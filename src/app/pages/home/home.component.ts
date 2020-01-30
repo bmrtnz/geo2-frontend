@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
 })
 
 export class HomeComponent {
-  constructor() {}
+
+  public currentDate: Date;
+
+  constructor() {
+    this.currentDate = new Date();
+  }
 }

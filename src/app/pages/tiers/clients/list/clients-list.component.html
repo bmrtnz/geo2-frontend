@@ -1,0 +1,26 @@
+<h2 class="content-block">{{ 'tiers-clients-title' | localize }}</h2>
+<a [routerLink]="['/tiers/clients/1']">Fiche client</a>
+<dx-data-grid class="dx-card wide-card"
+              [dataSource]="dataSource"
+              [showBorders]="false"
+              [focusedRowEnabled]="true"
+              [focusedRowIndex]="0"
+              [columnAutoWidth]="true"
+              [columnHidingEnabled]="true">
+
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+  <dxi-column
+    dataField="id"
+    [width]="90"
+    [hidingPriority]="2">
+  </dxi-column>
+  <dxi-column
+    dataField="nom"
+    [width]="190"
+    caption="{{ 'tiers-clients-nom' | localize }}"
+    [hidingPriority]="8">
+  </dxi-column>
+</dx-data-grid>

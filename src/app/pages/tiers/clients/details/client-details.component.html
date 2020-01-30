@@ -1,0 +1,19 @@
+<h2 class="content-block">{{ 'tiers-clients-details-title' | localize }}</h2>
+
+<div class="content-block">
+  <dx-form id="form"
+           [formData]="client"
+           labelLocation="top"
+           [colCount]="2"
+  >
+    <dxi-item itemType="group" caption="{{ 'tiers-clients-details-groupe-infos' | localize }}">
+      <dxi-item dataField="code"></dxi-item>
+      <dxi-item dataField="raisonSocial"></dxi-item>
+      <dxi-item dataField="societe.raisonSocial"></dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" caption="{{ 'tiers-clients-details-groupe-fact' | localize }}">
+
+    </dxi-item>
+
+  </dx-form>
+</div>

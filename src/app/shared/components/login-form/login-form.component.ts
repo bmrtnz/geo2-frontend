@@ -1,13 +1,12 @@
-import { Component, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import {Component, NgModule} from '@angular/core';
 
-import { AuthService, AppInfoService } from '../../services';
-import { DxButtonModule } from 'devextreme-angular/ui/button';
-import { DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
-import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
-import { DxValidatorModule } from 'devextreme-angular/ui/validator';
-import { DxValidationGroupModule } from 'devextreme-angular/ui/validation-group';
+import {AuthService} from '../../services';
+import {DxButtonModule} from 'devextreme-angular/ui/button';
+import {DxCheckBoxModule} from 'devextreme-angular/ui/check-box';
+import {DxTextBoxModule} from 'devextreme-angular/ui/text-box';
+import {DxValidatorModule} from 'devextreme-angular/ui/validator';
+import {DxValidationGroupModule} from 'devextreme-angular/ui/validation-group';
+import {SharedModule} from '../../shared.module';
 
 @Component({
   selector: 'app-login-form',
@@ -18,7 +17,7 @@ export class LoginFormComponent {
   login = '';
   password = '';
 
-  constructor(private authService: AuthService, public appInfo: AppInfoService) { }
+  constructor(private authService: AuthService) { }
 
   onLoginClick(args) {
     if (!args.validationGroup.validate().isValid) {
@@ -32,8 +31,7 @@ export class LoginFormComponent {
 }
 @NgModule({
   imports: [
-    CommonModule,
-    RouterModule,
+    SharedModule,
     DxButtonModule,
     DxCheckBoxModule,
     DxTextBoxModule,

@@ -17,5 +17,18 @@ export const navigation = [
         path: '/display-data'
       }
     ]
+  },
+  {
+    text: 'Tiers',
+    icon: 'user',
+    items: [
+      {
+        text: 'Clients',
+        path: '/tiers/clients'
+      }, {
+        text: 'Fournisseurs',
+        path: '/tiers/fournisseurs'
+      }
+    ]
   }
 ];
