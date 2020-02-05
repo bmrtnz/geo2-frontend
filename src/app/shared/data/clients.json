@@ -1,0 +1,39 @@
+[
+  {
+    "id": "000150",
+    "code": "DIFRUTAS",
+    "raisonSocial": "DIFRUTAS JOEL",
+    "societe": {
+      "id": "SA",
+      "raisonSocial": "Blue Whale S.A.S."
+    },
+    "secteur": {
+      "id": "ESP",
+      "description": "Espagne Portugal"
+    },
+    "adresse1": "Comercio de Frutas Lda.",
+    "adresse2": "LUGAR DO RIBEIRO",
+    "adresse3": null,
+    "codePostal": "5100-361",
+    "ville": "BRITIANDE LAMEGO ",
+    "pays": {
+      "id": "PT",
+      "description": "Portugal",
+      "numeroIso": "620"
+    },
+    "facturationRaisonSocial": "",
+    "facturationAdresse1": null,
+    "facturationAdresse2": null,
+    "facturationAdresse3": null,
+    "facturationPays": null,
+    "regimeTva": {
+      "id": "C"
+    },
+    "incoterm": {
+      "id": ""
+    },
+    "langue": {
+      "id": "FR"
+    }
+  }
+]

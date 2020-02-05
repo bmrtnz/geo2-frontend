@@ -4,8 +4,10 @@
     "home": "Accueil",
     "copyright": "Copyright © 2020{0} Microtec Informatique. ",
 
+    "auth-logout": "Déconnexion",
+
     "tiers-clients-title": "Clients",
-    "tiers-clients-nom": "Nom",
+    "tiers-clients-raisonsocial": "Raison Social",
 
     "tiers-clients-details-title": "Fiche clients",
     "tiers-clients-details-groupe-infos": "Infos générales",

@@ -1,10 +1,10 @@
-import { Component, NgModule, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, NgModule, Input, Output, EventEmitter} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { AuthService } from '../../services';
-import { UserPanelModule } from '../user-panel/user-panel.component';
-import { DxButtonModule } from 'devextreme-angular/ui/button';
-import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
+import {AuthService, LocalizationService} from '../../services';
+import {UserPanelModule} from '../user-panel/user-panel.component';
+import {DxButtonModule} from 'devextreme-angular/ui/button';
+import {DxToolbarModule} from 'devextreme-angular/ui/toolbar';
 
 @Component({
   selector: 'app-header',
@@ -22,18 +22,23 @@ export class HeaderComponent {
   @Input()
   title: string;
 
-  userMenuItems = [{
-    text: 'Profile',
-    icon: 'user'
-  }, {
-    text: 'Logout',
-    icon: 'runner',
-    onClick: () => {
-      this.authService.logOut();
-    }
-  }];
+  userMenuItems: any[];
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private localizeService: LocalizationService,
+    private authService: AuthService
+  ) {
+    this.userMenuItems = [{
+      text: 'Profile',
+      icon: 'user'
+    }, {
+      text: this.localizeService.localize('auth-logout'),
+      icon: 'runner',
+      onClick: () => {
+        this.authService.logOut();
+      }
+    }];
+  }
 
   toggleMenu = () => {
     this.menuToggle.emit();
@@ -47,7 +52,8 @@ export class HeaderComponent {
     UserPanelModule,
     DxToolbarModule
   ],
-  declarations: [ HeaderComponent ],
-  exports: [ HeaderComponent ]
+  declarations: [HeaderComponent],
+  exports: [HeaderComponent]
 })
-export class HeaderModule { }
+export class HeaderModule {
+}
