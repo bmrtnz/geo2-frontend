@@ -1,6 +1,27 @@
 {
-    "items": [],
-    "baseTheme": "material.orange.light",
+    "items": [
+        {
+            "key": "@base-accent",
+            "value": "rgba(0, 117, 156, 1)"
+        },
+        {
+            "key": "@base-text-color",
+            "value": "rgba(63, 63, 63, 1)"
+        },
+        {
+            "key": "@base-success",
+            "value": "rgba(143, 196, 89, 1)"
+        },
+        {
+            "key": "@base-danger",
+            "value": "rgba(255, 50, 90, 1)"
+        },
+        {
+            "key": "@base-border-radius",
+            "value": "6px"
+        }
+    ],
+    "baseTheme": "material.blue.light",
     "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
     "outputColorScheme": "base",
     "base": true
