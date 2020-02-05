@@ -1,12 +1,12 @@
-import { Component, HostBinding } from '@angular/core';
-import { AuthService, ScreenService, LocalizationService } from './shared/services';
+import {Component, HostBinding} from '@angular/core';
+import {AuthService, ScreenService, LocalizationService} from './shared/services';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent  {
+export class AppComponent {
   public static readonly START_DEV_YEAR: number = 2020;
 
   @HostBinding('class') get getClass() {
