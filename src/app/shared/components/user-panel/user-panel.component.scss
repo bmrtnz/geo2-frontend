@@ -28,7 +28,6 @@
 
   .user-name {
     font-size: 14px;
-    color: $base-text-color;
     margin: 0 9px;
   }
 }
@@ -56,6 +55,7 @@
   }
   .dx-menu-item .dx-menu-item-content {
       padding: 3px 15px 4px;
+      color: $base-text-color;
   }
 }
 
