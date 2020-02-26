@@ -1,8 +1,16 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuardService} from '../../../shared/services';
+import {FournisseursListComponent} from './list/fournisseurs-list.component';
 
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '',
+    component: FournisseursListComponent,
+    canActivate: [AuthGuardService]
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

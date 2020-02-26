@@ -14,7 +14,7 @@ export class AuthService {
 
   logOut() {
     this.loggedIn = false;
-    this.router.navigate(['/login-form']);
+    this.router.navigate(['/login']);
   }
 
   get isLoggedIn() {
@@ -28,7 +28,7 @@ export class AuthGuardService implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot): boolean {
         const isLoggedIn = this.authService.isLoggedIn;
-        const isLoginForm = route.routeConfig.path === 'login-form';
+        const isLoginForm = route.routeConfig.path === 'login';
 
         if (isLoggedIn && isLoginForm) {
             this.router.navigate(['/']);
@@ -36,7 +36,7 @@ export class AuthGuardService implements CanActivate {
         }
 
         if (!isLoggedIn && !isLoginForm) {
-            this.router.navigate(['/login-form']);
+            this.router.navigate(['/login']);
         }
 
         return isLoggedIn || isLoginForm;

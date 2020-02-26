@@ -1,0 +1,29 @@
+@import '~themes/generated/variables.base.scss';
+
+// Accordion
+.dx-accordion-item {
+  box-shadow: none;
+
+  .dx-accordion-item-title {
+    &::before {
+      left: 24px;
+      right: unset;
+
+      font-size: 20px;
+      text-align: center;
+
+      border-radius: 15px;
+      background-color: $base-accent;
+      color: white;
+    }
+
+    & .dx-accordion-item-title-caption {
+      text-align: right;
+      left: 72px;
+      right: 24px;
+
+      color: $base-accent;
+      font-weight: bold;
+    }
+  }
+}

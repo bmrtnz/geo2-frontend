@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, Input } from '@angular/core';
+import {Component, OnInit, NgModule, Input, isDevMode} from '@angular/core';
 import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
 import { ScreenService } from '../../shared/services';
 import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
@@ -31,6 +31,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
   constructor(private screen: ScreenService, private router: Router) { }
 
   ngOnInit() {
+    this.filterMenuItems();
     this.menuOpened = this.screen.sizes['screen-large'];
 
     this.router.events.subscribe(val => {
@@ -87,6 +88,12 @@ export class SideNavOuterToolbarComponent implements OnInit {
     if (this.showMenuAfterClick) {
       this.temporaryMenuOpened = true;
       this.menuOpened = true;
+    }
+  }
+
+  private filterMenuItems() {
+    if (!isDevMode()) {
+      this.menuItems = this.menuItems.filter(item => !item.dev);
     }
   }
 }

@@ -1,0 +1,24 @@
+@import "~themes/generated/variables.base";
+
+// Form
+.dx-form-group-caption {
+  color: $base-accent;
+  font-weight: bold;
+}
+.dx-field-label {
+  color: $base-accent;
+}
+
+// Vertical checkbox
+.dx-checkbox.vertical {
+  .dx-checkbox-icon {
+    display: block;
+    margin: 10px auto;
+  }
+  .dx-checkbox-text {
+    display: block;
+    margin: 0 auto 10px auto;
+    padding: 0;
+    text-align: center;
+  }
+}

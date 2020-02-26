@@ -3,3 +3,27 @@
   max-width: 100%;
   height: auto;
 }
+
+$base-fonts-path: './scss/fonts/';
+
+// Var
+@import "~themes/generated/variables.base";
+
+// App style
+@import "~scss/font";
+@import "~scss/icons";
+
+// Dx style customisation
+@import "~scss/dx/base";
+@import "~scss/dx/form";
+@import "~scss/dx/accordion";
+
+$orange: #dc6d5a;
+$cyan: #4080FF;
+
+.orange {
+  background-color: $orange;
+}
+.cyan {
+  background-color: $cyan;
+}

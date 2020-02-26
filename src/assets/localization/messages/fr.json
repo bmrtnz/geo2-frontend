@@ -4,6 +4,12 @@
     "home": "Accueil",
     "copyright": "Copyright © 2020{0} Microtec Informatique ",
 
+    "valide": "Validé",
+    "invalide": "Non Validé",
+
+    "btn-historique": "Historique",
+    "btn-valider": "Valider",
+
     "auth-logout": "Déconnexion",
     "auth-subtitle": "Connectez-vous à votre compte",
     "auth-login": "Identifiant",
@@ -13,10 +19,48 @@
     "auth-login-btn": "Connexion",
 
     "tiers-clients-title": "Clients",
-    "tiers-clients-raisonsocial": "Raison Social",
+    "tiers-clients-code": "Code Client",
+    "tiers-clients-raisonSocial": "Raison Sociale",
+    "tiers-clients-pays": "Pays",
+    "tiers-clients-adresse1": "Adresse 1",
+    "tiers-clients-adresse2": "Adresse 2",
+    "tiers-clients-adresse3": "Adresse 3",
+    "tiers-clients-ville": "Ville",
+    "tiers-clients-codePostal": "Code Postal",
+    "tiers-clients-secteur": "Secteur",
+    "tiers-clients-commercial": "Commercial",
+    "tiers-clients-assistante": "Assistante",
+    "tiers-clients-societe": "Société",
+    "tiers-clients-referencecoface": "Référence client COFACE",
+    "tiers-clients-ifco": "Référence IFCO",
+    "tiers-clients-siret": "Siret",
+    "tiers-clients-tvaCee": "ID TVA CEE",
+    "tiers-clients-langue": "Langue",
+    "tiers-clients-devise": "Devise",
+    "tiers-clients-moyenPaiement": "Moyen de paiement",
+    "tiers-clients-basePaiement": "Base de paiement",
+    "tiers-clients-adresseFacturation": "Adresse de facturation si différente",
+    "tiers-clients-indicationFacture": "Indications sur facture",
+    "tiers-clients-facturationRaisonSocial": "Raison social de facturation",
+    "tiers-clients-facturationAdresse1": "Adresse 1 de facturation",
+    "tiers-clients-facturationAdresse2": "Adresse 2 de facturation",
+    "tiers-clients-facturationAdresse3": "Adresse 3 de facturation",
+    "tiers-clients-facturationCodePostal": "Code postal de facturation",
+    "tiers-clients-facturationVille": "Ville de facturation",
+    "tiers-clients-facturationPays": "Pays de facturation",
+    "tiers-clients-incoterm": "Incoterm",
+    "tiers-clients-regimeTva": "Regime Tva",
+    "tiers-clients-commentaireHautFacture": "Commentaire Haut de Facture",
+    "tiers-clients-commentaireBasFacture": "Commentaire Bas de Facture",
+
+    "tiers-clients-contacts": "Contacts",
+    "tiers-clients-entrepots": "Entrepôts",
 
     "tiers-clients-details-title": "Fiche clients",
     "tiers-clients-details-groupe-infos": "Infos générales",
-    "tiers-clients-details-groupe-fact": "Facturation"
+    "tiers-clients-details-groupe-references": "Références",
+    "tiers-clients-details-groupe-adresses": "Adresses",
+    "tiers-clients-details-groupe-paiement": "Paiement",
+    "tiers-clients-details-groupe-commentaires": "Commentaires"
   }
 }

@@ -1,26 +1,47 @@
 <h2 class="content-block">{{ 'tiers-clients-title' | localize }}</h2>
-<a [routerLink]="['/tiers/clients/000150']">Fiche client</a>
-<dx-data-grid class="dx-card wide-card"
-              [dataSource]="dataSource"
-              [showBorders]="false"
-              [focusedRowEnabled]="true"
-              [focusedRowIndex]="0"
-              [columnAutoWidth]="true"
-              [columnHidingEnabled]="true">
 
-  <dxo-paging [pageSize]="10"></dxo-paging>
-  <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+<div class="content-block">
+  <dx-data-grid class="dx-card wide-card"
+                [dataSource]="dataSource"
+                [showBorders]="false"
+                [focusedRowEnabled]="true"
+                [focusedRowIndex]="0"
+                [columnAutoWidth]="true"
+                [columnHidingEnabled]="true"
+                (onRowDblClick)="onRowDblClick($event)">
 
-  <dxi-column
-    dataField="id"
-    [width]="90"
-    [hidingPriority]="2">
-  </dxi-column>
-  <dxi-column
-    dataField="raisonSocial"
-    [width]="190"
-    caption="{{ 'tiers-clients-raisonsocial' | localize }}"
-    [hidingPriority]="8">
-  </dxi-column>
-</dx-data-grid>
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+    <dxi-column
+      dataField="id"
+      [width]="90"
+      [hidingPriority]="2">
+    </dxi-column>
+    <dxi-column
+      dataField="raisonSocial"
+      [width]="190"
+      caption="{{ 'tiers-clients-raisonSocial' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="pays.description"
+      [width]="190"
+      caption="{{ 'tiers-clients-pays' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="ville"
+      [width]="190"
+      caption="{{ 'tiers-clients-ville' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="secteur.designation"
+      [width]="190"
+      caption="{{ 'tiers-clients-secteur' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+  </dx-data-grid>
+</div>

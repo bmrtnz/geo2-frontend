@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientsService} from '../../../../shared/services/clients.service';
-import {Client} from '../../../../shared/models/client';
+import {ClientsService} from '../../../../shared/services';
+import {Client} from '../../../../shared/models';
 import ArrayStore from 'devextreme/data/array_store';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-clients-list',
@@ -14,19 +15,24 @@ export class ClientsListComponent implements OnInit {
   clients: [Client];
 
   constructor(
-    private clientsService: ClientsService
+    private clientsService: ClientsService,
+    private router: Router
   ) {
   }
 
   ngOnInit(): void {
-    this.clientsService.get().subscribe(c => {
+    this.clientsService.get().then(c => {
       this.dataSource = {
         store: new ArrayStore({
           key: 'id',
-          data: [c]
+          data: c
         })
       };
     });
+  }
+
+  onRowDblClick(e) {
+    this.router.navigate([`/tiers/clients/${e.data.id}`]);
   }
 
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { formatDate, formatMessage, formatNumber, loadMessages, locale } from 'devextreme/localization';
-import { } from 'devextreme/ui/form'
 
 import config from 'devextreme/core/config';
 

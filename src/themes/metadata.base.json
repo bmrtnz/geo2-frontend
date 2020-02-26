@@ -5,10 +5,6 @@
             "value": "rgba(0, 117, 156, 1)"
         },
         {
-            "key": "@base-text-color",
-            "value": "rgba(63, 63, 63, 1)"
-        },
-        {
             "key": "@base-success",
             "value": "rgba(143, 196, 89, 1)"
         },
@@ -18,7 +14,11 @@
         },
         {
             "key": "@base-border-radius",
-            "value": "6px"
+            "value": "0px"
+        },
+        {
+          "key": "@base-font-family",
+          "value": "\"Barlow\", \"BarlowFallback\", sans-serif"
         }
     ],
     "baseTheme": "material.blue.light",
