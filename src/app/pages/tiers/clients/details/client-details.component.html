@@ -7,13 +7,15 @@
   <div class="content-block">
       <dx-box direction="row">
         <dxi-item [ratio]="1">
-          <div class="entity-id">N° {{ client?.id }}</div>
+          <h3 class="entity-id">N° {{ client?.id }}</h3>
           <dx-button
+            height="50"
             type="danger"
-            icon="material-icons perm_contact_calendar"
+            icon="material-icons person"
             text="{{ 'tiers-clients-contacts' | localize }}">
           </dx-button>
           <dx-button
+            height="50"
             type="default"
             icon="material-icons home_work"
             text="{{ 'tiers-clients-entrepots' | localize }}">
@@ -26,7 +28,8 @@
           ></dx-check-box>
           <dx-button text="{{ 'btn-historique' | localize }}"></dx-button>
         </dxi-item>
-
+        <dxi-item [ratio]="0.3">
+        </dxi-item>
         <dxi-item [ratio]="4">
           <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
             <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-infos' | localize }}</span>
@@ -49,9 +52,7 @@
                     [width]="300"
                     [(visible)]="defaultVisible">
                     <div *dxTemplate="let data = model of 'content'">
-                      Make final decision on whether we are going to
-                      increase our Google AdWord spend based
-                      on our 2013 marketing plan.
+                      Texte d'aide contextuelle
                     </div>
                   </dx-popover>
                 </div>
@@ -234,6 +235,8 @@
             </dx-accordion>
           </div>
         </dxi-item>
+        <dxi-item [ratio]="0.2">
+        </dxi-item>
         <dxi-item [ratio]="4">
           <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
             <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-references' | localize }}</span>
@@ -252,6 +255,14 @@
                 <div class="dx-field-label">{{ 'tiers-clients-ifco' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-text-box formControlName="ifco"></dx-text-box>
+                </div>
+              </div>
+
+              <!-- Lieu fonction EAN -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-lieuFonctionEAN' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
                 </div>
               </div>
 
@@ -276,25 +287,39 @@
                 </div>
               </div>
 
-              <!-- Reference Coface -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-clients-referencecoface' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="referenceCoface"></dx-text-box>
-                </div>
-              </div>
-
               <dx-accordion
                 [collapsible]="true"
                 [multiple]="false"
                 [selectedIndex]="-1"
               >
                 <dxi-item title="{{ 'tiers-clients-indicationFacture' | localize }}">
+                  
                   <!-- Reference Coface -->
+                  <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-clients-referencecoface' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-text-box formControlName="referenceCoface"></dx-text-box>
+                    </div>
+                  </div>
+                  <!-- Soumis CTIFL -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-clients-soumisCtifl' | localize }}</div>
                     <div class="dx-field-value">
                       <dx-check-box formControlName="soumisCtifl"></dx-check-box>
+                    </div>
+                  </div>
+                  <!-- Type client -->
+                  <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-clients-typeClient' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-text-box formControlName="typeClient"></dx-text-box>
+                    </div>
+                  </div>
+                  <!-- Compte comptable -->
+                  <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-text-box formControlName="compteComptable"></dx-text-box>
                     </div>
                   </div>
                 </dxi-item>
@@ -307,10 +332,10 @@
 
             <div class="dx-form-group-content">
               <dx-box direction="row">
-                <dxi-item [ratio]="1">
+                <dxi-item [ratio]="2">
                   <!-- Nb Jour Echeance -->
                   <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-clients-siret' | localize }}</div>
+                    <div class="dx-field-label">{{ 'tiers-clients-nbJourEcheance' | localize }}</div>
                     <div class="dx-field-value">
                       <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
                     </div>
@@ -319,7 +344,7 @@
                 <dxi-item [ratio]="1">
                   <!-- Echeance Le -->
                   <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-clients-siret' | localize }}</div>
+                    <div class="dx-field-label">{{ 'tiers-clients-echeanceLe' | localize }}</div>
                     <div class="dx-field-value">
                       <dx-text-box formControlName="echeanceLe"></dx-text-box>
                     </div>
@@ -341,7 +366,22 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="regimeTva"
-                    [items]="regimeTva"
+                    [dataSource]="regimeTva"
+                    displayExpr="description"
+                    valueExpr="id"
+                  ></dx-select-box>
+                </div>
+              </div>
+
+              <!-- Délai bon à facturer -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-delaiBonFacturer' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    formControlName="delaiBonFacturer"
+                    [dataSource]="delaiBonFacturer"
+                    displayExpr="description"
+                    valueExpr="id"
                   ></dx-select-box>
                 </div>
               </div>
@@ -382,9 +422,12 @@
             </div>
           </div>
         </dxi-item>
-
-        <dx-box direction="col">
-          <dxi-item>
+      </dx-box>
+        <br>
+        <dx-box
+        direction="row"
+        width="100%">
+          <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-commentaires' | localize }}</span>
 
@@ -409,6 +452,38 @@
             </div>
           </dxi-item>
         </dx-box>
-      </dx-box>
+        <dx-box
+        direction="row"
+        width="100%">
+          <dxi-item [ratio]="2">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-certifications' | localize }}</span>
+              <div class="dx-form-group-content">
+                <!-- Certifications -->
+                <div class="dx-field">
+                  <!-- <div class="dx-field-label">{{ 'tiers-clients-commentaireHautFacture' | localize }}</div> -->
+                  <div class="dx-field-value">
+                    <dx-text-area formControlName="certifications"></dx-text-area>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </dxi-item>
+
+          <dxi-item [ratio]="3">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-paramavances' | localize }}</span>
+              <div class="dx-form-group-content">
+                <!-- Paramètres avancés -->
+                <div class="dx-field">
+                  <!-- <div class="dx-field-label">{{ 'tiers-clients-commentaireHautFacture' | localize }}</div> -->
+                  <div class="dx-field-value">
+                    <dx-text-area formControlName="paramAvances"></dx-text-area>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </dxi-item>
+        </dx-box>
   </div>
 </form>

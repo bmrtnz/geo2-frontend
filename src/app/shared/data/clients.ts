@@ -37,7 +37,7 @@ const clients = [
     commentaireHautFacture: null,
     commentaireBasFacture: null,
     instructionCommercial: null,
-    siret: null,
+    siret: '45454545454',
     blocageAvoirEdi: false,
     debloquerEnvoieJour: false,
     ifco: null,

@@ -122,6 +122,7 @@ export class ClientDetailsComponent implements OnInit {
       .get(this.route.snapshot.paramMap.get('id'))
       .then(c => {
         this.client = c;
+        console.log(c)
         this.clientForm.patchValue(this.client);
       });
   }
