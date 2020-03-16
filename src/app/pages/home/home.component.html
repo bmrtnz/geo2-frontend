@@ -1,8 +1,56 @@
 <h2 class="content-block">{{ 'home' | localize }}</h2>
-<div class="content-block">
+<div class="content-block homepage">
     <div class="dx-card responsive-paddings">
-        <div class="logos-container">
-            <img src="/assets/images/BW-couleur-bleu.png" alt="bluewhale-logo">
+        <div class="main-buttons-container">
+            <div class="buttons-container">
+                <div class="home-button-container-horiz">
+                    <dx-button class="BW-khaki-dark"
+                    type="default"
+                    icon="material-icons group"
+                    text="Tiers">
+                    </dx-button>
+                    <dx-button class="BW-purple-dark"
+                    type="default"
+                    icon="material-icons list"
+                    text="Articles">
+                    </dx-button>
+                </div>
+                <div class="home-button-container-vert">
+                    <dx-button class="BW-turquoise-medium"
+                    type="default"
+                    icon="material-icons pageview"
+                    text="Traçabilité & Qualité">
+                    </dx-button>
+                    <dx-button class="BW-purple-medium"
+                    type="default"
+                    icon="material-icons trending_up"
+                    text="Analyses & Statistiques">
+                    </dx-button>
+                </div>
+                <img class="home-big-logo" src="/assets/images/BW-couleur-bleu.png" alt="bluewhale-logo">
+                <div class="home-button-container-vert">
+                    <dx-button class="BW-green-medium"
+                    type="default"
+                    icon="material-icons assignment_turned_in"
+                    text="Ordres de commande">
+                    </dx-button>
+                    <dx-button class="BW-green-dark"
+                    type="default"
+                    icon="material-icons view_module"
+                    text="Stock">
+                    </dx-button>
+                    <dx-button class="BW-orange-dark"
+                    type="default"
+                    icon="material-icons local_shipping"
+                    text="Logistique">
+                    </dx-button>
+                    <dx-button class="BW-orange-medium"
+                    type="default"
+                    icon="material-icons flash_on"
+                    text="Litiges">
+                    </dx-button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -11,3 +11,7 @@ export * from './moyen-paiement.model';
 export * from './personne.model';
 export * from './regime-tva.model';
 export * from './client.model';
+export * from './fournisseur.model';
+export * from './groupe-fournisseur.model';
+export * from './type.fournisseur.model';
+export * from './transporteur.model';

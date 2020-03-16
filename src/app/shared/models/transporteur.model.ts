@@ -1,6 +1,6 @@
 import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
 
-export class Client {
+export class Transporteur {
 
   public id: string;
   public code: string;

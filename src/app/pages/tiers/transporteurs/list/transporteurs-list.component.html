@@ -1,6 +1,6 @@
-<h2 class="content-block">{{ 'tiers-fournisseurs-title' | localize }}</h2>
+<h2 class="content-block">{{ 'tiers-transporteurs-title' | localize }}</h2>
 
-<div class="content-block fournisseur-page">
+<div class="content-block">
   <dx-data-grid class="dx-card wide-card"
                 [dataSource]="dataSource"
                 [showBorders]="false"
@@ -22,26 +22,21 @@
     <dxi-column
       dataField="raisonSocial"
       [width]="190"
-      caption="{{ 'tiers-fournisseurs-raisonSocial' | localize }}"
+      caption="{{ 'tiers-transporteurs-raisonSocial' | localize }}"
       [hidingPriority]="8">
     </dxi-column>
     <dxi-column
       dataField="pays.description"
       [width]="190"
-      caption="{{ 'tiers-fournisseurs-pays' | localize }}"
+      caption="{{ 'tiers-transporteurs-pays' | localize }}"
       [hidingPriority]="8">
     </dxi-column>
     <dxi-column
       dataField="ville"
       [width]="190"
-      caption="{{ 'tiers-fournisseurs-ville' | localize }}"
+      caption="{{ 'tiers-transporteurs-ville' | localize }}"
       [hidingPriority]="8">
     </dxi-column>
-    <dxi-column
-      dataField="secteur.designation"
-      [width]="190"
-      caption="{{ 'tiers-fournisseurs-secteur' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
+
   </dx-data-grid>
 </div>

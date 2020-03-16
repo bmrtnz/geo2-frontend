@@ -1,3 +1,61 @@
+// Var
+@import "~scss/variables.scss";
+
+.BW-khaki-dark {
+  background: $BW-khaki-dark;
+}
+.BW-khaki-medium {
+  background: $BW-khaki-medium;
+}
+.BW-khaki-light {
+  background: $BW-khaki-light;
+}
+.BW-turquoise-dark {
+  background: $BW-turquoise-dark;
+}
+.BW-turquoise-medium {
+  background: $BW-turquoise-medium;
+}
+.BW-turquoise-light {
+  background: $BW-turquoise-light;
+}
+.BW-purple-dark {
+  background: $BW-purple-dark;
+}
+.BW-purple-medium {
+  background: $BW-purple-medium;
+}
+.BW-purple-light {
+  background: $BW-purple-light;
+}
+.BW-green-dark {
+  background: $BW-green-dark;
+}
+.BW-green-medium {
+  background: $BW-green-medium;
+}
+.BW-green-light {
+  background: $BW-green-light;
+}
+.BW-almond-dark {
+  background: $BW-almond-dark;
+}
+.BW-almond-medium {
+  background: $BW-almond-medium;
+}
+.BW-almond-light {
+  background: $BW-almond-light;
+}
+.BW-orange-dark {
+  background: $BW-orange-dark;
+}
+.BW-orange-medium {
+  background: $BW-orange-medium;
+}
+.BW-orange-light {
+  background: $BW-orange-light;
+}
+
 .logos-container {
   margin: 20px 0 40px 0;
   text-align: center;
@@ -31,4 +89,63 @@
       margin: 0;
     }
   }
+}
+
+.buttons-container {
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  overflow: hidden;
+  transform: translateX(-50%);
+}
+
+.home-big-logo {
+  width: 250px;
+  float: left;
+  margin: 50px;
+}
+
+::ng-deep .buttons-container .dx-button {
+  height: 80px;
+  width: 80px;
+  border-radius: 0 12px;
+  padding: 0;
+  margin: 5px;
+  .dx-icon {
+    margin: 30px 0 0 0;
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
+    color:#FFF;
+  }
+  .dx-button-content {
+    padding: 10px 0 0 0;
+  }
+  .dx-button-text {
+    display: block;
+    position: absolute;
+    top: 10px;
+    font-size:10px;
+    line-height: 12px;
+    white-space: normal;
+    color:#FFF;
+    width: 100%;
+    font-weight: bold;
+  }
+}
+
+.home-button-container-horiz {
+  position: relative;
+  display: block;
+  height: 90px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.home-button-container-vert {
+  display: block;
+  margin-top: -30px;
+  height: 100%;
+  width: 90px;
+  float: left;
 }

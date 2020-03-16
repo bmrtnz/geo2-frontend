@@ -5,7 +5,7 @@ import {AuthGuardService} from './shared/services';
 import {HomeComponent} from './pages/home/home.component';
 import {ProfileComponent} from './pages/exemple/profile/profile.component';
 import {DisplayDataComponent} from './pages/exemple/display-data/display-data.component';
-import {DxDataGridModule, DxFormModule} from 'devextreme-angular';
+import {DxDataGridModule, DxFormModule, DxButtonModule} from 'devextreme-angular';
 import {SharedModule} from './shared/shared.module';
 
 const routes: Routes = [
@@ -46,6 +46,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     DxDataGridModule,
     DxFormModule,
+    DxButtonModule,
     SharedModule
   ],
   exports: [RouterModule],

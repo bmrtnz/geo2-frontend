@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+// import {DxButtonModule} from 'devextreme-angular/ui/button';
 
 @Component({
   templateUrl: 'home.component.html',

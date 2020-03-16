@@ -29,7 +29,7 @@ export class HeaderComponent {
     private authService: AuthService
   ) {
     this.userMenuItems = [{
-      text: 'Profile',
+      text: 'Profil',
       icon: 'user'
     }, {
       text: this.localizeService.localize('auth-logout'),

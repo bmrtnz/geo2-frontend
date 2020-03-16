@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
-
-import {FournisseursRoutingModule} from './fournisseurs-routing.module';
+import {TransporteursRoutingModule} from './transporteurs-routing.module';
+import {TransporteursListComponent} from './list/transporteurs-list.component';
+import {TransporteurDetailsComponent} from './details/transporteur-details.component';
 import {SharedModule} from '../../../shared/shared.module';
-import { FournisseursListComponent } from './list/fournisseurs-list.component';
 import {
   DxAccordionModule, DxBoxModule,
   DxButtonModule, DxCheckBoxModule,
@@ -10,14 +10,13 @@ import {
   DxFormModule, DxListModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
   DxTextBoxModule
 } from 'devextreme-angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
   imports: [
     SharedModule,
-    FournisseursRoutingModule,
+    TransporteursRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     DxFormModule,
@@ -33,10 +32,8 @@ import { FournisseurDetailsComponent } from './details/fournisseur-details.compo
     DxPopoverModule
   ],
   declarations: [
-    FournisseursListComponent,
-    FournisseurDetailsComponent
+    TransporteursListComponent,
+    TransporteurDetailsComponent
   ]
 })
-export class FournisseursModule { }
-
-
+export class TransporteursModule { }

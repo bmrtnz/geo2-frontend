@@ -1,0 +1,6 @@
+diff a/src/themes/generated/variables.base.scss b/src/themes/generated/variables.base.scss	(rejected hunks)
+@@ -5,3 +5,4 @@
+ $base-border-radius: 0px;
+ $base-accent: #00759c;
+ 
++$side-panel-min-width: 60px;

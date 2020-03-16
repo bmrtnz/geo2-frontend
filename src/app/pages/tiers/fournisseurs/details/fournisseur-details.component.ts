@@ -1,38 +1,40 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientsService} from '../../../../shared/services';
+import {FournisseursService} from '../../../../shared/services/fournisseurs.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   BasePaiement,
-  Client,
-  Devise, GroupeClient,
+  Fournisseur,
+  Devise, GroupeFournisseur,
   Incoterm,
   MoyenPaiement,
   Pays,
   Personne,
   RegimeTva,
-  Secteur,
-  Societe, TypeClient
+  Societe, TypeFournisseur
 } from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
-  selector: 'app-client-details',
-  templateUrl: './client-details.component.html',
-  styleUrls: ['./client-details.component.scss']
+  selector: 'app-fournisseur-details',
+  templateUrl: './fournisseur-details.component.html',
+  styleUrls: ['./fournisseur-details.component.scss']
 })
-export class ClientDetailsComponent implements OnInit {
+export class FournisseurDetailsComponent implements OnInit {
 
-  clientForm = this.fb.group({
+  fournisseurForm = this.fb.group({
     code: [''],
     raisonSocial: [''],
+    stockActif: [''],
+    suiviPrecalibre: [''],
     societe: [''],
-    secteur: [''],
     adresse1: [''],
     adresse2: [''],
     adresse3: [''],
     codePostal: [''],
     ville: [''],
     pays: [''],
+    latitude: [''],
+    longitude: [''],
     facturationRaisonSocial: [''],
     facturationAdresse1: [''],
     facturationAdresse2: [''],
@@ -46,43 +48,41 @@ export class ClientDetailsComponent implements OnInit {
     echeanceLe: [''],
     moyenPaiement: [''],
     tvaCee: [''],
-    controlReferenceClient: [''],
+    controlReferenceFournisseur: [''],
     commentaireHautFacture: [''],
     commentaireBasFacture: [''],
     instructionCommercial: [''],
-    siret: [''],
+    bureauAchat: [''],
+    typeBureau: [''],
     blocageAvoirEdi: [''],
     debloquerEnvoieJour: [''],
-    ifco: [''],
     instructionLogistique: [''],
     basePaiement: [''],
     compteComptable: [''],
     langue: [''],
     devise: [''],
-    commercial: [''],
-    assistante: [''],
     referenceCoface: [''],
-    agrement: [''],
+    agrementBW: [''],
+    codeStation: [''],
+    identTracabilite: [''],
     // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
-    typeClient: [''],
-    groupeClient: [''],
+    typeFournisseur: [''],
+    groupeFournisseur: [''],
     soumisCtifl: [''],
-    valide: [false],
-    lieuFonctionEAN: [''],
-    delaiBonFacturer: [''],
-    certifications: [''],
-
+    formeJuridique:  [''],
+    SiretAPE:  [''],
+    idTVA:  [''],
+    RCS:  [''],
+    autoFacturation: [false],
+    valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
-  client: Client;
-  secteurs: Secteur[];
+  fournisseur: Fournisseur;
   pays: Pays[];
-  code: string;
   commerciaux: Personne[];
-  clients: Client[];
   assistantes: Personne[];
   devises: Devise[];
   moyenPaiements: MoyenPaiement[];
@@ -92,7 +92,7 @@ export class ClientDetailsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private clientsService: ClientsService,
+    private fournisseursService: FournisseursService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -100,38 +100,32 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.clientsService.getSecteurs().then(s => {
-      this.secteurs = s;
-    });
-    this.clientsService.getPays().then(p => {
+    this.fournisseursService.getPays().then(p => {
       this.pays = p;
     });
-    this.clientsService.getCommerciaux().then(c => {
+    this.fournisseursService.getCommerciaux().then(c => {
       this.commerciaux = c;
     });
-    this.clientsService.get().then(c => {
-      this.clients = c;
-    });
-    this.clientsService.getAssistantes().then(a => {
+    this.fournisseursService.getAssistantes().then(a => {
       this.assistantes = a;
     });
-    this.clientsService.getDevises().then(a => {
+    this.fournisseursService.getDevises().then(a => {
       this.devises = a;
     });
-    this.clientsService.getMoyenPaiements().then(a => {
+    this.fournisseursService.getMoyenPaiements().then(a => {
       this.moyenPaiements = a;
     });
-    this.clientsService.getBasePaiements().then(a => {
+    this.fournisseursService.getBasePaiements().then(a => {
       this.basePaiements = a;
     });
-    this.clientsService.getRegimeTva().then(a => {
+    this.fournisseursService.getRegimeTva().then(a => {
       this.regimeTva = a;
     });
-    this.clientsService
+    this.fournisseursService
       .get(this.route.snapshot.paramMap.get('id'))
       .then(c => {
-        this.client = c;
-        this.clientForm.patchValue(this.client);
+        this.fournisseur = c;
+        this.fournisseurForm.patchValue(this.fournisseur);
       });
   }
 
@@ -140,16 +134,10 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.clientForm.value);
+    console.log(this.fournisseurForm.value);
   }
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
-  }
-
-  contactsBtnClick(event) {
-    console.log(`/tiers/contacts/${this.client.id}`);
-    //this.router.navigate([`/tiers/contacts/${this.client.id}`]);
-    this.router.navigate(['/home']);
   }
 }

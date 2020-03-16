@@ -8,6 +8,9 @@ const routes: Routes = [
   }, {
     path: 'fournisseurs',
     loadChildren: './fournisseurs/fournisseurs.module#FournisseursModule'
+  }, {
+    path: 'transporteurs',
+    loadChildren: './transporteurs/transporteurs.module#TransporteursModule'
   }
 ];
 

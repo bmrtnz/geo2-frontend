@@ -14,4 +14,5 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   declarations: [LocalizePipe],
   exports: [LocalizePipe]
 })
+
 export class SharedModule { }

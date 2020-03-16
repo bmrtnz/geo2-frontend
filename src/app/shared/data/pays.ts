@@ -7,5 +7,9 @@ export default [
     id: 'FR',
     description: 'France',
     numeroIso: '250'
+  }, {
+    id: 'ES',
+    description: 'Espagne',
+    numeroIso: '250'
   }
 ];

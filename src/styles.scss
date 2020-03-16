@@ -18,6 +18,8 @@ $base-fonts-path: './scss/fonts/';
 @import "~scss/dx/form";
 @import "~scss/dx/accordion";
 
+
+/* Colors */
 $orange: #dc6d5a;
 $cyan: #4080FF;
 
@@ -26,4 +28,34 @@ $cyan: #4080FF;
 }
 .cyan {
   background-color: $cyan;
+}
+
+.fournisseur-page, .client-page, .transporteur-page {
+
+  .dx-accordion-item-title::before {
+    font-size: 18px;
+  }
+
+  .dx-button {
+    margin-bottom:10px;
+    .dx-button-content {
+      padding: 10px 3px;
+    }
+    .dx-icon {
+      padding:0;
+      margin:0;
+    }
+    .dx-button-text {
+      display: block;
+      margin-top: 5px;
+      line-height: 18px;
+      white-space: normal;
+      color:#FFF;
+      width: 100%;
+    }
+  }
+}
+
+.black .dx-button-text {
+  color: #1E1E1E !important;
 }

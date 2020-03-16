@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientsService} from '../../../../shared/services';
+import {TransporteursService} from '../../../../shared/services/transporteurs.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   BasePaiement,
-  Client,
+  Transporteur,
   Devise, GroupeClient,
   Incoterm,
   MoyenPaiement,
@@ -16,13 +16,13 @@ import {
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
-  selector: 'app-client-details',
-  templateUrl: './client-details.component.html',
-  styleUrls: ['./client-details.component.scss']
+  selector: 'app-transporteur-details',
+  templateUrl: './transporteur-details.component.html',
+  styleUrls: ['./transporteur-details.component.scss']
 })
-export class ClientDetailsComponent implements OnInit {
+export class TransporteurDetailsComponent implements OnInit {
 
-  clientForm = this.fb.group({
+  transporteurForm = this.fb.group({
     code: [''],
     raisonSocial: [''],
     societe: [''],
@@ -69,20 +69,15 @@ export class ClientDetailsComponent implements OnInit {
     typeClient: [''],
     groupeClient: [''],
     soumisCtifl: [''],
-    valide: [false],
-    lieuFonctionEAN: [''],
-    delaiBonFacturer: [''],
-    certifications: [''],
-
+    valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
-  client: Client;
+  transporteur: Transporteur;
   secteurs: Secteur[];
   pays: Pays[];
   code: string;
   commerciaux: Personne[];
-  clients: Client[];
   assistantes: Personne[];
   devises: Devise[];
   moyenPaiements: MoyenPaiement[];
@@ -92,7 +87,7 @@ export class ClientDetailsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private clientsService: ClientsService,
+    private transporteursService: TransporteursService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -100,38 +95,35 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.clientsService.getSecteurs().then(s => {
+    this.transporteursService.getSecteurs().then(s => {
       this.secteurs = s;
     });
-    this.clientsService.getPays().then(p => {
+    this.transporteursService.getPays().then(p => {
       this.pays = p;
     });
-    this.clientsService.getCommerciaux().then(c => {
+    this.transporteursService.getCommerciaux().then(c => {
       this.commerciaux = c;
     });
-    this.clientsService.get().then(c => {
-      this.clients = c;
-    });
-    this.clientsService.getAssistantes().then(a => {
+    this.transporteursService.getAssistantes().then(a => {
       this.assistantes = a;
     });
-    this.clientsService.getDevises().then(a => {
+    this.transporteursService.getDevises().then(a => {
       this.devises = a;
     });
-    this.clientsService.getMoyenPaiements().then(a => {
+    this.transporteursService.getMoyenPaiements().then(a => {
       this.moyenPaiements = a;
     });
-    this.clientsService.getBasePaiements().then(a => {
+    this.transporteursService.getBasePaiements().then(a => {
       this.basePaiements = a;
     });
-    this.clientsService.getRegimeTva().then(a => {
+    this.transporteursService.getRegimeTva().then(a => {
       this.regimeTva = a;
     });
-    this.clientsService
+    this.transporteursService
       .get(this.route.snapshot.paramMap.get('id'))
       .then(c => {
-        this.client = c;
-        this.clientForm.patchValue(this.client);
+        this.transporteur = c;
+        this.transporteurForm.patchValue(this.transporteur);
       });
   }
 
@@ -140,16 +132,10 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.clientForm.value);
+    console.log(this.transporteurForm.value);
   }
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
-  }
-
-  contactsBtnClick(event) {
-    console.log(`/tiers/contacts/${this.client.id}`);
-    //this.router.navigate([`/tiers/contacts/${this.client.id}`]);
-    this.router.navigate(['/home']);
   }
 }

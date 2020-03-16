@@ -29,5 +29,4 @@ export class UserPanelComponent {
   declarations: [UserPanelComponent],
   exports: [UserPanelComponent]
 })
-export class UserPanelModule {
-}
+export class UserPanelModule { }
