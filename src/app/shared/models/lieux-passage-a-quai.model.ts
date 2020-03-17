@@ -1,6 +1,6 @@
 import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe} from './';
 
-export class typeLieu {
+export class LieuxPassageAQuai {
 
   public id: string;
   public code: string;
@@ -40,7 +40,5 @@ export class typeLieu {
   public compteComptable: string;
   public langue: Pays;
   public devise: Devise;
-
-  public typeLieuPassageAQuai: typeLieuPassageAQuai;
 
 }

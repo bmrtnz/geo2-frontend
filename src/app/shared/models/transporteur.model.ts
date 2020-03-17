@@ -1,4 +1,4 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
+import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe} from './';
 
 export class Transporteur {
 
@@ -40,7 +40,5 @@ export class Transporteur {
   public compteComptable: string;
   public langue: Pays;
   public devise: Devise;
-
-  public typeTransporteur: TypeClient;
 
 }
