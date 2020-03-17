@@ -32,6 +32,9 @@ export const navigation = [
       }, {
         text: 'Transporteurs',
         path: '/tiers/transporteurs'
+      } , {
+        text: 'Passages à quai',
+        path: '/tiers/lieux-passage-a-quai'
       }
     ]
   }

@@ -1,23 +1,14 @@
-const transporteurs = [
+const lieupassageaquai = [
   {
     id: '000150',
-    code: 'AGUNSA',
-    raisonSocial: 'AGUNSA EUROPA',
-    societe: {
-      id: 'SA',
-      raisonSocial: 'Blue Whale S.A.S.'
-    },
-    secteur: {
-      id: 'ESP',
-      description: 'Espagne Portugal',
-      valide: true
-    },
-    adresse1: 'DELAGACION BILBAO',
-    adresse2: 'C SAN VICENTE EDIFICIO ALBIA 1',
-    adresse3: '8-10',
-    codePostal: '48001',
-    ville: 'BILBAO VIZCAYA',
-    pays: 'ES',
+    code: '2FL',
+    raisonSocial: '2FL @Exofam',
+    adresse1: 'Bâtiment C6A',
+    adresse2: 'Cours d Alsace',
+    adresse3: '',
+    codePostal: '94',
+    ville: 'RUNGIS',
+    pays: 'FR',
     facturationRaisonSocial: '',
     facturationAdresse1: 'test adr fact',
     facturationAdresse2: null,
@@ -42,7 +33,7 @@ const transporteurs = [
     basePaiement: 'F',
     referenceCoface: '540069529A',
     compteComptable: 'AGUNSA',
-    langue: 'ES',
+    langue: 'FR',
     devise: 'EUR',
     agrement: null,
     courtier: null,
@@ -53,4 +44,4 @@ const transporteurs = [
   }
 ];
 
-export default transporteurs;
+export default lieupassageaquai;

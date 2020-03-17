@@ -149,7 +149,7 @@ export class ClientDetailsComponent implements OnInit {
 
   contactsBtnClick(event) {
     console.log(`/tiers/contacts/${this.client.id}`);
-    //this.router.navigate([`/tiers/contacts/${this.client.id}`]);
+    // this.router.navigate([`/tiers/contacts/${this.client.id}`]);
     this.router.navigate(['/home']);
   }
 }

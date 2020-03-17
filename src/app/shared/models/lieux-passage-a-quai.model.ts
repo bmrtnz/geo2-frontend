@@ -1,6 +1,6 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
+import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe} from './';
 
-export class Transporteur {
+export class typeLieu {
 
   public id: string;
   public code: string;
@@ -41,6 +41,6 @@ export class Transporteur {
   public langue: Pays;
   public devise: Devise;
 
-  public typeTransporteur: TypeClient;
+  public typeLieuPassageAQuai: typeLieuPassageAQuai;
 
 }
