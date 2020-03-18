@@ -138,75 +138,7 @@
                   </div>
                 </div>
               </div>
-  
-              <dx-accordion
-                [collapsible]="true"
-                [multiple]="false"
-                [selectedIndex]="-1"
-              >
-                <dxi-item title="{{ 'tiers-lieuxpassageaquai-adresseFacturation' | localize }}">
-                  <!-- Raison social -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-facturationRaisonSocial' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationRaisonSocial"></dx-text-box>
-                    </div>
-                  </div>
-  
-                  <!-- Adresse 1 -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-facturationAdresse1' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationAdresse1"></dx-text-box>
-                    </div>
-                  </div>
-  
-                  <!-- Adresse 2 -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-facturationAdresse2' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationAdresse2"></dx-text-box>
-                    </div>
-                  </div>
-  
-                  <!-- Adresse 3 -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-facturationAdresse3' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationAdresse3"></dx-text-box>
-                    </div>
-                  </div>
-  
-                  <!-- Code postal -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-facturationCodePostal' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationCodePostal"></dx-text-box>
-                    </div>
-                  </div>
-  
-                  <!-- Ville -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-facturationVille' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationVille"></dx-text-box>
-                    </div>
-                  </div>
-  
-                  <!-- Pays -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-facturationPays' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-select-box
-                        formControlName="facturationPays"
-                        [items]="pays"
-                        valueExpr="id"
-                        displayExpr="description"
-                      ></dx-select-box>
-                    </div>
-                  </div>
-                </dxi-item>
-              </dx-accordion>
+
             </div>
           </dxi-item>
           <dxi-item [ratio]="0.2">
@@ -246,52 +178,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Client raison sociale -->
-              <dx-box direction="row">
-                <dxi-item [ratio]="3">
-                    <div class="dx-field">
-                        <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-clientRaisonSociale' | localize }}</div>
-                        <div class="dx-field-value">
-                        <dx-text-box
-                            readOnly="true"
-                            formControlName="RaisonSociale"></dx-text-box>
-                        </div>
-                    </div>
-                </dxi-item>
-                <dxi-item [ratio]="0.2"></dxi-item>
-                <dxi-item [ratio]="1">
-                    <dx-button
-                    class="black"
-                    height="auto"
-                    text="{{ 'btn-affecter' | localize }}"></dx-button>
-                </dxi-item>
-              </dx-box>
-
-              <dx-accordion
-                [collapsible]="true"
-                [multiple]="false"
-                [selectedIndex]="-1"
-              >
-                <dxi-item title="{{ 'tiers-lieuxpassageaquai-indicationFacture' | localize }}">
-                  
-                  <!-- Reference Coface -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-referencecoface' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="referenceCoface"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Compte comptable -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-compteComptable' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="compteComptable"></dx-text-box>
-                    </div>
-                  </div>
-                </dxi-item>
-              </dx-accordion>
   
             </div>
   

@@ -69,6 +69,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     typeClient: [''],
     groupeClient: [''],
     soumisCtifl: [''],
+    lieuFonctionEAN: [''],
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
@@ -84,7 +85,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private lieupassageaquaisService: LieuxPassageAQuaiService,
+    private lieupassageaquaiService: LieuxPassageAQuaiService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -92,22 +93,22 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.lieupassageaquaisService.getPays().then(p => {
+    this.lieupassageaquaiService.getPays().then(p => {
       this.pays = p;
     });
-    this.lieupassageaquaisService.getDevises().then(a => {
+    this.lieupassageaquaiService.getDevises().then(a => {
       this.devises = a;
     });
-    this.lieupassageaquaisService.getMoyenPaiements().then(a => {
+    this.lieupassageaquaiService.getMoyenPaiements().then(a => {
       this.moyenPaiements = a;
     });
-    this.lieupassageaquaisService.getBasePaiements().then(a => {
+    this.lieupassageaquaiService.getBasePaiements().then(a => {
       this.basePaiements = a;
     });
-    this.lieupassageaquaisService.getRegimeTva().then(a => {
+    this.lieupassageaquaiService.getRegimeTva().then(a => {
       this.regimeTva = a;
     });
-    this.lieupassageaquaisService
+    this.lieupassageaquaiService
       .get(this.route.snapshot.paramMap.get('id'))
       .then(c => {
         this.lieupassageaquai = c;

@@ -69,6 +69,7 @@ export class TransporteurDetailsComponent implements OnInit {
     typeClient: [''],
     groupeClient: [''],
     soumisCtifl: [''],
+    lieuFonctionEAN: [''],
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
