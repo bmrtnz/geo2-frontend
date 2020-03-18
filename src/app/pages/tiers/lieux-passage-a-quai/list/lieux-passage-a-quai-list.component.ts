@@ -32,5 +32,8 @@ export class LieuxPassageAQuaiListComponent implements OnInit {
     });
   }
 
+  onRowDblClick(e) {
+    this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.id}`]);
+  }
 
 }

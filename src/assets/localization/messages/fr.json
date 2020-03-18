@@ -234,7 +234,7 @@
     "tiers-lieuxpassageaquai-commentaireBasFacture": "Commentaire Bas de Facture",
     "tiers-lieuxpassageaquai-details-groupe-certifications": "Certifications",
     "tiers-lieuxpassageaquai-details-groupe-paramavances": "Paramètres avancés",
-    "tiers-lieuxpassageaquai-details-title": "Fiche transporteur",
+    "tiers-lieuxpassageaquai-details-title": "Fiche lieu de passage à quai",
     "tiers-lieuxpassageaquai-details-groupe-infos": "Infos générales",
     "tiers-lieuxpassageaquai-details-groupe-references": "Références",
     "tiers-lieuxpassageaquai-details-groupe-adresses": "Adresse",
@@ -243,7 +243,7 @@
     "tiers-lieuxpassageaquai-idTVA": "id. TVA CEE",
     "tiers-lieuxpassageaquai-RCS": "RCS",
     "tiers-lieuxpassageaquai-autoFacturation": "Auto facturation",
-    "tiers-lieuxpassageaquai-type": "Type Transporteur",
+    "tiers-lieuxpassageaquai-type": "Type Lieu de passage à quai",
     "tiers-lieuxpassageaquai-details-groupe-paiement": "Paiement",
 
     "tiers-lieuxpassageaquai-contacts": "Contacts"
