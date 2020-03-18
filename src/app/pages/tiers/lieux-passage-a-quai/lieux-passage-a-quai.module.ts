@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 
 import {LieuxPassageAQuaiRoutingModule} from './lieux-passage-a-quai-routing.module';
 import {SharedModule} from '../../../shared/shared.module';
-import { LieuxPassageAQuaiListComponent } from './list/lieux-passage-a-quai-list.component';
 import {
   DxAccordionModule, DxBoxModule,
   DxButtonModule, DxCheckBoxModule,
@@ -12,6 +11,7 @@ import {
 } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LieuxPassageAQuaiDetailsComponent } from './details/lieux-passage-a-quai-details.component';
+import { LieuxPassageAQuaiListComponent } from './list/lieux-passage-a-quai-list.component';
 
 
 @NgModule({

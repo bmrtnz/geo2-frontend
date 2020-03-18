@@ -15,3 +15,5 @@ export * from './fournisseur.model';
 export * from './groupe-fournisseur.model';
 export * from './type.fournisseur.model';
 export * from './transporteur.model';
+export * from './lieu-passage-a-quai.model';
+

@@ -1,6 +1,6 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe} from './';
+import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, RegimeTva, Secteur, Societe} from './';
 
-export class LieuxPassageAQuai {
+export class LieuPassageAQuai {
 
   public id: string;
   public code: string;
