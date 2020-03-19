@@ -76,7 +76,10 @@ export class FournisseurDetailsComponent implements OnInit {
     idTVA:  [''],
     RCS:  [''],
     autoFacturation: [false],
-    valide: [false]
+    valide: [false],
+    paramAvances: [],
+    certifications: [],
+    delaiBonFacturer: []
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 

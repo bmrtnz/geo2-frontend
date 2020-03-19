@@ -5,8 +5,38 @@
   color: $base-accent;
   font-weight: bold;
 }
+
+// Set color of form label
 .dx-field-label {
   color: $base-accent;
+}
+
+/*
+ * Size of form field/label
+ * Large : 40/60 (Default DX value)
+ * Normal : 30/70
+ * Small : 20/80
+ */
+.dx-field:not(.field-large) {
+  & > .dx-field-label {
+    width: 30%;
+  }
+  & > .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
+    width: 70%;
+  }
+}
+.dx-field.field-small {
+  & > .dx-field-label {
+    width: 20%;
+  }
+  & > .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
+    width: 80%;
+  }
+}
+
+// Fix dx-field with inner dx-box
+.dx-field > .dx-box {
+  width: 100%;
 }
 
 // Vertical checkbox

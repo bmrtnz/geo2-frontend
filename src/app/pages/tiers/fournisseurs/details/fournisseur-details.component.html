@@ -1,9 +1,11 @@
 <form [formGroup]="fournisseurForm" (ngSubmit)="onSubmit()">
     <div class="content-block">
-      <h2>{{ 'tiers-fournisseurs-details-title' | localize }}</h2>
-      <dx-button type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
+      <h2>
+        {{ 'tiers-fournisseurs-details-title' | localize }}
+        <dx-button style="float: right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
+      </h2>
     </div>
-  
+
     <div class="content-block fournisseur-page">
         <dx-box direction="row">
           <dxi-item [ratio]="1">
@@ -20,7 +22,7 @@
               icon="material-icons home_work"
               text="{{ 'tiers-fournisseurs-partenaires' | localize }}">
             </dx-button>
-  
+
             <dx-check-box
               class="vertical"
               formControlName="valide"
@@ -28,11 +30,11 @@
             ></dx-check-box>
             <dx-button
               class="black"
-              height="auto" 
+              height="auto"
               text="{{ 'btn-historique' | localize }}"></dx-button>
             <dx-button
               class="black"
-              height="auto" 
+              height="auto"
               icon="material-icons folder"
               text="{{ 'btn-docsjoints' | localize }}">
             </dx-button>
@@ -42,7 +44,7 @@
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-infos' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
                 <!-- Code -->
                 <div class="dx-field">
@@ -71,7 +73,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-stockActif' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box 
+                    <dx-check-box
                     height= "00"
                     formControlName="stockActif"></dx-check-box>
                   </div>
@@ -89,10 +91,10 @@
 
               </div>
             </div>
-  
+
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-adresses' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
                 <!-- Raison social -->
                 <div class="dx-field">
@@ -101,7 +103,7 @@
                     <dx-text-box formControlName="raisonSocial"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Adresse 1 -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse1' | localize }}</div>
@@ -109,7 +111,7 @@
                     <dx-text-box formControlName="adresse1"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Adresse 2 -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse2' | localize }}</div>
@@ -117,7 +119,7 @@
                     <dx-text-box formControlName="adresse2"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Adresse 3 -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse3' | localize }}</div>
@@ -125,7 +127,7 @@
                     <dx-text-box formControlName="adresse3"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Code postal -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-codePostal' | localize }}</div>
@@ -133,7 +135,7 @@
                     <dx-text-box formControlName="codePostal"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Ville -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-ville' | localize }}</div>
@@ -141,7 +143,7 @@
                     <dx-text-box formControlName="ville"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Pays -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-pays' | localize }}</div>
@@ -171,7 +173,7 @@
                   </div>
                 </div>
               </div>
-  
+
               <dx-accordion
                 [collapsible]="true"
                 [multiple]="false"
@@ -185,7 +187,7 @@
                       <dx-text-box formControlName="facturationRaisonSocial"></dx-text-box>
                     </div>
                   </div>
-  
+
                   <!-- Adresse 1 -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-facturationAdresse1' | localize }}</div>
@@ -193,7 +195,7 @@
                       <dx-text-box formControlName="facturationAdresse1"></dx-text-box>
                     </div>
                   </div>
-  
+
                   <!-- Adresse 2 -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-facturationAdresse2' | localize }}</div>
@@ -201,7 +203,7 @@
                       <dx-text-box formControlName="facturationAdresse2"></dx-text-box>
                     </div>
                   </div>
-  
+
                   <!-- Adresse 3 -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-facturationAdresse3' | localize }}</div>
@@ -209,7 +211,7 @@
                       <dx-text-box formControlName="facturationAdresse3"></dx-text-box>
                     </div>
                   </div>
-  
+
                   <!-- code postal -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-facturationCodePostal' | localize }}</div>
@@ -217,7 +219,7 @@
                       <dx-text-box formControlName="facturationCodePostal"></dx-text-box>
                     </div>
                   </div>
-  
+
                   <!-- Ville -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-facturationVille' | localize }}</div>
@@ -225,7 +227,7 @@
                       <dx-text-box formControlName="facturationVille"></dx-text-box>
                     </div>
                   </div>
-  
+
                   <!-- Pays -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-facturationPays' | localize }}</div>
@@ -248,7 +250,7 @@
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-references' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
 
                 <!-- Bureau achat -->
@@ -284,7 +286,7 @@
                     <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Langue -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-langue' | localize }}</div>
@@ -297,7 +299,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- tvaCee -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-tvaCee' | localize }}</div>
@@ -305,7 +307,7 @@
                     <dx-text-box formControlName="tvaCee"></dx-text-box>
                   </div>
                 </div>
-                
+
               </div>
               <dx-accordion
                 [collapsible]="true"
@@ -313,7 +315,7 @@
                 [selectedIndex]="-1"
               >
                 <dxi-item title="{{ 'tiers-fournisseurs-indicationFacture' | localize }}">
-                  
+
                   <!-- Reference Coface -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-referencecoface' | localize }}</div>
@@ -367,32 +369,34 @@
                 </dxi-item>
               </dx-accordion>
             </div>
-  
+
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-paiement' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
-                <dx-box direction="row">
-                  <dxi-item [ratio]="2">
-                    <!-- Nb Jour Echeance -->
-                    <div class="dx-field">
-                      <div class="dx-field-label">{{ 'tiers-fournisseurs-nbJourEcheance' | localize }}</div>
-                      <div class="dx-field-value">
-                        <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
+                <div class="dx-field">
+                  <dx-box direction="row">
+                    <dxi-item [ratio]="2">
+                      <!-- Nb Jour Echeance -->
+                      <div class="dx-field field-large">
+                        <div class="dx-field-label">{{ 'tiers-fournisseurs-nbJourEcheance' | localize }}</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
+                        </div>
                       </div>
-                    </div>
-                  </dxi-item>
-                  <dxi-item [ratio]="1">
-                    <!-- Echeance Le -->
-                    <div class="dx-field">
-                      <div class="dx-field-label">{{ 'tiers-fournisseurs-echeanceLe' | localize }}</div>
-                      <div class="dx-field-value">
-                        <dx-text-box formControlName="echeanceLe"></dx-text-box>
+                    </dxi-item>
+                    <dxi-item [ratio]="1">
+                      <!-- Echeance Le -->
+                      <div class="dx-field field-small">
+                        <div class="dx-field-label">{{ 'tiers-fournisseurs-echeanceLe' | localize }}</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="echeanceLe"></dx-text-box>
+                        </div>
                       </div>
-                    </div>
-                  </dxi-item>
-                </dx-box>
-  
+                    </dxi-item>
+                  </dx-box>
+                </div>
+
                 <!-- Incoterm -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-incoterm' | localize }}</div>
@@ -400,7 +404,7 @@
                     <dx-text-box formControlName="incoterm"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Regime Tva -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-regimeTva' | localize }}</div>
@@ -413,7 +417,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- Délai bon à facturer -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-delaiBonFacturer' | localize }}</div>
@@ -426,7 +430,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- Devise -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-devise' | localize }}</div>
@@ -437,7 +441,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- Moyen Paiement -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-moyenPaiement' | localize }}</div>
@@ -448,7 +452,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- Base Paiement -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-basePaiement' | localize }}</div>
@@ -468,7 +472,7 @@
                 [selectedIndex]="-1"
               >
                 <dxi-item title="{{ 'tiers-fournisseurs-autoFacturation' | localize }}">
-                  
+
                   <!-- Auto facturation ? -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-autoFacturation' | localize }} ?</div>
@@ -547,4 +551,3 @@
           </dx-box>
     </div>
   </form>
-  

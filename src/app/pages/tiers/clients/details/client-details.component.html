@@ -1,9 +1,10 @@
 <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
   <div class="content-block">
-    <h2>{{ 'tiers-clients-details-title' | localize }}</h2>
-    <div>
-      <dx-button style="float:left;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
-
+    <h2>
+      {{ 'tiers-clients-details-title' | localize }}
+      <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
+    </h2>
+    <!--<div>
       <dx-list class="dx-home-search" style="margin-left:150px;width:60%;"
         #list
         [dataSource]="clients"
@@ -15,8 +16,7 @@
               <div>{{data.raisonSocial}}</div>
           </div>
       </dx-list>
-
-    </div>
+    </div> -->
   </div>
   <div class="content-block client-page">
       <dx-box direction="row">
@@ -35,7 +35,7 @@
             icon="material-icons home_work"
             text="{{ 'tiers-clients-entrepots' | localize }}">
           </dx-button>
-          
+
           <dx-check-box
             class="vertical"
             formControlName="valide"
@@ -47,7 +47,7 @@
           text="{{ 'btn-historique' | localize }}"></dx-button>
           <dx-button
             class="black"
-            height="auto" 
+            height="auto"
             icon="material-icons folder"
             text="{{ 'btn-docsjoints' | localize }}">
           </dx-button>
@@ -318,7 +318,7 @@
               [selectedIndex]="-1"
             >
               <dxi-item title="{{ 'tiers-clients-indicationFacture' | localize }}">
-                
+
                 <!-- Reference Coface -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-clients-referencecoface' | localize }}</div>
@@ -356,26 +356,28 @@
             <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-paiement' | localize }}</span>
 
             <div class="dx-form-group-content">
-              <dx-box direction="row">
-                <dxi-item [ratio]="2">
-                  <!-- Nb Jour Echeance -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-clients-nbJourEcheance' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
+              <div class="dx-field">
+                <dx-box direction="row">
+                  <dxi-item [ratio]="2">
+                    <!-- Nb Jour Echeance -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ 'tiers-clients-nbJourEcheance' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
+                      </div>
                     </div>
-                  </div>
-                </dxi-item>
-                <dxi-item [ratio]="1">
-                  <!-- Echeance Le -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-clients-echeanceLe' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="echeanceLe"></dx-text-box>
+                  </dxi-item>
+                  <dxi-item [ratio]="1">
+                    <!-- Echeance Le -->
+                    <div class="dx-field field-small">
+                      <div class="dx-field-label">{{ 'tiers-clients-echeanceLe' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-text-box formControlName="echeanceLe"></dx-text-box>
+                      </div>
                     </div>
-                  </div>
-                </dxi-item>
-              </dx-box>
+                  </dxi-item>
+                </dx-box>
+              </div>
 
               <!-- Incoterm -->
               <div class="dx-field">

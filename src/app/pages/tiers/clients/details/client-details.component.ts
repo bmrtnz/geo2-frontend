@@ -73,7 +73,7 @@ export class ClientDetailsComponent implements OnInit {
     lieuFonctionEAN: [''],
     delaiBonFacturer: [''],
     certifications: [''],
-
+    paramAvances: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
