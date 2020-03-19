@@ -39,6 +39,7 @@ const lieupassageaquai = [
     courtier: null,
     courtageModeCalcul: null,
     courtageValeur: null,
+    lieuFonctionEAN: '',
     typeTransporteur: null
 
   }

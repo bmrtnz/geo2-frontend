@@ -48,7 +48,8 @@ const transporteurs = [
     courtier: null,
     courtageModeCalcul: null,
     courtageValeur: null,
-    typeTransporteur: null
+    typeTransporteur: null,
+    lieuFonctionEAN: ''
 
   }
 ];

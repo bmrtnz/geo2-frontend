@@ -40,5 +40,6 @@ export class LieuPassageAQuai {
   public compteComptable: string;
   public langue: Pays;
   public devise: Devise;
+  public lieuFonctionEAN: Devise;
 
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BasePaiement, LieuPassageAQuai, Devise, MoyenPaiement, Pays, Personne, RegimeTva, Secteur} from '../models';
+import {BasePaiement, LieuPassageAQuai, Devise, MoyenPaiement, Pays, RegimeTva} from '../models';
 import {FakeService} from './fake.service';
 
 @Injectable({
@@ -15,39 +15,23 @@ export class LieuxPassageAQuaiService {
     return this.fakeService.get(LieuPassageAQuai, id);
   }
 
-  // getSecteurs() {
-  //   return this.fakeService.get(Secteur);
-  // }
+  getPays() {
+    return this.fakeService.get(Pays);
+  }
 
-  // async getCommerciaux() {
-  //   const personnes = await this.fakeService.get(Personne);
+  getDevises() {
+    return this.fakeService.get(Devise);
+  }
 
-  //   return personnes.filter(p => p.role === 'C');
-  // }
+  getMoyenPaiements() {
+    return this.fakeService.get(MoyenPaiement);
+  }
 
-  // async getAssistantes() {
-  //   const personnes = await this.fakeService.get(Personne);
+  getBasePaiements() {
+    return this.fakeService.get(BasePaiement);
+  }
 
-  //   return personnes.filter(p => p.role === 'A');
-  // }
-
-  // getPays() {
-  //   return this.fakeService.get(Pays);
-  // }
-
-  // getDevises() {
-  //   return this.fakeService.get(Devise);
-  // }
-
-  // getMoyenPaiements() {
-  //   return this.fakeService.get(MoyenPaiement);
-  // }
-
-  // getBasePaiements() {
-  //   return this.fakeService.get(BasePaiement);
-  // }
-
-  // getRegimeTva() {
-  //   return this.fakeService.get(RegimeTva);
-  // }
+  getRegimeTva() {
+    return this.fakeService.get(RegimeTva);
+  }
 }
