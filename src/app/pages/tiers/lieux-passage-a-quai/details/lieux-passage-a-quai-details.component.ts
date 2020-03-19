@@ -81,6 +81,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   moyenPaiements: MoyenPaiement[];
   basePaiements: MoyenPaiement[];
   regimeTva: RegimeTva[];
+  typeLieupassageaquai: any[];
   defaultVisible: boolean;
 
   constructor(

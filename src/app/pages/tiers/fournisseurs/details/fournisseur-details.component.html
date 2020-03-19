@@ -262,7 +262,7 @@
                     [dataSource]="bureauAchat"
                     displayExpr="description"
                     valueExpr="id"
-                  ></dx-select-box>
+                    ></dx-select-box>
                   </div>
                 </div>
 
@@ -275,7 +275,7 @@
                     [dataSource]="typeBureau"
                     displayExpr="description"
                     valueExpr="id"
-                  ></dx-select-box>
+                    ></dx-select-box>
                   </div>
                 </div>
 
@@ -422,12 +422,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-delaiBonFacturer' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-select-box
-                      formControlName="delaiBonFacturer"
-                      [dataSource]="delaiBonFacturer"
-                      displayExpr="description"
-                      valueExpr="id"
-                    ></dx-select-box>
+                    <dx-number-box formControlName="delaiBonFactuer"></dx-number-box>
                   </div>
                 </div>
 

@@ -91,6 +91,8 @@ export class FournisseurDetailsComponent implements OnInit {
   moyenPaiements: MoyenPaiement[];
   basePaiements: MoyenPaiement[];
   regimeTva: RegimeTva[];
+  bureauAchat: any[];
+  typeBureau: any[];
   defaultVisible: boolean;
 
   constructor(

@@ -84,6 +84,7 @@ export class TransporteurDetailsComponent implements OnInit {
   moyenPaiements: MoyenPaiement[];
   basePaiements: MoyenPaiement[];
   regimeTva: RegimeTva[];
+  typeTransporteur: any[];
   defaultVisible: boolean;
 
   constructor(

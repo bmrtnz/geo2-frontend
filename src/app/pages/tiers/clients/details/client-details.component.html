@@ -404,12 +404,7 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-delaiBonFacturer' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-select-box
-                    formControlName="delaiBonFacturer"
-                    [dataSource]="delaiBonFacturer"
-                    displayExpr="description"
-                    valueExpr="id"
-                  ></dx-select-box>
+                  <dx-number-box formControlName="delaiBonFacturer"></dx-number-box>
                 </div>
               </div>
 

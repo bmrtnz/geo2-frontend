@@ -14,7 +14,7 @@
               icon="material-icons person"
               text="{{ 'tiers-lieuxpassageaquai-contacts' | localize }}">
             </dx-button>
-            
+
             <dx-check-box
               class="vertical"
               formControlName="valide"
@@ -22,7 +22,7 @@
             ></dx-check-box>
             <dx-button
               class="black"
-              height="auto" 
+              height="auto"
               icon="material-icons folder"
               text="{{ 'btn-docsjoints' | localize }}">
             </dx-button>
@@ -32,7 +32,7 @@
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-infos' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
                 <!-- Code -->
                 <div class="dx-field">
@@ -72,10 +72,10 @@
 
               </div>
             </div>
-  
+
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-adresses' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
                 <!-- Raison sociale -->
                 <div class="dx-field">
@@ -84,7 +84,7 @@
                     <dx-text-box formControlName="raisonSocial"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Adresse 1 -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}</div>
@@ -92,7 +92,7 @@
                     <dx-text-box formControlName="adresse1"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Adresse 2 -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}</div>
@@ -100,7 +100,7 @@
                     <dx-text-box formControlName="adresse2"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Adresse 3 -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}</div>
@@ -108,7 +108,7 @@
                     <dx-text-box formControlName="adresse3"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Code postal -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}</div>
@@ -116,7 +116,7 @@
                     <dx-text-box formControlName="codePostal"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Ville -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-ville' | localize }}</div>
@@ -124,7 +124,7 @@
                     <dx-text-box formControlName="ville"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Pays -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-pays' | localize }}</div>
@@ -146,9 +146,9 @@
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-references' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
-  
+
                 <!-- Lieu fonction EAN -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}</div>
@@ -156,7 +156,7 @@
                     <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
                   </div>
                 </div>
-  
+
                 <!-- Langue -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-langue' | localize }}</div>
@@ -169,7 +169,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- tvaCee -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}</div>
@@ -178,17 +178,17 @@
                   </div>
                 </div>
               </div>
-  
+
             </div>
-  
+
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-paiement' | localize }}</span>
-  
+
               <div class="dx-form-group-content">
                 <dx-box direction="row">
                   <dxi-item [ratio]="2">
                     <!-- Nb Jour Echeance -->
-                    <div class="dx-field">
+                    <div class="dx-field field-large">
                       <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}</div>
                       <div class="dx-field-value">
                         <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
@@ -197,7 +197,7 @@
                   </dxi-item>
                   <dxi-item [ratio]="1">
                     <!-- Echeance Le -->
-                    <div class="dx-field">
+                    <div class="dx-field field-small">
                       <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-echeanceLe' | localize }}</div>
                       <div class="dx-field-value">
                         <dx-text-box formControlName="echeanceLe"></dx-text-box>
@@ -205,7 +205,7 @@
                     </div>
                   </dxi-item>
                 </dx-box>
-  
+
                 <!-- Regime Tva -->
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-regimeTva' | localize }}</div>
@@ -218,7 +218,7 @@
                       ></dx-select-box>
                     </div>
                 </div>
-  
+
                 <!-- Devise -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-devise' | localize }}</div>
@@ -229,7 +229,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- Moyen Paiement -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-moyenPaiement' | localize }}</div>
@@ -240,7 +240,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
                 <!-- Base Paiement -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-basePaiement' | localize }}</div>
@@ -251,7 +251,7 @@
                     ></dx-select-box>
                   </div>
                 </div>
-  
+
               </div>
             </div>
           </dxi-item>
@@ -259,4 +259,3 @@
 
     </div>
   </form>
-  

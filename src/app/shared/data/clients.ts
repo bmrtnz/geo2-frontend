@@ -181,7 +181,6 @@ const clients = [
     id: '000000',
     societe: {id: 'BWS', raisonSocial: ''},
     code: 'BWSTOCK',
-
     secteur: 'F',
     raisonSocial: 'BlUE-WHALE SAS ',
     adresse1: null,
