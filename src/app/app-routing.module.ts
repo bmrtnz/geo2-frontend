@@ -35,6 +35,11 @@ const routes: Routes = [
     loadChildren: './pages/tiers/tiers.module#TiersModule'
   },
   {
+    path: 'entrepots',
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/entrepots/entrepots.module#EntrepotsModule'
+  },
+  {
     path: '**',
     redirectTo: 'home',
     canActivate: [AuthGuardService]

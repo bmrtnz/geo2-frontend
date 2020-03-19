@@ -18,6 +18,11 @@ $base-fonts-path: './scss/fonts/';
 @import "~scss/dx/form";
 @import "~scss/dx/accordion";
 
+// No text overline
+body {
+	-webkit-user-select:none;
+     -moz-user-select:none;
+}
 
 /* Colors */
 $orange: #dc6d5a;

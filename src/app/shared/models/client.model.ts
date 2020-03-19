@@ -50,4 +50,5 @@ export class Client {
   public typeClient: TypeClient;
   public groupeClient: GroupeClient;
   public soumisCtifl: boolean;
+  public paramAvances: string;
 }
