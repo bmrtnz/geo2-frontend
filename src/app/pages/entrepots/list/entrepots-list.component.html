@@ -1,0 +1,45 @@
+<h2 class="content-block">{{ 'tiers-entrepots-title' | localize }}</h2>
+
+<div class="content-block">
+  <dx-data-grid class="dx-card wide-card"
+                [dataSource]="dataSource"
+                [showBorders]="false"
+                [focusedRowEnabled]="true"
+                [focusedRowIndex]="0"
+                [columnAutoWidth]="true"
+                [columnHidingEnabled]="true"
+                (onRowDblClick)="onRowDblClick($event)">
+
+    <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-export [enabled]="true" fileName="Transporteurs" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+    <dxi-column
+      dataField="id"
+      [width]="90"
+      [hidingPriority]="2">
+    </dxi-column>
+    <dxi-column
+      dataField="raisonSocial"
+      [width]="190"
+      caption="{{ 'tiers-entrepots-raisonSocial' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="pays.description"
+      [width]="190"
+      caption="{{ 'tiers-entrepots-pays' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="ville"
+      [width]="190"
+      caption="{{ 'tiers-entrepots-ville' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+
+  </dx-data-grid>
+</div>

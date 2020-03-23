@@ -1,8 +1,6 @@
-export class Devise {
+export class Transitaire {
 
   public id: string;
   public description: string;
-  public taux: number;
   public valide: boolean;
-
 }

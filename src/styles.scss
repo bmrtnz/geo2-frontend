@@ -35,7 +35,8 @@ $cyan: #4080FF;
   background-color: $cyan;
 }
 
-.fournisseur-page, .client-page, .transporteur-page, .lieupassageaquai-page {
+.fournisseur-page, .client-page, .transporteur-page, .lieupassageaquai-page,
+.entrepot-page {
 
   .dx-accordion-item-title::before {
     font-size: 18px;

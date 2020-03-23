@@ -147,9 +147,8 @@ export class ClientDetailsComponent implements OnInit {
     this.defaultVisible = !this.defaultVisible;
   }
 
-  contactsBtnClick(event) {
-    console.log(`/tiers/contacts/${this.client.id}`);
-    // this.router.navigate([`/tiers/contacts/${this.client.id}`]);
-    this.router.navigate(['/home']);
+  entrepotsBtnClick() {
+    // this.router.navigate([`./entrepots/${this.client.id}`]);
+    this.router.navigate([`./entrepots`]);
   }
 }

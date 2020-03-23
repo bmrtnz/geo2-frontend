@@ -1,6 +1,6 @@
-import {Incoterm, Pays, RegimeTva, Societe, baseTarifTransit,
-     ModeLivraison, Personne, TypePalette, baseTarifTransport,
-      typeCamion, Transitaire, Transporteur
+import {Incoterm, Pays, RegimeTva, Societe, BaseTarifTransit,
+     ModeLivraison, Personne, TypePalette, BaseTarifTransport,
+      TypeCamion, Transitaire, Transporteur
 } from './';
 
 export class Entrepot {
@@ -20,11 +20,11 @@ public tvaCee: string;
 public regimeTva: RegimeTva;
 public typePalette: TypePalette;
 public transporteur: Transporteur;
-public baseTarifTransport: baseTarifTransport;
-public typeCamion: typeCamion;
+public baseTarifTransport: BaseTarifTransport;
+public typeCamion: TypeCamion;
 public transitaire: Transitaire;
-public baseTarifTransit: baseTarifTransit;
-public instructSecrComm : string;
+public baseTarifTransit: BaseTarifTransit;
+public instructSecrComm: string;
 public instructLogistique: string;
 public gestionnaireCHEP: string;
 public referenceCHEP: string;
@@ -41,3 +41,4 @@ public modeLivraison: ModeLivraison;
 public PUTarifTransport: string;
 public PUTarifTransit: string;
 }
+

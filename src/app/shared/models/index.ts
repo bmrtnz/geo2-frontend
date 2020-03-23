@@ -16,4 +16,10 @@ export * from './groupe-fournisseur.model';
 export * from './type.fournisseur.model';
 export * from './transporteur.model';
 export * from './lieu-passage-a-quai.model';
-
+export * from './entrepot.model';
+export * from './base-tarif-transit.model';
+export * from './type-palette.model';
+export * from './base-tarif-transport.model';
+export * from './type-camion.model';
+export * from './transitaire.model';
+export * from './mode-livraison.model';

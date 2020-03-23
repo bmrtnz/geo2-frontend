@@ -26,14 +26,14 @@
             height="auto"
             type="danger"
             icon="material-icons person"
-            text="{{ 'tiers-clients-contacts' | localize }}"
-            (onClick)="contactsBtnClick($event)">
+            text="{{ 'tiers-clients-contacts' | localize }}">
           </dx-button>
           <dx-button
             height="auto"
             type="default"
             icon="material-icons home_work"
-            text="{{ 'tiers-clients-entrepots' | localize }}">
+            text="{{ 'tiers-clients-entrepots' | localize }}"
+            (onClick)="entrepotsBtnClick($event)">
           </dx-button>
 
           <dx-check-box
