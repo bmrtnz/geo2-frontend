@@ -53,16 +53,42 @@
                   </div>
                 </div>
 
-                <!-- Langue -->
+                <!-- Commercial -->
                 <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-type' | localize }}</div>
+                    <div class="dx-field-label">{{ 'tiers-entrepots-commercial' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-select-box
-                        formControlName="type"
-                        [items]="typeentrepot"
+                    <dx-select-box
+                        formControlName="commercial"
+                        [items]="commerciaux"
+                        valueExpr="id"
+                        displayExpr="nomUtilisateur"
+                    ></dx-select-box>
+                    </div>
+                </div>
+
+                <!-- Assistante -->
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-entrepots-assistante' | localize }}</div>
+                    <div class="dx-field-value">
+                    <dx-select-box
+                        formControlName="assistante"
+                        [items]="assistantes"
+                        valueExpr="id"
+                        displayExpr="nomUtilisateur"
+                    ></dx-select-box>
+                    </div>
+                </div>
+
+                <!-- Mode de livraion -->
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-entrepots-modeLivraison' | localize }}</div>
+                    <div class="dx-field-value">
+                    <dx-select-box
+                        formControlName="modeLivraison"
+                        [items]="modesLivraison"
                         valueExpr="id"
                         displayExpr="description"
-                      ></dx-select-box>
+                    ></dx-select-box>
                     </div>
                 </div>
 
@@ -213,12 +239,20 @@
 
               <div class="dx-form-group-content">
 
-                <!-- Lieu fonction EAN -->
+                <!-- Lieu fonction EAN Dépôt-->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEAN' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
-                  </div>
+                    <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEANDepot' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-text-box formControlName="lieuFonctionEANDepot"></dx-text-box>
+                    </div>
+                </div>
+
+                <!-- Lieu fonction EAN Acheteur-->
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEANAcheteur' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-text-box formControlName="lieuFonctionEANAcheteur"></dx-text-box>
+                    </div>
                 </div>
 
                 <!-- Langue -->
@@ -243,84 +277,58 @@
                 </div>
               </div>
 
-              <!-- Client raison sociale -->
-              <dx-box direction="row">
-                <dxi-item [ratio]="3">
-                    <div class="dx-field">
-                        <div class="dx-field-label">{{ 'tiers-entrepots-clientRaisonSociale' | localize }}</div>
-                        <div class="dx-field-value">
-                        <dx-text-box
-                            readOnly="true"
-                            formControlName="clientRaisonSociale"></dx-text-box>
-                        </div>
-                    </div>
-                </dxi-item>
-                <dxi-item [ratio]="0.2"></dxi-item>
-                <dxi-item [ratio]="1">
-                    <dx-button
-                    class="black"
-                    height="auto"
-                    text="{{ 'btn-affecter' | localize }}"></dx-button>
-                </dxi-item>
-              </dx-box>
+                <!-- Type palette -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-entrepots-typePalette' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="typePalette"
+                      [items]="typePalette"
+                      valueExpr="id"
+                      displayExpr="description"
+                    ></dx-select-box>
+                  </div>
+                </div>
 
+                <!-- Incoterm -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-entrepots-incoterm' | localize }}</div>
+                  <div class="dx-field-value">
+                  <dx-text-box formControlName="incoterm"></dx-text-box>
+                  </div>
+                </div>
+              
+              <!-- Indications sur facture -->
               <dx-accordion
                 [collapsible]="true"
                 [multiple]="false"
                 [selectedIndex]="-1"
               >
-                <dxi-item title="{{ 'tiers-entrepots-indicationFacture' | localize }}">
+                <dxi-item title="{{ 'tiers-entrepots-details-groupe-indicationFacture' | localize }}">
 
-                  <!-- Reference Coface -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-referencecoface' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="referenceCoface"></dx-text-box>
+                    <!-- Mention client facture -->
+                    <div class="dx-field">
+                      <div class="dx-field-label">{{ 'tiers-entrepots-mentionClientFacture' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-text-area formControlName="mentionClientFacture"></dx-text-area>
+                      </div>
                     </div>
-                  </div>
-
-                  <!-- Compte comptable -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-compteComptable' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="compteComptable"></dx-text-box>
-                    </div>
-                  </div>
+      
                 </dxi-item>
+
               </dx-accordion>
 
             </div>
 
+            <!-- Infos commerciales -->
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-paiement' | localize }}</span>
+              <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-infocomm' | localize }}</span>
 
               <div class="dx-form-group-content">
-                <div class="dx-field">
-                  <dx-box direction="row">
-                    <dxi-item [ratio]="2">
-                      <!-- Nb Jour Echeance -->
-                      <div class="dx-field field-large">
-                        <div class="dx-field-label">{{ 'tiers-entrepots-nbJourEcheance' | localize }}</div>
-                        <div class="dx-field-value">
-                          <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
-                        </div>
-                      </div>
-                    </dxi-item>
-                    <dxi-item [ratio]="1">
-                      <!-- Echeance Le -->
-                      <div class="dx-field field-small">
-                        <div class="dx-field-label">{{ 'tiers-entrepots-echeanceLe' | localize }}</div>
-                        <div class="dx-field-value">
-                          <dx-text-box formControlName="echeanceLe"></dx-text-box>
-                        </div>
-                      </div>
-                    </dxi-item>
-                  </dx-box>
-                </div>
 
                 <!-- Regime Tva -->
                 <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-regimeTva' | localize }}</div>
+                    <div class="dx-field-label">{{ 'tiers-entrepots-regimeTva' | localize }}</div>
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="regimeTva"
@@ -331,39 +339,155 @@
                     </div>
                 </div>
 
-                <!-- Devise -->
+                <!-- Type transporteur -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-entrepots-devise' | localize }}</div>
+                  <div class="dx-field-label">{{ 'tiers-entrepots-Transporteur' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-select-box
-                      formControlName="devise"
-                      [items]="devises"
+                      formControlName="transporteur"
+                      [dataSource]="transporteur"
+                      displayExpr="description"
+                      valueExpr="id"
+                    ></dx-select-box>
+                  </div>
+              </div>
+
+                <!-- Base tarif transport -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-entrepots-baseTarifTransport' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="baseTarifTransport"
+                      [items]="baseTarifTransport"
                     ></dx-select-box>
                   </div>
                 </div>
 
-                <!-- Moyen Paiement -->
+                <!-- PU Tarif transport -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-entrepots-moyenPaiement' | localize }}</div>
+                  <div class="dx-field-label">{{ 'tiers-entrepots-PUTarifTransport' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="PUTarifTransport"></dx-text-box>
+                  </div>
+                </div>
+
+                <!-- Type Camion -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-entrepots-typeCamion' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-select-box
-                      formControlName="moyenPaiement"
-                      [items]="moyenPaiements"
+                      formControlName="typeCamion"
+                      [items]="typeCamion"
                     ></dx-select-box>
                   </div>
                 </div>
 
-                <!-- Base Paiement -->
+                <!-- Transitaire -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-entrepots-basePaiement' | localize }}</div>
+                  <div class="dx-field-label">{{ 'tiers-entrepots-transitaire' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-select-box
-                      formControlName="basePaiement"
-                      [items]="basePaiements"
+                      formControlName="transitaire"
+                      [items]="transitaire"
                     ></dx-select-box>
                   </div>
                 </div>
 
+                <!-- Base tarif transit -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-entrepots-baseTarifTransit' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="baseTarifTransit"
+                      [items]="baseTarifTransit"
+                    ></dx-select-box>
+                  </div>
+                </div>
+
+                <!-- PU tarif transit -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-entrepots-PUTarifTransit' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="PUTarifTransit"></dx-text-box>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Autres infos commerciales -->
+              <dx-accordion
+                [collapsible]="true"
+                [multiple]="false"
+                [selectedIndex]="-1"
+              >
+                <dxi-item title="{{ 'tiers-entrepots-details-groupe-autres' | localize }}">
+
+                    <!-- gestionnaire CHEP -->
+                    <div class="dx-field">
+                      <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireCHEP' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-text-box formControlName="gestionnaireCHEP"></dx-text-box>
+                      </div>
+                    </div>
+
+                    <!-- référence n° CHEP -->
+                    <div class="dx-field">
+                      <div class="dx-field-label">{{ 'tiers-entrepots-referenceCHEP' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-text-box formControlName="referenceCHEP"></dx-text-box>
+                      </div>
+                    </div>
+
+                    <!-- declaration EUR1 -->
+                    <div class="dx-field">
+                      <div class="dx-field-label">{{ 'tiers-entrepots-declarationEUR1' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-check-box formControlName="declarationEUR1"></dx-check-box>
+                      </div>
+                    </div>
+
+                    <!-- Envoi auto détail -->
+                    <div class="dx-field">
+                      <div class="dx-field-label">{{ 'tiers-entrepots-envoiAutoDetail' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-check-box formControlName="envoiAutoDetail"></dx-check-box>
+                      </div>
+                    </div>
+
+                </dxi-item>
+
+              </dx-accordion>
+            </div>
+          </dxi-item>
+        </dx-box>
+
+        <dx-box
+        direction="row">
+          <dxi-item [ratio]="4">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-instructSecrComm' | localize }}</span>
+              <div class="dx-form-group-content">
+                <!-- Instructions secr comm -->
+                <div class="dx-field">
+                 <div class="dx-field-value">
+                    <dx-text-area formControlName="instructSecrComm"></dx-text-area>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item [ratio]="0.2">
+          </dxi-item>
+          <dxi-item [ratio]="4">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-instructLogistique' | localize }}</span>
+              <div class="dx-form-group-content">
+                <!-- Paramètres avancés -->
+                <div class="dx-field">
+                  <div class="dx-field-value">
+                    <dx-text-area formControlName="paramAvances"></dx-text-area>
+                  </div>
+                </div>
               </div>
             </div>
           </dxi-item>

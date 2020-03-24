@@ -35,8 +35,6 @@ const entrepots = [
     ifco: null,
     instructionLogistique: null,
     basePaiement: 'F',
-    referenceCoface: '540069529A',
-    compteComptable: 'AARTSE',
     langue: 'FR',
     devise: 'EUR',
     agrement: null,
@@ -44,7 +42,8 @@ const entrepots = [
     courtageModeCalcul: null,
     courtageValeur: null,
     typeTransporteur: null,
-    lieuFonctionEAN: ''
+    lieuFonctionEANDepot: 'Depot',
+    lieuFonctionEANAcheteur: 'Acheteur'
 
   }
 ];

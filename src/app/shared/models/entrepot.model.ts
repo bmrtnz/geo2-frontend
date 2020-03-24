@@ -40,5 +40,6 @@ public assistante: Personne;
 public modeLivraison: ModeLivraison;
 public PUTarifTransport: string;
 public PUTarifTransit: string;
+
 }
 

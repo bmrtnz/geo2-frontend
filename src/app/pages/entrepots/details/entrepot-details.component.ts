@@ -67,7 +67,8 @@ export class EntrepotDetailsComponent implements OnInit {
     typeClient: [''],
     groupeClient: [''],
     soumisCtifl: [''],
-    lieuFonctionEAN: [''],
+    lieuFonctionEANDepot: [''],
+    lieuFonctionEANAcheteur: [''],
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
