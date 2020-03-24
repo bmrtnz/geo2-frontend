@@ -454,6 +454,14 @@
                       </div>
                     </div>
 
+                    <!-- Contrôle réf client -->
+                    <div class="dx-field">
+                      <div class="dx-field-label">{{ 'tiers-entrepots-controleRefClient' | localize }}</div>
+                      <div class="dx-field-value">
+                        <dx-text-box formControlName="controleRefClient"></dx-text-box>
+                      </div>
+                    </div>
+
                 </dxi-item>
 
               </dx-accordion>
@@ -482,10 +490,10 @@
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-instructLogistique' | localize }}</span>
               <div class="dx-form-group-content">
-                <!-- Paramètres avancés -->
+                <!-- Instructions logistique -->
                 <div class="dx-field">
                   <div class="dx-field-value">
-                    <dx-text-area formControlName="paramAvances"></dx-text-area>
+                    <dx-text-area formControlName="instructLogistique"></dx-text-area>
                   </div>
                 </div>
               </div>
