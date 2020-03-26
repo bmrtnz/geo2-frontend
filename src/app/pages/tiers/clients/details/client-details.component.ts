@@ -149,11 +149,11 @@ export class ClientDetailsComponent implements OnInit {
 
   entrepotsBtnClick() {
     // this.router.navigate([`./entrepots/${this.client.id}`]);
-    this.router.navigate([`/entrepots`]);
+    this.router.navigate([`/tiers/entrepots`]);
   }
 
   contactsBtnClick() {
     // this.router.navigate([`./entrepots/${this.client.id}`]);
-    this.router.navigate([`/contacts`]);
+    this.router.navigate([`/tiers/contacts/clients/${this.client.id}`]);
   }
 }

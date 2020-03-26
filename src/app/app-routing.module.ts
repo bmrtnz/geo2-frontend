@@ -35,16 +35,11 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     loadChildren: './pages/tiers/tiers.module#TiersModule'
   },
-  {
-    path: 'entrepots',
-    canActivate: [AuthGuardService],
-    loadChildren: './pages/tiers/entrepots/entrepots.module#EntrepotsModule'
-  },
-  {
-    path: 'contacts',
-    canActivate: [AuthGuardService],
-    loadChildren: './pages/tiers/contacts/contacts.module#ContactsModule'
-  },
+  // {
+  //   path: 'contacts',
+  //   canActivate: [AuthGuardService],
+  //   loadChildren: './pages/tiers/contacts/contacts.module#ContactsModule'
+  // },
   {
     path: '**',
     redirectTo: 'home',
