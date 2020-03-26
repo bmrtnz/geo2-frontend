@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {EntrepotsService} from '../../../shared/services/entrepots.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  BasePaiement,
   Transporteur,
   Devise,
   Incoterm,
@@ -61,7 +60,6 @@ export class EntrepotDetailsComponent implements OnInit {
     assistante: [''],
     referenceCoface: [''],
     agrement: [''],
-    // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
     typeClient: [''],
@@ -83,7 +81,6 @@ export class EntrepotDetailsComponent implements OnInit {
   basePaiements: MoyenPaiement[];
   regimeTva: RegimeTva[];
   incoterm: Incoterm[];
-  typeTransporteur: any[];
   defaultVisible: boolean;
 
   constructor(

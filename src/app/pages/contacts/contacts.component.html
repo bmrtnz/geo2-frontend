@@ -1,0 +1,79 @@
+
+    <div class="content-block">
+      <h2>
+        {{ 'tiers-contacts-title' | localize }}
+        <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
+      </h2>
+    </div>
+    <div class="content-block contact-page">
+
+        <dx-data-grid 
+            id="gridContainer"
+            [dataSource]="dataSource"
+            keyExpr="ID"
+            [allowColumnReordering]="true"
+            [showBorders]="true"
+            (onEditingStart)="logEvent('EditingStart')"
+            (onInitNewRow)="logEvent('InitNewRow')"
+            (onRowInserting)="logEvent('RowInserting')"
+            (onRowInserted)="logEvent('RowInserted')"
+            (onRowUpdating)="logEvent('RowUpdating')"
+            (onRowUpdated)="logEvent('RowUpdated')"
+            (onRowRemoving)="logEvent('RowRemoving')"
+            (onRowRemoved)="logEvent('RowRemoved')">
+            
+            <dxo-paging [enabled]="true"></dxo-paging>
+            <dxo-editing 
+                mode="row"
+                [allowUpdating]="true"
+                [allowDeleting]="true"
+                [allowAdding]="true">
+            </dxo-editing>
+            
+            <dxi-column
+                dataField="Nom"
+                caption="Nom"
+                [width]="200">
+            </dxi-column>
+            <dxi-column
+                dataField="Prenom"
+                caption="Prénom">
+            </dxi-column>
+            <dxi-column
+                dataField="Moyen"
+                caption="Moyen"
+                [width]="100">         
+                <dxo-lookup
+                    [dataSource]="moyens"
+                    displayExpr="description"
+                    valueExpr="ID">
+                </dxo-lookup>
+            </dxi-column>
+            <dxi-column
+                dataField="Flux"
+                caption="Flux"
+                [width]="125">         
+                <dxo-lookup
+                    [dataSource]="flux"
+                    displayExpr="description"
+                    valueExpr="ID">
+                </dxo-lookup>
+            </dxi-column>
+            <dxi-column
+                dataField="Compl"
+                caption="Compl."
+                [width]="75">
+            </dxi-column>
+            <dxi-column
+                dataField="Coord"
+                caption="N°fax ou email ou nom imprim."
+                [width]="250">
+            </dxi-column>
+            <dxi-column
+                dataField="OK"
+                caption="OK"
+                [width]="75">
+            </dxi-column>
+        </dx-data-grid>
+    </div>
+

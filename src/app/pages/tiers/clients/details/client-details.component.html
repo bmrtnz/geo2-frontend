@@ -26,7 +26,8 @@
             height="auto"
             type="danger"
             icon="material-icons person"
-            text="{{ 'tiers-clients-contacts' | localize }}">
+            text="{{ 'tiers-clients-contacts' | localize }}"
+            (onClick)="contactsBtnClick($event)">
           </dx-button>
           <dx-button
             height="auto"

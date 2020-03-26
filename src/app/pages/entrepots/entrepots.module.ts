@@ -14,24 +14,24 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
-    imports: [
-        SharedModule,
-        EntrepotsRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        DxFormModule,
-        DxDataGridModule,
-        DxButtonModule,
-        DxAccordionModule,
-        DxListModule,
-        DxSelectBoxModule,
-        DxTextBoxModule,
-        DxBoxModule,
-        DxCheckBoxModule,
-        DxTextAreaModule,
-        DxPopoverModule,
-        DxNumberBoxModule
-    ],
+  imports: [
+      SharedModule,
+      EntrepotsRoutingModule,
+      FormsModule,
+      ReactiveFormsModule,
+      DxFormModule,
+      DxDataGridModule,
+      DxButtonModule,
+      DxAccordionModule,
+      DxListModule,
+      DxSelectBoxModule,
+      DxTextBoxModule,
+      DxBoxModule,
+      DxCheckBoxModule,
+      DxTextAreaModule,
+      DxPopoverModule,
+      DxNumberBoxModule
+  ],
   declarations: [
     EntrepotsListComponent,
     EntrepotDetailsComponent

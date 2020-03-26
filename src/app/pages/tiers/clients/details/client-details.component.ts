@@ -149,6 +149,11 @@ export class ClientDetailsComponent implements OnInit {
 
   entrepotsBtnClick() {
     // this.router.navigate([`./entrepots/${this.client.id}`]);
-    this.router.navigate([`./entrepots`]);
+    this.router.navigate([`/entrepots`]);
+  }
+
+  contactsBtnClick() {
+    // this.router.navigate([`./entrepots/${this.client.id}`]);
+    this.router.navigate([`/contacts`]);
   }
 }

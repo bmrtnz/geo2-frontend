@@ -40,6 +40,11 @@ const routes: Routes = [
     loadChildren: './pages/entrepots/entrepots.module#EntrepotsModule'
   },
   {
+    path: 'contacts',
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/contacts/contacts.module#ContactsModule'
+  },
+  {
     path: '**',
     redirectTo: 'home',
     canActivate: [AuthGuardService]

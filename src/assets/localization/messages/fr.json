@@ -314,7 +314,9 @@
     "tiers-entrepots-declarationEUR1": "Déclaration EUR1",
     "tiers-entrepots-": "",
 
-    "tiers-entrepot-contacts": "Contacts"
+    "tiers-entrepot-contacts": "Contacts",
+
+    "tiers-contacts-title" : "Contacts"
 
   }
 }
