@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Service, Employee, Moyen, Flux } from '../../shared/services/contacts.service';
+import { Service, Employee, Moyen, Flux } from '../../../shared/services/contacts.service';
 
 @Component({
     selector: 'app-contacts',

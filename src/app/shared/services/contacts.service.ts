@@ -30,7 +30,7 @@ const employees: Employee[] = [{
     Compl: 'P',
     Coord: 'import@aartsenfruit.nl',
     OK: true
-},{
+}, {
     ID: 2,
     Nom: 'Durand',
     Prenom: 'Robert',
@@ -39,7 +39,7 @@ const employees: Employee[] = [{
     Compl: '',
     Coord: 'import@aartsenfruit.nl',
     OK: true
-},{
+}, {
     ID: 3,
     Nom: 'Delapomme',
     Prenom: 'Maurice',

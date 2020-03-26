@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {EntrepotsService} from '../../../shared/services/entrepots.service';
+import {EntrepotsService} from '../../../../shared/services/entrepots.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   Transporteur,
@@ -9,7 +9,7 @@ import {
   Pays,
   Personne,
   RegimeTva
-} from '../../../shared/models';
+} from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({

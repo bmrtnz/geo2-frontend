@@ -7,6 +7,7 @@ import {ProfileComponent} from './pages/exemple/profile/profile.component';
 import {DisplayDataComponent} from './pages/exemple/display-data/display-data.component';
 import {DxDataGridModule, DxFormModule, DxButtonModule} from 'devextreme-angular';
 import {SharedModule} from './shared/shared.module';
+// import { ContactsComponent } from './pages/contacts/contacts.component';
 
 const routes: Routes = [
   {
@@ -37,12 +38,12 @@ const routes: Routes = [
   {
     path: 'entrepots',
     canActivate: [AuthGuardService],
-    loadChildren: './pages/entrepots/entrepots.module#EntrepotsModule'
+    loadChildren: './pages/tiers/entrepots/entrepots.module#EntrepotsModule'
   },
   {
     path: 'contacts',
     canActivate: [AuthGuardService],
-    loadChildren: './pages/contacts/contacts.module#ContactsModule'
+    loadChildren: './pages/tiers/contacts/contacts.module#ContactsModule'
   },
   {
     path: '**',

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {EntrepotsService} from '../../../shared/services/entrepots.service';
-import {Entrepot} from '../../../shared/models';
+import {EntrepotsService} from '../../../../shared/services/entrepots.service';
+import {Entrepot} from '../../../../shared/models';
 import ArrayStore from 'devextreme/data/array_store';
 import {Router} from '@angular/router';
 
