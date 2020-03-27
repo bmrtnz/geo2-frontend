@@ -160,75 +160,6 @@
                   </div>
                 </div>
               </div>
-
-              <dx-accordion
-                [collapsible]="true"
-                [multiple]="false"
-                [selectedIndex]="-1"
-              >
-                <dxi-item title="{{ 'tiers-entrepots-adresseFacturation' | localize }}">
-                  <!-- Raison social -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-facturationRaisonSocial' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationRaisonSocial"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Adresse 1 -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-facturationAdresse1' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationAdresse1"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Adresse 2 -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-facturationAdresse2' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationAdresse2"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Adresse 3 -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-facturationAdresse3' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationAdresse3"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Code postal -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-facturationCodePostal' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationCodePostal"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Ville -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-facturationVille' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="facturationVille"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Pays -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-entrepots-facturationPays' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-select-box
-                        formControlName="facturationPays"
-                        [items]="pays"
-                        valueExpr="id"
-                        displayExpr="description"
-                      ></dx-select-box>
-                    </div>
-                  </div>
-                </dxi-item>
-              </dx-accordion>
             </div>
           </dxi-item>
           <dxi-item [ratio]="0.2">
@@ -270,9 +201,9 @@
 
                 <!-- tvaCee -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-entrepots-tvaCee' | localize }}</div>
+                  <div class="dx-field-label">{{ 'tiers-entrepots-idTVA' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="tvaCee"></dx-text-box>
+                    <dx-text-box formControlName="idTVA"></dx-text-box>
                   </div>
                 </div>
               </div>
