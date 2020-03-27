@@ -1,7 +1,8 @@
 <form [formGroup]="lieupassageaquaiForm" (ngSubmit)="onSubmit()">
     <div class="content-block">
-      <h2>{{ 'tiers-lieuxpassageaquai-details-title' | localize }}</h2>
-      <dx-button type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
+      <h2>{{ 'tiers-lieuxpassageaquai-details-title' | localize }}
+        <dx-button style="float: right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
+      </h2>
     </div>
 
     <div class="content-block lieupassageaquai-page">
