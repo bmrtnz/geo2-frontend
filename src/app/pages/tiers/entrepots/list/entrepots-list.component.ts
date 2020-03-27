@@ -32,7 +32,8 @@ export class EntrepotsListComponent implements OnInit {
   }
 
   onRowDblClick(e) {
-    this.router.navigate([`/entrepots/${e.data.id}`]);
+    // console.log(`/entrepots/${e.data.id}`)
+    this.router.navigate([`/tiers/entrepots/${e.data.id}`]);
   }
 
 }

@@ -316,7 +316,14 @@
 
     "tiers-entrepot-contacts": "Contacts",
 
-    "tiers-contacts-title" : "Contacts"
+    "tiers-contacts-title" : "Contacts",
+    "tiers-contacts-header-nom" : "Nom",
+    "tiers-contacts-header-prenom" : "Prénom",
+    "tiers-contacts-header-moyen" : "Moyen",
+    "tiers-contacts-header-flux" : "Flux",
+    "tiers-contacts-header-compl" : "Compl.",
+    "tiers-contacts-header-coords" : "n°fax ou email ou nom imprimante"
+
 
   }
 }
