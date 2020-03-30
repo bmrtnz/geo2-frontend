@@ -136,4 +136,9 @@ export class FournisseurDetailsComponent implements OnInit {
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
   }
+
+  contactsBtnClick() {
+    this.router.navigate([`/tiers/contacts/fournisseurs/${this.fournisseur.id}`]);
+  }
+
 }

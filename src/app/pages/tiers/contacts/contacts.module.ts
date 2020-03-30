@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import {SharedModule} from '../../../shared/shared.module';
 import { ContactsComponent } from './contacts.component';
-import {ContactsRoutingModule} from './contacts-routing.module';
 import {
   DxAccordionModule, DxBoxModule,
   DxButtonModule, DxCheckBoxModule,
@@ -15,7 +14,6 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 @NgModule({
   imports: [
     SharedModule,
-    ContactsRoutingModule,
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,

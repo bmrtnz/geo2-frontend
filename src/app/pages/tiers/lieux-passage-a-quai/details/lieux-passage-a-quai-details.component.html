@@ -13,7 +13,8 @@
               height="auto"
               type="danger"
               icon="material-icons person"
-              text="{{ 'tiers-lieuxpassageaquai-contacts' | localize }}">
+              text="{{ 'tiers-lieuxpassageaquai-contacts' | localize }}"
+              (onClick)="contactsBtnClick($event)">
             </dx-button>
 
             <dx-check-box

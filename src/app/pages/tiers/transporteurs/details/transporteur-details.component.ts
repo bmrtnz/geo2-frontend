@@ -127,4 +127,9 @@ export class TransporteurDetailsComponent implements OnInit {
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
   }
+
+  contactsBtnClick() {
+    this.router.navigate([`/tiers/contacts/transporteurs/${this.transporteur.id}`]);
+  }
+
 }
