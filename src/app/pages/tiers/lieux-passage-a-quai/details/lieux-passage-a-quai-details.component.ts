@@ -66,7 +66,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
-    typeClient: [''],
+    type: [''],
     groupeClient: [''],
     soumisCtifl: [''],
     lieuFonctionEAN: [''],

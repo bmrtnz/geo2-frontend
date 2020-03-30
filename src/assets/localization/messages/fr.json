@@ -63,10 +63,8 @@
     "tiers-clients-commentaireBasFacture": "Commentaire Bas de Facture",
     "tiers-clients-details-groupe-certifications": "Certifications",
     "tiers-clients-details-groupe-paramavances": "Paramètres avancés",
-    
     "tiers-clients-contacts": "Contacts",
     "tiers-clients-entrepots": "Entrepôts",
-
     "tiers-clients-details-title": "Fiche client",
     "tiers-clients-details-groupe-infos": "Infos générales",
     "tiers-clients-details-groupe-references": "Références",
@@ -152,7 +150,6 @@
     "tiers-transporteurs-devise": "Devise",
     "tiers-transporteurs-moyenPaiement": "Moyen de paiement",
     "tiers-transporteurs-basePaiement": "Base de paiement",
-
 
     "tiers-lieuxpassageaquai-title": "Lieux de passage à quai",
     "tiers-lieuxpassageaquai-details-title": "Fiche lieu de passage à quai",

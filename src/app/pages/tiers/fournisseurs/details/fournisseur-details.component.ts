@@ -35,13 +35,6 @@ export class FournisseurDetailsComponent implements OnInit {
     pays: [''],
     latitude: [''],
     longitude: [''],
-    facturationRaisonSocial: [''],
-    facturationAdresse1: [''],
-    facturationAdresse2: [''],
-    facturationAdresse3: [''],
-    facturationCodePostal: [''],
-    facturationVille: [''],
-    facturationPays: [''],
     regimeTva: [''],
     incoterm: [''],
     nbJourEcheance: [''],
@@ -49,8 +42,6 @@ export class FournisseurDetailsComponent implements OnInit {
     moyenPaiement: [''],
     tvaCee: [''],
     controlReferenceFournisseur: [''],
-    commentaireHautFacture: [''],
-    commentaireBasFacture: [''],
     instructionCommercial: [''],
     bureauAchat: [''],
     typeBureau: [''],
@@ -65,10 +56,10 @@ export class FournisseurDetailsComponent implements OnInit {
     agrementBW: [''],
     codeStation: [''],
     identTracabilite: [''],
-    // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
     typeFournisseur: [''],
+    lieuFonctionEAN: [''],
     groupeFournisseur: [''],
     soumisCtifl: [''],
     formeJuridique:  [''],
@@ -77,9 +68,9 @@ export class FournisseurDetailsComponent implements OnInit {
     RCS:  [''],
     autoFacturation: [false],
     valide: [false],
-    paramAvances: [],
-    certifications: [],
-    delaiBonFacturer: []
+    paramAvances: [''],
+    certifications: [''],
+    delaiBonFacturer: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
