@@ -7,29 +7,21 @@
     </div>
     <div class="content-block contact-page">
 
-        <dx-data-grid 
+        <dx-data-grid
             id="gridContainer"
             [dataSource]="dataSource"
             keyExpr="ID"
             [allowColumnReordering]="true"
-            [showBorders]="true"
-            (onEditingStart)="logEvent('EditingStart')"
-            (onInitNewRow)="logEvent('InitNewRow')"
-            (onRowInserting)="logEvent('RowInserting')"
-            (onRowInserted)="logEvent('RowInserted')"
-            (onRowUpdating)="logEvent('RowUpdating')"
-            (onRowUpdated)="logEvent('RowUpdated')"
-            (onRowRemoving)="logEvent('RowRemoving')"
-            (onRowRemoved)="logEvent('RowRemoved')">
-            
+            [showBorders]="true">
+
             <dxo-paging [enabled]="true"></dxo-paging>
-            <dxo-editing 
+            <dxo-editing
                 mode="row"
                 [allowUpdating]="true"
                 [allowDeleting]="true"
                 [allowAdding]="true">
             </dxo-editing>
-            
+
             <dxi-column
                 dataField="Nom"
                 caption="Nom"
@@ -42,7 +34,7 @@
             <dxi-column
                 dataField="Moyen"
                 caption="Moyen"
-                [width]="100">         
+                [width]="100">
                 <dxo-lookup
                     [dataSource]="moyens"
                     displayExpr="description"
@@ -52,7 +44,7 @@
             <dxi-column
                 dataField="Flux"
                 caption="Flux"
-                [width]="125">         
+                [width]="125">
                 <dxo-lookup
                     [dataSource]="flux"
                     displayExpr="description"

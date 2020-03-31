@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BasePaiement, BaseTarifTransit, BaseTarifTransport, Entrepot,
-   Devise, MoyenPaiement, Pays, Personne, RegimeTva, 
-   TypePalette, TypeCamion, Transitaire, ModeLivraison
-  } from '../models';
+import {
+  BasePaiement, Entrepot,
+  Devise, MoyenPaiement, Pays, Personne, RegimeTva,
+  TypePalette, TypeCamion, Transitaire, ModeLivraison, BaseTarif
+} from '../models';
 import {FakeService} from './fake.service';
 
 @Injectable({
@@ -38,12 +39,8 @@ export class EntrepotsService {
     return this.fakeService.get(ModeLivraison);
   }
 
-  getBaseTarifTransit() {
-    return this.fakeService.get(BaseTarifTransit);
-  }
-
-  getBaseTarifTransport() {
-    return this.fakeService.get(BaseTarifTransport);
+  getBaseTarif() {
+    return this.fakeService.get(BaseTarif);
   }
 
   getTypePalette() {

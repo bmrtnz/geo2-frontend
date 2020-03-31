@@ -8,7 +8,7 @@ import {
   MoyenPaiement,
   Pays,
   Personne,
-  RegimeTva
+  RegimeTva, ModeLivraison, TypePalette, BasePaiement, BaseTarif, TypeCamion, Transitaire, Entrepot
 } from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
@@ -20,6 +20,7 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 export class EntrepotDetailsComponent implements OnInit {
 
   entrepotForm = this.fb.group({
+    id: [''],
     code: [''],
     raisonSocial: [''],
     societe: [''],
@@ -67,11 +68,28 @@ export class EntrepotDetailsComponent implements OnInit {
     soumisCtifl: [''],
     lieuFonctionEANDepot: [''],
     lieuFonctionEANAcheteur: [''],
-    valide: [false]
+    valide: [false],
+    modeLivraison: [''],
+    typePalette: [''],
+    mentionClientFacture: [''],
+    transporteur: [''],
+    transitaire: [''],
+    typeCamion: [''],
+    PUTarifTransport: [''],
+    instructLogistique: [''],
+    controleRefClient: [''],
+    instructSecrComm: [''],
+    envoiAutoDetail: [''],
+    declarationEUR1: [''],
+    referenceCHEP: [''],
+    gestionnaireCHEP: [''],
+    PUTarifTransit: [''],
+    baseTarifTransit: [''],
+    baseTarifTransport: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
-  transporteur: Transporteur;
+  entrepot: Entrepot;
   pays: Pays[];
   code: string;
   commerciaux: Personne[];
@@ -81,6 +99,12 @@ export class EntrepotDetailsComponent implements OnInit {
   basePaiements: MoyenPaiement[];
   regimeTva: RegimeTva[];
   incoterm: Incoterm[];
+  modesLivraison: ModeLivraison[];
+  typesPalette: TypePalette[];
+  baseTarifsTransport: BaseTarif[];
+  typesCamion: TypeCamion[];
+  transitaires: Transitaire[];
+  baseTarifsTransit: BaseTarif[];
   defaultVisible: boolean;
 
   constructor(
@@ -117,8 +141,8 @@ export class EntrepotDetailsComponent implements OnInit {
     this.entrepotsService
       .get(this.route.snapshot.paramMap.get('id'))
       .then(c => {
-        this.transporteur = c;
-        this.entrepotForm.patchValue(this.transporteur);
+        this.entrepot = c;
+        this.entrepotForm.patchValue(this.entrepot);
       });
   }
 
