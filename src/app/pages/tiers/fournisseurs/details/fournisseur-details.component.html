@@ -14,7 +14,8 @@
               height="auto"
               type="danger"
               icon="material-icons person"
-              text="{{ 'tiers-fournisseurs-contacts' | localize }}">
+              text="{{ 'tiers-fournisseurs-contacts' | localize }}"
+              (onClick)="contactsBtnClick($event)">
             </dx-button>
             <dx-button
               height="auto"
@@ -352,7 +353,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-delaiBonFacturer' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-number-box formControlName="delaiBonFactuer"></dx-number-box>
+                    <dx-number-box formControlName="delaiBonFacturer"></dx-number-box>
                   </div>
                 </div>
 

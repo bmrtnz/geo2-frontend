@@ -55,6 +55,7 @@ export class FournisseurDetailsComponent implements OnInit {
     codeStation: [''],
     idTracabilite: [''],
     typeFournisseur: [''],
+    lieuFonctionEAN: [''],
     groupeFournisseur: [''],
     soumisCtifl: [''],
     formeJuridique:  [''],
@@ -63,9 +64,9 @@ export class FournisseurDetailsComponent implements OnInit {
     RCS:  [''],
     autoFacturation: [false],
     valide: [false],
-    paramAvances: [],
-    certifications: [],
-    delaiBonFacturer: []
+    paramAvances: [''],
+    certifications: [''],
+    delaiBonFacturer: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
@@ -131,4 +132,9 @@ export class FournisseurDetailsComponent implements OnInit {
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
   }
+
+  contactsBtnClick() {
+    this.router.navigate([`/tiers/contacts/fournisseurs/${this.fournisseur.id}`]);
+  }
+
 }

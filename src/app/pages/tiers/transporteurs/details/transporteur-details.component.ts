@@ -41,20 +41,13 @@ export class TransporteurDetailsComponent implements OnInit {
     facturationVille: [''],
     facturationPays: [''],
     regimeTva: [''],
-    incoterm: [''],
     nbJourEcheance: [''],
     echeanceLe: [''],
     moyenPaiement: [''],
     tvaCee: [''],
     controlReferenceClient: [''],
-    commentaireHautFacture: [''],
-    commentaireBasFacture: [''],
-    instructionCommercial: [''],
-    siret: [''],
-    blocageAvoirEdi: [''],
-    debloquerEnvoieJour: [''],
-    ifco: [''],
     instructionLogistique: [''],
+    clientRaisonSociale: [''],
     basePaiement: [''],
     compteComptable: [''],
     langue: [''],
@@ -62,13 +55,7 @@ export class TransporteurDetailsComponent implements OnInit {
     commercial: [''],
     assistante: [''],
     referenceCoface: [''],
-    agrement: [''],
-    // public courtier: Courtier; // TODO
-    courtageModeCalcul: [''],
-    courtageValeur: [''],
-    typeClient: [''],
-    groupeClient: [''],
-    soumisCtifl: [''],
+    type: [''],
     lieuFonctionEAN: [''],
     valide: [false]
   });
@@ -140,4 +127,9 @@ export class TransporteurDetailsComponent implements OnInit {
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
   }
+
+  contactsBtnClick() {
+    this.router.navigate([`/tiers/contacts/transporteurs/${this.transporteur.id}`]);
+  }
+
 }

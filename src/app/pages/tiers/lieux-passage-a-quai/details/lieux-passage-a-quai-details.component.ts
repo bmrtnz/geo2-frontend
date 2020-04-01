@@ -66,7 +66,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
-    typeClient: [''],
+    type: [''],
     groupeClient: [''],
     soumisCtifl: [''],
     lieuFonctionEAN: [''],
@@ -128,4 +128,9 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
   }
+
+  contactsBtnClick() {
+    this.router.navigate([`/tiers/contacts/lieupassageaquais/${this.lieupassageaquai.id}`]);
+  }
+
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ContactsComponent } from './contacts/contacts.component';
 
 const routes: Routes = [
   {
@@ -14,7 +15,13 @@ const routes: Routes = [
   } , {
     path: 'lieux-passage-a-quai',
     loadChildren: './lieux-passage-a-quai/lieux-passage-a-quai.module#LieuxPassageAQuaiModule'
-  }
+  }, {
+    path: 'entrepots',
+    loadChildren: './entrepots/entrepots.module#EntrepotsModule'
+  },  {
+    path: 'contacts/:type/:id',
+    component: ContactsComponent
+  },
 ];
 
 @NgModule({
