@@ -29,11 +29,8 @@ export class Fournisseur {
   public echeanceLe: number;
   public moyenPaiement: MoyenPaiement;
   public tvaCee: string;
-  // public controlReferenceFournisseur: string;
-  // public instructionCommercial: string;
   public bureauAchat: string;
   public typeBureau: string;
-  // public instructionLogistique: string;
   public basePaiement: BasePaiement;
   public compteComptable: string;
   public langue: Pays;
@@ -41,7 +38,6 @@ export class Fournisseur {
   public referenceCoface: string;
   public agrement: number;
   public typeFournisseur: TypeFournisseur;
-  // public groupeFournisseur: GroupeFournisseur;
   public soumisCtifl: boolean;
   public SiretAPE: string;
   public idTVA: string;
