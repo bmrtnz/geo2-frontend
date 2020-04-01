@@ -86,7 +86,7 @@ export class ClientDetailsComponent implements OnInit {
   assistantes: Personne[];
   devises: Devise[];
   moyenPaiements: MoyenPaiement[];
-  basePaiements: MoyenPaiement[];
+  basePaiements: BasePaiement[];
   regimeTva: RegimeTva[];
   defaultVisible: boolean;
 
@@ -135,7 +135,7 @@ export class ClientDetailsComponent implements OnInit {
       });
   }
 
-  debug(test) {
+  debug(test: any) {
     console.log(test);
   }
 

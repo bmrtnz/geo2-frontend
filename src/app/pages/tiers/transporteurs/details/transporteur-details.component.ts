@@ -69,7 +69,7 @@ export class TransporteurDetailsComponent implements OnInit {
   assistantes: Personne[];
   devises: Devise[];
   moyenPaiements: MoyenPaiement[];
-  basePaiements: MoyenPaiement[];
+  basePaiements: BasePaiement[];
   regimeTva: RegimeTva[];
   typeTransporteur: any[];
   defaultVisible: boolean;

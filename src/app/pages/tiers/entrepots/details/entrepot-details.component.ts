@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {EntrepotsService} from '../../../../shared/services/entrepots.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  Transporteur,
+  Entrepot,
   Devise,
   Incoterm,
   MoyenPaiement,
@@ -74,7 +74,7 @@ export class EntrepotDetailsComponent implements OnInit {
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
-  transporteur: Transporteur;
+  entrepot: Entrepot;
   pays: Pays[];
   code: string;
   commerciaux: Personne[];
@@ -120,8 +120,8 @@ export class EntrepotDetailsComponent implements OnInit {
     this.entrepotsService
       .get(this.route.snapshot.paramMap.get('id'))
       .then(c => {
-        this.transporteur = c;
-        this.entrepotForm.patchValue(this.transporteur);
+        this.entrepot = c;
+        this.entrepotForm.patchValue(this.entrepot);
       });
   }
 
@@ -135,5 +135,9 @@ export class EntrepotDetailsComponent implements OnInit {
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
+  }
+
+  contactsBtnClick() {
+    this.router.navigate([`/tiers/contacts/entrepots/${this.entrepot.id}`]);
   }
 }

@@ -44,15 +44,11 @@ const employees: Employee[] = [{
     Nom: 'Delapomme',
     Prenom: 'Maurice',
     Moyen: '1',
-    Flux: '1',
+    Flux: '2',
     Compl: 'P',
     Coord: 'import@aartsenfruit.nl',
-    OK: false
-}
-
-
-
-];
+    OK: true
+}];
 
 const moyens: Moyen[] = [{
     ID: 1,
