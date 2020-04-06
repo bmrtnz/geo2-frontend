@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
-import {SharedModule} from '../../../shared/shared.module';
-import { ContactsComponent } from './contacts.component';
+import {SharedModule} from '../../shared/shared.module';
+import {ArticlesComponent} from './articles.component';
 import {
   DxAccordionModule, DxBoxModule,
   DxButtonModule, DxCheckBoxModule,
-  DxDataGridModule,
+  DxDataGridModule, DxTabPanelModule,
+  DxTemplateModule,
   DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
   DxTextBoxModule
 } from 'devextreme-angular';
@@ -15,10 +16,11 @@ import {
     SharedModule,
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
-    DxDataGridModule,
+    DxDataGridModule, DxTabPanelModule,
+    DxTemplateModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule
   ],
-  declarations: [ContactsComponent]
+  declarations: [ArticlesComponent]
 })
-export class ContactsModule { }
+export class ArticlesModule { }

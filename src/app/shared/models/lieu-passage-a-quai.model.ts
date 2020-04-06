@@ -1,4 +1,4 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, RegimeTva, Secteur, Societe} from './';
+import {BasePaiement, Devise, MoyenPaiement, Pays, RegimeTva} from './';
 
 export class LieuPassageAQuai {
 

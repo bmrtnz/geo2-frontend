@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 export class Employee {
-    ID: number;
+    id: number;
     Nom: string;
     Prenom: string;
     Moyen: string;
@@ -12,17 +12,17 @@ export class Employee {
 }
 
 export class Moyen {
-    ID: number;
+    id: number;
     description: string;
 }
 export class Flux {
-    ID: number;
+    id: number;
     description: string;
 }
 
 
 const employees: Employee[] = [{
-    ID: 1,
+    id: 1,
     Nom: 'Dupond',
     Prenom: 'Jean',
     Moyen: '1',
@@ -31,7 +31,7 @@ const employees: Employee[] = [{
     Coord: 'import@aartsenfruit.nl',
     OK: true
 }, {
-    ID: 2,
+    id: 2,
     Nom: 'Durand',
     Prenom: 'Robert',
     Moyen: '2',
@@ -40,7 +40,7 @@ const employees: Employee[] = [{
     Coord: 'import@aartsenfruit.nl',
     OK: true
 }, {
-    ID: 3,
+    id: 3,
     Nom: 'Delapomme',
     Prenom: 'Maurice',
     Moyen: '1',
@@ -51,18 +51,18 @@ const employees: Employee[] = [{
 }];
 
 const moyens: Moyen[] = [{
-    ID: 1,
+    id: 1,
     description: 'FAX'
 }, {
-    ID: 2,
+    id: 2,
     description: 'MAIL'
 }];
 
 const flux: Flux[] = [{
-    ID: 1,
+    id: 1,
     description: 'DETAIL'
 }, {
-    ID: 2,
+    id: 2,
     description: 'ORDRE'
 }];
 

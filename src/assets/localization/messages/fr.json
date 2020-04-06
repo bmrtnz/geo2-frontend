@@ -220,14 +220,17 @@
     "tiers-entrepots-details-groupe-instructLogistique": "Instructions logistique",
     "tiers-entrepots-details-title": "Fiche entrepôt",
  
-    "tiers-contacts-title" : "Contacts",
-    "tiers-contacts-header-nom" : "Nom",
-    "tiers-contacts-header-prenom" : "Prénom",
-    "tiers-contacts-header-moyen" : "Moyen",
-    "tiers-contacts-header-flux" : "Flux",
-    "tiers-contacts-header-compl" : "Compl.",
-    "tiers-contacts-header-coords" : "n°fax ou email ou nom imprimante"
+    "tiers-contacts-title": "Contacts",
+    "tiers-contacts-header-nom": "Nom",
+    "tiers-contacts-header-prenom": "Prénom",
+    "tiers-contacts-header-moyen": "Moyen",
+    "tiers-contacts-header-flux": "Flux",
+    "tiers-contacts-header-compl": "Compl.",
+    "tiers-contacts-header-coords": "n°fax ou email ou nom imprimante",
 
+    "articles-title" : "Articles",
+    "articles-detailTitle": "Détail",
+    "articles-of": "de"
 
   }
 }

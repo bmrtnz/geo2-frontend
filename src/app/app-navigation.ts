@@ -37,5 +37,10 @@ export const navigation = [
         path: '/tiers/lieux-passage-a-quai'
       }
     ]
+  },
+  {
+    text: 'Articles',
+    icon: 'box',
+    path: 'articles'
   }
 ];

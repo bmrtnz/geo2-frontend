@@ -9,3 +9,4 @@ export * from './fournisseurs.service';
 export * from './transporteurs.service';
 export * from './lieux-passage-a-quai.service';
 export * from './entrepots.service';
+export * from './articles.service';

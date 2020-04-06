@@ -1,4 +1,4 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Societe, TypeFournisseur, GroupeFournisseur} from './';
+import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, RegimeTva, Societe, TypeFournisseur} from './';
 
 export class Fournisseur {
 

@@ -42,4 +42,3 @@ public PUTarifTransport: string;
 public PUTarifTransit: string;
 
 }
-

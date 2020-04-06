@@ -1,4 +1,4 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe} from './';
+import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, RegimeTva, Secteur} from './';
 
 export class Transporteur {
 

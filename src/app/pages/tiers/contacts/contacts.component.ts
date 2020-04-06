@@ -15,7 +15,7 @@ export class ContactsComponent implements OnInit {
     moyens: Moyen[];
     flux: Flux[];
 
-    tierId: string;
+    tiersId: string;
     type: string;
 
     constructor(
@@ -23,7 +23,7 @@ export class ContactsComponent implements OnInit {
         private route: ActivatedRoute
         ) {
         this.dataSource = new ArrayStore({
-            key: 'ID',
+            key: 'id',
             data: service.getEmployees(),
             onUpdated: (values, key) => console.log(values, key)
         });
@@ -33,13 +33,7 @@ export class ContactsComponent implements OnInit {
 
     ngOnInit() {
         this.type = this.route.snapshot.paramMap.get('type');
-        this.tierId = this.route.snapshot.paramMap.get('id');
-        // this.service
-        //   .get(this.route.snapshot.paramMap.get('id'))
-        //   .then(c => {
-        //     this.id = c;
-        //     // this.clientForm.patchValue(this.client);
-        //   });
+        this.tiersId = this.route.snapshot.paramMap.get('id');
     }
 
 }

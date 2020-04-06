@@ -7,7 +7,7 @@ import {ProfileComponent} from './pages/exemple/profile/profile.component';
 import {DisplayDataComponent} from './pages/exemple/display-data/display-data.component';
 import {DxDataGridModule, DxFormModule, DxButtonModule} from 'devextreme-angular';
 import {SharedModule} from './shared/shared.module';
-// import { ContactsComponent } from './pages/contacts/contacts.component';
+import {ArticlesComponent} from './pages/articles/articles.component';
 
 const routes: Routes = [
   {
@@ -35,11 +35,11 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     loadChildren: './pages/tiers/tiers.module#TiersModule'
   },
-  // {
-  //   path: 'contacts',
-  //   canActivate: [AuthGuardService],
-  //   loadChildren: './pages/tiers/contacts/contacts.module#ContactsModule'
-  // },
+  {
+    path: 'articles',
+    component: ArticlesComponent,
+    canActivate: [AuthGuardService]
+  },
   {
     path: '**',
     redirectTo: 'home',

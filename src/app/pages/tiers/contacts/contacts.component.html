@@ -2,7 +2,7 @@
     <h2>
     {{ 'tiers-contacts-title' | localize }}
     -
-    {{ type }} : {{ tierId }}
+    {{ type }} : {{ tiersId }}
     <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
     </h2>
 </div>
@@ -11,7 +11,7 @@
     <dx-data-grid 
         id="gridContainer"
         [dataSource]="dataSource"
-        keyExpr="ID"
+        keyExpr="id"
         [allowColumnReordering]="true"
         [showBorders]="true">
         
@@ -39,7 +39,7 @@
             <dxo-lookup
                 [dataSource]="moyens"
                 displayExpr="description"
-                valueExpr="ID">
+                valueExpr="id">
             </dxo-lookup>
         </dxi-column>
         <dxi-column
@@ -49,7 +49,7 @@
             <dxo-lookup
                 [dataSource]="flux"
                 displayExpr="description"
-                valueExpr="ID">
+                valueExpr="id">
             </dxo-lookup>
         </dxi-column>
         <dxi-column
