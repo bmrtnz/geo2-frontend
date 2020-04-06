@@ -1,14 +1,29 @@
 @import "~themes/generated/variables.base";
 
-// Form
-.dx-form-group-caption {
-  color: $base-accent;
-  font-weight: bold;
+// Form group
+.dx-form-group {
+  // Form group caption color
+  & .dx-form-group-caption {
+    color: $base-accent;
+    font-weight: bold;
+  }
 }
 
-// Set color of form label
-.dx-field-label {
-  color: $base-accent;
+// Form field
+.dx-field {
+  // Reduce spacing between field
+  margin-bottom: 10px;
+
+  // Set color of form label
+  & .dx-field-label {
+    color: $base-accent;
+    font-size: 14px;
+  }
+
+  // Fix dx-field with inner dx-box
+  & > .dx-box {
+    width: 100%;
+  }
 }
 
 /*
@@ -32,11 +47,6 @@
   & > .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
     width: 80%;
   }
-}
-
-// Fix dx-field with inner dx-box
-.dx-field > .dx-box {
-  width: 100%;
 }
 
 // Vertical checkbox

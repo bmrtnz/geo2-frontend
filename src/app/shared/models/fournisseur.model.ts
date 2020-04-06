@@ -1,12 +1,10 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, RegimeTva, Societe, TypeFournisseur} from './';
+import {BasePaiement, Devise, MoyenPaiement, Pays, RegimeTva, Societe, TypeFournisseur, BureauAchat} from './';
 
 export class Fournisseur {
 
   public id: string;
   public code: string;
   public raisonSocial: string;
-  public stockActif: boolean;
-  public suiviPrecalibre: boolean;
   public societe: Societe;
   public adresse1: string;
   public adresse2: string;
@@ -14,36 +12,51 @@ export class Fournisseur {
   public codePostal: string;
   public ville: string;
   public pays: Pays;
+  public langue: Pays;
   public latitude: string;
   public longitude: string;
-  public facturationRaisonSocial: string;
-  public facturationAdresse1: string;
-  public facturationAdresse2: string;
-  public facturationAdresse3: string;
-  public facturationCodePostal: string;
-  public facturationVille: string;
-  public facturationPays: Pays;
+  public devise: Devise;
+  public moyenPaiement: MoyenPaiement;
+  public basePaiement: BasePaiement;
   public regimeTva: RegimeTva;
-  public incoterm: Incoterm;
   public nbJourEcheance: number;
   public echeanceLe: number;
-  public moyenPaiement: MoyenPaiement;
   public tvaCee: string;
-  public bureauAchat: string;
-  public typeBureau: string;
-  public basePaiement: BasePaiement;
-  public compteComptable: string;
-  public langue: Pays;
-  public devise: Devise;
-  public referenceCoface: string;
-  public agrement: number;
-  public typeFournisseur: TypeFournisseur;
-  public soumisCtifl: boolean;
-  public SiretAPE: string;
-  public idTVA: string;
-  public RCS: string;
-  public autoFacturation: string;
-  public identTracabilite: string;
+  public bureauAchat: BureauAchat;
+  public margeObjectifEuroKilo: number;
+  public margeObjectifPourcentCa: number;
+  public stockActif: boolean;
+  public stockPreca: boolean;
+  public type: TypeFournisseur;
+  public listeSocietes: string;
+  public idTracabilite: string;
   public agrementBW: string;
   public codeStation: string;
+  public compteComptable: string;
+  public lieuFonctionEAN: string;
+  public declarantCHEP: string;
+  public formeJuridique: string;
+  public siretAPE: string;
+  public tvaCeeLibelle: string;
+  public rcs: string;
+  public suiviDestockage: boolean;
+  public natureStation: string; // API = ENUM
+  public referenceIfco: string;
+  public dateDebutIfco: Date;
+  public consignePaloxSa: boolean;
+  public consignePaloxUdc: boolean;
+  public listeExpediteurs: string;
+  public valide: boolean;
+
+  // public incoterm: Incoterm; // Ne sert pas ?
+  // public typeBureau: string;
+  // public blocageAvoirEdi: boolean;
+  // public debloquerEnvoieJour: boolean;
+  // public instructionLogistique: string;
+  // public referenceCoface: string;
+  // public agrement: number;
+  // public groupeFournisseur: GroupeFournisseur;
+  // public soumisCtifl: boolean;
+  // public autoFacturation: string;
+  // public identTracabilite: string;
 }

@@ -215,7 +215,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="typePalette"
-                      [items]="typePalette"
+                      [items]="typesPalette"
                       valueExpr="id"
                       displayExpr="description"
                     ></dx-select-box>
@@ -229,7 +229,7 @@
                   <dx-text-box formControlName="incoterm"></dx-text-box>
                   </div>
                 </div>
-              
+
               <!-- Indications sur facture -->
               <dx-accordion
                 [collapsible]="true"
@@ -245,7 +245,7 @@
                         <dx-text-area formControlName="mentionClientFacture"></dx-text-area>
                       </div>
                     </div>
-      
+
                 </dxi-item>
 
               </dx-accordion>
@@ -271,13 +271,13 @@
                     </div>
                 </div>
 
-                <!-- Type transporteur -->
+                <!-- Type entrepot -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-Transporteur' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="transporteur"
-                      [dataSource]="transporteur"
+                      [dataSource]="entrepot"
                       displayExpr="description"
                       valueExpr="id"
                     ></dx-select-box>
@@ -290,7 +290,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="baseTarifTransport"
-                      [items]="baseTarifTransport"
+                      [items]="baseTarifsTransport"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -309,7 +309,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="typeCamion"
-                      [items]="typeCamion"
+                      [items]="typesCamion"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -320,7 +320,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="transitaire"
-                      [items]="transitaire"
+                      [items]="transitaires"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -331,7 +331,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="baseTarifTransit"
-                      [items]="baseTarifTransit"
+                      [items]="baseTarifsTransit"
                     ></dx-select-box>
                   </div>
                 </div>
