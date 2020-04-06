@@ -8,7 +8,7 @@ import {
   MoyenPaiement,
   Pays,
   Personne,
-  RegimeTva, ModeLivraison, TypePalette, BasePaiement, BaseTarif, TypeCamion, Transitaire, Entrepot
+  RegimeTva, ModeLivraison, TypePalette, BasePaiement, BaseTarif, TypeCamion, Transitaire
 } from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
@@ -56,24 +56,7 @@ export class EntrepotDetailsComponent implements OnInit {
     referenceCHEP: [''],
     lieuFonctionEANDepot: [''],
     lieuFonctionEANAcheteur: [''],
-    valide: [false],
-    modeLivraison: [''],
-    typePalette: [''],
-    mentionClientFacture: [''],
-    transporteur: [''],
-    transitaire: [''],
-    typeCamion: [''],
-    PUTarifTransport: [''],
-    instructLogistique: [''],
-    controleRefClient: [''],
-    instructSecrComm: [''],
-    envoiAutoDetail: [''],
-    declarationEUR1: [''],
-    referenceCHEP: [''],
-    gestionnaireCHEP: [''],
-    PUTarifTransit: [''],
-    baseTarifTransit: [''],
-    baseTarifTransport: ['']
+    valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
