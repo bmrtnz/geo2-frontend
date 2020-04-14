@@ -41,6 +41,9 @@
 }
 
 ::ng-deep .articles-page {
+    .dx-tabpanel {
+        overflow:hidden;
+    }
     .dx-tab {
         display:block;
         border-radius:70px;
@@ -57,7 +60,7 @@
         overflow: hidden;
         margin-top:10px;
     }
-    .dx-item:after {
+    .dx-tabs-wrapper .dx-item:after {
         position: absolute;
         left:80px;
         margin-top:10px;

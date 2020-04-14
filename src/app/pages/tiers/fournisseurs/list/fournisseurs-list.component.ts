@@ -22,7 +22,7 @@ export class FournisseursListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fournisseursService.get().then(c => {
-      console.log(c)
+      console.log(c);
       this.dataSource = {
         store: new ArrayStore({
           key: 'id',

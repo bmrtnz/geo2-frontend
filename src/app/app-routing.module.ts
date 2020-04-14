@@ -7,7 +7,7 @@ import {ProfileComponent} from './pages/exemple/profile/profile.component';
 import {DisplayDataComponent} from './pages/exemple/display-data/display-data.component';
 import {DxDataGridModule, DxFormModule, DxButtonModule} from 'devextreme-angular';
 import {SharedModule} from './shared/shared.module';
-import {ArticlesComponent} from './pages/articles/articles.component';
+import {ArticleDetailsComponent} from './pages/articles/details/article-details.component';
 
 const routes: Routes = [
   {
@@ -37,8 +37,8 @@ const routes: Routes = [
   },
   {
     path: 'articles',
-    component: ArticlesComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/articles/articles.module#ArticlesModule'
   },
   {
     path: '**',

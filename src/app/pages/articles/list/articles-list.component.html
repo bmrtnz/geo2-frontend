@@ -1,0 +1,50 @@
+<h2 class="content-block">{{ 'articles-title' | localize }}</h2>
+
+<div class="content-block articles-page">
+  <dx-data-grid class="dx-card wide-card"
+                [dataSource]="dataSource"
+                [showBorders]="false"
+                [focusedRowEnabled]="true"
+                [focusedRowIndex]="0"
+                [columnAutoWidth]="true"
+                [columnHidingEnabled]="true"
+                (onRowDblClick)="onRowDblClick($event)">
+
+    <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    
+    <dxi-column
+      dataField="id"
+      [width]="90"
+      [hidingPriority]="2">
+    </dxi-column>
+    <dxi-column
+      dataField="espece"
+      [width]="190"
+      caption="{{ 'articles-espece' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="variete"
+      [width]="190"
+      caption="{{ 'articles-variete' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="type"
+      [width]="190"
+      caption="{{ 'articles-type' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+    <dxi-column
+      dataField="modeCulture"
+      [width]="190"
+      caption="{{ 'articles-modeCulture' | localize }}"
+      [hidingPriority]="8">
+    </dxi-column>
+  </dx-data-grid>
+</div>

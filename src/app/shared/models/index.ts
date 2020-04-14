@@ -23,3 +23,4 @@ export * from './type-camion.model';
 export * from './transitaire.model';
 export * from './bureau-achat.model';
 export * from './mode-livraison.model';
+export * from './article.model';

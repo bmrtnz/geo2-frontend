@@ -7,14 +7,12 @@ import {SideNavOuterToolbarModule, SingleCardModule} from './layouts';
 import {FooterModule, LoginFormModule} from './shared/components';
 import {AuthService, ScreenService} from './shared/services';
 import {SharedModule} from './shared/shared.module';
-import { ArticlesModule } from './pages/articles/articles.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    ArticlesModule,
     BrowserModule,
     SharedModule,
     AppRoutingModule,

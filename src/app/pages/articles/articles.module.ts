@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import {SharedModule} from '../../shared/shared.module';
-import {ArticlesComponent} from './articles.component';
+import {ArticleDetailsComponent} from './details/article-details.component';
+import { ArticlesListComponent } from './list/articles-list.component';
 import {
   DxAccordionModule, DxBoxModule,
   DxButtonModule, DxCheckBoxModule,
@@ -9,11 +10,15 @@ import {
   DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
   DxTextBoxModule
 } from 'devextreme-angular';
-
+import { ArticlesRoutingModule } from './articles-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ArticlesRoutingModule,
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule, DxTabPanelModule,
@@ -21,6 +26,6 @@ import {
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule
   ],
-  declarations: [ArticlesComponent]
+  declarations: [ArticleDetailsComponent, ArticlesListComponent]
 })
 export class ArticlesModule { }
