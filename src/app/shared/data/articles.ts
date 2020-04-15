@@ -6,7 +6,8 @@ const articles = [
         variete: 'Canada',
         type: 'type1',
         modeCulture: 'Bio',
-        BWSTOCK: true
+        BWSTOCK: true,
+        instructStation: 'Instructions lorem ipsum'
     },
     {
         id: '082791',
@@ -15,7 +16,8 @@ const articles = [
         variete: 'Golden',
         type: 'type2',
         modeCulture: 'Bio',
-        BWSTOCK: true
+        BWSTOCK: true,
+        instructStation: 'Instructions lorem ipsum'
     },
     {
         id: '082792',
@@ -24,7 +26,8 @@ const articles = [
         variete: 'Gala',
         type: 'type1',
         modeCulture: 'Traditionnelle',
-        BWSTOCK: false
+        BWSTOCK: false,
+        instructStation: 'Instructions lorem ipsum'
     },
 ];
 
