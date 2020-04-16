@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FournisseursService} from '../../../../shared/services/fournisseurs.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -12,13 +12,14 @@ import {
   Societe, TypeFournisseur
 } from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fournisseur-details',
   templateUrl: './fournisseur-details.component.html',
   styleUrls: ['./fournisseur-details.component.scss']
 })
-export class FournisseurDetailsComponent implements OnInit {
+export class FournisseurDetailsComponent implements OnInit, OnDestroy {
 
   fournisseurForm = this.fb.group({
     code: [''],
@@ -64,6 +65,7 @@ export class FournisseurDetailsComponent implements OnInit {
     delaiBonFacturer: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  private queryGetOneFournisseur: Subscription;
 
   fournisseur: Fournisseur;
   pays: Pays[];
@@ -108,12 +110,12 @@ export class FournisseurDetailsComponent implements OnInit {
     this.fournisseursService.getRegimeTva().then(a => {
       this.regimeTva = a;
     });
-    this.fournisseursService
-      .get(this.route.snapshot.paramMap.get('id'))
-      .then(c => {
-        this.fournisseur = c;
-        this.fournisseurForm.patchValue(this.fournisseur);
-      });
+    this.queryGetOneFournisseur = this.fournisseursService
+    .getOne(this.route.snapshot.paramMap.get('id'))
+    .subscribe( res => {
+      this.fournisseur = res.data.fournisseur;
+      this.fournisseurForm.patchValue(this.fournisseur);
+    });
   }
 
   debug(test) {
@@ -130,6 +132,10 @@ export class FournisseurDetailsComponent implements OnInit {
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/fournisseurs/${this.fournisseur.id}`]);
+  }
+
+  ngOnDestroy() {
+    this.queryGetOneFournisseur.unsubscribe();
   }
 
 }

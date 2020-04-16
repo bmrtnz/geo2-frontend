@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {TransporteursService} from '../../../../shared/services/transporteurs.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -14,13 +14,14 @@ import {
   Societe, TypeClient
 } from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-transporteur-details',
   templateUrl: './transporteur-details.component.html',
   styleUrls: ['./transporteur-details.component.scss']
 })
-export class TransporteurDetailsComponent implements OnInit {
+export class TransporteurDetailsComponent implements OnInit, OnDestroy {
 
   transporteurForm = this.fb.group({
     code: [''],
@@ -47,6 +48,7 @@ export class TransporteurDetailsComponent implements OnInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  private queryGetOneTransporteur: Subscription;
 
   transporteur: Transporteur;
   secteurs: Secteur[];
@@ -95,12 +97,12 @@ export class TransporteurDetailsComponent implements OnInit {
     this.transporteursService.getRegimeTva().then(a => {
       this.regimeTva = a;
     });
-    this.transporteursService
-      .get(this.route.snapshot.paramMap.get('id'))
-      .then(c => {
-        this.transporteur = c;
-        this.transporteurForm.patchValue(this.transporteur);
-      });
+    this.queryGetOneTransporteur = this.transporteursService
+    .getOne(this.route.snapshot.paramMap.get('id'))
+    .subscribe( res => {
+      this.transporteur = res.data.transporteur;
+      this.transporteurForm.patchValue(this.transporteur);
+    });
   }
 
   debug(test) {
@@ -117,6 +119,10 @@ export class TransporteurDetailsComponent implements OnInit {
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/transporteurs/${this.transporteur.id}`]);
+  }
+
+  ngOnDestroy() {
+    this.queryGetOneTransporteur.unsubscribe();
   }
 
 }

@@ -1,18 +1,35 @@
 import {Injectable} from '@angular/core';
 import {BasePaiement, Transporteur, Devise, MoyenPaiement, Pays, Personne, RegimeTva, Secteur} from '../models';
 import {FakeService} from './fake.service';
+import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.service';
+import { Apollo } from 'apollo-angular';
+import { WatchQueryOptions, OperationVariables } from 'apollo-client';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TransporteursService {
+export class TransporteursService extends ApiService implements APIRead {
 
   constructor(
+    apollo: Apollo,
     private fakeService: FakeService
-  ) { }
+  ) {
+    super(apollo);
+  }
 
-  get(id?: string) {
-    return this.fakeService.get(Transporteur, id);
+  getAll(variables?: RelayPageVariables) {
+    const fields = [ 'id', 'raisonSocial', 'pays { description }', 'ville' ];
+    const query = this.buildGetAll('allTransporteur', fields);
+    type Response = { allTransporteur: RelayPage<Transporteur> };
+    return this.query<Response>(query, { variables } as WatchQueryOptions);
+  }
+
+  getOne(id: string) {
+    const fields = [ 'id', 'raisonSocial', 'pays { description }', 'ville' ];
+    const query = this.buildGetOne('transporteur', id, fields);
+    type Response = { transporteur: Transporteur };
+    const variables: OperationVariables = { id };
+    return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
   getSecteurs() {

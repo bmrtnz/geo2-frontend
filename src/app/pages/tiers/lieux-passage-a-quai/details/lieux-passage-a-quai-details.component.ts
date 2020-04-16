@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {LieuxPassageAQuaiService} from '../../../../shared/services/lieux-passage-a-quai.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -14,13 +14,14 @@ import {
   Societe, TypeClient, LieuPassageAQuai
 } from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
   templateUrl: './lieux-passage-a-quai-details.component.html',
   styleUrls: ['./lieux-passage-a-quai-details.component.scss']
 })
-export class LieuxPassageAQuaiDetailsComponent implements OnInit {
+export class LieuxPassageAQuaiDetailsComponent implements OnInit, OnDestroy {
 
   lieupassageaquaiForm = this.fb.group({
     code: [''],
@@ -45,6 +46,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  private queryGetOneLieuPassageAQuai: Subscription;
 
   lieupassageaquai: LieuPassageAQuai;
   pays: Pays[];
@@ -81,12 +83,12 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     this.lieupassageaquaiService.getRegimeTva().then(a => {
       this.regimeTva = a;
     });
-    this.lieupassageaquaiService
-      .get(this.route.snapshot.paramMap.get('id'))
-      .then(c => {
-        this.lieupassageaquai = c;
-        this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
-      });
+    this.queryGetOneLieuPassageAQuai = this.lieupassageaquaiService
+    .getOne(this.route.snapshot.paramMap.get('id'))
+    .subscribe( res => {
+      this.lieupassageaquai = res.data.lieuPassageAQuai;
+      this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
+    });
   }
 
   debug(test) {
@@ -103,6 +105,10 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/lieupassageaquais/${this.lieupassageaquai.id}`]);
+  }
+
+  ngOnDestroy() {
+    this.queryGetOneLieuPassageAQuai.unsubscribe();
   }
 
 }

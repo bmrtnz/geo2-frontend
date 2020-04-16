@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ClientsService} from '../../../../shared/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -14,13 +14,15 @@ import {
   Societe, TypeClient
 } from '../../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { SecteursService } from 'app/shared/services/secteurs.service';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent implements OnInit {
+export class ClientDetailsComponent implements OnInit, OnDestroy {
 
   clientForm = this.fb.group({
     code: [''],
@@ -76,6 +78,7 @@ export class ClientDetailsComponent implements OnInit {
     paramAvances: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  private queryGetOneClient: Subscription;
 
   client: Client;
   secteurs: Secteur[];
@@ -93,6 +96,7 @@ export class ClientDetailsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private clientsService: ClientsService,
+    private secteursService: SecteursService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -100,17 +104,11 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.clientsService.getSecteurs().then(s => {
-      this.secteurs = s;
-    });
     this.clientsService.getPays().then(p => {
       this.pays = p;
     });
     this.clientsService.getCommerciaux().then(c => {
       this.commerciaux = c;
-    });
-    this.clientsService.get().then(c => {
-      this.clients = c;
     });
     this.clientsService.getAssistantes().then(a => {
       this.assistantes = a;
@@ -127,12 +125,19 @@ export class ClientDetailsComponent implements OnInit {
     this.clientsService.getRegimeTva().then(a => {
       this.regimeTva = a;
     });
-    this.clientsService
-      .get(this.route.snapshot.paramMap.get('id'))
-      .then(c => {
-        this.client = c;
-        this.clientForm.patchValue(this.client);
-      });
+
+    // TODO fetch all secteurs ( not just first page )
+    this.secteursService.getAll()
+    .subscribe( res => this.secteurs = res.data.allSecteur.edges.map(({node}) => node));
+
+    this.queryGetOneClient = this.clientsService
+    .getOne(this.route.snapshot.paramMap.get('id'))
+    .subscribe( res => {
+      this.client = res.data.client;
+      this.clientForm.patchValue(this.client);
+    });
+
+
   }
 
   debug(test: any) {
@@ -141,6 +146,11 @@ export class ClientDetailsComponent implements OnInit {
 
   onSubmit() {
     console.log(this.clientForm.value);
+    // if (!this.clientForm.pristine && this.clientForm.valid) {
+    //   this.clientsService
+    //   .update({ client: this.clientForm.value })
+    //   .subscribe((res) => console.log(res));
+    // }
   }
 
   toggleVisible() {
@@ -155,5 +165,9 @@ export class ClientDetailsComponent implements OnInit {
   contactsBtnClick() {
     // this.router.navigate([`./entrepots/${this.client.id}`]);
     this.router.navigate([`/tiers/contacts/clients/${this.client.id}`]);
+  }
+
+  ngOnDestroy() {
+    this.queryGetOneClient.unsubscribe();
   }
 }
