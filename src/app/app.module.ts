@@ -7,7 +7,6 @@ import {SideNavOuterToolbarModule, SingleCardModule} from './layouts';
 import {FooterModule, LoginFormModule} from './shared/components';
 import {AuthService, ScreenService} from './shared/services';
 import {SharedModule} from './shared/shared.module';
-import { ArticlesModule } from './pages/articles/articles.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -16,7 +15,6 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent
   ],
   imports: [
-    ArticlesModule,
     BrowserModule,
     SharedModule,
     AppRoutingModule,

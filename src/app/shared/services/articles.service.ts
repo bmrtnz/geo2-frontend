@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { FakeService } from './fake.service';
+import { Article } from '../models';
 
 export class Company {
     ID: number;
@@ -54,10 +56,25 @@ const companies: Company[] = [{
     Website: 'http://www.nowebsitetomsclub.com'
 }];
 
-@Injectable()
-export class ArticlesService {
+@Injectable({
+    providedIn: 'root'
+  })
+
+  export class ArticlesService {
+
+    constructor(
+        private fakeService: FakeService
+      ) { }
+
     getCompanies(): Company[] {
         return companies;
     }
+
+    get(code?: string) {
+        this.fakeService.get(Article, code).then(res => console.log(res));
+        return this.fakeService.get(Article, code);
+    }
+
 }
+
 

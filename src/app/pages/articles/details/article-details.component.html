@@ -1,0 +1,154 @@
+<form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+
+    <div class="content-block">
+        <h2>
+        {{ 'articles-details-title' | localize }} {{ code }}
+        <!-- <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button> -->
+        </h2>
+    </div>
+    <div class="content-block articles-page"> 
+        
+        <dx-box direction="row">
+            <dxi-item [ratio]="4">
+            <div class="dx-form-group dx-card responsive-paddings">
+                <div class="dx-form-group-content">
+                    <!-- Code -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'articles-code' | localize }}</div>
+                        <div class="dx-field-value">
+                        <dx-text-box formControlName="id">
+                        </dx-text-box>
+                        </div>
+                    </div>
+                    <!-- Description abrégéee -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'articles-descriptAbregee' | localize }}</div>
+                        <div class="dx-field-value">
+                        <dx-text-box formControlName="descriptAbregee">
+                        </dx-text-box>
+                        </div>
+                    </div>
+                    
+                    <!-- BWSTOCK -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'articles-BWSTOCK' | localize }}</div>
+                        <div class="dx-field-value">
+                            <dx-check-box formControlName="BWSTOCK"></dx-check-box>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </dxi-item>
+            <dxi-item [ratio]="0.2"></dxi-item>
+            <dxi-item [ratio]="4">
+                <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                    <span class="dx-form-group-caption">{{ 'articles-instructStation' | localize }}</span>
+                    <div class="dx-form-group-content">
+                      <!-- Instructions au fournisseur -->
+                      <div class="dx-field">
+                        <div class="dx-field-value">
+                          <dx-text-area formControlName="instructStation"></dx-text-area>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </dxi-item>
+
+        </dx-box>
+        <br>
+        
+        <dx-tab-panel
+            #tabPanel
+            [height]="auto"
+            [dataSource]="companies"
+            [selectedIndex]="0"
+            [loop]="true"
+            [animationEnabled]="true"
+            [swipeEnabled]="true">
+        
+            <div *dxTemplate="let company of 'title'">
+                <span>{{company.CompanyName}}</span>
+            </div>
+
+            <div *dxTemplate="let company of 'item'">
+                <div class="tabpanel-item">
+                    <dx-data-grid 
+                    id="gridContainer" 
+                    [dataSource]="orders"
+                    [showBorders]="true">
+                        <dxo-filter-row 
+                            [visible]="showFilterRow" 
+                            [applyFilter]="currentFilter"></dxo-filter-row>
+                        <dxo-header-filter 
+                            [visible]="showHeaderFilter"></dxo-header-filter>
+                        <dxo-search-panel 
+                            [visible]="true" 
+                            [width]="240" 
+                            placeholder="Recherche…"></dxo-search-panel>
+                        <dxi-column 
+                            dataField="OrderNumber" 
+                            caption="Invoice Number">
+                            <dxo-header-filter 
+                                [groupInterval]="10000"></dxo-header-filter>
+                        </dxi-column>
+                        <dxi-column 
+                            dataField="OrderDate" 
+                            alignment="right" 
+                            dataType="date"
+                            [calculateFilterExpression]="calculateFilterExpression">
+                            <dxo-header-filter 
+                                [dataSource]="orderHeaderFilter"></dxo-header-filter>
+                        </dxi-column>
+                        <dxi-column 
+                            dataField="DeliveryDate" 
+                            alignment="right" 
+                            dataType="datetime"
+                            format="M/d/yyyy, HH:mm"></dxi-column>
+                        <dxi-column 
+                            dataField="SaleAmount" 
+                            alignment="right" 
+                            format="currency"
+                            [editorOptions]="{ format: 'currency', showClearButton: true }">
+                            <dxo-header-filter 
+                                [dataSource]="saleAmountHeaderFilter"></dxo-header-filter>
+                        </dxi-column>
+                        <dxi-column dataField="Employee"></dxi-column>
+                        <dxi-column 
+                            dataField="CustomerStoreCity" 
+                            caption="City">
+                            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
+                        </dxi-column>
+                    </dx-data-grid>
+                    <div>
+                        <p>
+                            <b>{{company.City}}</b>
+                            (<span>{{company.State}}</span>)
+                        </p>
+                        <p>
+                            <span>{{company.Zipcode}}</span>
+                            <span>{{company.Address}}</span>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            Phone: <b>{{company.Phone}}</b>
+                        </p>
+                        <p>
+                            Fax: <b>{{company.Fax}}</b>
+                        </p>
+                        <p>
+                            Website:
+                            <a href="{{company.Website}}" target="_blank">
+                                {{company.Website}}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </dx-tab-panel>
+        <div class="item-box">
+            {{ 'articles-detailTitle' | localize }} <span>{{tabPanel.selectedIndex + 1}}</span> {{ 'articles-of' | localize }} <span>{{itemCount}}</span>
+        </div>
+    </div>
+
+</form>

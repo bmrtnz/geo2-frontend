@@ -230,7 +230,16 @@
 
     "articles-title" : "Articles",
     "articles-detailTitle": "Détail",
-    "articles-of": "de"
+    "articles-of": "de",
+    "articles-code": "Code",
+    "articles-espece": "Espèce",
+    "articles-variete": "Variété",
+    "articles-type": "Type",
+    "articles-modeCulture": "Mode culture",
+    "articles-details-title": "Fiche article",
+    "articles-descriptAbregee": "Description abrégée",
+    "articles-BWSTOCK": "BW STOCK",
+    "articles-instructStation": "Instructions au fournisseur"
 
   }
 }
