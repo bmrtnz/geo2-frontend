@@ -12,10 +12,12 @@ import {
 } from 'devextreme-angular';
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
     SharedModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ArticlesRoutingModule,

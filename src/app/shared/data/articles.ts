@@ -7,7 +7,12 @@ const articles = [
         type: 'type1',
         modeCulture: 'Bio',
         BWSTOCK: true,
-        instructStation: 'Instructions lorem ipsum'
+        instructStation: 'Instructions lorem ipsum',
+        calibreUnifie: '50',
+        origine: 'France',
+        typeVarietal: 'Pomme',
+        coloration: 'Vert',
+        typeVente: 'V'
     },
     {
         id: '082791',
@@ -17,7 +22,12 @@ const articles = [
         type: 'type2',
         modeCulture: 'Bio',
         BWSTOCK: true,
-        instructStation: 'Instructions lorem ipsum'
+        instructStation: 'Instructions lorem ipsum',
+        calibreUnifie: '50',
+        origine: 'France',
+        typeVarietal: 'Pomme',
+        coloration: 'Vert',
+        typeVente: 'V'
     },
     {
         id: '082792',
@@ -27,7 +37,12 @@ const articles = [
         type: 'type1',
         modeCulture: 'Traditionnelle',
         BWSTOCK: false,
-        instructStation: 'Instructions lorem ipsum'
+        instructStation: 'Instructions lorem ipsum',
+        calibreUnifie: '50',
+        origine: 'France',
+        typeVarietal: 'Pomme',
+        coloration: 'Vert',
+        typeVente: 'V'
     },
 ];
 

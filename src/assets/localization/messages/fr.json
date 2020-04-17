@@ -239,7 +239,12 @@
     "articles-details-title": "Fiche article",
     "articles-descriptAbregee": "Description abrégée",
     "articles-BWSTOCK": "BW STOCK",
-    "articles-instructStation": "Instructions au fournisseur"
+    "articles-instructStation": "Instructions au fournisseur",
+    "articles-calibreUnifie": "Calibre unifié",
+    "articles-origine": "Origine",
+    "articles-typeVarietal": "Type variétal",
+    "articles-coloration": "Coloration",
+    "articles-typeVente": "Type vente"
 
   }
 }

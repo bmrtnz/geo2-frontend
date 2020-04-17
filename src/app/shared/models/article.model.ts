@@ -1,4 +1,3 @@
-// import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from '.';
 
 export class Article {
   public id: string;

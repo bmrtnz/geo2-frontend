@@ -71,7 +71,6 @@ const companies: Company[] = [{
     }
 
     get(code?: string) {
-        this.fakeService.get(Article, code).then(res => console.log(res));
         return this.fakeService.get(Article, code);
     }
 
