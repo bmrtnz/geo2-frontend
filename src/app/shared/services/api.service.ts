@@ -1,8 +1,10 @@
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ApolloQueryResult, WatchQueryOptions, MutationOptions, OperationVariables } from 'apollo-client';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { FetchResult } from 'apollo-link';
+import ArrayStore from 'devextreme/data/array_store';
+import DataSource from 'devextreme/data/data_source';
 
 export type PageInfo = {
   startCursor?: string;
@@ -23,21 +25,54 @@ export type RelayPageVariables = OperationVariables & {
 };
 
 export interface APIRead {
-  getAll(variables?: RelayPageVariables): Observable<ApolloQueryResult<unknown>>;
-  getOne(id: string): Observable<ApolloQueryResult<unknown>>;
+  getAll(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
+  getOne(id: string): Observable<ApolloQueryResult<any>>;
+  getDataSource?(variables?: OperationVariables): Observable<DataSource>;
 }
 
 export interface APIPersist {
-  update?(variables: OperationVariables): Observable<FetchResult<unknown, Record<string, any>, Record<string, any>>>;
+  update?(variables: OperationVariables): Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
 export abstract class ApiService {
 
   keyField = 'id';
+  pageSize = 10;
 
   constructor(
     private apollo: Apollo,
   ) { }
+
+  /**
+   * Map RelayPage as DataSource
+   * @param relayPage Input RelayPage
+   */
+  public asDataSource<T = any>(relayPage: RelayPage<T>) {
+    return new DataSource({
+      store: this.asArrayStore(relayPage),
+      paginate: true,
+      pageSize: this.pageSize,
+    });
+  }
+
+  /**
+   * Map RelayPage as ArrayStore
+   * @param relayPage Input RelayPage
+   */
+  public asArrayStore<T = any>(relayPage: RelayPage<T>) {
+    return new ArrayStore({
+        key: this.keyField,
+        data: this.asList(relayPage),
+    });
+  }
+
+  /**
+   * Map RelayPage as Array
+   * @param relayPage Input RelayPage
+   */
+  public asList<T = any>(relayPage: RelayPage<T>) {
+    return relayPage.edges.map(({node}) => node );
+  }
 
   /**
    * Run GraphQL query
@@ -50,6 +85,21 @@ export abstract class ApiService {
       ...options,
     })
     .valueChanges;
+  }
+
+  protected queryAll<T>(
+    gqlQuery: string,
+    fetchNext: (res: ApolloQueryResult<T>) => boolean,
+    options?: WatchQueryOptions,
+  ) {
+    const nextPage = (observer: Subscriber<ApolloQueryResult<T>>, page = 0) => this
+    .query<T>(gqlQuery, {...options, variables: {...options.variables, page}})
+    .subscribe((res) => {
+      observer.next(res);
+      if (fetchNext(res)) nextPage(observer, page + 1);
+      else observer.complete();
+    });
+    return new Observable<ApolloQueryResult<T>>(observer => nextPage(observer));
   }
 
   /**
@@ -72,7 +122,7 @@ export abstract class ApiService {
   protected buildGetAll(operation: string, fields: string[]) {
     const query = this.operationAsQueryName(operation);
     return `
-    query ${ query }($search: String, $page: Int = 0, $offset: Int = 10) {
+    query ${ query }($search: String, $page: Int = 0, $offset: Int = ${this.pageSize}) {
       ${ operation }(search:$search, page:$page, offset:$offset) {
         edges {
           node {
@@ -99,6 +149,17 @@ export abstract class ApiService {
       }
     }
   `;
+  }
+
+  /**
+   * Create DX Datasource with configured key
+   */
+  protected createDataSource() {
+    return new DataSource({
+      store: new ArrayStore({
+        key: this.keyField,
+      }),
+    });
   }
 
   /**

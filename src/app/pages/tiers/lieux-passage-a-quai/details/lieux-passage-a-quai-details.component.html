@@ -133,9 +133,9 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="pays"
-                      [items]="pays"
-                      valueExpr="id"
+                      [dataSource]="pays | async"
                       displayExpr="description"
+                      [(value)]="lieupassageaquai && lieupassageaquai.pays"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -155,7 +155,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
+                    <dx-text-box formControlName="lieuFonctionEan"></dx-text-box>
                   </div>
                 </div>
 
@@ -165,9 +165,9 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="langue"
-                      [items]="pays"
-                      valueExpr="id"
+                      [dataSource]="pays | async"
                       displayExpr="description"
+                      [(value)]="lieupassageaquai && lieupassageaquai.langue"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -214,9 +214,9 @@
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="regimeTva"
-                        [dataSource]="regimeTva"
+                        [dataSource]="regimesTva | async"
                         displayExpr="description"
-                        valueExpr="id"
+                        [(value)]="lieupassageaquai && lieupassageaquai.regimeTva"
                       ></dx-select-box>
                     </div>
                 </div>
@@ -227,7 +227,9 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="devise"
-                      [items]="devises"
+                      [dataSource]="devises | async"
+                      displayExpr="description"
+                      [(value)]="lieupassageaquai && lieupassageaquai.devise"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -238,7 +240,9 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="moyenPaiement"
-                      [items]="moyenPaiements"
+                      [dataSource]="moyensPaiement | async"
+                      displayExpr="description"
+                      [(value)]="lieupassageaquai && lieupassageaquai.moyenPaiement"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -249,7 +253,9 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="basePaiement"
-                      [items]="basePaiements"
+                      [dataSource]="basesPaiement | async"
+                      displayExpr="description"
+                      [(value)]="lieupassageaquai && lieupassageaquai.basePaiement"
                     ></dx-select-box>
                   </div>
                 </div>

@@ -1,10 +1,11 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FournisseursService} from '../../../../shared/services/fournisseurs.service';
-import {Fournisseur} from '../../../../shared/models/fournisseur.model';
-import ArrayStore from 'devextreme/data/array_store';
-import {Router} from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
+import { Fournisseur } from '../../../../shared/models/fournisseur.model';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import DataSource from 'devextreme/data/data_source';
+import ArrayStore from 'devextreme/data/array_store';
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -13,31 +14,37 @@ import { map } from 'rxjs/operators';
 })
 export class FournisseursListComponent implements OnInit, OnDestroy {
 
-  dataSource: any;
-  fournisseurs: [Fournisseur];
-  private querySubscription: Subscription;
+  fournisseurs: DataSource;
+  public fournisseursSubscription: Subscription;
 
   constructor(
     private fournisseursService: FournisseursService,
     private router: Router
   ) {
+    this.fournisseurs = new DataSource({
+      store: new ArrayStore({
+        key: this.fournisseursService.keyField,
+      }),
+    });
   }
 
-  ngOnInit(): void {
-    this.querySubscription = this.fournisseursService.getAll()
-    .pipe(map(res => new ArrayStore({
-      key: this.fournisseursService.keyField,
-      data: res.data.allFournisseur.edges.map( ({node}) => node ),
-    })))
-    .subscribe(store => this.dataSource = {store});
+  ngOnInit() {
+    this.fournisseursSubscription = this.fournisseursService.getAll()
+    .pipe(
+      map(res => this.fournisseursService.asList( res.data.allFournisseur )),
+    )
+    .subscribe( res => {
+      res.forEach((fournisseur: Fournisseur) => (this.fournisseurs.store() as ArrayStore).insert(fournisseur));
+      this.fournisseurs.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    this.fournisseursSubscription.unsubscribe();
   }
 
   onRowDblClick(e) {
     this.router.navigate([`/tiers/fournisseurs/${e.data.id}`]);
-  }
-
-  ngOnDestroy() {
-    this.querySubscription.unsubscribe();
   }
 
 }

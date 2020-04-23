@@ -2,7 +2,7 @@
 
 <div class="content-block">
   <dx-data-grid class="dx-card wide-card"
-                [dataSource]="dataSource"
+                [dataSource]="transporteurs"
                 [showBorders]="false"
                 [focusedRowEnabled]="true"
                 [focusedRowIndex]="0"
@@ -14,7 +14,13 @@
     <dxo-header-filter [visible]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Transporteurs" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [allowedPageSizes]="[10, 25, 50, 100]"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
 
     <dxi-column

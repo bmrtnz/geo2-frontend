@@ -1,10 +1,11 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {LieuxPassageAQuaiService} from '../../../../shared/services/lieux-passage-a-quai.service';
-import {LieuPassageAQuai} from '../../../../shared/models/lieu-passage-a-quai.model';
-import ArrayStore from 'devextreme/data/array_store';
-import {Router} from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
+import { LieuPassageAQuai } from '../../../../shared/models/lieu-passage-a-quai.model';
+import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import DataSource from 'devextreme/data/data_source';
+import ArrayStore from 'devextreme/data/array_store';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-list',
@@ -13,31 +14,37 @@ import { map } from 'rxjs/operators';
 })
 export class LieuxPassageAQuaiListComponent implements OnInit, OnDestroy {
 
-  dataSource: any;
-  lieuxpassageaquai: [LieuPassageAQuai];
-  private querySubscription: Subscription;
+  lieuxPassageAQuais: DataSource;
+  public lieuxPassageAQuaisSubscription: Subscription;
 
   constructor(
-    private lieuxpassageaquaiService: LieuxPassageAQuaiService,
+    private lieuxPassageAQuaiService: LieuxPassageAQuaiService,
     private router: Router
   ) {
+    this.lieuxPassageAQuais = new DataSource({
+      store: new ArrayStore({
+        key: this.lieuxPassageAQuaiService.keyField,
+      }),
+    });
   }
 
   ngOnInit() {
-    this.querySubscription = this.lieuxpassageaquaiService.getAll()
-    .pipe(map(res => new ArrayStore({
-      key: this.lieuxpassageaquaiService.keyField,
-      data: res.data.allLieuPassageAQuai.edges.map( ({node}) => node ),
-    })))
-    .subscribe(store => this.dataSource = {store});
+    this.lieuxPassageAQuaisSubscription = this.lieuxPassageAQuaiService.getAll()
+    .pipe(
+      map(res => this.lieuxPassageAQuaiService.asList( res.data.allLieuPassageAQuai )),
+    )
+    .subscribe( res => {
+      res.forEach((lieuPassageAQuai: LieuPassageAQuai) => (this.lieuxPassageAQuais.store() as ArrayStore).insert(lieuPassageAQuai));
+      this.lieuxPassageAQuais.reload();
+    });
+  }
+
+  ngOnDestroy() {
+    this.lieuxPassageAQuaisSubscription.unsubscribe();
   }
 
   onRowDblClick(e) {
     this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.id}`]);
-  }
-
-  ngOnDestroy() {
-    this.querySubscription.unsubscribe();
   }
 
 }
