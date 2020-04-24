@@ -15,7 +15,7 @@
               type="danger"
               icon="material-icons person"
               text="{{ 'tiers-transporteurs-contacts' | localize }}"
-              (onClick)="contactsBtnClick($event)">
+              (onClick)="contactsBtnClick()">
             </dx-button>
 
             <dx-check-box
@@ -66,7 +66,7 @@
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="type"
-                        [items]="typeTransporteur"
+                        [items]="typesTransporteur"
                         valueExpr="id"
                         displayExpr="description"
                       ></dx-select-box>
