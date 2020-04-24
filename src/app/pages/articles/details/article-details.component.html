@@ -104,7 +104,6 @@
                             <dxi-column *ngFor="let column of articlesCategories[i].cats"
                                 alignment="left"
                                 dataField="{{ column }}" 
-                                [width]="auto" 
                                 caption="{{ 'articles-' + column | localize }}">
                             </dxi-column>
                         </dx-data-grid>
