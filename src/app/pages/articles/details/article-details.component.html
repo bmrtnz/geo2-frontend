@@ -3,7 +3,7 @@
     <div class="content-block">
         <h2>
         {{ 'articles-details-title' | localize }} {{ code }}
-        <!-- <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button> -->
+        <dx-button *ngIf="tabPanel.selectedIndex === 4;" style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
         </h2>
     </div>
     <div class="content-block articles-page"> 
@@ -51,8 +51,8 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                </dxi-item>
+                </div>
+            </dxi-item>
 
         </dx-box>
         <br>
@@ -60,89 +60,441 @@
         <dx-tab-panel
             #tabPanel
             [height]="auto"
-            [dataSource]="companies"
+            [dataSource]="tabs"
             [selectedIndex]="0"
             [loop]="true"
             [animationEnabled]="true"
             [swipeEnabled]="true">
 
-            <div *dxTemplate="let company of 'title'">
-                <span>{{company.CompanyName}}</span>
+            <div *dxTemplate="let tab of 'title'; let i = index">
+                <span>{{tab.id}}</span>
+                <div class="subtitle">{{categories[i].name}}</div>
             </div>
 
-            <div *dxTemplate="let company of 'item'; let i = index">
+            <div *dxTemplate="let tab of 'item'; let i = index">
                 <div class="tabpanel-item">
 
-                    <h2>{{categories[i].name}}</h2>
+                    <h2 class="cat-name">{{categories[i].name}}</h2>
 
-                    <dx-data-grid 
-                    id="gridContainer" 
-                    [dataSource]="companies"
-                    [showBorders]="true">
-                        <dxo-filter-row 
-                            [visible]="showFilterRow" 
-                            [applyFilter]="currentFilter"></dxo-filter-row>
-                        <dxo-header-filter 
-                            [visible]="showHeaderFilter"></dxo-header-filter>
-                        <dxo-search-panel 
-                            [visible]="true" 
-                            [width]="240" 
-                            placeholder="Search..."></dxo-search-panel>
-                        
-                        <dxi-column *ngFor="let column of articlesCategories[i].cats"
-                            alignment="left"
-                            dataField="{{ column }}" 
-                            [width]="140" 
-                            caption="{{ 'articles-' + column | localize }}">
-                        </dxi-column>
-                        <!-- <dxi-column 
-                            alignment="left"
-                            dataField="id">
-                        </dxi-column> -->
-
-                                                
-                        <!-- <dxi-column 
-                            dataField="OrderDate" 
-                            alignment="right" 
-                            dataType="date"
-                            [width]="120"
-                            [calculateFilterExpression]="calculateFilterExpression">
+                    <div *ngIf="i < 4;">
+                        <dx-data-grid  
+                        id="gridContainer" 
+                        [dataSource]="articlesCombination[i]"
+                        [showBorders]="true">
+                            <dxo-editing 
+                                mode="form"
+                                [allowUpdating]="true"
+                                [allowDeleting]="true"
+                                [allowAdding]="true">
+                        </dxo-editing>
+                            <dxo-filter-row 
+                                [visible]="true" 
+                                [applyFilter]="true"></dxo-filter-row>
                             <dxo-header-filter 
-                                [dataSource]="orderHeaderFilter"></dxo-header-filter>
-                        </dxi-column>
-                        <dxi-column 
-                            dataField="DeliveryDate" 
-                            alignment="right" 
-                            dataType="datetime"
-                            format="M/d/yyyy, HH:mm"
-                            [width]="180"></dxi-column>
-                        <dxi-column 
-                            dataField="SaleAmount" 
-                            alignment="right" 
-                            format="currency"
-                            [editorOptions]="{ format: 'currency', showClearButton: true }">
-                            <dxo-header-filter 
-                                [dataSource]="saleAmountHeaderFilter"></dxo-header-filter>
-                        </dxi-column>
-                        <dxi-column dataField="Employee"></dxi-column>
-                        <dxi-column 
-                            dataField="CustomerStoreCity" 
-                            caption="City">
-                            <dxo-header-filter [allowSearch]="true"></dxo-header-filter>
-                        </dxi-column> -->
-                    </dx-data-grid>
-
+                                [visible]="true"></dxo-header-filter>
+                            <dxo-search-panel 
+                                [visible]="true" 
+                                [width]="240" 
+                                placeholder="Recherche…"></dxo-search-panel>
+                            <dxo-pager 
+                                [showPageSizeSelector]="true"
+                                [allowedPageSizes]="[5, 10]"
+                                [showInfo]="true">
+                            </dxo-pager>
+                            <dxi-column *ngFor="let column of articlesCategories[i].cats"
+                                alignment="left"
+                                dataField="{{ column }}" 
+                                [width]="auto" 
+                                caption="{{ 'articles-' + column | localize }}">
+                            </dxi-column>
+                        </dx-data-grid>
+                    </div>
+ 
                     <div>
-                            <a href="{{company.Website}}" target="_blank">
-                                {{company.Website}}
+                            <a href="{{tab.ID}}" target="_blank">
+                                {{tab.ID}}
                             </a>
                     </div>
                 </div>
             </div>
         </dx-tab-panel>
-        <div class="item-box">
-            {{ 'articles-detailTitle' | localize }} <span>{{tabPanel.selectedIndex + 1}}</span> {{ 'articles-of' | localize }} <span>{{itemCount}}</span>
+        <div class="item-box" *ngIf="tabPanel.selectedIndex < 4;">
+            {{ 'articles-detailTitle' | localize }} <span>{{tabPanel.selectedIndex + 1}}</span> {{ 'articles-of' | localize }} <span>{{itemCount - 1}}</span>
         </div>
+
+        <div *ngIf="tabPanel.selectedIndex === 4;">
+            <dx-box direction="row">
+                <dxi-item [ratio]="4">
+                    <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                        <span class="dx-form-group-caption">{{ 'articles-groupe-matierePremiere' | localize }}</span>
+                        <div class="dx-form-group-content">
+                            
+                            <!-- espèce -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="espece"
+                                    [items]="espece"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- variété -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-variete' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="variete"
+                                    [items]="variete"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Type variétal -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-typeVarietal' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="typeVarietal"
+                                    [items]="typeVarietal"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Mode de culture -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-modeCulture' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="modeCulture"
+                                    [items]="modeCulture"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Origine -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-origine' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="origine"
+                                    [items]="origine"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Calibre Unifié -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-calibreUnifie' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="calibreUnifie"
+                                    [items]="calibreUnifie"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Coloration -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-coloration' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="coloration"
+                                    [items]="coloration"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Type de vente -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-typeVente' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="typeVente"
+                                    [items]="typeVente"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [ratio]="0.2"></dxi-item>
+                <dxi-item [ratio]="4">
+                    <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                        <span class="dx-form-group-caption">{{ 'articles-groupe-emballage' | localize }}</span>
+                        <div class="dx-form-group-content">
+
+                            <!-- Sticker -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-stickeur' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="stickeur"
+                                    [items]="stickeur"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Marque -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-marque' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="marque"
+                                    [items]="marque"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Emballage -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-emballage' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="emballage"
+                                    [items]="emballage"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Conditionnement Spécial -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-condSpecial' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="condSpecial"
+                                    [items]="condSpecial"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Alvéole -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-alveole' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="alveole"
+                                    [items]="alveole"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Nombre unités/emballage -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-nbreUniteColis' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box formControlName="nbreUniteColis"></dx-text-box>
+                                </div>
+                            </div>
+                            <!-- Poids net colis réel -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-poidsNetReel' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box formControlName="poidsNetReel"></dx-text-box>
+                                </div>
+                            </div>
+                            <!-- Poids net UC -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-poidsNetUC' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box formControlName="poidsNetUC"></dx-text-box>
+                                </div>
+                            </div>
+                            <!-- Pré-pesé -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-prePese' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-check-box formControlName="prePese"></dx-check-box>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </dxi-item>
+
+            </dx-box>
+            <br>
+            <dx-box direction="row">
+                <dxi-item [ratio]="4">
+                    <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                        <span class="dx-form-group-caption">{{ 'articles-groupe-CDC' | localize }}</span>
+                        <div class="dx-form-group-content">
+                            
+                            <!-- Catégorie -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-categorie' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="categorie"
+                                    [items]="categorie"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Sucre -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-sucre' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="sucre"
+                                    [items]="sucre"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Pénétrométrie -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-penetro' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="penetro"
+                                    [items]="penetro"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Cirage -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-cirage' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="cirage"
+                                    [items]="cirage"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Rangement -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-rangement' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="rangement"
+                                    [items]="rangement"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Calibre Unifié -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-calibreUnifie' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="calibreUnifie"
+                                    [items]="calibreUnifie"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Coloration -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-coloration' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="coloration"
+                                    [items]="coloration"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [ratio]="0.2"></dxi-item>
+                <dxi-item [ratio]="4">
+                    <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                        <span class="dx-form-group-caption">{{ 'articles-groupe-normalisation' | localize }}</span>
+                        <div class="dx-form-group-content">
+
+                            <!-- Etiquette client -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-etiqClient' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="etiqClient"
+                                    [items]="etiqClient"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Etiquette UC -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-etiqUC' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="etiqUC"
+                                    [items]="etiqUC"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Etiquette événementielle -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-etiqEvenementielle' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="etiqEvenementielle"
+                                    [items]="etiqEvenementielle"
+                                    valueExpr="id"
+                                    displayExpr="description"
+                                  ></dx-select-box>
+                                </div>
+                            </div>
+                            <!-- GTIN UC -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-GTINUC' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box formControlName="GTINUC"></dx-text-box>
+                                </div>
+                            </div>
+                            <!-- GTIN Colis -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-GTINColis' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box formControlName="GTINColis"></dx-text-box>
+                                </div>
+                            </div>
+                            <!-- Code article client -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-articleClient' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box formControlName="articleClient"></dx-text-box>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </dxi-item>
+
+            </dx-box>
+        </div>
+
     </div>
 
 </form>

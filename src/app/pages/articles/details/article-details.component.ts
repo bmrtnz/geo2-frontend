@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ArticlesService, Company } from '../../../shared/services/articles.service';
+import { ArticlesService, Tab } from '../../../shared/services/articles.service';
 import { ActivatedRoute } from '@angular/router';
 import {
     Article
   } from '../../../shared/models';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-
 
 @Component({
     selector: 'app-articles',
@@ -25,46 +24,81 @@ export class ArticleDetailsComponent implements OnInit {
         origine: [''],
         typeVarietal: [''],
         coloration: [''],
-        typeVente: ['']
+        typeVente: [''],
+        type: [''],
+        modeCulture: [''],
+        emballage: [''],
+        poidsNetReel: [''],
+        poidsNetTheo: [''],
+        prePese: [''],
+        condSpecial: [''],
+        nbreUniteColis: [''],
+        poidsNetUC: [''],
+        alveole: [''],
+        stickeur: [''],
+        codePLU: [''],
+        marque: [''],
+        categorie: [''],
+        cirage: [''],
+        penetro: [''],
+        rangement: [''],
+        sucre: [''],
+        calibreMarquage: [''],
+        descrSpecialeCalClt: [''],
+        etiqClient: [''],
+        etiqUC: [''],
+        etiqEvenementielle: [''],
+        GTINColis: [''],
+        GTINUC: [''],
+        articleClient: ['']
     });
 
     article: Article;
     articles: Article[];
-    companies: Company[];
+    tabs: Tab[];
     categories: {};
+    combination: {};
     itemCount: number;
     id: string;
-    articlesCategories: {} = [
+    articlesCategories = [
         {
             id: 1,
             name: 'Matière première',
-            cats: ['espece', 'variete', 'calibreUnifie', 'origine', 'typeVarietal', 'coloration', 'typeVente'],
+            cats: ['espece', 'variete', 'calibreUnifie', 'origine', 'typeVarietal', 'coloration', 'typeVente', 'modeCulture']
         },
         {
             id: 2,
             name: 'Emballage',
-            cats: ['emb cat 1', 'emb cat 2', 'emb cat 3'],
+            cats: ['emballage', 'poidsNetReel', 'poidsNetTheo', 'prePese', 'condSpecial', 'nbreUniteColis', 'poidsNetUC',
+             'alveole', 'stickeur', 'codePLU', 'marque']
         },
         {
             id: 3,
             name: 'CDC',
-            cats: ['CDC cat 1', 'CDC cat 2', 'CDC cat 3'],
+            cats: ['categorie', 'cirage', 'penetro', 'rangement', 'sucre'],
         },
         {
             id: 4,
             name: 'Normalisation',
-            cats: ['norm cat 1', 'norm cat 2', 'norm cat 3'],
+            cats: ['calibreMarquage', 'descrSpecialeCalClt', 'etiqClient', 'etiqUC', 'GTINColis', 'GTINUC', 'articleClient'],
+        },
+        {
+            id: 5,
+            name: 'Fiche complète'
         }
     ];
+
+    articlesCombination = [];
 
     constructor(
         private articlesService: ArticlesService,
         private route: ActivatedRoute,
         private fb: FormBuilder,
         ) {
-        this.companies = articlesService.getCompanies();
+        this.tabs = articlesService.getTabs();
         this.categories = this.articlesCategories;
-        this.itemCount = this.companies.length;
+        this.combination = this.articlesCombination;
+        this.itemCount = this.tabs.length;
     }
 
     ngOnInit() {
@@ -78,6 +112,22 @@ export class ArticleDetailsComponent implements OnInit {
           this.article = id;
           this.articleForm.patchValue(this.article);
         });
+
+        // Create fake data (articlesCombination)
+        let cats = [];
+        for (let c = 0; c < 4; c++) {
+            this.articlesCombination[c] = [];
+            cats = this.articlesCategories[c].cats.slice(0, 2);
+            let element = {[cats[0]]: '', [cats[1]]: ''};
+            for (let i = 1; i <= 10; i++) {
+                for (let j = 1; j <= 3; j++) {
+                    element = {[cats[0]]: '', [cats[1]]: ''};
+                    element[cats[0]] = cats[0] + i;
+                    element[cats[1]] = cats[1] + j;
+                    this.articlesCombination[c].push(element);
+                }
+            }
+        }
 
     }
 
