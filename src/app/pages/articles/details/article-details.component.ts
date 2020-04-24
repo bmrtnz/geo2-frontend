@@ -55,8 +55,30 @@ export class ArticleDetailsComponent implements OnInit {
 
     article: Article;
     articles: Article[];
+
+    especes: any[];
+    varietes: any[];
+    typesVarietal: any[];
+    modesCulture: any[];
+    origines: any[];
+    calibresUnifie: any[];
+    colorations: any[];
+    typesVente: any[];
+    stickeurs: any[];
+    marques: any[];
+    emballages: any[];
+    conditionsSpecial: any[];
+    alveoles: any[];
+    categories: any[];
+    sucres: any[];
+    penetros: any[];
+    cirages: any[];
+    rangements: any[];
+    etiquettesClient: any[];
+    etiquettesUC: any[];
+    etiquettesEvenementielle: any[];
+
     tabs: Tab[];
-    categories: {};
     combination: {};
     itemCount: number;
     id: string;
@@ -129,6 +151,10 @@ export class ArticleDetailsComponent implements OnInit {
             }
         }
 
+    }
+
+    onSubmit() {
+      console.log('submit');
     }
 
 }

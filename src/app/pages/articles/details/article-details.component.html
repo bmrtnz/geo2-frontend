@@ -2,12 +2,12 @@
 
     <div class="content-block">
         <h2>
-        {{ 'articles-details-title' | localize }} {{ code }}
+        {{ 'articles-details-title' | localize }} {{ article.id }}
         <dx-button *ngIf="tabPanel.selectedIndex === 4;" style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
         </h2>
     </div>
-    <div class="content-block articles-page"> 
-        
+    <div class="content-block articles-page">
+
         <dx-box direction="row">
             <dxi-item [ratio]="4">
             <div class="dx-form-group dx-card responsive-paddings">
@@ -28,7 +28,7 @@
                         </dx-text-box>
                         </div>
                     </div>
-                    
+
                     <!-- BWSTOCK -->
                     <div class="dx-field">
                         <div class="dx-field-label">{{ 'articles-BWSTOCK' | localize }}</div>
@@ -59,7 +59,6 @@
 
         <dx-tab-panel
             #tabPanel
-            [height]="auto"
             [dataSource]="tabs"
             [selectedIndex]="0"
             [loop]="true"
@@ -77,39 +76,38 @@
                     <h2 class="cat-name">{{categories[i].name}}</h2>
 
                     <div *ngIf="i < 4;">
-                        <dx-data-grid  
-                        id="gridContainer" 
+                        <dx-data-grid
+                        id="gridContainer"
                         [dataSource]="articlesCombination[i]"
                         [showBorders]="true">
-                            <dxo-editing 
+                            <dxo-editing
                                 mode="form"
                                 [allowUpdating]="true"
                                 [allowDeleting]="true"
                                 [allowAdding]="true">
                         </dxo-editing>
-                            <dxo-filter-row 
-                                [visible]="true" 
+                            <dxo-filter-row
+                                [visible]="true"
                                 [applyFilter]="true"></dxo-filter-row>
-                            <dxo-header-filter 
+                            <dxo-header-filter
                                 [visible]="true"></dxo-header-filter>
-                            <dxo-search-panel 
-                                [visible]="true" 
-                                [width]="240" 
+                            <dxo-search-panel
+                                [visible]="true"
+                                [width]="240"
                                 placeholder="Recherche…"></dxo-search-panel>
-                            <dxo-pager 
+                            <dxo-pager
                                 [showPageSizeSelector]="true"
                                 [allowedPageSizes]="[5, 10]"
                                 [showInfo]="true">
                             </dxo-pager>
                             <dxi-column *ngFor="let column of articlesCategories[i].cats"
                                 alignment="left"
-                                dataField="{{ column }}" 
-                                [width]="auto" 
+                                dataField="{{ column }}"
                                 caption="{{ 'articles-' + column | localize }}">
                             </dxi-column>
                         </dx-data-grid>
                     </div>
- 
+
                     <div>
                             <a href="{{tab.ID}}" target="_blank">
                                 {{tab.ID}}
@@ -128,14 +126,14 @@
                     <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                         <span class="dx-form-group-caption">{{ 'articles-groupe-matierePremiere' | localize }}</span>
                         <div class="dx-form-group-content">
-                            
+
                             <!-- espèce -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="espece"
-                                    [items]="espece"
+                                    [items]="especes"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -147,7 +145,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="variete"
-                                    [items]="variete"
+                                    [items]="varietes"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -159,7 +157,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="typeVarietal"
-                                    [items]="typeVarietal"
+                                    [items]="typesVarietal"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -171,7 +169,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="modeCulture"
-                                    [items]="modeCulture"
+                                    [items]="modesCulture"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -183,7 +181,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="origine"
-                                    [items]="origine"
+                                    [items]="origines"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -195,7 +193,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="calibreUnifie"
-                                    [items]="calibreUnifie"
+                                    [items]="calibresUnifie"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -207,7 +205,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="coloration"
-                                    [items]="coloration"
+                                    [items]="colorations"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -219,13 +217,13 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="typeVente"
-                                    [items]="typeVente"
+                                    [items]="typesVente"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </dxi-item>
@@ -241,7 +239,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="stickeur"
-                                    [items]="stickeur"
+                                    [items]="stickeurs"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -253,7 +251,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="marque"
-                                    [items]="marque"
+                                    [items]="marques"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -265,7 +263,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="emballage"
-                                    [items]="emballage"
+                                    [items]="emballages"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -277,7 +275,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="condSpecial"
-                                    [items]="condSpecial"
+                                    [items]="conditionsSpecial"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -289,7 +287,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="alveole"
-                                    [items]="alveole"
+                                    [items]="alveoles"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -323,7 +321,7 @@
                                     <dx-check-box formControlName="prePese"></dx-check-box>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </dxi-item>
@@ -335,14 +333,14 @@
                     <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                         <span class="dx-form-group-caption">{{ 'articles-groupe-CDC' | localize }}</span>
                         <div class="dx-form-group-content">
-                            
+
                             <!-- Catégorie -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-categorie' | localize }}</div>
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="categorie"
-                                    [items]="categorie"
+                                    [items]="categories"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -354,7 +352,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="sucre"
-                                    [items]="sucre"
+                                    [items]="sucres"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -366,7 +364,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="penetro"
-                                    [items]="penetro"
+                                    [items]="penetros"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -378,7 +376,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="cirage"
-                                    [items]="cirage"
+                                    [items]="cirages"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -390,7 +388,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="rangement"
-                                    [items]="rangement"
+                                    [items]="rangements"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -402,7 +400,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="calibreUnifie"
-                                    [items]="calibreUnifie"
+                                    [items]="calibresUnifie"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -414,13 +412,13 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="coloration"
-                                    [items]="coloration"
+                                    [items]="colorations"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </dxi-item>
@@ -436,7 +434,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="etiqClient"
-                                    [items]="etiqClient"
+                                    [items]="etiquettesClient"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -448,7 +446,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="etiqUC"
-                                    [items]="etiqUC"
+                                    [items]="etiquettesUC"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -460,7 +458,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="etiqEvenementielle"
-                                    [items]="etiqEvenementielle"
+                                    [items]="etiquettesEvenementielle"
                                     valueExpr="id"
                                     displayExpr="description"
                                   ></dx-select-box>
@@ -487,7 +485,7 @@
                                     <dx-text-box formControlName="articleClient"></dx-text-box>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </dxi-item>
