@@ -12,7 +12,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ReactiveFormsModule
   ],
   declarations: [LocalizePipe],
-  exports: [LocalizePipe]
+  exports: [CommonModule, LocalizePipe]
 })
 
 export class SharedModule { }

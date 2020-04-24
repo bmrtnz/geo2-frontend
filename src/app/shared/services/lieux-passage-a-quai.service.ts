@@ -1,37 +1,58 @@
-import {Injectable} from '@angular/core';
-import {BasePaiement, LieuPassageAQuai, Devise, MoyenPaiement, Pays, RegimeTva} from '../models';
-import {FakeService} from './fake.service';
+import { Injectable } from '@angular/core';
+import { LieuPassageAQuai } from '../models';
+import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.service';
+import { Apollo } from 'apollo-angular';
+import { WatchQueryOptions, OperationVariables } from 'apollo-client';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LieuxPassageAQuaiService {
+export class LieuxPassageAQuaiService extends ApiService implements APIRead {
 
   constructor(
-    private fakeService: FakeService
-  ) { }
-
-  get(id?: string) {
-    return this.fakeService.get(LieuPassageAQuai, id);
+    apollo: Apollo,
+  ) {
+    super(apollo);
   }
 
-  getPays() {
-    return this.fakeService.get(Pays);
+  getAll(variables?: RelayPageVariables) {
+    const fields = [ 'id', 'raisonSocial', 'pays { id description }', 'ville' ];
+    const query = this.buildGetAll('allLieuPassageAQuai', fields);
+    type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
+    if (variables && variables.page > -1)
+      return this.query<Response>(query, { variables } as WatchQueryOptions);
+    return this.queryAll<Response>(
+      query,
+      (res) => res.data.allLieuPassageAQuai.pageInfo.hasNextPage,
+      { variables } as WatchQueryOptions,
+    );
   }
 
-  getDevises() {
-    return this.fakeService.get(Devise);
+  getOne(id: string) {
+    const fields = [
+      'id',
+      'valide',
+      'raisonSocial',
+      'pays { id description }',
+      'ville',
+      'adresse1',
+      'adresse2',
+      'adresse3',
+      'codePostal',
+      'lieuFonctionEan',
+      'langue { id description }',
+      'tvaCee',
+      'nbJourEcheance',
+      'echeanceLe',
+      'regimeTva { id description }',
+      'devise { id description }',
+      'moyenPaiement { id description }',
+      'basePaiement { id description }',
+    ];
+    const query = this.buildGetOne('lieuPassageAQuai', id, fields);
+    type Response = { lieuPassageAQuai: LieuPassageAQuai };
+    const variables: OperationVariables = { id };
+    return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  getMoyenPaiements() {
-    return this.fakeService.get(MoyenPaiement);
-  }
-
-  getBasePaiements() {
-    return this.fakeService.get(BasePaiement);
-  }
-
-  getRegimeTva() {
-    return this.fakeService.get(RegimeTva);
-  }
 }

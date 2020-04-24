@@ -7,6 +7,8 @@ import {SideNavOuterToolbarModule, SingleCardModule} from './layouts';
 import {FooterModule, LoginFormModule} from './shared/components';
 import {AuthService, ScreenService} from './shared/services';
 import {SharedModule} from './shared/shared.module';
+import { GraphQLModule } from './graphql.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import {SharedModule} from './shared/shared.module';
     SideNavOuterToolbarModule,
     SingleCardModule,
     FooterModule,
-    LoginFormModule
+    LoginFormModule,
+    GraphQLModule,
+    HttpClientModule
   ],
   exports: [],
   providers: [AuthService, ScreenService],

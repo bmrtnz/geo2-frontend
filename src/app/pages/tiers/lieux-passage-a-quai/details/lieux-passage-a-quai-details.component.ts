@@ -1,26 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {LieuxPassageAQuaiService} from '../../../../shared/services/lieux-passage-a-quai.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {
-  BasePaiement,
-  Transporteur,
-  Devise, GroupeClient,
-  Incoterm,
-  MoyenPaiement,
-  Pays,
-  Personne,
-  RegimeTva,
-  Secteur,
-  Societe, TypeClient, LieuPassageAQuai
-} from '../../../../shared/models';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LieuPassageAQuai } from '../../../../shared/models';
+import { FormBuilder } from '@angular/forms';
+import { Subscription, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { DevisesService } from 'app/shared/services/devises.service';
+import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
+import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import { PaysService } from 'app/shared/services/pays.service';
+import DataSource from 'devextreme/data/data_source';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
   templateUrl: './lieux-passage-a-quai-details.component.html',
   styleUrls: ['./lieux-passage-a-quai-details.component.scss']
 })
-export class LieuxPassageAQuaiDetailsComponent implements OnInit {
+export class LieuxPassageAQuaiDetailsComponent implements OnInit, OnDestroy {
 
   lieupassageaquaiForm = this.fb.group({
     code: [''],
@@ -32,7 +29,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     adresse3: [''],
     ville: [''],
     codePostal: [''],
-    lieuFonctionEAN: [''],
+    lieuFonctionEan: [''],
     langue: [''],
     tvaCee: [''],
     nbJourEcheance: [''],
@@ -45,20 +42,27 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  private queryGetOneLieuPassageAQuai: Subscription;
 
   lieupassageaquai: LieuPassageAQuai;
-  pays: Pays[];
   code: string;
-  devises: Devise[];
-  moyenPaiements: MoyenPaiement[];
-  basePaiements: MoyenPaiement[];
-  regimeTva: RegimeTva[];
+  pays: Observable<DataSource>;
+  devises: Observable<DataSource>;
+  moyensPaiement: Observable<DataSource>;
+  basesPaiement: Observable<DataSource>;
+  regimesTva: Observable<DataSource>;
+  bureauxAchat: Observable<DataSource>;
   typeLieupassageaquai: any[];
   defaultVisible: boolean;
 
   constructor(
     private fb: FormBuilder,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
+    private regimesTvaService: RegimesTvaService,
+    private devisesService: DevisesService,
+    private moyensPaiementService: MoyensPaiementService,
+    private basesPaiementService: BasesPaiementService,
+    private paysService: PaysService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -66,27 +70,39 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.lieupassageaquaiService.getPays().then(p => {
-      this.pays = p;
+
+    this.queryGetOneLieuPassageAQuai = this.lieupassageaquaiService
+    .getOne(this.route.snapshot.paramMap.get('id'))
+    .subscribe( res => {
+      this.lieupassageaquai = res.data.lieuPassageAQuai;
+      this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
     });
-    this.lieupassageaquaiService.getDevises().then(a => {
-      this.devises = a;
-    });
-    this.lieupassageaquaiService.getMoyenPaiements().then(a => {
-      this.moyenPaiements = a;
-    });
-    this.lieupassageaquaiService.getBasePaiements().then(a => {
-      this.basePaiements = a;
-    });
-    this.lieupassageaquaiService.getRegimeTva().then(a => {
-      this.regimeTva = a;
-    });
-    this.lieupassageaquaiService
-      .get(this.route.snapshot.paramMap.get('id'))
-      .then(c => {
-        this.lieupassageaquai = c;
-        this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
-      });
+
+    this.pays = this.paysService.getAll({offset: 200})
+    .pipe(
+      map( res => this.paysService.asDataSource(res.data.allPays)),
+    );
+
+    this.regimesTva = this.regimesTvaService.getAll({offset: 50})
+    .pipe(
+      map( res => this.regimesTvaService.asDataSource(res.data.allRegimeTva)),
+    );
+
+    this.devises = this.devisesService.getAll({offset: 50})
+    .pipe(
+      map( res => this.devisesService.asDataSource(res.data.allDevise)),
+    );
+
+    this.moyensPaiement = this.moyensPaiementService.getAll({offset: 50})
+    .pipe(
+      map( res => this.moyensPaiementService.asDataSource(res.data.allMoyenPaiement)),
+    );
+
+    this.basesPaiement = this.basesPaiementService.getAll({offset: 50})
+    .pipe(
+      map( res => this.basesPaiementService.asDataSource(res.data.allBasePaiement)),
+    );
+
   }
 
   debug(test) {
@@ -103,6 +119,10 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/lieupassageaquais/${this.lieupassageaquai.id}`]);
+  }
+
+  ngOnDestroy() {
+    this.queryGetOneLieuPassageAQuai.unsubscribe();
   }
 
 }

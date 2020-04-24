@@ -1,26 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {ClientsService} from '../../../../shared/services';
-import {ActivatedRoute, Router} from '@angular/router';
-import {
-  BasePaiement,
-  Client,
-  Devise, GroupeClient,
-  Incoterm,
-  MoyenPaiement,
-  Pays,
-  Personne,
-  RegimeTva,
-  Secteur,
-  Societe, TypeClient
-} from '../../../../shared/models';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ClientsService } from '../../../../shared/services';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Client } from '../../../../shared/models';
+import { FormBuilder } from '@angular/forms';
+import { Subscription, Observable } from 'rxjs';
+import { SecteursService } from 'app/shared/services/secteurs.service';
+import { map } from 'rxjs/operators';
+import DataSource from 'devextreme/data/data_source';
+import { PersonnesService } from 'app/shared/services/personnes.service';
+import { PaysService } from 'app/shared/services/pays.service';
+import { TypesClientService } from 'app/shared/services/types-client.service';
+import { IncotermsService } from 'app/shared/services/incoterms.service';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { DevisesService } from 'app/shared/services/devises.service';
+import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
+import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent implements OnInit {
+export class ClientDetailsComponent implements OnInit, OnDestroy {
 
   clientForm = this.fb.group({
     code: [''],
@@ -76,23 +77,33 @@ export class ClientDetailsComponent implements OnInit {
     paramAvances: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  private queryGetClient: Subscription;
 
   client: Client;
-  secteurs: Secteur[];
-  pays: Pays[];
+  secteurs: Observable<DataSource>;
+  pays: Observable<DataSource>;
   code: string;
-  commerciaux: Personne[];
-  clients: Client[];
-  assistantes: Personne[];
-  devises: Devise[];
-  moyenPaiements: MoyenPaiement[];
-  basePaiements: BasePaiement[];
-  regimeTva: RegimeTva[];
+  personnes: Observable<DataSource>;
+  typesClient: Observable<DataSource>;
+  incoterms: Observable<DataSource>;
+  devises: Observable<DataSource>;
+  moyensPaiement: Observable<DataSource>;
+  basesPaiement: Observable<DataSource>;
+  regimesTva: Observable<DataSource>;
   defaultVisible: boolean;
 
   constructor(
     private fb: FormBuilder,
+    private basesPaiementService: BasesPaiementService,
     private clientsService: ClientsService,
+    private devisesService: DevisesService,
+    private incotermsService: IncotermsService,
+    private paysService: PaysService,
+    private secteursService: SecteursService,
+    private personnesService: PersonnesService,
+    private regimesTvaService: RegimesTvaService,
+    private typesClientService: TypesClientService,
+    private moyensPaiementService: MoyensPaiementService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -100,39 +111,59 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.clientsService.getSecteurs().then(s => {
-      this.secteurs = s;
+
+    this.queryGetClient = this.clientsService
+    .getOne(this.route.snapshot.paramMap.get('id'))
+    .subscribe( res => {
+      this.client = res.data.client;
+      this.clientForm.patchValue(this.client);
     });
-    this.clientsService.getPays().then(p => {
-      this.pays = p;
-    });
-    this.clientsService.getCommerciaux().then(c => {
-      this.commerciaux = c;
-    });
-    this.clientsService.get().then(c => {
-      this.clients = c;
-    });
-    this.clientsService.getAssistantes().then(a => {
-      this.assistantes = a;
-    });
-    this.clientsService.getDevises().then(a => {
-      this.devises = a;
-    });
-    this.clientsService.getMoyenPaiements().then(a => {
-      this.moyenPaiements = a;
-    });
-    this.clientsService.getBasePaiements().then(a => {
-      this.basePaiements = a;
-    });
-    this.clientsService.getRegimeTva().then(a => {
-      this.regimeTva = a;
-    });
-    this.clientsService
-      .get(this.route.snapshot.paramMap.get('id'))
-      .then(c => {
-        this.client = c;
-        this.clientForm.patchValue(this.client);
-      });
+
+    this.secteurs = this.secteursService.getAll({offset: 100})
+    .pipe(
+      map( res => this.secteursService.asDataSource(res.data.allSecteur)),
+    );
+
+    this.personnes = this.personnesService.getAll({offset: 500})
+    .pipe(
+      map( res => this.personnesService.asDataSource(res.data.allPersonne)),
+    );
+
+    this.pays = this.paysService.getAll({offset: 200})
+    .pipe(
+      map( res => this.paysService.asDataSource(res.data.allPays)),
+    );
+
+    this.typesClient = this.typesClientService.getAll({offset: 50})
+    .pipe(
+      map( res => this.typesClientService.asDataSource(res.data.allTypeClient)),
+    );
+
+    this.incoterms = this.incotermsService.getAll({offset: 50})
+    .pipe(
+      map( res => this.incotermsService.asDataSource(res.data.allIncoterm)),
+    );
+
+    this.regimesTva = this.regimesTvaService.getAll({offset: 50})
+    .pipe(
+      map( res => this.regimesTvaService.asDataSource(res.data.allRegimeTva)),
+    );
+
+    this.devises = this.devisesService.getAll({offset: 50})
+    .pipe(
+      map( res => this.devisesService.asDataSource(res.data.allDevise)),
+    );
+
+    this.moyensPaiement = this.moyensPaiementService.getAll({offset: 50})
+    .pipe(
+      map( res => this.moyensPaiementService.asDataSource(res.data.allMoyenPaiement)),
+    );
+
+    this.basesPaiement = this.basesPaiementService.getAll({offset: 50})
+    .pipe(
+      map( res => this.basesPaiementService.asDataSource(res.data.allBasePaiement)),
+    );
+
   }
 
   debug(test: any) {
@@ -141,6 +172,11 @@ export class ClientDetailsComponent implements OnInit {
 
   onSubmit() {
     console.log(this.clientForm.value);
+    // if (!this.clientForm.pristine && this.clientForm.valid) {
+    //   this.clientsService
+    //   .update({ client: this.clientForm.value })
+    //   .subscribe((res) => console.log(res));
+    // }
   }
 
   toggleVisible() {
@@ -155,5 +191,9 @@ export class ClientDetailsComponent implements OnInit {
   contactsBtnClick() {
     // this.router.navigate([`./entrepots/${this.client.id}`]);
     this.router.navigate([`/tiers/contacts/clients/${this.client.id}`]);
+  }
+
+  ngOnDestroy() {
+    this.queryGetClient.unsubscribe();
   }
 }
