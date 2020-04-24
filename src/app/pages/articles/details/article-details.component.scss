@@ -71,10 +71,13 @@
     }
     .dx-tabs-wrapper .dx-item:after {
         position: absolute;
-        left:80px;
-        margin-top:10px;
+        left: 80px;
+        margin-top: 10px;
         content: "_____________";
-        color:$base-accent;
+        color: $base-accent;
+    }
+    .dx-tabs-wrapper .dx-item:last-child:after {
+        content: "";
     }
     .dx-tab:before {
         display:none;
