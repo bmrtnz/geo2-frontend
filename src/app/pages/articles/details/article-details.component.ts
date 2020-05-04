@@ -152,6 +152,21 @@ export class ArticleDetailsComponent implements OnInit {
         this.articlesService.getTypeVente().then(ve => {
             this.typesVente = ve;
         });
+        this.articlesService.getStickeur().then(a => {
+            this.stickeurs = a;
+        });
+        this.articlesService.getMarque().then(a => {
+            this.marques = a;
+        });
+        this.articlesService.getEmballage().then(a => {
+            this.emballages = a;
+        });
+        this.articlesService.getConditionsSpecial().then(a => {
+            this.conditionsSpecial = a;
+        });
+        this.articlesService.getAlveole().then(a => {
+            this.alveoles = a;
+        });
 
         this.articlesService
         .get(this.route.snapshot.paramMap.get('id'))

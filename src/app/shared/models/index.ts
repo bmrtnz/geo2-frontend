@@ -32,3 +32,9 @@ export * from './origine.model';
 export * from './calibre-unifie.model';
 export * from './variete.model';
 export * from './mode-culture.model';
+
+export * from './alveole.model';
+export * from './emballage.model';
+export * from './stickeur.model';
+export * from './conditions-special.model';
+export * from './marque.model';
