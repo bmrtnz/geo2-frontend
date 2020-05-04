@@ -1,0 +1,7 @@
+export class Espece {
+
+  public id: string;
+  public description: string;
+  public valide: boolean;
+
+}

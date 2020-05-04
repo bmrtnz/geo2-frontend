@@ -55,8 +55,30 @@ export class ArticleDetailsComponent implements OnInit {
 
     article: Article;
     articles: Article[];
+
+    especes: any[];
+    varietes: any[];
+    typesVarietal: any[];
+    modesCulture: any[];
+    origines: any[];
+    calibresUnifie: any[];
+    colorations: any[];
+    typesVente: any[];
+    stickeurs: any[];
+    marques: any[];
+    emballages: any[];
+    conditionsSpecial: any[];
+    alveoles: any[];
+    categories: any[];
+    sucres: any[];
+    penetros: any[];
+    cirages: any[];
+    rangements: any[];
+    etiquettesClient: any[];
+    etiquettesUC: any[];
+    etiquettesEvenementielle: any[];
+
     tabs: Tab[];
-    categories: {};
     combination: {};
     itemCount: number;
     id: string;
@@ -106,6 +128,31 @@ export class ArticleDetailsComponent implements OnInit {
         this.articlesService.get()
         .then( res => this.articles = res);
 
+        this.articlesService.getEspeces().then(a => {
+            this.especes = a;
+        });
+        this.articlesService.getVarietes().then(v => {
+            this.varietes = v;
+        });
+        this.articlesService.getTypeVarietal().then(tv => {
+            this.typesVarietal = tv;
+        });
+        this.articlesService.getModeCulture().then(c => {
+            this.modesCulture = c;
+        });
+        this.articlesService.getOrigine().then(o => {
+            this.origines = o;
+        });
+        this.articlesService.getCalibreUnifie().then(cu => {
+            this.calibresUnifie = cu;
+        });
+        this.articlesService.getColoration().then(co => {
+            this.colorations = co;
+        });
+        this.articlesService.getTypeVente().then(ve => {
+            this.typesVente = ve;
+        });
+
         this.articlesService
         .get(this.route.snapshot.paramMap.get('id'))
         .then(id => {
@@ -113,22 +160,10 @@ export class ArticleDetailsComponent implements OnInit {
           this.articleForm.patchValue(this.article);
         });
 
-        // Create fake data (articlesCombination)
-        let cats = [];
-        for (let c = 0; c < 4; c++) {
-            this.articlesCombination[c] = [];
-            cats = this.articlesCategories[c].cats.slice(0, 2);
-            let element = {[cats[0]]: '', [cats[1]]: ''};
-            for (let i = 1; i <= 10; i++) {
-                for (let j = 1; j <= 3; j++) {
-                    element = {[cats[0]]: '', [cats[1]]: ''};
-                    element[cats[0]] = cats[0] + i;
-                    element[cats[1]] = cats[1] + j;
-                    this.articlesCombination[c].push(element);
-                }
-            }
-        }
+    }
 
+    onSubmit() {
+      console.log('submit');
     }
 
 }
