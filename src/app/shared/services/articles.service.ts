@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FakeService } from './fake.service';
 import { Article, Espece, Variete, TypeVarietal, ModeCulture, Origine, CalibreUnifie,
     Coloration, TypeVente, Stickeur, Marque, Emballage, ConditionsSpecial,
-    Alveole } from '../models';
+    Alveole, Categorie, Penetro, Rangement, Cirage, Sucre } from '../models';
 
 export class Tab {
     id: string;
@@ -76,6 +76,21 @@ const tabs: Tab[] = [{
     }
     getAlveole() {
         return this.fakeService.get(Alveole);
+    }
+    getCategorie() {
+        return this.fakeService.get(Categorie);
+    }
+    getCirage() {
+        return this.fakeService.get(Cirage);
+    }
+    getPenetro() {
+        return this.fakeService.get(Penetro);
+    }
+    getSucre() {
+        return this.fakeService.get(Sucre);
+    }
+    getRangement() {
+        return this.fakeService.get(Rangement);
     }
 
 }

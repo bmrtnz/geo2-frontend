@@ -173,7 +173,7 @@ export class ArticleDetailsComponent implements OnInit {
         this.articlesService.getPenetro().then(a => {
             this.penetros = a;
         });
-        this.articlesService.getCirages().then(a => {
+        this.articlesService.getCirage().then(a => {
             this.cirages = a;
         });
         this.articlesService.getRangement().then(a => {

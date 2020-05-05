@@ -38,3 +38,8 @@ export * from './emballage.model';
 export * from './stickeur.model';
 export * from './conditions-special.model';
 export * from './marque.model';
+export * from './rangement.model';
+export * from './cirage.model';
+export * from './categorie.model';
+export * from './sucre.model';
+export * from './penetro.model';
