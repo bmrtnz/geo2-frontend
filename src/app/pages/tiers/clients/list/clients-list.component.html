@@ -4,16 +4,18 @@
   <dx-data-grid
     class="dx-card wide-card"
     [dataSource]="clients"
+    [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
+    [allowColumnReordering]="true"
     (onRowDblClick)="onRowDblClick($event)"
   >
 
     <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
-    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
     <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
@@ -21,7 +23,6 @@
       [allowedPageSizes]="[10, 25, 50, 100]"
       [showInfo]="true"
       [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
 

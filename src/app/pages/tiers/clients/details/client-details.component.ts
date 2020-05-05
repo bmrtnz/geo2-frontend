@@ -1,11 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Client } from '../../../../shared/models';
 import { FormBuilder } from '@angular/forms';
-import { Subscription, Observable } from 'rxjs';
 import { SecteursService } from 'app/shared/services/secteurs.service';
-import { map } from 'rxjs/operators';
 import DataSource from 'devextreme/data/data_source';
 import { PersonnesService } from 'app/shared/services/personnes.service';
 import { PaysService } from 'app/shared/services/pays.service';
@@ -15,13 +13,14 @@ import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent implements OnInit, OnDestroy {
+export class ClientDetailsComponent implements OnInit {
 
   clientForm = this.fb.group({
     code: [''],
@@ -63,7 +62,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     commercial: [''],
     assistante: [''],
     referenceCoface: [''],
-    agrement: [''],
+    // agrement: [''],
     // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
@@ -71,25 +70,23 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     groupeClient: [''],
     soumisCtifl: [''],
     valide: [false],
-    lieuFonctionEAN: [''],
+    lieuFonctionEan: [''],
     delaiBonFacturer: [''],
-    certifications: [''],
-    paramAvances: ['']
+    // certifications: [''],
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
-  private queryGetClient: Subscription;
 
   client: Client;
-  secteurs: Observable<DataSource>;
-  pays: Observable<DataSource>;
   code: string;
-  personnes: Observable<DataSource>;
-  typesClient: Observable<DataSource>;
-  incoterms: Observable<DataSource>;
-  devises: Observable<DataSource>;
-  moyensPaiement: Observable<DataSource>;
-  basesPaiement: Observable<DataSource>;
-  regimesTva: Observable<DataSource>;
+  secteurs: DataSource;
+  personnes: DataSource;
+  pays: DataSource;
+  typesClient: DataSource;
+  incoterms: DataSource;
+  devises: DataSource;
+  moyensPaiement: DataSource;
+  basesPaiement: DataSource;
+  regimesTva: DataSource;
   defaultVisible: boolean;
 
   constructor(
@@ -112,57 +109,22 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.queryGetClient = this.clientsService
+    this.clientsService
     .getOne(this.route.snapshot.paramMap.get('id'))
     .subscribe( res => {
       this.client = res.data.client;
       this.clientForm.patchValue(this.client);
     });
 
-    this.secteurs = this.secteursService.getAll({offset: 100})
-    .pipe(
-      map( res => this.secteursService.asDataSource(res.data.allSecteur)),
-    );
-
-    this.personnes = this.personnesService.getAll({offset: 500})
-    .pipe(
-      map( res => this.personnesService.asDataSource(res.data.allPersonne)),
-    );
-
-    this.pays = this.paysService.getAll({offset: 200})
-    .pipe(
-      map( res => this.paysService.asDataSource(res.data.allPays)),
-    );
-
-    this.typesClient = this.typesClientService.getAll({offset: 50})
-    .pipe(
-      map( res => this.typesClientService.asDataSource(res.data.allTypeClient)),
-    );
-
-    this.incoterms = this.incotermsService.getAll({offset: 50})
-    .pipe(
-      map( res => this.incotermsService.asDataSource(res.data.allIncoterm)),
-    );
-
-    this.regimesTva = this.regimesTvaService.getAll({offset: 50})
-    .pipe(
-      map( res => this.regimesTvaService.asDataSource(res.data.allRegimeTva)),
-    );
-
-    this.devises = this.devisesService.getAll({offset: 50})
-    .pipe(
-      map( res => this.devisesService.asDataSource(res.data.allDevise)),
-    );
-
-    this.moyensPaiement = this.moyensPaiementService.getAll({offset: 50})
-    .pipe(
-      map( res => this.moyensPaiementService.asDataSource(res.data.allMoyenPaiement)),
-    );
-
-    this.basesPaiement = this.basesPaiementService.getAll({offset: 50})
-    .pipe(
-      map( res => this.basesPaiementService.asDataSource(res.data.allBasePaiement)),
-    );
+    this.secteurs = this.secteursService.getDataSource();
+    this.personnes = this.personnesService.getDataSource();
+    this.pays = this.paysService.getDataSource();
+    this.typesClient = this.typesClientService.getDataSource();
+    this.incoterms = this.incotermsService.getDataSource();
+    this.regimesTva = this.regimesTvaService.getDataSource();
+    this.devises = this.devisesService.getDataSource();
+    this.moyensPaiement = this.moyensPaiementService.getDataSource();
+    this.basesPaiement = this.basesPaiementService.getDataSource();
 
   }
 
@@ -171,12 +133,13 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.clientForm.value);
-    // if (!this.clientForm.pristine && this.clientForm.valid) {
-    //   this.clientsService
-    //   .update({ client: this.clientForm.value })
-    //   .subscribe((res) => console.log(res));
-    // }
+    if (!this.clientForm.pristine && this.clientForm.valid) {
+      const client = this.clientsService
+      .extractDirty(this.clientForm.controls);
+      this.clientsService
+      .save({ client: { ...client, id: this.client.id } })
+      .subscribe((res) => console.log(res));
+    }
   }
 
   toggleVisible() {
@@ -193,7 +156,4 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     this.router.navigate([`/tiers/contacts/clients/${this.client.id}`]);
   }
 
-  ngOnDestroy() {
-    this.queryGetClient.unsubscribe();
-  }
 }

@@ -2,13 +2,16 @@
 
 <div class="content-block">
   <dx-data-grid class="dx-card wide-card"
-                [dataSource]="lieuxPassageAQuais"
-                [showBorders]="false"
-                [focusedRowEnabled]="true"
-                [focusedRowIndex]="0"
-                [columnAutoWidth]="true"
-                [columnHidingEnabled]="true"
-                (onRowDblClick)="onRowDblClick($event)">
+    [dataSource]="lieuxPassageAQuais"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="true"
+    [allowColumnReordering]="true"
+    (onRowDblClick)="onRowDblClick($event)"
+  >
 
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager

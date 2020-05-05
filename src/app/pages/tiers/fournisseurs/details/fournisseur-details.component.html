@@ -151,7 +151,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="pays"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
                       [(value)]="fournisseur && fournisseur.pays"
                     ></dx-select-box>
@@ -190,7 +190,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                     formControlName="bureauAchat"
-                    [dataSource]="bureauxAchat | async"
+                    [dataSource]="bureauxAchat"
                     displayExpr="raisonSocial"
                     [(value)]="fournisseur && fournisseur.bureauAchat"
                     ></dx-select-box>
@@ -214,7 +214,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-lieuFonctionEAN' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
+                    <dx-text-box formControlName="lieuFonctionEan"></dx-text-box>
                   </div>
                 </div>
 
@@ -224,7 +224,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="langue"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
                       [(value)]="fournisseur && fournisseur.langue"
                     ></dx-select-box>
@@ -267,7 +267,7 @@
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="type"
-                        [dataSource]="typesFournisseur | async"
+                        [dataSource]="typesFournisseur"
                         displayExpr="description"
                         [(value)]="fournisseur && fournisseur.type"
                       ></dx-select-box>
@@ -347,7 +347,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="regimeTva"
-                      [dataSource]="regimesTva | async"
+                      [dataSource]="regimesTva"
                       displayExpr="description"
                       [(value)]="fournisseur && fournisseur.regimeTva"
                     ></dx-select-box>
@@ -368,7 +368,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="devise"
-                      [dataSource]="devises | async"
+                      [dataSource]="devises"
                       displayExpr="description"
                       [(value)]="fournisseur && fournisseur.devise"
                     ></dx-select-box>
@@ -381,7 +381,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                     formControlName="moyenPaiement"
-                      [dataSource]="moyensPaiement | async"
+                      [dataSource]="moyensPaiement"
                       displayExpr="description"
                       [(value)]="fournisseur && fournisseur.moyenPaiement"
                     ></dx-select-box>
@@ -394,7 +394,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="basePaiement"
-                      [dataSource]="basesPaiement | async"
+                      [dataSource]="basesPaiement"
                       displayExpr="description"
                       [(value)]="fournisseur && fournisseur.basePaiement"
                     ></dx-select-box>

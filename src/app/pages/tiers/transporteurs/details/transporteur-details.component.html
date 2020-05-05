@@ -134,7 +134,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="pays"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
                       [(value)]="transporteur && transporteur.pays"
                     ></dx-select-box>
@@ -166,7 +166,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="langue"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
                       [(value)]="transporteur && transporteur.langue"
                     ></dx-select-box>
@@ -263,7 +263,7 @@
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="regimeTva"
-                        [dataSource]="regimesTva | async"
+                        [dataSource]="regimesTva"
                         displayExpr="description"
                         [(value)]="transporteur && transporteur.regimeTva"
                       ></dx-select-box>
@@ -276,7 +276,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="devise"
-                      [dataSource]="devises | async"
+                      [dataSource]="devises"
                       displayExpr="description"
                       [(value)]="transporteur && transporteur.devise"
                     ></dx-select-box>
@@ -289,7 +289,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="moyenPaiement"
-                      [dataSource]="moyensPaiement | async"
+                      [dataSource]="moyensPaiement"
                       displayExpr="description"
                       [(value)]="transporteur && transporteur.moyenPaiement"
                     ></dx-select-box>
@@ -302,7 +302,7 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="basePaiement"
-                      [dataSource]="basesPaiement | async"
+                      [dataSource]="basesPaiement"
                       displayExpr="description"
                       [(value)]="transporteur && transporteur.basePaiement"
                     ></dx-select-box>
