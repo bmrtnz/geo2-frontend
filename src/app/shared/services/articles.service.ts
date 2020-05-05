@@ -2,23 +2,8 @@ import { Injectable } from '@angular/core';
 import { FakeService } from './fake.service';
 import { Article, Espece, Variete, TypeVarietal, ModeCulture, Origine, CalibreUnifie,
     Coloration, TypeVente, Stickeur, Marque, Emballage, ConditionsSpecial,
-    Alveole, Categorie, Penetro, Rangement, Cirage, Sucre } from '../models';
-
-export class Tab {
-    id: string;
-}
-
-const tabs: Tab[] = [{
-    id: '1'
-}, {
-    id: '2'
-}, {
-    id: '3'
-}, {
-    id: '4'
-}, {
-    id: '5'
-}];
+    Alveole, Categorie, Penetro, Rangement, Cirage, Sucre,
+    EtiqClient, EtiqUC, EtiqEvt } from '../models';
 
 @Injectable({
     providedIn: 'root'
@@ -29,10 +14,6 @@ const tabs: Tab[] = [{
     constructor(
         private fakeService: FakeService
       ) { }
-
-    getTabs(): Tab[] {
-        return tabs;
-    }
 
     get(code?: string) {
         return this.fakeService.get(Article, code);
@@ -92,7 +73,16 @@ const tabs: Tab[] = [{
     getRangement() {
         return this.fakeService.get(Rangement);
     }
-
+    getEtiqClient() {
+        return this.fakeService.get(EtiqClient);
+    }
+    getEtiqUC() {
+        return this.fakeService.get(EtiqUC);
+    }
+    getEtiqEvt() {
+        return this.fakeService.get(EtiqEvt);
+    }
+    
 }
 
 
