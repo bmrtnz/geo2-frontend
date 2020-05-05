@@ -164,8 +164,20 @@ export class ArticleDetailsComponent implements OnInit {
         this.articlesService.getConditionsSpecial().then(a => {
             this.conditionsSpecial = a;
         });
-        this.articlesService.getAlveole().then(a => {
-            this.alveoles = a;
+        this.articlesService.getCategorie().then(a => {
+            this.categories = a;
+        });
+        this.articlesService.getSucre().then(a => {
+            this.sucres = a;
+        });
+        this.articlesService.getPenetro().then(a => {
+            this.penetros = a;
+        });
+        this.articlesService.getCirages().then(a => {
+            this.cirages = a;
+        });
+        this.articlesService.getRangement().then(a => {
+            this.rangements = a;
         });
 
         this.articlesService
