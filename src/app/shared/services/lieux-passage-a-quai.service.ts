@@ -43,18 +43,6 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     super(apollo, 'LieuPassageAQuai');
   }
 
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allLieuPassageAQuai.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
-  }
-
   getOne(id: string) {
     const query = this.buildGetOne(this.fullFields);
     type Response = { lieuPassageAQuai: LieuPassageAQuai };
@@ -62,17 +50,18 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  getDataSource(variables: RelayPageVariables = {}) {
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
     const query = this.buildGetAll(this.baseFields);
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          this.pageSize = options.take;
-          variables.offset = options.take;
-          variables.page = options.skip / options.take;
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
           return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allLieuPassageAQuai)),
             take(1),

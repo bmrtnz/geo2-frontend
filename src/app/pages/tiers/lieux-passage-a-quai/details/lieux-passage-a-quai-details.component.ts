@@ -9,6 +9,7 @@ import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.servi
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { PaysService } from 'app/shared/services/pays.service';
 import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -18,10 +19,9 @@ import DataSource from 'devextreme/data/data_source';
 export class LieuxPassageAQuaiDetailsComponent implements OnInit {
 
   lieupassageaquaiForm = this.fb.group({
-    code: [''],
+    id: [''],
     raisonSocial: [''],
     pays: [''],
-    type: [''],
     adresse1: [''],
     adresse2: [''],
     adresse3: [''],
@@ -61,7 +61,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     private basesPaiementService: BasesPaiementService,
     private paysService: PaysService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
   }
@@ -93,7 +93,10 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
       .extractDirty(this.lieupassageaquaiForm.controls);
       this.lieupassageaquaiService
       .save({ lieuPassageAQuai: { ...lieuPassageAQuai, id: this.lieupassageaquai.id } })
-      .subscribe((res) => console.log(res));
+      .subscribe({
+        next: () => notify('Sauvegardé', 'success', 3000),
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
     }
   }
 

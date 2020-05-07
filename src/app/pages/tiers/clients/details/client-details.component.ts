@@ -13,7 +13,7 @@ import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
-import { tap } from 'rxjs/operators';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-client-details',
@@ -102,7 +102,8 @@ export class ClientDetailsComponent implements OnInit {
     private typesClientService: TypesClientService,
     private moyensPaiementService: MoyensPaiementService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    // public localizePipe: LocalizePipe,
   ) {
     this.defaultVisible = false;
   }
@@ -138,7 +139,10 @@ export class ClientDetailsComponent implements OnInit {
       .extractDirty(this.clientForm.controls);
       this.clientsService
       .save({ client: { ...client, id: this.client.id } })
-      .subscribe((res) => console.log(res));
+      .subscribe({
+        next: () => notify('Sauvegardé', 'success', 3000),
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
     }
   }
 

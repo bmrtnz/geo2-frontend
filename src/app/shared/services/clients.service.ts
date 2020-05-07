@@ -46,6 +46,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'compteComptable',
     'nbJourEcheance',
     'echeanceLe',
+    'delaiBonFacturer',
     'incoterm { id description }',
     'regimeTva { id description }',
     'devise { id description }',
@@ -63,47 +64,45 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     super(apollo, 'Client');
   }
 
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allClient: RelayPage<Client> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allClient.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
+  getOne(id: string) {
+    const query = this.buildGetOne(this.allFields);
+    type Response = { client: Client };
+    const variables: OperationVariables = { id };
+    return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  getDataSource(variables: RelayPageVariables = {}) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allClient: RelayPage<Client> };
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          this.pageSize = options.take;
-          variables.offset = options.take;
-          variables.page = options.skip / options.take;
-          variables.search = options.filter ?
-            this.mapDXFilterToRSQL(options.filter) :
-            '';
+          const query = this.buildGetAll(this.baseFields);
+          type Response = { allClient: RelayPage<Client> };
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
           return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allClient)),
             take(1),
           )
           .toPromise();
         },
+        byKey: (key) => {
+          const query = this.buildGetOne(this.baseFields);
+          type Response = { client: Client };
+          variables = { ...variables, id: key };
+          return this.
+          query<Response>(query, { variables } as WatchQueryOptions)
+          .pipe(
+            map( res => res.data.client),
+            take(1),
+          )
+          .toPromise();
+        },
       }),
     });
-  }
-
-  getOne(id: string) {
-    const query = this.buildGetOne(this.allFields);
-    type Response = { client: Client };
-    const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
   save(variables: OperationVariables) {

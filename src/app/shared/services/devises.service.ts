@@ -24,37 +24,18 @@ export class DevisesService extends ApiService implements APIRead {
     super(apollo, 'Devise');
   }
 
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allDevise: RelayPage<Devise> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allDevise.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
-  }
-
-  getOne(id: string) {
-    const query = this.buildGetOne(this.baseFields);
-    type Response = { devise: Devise };
-    const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
-  }
-
-  getDataSource(variables: RelayPageVariables = {}) {
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
           const query = this.buildGetAll(this.baseFields);
           type Response = { allDevise: RelayPage<Devise> };
-          this.pageSize = options.take;
-          variables.offset = options.take;
-          variables.page = options.skip / options.take;
-          if (options.searchValue) variables.search = options.searchValue;
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
           return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allDevise)),
             take(1),
@@ -64,7 +45,7 @@ export class DevisesService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(this.baseFields);
           type Response = { devise: Devise };
-          variables.id = key;
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

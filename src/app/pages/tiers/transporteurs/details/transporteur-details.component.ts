@@ -9,6 +9,8 @@ import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.servi
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { PaysService } from 'app/shared/services/pays.service';
 import DataSource from 'devextreme/data/data_source';
+import { ClientsService } from 'app/shared/services';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -18,7 +20,7 @@ import DataSource from 'devextreme/data/data_source';
 export class TransporteurDetailsComponent implements OnInit {
 
   transporteurForm = this.fb.group({
-    code: [''],
+    id: [''],
     raisonSocial: [''],
     adresse1: [''],
     adresse2: [''],
@@ -31,13 +33,11 @@ export class TransporteurDetailsComponent implements OnInit {
     echeanceLe: [''],
     moyenPaiement: [''],
     tvaCee: [''],
-    clientRaisonSociale: [''],
+    clientRaisonSocial: [''],
     basePaiement: [''],
     compteComptable: [''],
     langue: [''],
     devise: [''],
-    referenceCoface: [''],
-    type: [''],
     lieuFonctionEan: [''],
     valide: [false]
   });
@@ -52,6 +52,7 @@ export class TransporteurDetailsComponent implements OnInit {
   regimesTva: DataSource;
   bureauxAchat: DataSource;
   typesTransporteur: DataSource;
+  clients: DataSource;
   defaultVisible: boolean;
 
   constructor(
@@ -62,8 +63,9 @@ export class TransporteurDetailsComponent implements OnInit {
     private moyensPaiementService: MoyensPaiementService,
     private basesPaiementService: BasesPaiementService,
     private paysService: PaysService,
+    private clientsService: ClientsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
   }
@@ -82,6 +84,7 @@ export class TransporteurDetailsComponent implements OnInit {
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
+    this.clients = this.clientsService.getDataSource();
 
   }
 
@@ -94,8 +97,11 @@ export class TransporteurDetailsComponent implements OnInit {
       const transporteur = this.transporteursService
       .extractDirty(this.transporteurForm.controls);
       this.transporteursService
-      .save({ transporteur: { ...transporteur, id: this.transporteur.id } })
-      .subscribe((res) => console.log(res));
+      .save({ transporteur: { ...transporteur, id: this.transporteur.id }})
+      .subscribe({
+        next: () => notify('Sauvegardé', 'success', 3000),
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
     }
   }
 

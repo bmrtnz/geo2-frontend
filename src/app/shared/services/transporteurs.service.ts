@@ -45,18 +45,6 @@ export class TransporteursService extends ApiService implements APIRead {
     super(apollo, 'Transporteur');
   }
 
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allTransporteur: RelayPage<Transporteur> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allTransporteur.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
-  }
-
   getOne(id: string) {
     const query = this.buildGetOne(this.fullFields);
     type Response = { transporteur: Transporteur };
@@ -64,17 +52,18 @@ export class TransporteursService extends ApiService implements APIRead {
     return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  getDataSource(variables: RelayPageVariables = {}) {
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
     const query = this.buildGetAll(this.baseFields);
     type Response = { allTransporteur: RelayPage<Transporteur> };
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          this.pageSize = options.take;
-          variables.offset = options.take;
-          variables.page = options.skip / options.take;
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
           return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allTransporteur)),
             take(1),

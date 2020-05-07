@@ -1,4 +1,5 @@
 import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, RegimeTva, Secteur} from './';
+import { Client } from './client.model';
 
 export class Transporteur {
 
@@ -24,5 +25,6 @@ export class Transporteur {
   public langue: Pays;
   public devise: Devise;
   public lieuFonctionEAN: string;
+  public clientRaisonSocial: Client;
 
 }

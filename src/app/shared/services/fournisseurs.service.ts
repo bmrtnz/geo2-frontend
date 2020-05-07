@@ -22,6 +22,7 @@ export class FournisseursService extends ApiService implements APIRead {
   fullFields = [
     ...this.baseFields,
     'valide',
+    'stockPrecalibre',
     'stockActif',
     'adresse1',
     'adresse2',
@@ -47,24 +48,13 @@ export class FournisseursService extends ApiService implements APIRead {
     'formeJuridique',
     'siretAPE',
     'rcs',
+    'tvaId',
   ];
 
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, 'Fournisseur');
-  }
-
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allFournisseur: RelayPage<Fournisseur> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allFournisseur.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
   }
 
   getOne(id: string) {
@@ -74,17 +64,18 @@ export class FournisseursService extends ApiService implements APIRead {
     return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  getDataSource(variables: RelayPageVariables = {}) {
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
     const query = this.buildGetAll(this.baseFields);
     type Response = { allFournisseur: RelayPage<Fournisseur> };
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          this.pageSize = options.take;
-          variables.offset = options.take;
-          variables.page = options.skip / options.take;
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
           return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allFournisseur)),
             take(1),

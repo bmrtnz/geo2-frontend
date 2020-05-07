@@ -91,6 +91,8 @@
                     formControlName="secteur"
                     [dataSource]="secteurs"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.secteur"
                   ></dx-select-box>
                 </div>
@@ -104,6 +106,8 @@
                     formControlName="commercial"
                     [dataSource]="personnes"
                     displayExpr="nomUtilisateur"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','nomUtilisateur']"
                     [(value)]="client && client.commercial"
                   ></dx-select-box>
                 </div>
@@ -117,6 +121,8 @@
                     formControlName="assistante"
                     [dataSource]="personnes"
                     displayExpr="nomUtilisateur"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','nomUtilisateur']"
                     [(value)]="client && client.assistante"
                   ></dx-select-box>
                 </div>
@@ -184,6 +190,8 @@
                     formControlName="pays"
                     [dataSource]="pays"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.pays"
                   ></dx-select-box>
                 </div>
@@ -252,6 +260,8 @@
                       formControlName="facturationPays"
                       [dataSource]="pays"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="client && client.facturationPays"
                     ></dx-select-box>
                   </div>
@@ -299,6 +309,8 @@
                     formControlName="langue"
                     [dataSource]="pays"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.langue"
                   ></dx-select-box>
                 </div>
@@ -342,6 +354,8 @@
                       formControlName="typeClient"
                       [dataSource]="typesClient"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="client && client.typeClient"
                     ></dx-select-box>
                   </div>
@@ -393,6 +407,8 @@
                     formControlName="incoterm"
                     [dataSource]="incoterms"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.incoterm"
                   ></dx-select-box>
                 </div>
@@ -406,6 +422,8 @@
                     formControlName="regimeTva"
                     [dataSource]="regimesTva"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.regimeTva"
                   ></dx-select-box>
                 </div>
@@ -427,6 +445,8 @@
                     formControlName="devise"
                     [dataSource]="devises"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.devise"
                   ></dx-select-box>
                 </div>
@@ -440,6 +460,8 @@
                     formControlName="moyenPaiement"
                     [dataSource]="moyensPaiement"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.moyenPaiement"
                   ></dx-select-box>
                 </div>
@@ -453,6 +475,8 @@
                     formControlName="basePaiement"
                     [dataSource]="basesPaiement"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.basePaiement"
                   ></dx-select-box>
                 </div>

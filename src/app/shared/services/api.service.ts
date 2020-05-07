@@ -6,26 +6,48 @@ import { FetchResult } from 'apollo-link';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
-import { take, filter } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { AbstractControl } from '@angular/forms';
+import { LoadOptions } from 'devextreme/data/load_options';
+
+const DEFAULT_ID = 'id';
+const DEFAULT_PAGE_SIZE = 10;
 
 export type PageInfo = {
-  startCursor?: string;
-  endCursor?: string;
-  hasPreviousPage?: boolean;
-  hasNextPage?: boolean;
+  startCursor?: string
+  endCursor?: string
+  hasPreviousPage?: boolean
+  hasNextPage?: boolean
 };
 
 export type RelayPage<T> = {
-  edges: { node: T, __typename: string }[];
-  pageInfo: PageInfo;
-  totalCount: number;
+  edges: { node: T, __typename: string }[]
+  pageInfo: PageInfo
+  totalCount: number
+};
+
+export enum Direction {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export type OrderedField = {
+  property: string
+  direction?: Direction
+  ignoreCase?: boolean
+};
+
+export type Pageable = {
+  pageNumber: number
+  pageSize: number
+  sort?: {
+    orders: OrderedField[],
+  }
 };
 
 export type RelayPageVariables = OperationVariables & {
-  search?: string;
-  page?: number;
-  offset?: number;
+  search?: string
+  pageable: Pageable
 };
 
 export interface APIRead {
@@ -40,8 +62,8 @@ export interface APIPersist {
 
 export abstract class ApiService {
 
-  keyField = 'id';
-  pageSize = 10;
+  keyField = DEFAULT_ID;
+  pageSize = DEFAULT_PAGE_SIZE;
   model: string;
 
   constructor(
@@ -104,11 +126,12 @@ export abstract class ApiService {
     .filter(([key, control]) => key === this.keyField || control.dirty )
     .map(([key, control]) => {
       if (control.value.__typename)
-        delete control.value.__typename;
+        for (const field of Object.keys(control.value))
+          if (field !== 'id')
+            delete control.value[field];
       return { [key]: control.value };
     })
     .reduce((acm, current) => ({...acm, ...current}));
-    // TODO RECURSE IN SOUS ENTITY
   }
 
   /**
@@ -182,8 +205,8 @@ export abstract class ApiService {
     const operation = `all${this.model}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      query ${ alias }($search: String, $page: Int = 0, $offset: Int = ${this.pageSize}) {
-        ${ operation }(search:$search, page:$page, offset:$offset) {
+      query ${ alias }($search: String, $pageable: PaginationInput!) {
+        ${ operation }(search:$search, pageable:$pageable) {
           edges {
             node {
               ${ fields.join('\n') }
@@ -259,6 +282,23 @@ export abstract class ApiService {
   }
 
   /**
+   * Map DX Search to DX Filter
+   * @param options DX CustomSource load options
+   */
+  protected mapDXSearchToDXFilter(options: LoadOptions) {
+    return typeof options.searchExpr === 'object' ?
+      (options.searchExpr as [])
+      .map( expr => [expr, options.searchOperation, options.searchValue])
+      .join('-or-')
+      .split('-')
+      .map((value: any) => {
+        const mapped = value.split(',');
+        return mapped.length > 1 ? mapped : mapped.shift();
+      }) :
+      [options.searchExpr, options.searchOperation, options.searchValue];
+  }
+
+  /**
    * Map DX filters to RSQL
    * @param dxFilter DX filters arrays
    */
@@ -276,10 +316,10 @@ export abstract class ApiService {
         let mappedOperator = '';
         switch (operator) {
           case '=': mappedOperator = '=='; break;
-          case 'contains': mappedOperator = '=like='; break;
-          case 'startswith': mappedOperator = '=like='; break;
-          case 'endswith': mappedOperator = '=like='; break;
-          case 'notcontains': mappedOperator = '=notlike='; break;
+          case 'contains': mappedOperator = '=ilike='; break;
+          case 'startswith': mappedOperator = '=ilike='; break;
+          case 'endswith': mappedOperator = '=ilike='; break;
+          case 'notcontains': mappedOperator = '=inotlike='; break;
           case '<>': mappedOperator = '!='; break;
           default: mappedOperator = operator; break;
         }
@@ -297,6 +337,23 @@ export abstract class ApiService {
       return node;
     })
     .join(' ');
+  }
+
+  protected mapLoadOptionsToVariables(options: LoadOptions) {
+    const variables: RelayPageVariables = {
+      pageable: {
+        pageNumber: options.skip / options.take,
+        pageSize: options.take,
+      },
+    };
+    this.pageSize = options.take;
+    variables.search = null;
+    if (options.filter)
+      variables.search = this.mapDXFilterToRSQL(options.filter);
+    if (options.searchValue)
+      variables.search = this
+      .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options));
+    return variables;
   }
 
 }

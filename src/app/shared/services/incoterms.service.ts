@@ -25,37 +25,19 @@ export class IncotermsService extends ApiService implements APIRead {
     super(apollo, 'Incoterm');
   }
 
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allIncoterm: RelayPage<Incoterm> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allIncoterm.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
-  }
-
-  getOne(id: string) {
-    const query = this.buildGetOne(this.baseFields);
-    type Response = { incoterm: Incoterm };
-    const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
-  }
-
-  getDataSource(variables: RelayPageVariables = {}) {
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
           const query = this.buildGetAll(this.baseFields);
           type Response = { allIncoterm: RelayPage<Incoterm> };
-          this.pageSize = options.take;
-          variables.offset = options.take;
-          variables.page = options.skip / options.take;
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
           if (options.searchValue) variables.search = options.searchValue;
           return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allIncoterm)),
             take(1),
@@ -65,7 +47,7 @@ export class IncotermsService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(this.baseFields);
           type Response = { incoterm: Incoterm };
-          variables.id = key;
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

@@ -24,37 +24,18 @@ export class MoyensPaiementService extends ApiService implements APIRead {
     super(apollo, 'MoyenPaiement');
   }
 
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allMoyenPaiement: RelayPage<MoyenPaiement> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allMoyenPaiement.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
-  }
-
-  getOne(id: string) {
-    const query = this.buildGetOne(this.baseFields);
-    type Response = { moyenPaiement: MoyenPaiement };
-    const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
-  }
-
-  getDataSource(variables: RelayPageVariables = {}) {
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
           const query = this.buildGetAll(this.baseFields);
           type Response = { allMoyenPaiement: RelayPage<MoyenPaiement> };
-          this.pageSize = options.take;
-          variables.offset = options.take;
-          variables.page = options.skip / options.take;
-          if (options.searchValue) variables.search = options.searchValue;
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
           return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allMoyenPaiement)),
             take(1),
@@ -64,7 +45,7 @@ export class MoyensPaiementService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(this.baseFields);
           type Response = { moyenPaiement: MoyenPaiement };
-          variables.id = key;
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

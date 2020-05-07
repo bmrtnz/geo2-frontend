@@ -11,6 +11,7 @@ import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -20,10 +21,10 @@ import { BasesPaiementService } from 'app/shared/services/bases-paiement.service
 export class FournisseurDetailsComponent implements OnInit {
 
   fournisseurForm = this.fb.group({
-    code: [''],
+    id: [''],
     raisonSocial: [''],
     stockActif: [''],
-    suiviPrecalibre: [''],
+    stockPrecalibre: [''],
     societe: [''],
     adresse1: [''],
     adresse2: [''],
@@ -34,7 +35,6 @@ export class FournisseurDetailsComponent implements OnInit {
     latitude: [''],
     longitude: [''],
     regimeTva: [''],
-    // incoterm: [''], // Ne sert plus ?
     nbJourEcheance: [''],
     echeanceLe: [''],
     moyenPaiement: [''],
@@ -45,22 +45,18 @@ export class FournisseurDetailsComponent implements OnInit {
     compteComptable: [''],
     langue: [''],
     devise: [''],
-    referenceCoface: [''],
     agrementBW: [''],
     codeStation: [''],
     idTracabilite: [''],
     type: [''],
     lieuFonctionEan: [''],
-    soumisCtifl: [''],
     formeJuridique:  [''],
     siretAPE:  [''],
-    idTVA:  [''],
+    tvaId:  [''],
     rcs:  [''],
-    autoFacturation: [false],
     valide: [false],
     paramAvances: [''],
     certifications: [''],
-    delaiBonFacturer: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
@@ -72,7 +68,6 @@ export class FournisseurDetailsComponent implements OnInit {
   regimesTva: DataSource;
   bureauxAchat: DataSource;
   typesFournisseur: DataSource;
-  typeBureau: any[];
   defaultVisible: boolean;
 
   constructor(
@@ -86,7 +81,7 @@ export class FournisseurDetailsComponent implements OnInit {
     private basesPaiementService: BasesPaiementService,
     private paysService: PaysService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
   }
@@ -120,7 +115,10 @@ export class FournisseurDetailsComponent implements OnInit {
       .extractDirty(this.fournisseurForm.controls);
       this.fournisseursService
       .save({ fournisseur: { ...fournisseur, id: this.fournisseur.id } })
-      .subscribe((res) => console.log(res));
+      .subscribe({
+        next: () => notify('Sauvegardé', 'success', 3000),
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
     }
   }
 
