@@ -51,22 +51,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-code' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="code">
-                      <dxi-button
-                        name="help"
-                        location="after"
-                        [options]="helpBtnOptions">
-                      </dxi-button>
-                    </dx-text-box>
-                    <dx-popover
-                      target="#help-1"
-                      position="bottom"
-                      [width]="300"
-                      [(visible)]="defaultVisible">
-                      <div *dxTemplate="let data = model of 'content'">
-                        Texte d'aide contextuelle
-                      </div>
-                    </dx-popover>
+                    <dx-text-box formControlName="id" [readOnly]="true"></dx-text-box>
                   </div>
                 </div>
 
@@ -82,11 +67,11 @@
 
                 <!-- Suivi précalibré -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-suiviPrecalibre' | localize }}</div>
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-stockPrecalibre' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-check-box
                     height= "00"
-                    formControlName="suiviPrecalibre"></dx-check-box>
+                    formControlName="stockPrecalibre"></dx-check-box>
                   </div>
                 </div>
 
@@ -151,8 +136,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="pays"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="fournisseur && fournisseur.pays"
                     ></dx-select-box>
                   </div>
@@ -190,22 +177,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                     formControlName="bureauAchat"
-                    [dataSource]="bureauxAchat | async"
+                    [dataSource]="bureauxAchat"
                     displayExpr="raisonSocial"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','raisonSocial']"
                     [(value)]="fournisseur && fournisseur.bureauAchat"
-                    ></dx-select-box>
-                  </div>
-                </div>
-
-                <!-- Type bureau-->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-typeBureau' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                    formControlName="typeBureau"
-                    [dataSource]="typeBureau"
-                    displayExpr="description"
-                    valueExpr="id"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -214,7 +190,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-lieuFonctionEAN' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
+                    <dx-text-box formControlName="lieuFonctionEan"></dx-text-box>
                   </div>
                 </div>
 
@@ -224,8 +200,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="langue"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="fournisseur && fournisseur.langue"
                     ></dx-select-box>
                   </div>
@@ -247,28 +225,16 @@
               >
                 <dxi-item title="{{ 'tiers-fournisseurs-indicationFacture' | localize }}">
 
-                  <!-- Reference Coface -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-referencecoface' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="referenceCoface"></dx-text-box>
-                    </div>
-                  </div>
-                  <!-- Soumis CTIFL -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-soumisCtifl' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-check-box formControlName="soumisCtifl"></dx-check-box>
-                    </div>
-                  </div>
                   <!-- Type fournisseur -->
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-typeFournisseur' | localize }}</div>
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="type"
-                        [dataSource]="typesFournisseur | async"
+                        [dataSource]="typesFournisseur"
                         displayExpr="description"
+                        [searchEnabled]="true"
+                        [searchExpr]="['id','description']"
                         [(value)]="fournisseur && fournisseur.type"
                       ></dx-select-box>
                     </div>
@@ -347,18 +313,12 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="regimeTva"
-                      [dataSource]="regimesTva | async"
+                      [dataSource]="regimesTva"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="fournisseur && fournisseur.regimeTva"
                     ></dx-select-box>
-                  </div>
-                </div>
-
-                <!-- Délai bon à facturer -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-delaiBonFacturer' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-number-box formControlName="delaiBonFacturer"></dx-number-box>
                   </div>
                 </div>
 
@@ -368,8 +328,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="devise"
-                      [dataSource]="devises | async"
+                      [dataSource]="devises"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="fournisseur && fournisseur.devise"
                     ></dx-select-box>
                   </div>
@@ -381,8 +343,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                     formControlName="moyenPaiement"
-                      [dataSource]="moyensPaiement | async"
+                      [dataSource]="moyensPaiement"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="fournisseur && fournisseur.moyenPaiement"
                     ></dx-select-box>
                   </div>
@@ -394,8 +358,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="basePaiement"
-                      [dataSource]="basesPaiement | async"
+                      [dataSource]="basesPaiement"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="fournisseur && fournisseur.basePaiement"
                     ></dx-select-box>
                   </div>
@@ -409,14 +375,6 @@
                 [selectedIndex]="-1"
               >
                 <dxi-item title="{{ 'tiers-fournisseurs-autoFacturation' | localize }}">
-
-                  <!-- Auto facturation ? -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-autoFacturation' | localize }} ?</div>
-                    <div class="dx-field-value">
-                      <dx-check-box formControlName="autoFacturation"></dx-check-box>
-                    </div>
-                  </div>
 
                   <!-- Forme juridique -->
                   <div class="dx-field">
@@ -436,7 +394,7 @@
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-fournisseurs-idTVA' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-text-box formControlName="idTVA"></dx-text-box>
+                      <dx-text-box formControlName="tvaId"></dx-text-box>
                     </div>
                   </div>
                   <!-- RCS -->
@@ -464,22 +422,6 @@
                     <!-- <div class="dx-field-label">{{ 'tiers-fournisseurs-certifications' | localize }}</div> -->
                     <div class="dx-field-value">
                       <dx-text-area formControlName="certifications"></dx-text-area>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </dxi-item>
-            <dxi-item [ratio]="0.2">
-            </dxi-item>
-            <dxi-item [ratio]="5">
-              <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-paramavances' | localize }}</span>
-                <div class="dx-form-group-content">
-                  <!-- Paramètres avancés -->
-                  <div class="dx-field">
-                    <!-- <div class="dx-field-label">{{ 'tiers-fournisseurs-paramavances' | localize }}</div> -->
-                    <div class="dx-field-value">
-                      <dx-text-area formControlName="paramAvances"></dx-text-area>
                     </div>
                   </div>
                 </div>

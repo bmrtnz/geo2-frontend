@@ -3,37 +3,59 @@ import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.servic
 import { Apollo } from 'apollo-angular';
 import { RegimeTva } from '../models';
 import { WatchQueryOptions, OperationVariables } from 'apollo-client';
+import { take, map } from 'rxjs/operators';
+import DataSource from 'devextreme/data/data_source';
+import { LoadOptions } from 'devextreme/data/load_options';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegimesTvaService extends ApiService implements APIRead {
 
+  baseFields = [
+    'id',
+    'description',
+    'valide',
+  ];
+
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo);
+    super(apollo, 'RegimeTva');
   }
 
-  getAll(variables?: RelayPageVariables) {
-    const fields = [ 'id', 'description', 'valide' ];
-    const query = this.buildGetAll('allRegimeTva', fields);
-    type Response = { allRegimeTva: RelayPage<RegimeTva> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allRegimeTva.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
-  }
-
-  getOne(id: string) {
-    const fields = [ 'id', 'description', 'valide' ];
-    const query = this.buildGetOne('regimeTva', id, fields);
-    type Response = { regimeTva: RegimeTva };
-    const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => {
+          const query = this.buildGetAll(this.baseFields);
+          type Response = { allRegimeTva: RelayPage<RegimeTva> };
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
+          return this.
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
+          .pipe(
+            map( res => this.asListCount(res.data.allRegimeTva)),
+            take(1),
+          )
+          .toPromise();
+        },
+        byKey: (key) => {
+          const query = this.buildGetOne(this.baseFields);
+          type Response = { regimeTva: RegimeTva };
+          variables = { ...variables, id: key };
+          return this.
+          query<Response>(query, { variables } as WatchQueryOptions)
+          .pipe(
+            map( res => res.data.regimeTva),
+            take(1),
+          )
+          .toPromise();
+        },
+      }),
+    });
   }
 
 }

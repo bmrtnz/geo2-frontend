@@ -41,36 +41,8 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-code' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="code">
-                      <dxi-button
-                        name="help"
-                        location="after"
-                        [options]="helpBtnOptions">
-                      </dxi-button>
-                    </dx-text-box>
-                    <dx-popover
-                      target="#help-1"
-                      position="bottom"
-                      [width]="300"
-                      [(visible)]="defaultVisible">
-                      <div *dxTemplate="let data = model of 'content'">
-                        Texte d'aide contextuelle
-                      </div>
-                    </dx-popover>
+                    <dx-text-box formControlName="id" [readOnly]="true"></dx-text-box>
                   </div>
-                </div>
-
-                <!-- Langue -->
-                <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-transporteurs-type' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-select-box
-                        formControlName="type"
-                        [items]="typesTransporteur"
-                        valueExpr="id"
-                        displayExpr="description"
-                      ></dx-select-box>
-                    </div>
                 </div>
 
               </div>
@@ -134,8 +106,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="pays"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.pays"
                     ></dx-select-box>
                   </div>
@@ -166,8 +140,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="langue"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.langue"
                     ></dx-select-box>
                   </div>
@@ -180,28 +156,22 @@
                     <dx-text-box formControlName="tvaCee"></dx-text-box>
                   </div>
                 </div>
+                
+                <!-- Client raison sociale -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSociale' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                    formControlName="clientRaisonSocial"
+                    [dataSource]="clients"
+                    displayExpr="raisonSocial"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','raisonSocial']"
+                    [(value)]="transporteur && transporteur.clientRaisonSocial"
+                    ></dx-select-box>
+                  </div>
+                </div>
               </div>
-
-              <!-- Client raison sociale -->
-              <dx-box direction="row">
-                <dxi-item [ratio]="3">
-                    <div class="dx-field">
-                        <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSociale' | localize }}</div>
-                        <div class="dx-field-value">
-                        <dx-text-box
-                            readOnly="true"
-                            formControlName="clientRaisonSociale"></dx-text-box>
-                        </div>
-                    </div>
-                </dxi-item>
-                <dxi-item [ratio]="0.2"></dxi-item>
-                <dxi-item [ratio]="1">
-                    <dx-button
-                    class="black"
-                    height="auto"
-                    text="{{ 'btn-affecter' | localize }}"></dx-button>
-                </dxi-item>
-              </dx-box>
 
               <dx-accordion
                 [collapsible]="true"
@@ -209,14 +179,6 @@
                 [selectedIndex]="-1"
               >
                 <dxi-item title="{{ 'tiers-transporteurs-indicationFacture' | localize }}">
-
-                  <!-- Reference Coface -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-transporteurs-referencecoface' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="referenceCoface"></dx-text-box>
-                    </div>
-                  </div>
 
                   <!-- Compte comptable -->
                   <div class="dx-field">
@@ -263,8 +225,10 @@
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="regimeTva"
-                        [dataSource]="regimesTva | async"
+                        [dataSource]="regimesTva"
                         displayExpr="description"
+                        [searchEnabled]="true"
+                        [searchExpr]="['id','description']"
                         [(value)]="transporteur && transporteur.regimeTva"
                       ></dx-select-box>
                     </div>
@@ -276,8 +240,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="devise"
-                      [dataSource]="devises | async"
+                      [dataSource]="devises"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.devise"
                     ></dx-select-box>
                   </div>
@@ -289,8 +255,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="moyenPaiement"
-                      [dataSource]="moyensPaiement | async"
+                      [dataSource]="moyensPaiement"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.moyenPaiement"
                     ></dx-select-box>
                   </div>
@@ -302,8 +270,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="basePaiement"
-                      [dataSource]="basesPaiement | async"
+                      [dataSource]="basesPaiement"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.basePaiement"
                     ></dx-select-box>
                   </div>

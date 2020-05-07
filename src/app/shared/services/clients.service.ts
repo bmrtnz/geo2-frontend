@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Client } from '../models';
-import { ApiService, RelayPage, APIRead, RelayPageVariables } from './api.service';
+import { ApiService, RelayPage, APIRead, RelayPageVariables, APIPersist } from './api.service';
 import { Apollo } from 'apollo-angular';
-import { OperationVariables, WatchQueryOptions } from 'apollo-client';
-import { map } from 'rxjs/operators';
-import ArrayStore from 'devextreme/data/array_store';
+import { OperationVariables, WatchQueryOptions, MutationOptions } from 'apollo-client';
+import { map, take } from 'rxjs/operators';
+import { LoadOptions } from 'devextreme/data/load_options';
+import DataSource from 'devextreme/data/data_source';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientsService extends ApiService implements APIRead {
+export class ClientsService extends ApiService implements APIRead, APIPersist {
 
   baseFields = [
     'id',
@@ -36,7 +37,7 @@ export class ClientsService extends ApiService implements APIRead {
     'facturationCodePostal',
     'facturationVille',
     'facturationPays { id description }',
-    'lieuFonctionEAN',
+    'lieuFonctionEan',
     'langue { id description }',
     'tvaCee',
     'referenceCoface',
@@ -45,6 +46,7 @@ export class ClientsService extends ApiService implements APIRead {
     'compteComptable',
     'nbJourEcheance',
     'echeanceLe',
+    'delaiBonFacturer',
     'incoterm { id description }',
     'regimeTva { id description }',
     'devise { id description }',
@@ -59,55 +61,53 @@ export class ClientsService extends ApiService implements APIRead {
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo);
-  }
-
-  getAll(variables?: RelayPageVariables) {
-    const query = this.buildGetAll('allClient', this.baseFields);
-    type Response = { allClient: RelayPage<Client> };
-    if (variables && variables.page > -1)
-      return this.query<Response>(query, { variables } as WatchQueryOptions);
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allClient.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    );
-  }
-
-  getDataSource(variables?: OperationVariables) {
-    const query = this.buildGetAll('allClient', this.baseFields);
-    const datasource = this.createDataSource();
-    type Response = { allClient: RelayPage<Client> };
-    return this.queryAll<Response>(
-      query,
-      (res) => res.data.allClient.pageInfo.hasNextPage,
-      { variables } as WatchQueryOptions,
-    )
-    .pipe(
-      map( res => {
-        this.asList( res.data.allClient )
-        .forEach((client: Client) => (datasource.store() as ArrayStore).insert(client));
-        datasource.reload();
-        return datasource;
-      }),
-    );
+    super(apollo, 'Client');
   }
 
   getOne(id: string) {
-    const query = this.buildGetOne('client', id, this.allFields);
+    const query = this.buildGetOne(this.allFields);
     type Response = { client: Client };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  // update(variables: OperationVariables) {
-  //   return this.mutate(`
-  //     mutation SaveClient($client: GeoClientInput!) {
-  //       saveClient(client: $client) {
-  //         id
-  //       }
-  //     }
-  //   `, { variables } as MutationOptions);
-  // }
+  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => {
+          const query = this.buildGetAll(this.baseFields);
+          type Response = { allClient: RelayPage<Client> };
+          variables = {
+            ...variables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
+          return this.
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
+          .pipe(
+            map( res => this.asListCount(res.data.allClient)),
+            take(1),
+          )
+          .toPromise();
+        },
+        byKey: (key) => {
+          const query = this.buildGetOne(this.baseFields);
+          type Response = { client: Client };
+          variables = { ...variables, id: key };
+          return this.
+          query<Response>(query, { variables } as WatchQueryOptions)
+          .pipe(
+            map( res => res.data.client),
+            take(1),
+          )
+          .toPromise();
+        },
+      }),
+    });
+  }
+
+  save(variables: OperationVariables) {
+    const mutation = this.buildSave(this.baseFields);
+    return this.mutate(mutation, { variables } as MutationOptions);
+  }
 
 }

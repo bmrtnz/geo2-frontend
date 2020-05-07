@@ -1,31 +1,30 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Fournisseur } from '../../../../shared/models';
 import { FormBuilder } from '@angular/forms';
-import { Subscription, Observable } from 'rxjs';
 import DataSource from 'devextreme/data/data_source';
 import { PaysService } from 'app/shared/services/pays.service';
-import { map } from 'rxjs/operators';
 import { BureauxAchatService } from 'app/shared/services/bureaux-achat.service';
 import { TypesFournisseurService } from 'app/shared/services/types-fournisseur.service';
 import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-fournisseur-details',
   templateUrl: './fournisseur-details.component.html',
   styleUrls: ['./fournisseur-details.component.scss']
 })
-export class FournisseurDetailsComponent implements OnInit, OnDestroy {
+export class FournisseurDetailsComponent implements OnInit {
 
   fournisseurForm = this.fb.group({
-    code: [''],
+    id: [''],
     raisonSocial: [''],
     stockActif: [''],
-    suiviPrecalibre: [''],
+    stockPrecalibre: [''],
     societe: [''],
     adresse1: [''],
     adresse2: [''],
@@ -36,7 +35,6 @@ export class FournisseurDetailsComponent implements OnInit, OnDestroy {
     latitude: [''],
     longitude: [''],
     regimeTva: [''],
-    // incoterm: [''], // Ne sert plus ?
     nbJourEcheance: [''],
     echeanceLe: [''],
     moyenPaiement: [''],
@@ -47,35 +45,29 @@ export class FournisseurDetailsComponent implements OnInit, OnDestroy {
     compteComptable: [''],
     langue: [''],
     devise: [''],
-    referenceCoface: [''],
     agrementBW: [''],
     codeStation: [''],
     idTracabilite: [''],
     type: [''],
-    lieuFonctionEAN: [''],
-    soumisCtifl: [''],
+    lieuFonctionEan: [''],
     formeJuridique:  [''],
     siretAPE:  [''],
-    idTVA:  [''],
+    tvaId:  [''],
     rcs:  [''],
-    autoFacturation: [false],
     valide: [false],
     paramAvances: [''],
     certifications: [''],
-    delaiBonFacturer: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
-  private queryGetOneFournisseur: Subscription;
 
   fournisseur: Fournisseur;
-  pays: Observable<DataSource>;
-  devises: Observable<DataSource>;
-  moyensPaiement: Observable<DataSource>;
-  basesPaiement: Observable<DataSource>;
-  regimesTva: Observable<DataSource>;
-  bureauxAchat: Observable<DataSource>;
-  typesFournisseur: Observable<DataSource>;
-  typeBureau: any[];
+  pays: DataSource;
+  devises: DataSource;
+  moyensPaiement: DataSource;
+  basesPaiement: DataSource;
+  regimesTva: DataSource;
+  bureauxAchat: DataSource;
+  typesFournisseur: DataSource;
   defaultVisible: boolean;
 
   constructor(
@@ -89,54 +81,27 @@ export class FournisseurDetailsComponent implements OnInit, OnDestroy {
     private basesPaiementService: BasesPaiementService,
     private paysService: PaysService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
   }
 
   ngOnInit() {
 
-    this.queryGetOneFournisseur = this.fournisseursService
+    this.fournisseursService
     .getOne(this.route.snapshot.paramMap.get('id'))
     .subscribe( res => {
       this.fournisseur = res.data.fournisseur;
       this.fournisseurForm.patchValue(this.fournisseur);
     });
 
-    this.pays = this.paysService.getAll({offset: 200})
-    .pipe(
-      map( res => this.paysService.asDataSource(res.data.allPays)),
-    );
-
-    this.bureauxAchat = this.bureauxAchatService.getAll({offset: 200})
-    .pipe(
-      map( res => this.bureauxAchatService.asDataSource(res.data.allBureauAchat)),
-    );
-
-    this.typesFournisseur = this.typesFournisseurService.getAll({offset: 200})
-    .pipe(
-      map( res => this.typesFournisseurService.asDataSource(res.data.allTypeFournisseur)),
-    );
-
-    this.regimesTva = this.regimesTvaService.getAll({offset: 50})
-    .pipe(
-      map( res => this.regimesTvaService.asDataSource(res.data.allRegimeTva)),
-    );
-
-    this.devises = this.devisesService.getAll({offset: 50})
-    .pipe(
-      map( res => this.devisesService.asDataSource(res.data.allDevise)),
-    );
-
-    this.moyensPaiement = this.moyensPaiementService.getAll({offset: 50})
-    .pipe(
-      map( res => this.moyensPaiementService.asDataSource(res.data.allMoyenPaiement)),
-    );
-
-    this.basesPaiement = this.basesPaiementService.getAll({offset: 50})
-    .pipe(
-      map( res => this.basesPaiementService.asDataSource(res.data.allBasePaiement)),
-    );
+    this.pays = this.paysService.getDataSource();
+    this.bureauxAchat = this.bureauxAchatService.getDataSource();
+    this.typesFournisseur = this.typesFournisseurService.getDataSource();
+    this.regimesTva = this.regimesTvaService.getDataSource();
+    this.devises = this.devisesService.getDataSource();
+    this.moyensPaiement = this.moyensPaiementService.getDataSource();
+    this.basesPaiement = this.basesPaiementService.getDataSource();
 
   }
 
@@ -145,7 +110,16 @@ export class FournisseurDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.fournisseurForm.value);
+    if (!this.fournisseurForm.pristine && this.fournisseurForm.valid) {
+      const fournisseur = this.fournisseursService
+      .extractDirty(this.fournisseurForm.controls);
+      this.fournisseursService
+      .save({ fournisseur: { ...fournisseur, id: this.fournisseur.id } })
+      .subscribe({
+        next: () => notify('Sauvegardé', 'success', 3000),
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
+    }
   }
 
   toggleVisible() {
@@ -154,10 +128,6 @@ export class FournisseurDetailsComponent implements OnInit, OnDestroy {
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/fournisseurs/${this.fournisseur.id}`]);
-  }
-
-  ngOnDestroy() {
-    this.queryGetOneFournisseur.unsubscribe();
   }
 
 }

@@ -89,8 +89,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="secteur"
-                    [dataSource]="secteurs | async"
+                    [dataSource]="secteurs"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.secteur"
                   ></dx-select-box>
                 </div>
@@ -102,8 +104,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="commercial"
-                    [dataSource]="personnes | async"
+                    [dataSource]="personnes"
                     displayExpr="nomUtilisateur"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','nomUtilisateur']"
                     [(value)]="client && client.commercial"
                   ></dx-select-box>
                 </div>
@@ -115,8 +119,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="assistante"
-                    [dataSource]="personnes | async"
+                    [dataSource]="personnes"
                     displayExpr="nomUtilisateur"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','nomUtilisateur']"
                     [(value)]="client && client.assistante"
                   ></dx-select-box>
                 </div>
@@ -182,8 +188,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="pays"
-                    [dataSource]="pays | async"
+                    [dataSource]="pays"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.pays"
                   ></dx-select-box>
                 </div>
@@ -250,9 +258,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="facturationPays"
-                      [dataSource]="pays | async"
+                      [dataSource]="pays"
                       displayExpr="description"
-                      [(value)]="client && client.pays"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                      [(value)]="client && client.facturationPays"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -287,7 +297,7 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-lieuFonctionEAN' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="lieuFonctionEAN"></dx-text-box>
+                  <dx-text-box formControlName="lieuFonctionEan"></dx-text-box>
                 </div>
               </div>
 
@@ -297,8 +307,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="langue"
-                    [dataSource]="pays | async"
+                    [dataSource]="pays"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.langue"
                   ></dx-select-box>
                 </div>
@@ -340,8 +352,10 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="typeClient"
-                      [dataSource]="typesClient | async"
+                      [dataSource]="typesClient"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
                       [(value)]="client && client.typeClient"
                     ></dx-select-box>
                   </div>
@@ -391,8 +405,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="incoterm"
-                    [dataSource]="incoterms | async"
+                    [dataSource]="incoterms"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.incoterm"
                   ></dx-select-box>
                 </div>
@@ -404,8 +420,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="regimeTva"
-                    [dataSource]="regimesTva | async"
+                    [dataSource]="regimesTva"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.regimeTva"
                   ></dx-select-box>
                 </div>
@@ -425,8 +443,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="devise"
-                    [dataSource]="devises | async"
+                    [dataSource]="devises"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.devise"
                   ></dx-select-box>
                 </div>
@@ -438,8 +458,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="moyenPaiement"
-                    [dataSource]="moyensPaiement | async"
+                    [dataSource]="moyensPaiement"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.moyenPaiement"
                   ></dx-select-box>
                 </div>
@@ -451,8 +473,10 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="basePaiement"
-                    [dataSource]="basesPaiement | async"
+                    [dataSource]="basesPaiement"
                     displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
                     [(value)]="client && client.basePaiement"
                   ></dx-select-box>
                 </div>
@@ -501,22 +525,7 @@
                 <div class="dx-field">
                   <!-- <div class="dx-field-label">{{ 'tiers-clients-certifications' | localize }}</div> -->
                   <div class="dx-field-value">
-                    <dx-text-area formControlName="certifications"></dx-text-area>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </dxi-item>
-          <dxi-item [ratio]="0.2"></dxi-item>
-          <dxi-item [ratio]="5">
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-paramavances' | localize }}</span>
-              <div class="dx-form-group-content">
-                <!-- Paramètres avancés -->
-                <div class="dx-field">
-                  <!-- <div class="dx-field-label">{{ 'tiers-clients-paramavances' | localize }}</div> -->
-                  <div class="dx-field-value">
-                    <dx-text-area formControlName="paramAvances"></dx-text-area>
+                    <dx-text-area></dx-text-area>
                   </div>
                 </div>
               </div>

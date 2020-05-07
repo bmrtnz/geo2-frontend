@@ -2,16 +2,20 @@
 
 <div class="content-block">
   <dx-data-grid class="dx-card wide-card"
-                [dataSource]="transporteurs"
-                [showBorders]="false"
-                [focusedRowEnabled]="true"
-                [focusedRowIndex]="0"
-                [columnAutoWidth]="true"
-                [columnHidingEnabled]="true"
-                (onRowDblClick)="onRowDblClick($event)">
+    [dataSource]="transporteurs"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="true"
+    [allowColumnReordering]="true"
+    (onRowDblClick)="onRowDblClick($event)"
+  >
 
+    <!-- Grid configuration -->
     <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
-    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
     <dxo-export [enabled]="true" fileName="Transporteurs" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
