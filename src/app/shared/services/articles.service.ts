@@ -82,7 +82,7 @@ import { Article, Espece, Variete, TypeVarietal, ModeCulture, Origine, CalibreUn
     getEtiqEvt() {
         return this.fakeService.get(EtiqEvt);
     }
-    
+
 }
 
 
