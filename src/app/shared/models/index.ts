@@ -45,4 +45,4 @@ export * from './sucre.model';
 export * from './penetro.model';
 export * from './etiquette-client.model';
 export * from './etiquette-UC.model';
-export * from './etiquette-Evt.model';
+export * from './etiquette-evt.model';
