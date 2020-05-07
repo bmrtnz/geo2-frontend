@@ -18,6 +18,10 @@
                         <div class="dx-field-label">{{ 'articles-code' | localize }}</div>
                         <div class="dx-field-value">
                         <dx-text-box formControlName="id">
+                            <dx-validator name="{{ 'articles-code' | localize }}">
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                                <dxi-validation-rule type="numeric" message="Code incorrect"></dxi-validation-rule>
+                            </dx-validator>
                         </dx-text-box>
                         </div>
                     </div>
@@ -26,6 +30,9 @@
                         <div class="dx-field-label">{{ 'articles-descriptAbregee' | localize }}</div>
                         <div class="dx-field-value">
                         <dx-text-box formControlName="descriptAbregee">
+                            <dx-validator name="{{ 'articles-descriptAbregee' | localize }}">
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dx-validator>
                         </dx-text-box>
                         </div>
                     </div>
@@ -48,7 +55,8 @@
                       <!-- Instructions au fournisseur -->
                       <div class="dx-field">
                         <div class="dx-field-value">
-                          <dx-text-area formControlName="instructStation"></dx-text-area>
+                            <dx-text-area formControlName="instructStation">
+                            </dx-text-area>
                         </div>
                       </div>
                     </div>
@@ -72,8 +80,11 @@
                                     formControlName="espece"
                                     [items]="especes"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-espece' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- variété -->
@@ -84,8 +95,11 @@
                                     formControlName="variete"
                                     [items]="varietes"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-variete' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                  </dx-select-box>
                                 </div>
                             </div>
                             <!-- Type variétal -->
@@ -96,8 +110,11 @@
                                     formControlName="typeVarietal"
                                     [items]="typesVarietal"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-typeVarietal' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Mode de culture -->
@@ -108,8 +125,11 @@
                                     formControlName="modeCulture"
                                     [items]="modesCulture"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-modeCulture' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Origine -->
@@ -120,8 +140,11 @@
                                     formControlName="origine"
                                     [items]="origines"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-origine' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Calibre Unifié -->
@@ -132,8 +155,11 @@
                                     formControlName="calibreUnifie"
                                     [items]="calibresUnifie"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-calibreUnifie' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Coloration -->
@@ -144,8 +170,11 @@
                                     formControlName="coloration"
                                     [items]="colorations"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-coloration' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Type de vente -->
@@ -156,8 +185,11 @@
                                     formControlName="typeVente"
                                     [items]="typesVente"
                                     valueExpr="id"
-                                    displayExpr="description"
-                                  ></dx-select-box>
+                                        displayExpr="description">
+                                        <dx-validator name="{{ 'articles-typeVente' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
 

@@ -8,7 +8,7 @@ import {
   DxDataGridModule, DxTabPanelModule,
   DxTemplateModule,
   DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-  DxTextBoxModule
+  DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
     DxDataGridModule, DxTabPanelModule,
     DxTemplateModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule
+    DxTextBoxModule, DxValidatorModule
   ],
   declarations: [ArticleDetailsComponent, ArticlesListComponent]
 })
