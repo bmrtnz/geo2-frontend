@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ArticlesService, Tab } from '../../../shared/services/articles.service';
+import { ArticlesService } from '../../../shared/services/articles.service';
 import { ActivatedRoute } from '@angular/router';
 import {
     Article
@@ -78,49 +78,13 @@ export class ArticleDetailsComponent implements OnInit {
     etiquettesUC: any[];
     etiquettesEvenementielle: any[];
 
-    tabs: Tab[];
-    combination: {};
-    itemCount: number;
     id: string;
-    articlesCategories = [
-        {
-            id: 1,
-            name: 'Matière première',
-            cats: ['espece', 'variete', 'calibreUnifie', 'origine', 'typeVarietal', 'coloration', 'typeVente', 'modeCulture']
-        },
-        {
-            id: 2,
-            name: 'Emballage',
-            cats: ['emballage', 'poidsNetReel', 'poidsNetTheo', 'prePese', 'condSpecial', 'nbreUniteColis', 'poidsNetUC',
-             'alveole', 'stickeur', 'codePLU', 'marque']
-        },
-        {
-            id: 3,
-            name: 'CDC',
-            cats: ['categorie', 'cirage', 'penetro', 'rangement', 'sucre'],
-        },
-        {
-            id: 4,
-            name: 'Normalisation',
-            cats: ['calibreMarquage', 'descrSpecialeCalClt', 'etiqClient', 'etiqUC', 'GTINColis', 'GTINUC', 'articleClient'],
-        },
-        {
-            id: 5,
-            name: 'Fiche complète'
-        }
-    ];
-
-    articlesCombination = [];
 
     constructor(
         private articlesService: ArticlesService,
         private route: ActivatedRoute,
         private fb: FormBuilder,
         ) {
-        this.tabs = articlesService.getTabs();
-        this.categories = this.articlesCategories;
-        this.combination = this.articlesCombination;
-        this.itemCount = this.tabs.length;
     }
 
     ngOnInit() {
@@ -178,6 +142,15 @@ export class ArticleDetailsComponent implements OnInit {
         });
         this.articlesService.getRangement().then(a => {
             this.rangements = a;
+        });
+        this.articlesService.getEtiqClient().then(a => {
+            this.etiquettesClient = a;
+        });
+        this.articlesService.getEtiqUC().then(a => {
+            this.etiquettesUC = a;
+        });
+        this.articlesService.getEtiqEvt().then(a => {
+            this.etiquettesEvenementielle = a;
         });
 
         this.articlesService
