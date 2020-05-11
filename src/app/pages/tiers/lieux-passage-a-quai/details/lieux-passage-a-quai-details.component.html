@@ -40,7 +40,12 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-code' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="id" [readOnly]="true"></dx-text-box>
+                    <dx-text-box formControlName="id" [readOnly]="true">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -55,7 +60,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="raisonSocial"></dx-text-box>
+                    <dx-text-box formControlName="raisonSocial">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                     </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -87,7 +96,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="codePostal"></dx-text-box>
+                    <dx-text-box formControlName="codePostal">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -95,7 +108,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-ville' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="ville"></dx-text-box>
+                    <dx-text-box formControlName="ville">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-ville' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -110,7 +127,11 @@
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
                       [(value)]="lieupassageaquai && lieupassageaquai.pays"
-                    ></dx-select-box>
+                    >
+                    <dx-validator name="{{ 'tiers-lieuxpassageaquai-pays' | localize }}">
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-select-box>
                   </div>
                 </div>
               </div>
@@ -144,7 +165,11 @@
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
                       [(value)]="lieupassageaquai && lieupassageaquai.langue"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-langue' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
 
@@ -210,7 +235,11 @@
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
                       [(value)]="lieupassageaquai && lieupassageaquai.devise"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-devise' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
 
