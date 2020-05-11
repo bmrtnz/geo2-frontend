@@ -1,7 +1,7 @@
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ApolloQueryResult, WatchQueryOptions, MutationOptions, OperationVariables } from 'apollo-client';
-import { Observable, Subscriber, of } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { FetchResult } from 'apollo-link';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
@@ -307,36 +307,44 @@ export abstract class ApiService {
     if (typeof dxFilter[0] === 'string')
       dxFilter = [dxFilter];
 
-    return dxFilter
-    .map( node => {
+    const next = (filter: any[], index = 0) => {
+      const node = filter[index];
       if (typeof node === 'object') { // comparison
-        const [selector, operator, value] = node;
 
-        // Map operator
-        let mappedOperator = '';
-        switch (operator) {
-          case '=': mappedOperator = '=='; break;
-          case 'contains': mappedOperator = '=ilike='; break;
-          case 'startswith': mappedOperator = '=ilike='; break;
-          case 'endswith': mappedOperator = '=ilike='; break;
-          case 'notcontains': mappedOperator = '=inotlike='; break;
-          case '<>': mappedOperator = '!='; break;
-          default: mappedOperator = operator; break;
+        // Deep filter
+        if (typeof node[0] === 'object')
+          filter[index] = next(node).join(' ');
+        else {
+          const [selector, operator, value] = node;
+
+          // Map operator
+          let mappedOperator = '';
+          switch (operator) {
+            case '=': mappedOperator = '=='; break;
+            case 'contains': mappedOperator = '=ilike='; break;
+            case 'startswith': mappedOperator = '=ilike='; break;
+            case 'endswith': mappedOperator = '=ilike='; break;
+            case 'notcontains': mappedOperator = '=inotlike='; break;
+            case '<>': mappedOperator = '!='; break;
+            default: mappedOperator = operator; break;
+          }
+
+          // Map value
+          let mappedValue = value;
+          if (['contains', 'notcontains'].includes(operator))
+            mappedValue = `%${mappedValue}%`;
+          if (operator === 'startswith') mappedValue = `${mappedValue}%`;
+          if (operator === 'endswith') mappedValue = `%${mappedValue}`;
+          mappedValue = parseInt(value, 2) || `"${mappedValue}"`;
+
+          filter[index] =  [selector, mappedOperator, mappedValue].join('');
         }
-
-        // Map value
-        let mappedValue = value;
-        if (['contains', 'notcontains'].includes(operator))
-          mappedValue = `%${mappedValue}%`;
-        if (operator === 'startswith') mappedValue = `${mappedValue}%`;
-        if (operator === 'endswith') mappedValue = `%${mappedValue}`;
-        mappedValue = parseInt(value, 2) || `"${mappedValue}"`;
-
-        return [selector, mappedOperator, mappedValue].join('');
-      }
-      return node;
-    })
-    .join(' ');
+      } else filter[index] =  node;
+      if (index < filter.length - 1)
+        return next(filter, index + 1);
+      else return filter;
+    };
+    return next(dxFilter).flat().join(' ');
   }
 
   protected mapLoadOptionsToVariables(options: LoadOptions) {
@@ -347,12 +355,25 @@ export abstract class ApiService {
       },
     };
     this.pageSize = options.take;
+
+    // Search / filter
     variables.search = null;
     if (options.filter)
       variables.search = this.mapDXFilterToRSQL(options.filter);
     if (options.searchValue)
       variables.search = this
       .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options));
+
+    // Sort
+    if (options.sort)
+      variables.pageable.sort = {
+        orders: options.sort
+        .map(({selector: property, desc}) => ({
+          property,
+          direction: desc ? Direction.DESC : Direction.ASC
+        } as OrderedField)),
+      };
+
     return variables;
   }
 
