@@ -8,7 +8,7 @@ import {
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule
+    DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
@@ -31,7 +31,8 @@ import { FournisseurDetailsComponent } from './details/fournisseur-details.compo
         DxCheckBoxModule,
         DxTextAreaModule,
         DxPopoverModule,
-        DxNumberBoxModule
+        DxNumberBoxModule,
+        DxValidatorModule
     ],
   declarations: [
     FournisseursListComponent,

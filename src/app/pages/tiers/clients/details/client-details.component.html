@@ -440,7 +440,11 @@
                     <div class="dx-field field-small">
                       <div class="dx-field-label">{{ 'tiers-clients-echeanceLe' | localize }}</div>
                       <div class="dx-field-value">
-                        <dx-text-box formControlName="echeanceLe"></dx-text-box>
+                        <dx-text-box formControlName="echeanceLe">
+                          <dx-validator name="{{ 'tiers-clients-echeanceLe' | localize }}">
+                            <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                          </dx-validator>
+                        </dx-text-box>
                       </div>
                     </div>
                   </dxi-item>
