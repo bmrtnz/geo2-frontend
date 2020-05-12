@@ -67,7 +67,6 @@
                   <dx-text-box formControlName="code">
                     <dx-validator name="{{ 'tiers-clients-code' | localize }}">
                       <dxi-validation-rule type="required"></dxi-validation-rule>
-                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
                   </dx-validator>
                     <dxi-button
                       name="help"
@@ -116,9 +115,9 @@
                     [searchEnabled]="true"
                     [searchExpr]="['id','nomUtilisateur']"
                     [(value)]="client && client.commercial">
-                      <dx-validator name="{{ 'tiers-clients-commercial' | localize }}">
+                      <!-- <dx-validator name="{{ 'tiers-clients-commercial' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
+                      </dx-validator> -->
                   </dx-select-box>
                 </div>
               </div>
@@ -134,9 +133,9 @@
                     [searchEnabled]="true"
                     [searchExpr]="['id','nomUtilisateur']"
                     [(value)]="client && client.assistante">
-                      <dx-validator name="{{ 'tiers-clients-assistante' | localize }}">
+                      <!-- <dx-validator name="{{ 'tiers-clients-assistante' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
+                      </dx-validator> -->
                   </dx-select-box>
                 </div>
               </div>
@@ -312,10 +311,6 @@
                 <div class="dx-field-label">{{ 'tiers-clients-siret' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-text-box formControlName="siret">
-                    <dx-validator name="{{ 'tiers-clients-siret' | localize }}">
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                    </dx-validator>
                   </dx-text-box>
                 </div>
               </div>
@@ -360,9 +355,6 @@
                 <div class="dx-field-label">{{ 'tiers-clients-tvaCee' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-text-box formControlName="tvaCee">
-                    <dx-validator name="{{ 'tiers-clients-tvaCee' | localize }}">
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
                   </dx-text-box>
                 </div>
               </div>
