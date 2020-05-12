@@ -41,6 +41,10 @@
                         location="after"
                         [options]="helpBtnOptions">
                       </dxi-button>
+                        <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
+                          <dxi-validation-rule type="required"></dxi-validation-rule>
+                          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                        </dx-validator>
                     </dx-text-box>
                     <dx-popover
                       target="#help-1"
@@ -63,7 +67,11 @@
                         [items]="commerciaux"
                         valueExpr="id"
                         displayExpr="nomUtilisateur"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-entrepots-commercial' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                     </div>
                 </div>
 
@@ -76,7 +84,11 @@
                         [items]="assistantes"
                         valueExpr="id"
                         displayExpr="nomUtilisateur"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-entrepots-assistante' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                     </div>
                 </div>
 
@@ -104,7 +116,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-raisonSocial' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="raisonSocial"></dx-text-box>
+                    <dx-text-box formControlName="raisonSocial">
+                      <dx-validator name="{{ 'tiers-entrepots-raisonSocial' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -137,6 +153,9 @@
                   <div class="dx-field-label">{{ 'tiers-entrepots-codePostal' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-text-box formControlName="codePostal"></dx-text-box>
+                      <dx-validator name="{{ 'tiers-entrepots-codePostal' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
                   </div>
                 </div>
 
@@ -144,7 +163,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-ville' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="ville"></dx-text-box>
+                    <dx-text-box formControlName="ville">
+                      <dx-validator name="{{ 'tiers-entrepots-ville' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -157,7 +180,11 @@
                       [items]="pays"
                       valueExpr="id"
                       displayExpr="description"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-entrepots-pays' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
               </div>
@@ -196,7 +223,11 @@
                       [items]="pays"
                       valueExpr="id"
                       displayExpr="description"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-entrepots-langue' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
 
