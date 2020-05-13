@@ -1,74 +1,109 @@
 import {Injectable} from '@angular/core';
-import {
-  BasePaiement, Entrepot,
-  Devise, MoyenPaiement, Pays, Personne, RegimeTva,
-  TypePalette, TypeCamion, Transitaire, ModeLivraison, BaseTarif
-} from '../models';
-import {FakeService} from './fake.service';
+import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.service';
+import { Apollo } from 'apollo-angular';
+import { Entrepot } from '../models';
+import { OperationVariables, WatchQueryOptions } from 'apollo-client';
+import DataSource from 'devextreme/data/data_source';
+import { LoadOptions } from 'devextreme/data/load_options';
+import { map, take } from 'rxjs/operators';
+import { MutationOptions } from 'apollo-client';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EntrepotsService {
+export class EntrepotsService extends ApiService implements APIRead {
+
+  baseFields = [
+    'id',
+    'valide',
+    'raisonSocial',
+    'pays { id description }',
+    'client { id raisonSocial }',
+    'ville',
+  ];
+
+  allFields = [
+    ...this.baseFields,
+    'code',
+    'commercial { id nomUtilisateur }',
+    'assistante { id nomUtilisateur }',
+    'modeLivraison',
+    'adresse1',
+    'adresse2',
+    'adresse3',
+    'codePostal',
+    'lieuFonctionEanDepot',
+    'lieuFonctionEanAcheteur',
+    'langue { id description }',
+    'tvaCee',
+    'typePalette { id description }',
+    'incoterm { id description }',
+    'mentionClientSurFacture',
+    'regimeTva { id description }',
+    'transporteur { id raisonSocial }',
+    'baseTarifTransport { id description }',
+    'baseTarifTransit { id description }',
+    'typeCamion { id description }',
+    'transitaire { id raisonSocial }',
+  ];
 
   constructor(
-    private fakeService: FakeService
-  ) { }
-
-  get(id?: string) {
-    return this.fakeService.get(Entrepot, id);
+    apollo: Apollo,
+  ) {
+    super(apollo, 'Entrepot');
   }
 
-  async getCommerciaux() {
-    const personnes = await this.fakeService.get(Personne);
-
-    return personnes.filter(p => p.role === 'C');
+  getOne(id: string) {
+    const query = this.buildGetOne(this.allFields);
+    type Response = { entrepot: Entrepot };
+    const variables: OperationVariables = { id };
+    return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  async getAssistantes() {
-    const personnes = await this.fakeService.get(Personne);
+  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => {
+          const query = this.buildGetAll(this.baseFields);
+          type Response = { allEntrepot: RelayPage<Entrepot> };
 
-    return personnes.filter(p => p.role === 'A');
+          // Merge search
+          const search = [];
+          const loadVariables = this.mapLoadOptionsToVariables(options);
+          if (inputVariables.search) search.push(inputVariables.search);
+          if (loadVariables.search) search.push(loadVariables.search);
+          const variables = {
+            ...loadVariables,
+            search: search.join(' and ')
+          };
+
+          return this.
+          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
+          .pipe(
+            map( res => this.asListCount(res.data.allEntrepot)),
+            take(1),
+          )
+          .toPromise();
+        },
+        byKey: (key) => {
+          const query = this.buildGetOne(this.baseFields);
+          type Response = { entrepot: Entrepot };
+          const variables = { ...inputVariables, id: key };
+          return this.
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
+          .pipe(
+            map( res => res.data.entrepot),
+            take(1),
+          )
+          .toPromise();
+        },
+      }),
+    });
   }
 
-  getPays() {
-    return this.fakeService.get(Pays);
+  save(variables: OperationVariables) {
+    const mutation = this.buildSave(this.baseFields);
+    return this.mutate(mutation, { variables } as MutationOptions);
   }
 
-  getModeLivraison() {
-    return this.fakeService.get(ModeLivraison);
-  }
-
-  getBaseTarif() {
-    return this.fakeService.get(BaseTarif);
-  }
-
-  getTypePalette() {
-    return this.fakeService.get(TypePalette);
-  }
-
-  getTypeCamion() {
-    return this.fakeService.get(TypeCamion);
-  }
-
-
-  getTransitaire() {
-    return this.fakeService.get(Transitaire);
-  }
-
-  getDevises() {
-    return this.fakeService.get(Devise);
-  }
-
-  getMoyenPaiements() {
-    return this.fakeService.get(MoyenPaiement);
-  }
-
-  getBasePaiements() {
-    return this.fakeService.get(BasePaiement);
-  }
-
-  getRegimeTva() {
-    return this.fakeService.get(RegimeTva);
-  }
 }

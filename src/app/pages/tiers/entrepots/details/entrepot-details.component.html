@@ -35,22 +35,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-code' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="code">
-                      <dxi-button
-                        name="help"
-                        location="after"
-                        [options]="helpBtnOptions">
-                      </dxi-button>
-                    </dx-text-box>
-                    <dx-popover
-                      target="#help-1"
-                      position="bottom"
-                      [width]="300"
-                      [(visible)]="defaultVisible">
-                      <div *dxTemplate="let data = model of 'content'">
-                        Texte d'aide contextuelle
-                      </div>
-                    </dx-popover>
+                    <dx-text-box formControlName="code" [readOnly]="true"></dx-text-box>
                   </div>
                 </div>
 
@@ -58,11 +43,13 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-entrepots-commercial' | localize }}</div>
                     <div class="dx-field-value">
-                    <dx-select-box
-                        formControlName="commercial"
-                        [items]="commerciaux"
-                        valueExpr="id"
-                        displayExpr="nomUtilisateur"
+                      <dx-select-box
+                      formControlName="commercial"
+                      [dataSource]="personnes"
+                      displayExpr="nomUtilisateur"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','nomUtilisateur']"
+                      [(value)]="entrepot && entrepot.commercial"
                     ></dx-select-box>
                     </div>
                 </div>
@@ -71,11 +58,13 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-entrepots-assistante' | localize }}</div>
                     <div class="dx-field-value">
-                    <dx-select-box
-                        formControlName="assistante"
-                        [items]="assistantes"
-                        valueExpr="id"
-                        displayExpr="nomUtilisateur"
+                      <dx-select-box
+                      formControlName="assistante"
+                      [dataSource]="personnes"
+                      displayExpr="nomUtilisateur"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','nomUtilisateur']"
+                      [(value)]="entrepot && entrepot.assistante"
                     ></dx-select-box>
                     </div>
                 </div>
@@ -84,12 +73,10 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-entrepots-modeLivraison' | localize }}</div>
                     <div class="dx-field-value">
-                    <dx-select-box
-                        formControlName="modeLivraison"
-                        [items]="modesLivraison"
-                        valueExpr="id"
-                        displayExpr="description"
-                    ></dx-select-box>
+                      <dx-select-box
+                          formControlName="modeLivraison"
+                          [dataSource]="modesLivraison"
+                      ></dx-select-box>
                     </div>
                 </div>
 
@@ -154,9 +141,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="pays"
-                      [items]="pays"
-                      valueExpr="id"
+                      [dataSource]="pays"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                      [(value)]="entrepot && entrepot.pays"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -175,7 +164,7 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEANDepot' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-text-box formControlName="lieuFonctionEANDepot"></dx-text-box>
+                      <dx-text-box formControlName="lieuFonctionEanDepot"></dx-text-box>
                     </div>
                 </div>
 
@@ -183,7 +172,7 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEANAcheteur' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-text-box formControlName="lieuFonctionEANAcheteur"></dx-text-box>
+                      <dx-text-box formControlName="lieuFonctionEanAcheteur"></dx-text-box>
                     </div>
                 </div>
 
@@ -192,10 +181,12 @@
                   <div class="dx-field-label">{{ 'tiers-entrepots-langue' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-select-box
-                      formControlName="langue"
-                      [items]="pays"
-                      valueExpr="id"
-                      displayExpr="description"
+                    formControlName="langue"
+                    [dataSource]="pays"
+                    displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
+                    [(value)]="entrepot && entrepot.langue"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -204,7 +195,7 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-idTVA' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="idTVA"></dx-text-box>
+                    <dx-text-box formControlName="tvaCee"></dx-text-box>
                   </div>
                 </div>
               </div>
@@ -215,9 +206,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="typePalette"
-                      [items]="typesPalette"
-                      valueExpr="id"
+                      [dataSource]="typesPalette"
                       displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                      [(value)]="entrepot && entrepot.typePalette"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -226,7 +219,14 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-incoterm' | localize }}</div>
                   <div class="dx-field-value">
-                  <dx-text-box formControlName="incoterm"></dx-text-box>
+                    <dx-select-box
+                      formControlName="incoterm"
+                      [dataSource]="incoterms"
+                      displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                      [(value)]="entrepot && entrepot.incoterm"
+                    ></dx-select-box>
                   </div>
                 </div>
 
@@ -242,7 +242,7 @@
                     <div class="dx-field">
                       <div class="dx-field-label">{{ 'tiers-entrepots-mentionClientFacture' | localize }}</div>
                       <div class="dx-field-value">
-                        <dx-text-area formControlName="mentionClientFacture"></dx-text-area>
+                        <dx-text-area formControlName="mentionClientSurFacture"></dx-text-area>
                       </div>
                     </div>
 
@@ -264,9 +264,11 @@
                     <div class="dx-field-value">
                       <dx-select-box
                         formControlName="regimeTva"
-                        [dataSource]="regimeTva"
+                        [dataSource]="regimesTva"
                         displayExpr="description"
-                        valueExpr="id"
+                        [searchEnabled]="true"
+                        [searchExpr]="['id','description']"
+                        [(value)]="entrepot && entrepot.regimeTva"
                       ></dx-select-box>
                     </div>
                 </div>
@@ -277,9 +279,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="transporteur"
-                      [dataSource]="entrepot"
-                      displayExpr="description"
-                      valueExpr="id"
+                      [dataSource]="transporteurs"
+                      displayExpr="raisonSocial"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','raisonSocial']"
+                      [(value)]="entrepot && entrepot.transporteur"
                     ></dx-select-box>
                   </div>
               </div>
@@ -290,7 +294,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="baseTarifTransport"
-                      [items]="baseTarifsTransport"
+                      [dataSource]="basesTarif"
+                      displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                      [(value)]="entrepot && entrepot.baseTarifTransport"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -309,7 +317,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="typeCamion"
-                      [items]="typesCamion"
+                      [dataSource]="typesCamion"
+                      displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                      [(value)]="entrepot && entrepot.typeCamion"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -320,7 +332,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="transitaire"
-                      [items]="transitaires"
+                      [dataSource]="transitaires"
+                      displayExpr="raisonSocial"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','raisonSocial']"
+                      [(value)]="entrepot && entrepot.transitaire"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -331,7 +347,11 @@
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="baseTarifTransit"
-                      [items]="baseTarifsTransit"
+                      [dataSource]="basesTarif"
+                      displayExpr="description"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                      [(value)]="entrepot && entrepot.baseTarifTransit"
                     ></dx-select-box>
                   </div>
                 </div>

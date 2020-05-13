@@ -1,6 +1,5 @@
-export class ModeLivraison {
-
-    public id: string;
-    public description: string;
-    public valide: boolean;
-  }
+export enum ModeLivraison {
+  DIRECT = 'D',
+  CROSS_DOCK = 'X',
+  SORTIE_STOCK = 'ST',
+}

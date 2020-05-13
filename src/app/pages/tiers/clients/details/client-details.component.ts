@@ -103,7 +103,6 @@ export class ClientDetailsComponent implements OnInit {
     private moyensPaiementService: MoyensPaiementService,
     private router: Router,
     private route: ActivatedRoute,
-    // public localizePipe: LocalizePipe,
   ) {
     this.defaultVisible = false;
   }
@@ -151,8 +150,10 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   entrepotsBtnClick() {
-    // this.router.navigate([`./entrepots/${this.client.id}`]);
-    this.router.navigate([`/tiers/entrepots`]);
+    const search = encodeURIComponent(`client.id=="${ this.client.id }"`);
+    this.router.navigate([`/tiers/entrepots`], {
+      queryParams: { search },
+    });
   }
 
   contactsBtnClick() {

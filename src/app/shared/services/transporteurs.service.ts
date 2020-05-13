@@ -52,20 +52,32 @@ export class TransporteursService extends ApiService implements APIRead {
     return this.query<Response>(query, { variables } as WatchQueryOptions);
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allTransporteur: RelayPage<Transporteur> };
+  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          variables = {
-            ...variables,
+          const query = this.buildGetAll(this.baseFields);
+          type Response = { allTransporteur: RelayPage<Transporteur> };
+          const variables = {
+            ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
           };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allTransporteur)),
+            take(1),
+          )
+          .toPromise();
+        },
+        byKey: (key) => {
+          const query = this.buildGetOne(this.baseFields);
+          type Response = { transporteur: Transporteur };
+          const variables = { ...inputVariables, id: key };
+          return this.
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
+          .pipe(
+            map( res => res.data.transporteur),
             take(1),
           )
           .toPromise();
