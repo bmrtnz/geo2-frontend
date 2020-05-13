@@ -8,7 +8,7 @@ import {
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule
+    DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
@@ -30,7 +30,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
       DxCheckBoxModule,
       DxTextAreaModule,
       DxPopoverModule,
-      DxNumberBoxModule
+      DxNumberBoxModule,
+      DxValidatorModule
   ],
   declarations: [
     EntrepotsListComponent,

@@ -41,7 +41,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-code' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="id" [readOnly]="true"></dx-text-box>
+                    <dx-text-box formControlName="id" [readOnly]="true">
+                      <dx-validator name="{{ 'tiers-transporteurs-code' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -56,7 +60,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-raisonSocial' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="raisonSocial"></dx-text-box>
+                    <dx-text-box formControlName="raisonSocial">
+                      <dx-validator name="{{ 'tiers-transporteurs-raisonSocial' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -88,7 +96,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-codePostal' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="codePostal"></dx-text-box>
+                    <dx-text-box formControlName="codePostal">
+                      <dx-validator name="{{ 'tiers-transporteurs-codePostal' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -96,7 +108,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-ville' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="ville"></dx-text-box>
+                    <dx-text-box formControlName="ville">
+                      <dx-validator name="{{ 'tiers-transporteurs-ville' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -111,7 +127,11 @@
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.pays"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-transporteurs-pays' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
               </div>
@@ -145,7 +165,11 @@
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.langue"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-transporteurs-langue' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
 
@@ -203,7 +227,11 @@
                       <div class="dx-field field-large">
                         <div class="dx-field-label">{{ 'tiers-transporteurs-nbJourEcheance' | localize }}</div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
+                          <dx-text-box formControlName="nbJourEcheance">
+                            <dx-validator name="{{ 'tiers-transporteurs-nbJourEcheance' | localize }}">
+                               <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            </dx-validator>
+                          </dx-text-box>
                         </div>
                       </div>
                     </dxi-item>
@@ -212,7 +240,11 @@
                       <div class="dx-field field-small">
                         <div class="dx-field-label">{{ 'tiers-transporteurs-echeanceLe' | localize }}</div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="echeanceLe"></dx-text-box>
+                          <dx-text-box formControlName="echeanceLe">
+                            <dx-validator name="{{ 'tiers-transporteurs-echeanceLe' | localize }}">
+                              <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            </dx-validator>
+                          </dx-text-box>
                         </div>
                       </div>
                     </dxi-item>
@@ -245,7 +277,11 @@
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
                       [(value)]="transporteur && transporteur.devise"
-                    ></dx-select-box>
+                    >
+                    <dx-validator name="{{ 'tiers-transporteurs-devise' | localize }}">
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-select-box>
                   </div>
                 </div>
 

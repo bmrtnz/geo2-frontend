@@ -7,7 +7,7 @@ import {
   DxButtonModule, DxCheckBoxModule,
   DxDataGridModule,
   DxFormModule, DxListModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-  DxTextBoxModule
+  DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LieuxPassageAQuaiDetailsComponent } from './details/lieux-passage-a-quai-details.component';
@@ -30,7 +30,8 @@ import { LieuxPassageAQuaiListComponent } from './list/lieux-passage-a-quai-list
     DxBoxModule,
     DxCheckBoxModule,
     DxTextAreaModule,
-    DxPopoverModule
+    DxPopoverModule,
+    DxValidatorModule
   ],
   declarations: [
     LieuxPassageAQuaiListComponent,
