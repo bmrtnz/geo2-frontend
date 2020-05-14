@@ -1,4 +1,6 @@
 import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
+import { TypeVente } from './type-vente.model';
+import { Courtier } from './courtier.model';
 
 export class Client {
 
@@ -28,6 +30,7 @@ export class Client {
   public moyenPaiement: MoyenPaiement;
   public tvaCee: string;
   public controlReferenceClient: string;
+  public typeVente: TypeVente;
   public commentaireHautFacture: string;
   public commentaireBasFacture: string;
   public instructionCommercial: string;
@@ -44,7 +47,7 @@ export class Client {
   public assistante: Personne;
   public referenceCoface: string;
   public agrement: number;
-  // public courtier: Courtier; // TODO
+  public courtier: Courtier;
   public courtageModeCalcul: string;
   public courtageValeur: number;
   public typeClient: TypeClient;

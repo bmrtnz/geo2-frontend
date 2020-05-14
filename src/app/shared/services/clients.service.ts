@@ -43,6 +43,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'referenceCoface',
     'soumisCtifl',
     'typeClient { id description }',
+    'typeVente { id description }',
     'compteComptable',
     'nbJourEcheance',
     'echeanceLe',
@@ -56,6 +57,19 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'assistante { id nomUtilisateur }',
     'moyenPaiement { id description }',
     'basePaiement { id description }',
+    'controlReferenceClient',
+    'instructionCommercial',
+    'agrement',
+    'blocageAvoirEdi',
+    'enCoursTemporaire',
+    'enCoursBlueWhale',
+    'tauxRemiseParFacture',
+    'tauxRemiseHorsFacture',
+    'fraisExcluArticlePasOrigineFrance',
+    'fraisMarketing',
+    'fraisPlateforme',
+    'groupeClient { id description }',
+    'courtier { id raisonSocial }'
   ];
 
   constructor(
