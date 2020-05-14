@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {EntrepotsService} from '../../../../shared/services/entrepots.service';
-import {Entrepot} from '../../../../shared/models';
-import ArrayStore from 'devextreme/data/array_store';
-import {Router} from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { EntrepotsService } from '../../../../shared/services/entrepots.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import DataSource from 'devextreme/data/data_source';
 
 @Component({
   selector: 'app-entrepots-list',
@@ -11,28 +10,26 @@ import {Router} from '@angular/router';
 })
 export class EntrepotsListComponent implements OnInit {
 
-  dataSource: any;
-  entrepots: [Entrepot];
+  entrepots: DataSource;
+  // @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
 
   constructor(
     private entrepotsService: EntrepotsService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
   }
 
   ngOnInit(): void {
-    this.entrepotsService.get().then(c => {
-      this.dataSource = {
-        store: new ArrayStore({
-          key: 'id',
-          data: c
-        })
-      };
+    this.route.queryParams
+    .subscribe(({ search }) => {
+      this.entrepots = this.entrepotsService.getDataSource({
+        search: decodeURIComponent(search),
+      });
     });
   }
 
   onRowDblClick(e) {
-    // console.log(`/entrepots/${e.data.id}`)
     this.router.navigate([`/tiers/entrepots/${e.data.id}`]);
   }
 

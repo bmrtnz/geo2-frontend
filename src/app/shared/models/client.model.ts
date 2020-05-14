@@ -1,6 +1,7 @@
 import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
 import { TypeVente } from './type-vente.model';
 import { Courtier } from './courtier.model';
+import { Entrepot } from './entrepot.model';
 
 export class Client {
 
@@ -54,4 +55,5 @@ export class Client {
   public groupeClient: GroupeClient;
   public soumisCtifl: boolean;
   public paramAvances: string;
+  public entrepots: Entrepot[];
 }

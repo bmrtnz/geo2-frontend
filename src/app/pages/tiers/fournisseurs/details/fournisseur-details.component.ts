@@ -57,6 +57,7 @@ export class FournisseurDetailsComponent implements OnInit {
     valide: [false],
     paramAvances: [''],
     certifications: [''],
+    autoFacturation: [''],
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
