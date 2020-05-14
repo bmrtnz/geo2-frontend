@@ -33,9 +33,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         DxNumberBoxModule,
         DxValidatorModule
     ],
-  declarations: [
-    ClientsListComponent,
-    ClientDetailsComponent
-  ]
+    exports: [
+        // ClientsListComponent
+    ],
+    declarations: [
+        ClientsListComponent,
+        ClientDetailsComponent
+    ]
 })
 export class ClientsModule { }

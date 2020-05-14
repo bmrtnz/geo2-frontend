@@ -16,6 +16,9 @@ export const navigation = [
       {
         text: 'Display Data',
         path: '/display-data'
+      }, {
+        text: 'Test grid-form',
+        path: '/test-grid-form'
       }
     ]
   },
