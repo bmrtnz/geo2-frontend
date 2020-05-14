@@ -22,7 +22,6 @@ export * from './type-palette.model';
 export * from './type-camion.model';
 export * from './transitaire.model';
 export * from './bureau-achat.model';
-export * from './mode-livraison.model';
 export * from './article.model';
 export * from './espece.model';
 export * from './coloration.model';

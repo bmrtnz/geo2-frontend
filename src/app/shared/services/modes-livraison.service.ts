@@ -3,9 +3,7 @@ import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.servic
 import { Apollo } from 'apollo-angular';
 import { OperationVariables, WatchQueryOptions } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
-import { LoadOptions } from 'devextreme/data/load_options';
 import { ModeLivraison } from '../models';
-import { map, take } from 'rxjs/operators';
 import ArrayStore from 'devextreme/data/array_store';
 
 @Injectable({

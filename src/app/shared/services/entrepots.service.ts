@@ -45,6 +45,15 @@ export class EntrepotsService extends ApiService implements APIRead {
     'baseTarifTransit { id description }',
     'typeCamion { id description }',
     'transitaire { id raisonSocial }',
+    'gestionnaireChep',
+    'referenceChep',
+    'declarationEur1',
+    'envoieAutomatiqueDetail',
+    'controlReferenceClient',
+    'instructionLogistique',
+    'instructionSecretaireCommercial',
+    'prixUnitaireTarifTransit',
+    'prixUnitaireTarifTransport ',
   ];
 
   constructor(

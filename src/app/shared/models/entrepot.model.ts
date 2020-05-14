@@ -1,8 +1,14 @@
 import {
   Incoterm, Pays, RegimeTva, Societe,
-  ModeLivraison, Personne, TypePalette,
+  Personne, TypePalette,
   TypeCamion, Transitaire, Transporteur, BaseTarif
 } from './';
+
+export enum ModeLivraison {
+  DIRECT = 'D',
+  CROSS_DOCK = 'X',
+  SORTIE_STOCK = 'ST',
+}
 
 export class Entrepot {
   public id: string;

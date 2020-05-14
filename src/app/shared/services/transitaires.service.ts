@@ -14,7 +14,7 @@ export class TransitairesService extends ApiService implements APIRead {
 
   baseFields = [
     'id',
-    'description',
+    'raisonSocial',
     'valide',
   ];
 
