@@ -140,9 +140,12 @@
                   <div class="dx-field-label">{{ 'tiers-entrepots-codePostal' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-text-box formControlName="codePostal"></dx-text-box>
-                      <dx-validator name="{{ 'tiers-entrepots-codePostal' | localize }}">
+                      <dx-validator name="{{ 'tiers-entrepots-raisonSocial' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
                       </dx-validator>
+                      <!-- <dx-validator name="{{ 'tiers-entrepots-codePostal' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator> -->
                   </div>
                 </div>
 

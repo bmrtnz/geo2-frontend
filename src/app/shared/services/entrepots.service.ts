@@ -57,7 +57,7 @@ export class EntrepotsService extends ApiService implements APIRead {
     const query = this.buildGetOne(this.allFields);
     type Response = { entrepot: Entrepot };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
+    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {

@@ -47,7 +47,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     const query = this.buildGetOne(this.fullFields);
     type Response = { lieuPassageAQuai: LieuPassageAQuai };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
+    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {

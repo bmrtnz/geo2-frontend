@@ -68,7 +68,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     const query = this.buildGetOne(this.allFields);
     type Response = { client: Client };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
+    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
