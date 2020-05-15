@@ -79,7 +79,9 @@
     "tiers-clients-fraisMarketing": "Frais marketting - P.U.",
     "tiers-clients-fraisPlateforme": "Frais plateforme (€/kg)",
     "tiers-clients-groupeClient": "Groupe client",
-    "tiers-clients-courtier": "Courtier",     
+    "tiers-clients-courtier": "Courtier",
+    "tiers-clients-courtageModeCalcul": "Courtage mode de calcul",
+    "tiers-clients-courtageValeur": "Courtage valeur",
 
     "tiers-clients-details-title": "Fiche client",
     "tiers-clients-details-groupe-infos": "Infos générales",
