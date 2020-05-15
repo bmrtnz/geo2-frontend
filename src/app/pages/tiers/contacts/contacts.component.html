@@ -2,7 +2,7 @@
     <h2>
     {{ 'tiers-contacts-title' | localize }}
     -
-    {{ type }} : {{ tiersId }}
+    {{ 'tiers-contacts-' + type | localize }} : {{ tiersId }}
     <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
     </h2>
 </div>

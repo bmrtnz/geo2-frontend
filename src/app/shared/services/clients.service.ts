@@ -43,6 +43,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'referenceCoface',
     'soumisCtifl',
     'typeClient { id description }',
+    'typeVente { id description }',
     'compteComptable',
     'nbJourEcheance',
     'echeanceLe',
@@ -56,6 +57,19 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'assistante { id nomUtilisateur }',
     'moyenPaiement { id description }',
     'basePaiement { id description }',
+    'controlReferenceClient',
+    'instructionCommercial',
+    'agrement',
+    'blocageAvoirEdi',
+    'enCoursTemporaire',
+    'enCoursBlueWhale',
+    'tauxRemiseParFacture',
+    'tauxRemiseHorsFacture',
+    'fraisExcluArticlePasOrigineFrance',
+    'fraisMarketing',
+    'fraisPlateforme',
+    'groupeClient { id description }',
+    'courtier { id raisonSocial }'
   ];
 
   constructor(
@@ -68,17 +82,17 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     const query = this.buildGetOne(this.allFields);
     type Response = { client: Client };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
+    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
           const query = this.buildGetAll(this.baseFields);
           type Response = { allClient: RelayPage<Client> };
-          variables = {
-            ...variables,
+          const variables = {
+            ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
           };
           return this.
@@ -92,9 +106,9 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
         byKey: (key) => {
           const query = this.buildGetOne(this.baseFields);
           type Response = { client: Client };
-          variables = { ...variables, id: key };
+          const variables = { ...inputVariables, id: key };
           return this.
-          query<Response>(query, { variables } as WatchQueryOptions)
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
             map( res => res.data.client),
             take(1),

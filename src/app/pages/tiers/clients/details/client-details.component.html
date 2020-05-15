@@ -67,6 +67,11 @@
                   <dx-text-box formControlName="code">
                     <dx-validator name="{{ 'tiers-clients-code' | localize }}">
                       <dxi-validation-rule type="required"></dxi-validation-rule>
+                      <!-- <dxi-validation-rule 
+                      type="stringLength"
+                      min="10"
+                      >
+                      </dxi-validation-rule>-->
                   </dx-validator>
                     <dxi-button
                       name="help"
@@ -139,6 +144,21 @@
                   </dx-select-box>
                 </div>
               </div>
+              <!-- Type vente -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-typeVente' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    formControlName="typeVente"
+                    [dataSource]="typesVente"
+                    displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
+                    [(value)]="client && client.typeVente"
+                  >
+                  </dx-select-box>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -151,7 +171,7 @@
                 <div class="dx-field-label">{{ 'tiers-clients-raisonSocial' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-text-box formControlName="raisonSocial">
-                    <dx-validator name="{{ 'tiers-clients-secteur' | localize }}">
+                    <dx-validator name="{{ 'tiers-clients-raisonSocial' | localize }}">
                       <dxi-validation-rule type="required"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
@@ -314,6 +334,13 @@
                   </dx-text-box>
                 </div>
               </div>
+              <!-- blocage Avoir Edi -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-blocageAvoirEdi' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-check-box formControlName="blocageAvoirEdi"></dx-check-box>
+                </div>
+              </div>
 
               <!-- Ifco -->
               <div class="dx-field">
@@ -358,6 +385,146 @@
                   </dx-text-box>
                 </div>
               </div>
+              <!-- Contrôle ref client -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-controlReferenceClient' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="controlReferenceClient">
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- Agrément -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-agrement' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="agrement">
+                    <dx-validator name="{{ 'tiers-clients-agrement' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- En-cours temporaire -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-enCoursTemporaire' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="enCoursTemporaire">
+                    <dx-validator name="{{ 'tiers-clients-enCoursTemporaire' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- En-cours BW -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-enCoursBlueWhale' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="enCoursBlueWhale">
+                    <dx-validator name="{{ 'tiers-clients-enCoursBlueWhale' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+
+              <!-- Taux remise/facture -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-tauxRemiseParFacture' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="tauxRemiseParFacture">
+                    <dx-validator name="{{ 'tiers-clients-tauxRemiseParFacture' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+
+              <div class="dx-form-group-content">
+                <div class="dx-field">
+                  <dx-box direction="row">
+                    <dxi-item [ratio]="1">
+                      <!-- tauxRemiseHorsFacture -->
+                      <div class="dx-field">
+                        <div class="dx-field-label">{{ 'tiers-clients-tauxRemiseHorsFacture' | localize }}</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="tauxRemiseHorsFacture">
+                            <dx-validator name="{{ 'tiers-clients-tauxRemiseHorsFacture' | localize }}">
+                              <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            </dx-validator>
+                          </dx-text-box>
+                        </div>
+                      </div>
+                    </dxi-item>
+                    <dxi-item [ratio]="1">
+                      <!-- Exclu frais article pas orig France -->
+                      <div class="dx-field">
+                        <div class="dx-field-label">{{ 'tiers-clients-fraisExcluArticlePasOrigineFrance' | localize }}</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="fraisExcluArticlePasOrigineFrance">
+                            <dx-validator name="{{ 'tiers-clients-fraisExcluArticlePasOrigineFrance' | localize }}">
+                              <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            </dx-validator>
+                          </dx-text-box>
+                        </div>
+                      </div>
+                    </dxi-item>
+                  </dx-box>
+                </div>
+              </div>
+
+              <!-- frais Marketing -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-fraisMarketing' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="fraisMarketing">
+                    <dx-validator name="{{ 'tiers-clients-fraisMarketing' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- frais Plateforme -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-fraisPlateforme' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="fraisPlateforme">
+                    <dx-validator name="{{ 'tiers-clients-fraisPlateforme' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- groupe Client -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-groupeClient' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    formControlName="groupeClient"
+                    [dataSource]="groupesClient"
+                    displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
+                    [(value)]="client && client.groupeClient"
+                  >
+                  </dx-select-box>
+                </div>
+              </div>
+              <!-- Courtier -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-courtier' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    formControlName="courtier"
+                    [dataSource]="courtiers"
+                    displayExpr="raisonSocial"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','raisonSocial']"
+                    [(value)]="client && client.courtier"
+                  >
+                  </dx-select-box>
+                </div>
+              </div>
+
             </div>
 
             <dx-accordion
@@ -574,6 +741,38 @@
                   </div>
                 </div>
 
+              </div>
+            </div>
+          </dxi-item>
+        </dx-box>
+        <br>
+        <dx-box
+        direction="row">
+          <dxi-item [ratio]="4">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-instructionCommercial' | localize }}</span>
+              <div class="dx-form-group-content">
+                <!-- Instructions secr comm -->
+                <div class="dx-field">
+                 <div class="dx-field-value">
+                    <dx-text-area formControlName="instructionCommercial"></dx-text-area>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item [ratio]="0.2">
+          </dxi-item>
+          <dxi-item [ratio]="4">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-instructionLogistique' | localize }}</span>
+              <div class="dx-form-group-content">
+                <!-- Instructions logistique -->
+                <div class="dx-field">
+                  <div class="dx-field-value">
+                    <dx-text-area formControlName="instructionLogistique"></dx-text-area>
+                  </div>
+                </div>
               </div>
             </div>
           </dxi-item>

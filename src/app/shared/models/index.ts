@@ -46,3 +46,4 @@ export * from './penetro.model';
 export * from './etiquette-client.model';
 export * from './etiquette-UC.model';
 export * from './etiquette-evt.model';
+export * from './courtier.model';

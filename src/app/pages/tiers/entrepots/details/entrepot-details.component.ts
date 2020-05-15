@@ -1,16 +1,20 @@
 import {Component, OnInit} from '@angular/core';
-import {EntrepotsService} from '../../../../shared/services/entrepots.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {
-  Entrepot,
-  Devise,
-  Incoterm,
-  MoyenPaiement,
-  Pays,
-  Personne,
-  RegimeTva, ModeLivraison, TypePalette, BasePaiement, BaseTarif, TypeCamion, Transitaire
-} from '../../../../shared/models';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { EntrepotsService } from '../../../../shared/services/entrepots.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Entrepot } from '../../../../shared/models';
+import { FormBuilder } from '@angular/forms';
+import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
+import { PersonnesService } from 'app/shared/services/personnes.service';
+import { ModesLivraisonService } from 'app/shared/services/modes-livraison.service';
+import { PaysService } from 'app/shared/services/pays.service';
+import { TypesPaletteService } from 'app/shared/services/types-palette.service';
+import { IncotermsService } from 'app/shared/services/incoterms.service';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { TransporteursService } from 'app/shared/services';
+import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
+import { TypesCamionService } from 'app/shared/services/types-camion.service';
+import { TransitairesService } from 'app/shared/services/transitaires.service';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -35,9 +39,8 @@ export class EntrepotDetailsComponent implements OnInit {
     tvaCee: [''],
     instructSecrComm: [''],
     instructLogistique: [''],
-    idTVA: [''],
     typePalette: [''],
-    mentionClientFacture: [''],
+    mentionClientSurFacture: [''],
     transporteur: [''],
     baseTarifTransport: [''],
     PUTarifTransport: [''],
@@ -54,33 +57,39 @@ export class EntrepotDetailsComponent implements OnInit {
     envoiAutoDetail: [''],
     gestionnaireCHEP: [''],
     referenceCHEP: [''],
-    lieuFonctionEANDepot: [''],
-    lieuFonctionEANAcheteur: [''],
+    lieuFonctionEanDepot: [''],
+    lieuFonctionEanAcheteur: [''],
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
-  entrepot: Entrepot;
-  pays: Pays[];
   code: string;
-  commerciaux: Personne[];
-  assistantes: Personne[];
-  devises: Devise[];
-  moyenPaiements: MoyenPaiement[];
-  basePaiements: MoyenPaiement[];
-  regimeTva: RegimeTva[];
-  incoterm: Incoterm[];
-  modesLivraison: ModeLivraison[];
-  typesPalette: TypePalette[];
-  baseTarifsTransport: BaseTarif[];
-  typesCamion: TypeCamion[];
-  transitaires: Transitaire[];
-  baseTarifsTransit: BaseTarif[];
+  entrepot: Entrepot;
+  personnes: DataSource;
+  modesLivraison: DataSource;
+  typesPalette: DataSource;
+  pays: DataSource;
+  incoterms: DataSource;
+  regimesTva: DataSource;
+  transporteurs: DataSource;
+  basesTarif: DataSource;
+  typesCamion: DataSource;
+  transitaires: DataSource;
   defaultVisible: boolean;
 
   constructor(
     private fb: FormBuilder,
     private entrepotsService: EntrepotsService,
+    private personnesService: PersonnesService,
+    private modesLivraisonService: ModesLivraisonService,
+    private paysService: PaysService,
+    private typesPaletteService: TypesPaletteService,
+    private incotermsService: IncotermsService,
+    private regimesTvaService: RegimesTvaService,
+    private transporteursService: TransporteursService,
+    private basesTarifService: BasesTarifService,
+    private typesCamionService: TypesCamionService,
+    private transitairesService: TransitairesService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -88,33 +97,22 @@ export class EntrepotDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.entrepotsService.getPays().then(p => {
-      this.pays = p;
-    });
-    this.entrepotsService.getCommerciaux().then(c => {
-      this.commerciaux = c;
-    });
-    this.entrepotsService.getAssistantes().then(a => {
-      this.assistantes = a;
-    });
-    this.entrepotsService.getDevises().then(a => {
-      this.devises = a;
-    });
-    this.entrepotsService.getMoyenPaiements().then(a => {
-      this.moyenPaiements = a;
-    });
-    this.entrepotsService.getBasePaiements().then(a => {
-      this.basePaiements = a;
-    });
-    this.entrepotsService.getRegimeTva().then(a => {
-      this.regimeTva = a;
-    });
     this.entrepotsService
-      .get(this.route.snapshot.paramMap.get('id'))
-      .then(c => {
-        this.entrepot = c;
-        this.entrepotForm.patchValue(this.entrepot);
-      });
+    .getOne(this.route.snapshot.paramMap.get('id'))
+    .subscribe( res => {
+      this.entrepot = res.data.entrepot;
+      this.entrepotForm.patchValue(this.entrepot);
+    });
+    this.personnes = this.personnesService.getDataSource();
+    this.modesLivraison = this.modesLivraisonService.getDataSource();
+    this.pays = this.paysService.getDataSource();
+    this.typesPalette = this.typesPaletteService.getDataSource();
+    this.incoterms = this.incotermsService.getDataSource();
+    this.regimesTva = this.regimesTvaService.getDataSource();
+    this.transporteurs = this.transporteursService.getDataSource();
+    this.basesTarif = this.basesTarifService.getDataSource();
+    this.typesCamion = this.typesCamionService.getDataSource();
+    this.transitaires = this.transitairesService.getDataSource();
   }
 
   debug(test) {
@@ -122,7 +120,16 @@ export class EntrepotDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.entrepotForm.value);
+    if (!this.entrepotForm.pristine && this.entrepotForm.valid) {
+      const entrepot = this.entrepotsService
+      .extractDirty(this.entrepotForm.controls);
+      this.entrepotsService
+      .save({ entrepot: { ...entrepot, id: this.entrepot.id } })
+      .subscribe({
+        next: () => notify('Sauvegardé', 'success', 3000),
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
+    }
   }
 
   toggleVisible() {

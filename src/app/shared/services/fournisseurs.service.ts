@@ -49,6 +49,7 @@ export class FournisseursService extends ApiService implements APIRead {
     'siretAPE',
     'rcs',
     'tvaId',
+    'autoFacturation',
   ];
 
   constructor(
@@ -61,17 +62,17 @@ export class FournisseursService extends ApiService implements APIRead {
     const query = this.buildGetOne(this.fullFields);
     type Response = { fournisseur: Fournisseur };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables } as WatchQueryOptions);
+    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     const query = this.buildGetAll(this.baseFields);
     type Response = { allFournisseur: RelayPage<Fournisseur> };
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          variables = {
-            ...variables,
+          const variables = {
+            ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
           };
           return this.
