@@ -50,6 +50,7 @@ export class FournisseursService extends ApiService implements APIRead {
     'rcs',
     'tvaId',
     'autoFacturation',
+    'typeTiers',
   ];
 
   constructor(

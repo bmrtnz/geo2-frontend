@@ -157,8 +157,10 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    // this.router.navigate([`./entrepots/${this.client.id}`]);
-    this.router.navigate([`/tiers/contacts/clients/${this.client.id}`]);
+    const search = encodeURIComponent(`codeTiers=="${ this.client.code }" and typeTiers==${ this.client.typeTiers }`);
+    this.router.navigate([`/tiers/contacts`], {
+      queryParams: { search },
+    });
   }
 
 }

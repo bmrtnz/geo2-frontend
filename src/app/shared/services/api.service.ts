@@ -255,6 +255,18 @@ export abstract class ApiService {
     `;
   }
 
+  protected buildDelete() {
+    const operation = `delete${this.model}`;
+    const alias = this.withUpperCaseFirst(operation);
+    return `
+      mutation ${ alias }($${ this.keyField }: String!) {
+        ${ operation }(${ this.keyField }: $${ this.keyField }) {
+          id
+        }
+      }
+    `;
+  }
+
   /**
    * Create DX CustomStore with preconfigured key
    */

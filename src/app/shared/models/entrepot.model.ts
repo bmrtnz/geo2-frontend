@@ -3,6 +3,7 @@ import {
   Personne, TypePalette,
   TypeCamion, Transitaire, Transporteur, BaseTarif
 } from './';
+import { TypeTiers } from './tier.model';
 
 export enum ModeLivraison {
   DIRECT = 'D',
@@ -45,8 +46,7 @@ export class Entrepot {
   public controleRefClient: string;
   public mentionClientSurFacture: string;
   public valide: boolean;
-
-  // ??
+  public typeTiers: TypeTiers;
   public PUTarifTransport: string;
   public PUTarifTransit: string;
 

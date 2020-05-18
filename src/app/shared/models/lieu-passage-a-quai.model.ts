@@ -1,4 +1,5 @@
 import {BasePaiement, Devise, MoyenPaiement, Pays, RegimeTva} from './';
+import { TypeTiers } from './tier.model';
 
 export class LieuPassageAQuai {
 
@@ -21,5 +22,6 @@ export class LieuPassageAQuai {
   public langue: Pays;
   public devise: Devise;
   public lieuFonctionEAN: Devise;
+  public typeTiers: TypeTiers;
 
 }

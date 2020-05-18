@@ -11,7 +11,6 @@ import DataSource from 'devextreme/data/data_source';
 export class EntrepotsListComponent implements OnInit {
 
   entrepots: DataSource;
-  // @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
 
   constructor(
     private entrepotsService: EntrepotsService,

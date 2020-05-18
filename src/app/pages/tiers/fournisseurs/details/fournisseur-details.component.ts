@@ -128,7 +128,10 @@ export class FournisseurDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/fournisseurs/${this.fournisseur.id}`]);
+    const search = encodeURIComponent(`codeTiers=="${ this.fournisseur.id }" and typeTiers==${ this.fournisseur.typeTiers }`);
+    this.router.navigate([`/tiers/contacts`], {
+      queryParams: { search },
+    });
   }
 
 }

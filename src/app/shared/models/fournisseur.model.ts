@@ -1,4 +1,5 @@
 import {BasePaiement, Devise, MoyenPaiement, Pays, RegimeTva, Societe, TypeFournisseur, BureauAchat} from './';
+import { TypeTiers } from './tier.model';
 
 export class Fournisseur {
 
@@ -47,6 +48,7 @@ export class Fournisseur {
   public consignePaloxUdc: boolean;
   public listeExpediteurs: string;
   public valide: boolean;
+  public typeTiers: TypeTiers;
 
   // public incoterm: Incoterm; // Ne sert pas ?
   // public typeBureau: string;

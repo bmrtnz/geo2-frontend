@@ -37,6 +37,7 @@ export class TransporteursService extends ApiService implements APIRead {
     'devise { id description }',
     'moyenPaiement { id description }',
     'basePaiement { id description }',
+    'typeTiers',
   ];
 
   constructor(

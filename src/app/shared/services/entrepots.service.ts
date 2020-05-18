@@ -53,7 +53,8 @@ export class EntrepotsService extends ApiService implements APIRead {
     'instructionLogistique',
     'instructionSecretaireCommercial',
     'prixUnitaireTarifTransit',
-    'prixUnitaireTarifTransport ',
+    'prixUnitaireTarifTransport',
+    'typeTiers',
   ];
 
   constructor(

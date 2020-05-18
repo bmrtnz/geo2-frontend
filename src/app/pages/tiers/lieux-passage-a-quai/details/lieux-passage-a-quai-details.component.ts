@@ -105,7 +105,10 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/lieupassageaquais/${this.lieupassageaquai.id}`]);
+    const search = encodeURIComponent(`codeTiers=="${ this.lieupassageaquai.id }" and typeTiers==${ this.lieupassageaquai.typeTiers }`);
+    this.router.navigate([`/tiers/contacts`], {
+      queryParams: { search },
+    });
   }
 
 }

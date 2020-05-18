@@ -1,40 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { Service, Employee, Moyen, Flux } from '../../../shared/services/contacts.service';
+import DataSource from 'devextreme/data/data_source';
+import { ContactsService } from 'app/shared/services/contacts.service';
 import { ActivatedRoute } from '@angular/router';
-import ArrayStore from 'devextreme/data/array_store';
 
 @Component({
-    selector: 'app-contacts',
-    templateUrl: './contacts.component.html',
-    styleUrls: ['./contacts.component.scss'],
-    providers: [Service]
+  selector: 'app-contacts',
+  templateUrl: './contacts.component.html',
+  styleUrls: ['./contacts.component.scss'],
 })
 export class ContactsComponent implements OnInit {
 
-    dataSource: ArrayStore;
-    moyens: Moyen[];
-    flux: Flux[];
+  contacts: DataSource;
 
-    tiersId: string;
-    type: string;
+  constructor(
+    private contactsService: ContactsService,
+    private route: ActivatedRoute,
+  ) {}
 
-    constructor(
-        private service: Service,
-        private route: ActivatedRoute
-        ) {
-        this.dataSource = new ArrayStore({
-            key: 'id',
-            data: service.getEmployees(),
-            onUpdated: (values, key) => console.log(values, key)
-        });
-        this.moyens = service.getMoyens();
-        this.flux = service.getFlux();
-    }
-
-    ngOnInit() {
-        this.type = this.route.snapshot.paramMap.get('type');
-        this.tiersId = this.route.snapshot.paramMap.get('id');
-    }
+  ngOnInit() {
+    this.route.queryParams
+    .subscribe(({ search }) => {
+      this.contacts = this.contactsService.getDataSource({
+        search: decodeURIComponent(search),
+      });
+    });
+  }
 
 }
-

@@ -1,5 +1,6 @@
 import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
 import { Entrepot } from './entrepot.model';
+import { TypeTiers } from './tier.model';
 
 export class Client {
 
@@ -53,4 +54,5 @@ export class Client {
   public soumisCtifl: boolean;
   public paramAvances: string;
   public entrepots: Entrepot[];
+  public typeTiers: TypeTiers;
 }
