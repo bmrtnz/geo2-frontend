@@ -37,6 +37,22 @@
                         </div>
                     </div>
 
+                    <!-- espèce -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
+                        <div class="dx-field-value">
+                            <dx-select-box
+                            formControlName="espece"
+                            [items]="especes"
+                            valueExpr="id"
+                            displayExpr="description">
+                                <dx-validator name="{{ 'articles-espece' | localize }}">
+                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                </dx-validator>
+                            </dx-select-box>
+                        </div>
+                    </div>
+
                     <!-- BWSTOCK -->
                     <div class="dx-field">
                         <div class="dx-field-label">{{ 'articles-BWSTOCK' | localize }}</div>
@@ -72,21 +88,6 @@
                         <span class="dx-form-group-caption">{{ 'articles-groupe-matierePremiere' | localize }}</span>
                         <div class="dx-form-group-content">
 
-                            <!-- espèce -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="espece"
-                                    [items]="especes"
-                                    valueExpr="id"
-                                    displayExpr="description">
-                                        <dx-validator name="{{ 'articles-espece' | localize }}">
-                                            <dxi-validation-rule type="required"></dxi-validation-rule>
-                                        </dx-validator>
-                                    </dx-select-box>
-                                </div>
-                            </div>
                             <!-- variété -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-variete' | localize }}</div>

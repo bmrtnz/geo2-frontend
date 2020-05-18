@@ -70,7 +70,12 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'fraisPlateforme',
     'groupeClient { id description }',
     'courtier { id raisonSocial }',
-    'courtageModeCalcul'
+    'courtageModeCalcul',
+    'paloxRaisonSocial { id raisonSocial }',
+    'delaiBonFacturer',
+    'debloquerEnvoieJour',
+    'clotureAutomatique',
+    'fraisRamasse'
   ];
 
   constructor(

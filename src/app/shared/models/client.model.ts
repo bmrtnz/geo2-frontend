@@ -38,6 +38,8 @@ export class Client {
   public siret: string;
   public blocageAvoirEdi: boolean;
   public debloquerEnvoieJour: boolean;
+  public fraisRamasse: boolean;
+  public clotureAutomatique: boolean;
   public ifco: string;
   public instructionLogistique: string;
   public basePaiement: BasePaiement;
@@ -56,4 +58,5 @@ export class Client {
   public soumisCtifl: boolean;
   public paramAvances: string;
   public entrepots: Entrepot[];
+  public paloxRaisonSocial: Client;
 }

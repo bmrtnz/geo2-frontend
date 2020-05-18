@@ -38,7 +38,6 @@
     "tiers-clients-ifco": "Référence IFCO",
     "tiers-clients-siret": "Siret",
     "tiers-clients-lieuFonctionEAN": "Lieu fonction EAN",
-    "tiers-clients-delaiBonFacturer": "Délai bon à facturer",
     "tiers-clients-tvaCee": "ID TVA CEE",
     "tiers-clients-soumisCtifl": "Soumis CTIFL",
     "tiers-clients-typeClient": "Type client",
@@ -82,6 +81,10 @@
     "tiers-clients-courtier": "Courtier",
     "tiers-clients-courtageModeCalcul": "Courtage mode de calcul",
     "tiers-clients-courtageValeur": "Courtage valeur",
+    "tiers-clients-delaiBonFacturer": "Délai BAF",
+    "tiers-clients-debloquerEnvoieJour": "Débloquer envoi du jour",
+    "tiers-clients-clotureAutomatique": "Clôture automatique",
+    "tiers-clients-fraisRamasse": "Frais de ramasse",
 
     "tiers-clients-details-title": "Fiche client",
     "tiers-clients-details-groupe-infos": "Infos générales",

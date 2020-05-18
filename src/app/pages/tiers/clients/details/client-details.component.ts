@@ -55,7 +55,6 @@ export class ClientDetailsComponent implements OnInit {
     instructionCommercial: [''],
     siret: [''],
     blocageAvoirEdi: [''],
-    debloquerEnvoieJour: [''],
     ifco: [''],
     instructionLogistique: [''],
     basePaiement: [''],
@@ -73,17 +72,20 @@ export class ClientDetailsComponent implements OnInit {
     assistante: [''],
     referenceCoface: [''],
     agrement: [''],
-    // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
     typeClient: [''],
     typeVente: [''],
     groupeClient: [''],
+    paloxRaisonSocial: [''],
     courtier: [''],
     soumisCtifl: [''],
     valide: [false],
     lieuFonctionEan: [''],
     delaiBonFacturer: [''],
+    debloquerEnvoieJour: [''],
+    clotureAutomatique: [''],
+    fraisRamasse: [''],
     // certifications: [''],
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
@@ -101,6 +103,7 @@ export class ClientDetailsComponent implements OnInit {
   typesVente: DataSource;
   groupesClient: DataSource;
   courtiers: DataSource;
+  clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
 
@@ -146,6 +149,7 @@ export class ClientDetailsComponent implements OnInit {
     this.typesVente = this.typesVenteService.getDataSource();
     this.groupesClient = this.groupesClientService.getDataSource();
     this.courtiers = this.courtiersService.getDataSource();
+    this.clients = this.clientsService.getDataSource();
 
   }
 

@@ -47,3 +47,4 @@ export * from './etiquette-client.model';
 export * from './etiquette-UC.model';
 export * from './etiquette-evt.model';
 export * from './courtier.model';
+export * from './palox-raison-sociale.model';
