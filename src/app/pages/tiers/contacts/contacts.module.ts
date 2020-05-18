@@ -6,7 +6,7 @@ import {
   DxButtonModule, DxCheckBoxModule,
   DxDataGridModule,
   DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-  DxTextBoxModule
+  DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 
 
@@ -17,7 +17,7 @@ import {
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule
+    DxTextBoxModule, DxValidatorModule
   ],
   declarations: [ContactsComponent]
 })
