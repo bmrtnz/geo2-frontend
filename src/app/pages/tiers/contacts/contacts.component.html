@@ -32,7 +32,7 @@
         <dxi-column
             dataField="Prenom"
             caption="{{ 'tiers-contacts-header-prenom' | localize }}">
-            <dxi-validation-rule type="required"></dxi-validation-rule>
+            <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
             <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
         </dxi-column>
         <dxi-column
@@ -65,7 +65,8 @@
             dataField="Coord"
             caption="{{ 'tiers-contacts-header-coords' | localize }}"
             [width]="250">
-            <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+            <dxi-validation-rule type="stringLength" max="70
+            "></dxi-validation-rule>
         </dxi-column>
         <dxi-column
             dataField="OK"

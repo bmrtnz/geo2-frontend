@@ -73,8 +73,12 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse1"></dx-text-box>
-                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dx-text-box formControlName="adresse1">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -82,8 +86,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse2"></dx-text-box>
-                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dx-text-box formControlName="adresse2">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -91,8 +98,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse3"></dx-text-box>
-                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dx-text-box formControlName="adresse3">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -156,8 +166,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEan"></dx-text-box>
-                    <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                    <dx-text-box formControlName="lieuFonctionEan">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -184,8 +197,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="tvaCee"></dx-text-box>
-                    <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
+                    <dx-text-box formControlName="tvaCee">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
               </div>
@@ -202,8 +218,12 @@
                     <div class="dx-field field-large">
                       <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}</div>
                       <div class="dx-field-value">
-                        <dx-text-box formControlName="nbJourEcheance"></dx-text-box>
-                        <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
+                        <dx-text-box formControlName="nbJourEcheance">
+                          <dx-validator name="{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}">
+                            <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>                            
+                          </dx-validator>
+                        </dx-text-box>
                       </div>
                     </div>
                   </dxi-item>
@@ -212,8 +232,12 @@
                     <div class="dx-field field-small">
                       <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-echeanceLe' | localize }}</div>
                       <div class="dx-field-value">
-                        <dx-text-box formControlName="echeanceLe"></dx-text-box>
-                        <dxi-validation-rule type="stringLength" max="2"></dxi-validation-rule>
+                        <dx-text-box formControlName="echeanceLe">
+                          <dx-validator name="{{ 'tiers-lieuxpassageaquai-echeanceLe' | localize }}">
+                            <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            <dxi-validation-rule type="stringLength" max="2"></dxi-validation-rule>                            
+                          </dx-validator>
+                        </dx-text-box>
                       </div>
                     </div>
                   </dxi-item>

@@ -92,7 +92,7 @@
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-raisonSocial' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-text-box formControlName="raisonSocial">
-                      <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
+                      <dx-validator name="{{ 'tiers-fournisseurs-raisonSocial' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
                      </dx-validator>
                     </dx-text-box>
@@ -362,8 +362,9 @@
                         <div class="dx-field-value">
                           <dx-text-box formControlName="nbJourEcheance">
                             <dx-validator name="{{ 'tiers-fournisseurs-nbJourEcheance' | localize }}">
-                             <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                             <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
+                              <dxi-validation-rule type="required"></dxi-validation-rule>
+                              <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                              <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
                             </dx-validator>
                           </dx-text-box>
                         </div>
