@@ -28,7 +28,7 @@ export class ClientsListComponent implements OnInit {
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {
-        e.rowElement.classList.add('highlight');
+        e.rowElement.classList.add('highlight-datagrid-row');
       }
     }
   }

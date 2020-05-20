@@ -1,13 +1,13 @@
 ::ng-deep .dx-row.dx-data-row {
 
     & {
-        &.highlight > td {
+        &.highlight-datagrid-row > td {
             background:#EEE;
         }
     }
 
     &.dx-row-focused {
-        &.highlight > td {
+        &.highlight-datagrid-row > td {
             color:#CCC;
         }
     }
