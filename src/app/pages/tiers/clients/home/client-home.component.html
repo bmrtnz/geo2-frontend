@@ -17,26 +17,29 @@
 
 <div id="router">
   <br/>
-  <dx-button
-    style="float: left;"
-    icon="arrowleft"
-    text="Client précedent"
-    [disabled]="!clientsList.hasPrevious()"
-    (onClick)="clientsList.selectPrevious()">
-  </dx-button>
-  <dx-button
-    style="float: right;"
-    icon="arrowright"
-    text="Client suivant"
-    [disabled]="!clientsList.hasNext()"
-    (onClick)="clientsList.selectNext()">
-  </dx-button>
-  <div style="clear: both;"></div>
-  <dx-button
-    text="retour"
-    [visible]="backBtnVisible"
-    (onClick)="backClick()">
-  </dx-button>
-  <router-outlet></router-outlet>
+  <div class="content-block">
+    <dx-button
+      style="float: left;"
+      icon="arrowleft"
+      text="Client précedent"
+      [disabled]="!clientsList.hasPrevious()"
+      (onClick)="clientsList.selectPrevious()">
+    </dx-button>
+    <dx-button
+      style="float: right;"
+      icon="arrowright"
+      text="Client suivant"
+      [disabled]="!clientsList.hasNext()"
+      (onClick)="clientsList.selectNext()">
+    </dx-button>
+    <dx-button
+      style="float: left;"
+      text="retour"
+      [disabled]="backBtnDisabled"
+      (onClick)="backClick()">
+    </dx-button>
+    <div style="clear: both;"></div>
+  </div>
+  <router-outlet (activate)="activate($event)"></router-outlet>
 </div>
 

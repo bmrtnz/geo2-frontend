@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, OnInit, ViewChild} from '@angular/core';
 import { Location } from '@angular/common';
-import {ActivatedRoute, ActivationEnd, Router} from '@angular/router';
+import {ActivatedRoute, ActivationEnd, NavigationEnd, Router} from '@angular/router';
 import {Client} from '../../../../shared/models';
 import {ClientsListComponent} from '../list/clients-list.component';
 import {ClientDetailsComponent} from '../details/client-details.component';
@@ -12,7 +12,7 @@ import {ClientDetailsComponent} from '../details/client-details.component';
 })
 export class ClientHomeComponent implements OnInit {
 
-  backBtnVisible = false;
+  backBtnDisabled = false;
   collapseMode = true;
   @ViewChild(ClientsListComponent, { static: true }) clientsList;
 
@@ -22,14 +22,14 @@ export class ClientHomeComponent implements OnInit {
     private location: Location
   ) {
     this.router.events.subscribe(e => {
-      if (e instanceof ActivationEnd && e.snapshot.component === ClientDetailsComponent) {
-        // console.log(e.snapshot);
-        console.log('select row', e.snapshot.params.id);
-        this.clientsList.setInitialKey(e.snapshot.params.id);
+      if (e instanceof NavigationEnd) {
+        this.backBtnDisabled = !/\/tiers\/clients\/\d+\/.*/.test(e.url);
       }
-    });
-    this.route.url.subscribe(() => {
-      this.backBtnVisible = !(this.route.snapshot.firstChild.component === ClientDetailsComponent);
+      if (e instanceof ActivationEnd) {
+        if (e.snapshot.component === ClientDetailsComponent) {
+          this.clientsList.setInitialKey(e.snapshot.params.id);
+        }
+      }
     });
   }
 
@@ -66,4 +66,7 @@ export class ClientHomeComponent implements OnInit {
     this.location.back();
   }
 
+  activate(event) {
+    console.log(event);
+  }
 }
