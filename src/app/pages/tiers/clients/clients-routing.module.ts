@@ -1,15 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '../../../shared/services';
-import {ClientsListComponent} from './list/clients-list.component';
 import {ClientDetailsComponent} from './details/client-details.component';
+import {ContactsComponent} from '../contacts/contacts.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: ClientsListComponent,
-    canActivate: [AuthGuardService]
-  }, {
     path: ':id',
     component: ClientDetailsComponent,
     canActivate: [AuthGuardService]

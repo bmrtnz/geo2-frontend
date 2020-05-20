@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Client, Courtier } from '../../../../shared/models';
+import { Client } from '../../../../shared/models';
 import { FormBuilder } from '@angular/forms';
 import { SecteursService } from 'app/shared/services/secteurs.service';
 import DataSource from 'devextreme/data/data_source';
@@ -127,11 +127,13 @@ export class ClientDetailsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.clientsService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.client = res.data.client;
-      this.clientForm.patchValue(this.client);
+    this.route.params.subscribe(params => {
+      this.clientsService
+        .getOne(params.id)
+        .subscribe( res => {
+          this.client = res.data.client;
+          this.clientForm.patchValue(this.client);
+        });
     });
 
     this.secteurs = this.secteursService.getDataSource();
@@ -172,14 +174,13 @@ export class ClientDetailsComponent implements OnInit {
 
   entrepotsBtnClick() {
     const search = encodeURIComponent(`client.id=="${ this.client.id }"`);
-    this.router.navigate([`/tiers/entrepots`], {
+    this.router.navigate([`/tiers/clients/${this.client.id}/entrepots`], {
       queryParams: { search },
     });
   }
 
   contactsBtnClick() {
-    // this.router.navigate([`./entrepots/${this.client.id}`]);
-    this.router.navigate([`/tiers/contacts/clients/${this.client.id}`]);
+    this.router.navigate([`/tiers/clients/${this.client.id}/contacts`]);
   }
 
 }

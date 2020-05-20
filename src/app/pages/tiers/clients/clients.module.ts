@@ -7,10 +7,11 @@ import {
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,
-    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
+    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxSwitchModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ClientHomeComponent} from './home/client-home.component';
 
 
 @NgModule({
@@ -31,13 +32,15 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         DxTextAreaModule,
         DxPopoverModule,
         DxNumberBoxModule,
-        DxValidatorModule
+        DxValidatorModule,
+        DxSwitchModule
     ],
     exports: [
         // ClientsListComponent
     ],
     declarations: [
         ClientsListComponent,
+        ClientHomeComponent,
         ClientDetailsComponent
     ]
 })

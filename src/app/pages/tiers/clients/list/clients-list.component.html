@@ -1,7 +1,6 @@
-<h2 class="content-block">{{ 'tiers-clients-title' | localize }}</h2>
-
 <div class="content-block">
   <dx-data-grid
+    #dataGrid
     class="dx-card wide-card"
     [dataSource]="clients"
     [remoteOperations]="true"
@@ -11,12 +10,15 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
     [allowColumnReordering]="true"
-    (onRowDblClick)="onRowDblClick($event)"
+    (onContentReady)="onContentReady()"
+    (onRowDblClick)="onSelectionChange($event)"
   >
 
+    <dxo-selection mode="single"></dxo-selection>
     <!-- Grid configuration -->
     <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
-    <!-- <dxo-header-filter [dataSource]="clients" [visible]="true"></dxo-header-filter> -->
+<!--    <dxo-header-filter [dataSource]="clients" [visible]="true"></dxo-header-filter>-->
+    <dxo-column-chooser></dxo-column-chooser>
     <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
@@ -29,32 +31,31 @@
 
     <dxi-column
       dataField="id"
-      [width]="90"
       [hidingPriority]="2">
     </dxi-column>
     <dxi-column
       dataField="raisonSocial"
-      [width]="190"
       caption="{{ 'tiers-clients-raisonSocial' | localize }}"
       [hidingPriority]="8">
     </dxi-column>
     <dxi-column
       dataField="pays.description"
-      [width]="190"
       caption="{{ 'tiers-clients-pays' | localize }}"
       [hidingPriority]="8">
     </dxi-column>
     <dxi-column
       dataField="ville"
-      [width]="190"
       caption="{{ 'tiers-clients-ville' | localize }}"
       [hidingPriority]="8">
     </dxi-column>
     <dxi-column
       dataField="secteur.description"
-      [width]="190"
       caption="{{ 'tiers-clients-secteur' | localize }}"
       [hidingPriority]="8">
     </dxi-column>
   </dx-data-grid>
+
+  <div *ngIf="this.selectedRowKeys.length">
+    <span [textContent]="this.selectedRowKeys"></span>
+  </div>
 </div>

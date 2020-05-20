@@ -1,0 +1,21 @@
+.collapse {
+  overflow: hidden;
+  transition: max-height 300ms;
+  max-height: 0;
+
+  &.collapsed {
+    max-height: unset;
+  }
+}
+
+.splitter {
+  cursor: pointer;
+  border: 1px solid black;
+  text-align: center;
+
+  transition: background-color 300ms;
+
+  &:hover {
+    background-color: lightblue;
+  }
+}

@@ -30,7 +30,7 @@ export class EntrepotsListComponent implements OnInit {
   }
 
   onRowDblClick(e) {
-    this.router.navigate([`/tiers/entrepots/${e.data.id}`]);
+    this.router.navigate([`/tiers/clients/${this.route.snapshot.params.id}/entrepots/${e.data.id}`]);
   }
 
 }
