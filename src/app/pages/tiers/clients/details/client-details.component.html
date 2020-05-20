@@ -720,8 +720,15 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-courtageModeCalcul' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="courtageModeCalcul">
-                  </dx-text-box>
+                  <dx-select-box
+                    formControlName="courtageModeCalcul"
+                    [dataSource]="basesTarif"
+                    displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
+                    [(value)]="client && client.courtageModeCalcul"
+                  >
+                  </dx-select-box>
                 </div>
               </div>
               <!-- Valeur Courtage -->

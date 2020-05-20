@@ -70,8 +70,8 @@
     "tiers-clients-typeVente": "Type de vente",
     "tiers-clients-blocageAvoirEdi": "Blocage avoir EDI", 
     "tiers-clients-paloxRaisonSocial": "Palox raison sociale",
-    "tiers-clients-enCoursTemporaire": "En-cours temporaire",
-    "tiers-clients-enCoursBlueWhale": "En-cours supplément BW",
+    "tiers-clients-enCoursTemporaire": "Couverture temporaire COFACE",
+    "tiers-clients-enCoursBlueWhale": "Couverture supp. BW",
     "tiers-clients-tauxRemiseParFacture": "Tx ristourne/facture",
     "tiers-clients-tauxRemiseHorsFacture": "Tx ristourne hors fact.",
     "tiers-clients-fraisExcluArticlePasOrigineFrance": "Exclu frais article pas orig France",
@@ -92,7 +92,7 @@
     "tiers-clients-details-groupe-adresses": "Adresse",
     "tiers-clients-details-groupe-paiement": "Paiement",
     "tiers-clients-details-groupe-commentaires": "Commentaires",
-    "tiers-clients-details-groupe-instructionCommercial": "Instruct. Secr. comm.",
+    "tiers-clients-details-groupe-instructionCommercial": "Instructions internes",
     "tiers-clients-details-groupe-instructionLogistique": "Instructions logistique",
 
     "tiers-fournisseurs-title": "Fournisseurs",
@@ -239,7 +239,7 @@
     "tiers-entrepots-declarationEUR1": "Déclaration EUR1",
     "tiers-entrepots-envoiAutoDetail": "Envoi automatique détail",
     "tiers-entrepots-controleRefClient": "Contrôle référence client",
-    "tiers-entrepots-details-groupe-instructSecrComm": "Instruct. Secr. comm.",
+    "tiers-entrepots-details-groupe-instructSecrComm": "Instruct. internes",
     "tiers-entrepots-details-groupe-instructLogistique": "Instructions logistique",
     "tiers-entrepots-details-title": "Fiche entrepôt",
  

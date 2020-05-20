@@ -2,6 +2,7 @@ import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva
 import { TypeVente } from './type-vente.model';
 import { Courtier } from './courtier.model';
 import { Entrepot } from './entrepot.model';
+import { BaseTarif } from './base-tarif.model';
 
 export class Client {
 
@@ -51,7 +52,6 @@ export class Client {
   public referenceCoface: string;
   public agrement: number;
   public courtier: Courtier;
-  public courtageModeCalcul: string;
   public courtageValeur: number;
   public typeClient: TypeClient;
   public groupeClient: GroupeClient;
@@ -59,4 +59,5 @@ export class Client {
   public paramAvances: string;
   public entrepots: Entrepot[];
   public paloxRaisonSocial: Client;
+  public courtageModeCalcul: BaseTarif;
 }

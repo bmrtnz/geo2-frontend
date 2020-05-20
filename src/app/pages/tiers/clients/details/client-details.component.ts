@@ -17,6 +17,7 @@ import notify from 'devextreme/ui/notify';
 import { TypesVenteService } from 'app/shared/services/types-vente.service';
 import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
+import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 
 @Component({
   selector: 'app-client-details',
@@ -100,6 +101,7 @@ export class ClientDetailsComponent implements OnInit {
   devises: DataSource;
   moyensPaiement: DataSource;
   basesPaiement: DataSource;
+  basesTarif: DataSource;
   typesVente: DataSource;
   groupesClient: DataSource;
   courtiers: DataSource;
@@ -120,6 +122,7 @@ export class ClientDetailsComponent implements OnInit {
     private typesClientService: TypesClientService,
     private typesVenteService: TypesVenteService,
     private courtiersService: CourtierService,
+    private basesTarifService: BasesTarifService,
     private groupesClientService: GroupesClientService,
     private moyensPaiementService: MoyensPaiementService,
     private router: Router,
@@ -150,6 +153,7 @@ export class ClientDetailsComponent implements OnInit {
     this.groupesClient = this.groupesClientService.getDataSource();
     this.courtiers = this.courtiersService.getDataSource();
     this.clients = this.clientsService.getDataSource();
+    this.basesTarif = this.basesTarifService.getDataSource();
 
   }
 
