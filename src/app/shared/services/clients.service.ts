@@ -56,6 +56,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'assistante { id nomUtilisateur }',
     'moyenPaiement { id description }',
     'basePaiement { id description }',
+    'historique { commentaire, valide, userModification, dateModification }'
   ];
 
   constructor(

@@ -1,4 +1,4 @@
-import {BasePaiement, Devise, MoyenPaiement, Pays, RegimeTva, Societe, TypeFournisseur, BureauAchat} from './';
+import {BasePaiement, Devise, MoyenPaiement, Pays, RegimeTva, Societe, TypeFournisseur, BureauAchat, Historique} from './';
 
 export class Fournisseur {
 
@@ -47,6 +47,7 @@ export class Fournisseur {
   public consignePaloxUdc: boolean;
   public listeExpediteurs: string;
   public valide: boolean;
+  public historique: Historique[];
 
   // public incoterm: Incoterm; // Ne sert pas ?
   // public typeBureau: string;

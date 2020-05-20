@@ -6,6 +6,10 @@
 
     "valide": "Validé",
     "invalide": "Non Validé",
+    "user-modification": "Modifié par",
+    "date-modification": "Date de modification",
+    "commentaire": "Commentaire",
+    "action": "Action",
 
     "btn-historique": "Historique",
     "btn-docsjoints": "Docs joints",
@@ -143,7 +147,7 @@
     "tiers-transporteurs-clientRaisonSociale": "Client raison sociale",
     "tiers-transporteurs-indicationFacture": "Indications sur facture",
     "tiers-transporteurs-referencecoface": "Référence fournisseur COFACE",
-    "tiers-transporteurs-compteComptable": "Compte comptable", 
+    "tiers-transporteurs-compteComptable": "Compte comptable",
     "tiers-transporteurs-details-groupe-paiement": "Paiement",
     "tiers-transporteurs-nbJourEcheance": "Nb de jours échéance",
     "tiers-transporteurs-echeanceLe": "Le",
@@ -220,7 +224,7 @@
     "tiers-entrepots-details-groupe-instructSecrComm": "Instruct. Secr. comm.",
     "tiers-entrepots-details-groupe-instructLogistique": "Instructions logistique",
     "tiers-entrepots-details-title": "Fiche entrepôt",
- 
+
     "tiers-contacts-title": "Contacts",
     "tiers-contacts-header-nom": "Nom",
     "tiers-contacts-header-prenom": "Prénom",

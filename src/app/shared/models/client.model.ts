@@ -1,5 +1,7 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
-import { Entrepot } from './entrepot.model';
+import {
+  BasePaiement, Devise, Incoterm, Entrepot, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe,
+  TypeClient, GroupeClient, Historique
+} from './';
 
 export class Client {
 
@@ -53,4 +55,5 @@ export class Client {
   public soumisCtifl: boolean;
   public paramAvances: string;
   public entrepots: Entrepot[];
+  public historique: Historique[];
 }
