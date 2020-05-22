@@ -33,7 +33,7 @@ import {HistoriqueValideModule} from '../../../shared/components/historique-vali
         DxPopoverModule,
         DxNumberBoxModule,
         DxValidatorModule,
-        DxDateBoxModule
+        DxDateBoxModule,
         HistoriqueValideModule
     ],
   declarations: [
