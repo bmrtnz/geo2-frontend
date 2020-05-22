@@ -1,6 +1,6 @@
 import {
   BasePaiement, Devise, Incoterm, Entrepot, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe,
-  TypeClient, GroupeClient, Historique
+  TypeClient, TypeVente, GroupeClient, Historique, Courtier, Entrepot, BaseTarif 
 } from './';
 
 export class Client {
@@ -31,12 +31,15 @@ export class Client {
   public moyenPaiement: MoyenPaiement;
   public tvaCee: string;
   public controlReferenceClient: string;
+  public typeVente: TypeVente;
   public commentaireHautFacture: string;
   public commentaireBasFacture: string;
   public instructionCommercial: string;
   public siret: string;
   public blocageAvoirEdi: boolean;
   public debloquerEnvoieJour: boolean;
+  public fraisRamasse: boolean;
+  public clotureAutomatique: boolean;
   public ifco: string;
   public instructionLogistique: string;
   public basePaiement: BasePaiement;
@@ -47,8 +50,7 @@ export class Client {
   public assistante: Personne;
   public referenceCoface: string;
   public agrement: number;
-  // public courtier: Courtier; // TODO
-  public courtageModeCalcul: string;
+  public courtier: Courtier;
   public courtageValeur: number;
   public typeClient: TypeClient;
   public groupeClient: GroupeClient;
@@ -56,4 +58,10 @@ export class Client {
   public paramAvances: string;
   public entrepots: Entrepot[];
   public historique: Historique[];
+  public paloxRaisonSocial: Client;
+  public courtageModeCalcul: BaseTarif;
+  public refusCoface: boolean;
+  public fraisMarketingModeCalcul: BaseTarif;
+  public enCoursDateLimite: Date;
+  public dateDebutIfco: Date;
 }

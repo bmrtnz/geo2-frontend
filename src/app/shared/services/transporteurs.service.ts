@@ -14,9 +14,10 @@ export class TransporteursService extends ApiService implements APIRead {
 
   baseFields = [
     'id',
+    'valide',
     'raisonSocial',
     'pays { id description }',
-    'ville',
+    'ville'
   ];
 
   fullFields = [

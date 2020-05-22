@@ -72,7 +72,12 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-adresse1' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse1"></dx-text-box>
+                    <dx-text-box formControlName="adresse1">
+                      <dx-validator name="{{ 'tiers-transporteurs-adresse1' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -80,7 +85,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-adresse2' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse2"></dx-text-box>
+                    <dx-text-box formControlName="adresse2">
+                      <dx-validator name="{{ 'tiers-transporteurs-adresse2' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -88,7 +97,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-adresse3' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse3"></dx-text-box>
+                    <dx-text-box formControlName="adresse3">
+                      <dx-validator name="{{ 'tiers-transporteurs-adresse3' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
 
@@ -99,6 +112,7 @@
                     <dx-text-box formControlName="codePostal">
                       <dx-validator name="{{ 'tiers-transporteurs-codePostal' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="9"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -111,6 +125,7 @@
                     <dx-text-box formControlName="ville">
                       <dx-validator name="{{ 'tiers-transporteurs-ville' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -177,7 +192,11 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-transporteurs-tvaCee' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="tvaCee"></dx-text-box>
+                    <dx-text-box formControlName="tvaCee">
+                      <dx-validator name="{{ 'tiers-transporteurs-tvaCee' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
+                     </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
                 
@@ -192,7 +211,8 @@
                     [searchEnabled]="true"
                     [searchExpr]="['id','raisonSocial']"
                     [(value)]="transporteur && transporteur.clientRaisonSocial"
-                    ></dx-select-box>
+                    >
+                    </dx-select-box>
                   </div>
                 </div>
               </div>
@@ -230,6 +250,7 @@
                           <dx-text-box formControlName="nbJourEcheance">
                             <dx-validator name="{{ 'tiers-transporteurs-nbJourEcheance' | localize }}">
                                <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                               <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
                             </dx-validator>
                           </dx-text-box>
                         </div>
@@ -243,6 +264,7 @@
                           <dx-text-box formControlName="echeanceLe">
                             <dx-validator name="{{ 'tiers-transporteurs-echeanceLe' | localize }}">
                               <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                              <dxi-validation-rule type="stringLength" max="2"></dxi-validation-rule>
                             </dx-validator>
                           </dx-text-box>
                         </div>

@@ -25,4 +25,12 @@ export class ClientsListComponent implements OnInit {
     this.router.navigate([`/tiers/clients/${e.data.id}`]);
   }
 
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
+  }
+
 }
