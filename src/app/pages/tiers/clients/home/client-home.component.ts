@@ -24,6 +24,11 @@ export class ClientHomeComponent implements OnInit {
     this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         this.backBtnDisabled = !/\/tiers\/clients\/\d+\/.*/.test(e.url);
+        if (!this.backBtnDisabled) {
+          console.log('hide grid');
+          setTimeout(this.hideGrid, 300);
+          // this.hideGrid();
+        }
       }
       if (e instanceof ActivationEnd) {
         if (e.snapshot.component === ClientDetailsComponent) {
