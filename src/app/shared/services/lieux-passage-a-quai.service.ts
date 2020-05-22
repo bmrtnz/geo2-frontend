@@ -11,12 +11,13 @@ import DataSource from 'devextreme/data/data_source';
   providedIn: 'root'
 })
 export class LieuxPassageAQuaiService extends ApiService implements APIRead {
-
+  
   baseFields = [
     'id',
+    'valide',
     'raisonSocial',
     'pays { id description }',
-    'ville',
+    'ville'
   ];
 
   fullFields = [

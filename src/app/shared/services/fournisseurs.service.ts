@@ -14,14 +14,14 @@ export class FournisseursService extends ApiService implements APIRead {
 
   baseFields = [
     'id',
+    'valide',
     'raisonSocial',
     'pays { id description }',
-    'ville',
+    'ville'
   ];
 
   fullFields = [
     ...this.baseFields,
-    'valide',
     'stockPrecalibre',
     'stockActif',
     'adresse1',

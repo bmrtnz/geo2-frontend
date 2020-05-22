@@ -3,6 +3,7 @@ import { TypeVente } from './type-vente.model';
 import { Courtier } from './courtier.model';
 import { Entrepot } from './entrepot.model';
 import { BaseTarif } from './base-tarif.model';
+import { Local } from 'protractor/built/driverProviders';
 
 export class Client {
 
@@ -60,4 +61,8 @@ export class Client {
   public entrepots: Entrepot[];
   public paloxRaisonSocial: Client;
   public courtageModeCalcul: BaseTarif;
+  public refusCoface: boolean;
+  public fraisMarketingModeCalcul: BaseTarif;
+  public enCoursDateLimite: Date;
+  public dateDebutIfco: Date;
 }

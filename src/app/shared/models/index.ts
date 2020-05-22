@@ -49,3 +49,4 @@ export * from './etiquette-evt.model';
 export * from './courtier.model';
 export * from './palox-raison-sociale.model';
 export * from './courtage-mode-calcul.model';
+export * from './frais-marketing-mode-calcul.model';

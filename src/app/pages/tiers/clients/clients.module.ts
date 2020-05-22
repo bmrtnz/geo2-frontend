@@ -8,10 +8,13 @@ import {
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule, DxValidatorModule
+    DxTextBoxModule, DxValidatorModule, DxDateBoxModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-
+// import 'devextreme/localization/globalize/number';
+// import 'devextreme/localization/globalize/date';
+// import 'devextreme/localization/globalize/currency';
+// import 'devextreme/localization/globalize/message';
 
 @NgModule({
     imports: [
@@ -31,7 +34,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         DxTextAreaModule,
         DxPopoverModule,
         DxNumberBoxModule,
-        DxValidatorModule
+        DxValidatorModule,
+        DxDateBoxModule
     ],
   declarations: [
     ClientsListComponent,

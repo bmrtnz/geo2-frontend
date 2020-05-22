@@ -87,7 +87,15 @@ export class ClientDetailsComponent implements OnInit {
     debloquerEnvoieJour: [''],
     clotureAutomatique: [''],
     fraisRamasse: [''],
+    refusCoface: [''],
+    enCoursDateLimite: [''],
     // certifications: [''],
+    fraisMarketingModeCalcul: [''],
+    // formatDluo: [''],
+    dateDebutIfco: [''],
+    // nbJourLimiteLitige: [''],
+    detailAutomatique: [''],
+    // venteACommission: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 

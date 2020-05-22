@@ -534,6 +534,16 @@
                   </dx-text-box>
                 </div>
               </div>
+              
+              <!-- Date Debut Ifco -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-dateDebutIfco' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-date-box formControlName="dateDebutIfco"
+                  type="date">
+                  </dx-date-box>
+                </div>
+              </div>
 
               <!-- Lieu fonction EAN -->
               <div class="dx-field">
@@ -585,15 +595,33 @@
                   </dx-text-box>
                 </div>
               </div>
-              <!-- Agrément -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-clients-agrement' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="agrement">
-                    <dx-validator name="{{ 'tiers-clients-agrement' | localize }}">
-                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-text-box>
+
+              <div class="dx-form-group-content">
+                <div class="dx-field">
+                  <dx-box direction="row">
+                    <dxi-item [ratio]="2">
+                      <!-- Agrément -->
+                      <div class="dx-field">
+                        <div class="dx-field-label">{{ 'tiers-clients-agrement' | localize }}</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="agrement">
+                            <dx-validator name="{{ 'tiers-clients-agrement' | localize }}">
+                              <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            </dx-validator>
+                          </dx-text-box>
+                        </div>
+                      </div>
+                    </dxi-item>
+                    <dxi-item [ratio]="1">
+                      <!-- Refus COFACE -->
+                      <div class="dx-field">
+                        <div class="dx-field-label">{{ 'tiers-clients-refusCoface' | localize }}</div>
+                        <div class="dx-field-value">
+                          <dx-check-box formControlName="refusCoface"></dx-check-box>
+                        </div>
+                      </div>
+                    </dxi-item>
+                  </dx-box>
                 </div>
               </div>
               <!-- Couverture temporaire COFACE -->
@@ -605,6 +633,15 @@
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
+                </div>
+              </div>
+              <!-- En cours date limite -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-enCoursDateLimite' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-date-box formControlName="enCoursDateLimite"
+                  type="date">
+                  </dx-date-box>
                 </div>
               </div>
               <!-- Couverture supp. BW -->
@@ -673,6 +710,21 @@
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
+                </div>
+              </div>
+              <!-- Mode de calcul Courtage -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-fraisMarketingModeCalcul' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    formControlName="fraisMarketingModeCalcul"
+                    [dataSource]="basesTarif"
+                    displayExpr="description"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id','description']"
+                    [(value)]="client && client.fraisMarketingModeCalcul"
+                  >
+                  </dx-select-box>
                 </div>
               </div>
               <!-- frais Plateforme -->
@@ -782,6 +834,13 @@
               <div class="dx-field-label">{{ 'tiers-clients-clotureAutomatique' | localize }}</div>
               <div class="dx-field-value">
                 <dx-check-box formControlName="clotureAutomatique"></dx-check-box>
+              </div>
+            </div>
+            <!-- Envoi auto détail -->
+            <div class="dx-field field-large">
+              <div class="dx-field-label">{{ 'tiers-clients-detailAutomatique' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-check-box formControlName="detailAutomatique"></dx-check-box>
               </div>
             </div>
             <!-- Frais de ramasse -->

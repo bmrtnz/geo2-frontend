@@ -75,7 +75,15 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'debloquerEnvoieJour',
     'clotureAutomatique',
     'fraisRamasse',
-    'courtageModeCalcul { id description }'
+    'courtageModeCalcul { id description }',
+    'refusCoface',
+    'enCoursDateLimite',
+    'fraisMarketingModeCalcul { id description }',
+    // 'formatDluo',
+    'dateDebutIfco',
+    // 'nbJourLimiteLitige',
+    'detailAutomatique',
+    // 'venteACommission'
   ];
 
   constructor(
