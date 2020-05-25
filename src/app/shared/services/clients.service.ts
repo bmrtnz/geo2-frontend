@@ -79,11 +79,11 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'refusCoface',
     'enCoursDateLimite',
     'fraisMarketingModeCalcul { id description }',
-    // 'formatDluo',
+    'formatDluo',
     'dateDebutIfco',
-    // 'nbJourLimiteLitige',
+    'nbJourLimiteLitige',
     'detailAutomatique',
-    // 'venteACommission'
+    'venteACommission'
   ];
 
   constructor(

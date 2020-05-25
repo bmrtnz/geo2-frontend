@@ -91,11 +91,11 @@ export class ClientDetailsComponent implements OnInit {
     enCoursDateLimite: [''],
     // certifications: [''],
     fraisMarketingModeCalcul: [''],
-    // formatDluo: [''],
+    formatDluo: [''],
     dateDebutIfco: [''],
-    // nbJourLimiteLitige: [''],
+    nbJourLimiteLitige: [''],
     detailAutomatique: [''],
-    // venteACommission: ['']
+    venteACommission: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
