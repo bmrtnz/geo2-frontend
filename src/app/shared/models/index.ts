@@ -46,6 +46,7 @@ export * from './penetro.model';
 export * from './etiquette-client.model';
 export * from './etiquette-UC.model';
 export * from './etiquette-evt.model';
+export * from './historique.model';
 export * from './courtier.model';
 export * from './palox-raison-sociale.model';
 export * from './courtage-mode-calcul.model';

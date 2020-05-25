@@ -29,10 +29,7 @@
               formControlName="valide"
               [text]="fournisseurForm.get('valide') ? 'valide' : 'invalide' | localize"
             ></dx-check-box>
-            <dx-button
-              class="black"
-              height="auto"
-              text="{{ 'btn-historique' | localize }}"></dx-button>
+            <app-historique-valide [historique]="fournisseur?.historique"></app-historique-valide>
             <dx-button
               class="black"
               height="auto"

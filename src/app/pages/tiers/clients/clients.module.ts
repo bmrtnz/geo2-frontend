@@ -11,10 +11,8 @@ import {
     DxTextBoxModule, DxValidatorModule, DxDateBoxModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-// import 'devextreme/localization/globalize/number';
-// import 'devextreme/localization/globalize/date';
-// import 'devextreme/localization/globalize/currency';
-// import 'devextreme/localization/globalize/message';
+import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
+
 
 @NgModule({
     imports: [
@@ -35,7 +33,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         DxPopoverModule,
         DxNumberBoxModule,
         DxValidatorModule,
-        DxDateBoxModule
+        DxDateBoxModule,
+        HistoriqueValideModule
     ],
   declarations: [
     ClientsListComponent,

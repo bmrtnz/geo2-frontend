@@ -1,9 +1,7 @@
-import {BasePaiement, Devise, Incoterm, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe, TypeClient, GroupeClient} from './';
-import { TypeVente } from './type-vente.model';
-import { Courtier } from './courtier.model';
-import { Entrepot } from './entrepot.model';
-import { BaseTarif } from './base-tarif.model';
-import { Local } from 'protractor/built/driverProviders';
+import {
+  BasePaiement, Devise, Incoterm, Entrepot, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe,
+  TypeClient, TypeVente, GroupeClient, Historique, Courtier, Entrepot, BaseTarif 
+} from './';
 
 export class Client {
 
@@ -59,6 +57,7 @@ export class Client {
   public soumisCtifl: boolean;
   public paramAvances: string;
   public entrepots: Entrepot[];
+  public historique: Historique[];
   public paloxRaisonSocial: Client;
   public courtageModeCalcul: BaseTarif;
   public refusCoface: boolean;

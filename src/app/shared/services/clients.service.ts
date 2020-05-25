@@ -83,7 +83,8 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     'dateDebutIfco',
     'nbJourLimiteLitige',
     'detailAutomatique',
-    'venteACommission'
+    'venteACommission',
+    'historique { commentaire, valide, userModification, dateModification }'
   ];
 
   constructor(
