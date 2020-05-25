@@ -1,6 +1,6 @@
 import {
   BasePaiement, Devise, Incoterm, Entrepot, MoyenPaiement, Pays, Personne, RegimeTva, Secteur, Societe,
-  TypeClient, TypeVente, GroupeClient, Historique, Courtier, Entrepot, BaseTarif 
+  TypeClient, TypeVente, GroupeClient, Historique, Courtier, BaseTarif
 } from './';
 
 export class Client {
