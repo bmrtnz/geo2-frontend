@@ -2,7 +2,7 @@
     <h2>
     {{ 'tiers-contacts-title' | localize }}
     -
-    {{ typeTiersLabel }} : {{ codeTiers }}
+    {{ 'tiers-contacts-' + typeTiersLabel | localize }} : {{ codeTiers }}
     <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
     </h2>
 </div>
@@ -41,10 +41,14 @@
             dataField="nom"
             caption="{{ 'tiers-contacts-header-nom' | localize }}"
             [width]="200">
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+            <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
         </dxi-column>
         <dxi-column
             dataField="prenom"
             caption="{{ 'tiers-contacts-header-prenom' | localize }}">
+            <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+            <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
         </dxi-column>
         <!-- <dxi-column
             dataField="moyen"
@@ -70,11 +74,14 @@
             dataField="compl"
             caption="{{ 'tiers-contacts-header-compl' | localize }}"
             [width]="75">
+            <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
         </dxi-column>
         <dxi-column
             dataField="coord"
             caption="{{ 'tiers-contacts-header-coords' | localize }}"
             [width]="250">
+            <dxi-validation-rule type="stringLength" max="70
+            "></dxi-validation-rule>
         </dxi-column>
         <dxi-column
             dataField="ok"

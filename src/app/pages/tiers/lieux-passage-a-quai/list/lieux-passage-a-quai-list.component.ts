@@ -24,5 +24,11 @@ export class LieuxPassageAQuaiListComponent implements OnInit {
   onRowDblClick(e) {
     this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.id}`]);
   }
-
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
+  }
 }

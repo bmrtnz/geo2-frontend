@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Client } from '../../../../shared/models';
+import { Client, Courtier } from '../../../../shared/models';
 import { FormBuilder } from '@angular/forms';
 import { SecteursService } from 'app/shared/services/secteurs.service';
 import DataSource from 'devextreme/data/data_source';
@@ -14,6 +14,10 @@ import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import notify from 'devextreme/ui/notify';
+import { TypesVenteService } from 'app/shared/services/types-vente.service';
+import { CourtierService } from 'app/shared/services/courtiers.service';
+import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
+import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 
 @Component({
   selector: 'app-client-details',
@@ -52,27 +56,46 @@ export class ClientDetailsComponent implements OnInit {
     instructionCommercial: [''],
     siret: [''],
     blocageAvoirEdi: [''],
-    debloquerEnvoieJour: [''],
     ifco: [''],
     instructionLogistique: [''],
     basePaiement: [''],
     compteComptable: [''],
     langue: [''],
     devise: [''],
+    enCoursTemporaire: [''],
+    enCoursBlueWhale: [''],
+    fraisMarketing: [''],
+    fraisPlateforme: [''],
+    fraisExcluArticlePasOrigineFrance: [''],
+    tauxRemiseParFacture: [''],
+    tauxRemiseHorsFacture: [''],
     commercial: [''],
     assistante: [''],
     referenceCoface: [''],
-    // agrement: [''],
-    // public courtier: Courtier; // TODO
+    agrement: [''],
     courtageModeCalcul: [''],
     courtageValeur: [''],
     typeClient: [''],
+    typeVente: [''],
     groupeClient: [''],
+    paloxRaisonSocial: [''],
+    courtier: [''],
     soumisCtifl: [''],
     valide: [false],
     lieuFonctionEan: [''],
     delaiBonFacturer: [''],
+    debloquerEnvoieJour: [''],
+    clotureAutomatique: [''],
+    fraisRamasse: [''],
+    refusCoface: [''],
+    enCoursDateLimite: [''],
     // certifications: [''],
+    fraisMarketingModeCalcul: [''],
+    formatDluo: [''],
+    dateDebutIfco: [''],
+    nbJourLimiteLitige: [''],
+    detailAutomatique: [''],
+    venteACommission: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
@@ -86,6 +109,11 @@ export class ClientDetailsComponent implements OnInit {
   devises: DataSource;
   moyensPaiement: DataSource;
   basesPaiement: DataSource;
+  basesTarif: DataSource;
+  typesVente: DataSource;
+  groupesClient: DataSource;
+  courtiers: DataSource;
+  clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
 
@@ -100,6 +128,10 @@ export class ClientDetailsComponent implements OnInit {
     private personnesService: PersonnesService,
     private regimesTvaService: RegimesTvaService,
     private typesClientService: TypesClientService,
+    private typesVenteService: TypesVenteService,
+    private courtiersService: CourtierService,
+    private basesTarifService: BasesTarifService,
+    private groupesClientService: GroupesClientService,
     private moyensPaiementService: MoyensPaiementService,
     private router: Router,
     private route: ActivatedRoute,
@@ -125,6 +157,11 @@ export class ClientDetailsComponent implements OnInit {
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
+    this.typesVente = this.typesVenteService.getDataSource();
+    this.groupesClient = this.groupesClientService.getDataSource();
+    this.courtiers = this.courtiersService.getDataSource();
+    this.clients = this.clientsService.getDataSource();
+    this.basesTarif = this.basesTarifService.getDataSource();
 
   }
 

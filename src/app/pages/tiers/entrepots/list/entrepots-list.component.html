@@ -1,7 +1,8 @@
 <h2 class="content-block">{{ 'tiers-entrepots-title' | localize }}</h2>
 
 <div class="content-block">
-  <dx-data-grid class="dx-card wide-card"
+  <dx-data-grid
+    class="dx-card wide-card"
     [dataSource]="entrepots"
     [remoteOperations]="true"
     [showBorders]="false"
@@ -10,6 +11,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
     [allowColumnReordering]="true"
+    (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
   >
 

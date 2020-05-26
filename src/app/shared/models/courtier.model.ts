@@ -1,9 +1,9 @@
 import { Model, Field } from './model';
 
-export class TypeVente extends Model {
+export class Courtier extends Model {
 
   @Field() public id: string;
-  @Field() public description: string;
+  @Field() public raisonSocial: string;
   @Field() public valide: boolean;
 
 }

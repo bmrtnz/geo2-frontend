@@ -28,6 +28,7 @@ export class ContactsComponent implements OnInit {
     this.typeTiersLabel = Object
     .entries(TypeTiers)
     .find(([, value]) => value === this.typeTiers)
+    .map( value => value.toLowerCase() )
     .shift();
     this.route.queryParams
     .subscribe(({ search }) => {
