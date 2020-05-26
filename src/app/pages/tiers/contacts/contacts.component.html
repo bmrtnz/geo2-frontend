@@ -2,7 +2,7 @@
     <h2>
     {{ 'tiers-contacts-title' | localize }}
     -
-    <!-- {{ type }} : {{ tiersId }} -->
+    {{ typeTiersLabel }} : {{ codeTiers }}
     <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
     </h2>
 </div>
@@ -11,10 +11,11 @@
         [dataSource]="contacts"
         [remoteOperations]="true"
         [allowColumnReordering]="true"
-        [showBorders]="true">
+        [showBorders]="true"
+        (onRowInserting)="onRowInserting($event)">
         
         <!-- Grid configuration -->
-        <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+        <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
         <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
         <dxo-paging [pageSize]="10"></dxo-paging>
         <dxo-pager
@@ -30,7 +31,7 @@
             [allowDeleting]="true"
             [allowAdding]="true">
         </dxo-editing>
-        
+
         <dxi-column
             dataField="id"
             caption="ID"

@@ -12,61 +12,16 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class ClientsService extends ApiService implements APIRead, APIPersist {
 
-  baseFields = [
-    'id',
-    'valide',
-    'raisonSocial',
-    'pays { id description }',
-    'ville',
-    'secteur { id description }',
-  ];
-
-  allFields = [
-    ...this.baseFields,
-    'code',
-    'siret',
-    'ifco',
-    'adresse1',
-    'adresse2',
-    'adresse3',
-    'codePostal',
-    'facturationRaisonSocial',
-    'facturationAdresse1',
-    'facturationAdresse2',
-    'facturationAdresse3',
-    'facturationCodePostal',
-    'facturationVille',
-    'facturationPays { id description }',
-    'lieuFonctionEan',
-    'langue { id description }',
-    'tvaCee',
-    'referenceCoface',
-    'soumisCtifl',
-    'typeClient { id description }',
-    'compteComptable',
-    'nbJourEcheance',
-    'echeanceLe',
-    'delaiBonFacturer',
-    'incoterm { id description }',
-    'regimeTva { id description }',
-    'devise { id description }',
-    'commentaireHautFacture',
-    'commentaireBasFacture',
-    'commercial { id nomUtilisateur }',
-    'assistante { id nomUtilisateur }',
-    'moyenPaiement { id description }',
-    'basePaiement { id description }',
-    'typeTiers',
-  ];
+  listRegexp = /.*\.(?:id|raisonSocial|description|ville)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Client');
+    super(apollo, Client);
   }
 
   getOne(id: string) {
-    const query = this.buildGetOne(this.allFields);
+    const query = this.buildGetOne();
     type Response = { client: Client };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -76,7 +31,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allClient: RelayPage<Client> };
           const variables = {
             ...inputVariables,
@@ -91,7 +46,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne();
           type Response = { client: Client };
           const variables = { ...inputVariables, id: key };
           return this.
@@ -107,7 +62,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(this.baseFields);
+    const mutation = this.buildSave(1, this.listRegexp);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

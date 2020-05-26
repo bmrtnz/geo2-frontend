@@ -1,13 +1,15 @@
-export class Personne {
+import { Model, Field } from './model';
 
-  public id: string;
-  public prenom: string;
-  public nom: string;
-  public service: string;
-  public nomUtilisateur: string;
-  public imprimante: string;
-  public email: string;
-  public valide: boolean;
+export class Personne extends Model {
+
+  @Field() public id: string;
+  @Field() public prenom: string;
+  @Field() public nom: string;
+  @Field() public service: string;
+  @Field() public nomUtilisateur: string;
+  @Field() public imprimante: string;
+  @Field() public email: string;
+  @Field() public valide: boolean;
 
   public nomPrenom() {
     return `${this.nom} ${this.prenom}`;

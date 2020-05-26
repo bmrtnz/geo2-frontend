@@ -1,5 +1,6 @@
-export class Flux {
-  public id: string;
-  public description: string;
-  public valide: boolean;
+import { Model, Field } from './model';
+
+export class Flux extends Model {
+  @Field() public id: string;
+  @Field() public description: string;
 }

@@ -9,6 +9,7 @@ import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
 import { take } from 'rxjs/operators';
 import { AbstractControl } from '@angular/forms';
 import { LoadOptions } from 'devextreme/data/load_options';
+import { Model } from '../models/model';
 
 const DEFAULT_ID = 'id';
 const DEFAULT_PAGE_SIZE = 10;
@@ -64,11 +65,11 @@ export abstract class ApiService {
 
   keyField = DEFAULT_ID;
   pageSize = DEFAULT_PAGE_SIZE;
-  model: string;
+  model: typeof Model;
 
   constructor(
     private apollo: Apollo,
-    model: string,
+    model: typeof Model,
   ) {
     this.model = model;
   }
@@ -198,18 +199,18 @@ export abstract class ApiService {
 
   /**
    * Build paginated query
-   * @param operation Operation name
-   * @param fields Fetched fields
+   * @param depth Sub model selection depth
+   * @param filter Regexp field filter
    */
-  protected buildGetAll(fields: string[]) {
-    const operation = `all${this.model}`;
+  protected buildGetAll(depth?: number, filter?: RegExp) {
+    const operation = `all${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
       query ${ alias }($search: String, $pageable: PaginationInput!) {
         ${ operation }(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${ fields.join('\n') }
+              ${ this.model.getGQLFields(depth, filter) }
             }
           }
           pageInfo {
@@ -226,37 +227,37 @@ export abstract class ApiService {
 
   /**
    * Build query
-   * @param operation Operation name
-   * @param fields Fetched fields
+   * @param depth Sub model selection depth
+   * @param filter Regexp field filter
    */
-  protected buildGetOne(fields: string[]) {
-    const operation = this.withLowerCaseFirst(this.model);
+  protected buildGetOne(depth?: number, filter?: RegExp) {
+    const operation = this.withLowerCaseFirst(this.model.name);
     const alias = this.withUpperCaseFirst(operation);
     return `
       query ${ alias }($${ this.keyField }: String!) {
         ${ operation }(${ this.keyField }:$${ this.keyField }) {
-          ${ fields.join('\n') }
+          ${ this.model.getGQLFields(depth, filter) }
         }
       }
     `;
   }
 
-  protected buildSave(fields: string[]) {
-    const entity = this.withLowerCaseFirst(this.model);
-    const operation = `save${this.model}`;
-    const type = `Geo${this.model}Input`;
+  protected buildSave(depth?: number, filter?: RegExp) {
+    const entity = this.withLowerCaseFirst(this.model.name);
+    const operation = `save${this.model.name}`;
+    const type = `Geo${this.model.name}Input`;
     const alias = this.withUpperCaseFirst(operation);
     return `
       mutation ${ alias }($${ entity }: ${ type }!) {
         ${ operation }(${ entity }: $${ entity }) {
-          ${ fields.join('\n') }
+          ${ this.model.getGQLFields(depth, filter) }
         }
       }
     `;
   }
 
   protected buildDelete() {
-    const operation = `delete${this.model}`;
+    const operation = `delete${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
       mutation ${ alias }($${ this.keyField }: String!) {

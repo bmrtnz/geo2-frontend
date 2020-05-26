@@ -150,15 +150,15 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   entrepotsBtnClick() {
-    const search = encodeURIComponent(`client.id=="${ this.client.id }"`);
+    const search = `client.id=="${ this.client.id }"`;
     this.router.navigate([`/tiers/entrepots`], {
       queryParams: { search },
     });
   }
 
   contactsBtnClick() {
-    const search = encodeURIComponent(`codeTiers=="${ this.client.code }" and typeTiers==${ this.client.typeTiers }`);
-    this.router.navigate([`/tiers/contacts`], {
+    const search = `codeTiers=="${ this.client.code }" and typeTiers=="${ this.client.typeTiers }"`;
+    this.router.navigate([`/tiers/contacts/${ this.client.id }/${ this.client.typeTiers }`], {
       queryParams: { search },
     });
   }

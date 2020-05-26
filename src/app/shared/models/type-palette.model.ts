@@ -1,14 +1,16 @@
-export class TypePalette {
-    public id: string;
-    public description: string;
-    public valide: boolean;
-    public codeEan: string;
-    public consigne: boolean;
-    public dimensions: string;
-    public dimensionsSatar: string;
-    public gestionnaireChep: string;
-    public modifiedAt: string;
-    public modifiedBy: string;
-    public poids: number;
-    public referenceChep: number;
+import { Model, Field } from './model';
+
+export class TypePalette extends Model {
+    @Field() public id: string;
+    @Field() public description: string;
+    @Field() public valide: boolean;
+    @Field() public codeEan: string;
+    @Field() public consigne: boolean;
+    @Field() public dimensions: string;
+    @Field() public dimensionsSatar: string;
+    @Field() public gestionnaireChep: string;
+    @Field() public modifiedAt: string;
+    @Field() public modifiedBy: string;
+    @Field() public poids: number;
+    @Field() public referenceChep: number;
 }

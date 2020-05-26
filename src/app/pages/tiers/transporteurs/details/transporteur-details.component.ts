@@ -110,8 +110,8 @@ export class TransporteurDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    const search = encodeURIComponent(`codeTiers=="${ this.transporteur.id }" and typeTiers==${ this.transporteur.typeTiers }`);
-    this.router.navigate([`/tiers/contacts`], {
+    const search = `codeTiers=="${ this.transporteur.id }" and typeTiers==${ this.transporteur.typeTiers }`;
+    this.router.navigate([`/tiers/contacts/${ this.transporteur.id }/${ this.transporteur.typeTiers }`], {
       queryParams: { search },
     });
   }

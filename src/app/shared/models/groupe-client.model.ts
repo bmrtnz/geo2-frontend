@@ -1,7 +1,9 @@
-export class GroupeClient {
+import { Model, Field } from './model';
 
-  public id: string;
-  public description: string;
-  public valide: boolean;
+export class GroupeClient extends Model {
+
+  @Field() public id: string;
+  @Field() public description: string;
+  @Field() public valide: boolean;
 
 }

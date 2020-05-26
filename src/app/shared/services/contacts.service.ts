@@ -12,35 +12,19 @@ import { map, take, tap } from 'rxjs/operators';
 })
 export class ContactsService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'valide',
-    'societe { id raisonSocial }',
-    'nom',
-    'prenom',
-    'codeTiers',
-    'typeTiers',
-  ];
-
-  allFields = [
-    ...this.baseFields,
-    'flux { id description }',
-    'fluxAccess1',
-    'fluxAccess2',
-    'fluxComponent',
-  ];
+  // listRegexp = /.*\.(?:id|description|raisonSocial|nom|prenom|codeTiers|typeTiers)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Contact');
+    super(apollo, Contact);
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll();
           type Response = { allContact: RelayPage<Contact> };
 
           // Merge search
@@ -62,7 +46,7 @@ export class ContactsService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne();
           type Response = { contact: Contact };
           const variables = { ...inputVariables, id: key };
           return this.
@@ -75,14 +59,14 @@ export class ContactsService extends ApiService implements APIRead {
         },
         insert: (values) => {
           const variables = { contact: values };
-          const mutation = this.buildSave(this.baseFields);
+          const mutation = this.buildSave();
           return this
           .mutate(mutation, { variables } as MutationOptions<any, any>)
           .toPromise();
         },
         update: (key, values) => {
           const variables = { contact: { id: key, ...values }};
-          const mutation = this.buildSave(this.baseFields);
+          const mutation = this.buildSave();
           return this
           .mutate(mutation, { variables } as MutationOptions<any, any>)
           .toPromise();
@@ -95,11 +79,6 @@ export class ContactsService extends ApiService implements APIRead {
         },
       }),
     });
-  }
-
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(this.baseFields);
-    return this.mutate(mutation, { variables } as MutationOptions);
   }
 
 }

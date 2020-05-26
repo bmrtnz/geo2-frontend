@@ -19,7 +19,7 @@ const routes: Routes = [
     path: 'entrepots',
     loadChildren: './entrepots/entrepots.module#EntrepotsModule'
   },  {
-    path: 'contacts',
+    path: 'contacts/:codeTiers/:typeTiers',
     component: ContactsComponent
   },
 ];

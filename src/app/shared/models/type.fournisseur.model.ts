@@ -1,7 +1,9 @@
-export class TypeFournisseur {
+import { Model, Field } from './model';
 
-  public id: string;
-  public description: string;
-  public valide: boolean;
+export class TypeFournisseur extends Model {
+
+  @Field() public id: string;
+  @Field() public description: string;
+  @Field() public valide: boolean;
 
 }

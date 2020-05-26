@@ -12,47 +12,23 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class LieuxPassageAQuaiService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'raisonSocial',
-    'pays { id description }',
-    'ville',
-  ];
-
-  fullFields = [
-    ...this.baseFields,
-    'valide',
-    'adresse1',
-    'adresse2',
-    'adresse3',
-    'codePostal',
-    'lieuFonctionEan',
-    'langue { id description }',
-    'tvaCee',
-    'nbJourEcheance',
-    'echeanceLe',
-    'regimeTva { id description }',
-    'devise { id description }',
-    'moyenPaiement { id description }',
-    'basePaiement { id description }',
-    'typeTiers',
-  ];
+  listRegexp = /.*\.(?:id|raisonSocial|description|ville)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'LieuPassageAQuai');
+    super(apollo, LieuPassageAQuai);
   }
 
   getOne(id: string) {
-    const query = this.buildGetOne(this.fullFields);
+    const query = this.buildGetOne();
     type Response = { lieuPassageAQuai: LieuPassageAQuai };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
+    const query = this.buildGetAll(1, this.listRegexp);
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
@@ -74,7 +50,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(this.baseFields);
+    const mutation = this.buildSave(1, this.listRegexp);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

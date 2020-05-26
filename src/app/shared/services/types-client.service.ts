@@ -12,23 +12,19 @@ import { map, take } from 'rxjs/operators';
 })
 export class TypesClientService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'description',
-    'valide',
-  ];
+  listRegexp = /.*\.(?:id|description)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'TypeClient');
+    super(apollo, TypeClient);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allTypeClient: RelayPage<TypeClient> };
           variables = {
             ...variables,
@@ -43,7 +39,7 @@ export class TypesClientService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { typeClient: TypeClient };
           variables = { ...variables, id: key };
           return this.
