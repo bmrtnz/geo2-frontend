@@ -15,6 +15,8 @@
     "btn-docsjoints": "Docs joints",
     "btn-affecter": "Affecter",
     "btn-valider": "Valider",
+    "btn-annuler": "Annuler",
+    "btn-editer": "Éditer",
     "btn-cloner": "Cloner",
 
     "auth-logout": "Déconnexion",
@@ -72,7 +74,7 @@
     "tiers-clients-controlReferenceClient": "Contrôle réf. client",
     "tiers-clients-agrement": "Agrément/rating",
     "tiers-clients-typeVente": "Type de vente",
-    "tiers-clients-blocageAvoirEdi": "Blocage avoir EDI", 
+    "tiers-clients-blocageAvoirEdi": "Blocage avoir EDI",
     "tiers-clients-paloxRaisonSocial": "Palox raison sociale",
     "tiers-clients-enCoursTemporaire": "Couverture temporaire COFACE",
     "tiers-clients-enCoursBlueWhale": "Couverture supp. BW",
@@ -266,7 +268,7 @@
     "tiers-contacts-clients": "Client",
     "tiers-contacts-fournisseurs": "Fournisseur",
     "tiers-contacts-transporteurs": "Transporteur",
-  
+
     "articles-title" : "Articles",
     "articles-detailTitle": "Détail",
     "articles-of": "de",

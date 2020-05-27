@@ -70,6 +70,7 @@ export class FournisseurDetailsComponent implements OnInit {
   bureauxAchat: DataSource;
   typesFournisseur: DataSource;
   defaultVisible: boolean;
+  readOnlyMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -117,10 +118,19 @@ export class FournisseurDetailsComponent implements OnInit {
       this.fournisseursService
       .save({ fournisseur: { ...fournisseur, id: this.fournisseur.id } })
       .subscribe({
-        next: () => notify('Sauvegardé', 'success', 3000),
+        next: () => {
+          notify('Sauvegardé', 'success', 3000);
+          this.fournisseur = { id: this.fournisseur.id, ...this.fournisseurForm.getRawValue() };
+          this.readOnlyMode = true;
+        },
         error: () => notify('Echec de la sauvegarde', 'error', 3000),
       });
     }
+  }
+
+  onCancel() {
+    this.fournisseurForm.reset(this.fournisseur);
+    this.readOnlyMode = true;
   }
 
   toggleVisible() {

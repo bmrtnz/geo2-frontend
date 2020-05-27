@@ -116,6 +116,7 @@ export class ClientDetailsComponent implements OnInit {
   clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
+  readOnlyMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -164,22 +165,26 @@ export class ClientDetailsComponent implements OnInit {
     this.basesTarif = this.basesTarifService.getDataSource();
 
   }
-
-  debug(test: any) {
-    console.log(test);
-  }
-
+  
   onSubmit() {
     if (!this.clientForm.pristine && this.clientForm.valid) {
-      const client = this.clientsService
-      .extractDirty(this.clientForm.controls);
+      const client = this.clientsService.extractDirty(this.clientForm.controls);
       this.clientsService
-      .save({ client: { ...client, id: this.client.id } })
-      .subscribe({
-        next: () => notify('Sauvegardé', 'success', 3000),
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
+        .save({ client: { ...client, id: this.client.id } })
+        .subscribe({
+          next: () => {
+            notify('Sauvegardé', 'success', 3000);
+            this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
+            this.readOnlyMode = true;
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
     }
+  }
+
+  onCancel() {
+    this.clientForm.reset(this.client);
+    this.readOnlyMode = true;
   }
 
   toggleVisible() {

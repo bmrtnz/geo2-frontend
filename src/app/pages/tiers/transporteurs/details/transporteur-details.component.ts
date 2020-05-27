@@ -54,6 +54,7 @@ export class TransporteurDetailsComponent implements OnInit {
   typesTransporteur: DataSource;
   clients: DataSource;
   defaultVisible: boolean;
+  readOnlyMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -99,10 +100,19 @@ export class TransporteurDetailsComponent implements OnInit {
       this.transporteursService
       .save({ transporteur: { ...transporteur, id: this.transporteur.id }})
       .subscribe({
-        next: () => notify('Sauvegardé', 'success', 3000),
+        next: () => {
+          notify('Sauvegardé', 'success', 3000);
+          this.transporteur = { id: this.transporteur.id, ...this.transporteurForm.getRawValue() };
+          this.readOnlyMode = true;
+        },
         error: () => notify('Echec de la sauvegarde', 'error', 3000),
       });
     }
+  }
+
+  onCancel() {
+    this.transporteurForm.reset(this.transporteur);
+    this.readOnlyMode = true;
   }
 
   toggleVisible() {
