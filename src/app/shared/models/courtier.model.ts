@@ -1,7 +1,9 @@
-export class Courtier {
+import { Model, Field } from './model';
 
-  public id: string;
-  public raisonSocial: string;
-  public valide: boolean;
+export class Courtier extends Model {
+
+  @Field() public id: string;
+  @Field() public raisonSocial: string;
+  @Field() public valide: boolean;
 
 }

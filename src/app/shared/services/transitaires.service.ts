@@ -12,23 +12,19 @@ import { map, take } from 'rxjs/operators';
 })
 export class TransitairesService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'description',
-    'valide',
-  ];
+  listRegexp = /.*(?:id|raisonSocial)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Transitaire');
+    super(apollo, Transitaire);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allTransitaire: RelayPage<Transitaire> };
           variables = {
             ...variables,
@@ -43,7 +39,7 @@ export class TransitairesService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { transitaire: Transitaire };
           variables = { ...variables, id: key };
           return this.

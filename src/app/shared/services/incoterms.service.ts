@@ -12,24 +12,19 @@ import { map, take } from 'rxjs/operators';
 })
 export class IncotermsService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'description',
-    'lieu',
-    'valide',
-  ];
+  listRegexp = /.*\.(?:id|description|lieu)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Incoterm');
+    super(apollo, Incoterm);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allIncoterm: RelayPage<Incoterm> };
           variables = {
             ...variables,
@@ -45,7 +40,7 @@ export class IncotermsService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { incoterm: Incoterm };
           variables = { ...variables, id: key };
           return this.

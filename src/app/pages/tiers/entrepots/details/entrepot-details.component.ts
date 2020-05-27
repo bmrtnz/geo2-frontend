@@ -37,26 +37,26 @@ export class EntrepotDetailsComponent implements OnInit {
     incoterm: [''],
     regimeTva: [''],
     tvaCee: [''],
-    instructSecrComm: [''],
-    instructLogistique: [''],
+    instructionSecretaireCommercial: [''],
+    instructionLogistique: [''],
     typePalette: [''],
     mentionClientSurFacture: [''],
     transporteur: [''],
     baseTarifTransport: [''],
-    PUTarifTransport: [''],
+    prixUnitaireTarifTransport: [''],
     typeCamion: [''],
     transitaire: [''],
     baseTarifTransit: [''],
-    PUTarifTransit: [''],
+    prixUnitaireTarifTransit: [''],
     modeLivraison: [''],
     langue: [''],
     commercial: [''],
     assistante: [''],
-    controleRefClient: [''],
-    declarationEUR1: [''],
-    envoiAutoDetail: [''],
-    gestionnaireCHEP: [''],
-    referenceCHEP: [''],
+    controlReferenceClient: [''],
+    declarationEur1: [''],
+    envoieAutomatiqueDetail: [''],
+    gestionnaireChep: [''],
+    referenceChep: [''],
     lieuFonctionEanDepot: [''],
     lieuFonctionEanAcheteur: [''],
     valide: [false]
@@ -141,6 +141,9 @@ export class EntrepotDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/entrepots/${this.entrepot.id}`]);
+    const search = encodeURIComponent(`codeTiers=="${ this.entrepot.id }" and typeTiers==${ this.entrepot.typeTiers }`);
+    this.router.navigate([`/tiers/contacts/${ this.entrepot.id }/${ this.entrepot.typeTiers }`], {
+      queryParams: { search },
+    });
   }
 }

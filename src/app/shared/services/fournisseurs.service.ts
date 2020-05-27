@@ -12,62 +12,23 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class FournisseursService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'valide',
-    'raisonSocial',
-    'pays { id description }',
-    'ville'
-  ];
-
-  fullFields = [
-    ...this.baseFields,
-    'stockPrecalibre',
-    'stockActif',
-    'adresse1',
-    'adresse2',
-    'adresse3',
-    'codePostal',
-    'latitude',
-    'longitude',
-    'bureauAchat { id raisonSocial }',
-    'lieuFonctionEan ',
-    'langue { id description }',
-    'tvaCee',
-    'type { id description }',
-    'compteComptable',
-    'idTracabilite',
-    'agrementBW',
-    'codeStation',
-    'nbJourEcheance',
-    'echeanceLe',
-    'regimeTva { id description }',
-    'devise { id description }',
-    'moyenPaiement { id description }',
-    'basePaiement { id description }',
-    'formeJuridique',
-    'siretAPE',
-    'rcs',
-    'tvaId',
-    'autoFacturation',
-    'historique { valide, commentaire, userModification, dateModification }'
-  ];
+  listRegexp = /.*\.(?:id|raisonSocial|description|ville)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Fournisseur');
+    super(apollo, Fournisseur);
   }
 
   getOne(id: string) {
-    const query = this.buildGetOne(this.fullFields);
+    const query = this.buildGetOne();
     type Response = { fournisseur: Fournisseur };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
+    const query = this.buildGetAll(1, this.listRegexp);
     type Response = { allFournisseur: RelayPage<Fournisseur> };
     return new DataSource({
       store: this.createCustomStore({
@@ -89,7 +50,7 @@ export class FournisseursService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(this.baseFields);
+    const mutation = this.buildSave(1, this.listRegexp);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

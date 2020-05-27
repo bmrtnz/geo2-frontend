@@ -6,30 +6,25 @@ import { Secteur } from '../models';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { map, take } from 'rxjs/operators';
 import DataSource from 'devextreme/data/data_source';
-import { variable } from '@angular/compiler/src/output/output_ast';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SecteursService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'description',
-    'valide',
-  ];
+  listRegexp = /.*\.(?:id|description)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Secteur');
+    super(apollo, Secteur);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allSecteur: RelayPage<Secteur> };
           variables = {
             ...variables,
@@ -44,7 +39,7 @@ export class SecteursService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { secteur: Secteur };
           variables = { ...variables, id: key };
           return this.

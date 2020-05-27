@@ -12,6 +12,7 @@ import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import notify from 'devextreme/ui/notify';
+import { TypeTiers } from 'app/shared/models/tier.model';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -138,7 +139,10 @@ export class FournisseurDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/fournisseurs/${this.fournisseur.id}`]);
+    const search = `codeTiers=="${ this.fournisseur.id }" and typeTiers==${ this.fournisseur.typeTiers }`;
+    this.router.navigate([`/tiers/contacts/${ this.fournisseur.id }/${ this.fournisseur.typeTiers }`], {
+      queryParams: { search },
+    });
   }
 
 }

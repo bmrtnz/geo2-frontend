@@ -1,40 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { Service, Employee, Moyen, Flux } from '../../../shared/services/contacts.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+import { ContactsService } from 'app/shared/services/contacts.service';
 import { ActivatedRoute } from '@angular/router';
-import ArrayStore from 'devextreme/data/array_store';
+import { Contact } from 'app/shared/models';
+import { TypeTiers } from 'app/shared/models/tier.model';
 
 @Component({
-    selector: 'app-contacts',
-    templateUrl: './contacts.component.html',
-    styleUrls: ['./contacts.component.scss'],
-    providers: [Service]
+  selector: 'app-contacts',
+  templateUrl: './contacts.component.html',
+  styleUrls: ['./contacts.component.scss'],
 })
 export class ContactsComponent implements OnInit {
 
-    dataSource: ArrayStore;
-    moyens: Moyen[];
-    flux: Flux[];
+  contacts: DataSource;
+  codeTiers: string;
+  typeTiers: string;
+  typeTiersLabel: string;
 
-    tiersId: string;
-    type: string;
+  constructor(
+    private contactsService: ContactsService,
+    private route: ActivatedRoute,
+  ) {}
 
-    constructor(
-        private service: Service,
-        private route: ActivatedRoute
-        ) {
-        this.dataSource = new ArrayStore({
-            key: 'id',
-            data: service.getEmployees(),
-            onUpdated: (values, key) => console.log(values, key)
-        });
-        this.moyens = service.getMoyens();
-        this.flux = service.getFlux();
-    }
+  ngOnInit() {
+    this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
+    this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
+    this.typeTiersLabel = Object
+    .entries(TypeTiers)
+    .find(([, value]) => value === this.typeTiers)
+    .map( value => value.toLowerCase() )
+    .shift();
+    this.route.queryParams
+    .subscribe(({ search }) => {
+      this.contacts = this.contactsService.getDataSource({
+        search: search ? decodeURIComponent(search) : '',
+      });
+    });
+  }
 
-    ngOnInit() {
-        this.type = this.route.snapshot.paramMap.get('type');
-        this.tiersId = this.route.snapshot.paramMap.get('id');
-    }
+  onRowInserting(event) {
+    (event.data as Contact).codeTiers = this.codeTiers;
+    (event.data as Contact).typeTiers = this.typeTiers;
+  }
 
 }
-

@@ -1,6 +1,7 @@
-export class TypeCamion {
+import { Field, Model } from './model';
 
-    public id: string;
-    public description: string;
-    public valide: boolean;
+export class TypeCamion extends Model {
+    @Field() public id: string;
+    @Field() public description: string;
+    @Field() public valide: boolean;
 }

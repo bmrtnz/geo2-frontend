@@ -12,23 +12,17 @@ import { map, take } from 'rxjs/operators';
 })
 export class CourtierService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'raisonSocial',
-    'valide',
-  ];
-
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Courtier');
+    super(apollo, Courtier);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll();
           console.log(query);
           type Response = { allCourtier: RelayPage<Courtier> };
           variables = {
@@ -44,7 +38,7 @@ export class CourtierService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne();
           type Response = { courtier: Courtier };
           variables = { ...variables, id: key };
           return this.

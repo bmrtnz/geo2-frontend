@@ -12,23 +12,19 @@ import { map, take } from 'rxjs/operators';
 })
 export class PersonnesService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'nomUtilisateur',
-    'valide',
-  ];
+  listRegexp = /.*\.(?:id|nomUtilisateur)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Personne');
+    super(apollo, Personne);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allPersonne: RelayPage<Personne> };
           variables = {
             ...variables,
@@ -43,7 +39,7 @@ export class PersonnesService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { personne: Personne };
           variables = { ...variables, id: key };
           return this.

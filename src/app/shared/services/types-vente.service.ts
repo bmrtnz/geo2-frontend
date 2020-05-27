@@ -12,23 +12,17 @@ import { map, take } from 'rxjs/operators';
 })
 export class TypesVenteService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'description',
-    'valide',
-  ];
-
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'TypeVente');
+    super(apollo, TypeVente);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+          const query = this.buildGetAll();
           type Response = { allTypeVente: RelayPage<TypeVente> };
           variables = {
             ...variables,
@@ -43,7 +37,7 @@ export class TypesVenteService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne();
           type Response = { typeVente: TypeVente };
           variables = { ...variables, id: key };
           return this.

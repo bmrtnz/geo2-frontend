@@ -2,41 +2,56 @@
     <h2>
     {{ 'tiers-contacts-title' | localize }}
     -
-    {{ 'tiers-contacts-' + type | localize }} : {{ tiersId }}
+    {{ 'tiers-contacts-' + typeTiersLabel | localize }} : {{ codeTiers }}
     <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
     </h2>
 </div>
 <div class="content-block contact-page">
     <dx-data-grid 
-        id="gridContainer"
-        [dataSource]="dataSource"
-        keyExpr="id"
+        [dataSource]="contacts"
+        [remoteOperations]="true"
         [allowColumnReordering]="true"
-        [showBorders]="true">
+        [showBorders]="true"
+        (onRowInserting)="onRowInserting($event)">
         
-        <dxo-paging [enabled]="true"></dxo-paging>
-        <dxo-editing 
+        <!-- Grid configuration -->
+        <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
+        <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 25, 50, 100]"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+        ></dxo-pager>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-editing
             mode="row"
             [allowUpdating]="true"
             [allowDeleting]="true"
             [allowAdding]="true">
         </dxo-editing>
-        
+
         <dxi-column
-            dataField="Nom"
+            dataField="id"
+            caption="ID"
+            [allowEditing]="false">
+        </dxi-column>
+        <dxi-column
+            dataField="nom"
             caption="{{ 'tiers-contacts-header-nom' | localize }}"
             [width]="200">
             <dxi-validation-rule type="required"></dxi-validation-rule>
             <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
         </dxi-column>
         <dxi-column
-            dataField="Prenom"
+            dataField="prenom"
             caption="{{ 'tiers-contacts-header-prenom' | localize }}">
             <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
             <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
         </dxi-column>
-        <dxi-column
-            dataField="Moyen"
+        <!-- <dxi-column
+            dataField="moyen"
             caption="{{ 'tiers-contacts-header-moyen' | localize }}"
             [width]="100">         
             <dxo-lookup
@@ -46,7 +61,7 @@
             </dxo-lookup>
         </dxi-column>
         <dxi-column
-            dataField="Flux"
+            dataField="flux"
             caption="{{ 'tiers-contacts-header-flux' | localize }}"
             [width]="125">         
             <dxo-lookup
@@ -56,22 +71,22 @@
             </dxo-lookup>
         </dxi-column>
         <dxi-column
-            dataField="Compl"
+            dataField="compl"
             caption="{{ 'tiers-contacts-header-compl' | localize }}"
             [width]="75">
             <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
         </dxi-column>
         <dxi-column
-            dataField="Coord"
+            dataField="coord"
             caption="{{ 'tiers-contacts-header-coords' | localize }}"
             [width]="250">
             <dxi-validation-rule type="stringLength" max="70
             "></dxi-validation-rule>
         </dxi-column>
         <dxi-column
-            dataField="OK"
+            dataField="ok"
             caption="OK"
             [width]="75">
-        </dxi-column>
+        </dxi-column> -->
     </dx-data-grid>
 </div>

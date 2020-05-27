@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services/entrepots.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
@@ -11,7 +11,6 @@ import DataSource from 'devextreme/data/data_source';
 export class EntrepotsListComponent implements OnInit {
 
   entrepots: DataSource;
-  // @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
 
   constructor(
     private entrepotsService: EntrepotsService,

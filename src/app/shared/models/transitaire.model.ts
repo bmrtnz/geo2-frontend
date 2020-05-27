@@ -1,6 +1,7 @@
-export class Transitaire {
+import { Field, Model } from './model';
 
-  public id: string;
-  public description: string;
-  public valide: boolean;
+export class Transitaire extends Model {
+  @Field() public id: string;
+  @Field() public raisonSocial: string;
+  @Field() public valide: boolean;
 }
