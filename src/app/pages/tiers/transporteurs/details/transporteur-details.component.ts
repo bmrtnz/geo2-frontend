@@ -89,10 +89,6 @@ export class TransporteurDetailsComponent implements OnInit {
 
   }
 
-  debug(test) {
-    console.log(test);
-  }
-
   onSubmit() {
     if (!this.transporteurForm.pristine && this.transporteurForm.valid) {
       const transporteur = this.transporteursService

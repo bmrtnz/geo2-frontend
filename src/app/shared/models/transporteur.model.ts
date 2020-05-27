@@ -29,5 +29,6 @@ export class Transporteur extends Model {
   @Field() public lieuFonctionEan: string;
   @Field({model: Client}) public clientRaisonSocial: Client;
   @Field() public typeTiers: TypeTiers;
+  @Field() public valide: boolean;
 
 }

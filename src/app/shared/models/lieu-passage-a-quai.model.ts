@@ -26,5 +26,6 @@ export class LieuPassageAQuai extends Model {
   @Field({model: Devise}) public devise: Devise;
   @Field() public lieuFonctionEan: string;
   @Field() public typeTiers: TypeTiers;
+  @Field() public valide: boolean;
 
 }

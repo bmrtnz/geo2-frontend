@@ -66,4 +66,5 @@ export class Client extends Model {
   @Field() public typeTiers: TypeTiers;
   @Field() public lieuFonctionEan: string;
   @Field() public delaiBonFacturer: number;
+  @Field() public valide: boolean;
 }

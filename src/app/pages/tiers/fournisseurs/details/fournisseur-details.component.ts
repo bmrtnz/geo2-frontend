@@ -108,10 +108,6 @@ export class FournisseurDetailsComponent implements OnInit {
 
   }
 
-  debug(test) {
-    console.log(test);
-  }
-
   onSubmit() {
     if (!this.fournisseurForm.pristine && this.fournisseurForm.valid) {
       const fournisseur = this.fournisseursService
