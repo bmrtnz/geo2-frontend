@@ -13,6 +13,7 @@ import { Personne } from './personne.model';
 import { TypeClient } from './type.client.model';
 import { GroupeClient } from './groupe-client.model';
 import { BaseTarif } from './base-tarif.model';
+import {Historique} from './historique.model';
 
 export class Client extends Model {
 
@@ -67,4 +68,5 @@ export class Client extends Model {
   @Field() public lieuFonctionEan: string;
   @Field() public delaiBonFacturer: number;
   @Field() public valide: boolean;
+  @Field({model: Historique}) public historique: Historique[];
 }

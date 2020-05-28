@@ -1,9 +1,11 @@
-export class Historique {
+import {Field, Model} from './model';
 
-  public id: string;
-  public commentaire: string;
-  public valide: boolean;
-  public userModification: string;
-  public dateModification: Date;
+export class Historique extends Model {
+
+  @Field() public id: string;
+  @Field() public commentaire: string;
+  @Field() public valide: boolean;
+  @Field() public userModification: string;
+  @Field() public dateModification: Date;
 
 }
