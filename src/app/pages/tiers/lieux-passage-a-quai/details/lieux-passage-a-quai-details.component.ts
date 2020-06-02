@@ -51,6 +51,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   bureauxAchat: DataSource;
   typeLieupassageaquai: any[];
   defaultVisible: boolean;
+  readOnlyMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -67,24 +68,18 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.lieupassageaquaiService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.lieupassageaquai = res.data.lieuPassageAQuai;
-      this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
-    });
+      .getOne(this.route.snapshot.paramMap.get('id'))
+      .subscribe( res => {
+        this.lieupassageaquai = res.data.lieuPassageAQuai;
+        this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
+      });
 
     this.pays = this.paysService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
-
-  }
-
-  debug(test) {
-    console.log(test);
   }
 
   onSubmit() {
@@ -94,10 +89,19 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
       this.lieupassageaquaiService
       .save({ lieuPassageAQuai: { ...lieuPassageAQuai, id: this.lieupassageaquai.id } })
       .subscribe({
-        next: () => notify('Sauvegardé', 'success', 3000),
+        next: () => {
+          notify('Sauvegardé', 'success', 3000);
+          this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.lieupassageaquaiForm.getRawValue() };
+          this.readOnlyMode = true;
+        },
         error: () => notify('Echec de la sauvegarde', 'error', 3000),
       });
     }
+  }
+
+  onCancel() {
+    this.lieupassageaquaiForm.reset(this.lieupassageaquai);
+    this.readOnlyMode = true;
   }
 
   toggleVisible() {

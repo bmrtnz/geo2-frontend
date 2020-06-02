@@ -7,6 +7,7 @@ import { BasePaiement } from './base.paiement.model';
 import { RegimeTva } from './regime-tva.model';
 import { BureauAchat } from './bureau-achat.model';
 import { TypeFournisseur } from './type.fournisseur.model';
+import {Historique} from './historique.model';
 
 export class Fournisseur extends Model {
 
@@ -55,4 +56,5 @@ export class Fournisseur extends Model {
   @Field() public typeTiers: TypeTiers;
   @Field() public autoFacturation: boolean;
   @Field() public tvaId: string;
+  @Field({model: Historique}) public historique: Historique[];
 }

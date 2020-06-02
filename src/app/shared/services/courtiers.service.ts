@@ -23,7 +23,6 @@ export class CourtierService extends ApiService implements APIRead {
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
           const query = this.buildGetAll();
-          console.log(query);
           type Response = { allCourtier: RelayPage<Courtier> };
           variables = {
             ...variables,

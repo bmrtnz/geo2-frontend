@@ -13,7 +13,7 @@ import { MutationOptions } from 'apollo-client';
 })
 export class EntrepotsService extends ApiService implements APIRead {
 
-  listRegexp = /.*\.(?:id|description|raisonSocial|ville)$/i;
+  listRegexp = /.*\.(?:id|description|raisonSocial|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,

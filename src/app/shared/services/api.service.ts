@@ -129,11 +129,13 @@ export abstract class ApiService {
     return Object.entries(controls)
     .filter(([key, control]) => key === this.keyField || control.dirty )
     .map(([key, control]) => {
-      if (control.value.__typename)
-        for (const field of Object.keys(control.value))
+      const value = { ...control.value };
+
+      if (value.__typename)
+        for (const field of Object.keys(value))
           if (field !== 'id')
-            delete control.value[field];
-      return { [key]: control.value };
+            delete value[field];
+      return { [key]: value };
     })
     .reduce((acm, current) => ({...acm, ...current}));
   }
