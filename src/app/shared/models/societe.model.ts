@@ -3,8 +3,8 @@ import { Model, Field } from './model';
 
 export class Societe extends Model {
 
-  @Field() public id: string;
-  @Field() public raisonSocial: string;
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public raisonSocial: string;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;

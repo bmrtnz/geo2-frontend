@@ -137,9 +137,6 @@ export class EntrepotDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    const search = encodeURIComponent(`codeTiers=="${ this.entrepot.id }" and typeTiers==${ this.entrepot.typeTiers }`);
-    this.router.navigate([`/tiers/contacts/${ this.entrepot.id }/${ this.entrepot.typeTiers }`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/contacts/${ this.entrepot.id }/${ this.entrepot.typeTiers }`]);
   }
 }

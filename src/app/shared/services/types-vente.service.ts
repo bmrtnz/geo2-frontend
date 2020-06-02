@@ -39,7 +39,7 @@ export class TypesVenteService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { typeVente: TypeVente };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

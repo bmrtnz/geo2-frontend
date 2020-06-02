@@ -1,8 +1,8 @@
 import { Model, Field } from './model';
 
 export class TypePalette extends Model {
-    @Field() public id: string;
-    @Field() public description: string;
+    @Field({asKey: true}) public id: string;
+    @Field({asLabel: true}) public description: string;
     @Field() public valide: boolean;
     @Field() public codeEan: string;
     @Field() public consigne: boolean;

@@ -13,7 +13,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit {
   lieuxPassageAQuais: DataSource;
 
   constructor(
-    private lieuxPassageAQuaiService: LieuxPassageAQuaiService,
+    public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
     private router: Router
   ) { }
 

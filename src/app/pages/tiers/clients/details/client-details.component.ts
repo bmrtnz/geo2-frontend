@@ -194,10 +194,7 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    const search = `codeTiers=="${ this.client.code }" and typeTiers=="${ this.client.typeTiers }"`;
-    this.router.navigate([`/tiers/contacts/${ this.client.id }/${ this.client.typeTiers }`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/contacts/${ this.client.id }/${ this.client.typeTiers }`]);
   }
 
 }

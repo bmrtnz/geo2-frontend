@@ -41,7 +41,7 @@ export class DevisesService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { devise: Devise };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

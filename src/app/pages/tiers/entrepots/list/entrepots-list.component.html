@@ -27,30 +27,15 @@
       [showNavigationButtons]="true"
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
 
     <dxi-column
-      dataField="id"
-      [width]="90"
-      [hidingPriority]="2">
-    </dxi-column>
-    <dxi-column
-      dataField="raisonSocial"
-      [width]="190"
-      caption="{{ 'tiers-entrepots-raisonSocial' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="pays.description"
-      [width]="190"
-      caption="{{ 'tiers-entrepots-pays' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="ville"
-      [width]="190"
-      caption="{{ 'tiers-entrepots-ville' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
+      *ngFor="let field of entrepotsService.model.getListFields();let i=index"
+      [dataField]="field"
+      [caption]="('tiers-entrepots-' + field.split('.').shift() | localize) || field"
+      [visible]="i < entrepotsService.baseFieldsSize"
+    ></dxi-column>
 
   </dx-data-grid>
 </div>

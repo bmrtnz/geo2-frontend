@@ -2,8 +2,8 @@ import { Model, Field } from './model';
 
 export class Personne extends Model {
 
-  @Field() public id: string;
-  @Field() public prenom: string;
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public prenom: string;
   @Field() public nom: string;
   @Field() public service: string;
   @Field() public nomUtilisateur: string;

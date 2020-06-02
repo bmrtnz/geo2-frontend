@@ -18,15 +18,15 @@ export enum ModeLivraison {
 }
 
 export class Entrepot extends Model {
-  @Field() public id: string;
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field({model: Pays}) public pays: Pays;
+  @Field() public ville: string;
   @Field() public code: string;
-  @Field() public raisonSocial: string;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field() public codePostal: string;
-  @Field() public ville: string;
-  @Field({model: Pays}) public pays: Pays;
   @Field({model: Pays}) public langue: Pays;
   @Field({model: Incoterm}) public incoterm: Incoterm;
   @Field() public tvaCee: string;

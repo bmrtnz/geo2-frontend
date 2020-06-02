@@ -13,7 +13,7 @@ export class FournisseursListComponent implements OnInit {
   fournisseurs: DataSource;
 
   constructor(
-    private fournisseursService: FournisseursService,
+    public fournisseursService: FournisseursService,
     private router: Router
   ) { }
 

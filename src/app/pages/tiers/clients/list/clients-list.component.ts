@@ -13,7 +13,7 @@ export class ClientsListComponent implements OnInit {
   clients: DataSource;
 
   constructor(
-    private clientsService: ClientsService,
+    public clientsService: ClientsService,
     private router: Router
   ) { }
 

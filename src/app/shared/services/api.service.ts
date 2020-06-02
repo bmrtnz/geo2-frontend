@@ -13,6 +13,7 @@ import { Model } from '../models/model';
 
 const DEFAULT_ID = 'id';
 const DEFAULT_PAGE_SIZE = 10;
+const BASE_FIELDS_SIZE = 5;
 
 export type PageInfo = {
   startCursor?: string
@@ -63,8 +64,9 @@ export interface APIPersist {
 
 export abstract class ApiService {
 
-  keyField = DEFAULT_ID;
   pageSize = DEFAULT_PAGE_SIZE;
+  baseFieldsSize = BASE_FIELDS_SIZE;
+  keyField: string;
   model: typeof Model;
 
   constructor(
@@ -72,6 +74,7 @@ export abstract class ApiService {
     model: typeof Model,
   ) {
     this.model = model;
+    this.keyField = this.model.getKeyField() || DEFAULT_ID;
   }
 
   /**

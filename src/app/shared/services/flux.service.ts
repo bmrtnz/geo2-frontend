@@ -1,31 +1,29 @@
 import { Injectable } from '@angular/core';
 import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.service';
 import { Apollo } from 'apollo-angular';
+import { Flux } from '../models';
 import { OperationVariables, WatchQueryOptions } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { Transitaire } from '../models';
 import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TransitairesService extends ApiService implements APIRead {
-
-  listRegexp = /.*(?:id|raisonSocial)$/i;
+export class FluxService extends ApiService implements APIRead {
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, Transitaire);
+    super(apollo, Flux);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(1, this.listRegexp);
-          type Response = { allTransitaire: RelayPage<Transitaire> };
+          const query = this.buildGetAll();
+          type Response = { allFlux: RelayPage<Flux> };
           variables = {
             ...variables,
             ...this.mapLoadOptionsToVariables(options),
@@ -33,19 +31,19 @@ export class TransitairesService extends ApiService implements APIRead {
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
-            map( res => this.asListCount(res.data.allTransitaire)),
+            map( res => this.asListCount(res.data.allFlux)),
             take(1),
           )
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(1, this.listRegexp);
-          type Response = { transitaire: Transitaire };
+          const query = this.buildGetOne();
+          type Response = { flux: Flux };
           variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(
-            map( res => res.data.transitaire),
+            map( res => res.data.flux),
             take(1),
           )
           .toPromise();
@@ -55,3 +53,4 @@ export class TransitairesService extends ApiService implements APIRead {
   }
 
 }
+

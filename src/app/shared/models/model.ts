@@ -1,7 +1,10 @@
 import 'reflect-metadata';
 
-type ModeFieldOptions = {
-  model?: typeof Model; // Model class
+export type ModelFieldOptions = {
+  model?: typeof Model;
+  asLabel?: boolean;
+  asKey?: boolean;
+  [attribute: string]: any;
 };
 
 const fieldMetadataKey = Symbol('field');
@@ -10,7 +13,7 @@ const fieldMetadataKey = Symbol('field');
  * Field property decorator
  * @param options Field definition options
  */
-export const Field = (options: ModeFieldOptions = {}) => (target: any, key: string | symbol) => {
+export const Field = (options: ModelFieldOptions = {}) => (target: any, key: string | symbol) => {
 
   Object.defineProperty(target, key, { get: () => target[key] });
   Reflect.defineMetadata(fieldMetadataKey, options, target, key);
@@ -25,9 +28,15 @@ export abstract class Model {
   /**
    * Get model fields as list
    */
-  static getFields() {
+  static getListFields() {
     return Object.getOwnPropertyNames(this.prototype)
-    .filter( propertyName => Reflect.getMetadata(fieldMetadataKey, this.prototype, propertyName));
+    .filter( propertyName => Reflect.getMetadata(fieldMetadataKey, this.prototype, propertyName))
+    .map( propertyName => {
+      const options: ModelFieldOptions = Reflect.getMetadata(fieldMetadataKey, this.prototype, propertyName);
+      if (options.model && options.model.getLabelField())
+        return `${propertyName}.${options.model.getLabelField()}`;
+      return propertyName;
+    });
   }
 
   /**
@@ -39,7 +48,7 @@ export abstract class Model {
     return Object.getOwnPropertyNames(this.prototype)
     .filter( propertyName => {
 
-      const options: ModeFieldOptions = Reflect
+      const options: ModelFieldOptions = Reflect
       .getMetadata(fieldMetadataKey, this.prototype, propertyName);
 
       if (!options) return false;
@@ -51,7 +60,7 @@ export abstract class Model {
     })
     .map( propertyName => {
 
-      const { model }: ModeFieldOptions = Reflect
+      const { model }: ModelFieldOptions = Reflect
       .getMetadata(fieldMetadataKey, this.prototype, propertyName);
 
       if (!model) return propertyName;
@@ -63,6 +72,62 @@ export abstract class Model {
     .join('\n');
   }
 
-  // static getValidatorFields() {}
+  /**
+   * Get model detailed fields
+   */
+  static getDetailedFields(): ({name: string} & ModelFieldOptions)[] {
+    return Object.getOwnPropertyNames(this.prototype)
+    .filter( name => Reflect.getMetadata(fieldMetadataKey, this.prototype, name))
+    .map( name => ({ name, ...Reflect.getMetadata(fieldMetadataKey, this.prototype, name)}));
+  }
+
+  /**
+   * Return the field decorated with attribute
+   * @param attribute Field attribute
+   * @param value Attribute value
+   */
+  static getFieldWithAttribute(attribute: string, value?: any) {
+    const withAttributes = Object.getOwnPropertyNames(this.prototype)
+    .filter( propertyName => {
+
+      const options: ModelFieldOptions = Reflect
+      .getMetadata(fieldMetadataKey, this.prototype, propertyName);
+
+      if (!options) return false;
+      if (options.model) return false;
+      if (options[attribute] === undefined) return false;
+      return value ? value === options[attribute] : true;
+
+    });
+
+    return withAttributes.length ? withAttributes.shift() : false;
+
+  }
+
+  /**
+   * Return the field decorated as key
+   */
+  static getKeyField() {
+    return this.getFieldWithAttribute('asKey');
+  }
+
+  /**
+   * Return the field decorated as label
+   */
+  static getLabelField() {
+    return this.getFieldWithAttribute('asLabel') || '';
+  }
+
+  /**
+   * Check if the field is decorated with attribute
+   * @param fieldName Field name
+   * @param attribute Field attribute
+   * @param value Attribute value
+   */
+  static withAttribute(fieldName: string, attribute: string, value: any = true) {
+    const options: ModelFieldOptions = Reflect
+    .getMetadata(fieldMetadataKey, this.prototype, fieldName);
+    return options && !options.model && (options[attribute] !== undefined && value ? value === options[attribute] : true);
+  }
 
 }

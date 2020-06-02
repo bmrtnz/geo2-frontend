@@ -13,7 +13,7 @@ export class EntrepotsListComponent implements OnInit {
   entrepots: DataSource;
 
   constructor(
-    private entrepotsService: EntrepotsService,
+    public entrepotsService: EntrepotsService,
     private router: Router,
     private route: ActivatedRoute,
   ) {

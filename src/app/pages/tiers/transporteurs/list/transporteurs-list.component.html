@@ -27,30 +27,15 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
 
     <dxi-column
-      dataField="id"
-      [width]="90"
-      [hidingPriority]="2">
-    </dxi-column>
-    <dxi-column
-      dataField="raisonSocial"
-      [width]="190"
-      caption="{{ 'tiers-transporteurs-raisonSocial' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="pays.description"
-      [width]="190"
-      caption="{{ 'tiers-transporteurs-pays' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="ville"
-      [width]="190"
-      caption="{{ 'tiers-transporteurs-ville' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
+      *ngFor="let field of transporteursService.model.getListFields();let i=index"
+      [dataField]="field"
+      [caption]="('tiers-transporteurs-' + field.split('.').shift() | localize) || field"
+      [visible]="i < transporteursService.baseFieldsSize"
+    ></dxi-column>
 
   </dx-data-grid>
 </div>

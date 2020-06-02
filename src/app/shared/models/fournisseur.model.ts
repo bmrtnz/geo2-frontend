@@ -10,18 +10,18 @@ import { TypeFournisseur } from './type.fournisseur.model';
 
 export class Fournisseur extends Model {
 
-  @Field() public id: string;
-  @Field() public raisonSocial: string;
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field({model: Pays}) public pays: Pays;
+  @Field() public ville: string;
+  @Field({model: Devise}) public devise: Devise;
+  @Field({model: Pays}) public langue: Pays;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field() public codePostal: string;
-  @Field() public ville: string;
-  @Field({model: Pays}) public pays: Pays;
-  @Field({model: Pays}) public langue: Pays;
   @Field() public latitude: string;
   @Field() public longitude: string;
-  @Field({model: Devise}) public devise: Devise;
   @Field({model: MoyenPaiement}) public moyenPaiement: MoyenPaiement;
   @Field({model: BasePaiement}) public basePaiement: BasePaiement;
   @Field({model: RegimeTva}) public regimeTva: RegimeTva;

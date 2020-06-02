@@ -4,15 +4,15 @@ import { TypeTiers } from './tier.model';
 import { Model, Field } from './model';
 
 export class Contact extends Model {
-  @Field() public id: string;
+  @Field({asKey: true, allowEditing: false}) public id: string;
+  @Field({asLabel: true}) public nom: string;
+  @Field() public prenom: string;
+  @Field({model: Societe}) public societe: Societe;
   @Field({model: Flux}) public flux: Flux;
   @Field() public fluxAccess1: string;
   @Field() public fluxAccess2: string;
   @Field() public fluxComplement: string;
-  @Field() public nom: string;
-  @Field() public prenom: string;
-  @Field({model: Societe}) public societe: Societe;
   @Field() public valide: boolean;
-  @Field() public codeTiers: string;
-  @Field() public typeTiers: TypeTiers|string;
+  @Field({allowEditing: false}) public codeTiers: string;
+  @Field({allowEditing: false}) public typeTiers: TypeTiers|string;
 }

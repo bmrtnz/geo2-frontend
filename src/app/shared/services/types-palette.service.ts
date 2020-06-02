@@ -41,7 +41,7 @@ export class TypesPaletteService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { typePalette: TypePalette };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

@@ -9,14 +9,14 @@ import { Devise } from './devise.model';
 
 export class Transporteur extends Model {
 
-  @Field() public id: string;
-  @Field() public raisonSocial: string;
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field({model: Pays}) public pays: Pays;
+  @Field() public ville: string;
+  @Field() public codePostal: string;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
-  @Field() public codePostal: string;
-  @Field() public ville: string;
-  @Field({model: Pays}) public pays: Pays;
   @Field({model: RegimeTva}) public regimeTva: RegimeTva;
   @Field() public nbJourEcheance: number;
   @Field() public echeanceLe: number;

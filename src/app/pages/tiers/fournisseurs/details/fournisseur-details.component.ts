@@ -129,10 +129,7 @@ export class FournisseurDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    const search = `codeTiers=="${ this.fournisseur.id }" and typeTiers==${ this.fournisseur.typeTiers }`;
-    this.router.navigate([`/tiers/contacts/${ this.fournisseur.id }/${ this.fournisseur.typeTiers }`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/contacts/${ this.fournisseur.id }/${ this.fournisseur.typeTiers }`]);
   }
 
 }

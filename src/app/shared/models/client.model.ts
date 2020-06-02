@@ -16,17 +16,17 @@ import { BaseTarif } from './base-tarif.model';
 
 export class Client extends Model {
 
-  @Field() public id: string;
-  @Field() public code: string;
-  @Field() public raisonSocial: string;
-  @Field({model: Societe}) public societe: Societe;
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field({model: Pays}) public pays: Pays;
+  @Field() public ville: string;
   @Field({model: Secteur}) public secteur: Secteur;
+  @Field() public code: string;
+  @Field({model: Societe}) public societe: Societe;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field() public codePostal: string;
-  @Field() public ville: string;
-  @Field({model: Pays}) public pays: Pays;
   @Field() public facturationRaisonSocial: string;
   @Field() public facturationAdresse1: string;
   @Field() public facturationAdresse2: string;

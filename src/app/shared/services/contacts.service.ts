@@ -12,8 +12,6 @@ import { map, take, tap } from 'rxjs/operators';
 })
 export class ContactsService extends ApiService implements APIRead {
 
-  // listRegexp = /.*\.(?:id|description|raisonSocial|nom|prenom|codeTiers|typeTiers)$/i;
-
   constructor(
     apollo: Apollo,
   ) {
