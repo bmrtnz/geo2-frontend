@@ -389,7 +389,7 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-entrepots-PUTarifTransport' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="PUTarifTransport" [readOnly]="readOnlyMode">
+                <dx-text-box formControlName="prixUnitaireTarifTransport" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-entrepots-PUTarifTransport' | localize }}">
                     <dxi-validation-rule type="numeric"></dxi-validation-rule>
                   </dx-validator>
@@ -446,7 +446,7 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-entrepots-PUTarifTransit' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="PUTarifTransit" [readOnly]="readOnlyMode"></dx-text-box>
+                <dx-text-box formControlName="prixUnitaireTarifTransit" [readOnly]="readOnlyMode"></dx-text-box>
               </div>
             </div>
 
@@ -464,7 +464,7 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireCHEP' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="gestionnaireCHEP" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="gestionnaireChep" [readOnly]="readOnlyMode">
                     <dx-validator name="{{ 'tiers-entrepots-gestionnaireCHEP' | localize }}">
                       <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
                     </dx-validator>
@@ -476,7 +476,7 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-entrepots-referenceCHEP' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="referenceCHEP" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="referenceChep" [readOnly]="readOnlyMode">
                     <dx-validator name="{{ 'tiers-entrepots-referenceCHEP' | localize }}">
                       <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                     </dx-validator>
@@ -488,7 +488,7 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-entrepots-declarationEUR1' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-check-box formControlName="declarationEUR1" [readOnly]="readOnlyMode"></dx-check-box>
+                  <dx-check-box formControlName="declarationEur1" [readOnly]="readOnlyMode"></dx-check-box>
                 </div>
               </div>
 
@@ -496,7 +496,7 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-entrepots-envoiAutoDetail' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-check-box formControlName="envoiAutoDetail" [readOnly]="readOnlyMode"></dx-check-box>
+                  <dx-check-box formControlName="envoieAutomatiqueDetail" [readOnly]="readOnlyMode"></dx-check-box>
                 </div>
               </div>
 
@@ -504,7 +504,7 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-entrepots-controleRefClient' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="controleRefClient" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="controlReferenceClient" [readOnly]="readOnlyMode">
                     <dx-validator name="{{ 'tiers-entrepots-controleRefClient' | localize }}">
                       <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
                     </dx-validator>
@@ -527,7 +527,7 @@
             <!-- Instructions secr comm -->
             <div class="dx-field">
               <div class="dx-field-value">
-                <dx-text-area formControlName="instructSecrComm" [readOnly]="readOnlyMode">
+                <dx-text-area formControlName="instructionSecretaireCommercial" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-entrepots-instructSecrComm' | localize }}">
                     <dxi-validation-rule type="stringLength" max="140"></dxi-validation-rule>
                   </dx-validator>
@@ -546,7 +546,7 @@
             <!-- Instructions logistique -->
             <div class="dx-field">
               <div class="dx-field-value">
-                <dx-text-area formControlName="instructLogistique" [readOnly]="readOnlyMode">
+                <dx-text-area formControlName="instructionLogistique" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-entrepots-instructSecrComm' | localize }}">
                     <dxi-validation-rule type="stringLength" max="280"></dxi-validation-rule>
                   </dx-validator>
