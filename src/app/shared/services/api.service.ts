@@ -129,8 +129,7 @@ export abstract class ApiService {
     return Object.entries(controls)
     .filter(([key, control]) => key === this.keyField || control.dirty )
     .map(([key, control]) => {
-      const value = { ...control.value };
-
+      const value = JSON.parse(JSON.stringify(control.value));
       if (value.__typename)
         for (const field of Object.keys(value))
           if (field !== 'id')

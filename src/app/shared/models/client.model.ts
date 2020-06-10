@@ -14,6 +14,8 @@ import { TypeClient } from './type.client.model';
 import { GroupeClient } from './groupe-client.model';
 import { BaseTarif } from './base-tarif.model';
 import {Historique} from './historique.model';
+import { TypeVente } from './type-vente.model';
+import { Courtier } from './courtier.model';
 
 export class Client extends Model {
 
@@ -69,4 +71,24 @@ export class Client extends Model {
   @Field() public delaiBonFacturer: number;
   @Field() public valide: boolean;
   @Field({model: Historique}) public historique: Historique[];
+  @Field({model: TypeVente}) public typeVente: TypeVente;
+  @Field() public dateDebutIfco: string;
+  @Field() public refusCoface: boolean;
+  @Field() public enCoursBlueWhale: number;
+  @Field() public enCoursDateLimite: number;
+  @Field() public enCoursTemporaire: number;
+  @Field() public tauxRemiseParFacture: number;
+  @Field() public tauxRemiseHorsFacture: number;
+  @Field() public fraisExcluArticlePasOrigineFrance: boolean;
+  @Field() public fraisMarketing: number;
+  @Field({model: BaseTarif}) public fraisMarketingModeCalcul: BaseTarif;
+  @Field() public fraisPlateforme: number;
+  @Field({model: Courtier}) public courtier: Courtier;
+  @Field({model: Client}) public paloxRaisonSocial: Client;
+  @Field() public formatDluo: string;
+  @Field() public nbJourLimiteLitige: number;
+  @Field() public clotureAutomatique: boolean;
+  @Field() public detailAutomatique: boolean;
+  @Field() public fraisRamasse: boolean;
+  @Field() public venteACommission: boolean;
 }
