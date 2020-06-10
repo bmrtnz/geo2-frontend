@@ -112,3 +112,10 @@
     font-size:20px;
     font-weight:bold;
 }
+// ::ng-deep .dx-datagrid .dx-datagrid-content .dx-datagrid-table .dx-datagrid-action {
+//     padding-left:0;
+//     padding-right:0;
+// }
+::ng-deep .dx-datagrid-text-content {
+    text-overflow:initial;
+}

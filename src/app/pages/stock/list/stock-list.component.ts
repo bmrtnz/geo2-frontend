@@ -64,6 +64,7 @@ export class StockListComponent implements OnInit, AfterViewInit {
   id: string;
 
   stockCategories: StockCategory[];
+  stockItems: any;
   itemCount: number;
 
   constructor(
@@ -100,7 +101,17 @@ export class StockListComponent implements OnInit, AfterViewInit {
     this.articlesService.getGroupeEmballage().then(ge => {
       this.groupesEmballage = ge;
     });
-    console.log(this)
+
+    this.articlesService.get().then(c => {
+      this.stockItems = {
+        store: new ArrayStore({
+          key: 'id',
+          data: c
+        })
+      };
+    });
+
+
   }
 
 }

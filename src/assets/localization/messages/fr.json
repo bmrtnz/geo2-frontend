@@ -318,6 +318,14 @@
 
     "stocks-title": "Stocks",
     "stocks-fournisseurs-title": "Four.",
-    "stocks-groupeEmballage": "Groupe emballage"
+    "stocks-groupeEmballage": "Groupe emballage",
+    "stocks-articles-description": "Description",
+    "stocks-articles-stockJ": "J",
+    "stocks-articles-stockJ18": "J1-8",
+    "stocks-articles-stockJ920": "J9-20",
+    "stocks-articles-stockJ21": "J21+",
+    "stocks-articles-actions": "Actions",
+    "stocks-articles-total": "Total",
+    "stocks-articles-comm": "Commentaires"
   }
 }

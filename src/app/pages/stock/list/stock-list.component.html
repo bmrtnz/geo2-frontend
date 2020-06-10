@@ -152,7 +152,113 @@
                     <div class="stock-grid-title">STOCK {{ stockCategory.stockName }} consolidé du 17/05/20 09:25:47 - 7 lignes</div>
 
                     <dx-data-grid class="dx-card wide-card"
-                    [dataSource]="clients"
+                    [dataSource]="stockItems"
+                    [columnHidingEnabled]="true"
+                    [showBorders]="false"
+                    [focusedRowEnabled]="true"
+                    [focusedRowIndex]="0"
+                    [columnAutoWidth]="true"
+                    [allowColumnReordering]="true">
+    
+                        <dxo-search-panel [visible]="true" [width]="240" placeholder="Recherche..."></dxo-search-panel>
+                        <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
+                        <dxo-paging [pageSize]="10"></dxo-paging>
+                        <dxo-pager
+                          [showPageSizeSelector]="true"
+                          [allowedPageSizes]="[10, 25, 50, 100]"
+                          [showInfo]="true"
+                          [showNavigationButtons]="true"
+                        ></dxo-pager>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+
+                        <dxi-column
+                        dataField="id"
+                        [width]="90"
+                        caption="{{ 'articles-id' | localize }}"
+                        [hidingPriority]="2">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="variete"
+                        caption="{{ 'articles-variete' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="calibreUnifie"
+                        caption="{{ 'articles-calibreUnifie' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="categorie"
+                        caption="{{ 'articles-categorie' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="emballage"
+                        caption="{{ 'articles-emballage' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="typeVente"
+                        caption="{{ 'articles-typeVente' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="marque"
+                        caption="{{ 'articles-marque' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        class="toto"
+                        dataField="stockJ"
+                        [allowFiltering]="false"
+                        [width]="60"
+                        caption="{{ 'stocks-articles-stockJ' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="stockJ18"
+                        [allowFiltering]="false"
+                        [width]="60"
+                        caption="{{ 'stocks-articles-stockJ18' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="stockJ920"
+                        [allowFiltering]="false"
+                        [width]="60"
+                        caption="{{ 'stocks-articles-stockJ920' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="stockJ21"
+                        [allowFiltering]="false"
+                        [width]="60"
+                        caption="{{ 'stocks-articles-stockJ21' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="actions"
+                        [allowFiltering]="false"
+                        caption="{{ 'stocks-articles-actions' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="total"
+                        [allowFiltering]="false"
+                        caption="{{ 'stocks-articles-total' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                        <dxi-column
+                        dataField="commentaires"
+                        caption="{{ 'stocks-articles-comm' | localize }}"
+                        [hidingPriority]="8">
+                        </dxi-column>
+                    </dx-data-grid>
+
+                    <!-- <dx-data-grid class="dx-card wide-card"
+                    [dataSource]="stockItems"
                     [remoteOperations]="true"
                     [showBorders]="false"
                     [focusedRowEnabled]="true"
@@ -162,9 +268,7 @@
                     [allowColumnReordering]="true"
                   >
                 
-                    <!-- Grid configuration -->
                     <dxo-search-panel [visible]="true" [width]="240" placeholder="Recherche…"></dxo-search-panel>
-                    <!-- <dxo-header-filter [dataSource]="clients" [visible]="true"></dxo-header-filter> -->
                     <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
                     <dxo-paging [pageSize]="10"></dxo-paging>
                     <dxo-pager
@@ -182,9 +286,7 @@
                       [dataField]="field"
                       [caption]="('tiers-clients-' + field.split('.').shift() | localize) || field"
                       [visible]="i < clientsService.baseFieldsSize"
-                    ></dxi-column>
-                
-                  </dx-data-grid>
+                    ></dxi-column> -->
 
                 </form>
 
