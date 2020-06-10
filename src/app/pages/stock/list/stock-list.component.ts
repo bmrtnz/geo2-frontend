@@ -63,7 +63,7 @@ export class StockListComponent implements OnInit, AfterViewInit {
 
   id: string;
 
-  stockCategory: StockCategory[];
+  stockCategories: StockCategory[];
   itemCount: number;
 
   constructor(
