@@ -272,6 +272,7 @@
     "articles-title" : "Articles",
     "articles-detailTitle": "Détail",
     "articles-of": "de",
+    "articles-id": "N° d'article",
     "articles-groupe-CDC": "CDC",
     "articles-groupe-matierePremiere": "Matière première",
     "articles-groupe-normalisation": "Normalisation",
@@ -313,7 +314,10 @@
     "articles-etiqEvenementielle": "Etiquette événementielle",
     "articles-GTINColis": "GTIN Colis",
     "articles-GTINUC": "GTIN UC",
-    "articles-articleClient": "Code article client"
+    "articles-articleClient": "Code article client",
 
+    "stocks-title": "Stocks",
+    "stocks-fournisseurs-title": "Four.",
+    "stocks-groupeEmballage": "Groupe emballage"
   }
 }

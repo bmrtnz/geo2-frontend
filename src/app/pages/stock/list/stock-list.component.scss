@@ -1,0 +1,114 @@
+::ng-deep .tabpanel-item {
+    position: relative;
+    margin-top:12px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding:15px;
+    border:1px solid #00759c;
+    overflow: hidden;
+    background:#FFF;
+}
+::ng-deep .mobile .tabpanel-item {
+    padding-top: 10px;
+}
+::ng-deep .tabpanel-item  p {
+    font-size: 16px;
+    margin: 0;    
+}
+::ng-deep .item-box {
+    font-size: 16px;
+    margin: 15px 0 45px 10px;
+}
+::ng-deep .dx-tabs-wrapper {
+    background:#F2F2F2;
+    .dx-tab:after {
+        position: absolute;
+        font-size:30px;
+        top:35px;
+        right:50%;
+        color:#00759c;
+        content: "|";
+        display:none;
+    }
+}
+::ng-deep .dx-tab-content {
+    span {
+        font-size:24px;
+        text-transform:none;
+    }
+}
+::ng-deep .dx-tab-selected:before {
+    display:none;
+}
+::ng-deep .dx-tab-selected, ::ng-deep .dx-tabs-wrapper .dx-tab:hover {
+    background:#F2F2F2;
+}
+::ng-deep .dx-tabs-wrapper .dx-tab-selected:after {
+    display:block;
+}
+::ng-deep .search-criteria-container {
+    position:relative;
+    right:0;
+    min-width:300px;
+    min-height:100px;
+    float:right;
+}
+::ng-deep .search-criteria-subcontainer {
+    height:120px;
+    margin-left:15px;
+    float:left;
+    overflow:hidden;
+    .dx-field {
+        width:180px;
+        height:30px;
+        .dx-field-label {
+            padding-right:10px;
+            text-overflow:initial;
+            white-space:normal;
+            font-size:11px;
+            line-height:11px;
+            color:#00759c;
+        }
+        .dx-texteditor {
+            font-size:11px;
+            .dx-texteditor-input {
+                font-size:14px;
+            }
+        }
+    }
+}
+::ng-deep .dx-list-item {
+    height:20px;
+    .dx-list-item-content {
+        font-size:12px;
+        line-height:12px;
+    }  
+    .dx-list-item-content:first-of-type {
+        margin:0;
+    }
+}
+
+::ng-deep .advancedsearch {
+    width:90px;
+    color:#00759c;
+    left:0;
+    margin:10px 0;
+    font-size:16px;
+    font-weight:bold;
+}
+::ng-deep .quicksearch-container {
+    position: relative;
+    float:left;
+    left:0;
+    width:300px;
+}
+::ng-deep .stock-grid-title {
+    margin:15px 0 8px 0;
+    color:#00759c;
+    font-size:20px;
+    font-weight:bold;
+}

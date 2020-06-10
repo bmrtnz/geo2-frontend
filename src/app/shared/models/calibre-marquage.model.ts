@@ -1,0 +1,7 @@
+export class CalibreMarquage {
+
+  public id: string;
+  public description: string;
+  public valide: boolean;
+
+}

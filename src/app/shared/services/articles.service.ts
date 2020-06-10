@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FakeService } from './fake.service';
 import { Article, Espece, Variete, TypeVarietal, ModeCulture, Origine, CalibreUnifie,
-    Coloration, TypeVente, Stickeur, Marque, Emballage, ConditionsSpecial,
+    CalibreMarquage, Coloration, TypeVente, Stickeur, Marque, Emballage, ConditionsSpecial,
     Alveole, Categorie, Penetro, Rangement, Cirage, Sucre,
-    EtiqClient, EtiqUC, EtiqEvt } from '../models';
+    EtiqClient, EtiqUC, EtiqEvt, GroupeEmballage } from '../models';
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +22,9 @@ import { Article, Espece, Variete, TypeVarietal, ModeCulture, Origine, CalibreUn
     getEspeces() {
         return this.fakeService.get(Espece);
     }
+    getGroupeEmballage() {
+        return this.fakeService.get(GroupeEmballage);
+    }
     getVarietes() {
         return this.fakeService.get(Variete);
     }
@@ -36,6 +39,9 @@ import { Article, Espece, Variete, TypeVarietal, ModeCulture, Origine, CalibreUn
     }
     getCalibreUnifie() {
         return this.fakeService.get(CalibreUnifie);
+    }
+    getCalibreMarquage() {
+        return this.fakeService.get(CalibreMarquage);
     }
     getColoration() {
         return this.fakeService.get(Coloration);

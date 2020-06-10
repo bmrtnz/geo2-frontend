@@ -62,6 +62,7 @@ export class ArticleDetailsComponent implements OnInit {
     modesCulture: any[];
     origines: any[];
     calibresUnifie: any[];
+    calibresMarquage: any[];
     colorations: any[];
     typesVente: any[];
     stickeurs: any[];
@@ -109,6 +110,9 @@ export class ArticleDetailsComponent implements OnInit {
         });
         this.articlesService.getCalibreUnifie().then(cu => {
             this.calibresUnifie = cu;
+        });
+        this.articlesService.getCalibreMarquage().then(cm => {
+            this.calibresMarquage = cm;
         });
         this.articlesService.getColoration().then(co => {
             this.colorations = co;

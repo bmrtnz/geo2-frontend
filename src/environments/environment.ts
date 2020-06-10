@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://localhost:8081/graphql',
+  apiEndpoint: 'http://192.168.2.161:8089/graphql',
 };
 
 /*
