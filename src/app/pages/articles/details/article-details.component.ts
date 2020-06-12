@@ -96,6 +96,9 @@ export class ArticleDetailsComponent implements OnInit {
         this.articlesService.getEspeces().then(a => {
             this.especes = a;
         });
+        this.articlesService.getAlveole().then(a => {
+            this.alveoles = a;
+        });
         this.articlesService.getVarietes().then(v => {
             this.varietes = v;
         });

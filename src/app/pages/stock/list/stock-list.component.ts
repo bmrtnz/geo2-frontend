@@ -111,7 +111,22 @@ export class StockListComponent implements OnInit, AfterViewInit {
       };
     });
 
+  }
 
+  onSelectClick(e) {
+    alert('selection');
+  }
+
+  onDetailClick(e) {
+    alert('détail');
+  }
+
+  onViewClick(e) {
+    alert('fiche article');
+  }
+
+  onClientClick(e) {
+    alert('client');
   }
 
 }

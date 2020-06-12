@@ -19,11 +19,13 @@ const articles = [
         stockJ: '10',
         stockJ18: '22',
         stockJ920: '150',
-        stockJ21: '170'
+        stockJ21: '170',
+        total: '352',
+        commentaires: ''
 
     },
     {
-        id: '085593',
+        id: '085594',
         espece: 'POMME',
         descriptAbregee: 'Pomme Canada',
         variete: 'ARIANE',
@@ -42,11 +44,13 @@ const articles = [
         stockJ: '10',
         stockJ18: '22',
         stockJ920: '150',
-        stockJ21: '170'
+        stockJ21: '170',
+        total: '352',
+        commentaires: ''
 
     },
     {
-        id: '085593',
+        id: '085595',
         espece: 'POMME',
         descriptAbregee: 'Pomme Canada',
         variete: 'ARIANE',
@@ -65,10 +69,12 @@ const articles = [
         stockJ: '10',
         stockJ18: '22',
         stockJ920: '150',
-        stockJ21: '170'
+        stockJ21: '170',
+        total: '352',
+        commentaires: ''
     },
     {
-        id: '085593',
+        id: '085596',
         espece: 'POMME',
         descriptAbregee: 'Pomme Canada',
         variete: 'ARIANE',
@@ -87,11 +93,13 @@ const articles = [
         stockJ: '10',
         stockJ18: '22',
         stockJ920: '150',
-        stockJ21: '170'
+        stockJ21: '170',
+        total: '352',
+        commentaires: ''
 
     },
     {
-        id: '085593',
+        id: '085597',
         espece: 'POMME',
         descriptAbregee: 'Pomme Canada',
         variete: 'ARIANE',
@@ -110,11 +118,13 @@ const articles = [
         stockJ: '10',
         stockJ18: '22',
         stockJ920: '150',
-        stockJ21: '170'
+        stockJ21: '170',
+        total: '352',
+        commentaires: ''
 
     },
     {
-        id: '085593',
+        id: '085598',
         espece: 'POMME',
         descriptAbregee: 'Pomme Canada',
         variete: 'ARIANE',
@@ -133,11 +143,13 @@ const articles = [
         stockJ: '10',
         stockJ18: '22',
         stockJ920: '150',
-        stockJ21: '170'
+        stockJ21: '170',
+        total: '352',
+        commentaires: ''
 
     },
     {
-        id: '085593',
+        id: '085599',
         espece: 'POMME',
         descriptAbregee: 'Pomme Canada',
         variete: 'ARIANE',
@@ -156,7 +168,9 @@ const articles = [
         stockJ: '10',
         stockJ18: '22',
         stockJ920: '150',
-        stockJ21: '170'
+        stockJ21: '170',
+        total: '352',
+        commentaires: ''
 
     },
 

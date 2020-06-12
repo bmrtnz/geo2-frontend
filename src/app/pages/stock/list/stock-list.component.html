@@ -157,7 +157,9 @@
                     [showBorders]="false"
                     [focusedRowEnabled]="true"
                     [focusedRowIndex]="0"
+                    [showColumnLines]="true"
                     [columnAutoWidth]="true"
+                    [rowAlternationEnabled]="true"
                     [allowColumnReordering]="true">
     
                         <dxo-search-panel [visible]="true" [width]="240" placeholder="Recherche..."></dxo-search-panel>
@@ -167,8 +169,7 @@
                           [showPageSizeSelector]="true"
                           [allowedPageSizes]="[10, 25, 50, 100]"
                           [showInfo]="true"
-                          [showNavigationButtons]="true"
-                        ></dxo-pager>
+                          [showNavigationButtons]="true">  </dxo-pager>
                         <dxo-filter-row [visible]="true"></dxo-filter-row>
                         <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
                         <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
@@ -176,144 +177,100 @@
                         <dxi-column
                         dataField="id"
                         [width]="90"
-                        caption="{{ 'articles-id' | localize }}"
+                        caption="{{ 'stocks-articles-numero' | localize }}"
                         [hidingPriority]="2">
                         </dxi-column>
                         <dxi-column
                         dataField="variete"
-                        caption="{{ 'articles-variete' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'articles-variete' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="calibreUnifie"
-                        caption="{{ 'articles-calibreUnifie' | localize }}"
-                        [hidingPriority]="8">
+                        [width]="100"
+                        caption="{{ 'articles-calibreUnifie' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="categorie"
-                        caption="{{ 'articles-categorie' | localize }}"
-                        [hidingPriority]="8">
+                        [width]="90"
+                        caption="{{ 'articles-categorie' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="emballage"
-                        caption="{{ 'articles-emballage' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'articles-emballage' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="typeVente"
-                        caption="{{ 'articles-typeVente' | localize }}"
-                        [hidingPriority]="8">
+                        [width]="90"
+                        caption="{{ 'articles-typeVente' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="marque"
-                        caption="{{ 'articles-marque' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'articles-marque' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         class="toto"
                         dataField="stockJ"
                         [allowFiltering]="false"
                         [width]="60"
-                        caption="{{ 'stocks-articles-stockJ' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'stocks-articles-stockJ' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="stockJ18"
                         [allowFiltering]="false"
                         [width]="60"
-                        caption="{{ 'stocks-articles-stockJ18' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'stocks-articles-stockJ18' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="stockJ920"
                         [allowFiltering]="false"
                         [width]="60"
-                        caption="{{ 'stocks-articles-stockJ920' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'stocks-articles-stockJ920' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="stockJ21"
                         [allowFiltering]="false"
                         [width]="60"
-                        caption="{{ 'stocks-articles-stockJ21' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'stocks-articles-stockJ21' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="actions"
                         [allowFiltering]="false"
-                        caption="{{ 'stocks-articles-actions' | localize }}"
-                        [hidingPriority]="8">
+                        type="buttons"
+                        [width]="132"
+                        caption="{{ 'stocks-articles-actions' | localize }}">  
+                            <dxi-button
+                                icon="material-icons play_arrow"
+                                [onClick]="onSelectClick"
+                                hint="Sélection">
+                            </dxi-button>
+                            <dxi-button
+                                icon="material-icons visibility"
+                                [onClick]="onDetailClick"
+                                hint="Détail">
+                            </dxi-button>
+                            <dxi-button
+                                icon="material-icons search"
+                                [onClick]="onViewClick"
+                                hint="Fiche article">
+                            </dxi-button>
+                            <dxi-button
+                                icon="user"
+                                [onClick]="onClientClick"
+                                hint="Client">
+                            </dxi-button>
                         </dxi-column>
                         <dxi-column
                         dataField="total"
+                        [width]="60"
                         [allowFiltering]="false"
-                        caption="{{ 'stocks-articles-total' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'stocks-articles-total' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="commentaires"
-                        caption="{{ 'stocks-articles-comm' | localize }}"
-                        [hidingPriority]="8">
+                        caption="{{ 'stocks-articles-comm' | localize }}">  
                         </dxi-column>
                     </dx-data-grid>
-
-                    <!-- <dx-data-grid class="dx-card wide-card"
-                    [dataSource]="stockItems"
-                    [remoteOperations]="true"
-                    [showBorders]="false"
-                    [focusedRowEnabled]="true"
-                    [focusedRowIndex]="0"
-                    [columnAutoWidth]="true"
-                    [columnHidingEnabled]="true"
-                    [allowColumnReordering]="true"
-                  >
-                
-                    <dxo-search-panel [visible]="true" [width]="240" placeholder="Recherche…"></dxo-search-panel>
-                    <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
-                    <dxo-paging [pageSize]="10"></dxo-paging>
-                    <dxo-pager
-                      [showPageSizeSelector]="true"
-                      [allowedPageSizes]="[10, 25, 50, 100]"
-                      [showInfo]="true"
-                      [showNavigationButtons]="true"
-                    ></dxo-pager>
-                    <dxo-filter-row [visible]="true"></dxo-filter-row>
-                    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-                    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
-                
-                    <dxi-column
-                      *ngFor="let field of clientsService.model.getListFields();let i=index"
-                      [dataField]="field"
-                      [caption]="('tiers-clients-' + field.split('.').shift() | localize) || field"
-                      [visible]="i < clientsService.baseFieldsSize"
-                    ></dxi-column> -->
-
                 </form>
-
-                <!-- <div>
-                    <p>
-                        <b>{{stockCategory.City}}</b>
-                        (<span>{{stockCategory.State}}</span>)
-                    </p>
-                    <p>
-                        <span>{{stockCategory.Zipcode}}</span>
-                        <span>{{stockCategory.Address}}</span>
-                    </p>
-                </div>
-                <div>
-                    <p>
-                        Phone: <b>{{stockCategory.Phone}}</b>
-                    </p>
-                    <p>
-                        Fax: <b>{{stockCategory.Fax}}</b>
-                    </p>
-                    <p>
-                        Website:
-                        <a href="{{stockCategory.Website}}" target="_blank">
-                            {{stockCategory.Website}}
-                        </a>
-                    </p>
-                </div> -->
             </div>
         </div>
     </dx-tab-panel>
