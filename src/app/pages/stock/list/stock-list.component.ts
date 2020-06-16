@@ -9,6 +9,7 @@ import { ClientsService } from '../../../shared/services/clients.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { valueFromAST } from 'graphql';
 
 @Component({
   selector: 'app-stock-list',
@@ -16,9 +17,9 @@ import { DxDataGridComponent } from 'devextreme-angular';
   styleUrls: ['./stock-list.component.scss'],
 })
 
-export class StockListComponent implements OnInit, AfterViewInit {
+export class StockListComponent implements OnInit {
 
-  @ViewChild(DxDataGridComponent, {static: true}) grid: DxDataGridComponent;
+  produitGrid: DxDataGridComponent;
   stockForm = this.fb.group({
     id: [''],
     bureauAchat: [''],
@@ -64,7 +65,7 @@ export class StockListComponent implements OnInit, AfterViewInit {
   id: string;
 
   stockCategories: StockCategory[];
-  stockItems: any;
+  stockItems: DataSource;
   itemCount: number;
 
   constructor(
@@ -76,10 +77,6 @@ export class StockListComponent implements OnInit, AfterViewInit {
     private router: Router,
     private fb: FormBuilder
   ) { }
-
-  ngAfterViewInit() {
-    console.log(this.grid);
-  }
 
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
@@ -127,6 +124,15 @@ export class StockListComponent implements OnInit, AfterViewInit {
 
   onClientClick(e) {
     alert('client');
+  }
+
+  onQuickSearchChange(e) {
+    const divs = document.getElementsByClassName('dx-texteditor-input')[10];
+    divs.focus();
+    divs.value = e.value;
+    setTimeout(() => {
+      e.element.querySelector('input').focus();
+    }, 100);
   }
 
 }
