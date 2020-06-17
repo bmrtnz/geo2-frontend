@@ -29,7 +29,7 @@
                     <div class="dx-field">
                         <div class="dx-field-label">{{ 'articles-descriptAbregee' | localize }}</div>
                         <div class="dx-field-value">
-                        <dx-text-box formControlName="descriptAbregee">
+                        <dx-text-box formControlName="description">
                             <dx-validator name="{{ 'articles-descriptAbregee' | localize }}">
                                 <dxi-validation-rule type="required"></dxi-validation-rule>
                             </dx-validator>
@@ -40,12 +40,13 @@
                     <!-- espèce -->
                     <div class="dx-field">
                         <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
-                        <div class="dx-field-value">
+                        <div class="dx-field-value" formGroupName="matierePremiere">
                             <dx-select-box
                             formControlName="espece"
-                            [items]="especes"
-                            valueExpr="id"
-                            displayExpr="description">
+                            [dataSource]="especes"
+                            displayExpr="description"
+                            [searchEnabled]="true"
+                            [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-espece' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -57,7 +58,7 @@
                     <div class="dx-field">
                         <div class="dx-field-label">{{ 'articles-BWSTOCK' | localize }}</div>
                         <div class="dx-field-value">
-                            <dx-check-box formControlName="BWSTOCK"></dx-check-box>
+                            <dx-check-box formControlName="blueWhaleStock"></dx-check-box>
                         </div>
                     </div>
                 </div>
@@ -70,8 +71,8 @@
                     <div class="dx-form-group-content">
                       <!-- Instructions au fournisseur -->
                       <div class="dx-field">
-                        <div class="dx-field-value">
-                            <dx-text-area formControlName="instructStation">
+                        <div class="dx-field-value" formGroupName="cahierDesCharge">
+                            <dx-text-area formControlName="instructionStation">
                             </dx-text-area>
                         </div>
                       </div>
@@ -91,12 +92,13 @@
                             <!-- variété -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-variete' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="matierePremiere">
                                     <dx-select-box
                                     formControlName="variete"
-                                    [items]="varietes"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="varietes"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-variete' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -106,12 +108,13 @@
                             <!-- Type variétal -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-typeVarietal' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="matierePremiere">
                                     <dx-select-box
-                                    formControlName="typeVarietal"
-                                    [items]="typesVarietal"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    formControlName="type"
+                                    [dataSource]="types"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-typeVarietal' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -121,12 +124,13 @@
                             <!-- Mode de culture -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-modeCulture' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="matierePremiere">
                                     <dx-select-box
                                     formControlName="modeCulture"
-                                    [items]="modesCulture"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="modesCulture"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-modeCulture' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -136,12 +140,13 @@
                             <!-- Origine -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-origine' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="matierePremiere">
                                     <dx-select-box
                                     formControlName="origine"
-                                    [items]="origines"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="origines"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-origine' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -151,12 +156,13 @@
                             <!-- Calibre Unifié -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-calibreUnifie' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="matierePremiere">
                                     <dx-select-box
                                     formControlName="calibreUnifie"
-                                    [items]="calibresUnifie"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="calibresUnifies"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-calibreUnifie' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -166,12 +172,12 @@
                             <!-- Coloration -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-coloration' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="cahierDesCharge">
                                     <dx-select-box
                                     formControlName="coloration"
-                                    [items]="colorations"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="colorations"
+                                    displayExpr="description"[searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-coloration' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -181,12 +187,13 @@
                             <!-- Type de vente -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-typeVente' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="matierePremiere">
                                     <dx-select-box
                                     formControlName="typeVente"
-                                    [items]="typesVente"
-                                    valueExpr="id"
-                                        displayExpr="description">
+                                    [dataSource]="typesVente"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-typeVente' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -206,12 +213,13 @@
                             <!-- Sticker -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-stickeur' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="normalisation">
                                     <dx-select-box
                                     formControlName="stickeur"
-                                    [items]="stickeurs"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="stickeurs"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-stickeur' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -221,12 +229,13 @@
                             <!-- Marque -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-marque' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="normalisation">
                                     <dx-select-box
                                     formControlName="marque"
-                                    [items]="marques"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="marques"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-stickeur' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -236,12 +245,13 @@
                             <!-- Emballage -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-emballage' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="emballage">
                                     <dx-select-box
                                     formControlName="emballage"
-                                    [items]="emballages"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="emballages"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-emballage' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -251,24 +261,26 @@
                             <!-- Conditionnement Spécial -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-condSpecial' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="emballage">
                                     <dx-select-box
-                                    formControlName="condSpecial"
-                                    [items]="conditionsSpecial"
-                                    valueExpr="id"
+                                    formControlName="conditionSpecial"
+                                    [dataSource]="conditionsSpecials"
                                     displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']"
                                   ></dx-select-box>
                                 </div>
                             </div>
                             <!-- Alvéole -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-alveole' | localize }}</div>
-                                <div class="dx-field-value">
+                                <div class="dx-field-value" formGroupName="emballage">
                                     <dx-select-box
                                     formControlName="alveole"
-                                    [items]="alveoles"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    [dataSource]="alveoles"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
                                         <dx-validator name="{{ 'articles-alveole' | localize }}">
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
@@ -278,8 +290,8 @@
                             <!-- Nombre unités/emballage -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-nbreUniteColis' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-text-box formControlName="nbreUniteColis">
+                                <div class="dx-field-value" formGroupName="emballage">
+                                    <dx-text-box formControlName="uniteParColis">
                                         <dx-validator name="{{ 'articles-nbreUniteColis' | localize }}">
                                             <dxi-validation-rule type="numeric" ></dxi-validation-rule>
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -290,8 +302,8 @@
                             <!-- Poids net colis réel -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-poidsNetReel' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-text-box formControlName="poidsNetReel">
+                                <div class="dx-field-value" formGroupName="emballage">
+                                    <dx-text-box formControlName="poidsNetColis">
                                         <dx-validator name="{{ 'articles-poidsNetReel' | localize }}">
                                             <dxi-validation-rule type="numeric" ></dxi-validation-rule>
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -302,8 +314,8 @@
                             <!-- Poids net UC -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-poidsNetUC' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-text-box formControlName="poidsNetUC">
+                                <div class="dx-field-value" formGroupName="emballage">
+                                    <dx-text-box formControlName="poidsNetGaranti">
                                         <dx-validator name="{{ 'articles-poidsNetUC' | localize }}">
                                             <dxi-validation-rule type="numeric" ></dxi-validation-rule>
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -314,8 +326,8 @@
                             <!-- Pré-pesé -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-prePese' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-check-box formControlName="prePese"></dx-check-box>
+                                <div class="dx-field-value" formGroupName="emballage">
+                                    <dx-check-box formControlName="prepese"></dx-check-box>
                                 </div>
                             </div>
 
@@ -334,12 +346,13 @@
                         <!-- Catégorie -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-categorie' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="cahierDesCharge">
                                 <dx-select-box
                                 formControlName="categorie"
-                                [items]="categories"
-                                valueExpr="id"
-                                displayExpr="description">
+                                [dataSource]="categories"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-alveole' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -349,12 +362,13 @@
                         <!-- Sucre -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-sucre' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="cahierDesCharge">
                                 <dx-select-box
                                 formControlName="sucre"
-                                [items]="sucres"
-                                valueExpr="id"
-                                displayExpr="description">
+                                [dataSource]="sucres"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-sucre' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -364,12 +378,13 @@
                         <!-- Pénétrométrie -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-penetro' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="cahierDesCharge">
                                 <dx-select-box
                                 formControlName="penetro"
-                                [items]="penetros"
-                                valueExpr="id"
-                                displayExpr="description">
+                                [dataSource]="penetros"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-penetro' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -379,12 +394,13 @@
                         <!-- Cirage -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-cirage' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="cahierDesCharge">
                                 <dx-select-box
                                 formControlName="cirage"
-                                [items]="cirages"
-                                valueExpr="id"
-                                displayExpr="description">
+                                [dataSource]="cirages"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-cirage' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -394,12 +410,13 @@
                         <!-- Rangement -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-rangement' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="cahierDesCharge">
                                 <dx-select-box
                                 formControlName="rangement"
-                                [items]="rangements"
-                                valueExpr="id"
-                                displayExpr="description">
+                                [dataSource]="rangements"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-rangement' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -419,12 +436,13 @@
                         <!-- Etiquette client -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-etiqClient' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="normalisation">
                                 <dx-select-box
-                                formControlName="etiqClient"
-                                [items]="etiquettesClient"
-                                valueExpr="id"
-                                displayExpr="description">
+                                formControlName="etiquetteColis"
+                                [dataSource]="etiquettesColis"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-etiqClient' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -434,12 +452,13 @@
                         <!-- Etiquette UC -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-etiqUC' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="normalisation">
                                 <dx-select-box
-                                formControlName="etiqUC"
-                                [items]="etiquettesUC"
-                                valueExpr="id"
-                                displayExpr="description">
+                                formControlName="etiquetteUc"
+                                [dataSource]="etiquettesUc"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-etiqUC' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -449,12 +468,13 @@
                         <!-- Etiquette événementielle -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-etiqEvenementielle' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="normalisation">
                                 <dx-select-box
-                                formControlName="etiqEvenementielle"
-                                [items]="etiquettesEvenementielle"
-                                valueExpr="id"
-                                displayExpr="description">
+                                formControlName="etiquetteEvenementielle"
+                                [dataSource]="etiquettesEvenementielle"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                 <dx-validator name="{{ 'articles-etiqEvenementielle' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -464,8 +484,8 @@
                         <!-- GTIN UC -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-GTINUC' | localize }}</div>
-                            <div class="dx-field-value">
-                                <dx-text-box formControlName="GTINUC">
+                            <div class="dx-field-value" formGroupName="normalisation">
+                                <dx-text-box formControlName="gtinUc">
                                     <dx-validator name="{{ 'articles-GTINUC' | localize }}">
                                         <dxi-validation-rule type="numeric" ></dxi-validation-rule>
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -476,8 +496,8 @@
                         <!-- GTIN Colis -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-GTINColis' | localize }}</div>
-                            <div class="dx-field-value">
-                                <dx-text-box formControlName="GTINColis">
+                            <div class="dx-field-value" formGroupName="normalisation">
+                                <dx-text-box formControlName="gtinColis">
                                     <dx-validator name="{{ 'articles-GTINColis' | localize }}">
                                         <dxi-validation-rule type="numeric" ></dxi-validation-rule>
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -488,7 +508,7 @@
                         <!-- Code article client -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-articleClient' | localize }}</div>
-                            <div class="dx-field-value">
+                            <div class="dx-field-value" formGroupName="normalisation">
                                 <dx-text-box formControlName="articleClient">
                                     <dx-validator name="{{ 'articles-articleClient' | localize }}">
                                         <dxi-validation-rule type="numeric" ></dxi-validation-rule>

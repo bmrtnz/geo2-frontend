@@ -1,7 +1,6 @@
-export class ModeCulture {
+import { Model, Field } from './model';
 
-  public id: string;
-  public description: string;
-  public valide: boolean;
-
+export class ModeCulture extends Model {
+  @Field({asKey: true}) public id: number;
+  @Field({asLabel: true}) public description: string;
 }

@@ -1,7 +1,6 @@
-export class Variete {
+import { Model, Field } from './model';
 
-  public id: string;
-  public description: string;
-  public valide: boolean;
-
+export class Variete extends Model {
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public description: string;
 }

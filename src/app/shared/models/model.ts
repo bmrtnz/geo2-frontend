@@ -1,13 +1,11 @@
-import 'reflect-metadata';
-
-export type ModelFieldOptions = {
-  model?: typeof Model;
-  asLabel?: boolean;
-  asKey?: boolean;
-  [attribute: string]: any;
+export type ModelFieldOptions<T = typeof Model> = {
+  model?: T
+  asLabel?: boolean
+  asKey?: boolean
+  [attribute: string]: any
 };
 
-const fieldMetadataKey = Symbol('field');
+const DefaultGridFilter = /(?:^\w+|raisonSocial|description)$/i;
 
 /**
  * Field property decorator
@@ -15,8 +13,13 @@ const fieldMetadataKey = Symbol('field');
  */
 export const Field = (options: ModelFieldOptions = {}) => (target: any, key: string | symbol) => {
 
-  Object.defineProperty(target, key, { get: () => target[key] });
-  Reflect.defineMetadata(fieldMetadataKey, options, target, key);
+  Object.defineProperty(target, 'fields', {
+    value: {
+      ...target.fields,
+      [key]: options,
+    },
+    writable: true,
+  });
 
 };
 
@@ -25,18 +28,44 @@ export const Field = (options: ModelFieldOptions = {}) => (target: any, key: str
  */
 export abstract class Model {
 
+  constructor(rawEntity) {
+    const fieldsEntries = Object.entries<ModelFieldOptions>(this.constructor.prototype.fields);
+    for (const [field, options] of fieldsEntries) {
+      if ( !rawEntity[field] ) continue;
+      if (options.model)
+        this[field] = new (options.model as any)(rawEntity[field]);
+      else
+        this[field] = rawEntity[field];
+    }
+  }
+
   /**
    * Get model fields as list
    */
-  static getListFields() {
-    return Object.getOwnPropertyNames(this.prototype)
-    .filter( propertyName => Reflect.getMetadata(fieldMetadataKey, this.prototype, propertyName))
-    .map( propertyName => {
-      const options: ModelFieldOptions = Reflect.getMetadata(fieldMetadataKey, this.prototype, propertyName);
-      if (options.model && options.model.getLabelField())
-        return `${propertyName}.${options.model.getLabelField()}`;
-      return propertyName;
-    });
+  static getListFields(depth = 1, filter = DefaultGridFilter, prefix?: string) {
+    const getFieldName = (property: string) => prefix ? `${prefix}.${property}` : property;
+    return Object.entries(this.getFields())
+    .filter(([propertyName, options]) => {
+
+      if (!options) return false;
+
+      const fieldName = getFieldName(propertyName);
+      if (!options.model && filter && !filter.test(fieldName)) return false;
+
+      return !options.model || (options.model && depth > 0);
+    })
+    .map(([propertyName, options]) => {
+
+      const fieldName = getFieldName(propertyName);
+      if (!options.model) return fieldName;
+
+      const type: typeof Model = options.model;
+      if (type && type.getLabelField())
+        return type.getListFields(depth - 1, filter, fieldName);
+
+    })
+    .filter( field => field !== undefined )
+    .flat();
   }
 
   /**
@@ -45,12 +74,10 @@ export abstract class Model {
    * @param filter Regexp field filter
    */
   static getGQLFields(depth = 1, filter?: RegExp) {
-    return Object.getOwnPropertyNames(this.prototype)
+    return Object.keys(this.getFields())
     .filter( propertyName => {
 
-      const options: ModelFieldOptions = Reflect
-      .getMetadata(fieldMetadataKey, this.prototype, propertyName);
-
+      const options = this.getFields()[propertyName];
       if (!options) return false;
 
       if (!options.model && filter && !filter.test(`${this.name}.${propertyName}`)) return false;
@@ -60,12 +87,10 @@ export abstract class Model {
     })
     .map( propertyName => {
 
-      const { model }: ModelFieldOptions = Reflect
-      .getMetadata(fieldMetadataKey, this.prototype, propertyName);
-
+      const {model} = this.getFields()[propertyName];
       if (!model) return propertyName;
 
-      const type: typeof Model = model || Reflect.getMetadata('design:type', this.prototype, propertyName);
+      const type: typeof Model = model;
       return `${propertyName} {\n${type.getGQLFields(depth - 1, filter)}\n}`;
 
     })
@@ -76,9 +101,8 @@ export abstract class Model {
    * Get model detailed fields
    */
   static getDetailedFields(): ({name: string} & ModelFieldOptions)[] {
-    return Object.getOwnPropertyNames(this.prototype)
-    .filter( name => Reflect.getMetadata(fieldMetadataKey, this.prototype, name))
-    .map( name => ({ name, ...Reflect.getMetadata(fieldMetadataKey, this.prototype, name)}));
+    return Object.entries(this.getFields())
+    .map(([name, options]) => ({ name, ...options}));
   }
 
   /**
@@ -87,18 +111,16 @@ export abstract class Model {
    * @param value Attribute value
    */
   static getFieldWithAttribute(attribute: string, value?: any) {
-    const withAttributes = Object.getOwnPropertyNames(this.prototype)
-    .filter( propertyName => {
-
-      const options: ModelFieldOptions = Reflect
-      .getMetadata(fieldMetadataKey, this.prototype, propertyName);
+    const withAttributes = Object.entries(this.getFields())
+    .filter(([, options]) => {
 
       if (!options) return false;
       if (options.model) return false;
       if (options[attribute] === undefined) return false;
       return value ? value === options[attribute] : true;
 
-    });
+    })
+    .map(([propertyName]) => propertyName);
 
     return withAttributes.length ? withAttributes.shift() : false;
 
@@ -125,9 +147,12 @@ export abstract class Model {
    * @param value Attribute value
    */
   static withAttribute(fieldName: string, attribute: string, value: any = true) {
-    const options: ModelFieldOptions = Reflect
-    .getMetadata(fieldMetadataKey, this.prototype, fieldName);
+    const options = this.getFields()[fieldName];
     return options && !options.model && (options[attribute] !== undefined && value ? value === options[attribute] : true);
+  }
+
+  static getFields(): {[field: string]: ModelFieldOptions} {
+    return this.prototype.constructor.prototype.fields;
   }
 
 }

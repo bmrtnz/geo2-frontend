@@ -6,12 +6,13 @@ import { FetchResult } from 'apollo-link';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
-import { take } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 import { AbstractControl } from '@angular/forms';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { Model } from '../models/model';
 
-const DEFAULT_ID = 'id';
+const DEFAULT_KEY = 'id';
+const DEFAULT_GQL_KEY_TYPE = 'String';
 const DEFAULT_PAGE_SIZE = 10;
 const BASE_FIELDS_SIZE = 5;
 
@@ -20,6 +21,12 @@ export type PageInfo = {
   endCursor?: string
   hasPreviousPage?: boolean
   hasNextPage?: boolean
+};
+
+export type DistinctInfo = {
+  count: number
+  key: string
+  items: DistinctInfo[]
 };
 
 export type RelayPage<T> = {
@@ -67,14 +74,16 @@ export abstract class ApiService {
   pageSize = DEFAULT_PAGE_SIZE;
   baseFieldsSize = BASE_FIELDS_SIZE;
   keyField: string;
+  gqlKeyType = DEFAULT_GQL_KEY_TYPE;
   model: typeof Model;
+  storeConfiguration: CustomStoreOptions;
 
   constructor(
     private apollo: Apollo,
     model: typeof Model,
   ) {
     this.model = model;
-    this.keyField = this.model.getKeyField() || DEFAULT_ID;
+    this.keyField = this.model.getKeyField() || DEFAULT_KEY;
   }
 
   /**
@@ -230,7 +239,7 @@ export abstract class ApiService {
   }
 
   /**
-   * Build query
+   * Build getOne query
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
@@ -238,7 +247,7 @@ export abstract class ApiService {
     const operation = this.withLowerCaseFirst(this.model.name);
     const alias = this.withUpperCaseFirst(operation);
     return `
-      query ${ alias }($${ this.keyField }: String!) {
+      query ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
         ${ operation }(${ this.keyField }:$${ this.keyField }) {
           ${ this.model.getGQLFields(depth, filter) }
         }
@@ -246,6 +255,11 @@ export abstract class ApiService {
     `;
   }
 
+  /**
+   * Build save query
+   * @param depth Save response depth
+   * @param filter Fields filter
+   */
   protected buildSave(depth?: number, filter?: RegExp) {
     const entity = this.withLowerCaseFirst(this.model.name);
     const operation = `save${this.model.name}`;
@@ -260,11 +274,14 @@ export abstract class ApiService {
     `;
   }
 
+  /**
+   * Build delete query
+   */
   protected buildDelete() {
     const operation = `delete${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      mutation ${ alias }($${ this.keyField }: String!) {
+      mutation ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
         ${ operation }(${ this.keyField }: $${ this.keyField }) {
           id
         }
@@ -273,13 +290,79 @@ export abstract class ApiService {
   }
 
   /**
+   * Build distinct query
+   */
+  protected buildDistinct() {
+    const operation = `distinct`;
+    const alias = this.withUpperCaseFirst(operation);
+    const type = `Geo${this.model.name}`;
+    return `
+      query ${ alias }($field: String!, $search: String, $pageable: PaginationInput!) {
+        ${ operation }(type: "${ type }", field: $field, search: $search, pageable: $pageable) {
+          edges {
+            node {
+              count
+              key
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          totalPage
+          totalCount
+        }
+      }
+    `;
+  }
+
+  /**
    * Create DX CustomStore with preconfigured key
+   * @param options DXCustomStore options
    */
   protected createCustomStore(options?: CustomStoreOptions) {
+    this.storeConfiguration = options;
     return new CustomStore({
-      key: this.keyField,
+      key: options.key || this.keyField,
       ...options,
     });
+  }
+
+  /**
+   * Build and prepare distinct query
+   * @param options DX LoadOptions object
+   * @param inputVariables User variables
+   */
+  protected getDistinct(options: LoadOptions, inputVariables?: OperationVariables | RelayPageVariables) {
+    // const field = options.group ?
+    //   options.group[0].selector :
+    //   inputVariables.group[0].selector;
+    const field = options.group[0].selector;
+    const distinctQuery = this.buildDistinct();
+    type DistinctResponse = { distinct: RelayPage<DistinctInfo> };
+    const distinctVariables = {
+      ...inputVariables,
+      field,
+      ...this.mapLoadOptionsToVariables(options),
+    };
+    return this.
+    query<DistinctResponse>(distinctQuery, {
+      variables: distinctVariables,
+    } as WatchQueryOptions<any>)
+    .pipe(
+      map( res => this.asListCount(res.data.distinct)),
+      // map( res => {
+      //   if (inputVariables && inputVariables.group)
+      //     return {...res, data: res.data.map(({key}) => ({
+      //       text: key,
+      //       value: [`${this.model.name.toLowerCase()}.${field}`, 'contains', key],
+      //     }))};
+      //   return res;
+      // }),
+      take(1),
+    );
   }
 
   /**
@@ -367,8 +450,8 @@ export abstract class ApiService {
   protected mapLoadOptionsToVariables(options: LoadOptions) {
     const variables: RelayPageVariables = {
       pageable: {
-        pageNumber: options.skip / options.take,
-        pageSize: options.take,
+        pageNumber: options.skip / options.take || 0,
+        pageSize: options.take || DEFAULT_PAGE_SIZE,
       },
     };
     this.pageSize = options.take;
