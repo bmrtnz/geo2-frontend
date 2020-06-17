@@ -14,7 +14,7 @@
     "btn-historique": "Historique",
     "btn-docsjoints": "Docs joints",
     "btn-affecter": "Affecter",
-    "btn-valider": "Valider",
+    "btn-valider": "Valider", 
     "btn-annuler": "Annuler",
     "btn-editer": "Éditer",
     "btn-cloner": "Cloner",
@@ -272,6 +272,7 @@
     "articles-title" : "Articles",
     "articles-detailTitle": "Détail",
     "articles-of": "de",
+    "articles-id": "N° d'article",
     "articles-groupe-CDC": "CDC",
     "articles-groupe-matierePremiere": "Matière première",
     "articles-groupe-normalisation": "Normalisation",
@@ -313,7 +314,19 @@
     "articles-etiqEvenementielle": "Etiquette événementielle",
     "articles-GTINColis": "GTIN Colis",
     "articles-GTINUC": "GTIN UC",
-    "articles-articleClient": "Code article client"
+    "articles-articleClient": "Code article client",
 
+    "stocks-title": "Stocks",
+    "stocks-fournisseurs-title": "Four.",
+    "stocks-groupeEmballage": "Groupe emballage",
+    "stocks-articles-numero": "No article",
+    "stocks-articles-description": "Description",
+    "stocks-articles-stockJ": "J",
+    "stocks-articles-stockJ18": "J1-8",
+    "stocks-articles-stockJ920": "J9-20",
+    "stocks-articles-stockJ21": "J21+",
+    "stocks-articles-actions": "Actions",
+    "stocks-articles-total": "Total",
+    "stocks-articles-comm": "Commentaires"
   }
 }

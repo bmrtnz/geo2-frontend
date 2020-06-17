@@ -169,6 +169,21 @@
                                     </dx-select-box>
                                 </div>
                             </div>
+                            <!-- Calibre Marquage -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="calibreMarquage"
+                                    [items]="calibresMarquage"
+                                    valueExpr="id"
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-calibreMarquage' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
+                                </div>
+                            </div>
                             <!-- Coloration -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-coloration' | localize }}</div>
