@@ -40,8 +40,7 @@
                                     <dx-select-box
                                     formControlName="fournisseur"
                                     [items]="fournisseurs"
-                                    valueExpr="id"
-                                    displayExpr="description">
+                                    displayExpr="raisonSocial">
                                     </dx-select-box>
                                 </div>
                             </div>
@@ -49,12 +48,11 @@
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
                                 <div class="dx-field-value">
-                                <dx-select-box
-                                formControlName="bureauAchat"
-                                [dataSource]="bureauxAchat"
-                                displayExpr="raisonSocial"
-                                >
-                                </dx-select-box>
+                                    <dx-select-box
+                                    formControlName="bureauAchat"
+                                    [dataSource]="bureauxAchat"
+                                    displayExpr="raisonSocial">
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Origine -->
@@ -211,31 +209,26 @@
                         <dxi-column
                         class="toto"
                         dataField="stockJ"
-                        [allowFiltering]="false"
                         [width]="60"
                         caption="{{ 'stocks-articles-stockJ' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="stockJ18"
-                        [allowFiltering]="false"
                         [width]="60"
                         caption="{{ 'stocks-articles-stockJ18' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="stockJ920"
-                        [allowFiltering]="false"
                         [width]="60"
                         caption="{{ 'stocks-articles-stockJ920' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="stockJ21"
-                        [allowFiltering]="false"
                         [width]="60"
                         caption="{{ 'stocks-articles-stockJ21' | localize }}">  
                         </dxi-column>
                         <dxi-column
                         dataField="actions"
-                        [allowFiltering]="false"
                         type="buttons"
                         [width]="132"
                         caption="{{ 'stocks-articles-actions' | localize }}">  

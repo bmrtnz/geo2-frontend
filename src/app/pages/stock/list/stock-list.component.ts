@@ -93,20 +93,23 @@ export class StockListComponent implements OnInit {
       this.calibresUnifie = cu;
     });
     this.articlesService.getCalibreMarquage().then(cm => {
-      this.calibresUnifie = cm;
+      this.calibresMarquage = cm;
     });
     this.articlesService.getGroupeEmballage().then(ge => {
       this.groupesEmballage = ge;
     });
 
-    this.articlesService.get().then(c => {
-      this.stockItems = {
-        store: new ArrayStore({
-          key: 'id',
-          data: c
-        })
-      };
-    });
+    // this.articlesService.get().then(c => {
+    //   this.stockItems = {
+    //     store: new ArrayStore({
+    //       key: 'id',
+    //       data: c
+    //     })
+    //   };
+    // });
+
+    this.articlesService.get()
+    .then( res => this.stockItems = res);
 
   }
 
