@@ -21,7 +21,8 @@
                         <div class="dx-field">
                             <div class="dx-field-value">
                                 <dx-autocomplete
-                                    placeholder="Mot clé…">
+                                    placeholder="Mot clé…"
+                                    (onValueChanged)="onQuickSearchChange($event)">
                                 </dx-autocomplete>
                             </div>
                         </div>
@@ -31,7 +32,7 @@
                             <div class="advancedsearch">Recherche avancée</div>
                             <dx-button class="upperButton" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
                         </div>
-                        <div class="search-criteria-subcontainer">
+                        <div class="search-criteria-subcontainer" style="width:auto">
                             <!-- fournisseur -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
@@ -267,6 +268,7 @@
                         </dxi-column>
                         <dxi-column
                         dataField="commentaires"
+                        [width]="150"
                         caption="{{ 'stocks-articles-comm' | localize }}">  
                         </dxi-column>
                     </dx-data-grid>

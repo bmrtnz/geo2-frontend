@@ -53,8 +53,6 @@
 ::ng-deep .search-criteria-container {
     position:relative;
     right:0;
-    min-width:300px;
-    min-height:100px;
     float:right;
 }
 ::ng-deep .search-criteria-subcontainer {
@@ -63,15 +61,15 @@
     float:left;
     overflow:hidden;
     .dx-field {
-        width:180px;
         height:30px;
         .dx-field-label {
             padding-right:10px;
             text-overflow:initial;
             white-space:normal;
             font-size:11px;
-            line-height:11px;
-            color:#00759c;
+            line-height:12px;
+            padding:10px 10px 4px 0;
+            text-align:right;
         }
         .dx-texteditor {
             font-size:11px;
@@ -86,12 +84,13 @@
     .dx-list-item-content {
         font-size:12px;
         line-height:12px;
+        padding-top:3px !important;
+        padding-bottom:3px !important;
     }  
     .dx-list-item-content:first-of-type {
         margin:0;
     }
 }
-
 ::ng-deep .advancedsearch {
     width:90px;
     color:#00759c;
@@ -104,7 +103,6 @@
     position: relative;
     float:left;
     left:0;
-    width:300px;
 }
 ::ng-deep .stock-grid-title {
     margin:15px 0 8px 0;
@@ -112,14 +110,14 @@
     font-size:20px;
     font-weight:bold;
 }
-// ::ng-deep .dx-datagrid .dx-datagrid-content .dx-datagrid-table .dx-datagrid-action {
-//     padding-left:0;
-//     padding-right:0;
-// }
-// ::ng-deep .dx-datagrid {
-//     top:-20px;
-//     overflow:visible;
-// }
+
 ::ng-deep .dx-datagrid-text-content {
     text-overflow:initial;
 }
+// ::ng-deep .dx-datagrid {
+//     .dx-toolbar-button:nth-of-type(3) {
+//         width:0;
+//         padding:0;
+//         display:block;
+//     }
+// }

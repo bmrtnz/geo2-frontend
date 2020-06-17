@@ -132,7 +132,7 @@ export class StockListComponent implements OnInit {
     divs.value = e.value;
     setTimeout(() => {
       e.element.querySelector('input').focus();
-    }, 100);
+    }, 20);
   }
 
 }
