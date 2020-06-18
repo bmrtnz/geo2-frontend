@@ -101,6 +101,7 @@ export class ClientDetailsComponent implements OnInit {
 
   client: Client;
   code: string;
+  gridBoxValue: number[];
   secteurs: DataSource;
   personnes: DataSource;
   pays: DataSource;
@@ -165,7 +166,7 @@ export class ClientDetailsComponent implements OnInit {
     this.basesTarif = this.basesTarifService.getDataSource();
 
   }
-  
+
   onSubmit() {
     if (!this.clientForm.pristine && this.clientForm.valid) {
       const client = this.clientsService.extractDirty(this.clientForm.controls);

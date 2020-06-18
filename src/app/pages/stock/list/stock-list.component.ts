@@ -14,6 +14,8 @@ import { valueFromAST } from 'graphql';
 import { OriginesService } from 'app/shared/services/origines.service';
 import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
 import { ModesCultureService } from 'app/shared/services/modes-culture.service';
+import { GroupesEmballageService } from 'app/shared/services/groupes-emballage.service';
+import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -48,8 +50,8 @@ export class StockListComponent implements OnInit {
   modesCulture: DataSource;
   origines: DataSource;
   calibresUnifies: DataSource;
-  calibresMarquage: any[];
-  groupesEmballage: any[];
+  calibresMarquage: DataSource;
+  groupesEmballage: DataSource;
   colorations: any[];
   typesVente: any[];
   stickeurs: any[];
@@ -80,6 +82,8 @@ export class StockListComponent implements OnInit {
     private originesService: OriginesService,
     private modesCultureService: ModesCultureService,
     private calibresUnifiesService: CalibresUnifiesService,
+    private calibresMarquageService: CalibresMarquageService,
+    private groupesEmballageService: GroupesEmballageService,
     public clientsService: ClientsService,
     public stocksService: StockService,
     private router: Router,
@@ -89,6 +93,8 @@ export class StockListComponent implements OnInit {
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
 
+    this.groupesEmballage = this.groupesEmballageService.getDataSource();
+    this.calibresMarquage = this.calibresMarquageService.getDataSource();
     this.calibresUnifies = this.calibresUnifiesService.getDataSource();
     this.modesCulture = this.modesCultureService.getDataSource();
     this.varietes = this.varietesService.getDataSource();

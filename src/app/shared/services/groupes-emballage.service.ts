@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.service';
 import { Apollo } from 'apollo-angular';
-import { Origine } from '../models';
+import { GroupeEmballage } from '../models';
 import { OperationVariables, WatchQueryOptions } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
@@ -17,7 +17,7 @@ export class GroupesEmballageService extends ApiService implements APIRead {
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, Origine);
+    super(apollo, GroupeEmballage);
     this.gqlKeyType = 'GeoProduitWithEspeceIdInput';
   }
 
@@ -27,7 +27,7 @@ export class GroupesEmballageService extends ApiService implements APIRead {
         key: ['id', 'especeId'],
         load: (options: LoadOptions) => {
           const query = this.buildGetAll(1, this.listRegexp);
-          type Response = { allOrigine: RelayPage<Origine> };
+          type Response = { allGroupeEmballage: RelayPage<GroupeEmballage> };
           const variables = {
             ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
@@ -35,10 +35,10 @@ export class GroupesEmballageService extends ApiService implements APIRead {
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
-            map( res => this.asListCount(res.data.allOrigine)),
+            map( res => this.asListCount(res.data.allGroupeEmballage)),
             map( res => ({
               ...res,
-              data: res.data.map( entity => new Origine(entity))
+              data: res.data.map( entity => new GroupeEmballage(entity))
             })),
             take(1),
           )
@@ -46,13 +46,13 @@ export class GroupesEmballageService extends ApiService implements APIRead {
         },
         byKey: (key) => {
           const query = this.buildGetOne();
-          type Response = { origine: Origine };
+          type Response = { groupeEmballage: GroupeEmballage };
           const id = key ? {id: key.id, espece: key.especeId || ''} : {};
           const variables = { ...inputVariables, id };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
-            map( res => new Origine(res.data.origine)),
+            map( res => new GroupeEmballage(res.data.groupeEmballage)),
             take(1),
           )
           .toPromise();

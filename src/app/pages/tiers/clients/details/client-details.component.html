@@ -105,7 +105,6 @@
                   </dx-popover>
                 </div>
               </div>
-
               <!-- Secteur -->
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
@@ -1036,9 +1035,30 @@
               <div class="dx-form-group-content">
                 <!-- Certifications -->
                 <div class="dx-field">
-                  <!-- <div class="dx-field-label">{{ 'tiers-clients-certifications' | localize }}</div> -->
+                  <div class="dx-field-label">{{ 'tiers-clients-details-groupe-certifications' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-area></dx-text-area>
+                    <dx-drop-down-box
+                    [(value)]="gridBoxValue"
+                    valueExpr="id"
+                    displayExpr="description"
+                    placeholder="Sélectionner une ou plusieurs certifications..."
+                    [showClearButton]="true"
+                    [dataSource]="secteurs">
+                    <div *dxTemplate="let data of 'content'">
+                      <dx-data-grid
+                      [dataSource]="secteurs"
+                      [columns]="['description']"
+                      [selection]="{ mode: 'multiple' }"
+                      [hoverStateEnabled]="true"
+                      [paging]="{ enabled: true, pageSize: 10 }"
+                      [filterRow]="{ visible: false }"
+                      [scrolling]="{ mode: 'infinite' }"
+                      [(selectedRowKeys)]="gridBoxValue"
+                      height="100%"
+                      >
+                        </dx-data-grid>
+                      </div>
+                    </dx-drop-down-box>
                   </div>
                 </div>
               </div>

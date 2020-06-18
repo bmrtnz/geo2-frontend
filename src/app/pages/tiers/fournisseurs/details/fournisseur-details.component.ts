@@ -71,6 +71,7 @@ export class FournisseurDetailsComponent implements OnInit {
   bureauxAchat: DataSource;
   typesFournisseur: DataSource;
   defaultVisible: boolean;
+  gridBoxValue: number[];
   readOnlyMode = true;
 
   constructor(
