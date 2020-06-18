@@ -336,9 +336,6 @@ export abstract class ApiService {
    * @param inputVariables User variables
    */
   protected getDistinct(options: LoadOptions, inputVariables?: OperationVariables | RelayPageVariables) {
-    // const field = options.group ?
-    //   options.group[0].selector :
-    //   inputVariables.group[0].selector;
     const field = options.group[0].selector;
     const distinctQuery = this.buildDistinct();
     type DistinctResponse = { distinct: RelayPage<DistinctInfo> };
@@ -353,14 +350,6 @@ export abstract class ApiService {
     } as WatchQueryOptions<any>)
     .pipe(
       map( res => this.asListCount(res.data.distinct)),
-      // map( res => {
-      //   if (inputVariables && inputVariables.group)
-      //     return {...res, data: res.data.map(({key}) => ({
-      //       text: key,
-      //       value: [`${this.model.name.toLowerCase()}.${field}`, 'contains', key],
-      //     }))};
-      //   return res;
-      // }),
       take(1),
     );
   }

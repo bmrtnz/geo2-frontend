@@ -33,6 +33,10 @@ export class FournisseursService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
           const variables = {
             ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),

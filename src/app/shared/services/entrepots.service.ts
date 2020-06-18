@@ -32,6 +32,10 @@ export class EntrepotsService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allEntrepot: RelayPage<Entrepot> };
 

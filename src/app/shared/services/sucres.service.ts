@@ -26,6 +26,10 @@ export class SucresService extends ApiService implements APIRead {
       store: this.createCustomStore({
         key: ['id', 'especeId'],
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allSucre: RelayPage<Sucre> };
           const variables = {

@@ -23,6 +23,10 @@ export class ArticlesMatieresPremieresService extends ApiService implements APIR
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
           const query = this.buildGetAll();
           type Response = { allArticleMatierePremiere: RelayPage<ArticleMatierePremiere> };
           const variables = {

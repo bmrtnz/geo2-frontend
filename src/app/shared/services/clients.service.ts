@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client } from '../models';
-import { ApiService, RelayPage, APIRead, RelayPageVariables, APIPersist } from './api.service';
+import { ApiService, RelayPage, APIRead, RelayPageVariables, APIPersist, DistinctInfo } from './api.service';
 import { Apollo } from 'apollo-angular';
 import { OperationVariables, WatchQueryOptions, MutationOptions } from 'apollo-client';
 import { map, take } from 'rxjs/operators';
@@ -31,6 +31,10 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allClient: RelayPage<Client> };
           const variables = {
