@@ -1,71 +1,64 @@
 import { Injectable } from '@angular/core';
-import { Fournisseur } from '../models';
 import { ApiService, APIRead, RelayPageVariables, RelayPage } from './api.service';
 import { Apollo } from 'apollo-angular';
-import { WatchQueryOptions, OperationVariables, MutationOptions } from 'apollo-client';
+import { Origine } from '../models';
+import { OperationVariables, WatchQueryOptions } from 'apollo-client';
+import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { map, take } from 'rxjs/operators';
-import DataSource from 'devextreme/data/data_source';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FournisseursService extends ApiService implements APIRead {
+export class GroupesEmballageService extends ApiService implements APIRead {
 
-  listRegexp = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  listRegexp = /.\.*(?:id|description)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, Fournisseur);
-  }
-
-  getOne(id: string) {
-    const query = this.buildGetOne();
-    type Response = { fournisseur: Fournisseur };
-    const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
+    super(apollo, Origine);
+    this.gqlKeyType = 'GeoProduitWithEspeceIdInput';
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
-
     return new DataSource({
       store: this.createCustomStore({
+        key: ['id', 'especeId'],
         load: (options: LoadOptions) => {
+          const query = this.buildGetAll(1, this.listRegexp);
+          type Response = { allOrigine: RelayPage<Origine> };
           const variables = {
             ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
           };
-          const query = this.buildGetAll(1, this.listRegexp);
-          type Response = { allFournisseur: RelayPage<Fournisseur> };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
-            map( res => this.asListCount(res.data.allFournisseur)),
+            map( res => this.asListCount(res.data.allOrigine)),
+            map( res => ({
+              ...res,
+              data: res.data.map( entity => new Origine(entity))
+            })),
             take(1),
           )
           .toPromise();
         },
         byKey: (key) => {
           const query = this.buildGetOne();
-          type Response = { fournisseur: Fournisseur };
+          type Response = { origine: Origine };
           const id = key ? {id: key.id, espece: key.especeId || ''} : {};
           const variables = { ...inputVariables, id };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
-            map( res => new Fournisseur(res.data.fournisseur)),
+            map( res => new Origine(res.data.origine)),
             take(1),
           )
           .toPromise();
-          }
+        },
       }),
     });
-  }
-
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
-    return this.mutate(mutation, { variables } as MutationOptions);
   }
 
 }
