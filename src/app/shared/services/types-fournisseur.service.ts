@@ -24,6 +24,10 @@ export class TypesFournisseurService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, variables).toPromise();
+
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allTypeFournisseur: RelayPage<TypeFournisseur> };
           variables = {
