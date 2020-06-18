@@ -5,11 +5,15 @@ import { StockCategory, StockService } from '../../../shared/services/stock.serv
 import { ArticlesService } from '../../../shared/services/articles.service';
 import { BureauxAchatService } from '../../../shared/services/bureaux-achat.service';
 import { FournisseursService } from '../../../shared/services/fournisseurs.service';
+import { VarietesService } from '../../../shared/services/varietes.service';
 import { ClientsService } from '../../../shared/services/clients.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { valueFromAST } from 'graphql';
+import { OriginesService } from 'app/shared/services/origines.service';
+import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
+import { ModesCultureService } from 'app/shared/services/modes-culture.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -37,13 +41,13 @@ export class StockListComponent implements OnInit {
 
   especes: any[];
   bureauxAchat: DataSource;
-  varietes: any[];
+  varietes: DataSource;
   fournisseurs: DataSource;
   clients: DataSource;
   typesVarietal: any[];
-  modesCulture: any[];
-  origines: any[];
-  calibresUnifie: any[];
+  modesCulture: DataSource;
+  origines: DataSource;
+  calibresUnifies: DataSource;
   calibresMarquage: any[];
   groupesEmballage: any[];
   colorations: any[];
@@ -65,13 +69,17 @@ export class StockListComponent implements OnInit {
   id: string;
 
   stockCategories: StockCategory[];
-  stockItems: DataSource;
+  articles: DataSource;
   itemCount: number;
 
   constructor(
     private articlesService: ArticlesService,
     private bureauxAchatService: BureauxAchatService,
     private fournisseursService: FournisseursService,
+    private varietesService: VarietesService,
+    private originesService: OriginesService,
+    private modesCultureService: ModesCultureService,
+    private calibresUnifiesService: CalibresUnifiesService,
     public clientsService: ClientsService,
     public stocksService: StockService,
     private router: Router,
@@ -80,36 +88,15 @@ export class StockListComponent implements OnInit {
 
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
-    this.articlesService.getVarietes().then(v => {
-      this.varietes = v;
-    });
+
+    this.calibresUnifies = this.calibresUnifiesService.getDataSource();
+    this.modesCulture = this.modesCultureService.getDataSource();
+    this.varietes = this.varietesService.getDataSource();
+    this.origines = this.originesService.getDataSource();
     this.bureauxAchat = this.bureauxAchatService.getDataSource();
     this.fournisseurs = this.fournisseursService.getDataSource();
     this.clients = this.clientsService.getDataSource();
-    this.articlesService.getOrigine().then(o => {
-      this.origines = o;
-    });
-    this.articlesService.getCalibreUnifie().then(cu => {
-      this.calibresUnifie = cu;
-    });
-    this.articlesService.getCalibreMarquage().then(cm => {
-      this.calibresMarquage = cm;
-    });
-    this.articlesService.getGroupeEmballage().then(ge => {
-      this.groupesEmballage = ge;
-    });
-
-    // this.articlesService.get().then(c => {
-    //   this.stockItems = {
-    //     store: new ArrayStore({
-    //       key: 'id',
-    //       data: c
-    //     })
-    //   };
-    // });
-
-    this.articlesService.get()
-    .then( res => this.stockItems = res);
+    this.articles = this.articlesService.getDataSource();
 
   }
 

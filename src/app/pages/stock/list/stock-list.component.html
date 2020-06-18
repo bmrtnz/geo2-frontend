@@ -39,7 +39,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="fournisseur"
-                                    [items]="fournisseurs"
+                                    [dataSource]="fournisseurs"
                                     displayExpr="raisonSocial">
                                     </dx-select-box>
                                 </div>
@@ -75,7 +75,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="variete"
-                                    [items]="varietes"
+                                    [dataSource]="varietes"
                                     valueExpr="id"
                                     displayExpr="description">
                                     </dx-select-box>
@@ -87,7 +87,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="calibreUnifie"
-                                    [items]="calibresUnifie"
+                                    [dataSource]="calibresUnifies"
                                     valueExpr="id"
                                     displayExpr="description">
                                     </dx-select-box>
@@ -111,12 +111,12 @@
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'stocks-groupeEmballage' | localize }}</div>
                                 <div class="dx-field-value">
-                                <dx-select-box
-                                formControlName="groupeEmballage"
-                                [dataSource]="groupesEmballage"
-                                displayExpr="description"
-                                >
-                                </dx-select-box>
+                                    <dx-select-box
+                                    formControlName="groupeEmballage"
+                                    [dataSource]="groupesEmballage"
+                                    displayExpr="description"
+                                    >
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Mode Culture -->
@@ -125,8 +125,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="modeCulture"
-                                    [items]="modesCulture"
-                                    valueExpr="id"
+                                    [dataSource]="modesCulture"
                                     displayExpr="description">
                                     </dx-select-box>
                                 </div>
@@ -135,12 +134,12 @@
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
                                 <div class="dx-field-value">
-                                <dx-select-box
-                                formControlName="client"
-                                [dataSource]="clients"
-                                valueExpr="id"
-                                displayExpr="raisonSocial"
-                                >
+                                    <dx-select-box
+                                    formControlName="client"
+                                    [dataSource]="clients"
+                                    valueExpr="id"
+                                    displayExpr="raisonSocial"
+                                    >
                                 </dx-select-box>
                                 </div>
                             </div>
@@ -151,7 +150,7 @@
                     <div class="stock-grid-title">STOCK {{ stockCategory.stockName }} consolidé du 17/05/20 09:25:47 - 7 lignes</div>
 
                     <dx-data-grid class="dx-card wide-card"
-                    [dataSource]="stockItems"
+                    [dataSource]="articles"
                     [columnHidingEnabled]="true"
                     [showBorders]="false"
                     [focusedRowEnabled]="true"
@@ -180,11 +179,11 @@
                         [hidingPriority]="2">
                         </dxi-column>
                         <dxi-column
-                        dataField="variete"
+                        dataField="varietes"
                         caption="{{ 'articles-variete' | localize }}">  
                         </dxi-column>
                         <dxi-column
-                        dataField="calibreUnifie"
+                        dataField="calibresUnifies"
                         [width]="100"
                         caption="{{ 'articles-calibreUnifie' | localize }}">  
                         </dxi-column>
