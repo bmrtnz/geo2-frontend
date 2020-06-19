@@ -13,6 +13,7 @@ import { TypesService } from 'app/shared/services/types.service';
 import { ModesCultureService } from 'app/shared/services/modes-culture.service';
 import { OriginesService } from 'app/shared/services/origines.service';
 import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
+import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
 import { ColorationsService } from 'app/shared/services/colorations.service';
 import { TypesVenteService } from 'app/shared/services/types-vente.service';
 import { StickeursService } from 'app/shared/services/stickeurs.service';
@@ -92,6 +93,7 @@ export class ArticleDetailsComponent implements OnInit {
     modesCulture: DataSource;
     origines: DataSource;
     calibresUnifies: DataSource;
+    calibresMarquage: DataSource;
     colorations: DataSource;
     typesVente: DataSource;
     stickeurs: DataSource;
@@ -118,6 +120,7 @@ export class ArticleDetailsComponent implements OnInit {
         private modesCultureService: ModesCultureService,
         private originesService: OriginesService,
         private calibresUnifiesService: CalibresUnifiesService,
+        private calibresMarquageService: CalibresUnifiesService,
         private colorationsService: ColorationsService,
         private typesVenteService: TypesVenteService,
         private stickeursService: StickeursService,
@@ -153,6 +156,7 @@ export class ArticleDetailsComponent implements OnInit {
         this.modesCulture = this.modesCultureService.getDataSource();
         this.origines = this.originesService.getDataSource();
         this.calibresUnifies = this.calibresUnifiesService.getDataSource();
+        this.calibresMarquage = this.calibresMarquageService.getDataSource();
         this.colorations = this.colorationsService.getDataSource();
         this.typesVente = this.typesVenteService.getDataSource();
         this.stickeurs = this.stickeursService.getDataSource();

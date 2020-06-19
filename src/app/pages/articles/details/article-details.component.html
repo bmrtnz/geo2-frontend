@@ -175,7 +175,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="calibreMarquage"
-                                    [items]="calibresMarquage"
+                                    [dataSource]="calibresMarquage"
                                     valueExpr="id"
                                     displayExpr="description">
                                         <dx-validator name="{{ 'articles-calibreMarquage' | localize }}">
