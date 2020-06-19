@@ -6,7 +6,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
-    DxDataGridModule, DxDropDownBoxModule,
+    DxDataGridModule, DxTagBoxModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule, DxDateBoxModule
 } from 'devextreme-angular';
@@ -24,7 +24,7 @@ import {HistoriqueValideModule} from '../../../shared/components/historique-vali
         DxDataGridModule,
         DxButtonModule,
         DxAccordionModule,
-        DxDropDownBoxModule,
+        DxTagBoxModule,
         DxListModule,
         DxSelectBoxModule,
         DxTextBoxModule,

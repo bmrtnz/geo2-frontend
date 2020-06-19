@@ -99,6 +99,7 @@
     "tiers-clients-nbJourLimiteLitige": "Nbs jours litige",
     "tiers-clients-detailAutomatique": "Envoi auto détails",
     "tiers-clients-venteACommission": "Ind vente com",
+    "tiers-clients-typeCertification": "Type(s)",
 
     "tiers-clients-details-title": "Fiche client",
     "tiers-clients-details-groupe-infos": "Infos générales",
@@ -157,6 +158,7 @@
     "tiers-fournisseurs-details-title": "Fiche fournisseur",
     "tiers-fournisseurs-contacts": "Contacts",
     "tiers-fournisseurs-partenaires": "Codes partenaires",
+    "tiers-fournisseurs-typeCertification": "Type(s)",
 
     "tiers-transporteurs-details-title": "Fiche transporteur",
     "tiers-transporteurs-title": "Transporteurs",
