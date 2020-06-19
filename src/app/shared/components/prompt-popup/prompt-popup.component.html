@@ -1,0 +1,39 @@
+<dx-popup
+  width="600"
+  height="200"
+  [visible]="this.visible"
+  [showTitle]="true"
+  [dragEnabled]="false"
+  [title]="this.title"
+  [(visible)]="this.visible"
+  (onHiding)="this.onHide($event)"
+  (onShowing)="this.onShow($event)"
+  [showCloseButton]="this.cancellable"
+  [closeOnOutsideClick]="this.cancellable"
+>
+  <div *dxTemplate="let d of 'content'">
+    <dx-text-box
+      valueChangeEvent="keyup"
+      [(isValid)]="this.commentValid"
+      [placeholder]="this.placeholder"
+    >
+      <dx-validator name="{{ 'valide-comment' | localize }}">
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+    <div class="prompt-action">
+      <dx-button
+        text="{{ 'btn-annuler' | localize }}"
+        type="normal"
+        [visible]="this.cancellable"
+        (onClick)="this.onCancel($event)"
+      ></dx-button>
+      <dx-button
+        text="{{ 'btn-valider' | localize }}"
+        type="default"
+        [disabled]="!this.commentValid"
+        (onClick)="this.onSubmit($event)"
+      ></dx-button>
+    </div>
+  </div>
+</dx-popup>

@@ -21,7 +21,6 @@ export class HistoriqueValideComponent implements OnChanges {
       this.btnVisible = this.historique.length > 0;
     }
   }
-
 }
 
 @NgModule({

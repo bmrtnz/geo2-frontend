@@ -5,6 +5,8 @@
     "copyright": "Copyright © 2020{0} Microtec Informatique ",
 
     "valide": "Validé",
+    "valide-comment": "Commentaire",
+    "valide-comment-title": "Saisie d'un commentaire de validation",
     "invalide": "Non Validé",
     "user-modification": "Modifié par",
     "date-modification": "Date de modification",

@@ -117,6 +117,7 @@ export class ClientDetailsComponent implements OnInit {
   regimesTva: DataSource;
   defaultVisible: boolean;
   readOnlyMode = true;
+  validateCommentPromptVisible = false;
 
   constructor(
     private fb: FormBuilder,
@@ -165,7 +166,7 @@ export class ClientDetailsComponent implements OnInit {
     this.basesTarif = this.basesTarifService.getDataSource();
 
   }
-  
+
   onSubmit() {
     if (!this.clientForm.pristine && this.clientForm.valid) {
       const client = this.clientsService.extractDirty(this.clientForm.controls);
@@ -189,6 +190,12 @@ export class ClientDetailsComponent implements OnInit {
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
+  }
+
+  onValideChange(e) {
+    if (e.event) { // Changed by user
+      this.validateCommentPromptVisible = true;
+    }
   }
 
   entrepotsBtnClick() {

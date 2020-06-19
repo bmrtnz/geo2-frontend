@@ -57,10 +57,18 @@
           </dx-button>
 
           <dx-check-box
+            #valideCheckBox
             class="vertical"
             formControlName="valide"
             [text]="clientForm.get('valide') ? 'valide' : 'invalide' | localize"
+            (onValueChanged)="onValideChange($event)"
           ></dx-check-box>
+          <app-prompt-popup
+            title="{{ 'valide-comment-title' | localize }}"
+            [placeholder]="'valide-comment' | localize"
+            [(visible)]="this.validateCommentPromptVisible"
+            (cancel)="valideCheckBox.value = !valideCheckBox.value"
+          ></app-prompt-popup>
           <app-historique-valide [historique]="client?.historique"></app-historique-valide>
           <dx-button
             class="black"

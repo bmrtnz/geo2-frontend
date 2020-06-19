@@ -12,6 +12,7 @@ import {
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
+import {PromptPopupModule} from '../../../shared/components/prompt-popup/prompt-popup.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import {HistoriqueValideModule} from '../../../shared/components/historique-vali
         DxNumberBoxModule,
         DxValidatorModule,
         DxDateBoxModule,
-        HistoriqueValideModule
+        HistoriqueValideModule,
+        PromptPopupModule
     ],
   declarations: [
     ClientsListComponent,
