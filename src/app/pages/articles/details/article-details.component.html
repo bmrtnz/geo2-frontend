@@ -46,7 +46,8 @@
                             [dataSource]="especes"
                             displayExpr="description"
                             [searchEnabled]="true"
-                            [searchExpr]="['id','description']">
+                            [searchExpr]="['id','description']"
+                            (onValueChanged)="onEspeceChange($event)">
                                 <dx-validator name="{{ 'articles-espece' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
@@ -169,21 +170,6 @@
                                     </dx-select-box>
                                 </div>
                             </div>
-                            <!-- Calibre Marquage -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="calibreMarquage"
-                                    [dataSource]="calibresMarquage"
-                                    valueExpr="id"
-                                    displayExpr="description">
-                                        <dx-validator name="{{ 'articles-calibreMarquage' | localize }}">
-                                            <dxi-validation-rule type="required"></dxi-validation-rule>
-                                        </dx-validator>
-                                    </dx-select-box>
-                                </div>
-                            </div>
                             <!-- Coloration -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-coloration' | localize }}</div>
@@ -255,6 +241,21 @@
                                             <dxi-validation-rule type="required"></dxi-validation-rule>
                                         </dx-validator>
                                 </dx-select-box>
+                                </div>
+                            </div>
+                            <!-- Calibre Marquage -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
+                                <div class="dx-field-value" formGroupName="normalisation">
+                                    <dx-select-box
+                                    formControlName="calibreMarquage"
+                                    [dataSource]="calibresMarquage"
+                                    valueExpr="id"
+                                    displayExpr="description">
+                                        <dx-validator name="{{ 'articles-calibreMarquage' | localize }}">
+                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
                                 </div>
                             </div>
                             <!-- Emballage -->
