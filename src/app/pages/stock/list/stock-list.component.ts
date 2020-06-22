@@ -123,9 +123,9 @@ export class StockListComponent implements OnInit {
   }
 
   onQuickSearchChange(e) {
-    const divs = document.getElementsByClassName('dx-texteditor-input')[10];
+    /*const divs = document.getElementsByClassName('dx-texteditor-input')[10];
     divs.focus();
-    divs.value = e.value;
+    divs.value = e.value;*/
     setTimeout(() => {
       e.element.querySelector('input').focus();
     }, 20);

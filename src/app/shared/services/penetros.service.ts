@@ -33,8 +33,8 @@ export class PenetrosService extends ApiService implements APIRead {
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allPenetro: RelayPage<Penetro> };
           const variables = {
-            ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
+            ...inputVariables,
           };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

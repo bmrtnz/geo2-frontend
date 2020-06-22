@@ -31,8 +31,8 @@ export class AlveolesService extends ApiService implements APIRead {
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allAlveole: RelayPage<Alveole> };
           const variables = {
-            ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
+            ...inputVariables,
           };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

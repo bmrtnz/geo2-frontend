@@ -67,7 +67,8 @@ export class ArticleDetailsComponent implements OnInit {
             etiquetteEvenementielle: [''],
             gtinColis: [''],
             gtinUc: [''],
-            articleClient: ['']
+            articleClient: [''],
+            calibreMarquage: ['']
         }),
         emballage: this.fb.group({
             emballage: [''],
@@ -150,29 +151,6 @@ export class ArticleDetailsComponent implements OnInit {
             this.articleForm.patchValue(this.article);
         });
 
-        this.especes = this.especesService.getDataSource();
-        this.varietes = this.varietesService.getDataSource();
-        this.types = this.typesService.getDataSource();
-        this.modesCulture = this.modesCultureService.getDataSource();
-        this.origines = this.originesService.getDataSource();
-        this.calibresUnifies = this.calibresUnifiesService.getDataSource();
-        this.calibresMarquage = this.calibresMarquageService.getDataSource();
-        this.colorations = this.colorationsService.getDataSource();
-        this.typesVente = this.typesVenteService.getDataSource();
-        this.stickeurs = this.stickeursService.getDataSource();
-        this.marques = this.marquesService.getDataSource();
-        this.emballages = this.emballagesService.getDataSource();
-        this.conditionsSpecials = this.conditionsSpecialesService.getDataSource();
-        this.alveoles = this.alveolesService.getDataSource();
-        this.categories = this.categoriesService.getDataSource();
-        this.sucres = this.sucresService.getDataSource();
-        this.penetros = this.penetrosService.getDataSource();
-        this.cirages = this.ciragesService.getDataSource();
-        this.rangements = this.rangementsService.getDataSource();
-        this.etiquettesColis = this.etiquettesColisService.getDataSource();
-        this.etiquettesUc = this.etiquettesUcService.getDataSource();
-        this.etiquettesEvenementielle = this.etiquettesEvenementiellesService.getDataSource();
-
     }
 
     onSubmit() {
@@ -189,5 +167,34 @@ export class ArticleDetailsComponent implements OnInit {
                 });
         }
       }
+
+    onEspeceChange(event) {
+        const dsOptions = {
+            search: 'espece.id==' + event.value.id
+        };
+
+        this.especes = this.especesService.getDataSource();
+        this.varietes = this.varietesService.getDataSource(dsOptions);
+        this.types = this.typesService.getDataSource(dsOptions);
+        this.modesCulture = this.modesCultureService.getDataSource();
+        this.origines = this.originesService.getDataSource(dsOptions);
+        this.calibresUnifies = this.calibresUnifiesService.getDataSource(dsOptions);
+        this.calibresMarquage = this.calibresMarquageService.getDataSource(dsOptions);
+        this.colorations = this.colorationsService.getDataSource(dsOptions);
+        this.typesVente = this.typesVenteService.getDataSource();
+        this.stickeurs = this.stickeursService.getDataSource(dsOptions);
+        this.marques = this.marquesService.getDataSource(dsOptions);
+        this.emballages = this.emballagesService.getDataSource(dsOptions);
+        this.conditionsSpecials = this.conditionsSpecialesService.getDataSource(dsOptions);
+        this.alveoles = this.alveolesService.getDataSource(dsOptions);
+        this.categories = this.categoriesService.getDataSource(dsOptions);
+        this.sucres = this.sucresService.getDataSource(dsOptions);
+        this.penetros = this.penetrosService.getDataSource(dsOptions);
+        this.cirages = this.ciragesService.getDataSource(dsOptions);
+        this.rangements = this.rangementsService.getDataSource(dsOptions);
+        this.etiquettesColis = this.etiquettesColisService.getDataSource(dsOptions);
+        this.etiquettesUc = this.etiquettesUcService.getDataSource(dsOptions);
+        this.etiquettesEvenementielle = this.etiquettesEvenementiellesService.getDataSource(dsOptions);
+    }
 
 }
