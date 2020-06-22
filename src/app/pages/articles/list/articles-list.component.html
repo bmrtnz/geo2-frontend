@@ -25,7 +25,7 @@
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+    <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
 
     <dxi-column
       *ngFor="let field of articlesService.model.getListFields(2);let i=index"
