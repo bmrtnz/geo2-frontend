@@ -30,8 +30,10 @@
     <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of fournisseursService.model.getListFields(1);let i=index"
+      *ngFor="let field of fournisseursService.model.getListFields();let i=index"
       [dataField]="field"
+      [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
+      [filterValue]="field === 'valide' ? true : undefined"
       [caption]="('tiers-fournisseurs-' + field.split('.').shift() | localize) || field"
       [visible]="i < fournisseursService.baseFieldsSize"
     ></dxi-column>

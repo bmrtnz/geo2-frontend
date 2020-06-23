@@ -13,10 +13,11 @@ export class Fournisseur extends Model {
 
   @Field({asKey: true}) public id: string;
   @Field({asLabel: true}) public raisonSocial: string;
-  @Field({model: Pays}) public pays: Pays;
   @Field() public ville: string;
+  @Field({model: Pays}) public pays: Pays;
   @Field({model: Devise}) public devise: Devise;
   @Field({model: Pays}) public langue: Pays;
+  @Field() public valide: boolean;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
@@ -52,7 +53,6 @@ export class Fournisseur extends Model {
   @Field() public consignePaloxSa: boolean;
   @Field() public consignePaloxUdc: boolean;
   @Field() public listeExpediteurs: string;
-  @Field() public valide: boolean;
   @Field() public typeTiers: TypeTiers;
   @Field() public autoFacturation: boolean;
   @Field() public tvaId: string;

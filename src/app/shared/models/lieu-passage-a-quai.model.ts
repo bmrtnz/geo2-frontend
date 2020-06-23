@@ -10,10 +10,11 @@ export class LieuPassageAQuai extends Model {
 
   @Field({asKey: true}) public id: string;
   @Field({asLabel: true}) public raisonSocial: string;
-  @Field({model: Pays}) public pays: Pays;
   @Field() public ville: string;
+  @Field({model: Pays}) public pays: Pays;
   @Field() public codePostal: string;
   @Field() public adresse1: string;
+  @Field() public valide: boolean;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field({model: RegimeTva}) public regimeTva: RegimeTva;
@@ -26,6 +27,5 @@ export class LieuPassageAQuai extends Model {
   @Field({model: Devise}) public devise: Devise;
   @Field() public lieuFonctionEan: string;
   @Field() public typeTiers: TypeTiers;
-  @Field() public valide: boolean;
 
 }

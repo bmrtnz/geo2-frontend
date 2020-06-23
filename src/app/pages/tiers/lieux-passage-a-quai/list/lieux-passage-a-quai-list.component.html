@@ -32,6 +32,8 @@
     <dxi-column
       *ngFor="let field of lieuxPassageAQuaiService.model.getListFields();let i=index"
       [dataField]="field"
+      [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
+      [filterValue]="field === 'valide' ? true : undefined"
       [caption]="('tiers-lieuxpassageaquai-' + field.split('.').shift() | localize) || field"
       [visible]="i < lieuxPassageAQuaiService.baseFieldsSize"
     ></dxi-column>

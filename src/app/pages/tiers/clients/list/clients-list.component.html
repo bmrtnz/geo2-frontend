@@ -32,6 +32,8 @@
     <dxi-column
       *ngFor="let field of clientsService.model.getListFields();let i=index"
       [dataField]="field"
+      [width]="field === 'id' ? 100 : field === 'valide' ? 100 : undefined"
+      [filterValue]="field === 'valide' ? true : undefined"
       [caption]="('tiers-clients-' + field.split('.').shift() | localize) || field"
       [visible]="i < clientsService.baseFieldsSize"
     ></dxi-column>

@@ -13,7 +13,7 @@ import { map, take } from 'rxjs/operators';
 
 export class ArticlesService extends ApiService implements APIRead {
 
-  listRegexp = /.\.*(?:id|description|espece|variete|type|modeCulture)$/i;
+  listRegexp = /.\.*(?:id|description|espece|variete|blueWhaleStock|type|modeCulture|valide)$/i;
 
   constructor(
     apollo: Apollo,

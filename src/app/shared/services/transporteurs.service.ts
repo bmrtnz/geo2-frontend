@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class TransporteursService extends ApiService implements APIRead {
 
-  listRegexp = /.\.*(?:id|raisonSocial|description|ville|valide)$/i;
+  listRegexp = /.\.*(?:id|raisonSocial|description|ville|codePostal|adresse1|valide)$/i;
 
   constructor(
     apollo: Apollo,

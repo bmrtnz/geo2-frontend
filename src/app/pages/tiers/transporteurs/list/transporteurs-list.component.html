@@ -33,6 +33,8 @@
     <dxi-column
       *ngFor="let field of transporteursService.model.getListFields();let i=index"
       [dataField]="field"
+      [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
+      [filterValue]="field === 'valide' ? true : undefined"
       [caption]="('tiers-transporteurs-' + field.split('.').shift() | localize) || field"
       [visible]="i < transporteursService.baseFieldsSize"
     ></dxi-column>

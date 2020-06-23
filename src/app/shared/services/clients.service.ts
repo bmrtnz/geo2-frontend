@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class ClientsService extends ApiService implements APIRead, APIPersist {
 
-  listRegexp = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  listRegexp = /.*\.(?:id|code|raisonSocial|description|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
