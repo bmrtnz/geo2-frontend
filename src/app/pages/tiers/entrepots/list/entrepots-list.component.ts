@@ -11,6 +11,7 @@ import DataSource from 'devextreme/data/data_source';
 export class EntrepotsListComponent implements OnInit {
 
   entrepots: DataSource;
+  clientID: string;
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -20,11 +21,9 @@ export class EntrepotsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams
-    .subscribe(({ search }) => {
-      this.entrepots = this.entrepotsService.getDataSource({
-        search: decodeURIComponent(search),
-      });
+    this.clientID = this.route.snapshot.paramMap.get('client');
+    this.entrepots = this.entrepotsService.getDataSource({
+      search: `client.id=="${ this.clientID }"`,
     });
   }
 

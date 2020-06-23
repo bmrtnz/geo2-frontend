@@ -195,10 +195,7 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   entrepotsBtnClick() {
-    const search = `client.id=="${ this.client.id }"`;
-    this.router.navigate([`/tiers/entrepots`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/entrepots/client/${ this.client.id }`]);
   }
 
   contactsBtnClick() {
