@@ -12,6 +12,7 @@ import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import notify from 'devextreme/ui/notify';
+import { TypeTiers } from 'app/shared/models/tier.model';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -70,6 +71,8 @@ export class FournisseurDetailsComponent implements OnInit {
   bureauxAchat: DataSource;
   typesFournisseur: DataSource;
   defaultVisible: boolean;
+  gridBoxValue: number[];
+  readOnlyMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -106,10 +109,6 @@ export class FournisseurDetailsComponent implements OnInit {
 
   }
 
-  debug(test) {
-    console.log(test);
-  }
-
   onSubmit() {
     if (!this.fournisseurForm.pristine && this.fournisseurForm.valid) {
       const fournisseur = this.fournisseursService
@@ -117,10 +116,19 @@ export class FournisseurDetailsComponent implements OnInit {
       this.fournisseursService
       .save({ fournisseur: { ...fournisseur, id: this.fournisseur.id } })
       .subscribe({
-        next: () => notify('Sauvegardé', 'success', 3000),
+        next: () => {
+          notify('Sauvegardé', 'success', 3000);
+          this.fournisseur = { id: this.fournisseur.id, ...this.fournisseurForm.getRawValue() };
+          this.readOnlyMode = true;
+        },
         error: () => notify('Echec de la sauvegarde', 'error', 3000),
       });
     }
+  }
+
+  onCancel() {
+    this.fournisseurForm.reset(this.fournisseur);
+    this.readOnlyMode = true;
   }
 
   toggleVisible() {
@@ -128,7 +136,7 @@ export class FournisseurDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/fournisseurs/${this.fournisseur.id}`]);
+    this.router.navigate([`/tiers/contacts/${ this.fournisseur.id }/${ this.fournisseur.typeTiers }`]);
   }
 
 }

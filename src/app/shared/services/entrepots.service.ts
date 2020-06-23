@@ -13,48 +13,16 @@ import { MutationOptions } from 'apollo-client';
 })
 export class EntrepotsService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'valide',
-    'raisonSocial',
-    'pays { id description }',
-    'client { id raisonSocial }',
-    'ville',
-  ];
-
-  allFields = [
-    ...this.baseFields,
-    'code',
-    'commercial { id nomUtilisateur }',
-    'assistante { id nomUtilisateur }',
-    'modeLivraison',
-    'adresse1',
-    'adresse2',
-    'adresse3',
-    'codePostal',
-    'lieuFonctionEanDepot',
-    'lieuFonctionEanAcheteur',
-    'langue { id description }',
-    'tvaCee',
-    'typePalette { id description }',
-    'incoterm { id description }',
-    'mentionClientSurFacture',
-    'regimeTva { id description }',
-    'transporteur { id raisonSocial }',
-    'baseTarifTransport { id description }',
-    'baseTarifTransit { id description }',
-    'typeCamion { id description }',
-    'transitaire { id raisonSocial }',
-  ];
+  listRegexp = /.*\.(?:id|description|raisonSocial|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Entrepot');
+    super(apollo, Entrepot);
   }
 
   getOne(id: string) {
-    const query = this.buildGetOne(this.allFields);
+    const query = this.buildGetOne();
     type Response = { entrepot: Entrepot };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -64,7 +32,11 @@ export class EntrepotsService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allEntrepot: RelayPage<Entrepot> };
 
           // Merge search
@@ -86,7 +58,7 @@ export class EntrepotsService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { entrepot: Entrepot };
           const variables = { ...inputVariables, id: key };
           return this.
@@ -102,7 +74,7 @@ export class EntrepotsService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(this.baseFields);
+    const mutation = this.buildSave(1, this.listRegexp);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

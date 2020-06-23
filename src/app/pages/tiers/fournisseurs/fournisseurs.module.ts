@@ -6,12 +6,13 @@ import { FournisseursListComponent } from './list/fournisseurs-list.component';
 import {
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
-    DxDataGridModule,
+    DxDataGridModule, DxTagBoxModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
+import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { FournisseurDetailsComponent } from './details/fournisseur-details.compo
         ReactiveFormsModule,
         DxFormModule,
         DxDataGridModule,
+        DxTagBoxModule,
         DxButtonModule,
         DxAccordionModule,
         DxListModule,
@@ -32,7 +34,8 @@ import { FournisseurDetailsComponent } from './details/fournisseur-details.compo
         DxTextAreaModule,
         DxPopoverModule,
         DxNumberBoxModule,
-        DxValidatorModule
+        DxValidatorModule,
+        HistoriqueValideModule
     ],
   declarations: [
     FournisseursListComponent,

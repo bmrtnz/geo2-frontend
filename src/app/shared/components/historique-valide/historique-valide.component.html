@@ -1,0 +1,45 @@
+<dx-button
+  class="black"
+  height="auto"
+  width="100%"
+  text="{{ 'btn-historique' | localize }}"
+  [visible]="this.btnVisible"
+  (onClick)="this.visible = true"
+></dx-button>
+
+<dx-popup
+  width="900"
+  [visible]="this.visible"
+  [showTitle]="true"
+  [dragEnabled]="false"
+  title="{{ 'btn-historique' | localize }}"
+  [(visible)]="this.visible"
+  [closeOnOutsideClick]="true">
+  <div *dxTemplate="let d of 'content'">
+    <dx-data-grid [dataSource]="this.historique">
+
+      <dxi-column
+        caption="{{ 'date-modification' | localize }}"
+        dataField="dateModification"
+        dataType="datetime"
+        width="120"
+      ></dxi-column>
+      <dxi-column
+        caption="{{ 'action' | localize }}"
+        dataField="valide"
+        width="50"
+      ></dxi-column>
+      <dxi-column
+        caption="{{ 'user-modification' | localize }}"
+        dataField="userModification"
+        width="80"
+      ></dxi-column>
+      <dxi-column
+        caption="{{ 'commentaire' | localize }}"
+        dataField="commentaire"
+        width="auto"
+      ></dxi-column>
+
+    </dx-data-grid>
+  </div>
+</dx-popup>

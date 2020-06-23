@@ -8,10 +8,11 @@ import {
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxSwitchModule, DxTextAreaModule,
-    DxTextBoxModule, DxValidatorModule
+    DxTextBoxModule, DxValidatorModule, DxTagBoxModule, DxDateBoxModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ClientHomeComponent} from './home/client-home.component';
+import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import {ClientHomeComponent} from './home/client-home.component';
         DxDataGridModule,
         DxButtonModule,
         DxAccordionModule,
+        DxTagBoxModule,
         DxListModule,
         DxSelectBoxModule,
         DxTextBoxModule,
@@ -33,7 +35,9 @@ import {ClientHomeComponent} from './home/client-home.component';
         DxPopoverModule,
         DxNumberBoxModule,
         DxValidatorModule,
-        DxSwitchModule
+        DxSwitchModule,
+        DxDateBoxModule,
+        HistoriqueValideModule,
     ],
     exports: [
         // ClientsListComponent

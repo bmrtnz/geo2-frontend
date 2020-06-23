@@ -47,6 +47,11 @@ const routes: Routes = [
     loadChildren: './pages/articles/articles.module#ArticlesModule'
   },
   {
+    path: 'stock',
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/stock/stock.module#StockModule'
+  },
+  {
     path: '**',
     redirectTo: 'home',
     canActivate: [AuthGuardService]

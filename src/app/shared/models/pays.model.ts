@@ -1,8 +1,10 @@
-export class Pays {
+import { Field, Model } from './model';
 
-  public id: string;
-  public description: string;
-  public numeroIso: string;
-  public valide: boolean;
+export class Pays extends Model {
+
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public description: string;
+  @Field() public numeroIso: string;
+  @Field() public valide: boolean;
 
 }

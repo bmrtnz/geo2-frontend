@@ -1,488 +1,571 @@
 <form [formGroup]="fournisseurForm" (ngSubmit)="onSubmit()">
-    <div class="content-block">
-      <h2>
-        {{ 'tiers-fournisseurs-details-title' | localize }}
-        <dx-button style="float: right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
-      </h2>
-    </div>
+  <div class="content-block">
+    <h2>
+      {{ 'tiers-fournisseurs-details-title' | localize }}
+      <div class="right">
+        <dx-button
+          type="normal"
+          text="{{ 'btn-annuler' | localize }}"
+          [visible]="!readOnlyMode"
+          (onClick)="onCancel()"
+        ></dx-button>
+        <dx-button
+          type="default"
+          text="{{ 'btn-valider' | localize }}"
+          [visible]="!readOnlyMode"
+          [useSubmitBehavior]="true"
+        ></dx-button>
+        <dx-button
+          type="default"
+          text="{{ 'btn-editer' | localize }}"
+          [visible]="readOnlyMode"
+          (onClick)="readOnlyMode = !readOnlyMode"
+        ></dx-button>
+      </div>
+    </h2>
+  </div>
 
-    <div class="content-block fournisseur-page">
-        <dx-box direction="row">
-          <dxi-item [ratio]="1">
-            <h4 class="entity-id">N° {{ fournisseur?.id }}</h4>
-            <dx-button
-              height="auto"
-              type="danger"
-              icon="material-icons person"
-              text="{{ 'tiers-fournisseurs-contacts' | localize }}"
-              (onClick)="contactsBtnClick()">
-            </dx-button>
-            <dx-button
-              height="auto"
-              type="default"
-              icon="material-icons home_work"
-              text="{{ 'tiers-fournisseurs-partenaires' | localize }}">
-            </dx-button>
+  <div class="content-block fournisseur-page">
+    <dx-box direction="row">
+      <dxi-item [ratio]="1">
+        <h4 class="entity-id">N° {{ fournisseur?.id }}</h4>
+        <dx-button
+          height="auto"
+          type="danger"
+          icon="material-icons person"
+          text="{{ 'tiers-fournisseurs-contacts' | localize }}"
+          (onClick)="contactsBtnClick()">
+        </dx-button>
+        <!--<dx-button
+          height="auto"
+          type="default"
+          icon="material-icons home_work"
+          text="{{ 'tiers-fournisseurs-partenaires' | localize }}">
+        </dx-button>-->
 
-            <dx-check-box
-              class="vertical"
-              formControlName="valide"
-              [text]="fournisseurForm.get('valide') ? 'valide' : 'invalide' | localize"
-            ></dx-check-box>
-            <dx-button
-              class="black"
-              height="auto"
-              text="{{ 'btn-historique' | localize }}"></dx-button>
-            <dx-button
-              class="black"
-              height="auto"
-              icon="material-icons folder"
-              text="{{ 'btn-docsjoints' | localize }}">
-            </dx-button>
-          </dxi-item>
-          <dxi-item [ratio]="0.3">
-          </dxi-item>
-          <dxi-item [ratio]="4">
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-infos' | localize }}</span>
+        <dx-check-box
+          class="vertical"
+          formControlName="valide"
+          [text]="fournisseurForm.get('valide') ? 'valide' : 'invalide' | localize"
+        ></dx-check-box>
+        <app-historique-valide [historique]="fournisseur?.historique"></app-historique-valide>
+        <dx-button
+          class="black"
+          height="auto"
+          icon="material-icons folder"
+          text="{{ 'btn-docsjoints' | localize }}">
+        </dx-button>
+      </dxi-item>
+      <dxi-item [ratio]="0.3">
+      </dxi-item>
+      <dxi-item [ratio]="4">
+        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+          <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-infos' | localize }}</span>
 
-              <div class="dx-form-group-content">
-                <!-- Code -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-code' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="id" [readOnly]="true">
-                      <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Stock actif -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-stockActif' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-check-box
-                    height= "00"
-                    formControlName="stockActif"></dx-check-box>
-                  </div>
-                </div>
-
-                <!-- Suivi précalibré -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-stockPrecalibre' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-check-box
-                    height= "00"
-                    formControlName="stockPrecalibre"></dx-check-box>
-                  </div>
-                </div>
-
+          <div class="dx-form-group-content">
+            <!-- Code -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-code' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="id" [readOnly]="true">
+                  <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
               </div>
             </div>
 
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-adresses' | localize }}</span>
-
-              <div class="dx-form-group-content">
-                <!-- Raison social -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-raisonSocial' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="raisonSocial">
-                      <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                     </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Adresse 1 -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse1' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse1"></dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Adresse 2 -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse2' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse2"></dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Adresse 3 -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse3' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse3"></dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Code postal -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-codePostal' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="codePostal">
-                      <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Ville -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-ville' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="ville">
-                      <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Pays -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-pays' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                      formControlName="pays"
-                      [dataSource]="pays"
-                      displayExpr="description"
-                      [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
-                      [(value)]="fournisseur && fournisseur.pays"
-                    >
-                    <dx-validator name="{{ 'tiers-fournisseurs-pays' | localize }}">
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-select-box>
-                  </div>
-                </div>
-
-                <!-- Latitude -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-latitude' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="latitude"></dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Longitude -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-longitude' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="longitude"></dx-text-box>
-                  </div>
-                </div>
+            <!-- Stock actif -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-stockActif' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-check-box
+                  formControlName="stockActif"
+                  [readOnly]="readOnlyMode"
+                ></dx-check-box>
               </div>
             </div>
-          </dxi-item>
-          <dxi-item [ratio]="0.2">
-          </dxi-item>
-          <dxi-item [ratio]="4">
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-references' | localize }}</span>
 
-              <div class="dx-form-group-content">
+            <!-- Suivi précalibré -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-stockPrecalibre' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-check-box
+                  formControlName="stockPrecalibre"
+                  [readOnly]="readOnlyMode"
+                ></dx-check-box>
+              </div>
+            </div>
 
-                <!-- Bureau achat -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                    formControlName="bureauAchat"
-                    [dataSource]="bureauxAchat"
-                    displayExpr="raisonSocial"
+          </div>
+        </div>
+
+        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+          <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-adresses' | localize }}</span>
+
+          <div class="dx-form-group-content">
+            <!-- Raison social -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-raisonSocial' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="raisonSocial" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-raisonSocial' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                 </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Adresse 1 -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse1' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="adresse1" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-adresse1' | localize }}">
+                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Adresse 2 -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse2' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="adresse2" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-adresse2' | localize }}">
+                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Adresse 3 -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-adresse3' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="adresse3" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-adresse3' | localize }}">
+                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Code postal -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-codePostal' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="codePostal" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-codePostal' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" max="9"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Ville -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-ville' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="ville" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-ville' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Pays -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-pays' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="pays"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="pays"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                >
+                <dx-validator name="{{ 'tiers-fournisseurs-pays' | localize }}">
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-select-box>
+              </div>
+            </div>
+
+            <!-- Latitude -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-latitude' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="latitude" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-latitude' | localize }}">
+                    <dxi-validation-rule type="stringLength" max="15"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Longitude -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-longitude' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="longitude" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-longitude' | localize }}">
+                    <dxi-validation-rule type="stringLength" max="15"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="0.2">
+      </dxi-item>
+      <dxi-item [ratio]="4">
+        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+          <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-references' | localize }}</span>
+
+          <div class="dx-form-group-content">
+
+            <!-- Bureau achat -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                formControlName="bureauAchat"
+                [readOnly]="readOnlyMode"
+                [dataSource]="bureauxAchat"
+                displayExpr="raisonSocial"
+                [searchEnabled]="true"
+                [searchExpr]="['id','raisonSocial']"
+                >
+                <dx-validator name="{{ 'tiers-fournisseurs-bureauAchat' | localize }}">
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-select-box>
+              </div>
+            </div>
+
+            <!-- Lieu fonction EAN -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-lieuFonctionEAN' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-lieuFonctionEAN' | localize }}">
+                    <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+            <!-- Langue -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-langue' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="langue"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="pays"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                >
+                <dx-validator name="{{ 'tiers-fournisseurs-langue' | localize }}">
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-select-box>
+              </div>
+            </div>
+
+            <!-- tvaCee -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-tvaCee' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="tvaCee" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-fournisseurs-tvaCee' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+
+          </div>
+          <dx-accordion
+            [collapsible]="true"
+            [multiple]="false"
+            [selectedIndex]="-1"
+          >
+            <dxi-item title="{{ 'tiers-fournisseurs-indicationFacture' | localize }}">
+
+              <!-- Type fournisseur -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-typeFournisseur' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    formControlName="type"
+                    [readOnly]="readOnlyMode"
+                    [dataSource]="typesFournisseur"
+                    displayExpr="description"
                     [searchEnabled]="true"
-                    [searchExpr]="['id','raisonSocial']"
-                    [(value)]="fournisseur && fournisseur.bureauAchat"
-                    >
-                    <dx-validator name="{{ 'tiers-fournisseurs-bureauAchat' | localize }}">
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-select-box>
-                  </div>
+                    [searchExpr]="['id','description']"
+                  ></dx-select-box>
                 </div>
-
-                <!-- Lieu fonction EAN -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-lieuFonctionEAN' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEan"></dx-text-box>
-                  </div>
-                </div>
-
-                <!-- Langue -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-langue' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                      formControlName="langue"
-                      [dataSource]="pays"
-                      displayExpr="description"
-                      [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
-                      [(value)]="fournisseur && fournisseur.langue"
-                    >
-                    <dx-validator name="{{ 'tiers-fournisseurs-langue' | localize }}">
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-select-box>
-                  </div>
-                </div>
-
-                <!-- tvaCee -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-tvaCee' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="tvaCee">
-                      <dx-validator name="{{ 'tiers-fournisseurs-tvaCee' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
-
               </div>
-              <dx-accordion
-                [collapsible]="true"
-                [multiple]="false"
-                [selectedIndex]="-1"
-              >
-                <dxi-item title="{{ 'tiers-fournisseurs-indicationFacture' | localize }}">
-
-                  <!-- Type fournisseur -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-typeFournisseur' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-select-box
-                        formControlName="type"
-                        [dataSource]="typesFournisseur"
-                        displayExpr="description"
-                        [searchEnabled]="true"
-                        [searchExpr]="['id','description']"
-                        [(value)]="fournisseur && fournisseur.type"
-                      ></dx-select-box>
-                    </div>
-                  </div>
-                  <!-- Compte comptable -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-compteComptable' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="compteComptable">
-                      </dx-text-box>
-                    </div>
-                  </div>
-                  <!-- id tracçabilité -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-idTracabilite' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="idTracabilite"></dx-text-box>
-                    </div>
-                  </div>
-
-                  <!-- Agrément BW -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-agrementBW' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="agrementBW"></dx-text-box>
-                    </div>
-                  </div>
-                  <!-- Code station -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-codeStation' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="codeStation"></dx-text-box>
-                    </div>
-                  </div>
-                </dxi-item>
-              </dx-accordion>
-            </div>
-
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-paiement' | localize }}</span>
-
-              <div class="dx-form-group-content">
-                <div class="dx-field">
-                  <dx-box direction="row">
-                    <dxi-item [ratio]="2">
-                      <!-- Nb Jour Echeance -->
-                      <div class="dx-field field-large">
-                        <div class="dx-field-label">{{ 'tiers-fournisseurs-nbJourEcheance' | localize }}</div>
-                        <div class="dx-field-value">
-                          <dx-text-box formControlName="nbJourEcheance">
-                            <dx-validator name="{{ 'tiers-fournisseurs-nbJourEcheance' | localize }}">
-                             <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                            </dx-validator>
-                          </dx-text-box>
-                        </div>
-                      </div>
-                    </dxi-item>
-                    <dxi-item [ratio]="1">
-                      <!-- Echeance Le -->
-                      <div class="dx-field field-small">
-                        <div class="dx-field-label">{{ 'tiers-fournisseurs-echeanceLe' | localize }}</div>
-                        <div class="dx-field-value">
-                          <dx-text-box formControlName="echeanceLe">
-                              <dx-validator name="{{ 'tiers-fournisseurs-echeanceLe' | localize }}">
-                                <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                              </dx-validator>
-                           </dx-text-box>
-                        </div>
-                      </div>
-                    </dxi-item>
-                  </dx-box>
+              <!-- Compte comptable -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-compteComptable' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-compteComptable' | localize }}">
+                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
                 </div>
-
-                <!-- Incoterm (Ne sert pas ?) -->
-                <!-- <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-incoterm' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="incoterm"></dx-text-box>
-                  </div>
-                </div> -->
-
-                <!-- Regime Tva -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-regimeTva' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                      formControlName="regimeTva"
-                      [dataSource]="regimesTva"
-                      displayExpr="description"
-                      [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
-                      [(value)]="fournisseur && fournisseur.regimeTva"
-                    ></dx-select-box>
-                  </div>
+              </div>
+              <!-- id tracabilité -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-idTracabilite' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="idTracabilite" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-idTracabilite' | localize }}">
+                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
                 </div>
-
-                <!-- Devise -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-devise' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                      formControlName="devise"
-                      [dataSource]="devises"
-                      displayExpr="description"
-                      [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
-                      [(value)]="fournisseur && fournisseur.devise"
-                    >
-                      <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-select-box>
-                  </div>
-                </div>
-
-                <!-- Moyen Paiement -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-moyenPaiement' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                    formControlName="moyenPaiement"
-                      [dataSource]="moyensPaiement"
-                      displayExpr="description"
-                      [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
-                      [(value)]="fournisseur && fournisseur.moyenPaiement"
-                    ></dx-select-box>
-                  </div>
-                </div>
-
-                <!-- Base Paiement -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-fournisseurs-basePaiement' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                      formControlName="basePaiement"
-                      [dataSource]="basesPaiement"
-                      displayExpr="description"
-                      [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
-                      [(value)]="fournisseur && fournisseur.basePaiement"
-                    ></dx-select-box>
-                  </div>
-                </div>
-
               </div>
 
-              <dx-accordion
-                [collapsible]="true"
-                [multiple]="false"
-                [selectedIndex]="-1"
-              >
-                <dxi-item title="{{ 'tiers-fournisseurs-autoFacturation' | localize }}">
+              <!-- Agrément BW -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-agrementBW' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="agrementBW" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-agrementBW' | localize }}">
+                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- Code station -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-codeStation' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="codeStation" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-codeStation' | localize }}">
+                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+            </dxi-item>
+          </dx-accordion>
+        </div>
 
-                  <!-- Auto facturation ? -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-autoFacturation' | localize }} ?</div>
+        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+          <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-paiement' | localize }}</span>
+
+          <div class="dx-form-group-content">
+            <div class="dx-field">
+              <dx-box direction="row">
+                <dxi-item [ratio]="2">
+                  <!-- Nb Jour Echeance -->
+                  <div class="dx-field field-large">
+                    <div class="dx-field-label">{{ 'tiers-fournisseurs-nbJourEcheance' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-check-box formControlName="autoFacturation"></dx-check-box>
-                    </div>
-                  </div>
-                  <!-- Forme juridique -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-formeJuridique' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="formeJuridique"></dx-text-box>
-                    </div>
-                  </div>
-                  <!-- SIRET APE -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-SiretAPE' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="siretAPE">
-                        <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
+                      <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
+                        <dx-validator name="{{ 'tiers-fournisseurs-nbJourEcheance' | localize }}">
+                          <dxi-validation-rule type="required"></dxi-validation-rule>
                           <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                          <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
                   </div>
-                  <!-- id TVA -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-idTVA' | localize }}</div>
+                </dxi-item>
+                <dxi-item [ratio]="1">
+                  <!-- Echeance Le -->
+                  <div class="dx-field field-small">
+                    <div class="dx-field-label">{{ 'tiers-fournisseurs-echeanceLe' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-text-box formControlName="tvaId"></dx-text-box>
-                    </div>
-                  </div>
-                  <!-- RCS -->
-                  <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-fournisseurs-RCS' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="rcs"></dx-text-box>
+                      <dx-text-box formControlName="echeanceLe" [readOnly]="readOnlyMode">
+                          <dx-validator name="{{ 'tiers-fournisseurs-echeanceLe' | localize }}">
+                            <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                            <dxi-validation-rule type="stringLength" max="2"></dxi-validation-rule>
+                          </dx-validator>
+                       </dx-text-box>
                     </div>
                   </div>
                 </dxi-item>
-              </dx-accordion>
-
+              </dx-box>
             </div>
-          </dxi-item>
-        </dx-box>
-          <br>
-          <dx-box
-          direction="row">
-            <dxi-item [ratio]="3">
-              <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-certifications' | localize }}</span>
-                <div class="dx-form-group-content">
-                  <!-- Certifications -->
-                  <div class="dx-field">
-                    <!-- <div class="dx-field-label">{{ 'tiers-fournisseurs-certifications' | localize }}</div> -->
-                    <div class="dx-field-value">
-                      <dx-text-area formControlName="certifications"></dx-text-area>
-                    </div>
-                  </div>
+
+            <!-- Incoterm (Ne sert pas ?) -->
+            <!-- <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-incoterm' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="incoterm"></dx-text-box>
+              </div>
+            </div> -->
+
+            <!-- Regime Tva -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-regimeTva' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="regimeTva"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="regimesTva"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                ></dx-select-box>
+              </div>
+            </div>
+
+            <!-- Devise -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-devise' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="devise"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="devises"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                >
+                  <dx-validator name="{{ 'tiers-fournisseurs-devise' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-select-box>
+              </div>
+            </div>
+
+            <!-- Moyen Paiement -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-moyenPaiement' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="moyenPaiement"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="moyensPaiement"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                ></dx-select-box>
+              </div>
+            </div>
+
+            <!-- Base Paiement -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-basePaiement' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="basePaiement"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="basesPaiement"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                ></dx-select-box>
+              </div>
+            </div>
+
+          </div>
+
+          <dx-accordion
+            [collapsible]="true"
+            [multiple]="false"
+            [selectedIndex]="-1"
+          >
+            <dxi-item title="{{ 'tiers-fournisseurs-autoFacturation' | localize }}">
+
+              <!-- Auto facturation ? -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-autoFacturation' | localize }} ?</div>
+                <div class="dx-field-value">
+                  <dx-check-box formControlName="autoFacturation" [readOnly]="readOnlyMode"></dx-check-box>
+                </div>
+              </div>
+              <!-- Forme juridique -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-formeJuridique' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="formeJuridique" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-formeJuridique' | localize }}">
+                      <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- SIRET APE -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-SiretAPE' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="siretAPE" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-SiretAPE' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                      <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- id TVA -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-idTVA' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="tvaId" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-idTVA' | localize }}">
+                      <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- RCS -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-fournisseurs-RCS' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="rcs" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-fournisseurs-RCS' | localize }}">
+                      <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
                 </div>
               </div>
             </dxi-item>
-          </dx-box>
-    </div>
-  </form>
+          </dx-accordion>
+
+        </div>
+      </dxi-item>
+    </dx-box>
+    <br>
+    <dx-box direction="row">
+      <dxi-item [ratio]="3">
+        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+          <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-certifications' | localize }}</span>
+          <div class="dx-form-group-content">
+            <!-- Certifications -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-clients-typeCertification' | localize }}</div>
+              <div class="dx-field-value">
+                  <dx-tag-box
+                      [dataSource]="pays"
+                      [readOnly]="readOnlyMode"
+                      displayExpr="description"
+                      placeholder="Sélectionner une ou plusieurs certifications..."
+                      valueExpr="id">
+                  </dx-tag-box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dxi-item>
+    </dx-box>
+  </div>
+</form>

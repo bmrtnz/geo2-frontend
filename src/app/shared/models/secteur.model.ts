@@ -1,7 +1,9 @@
-export class Secteur {
+import { Field, Model } from './model';
 
-  public id: string;
-  public description: string;
-  public valide: boolean;
+export class Secteur extends Model {
+
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public description: string;
+  @Field() public valide: boolean;
 
 }

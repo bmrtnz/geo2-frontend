@@ -12,23 +12,23 @@ import { LoadOptions } from 'devextreme/data/load_options';
 })
 export class RegimesTvaService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'description',
-    'valide',
-  ];
+  listRegexp = /.*\.(?:id|description)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'RegimeTva');
+    super(apollo, RegimeTva);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+
+          if (options.group)
+            return this.getDistinct(options, variables).toPromise();
+
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allRegimeTva: RelayPage<RegimeTva> };
           variables = {
             ...variables,
@@ -43,9 +43,9 @@ export class RegimesTvaService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { regimeTva: RegimeTva };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

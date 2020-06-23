@@ -20,7 +20,7 @@ export class ClientsListComponent implements OnInit {
   @Output() rowDblClick = new EventEmitter<Client>();
 
   constructor(
-    private clientsService: ClientsService,
+    public clientsService: ClientsService,
     private router: Router
   ) { }
 
@@ -108,6 +108,14 @@ export class ClientsListComponent implements OnInit {
     this.dataGrid.instance.selectRowsByIndexes([previousIndex]);
 
     this.rowDblClick.emit(this.dataGrid.instance.getSelectedRowsData()[0]);
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
   }
 
 }

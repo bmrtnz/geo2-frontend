@@ -1,9 +1,11 @@
-export class Incoterm {
+import { Model, Field } from './model';
 
-  public id: string;
-  public description: string;
-  public renduDepart: string;
-  public lieu: boolean;
-  public valide: boolean;
+export class Incoterm extends Model {
+
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public description: string;
+  @Field() public renduDepart: string;
+  @Field() public lieu: boolean;
+  @Field() public valide: boolean;
 
 }

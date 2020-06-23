@@ -1,70 +1,65 @@
 <div class="content-block">
-    <h2>
+  <h2>
     {{ 'tiers-contacts-title' | localize }}
     -
-    {{ 'tiers-contacts-' + type | localize }} : {{ tiersId }}
-    <dx-button style="float:right;" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
-    </h2>
+    {{ 'tiers-contacts-' + typeTiersLabel | localize }} : {{ codeTiers }}
+  </h2>
 </div>
 <div class="content-block contact-page">
-    <dx-data-grid 
-        id="gridContainer"
-        [dataSource]="dataSource"
-        keyExpr="id"
-        [allowColumnReordering]="true"
-        [showBorders]="true">
-        
-        <dxo-paging [enabled]="true"></dxo-paging>
-        <dxo-editing 
-            mode="row"
-            [allowUpdating]="true"
-            [allowDeleting]="true"
-            [allowAdding]="true">
-        </dxo-editing>
-        
-        <dxi-column
-            dataField="Nom"
-            caption="{{ 'tiers-contacts-header-nom' | localize }}"
-            [width]="200">
-        </dxi-column>
-        <dxi-column
-            dataField="Prenom"
-            caption="{{ 'tiers-contacts-header-prenom' | localize }}">
-        </dxi-column>
-        <dxi-column
-            dataField="Moyen"
-            caption="{{ 'tiers-contacts-header-moyen' | localize }}"
-            [width]="100">         
-            <dxo-lookup
-                [dataSource]="moyens"
-                displayExpr="description"
-                valueExpr="id">
-            </dxo-lookup>
-        </dxi-column>
-        <dxi-column
-            dataField="Flux"
-            caption="{{ 'tiers-contacts-header-flux' | localize }}"
-            [width]="125">         
-            <dxo-lookup
-                [dataSource]="flux"
-                displayExpr="description"
-                valueExpr="id">
-            </dxo-lookup>
-        </dxi-column>
-        <dxi-column
-            dataField="Compl"
-            caption="{{ 'tiers-contacts-header-compl' | localize }}"
-            [width]="75">
-        </dxi-column>
-        <dxi-column
-            dataField="Coord"
-            caption="{{ 'tiers-contacts-header-coords' | localize }}"
-            [width]="250">
-        </dxi-column>
-        <dxi-column
-            dataField="OK"
-            caption="OK"
-            [width]="75">
-        </dxi-column>
-    </dx-data-grid>
+  <dx-data-grid
+    [dataSource]="contacts"
+    [remoteOperations]="true"
+    [allowColumnReordering]="true"
+    [showBorders]="true"
+    (onRowInserting)="onRowInserting($event)"
+    (onRowClick)="onRowClick($event)"
+  >
+
+    <!-- Grid configuration -->
+    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
+    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [allowedPageSizes]="[10, 25, 50, 100]"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    ></dxo-pager>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-editing
+      mode="form"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [allowAdding]="true"
+    >
+    </dxo-editing>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
+    <dxo-selection mode="single"></dxo-selection>
+
+    <dxi-column
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.name"
+      [caption]="('tiers-contacts-' + field.name | localize) || field.name"
+      [visible]="i < contactsService.baseFieldsSize"
+      [allowEditing]="field.allowEditing"
+      [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"
+      [showEditorAlways]="true"
+    ></dxi-column>
+
+    <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
+      <dx-select-box
+        [dataSource]="this[cell.column.dataField + 'Source']"
+        [displayExpr]="this[cell.column.dataField + 'Service'].model.getLabelField()"
+        [searchExpr]="[
+          this[cell.column.dataField + 'Service'].model.getKeyField(),
+          this[cell.column.dataField + 'Service'].model.getLabelField()
+        ]"
+        [searchEnabled]="true"
+        [value]="cell.data[cell.column.dataField]"
+        (onValueChanged)="onValueChanged($event, cell)"
+      ></dx-select-box>
+    </div>
+    
+  </dx-data-grid>
 </div>

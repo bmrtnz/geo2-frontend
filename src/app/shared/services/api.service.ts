@@ -6,18 +6,27 @@ import { FetchResult } from 'apollo-link';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
-import { take } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 import { AbstractControl } from '@angular/forms';
 import { LoadOptions } from 'devextreme/data/load_options';
+import { Model } from '../models/model';
 
-const DEFAULT_ID = 'id';
+const DEFAULT_KEY = 'id';
+const DEFAULT_GQL_KEY_TYPE = 'String';
 const DEFAULT_PAGE_SIZE = 10;
+const BASE_FIELDS_SIZE = 5;
 
 export type PageInfo = {
   startCursor?: string
   endCursor?: string
   hasPreviousPage?: boolean
   hasNextPage?: boolean
+};
+
+export type DistinctInfo = {
+  count: number
+  key: string
+  items: DistinctInfo[]
 };
 
 export type RelayPage<T> = {
@@ -62,15 +71,19 @@ export interface APIPersist {
 
 export abstract class ApiService {
 
-  keyField = DEFAULT_ID;
   pageSize = DEFAULT_PAGE_SIZE;
-  model: string;
+  baseFieldsSize = BASE_FIELDS_SIZE;
+  keyField: string;
+  gqlKeyType = DEFAULT_GQL_KEY_TYPE;
+  model: typeof Model;
+  storeConfiguration: CustomStoreOptions;
 
   constructor(
     private apollo: Apollo,
-    model: string,
+    model: typeof Model,
   ) {
     this.model = model;
+    this.keyField = this.model.getKeyField() || DEFAULT_KEY;
   }
 
   /**
@@ -125,11 +138,12 @@ export abstract class ApiService {
     return Object.entries(controls)
     .filter(([key, control]) => key === this.keyField || control.dirty )
     .map(([key, control]) => {
-      if (control.value.__typename)
-        for (const field of Object.keys(control.value))
+      const value = JSON.parse(JSON.stringify(control.value));
+      if (value.__typename)
+        for (const field of Object.keys(value))
           if (field !== 'id')
-            delete control.value[field];
-      return { [key]: control.value };
+            delete value[field];
+      return { [key]: value };
     })
     .reduce((acm, current) => ({...acm, ...current}));
   }
@@ -198,18 +212,18 @@ export abstract class ApiService {
 
   /**
    * Build paginated query
-   * @param operation Operation name
-   * @param fields Fetched fields
+   * @param depth Sub model selection depth
+   * @param filter Regexp field filter
    */
-  protected buildGetAll(fields: string[]) {
-    const operation = `all${this.model}`;
+  protected buildGetAll(depth?: number, filter?: RegExp) {
+    const operation = `all${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
       query ${ alias }($search: String, $pageable: PaginationInput!) {
         ${ operation }(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${ fields.join('\n') }
+              ${ this.model.getGQLFields(depth, filter) }
             }
           }
           pageInfo {
@@ -225,31 +239,80 @@ export abstract class ApiService {
   }
 
   /**
-   * Build query
-   * @param operation Operation name
-   * @param fields Fetched fields
+   * Build getOne query
+   * @param depth Sub model selection depth
+   * @param filter Regexp field filter
    */
-  protected buildGetOne(fields: string[]) {
-    const operation = this.withLowerCaseFirst(this.model);
+  protected buildGetOne(depth?: number, filter?: RegExp) {
+    const operation = this.withLowerCaseFirst(this.model.name);
     const alias = this.withUpperCaseFirst(operation);
     return `
-      query ${ alias }($${ this.keyField }: String!) {
+      query ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
         ${ operation }(${ this.keyField }:$${ this.keyField }) {
-          ${ fields.join('\n') }
+          ${ this.model.getGQLFields(depth, filter) }
         }
       }
     `;
   }
 
-  protected buildSave(fields: string[]) {
-    const entity = this.withLowerCaseFirst(this.model);
-    const operation = `save${this.model}`;
-    const type = `Geo${this.model}Input`;
+  /**
+   * Build save query
+   * @param depth Save response depth
+   * @param filter Fields filter
+   */
+  protected buildSave(depth?: number, filter?: RegExp) {
+    const entity = this.withLowerCaseFirst(this.model.name);
+    const operation = `save${this.model.name}`;
+    const type = `Geo${this.model.name}Input`;
     const alias = this.withUpperCaseFirst(operation);
     return `
       mutation ${ alias }($${ entity }: ${ type }!) {
         ${ operation }(${ entity }: $${ entity }) {
-          ${ fields.join('\n') }
+          ${ this.model.getGQLFields(depth, filter) }
+        }
+      }
+    `;
+  }
+
+  /**
+   * Build delete query
+   */
+  protected buildDelete() {
+    const operation = `delete${this.model.name}`;
+    const alias = this.withUpperCaseFirst(operation);
+    return `
+      mutation ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
+        ${ operation }(${ this.keyField }: $${ this.keyField }) {
+          id
+        }
+      }
+    `;
+  }
+
+  /**
+   * Build distinct query
+   */
+  protected buildDistinct() {
+    const operation = `distinct`;
+    const alias = this.withUpperCaseFirst(operation);
+    const type = `Geo${this.model.name}`;
+    return `
+      query ${ alias }($field: String!, $search: String, $pageable: PaginationInput!) {
+        ${ operation }(type: "${ type }", field: $field, search: $search, pageable: $pageable) {
+          edges {
+            node {
+              count
+              key
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          totalPage
+          totalCount
         }
       }
     `;
@@ -257,12 +320,38 @@ export abstract class ApiService {
 
   /**
    * Create DX CustomStore with preconfigured key
+   * @param options DXCustomStore options
    */
   protected createCustomStore(options?: CustomStoreOptions) {
+    this.storeConfiguration = options;
     return new CustomStore({
-      key: this.keyField,
+      key: options.key || this.keyField,
       ...options,
     });
+  }
+
+  /**
+   * Build and prepare distinct query
+   * @param options DX LoadOptions object
+   * @param inputVariables User variables
+   */
+  protected getDistinct(options: LoadOptions, inputVariables?: OperationVariables | RelayPageVariables) {
+    const field = options.group[0].selector;
+    const distinctQuery = this.buildDistinct();
+    type DistinctResponse = { distinct: RelayPage<DistinctInfo> };
+    const distinctVariables = {
+      ...inputVariables,
+      field,
+      ...this.mapLoadOptionsToVariables(options),
+    };
+    return this.
+    query<DistinctResponse>(distinctQuery, {
+      variables: distinctVariables,
+    } as WatchQueryOptions<any>)
+    .pipe(
+      map( res => this.asListCount(res.data.distinct)),
+      take(1),
+    );
   }
 
   /**
@@ -350,8 +439,8 @@ export abstract class ApiService {
   protected mapLoadOptionsToVariables(options: LoadOptions) {
     const variables: RelayPageVariables = {
       pageable: {
-        pageNumber: options.skip / options.take,
-        pageSize: options.take,
+        pageNumber: options.skip / options.take || 0,
+        pageSize: options.take || DEFAULT_PAGE_SIZE,
       },
     };
     this.pageSize = options.take;
