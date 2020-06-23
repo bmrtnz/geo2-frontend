@@ -28,7 +28,7 @@ export class EntrepotsListComponent implements OnInit {
   }
 
   onRowDblClick(e) {
-    this.router.navigate([`/tiers/clients/${this.route.snapshot.params.id}/entrepots/${e.data.id}`]);
+    this.router.navigate([`/tiers/clients/${this.clientID}/entrepots/${e.data.id}`]);
   }
   onRowPrepared(e) {
     if (e.rowType === 'data') {

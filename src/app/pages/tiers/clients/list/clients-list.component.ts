@@ -26,7 +26,6 @@ export class ClientsListComponent implements OnInit {
 
   ngOnInit() {
     this.clients = this.clientsService.getDataSource();
-    //this.filters = this.clientsService.getFilterDatasource();
   }
 
   async onSelectionChange(e) {
