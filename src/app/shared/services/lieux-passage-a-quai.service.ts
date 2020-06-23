@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class LieuxPassageAQuaiService extends ApiService implements APIRead {
 
-  listRegexp = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
@@ -28,7 +28,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
-    const query = this.buildGetAll(1, this.listRegexp);
+    const query = this.buildGetAll();
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
@@ -54,7 +54,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
+    const mutation = this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 
