@@ -36,7 +36,7 @@ export class ArticlesService extends ApiService implements APIRead {
           if (options.group)
             return this.getDistinct(options, inputVariables).toPromise();
 
-          const query = this.buildGetAll(2, this.listRegexp);
+          const query = this.buildGetAll(2);
           type Response = { allArticle: RelayPage<Article> };
           const variables = {
             ...inputVariables,
@@ -51,7 +51,7 @@ export class ArticlesService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(1, this.listRegexp);
+          const query = this.buildGetOne(1, this.fieldsFilter);
           type Response = { article: Article };
           const variables = { ...inputVariables, id: key };
           return this.
@@ -67,7 +67,7 @@ export class ArticlesService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
+    const mutation = this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 
