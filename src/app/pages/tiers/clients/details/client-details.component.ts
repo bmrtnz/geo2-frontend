@@ -197,7 +197,7 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${ this.client.id }/${ this.client.typeTiers }`]);
+    this.router.navigate([`/tiers/contacts/${ this.client.code }/${ this.client.typeTiers }`]);
   }
 
 }
