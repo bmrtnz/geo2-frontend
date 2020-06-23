@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import {ActivatedRoute, ActivationEnd, NavigationEnd, Router} from '@angular/router';
 import {Client} from '../../../../shared/models';
@@ -13,7 +13,6 @@ import {ClientDetailsComponent} from '../details/client-details.component';
 export class ClientHomeComponent implements OnInit {
 
   backBtnDisabled = false;
-  collapseMode = true;
   @ViewChild(ClientsListComponent, { static: true }) clientsList;
 
   constructor(
@@ -37,11 +36,8 @@ export class ClientHomeComponent implements OnInit {
   }
 
   hideGrid() {
-    if (this.collapseMode) {
-      this.toggleCollapse(true);
-    } else {
-      document.getElementById('router').scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById('router')
+    .scrollIntoView({ behavior: 'smooth' });
   }
 
   toggleCollapse(forceHide = false) {
