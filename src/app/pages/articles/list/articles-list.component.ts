@@ -28,4 +28,12 @@ export class ArticlesListComponent implements OnInit {
     this.router.navigate([`/articles/${e.data.id}`]);
   }
 
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
+  }
+
 }

@@ -20,11 +20,12 @@ import { Courtier } from './courtier.model';
 export class Client extends Model {
 
   @Field({asKey: true}) public id: string;
-  @Field({asLabel: true}) public raisonSocial: string;
-  @Field({model: Pays}) public pays: Pays;
-  @Field() public ville: string;
-  @Field({model: Secteur}) public secteur: Secteur;
   @Field() public code: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field() public ville: string;
+  @Field({model: Pays}) public pays: Pays;
+  @Field({model: Secteur}) public secteur: Secteur;
+  @Field() public valide: boolean;
   @Field({model: Societe}) public societe: Societe;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
@@ -69,7 +70,6 @@ export class Client extends Model {
   @Field() public typeTiers: TypeTiers;
   @Field() public lieuFonctionEan: string;
   @Field() public delaiBonFacturer: number;
-  @Field() public valide: boolean;
   @Field({model: Historique}) public historique: Historique[];
   @Field({model: TypeVente}) public typeVente: TypeVente;
   @Field() public dateDebutIfco: string;

@@ -13,7 +13,7 @@ import { MutationOptions } from 'apollo-client';
 })
 export class EntrepotsService extends ApiService implements APIRead {
 
-  listRegexp = /.*\.(?:id|description|raisonSocial|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|description|raisonSocial|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
@@ -36,7 +36,7 @@ export class EntrepotsService extends ApiService implements APIRead {
           if (options.group)
             return this.getDistinct(options, inputVariables).toPromise();
 
-          const query = this.buildGetAll(1, this.listRegexp);
+          const query = this.buildGetAll();
           type Response = { allEntrepot: RelayPage<Entrepot> };
 
           // Merge search
@@ -58,7 +58,7 @@ export class EntrepotsService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(1, this.listRegexp);
+          const query = this.buildGetOne(1, this.fieldsFilter);
           type Response = { entrepot: Entrepot };
           const variables = { ...inputVariables, id: key };
           return this.
@@ -74,7 +74,7 @@ export class EntrepotsService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
+    const mutation = this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

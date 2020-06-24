@@ -49,6 +49,7 @@ export class TransporteurDetailsComponent implements OnInit {
   devises: DataSource;
   moyensPaiement: DataSource;
   basesPaiement: DataSource;
+  clientsRaisonSocial: DataSource;
   regimesTva: DataSource;
   bureauxAchat: DataSource;
   typesTransporteur: DataSource;
@@ -85,7 +86,7 @@ export class TransporteurDetailsComponent implements OnInit {
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
-    this.clients = this.clientsService.getDataSource();
+    this.clientsRaisonSocial = this.clientsService.getDataSource();
 
   }
 

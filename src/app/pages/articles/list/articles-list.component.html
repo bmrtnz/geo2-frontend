@@ -9,10 +9,11 @@
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
+    (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
   >
 
-    <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
@@ -27,12 +28,22 @@
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
 
-    <dxi-column
+    <!-- <dxi-column
       *ngFor="let field of articlesService.model.getListFields(2);let i=index"
       [dataField]="field"
-      [caption]="('articles-' + field.split('.').shift() | localize) || field"
+      [caption]="('articles-' + field.split('.')[1] | localize) || field"
+      [visible]="i < articlesService.baseFieldsSize"
+    ></dxi-column> -->
+
+    <dxi-column
+      *ngFor="let field of articlesService.model.getListFields();let i=index"
+      [dataField]="field"
+      [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
+      [filterValue]="field === 'valide' ? true : undefined"
+      [caption]="('articles-' + field.split('.')[1] | localize) || field"
       [visible]="i < articlesService.baseFieldsSize"
     ></dxi-column>
-    
+
+
   </dx-data-grid>
 </div>
