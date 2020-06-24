@@ -35,7 +35,7 @@
       [dataField]="field"
       [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
       [filterValue]="field === 'valide' ? true : undefined"
-      [caption]="('tiers-transporteurs-' + field.split('.').shift() | localize) || field"
+      [caption]="('tiers-transporteurs-' + field.replace('.description','').replace('.','-') | localize) || field"
       [visible]="i < transporteursService.baseFieldsSize"
     ></dxi-column>
 
