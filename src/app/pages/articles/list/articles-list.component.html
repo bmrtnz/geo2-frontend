@@ -9,6 +9,7 @@
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
+    (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
   >
 
@@ -33,7 +34,7 @@
       [caption]="('articles-' + field.split('.')[1] | localize) || field"
       [visible]="i < articlesService.baseFieldsSize"
     ></dxi-column> -->
-    
+
     <dxi-column
       *ngFor="let field of articlesService.model.getListFields();let i=index"
       [dataField]="field"
