@@ -11,7 +11,6 @@ import {
     DxTextBoxModule, DxValidatorModule, DxTagBoxModule, DxDateBoxModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ClientHomeComponent} from './home/client-home.component';
 import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
 
 
@@ -39,12 +38,8 @@ import { HistoriqueValideModule } from 'app/shared/components/historique-valide/
         DxDateBoxModule,
         HistoriqueValideModule,
     ],
-    exports: [
-        // ClientsListComponent
-    ],
     declarations: [
         ClientsListComponent,
-        ClientHomeComponent,
         ClientDetailsComponent
     ]
 })

@@ -1,6 +1,5 @@
 <div class="content-block">
   <dx-data-grid
-    #dataGrid
     class="dx-card wide-card"
     [dataSource]="clients"
     [remoteOperations]="true"
@@ -10,9 +9,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
     [allowColumnReordering]="true"
-    (onContentReady)="onContentReady()"
-    (onRowDblClick)="onSelectionChange($event)"
     (onRowPrepared)="onRowPrepared($event)"
+    (onRowDblClick)="onRowDblClick($event)"
   >
 
     <dxo-selection mode="single"></dxo-selection>
@@ -42,7 +40,4 @@
 
   </dx-data-grid>
 
-  <div *ngIf="this.selectedRowKeys.length">
-    <span [textContent]="this.selectedRowKeys"></span>
-  </div>
 </div>

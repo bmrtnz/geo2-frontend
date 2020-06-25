@@ -52,6 +52,11 @@ const routes: Routes = [
     loadChildren: './pages/stock/stock.module#StockModule'
   },
   {
+    path: 'nested',
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/nested/nested.module#NestedModule'
+  },
+  {
     path: '**',
     redirectTo: 'home',
     canActivate: [AuthGuardService]

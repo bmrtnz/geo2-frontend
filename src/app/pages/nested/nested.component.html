@@ -1,0 +1,12 @@
+<div class="collapse collapsed">
+
+  <h2 class="content-block">NESTED</h2>
+  <router-outlet (activate)="onActivate($event)"></router-outlet>
+  <!-- <div *ngIf="this.selectedRowKeys.length">
+    <span [textContent]="this.selectedRowKeys"></span>
+  </div> -->
+
+</div>
+
+<app-grid-navigator></app-grid-navigator>
+<router-outlet name="details"></router-outlet>

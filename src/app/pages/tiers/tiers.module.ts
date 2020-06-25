@@ -11,7 +11,6 @@ import {ClientsModule} from './clients/clients.module';
   imports: [
     SharedModule,
     TiersRoutingModule,
-    ClientsModule,
     ContactsModule
   ]
 })

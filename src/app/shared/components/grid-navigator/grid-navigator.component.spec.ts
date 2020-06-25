@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClientHomeComponent } from './client-home.component';
+import { GridNavigatorComponent } from './grid-navigator.component';
 
-describe('HomeComponent', () => {
-  let component: ClientHomeComponent;
-  let fixture: ComponentFixture<ClientHomeComponent>;
+describe('GridNavigatorComponent', () => {
+  let component: GridNavigatorComponent;
+  let fixture: ComponentFixture<GridNavigatorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClientHomeComponent ]
+      declarations: [ GridNavigatorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClientHomeComponent);
+    fixture = TestBed.createComponent(GridNavigatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
