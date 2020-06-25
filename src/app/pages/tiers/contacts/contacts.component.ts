@@ -7,6 +7,7 @@ import { ModelFieldOptions } from 'app/shared/models/model';
 import { TypeTiers } from 'app/shared/models/tier.model';
 import { SocietesService } from 'app/shared/services/societes.service';
 import { FluxService } from 'app/shared/services/flux.service';
+import { MoyenCommunicationService } from 'app/shared/services/moyens-communication.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
@@ -19,6 +20,7 @@ export class ContactsComponent implements OnInit {
   contacts: DataSource;
   fluxSource: DataSource;
   societeSource: DataSource;
+  moyenCommunicationSource: DataSource;
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
@@ -29,6 +31,7 @@ export class ContactsComponent implements OnInit {
     public contactsService: ContactsService,
     public societeService: SocietesService,
     public fluxService: FluxService,
+    public moyenCommunicationService: MoyenCommunicationService,
     private route: ActivatedRoute,
   ) {}
 
@@ -47,6 +50,15 @@ export class ContactsComponent implements OnInit {
     });
     this.societeSource = this.societeService.getDataSource();
     this.fluxSource = this.fluxService.getDataSource();
+    this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
   }
 
   onRowInserting(event) {
