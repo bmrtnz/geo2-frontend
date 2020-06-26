@@ -18,7 +18,7 @@ export enum ModeLivraison {
 }
 
 export class Entrepot extends Model {
-  @Field({asKey: true}) public id: string;
+  @Field({asKey: true, width: 150}) public id: string;
   @Field({asLabel: true}) public raisonSocial: string;
   @Field({model: Pays}) public pays: Pays;
   @Field() public ville: string;
@@ -46,11 +46,11 @@ export class Entrepot extends Model {
   @Field() public referenceChep: string;
   @Field() public lieuFonctionEanDepot: string;
   @Field() public lieuFonctionEanAcheteur: string;
-  @Field() public declarationEur1: boolean;
-  @Field() public envoieAutomatiqueDetail: boolean;
+  @Field({allowHeaderFiltering: false}) public declarationEur1: boolean;
+  @Field({allowHeaderFiltering: false}) public envoieAutomatiqueDetail: boolean;
   @Field() public controlReferenceClient: string;
   @Field() public mentionClientSurFacture: string;
-  @Field() public valide: boolean;
+  @Field({allowHeaderFiltering: false, filterValue: true, width: 100}) public valide: boolean;
   @Field() public typeTiers: TypeTiers;
   @Field() public prixUnitaireTarifTransport: number;
   @Field() public prixUnitaireTarifTransit: number;

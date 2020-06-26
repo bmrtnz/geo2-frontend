@@ -35,12 +35,13 @@
     <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of clientsService.model.getListFields();let i=index"
-      [dataField]="field"
-      [width]="field === 'id' ? 100 : field === 'valide' ? 100 : undefined"
-      [filterValue]="field === 'valide' ? true : undefined"
-      [caption]="('tiers-clients-' + field.split('.').shift() | localize) || field"
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.path"
+      [caption]="('tiers-clients-' + field.name | localize) || field.name"
       [visible]="i < clientsService.baseFieldsSize"
+      [allowHeaderFiltering]="field.allowHeaderFiltering"
+      [filterValue]="field.filterValue"
+      [width]="field.width"
     ></dxi-column>
 
   </dx-data-grid>
