@@ -11,6 +11,7 @@
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
+    (onContentReady)="contentReadyEvent.emit($event)"
   >
 
     <dxo-selection mode="single"></dxo-selection>

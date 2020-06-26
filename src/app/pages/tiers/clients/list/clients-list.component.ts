@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, OnDestroy, Output } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
@@ -6,16 +6,18 @@ import { Client } from '../../../../shared/models';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { NestedGrid } from 'app/pages/nested/nested.component';
 
 @Component({
   selector: 'app-clients-list',
   templateUrl: './clients-list.component.html',
   styleUrls: ['./clients-list.component.scss']
 })
-export class ClientsListComponent implements OnInit, OnDestroy {
+export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Client> {
 
   clients: DataSource;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  @Output() contentReadyEvent = new EventEmitter();
   onRowDetailsRequested = new EventEmitter<Client>();
   onRowDetailsSubscription: Subscription;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Client) => [[ event.id ], { relativeTo: this.activatedRoute.parent }];
