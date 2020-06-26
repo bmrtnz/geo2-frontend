@@ -9,13 +9,13 @@ import { Devise } from './devise.model';
 
 export class Transporteur extends Model {
 
-  @Field({asKey: true}) public id: string;
+  @Field({asKey: true, width: 150}) public id: string;
   @Field({asLabel: true}) public raisonSocial: string;
   @Field() public ville: string;
   @Field({model: Pays}) public pays: Pays;
   @Field() public codePostal: string;
   @Field() public adresse1: string;
-  @Field() public valide: boolean;
+  @Field({allowHeaderFiltering: false, filterValue: true, width: 100}) public valide: boolean;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field({model: RegimeTva}) public regimeTva: RegimeTva;

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TransporteursService } from '../../../../shared/services';
 import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-transporteurs-list',
@@ -11,6 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 export class TransporteursListComponent implements OnInit {
 
   transporteurs: DataSource;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
     public transporteursService: TransporteursService,
@@ -19,6 +21,7 @@ export class TransporteursListComponent implements OnInit {
 
   ngOnInit() {
     this.transporteurs = this.transporteursService.getDataSource();
+    this.detailedFields = this.transporteursService.model.getDetailedFields();
   }
 
   onRowDblClick(e) {

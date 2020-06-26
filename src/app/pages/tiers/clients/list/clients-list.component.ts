@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-clients-list',
@@ -11,6 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 export class ClientsListComponent implements OnInit {
 
   clients: DataSource;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
     public clientsService: ClientsService,
@@ -19,6 +21,7 @@ export class ClientsListComponent implements OnInit {
 
   ngOnInit() {
     this.clients = this.clientsService.getDataSource();
+    this.detailedFields = this.clientsService.model.getDetailedFields();
   }
 
   onRowDblClick(e) {
