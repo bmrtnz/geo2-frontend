@@ -6,7 +6,7 @@
         <dx-button
           type="normal"
           text="{{ 'btn-annuler' | localize }}"
-          [visible]="!readOnlyMode"
+          [visible]="!readOnlyMode && !createMode"
           (onClick)="onCancel()"
         ></dx-button>
         <dx-button
@@ -18,7 +18,7 @@
         <dx-button
           type="default"
           text="{{ 'btn-editer' | localize }}"
-          [visible]="readOnlyMode"
+          [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
       </div>
@@ -737,6 +737,16 @@
                   </dx-text-box>
                 </div>
               </div>
+              <!-- soumis CTFIL -->
+              <!-- <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-soumisCtifl' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-clients-soumisCtifl' | localize }}">
+                    </dx-validator>
+                  </dx-check-box>
+                </div>
+              </div> -->
               <!-- Mode de calcul Courtage -->
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-fraisMarketingModeCalcul' | localize }}</div>
@@ -818,6 +828,24 @@
                     </dx-validator>
                   </dx-text-box>
                 </div>
+              </div>
+            </div>
+            <!-- Conditions de vente -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-clients-conditionsVente' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="conditionVente"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="conditionsVente"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                >
+                <dx-validator name="{{ 'tiers-clients-conditionsVente' | localize }}">
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-select-box>
               </div>
             </div>
 
@@ -924,7 +952,10 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label">{{ 'tiers-clients-soumisCtifl' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-clients-soumisCtifl' | localize }}">
+                      </dx-validator>
+                    </dx-check-box>
                   </div>
                 </div>
                 <!-- Type client -->
@@ -948,6 +979,7 @@
                     <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
                       <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}">
                         <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>

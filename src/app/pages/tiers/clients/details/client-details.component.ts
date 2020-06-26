@@ -18,6 +18,7 @@ import { TypesVenteService } from 'app/shared/services/types-vente.service';
 import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
+import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
 
 @Component({
   selector: 'app-client-details',
@@ -75,6 +76,7 @@ export class ClientDetailsComponent implements OnInit {
     agrement: [''],
     courtageModeCalcul: [''],
     courtageValeur: [''],
+    conditionVente: [''],
     typeClient: [''],
     typeVente: [''],
     groupeClient: [''],
@@ -117,7 +119,9 @@ export class ClientDetailsComponent implements OnInit {
   clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
+  conditionsVente: DataSource;
   readOnlyMode = true;
+  createMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -135,6 +139,7 @@ export class ClientDetailsComponent implements OnInit {
     private basesTarifService: BasesTarifService,
     private groupesClientService: GroupesClientService,
     private moyensPaiementService: MoyensPaiementService,
+    private conditionsVenteService: ConditionsVenteService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -143,12 +148,26 @@ export class ClientDetailsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.clientsService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.client = res.data.client;
+    const suffix = this.route.snapshot.url[0].path;
+
+    if (suffix !== 'create') {
+      this.clientsService
+      .getOne(this.route.snapshot.paramMap.get('id'))
+      .subscribe( res => {
+        this.client = res.data.client;
+        this.clientForm.patchValue(this.client);
+      });
+
+    } else {
+      this.createMode = true;
+      this.readOnlyMode = false;
+
+      // Apply default value
+      this.client = new Client({
+        soumisCtifl: false
+      });
       this.clientForm.patchValue(this.client);
-    });
+    }
 
     this.secteurs = this.secteursService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
@@ -164,22 +183,35 @@ export class ClientDetailsComponent implements OnInit {
     this.courtiers = this.courtiersService.getDataSource();
     this.clients = this.clientsService.getDataSource();
     this.basesTarif = this.basesTarifService.getDataSource();
+    this.conditionsVente = this.conditionsVenteService.getDataSource();
 
   }
+
+  private requiredFields = ['soumisCtifl'];
 
   onSubmit() {
     if (!this.clientForm.pristine && this.clientForm.valid) {
       const client = this.clientsService.extractDirty(this.clientForm.controls);
+
+      if (!this.createMode) {
+        client.id = this.client.id;
+      } else {
+        for (const f of this.requiredFields) {
+          client[f] = this.clientForm.controls[f].value;
+        }
+        client.societe = { id: 'SA' };
+      }
+
       this.clientsService
-        .save({ client: { ...client, id: this.client.id } })
-        .subscribe({
-          next: () => {
-            notify('Sauvegardé', 'success', 3000);
-            this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
-            this.readOnlyMode = true;
-          },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
+          .save({ client })
+          .subscribe({
+            next: () => {
+              notify('Sauvegardé', 'success', 3000);
+              this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
+              this.readOnlyMode = true;
+            },
+            error: () => notify('Echec de la sauvegarde', 'error', 3000),
+          });
     }
   }
 

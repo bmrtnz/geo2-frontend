@@ -18,6 +18,7 @@
     "btn-annuler": "Annuler",
     "btn-editer": "Éditer",
     "btn-cloner": "Cloner",
+    "btn-nouveau": "Nouveau",
     "columnChooser": "Choisir colonnes",
     "search": "Recherche…",
 
@@ -91,6 +92,7 @@
     "tiers-clients-courtier": "Courtier",
     "tiers-clients-courtageModeCalcul": "Courtage mode de calcul",
     "tiers-clients-courtageValeur": "Courtage valeur",
+    "tiers-clients-conditionsVente": "Conditions de vente",
     "tiers-clients-delaiBonFacturer": "Délai BAF",
     "tiers-clients-debloquerEnvoieJour": "Débloquer envoi du jour",
     "tiers-clients-clotureAutomatique": "Clôture automatique",

@@ -13,9 +13,10 @@ import { Personne } from './personne.model';
 import { TypeClient } from './type.client.model';
 import { GroupeClient } from './groupe-client.model';
 import { BaseTarif } from './base-tarif.model';
-import {Historique} from './historique.model';
+import { Historique } from './historique.model';
 import { TypeVente } from './type-vente.model';
 import { Courtier } from './courtier.model';
+import { ConditionVente } from './condition-vente.model';
 
 export class Client extends Model {
 
@@ -91,4 +92,5 @@ export class Client extends Model {
   @Field() public detailAutomatique: boolean;
   @Field() public fraisRamasse: boolean;
   @Field() public venteACommission: boolean;
+  @Field({model: ConditionVente}) public conditionVente: ConditionVente;
 }

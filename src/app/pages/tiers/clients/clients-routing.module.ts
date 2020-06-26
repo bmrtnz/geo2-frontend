@@ -9,6 +9,10 @@ const routes: Routes = [
     path: '',
     component: ClientsListComponent,
     canActivate: [AuthGuardService]
+  },  {
+    path: 'create',
+    component: ClientDetailsComponent,
+    canActivate: [AuthGuardService]
   }, {
     path: ':id',
     component: ClientDetailsComponent,
