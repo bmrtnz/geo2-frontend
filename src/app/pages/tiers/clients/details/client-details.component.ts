@@ -27,6 +27,8 @@ import { ConditionsVenteService } from 'app/shared/services/conditions-vente.ser
 })
 export class ClientDetailsComponent implements OnInit {
 
+  private requiredFields = ['soumisCtifl'];
+
   clientForm = this.fb.group({
     code: [''],
     raisonSocial: [''],
@@ -187,8 +189,6 @@ export class ClientDetailsComponent implements OnInit {
 
   }
 
-  private requiredFields = ['soumisCtifl'];
-
   onSubmit() {
     if (!this.clientForm.pristine && this.clientForm.valid) {
       const client = this.clientsService.extractDirty(this.clientForm.controls);
@@ -199,16 +199,22 @@ export class ClientDetailsComponent implements OnInit {
         for (const f of this.requiredFields) {
           client[f] = this.clientForm.controls[f].value;
         }
+        // Fake -> pour passer l'étape de création
         client.societe = { id: 'SA' };
       }
 
       this.clientsService
           .save({ client })
           .subscribe({
-            next: () => {
+            next: (e) => {
               notify('Sauvegardé', 'success', 3000);
-              this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
-              this.readOnlyMode = true;
+              if (!this.createMode) {
+                this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
+                this.readOnlyMode = true;
+              } else {
+                this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+              }
+              // console.log(e.data.saveClient)
             },
             error: () => notify('Echec de la sauvegarde', 'error', 3000),
           });
@@ -216,8 +222,12 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   onCancel() {
-    this.clientForm.reset(this.client);
-    this.readOnlyMode = true;
+    if (!this.createMode) {
+      this.clientForm.reset(this.client);
+      this.readOnlyMode = true;
+    } else {
+      this.router.navigate([`/tiers/clients`]);
+    }
   }
 
   toggleVisible() {
