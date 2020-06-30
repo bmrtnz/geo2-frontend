@@ -22,7 +22,7 @@ export class GridNavigatorComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // console.log(event.url);
-        this.backBtnDisabled = !/\/nested\/\d+\/.*/.test(event.url);
+        this.backBtnDisabled = !/^\/nested\/.*/.test(event.url);
       }
     });
   }
