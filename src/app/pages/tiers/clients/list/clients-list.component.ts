@@ -17,8 +17,8 @@ export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Clien
 
   clients: DataSource;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  @Output() contentReadyEvent = new EventEmitter();
-  onRowDetailsRequested = new EventEmitter<Client>();
+  @Output() contentReadyEvent = new EventEmitter<any>();
+  @Output() rowDetailsRequested = new EventEmitter<Client>();
   onRowDetailsSubscription: Subscription;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Client) => [[ event.id ], { relativeTo: this.activatedRoute.parent }];
 
@@ -30,17 +30,13 @@ export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Clien
 
   ngOnInit() {
     this.clients = this.clientsService.getDataSource();
-    this.onRowDetailsSubscription = this.onRowDetailsRequested
+    this.onRowDetailsSubscription = this.rowDetailsRequested
     .pipe(map( this.detailsNavigationHook ))
     .subscribe( navigationParams => this.router.navigate(...navigationParams));
   }
 
   ngOnDestroy() {
     this.onRowDetailsSubscription.unsubscribe();
-  }
-
-  onRowDblClick(e) {
-    this.onRowDetailsRequested.emit(e.data);
   }
 
   onRowPrepared(e) {

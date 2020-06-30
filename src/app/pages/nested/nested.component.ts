@@ -1,13 +1,15 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras, Params } from '@angular/router';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { GridNavigatorComponent } from 'app/shared/components/grid-navigator/grid-navigator.component';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { combineLatest } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
+import { take, filter, catchError, tap, map } from 'rxjs/operators';
 
 export interface NestedGrid<Model = any> {
   dataGrid: DxDataGridComponent;
   detailsNavigationHook: (row: Model) => [any[], NavigationExtras];
   contentReadyEvent: EventEmitter<any>;
+  rowDetailsRequested: EventEmitter<any>;
 }
 
 @Component({
@@ -29,16 +31,24 @@ export class NestedComponent implements OnInit {
   }
 
   onActivate(listComponent: NestedGrid) {
+
     this.dataGrid = listComponent.dataGrid;
 
-    // NOT WORKING =/
-    // select row by route
+    // select row from route
+    // NOT WORKING, IMPOSSIBLE WITH PAGING ?
+    // const detailsOutlet = this.activatedRoute.children
+    // .find( ({outlet}) => outlet === 'details' );
     // combineLatest(
-    //   this.activatedRoute.children.find( ({outlet}) => outlet === 'details' ).params,
+    //   detailsOutlet ? detailsOutlet.params : of({}),
     //   listComponent.contentReadyEvent,
-    // ).subscribe(([params]) => {
-    //   // this.dataGrid.focusedRowIndex = this.dataGrid.instance.getRowIndexByKey(params.id);
-    //   this.dataGrid.instance.navigateToRow(params.id);
+    // )
+    // .pipe(
+    //   map( ([params, event]) => params.id || (event as any).component.getKeyByRowIndex(0)),
+    //   take(1),
+    // )
+    // .subscribe( key => {
+    //   this.dataGrid.instance.navigateToRow(key);
+    //   // this.dataGrid.focusedRowIndex = this.dataGrid.instance.getRowIndexByKey(key);
     // });
 
     // navigation
@@ -49,6 +59,7 @@ export class NestedComponent implements OnInit {
         { relativeTo: this.activatedRoute },
       ];
     };
+
   }
 
 }

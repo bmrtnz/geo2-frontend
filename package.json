@@ -28,7 +28,7 @@
     "apollo-cache-inmemory": "^1.6.0",
     "apollo-client": "^2.6.0",
     "apollo-link": "^1.2.11",
-    "devextreme": "latest",
+    "devextreme": "^20.1.4",
     "devextreme-angular": "^20.1.3",
     "devextreme-schematics": "^1.0.12",
     "graphql": "^14.5.0",

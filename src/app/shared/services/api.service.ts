@@ -325,7 +325,7 @@ export abstract class ApiService {
   protected createCustomStore(options?: CustomStoreOptions) {
     this.storeConfiguration = options;
     return new CustomStore({
-      key: options.key || this.keyField,
+      key: this.keyField,
       ...options,
     });
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit, NgModule, ElementRef, Input } from '@angular/core';
 import { DxButtonModule, DxDataGridComponent } from 'devextreme-angular';
 import { Location } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-grid-navigator',
@@ -19,16 +19,12 @@ export class GridNavigatorComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public element: ElementRef,
   ) {
-    // this.router.events.subscribe(e => {
-    //   if (e instanceof NavigationEnd) {
-    //     this.backBtnDisabled = !/\/tiers\/clients\/\d+\/.*/.test(e.url);
-    //   }
-    //   if (e instanceof ActivationEnd) {
-    //     if (e.snapshot.component === ClientDetailsComponent) {
-    //       this.clientsList.setInitialKey(e.snapshot.params.id);
-    //     }
-    //   }
-    // });
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // console.log(event.url);
+        this.backBtnDisabled = !/\/nested\/\d+\/.*/.test(event.url);
+      }
+    });
   }
 
   ngOnInit() {
