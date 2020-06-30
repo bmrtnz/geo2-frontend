@@ -21,6 +21,9 @@
     "btn-nouveau": "Nouveau",
     "columnChooser": "Choisir colonnes",
     "search": "Recherche…",
+    "saveError": "Sauvegardé",    
+    "saveKO": "Échec de la sauvegarde",
+    "create": "Création",
 
     "auth-logout": "Déconnexion",
     "auth-subtitle": "Connectez-vous à votre compte",
