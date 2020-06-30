@@ -17,6 +17,7 @@ import notify from 'devextreme/ui/notify';
 import { TypesVenteService } from 'app/shared/services/types-vente.service';
 import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
+import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 
 @Component({
   selector: 'app-client-details',
@@ -55,7 +56,6 @@ export class ClientDetailsComponent implements OnInit {
     instructionCommercial: [''],
     siret: [''],
     blocageAvoirEdi: [''],
-    debloquerEnvoieJour: [''],
     ifco: [''],
     instructionLogistique: [''],
     basePaiement: [''],
@@ -73,23 +73,35 @@ export class ClientDetailsComponent implements OnInit {
     assistante: [''],
     referenceCoface: [''],
     agrement: [''],
-    // public courtier: Courtier; // TODO
     courtageModeCalcul: [''],
     courtageValeur: [''],
     typeClient: [''],
     typeVente: [''],
     groupeClient: [''],
+    paloxRaisonSocial: [''],
     courtier: [''],
     soumisCtifl: [''],
     valide: [false],
     lieuFonctionEan: [''],
     delaiBonFacturer: [''],
+    debloquerEnvoieJour: [''],
+    clotureAutomatique: [''],
+    fraisRamasse: [''],
+    refusCoface: [''],
+    enCoursDateLimite: [''],
     // certifications: [''],
+    fraisMarketingModeCalcul: [''],
+    formatDluo: [''],
+    dateDebutIfco: [''],
+    nbJourLimiteLitige: [''],
+    detailAutomatique: [''],
+    venteACommission: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
   client: Client;
   code: string;
+  gridBoxValue: number[];
   secteurs: DataSource;
   personnes: DataSource;
   pays: DataSource;
@@ -98,11 +110,14 @@ export class ClientDetailsComponent implements OnInit {
   devises: DataSource;
   moyensPaiement: DataSource;
   basesPaiement: DataSource;
+  basesTarif: DataSource;
   typesVente: DataSource;
   groupesClient: DataSource;
   courtiers: DataSource;
+  clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
+  readOnlyMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -117,6 +132,7 @@ export class ClientDetailsComponent implements OnInit {
     private typesClientService: TypesClientService,
     private typesVenteService: TypesVenteService,
     private courtiersService: CourtierService,
+    private basesTarifService: BasesTarifService,
     private groupesClientService: GroupesClientService,
     private moyensPaiementService: MoyensPaiementService,
     private router: Router,
@@ -148,24 +164,30 @@ export class ClientDetailsComponent implements OnInit {
     this.typesVente = this.typesVenteService.getDataSource();
     this.groupesClient = this.groupesClientService.getDataSource();
     this.courtiers = this.courtiersService.getDataSource();
+    this.clients = this.clientsService.getDataSource();
+    this.basesTarif = this.basesTarifService.getDataSource();
 
-  }
-
-  debug(test: any) {
-    console.log(test);
   }
 
   onSubmit() {
     if (!this.clientForm.pristine && this.clientForm.valid) {
-      const client = this.clientsService
-      .extractDirty(this.clientForm.controls);
+      const client = this.clientsService.extractDirty(this.clientForm.controls);
       this.clientsService
-      .save({ client: { ...client, id: this.client.id } })
-      .subscribe({
-        next: () => notify('Sauvegardé', 'success', 3000),
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
+        .save({ client: { ...client, id: this.client.id } })
+        .subscribe({
+          next: () => {
+            notify('Sauvegardé', 'success', 3000);
+            this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
+            this.readOnlyMode = true;
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
     }
+  }
+
+  onCancel() {
+    this.clientForm.reset(this.client);
+    this.readOnlyMode = true;
   }
 
   toggleVisible() {
@@ -173,14 +195,11 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   entrepotsBtnClick() {
-    const search = encodeURIComponent(`client.id=="${ this.client.id }"`);
-    this.router.navigate([`/tiers/clients/${this.client.id}/entrepots`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/entrepots/client/${ this.client.id }`]);
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/clients/${this.client.id}/contacts`]);
+    this.router.navigate([`/tiers/contacts/${ this.client.id }/${ this.client.typeTiers }`]);
   }
 
 }

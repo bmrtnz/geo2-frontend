@@ -10,6 +10,10 @@ const routes: Routes = [
     component: EntrepotsListComponent,
     canActivate: [AuthGuardService]
   }, {
+    path: 'client/:client',
+    component: EntrepotsListComponent,
+    canActivate: [AuthGuardService]
+  }, {
     path: ':id',
     component: EntrepotDetailsComponent,
     canActivate: [AuthGuardService]

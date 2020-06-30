@@ -1,40 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { Service, Employee, Moyen, Flux } from '../../../shared/services/contacts.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+import { ContactsService } from 'app/shared/services/contacts.service';
 import { ActivatedRoute } from '@angular/router';
-import ArrayStore from 'devextreme/data/array_store';
+import { Contact } from 'app/shared/models';
+import { ModelFieldOptions } from 'app/shared/models/model';
+import { TypeTiers } from 'app/shared/models/tier.model';
+import { SocietesService } from 'app/shared/services/societes.service';
+import { FluxService } from 'app/shared/services/flux.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
-    selector: 'app-contacts',
-    templateUrl: './contacts.component.html',
-    styleUrls: ['./contacts.component.scss'],
-    providers: [Service]
+  selector: 'app-contacts',
+  templateUrl: './contacts.component.html',
+  styleUrls: ['./contacts.component.scss'],
 })
 export class ContactsComponent implements OnInit {
 
-    dataSource: ArrayStore;
-    moyens: Moyen[];
-    flux: Flux[];
+  contacts: DataSource;
+  fluxSource: DataSource;
+  societeSource: DataSource;
+  codeTiers: string;
+  typeTiers: string;
+  typeTiersLabel: string;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
 
-    tiersId: string;
-    type: string;
+  constructor(
+    public contactsService: ContactsService,
+    public societeService: SocietesService,
+    public fluxService: FluxService,
+    private route: ActivatedRoute,
+  ) {}
 
-    constructor(
-        private service: Service,
-        private route: ActivatedRoute
-        ) {
-        this.dataSource = new ArrayStore({
-            key: 'id',
-            data: service.getEmployees(),
-            onUpdated: (values, key) => console.log(values, key)
-        });
-        this.moyens = service.getMoyens();
-        this.flux = service.getFlux();
-    }
+  ngOnInit() {
+    this.detailedFields = this.contactsService.model.getDetailedFields();
+    this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
+    this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
+    this.typeTiersLabel = Object
+    .entries(TypeTiers)
+    .find(([, value]) => value === this.typeTiers)
+    .map( value => value.toLowerCase() )
+    .shift();
 
-    ngOnInit() {
-        this.type = this.route.snapshot.paramMap.get('type');
-        this.tiersId = this.route.snapshot.paramMap.get('id');
-    }
+    this.contacts = this.contactsService.getDataSource({
+      search: `codeTiers=="${ this.codeTiers }" and typeTiers=="${ this.typeTiers }"`,
+    });
+    this.societeSource = this.societeService.getDataSource();
+    this.fluxSource = this.fluxService.getDataSource();
+  }
+
+  onRowInserting(event) {
+    (event.data as Contact).codeTiers = this.codeTiers;
+    (event.data as Contact).typeTiers = this.typeTiers;
+  }
+
+  onRowClick({rowIndex}) {
+    this.dataGrid.instance.editRow(rowIndex);
+  }
+
+  onValueChanged(event, cell) {
+    const key = this[cell.column.dataField + 'Service'].keyField;
+    if (cell.setValue)
+      cell.setValue({[key]: event.value[key]});
+  }
 
 }
-

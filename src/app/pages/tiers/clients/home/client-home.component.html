@@ -1,18 +1,9 @@
 <div class="collapse collapsed">
   <h2 class="content-block">
     {{ 'tiers-clients-title' | localize }}
-    <dx-switch
-      switchedOffText="collapse"
-      switchedOnText="scroll"
-      [(value)]="collapseMode"
-    ></dx-switch>
   </h2>
 
   <app-clients-list #clientsList (rowDblClick)="selectRow($event)"></app-clients-list>
-</div>
-
-<div class="content-block">
-  <div class="splitter" (click)="toggleCollapse()" [hidden]="!collapseMode">↑↑↑↑↑↑↑</div>
 </div>
 
 <div id="router">

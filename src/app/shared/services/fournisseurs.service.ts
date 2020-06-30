@@ -12,69 +12,36 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class FournisseursService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'raisonSocial',
-    'pays { id description }',
-    'ville',
-  ];
-
-  fullFields = [
-    ...this.baseFields,
-    'valide',
-    'stockPrecalibre',
-    'stockActif',
-    'adresse1',
-    'adresse2',
-    'adresse3',
-    'codePostal',
-    'latitude',
-    'longitude',
-    'bureauAchat { id raisonSocial }',
-    'lieuFonctionEan ',
-    'langue { id description }',
-    'tvaCee',
-    'type { id description }',
-    'compteComptable',
-    'idTracabilite',
-    'agrementBW',
-    'codeStation',
-    'nbJourEcheance',
-    'echeanceLe',
-    'regimeTva { id description }',
-    'devise { id description }',
-    'moyenPaiement { id description }',
-    'basePaiement { id description }',
-    'formeJuridique',
-    'siretAPE',
-    'rcs',
-    'tvaId',
-    'autoFacturation',
-  ];
+  listRegexp = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'Fournisseur');
+    super(apollo, Fournisseur);
   }
 
   getOne(id: string) {
-    const query = this.buildGetOne(this.fullFields);
+    const query = this.buildGetOne();
     type Response = { fournisseur: Fournisseur };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
-    const query = this.buildGetAll(this.baseFields);
-    type Response = { allFournisseur: RelayPage<Fournisseur> };
+
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
           const variables = {
             ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
           };
+          const query = this.buildGetAll(1, this.listRegexp);
+          type Response = { allFournisseur: RelayPage<Fournisseur> };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -83,12 +50,25 @@ export class FournisseursService extends ApiService implements APIRead {
           )
           .toPromise();
         },
+        byKey: (key) => {
+          const query = this.buildGetOne();
+          type Response = { fournisseur: Fournisseur };
+          const id = key ? {id: key.id, espece: key.especeId || ''} : {};
+          const variables = { ...inputVariables, id };
+          return this.
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
+          .pipe(
+            map( res => new Fournisseur(res.data.fournisseur)),
+            take(1),
+          )
+          .toPromise();
+          }
       }),
     });
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(this.baseFields);
+    const mutation = this.buildSave(1, this.listRegexp);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

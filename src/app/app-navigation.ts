@@ -45,5 +45,10 @@ export const navigation = [
     text: 'Articles',
     icon: 'box',
     path: 'articles'
+  },
+  {
+    text: 'Stock',
+    icon: 'material-icons dashboard',
+    path: 'stock'
   }
 ];

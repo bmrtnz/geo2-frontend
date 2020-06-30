@@ -1,14 +1,15 @@
-import {Pays} from './pays.model';
+import { Pays } from './pays.model';
+import { Model, Field } from './model';
 
-export class Societe {
+export class Societe extends Model {
 
-  public id: string;
-  public raisonSocial: string;
-  public adresse1: string;
-  public adresse2: string;
-  public adresse3: string;
-  public codePostal: string;
-  public ville: string;
-  public pays: Pays;
+  @Field({asKey: true}) public id: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field() public adresse1: string;
+  @Field() public adresse2: string;
+  @Field() public adresse3: string;
+  @Field() public codePostal: string;
+  @Field() public ville: string;
+  @Field({model: Pays}) public pays: Pays;
 
 }

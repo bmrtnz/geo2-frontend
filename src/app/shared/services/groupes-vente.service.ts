@@ -12,23 +12,21 @@ import { map, take } from 'rxjs/operators';
 })
 export class GroupesClientService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'description',
-    'valide',
-  ];
-
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'GroupeClient');
+    super(apollo, GroupeClient);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+
+          if (options.group)
+            return this.getDistinct(options, variables).toPromise();
+
+          const query = this.buildGetAll();
           type Response = { allGroupeClient: RelayPage<GroupeClient> };
           variables = {
             ...variables,
@@ -43,9 +41,9 @@ export class GroupesClientService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne();
           type Response = { groupeClient: GroupeClient };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { EntrepotsService } from '../../../../shared/services/entrepots.service';
+import { EntrepotsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
 import { FormBuilder } from '@angular/forms';
@@ -37,33 +37,32 @@ export class EntrepotDetailsComponent implements OnInit {
     incoterm: [''],
     regimeTva: [''],
     tvaCee: [''],
-    instructSecrComm: [''],
-    instructLogistique: [''],
+    instructionSecretaireCommercial: [''],
+    instructionLogistique: [''],
     typePalette: [''],
     mentionClientSurFacture: [''],
     transporteur: [''],
     baseTarifTransport: [''],
-    PUTarifTransport: [''],
+    prixUnitaireTarifTransport: [''],
     typeCamion: [''],
     transitaire: [''],
     baseTarifTransit: [''],
-    PUTarifTransit: [''],
+    prixUnitaireTarifTransit: [''],
     modeLivraison: [''],
     langue: [''],
     commercial: [''],
     assistante: [''],
-    controleRefClient: [''],
-    declarationEUR1: [''],
-    envoiAutoDetail: [''],
-    gestionnaireCHEP: [''],
-    referenceCHEP: [''],
+    controlReferenceClient: [''],
+    declarationEur1: [''],
+    envoieAutomatiqueDetail: [''],
+    gestionnaireChep: [''],
+    referenceChep: [''],
     lieuFonctionEanDepot: [''],
     lieuFonctionEanAcheteur: [''],
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
-  code: string;
   entrepot: Entrepot;
   personnes: DataSource;
   modesLivraison: DataSource;
@@ -76,6 +75,7 @@ export class EntrepotDetailsComponent implements OnInit {
   typesCamion: DataSource;
   transitaires: DataSource;
   defaultVisible: boolean;
+  readOnlyMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -98,11 +98,11 @@ export class EntrepotDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.entrepotsService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.entrepot = res.data.entrepot;
-      this.entrepotForm.patchValue(this.entrepot);
-    });
+      .getOne(this.route.snapshot.paramMap.get('id'))
+      .subscribe( res => {
+        this.entrepot = res.data.entrepot;
+        this.entrepotForm.patchValue(this.entrepot);
+      });
     this.personnes = this.personnesService.getDataSource();
     this.modesLivraison = this.modesLivraisonService.getDataSource();
     this.pays = this.paysService.getDataSource();
@@ -115,21 +115,25 @@ export class EntrepotDetailsComponent implements OnInit {
     this.transitaires = this.transitairesService.getDataSource();
   }
 
-  debug(test) {
-    console.log(test);
-  }
-
   onSubmit() {
     if (!this.entrepotForm.pristine && this.entrepotForm.valid) {
-      const entrepot = this.entrepotsService
-      .extractDirty(this.entrepotForm.controls);
+      const entrepot = this.entrepotsService.extractDirty(this.entrepotForm.controls);
       this.entrepotsService
-      .save({ entrepot: { ...entrepot, id: this.entrepot.id } })
-      .subscribe({
-        next: () => notify('Sauvegardé', 'success', 3000),
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
+        .save({ entrepot: { ...entrepot, id: this.entrepot.id } })
+        .subscribe({
+          next: () => {
+            notify('Sauvegardé', 'success', 3000);
+            this.entrepot = { id: this.entrepot.id, ...this.entrepotForm.getRawValue() };
+            this.readOnlyMode = true;
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
     }
+  }
+
+  onCancel() {
+    this.entrepotForm.reset(this.entrepot);
+    this.readOnlyMode = true;
   }
 
   toggleVisible() {
@@ -137,6 +141,6 @@ export class EntrepotDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/entrepots/${this.entrepot.id}`]);
+    this.router.navigate([`/tiers/contacts/${ this.entrepot.id }/${ this.entrepot.typeTiers }`]);
   }
 }

@@ -4,6 +4,10 @@
   height: auto;
 }
 
+.right {
+  float: right;
+}
+
 $base-fonts-path: './scss/fonts/';
 
 // Var
@@ -25,19 +29,7 @@ body {
      -moz-user-select:none;
 }
 
-/* Colors */
-$orange: #dc6d5a;
-$cyan: #4080FF;
-
-.orange {
-  background-color: $orange;
-}
-.cyan {
-  background-color: $cyan;
-}
-
-.fournisseur-page, .client-page, .transporteur-page, .lieupassageaquai-page,
-.entrepot-page {
+.fournisseur-page, .client-page, .transporteur-page, .lieupassageaquai-page, .entrepot-page {
 
   .dx-accordion-item-title::before {
     font-size: 18px;

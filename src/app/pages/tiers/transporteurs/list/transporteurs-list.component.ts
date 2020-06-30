@@ -13,7 +13,7 @@ export class TransporteursListComponent implements OnInit {
   transporteurs: DataSource;
 
   constructor(
-    private transporteursService: TransporteursService,
+    public transporteursService: TransporteursService,
     private router: Router
   ) { }
 
@@ -24,5 +24,11 @@ export class TransporteursListComponent implements OnInit {
   onRowDblClick(e) {
     this.router.navigate([`/tiers/transporteurs/${e.data.id}`]);
   }
-
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
+  }
 }

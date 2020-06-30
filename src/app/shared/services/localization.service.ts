@@ -28,7 +28,7 @@ export class LocalizationService {
    * @param args Can contain key string arguments or date and number format.
    */
   localize(value: any, ...args: any[]): string {
-    console.log('Trad requested : ', value);
+    // console.log('Trad requested : ', value);
     if (typeof value === 'string') {
       return formatMessage(value, args);
     }

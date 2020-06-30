@@ -12,23 +12,23 @@ import { take, map } from 'rxjs/operators';
 })
 export class BureauxAchatService extends ApiService implements APIRead {
 
-  baseFields = [
-    'id',
-    'raisonSocial',
-    'valide',
-  ];
+  listRegexp = /.*\.(?:id|raisonSocial)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, 'BureauAchat');
+    super(apollo, BureauAchat);
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(this.baseFields);
+
+          if (options.group)
+            return this.getDistinct(options, variables).toPromise();
+
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allBureauAchat: RelayPage<BureauAchat> };
           variables = {
             ...variables,
@@ -43,9 +43,9 @@ export class BureauxAchatService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(this.baseFields);
+          const query = this.buildGetOne(1, this.listRegexp);
           type Response = { bureauAchat: BureauAchat };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

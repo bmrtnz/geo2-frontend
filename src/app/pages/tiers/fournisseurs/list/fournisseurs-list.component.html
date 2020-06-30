@@ -1,6 +1,6 @@
 <h2 class="content-block">{{ 'tiers-fournisseurs-title' | localize }}</h2>
 
-<div class="content-block fournisseur-page">
+<div class="content-block">
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="fournisseurs"
     [remoteOperations]="true"
@@ -10,12 +10,13 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
     [allowColumnReordering]="true"
+    (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
   >
 
     <!-- Grid configuration -->
     <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
-    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Fournisseurs" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
@@ -23,32 +24,17 @@
       [allowedPageSizes]="[10, 25, 50, 100]"
       [showInfo]="true"
       [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
 
     <dxi-column
-      dataField="id"
-      [width]="90"
-      [hidingPriority]="2">
-    </dxi-column>
-    <dxi-column
-      dataField="raisonSocial"
-      [width]="190"
-      caption="{{ 'tiers-fournisseurs-raisonSocial' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="pays.description"
-      [width]="190"
-      caption="{{ 'tiers-fournisseurs-pays' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="ville"
-      [width]="190"
-      caption="{{ 'tiers-fournisseurs-ville' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
+      *ngFor="let field of fournisseursService.model.getListFields(1);let i=index"
+      [dataField]="field"
+      [caption]="('tiers-fournisseurs-' + field.split('.').shift() | localize) || field"
+      [visible]="i < fournisseursService.baseFieldsSize"
+    ></dxi-column>
+
   </dx-data-grid>
 </div>

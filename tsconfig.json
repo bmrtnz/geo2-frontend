@@ -30,6 +30,7 @@
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "allowJs": true
   }
 }

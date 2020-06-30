@@ -36,7 +36,7 @@ const routes: Routes = [
     path: 'entrepots',
     loadChildren: './entrepots/entrepots.module#EntrepotsModule'
   },  {
-    path: 'contacts/:type/:id',
+    path: 'contacts/:codeTiers/:typeTiers',
     component: ContactsComponent
   },
 ];

@@ -3,6 +3,7 @@ import {ArticlesService} from '../../../shared/services/articles.service';
 import {Article} from '../../../shared/models';
 import ArrayStore from 'devextreme/data/array_store';
 import {Router} from '@angular/router';
+import DataSource from 'devextreme/data/data_source';
 
 @Component({
   selector: 'app-articles-list',
@@ -11,28 +12,19 @@ import {Router} from '@angular/router';
 })
 export class ArticlesListComponent implements OnInit {
 
-  dataSource: any;
-  articles: [Article];
+  articles: DataSource;
 
   constructor(
-    private articlesService: ArticlesService,
+    public articlesService: ArticlesService,
     private router: Router
   ) {
   }
 
-  ngOnInit(): void {
-    this.articlesService.get().then(c => {
-      this.dataSource = {
-        store: new ArrayStore({
-          key: 'id',
-          data: c
-        })
-      };
-    });
+  ngOnInit() {
+    this.articles = this.articlesService.getDataSource();
   }
 
   onRowDblClick(e) {
-    // console.log(`/entrepots/${e.data.id}`)
     this.router.navigate([`/articles/${e.data.id}`]);
   }
 

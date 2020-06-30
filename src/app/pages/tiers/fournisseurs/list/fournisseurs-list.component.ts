@@ -13,7 +13,7 @@ export class FournisseursListComponent implements OnInit {
   fournisseurs: DataSource;
 
   constructor(
-    private fournisseursService: FournisseursService,
+    public fournisseursService: FournisseursService,
     private router: Router
   ) { }
 
@@ -24,5 +24,11 @@ export class FournisseursListComponent implements OnInit {
   onRowDblClick(e) {
     this.router.navigate([`/tiers/fournisseurs/${e.data.id}`]);
   }
-
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
+  }
 }
