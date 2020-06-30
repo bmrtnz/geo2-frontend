@@ -11,12 +11,13 @@ import {Historique} from './historique.model';
 
 export class Fournisseur extends Model {
 
-  @Field({asKey: true}) public id: string;
+  @Field({asKey: true, width: 150}) public id: string;
   @Field({asLabel: true}) public raisonSocial: string;
-  @Field({model: Pays}) public pays: Pays;
   @Field() public ville: string;
+  @Field({model: Pays}) public pays: Pays;
   @Field({model: Devise}) public devise: Devise;
   @Field({model: Pays}) public langue: Pays;
+  @Field({allowHeaderFiltering: false, filterValue: true, width: 100}) public valide: boolean;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
@@ -32,8 +33,8 @@ export class Fournisseur extends Model {
   @Field({model: BureauAchat}) public bureauAchat: BureauAchat;
   @Field() public margeObjectifEuroKilo: number;
   @Field() public margeObjectifPourcentCa: number;
-  @Field() public stockActif: boolean;
-  @Field() public stockPrecalibre: boolean;
+  @Field({allowHeaderFiltering: false}) public stockActif: boolean;
+  @Field({allowHeaderFiltering: false}) public stockPrecalibre: boolean;
   @Field({model: TypeFournisseur}) public type: TypeFournisseur;
   @Field() public listeSocietes: string;
   @Field() public idTracabilite: string;
@@ -45,16 +46,15 @@ export class Fournisseur extends Model {
   @Field() public formeJuridique: string;
   @Field() public siretAPE: string;
   @Field() public rcs: string;
-  @Field() public suiviDestockage: boolean;
+  @Field({allowHeaderFiltering: false}) public suiviDestockage: boolean;
   @Field() public natureStation: string; // API = ENUM
   @Field() public referenceIfco: string;
   @Field() public dateDebutIfco: Date;
-  @Field() public consignePaloxSa: boolean;
-  @Field() public consignePaloxUdc: boolean;
+  @Field({allowHeaderFiltering: false}) public consignePaloxSa: boolean;
+  @Field({allowHeaderFiltering: false}) public consignePaloxUdc: boolean;
   @Field() public listeExpediteurs: string;
-  @Field() public valide: boolean;
   @Field() public typeTiers: TypeTiers;
-  @Field() public autoFacturation: boolean;
+  @Field({allowHeaderFiltering: false}) public autoFacturation: boolean;
   @Field() public tvaId: string;
   @Field({model: Historique}) public historique: Historique[];
 }

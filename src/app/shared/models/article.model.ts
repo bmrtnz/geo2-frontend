@@ -11,5 +11,6 @@ export class Article extends Model {
   @Field() public blueWhaleStock: boolean;
   @Field({model: ArticleCahierDesCharges}) public cahierDesCharge: ArticleCahierDesCharges;
   @Field({model: ArticleNormalisation}) public normalisation: ArticleNormalisation;
+  @Field() public valide: boolean;
   @Field({model: ArticleEmballage}) public emballage: ArticleEmballage;
 }

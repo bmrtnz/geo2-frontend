@@ -102,7 +102,13 @@ export abstract class Model {
    */
   static getDetailedFields(): ({name: string} & ModelFieldOptions)[] {
     return Object.entries(this.getFields())
-    .map(([name, options]) => ({ name, ...options}));
+    .map(([name, options]) => {
+      return {
+        name,
+        path: options.model ? `${ name }.${ options.model.getLabelField() }` : name,
+        ...options
+      };
+    });
   }
 
   /**

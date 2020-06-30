@@ -1,6 +1,7 @@
 <div class="collapse collapsed">
   <h2 class="content-block">
     {{ 'tiers-clients-title' | localize }}
+    <dx-button class="title-button" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
   </h2>
 
   <app-clients-list #clientsList (rowDblClick)="selectRow($event)"></app-clients-list>

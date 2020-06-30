@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
 import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-list',
@@ -11,6 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 export class LieuxPassageAQuaiListComponent implements OnInit {
 
   lieuxPassageAQuais: DataSource;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
@@ -19,6 +21,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit {
 
   ngOnInit() {
     this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource();
+    this.detailedFields = this.lieuxPassageAQuaiService.model.getDetailedFields();
   }
 
   onRowDblClick(e) {

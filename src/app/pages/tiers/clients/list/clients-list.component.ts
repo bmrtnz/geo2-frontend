@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import {Client} from '../../../../shared/models';
 import {DxDataGridComponent} from 'devextreme-angular';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-clients-list',
@@ -13,11 +14,11 @@ import {DxDataGridComponent} from 'devextreme-angular';
 export class ClientsListComponent implements OnInit {
 
   clients: DataSource;
-  filters: DataSource;
   selectedRowKeys = [];
   initialValue: any;
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid;
   @Output() rowDblClick = new EventEmitter<Client>();
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
     public clientsService: ClientsService,
@@ -26,6 +27,7 @@ export class ClientsListComponent implements OnInit {
 
   ngOnInit() {
     this.clients = this.clientsService.getDataSource();
+    this.detailedFields = this.clientsService.model.getDetailedFields();
   }
 
   async onSelectionChange(e) {

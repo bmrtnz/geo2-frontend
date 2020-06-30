@@ -3,23 +3,23 @@
     <h2>
       {{ 'tiers-lieuxpassageaquai-details-title' | localize }}
       <div class="right">
-        <dx-button
-          type="normal"
-          text="{{ 'btn-annuler' | localize }}"
-          [visible]="!readOnlyMode"
-          (onClick)="onCancel()"
-        ></dx-button>
-        <dx-button
+        <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
           [useSubmitBehavior]="true"
         ></dx-button>
-        <dx-button
+        <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
           [visible]="readOnlyMode"
           (onClick)="readOnlyMode = !readOnlyMode"
+        ></dx-button>
+        <dx-button class="upperButton"
+          type="normal"
+          text="{{ 'btn-annuler' | localize }}"
+          [visible]="!readOnlyMode"
+          (onClick)="onCancel()"
         ></dx-button>
       </div>
     </h2>
@@ -184,10 +184,10 @@
 
             <!-- Lieu fonction EAN -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}">
+                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}">
                     <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>

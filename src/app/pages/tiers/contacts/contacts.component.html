@@ -11,12 +11,13 @@
     [remoteOperations]="true"
     [allowColumnReordering]="true"
     [showBorders]="true"
+    (onRowPrepared)="onRowPrepared($event)"
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
   >
 
     <!-- Grid configuration -->
-    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
+    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
     <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
@@ -27,7 +28,6 @@
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-editing
-      mode="form"
       [allowUpdating]="true"
       [allowDeleting]="true"
       [allowAdding]="true"
@@ -43,6 +43,8 @@
       [caption]="('tiers-contacts-' + field.name | localize) || field.name"
       [visible]="i < contactsService.baseFieldsSize"
       [allowEditing]="field.allowEditing"
+      [filterValue]="field.name === 'valide' ? true : undefined"
+      [width]="field.name === 'valide' ? 100 : field.name === 'fluxComplement' ? 75 : field.name === 'moyenCommunication' ? 150 :undefined"
       [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
     ></dxi-column>

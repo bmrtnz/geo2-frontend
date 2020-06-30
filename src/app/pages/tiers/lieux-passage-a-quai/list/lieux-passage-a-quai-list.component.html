@@ -15,7 +15,7 @@
   >
 
     <!-- Grid configuration -->
-    <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
@@ -32,8 +32,20 @@
     <dxi-column
       *ngFor="let field of lieuxPassageAQuaiService.model.getListFields();let i=index"
       [dataField]="field"
+      [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
+      [filterValue]="field === 'valide' ? true : undefined"
       [caption]="('tiers-lieuxpassageaquai-' + field.split('.').shift() | localize) || field"
       [visible]="i < lieuxPassageAQuaiService.baseFieldsSize"
+    ></dxi-column>
+
+    <dxi-column
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.path"
+      [caption]="('tiers-lieuxpassageaquai-' + field.name | localize) || field.name"
+      [visible]="i < lieuxPassageAQuaiService.baseFieldsSize"
+      [allowHeaderFiltering]="field.allowHeaderFiltering"
+      [filterValue]="field.filterValue"
+      [width]="field.width"
     ></dxi-column>
 
   </dx-data-grid>

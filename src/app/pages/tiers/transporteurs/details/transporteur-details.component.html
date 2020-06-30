@@ -3,23 +3,23 @@
     <h2>
       {{ 'tiers-transporteurs-details-title' | localize }}
       <div class="right">
-        <dx-button
-          type="normal"
-          text="{{ 'btn-annuler' | localize }}"
-          [visible]="!readOnlyMode"
-          (onClick)="onCancel()"
-        ></dx-button>
-        <dx-button
+        <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
           [useSubmitBehavior]="true"
         ></dx-button>
-        <dx-button
+        <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
           [visible]="readOnlyMode"
           (onClick)="readOnlyMode = !readOnlyMode"
+        ></dx-button>
+        <dx-button class="upperButton"
+          type="normal"
+          text="{{ 'btn-annuler' | localize }}"
+          [visible]="!readOnlyMode"
+          (onClick)="onCancel()"
         ></dx-button>
       </div>
     </h2>
@@ -181,9 +181,25 @@
 
             <!-- Lieu fonction EAN -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-transporteurs-lieuFonctionEAN' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-transporteurs-lieuFonctionEan' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode"></dx-text-box>
+              </div>
+            </div>
+
+            <!-- Client raison sociale -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSocial' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="clientRaisonSocial"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="clientsRaisonSocial"
+                  displayExpr="raisonSocial"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','raisonSocial']"
+                >
+                </dx-select-box>
               </div>
             </div>
 
@@ -218,21 +234,6 @@
               </div>
             </div>
 
-            <!-- Client raison sociale -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSociale' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="clientRaisonSocial"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="clients"
-                  displayExpr="raisonSocial"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','raisonSocial']"
-                >
-                </dx-select-box>
-              </div>
-            </div>
           </div>
 
           <dx-accordion

@@ -62,6 +62,11 @@ export class ClientHomeComponent implements OnInit {
     this.hideGrid();
   }
 
+  onCreate() {
+    this.router.navigate([`/tiers/clients/create`]);
+    this.hideGrid();
+  }
+
   // TODO Create directive backButton
   backClick() {
     this.location.back();

@@ -14,7 +14,7 @@ import { Model } from '../models/model';
 const DEFAULT_KEY = 'id';
 const DEFAULT_GQL_KEY_TYPE = 'String';
 const DEFAULT_PAGE_SIZE = 10;
-const BASE_FIELDS_SIZE = 5;
+const BASE_FIELDS_SIZE = 7;
 
 export type PageInfo = {
   startCursor?: string
@@ -424,7 +424,7 @@ export abstract class ApiService {
             mappedValue = `%${mappedValue}%`;
           if (operator === 'startswith') mappedValue = `${mappedValue}%`;
           if (operator === 'endswith') mappedValue = `%${mappedValue}`;
-          mappedValue = parseInt(value, 2) || `"${mappedValue}"`;
+          mappedValue = JSON.stringify(mappedValue);
 
           filter[index] =  [selector, mappedOperator, mappedValue].join('');
         }
