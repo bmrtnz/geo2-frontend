@@ -12,7 +12,6 @@ import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import notify from 'devextreme/ui/notify';
-import { TypeTiers } from 'app/shared/models/tier.model';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -91,12 +90,13 @@ export class FournisseurDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.fournisseursService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.fournisseur = res.data.fournisseur;
-      this.fournisseurForm.patchValue(this.fournisseur);
+    this.route.params.subscribe(({id}) => {
+      this.fournisseursService
+      .getOne(id)
+      .subscribe( res => {
+        this.fournisseur = res.data.fournisseur;
+        this.fournisseurForm.patchValue(this.fournisseur);
+      });
     });
 
     this.pays = this.paysService.getDataSource();

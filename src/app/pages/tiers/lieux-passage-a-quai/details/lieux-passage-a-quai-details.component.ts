@@ -68,12 +68,14 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.lieupassageaquaiService
-      .getOne(this.route.snapshot.paramMap.get('id'))
+    this.route.params.subscribe(({id}) => {
+      this.lieupassageaquaiService
+      .getOne(id)
       .subscribe( res => {
         this.lieupassageaquai = res.data.lieuPassageAQuai;
         this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
       });
+    });
 
     this.pays = this.paysService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();

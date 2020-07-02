@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ClientDetailsComponent} from './details/client-details.component';
 import { ClientsListComponent } from './list/clients-list.component';
+import { AuthGuardService } from 'app/shared/services';
 
 const routes: Routes = [
   {
@@ -12,10 +13,12 @@ const routes: Routes = [
   {
     path: 'list',
     component: ClientsListComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: ':id',
     component: ClientDetailsComponent,
+    canActivate: [AuthGuardService]
   },
 ];
 

@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { Client } from '../../../../shared/models';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { NestedGrid } from 'app/pages/nested/nested.component';
 
@@ -17,8 +17,8 @@ export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Clien
 
   clients: DataSource;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  @Output() contentReadyEvent = new EventEmitter<any>();
-  @Output() rowDetailsRequested = new EventEmitter<Client>();
+  contentReadyEvent = new EventEmitter<any>();
+  rowDetailsRequested = new EventEmitter<Client>();
   onRowDetailsSubscription: Subscription;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Client) => [[ event.id ], { relativeTo: this.activatedRoute.parent }];
 

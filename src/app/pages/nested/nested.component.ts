@@ -1,15 +1,12 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { Component, OnInit, ViewChild, Output } from '@angular/core';
+import { ActivatedRoute, NavigationExtras } from '@angular/router';
 import { GridNavigatorComponent } from 'app/shared/components/grid-navigator/grid-navigator.component';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { combineLatest, of } from 'rxjs';
-import { take, filter, catchError, tap, map } from 'rxjs/operators';
 
 export interface NestedGrid<Model = any> {
   dataGrid: DxDataGridComponent;
   detailsNavigationHook: (row: Model) => [any[], NavigationExtras];
-  contentReadyEvent: EventEmitter<any>;
-  rowDetailsRequested: EventEmitter<any>;
+  // contentReadyEvent: EventEmitter<any>;
 }
 
 @Component({
@@ -24,7 +21,6 @@ export class NestedComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -35,7 +31,7 @@ export class NestedComponent implements OnInit {
     this.dataGrid = listComponent.dataGrid;
 
     // select row from route
-    // NOT WORKING, IMPOSSIBLE WITH PAGING ?
+    // this.dataGrid.autoNavigateToFocusedRow = true;
     // const detailsOutlet = this.activatedRoute.children
     // .find( ({outlet}) => outlet === 'details' );
     // combineLatest(
@@ -44,11 +40,19 @@ export class NestedComponent implements OnInit {
     // )
     // .pipe(
     //   map( ([params, event]) => params.id || (event as any).component.getKeyByRowIndex(0)),
+    //   map( key => {
+    //     // Fetch row position info like :
+    //     // < { type: 'GeoClient', key: '000141', pageSize: 10 }
+    //     // > { index: 6, page: 2 }
+    //     return {index: 1, page: 2};
+    //   }),
     //   take(1),
     // )
-    // .subscribe( key => {
-    //   this.dataGrid.instance.navigateToRow(key);
-    //   // this.dataGrid.focusedRowIndex = this.dataGrid.instance.getRowIndexByKey(key);
+    // .subscribe( async ({page, index}) => {
+    //   // Not working because keys not follow one another ?
+    //   // this.dataGrid.instance.navigateToRow(key);
+    //   await this.dataGrid.instance.pageIndex(page);
+    //   this.dataGrid.focusedRowIndex = index;
     // });
 
     // navigation

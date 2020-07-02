@@ -97,12 +97,14 @@ export class EntrepotDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.entrepotsService
-      .getOne(this.route.snapshot.paramMap.get('id'))
-      .subscribe( res => {
-        this.entrepot = res.data.entrepot;
-        this.entrepotForm.patchValue(this.entrepot);
-      });
+    this.route.params.subscribe(({id}) => {
+      this.entrepotsService
+        .getOne(id)
+        .subscribe( res => {
+          this.entrepot = res.data.entrepot;
+          this.entrepotForm.patchValue(this.entrepot);
+        });
+    });
     this.personnes = this.personnesService.getDataSource();
     this.modesLivraison = this.modesLivraisonService.getDataSource();
     this.pays = this.paysService.getDataSource();

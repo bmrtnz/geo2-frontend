@@ -1,6 +1,6 @@
 import { Component, OnInit, NgModule, ElementRef, Input } from '@angular/core';
 import { DxButtonModule, DxDataGridComponent } from 'devextreme-angular';
-import { Location } from '@angular/common';
+import { Location, CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Component({
@@ -20,10 +20,8 @@ export class GridNavigatorComponent implements OnInit {
     public element: ElementRef,
   ) {
     this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        // console.log(event.url);
-        this.backBtnDisabled = !/^\/nested\/.*/.test(event.url);
-      }
+      if (event instanceof NavigationEnd)
+        this.backBtnDisabled = !/^\/nested\/.*details.*/.test(event.url);
     });
   }
 
@@ -105,6 +103,7 @@ export class GridNavigatorComponent implements OnInit {
 
 @NgModule({
   imports: [
+    CommonModule,
     DxButtonModule,
   ],
   declarations: [GridNavigatorComponent],

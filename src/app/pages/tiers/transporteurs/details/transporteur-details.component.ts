@@ -74,11 +74,13 @@ export class TransporteurDetailsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.transporteursService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.transporteur = res.data.transporteur;
-      this.transporteurForm.patchValue(this.transporteur);
+    this.route.params.subscribe(({id}) => {
+      this.transporteursService
+      .getOne(id)
+      .subscribe( res => {
+        this.transporteur = res.data.transporteur;
+        this.transporteurForm.patchValue(this.transporteur);
+      });
     });
 
     this.pays = this.paysService.getDataSource();

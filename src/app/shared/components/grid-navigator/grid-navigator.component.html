@@ -1,25 +1,23 @@
-<div>
-  <div class="content-block">
-    <dx-button
-      style="float: left;"
-      icon="arrowleft"
-      text="Client précedent"
-      [disabled]="!hasPrevious()"
-      (onClick)="selectPrevious()">
-    </dx-button>
-    <dx-button
-      style="float: right;"
-      icon="arrowright"
-      text="Client suivant"
-      [disabled]="!hasNext()"
-      (onClick)="selectNext()">
-    </dx-button>
-    <dx-button
-      style="float: left;"
-      text="retour"
-      [disabled]="backBtnDisabled"
-      (onClick)="backClick()">
-    </dx-button>
-    <div style="clear: both;"></div>
-  </div>
+<div class="content-block">
+  <dx-button
+    style="float: left;"
+    icon="arrowleft"
+    text="Précédent"
+    [disabled]="!hasPrevious()"
+    (onClick)="selectPrevious()">
+  </dx-button>
+  <dx-button
+    style="float: right;"
+    icon="arrowright"
+    text="Suivant"
+    [disabled]="!hasNext()"
+    (onClick)="selectNext()">
+  </dx-button>
+  <dx-button
+    style="float: left;"
+    text="retour"
+    [disabled]="backBtnDisabled"
+    (onClick)="backClick()">
+  </dx-button>
+  <div style="clear: both;"></div>
 </div>
