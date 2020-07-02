@@ -36,11 +36,11 @@
     ></dxi-column> -->
 
     <dxi-column
-      *ngFor="let field of articlesService.model.getListFields();let i=index"
+      *ngFor="let field of articlesService.model.getListFields(2);let i=index"
       [dataField]="field"
       [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
       [filterValue]="field === 'valide' ? true : undefined"
-      [caption]="('articles-' + field.split('.')[1] | localize) || field"
+      [caption]="('articles-' + field.replace('.description', '').split('.').pop() | localize) || field"
       [visible]="i < articlesService.baseFieldsSize"
     ></dxi-column>
 

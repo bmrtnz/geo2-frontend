@@ -22,6 +22,8 @@ export class ArticlesListComponent implements OnInit {
 
   ngOnInit() {
     this.articles = this.articlesService.getDataSource();
+    const field = 'matierePremiere.espece.description';
+    // console.log('articles-' + field.replace('.description', '').split('.').pop())
   }
 
   onRowDblClick(e) {

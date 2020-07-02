@@ -7,6 +7,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NestedGrid } from 'app/pages/nested/nested.component';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-list',
@@ -20,6 +21,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, OnDestroy, Nested
   contentReadyEvent = new EventEmitter<any>();
   rowDetailsRequested = new EventEmitter<LieuPassageAQuai>();
   onRowDetailsSubscription: Subscription;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: LieuPassageAQuai) => [
     [ event.id ],
     { relativeTo: this.activatedRoute.parent },
@@ -36,6 +38,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, OnDestroy, Nested
     this.onRowDetailsSubscription = this.rowDetailsRequested
     .pipe(map( this.detailsNavigationHook ))
     .subscribe( navigationParams => this.router.navigate(...navigationParams));
+    this.detailedFields = this.lieuxPassageAQuaiService.model.getDetailedFields();
   }
 
   ngOnDestroy() {

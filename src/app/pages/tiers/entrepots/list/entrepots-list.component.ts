@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services/entrepots.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-entrepots-list',
@@ -12,6 +13,7 @@ export class EntrepotsListComponent implements OnInit {
 
   entrepots: DataSource;
   clientID: string;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -25,6 +27,7 @@ export class EntrepotsListComponent implements OnInit {
     this.entrepots = this.entrepotsService.getDataSource({
       search: `client.id=="${ this.clientID }"`,
     });
+    this.detailedFields = this.entrepotsService.model.getDetailedFields();
   }
 
   onRowDblClick(e) {

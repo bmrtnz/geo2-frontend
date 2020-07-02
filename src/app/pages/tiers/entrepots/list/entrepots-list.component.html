@@ -31,10 +31,13 @@
     <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of entrepotsService.model.getListFields();let i=index"
-      [dataField]="field"
-      [caption]="('tiers-entrepots-' + field.split('.').shift() | localize) || field"
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.path"
+      [caption]="('tiers-entrepots-' + field.name | localize) || field.name"
       [visible]="i < entrepotsService.baseFieldsSize"
+      [allowHeaderFiltering]="field.allowHeaderFiltering"
+      [filterValue]="field.filterValue"
+      [width]="field.width"
     ></dxi-column>
 
   </dx-data-grid>

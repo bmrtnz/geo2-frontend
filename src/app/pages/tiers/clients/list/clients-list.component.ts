@@ -7,6 +7,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { map, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { NestedGrid } from 'app/pages/nested/nested.component';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-clients-list',
@@ -20,6 +21,7 @@ export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Clien
   contentReadyEvent = new EventEmitter<any>();
   rowDetailsRequested = new EventEmitter<Client>();
   onRowDetailsSubscription: Subscription;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Client) => [[ event.id ], { relativeTo: this.activatedRoute.parent }];
 
   constructor(
@@ -33,6 +35,7 @@ export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Clien
     this.onRowDetailsSubscription = this.rowDetailsRequested
     .pipe(map( this.detailsNavigationHook ))
     .subscribe( navigationParams => this.router.navigate(...navigationParams));
+    this.detailedFields = this.clientsService.model.getDetailedFields();
   }
 
   ngOnDestroy() {

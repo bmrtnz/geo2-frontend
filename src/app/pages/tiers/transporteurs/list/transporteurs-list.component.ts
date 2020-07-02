@@ -5,8 +5,9 @@ import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Transporteur } from 'app/shared/models';
 import { Subscription } from 'rxjs';
-import { NestedComponent, NestedGrid } from 'app/pages/nested/nested.component';
+import { NestedGrid } from 'app/pages/nested/nested.component';
 import { map } from 'rxjs/operators';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-transporteurs-list',
@@ -20,6 +21,7 @@ export class TransporteursListComponent implements OnInit, OnDestroy, NestedGrid
   contentReadyEvent = new EventEmitter<any>();
   rowDetailsRequested = new EventEmitter<Transporteur>();
   onRowDetailsSubscription: Subscription;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Transporteur) => [
     [ event.id ],
     { relativeTo: this.activatedRoute.parent },
@@ -36,6 +38,7 @@ export class TransporteursListComponent implements OnInit, OnDestroy, NestedGrid
     this.onRowDetailsSubscription = this.rowDetailsRequested
     .pipe(map( this.detailsNavigationHook ))
     .subscribe( navigationParams => this.router.navigate(...navigationParams));
+    this.detailedFields = this.transporteursService.model.getDetailedFields();
   }
 
   ngOnDestroy() {

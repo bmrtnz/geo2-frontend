@@ -424,7 +424,7 @@ export abstract class ApiService {
             mappedValue = `%${mappedValue}%`;
           if (operator === 'startswith') mappedValue = `${mappedValue}%`;
           if (operator === 'endswith') mappedValue = `%${mappedValue}`;
-          mappedValue = `"${mappedValue}"`;
+          mappedValue = JSON.stringify(mappedValue);
 
           filter[index] =  [selector, mappedOperator, mappedValue].join('');
         }

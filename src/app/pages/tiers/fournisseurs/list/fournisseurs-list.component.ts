@@ -6,7 +6,8 @@ import { Fournisseur } from 'app/shared/models';
 import { NestedGrid } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -19,6 +20,7 @@ export class FournisseursListComponent implements OnInit, OnDestroy, NestedGrid<
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
   rowDetailsRequested = new EventEmitter<Fournisseur>();
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
   onRowDetailsSubscription: Subscription;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Fournisseur) => [
     [ event.id ],
@@ -36,6 +38,7 @@ export class FournisseursListComponent implements OnInit, OnDestroy, NestedGrid<
     this.onRowDetailsSubscription = this.rowDetailsRequested
     .pipe(map( this.detailsNavigationHook ))
     .subscribe( navigationParams => this.router.navigate(...navigationParams));
+    this.detailedFields = this.fournisseursService.model.getDetailedFields();
   }
 
   ngOnDestroy() {

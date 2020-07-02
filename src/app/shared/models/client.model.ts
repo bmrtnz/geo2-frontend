@@ -13,19 +13,20 @@ import { Personne } from './personne.model';
 import { TypeClient } from './type.client.model';
 import { GroupeClient } from './groupe-client.model';
 import { BaseTarif } from './base-tarif.model';
-import {Historique} from './historique.model';
+import { Historique } from './historique.model';
 import { TypeVente } from './type-vente.model';
 import { Courtier } from './courtier.model';
+import { ConditionVente } from './condition-vente.model';
 
 export class Client extends Model {
 
-  @Field({asKey: true}) public id: string;
+  @Field({asKey: true, width: 100}) public id: string;
   @Field() public code: string;
   @Field({asLabel: true}) public raisonSocial: string;
   @Field() public ville: string;
   @Field({model: Pays}) public pays: Pays;
   @Field({model: Secteur}) public secteur: Secteur;
-  @Field() public valide: boolean;
+  @Field({allowHeaderFiltering: false, filterValue: true, width: 100}) public valide: boolean;
   @Field({model: Societe}) public societe: Societe;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
@@ -49,8 +50,8 @@ export class Client extends Model {
   @Field() public commentaireBasFacture: string;
   @Field() public instructionCommercial: string;
   @Field() public siret: string;
-  @Field() public blocageAvoirEdi: boolean;
-  @Field() public debloquerEnvoieJour: boolean;
+  @Field({allowHeaderFiltering: false}) public blocageAvoirEdi: boolean;
+  @Field({allowHeaderFiltering: false}) public debloquerEnvoieJour: boolean;
   @Field() public ifco: string;
   @Field() public instructionLogistique: string;
   @Field({model: BasePaiement}) public basePaiement: BasePaiement;
@@ -65,7 +66,7 @@ export class Client extends Model {
   @Field() public courtageValeur: number;
   @Field({model: TypeClient}) public typeClient: TypeClient;
   @Field({model: GroupeClient}) public groupeClient: GroupeClient;
-  @Field() public soumisCtifl: boolean;
+  @Field({allowHeaderFiltering: false}) public soumisCtifl: boolean;
   // @Field({model: Entrepot}) public entrepots: Entrepot[];
   @Field() public typeTiers: TypeTiers;
   @Field() public lieuFonctionEan: string;
@@ -73,13 +74,13 @@ export class Client extends Model {
   @Field({model: Historique}) public historique: Historique[];
   @Field({model: TypeVente}) public typeVente: TypeVente;
   @Field() public dateDebutIfco: string;
-  @Field() public refusCoface: boolean;
+  @Field({allowHeaderFiltering: false}) public refusCoface: boolean;
   @Field() public enCoursBlueWhale: number;
   @Field() public enCoursDateLimite: number;
   @Field() public enCoursTemporaire: number;
   @Field() public tauxRemiseParFacture: number;
   @Field() public tauxRemiseHorsFacture: number;
-  @Field() public fraisExcluArticlePasOrigineFrance: boolean;
+  @Field({allowHeaderFiltering: false}) public fraisExcluArticlePasOrigineFrance: boolean;
   @Field() public fraisMarketing: number;
   @Field({model: BaseTarif}) public fraisMarketingModeCalcul: BaseTarif;
   @Field() public fraisPlateforme: number;
@@ -87,8 +88,8 @@ export class Client extends Model {
   @Field({model: Client}) public paloxRaisonSocial: Client;
   @Field() public formatDluo: string;
   @Field() public nbJourLimiteLitige: number;
-  @Field() public clotureAutomatique: boolean;
-  @Field() public detailAutomatique: boolean;
-  @Field() public fraisRamasse: boolean;
-  @Field() public venteACommission: boolean;
+  @Field({allowHeaderFiltering: false}) public clotureAutomatique: boolean;
+  @Field({allowHeaderFiltering: false}) public detailAutomatique: boolean;
+  @Field({allowHeaderFiltering: false}) public fraisRamasse: boolean;
+  @Field({allowHeaderFiltering: false}) public venteACommission: boolean;
 }

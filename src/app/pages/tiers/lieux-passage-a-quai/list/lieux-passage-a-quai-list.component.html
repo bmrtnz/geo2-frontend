@@ -39,6 +39,16 @@
       [visible]="i < lieuxPassageAQuaiService.baseFieldsSize"
     ></dxi-column>
 
+    <dxi-column
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.path"
+      [caption]="('tiers-lieuxpassageaquai-' + field.name | localize) || field.name"
+      [visible]="i < lieuxPassageAQuaiService.baseFieldsSize"
+      [allowHeaderFiltering]="field.allowHeaderFiltering"
+      [filterValue]="field.filterValue"
+      [width]="field.width"
+    ></dxi-column>
+
   </dx-data-grid>
 
 </div>

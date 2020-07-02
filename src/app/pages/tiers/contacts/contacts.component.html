@@ -11,6 +11,7 @@
     [remoteOperations]="true"
     [allowColumnReordering]="true"
     [showBorders]="true"
+    (onRowPrepared)="onRowPrepared($event)"
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
   >
@@ -42,6 +43,8 @@
       [caption]="('tiers-contacts-' + field.name | localize) || field.name"
       [visible]="i < contactsService.baseFieldsSize"
       [allowEditing]="field.allowEditing"
+      [filterValue]="field.name === 'valide' ? true : undefined"
+      [width]="field.name === 'valide' ? 100 : field.name === 'fluxComplement' ? 75 : field.name === 'moyenCommunication' ? 150 :undefined"
       [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
     ></dxi-column>
