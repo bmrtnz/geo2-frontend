@@ -14,7 +14,6 @@ export class EntrepotsListComponent implements OnInit {
   entrepots: DataSource;
   clientID: string;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
-  clientService: ClientsService;
 
   constructor(
     public entrepotsService: EntrepotsService,
