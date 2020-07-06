@@ -342,6 +342,16 @@ export abstract class ApiService {
     const field = options.group[0].selector;
     const distinctQuery = this.buildDistinct();
     type DistinctResponse = { distinct: RelayPage<DistinctInfo> };
+
+    // Full filter fix
+    // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
+    const withDepth = options.filter
+    .find( res => typeof res === 'object' );
+    const withOperator = options.filter
+    .find( res => ['or', 'and'].includes(res) );
+    if (withDepth && !withOperator)
+      options.filter = [options.filter[0], 'and', options.filter[1]];
+
     const distinctVariables = {
       ...inputVariables,
       field,
@@ -396,8 +406,12 @@ export abstract class ApiService {
    */
   protected mapDXFilterToRSQL(dxFilter: any[]) {
 
-    if (typeof dxFilter[0] === 'string')
-      dxFilter = [dxFilter];
+    // Avoid modify original
+    let clonedFilter = JSON.parse(JSON.stringify(dxFilter));
+
+    // Make filter structure consistant: [string|[]]
+    if (typeof clonedFilter[0] === 'string')
+      clonedFilter = [clonedFilter];
 
     const next = (filter: any[], index = 0) => {
       const node = filter[index];
@@ -405,7 +419,7 @@ export abstract class ApiService {
 
         // Deep filter
         if (typeof node[0] === 'object')
-          filter[index] = next(node).join(' ');
+          filter[index] = `(${ next(node).join(' ') })`;
         else {
           const [selector, operator, value] = node;
 
@@ -429,14 +443,14 @@ export abstract class ApiService {
           if (operator === 'endswith') mappedValue = `%${mappedValue}`;
           mappedValue = JSON.stringify(mappedValue);
 
-          filter[index] =  [selector, mappedOperator, mappedValue].join('');
+          filter[index] = [selector, mappedOperator, mappedValue].join('');
         }
       } else filter[index] =  node;
       if (index < filter.length - 1)
         return next(filter, index + 1);
       else return filter;
     };
-    return next(dxFilter).flat().join(' ');
+    return next(clonedFilter).flat().join(' ');
   }
 
   protected mapLoadOptionsToVariables(options: LoadOptions) {
@@ -450,9 +464,9 @@ export abstract class ApiService {
 
     // Search / filter
     variables.search = null;
-    if (options.filter)
+    if (options.filter) // row/header filters
       variables.search = this.mapDXFilterToRSQL(options.filter);
-    if (options.searchValue)
+    if (options.searchValue) // global search
       variables.search = this
       .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options));
 
