@@ -34,4 +34,8 @@ export class FournisseursListComponent implements OnInit {
       }
     }
   }
+  onCreate() {
+    this.router.navigate([`/tiers/fournisseurs/create`]);
+  }
+
 }

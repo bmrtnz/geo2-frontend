@@ -37,8 +37,8 @@ export class FournisseursService extends ApiService implements APIRead {
             return this.getDistinct(options, inputVariables).toPromise();
 
           const variables = {
-            ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
+            ...inputVariables,
           };
           const query = this.buildGetAll();
           type Response = { allFournisseur: RelayPage<Fournisseur> };
@@ -51,18 +51,17 @@ export class FournisseursService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne();
+          const query = this.buildGetOne(1, this.fieldsFilter);
           type Response = { fournisseur: Fournisseur };
-          const id = key ? {id: key.id, espece: key.especeId || ''} : {};
-          const variables = { ...inputVariables, id };
+          const variables = { ...inputVariables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
-            map( res => new Fournisseur(res.data.fournisseur)),
+            map( res => res.data.fournisseur),
             take(1),
           )
           .toPromise();
-          }
+        },
       }),
     });
   }

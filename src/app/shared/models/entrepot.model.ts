@@ -10,6 +10,7 @@ import { Transporteur } from './transporteur.model';
 import { TypeCamion } from './type-camion.model';
 import { BaseTarif } from './base-tarif.model';
 import { Transitaire } from './transitaire.model';
+import { Client } from './client.model';
 
 export enum ModeLivraison {
   DIRECT = 'D',
@@ -19,10 +20,10 @@ export enum ModeLivraison {
 
 export class Entrepot extends Model {
   @Field({asKey: true, width: 150}) public id: string;
-  @Field({asLabel: true}) public raisonSocial: string;
-  @Field({model: Pays}) public pays: Pays;
-  @Field() public ville: string;
   @Field() public code: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field() public ville: string;
+  @Field({model: Pays}) public pays: Pays;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
@@ -54,5 +55,6 @@ export class Entrepot extends Model {
   @Field() public typeTiers: TypeTiers;
   @Field() public prixUnitaireTarifTransport: number;
   @Field() public prixUnitaireTarifTransit: number;
+  @Field({model: Client}) public client: Client;
 
 }

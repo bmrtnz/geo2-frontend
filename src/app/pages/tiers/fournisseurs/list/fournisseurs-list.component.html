@@ -1,6 +1,12 @@
 <h2 class="content-block">{{ 'tiers-fournisseurs-title' | localize }}</h2>
 
 <div class="content-block">
+
+  <h2>
+    <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
+    <div style="clear:both"></div>
+    </h2>
+
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="fournisseurs"
     [remoteOperations]="true"

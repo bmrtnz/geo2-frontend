@@ -17,7 +17,11 @@ const routes: Routes = [
     path: ':id',
     component: EntrepotDetailsComponent,
     canActivate: [AuthGuardService]
-  }
+  }, {
+    path: 'create/:client',
+    component: EntrepotDetailsComponent,
+    canActivate: [AuthGuardService]
+}
 ];
 
 @NgModule({

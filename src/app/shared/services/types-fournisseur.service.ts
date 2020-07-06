@@ -31,8 +31,8 @@ export class TypesFournisseurService extends ApiService implements APIRead {
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allTypeFournisseur: RelayPage<TypeFournisseur> };
           variables = {
-            ...variables,
             ...this.mapLoadOptionsToVariables(options),
+            ...variables,
           };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

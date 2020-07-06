@@ -4,6 +4,7 @@ export * from './societe.model';
 export * from './regime-tva.model';
 export * from './type.client.model';
 export * from './groupe-client.model';
+export * from './groupe-fournisseur.model';
 export * from './incoterm.model';
 export * from './base.paiement.model';
 export * from './devise.model';

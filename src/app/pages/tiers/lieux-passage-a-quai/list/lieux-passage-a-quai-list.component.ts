@@ -24,6 +24,10 @@ export class LieuxPassageAQuaiListComponent implements OnInit {
     this.detailedFields = this.lieuxPassageAQuaiService.model.getDetailedFields();
   }
 
+  onCreate() {
+    this.router.navigate([`/tiers/lieux-passage-a-quai/create`]);
+  }
+
   onRowDblClick(e) {
     this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.id}`]);
   }

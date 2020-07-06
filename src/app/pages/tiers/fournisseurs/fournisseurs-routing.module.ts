@@ -13,6 +13,10 @@ const routes: Routes = [
       path: ':id',
       component: FournisseurDetailsComponent,
       canActivate: [AuthGuardService]
+    }, {
+      path: 'create',
+      component: FournisseurDetailsComponent,
+      canActivate: [AuthGuardService]
     }
   ];
 

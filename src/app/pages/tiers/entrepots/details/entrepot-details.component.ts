@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { PersonnesService } from 'app/shared/services/personnes.service';
@@ -21,11 +21,11 @@ import { TransitairesService } from 'app/shared/services/transitaires.service';
   templateUrl: './entrepot-details.component.html',
   styleUrls: ['./entrepot-details.component.scss']
 })
-export class EntrepotDetailsComponent implements OnInit {
+export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
 
   entrepotForm = this.fb.group({
-    id: [''],
     code: [''],
+    client: [''],
     raisonSocial: [''],
     societe: [''],
     adresse1: [''],
@@ -76,6 +76,7 @@ export class EntrepotDetailsComponent implements OnInit {
   transitaires: DataSource;
   defaultVisible: boolean;
   readOnlyMode = true;
+  createMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -94,15 +95,36 @@ export class EntrepotDetailsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.defaultVisible = false;
+    this.checkCode = this.checkCode.bind(this);
+  }
+  ngAfterViewInit(): void {
+    this.entrepotForm.reset();
   }
 
   ngOnInit() {
-    this.entrepotsService
-      .getOne(this.route.snapshot.paramMap.get('id'))
-      .subscribe( res => {
-        this.entrepot = res.data.entrepot;
-        this.entrepotForm.patchValue(this.entrepot);
-      });
+
+    this.route.params.subscribe(params => {
+      this.createMode = this.route.snapshot.url[0].path.includes('create');
+      this.readOnlyMode = !this.createMode;
+      if (!this.createMode) {
+        this.entrepotsService
+          .getOne(params.id)
+          .subscribe( res => {
+            this.entrepot = res.data.entrepot;
+            this.entrepotForm.patchValue(this.entrepot);
+          });
+      } else {
+        this.entrepot = new Entrepot({});
+        // console.log(this.route.snapshot)
+        // this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
+        //   res => {
+        //     this.entrepot.client = res.data.client;
+        //     console.log(this.entrepot)
+        //     }
+        // );
+      }
+    });
+
     this.personnes = this.personnesService.getDataSource();
     this.modesLivraison = this.modesLivraisonService.getDataSource();
     this.pays = this.paysService.getDataSource();
@@ -115,25 +137,49 @@ export class EntrepotDetailsComponent implements OnInit {
     this.transitaires = this.transitairesService.getDataSource();
   }
 
+  checkCode(params) {
+      const code = params.value.toUpperCase();
+      const entrepotsSource = this.entrepotsService.getDataSource({ search: `code=="${ code }"` });
+      return entrepotsSource.load().then(res => !(res.length));
+  }
+
   onSubmit() {
+
     if (!this.entrepotForm.pristine && this.entrepotForm.valid) {
       const entrepot = this.entrepotsService.extractDirty(this.entrepotForm.controls);
+
+      if (!this.createMode) {
+        entrepot.id = this.entrepot.id;
+      } else {
+        entrepot.code = this.entrepotForm.get('code').value.toUpperCase();
+        entrepot.client = {id: this.route.snapshot.params.client};
+      }
+
       this.entrepotsService
-        .save({ entrepot: { ...entrepot, id: this.entrepot.id } })
+      .save({ entrepot })
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
-            this.entrepot = { id: this.entrepot.id, ...this.entrepotForm.getRawValue() };
-            this.readOnlyMode = true;
+            if (!this.createMode) {
+              this.entrepot = { id: this.entrepot.id, ...this.entrepotForm.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
+            }
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
     }
+
   }
 
   onCancel() {
-    this.entrepotForm.reset(this.entrepot);
-    this.readOnlyMode = true;
+    if (!this.createMode) {
+      this.entrepotForm.reset(this.entrepot);
+      this.readOnlyMode = true;
+    } else {
+      this.router.navigate([`/tiers/entrepots`]);
+    }
   }
 
   toggleVisible() {

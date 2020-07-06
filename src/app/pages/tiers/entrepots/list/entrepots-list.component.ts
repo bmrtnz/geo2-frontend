@@ -14,6 +14,7 @@ export class EntrepotsListComponent implements OnInit {
   entrepots: DataSource;
   clientID: string;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
+  clientService: ClientsService;
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -32,6 +33,9 @@ export class EntrepotsListComponent implements OnInit {
 
   onRowDblClick(e) {
     this.router.navigate([`/tiers/entrepots/${e.data.id}`]);
+  }
+  onCreate() {
+    this.router.navigate([`/tiers/entrepots/create/${this.clientID}`]);
   }
   onRowPrepared(e) {
     if (e.rowType === 'data') {

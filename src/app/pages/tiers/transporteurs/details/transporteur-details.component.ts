@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { TransporteursService } from '../../../../shared/services/transporteurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transporteur } from '../../../../shared/models';
@@ -17,7 +17,7 @@ import notify from 'devextreme/ui/notify';
   templateUrl: './transporteur-details.component.html',
   styleUrls: ['./transporteur-details.component.scss']
 })
-export class TransporteurDetailsComponent implements OnInit {
+export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
 
   transporteurForm = this.fb.group({
     id: [''],
@@ -56,6 +56,7 @@ export class TransporteurDetailsComponent implements OnInit {
   clients: DataSource;
   defaultVisible: boolean;
   readOnlyMode = true;
+  createMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -70,15 +71,27 @@ export class TransporteurDetailsComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
+    this.checkCode = this.checkCode.bind(this);
+  }
+  ngAfterViewInit(): void {
+    this.transporteurForm.reset(this.transporteur);
   }
 
   ngOnInit() {
 
-    this.transporteursService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.transporteur = res.data.transporteur;
-      this.transporteurForm.patchValue(this.transporteur);
+    this.route.params.subscribe(params => {
+      this.createMode = this.route.snapshot.url[0].path === 'create';
+      this.readOnlyMode = !this.createMode;
+      if (!this.createMode) {
+        this.transporteursService
+          .getOne(params.id)
+          .subscribe( res => {
+            this.transporteur = res.data.transporteur;
+            this.transporteurForm.patchValue(this.transporteur);
+          });
+      } else {
+        this.transporteur = new Transporteur({});
+      }
     });
 
     this.pays = this.paysService.getDataSource();
@@ -90,26 +103,49 @@ export class TransporteurDetailsComponent implements OnInit {
 
   }
 
+  checkCode(params) {
+      const code = params.value.toUpperCase();
+      const transporteursSource = this.transporteursService.getDataSource({ search: `id=="${ code }"` });
+      return transporteursSource.load().then(res => !(res.length));
+  }
+
   onSubmit() {
+
     if (!this.transporteurForm.pristine && this.transporteurForm.valid) {
-      const transporteur = this.transporteursService
-      .extractDirty(this.transporteurForm.controls);
+      const transporteur = this.transporteursService.extractDirty(this.transporteurForm.controls);
+
+      if (this.createMode) {
+        transporteur.id = this.transporteurForm.get('id').value.toUpperCase();
+          // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
+          // Avoir pour les valeur par defaut (qui sont not null dans la base)
+      } else {
+        transporteur.id = this.transporteur.id;
+      }
+
       this.transporteursService
-      .save({ transporteur: { ...transporteur, id: this.transporteur.id }})
-      .subscribe({
-        next: () => {
-          notify('Sauvegardé', 'success', 3000);
-          this.transporteur = { id: this.transporteur.id, ...this.transporteurForm.getRawValue() };
-          this.readOnlyMode = true;
-        },
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
-    }
+      .save({ transporteur })
+        .subscribe({
+          next: () => {
+            notify('Sauvegardé', 'success', 3000);
+            if (!this.createMode) {
+              this.transporteur = { id: this.transporteur.id, ...this.transporteurForm.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
+            }
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
+      }
   }
 
   onCancel() {
-    this.transporteurForm.reset(this.transporteur);
-    this.readOnlyMode = true;
+    if (!this.createMode) {
+      this.transporteurForm.reset(this.transporteur);
+      this.readOnlyMode = true;
+    } else {
+      this.router.navigate([`/tiers/transporteurs`]);
+    }
   }
 
   toggleVisible() {

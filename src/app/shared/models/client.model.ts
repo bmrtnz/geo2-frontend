@@ -92,4 +92,5 @@ export class Client extends Model {
   @Field({allowHeaderFiltering: false}) public detailAutomatique: boolean;
   @Field({allowHeaderFiltering: false}) public fraisRamasse: boolean;
   @Field({allowHeaderFiltering: false}) public venteACommission: boolean;
+  @Field({model: ConditionVente}) public conditionVente: ConditionVente;
 }

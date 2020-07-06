@@ -29,8 +29,8 @@ export class SocietesService extends ApiService implements APIRead {
           const query = this.buildGetAll();
           type Response = { allSociete: RelayPage<Societe> };
           variables = {
-            ...variables,
             ...this.mapLoadOptionsToVariables(options),
+            ...variables,
           };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

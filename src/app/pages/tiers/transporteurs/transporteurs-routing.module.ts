@@ -10,6 +10,10 @@ const routes: Routes = [
     component: TransporteursListComponent,
     canActivate: [AuthGuardService]
   }, {
+    path: 'create',
+    component: TransporteurDetailsComponent,
+    canActivate: [AuthGuardService]
+  }, {
     path: ':id',
     component: TransporteurDetailsComponent,
     canActivate: [AuthGuardService]

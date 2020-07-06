@@ -7,7 +7,16 @@ import { BasePaiement } from './base.paiement.model';
 import { RegimeTva } from './regime-tva.model';
 import { BureauAchat } from './bureau-achat.model';
 import { TypeFournisseur } from './type.fournisseur.model';
-import {Historique} from './historique.model';
+import { Historique } from './historique.model';
+import { ConditionVente } from './condition-vente.model';
+import { GroupeFournisseur } from './groupe-fournisseur.model';
+
+export enum NatureStation {
+  EXPEDITEUR_EMBALLEUR = 'O',
+  STATION_NORMAL = 'N',
+  EXCLUSIVEMENT_PROPRIETAIRE = 'E',
+  EXCLUSIVEMENT_EXPEDITEUR = 'F'
+}
 
 export class Fournisseur extends Model {
 
@@ -57,4 +66,11 @@ export class Fournisseur extends Model {
   @Field({allowHeaderFiltering: false}) public autoFacturation: boolean;
   @Field() public tvaId: string;
   @Field({model: Historique}) public historique: Historique[];
+  @Field({allowHeaderFiltering: false}) public indicateurModificationDetail: boolean;
+  @Field() public dateConditionGeneraleAchatSignee: Date;
+  @Field({allowHeaderFiltering: false}) public declarantBacsCHEP: boolean;
+  @Field({model: ConditionVente}) public conditionVente: ConditionVente;
+  @Field({model: Fournisseur}) public fournisseurDeRattachement: Fournisseur;
+  @Field({model: GroupeFournisseur}) public groupeFournisseur: GroupeFournisseur;
+
 }

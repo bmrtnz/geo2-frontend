@@ -1,6 +1,12 @@
 <h2 class="content-block">{{ 'tiers-transporteurs-title' | localize }}</h2>
 
 <div class="content-block">
+
+  <h2>
+    <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
+    <div style="clear:both"></div>
+    </h2>
+
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="transporteurs"
     [remoteOperations]="true"
@@ -33,7 +39,7 @@
     <dxi-column
       *ngFor="let field of detailedFields;let i=index"
       [dataField]="field.path"
-      [caption]="('tiers-transporteurs-' + field.name | localize) || field.name"
+      [caption]="('tiers-transporteurs-'+ field.name.replace('.description', '').split('.').pop() | localize) || field.name"
       [visible]="i < transporteursService.baseFieldsSize"
       [allowHeaderFiltering]="field.allowHeaderFiltering"
       [filterValue]="field.filterValue"

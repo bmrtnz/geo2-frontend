@@ -10,6 +10,10 @@ const routes: Routes = [
     component: LieuxPassageAQuaiListComponent,
     canActivate: [AuthGuardService]
   }, {
+    path: 'create',
+    component: LieuxPassageAQuaiDetailsComponent,
+    canActivate: [AuthGuardService]
+  }, {
       path: ':id',
       component: LieuxPassageAQuaiDetailsComponent,
       canActivate: [AuthGuardService]

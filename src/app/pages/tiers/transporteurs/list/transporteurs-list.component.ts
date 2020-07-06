@@ -27,6 +27,11 @@ export class TransporteursListComponent implements OnInit {
   onRowDblClick(e) {
     this.router.navigate([`/tiers/transporteurs/${e.data.id}`]);
   }
+
+  onCreate() {
+    this.router.navigate([`/tiers/transporteurs/create`]);
+  }
+
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {

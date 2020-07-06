@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LieuPassageAQuai } from '../../../../shared/models';
@@ -16,7 +16,7 @@ import notify from 'devextreme/ui/notify';
   templateUrl: './lieux-passage-a-quai-details.component.html',
   styleUrls: ['./lieux-passage-a-quai-details.component.scss']
 })
-export class LieuxPassageAQuaiDetailsComponent implements OnInit {
+export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit {
 
   lieupassageaquaiForm = this.fb.group({
     id: [''],
@@ -52,6 +52,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
   typeLieupassageaquai: any[];
   defaultVisible: boolean;
   readOnlyMode = true;
+  createMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -65,15 +66,28 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
+    this.checkCode = this.checkCode.bind(this);
+  }
+  ngAfterViewInit(): void {
+    this.lieupassageaquaiForm.reset(this.lieupassageaquai);
   }
 
   ngOnInit() {
-    this.lieupassageaquaiService
-      .getOne(this.route.snapshot.paramMap.get('id'))
-      .subscribe( res => {
-        this.lieupassageaquai = res.data.lieuPassageAQuai;
-        this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
-      });
+
+    this.route.params.subscribe(params => {
+      this.createMode = this.route.snapshot.url[0].path === 'create';
+      this.readOnlyMode = !this.createMode;
+      if (!this.createMode) {
+        this.lieupassageaquaiService
+          .getOne(params.id)
+          .subscribe( res => {
+            this.lieupassageaquai = res.data.lieuPassageAQuai;
+            this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
+          });
+      } else {
+        this.lieupassageaquai = new LieuPassageAQuai({});
+      }
+    });
 
     this.pays = this.paysService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -82,26 +96,50 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit {
     this.basesPaiement = this.basesPaiementService.getDataSource();
   }
 
+  checkCode(params) {
+      const code = params.value.toUpperCase();
+      const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource({ search: `id=="${ code }"` });
+      return lieuxpassageaquaiSource.load().then(res => !(res.length));
+  }
+
   onSubmit() {
+
     if (!this.lieupassageaquaiForm.pristine && this.lieupassageaquaiForm.valid) {
-      const lieuPassageAQuai = this.lieupassageaquaiService
-      .extractDirty(this.lieupassageaquaiForm.controls);
+      const lieuPassageAQuai = this.lieupassageaquaiService.extractDirty(this.lieupassageaquaiForm.controls);
+
+      if (this.createMode) {
+        lieuPassageAQuai.id = this.lieupassageaquaiForm.get('id').value.toUpperCase();
+          // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
+          // Avoir pour les valeur par defaut (qui sont not null dans la base)
+      } else {
+        lieuPassageAQuai.id = this.lieupassageaquai.id;
+      }
+
       this.lieupassageaquaiService
-      .save({ lieuPassageAQuai: { ...lieuPassageAQuai, id: this.lieupassageaquai.id } })
-      .subscribe({
-        next: () => {
-          notify('Sauvegardé', 'success', 3000);
-          this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.lieupassageaquaiForm.getRawValue() };
-          this.readOnlyMode = true;
-        },
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
-    }
+      .save({ lieuPassageAQuai })
+        .subscribe({
+          next: () => {
+            notify('Sauvegardé', 'success', 3000);
+            if (!this.createMode) {
+              this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.lieupassageaquaiForm.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.router.navigate([`/tiers/lieux-passage-a-quai/${lieuPassageAQuai.id}`]);
+            }
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
+      }
+
   }
 
   onCancel() {
-    this.lieupassageaquaiForm.reset(this.lieupassageaquai);
-    this.readOnlyMode = true;
+    if (!this.createMode) {
+      this.lieupassageaquaiForm.reset(this.lieupassageaquaiForm);
+      this.readOnlyMode = true;
+    } else {
+      this.router.navigate([`/tiers/lieux-passage-a-quai`]);
+    }
   }
 
   toggleVisible() {
