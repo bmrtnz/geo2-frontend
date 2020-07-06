@@ -9,13 +9,15 @@ const routes: Routes = [
     path: '',
     redirectTo: '/nested/transporteurs',
     pathMatch: 'full',
-  },
-  {
+  }, {
     path: 'list',
     component: TransporteursListComponent,
     canActivate: [AuthGuardService]
-  },
-  {
+  }, {
+    path: 'create',
+    component: TransporteurDetailsComponent,
+    canActivate: [AuthGuardService]
+  }, {
     path: ':id',
     component: TransporteurDetailsComponent,
     canActivate: [AuthGuardService]

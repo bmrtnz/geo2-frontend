@@ -39,14 +39,9 @@ export class EntrepotsService extends ApiService implements APIRead {
           const query = this.buildGetAll();
           type Response = { allEntrepot: RelayPage<Entrepot> };
 
-          // Merge search
-          const search = [];
-          const loadVariables = this.mapLoadOptionsToVariables(options);
-          if (inputVariables.search) search.push(inputVariables.search);
-          if (loadVariables.search) search.push(loadVariables.search);
           const variables = {
-            ...loadVariables,
-            search: search.join(' and ')
+            ...this.mapLoadOptionsToVariables(options),
+            ...inputVariables,
           };
 
           return this.

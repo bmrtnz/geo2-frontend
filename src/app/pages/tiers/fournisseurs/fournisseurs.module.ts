@@ -6,7 +6,7 @@ import { FournisseursListComponent } from './list/fournisseurs-list.component';
 import {
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
-    DxDataGridModule, DxTagBoxModule,
+    DxDataGridModule, DxTagBoxModule, DxDateBoxModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
@@ -32,6 +32,7 @@ import {HistoriqueValideModule} from '../../../shared/components/historique-vali
         DxBoxModule,
         DxCheckBoxModule,
         DxTextAreaModule,
+        DxDateBoxModule,
         DxPopoverModule,
         DxNumberBoxModule,
         DxValidatorModule,

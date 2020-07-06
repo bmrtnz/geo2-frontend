@@ -1,6 +1,6 @@
 <form [formGroup]="transporteurForm" (ngSubmit)="onSubmit()">
   <div class="content-block">
-    <h2>
+    <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-transporteurs-details-title' | localize }}
       <div class="right">
         <dx-button class="upperButton"
@@ -12,7 +12,7 @@
         <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
-          [visible]="readOnlyMode"
+          [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
         <dx-button class="upperButton"
@@ -27,8 +27,10 @@
 
   <div class="content-block transporteur-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1">
-        <h4 class="entity-id">N° {{ transporteur?.id }}</h4>
+      <dxi-item [ratio]="1"
+      [visible]="!createMode"
+      >
+        <h5 class="entity-id">{{ transporteur?.id }}</h5>
         <dx-button
           height="auto"
           type="danger"
@@ -40,7 +42,8 @@
         <dx-check-box
           class="vertical"
           formControlName="valide"
-          [text]="transporteurForm.get('valide') ? 'valide' : 'invalide' | localize"
+          [readOnly]="readOnlyMode"
+          [text]="transporteurForm.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
         <dx-button
           class="black"
@@ -60,9 +63,14 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-transporteurs-code' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="id" [readOnly]="true">
+                <dx-text-box
+                formControlName="id"
+                [readOnly]="!createMode"
+                [inputAttr]="{'style':  'text-transform: uppercase'}"
+                >
                   <dx-validator name="{{ 'tiers-transporteurs-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
               </div>
@@ -189,7 +197,7 @@
 
             <!-- Client raison sociale -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSocial' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSocial-raisonSocial' | localize }}</div>
               <div class="dx-field-value">
                 <dx-select-box
                   formControlName="clientRaisonSocial"
@@ -303,7 +311,11 @@
                   displayExpr="description"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
-                ></dx-select-box>
+                >
+                  <dx-validator name="{{ 'tiers-transporteurs-regimeTva' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-select-box>
               </div>
             </div>
 

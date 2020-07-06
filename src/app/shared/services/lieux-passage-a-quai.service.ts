@@ -38,8 +38,8 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
             return this.getDistinct(options, inputVariables).toPromise();
 
           const variables = {
-            ...inputVariables,
             ...this.mapLoadOptionsToVariables(options),
+            ...inputVariables,
           };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Client } from '../../../../shared/models';
@@ -19,13 +19,14 @@ import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
+import DxButton from 'devextreme/ui/button';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent implements OnInit {
+export class ClientDetailsComponent  implements OnInit, AfterViewInit {
 
   private requiredFields = ['soumisCtifl'];
 
@@ -146,13 +147,22 @@ export class ClientDetailsComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
+    this.checkCode = this.checkCode.bind(this);
+  }
+
+  ngAfterViewInit(): void {
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.createMode = params.id === 'create';
-      this.readOnlyMode = !this.createMode;
 
+    this.route.params.subscribe(params => {
+      this.createMode = this.route.snapshot.url[0].path === 'create';
+      this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
         this.clientsService
           .getOne(params.id)
@@ -165,7 +175,7 @@ export class ClientDetailsComponent implements OnInit {
         this.client = new Client({
           soumisCtifl: false
         });
-        this.clientForm.reset(this.client);
+        this.clientForm.patchValue(this.client);
       }
     });
 
@@ -187,7 +197,16 @@ export class ClientDetailsComponent implements OnInit {
 
   }
 
+  checkCode(params) {
+
+    const code = params.value.toUpperCase();
+    const clientsSource = this.clientsService.getDataSource({ search: `code=="${ code }"` });
+    return clientsSource.load().then(res => !(res.length));
+
+  }
+
   onSubmit() {
+
     if (!this.clientForm.pristine && this.clientForm.valid) {
       const client = this.clientsService.extractDirty(this.clientForm.controls);
 
@@ -199,29 +218,29 @@ export class ClientDetailsComponent implements OnInit {
         }
         // Fake -> pour passer l'étape de création
         client.societe = { id: 'SA' };
+        client.code = this.clientForm.get('code').value.toUpperCase();
       }
 
       this.clientsService
-          .save({ client })
-          .subscribe({
-            next: (e) => {
-              notify('Sauvegardé', 'success', 3000);
-              if (!this.createMode) {
-                this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
-                this.readOnlyMode = true;
-              } else {
-                this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
-              }
-              // console.log(e.data.saveClient)
-            },
-            error: () => notify('Echec de la sauvegarde', 'error', 3000),
-          });
+      .save({ client })
+        .subscribe({
+          next: (e) => {
+            notify('Sauvegardé', 'success', 3000);
+            if (!this.createMode) {
+              this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+            }
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
     }
   }
 
   onCancel() {
     if (!this.createMode) {
-      this.clientForm.reset(this.client);
+      // this.clientForm.reset(this.client);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/clients`]);

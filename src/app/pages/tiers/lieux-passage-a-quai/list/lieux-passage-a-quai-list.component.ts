@@ -45,6 +45,14 @@ export class LieuxPassageAQuaiListComponent implements OnInit, OnDestroy, Nested
     this.onRowDetailsSubscription.unsubscribe();
   }
 
+  onCreate() {
+    this.router.navigate([`/tiers/lieux-passage-a-quai/create`]);
+  }
+
+  onRowDblClick(e) {
+    this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.id}`]);
+  }
+
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {

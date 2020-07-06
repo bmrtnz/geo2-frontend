@@ -9,18 +9,20 @@ const routes: Routes = [
     path: '',
     redirectTo: '/nested/lieuxpassageaquai',
     pathMatch: 'full',
-  },
-  {
+  }, {
     path: 'list',
     component: LieuxPassageAQuaiListComponent,
     canActivate: [AuthGuardService]
-  },
-  {
-    path: ':id',
+  }, {
+    path: 'create',
     component: LieuxPassageAQuaiDetailsComponent,
     canActivate: [AuthGuardService]
-  },
-];
+  }, {
+      path: ':id',
+      component: LieuxPassageAQuaiDetailsComponent,
+      canActivate: [AuthGuardService]
+    }
+  ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

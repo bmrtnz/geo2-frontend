@@ -9,17 +9,19 @@ const routes: Routes = [
     path: '',
     redirectTo: '/nested/fournisseurs',
     pathMatch: 'full',
-  },
-  {
+  }, {
     path: 'list',
     component: FournisseursListComponent,
     canActivate: [AuthGuardService]
-  },
-  {
+  }, {
     path: ':id',
     component: FournisseurDetailsComponent,
     canActivate: [AuthGuardService]
-  },
+  }, {
+    path: 'create',
+    component: FournisseurDetailsComponent,
+    canActivate: [AuthGuardService]
+  }
 ];
 
 @NgModule({

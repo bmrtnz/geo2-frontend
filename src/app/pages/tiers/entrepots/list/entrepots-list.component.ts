@@ -33,6 +33,9 @@ export class EntrepotsListComponent implements OnInit {
   onRowDblClick(e) {
     this.router.navigate([`/tiers/entrepots/${e.data.id}`]);
   }
+  onCreate() {
+    this.router.navigate([`/tiers/entrepots/create/${this.clientID}`]);
+  }
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {

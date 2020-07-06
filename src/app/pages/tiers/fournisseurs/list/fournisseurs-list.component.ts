@@ -52,4 +52,8 @@ export class FournisseursListComponent implements OnInit, OnDestroy, NestedGrid<
       }
     }
   }
+  onCreate() {
+    this.router.navigate([`/tiers/fournisseurs/create`]);
+  }
+
 }

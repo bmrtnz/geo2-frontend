@@ -31,8 +31,8 @@ export class TypesCamionService extends ApiService implements APIRead {
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allTypeCamion: RelayPage<TypeCamion> };
           variables = {
-            ...variables,
             ...this.mapLoadOptionsToVariables(options),
+            ...variables,
           };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

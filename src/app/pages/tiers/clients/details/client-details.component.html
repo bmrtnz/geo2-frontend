@@ -3,7 +3,8 @@
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-clients-details-title' | localize }}
       <div class="right">
-        <dx-button class="upperButton"
+
+        <dx-button class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
@@ -48,7 +49,7 @@
           <dx-check-box
             class="vertical"
             formControlName="valide"
-            [text]="clientForm.get('valide') ? 'valide' : 'invalide' | localize"
+            [text]="clientForm.get('valide') ? 'Valide' : 'Invalide' | localize"
             [readOnly]="readOnlyMode"
           ></dx-check-box>
           <app-historique-valide [historique]="client?.historique"></app-historique-valide>
@@ -73,10 +74,12 @@
                   <dx-text-box
                     formControlName="code"
                     [readOnly]="readOnlyMode"
+                    [inputAttr]="{'style':  'text-transform: uppercase'}" 
                   >
                     <dx-validator name="{{ 'tiers-clients-code' | localize }}">
                       <dxi-validation-rule type="required"></dxi-validation-rule>
                       <dxi-validation-rule type="stringLength" max="18"></dxi-validation-rule>
+                      <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                     </dx-validator>
                     <dxi-button
                       name="help"
@@ -572,10 +575,10 @@
 
               <!-- Lieu fonction EAN -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-clients-lieuFonctionEAN' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-clients-lieuFonctionEan' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-clients-lieuFonctionEAN' | localize }}">
+                    <dx-validator name="{{ 'tiers-clients-lieuFonctionEan' | localize }}">
                       <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
@@ -919,10 +922,10 @@
 
                 <!-- Reference Coface -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-clients-referencecoface' | localize }}</div>
+                  <div class="dx-field-label">{{ 'tiers-clients-referenceCoface' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-text-box formControlName="referenceCoface" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-clients-referencecoface' | localize }}">
+                      <dx-validator name="{{ 'tiers-clients-referenceCoface' | localize }}">
                         <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -1035,7 +1038,7 @@
         direction="row">
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-instructionCommercial' | localize }}</span>
+              <span class="dx-form-group-caption">{{ 'tiers-clients-instructionCommercial' | localize }}</span>
               <div class="dx-form-group-content">
                 <!-- Instructions internes -->
                 <div class="dx-field">

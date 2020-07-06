@@ -45,6 +45,10 @@ export class TransporteursListComponent implements OnInit, OnDestroy, NestedGrid
     this.onRowDetailsSubscription.unsubscribe();
   }
 
+  onCreate() {
+    this.router.navigate([`/tiers/transporteurs/create`]);
+  }
+
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {

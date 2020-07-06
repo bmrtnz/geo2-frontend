@@ -1,6 +1,6 @@
 <form [formGroup]="lieupassageaquaiForm" (ngSubmit)="onSubmit()">
   <div class="content-block">
-    <h2>
+    <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-lieuxpassageaquai-details-title' | localize }}
       <div class="right">
         <dx-button class="upperButton"
@@ -12,7 +12,7 @@
         <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
-          [visible]="readOnlyMode"
+          [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
         <dx-button class="upperButton"
@@ -27,7 +27,9 @@
 
   <div class="content-block lieupassageaquai-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1">
+      <dxi-item [ratio]="1"
+      [visible]="!createMode"
+      >
         <h4 class="entity-id">N° {{ lieupassageaquai?.id }}</h4>
         <dx-button
           height="auto"
@@ -40,7 +42,8 @@
         <dx-check-box
           class="vertical"
           formControlName="valide"
-          [text]="lieupassageaquaiForm.get('valide') ? 'valide' : 'invalide' | localize"
+          [readOnly]="readOnlyMode"
+          [text]="lieupassageaquaiForm.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
         <dx-button
           class="black"
@@ -60,10 +63,15 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-code' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="id" [readOnly]="true">
+                <dx-text-box
+                formControlName="id" 
+                [readOnly]="!createMode"
+                [inputAttr]="{'style':  'text-transform: uppercase'}"  
+                >
                   <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                 </dx-validator>
                 </dx-text-box>
               </div>
