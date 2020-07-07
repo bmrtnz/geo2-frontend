@@ -23,7 +23,7 @@
 
     <!-- Grid configuration -->
     <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
-    <!-- <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter> -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
@@ -41,7 +41,9 @@
       [dataField]="field.path"
       [caption]="('tiers-entrepots-' + field.name | localize) || field.name"
       [visible]="i < entrepotsService.baseFieldsSize"
-      [allowHeaderFiltering]="field.allowHeaderFiltering"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
       [filterValue]="field.filterValue"
       [width]="field.width"
     ></dxi-column>

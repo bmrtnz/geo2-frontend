@@ -30,10 +30,7 @@ export class BasesPaiementService extends ApiService implements APIRead {
 
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allBasePaiement: RelayPage<BasePaiement> };
-          variables = {
-            ...variables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
+          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(

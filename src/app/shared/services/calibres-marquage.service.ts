@@ -28,10 +28,7 @@ export class CalibresMarquageService extends ApiService implements APIRead {
         load: (options: LoadOptions) => {
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allCalibreMarquage: RelayPage<CalibreMarquage> };
-          const variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...inputVariables,
-          };
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(

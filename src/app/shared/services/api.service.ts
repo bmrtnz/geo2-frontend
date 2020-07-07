@@ -345,18 +345,20 @@ export abstract class ApiService {
 
     // Full filter fix
     // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
-    const withDepth = options.filter
-    .find( res => typeof res === 'object' );
-    const withOperator = options.filter
-    .find( res => ['or', 'and'].includes(res) );
-    if (withDepth && !withOperator)
-      options.filter = [options.filter[0], 'and', options.filter[1]];
+    if (options.filter && options.filter.lenght === 2) {
+      const withDepth = options.filter
+      .find( res => typeof res === 'object' );
+      const withOperator = options.filter
+      .find( res => ['or', 'and'].includes(res) );
+      if (withDepth && !withOperator)
+        options.filter = [options.filter[0], 'and', options.filter[1]];
+    }
 
-    const distinctVariables = {
-      ...inputVariables,
-      field,
-      ...this.mapLoadOptionsToVariables(options),
-    };
+    const distinctVariables = this.mergeVariables(
+      inputVariables,
+      {field},
+      this.mapLoadOptionsToVariables(options),
+    );
     return this.
     query<DistinctResponse>(distinctQuery, {
       variables: distinctVariables,
@@ -481,6 +483,21 @@ export abstract class ApiService {
       };
 
     return variables;
+  }
+
+  /**
+   * Merge variables, last item as priority if merge is impossible
+   * @param variables Variables list
+   */
+  protected mergeVariables(...variables: OperationVariables[]|RelayPageVariables[]) {
+    return variables.reduce((acm, current) => ({
+      ...acm,
+      ...current,
+      // search: `${ acm.search || '' }${ current.search ? `and ${ current.search }` : '' }`,
+      search: [acm ? acm.search : '', current ? current.search : '']
+      .filter( v => v )
+      .join(' and '),
+    }));
   }
 
 }

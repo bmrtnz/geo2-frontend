@@ -29,10 +29,7 @@ export class ArticlesMatieresPremieresService extends ApiService implements APIR
 
           const query = this.buildGetAll();
           type Response = { allArticleMatierePremiere: RelayPage<ArticleMatierePremiere> };
-          const variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...inputVariables,
-          };
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(

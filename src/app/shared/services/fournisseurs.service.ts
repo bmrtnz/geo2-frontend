@@ -36,10 +36,7 @@ export class FournisseursService extends ApiService implements APIRead {
           if (options.group)
             return this.getDistinct(options, inputVariables).toPromise();
 
-          const variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...inputVariables,
-          };
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
           const query = this.buildGetAll();
           type Response = { allFournisseur: RelayPage<Fournisseur> };
           return this.

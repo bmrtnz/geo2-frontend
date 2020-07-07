@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 export type ModelFieldOptions<T = typeof Model> = {
   model?: T
   asLabel?: boolean
@@ -28,7 +30,7 @@ export const Field = (options: ModelFieldOptions = {}) => (target: any, key: str
  */
 export abstract class Model {
 
-  constructor(rawEntity) {
+  constructor(rawEntity = {}) {
     const fieldsEntries = Object.entries<ModelFieldOptions>(this.constructor.prototype.fields);
     for (const [field, options] of fieldsEntries) {
       if ( !rawEntity[field] ) continue;
@@ -101,10 +103,22 @@ export abstract class Model {
    * Get model detailed fields
    */
   static getDetailedFields(): ({name: string} & ModelFieldOptions)[] {
+    enum DXDataType {
+      'String' = 'string',
+      'Number' = 'number',
+      'Boolean' = 'boolean',
+      'Date' = 'date',
+      'Object' = 'object',
+      'Datetime' = 'datetime',
+    }
     return Object.entries(this.getFields())
     .map(([name, options]) => {
+      const type = Reflect
+      .getMetadata('design:type', this.prototype, name).name;
       return {
         name,
+        type,
+        dataType: options.dataType || DXDataType[type] || 'string',
         path: options.model ? `${ name }.${ options.model.getLabelField() }` : name,
         ...options
       };

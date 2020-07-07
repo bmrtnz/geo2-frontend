@@ -35,7 +35,7 @@ export class Entrepot extends Model {
   @Field({model: TypePalette}) public typePalette: TypePalette;
   @Field({model: Personne}) public commercial: Personne;
   @Field({model: Personne}) public assistante: Personne;
-  @Field() public modeLivraison: ModeLivraison;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public modeLivraison: ModeLivraison;
   @Field({model: Transporteur}) public transporteur: Transporteur;
   @Field({model: TypeCamion}) public typeCamion: TypeCamion;
   @Field({model: BaseTarif}) public baseTarifTransport: BaseTarif;
@@ -47,12 +47,12 @@ export class Entrepot extends Model {
   @Field() public referenceChep: string;
   @Field() public lieuFonctionEanDepot: string;
   @Field() public lieuFonctionEanAcheteur: string;
-  @Field({allowHeaderFiltering: false}) public declarationEur1: boolean;
-  @Field({allowHeaderFiltering: false}) public envoieAutomatiqueDetail: boolean;
+  @Field() public declarationEur1: boolean;
+  @Field() public envoieAutomatiqueDetail: boolean;
   @Field() public controlReferenceClient: string;
   @Field() public mentionClientSurFacture: string;
-  @Field({allowHeaderFiltering: false, filterValue: true, width: 100}) public valide: boolean;
-  @Field() public typeTiers: TypeTiers;
+  @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
   @Field() public prixUnitaireTarifTransport: number;
   @Field() public prixUnitaireTarifTransit: number;
   @Field({model: Client}) public client: Client;

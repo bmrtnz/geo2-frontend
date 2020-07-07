@@ -37,10 +37,7 @@ export class TransporteursService extends ApiService implements APIRead {
 
           const query = this.buildGetAll();
           type Response = { allTransporteur: RelayPage<Transporteur> };
-          const variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...inputVariables,
-          };
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
