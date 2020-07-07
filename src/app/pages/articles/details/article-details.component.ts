@@ -170,6 +170,8 @@ export class ArticleDetailsComponent implements OnInit {
     onClone() {
         this.readOnlyMode = false;
         this.cloneMode = true;
+        // this.articleForm.get('id').patchValue('');
+        // Ne pas oublier de retirer l'ID de l'élement cloné
     }
 
     onSubmit() {

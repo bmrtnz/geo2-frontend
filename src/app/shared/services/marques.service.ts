@@ -18,11 +18,13 @@ export class MarquesService extends ApiService implements APIRead {
     apollo: Apollo,
   ) {
     super(apollo, Marque);
+    this.gqlKeyType = 'GeoProduitWithEspeceIdInput';
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
+        key: ['id', 'especeId'],
         load: (options: LoadOptions) => {
 
           if (options.group)
@@ -49,11 +51,12 @@ export class MarquesService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { marque: Marque };
-          const variables = { ...inputVariables, id: key };
+          const id = key ? {id: key.id, espece: key.especeId || ''} : {};
+          const variables = { ...inputVariables, id };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
-            map( res => res.data.marque),
+            map( res => new Marque(res.data.marque)),
             take(1),
           )
           .toPromise();

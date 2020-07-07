@@ -42,6 +42,10 @@ export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Clien
     this.onRowDetailsSubscription.unsubscribe();
   }
 
+  onCreate() {
+    this.router.navigate([`/tiers/clients/create`]);
+  }
+
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {

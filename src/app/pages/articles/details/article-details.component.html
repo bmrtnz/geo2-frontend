@@ -1,8 +1,9 @@
 <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
 
     <div class="content-block">
-        <h2><span *ngIf="cloneMode === true">{{ 'clone' | localize }}</span>
+        <h2><span *ngIf="cloneMode === true">{{ 'create' | localize }}</span>
         {{ 'articles-details-title' | localize }} <!-- {{ article.id }} -->
+        <span *ngIf="cloneMode === true">({{ 'clone' | localize }})</span>
         <dx-button class="upperButton"
             type="default"
             text="{{ 'btn-valider' | localize }}"
@@ -57,14 +58,14 @@
                 <div class="dx-form-group dx-card responsive-paddings">
                     <div class="dx-form-group-content">
                         <!-- Code -->
-                        <div class="dx-field">
+                        <div *ngIf="!cloneMode" class="dx-field">
                             <div class="dx-field-label">{{ 'articles-code' | localize }}</div>
                             <div class="dx-field-value">
-                            <dx-text-box formControlName="id" [readOnly]="readOnlyMode">
-                                <dx-validator name="{{ 'articles-code' | localize }}">
+                            <dx-text-box formControlName="id" [readOnly]="true">
+                                <!-- <dx-validator name="{{ 'articles-code' | localize }}">
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                     <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                                </dx-validator>
+                                </dx-validator> -->
                             </dx-text-box>
                             </div>
                         </div>
@@ -374,7 +375,7 @@
                                 displayExpr="description"
                                 [searchEnabled]="true"
                                 [searchExpr]="['id','description']">
-                                    <dx-validator name="{{ 'articles-stickeur' | localize }}">
+                                    <dx-validator name="{{ 'articles-marque' | localize }}">
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
                                     </dx-validator>
                             </dx-select-box>
