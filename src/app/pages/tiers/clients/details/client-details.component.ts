@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Client } from '../../../../shared/models';
+import { Client, Courtier } from '../../../../shared/models';
 import { FormBuilder } from '@angular/forms';
 import { SecteursService } from 'app/shared/services/secteurs.service';
 import DataSource from 'devextreme/data/data_source';
