@@ -24,6 +24,7 @@
     "saveError": "Sauvegardé",    
     "saveKO": "Échec de la sauvegarde",
     "create": "Création",
+    "clone": "Clonage",
 
     "auth-logout": "Déconnexion",
     "auth-subtitle": "Connectez-vous à votre compte",

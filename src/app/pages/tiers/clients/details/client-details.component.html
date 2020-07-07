@@ -1,4 +1,5 @@
 <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+  
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-clients-details-title' | localize }}
@@ -975,8 +976,8 @@
         </dxi-item>
       </dx-box>
         <br>
-        <dx-box
-        direction="row">
+
+        <dx-box direction="row">
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-commentaires' | localize }}</span>

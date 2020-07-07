@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ArticlesService } from '../../../shared/services/articles.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
     Article
   } from '../../../shared/models';
@@ -41,6 +41,7 @@ export class ArticleDetailsComponent implements OnInit {
         id: [''],
         description: [''],
         blueWhaleStock: [''],
+        valide: [''],
         matierePremiere: this.fb.group({
             espece: [''],
             variete: [''],
@@ -110,6 +111,9 @@ export class ArticleDetailsComponent implements OnInit {
     etiquettesColis: DataSource;
     etiquettesUc: DataSource;
     etiquettesEvenementielle: DataSource;
+    readOnlyMode = true;
+    editMode = false;
+    cloneMode = false;
 
     id: string;
 
@@ -137,6 +141,7 @@ export class ArticleDetailsComponent implements OnInit {
         private etiquettesColisService: EtiquettesColisService,
         private etiquettesUcService: EtiquettesUcService,
         private etiquettesEvenementiellesService: EtiquettesEvenementiellesService,
+        private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
         ) {
@@ -151,6 +156,20 @@ export class ArticleDetailsComponent implements OnInit {
             this.articleForm.patchValue(this.article);
         });
 
+    }
+
+    onCancel() {
+        if (!this.cloneMode) {
+            this.readOnlyMode = true;
+            this.editMode = false;
+        } else {
+            this.router.navigate([`/articles`]);
+        }
+    }
+
+    onClone() {
+        this.readOnlyMode = false;
+        this.cloneMode = true;
     }
 
     onSubmit() {
