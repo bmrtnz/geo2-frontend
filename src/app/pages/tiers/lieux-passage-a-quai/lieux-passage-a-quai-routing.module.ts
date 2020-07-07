@@ -7,6 +7,10 @@ import {LieuxPassageAQuaiDetailsComponent} from './details/lieux-passage-a-quai-
 const routes: Routes = [
   {
     path: '',
+    redirectTo: '/nested/lieuxpassageaquai',
+    pathMatch: 'full',
+  }, {
+    path: 'list',
     component: LieuxPassageAQuaiListComponent,
     canActivate: [AuthGuardService]
   }, {

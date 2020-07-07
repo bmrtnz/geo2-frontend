@@ -1,12 +1,17 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from '../../../shared/services';
-import {ClientsListComponent} from './list/clients-list.component';
 import {ClientDetailsComponent} from './details/client-details.component';
+import { ClientsListComponent } from './list/clients-list.component';
+import { AuthGuardService } from 'app/shared/services';
 
 const routes: Routes = [
   {
     path: '',
+    redirectTo: '/nested/clients',
+    pathMatch: 'full',
+  },
+  {
+    path: 'list',
     component: ClientsListComponent,
     canActivate: [AuthGuardService]
   }, {
@@ -17,7 +22,7 @@ const routes: Routes = [
     path: ':id',
     component: ClientDetailsComponent,
     canActivate: [AuthGuardService]
-  }
+  },
 ];
 
 @NgModule({

@@ -7,6 +7,10 @@ import {TransporteurDetailsComponent} from './details/transporteur-details.compo
 const routes: Routes = [
   {
     path: '',
+    redirectTo: '/nested/transporteurs',
+    pathMatch: 'full',
+  }, {
+    path: 'list',
     component: TransporteursListComponent,
     canActivate: [AuthGuardService]
   }, {
@@ -17,7 +21,7 @@ const routes: Routes = [
     path: ':id',
     component: TransporteurDetailsComponent,
     canActivate: [AuthGuardService]
-  }
+  },
 ];
 
 @NgModule({

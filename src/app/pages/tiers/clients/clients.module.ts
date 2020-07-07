@@ -6,12 +6,12 @@ import {SharedModule} from '../../../shared/shared.module';
 import {
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
-    DxDataGridModule, DxTagBoxModule,
-    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule, DxValidatorModule, DxDateBoxModule
+    DxDataGridModule,
+    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxSwitchModule, DxTextAreaModule,
+    DxTextBoxModule, DxValidatorModule, DxTagBoxModule, DxDateBoxModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
+import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
 
 
 @NgModule({
@@ -34,12 +34,13 @@ import {HistoriqueValideModule} from '../../../shared/components/historique-vali
         DxPopoverModule,
         DxNumberBoxModule,
         DxValidatorModule,
+        DxSwitchModule,
         DxDateBoxModule,
-        HistoriqueValideModule
+        HistoriqueValideModule,
     ],
-  declarations: [
-    ClientsListComponent,
-    ClientDetailsComponent
-  ]
+    declarations: [
+        ClientsListComponent,
+        ClientDetailsComponent
+    ]
 })
 export class ClientsModule { }

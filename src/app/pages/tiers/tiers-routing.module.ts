@@ -12,7 +12,7 @@ const routes: Routes = [
   }, {
     path: 'transporteurs',
     loadChildren: './transporteurs/transporteurs.module#TransporteursModule'
-  } , {
+  }, {
     path: 'lieux-passage-a-quai',
     loadChildren: './lieux-passage-a-quai/lieux-passage-a-quai.module#LieuxPassageAQuaiModule'
   }, {

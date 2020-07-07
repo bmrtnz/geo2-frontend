@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Client, Courtier } from '../../../../shared/models';
+import { Client } from '../../../../shared/models';
 import { FormBuilder } from '@angular/forms';
 import { SecteursService } from 'app/shared/services/secteurs.service';
 import DataSource from 'devextreme/data/data_source';
@@ -204,7 +204,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
     return clientsSource.load().then(res => !(res.length));
 
   }
-  
+
   onSubmit() {
 
     if (!this.clientForm.pristine && this.clientForm.valid) {
