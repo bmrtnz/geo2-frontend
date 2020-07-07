@@ -345,14 +345,12 @@ export abstract class ApiService {
 
     // Full filter fix
     // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
-    if (options.filter && options.filter.lenght === 2) {
-      const withDepth = options.filter
-      .find( res => typeof res === 'object' );
-      const withOperator = options.filter
-      .find( res => ['or', 'and'].includes(res) );
-      if (withDepth && !withOperator)
-        options.filter = [options.filter[0], 'and', options.filter[1]];
-    }
+    const withDepth = options.filter
+    .find( res => typeof res === 'object' );
+    const withOperator = options.filter
+    .find( res => ['or', 'and'].includes(res) );
+    if (withDepth && !withOperator)
+      options.filter = [options.filter[0], 'and', options.filter[1]];
 
     const distinctVariables = this.mergeVariables(
       inputVariables,
