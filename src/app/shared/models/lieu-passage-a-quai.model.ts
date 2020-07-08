@@ -14,7 +14,7 @@ export class LieuPassageAQuai extends Model {
   @Field({model: Pays}) public pays: Pays;
   @Field() public codePostal: string;
   @Field() public adresse1: string;
-  @Field({allowHeaderFiltering: false, filterValue: true, width: 100}) public valide: boolean;
+  @Field({filterValue: true, width: 100}) public valide: boolean;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field({model: RegimeTva}) public regimeTva: RegimeTva;
@@ -26,6 +26,6 @@ export class LieuPassageAQuai extends Model {
   @Field({model: Pays}) public langue: Pays;
   @Field({model: Devise}) public devise: Devise;
   @Field() public lieuFonctionEan: string;
-  @Field() public typeTiers: TypeTiers;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
 
 }

@@ -30,10 +30,7 @@ export class IncotermsService extends ApiService implements APIRead {
 
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allIncoterm: RelayPage<Incoterm> };
-          variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...variables,
-          };
+          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
           if (options.searchValue) variables.search = options.searchValue;
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

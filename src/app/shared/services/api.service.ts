@@ -352,11 +352,11 @@ export abstract class ApiService {
     if (withDepth && !withOperator)
       options.filter = [options.filter[0], 'and', options.filter[1]];
 
-    const distinctVariables = {
-      ...inputVariables,
-      field,
-      ...this.mapLoadOptionsToVariables(options),
-    };
+    const distinctVariables = this.mergeVariables(
+      inputVariables,
+      {field},
+      this.mapLoadOptionsToVariables(options),
+    );
     return this.
     query<DistinctResponse>(distinctQuery, {
       variables: distinctVariables,
@@ -481,6 +481,21 @@ export abstract class ApiService {
       };
 
     return variables;
+  }
+
+  /**
+   * Merge variables, last item as priority if merge is impossible
+   * @param variables Variables list
+   */
+  protected mergeVariables(...variables: OperationVariables[]|RelayPageVariables[]) {
+    return variables.reduce((acm, current) => ({
+      ...acm,
+      ...current,
+      // search: `${ acm.search || '' }${ current.search ? `and ${ current.search }` : '' }`,
+      search: [acm ? acm.search : '', current ? current.search : '']
+      .filter( v => v )
+      .join(' and '),
+    }));
   }
 
 }

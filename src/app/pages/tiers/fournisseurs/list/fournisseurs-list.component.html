@@ -48,7 +48,9 @@
       [dataField]="field.path"
       [caption]="('tiers-fournisseurs-' + field.name | localize) || field.name"
       [visible]="i < fournisseursService.baseFieldsSize"
-      [allowHeaderFiltering]="field.allowHeaderFiltering"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
       [filterValue]="field.filterValue"
       [width]="field.width"
     ></dxi-column>

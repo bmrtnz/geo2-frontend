@@ -28,11 +28,7 @@ export class CourtierService extends ApiService implements APIRead {
 
           const query = this.buildGetAll();
           type Response = { allCourtier: RelayPage<Courtier> };
-          variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...variables,
-
-          };
+          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(

@@ -26,7 +26,7 @@ export class Fournisseur extends Model {
   @Field({model: Pays}) public pays: Pays;
   @Field({model: Devise}) public devise: Devise;
   @Field({model: Pays}) public langue: Pays;
-  @Field({allowHeaderFiltering: false, filterValue: true, width: 100}) public valide: boolean;
+  @Field({filterValue: true, width: 100}) public valide: boolean;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
@@ -42,8 +42,8 @@ export class Fournisseur extends Model {
   @Field({model: BureauAchat}) public bureauAchat: BureauAchat;
   @Field() public margeObjectifEuroKilo: number;
   @Field() public margeObjectifPourcentCa: number;
-  @Field({allowHeaderFiltering: false}) public stockActif: boolean;
-  @Field({allowHeaderFiltering: false}) public stockPrecalibre: boolean;
+  @Field() public stockActif: boolean;
+  @Field() public stockPrecalibre: boolean;
   @Field({model: TypeFournisseur}) public type: TypeFournisseur;
   @Field() public listeSocietes: string;
   @Field() public idTracabilite: string;
@@ -51,24 +51,24 @@ export class Fournisseur extends Model {
   @Field() public codeStation: string;
   @Field() public compteComptable: string;
   @Field() public lieuFonctionEan: string;
-  @Field() public declarantCHEP: string;
+  @Field() public declarantCHEP: boolean;
   @Field() public formeJuridique: string;
   @Field() public siretAPE: string;
   @Field() public rcs: string;
-  @Field({allowHeaderFiltering: false}) public suiviDestockage: boolean;
-  @Field() public natureStation: string; // API = ENUM
+  @Field() public suiviDestockage: boolean;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public natureStation: NatureStation; // API = ENUM
   @Field() public referenceIfco: string;
-  @Field() public dateDebutIfco: Date;
-  @Field({allowHeaderFiltering: false}) public consignePaloxSa: boolean;
-  @Field({allowHeaderFiltering: false}) public consignePaloxUdc: boolean;
+  @Field({dataType: 'date'}) public dateDebutIfco: string;
+  @Field() public consignePaloxSa: boolean;
+  @Field() public consignePaloxUdc: boolean;
   @Field() public listeExpediteurs: string;
-  @Field() public typeTiers: TypeTiers;
-  @Field({allowHeaderFiltering: false}) public autoFacturation: boolean;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
+  @Field() public autoFacturation: boolean;
   @Field() public tvaId: string;
   @Field({model: Historique}) public historique: Historique[];
-  @Field({allowHeaderFiltering: false}) public indicateurModificationDetail: boolean;
-  @Field() public dateConditionGeneraleAchatSignee: Date;
-  @Field({allowHeaderFiltering: false}) public declarantBacsCHEP: boolean;
+  @Field() public indicateurModificationDetail: boolean;
+  @Field({dataType: 'date'}) public dateConditionGeneraleAchatSignee: string;
+  @Field() public declarantBacsCHEP: boolean;
   @Field({model: ConditionVente}) public conditionVente: ConditionVente;
   @Field({model: Fournisseur}) public fournisseurDeRattachement: Fournisseur;
   @Field({model: GroupeFournisseur}) public groupeFournisseur: GroupeFournisseur;

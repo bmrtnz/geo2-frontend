@@ -28,10 +28,7 @@ export class MoyenCommunicationService extends ApiService implements APIRead {
 
           const query = this.buildGetAll();
           type Response = { allMoyenCommunication: RelayPage<MoyenCommunication> };
-          variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...variables,
-          };
+          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
