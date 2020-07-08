@@ -22,7 +22,7 @@
   position:fixed;
   bottom:20px;
   right:20px;
-  transition:all 0.2s ease-in;
+  transition:all 0.21s ease-in;
   z-index:10000;
   .dx-button {
     /* To overcome native color change on click */
@@ -32,5 +32,5 @@
 
 .noOpacity {
   opacity:0;
-  right:-30px;
+  right:-35px;
 }
