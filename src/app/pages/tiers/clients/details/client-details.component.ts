@@ -171,7 +171,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
           .getOne(params.id)
           .subscribe( res => {
             this.client = res.data.client;
-            console.log(this.client)
+            // console.log(this.client)
             this.clientForm.patchValue(this.client);
           });
       } else {

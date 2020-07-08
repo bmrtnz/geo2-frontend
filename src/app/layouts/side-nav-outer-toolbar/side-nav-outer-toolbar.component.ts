@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 
 import { navigation } from '../../app-navigation';
 import { Router, NavigationEnd } from '@angular/router';
+import { DxButtonModule } from 'devextreme-angular';
 
 @Component({
   selector: 'app-side-nav-outer-toolbar',
@@ -43,6 +44,22 @@ export class SideNavOuterToolbarComponent implements OnInit {
     this.screen.changed.subscribe(() => this.updateDrawer());
 
     this.updateDrawer();
+  }
+
+  onScroll(e) {
+    const topValue = e.scrollOffset.top;
+    const Element = document.querySelector('.backtotop') as HTMLElement;
+    if (topValue < 150) {
+      Element.classList.add('noOpacity');
+    } else {
+      Element.classList.remove('noOpacity');
+    }
+  }
+  scrollToTop() {
+    const Element = document.querySelector('.content') as HTMLElement;
+    Element.scrollIntoView({
+      behavior: 'smooth'
+    });
   }
 
   updateDrawer() {
@@ -99,7 +116,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
 }
 
 @NgModule({
-  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxScrollViewModule, CommonModule ],
+  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxButtonModule, DxScrollViewModule, CommonModule ],
   exports: [ SideNavOuterToolbarComponent ],
   declarations: [ SideNavOuterToolbarComponent ]
 })
