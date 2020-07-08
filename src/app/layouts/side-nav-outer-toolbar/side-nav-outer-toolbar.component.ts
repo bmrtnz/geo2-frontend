@@ -50,9 +50,9 @@ export class SideNavOuterToolbarComponent implements OnInit {
     const topValue = e.scrollOffset.top;
     const Element = document.querySelector('.backtotop') as HTMLElement;
     if (topValue < 150) {
-      Element.classList.add('noOpacity');
+      Element.classList.add('hiddenBacktotop');
     } else {
-      Element.classList.remove('noOpacity');
+      Element.classList.remove('hiddenBacktotop');
     }
   }
   scrollToTop() {
