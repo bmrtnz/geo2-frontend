@@ -9,6 +9,7 @@ import { SocietesService } from 'app/shared/services/societes.service';
 import { FluxService } from 'app/shared/services/flux.service';
 import { MoyenCommunicationService } from 'app/shared/services/moyens-communication.service';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { environment} from 'environments/environment';
 
 @Component({
   selector: 'app-contacts',
@@ -25,6 +26,7 @@ export class ContactsComponent implements OnInit {
   typeTiers: string;
   typeTiersLabel: string;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
 
   constructor(

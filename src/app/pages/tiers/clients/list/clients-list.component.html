@@ -38,9 +38,11 @@
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
       mode="select"
-      allowSearch="true"
-      title="{{ 'columnChooser' | localize }}">
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true">
     </dxo-column-chooser>
 
     <dxi-column

@@ -8,6 +8,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -22,6 +23,7 @@ export class FournisseursListComponent implements OnInit, OnDestroy, NestedGrid<
   rowDetailsRequested = new EventEmitter<Fournisseur>();
   detailedFields: ({ name: string } & ModelFieldOptions)[];
   onRowDetailsSubscription: Subscription;
+  columnChooser = environment.columnChooser;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Fournisseur) => [
     [ event.id ],
     { relativeTo: this.activatedRoute.parent },

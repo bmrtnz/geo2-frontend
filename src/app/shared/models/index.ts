@@ -57,3 +57,4 @@ export * from './courtage-mode-calcul.model';
 export * from './frais-marketing-mode-calcul.model';
 export * from './moyen-communication.model';
 export * from './condition-vente.model';
+export * from './certification.model';

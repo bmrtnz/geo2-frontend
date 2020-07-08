@@ -8,11 +8,12 @@ import { map, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { NestedGrid } from 'app/pages/nested/nested.component';
 import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment} from 'environments/environment';
 
 @Component({
   selector: 'app-clients-list',
   templateUrl: './clients-list.component.html',
-  styleUrls: ['./clients-list.component.scss']
+  styleUrls: ['./clients-list.component.scss'],
 })
 export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Client> {
 
@@ -22,6 +23,7 @@ export class ClientsListComponent implements OnInit, OnDestroy, NestedGrid<Clien
   rowDetailsRequested = new EventEmitter<Client>();
   onRowDetailsSubscription: Subscription;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Client) => [[ event.id ], { relativeTo: this.activatedRoute.parent }];
 
   constructor(

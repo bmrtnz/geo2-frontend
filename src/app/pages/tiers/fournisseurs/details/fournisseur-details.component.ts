@@ -12,6 +12,7 @@ import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import { CertificationsService } from 'app/shared/services/certification.service';
 import notify from 'devextreme/ui/notify';
 import { TypeTiers } from 'app/shared/models/tier.model';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
@@ -92,6 +93,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
   typesFournisseur: DataSource;
   defaultVisible: boolean;
   conditionsVente: DataSource;
+  certifications: DataSource;
   gridBoxValue: number[];
   fournisseursDeRattachement: DataSource;
   groupesFournisseur: DataSource;
@@ -109,6 +111,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
     private moyensPaiementService: MoyensPaiementService,
     private naturesStationService: NaturesStationService,
     private basesPaiementService: BasesPaiementService,
+    private certificationsService: CertificationsService,
     private groupesFournisseurService: GroupesFournisseurService,
     private paysService: PaysService,
     private router: Router,
@@ -151,6 +154,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
     this.conditionsVente = this.conditionsVenteService.getDataSource();
     this.fournisseursDeRattachement = this.fournisseursService.getDataSource();
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
+    this.certifications = this.certificationsService.getDataSource();
 
   }
 

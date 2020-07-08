@@ -3,6 +3,7 @@ import { EntrepotsService } from '../../../../shared/services/entrepots.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-entrepots-list',
@@ -14,6 +15,7 @@ export class EntrepotsListComponent implements OnInit {
   entrepots: DataSource;
   clientID: string;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
 
   constructor(
     public entrepotsService: EntrepotsService,

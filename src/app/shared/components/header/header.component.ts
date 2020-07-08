@@ -1,4 +1,4 @@
-import {Component, NgModule, Input, Output, EventEmitter} from '@angular/core';
+import {Component, NgModule, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {AuthService, LocalizationService} from '../../services';
@@ -40,9 +40,31 @@ export class HeaderComponent {
     }];
   }
 
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngOnInit() {
+
+    const myElement =  document.querySelector('.content');
+    myElement.addEventListener('scroll', (ev) => {
+      const aa = ev.target as HTMLElement;
+      console.log(aa.scrollTop)
+      if (aa.scrollTop > 100) {
+          console.log('>100')
+      };
+
+    });
+  }
+
   toggleMenu = () => {
     this.menuToggle.emit();
   }
+
+  scrollToTop() {
+    const Element = document.querySelector('.content') as HTMLElement;
+    Element.scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
+
 }
 
 @NgModule({

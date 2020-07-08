@@ -4,6 +4,7 @@ import {Article} from '../../../shared/models';
 import ArrayStore from 'devextreme/data/array_store';
 import {Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-articles-list',
@@ -13,6 +14,7 @@ import DataSource from 'devextreme/data/data_source';
 export class ArticlesListComponent implements OnInit {
 
   articles: DataSource;
+  columnChooser = environment.columnChooser;
 
   constructor(
     public articlesService: ArticlesService,
@@ -23,7 +25,6 @@ export class ArticlesListComponent implements OnInit {
   ngOnInit() {
     this.articles = this.articlesService.getDataSource();
     const field = 'matierePremiere.espece.description';
-    // console.log('articles-' + field.replace('.description', '').split('.').pop())
   }
 
   onRowDblClick(e) {

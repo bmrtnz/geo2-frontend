@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NestedGrid } from 'app/pages/nested/nested.component';
 import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-list',
@@ -22,6 +23,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, OnDestroy, Nested
   rowDetailsRequested = new EventEmitter<LieuPassageAQuai>();
   onRowDetailsSubscription: Subscription;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: LieuPassageAQuai) => [
     [ event.id ],
     { relativeTo: this.activatedRoute.parent },

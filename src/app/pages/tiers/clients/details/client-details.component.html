@@ -1,5 +1,5 @@
 <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
-  
+
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-clients-details-title' | localize }}
@@ -1021,11 +1021,13 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-typeCertification' | localize }}</div>
                   <div class="dx-field-value">
+                    <!-- formControlName="certifications" -->
                       <dx-tag-box
-                          [dataSource]="pays"
+                          [dataSource]="certifications"
                           displayExpr="description"
                           placeholder="Sélectionner une ou plusieurs certifications..."
                           [readOnly]="readOnlyMode"
+                          [hideSelectedItems]="true"
                           valueExpr="id">
                       </dx-tag-box>
                   </div>
