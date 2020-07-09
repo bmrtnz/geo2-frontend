@@ -4,10 +4,11 @@ export type ModelFieldOptions<T = typeof Model> = {
   model?: T
   asLabel?: boolean
   asKey?: boolean
+  details?: ModelFieldOptions[]
   [attribute: string]: any
 };
 
-const DefaultGridFilter = /(?:^\w+|raisonSocial|description)$/i;
+const DefaultGridFilter = /(?:^\w?|\.raisonSocial|\.description)$/i;
 
 /**
  * Field property decorator
@@ -101,8 +102,11 @@ export abstract class Model {
 
   /**
    * Get model detailed fields
+   * @param depth Sub model fetch depth
+   * @param flat Get one level detail
    */
-  static getDetailedFields(): ({name: string} & ModelFieldOptions)[] {
+  static getDetailedFields(depth = 1, flat = true, filter = /^(?:raisonSocial|description)$/): ({name: string} & ModelFieldOptions)[] {
+
     enum DXDataType {
       'String' = 'string',
       'Number' = 'number',
@@ -111,18 +115,37 @@ export abstract class Model {
       'Object' = 'object',
       'Datetime' = 'datetime',
     }
-    return Object.entries(this.getFields())
+
+    const res = Object.entries(this.getFields())
+    .filter(([name, options]) => depth > 0 || options.model || filter.test(name))
     .map(([name, options]) => {
-      const type = Reflect
-      .getMetadata('design:type', this.prototype, name).name;
+
+      if (options.model && depth > 1)
+        options.details = options.model.getDetailedFields(depth - 1, false, filter);
+      const type = Reflect.getMetadata('design:type', this.prototype, name).name;
       return {
         name,
         type,
         dataType: options.dataType || DXDataType[type] || 'string',
-        path: options.model ? `${ name }.${ options.model.getLabelField() }` : name,
         ...options
       };
+
     });
+
+    if (flat) {
+      const mapDetails = (fields: ModelFieldOptions[]) => fields
+      .map( field => {
+        if (field.details) {
+          return mapDetails(field.details
+          .map( v => ({...v, path: `${field.path || field.name}.${v.name}`})));
+        }
+        return [{...field, path: field.model ? `${field.path || field.name}.${field.model.getLabelField()}` : field.path || field.name}];
+      });
+      return mapDetails(res).flat(depth) as any;
+    }
+
+    return res;
+
   }
 
   /**

@@ -4,7 +4,7 @@ import { ConditionSpecial } from './condition-special.model';
 import { Alveole } from './alveole.model';
 
 export class ArticleEmballage extends Model {
-  @Field({asKey: true}) public id: string;
+  @Field({asKey: true, asLabel: true}) public id: string;
   @Field({model: Emballage}) public emballage: Emballage;
   @Field({model: ConditionSpecial}) public conditionSpecial:
   ConditionSpecial;

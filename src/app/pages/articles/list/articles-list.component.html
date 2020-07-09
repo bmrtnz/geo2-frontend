@@ -28,20 +28,16 @@
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
 
-    <!-- <dxi-column
-      *ngFor="let field of articlesService.model.getListFields(2);let i=index"
-      [dataField]="field"
-      [caption]="('articles-' + field.split('.')[1] | localize) || field"
-      [visible]="i < articlesService.baseFieldsSize"
-    ></dxi-column> -->
-
     <dxi-column
-      *ngFor="let field of articlesService.model.getListFields(2);let i=index"
-      [dataField]="field"
-      [width]="field === 'id' ? 150 : field === 'valide' ? 100 : undefined"
-      [filterValue]="field === 'valide' ? true : undefined"
-      [caption]="('articles-' + field.replace('.description', '').split('.').pop() | localize) || field"
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.path"
+      [caption]="('articles-' + field.name | localize) || field.name"
       [visible]="i < articlesService.baseFieldsSize"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [filterValue]="field.filterValue"
+      [width]="field.width"
     ></dxi-column>
 
 
