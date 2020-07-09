@@ -187,6 +187,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${ this.entrepot.id }/${ this.entrepot.typeTiers }`]);
+    this.router.navigate([`/tiers/contacts/${ this.entrepot.code }/${ this.entrepot.typeTiers }`]);
   }
 }
