@@ -41,6 +41,7 @@ export class ContactsComponent implements OnInit {
     this.detailedFields = this.contactsService.model.getDetailedFields();
     this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
     this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
+
     this.typeTiersLabel = Object
     .entries(TypeTiers)
     .find(([, value]) => value === this.typeTiers)

@@ -11,6 +11,13 @@
     "commentaire": "Commentaire",
     "action": "Action",
 
+    "client": "client",
+    "entrepot": "entrepôt",
+    "fournisseur": "fournisseur",
+    "lieupassageaquai": "lieu de passage à quai",
+    "sortie_stock": "sortie stock",
+    "transporteur": "transporteur",
+
     "btn-historique": "Historique",
     "btn-docsjoints": "Docs joints",
     "btn-affecter": "Affecter",
