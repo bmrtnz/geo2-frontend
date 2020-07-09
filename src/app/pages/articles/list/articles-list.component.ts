@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ArticlesService} from '../../../shared/services/articles.service';
-import {Article} from '../../../shared/models';
-import ArrayStore from 'devextreme/data/array_store';
 import {Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 
 @Component({
@@ -14,6 +13,7 @@ import { environment } from 'environments/environment';
 export class ArticlesListComponent implements OnInit {
 
   articles: DataSource;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
   columnChooser = environment.columnChooser;
 
   constructor(
@@ -24,7 +24,7 @@ export class ArticlesListComponent implements OnInit {
 
   ngOnInit() {
     this.articles = this.articlesService.getDataSource();
-    const field = 'matierePremiere.espece.description';
+    this.detailedFields = this.articlesService.model.getDetailedFields(2);
   }
 
   onRowDblClick(e) {
