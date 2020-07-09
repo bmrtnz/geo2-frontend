@@ -20,7 +20,6 @@ import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
-import DxButton from 'devextreme/ui/button';
 
 @Component({
   selector: 'app-client-details',
@@ -171,7 +170,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
           .getOne(params.id)
           .subscribe( res => {
             this.client = res.data.client;
-            // console.log(this.client)
+            console.log(this.client)
             this.clientForm.patchValue(this.client);
           });
       } else {

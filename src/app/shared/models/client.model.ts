@@ -94,5 +94,5 @@ export class Client extends Model {
   @Field() public fraisRamasse: boolean;
   @Field() public venteACommission: boolean;
   @Field({model: ConditionVente}) public conditionVente: ConditionVente;
-  @Field({model: Certification}) public certifications: Certification;
+  @Field({model: Certification}) public certifications: Certification[];
 }

@@ -1,8 +1,8 @@
-import {Component, OnInit, NgModule, Input, isDevMode} from '@angular/core';
+import {Component, OnInit, NgModule, Input, isDevMode, ViewChild} from '@angular/core';
 import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
 import { ScreenService } from '../../shared/services';
 import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
-import { DxScrollViewModule } from 'devextreme-angular/ui/scroll-view';
+import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
 import { CommonModule } from '@angular/common';
 
 import { navigation } from '../../app-navigation';
@@ -20,6 +20,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
   menuOpened: boolean;
   temporaryMenuOpened = false;
+
+  @ViewChild(DxScrollViewComponent, { static: false }) scrollView: DxScrollViewComponent;
 
   @Input()
   title: string;
@@ -61,6 +63,10 @@ export class SideNavOuterToolbarComponent implements OnInit {
       behavior: 'smooth'
     });
   }
+
+  // scrollToTop() {
+  //   this.scrollView.instance.scrollTo(0);
+  // }
 
   updateDrawer() {
     const isXSmall = this.screen.sizes['screen-x-small'];
