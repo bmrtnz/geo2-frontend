@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { NestedGrid } from 'app/pages/nested/nested.component';
 import { map } from 'rxjs/operators';
 import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-transporteurs-list',
@@ -22,6 +23,7 @@ export class TransporteursListComponent implements OnInit, OnDestroy, NestedGrid
   rowDetailsRequested = new EventEmitter<Transporteur>();
   onRowDetailsSubscription: Subscription;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
   detailsNavigationHook: (row) => [any[], NavigationExtras] = (event: Transporteur) => [
     [ event.id ],
     { relativeTo: this.activatedRoute.parent },

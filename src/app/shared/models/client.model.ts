@@ -17,6 +17,7 @@ import { Historique } from './historique.model';
 import { TypeVente } from './type-vente.model';
 import { Courtier } from './courtier.model';
 import { ConditionVente } from './condition-vente.model';
+import { Certification } from './certification.model';
 
 export class Client extends Model {
 
@@ -93,4 +94,5 @@ export class Client extends Model {
   @Field() public fraisRamasse: boolean;
   @Field() public venteACommission: boolean;
   @Field({model: ConditionVente}) public conditionVente: ConditionVente;
+  @Field({model: Certification}) public certifications: Certification;
 }

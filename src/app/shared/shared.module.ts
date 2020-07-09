@@ -19,6 +19,7 @@ import DataGrid from 'devextreme/ui/data_grid';
 export class SharedModule {
 
   constructor() {
+    // tslint:disable-next-line: max-line-length
     // https://supportcenter.devexpress.com/ticket/details/t343901/dxdatagrid-how-to-sort-columns-in-the-column-chooser-in-alphabetical-order
     (DataGrid as any).registerModule('columnChooserSorting', {
       extenders: {

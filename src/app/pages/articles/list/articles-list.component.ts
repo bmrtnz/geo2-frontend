@@ -3,6 +3,7 @@ import {ArticlesService} from '../../../shared/services/articles.service';
 import {Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-articles-list',
@@ -13,6 +14,7 @@ export class ArticlesListComponent implements OnInit {
 
   articles: DataSource;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
 
   constructor(
     public articlesService: ArticlesService,

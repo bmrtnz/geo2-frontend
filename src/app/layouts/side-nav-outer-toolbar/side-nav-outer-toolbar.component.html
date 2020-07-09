@@ -25,7 +25,9 @@
         (openMenu)="navigationClick()">
     </app-side-navigation-menu>
 
-    <dx-scroll-view class="full-height-scrollable">
+    <dx-scroll-view
+        class="full-height-scrollable toto"
+        (onScroll)="onScroll($event)">
         <div class="content">
             <ng-content></ng-content>
         </div>
@@ -35,3 +37,11 @@
         </div>
     </dx-scroll-view>
 </dx-drawer>
+<div class="backtotop hiddenBacktotop">
+    <dx-button
+        type="default"
+        icon="material-icons keyboard_arrow_up"
+        (onClick)="scrollToTop()"
+    >
+    </dx-button>
+</div>

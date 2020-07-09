@@ -6,6 +6,10 @@ export const environment = {
   production: false,
   apiEndpoint: 'http://192.168.2.161:8089/graphql',
   // apiEndpoint: 'http://192.168.113.2:8081/graphql',
+  columnChooser: {
+    width: 500,
+    height: 500
+  },
 };
 
 /*

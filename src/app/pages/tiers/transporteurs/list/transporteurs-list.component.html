@@ -35,8 +35,14 @@
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
-
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height">
+    </dxo-column-chooser>
     <dxi-column
       *ngFor="let field of detailedFields;let i=index"
       [dataField]="field.path"

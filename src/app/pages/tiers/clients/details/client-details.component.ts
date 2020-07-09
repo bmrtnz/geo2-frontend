@@ -13,6 +13,7 @@ import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import { CertificationsService } from 'app/shared/services/certification.service';
 import notify from 'devextreme/ui/notify';
 import { TypesVenteService } from 'app/shared/services/types-vente.service';
 import { CourtierService } from 'app/shared/services/courtiers.service';
@@ -94,7 +95,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
     fraisRamasse: [''],
     refusCoface: [''],
     enCoursDateLimite: [''],
-    // certifications: [''],
+    certifications: [''],
     fraisMarketingModeCalcul: [''],
     formatDluo: [''],
     dateDebutIfco: [''],
@@ -123,6 +124,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
   regimesTva: DataSource;
   defaultVisible: boolean;
   conditionsVente: DataSource;
+  certifications: DataSource;
   readOnlyMode = true;
   createMode = false;
 
@@ -141,6 +143,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
     private courtiersService: CourtierService,
     private basesTarifService: BasesTarifService,
     private groupesClientService: GroupesClientService,
+    private certificationsService: CertificationsService,
     private moyensPaiementService: MoyensPaiementService,
     private conditionsVenteService: ConditionsVenteService,
     private router: Router,
@@ -168,6 +171,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
           .getOne(params.id)
           .subscribe( res => {
             this.client = res.data.client;
+            // console.log(this.client)
             this.clientForm.patchValue(this.client);
           });
       } else {
@@ -194,6 +198,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
     this.clients = this.clientsService.getDataSource();
     this.basesTarif = this.basesTarifService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
+    this.certifications = this.certificationsService.getDataSource();
 
   }
 

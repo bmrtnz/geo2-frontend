@@ -34,7 +34,14 @@
     >
     </dxo-editing>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
+    <dxo-column-chooser 
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height">
+    </dxo-column-chooser>
     <dxo-selection mode="single"></dxo-selection>
 
     <dxi-column

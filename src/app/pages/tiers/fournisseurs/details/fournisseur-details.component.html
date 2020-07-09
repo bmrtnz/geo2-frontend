@@ -732,12 +732,14 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-clients-typeCertification' | localize }}</div>
               <div class="dx-field-value">
+                <!-- formControlName="certifications" -->
                   <dx-tag-box
-                      [dataSource]="pays"
-                      [readOnly]="readOnlyMode"
-                      displayExpr="description"
-                      placeholder="Sélectionner une ou plusieurs certifications..."
-                      valueExpr="id">
+                    [dataSource]="certifications"
+                    displayExpr="description"
+                    placeholder="Sélectionner une ou plusieurs certifications..."
+                    [readOnly]="readOnlyMode"
+                    [hideSelectedItems]="true"
+                    valueExpr="id">
                   </dx-tag-box>
               </div>
             </div>

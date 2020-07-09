@@ -17,3 +17,20 @@
 .content {
   flex-grow: 1;
 }
+
+.backtotop {
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  transition:all 0.21s ease-in;
+  z-index:10000;
+  .dx-button {
+    /* To overcome native color change on click */
+    background-color:#00759C;
+  }
+}
+
+.hiddenBacktotop {
+  opacity:0;
+  right:-35px;
+}
