@@ -125,7 +125,7 @@ export class ArticleDetailsComponent implements OnInit {
         private modesCultureService: ModesCultureService,
         private originesService: OriginesService,
         private calibresUnifiesService: CalibresUnifiesService,
-        private calibresMarquageService: CalibresUnifiesService,
+        private calibresMarquageService: CalibresMarquageService,
         private colorationsService: ColorationsService,
         private typesVenteService: TypesVenteService,
         private stickeursService: StickeursService,
