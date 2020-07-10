@@ -170,8 +170,14 @@
                           [showNavigationButtons]="true">  </dxo-pager>
                         <dxo-filter-row [visible]="true"></dxo-filter-row>
                         <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-                        <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
-
+                        <dxo-column-chooser
+                            [enabled]="true"
+                            [width]="columnChooser.width"
+                            [height]="columnChooser.height"
+                            mode="select"
+                            title="{{ 'columnChooser' | localize }}"
+                            allowSearch="true">
+                        </dxo-column-chooser>
                         <dxi-column
                         dataField="id"
                         [width]="90"
@@ -179,7 +185,7 @@
                         [hidingPriority]="2">
                         </dxi-column>
                         <dxi-column
-                        dataField="varietes"
+                        dataField="variete"
                         caption="{{ 'articles-variete' | localize }}">  
                         </dxi-column>
                         <dxi-column

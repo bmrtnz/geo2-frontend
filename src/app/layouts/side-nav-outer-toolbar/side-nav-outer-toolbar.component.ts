@@ -49,9 +49,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
   }
 
   onScroll(e) {
+    const showHidePixelsFromTop = 150;
     const topValue = e.scrollOffset.top;
     const Element = document.querySelector('.backtotop') as HTMLElement;
-    if (topValue < 150) {
+
+    if (topValue < showHidePixelsFromTop) {
       Element.classList.add('hiddenBacktotop');
     } else {
       Element.classList.remove('hiddenBacktotop');

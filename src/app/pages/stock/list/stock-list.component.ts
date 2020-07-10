@@ -16,6 +16,7 @@ import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.ser
 import { ModesCultureService } from 'app/shared/services/modes-culture.service';
 import { GroupesEmballageService } from 'app/shared/services/groupes-emballage.service';
 import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-stock-list',
@@ -73,6 +74,7 @@ export class StockListComponent implements OnInit {
   stockCategories: StockCategory[];
   articles: DataSource;
   itemCount: number;
+  columnChooser = environment.columnChooser;
 
   constructor(
     private articlesService: ArticlesService,

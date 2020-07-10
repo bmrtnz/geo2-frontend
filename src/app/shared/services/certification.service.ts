@@ -12,10 +12,13 @@ import { map, take } from 'rxjs/operators';
 })
 export class CertificationsService extends ApiService implements APIRead {
 
+  listRegexp = /.\.*(?:id|description)$/i;
+
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, Certification);
+    this.gqlKeyType = 'Int';
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
@@ -26,7 +29,7 @@ export class CertificationsService extends ApiService implements APIRead {
           if (options.group)
             return this.getDistinct(options, variables).toPromise();
 
-          const query = this.buildGetAll();
+          const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allCertification: RelayPage<Certification> };
           variables = {
             ...this.mapLoadOptionsToVariables(options),

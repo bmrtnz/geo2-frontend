@@ -199,22 +199,6 @@
                                 </dx-select-box>
                             </div>
                         </div>
-                        <!-- Coloration -->
-                        <div class="dx-field">
-                            <div class="dx-field-label">{{ 'articles-coloration' | localize }}</div>
-                            <div class="dx-field-value" formGroupName="cahierDesCharge">
-                                <dx-select-box
-                                formControlName="coloration"
-                                [readOnly]="readOnlyMode"
-                                [dataSource]="colorations"
-                                displayExpr="description"[searchEnabled]="true"
-                                [searchExpr]="['id','description']">
-                                    <dx-validator name="{{ 'articles-coloration' | localize }}">
-                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                    </dx-validator>
-                                </dx-select-box>
-                            </div>
-                        </div>
                         <!-- Type de vente -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-typeVente' | localize }}</div>
@@ -254,6 +238,22 @@
                                     <dxi-validation-rule type="required"></dxi-validation-rule>
                                 </dx-validator>
                         </dx-select-box>
+                            </div>
+                        </div>
+                        <!-- Coloration -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'articles-coloration' | localize }}</div>
+                            <div class="dx-field-value" formGroupName="cahierDesCharge">
+                                <dx-select-box
+                                formControlName="coloration"
+                                [readOnly]="readOnlyMode"
+                                [dataSource]="colorations"
+                                displayExpr="description"[searchEnabled]="true"
+                                [searchExpr]="['id','description']">
+                                    <dx-validator name="{{ 'articles-coloration' | localize }}">
+                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                    </dx-validator>
+                                </dx-select-box>
                             </div>
                         </div>
                         <!-- Sucre -->
@@ -347,56 +347,6 @@
                     <span class="dx-form-group-caption">{{ 'articles-groupe-emballage' | localize }}</span>
                     <div class="dx-form-group-content">
 
-                        <!-- Sticker -->
-                        <div class="dx-field">
-                            <div class="dx-field-label">{{ 'articles-stickeur' | localize }}</div>
-                            <div class="dx-field-value" formGroupName="normalisation">
-                                <dx-select-box
-                                formControlName="stickeur"
-                                [readOnly]="readOnlyMode"
-                                [dataSource]="stickeurs"
-                                displayExpr="description"
-                                [searchEnabled]="true"
-                                [searchExpr]="['id','description']">
-                                    <dx-validator name="{{ 'articles-stickeur' | localize }}">
-                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                    </dx-validator>
-                                </dx-select-box>
-                            </div>
-                        </div>
-                        <!-- Marque -->
-                        <div class="dx-field">
-                            <div class="dx-field-label">{{ 'articles-marque' | localize }}</div>
-                            <div class="dx-field-value" formGroupName="normalisation">
-                                <dx-select-box
-                                formControlName="marque"
-                                [readOnly]="readOnlyMode"
-                                [dataSource]="marques"
-                                displayExpr="description"
-                                [searchEnabled]="true"
-                                [searchExpr]="['id','description']">
-                                    <dx-validator name="{{ 'articles-marque' | localize }}">
-                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                    </dx-validator>
-                            </dx-select-box>
-                            </div>
-                        </div>
-                        <!-- Calibre Marquage -->
-                        <div class="dx-field">
-                            <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
-                            <div class="dx-field-value" formGroupName="normalisation">
-                                <dx-select-box
-                                formControlName="calibreMarquage"
-                                [readOnly]="readOnlyMode"
-                                [dataSource]="calibresMarquage"
-                                valueExpr="id"
-                                displayExpr="description">
-                                    <dx-validator name="{{ 'articles-calibreMarquage' | localize }}">
-                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                    </dx-validator>
-                                </dx-select-box>
-                            </div>
-                        </div>
                         <!-- Emballage -->
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-emballage' | localize }}</div>
@@ -494,6 +444,57 @@
                 <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                     <span class="dx-form-group-caption">{{ 'articles-groupe-normalisation' | localize }}</span>
                     <div class="dx-form-group-content">
+
+                        <!-- Sticker -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'articles-stickeur' | localize }}</div>
+                            <div class="dx-field-value" formGroupName="normalisation">
+                                <dx-select-box
+                                formControlName="stickeur"
+                                [readOnly]="readOnlyMode"
+                                [dataSource]="stickeurs"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
+                                    <dx-validator name="{{ 'articles-stickeur' | localize }}">
+                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                    </dx-validator>
+                                </dx-select-box>
+                            </div>
+                        </div>
+                        <!-- Marque -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'articles-marque' | localize }}</div>
+                            <div class="dx-field-value" formGroupName="normalisation">
+                                <dx-select-box
+                                formControlName="marque"
+                                [readOnly]="readOnlyMode"
+                                [dataSource]="marques"
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
+                                    <dx-validator name="{{ 'articles-marque' | localize }}">
+                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                    </dx-validator>
+                            </dx-select-box>
+                            </div>
+                        </div>
+                        <!-- Calibre Marquage -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
+                            <div class="dx-field-value" formGroupName="normalisation">
+                                <dx-select-box
+                                formControlName="calibreMarquage"
+                                [readOnly]="readOnlyMode"
+                                [dataSource]="calibresMarquage"
+                                valueExpr="id"
+                                displayExpr="description">
+                                    <dx-validator name="{{ 'articles-calibreMarquage' | localize }}">
+                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                    </dx-validator>
+                                </dx-select-box>
+                            </div>
+                        </div>
 
                         <!-- Etiquette client -->
                         <div class="dx-field">

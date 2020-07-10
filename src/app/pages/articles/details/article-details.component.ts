@@ -154,6 +154,7 @@ export class ArticleDetailsComponent implements OnInit {
         .subscribe( res => {
             this.article = new Article(res.data.article);
             this.articleForm.patchValue(this.article);
+            console.log(this.article)
         });
 
     }
