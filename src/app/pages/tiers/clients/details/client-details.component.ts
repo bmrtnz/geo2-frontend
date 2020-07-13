@@ -172,7 +172,6 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
           .getOne(params.id)
           .subscribe( res => {
             this.client = res.data.client;
-            console.log(this.client)
             this.clientForm.patchValue(this.client);
             this.contentReadyEvent.emit();
           });

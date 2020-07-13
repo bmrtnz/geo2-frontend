@@ -39,6 +39,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="fournisseur"
+                                    [searchEnabled]="true"
                                     [dataSource]="fournisseurs"
                                     displayExpr="raisonSocial">
                                     </dx-select-box>
@@ -50,6 +51,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="bureauAchat"
+                                    [searchEnabled]="true"
                                     [dataSource]="bureauxAchat"
                                     displayExpr="raisonSocial">
                                     </dx-select-box>
@@ -61,6 +63,7 @@
                                 <div class="dx-field-value">
                                 <dx-select-box
                                 formControlName="origine"
+                                [searchEnabled]="true"
                                 [dataSource]="origines"
                                 displayExpr="description"
                                 >
@@ -75,6 +78,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="variete"
+                                    [searchEnabled]="true"
                                     [dataSource]="varietes"
                                     valueExpr="id"
                                     displayExpr="description">
@@ -87,6 +91,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="calibreUnifie"
+                                    [searchEnabled]="true"
                                     [dataSource]="calibresUnifies"
                                     valueExpr="id"
                                     displayExpr="description">
@@ -99,6 +104,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="calibreMarquage"
+                                    [searchEnabled]="true"
                                     [dataSource]="calibresMarquage"
                                     valueExpr="id"
                                     displayExpr="description">
@@ -113,6 +119,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="groupeEmballage"
+                                    [searchEnabled]="true"
                                     [dataSource]="groupesEmballage"
                                     displayExpr="description"
                                     >
@@ -125,6 +132,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="modeCulture"
+                                    [searchEnabled]="true"
                                     [dataSource]="modesCulture"
                                     displayExpr="description">
                                     </dx-select-box>
@@ -136,6 +144,7 @@
                                 <div class="dx-field-value">
                                     <dx-select-box
                                     formControlName="client"
+                                    [searchEnabled]="true"
                                     [dataSource]="clients"
                                     valueExpr="id"
                                     displayExpr="raisonSocial"
@@ -170,8 +179,14 @@
                           [showNavigationButtons]="true">  </dxo-pager>
                         <dxo-filter-row [visible]="true"></dxo-filter-row>
                         <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-                        <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}"></dxo-column-chooser>
-
+                        <dxo-column-chooser
+                            [enabled]="true"
+                            [width]="columnChooser.width"
+                            [height]="columnChooser.height"
+                            mode="select"
+                            title="{{ 'columnChooser' | localize }}"
+                            allowSearch="true">
+                        </dxo-column-chooser>
                         <dxi-column
                         dataField="id"
                         [width]="90"
@@ -179,7 +194,7 @@
                         [hidingPriority]="2">
                         </dxi-column>
                         <dxi-column
-                        dataField="varietes"
+                        dataField="variete"
                         caption="{{ 'articles-variete' | localize }}">  
                         </dxi-column>
                         <dxi-column
