@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LieuPassageAQuai } from '../../../../shared/models';
@@ -10,13 +10,14 @@ import { BasesPaiementService } from 'app/shared/services/bases-paiement.service
 import { PaysService } from 'app/shared/services/pays.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
+import { NestedPart } from 'app/pages/nested/nested.component';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
   templateUrl: './lieux-passage-a-quai-details.component.html',
   styleUrls: ['./lieux-passage-a-quai-details.component.scss']
 })
-export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit {
+export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit, NestedPart {
 
   lieupassageaquaiForm = this.fb.group({
     id: [''],
@@ -40,6 +41,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit 
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
 
   lieupassageaquai: LieuPassageAQuai;
   code: string;
@@ -83,9 +85,11 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit 
           .subscribe( res => {
             this.lieupassageaquai = res.data.lieuPassageAQuai;
             this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
+            this.contentReadyEvent.emit();
           });
       } else {
         this.lieupassageaquai = new LieuPassageAQuai({});
+        this.contentReadyEvent.emit();
       }
     });
 

@@ -13,6 +13,7 @@ import {
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { CommonModule } from '@angular/common';
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule
   ],
-  declarations: [ArticleDetailsComponent, ArticlesListComponent]
+  declarations: [ArticleDetailsComponent, ArticlesListComponent],
+  providers: [NestedGuard],
 })
 export class ArticlesModule { }

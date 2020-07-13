@@ -12,12 +12,15 @@ import {
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EntrepotsModule } from '../entrepots/entrepots.module';
 
 
 @NgModule({
     imports: [
         SharedModule,
         ClientsRoutingModule,
+        EntrepotsModule,
         FormsModule,
         ReactiveFormsModule,
         DxFormModule,
@@ -41,6 +44,7 @@ import { HistoriqueValideModule } from 'app/shared/components/historique-valide/
     declarations: [
         ClientsListComponent,
         ClientDetailsComponent
-    ]
+    ],
+    providers: [NestedGuard],
 })
 export class ClientsModule { }

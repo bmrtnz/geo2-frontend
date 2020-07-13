@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { TransporteursService } from '../../../../shared/services/transporteurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transporteur } from '../../../../shared/models';
@@ -11,13 +11,14 @@ import { PaysService } from 'app/shared/services/pays.service';
 import DataSource from 'devextreme/data/data_source';
 import { ClientsService } from 'app/shared/services';
 import notify from 'devextreme/ui/notify';
+import { NestedPart } from 'app/pages/nested/nested.component';
 
 @Component({
   selector: 'app-transporteur-details',
   templateUrl: './transporteur-details.component.html',
   styleUrls: ['./transporteur-details.component.scss']
 })
-export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
+export class TransporteurDetailsComponent implements OnInit, AfterViewInit, NestedPart {
 
   transporteurForm = this.fb.group({
     id: [''],
@@ -42,6 +43,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
 
   transporteur: Transporteur;
   code: string;
@@ -88,9 +90,11 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
           .subscribe( res => {
             this.transporteur = res.data.transporteur;
             this.transporteurForm.patchValue(this.transporteur);
+            this.contentReadyEvent.emit();
           });
       } else {
         this.transporteur = new Transporteur({});
+        this.contentReadyEvent.emit();
       }
     });
 

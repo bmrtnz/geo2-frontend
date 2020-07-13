@@ -1,12 +1,23 @@
-import { Component, OnInit, ViewChild, Output } from '@angular/core';
-import { ActivatedRoute, NavigationExtras } from '@angular/router';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { GridNavigatorComponent } from 'app/shared/components/grid-navigator/grid-navigator.component';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { take, filter, map, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, of, Subscription } from 'rxjs';
+import { ApiService } from 'app/shared/services/api.service';
 
-export interface NestedGrid<Model = any> {
+/**
+ * Nested view main component
+ */
+export interface NestedMain {
   dataGrid: DxDataGridComponent;
-  detailsNavigationHook: (row: Model) => [any[], NavigationExtras];
-  // contentReadyEvent: EventEmitter<any>;
+  apiService: ApiService;
+}
+/**
+ * Nested view component
+ */
+export interface NestedPart {
+  contentReadyEvent: EventEmitter<any>;
 }
 
 @Component({
@@ -14,56 +25,53 @@ export interface NestedGrid<Model = any> {
   templateUrl: './nested.component.html',
   styleUrls: ['./nested.component.scss']
 })
-export class NestedComponent implements OnInit {
+export class NestedComponent implements OnInit, OnDestroy {
 
-  @ViewChild(GridNavigatorComponent, { static: false }) gridNav: GridNavigatorComponent;
+  @ViewChild(GridNavigatorComponent, { static: true }) gridNav: GridNavigatorComponent;
   @Output() dataGrid: DxDataGridComponent;
+  scrollInSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
   ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  onActivate(mainComponent: NestedMain & NestedPart) {
+
+    const detailsOutlet = this.activatedRoute.children
+    .find(({outlet}) => outlet === 'details' );
+    this.dataGrid = mainComponent.dataGrid;
+
+    this.scrollInSubscription = combineLatest(
+      this.activatedRoute.queryParams,
+      detailsOutlet ? detailsOutlet.params : of({}),
+      mainComponent.contentReadyEvent.pipe(take(1)),
+    )
+    .pipe(
+      tap(([queryParams]) => !queryParams.nofocus && this.gridNav.scrollIn()),
+      map(([, params]) => params.id),
+      filter( key => key ),
+      switchMap( key => mainComponent.apiService.locatePage({key}).pipe(map( res => ({...res, key}) ))),
+    )
+    .subscribe(async ({locatePage, key}) => {
+      await this.dataGrid.instance.pageIndex(locatePage);
+      this.dataGrid.focusedRowKey = key;
+    });
+
   }
 
-  onActivate(listComponent: NestedGrid) {
+  ngOnDestroy() {
+    this.scrollInSubscription.unsubscribe();
+  }
 
-    this.dataGrid = listComponent.dataGrid;
-
-    // select row from route
-    // this.dataGrid.autoNavigateToFocusedRow = true;
-    // const detailsOutlet = this.activatedRoute.children
-    // .find( ({outlet}) => outlet === 'details' );
-    // combineLatest(
-    //   detailsOutlet ? detailsOutlet.params : of({}),
-    //   listComponent.contentReadyEvent,
-    // )
-    // .pipe(
-    //   map( ([params, event]) => params.id || (event as any).component.getKeyByRowIndex(0)),
-    //   map( key => {
-    //     // Fetch row position info like :
-    //     // < { type: 'GeoClient', key: '000141', pageSize: 10 }
-    //     // > { index: 6, page: 2 }
-    //     return {index: 1, page: 2};
-    //   }),
-    //   take(1),
-    // )
-    // .subscribe( async ({page, index}) => {
-    //   // Not working because keys not follow one another ?
-    //   // this.dataGrid.instance.navigateToRow(key);
-    //   await this.dataGrid.instance.pageIndex(page);
-    //   this.dataGrid.focusedRowIndex = index;
-    // });
-
-    // navigation
-    listComponent.detailsNavigationHook = row => {
-      this.gridNav.scrollIn();
-      return [
-        [{ outlets: { details: [row.id] }}],
-        { relativeTo: this.activatedRoute },
-      ];
-    };
-
+  onActivateDetails(partComponent: NestedPart) {
+    combineLatest(
+      this.activatedRoute.queryParams,
+      partComponent.contentReadyEvent,
+    )
+    .pipe(take(1))
+    .subscribe(([queryParams]) => !queryParams.nofocus && this.gridNav.scrollIn({behavior: 'auto'}));
   }
 
 }

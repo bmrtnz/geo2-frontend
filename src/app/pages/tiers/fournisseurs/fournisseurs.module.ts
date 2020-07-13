@@ -13,6 +13,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
 import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import {HistoriqueValideModule} from '../../../shared/components/historique-vali
   declarations: [
     FournisseursListComponent,
     FournisseurDetailsComponent
-  ]
+  ],
+  providers: [NestedGuard],
 })
 export class FournisseursModule { }
 

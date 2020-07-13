@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ArticlesService } from '../../../shared/services/articles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -29,13 +29,14 @@ import { RangementsService } from 'app/shared/services/rangements.service';
 import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.service';
 import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
 import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
 
 @Component({
     selector: 'app-articles',
     templateUrl: './article-details.component.html',
     styleUrls: ['./article-details.component.scss']
 })
-export class ArticleDetailsComponent implements OnInit {
+export class ArticleDetailsComponent implements OnInit, NestedPart {
 
     articleForm = this.fb.group({
         id: [''],
@@ -86,6 +87,7 @@ export class ArticleDetailsComponent implements OnInit {
         // calibreMarquage: [''],
         // descrSpecialeCalClt: [''],
     });
+    contentReadyEvent = new EventEmitter<any>();
 
     article: Article;
 
@@ -154,6 +156,7 @@ export class ArticleDetailsComponent implements OnInit {
         .subscribe( res => {
             this.article = new Article(res.data.article);
             this.articleForm.patchValue(this.article);
+            this.contentReadyEvent.emit();
         });
 
     }

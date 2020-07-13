@@ -11,6 +11,7 @@ import {
     DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   declarations: [
     EntrepotsListComponent,
     EntrepotDetailsComponent
-  ]
+  ],
+  providers: [NestedGuard],
 })
 export class EntrepotsModule { }

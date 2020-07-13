@@ -9,6 +9,10 @@ import { TransporteursListComponent } from '../tiers/transporteurs/list/transpor
 import { TransporteurDetailsComponent } from '../tiers/transporteurs/details/transporteur-details.component';
 import { LieuxPassageAQuaiListComponent } from '../tiers/lieux-passage-a-quai/list/lieux-passage-a-quai-list.component';
 import { LieuxPassageAQuaiDetailsComponent } from '../tiers/lieux-passage-a-quai/details/lieux-passage-a-quai-details.component';
+import { ArticlesListComponent } from '../articles/list/articles-list.component';
+import { ArticleDetailsComponent } from '../articles/details/article-details.component';
+import { ContactsComponent } from '../tiers/contacts/contacts.component';
+import { EntrepotsListComponent } from '../tiers/entrepots/list/entrepots-list.component';
 
 // Outlets issue :
 // https://github.com/angular/angular/issues/18271
@@ -31,6 +35,16 @@ const routes: Routes = [
         component: ClientDetailsComponent,
         outlet: 'details',
       },
+      {
+        path: 'contacts/:codeTiers/:typeTiers',
+        component: ContactsComponent,
+        outlet: 'details',
+      },
+      {
+        path: ':client/entrepots',
+        component: EntrepotsListComponent,
+        outlet: 'details',
+      },
     ],
   },
   {
@@ -44,6 +58,11 @@ const routes: Routes = [
       {
         path: ':id',
         component: FournisseurDetailsComponent,
+        outlet: 'details',
+      },
+      {
+        path: 'contacts/:codeTiers/:typeTiers',
+        component: ContactsComponent,
         outlet: 'details',
       },
     ],
@@ -61,6 +80,11 @@ const routes: Routes = [
         component: TransporteurDetailsComponent,
         outlet: 'details',
       },
+      {
+        path: 'contacts/:codeTiers/:typeTiers',
+        component: ContactsComponent,
+        outlet: 'details',
+      },
     ],
   },
   {
@@ -74,6 +98,26 @@ const routes: Routes = [
       {
         path: ':id',
         component: LieuxPassageAQuaiDetailsComponent,
+        outlet: 'details',
+      },
+      {
+        path: 'contacts/:codeTiers/:typeTiers',
+        component: ContactsComponent,
+        outlet: 'details',
+      },
+    ],
+  },
+  {
+    path: 'articles',
+    component: NestedComponent,
+    children: [
+      {
+        path: '',
+        component: ArticlesListComponent,
+      },
+      {
+        path: ':id',
+        component: ArticleDetailsComponent,
         outlet: 'details',
       },
     ],

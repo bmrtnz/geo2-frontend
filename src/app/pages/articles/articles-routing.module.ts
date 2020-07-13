@@ -3,17 +3,26 @@ import { Routes, RouterModule } from '@angular/router';
 import { ArticlesListComponent } from './list/articles-list.component';
 import { ArticleDetailsComponent } from './details/article-details.component';
 import { AuthGuardService } from '../../shared/services';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
 
 const routes: Routes = [
   {
     path: '',
+    redirectTo: '/nested/articles',
+    pathMatch: 'full',
+  }, {
+    path: 'list',
     component: ArticlesListComponent,
+    canActivate: [AuthGuardService]
+  }, {
+    path: 'create',
+    component: ArticleDetailsComponent,
     canActivate: [AuthGuardService]
   }, {
     path: ':id',
     component: ArticleDetailsComponent,
-    canActivate: [AuthGuardService]
-  }
+    canActivate: [AuthGuardService, NestedGuard]
+  },
 ];
 
 @NgModule({

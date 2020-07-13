@@ -3,6 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {ClientDetailsComponent} from './details/client-details.component';
 import { ClientsListComponent } from './list/clients-list.component';
 import { AuthGuardService } from 'app/shared/services';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EntrepotsListComponent } from '../entrepots/list/entrepots-list.component';
 
 const routes: Routes = [
   {
@@ -21,7 +23,11 @@ const routes: Routes = [
   }, {
     path: ':id',
     component: ClientDetailsComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, NestedGuard]
+  }, {
+    path: ':client/entrepots',
+    component: EntrepotsListComponent,
+    canActivate: [AuthGuardService, NestedGuard]
   },
 ];
 

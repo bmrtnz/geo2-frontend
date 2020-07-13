@@ -10,7 +10,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="true"
     (onRowPrepared)="onRowPrepared($event)"
-    (onRowDblClick)="onRowDblClick($event)"
+    (onRowDblClick)="onRowDblClick($event);"
+    (onContentReady)="contentReadyEvent.emit($event)"
   >
 
     <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Fournisseur } from '../../../../shared/models';
@@ -14,16 +14,16 @@ import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.servi
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { CertificationsService } from 'app/shared/services/certification.service';
 import notify from 'devextreme/ui/notify';
-import { TypeTiers } from 'app/shared/models/tier.model';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
 import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
 
 @Component({
   selector: 'app-fournisseur-details',
   templateUrl: './fournisseur-details.component.html',
   styleUrls: ['./fournisseur-details.component.scss']
 })
-export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
+export class FournisseurDetailsComponent implements OnInit, AfterViewInit, NestedPart {
 
   fournisseurForm = this.fb.group({
     id: [''],
@@ -81,6 +81,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
     conditionVente: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
 
   fournisseur: Fournisseur;
   pays: DataSource;
@@ -137,9 +138,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
             this.fournisseur = res.data.fournisseur;
             console.log(this.fournisseur.fournisseurDeRattachement);
             this.fournisseurForm.patchValue(this.fournisseur);
+            this.contentReadyEvent.emit();
           });
       } else {
         this.fournisseur = new Fournisseur({});
+        this.contentReadyEvent.emit();
       }
     });
 

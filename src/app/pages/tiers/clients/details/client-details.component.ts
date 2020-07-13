@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, EventEmitter } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Client, Courtier } from '../../../../shared/models';
@@ -20,13 +20,14 @@ import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent  implements OnInit, AfterViewInit {
+export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPart {
 
   private requiredFields = ['soumisCtifl'];
 
@@ -102,6 +103,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
     detailAutomatique: [''],
     venteACommission: ['']
   });
+  contentReadyEvent = new EventEmitter<any>();
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
 
   client: Client;
@@ -172,6 +174,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
             this.client = res.data.client;
             console.log(this.client)
             this.clientForm.patchValue(this.client);
+            this.contentReadyEvent.emit();
           });
       } else {
         // Apply default value
@@ -179,6 +182,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
           soumisCtifl: false
         });
         this.clientForm.patchValue(this.client);
+        this.contentReadyEvent.emit();
       }
     });
 
@@ -256,7 +260,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
   }
 
   entrepotsBtnClick() {
-    this.router.navigate([`/tiers/entrepots/client/${ this.client.id }`]);
+    this.router.navigate([`/tiers/clients/${ this.client.id }/entrepots`]);
   }
 
   contactsBtnClick() {

@@ -10,7 +10,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 })
 export class GridNavigatorComponent implements OnInit {
 
-  backBtnDisabled = false;
+  backBtnDisabled = true;
   @Input() dataGrid: DxDataGridComponent;
 
   constructor(
@@ -28,8 +28,8 @@ export class GridNavigatorComponent implements OnInit {
   ngOnInit() {
   }
 
-  scrollIn() {
-    this.element.nativeElement.scrollIntoView({ behavior: 'smooth' });
+  scrollIn(options = { behavior: 'smooth' }) {
+    this.element.nativeElement.scrollIntoView(options);
   }
 
   public hasNext() {
@@ -90,7 +90,7 @@ export class GridNavigatorComponent implements OnInit {
   navToDetail(id: string) {
     this.router.navigate(
       [{ outlets: { details: [id] }}],
-      { relativeTo: this.activatedRoute },
+      { relativeTo: this.activatedRoute, queryParams: { nofocus: true } },
     );
   }
 

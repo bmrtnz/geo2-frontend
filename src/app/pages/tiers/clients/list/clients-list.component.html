@@ -18,7 +18,7 @@
     [columnHidingEnabled]="true"
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
-    (onRowDblClick)="rowDetailsRequested.emit($event.data)"
+    (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"
   >
 

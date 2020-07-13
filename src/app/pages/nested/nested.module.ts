@@ -7,6 +7,9 @@ import { GridNavigatorModule } from 'app/shared/components/grid-navigator/grid-n
 import { FournisseursModule } from '../tiers/fournisseurs/fournisseurs.module';
 import { TransporteursModule } from '../tiers/transporteurs/transporteurs.module';
 import { LieuxPassageAQuaiModule } from '../tiers/lieux-passage-a-quai/lieux-passage-a-quai.module';
+import { ArticlesModule } from '../articles/articles.module';
+import { TiersModule } from '../tiers/tiers.module';
+import { EntrepotsModule } from '../tiers/entrepots/entrepots.module';
 
 @NgModule({
   declarations: [NestedComponent],
@@ -18,6 +21,9 @@ import { LieuxPassageAQuaiModule } from '../tiers/lieux-passage-a-quai/lieux-pas
     FournisseursModule,
     TransporteursModule,
     LieuxPassageAQuaiModule,
+    ArticlesModule,
+    TiersModule,
+    EntrepotsModule,
   ]
 })
 export class NestedModule { }

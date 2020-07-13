@@ -1,18 +1,24 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter, ViewChild} from '@angular/core';
 import {ArticlesService} from '../../../shared/services/articles.service';
 import {Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
+import { ApiService } from 'app/shared/services/api.service';
+import { NestedMain } from 'app/pages/nested/nested.component';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-articles-list',
   templateUrl: './articles-list.component.html',
   styleUrls: ['./articles-list.component.scss']
 })
-export class ArticlesListComponent implements OnInit {
+export class ArticlesListComponent implements OnInit, NestedMain {
 
   articles: DataSource;
+  contentReadyEvent = new EventEmitter<any>();
+  apiService: ApiService;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
   columnChooser = environment.columnChooser;
 
@@ -20,6 +26,7 @@ export class ArticlesListComponent implements OnInit {
     public articlesService: ArticlesService,
     private router: Router
   ) {
+    this.apiService = this.articlesService;
   }
 
   ngOnInit() {
