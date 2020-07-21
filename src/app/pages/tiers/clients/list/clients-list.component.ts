@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnInit, ViewChild, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
-import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { NestedMain } from 'app/pages/nested/nested.component';
+import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import { environment} from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
@@ -13,7 +13,7 @@ import { ApiService } from 'app/shared/services/api.service';
   templateUrl: './clients-list.component.html',
   styleUrls: ['./clients-list.component.scss'],
 })
-export class ClientsListComponent implements OnInit, NestedMain {
+export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
 
   clients: DataSource;
   contentReadyEvent = new EventEmitter<any>();

@@ -96,7 +96,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
       if (event.node.selected) {
         pointerEvent.preventDefault();
       } else {
-        this.router.navigate([path]);
+        this.router.navigateByUrl(path);
       }
 
       if (this.hideMenuAfterNavigation) {

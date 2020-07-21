@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { ContactsService } from 'app/shared/services/contacts.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,13 +10,14 @@ import { FluxService } from 'app/shared/services/flux.service';
 import { MoyenCommunicationService } from 'app/shared/services/moyens-communication.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { environment} from 'environments/environment';
+import { NestedPart } from 'app/pages/nested/nested.component';
 
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss'],
 })
-export class ContactsComponent implements OnInit {
+export class ContactsComponent implements OnInit, NestedPart {
 
   contacts: DataSource;
   fluxSource: DataSource;
@@ -28,6 +29,7 @@ export class ContactsComponent implements OnInit {
   detailedFields: ({ name: string } & ModelFieldOptions)[];
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
+  contentReadyEvent = new EventEmitter<any>();
 
   constructor(
     public contactsService: ContactsService,

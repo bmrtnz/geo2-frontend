@@ -38,6 +38,11 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
+    path: 'nested',
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/nested/nested.module#NestedModule',
+  },
+  {
     path: 'tiers',
     canActivate: [AuthGuardService],
     loadChildren: './pages/tiers/tiers.module#TiersModule'
@@ -51,11 +56,6 @@ const routes: Routes = [
     path: 'stock',
     canActivate: [AuthGuardService],
     loadChildren: './pages/stock/stock.module#StockModule'
-  },
-  {
-    path: 'nested',
-    canActivate: [AuthGuardService],
-    loadChildren: './pages/nested/nested.module#NestedModule'
   },
   {
     path: '**',

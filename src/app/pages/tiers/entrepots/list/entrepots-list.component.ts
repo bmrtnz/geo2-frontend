@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services/entrepots.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
@@ -16,6 +16,7 @@ export class EntrepotsListComponent implements OnInit {
   clientID: string;
   detailedFields: ({ name: string } & ModelFieldOptions)[];
   columnChooser = environment.columnChooser;
+  contentReadyEvent = new EventEmitter<any>();
 
   constructor(
     public entrepotsService: EntrepotsService,

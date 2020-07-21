@@ -19,6 +19,7 @@
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
+    (onContentReady)="contentReadyEvent.emit($event)"
   >
 
     <!-- Grid configuration -->

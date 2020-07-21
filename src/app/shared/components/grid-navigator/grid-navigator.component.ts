@@ -8,7 +8,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
   templateUrl: './grid-navigator.component.html',
   styleUrls: ['./grid-navigator.component.scss']
 })
-export class GridNavigatorComponent implements OnInit {
+export class GridNavigatorComponent {
 
   backBtnDisabled = true;
   @Input() dataGrid: DxDataGridComponent;
@@ -23,13 +23,6 @@ export class GridNavigatorComponent implements OnInit {
       if (event instanceof NavigationEnd)
         this.backBtnDisabled = !/^\/nested\/.*details.*/.test(event.url);
     });
-  }
-
-  ngOnInit() {
-  }
-
-  scrollIn(options = { behavior: 'smooth' }) {
-    this.element.nativeElement.scrollIntoView(options);
   }
 
   public hasNext() {
@@ -88,10 +81,18 @@ export class GridNavigatorComponent implements OnInit {
   }
 
   navToDetail(id: string) {
+    const details = this.router.createUrlTree([])
+    .root.children.primary.children.primary.segments
+    .map(({ path }) => path === 'list' ? id : path )
+    .join('/');
     this.router.navigate(
-      [{ outlets: { details: [id] }}],
-      { relativeTo: this.activatedRoute, queryParams: { nofocus: true } },
+      [ { outlets: { details } } ],
+      { relativeTo: this.activatedRoute },
     );
+  }
+
+  scrollToDetails(options = { behavior: 'smooth' }) {
+    this.element.nativeElement.scrollIntoView(options);
   }
 
   // TODO Create directive backButton

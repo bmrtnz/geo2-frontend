@@ -8,7 +8,7 @@ import { NestedGuard } from 'app/shared/guards/nested-guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/nested/transporteurs',
+    redirectTo: 'list',
     pathMatch: 'full',
   }, {
     path: 'list',

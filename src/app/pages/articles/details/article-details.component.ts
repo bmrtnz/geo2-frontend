@@ -30,6 +30,7 @@ import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.ser
 import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
 import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
     selector: 'app-articles',
@@ -151,8 +152,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart {
 
     ngOnInit() {
 
-        this.articlesService
-        .getOne(this.route.snapshot.paramMap.get('id'))
+        this.route.params
+        .pipe(switchMap( params => this.articlesService.getOne(params.id)))
         .subscribe( res => {
             this.article = new Article(res.data.article);
             this.articleForm.patchValue(this.article);

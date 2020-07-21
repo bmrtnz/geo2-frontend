@@ -1,21 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NestedComponent } from '../nested/nested.component';
+import { AuthGuardService } from 'app/shared/services';
+import { ArticleDetailsComponent } from '../articles/details/article-details.component';
+import { ArticlesListComponent } from '../articles/list/articles-list.component';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { ClientsListComponent } from '../tiers/clients/list/clients-list.component';
 import { ClientDetailsComponent } from '../tiers/clients/details/client-details.component';
+import { EntrepotsListComponent } from '../tiers/entrepots/list/entrepots-list.component';
+import { ContactsComponent } from '../tiers/contacts/contacts.component';
 import { FournisseursListComponent } from '../tiers/fournisseurs/list/fournisseurs-list.component';
 import { FournisseurDetailsComponent } from '../tiers/fournisseurs/details/fournisseur-details.component';
-import { TransporteursListComponent } from '../tiers/transporteurs/list/transporteurs-list.component';
 import { TransporteurDetailsComponent } from '../tiers/transporteurs/details/transporteur-details.component';
+import { TransporteursListComponent } from '../tiers/transporteurs/list/transporteurs-list.component';
 import { LieuxPassageAQuaiListComponent } from '../tiers/lieux-passage-a-quai/list/lieux-passage-a-quai-list.component';
 import { LieuxPassageAQuaiDetailsComponent } from '../tiers/lieux-passage-a-quai/details/lieux-passage-a-quai-details.component';
-import { ArticlesListComponent } from '../articles/list/articles-list.component';
-import { ArticleDetailsComponent } from '../articles/details/article-details.component';
-import { ContactsComponent } from '../tiers/contacts/contacts.component';
-import { EntrepotsListComponent } from '../tiers/entrepots/list/entrepots-list.component';
+import { EntrepotDetailsComponent } from '../tiers/entrepots/details/entrepot-details.component';
 
-// Outlets issue :
+// Outlets issues :
 // https://github.com/angular/angular/issues/18271
+// https://github.com/angular/angular/issues/10726
+// OUTLETS + LAZY MODULES NOT WORKING ¯\_(ツ)_/¯
+// All routes are duplicated instead of modules inclusion
 const routes: Routes = [
   {
     path: '',
@@ -23,100 +29,105 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'clients',
+    path: 'n',
     component: NestedComponent,
     children: [
       {
-        path: '',
+        path: 'tiers/clients/list',
         component: ClientsListComponent,
       },
       {
-        path: ':id',
+        path: 'tiers/clients/create',
         component: ClientDetailsComponent,
         outlet: 'details',
       },
       {
-        path: 'contacts/:codeTiers/:typeTiers',
-        component: ContactsComponent,
+        path: 'tiers/clients/:id',
+        component: ClientDetailsComponent,
         outlet: 'details',
       },
       {
-        path: ':client/entrepots',
+        path: 'tiers/clients/:client/entrepots',
         component: EntrepotsListComponent,
         outlet: 'details',
       },
-    ],
-  },
-  {
-    path: 'fournisseurs',
-    component: NestedComponent,
-    children: [
       {
-        path: '',
+        path: 'tiers/fournisseurs/list',
         component: FournisseursListComponent,
       },
       {
-        path: ':id',
+        path: 'tiers/fournisseurs/create',
         component: FournisseurDetailsComponent,
         outlet: 'details',
       },
       {
-        path: 'contacts/:codeTiers/:typeTiers',
-        component: ContactsComponent,
+        path: 'tiers/fournisseurs/:id',
+        component: FournisseurDetailsComponent,
         outlet: 'details',
       },
-    ],
-  },
-  {
-    path: 'transporteurs',
-    component: NestedComponent,
-    children: [
       {
-        path: '',
+        path: 'tiers/fournisseurs/:client/entrepots',
+        component: FournisseursListComponent,
+        outlet: 'details',
+      },
+      {
+        path: 'tiers/transporteurs/list',
         component: TransporteursListComponent,
       },
       {
-        path: ':id',
+        path: 'tiers/transporteurs/create',
         component: TransporteurDetailsComponent,
         outlet: 'details',
       },
       {
-        path: 'contacts/:codeTiers/:typeTiers',
-        component: ContactsComponent,
+        path: 'tiers/transporteurs/:id',
+        component: TransporteurDetailsComponent,
         outlet: 'details',
       },
-    ],
-  },
-  {
-    path: 'lieuxpassageaquai',
-    component: NestedComponent,
-    children: [
       {
-        path: '',
+        path: 'tiers/lieux-passage-a-quai/list',
         component: LieuxPassageAQuaiListComponent,
       },
       {
-        path: ':id',
+        path: 'tiers/lieux-passage-a-quai/create',
         component: LieuxPassageAQuaiDetailsComponent,
         outlet: 'details',
       },
       {
-        path: 'contacts/:codeTiers/:typeTiers',
+        path: 'tiers/lieux-passage-a-quai/:id',
+        component: LieuxPassageAQuaiDetailsComponent,
+        outlet: 'details',
+      },
+      {
+        path: 'tiers/entrepots/list',
+        component: EntrepotsListComponent,
+      },
+      {
+        path: 'tiers/entrepots/create/:client',
+        component: EntrepotDetailsComponent,
+        outlet: 'details',
+      },
+      {
+        path: 'tiers/entrepots/:id',
+        component: EntrepotDetailsComponent,
+        outlet: 'details',
+      },
+      {
+        path: 'tiers/contacts/:codeTiers/:typeTiers',
         component: ContactsComponent,
         outlet: 'details',
       },
-    ],
-  },
-  {
-    path: 'articles',
-    component: NestedComponent,
-    children: [
       {
-        path: '',
+        path: 'articles/list',
         component: ArticlesListComponent,
       },
       {
-        path: ':id',
+        path: 'articles/create',
+        component: ArticleDetailsComponent,
+        outlet: 'details',
+      },
+      {
+        path: 'articles/:id',
         component: ArticleDetailsComponent,
         outlet: 'details',
       },

@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit, EventEmitter} from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
@@ -15,13 +15,14 @@ import { TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { TypesCamionService } from 'app/shared/services/types-camion.service';
 import { TransitairesService } from 'app/shared/services/transitaires.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
 
 @Component({
   selector: 'app-entrepot-details',
   templateUrl: './entrepot-details.component.html',
   styleUrls: ['./entrepot-details.component.scss']
 })
-export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
+export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPart {
 
   entrepotForm = this.fb.group({
     code: [''],
@@ -62,6 +63,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
 
   entrepot: Entrepot;
   personnes: DataSource;
@@ -112,6 +114,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
           .subscribe( res => {
             this.entrepot = res.data.entrepot;
             this.entrepotForm.patchValue(this.entrepot);
+            this.contentReadyEvent.emit();
           });
       } else {
         this.entrepot = new Entrepot({});
@@ -122,6 +125,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
         //     console.log(this.entrepot)
         //     }
         // );
+        this.contentReadyEvent.emit();
       }
     });
 

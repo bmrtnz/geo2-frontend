@@ -1,4 +1,4 @@
-import { CanActivate, ActivatedRouteSnapshot, Router, ActivatedRoute, UrlTree } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, Router, ActivatedRoute, UrlTree, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -9,10 +9,10 @@ export class NestedGuard implements CanActivate {
     private activatedRoute: ActivatedRoute,
   ) {}
 
-  canActivate(next: ActivatedRouteSnapshot): boolean|UrlTree {
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean|UrlTree {
     if (this.router.url.startsWith('/nested')) {
       return this.router.createUrlTree([
-        { outlets: { details: next.url.map(({path}) => path).join('/') }}
+        { outlets: { details: state.url.substring(1) }}
       ], { relativeTo: this.activatedRoute.firstChild.firstChild });
     }
     return true;

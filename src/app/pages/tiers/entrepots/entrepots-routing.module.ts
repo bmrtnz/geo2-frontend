@@ -8,6 +8,10 @@ import { NestedGuard } from 'app/shared/guards/nested-guard';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'list',
+    pathMatch: 'full',
+  }, {
+    path: 'list',
     component: EntrepotsListComponent,
     canActivate: [AuthGuardService]
   }, {

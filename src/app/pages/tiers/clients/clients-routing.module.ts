@@ -9,7 +9,7 @@ import { EntrepotsListComponent } from '../entrepots/list/entrepots-list.compone
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/nested/clients',
+    redirectTo: 'list',
     pathMatch: 'full',
   },
   {
