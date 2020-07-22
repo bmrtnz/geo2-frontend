@@ -19,6 +19,7 @@ import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisse
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { Editable } from 'app/shared/guards/editing-guard';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -27,7 +28,7 @@ import { Editable } from 'app/shared/guards/editing-guard';
 })
 export class FournisseurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  fournisseurForm = this.fb.group({
+  formGroup = this.fb.group({
     id: [''],
     raisonSocial: [''],
     stockActif: [''],
@@ -135,12 +136,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   ngAfterViewInit(): void {
-    this.fournisseurForm.reset(this.fournisseur);
+    this.formGroup.reset(this.fournisseur);
   }
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -149,7 +152,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           .subscribe( res => {
             this.fournisseur = res.data.fournisseur;
             console.log(this.fournisseur.fournisseurDeRattachement);
-            this.fournisseurForm.patchValue(this.fournisseur);
+            this.formGroup.patchValue(this.fournisseur);
             this.contentReadyEvent.emit();
           });
       } else {
@@ -185,11 +188,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   onSubmit() {
 
-    if (!this.fournisseurForm.pristine && this.fournisseurForm.valid) {
-      const fournisseur = this.fournisseursService.extractDirty(this.fournisseurForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const fournisseur = this.fournisseursService.extractDirty(this.formGroup.controls);
 
       if (this.createMode) {
-        fournisseur.id = this.fournisseurForm.get('id').value.toUpperCase();
+        fournisseur.id = this.formGroup.get('id').value.toUpperCase();
           // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
           // Avoir pour les valeur par defaut (qui sont not null dans la base)
       } else {
@@ -202,7 +205,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           next: () => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.fournisseur = { id: this.fournisseur.id, ...this.fournisseurForm.getRawValue() };
+              this.fournisseur = { id: this.fournisseur.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/fournisseurs/${fournisseur.id}`]);
@@ -215,7 +218,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   onCancel() {
     if (!this.createMode) {
-      this.fournisseurForm.reset(this.fournisseur);
+      this.formGroup.reset(this.fournisseur);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/fournisseurs`]);

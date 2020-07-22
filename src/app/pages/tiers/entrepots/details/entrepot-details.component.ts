@@ -18,6 +18,7 @@ import { TransitairesService } from 'app/shared/services/transitaires.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -26,7 +27,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 })
 export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  entrepotForm = this.fb.group({
+  formGroup = this.fb.group({
     code: [''],
     client: [''],
     raisonSocial: [''],
@@ -113,12 +114,14 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   ngAfterViewInit(): void {
-    this.entrepotForm.reset();
+    this.formGroup.reset();
   }
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path.includes('create');
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -126,7 +129,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           .getOne(params.id)
           .subscribe( res => {
             this.entrepot = res.data.entrepot;
-            this.entrepotForm.patchValue(this.entrepot);
+            this.formGroup.patchValue(this.entrepot);
             this.contentReadyEvent.emit();
           });
       } else {
@@ -162,13 +165,13 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   onSubmit() {
 
-    if (!this.entrepotForm.pristine && this.entrepotForm.valid) {
-      const entrepot = this.entrepotsService.extractDirty(this.entrepotForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const entrepot = this.entrepotsService.extractDirty(this.formGroup.controls);
 
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
       } else {
-        entrepot.code = this.entrepotForm.get('code').value.toUpperCase();
+        entrepot.code = this.formGroup.get('code').value.toUpperCase();
         entrepot.client = {id: this.route.snapshot.params.client};
       }
 
@@ -178,7 +181,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.entrepot = { id: this.entrepot.id, ...this.entrepotForm.getRawValue() };
+              this.entrepot = { id: this.entrepot.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
@@ -192,7 +195,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   onCancel() {
     if (!this.createMode) {
-      this.entrepotForm.reset(this.entrepot);
+      this.formGroup.reset(this.entrepot);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/entrepots`]);

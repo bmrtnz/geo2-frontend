@@ -1,4 +1,4 @@
-<form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
 
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
@@ -50,7 +50,7 @@
           <dx-check-box
             class="vertical"
             formControlName="valide"
-            [text]="clientForm.get('valide') ? 'Valide' : 'Invalide' | localize"
+            [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
             [readOnly]="readOnlyMode"
           ></dx-check-box>
           <app-historique-valide [historique]="client?.historique"></app-historique-valide>

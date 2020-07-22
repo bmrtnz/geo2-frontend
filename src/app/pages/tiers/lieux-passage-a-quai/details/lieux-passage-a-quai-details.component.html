@@ -1,4 +1,4 @@
-<form [formGroup]="lieupassageaquaiForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-lieuxpassageaquai-details-title' | localize }}
@@ -43,7 +43,7 @@
           class="vertical"
           formControlName="valide"
           [readOnly]="readOnlyMode"
-          [text]="lieupassageaquaiForm.get('valide') ? 'Valide' : 'Invalide' | localize"
+          [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
         <dx-button
           class="black"

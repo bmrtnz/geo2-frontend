@@ -23,6 +23,7 @@ import { ConditionsVenteService } from 'app/shared/services/conditions-vente.ser
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { Editable } from 'app/shared/guards/editing-guard';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client-details',
@@ -33,7 +34,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   private requiredFields = ['soumisCtifl'];
 
-  clientForm = this.fb.group({
+  formGroup = this.fb.group({
     code: [''],
     raisonSocial: [''],
     societe: [''],
@@ -176,7 +177,9 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -184,7 +187,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
           .getOne(params.id)
           .subscribe( res => {
             this.client = res.data.client;
-            this.clientForm.patchValue(this.client);
+            this.formGroup.patchValue(this.client);
             this.contentReadyEvent.emit();
           });
       } else {
@@ -192,7 +195,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
         this.client = new Client({
           soumisCtifl: false
         });
-        this.clientForm.patchValue(this.client);
+        this.formGroup.patchValue(this.client);
         this.contentReadyEvent.emit();
       }
     });
@@ -226,18 +229,18 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   onSubmit() {
 
-    if (!this.clientForm.pristine && this.clientForm.valid) {
-      const client = this.clientsService.extractDirty(this.clientForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const client = this.clientsService.extractDirty(this.formGroup.controls);
 
       if (!this.createMode) {
         client.id = this.client.id;
       } else {
         for (const f of this.requiredFields) {
-          client[f] = this.clientForm.controls[f].value;
+          client[f] = this.formGroup.controls[f].value;
         }
         // Fake -> pour passer l'étape de création
         client.societe = { id: 'SA' };
-        client.code = this.clientForm.get('code').value.toUpperCase();
+        client.code = this.formGroup.get('code').value.toUpperCase();
       }
 
       this.clientsService
@@ -246,7 +249,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
+              this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);

@@ -13,6 +13,7 @@ import notify from 'devextreme/ui/notify';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -21,7 +22,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 })
 export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  lieupassageaquaiForm = this.fb.group({
+  formGroup = this.fb.group({
     id: [''],
     raisonSocial: [''],
     pays: [''],
@@ -84,12 +85,14 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   }
 
   ngAfterViewInit(): void {
-    this.lieupassageaquaiForm.reset(this.lieupassageaquai);
+    this.formGroup.reset(this.lieupassageaquai);
   }
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -97,7 +100,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
           .getOne(params.id)
           .subscribe( res => {
             this.lieupassageaquai = res.data.lieuPassageAQuai;
-            this.lieupassageaquaiForm.patchValue(this.lieupassageaquai);
+            this.formGroup.patchValue(this.lieupassageaquai);
             this.contentReadyEvent.emit();
           });
       } else {
@@ -121,11 +124,11 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   onSubmit() {
 
-    if (!this.lieupassageaquaiForm.pristine && this.lieupassageaquaiForm.valid) {
-      const lieuPassageAQuai = this.lieupassageaquaiService.extractDirty(this.lieupassageaquaiForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const lieuPassageAQuai = this.lieupassageaquaiService.extractDirty(this.formGroup.controls);
 
       if (this.createMode) {
-        lieuPassageAQuai.id = this.lieupassageaquaiForm.get('id').value.toUpperCase();
+        lieuPassageAQuai.id = this.formGroup.get('id').value.toUpperCase();
           // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
           // Avoir pour les valeur par defaut (qui sont not null dans la base)
       } else {
@@ -138,7 +141,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
           next: () => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.lieupassageaquaiForm.getRawValue() };
+              this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/lieux-passage-a-quai/${lieuPassageAQuai.id}`]);
@@ -152,7 +155,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   onCancel() {
     if (!this.createMode) {
-      this.lieupassageaquaiForm.reset(this.lieupassageaquaiForm);
+      this.formGroup.reset(this.formGroup);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/lieux-passage-a-quai`]);

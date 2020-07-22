@@ -30,7 +30,7 @@ import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.ser
 import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
 import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 
@@ -41,7 +41,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 })
 export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
-    articleForm = this.fb.group({
+    formGroup = this.fb.group({
         id: [''],
         description: [''],
         blueWhaleStock: [''],
@@ -155,10 +155,13 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     ngOnInit() {
 
         this.route.params
-        .pipe(switchMap( params => this.articlesService.getOne(params.id)))
+        .pipe(
+            tap( _ => this.formGroup.reset()),
+            switchMap( params => this.articlesService.getOne(params.id)),
+        )
         .subscribe( res => {
             this.article = new Article(res.data.article);
-            this.articleForm.patchValue(this.article);
+            this.formGroup.patchValue(this.article);
             this.contentReadyEvent.emit();
         });
 
@@ -181,14 +184,14 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     onSubmit() {
-        if (!this.articleForm.pristine && this.articleForm.valid) {
-            const article = this.articlesService.extractDirty(this.articleForm.controls);
+        if (!this.formGroup.pristine && this.formGroup.valid) {
+            const article = this.articlesService.extractDirty(this.formGroup.controls);
             this.articlesService
                 .save({ article: { ...article, id: this.article.id } })
                 .subscribe({
                 next: () => {
                     notify('Sauvegardé', 'success', 3000);
-                    this.article = { id: this.article.id, ...this.articleForm.getRawValue() };
+                    this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
                 },
                 error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });
@@ -197,7 +200,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     onEspeceChange(event) {
         const dsOptions = {
-            search: 'espece.id==' + event.value.id
+            search: event.value ? 'espece.id==' + event.value.id : '',
         };
 
         this.especes = this.especesService.getDataSource();
