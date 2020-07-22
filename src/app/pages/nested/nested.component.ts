@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GridNavigatorComponent } from 'app/shared/components/grid-navigator/grid-navigator.component';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { take, filter, map, switchMap } from 'rxjs/operators';
-import { combineLatest, of, Subscription } from 'rxjs';
+import { take, filter, map, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, of } from 'rxjs';
 import { ApiService } from 'app/shared/services/api.service';
 
 /**
@@ -25,11 +25,10 @@ export interface NestedPart {
   templateUrl: './nested.component.html',
   styleUrls: ['./nested.component.scss']
 })
-export class NestedComponent implements OnDestroy {
+export class NestedComponent {
 
   @ViewChild(GridNavigatorComponent, { static: true }) gridNav: GridNavigatorComponent;
   @Output() dataGrid: DxDataGridComponent;
-  scrollInSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -41,11 +40,12 @@ export class NestedComponent implements OnDestroy {
 
     const detailsOutlet = this.activatedRoute.children
     .find(({outlet}) => outlet === 'details' );
-    this.scrollInSubscription = combineLatest(
+    combineLatest(
       detailsOutlet ? detailsOutlet.params : of({}),
       mainComponent.contentReadyEvent.pipe(take(1)),
     )
     .pipe(
+      tap( _ => this.gridNav.scrollToDetails()),
       map(([params]) => params.id),
       filter( key => key ),
       switchMap( key => mainComponent.apiService.locatePage({key}).pipe(map( res => ({...res, key}) ))),
@@ -53,13 +53,8 @@ export class NestedComponent implements OnDestroy {
     .subscribe(async ({locatePage, key}) => {
       await this.dataGrid.instance.pageIndex(locatePage);
       this.dataGrid.focusedRowKey = key;
-      this.gridNav.scrollToDetails();
     });
 
-  }
-
-  ngOnDestroy() {
-    this.scrollInSubscription.unsubscribe();
   }
 
   onActivateDetails(partComponent: NestedPart) {

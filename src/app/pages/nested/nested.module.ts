@@ -10,6 +10,7 @@ import { LieuxPassageAQuaiModule } from '../tiers/lieux-passage-a-quai/lieux-pas
 import { ArticlesModule } from '../articles/articles.module';
 import { TiersModule } from '../tiers/tiers.module';
 import { EntrepotsModule } from '../tiers/entrepots/entrepots.module';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 @NgModule({
   declarations: [NestedComponent],
@@ -24,6 +25,7 @@ import { EntrepotsModule } from '../tiers/entrepots/entrepots.module';
     ArticlesModule,
     TiersModule,
     EntrepotsModule,
-  ]
+  ],
+  providers: [ EditingGuard ],
 })
 export class NestedModule { }

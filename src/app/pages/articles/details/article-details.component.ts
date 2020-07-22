@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { ArticlesService } from '../../../shared/services/articles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -31,13 +31,15 @@ import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
 import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { switchMap } from 'rxjs/operators';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 
 @Component({
     selector: 'app-articles',
     templateUrl: './article-details.component.html',
     styleUrls: ['./article-details.component.scss']
 })
-export class ArticleDetailsComponent implements OnInit, NestedPart {
+export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     articleForm = this.fb.group({
         id: [''],
@@ -89,6 +91,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart {
         // descrSpecialeCalClt: [''],
     });
     contentReadyEvent = new EventEmitter<any>();
+    @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+    editing = false;
 
     article: Article;
 
@@ -115,7 +119,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart {
     etiquettesUc: DataSource;
     etiquettesEvenementielle: DataSource;
     readOnlyMode = true;
-    editMode = false;
     cloneMode = false;
 
     id: string;
@@ -147,8 +150,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart {
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
-        ) {
-    }
+    ) {}
 
     ngOnInit() {
 
@@ -165,7 +167,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart {
     onCancel() {
         if (!this.cloneMode) {
             this.readOnlyMode = true;
-            this.editMode = false;
+            this.editing = false;
         } else {
             this.router.navigate([`/articles`]);
         }

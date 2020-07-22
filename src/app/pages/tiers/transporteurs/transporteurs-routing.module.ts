@@ -4,6 +4,7 @@ import {AuthGuardService} from '../../../shared/services';
 import {TransporteursListComponent} from './list/transporteurs-list.component';
 import {TransporteurDetailsComponent} from './details/transporteur-details.component';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 const routes: Routes = [
   {
@@ -17,11 +18,13 @@ const routes: Routes = [
   }, {
     path: 'create',
     component: TransporteurDetailsComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard],
   }, {
     path: ':id',
     component: TransporteurDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard]
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard]
   },
 ];
 

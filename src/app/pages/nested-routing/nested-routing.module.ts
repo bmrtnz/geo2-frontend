@@ -16,12 +16,13 @@ import { TransporteursListComponent } from '../tiers/transporteurs/list/transpor
 import { LieuxPassageAQuaiListComponent } from '../tiers/lieux-passage-a-quai/list/lieux-passage-a-quai-list.component';
 import { LieuxPassageAQuaiDetailsComponent } from '../tiers/lieux-passage-a-quai/details/lieux-passage-a-quai-details.component';
 import { EntrepotDetailsComponent } from '../tiers/entrepots/details/entrepot-details.component';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 // Outlets issues :
 // https://github.com/angular/angular/issues/18271
 // https://github.com/angular/angular/issues/10726
 // OUTLETS + LAZY MODULES NOT WORKING ¯\_(ツ)_/¯
-// All routes are duplicated instead of modules inclusion
+// Duplicating routes instead of modules inclusion
 const routes: Routes = [
   {
     path: '',
@@ -31,6 +32,7 @@ const routes: Routes = [
   {
     path: 'n',
     component: NestedComponent,
+    // canActivateChild: [AuthGuardService],
     children: [
       {
         path: 'tiers/clients/list',
@@ -40,11 +42,13 @@ const routes: Routes = [
         path: 'tiers/clients/create',
         component: ClientDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/clients/:id',
         component: ClientDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/clients/:client/entrepots',
@@ -59,11 +63,13 @@ const routes: Routes = [
         path: 'tiers/fournisseurs/create',
         component: FournisseurDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/fournisseurs/:id',
         component: FournisseurDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/fournisseurs/:client/entrepots',
@@ -78,11 +84,13 @@ const routes: Routes = [
         path: 'tiers/transporteurs/create',
         component: TransporteurDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/transporteurs/:id',
         component: TransporteurDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/lieux-passage-a-quai/list',
@@ -92,11 +100,13 @@ const routes: Routes = [
         path: 'tiers/lieux-passage-a-quai/create',
         component: LieuxPassageAQuaiDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/lieux-passage-a-quai/:id',
         component: LieuxPassageAQuaiDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/entrepots/list',
@@ -106,11 +116,13 @@ const routes: Routes = [
         path: 'tiers/entrepots/create/:client',
         component: EntrepotDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/entrepots/:id',
         component: EntrepotDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/contacts/:codeTiers/:typeTiers',
@@ -125,11 +137,13 @@ const routes: Routes = [
         path: 'articles/create',
         component: ArticleDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'articles/:id',
         component: ArticleDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
     ],
   },

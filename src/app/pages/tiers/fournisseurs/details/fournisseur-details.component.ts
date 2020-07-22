@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, EventEmitter, ViewChild } from '@angular/core';
 import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Fournisseur } from '../../../../shared/models';
@@ -17,13 +17,15 @@ import notify from 'devextreme/ui/notify';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
 import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { Editable } from 'app/shared/guards/editing-guard';
 
 @Component({
   selector: 'app-fournisseur-details',
   templateUrl: './fournisseur-details.component.html',
   styleUrls: ['./fournisseur-details.component.scss']
 })
-export class FournisseurDetailsComponent implements OnInit, AfterViewInit, NestedPart {
+export class FournisseurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
   fournisseurForm = this.fb.group({
     id: [''],
@@ -82,6 +84,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   fournisseur: Fournisseur;
   pays: DataSource;
@@ -98,7 +102,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   gridBoxValue: number[];
   fournisseursDeRattachement: DataSource;
   groupesFournisseur: DataSource;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -120,6 +124,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
+  }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
   }
 
   ngAfterViewInit(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, EventEmitter, ViewChild } from '@angular/core';
 import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LieuPassageAQuai } from '../../../../shared/models';
@@ -11,13 +11,15 @@ import { PaysService } from 'app/shared/services/pays.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
   templateUrl: './lieux-passage-a-quai-details.component.html',
   styleUrls: ['./lieux-passage-a-quai-details.component.scss']
 })
-export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit, NestedPart {
+export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
   lieupassageaquaiForm = this.fb.group({
     id: [''],
@@ -42,6 +44,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   lieupassageaquai: LieuPassageAQuai;
   code: string;
@@ -53,7 +57,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   bureauxAchat: DataSource;
   typeLieupassageaquai: any[];
   defaultVisible: boolean;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -70,6 +74,15 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
   }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
   ngAfterViewInit(): void {
     this.lieupassageaquaiForm.reset(this.lieupassageaquai);
   }

@@ -14,6 +14,8 @@ import { ArticlesRoutingModule } from './articles-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 
 @NgModule({
   imports: [
@@ -27,9 +29,10 @@ import { NestedGuard } from 'app/shared/guards/nested-guard';
     DxDataGridModule, DxTabPanelModule,
     DxTemplateModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule, DxValidatorModule
+    DxTextBoxModule, DxValidatorModule,
+    EditingAlertModule,
   ],
   declarations: [ArticleDetailsComponent, ArticlesListComponent],
-  providers: [NestedGuard],
+  providers: [NestedGuard, EditingGuard],
 })
 export class ArticlesModule { }

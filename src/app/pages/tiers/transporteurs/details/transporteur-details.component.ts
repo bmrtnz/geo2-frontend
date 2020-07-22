@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { TransporteursService } from '../../../../shared/services/transporteurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transporteur } from '../../../../shared/models';
@@ -12,13 +12,15 @@ import DataSource from 'devextreme/data/data_source';
 import { ClientsService } from 'app/shared/services';
 import notify from 'devextreme/ui/notify';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 
 @Component({
   selector: 'app-transporteur-details',
   templateUrl: './transporteur-details.component.html',
   styleUrls: ['./transporteur-details.component.scss']
 })
-export class TransporteurDetailsComponent implements OnInit, AfterViewInit, NestedPart {
+export class TransporteurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
   transporteurForm = this.fb.group({
     id: [''],
@@ -44,6 +46,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   transporteur: Transporteur;
   code: string;
@@ -57,7 +61,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   typesTransporteur: DataSource;
   clients: DataSource;
   defaultVisible: boolean;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -75,6 +79,15 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
   }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
   ngAfterViewInit(): void {
     this.transporteurForm.reset(this.transporteur);
   }

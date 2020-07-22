@@ -14,6 +14,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EntrepotsModule } from '../entrepots/entrepots.module';
+import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 
 @NgModule({
@@ -40,11 +42,12 @@ import { EntrepotsModule } from '../entrepots/entrepots.module';
         DxSwitchModule,
         DxDateBoxModule,
         HistoriqueValideModule,
+        EditingAlertModule,
     ],
     declarations: [
         ClientsListComponent,
         ClientDetailsComponent
     ],
-    providers: [NestedGuard],
+    providers: [NestedGuard, EditingGuard],
 })
 export class ClientsModule { }

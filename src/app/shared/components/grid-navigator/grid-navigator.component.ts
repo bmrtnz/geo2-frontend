@@ -42,6 +42,8 @@ export class GridNavigatorComponent {
   }
 
   public async selectNext() {
+    const backRowIndex = this.dataGrid.focusedRowIndex;
+    const backPageIndex = this.dataGrid.instance.pageIndex();
     let nextIndex = this.dataGrid.focusedRowIndex + 1;
 
     if (nextIndex >= this.dataGrid.instance.pageSize()) {
@@ -51,7 +53,11 @@ export class GridNavigatorComponent {
 
     this.dataGrid.focusedRowIndex = nextIndex;
     this.dataGrid.instance.selectRowsByIndexes([nextIndex]);
-    this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id);
+    if (!await this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id)) {
+      await this.dataGrid.instance.pageIndex(backPageIndex);
+      this.dataGrid.focusedRowIndex = backRowIndex;
+      this.dataGrid.instance.selectRowsByIndexes([backRowIndex]);
+    }
 
   }
 
@@ -68,6 +74,8 @@ export class GridNavigatorComponent {
   }
 
   public async selectPrevious() {
+    const backRowIndex = this.dataGrid.focusedRowIndex;
+    const backPageIndex = this.dataGrid.instance.pageIndex();
     let previousIndex = this.dataGrid.focusedRowIndex - 1;
 
     if (previousIndex < 0) {
@@ -77,7 +85,11 @@ export class GridNavigatorComponent {
 
     this.dataGrid.focusedRowIndex = previousIndex;
     this.dataGrid.instance.selectRowsByIndexes([previousIndex]);
-    this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id);
+    if (!await this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id)) {
+      await this.dataGrid.instance.pageIndex(backPageIndex);
+      this.dataGrid.focusedRowIndex = backRowIndex;
+      this.dataGrid.instance.selectRowsByIndexes([backRowIndex]);
+    }
   }
 
   navToDetail(id: string) {
@@ -85,7 +97,7 @@ export class GridNavigatorComponent {
     .root.children.primary.children.primary.segments
     .map(({ path }) => path === 'list' ? id : path )
     .join('/');
-    this.router.navigate(
+    return this.router.navigate(
       [ { outlets: { details } } ],
       { relativeTo: this.activatedRoute },
     );

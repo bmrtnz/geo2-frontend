@@ -4,6 +4,7 @@ import {AuthGuardService} from '../../../shared/services';
 import {FournisseursListComponent} from './list/fournisseurs-list.component';
 import {FournisseurDetailsComponent} from './details/fournisseur-details.component';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 const routes: Routes = [
   {
@@ -17,11 +18,13 @@ const routes: Routes = [
   }, {
     path: ':id',
     component: FournisseurDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard]
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard],
   }, {
     path: 'create',
     component: FournisseurDetailsComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard],
   }
 ];
 

@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, EventEmitter} from '@angular/core';
+import {Component, OnInit, AfterViewInit, EventEmitter, ViewChild} from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
@@ -16,13 +16,15 @@ import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { TypesCamionService } from 'app/shared/services/types-camion.service';
 import { TransitairesService } from 'app/shared/services/transitaires.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 
 @Component({
   selector: 'app-entrepot-details',
   templateUrl: './entrepot-details.component.html',
   styleUrls: ['./entrepot-details.component.scss']
 })
-export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPart {
+export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
   entrepotForm = this.fb.group({
     code: [''],
@@ -64,6 +66,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   entrepot: Entrepot;
   personnes: DataSource;
@@ -77,7 +81,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   typesCamion: DataSource;
   transitaires: DataSource;
   defaultVisible: boolean;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -99,6 +103,15 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
   }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
   ngAfterViewInit(): void {
     this.entrepotForm.reset();
   }

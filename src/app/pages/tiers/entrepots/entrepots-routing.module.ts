@@ -4,6 +4,7 @@ import { EntrepotsListComponent } from './list/entrepots-list.component';
 import { EntrepotDetailsComponent } from './details/entrepot-details.component';
 import { AuthGuardService } from '../../../shared/services';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 const routes: Routes = [
   {
@@ -17,12 +18,14 @@ const routes: Routes = [
   }, {
     path: ':id',
     component: EntrepotDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard ]
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard],
   }, {
     path: 'create/:client',
     component: EntrepotDetailsComponent,
-    canActivate: [AuthGuardService]
-}
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard],
+  }
 ];
 
 @NgModule({

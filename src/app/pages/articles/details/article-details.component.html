@@ -14,7 +14,7 @@
             type="default"
             text="{{ 'btn-editer' | localize }}"
             [visible]="readOnlyMode && !cloneMode"
-            (onClick)="readOnlyMode = false; editMode = true"
+            (onClick)="readOnlyMode = false; editing = true"
         ></dx-button>
         <dx-button class="upperButton"
             type="default"
@@ -592,3 +592,4 @@
     </div>
 
 </form>
+<app-editing-alert></app-editing-alert>

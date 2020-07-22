@@ -21,13 +21,15 @@ import { GroupesClientService } from 'app/shared/services/groupes-vente.service'
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { Editable } from 'app/shared/guards/editing-guard';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPart {
+export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPart, Editable {
 
   private requiredFields = ['soumisCtifl'];
 
@@ -105,6 +107,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   });
   contentReadyEvent = new EventEmitter<any>();
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   client: Client;
   code: string;
@@ -126,7 +130,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   defaultVisible: boolean;
   conditionsVente: DataSource;
   certifications: DataSource;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -152,6 +156,14 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
+  }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
   }
 
   ngAfterViewInit(): void {
