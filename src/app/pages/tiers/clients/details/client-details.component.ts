@@ -180,7 +180,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     this.route.params
     .pipe(tap( _ => this.formGroup.reset()))
     .subscribe(params => {
-      this.createMode = this.route.snapshot.url[0].path === 'create';
+      const url = this.route.snapshot.url;
+      this.createMode = url[url.length - 1].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
         this.clientsService
