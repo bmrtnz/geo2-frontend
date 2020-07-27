@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit, EventEmitter, ViewChild} from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
@@ -15,15 +15,19 @@ import { TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { TypesCamionService } from 'app/shared/services/types-camion.service';
 import { TransitairesService } from 'app/shared/services/transitaires.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entrepot-details',
   templateUrl: './entrepot-details.component.html',
   styleUrls: ['./entrepot-details.component.scss']
 })
-export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
+export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  entrepotForm = this.fb.group({
+  formGroup = this.fb.group({
     code: [''],
     client: [''],
     raisonSocial: [''],
@@ -62,6 +66,9 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   entrepot: Entrepot;
   personnes: DataSource;
@@ -75,7 +82,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
   typesCamion: DataSource;
   transitaires: DataSource;
   defaultVisible: boolean;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -97,13 +104,24 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
   }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
   ngAfterViewInit(): void {
-    this.entrepotForm.reset();
+    this.formGroup.reset();
   }
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path.includes('create');
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -111,7 +129,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
           .getOne(params.id)
           .subscribe( res => {
             this.entrepot = res.data.entrepot;
-            this.entrepotForm.patchValue(this.entrepot);
+            this.formGroup.patchValue(this.entrepot);
+            this.contentReadyEvent.emit();
           });
       } else {
         this.entrepot = new Entrepot({});
@@ -122,6 +141,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
         //     console.log(this.entrepot)
         //     }
         // );
+        this.contentReadyEvent.emit();
       }
     });
 
@@ -145,13 +165,13 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
 
-    if (!this.entrepotForm.pristine && this.entrepotForm.valid) {
-      const entrepot = this.entrepotsService.extractDirty(this.entrepotForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const entrepot = this.entrepotsService.extractDirty(this.formGroup.controls);
 
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
       } else {
-        entrepot.code = this.entrepotForm.get('code').value.toUpperCase();
+        entrepot.code = this.formGroup.get('code').value.toUpperCase();
         entrepot.client = {id: this.route.snapshot.params.client};
       }
 
@@ -161,7 +181,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.entrepot = { id: this.entrepot.id, ...this.entrepotForm.getRawValue() };
+              this.entrepot = { id: this.entrepot.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
@@ -175,7 +195,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit {
 
   onCancel() {
     if (!this.createMode) {
-      this.entrepotForm.reset(this.entrepot);
+      this.formGroup.reset(this.entrepot);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/entrepots`]);

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { TransporteursService } from '../../../../shared/services/transporteurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transporteur } from '../../../../shared/models';
@@ -11,15 +11,19 @@ import { PaysService } from 'app/shared/services/pays.service';
 import DataSource from 'devextreme/data/data_source';
 import { ClientsService } from 'app/shared/services';
 import notify from 'devextreme/ui/notify';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-transporteur-details',
   templateUrl: './transporteur-details.component.html',
   styleUrls: ['./transporteur-details.component.scss']
 })
-export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
+export class TransporteurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  transporteurForm = this.fb.group({
+  formGroup = this.fb.group({
     id: [''],
     raisonSocial: [''],
     adresse1: [''],
@@ -42,6 +46,9 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   transporteur: Transporteur;
   code: string;
@@ -55,7 +62,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
   typesTransporteur: DataSource;
   clients: DataSource;
   defaultVisible: boolean;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -73,13 +80,24 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
   }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
   ngAfterViewInit(): void {
-    this.transporteurForm.reset(this.transporteur);
+    this.formGroup.reset(this.transporteur);
   }
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -87,10 +105,12 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
           .getOne(params.id)
           .subscribe( res => {
             this.transporteur = res.data.transporteur;
-            this.transporteurForm.patchValue(this.transporteur);
+            this.formGroup.patchValue(this.transporteur);
+            this.contentReadyEvent.emit();
           });
       } else {
         this.transporteur = new Transporteur({});
+        this.contentReadyEvent.emit();
       }
     });
 
@@ -111,11 +131,11 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
 
-    if (!this.transporteurForm.pristine && this.transporteurForm.valid) {
-      const transporteur = this.transporteursService.extractDirty(this.transporteurForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const transporteur = this.transporteursService.extractDirty(this.formGroup.controls);
 
       if (this.createMode) {
-        transporteur.id = this.transporteurForm.get('id').value.toUpperCase();
+        transporteur.id = this.formGroup.get('id').value.toUpperCase();
           // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
           // Avoir pour les valeur par defaut (qui sont not null dans la base)
       } else {
@@ -128,7 +148,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
           next: () => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.transporteur = { id: this.transporteur.id, ...this.transporteurForm.getRawValue() };
+              this.transporteur = { id: this.transporteur.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
@@ -141,7 +161,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit {
 
   onCancel() {
     if (!this.createMode) {
-      this.transporteurForm.reset(this.transporteur);
+      this.formGroup.reset(this.transporteur);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/transporteurs`]);

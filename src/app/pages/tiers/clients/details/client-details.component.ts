@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, EventEmitter } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Client, Courtier } from '../../../../shared/models';
@@ -20,17 +20,21 @@ import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent  implements OnInit, AfterViewInit {
+export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPart, Editable {
 
   private requiredFields = ['soumisCtifl'];
 
-  clientForm = this.fb.group({
+  formGroup = this.fb.group({
     code: [''],
     raisonSocial: [''],
     societe: [''],
@@ -102,7 +106,10 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
     detailAutomatique: [''],
     venteACommission: ['']
   });
+  contentReadyEvent = new EventEmitter<any>();
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   client: Client;
   code: string;
@@ -124,7 +131,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
   defaultVisible: boolean;
   conditionsVente: DataSource;
   certifications: DataSource;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -152,6 +159,14 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
     this.checkCode = this.checkCode.bind(this);
   }
 
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
   ngAfterViewInit(): void {
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
@@ -162,7 +177,9 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -170,14 +187,16 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
           .getOne(params.id)
           .subscribe( res => {
             this.client = res.data.client;
-            this.clientForm.patchValue(this.client);
+            this.formGroup.patchValue(this.client);
+            this.contentReadyEvent.emit();
           });
       } else {
         // Apply default value
         this.client = new Client({
           soumisCtifl: false
         });
-        this.clientForm.patchValue(this.client);
+        this.formGroup.patchValue(this.client);
+        this.contentReadyEvent.emit();
       }
     });
 
@@ -210,18 +229,18 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
 
   onSubmit() {
 
-    if (!this.clientForm.pristine && this.clientForm.valid) {
-      const client = this.clientsService.extractDirty(this.clientForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const client = this.clientsService.extractDirty(this.formGroup.controls);
 
       if (!this.createMode) {
         client.id = this.client.id;
       } else {
         for (const f of this.requiredFields) {
-          client[f] = this.clientForm.controls[f].value;
+          client[f] = this.formGroup.controls[f].value;
         }
         // Fake -> pour passer l'étape de création
         client.societe = { id: 'SA' };
-        client.code = this.clientForm.get('code').value.toUpperCase();
+        client.code = this.formGroup.get('code').value.toUpperCase();
       }
 
       this.clientsService
@@ -230,7 +249,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
+              this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
@@ -255,7 +274,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit {
   }
 
   entrepotsBtnClick() {
-    this.router.navigate([`/tiers/entrepots/client/${ this.client.id }`]);
+    this.router.navigate([`/tiers/clients/${ this.client.id }/entrepots`]);
   }
 
   contactsBtnClick() {

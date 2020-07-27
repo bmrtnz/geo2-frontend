@@ -12,6 +12,9 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LieuxPassageAQuaiDetailsComponent } from './details/lieux-passage-a-quai-details.component';
 import { LieuxPassageAQuaiListComponent } from './list/lieux-passage-a-quai-list.component';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 
 
 @NgModule({
@@ -31,12 +34,14 @@ import { LieuxPassageAQuaiListComponent } from './list/lieux-passage-a-quai-list
     DxCheckBoxModule,
     DxTextAreaModule,
     DxPopoverModule,
-    DxValidatorModule
+    DxValidatorModule,
+    EditingAlertModule,
   ],
   declarations: [
     LieuxPassageAQuaiListComponent,
     LieuxPassageAQuaiDetailsComponent
-  ]
+  ],
+  providers: [NestedGuard, EditingGuard],
 })
 export class LieuxPassageAQuaiModule { }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, EventEmitter, ViewChild } from '@angular/core';
 import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Fournisseur } from '../../../../shared/models';
@@ -14,18 +14,21 @@ import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.servi
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { CertificationsService } from 'app/shared/services/certification.service';
 import notify from 'devextreme/ui/notify';
-import { TypeTiers } from 'app/shared/models/tier.model';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
 import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-fournisseur-details',
   templateUrl: './fournisseur-details.component.html',
   styleUrls: ['./fournisseur-details.component.scss']
 })
-export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
+export class FournisseurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  fournisseurForm = this.fb.group({
+  formGroup = this.fb.group({
     id: [''],
     raisonSocial: [''],
     stockActif: [''],
@@ -81,6 +84,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
     conditionVente: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   fournisseur: Fournisseur;
   pays: DataSource;
@@ -97,7 +103,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
   gridBoxValue: number[];
   fournisseursDeRattachement: DataSource;
   groupesFournisseur: DataSource;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
   createMode = false;
 
   constructor(
@@ -121,13 +127,23 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
     this.checkCode = this.checkCode.bind(this);
   }
 
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
   ngAfterViewInit(): void {
-    this.fournisseurForm.reset(this.fournisseur);
+    this.formGroup.reset(this.fournisseur);
   }
 
   ngOnInit() {
 
-    this.route.params.subscribe(params => {
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
       this.createMode = this.route.snapshot.url[0].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
@@ -136,10 +152,12 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
           .subscribe( res => {
             this.fournisseur = res.data.fournisseur;
             console.log(this.fournisseur.fournisseurDeRattachement);
-            this.fournisseurForm.patchValue(this.fournisseur);
+            this.formGroup.patchValue(this.fournisseur);
+            this.contentReadyEvent.emit();
           });
       } else {
         this.fournisseur = new Fournisseur({});
+        this.contentReadyEvent.emit();
       }
     });
 
@@ -170,11 +188,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
 
-    if (!this.fournisseurForm.pristine && this.fournisseurForm.valid) {
-      const fournisseur = this.fournisseursService.extractDirty(this.fournisseurForm.controls);
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const fournisseur = this.fournisseursService.extractDirty(this.formGroup.controls);
 
       if (this.createMode) {
-        fournisseur.id = this.fournisseurForm.get('id').value.toUpperCase();
+        fournisseur.id = this.formGroup.get('id').value.toUpperCase();
           // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
           // Avoir pour les valeur par defaut (qui sont not null dans la base)
       } else {
@@ -187,7 +205,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
           next: () => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.fournisseur = { id: this.fournisseur.id, ...this.fournisseurForm.getRawValue() };
+              this.fournisseur = { id: this.fournisseur.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
               this.router.navigate([`/tiers/fournisseurs/${fournisseur.id}`]);
@@ -200,7 +218,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit {
 
   onCancel() {
     if (!this.createMode) {
-      this.fournisseurForm.reset(this.fournisseur);
+      this.formGroup.reset(this.fournisseur);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/fournisseurs`]);

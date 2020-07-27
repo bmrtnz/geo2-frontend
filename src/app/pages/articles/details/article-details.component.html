@@ -1,4 +1,4 @@
-<form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
 
     <div class="content-block">
         <h2><span *ngIf="cloneMode === true">{{ 'create' | localize }}</span>
@@ -14,7 +14,7 @@
             type="default"
             text="{{ 'btn-editer' | localize }}"
             [visible]="readOnlyMode && !cloneMode"
-            (onClick)="readOnlyMode = false; editMode = true"
+            (onClick)="readOnlyMode = false; editing = true"
         ></dx-button>
         <dx-button class="upperButton"
             type="default"
@@ -41,7 +41,7 @@
                 <dx-check-box
                 class="vertical"
                 formControlName="valide"
-                [text]="articleForm.get('valide') ? 'Valide' : 'Invalide' | localize"
+                [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
                 [readOnly]="readOnlyMode"
                 ></dx-check-box>
                 <!-- <app-historique-valide [historique]="client?.historique"></app-historique-valide> -->
@@ -592,3 +592,4 @@
     </div>
 
 </form>
+<app-editing-alert></app-editing-alert>

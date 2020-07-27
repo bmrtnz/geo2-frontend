@@ -3,25 +3,29 @@ import { Routes, RouterModule } from '@angular/router';
 import { EntrepotsListComponent } from './list/entrepots-list.component';
 import { EntrepotDetailsComponent } from './details/entrepot-details.component';
 import { AuthGuardService } from '../../../shared/services';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: EntrepotsListComponent,
-    canActivate: [AuthGuardService]
+    redirectTo: 'list',
+    pathMatch: 'full',
   }, {
-    path: 'client/:client',
+    path: 'list',
     component: EntrepotsListComponent,
     canActivate: [AuthGuardService]
   }, {
     path: ':id',
     component: EntrepotDetailsComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard],
   }, {
     path: 'create/:client',
     component: EntrepotDetailsComponent,
-    canActivate: [AuthGuardService]
-}
+    canActivate: [AuthGuardService, NestedGuard],
+    canDeactivate: [EditingGuard],
+  }
 ];
 
 @NgModule({

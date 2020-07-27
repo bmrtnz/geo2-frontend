@@ -13,6 +13,9 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
 import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 
 
 @NgModule({
@@ -36,12 +39,14 @@ import {HistoriqueValideModule} from '../../../shared/components/historique-vali
         DxPopoverModule,
         DxNumberBoxModule,
         DxValidatorModule,
-        HistoriqueValideModule
+        HistoriqueValideModule,
+        EditingAlertModule,
     ],
   declarations: [
     FournisseursListComponent,
     FournisseurDetailsComponent
-  ]
+  ],
+  providers: [NestedGuard, EditingGuard],
 })
 export class FournisseursModule { }
 

@@ -59,6 +59,12 @@ export type RelayPageVariables = OperationVariables & {
   pageable: Pageable
 };
 
+export type LocateVariables = {
+  pageSize?: number
+  type?: string
+  key: any[]
+};
+
 export interface APIRead {
   getAll?(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
   getOne?(id: string): Observable<ApolloQueryResult<any>>;
@@ -149,6 +155,25 @@ export abstract class ApiService {
       return { [key]: value };
     })
     .reduce((acm, current) => ({...acm, ...current}));
+  }
+
+  /**
+   * Locate page and index of entity in paginated list
+   * @param inputVariables Page location variables
+   */
+  public locatePage(inputVariables: LocateVariables) {
+    const type = `Geo${this.model.name}`;
+    const pageSize = this.pageSize;
+    const query = this.buildLocate();
+
+    return this.
+    query<{locatePage: number}>(query, {
+      variables: {pageSize, type, ...inputVariables},
+    } as WatchQueryOptions<any>)
+    .pipe(
+      map( res => res.data ),
+      take(1),
+    );
   }
 
   /**
@@ -367,6 +392,19 @@ export abstract class ApiService {
       map( res => this.asListCount(res.data.distinct)),
       take(1),
     );
+  }
+
+  /**
+   * Build locate query
+   */
+  protected buildLocate() {
+    const operation = `locatePage`;
+    const alias = this.withUpperCaseFirst(operation);
+    return `
+      query ${ alias }($pageSize: Int!, $type: String!, $key: [String]!) {
+        ${ operation }(pageSize: $pageSize, type: $type, key: $key)
+      }
+    `;
   }
 
   /**

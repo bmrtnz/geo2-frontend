@@ -28,23 +28,23 @@ export const navigation = [
     items: [
       {
         text: 'Clients',
-        path: '/tiers/clients'
+        path: '/nested/n/(tiers/clients/list)'
       }, {
         text: 'Fournisseurs',
-        path: '/tiers/fournisseurs'
+        path: '/nested/n/(tiers/fournisseurs/list)'
       }, {
         text: 'Transporteurs',
-        path: '/tiers/transporteurs'
+        path: '/nested/n/(tiers/transporteurs/list)'
       } , {
         text: 'Passages à quai',
-        path: '/tiers/lieux-passage-a-quai'
+        path: '/nested/n/(tiers/lieux-passage-a-quai/list)'
       }
     ]
   },
   {
     text: 'Articles',
     icon: 'box',
-    path: 'articles'
+    path: '/nested/n/(articles/list)'
   },
   {
     text: 'Stock',

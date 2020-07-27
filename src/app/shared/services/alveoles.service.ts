@@ -18,11 +18,13 @@ export class AlveolesService extends ApiService implements APIRead {
     apollo: Apollo,
   ) {
     super(apollo, Alveole);
+    this.gqlKeyType = 'GeoProduitWithEspeceIdInput';
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
+        key: ['id', 'especeId'],
         load: (options: LoadOptions) => {
 
           if (options.group)
@@ -46,11 +48,12 @@ export class AlveolesService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { alveole: Alveole };
-          const variables = { ...inputVariables, id: key };
+          const id = key ? {id: key.id, espece: key.especeId || ''} : {};
+          const variables = { ...inputVariables, id };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
-            map( res => res.data.alveole),
+            map( res => new Alveole(res.data.alveole)),
             take(1),
           )
           .toPromise();

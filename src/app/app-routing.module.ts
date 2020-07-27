@@ -8,6 +8,7 @@ import {DisplayDataComponent} from './pages/exemple/display-data/display-data.co
 import {DxDataGridModule, DxFormModule, DxButtonModule} from 'devextreme-angular';
 import {SharedModule} from './shared/shared.module';
 import {TestGridFormComponent} from './pages/exemple/test-grid-form/test-grid-form.component';
+import { environment } from '../environments/environment';
 
 const routes: Routes = [
   {
@@ -37,6 +38,11 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
+    path: 'nested',
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/nested/nested.module#NestedModule',
+  },
+  {
     path: 'tiers',
     canActivate: [AuthGuardService],
     loadChildren: './pages/tiers/tiers.module#TiersModule'
@@ -52,11 +58,6 @@ const routes: Routes = [
     loadChildren: './pages/stock/stock.module#StockModule'
   },
   {
-    path: 'nested',
-    canActivate: [AuthGuardService],
-    loadChildren: './pages/nested/nested.module#NestedModule'
-  },
-  {
     path: '**',
     redirectTo: 'home',
     canActivate: [AuthGuardService]
@@ -65,7 +66,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { enableTracing: environment.debugRouting }),
     DxDataGridModule,
     DxFormModule,
     DxButtonModule,

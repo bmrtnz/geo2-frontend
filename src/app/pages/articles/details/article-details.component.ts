@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { ArticlesService } from '../../../shared/services/articles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -29,15 +29,19 @@ import { RangementsService } from 'app/shared/services/rangements.service';
 import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.service';
 import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
 import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { switchMap, tap } from 'rxjs/operators';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 
 @Component({
     selector: 'app-articles',
     templateUrl: './article-details.component.html',
     styleUrls: ['./article-details.component.scss']
 })
-export class ArticleDetailsComponent implements OnInit {
+export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
-    articleForm = this.fb.group({
+    formGroup = this.fb.group({
         id: [''],
         description: [''],
         blueWhaleStock: [''],
@@ -86,6 +90,9 @@ export class ArticleDetailsComponent implements OnInit {
         // calibreMarquage: [''],
         // descrSpecialeCalClt: [''],
     });
+    contentReadyEvent = new EventEmitter<any>();
+    @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+    editing = false;
 
     article: Article;
 
@@ -112,7 +119,6 @@ export class ArticleDetailsComponent implements OnInit {
     etiquettesUc: DataSource;
     etiquettesEvenementielle: DataSource;
     readOnlyMode = true;
-    editMode = false;
     cloneMode = false;
 
     id: string;
@@ -144,17 +150,19 @@ export class ArticleDetailsComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
-        ) {
-    }
+    ) {}
 
     ngOnInit() {
 
-        this.articlesService
-        .getOne(this.route.snapshot.paramMap.get('id'))
+        this.route.params
+        .pipe(
+            tap( _ => this.formGroup.reset()),
+            switchMap( params => this.articlesService.getOne(params.id)),
+        )
         .subscribe( res => {
             this.article = new Article(res.data.article);
-            this.articleForm.patchValue(this.article);
-            console.log(this.article)
+            this.formGroup.patchValue(this.article);
+            this.contentReadyEvent.emit();
         });
 
     }
@@ -162,7 +170,7 @@ export class ArticleDetailsComponent implements OnInit {
     onCancel() {
         if (!this.cloneMode) {
             this.readOnlyMode = true;
-            this.editMode = false;
+            this.editing = false;
         } else {
             this.router.navigate([`/articles`]);
         }
@@ -176,14 +184,14 @@ export class ArticleDetailsComponent implements OnInit {
     }
 
     onSubmit() {
-        if (!this.articleForm.pristine && this.articleForm.valid) {
-            const article = this.articlesService.extractDirty(this.articleForm.controls);
+        if (!this.formGroup.pristine && this.formGroup.valid) {
+            const article = this.articlesService.extractDirty(this.formGroup.controls);
             this.articlesService
                 .save({ article: { ...article, id: this.article.id } })
                 .subscribe({
                 next: () => {
                     notify('Sauvegardé', 'success', 3000);
-                    this.article = { id: this.article.id, ...this.articleForm.getRawValue() };
+                    this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
                 },
                 error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });
@@ -192,7 +200,7 @@ export class ArticleDetailsComponent implements OnInit {
 
     onEspeceChange(event) {
         const dsOptions = {
-            search: 'espece.id==' + event.value.id
+            search: event.value ? 'espece.id==' + event.value.id : '',
         };
 
         this.especes = this.especesService.getDataSource();

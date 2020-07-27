@@ -8,9 +8,9 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
   templateUrl: './grid-navigator.component.html',
   styleUrls: ['./grid-navigator.component.scss']
 })
-export class GridNavigatorComponent implements OnInit {
+export class GridNavigatorComponent {
 
-  backBtnDisabled = false;
+  backBtnDisabled = true;
   @Input() dataGrid: DxDataGridComponent;
 
   constructor(
@@ -23,13 +23,6 @@ export class GridNavigatorComponent implements OnInit {
       if (event instanceof NavigationEnd)
         this.backBtnDisabled = !/^\/nested\/.*details.*/.test(event.url);
     });
-  }
-
-  ngOnInit() {
-  }
-
-  scrollIn() {
-    this.element.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
 
   public hasNext() {
@@ -49,6 +42,8 @@ export class GridNavigatorComponent implements OnInit {
   }
 
   public async selectNext() {
+    const backRowIndex = this.dataGrid.focusedRowIndex;
+    const backPageIndex = this.dataGrid.instance.pageIndex();
     let nextIndex = this.dataGrid.focusedRowIndex + 1;
 
     if (nextIndex >= this.dataGrid.instance.pageSize()) {
@@ -58,7 +53,11 @@ export class GridNavigatorComponent implements OnInit {
 
     this.dataGrid.focusedRowIndex = nextIndex;
     this.dataGrid.instance.selectRowsByIndexes([nextIndex]);
-    this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id);
+    if (!await this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id)) {
+      await this.dataGrid.instance.pageIndex(backPageIndex);
+      this.dataGrid.focusedRowIndex = backRowIndex;
+      this.dataGrid.instance.selectRowsByIndexes([backRowIndex]);
+    }
 
   }
 
@@ -75,6 +74,8 @@ export class GridNavigatorComponent implements OnInit {
   }
 
   public async selectPrevious() {
+    const backRowIndex = this.dataGrid.focusedRowIndex;
+    const backPageIndex = this.dataGrid.instance.pageIndex();
     let previousIndex = this.dataGrid.focusedRowIndex - 1;
 
     if (previousIndex < 0) {
@@ -84,14 +85,26 @@ export class GridNavigatorComponent implements OnInit {
 
     this.dataGrid.focusedRowIndex = previousIndex;
     this.dataGrid.instance.selectRowsByIndexes([previousIndex]);
-    this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id);
+    if (!await this.navToDetail(this.dataGrid.instance.getSelectedRowsData()[0].id)) {
+      await this.dataGrid.instance.pageIndex(backPageIndex);
+      this.dataGrid.focusedRowIndex = backRowIndex;
+      this.dataGrid.instance.selectRowsByIndexes([backRowIndex]);
+    }
   }
 
   navToDetail(id: string) {
-    this.router.navigate(
-      [{ outlets: { details: [id] }}],
+    const details = this.router.createUrlTree([])
+    .root.children.primary.children.primary.segments
+    .map(({ path }) => path === 'list' ? id : path )
+    .join('/');
+    return this.router.navigate(
+      [ { outlets: { details } } ],
       { relativeTo: this.activatedRoute },
     );
+  }
+
+  scrollToDetails(options = { behavior: 'smooth' }) {
+    this.element.nativeElement.scrollIntoView(options);
   }
 
   // TODO Create directive backButton
