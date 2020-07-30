@@ -961,7 +961,7 @@
                   <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}">
+                      <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}" onValidated="toto()">
                         <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                         <dxi-validation-rule type="required"></dxi-validation-rule>
                       </dx-validator>
@@ -1022,14 +1022,14 @@
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-typeCertification' | localize }}</div>
                   <div class="dx-field-value">
                     <!-- formControlName="certifications" -->
-                      <dx-tag-box
-                          formControlName="certifications"
-                          [dataSource]="certifications"
-                          displayExpr="description"
-                          placeholder="Sélectionner une ou plusieurs certifications..."
-                          [readOnly]="readOnlyMode"
-                          >
-                      </dx-tag-box>
+                    <dx-tag-box
+                      formControlName="certifications"
+                      [dataSource]="certifications"
+                      displayExpr="description"
+                      placeholder="Sélectionner une ou plusieurs certifications..."
+                      [readOnly]="readOnlyMode"
+                      >
+                    </dx-tag-box>
                   </div>
                 </div>
               </div>

@@ -168,6 +168,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   }
 
   ngAfterViewInit(): void {
+    this.formGroup.reset();
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
       const Element = document.querySelector('.submit') as HTMLElement;
@@ -253,6 +254,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
               this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
+              this.editing = false;
               this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
             }
           },

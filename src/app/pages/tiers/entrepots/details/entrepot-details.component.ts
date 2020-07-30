@@ -115,6 +115,11 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   ngAfterViewInit(): void {
     this.formGroup.reset();
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
@@ -185,6 +190,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
               this.entrepot = { id: this.entrepot.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
+              this.editing = false;
               this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
             }
           },

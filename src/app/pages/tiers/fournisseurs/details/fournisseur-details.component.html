@@ -3,7 +3,7 @@
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-fournisseurs-details-title' | localize }}
       <div class="right">
-        <dx-button class="upperButton"
+        <dx-button class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
@@ -73,7 +73,6 @@
                 <dx-text-box
                 formControlName="id"
                 [readOnly]="!createMode"
-                (onChange)=onCodeChange()
                 [inputAttr]="{'style':  'text-transform: uppercase'}"
                 >
                   <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
@@ -730,17 +729,17 @@
           <div class="dx-form-group-content">
             <!-- Certifications -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-clients-typeCertification' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-fournisseurs-typeCertification' | localize }}</div>
               <div class="dx-field-value">
                 <!-- formControlName="certifications" -->
-                  <dx-tag-box
-                    [dataSource]="certifications"
-                    displayExpr="description"
-                    placeholder="Sélectionner une ou plusieurs certifications..."
-                    [readOnly]="readOnlyMode"
-                    [hideSelectedItems]="true"
-                    valueExpr="id">
-                  </dx-tag-box>
+                <dx-tag-box
+                  formControlName="certifications"
+                  [dataSource]="certifications"
+                  displayExpr="description"
+                  placeholder="Sélectionner une ou plusieurs certifications..."
+                  [readOnly]="readOnlyMode"
+                  >
+                </dx-tag-box>
               </div>
             </div>
             <!-- Date cond achat signée -->

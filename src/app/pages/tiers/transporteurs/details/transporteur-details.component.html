@@ -3,7 +3,7 @@
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-transporteurs-details-title' | localize }}
       <div class="right">
-        <dx-button class="upperButton"
+        <dx-button class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"

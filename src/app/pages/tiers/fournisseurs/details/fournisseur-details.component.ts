@@ -137,6 +137,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   ngAfterViewInit(): void {
     this.formGroup.reset(this.fournisseur);
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
@@ -177,8 +182,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   }
 
-  onCodeChange(params) {
-    params.value = params.value.toUpperCase() + '2';
+  F(params) {
+    params.value = params.value.toUpperCase();
   }
 
   checkCode(params) {
@@ -209,6 +214,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
               this.fournisseur = { id: this.fournisseur.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
+              this.editing = false;
               this.router.navigate([`/tiers/fournisseurs/${fournisseur.id}`]);
             }
           },

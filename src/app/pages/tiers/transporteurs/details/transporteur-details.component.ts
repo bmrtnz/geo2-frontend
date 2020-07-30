@@ -91,6 +91,11 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   ngAfterViewInit(): void {
     this.formGroup.reset(this.transporteur);
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
@@ -152,6 +157,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
               this.transporteur = { id: this.transporteur.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
+              this.editing = false;
               this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
             }
           },

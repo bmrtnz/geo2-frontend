@@ -86,6 +86,11 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   ngAfterViewInit(): void {
     this.formGroup.reset(this.lieupassageaquai);
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
@@ -145,6 +150,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
               this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;
             } else {
+              this.editing = false;
               this.router.navigate([`/tiers/lieux-passage-a-quai/${lieuPassageAQuai.id}`]);
             }
           },
