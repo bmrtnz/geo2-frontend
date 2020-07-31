@@ -191,6 +191,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
             this.client = res.data.client;
             this.formGroup.patchValue(this.client);
             this.contentReadyEvent.emit();
+            console.log(this.client.certifications)
+            console.log(this.client.conditionVente)
           });
       } else {
         // Apply default value
@@ -218,6 +220,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     this.basesTarif = this.basesTarifService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
+    // this.certifications.load().then(() => console.log('certifications.items : ', this.certifications.items()));
+    
 
   }
 
