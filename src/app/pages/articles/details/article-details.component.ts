@@ -168,30 +168,35 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     onCancel() {
-        if (!this.cloneMode) {
-            this.readOnlyMode = true;
-            this.editing = false;
-        } else {
-            this.router.navigate([`/articles`]);
-        }
+        this.cloneMode = false;
+        this.readOnlyMode = true;
+        this.editing = false;
+        this.formGroup.reset(this.article);
     }
 
     onClone() {
         this.readOnlyMode = false;
         this.cloneMode = true;
-        // this.articleForm.get('id').patchValue('');
-        // Ne pas oublier de retirer l'ID de l'élement cloné
+        this.editing = true;
+        Object.keys(this.formGroup.controls).forEach(key => {
+            this.formGroup.get(key).markAsDirty();
+        });
     }
 
     onSubmit() {
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
             this.articlesService
-                .save({ article: { ...article, id: this.article.id } })
+                .save({ article, clone: this.cloneMode })
                 .subscribe({
-                next: () => {
+                next: (event) => {
                     notify('Sauvegardé', 'success', 3000);
                     this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
+                    if (this.cloneMode)
+                        this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
+                    this.cloneMode = false;
+                    this.readOnlyMode = true;
+                    this.editing = false;
                 },
                 error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });

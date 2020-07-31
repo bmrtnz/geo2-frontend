@@ -112,6 +112,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
       } else {
         this.lieupassageaquai = new LieuPassageAQuai({});
         this.contentReadyEvent.emit();
+        console.log('hi')
       }
     });
 

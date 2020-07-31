@@ -63,9 +63,19 @@ export class ArticlesService extends ApiService implements APIRead {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.fieldsFilter);
-    return this.mutate(mutation, { variables } as MutationOptions);
+  save(variables: OperationVariables & { clone: boolean }) {
+    const mutation = this.buildSaveWithClone(2, this.fieldsFilter);
+    return this.mutate(mutation, { variables } as any);
+  }
+
+  protected buildSaveWithClone(depth?: number, filter?: RegExp) {
+    return `
+      mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {
+        saveArticle(article: $article,clone: $clone) {
+          ${ this.model.getGQLFields(depth, filter) }
+        }
+      }
+    `;
   }
 
 }

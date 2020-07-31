@@ -487,8 +487,9 @@
                                 formControlName="calibreMarquage"
                                 [readOnly]="readOnlyMode"
                                 [dataSource]="calibresMarquage"
-                                valueExpr="id"
-                                displayExpr="description">
+                                displayExpr="description"
+                                [searchEnabled]="true"
+                                [searchExpr]="['id','description']">
                                     <dx-validator name="{{ 'articles-calibreMarquage' | localize }}">
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
                                     </dx-validator>
