@@ -5,9 +5,11 @@ import { EtiquetteColis } from './etiquette-colis.model';
 import { EtiquetteUc } from './etiquette-UC.model';
 import { EtiquetteEvenementielle } from './etiquette-evt.model';
 import { CalibreMarquage } from './calibre-marquage.model';
+import { Espece } from './espece.model';
 
 export class ArticleNormalisation extends Model {
   @Field({asKey: true, asLabel: true}) public id: string;
+  @Field({model: Espece}) public espece: Espece;
   @Field({model: Stickeur}) public stickeur: Stickeur;
   @Field({model: Marque}) public marque: Marque;
   @Field({model: EtiquetteColis}) public etiquetteColis: EtiquetteColis;

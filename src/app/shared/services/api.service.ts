@@ -148,9 +148,9 @@ export abstract class ApiService {
       if (value == null) {
         console.log(key);
       }
-      if (value.__typename)
+      if (value && value.__typename)
         for (const field of Object.keys(value))
-          if (field !== 'id')
+          if (field !== this.keyField)
             delete value[field];
       return { [key]: value };
     })

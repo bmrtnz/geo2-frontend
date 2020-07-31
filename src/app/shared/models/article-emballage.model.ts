@@ -2,9 +2,11 @@ import { Model, Field } from './model';
 import { Emballage } from './emballage.model';
 import { ConditionSpecial } from './condition-special.model';
 import { Alveole } from './alveole.model';
+import { Espece } from './espece.model';
 
 export class ArticleEmballage extends Model {
   @Field({asKey: true, asLabel: true}) public id: string;
+  @Field({model: Espece}) public espece: Espece;
   @Field({model: Emballage}) public emballage: Emballage;
   @Field({model: ConditionSpecial}) public conditionSpecial:
   ConditionSpecial;

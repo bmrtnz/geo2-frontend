@@ -34,7 +34,7 @@ export abstract class Model {
   constructor(rawEntity = {}) {
     const fieldsEntries = Object.entries<ModelFieldOptions>(this.constructor.prototype.fields);
     for (const [field, options] of fieldsEntries) {
-      if ( !rawEntity[field] ) continue;
+      if ( rawEntity[field] === null || rawEntity[field] === undefined ) continue;
       if (options.model)
         this[field] = new (options.model as any)(rawEntity[field]);
       else
