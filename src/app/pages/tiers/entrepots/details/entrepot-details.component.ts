@@ -122,7 +122,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     this.route.params
     .pipe(tap( _ => this.formGroup.reset()))
     .subscribe(params => {
-      this.createMode = this.route.snapshot.url[0].path.includes('create');
+      const url = this.route.snapshot.url;
+      this.createMode = url[url.length - 2].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
         this.entrepotsService
