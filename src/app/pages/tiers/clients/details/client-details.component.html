@@ -519,7 +519,18 @@
                   </dx-select-box>
                 </div>
               </div>
-
+              <!-- Compte comptable -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}" onValidated="toto()">
+                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -954,18 +965,6 @@
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
                     ></dx-select-box>
-                  </div>
-                </div>
-                <!-- Compte comptable -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}" onValidated="toto()">
-                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
                   </div>
                 </div>
               </dxi-item>
