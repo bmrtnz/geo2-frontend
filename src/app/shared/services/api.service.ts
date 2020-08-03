@@ -466,6 +466,7 @@ export abstract class ApiService {
           else {
             /* tslint:disable-next-line:prefer-const */
             let [selector, operator, value] = node;
+            const dxOperator = operator;
 
             // Map operator
             switch (operator) {
@@ -489,10 +490,10 @@ export abstract class ApiService {
               filter[index] = this.mapDXFilterToRSQL(mappedFilter);
             } else {
 
-              if (['contains', 'notcontains'].includes(operator))
+              if (['contains', 'notcontains'].includes(dxOperator))
                 value = `%${value}%`;
-              if (operator === 'startswith') value = `${value}%`;
-              if (operator === 'endswith') value = `%${value}`;
+              if (dxOperator === 'startswith') value = `${value}%`;
+              if (dxOperator === 'endswith') value = `%${value}`;
               value = JSON.stringify(value);
               filter[index] = [selector, operator, value].join('');
 
