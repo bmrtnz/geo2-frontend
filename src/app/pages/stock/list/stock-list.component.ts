@@ -17,6 +17,7 @@ import { GroupesEmballageService } from 'app/shared/services/groupes-emballage.s
 import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
 import { EmballagesService } from 'app/shared/services/emballages.service';
 import { environment } from 'environments/environment';
+import { EspecesService } from 'app/shared/services/especes.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -44,7 +45,6 @@ export class StockListComponent implements OnInit {
     groupeEmballage: ['']
   });
 
-  especes: any[];
   bureauxAchat: DataSource;
   varietes: DataSource;
   fournisseurs: DataSource;
@@ -55,6 +55,7 @@ export class StockListComponent implements OnInit {
   calibresUnifies: DataSource;
   calibresMarquage: DataSource;
   groupesEmballage: DataSource;
+  especes: DataSource;
   colorations: any[];
   typesVente: any[];
   stickeurs: any[];
@@ -80,6 +81,7 @@ export class StockListComponent implements OnInit {
 
   constructor(
     private articlesService: ArticlesService,
+    private especesService: EspecesService,
     private bureauxAchatService: BureauxAchatService,
     private fournisseursService: FournisseursService,
     private varietesService: VarietesService,
@@ -97,6 +99,7 @@ export class StockListComponent implements OnInit {
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
 
+    this.especes = this.especesService.getDataSource();
     this.groupesEmballage = this.groupesEmballageService.getDataSource();
     this.calibresMarquage = this.calibresMarquageService.getDataSource();
     this.calibresUnifies = this.calibresUnifiesService.getDataSource();

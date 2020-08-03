@@ -45,6 +45,20 @@
                                     </dx-select-box>
                                 </div>
                             </div>
+                            <!-- espèce -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="espece"
+                                    [searchEnabled]="true"
+                                    [dataSource]="especes"
+                                    displayExpr="description">
+                                    </dx-select-box>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-criteria-subcontainer">
                             <!-- Bureau achat -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
@@ -70,8 +84,6 @@
                                 </dx-select-box>
                                 </div>
                             </div>
-                        </div>
-                        <div class="search-criteria-subcontainer">
                             <!-- variété -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-variete' | localize }}</div>
@@ -98,6 +110,8 @@
                                     </dx-select-box>
                                 </div>
                             </div>
+                        </div>
+                        <div class="search-criteria-subcontainer">
                             <!-- Calibre Marquage -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
@@ -111,8 +125,6 @@
                                     </dx-select-box>
                                 </div>
                             </div>
-                        </div>
-                        <div class="search-criteria-subcontainer">
                             <!-- Groupe emballage -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'stocks-groupeEmballage' | localize }}</div>
