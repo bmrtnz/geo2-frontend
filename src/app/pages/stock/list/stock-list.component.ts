@@ -93,7 +93,8 @@ export class StockListComponent implements OnInit {
     public clientsService: ClientsService,
     public stocksService: StockService,
     public emballagesService: EmballagesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+
   ) { }
 
   ngOnInit() {
