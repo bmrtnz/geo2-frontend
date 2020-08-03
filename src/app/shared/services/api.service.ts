@@ -141,18 +141,21 @@ export abstract class ApiService {
   public extractDirty(controls: {
     [key: string]: AbstractControl;
   }) {
-    return Object.entries(controls)
-    .filter(([key, control]) => key === this.keyField || control.dirty )
-    .map(([key, control]) => {
-      const value = JSON.parse(JSON.stringify(control.value));
-      if (value == null) {
-        console.log(key);
-      }
+    const clean = (value) => {
       if (value && value.__typename)
         for (const field of Object.keys(value))
           if (field !== this.keyField)
             delete value[field];
-      return { [key]: value };
+      return value;
+    };
+    return Object.entries(controls)
+    .filter(([key, control]) => key === this.keyField || control.dirty )
+    .map(([key, control]) => {
+      const value = JSON.parse(JSON.stringify(control.value));
+      const cleanValue = typeof value === 'object' ?
+        (value as []).map( v => clean(v) ) :
+        clean(value);
+      return { [key]: cleanValue };
     })
     .reduce((acm, current) => ({...acm, ...current}));
   }
@@ -460,31 +463,41 @@ export abstract class ApiService {
         // Deep filter
         if (typeof node[0] === 'object')
           filter[index] = `(${ next(node).join(' ') })`;
-        else {
-          const [selector, operator, value] = node;
+          else {
+            /* tslint:disable-next-line:prefer-const */
+            let [selector, operator, value] = node;
 
-          // Map operator
-          let mappedOperator = '';
-          switch (operator) {
-            case '=': mappedOperator = '=='; break;
-            case 'contains': mappedOperator = '=ilike='; break;
-            case 'startswith': mappedOperator = '=ilike='; break;
-            case 'endswith': mappedOperator = '=ilike='; break;
-            case 'notcontains': mappedOperator = '=inotlike='; break;
-            case '<>': mappedOperator = '!='; break;
-            default: mappedOperator = operator; break;
+            // Map operator
+            switch (operator) {
+              case '=': operator = '=='; break;
+              case 'contains': operator = '=ilike='; break;
+              case 'startswith': operator = '=ilike='; break;
+              case 'endswith': operator = '=ilike='; break;
+              case 'notcontains': operator = '=inotlike='; break;
+              case '<>': operator = '!='; break;
+            }
+
+            // Map value
+            if (selector === 'this') {
+              const mappedFilter = Object
+                .entries(value)
+                .filter(([key]) => key !== '__typename')
+                .map(([k, v]) => JSON.stringify([k, '=', v]))
+                .join(`¤${JSON.stringify('and')}¤`)
+                .split('¤')
+                .map(v => JSON.parse(v));
+              filter[index] = this.mapDXFilterToRSQL(mappedFilter);
+            } else {
+
+              if (['contains', 'notcontains'].includes(operator))
+                value = `%${value}%`;
+              if (operator === 'startswith') value = `${value}%`;
+              if (operator === 'endswith') value = `%${value}`;
+              value = JSON.stringify(value);
+              filter[index] = [selector, operator, value].join('');
+
+            }
           }
-
-          // Map value
-          let mappedValue = value;
-          if (['contains', 'notcontains'].includes(operator))
-            mappedValue = `%${mappedValue}%`;
-          if (operator === 'startswith') mappedValue = `${mappedValue}%`;
-          if (operator === 'endswith') mappedValue = `%${mappedValue}`;
-          mappedValue = JSON.stringify(mappedValue);
-
-          filter[index] = [selector, mappedOperator, mappedValue].join('');
-        }
       } else filter[index] =  node;
       if (index < filter.length - 1)
         return next(filter, index + 1);

@@ -73,6 +73,6 @@ export class Fournisseur extends Model {
   @Field({model: ConditionVente}) public conditionVente: ConditionVente;
   @Field({model: Fournisseur}) public fournisseurDeRattachement: Fournisseur;
   @Field({model: GroupeFournisseur}) public groupeFournisseur: GroupeFournisseur;
-  // @Field({model: Certification}) public certifications: Certification[];
+  @Field({model: Certification}) public certifications: Certification[];
 
 }

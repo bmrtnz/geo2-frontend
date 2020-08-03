@@ -1021,16 +1021,13 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-fournisseurs-typeCertification' | localize }}</div>
                   <div class="dx-field-value">
-                    <!-- formControlName="certifications" -->
                     <dx-tag-box
                       formControlName="certifications"
                       [dataSource]="certifications"
                       displayExpr="description"
                       placeholder="Sélectionner une ou plusieurs certifications..."
-                      valueExpr="id"
                       [readOnly]="readOnlyMode"
-                      >
-                    </dx-tag-box>
+                    ></dx-tag-box>
                   </div>
                 </div>
               </div>

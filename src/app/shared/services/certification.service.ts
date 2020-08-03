@@ -21,19 +21,19 @@ export class CertificationsService extends ApiService implements APIRead {
     this.gqlKeyType = 'Int';
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, variables).toPromise();
+            return this.getDistinct(options, inputVariables).toPromise();
 
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allCertification: RelayPage<Certification> };
-          variables = {
+          const variables = {
             ...this.mapLoadOptionsToVariables(options),
-            ...variables,
+            ...inputVariables,
 
           };
           return this.
@@ -47,9 +47,9 @@ export class CertificationsService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { certification: Certification };
-          variables = { ...variables, [this.keyField]: key };
+          inputVariables = { ...inputVariables, [this.keyField]: key };
           return this.
-          query<Response>(query, { variables } as WatchQueryOptions)
+          query<Response>(query, { variables: inputVariables } as WatchQueryOptions)
           .pipe(
             map( res => res.data.certification),
             take(1),
