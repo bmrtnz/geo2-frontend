@@ -18,14 +18,6 @@
                 <form [formGroup]="stockForm">
                     <div class="quicksearch-container">
                         <div class="quicksearch">Recherche rapide</div>
-                        <!-- <div class="dx-field">
-                            <div class="dx-field-value">
-                                <dx-autocomplete
-                                    placeholder="Mot clé…"
-                                    (onValueChanged)="onQuickSearchChange($event)">
-                                </dx-autocomplete>
-                            </div>
-                        </div> -->
                     </div>
                     <div class="search-criteria-container">
                         <div class="search-criteria-subcontainer">
@@ -182,7 +174,7 @@
                     [rowAlternationEnabled]="true"
                     [allowColumnReordering]="true">
     
-                        <dxo-search-panel [visible]="true" [width]="240" placeholder="Recherche..."></dxo-search-panel>
+                        <dxo-search-panel [visible]="true" [width]="240" placeholder="Mot clé…"></dxo-search-panel>
                         <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
                         <dxo-paging [pageSize]="10"></dxo-paging>
                         <dxo-pager
