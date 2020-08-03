@@ -98,19 +98,24 @@ export class StockListComponent implements OnInit {
 
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
-
+    this.articles = this.articlesService.getDataSource();
     this.especes = this.especesService.getDataSource();
-    this.groupesEmballage = this.groupesEmballageService.getDataSource();
-    this.calibresMarquage = this.calibresMarquageService.getDataSource();
-    this.calibresUnifies = this.calibresUnifiesService.getDataSource();
-    this.modesCulture = this.modesCultureService.getDataSource();
-    this.varietes = this.varietesService.getDataSource();
-    this.origines = this.originesService.getDataSource();
     this.bureauxAchat = this.bureauxAchatService.getDataSource();
     this.fournisseurs = this.fournisseursService.getDataSource();
     this.clients = this.clientsService.getDataSource();
-    this.articles = this.articlesService.getDataSource();
-    this.emballages = this.emballagesService.getDataSource();
+    this.modesCulture = this.modesCultureService.getDataSource();
+  }
+
+  onEspeceChange(event) {
+    const dsOptions = {
+        search: event.value ? 'espece.id==' + event.value.id : '',
+    };
+    this.groupesEmballage = this.groupesEmballageService.getDataSource(dsOptions);
+    this.calibresMarquage = this.calibresMarquageService.getDataSource(dsOptions);
+    this.calibresUnifies = this.calibresUnifiesService.getDataSource(dsOptions);
+    this.varietes = this.varietesService.getDataSource(dsOptions);
+    this.origines = this.originesService.getDataSource(dsOptions);
+    this.emballages = this.emballagesService.getDataSource(dsOptions);
 
   }
 

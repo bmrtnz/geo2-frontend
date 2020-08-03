@@ -33,6 +33,19 @@
                             <dx-button class="upperButton" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
                         </div>
                         <div class="search-criteria-subcontainer" style="width:auto">
+                            <!-- espèce -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="espece"
+                                    [searchEnabled]="true"
+                                    [dataSource]="especes"
+                                    displayExpr="description"
+                                    (onValueChanged)="onEspeceChange($event)">
+                                    </dx-select-box>
+                                </div>
+                            </div>
                             <!-- fournisseur -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
@@ -42,18 +55,6 @@
                                     [searchEnabled]="true"
                                     [dataSource]="fournisseurs"
                                     displayExpr="raisonSocial">
-                                    </dx-select-box>
-                                </div>
-                            </div>
-                            <!-- espèce -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="espece"
-                                    [searchEnabled]="true"
-                                    [dataSource]="especes"
-                                    displayExpr="description">
                                     </dx-select-box>
                                 </div>
                             </div>
