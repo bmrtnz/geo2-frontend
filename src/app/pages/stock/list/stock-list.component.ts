@@ -105,19 +105,24 @@ export class StockListComponent implements OnInit {
     this.fournisseurs = this.fournisseursService.getDataSource();
     this.clients = this.clientsService.getDataSource();
     this.modesCulture = this.modesCultureService.getDataSource();
+    this.subGetDataSource('');
   }
 
   onEspeceChange(event) {
     const dsOptions = {
         search: event.value ? 'espece.id==' + event.value.id : '',
     };
+    this.subGetDataSource(dsOptions);
+
+  }
+
+  subGetDataSource(dsOptions) {
     this.groupesEmballage = this.groupesEmballageService.getDataSource(dsOptions);
     this.calibresMarquage = this.calibresMarquageService.getDataSource(dsOptions);
     this.calibresUnifies = this.calibresUnifiesService.getDataSource(dsOptions);
     this.varietes = this.varietesService.getDataSource(dsOptions);
     this.origines = this.originesService.getDataSource(dsOptions);
     this.emballages = this.emballagesService.getDataSource(dsOptions);
-
   }
 
   onSelectClick(e) {
