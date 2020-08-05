@@ -13,6 +13,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
 import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
+import {PromptPopupModule} from '../../../shared/components/prompt-popup/prompt-popup.component';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
@@ -40,6 +41,7 @@ import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-
         DxNumberBoxModule,
         DxValidatorModule,
         HistoriqueValideModule,
+        PromptPopupModule,
         EditingAlertModule,
     ],
   declarations: [

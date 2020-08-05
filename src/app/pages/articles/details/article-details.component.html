@@ -39,12 +39,20 @@
                 <h4 class="entity-id">N° {{ article?.id }}</h4>
    
                 <dx-check-box
-                class="vertical"
-                formControlName="valide"
-                [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
-                [readOnly]="readOnlyMode"
+                    #valideCheckBox
+                    class="vertical"
+                    formControlName="valide"
+                    (onValueChanged)="onValideChange($event)"
+                    [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
+                    [readOnly]="readOnlyMode"
                 ></dx-check-box>
-                <!-- <app-historique-valide [historique]="client?.historique"></app-historique-valide> -->
+                <app-prompt-popup
+                    title="{{ 'valide-comment-title' | localize }}"
+                    [placeholder]="'valide-comment' | localize"
+                    [(visible)]="this.validateCommentPromptVisible"
+                    (cancel)="valideCheckBox.value = !valideCheckBox.value"
+                ></app-prompt-popup>
+                <!-- <app-historique-valide [historique]="article?.historique"></app-historique-valide> -->
                 <dx-button
                 class="black"
                 height="auto"

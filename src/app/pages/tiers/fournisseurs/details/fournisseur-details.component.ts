@@ -98,6 +98,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   bureauxAchat: DataSource;
   typesFournisseur: DataSource;
   defaultVisible: boolean;
+  validateCommentPromptVisible = false;
   conditionsVente: DataSource;
   certifications: DataSource;
   gridBoxValue: number[];
@@ -234,6 +235,12 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
+  }
+
+  onValideChange(e) {
+    if (e.event) { // Changed by user
+      this.validateCommentPromptVisible = true;
+    }
   }
 
   contactsBtnClick() {

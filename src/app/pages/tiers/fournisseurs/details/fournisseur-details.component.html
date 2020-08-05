@@ -46,11 +46,19 @@
         </dx-button>-->
 
         <dx-check-box
+          #valideCheckBox
           class="vertical"
           formControlName="valide"
+          (onValueChanged)="onValideChange($event)"
           [readOnly]="readOnlyMode"
           [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
+        <app-prompt-popup
+          title="{{ 'valide-comment-title' | localize }}"
+          [placeholder]="'valide-comment' | localize"
+          [(visible)]="this.validateCommentPromptVisible"
+          (cancel)="valideCheckBox.value = !valideCheckBox.value"
+        ></app-prompt-popup>
         <app-historique-valide [historique]="fournisseur?.historique"></app-historique-valide>
         <dx-button
           class="black"

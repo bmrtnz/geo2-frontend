@@ -12,10 +12,12 @@ import {
 } from 'devextreme-angular';
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {PromptPopupModule} from '../../shared/components/prompt-popup/prompt-popup.component';
 import { CommonModule } from '@angular/common';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
+import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
 
 @NgModule({
   imports: [
@@ -30,7 +32,8 @@ import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-
     DxTemplateModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule,
-    EditingAlertModule,
+    EditingAlertModule, PromptPopupModule,
+    HistoriqueValideModule,
   ],
   declarations: [ArticleDetailsComponent, ArticlesListComponent],
   providers: [NestedGuard, EditingGuard],

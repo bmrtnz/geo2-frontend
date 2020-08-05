@@ -118,6 +118,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     etiquettesColis: DataSource;
     etiquettesUc: DataSource;
     etiquettesEvenementielle: DataSource;
+    validateCommentPromptVisible = false;
     readOnlyMode = true;
     cloneMode = false;
 
@@ -231,5 +232,11 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.etiquettesUc = this.etiquettesUcService.getDataSource(dsOptions);
         this.etiquettesEvenementielle = this.etiquettesEvenementiellesService.getDataSource(dsOptions);
     }
+
+    onValideChange(e) {
+        if (e.event) { // Changed by user
+          this.validateCommentPromptVisible = true;
+        }
+      }
 
 }

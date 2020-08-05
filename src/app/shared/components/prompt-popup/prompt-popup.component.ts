@@ -43,14 +43,15 @@ export class PromptPopupComponent implements OnInit {
   onSubmit(e) {
     this.submitted = true;
     this.visible = false;
+    this.visibleChange.emit(this.visible);
   }
 
   onCancel(e) {
     this.visible = false;
+    this.visibleChange.emit(this.visible);
   }
 
   onHide(e) {
-    this.visibleChange.emit(this.visible);
     if (!this.submitted) {
       this.cancel.emit();
     } else {
