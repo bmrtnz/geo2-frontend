@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class ClientsService extends ApiService implements APIRead, APIPersist {
 
-  listRegexp = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|code|raisonSocial|description|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
@@ -31,12 +31,13 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(1, this.listRegexp);
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
+          const query = this.buildGetAll();
           type Response = { allClient: RelayPage<Client> };
-          const variables = {
-            ...inputVariables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -62,7 +63,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
+    const mutation = this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

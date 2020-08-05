@@ -11,6 +11,9 @@ import {
     DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 
 
 @NgModule({
@@ -31,11 +34,13 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
       DxTextAreaModule,
       DxPopoverModule,
       DxNumberBoxModule,
-      DxValidatorModule
+      DxValidatorModule,
+      EditingAlertModule,
   ],
   declarations: [
     EntrepotsListComponent,
     EntrepotDetailsComponent
-  ]
+  ],
+  providers: [NestedGuard, EditingGuard],
 })
 export class EntrepotsModule { }

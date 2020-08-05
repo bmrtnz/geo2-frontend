@@ -1,39 +1,49 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter, ViewChild} from '@angular/core';
 import {ArticlesService} from '../../../shared/services/articles.service';
-import {Article} from '../../../shared/models';
-import ArrayStore from 'devextreme/data/array_store';
 import {Router} from '@angular/router';
+import DataSource from 'devextreme/data/data_source';
+import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
+import { ApiService } from 'app/shared/services/api.service';
+import { NestedMain } from 'app/pages/nested/nested.component';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-articles-list',
   templateUrl: './articles-list.component.html',
   styleUrls: ['./articles-list.component.scss']
 })
-export class ArticlesListComponent implements OnInit {
+export class ArticlesListComponent implements OnInit, NestedMain {
 
-  dataSource: any;
-  articles: [Article];
+  articles: DataSource;
+  contentReadyEvent = new EventEmitter<any>();
+  apiService: ApiService;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
 
   constructor(
-    private articlesService: ArticlesService,
+    public articlesService: ArticlesService,
     private router: Router
   ) {
+    this.apiService = this.articlesService;
   }
 
-  ngOnInit(): void {
-    this.articlesService.get().then(c => {
-      this.dataSource = {
-        store: new ArrayStore({
-          key: 'id',
-          data: c
-        })
-      };
-    });
+  ngOnInit() {
+    this.articles = this.articlesService.getDataSource();
+    this.detailedFields = this.articlesService.model.getDetailedFields(2);
   }
 
   onRowDblClick(e) {
-    // console.log(`/entrepots/${e.data.id}`)
     this.router.navigate([`/articles/${e.data.id}`]);
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      if (!e.data.valide) {
+        e.rowElement.classList.add('highlight-datagrid-row');
+      }
+    }
   }
 
 }

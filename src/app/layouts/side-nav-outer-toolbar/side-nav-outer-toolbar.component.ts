@@ -1,12 +1,13 @@
-import {Component, OnInit, NgModule, Input, isDevMode} from '@angular/core';
+import {Component, OnInit, NgModule, Input, isDevMode, ViewChild} from '@angular/core';
 import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
 import { ScreenService } from '../../shared/services';
 import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
-import { DxScrollViewModule } from 'devextreme-angular/ui/scroll-view';
+import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
 import { CommonModule } from '@angular/common';
 
 import { navigation } from '../../app-navigation';
 import { Router, NavigationEnd } from '@angular/router';
+import { DxButtonModule } from 'devextreme-angular';
 
 @Component({
   selector: 'app-side-nav-outer-toolbar',
@@ -19,6 +20,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
   menuOpened: boolean;
   temporaryMenuOpened = false;
+
+  @ViewChild(DxScrollViewComponent, { static: false }) scrollView: DxScrollViewComponent;
 
   @Input()
   title: string;
@@ -44,6 +47,28 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
     this.updateDrawer();
   }
+
+  onScroll(e) {
+    const showHidePixelsFromTop = 150;
+    const topValue = e.scrollOffset.top;
+    const Element = document.querySelector('.backtotop') as HTMLElement;
+
+    if (topValue < showHidePixelsFromTop) {
+      Element.classList.add('hiddenBacktotop');
+    } else {
+      Element.classList.remove('hiddenBacktotop');
+    }
+  }
+  scrollToTop() {
+    const Element = document.querySelector('.content') as HTMLElement;
+    Element.scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
+
+  // scrollToTop() {
+  //   this.scrollView.instance.scrollTo(0);
+  // }
 
   updateDrawer() {
     const isXSmall = this.screen.sizes['screen-x-small'];
@@ -71,7 +96,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
       if (event.node.selected) {
         pointerEvent.preventDefault();
       } else {
-        this.router.navigate([path]);
+        this.router.navigateByUrl(path);
       }
 
       if (this.hideMenuAfterNavigation) {
@@ -99,7 +124,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
 }
 
 @NgModule({
-  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxScrollViewModule, CommonModule ],
+  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxButtonModule, DxScrollViewModule, CommonModule ],
   exports: [ SideNavOuterToolbarComponent ],
   declarations: [ SideNavOuterToolbarComponent ]
 })

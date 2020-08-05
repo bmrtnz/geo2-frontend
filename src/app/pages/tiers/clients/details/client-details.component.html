@@ -1,45 +1,36 @@
-<form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
   <div class="content-block">
-    <h2>
+    <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-clients-details-title' | localize }}
       <div class="right">
-        <dx-button
-          type="normal"
-          text="{{ 'btn-annuler' | localize }}"
-          [visible]="!readOnlyMode"
-          (onClick)="onCancel()"
-        ></dx-button>
-        <dx-button
+
+        <dx-button class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
           [useSubmitBehavior]="true"
         ></dx-button>
-        <dx-button
+        <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
-          [visible]="readOnlyMode"
+          [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
+        ></dx-button>
+        <dx-button class="upperButton"
+          type="normal"
+          text="{{ 'btn-annuler' | localize }}"
+          [visible]="!readOnlyMode"
+          (onClick)="onCancel()"
         ></dx-button>
       </div>
     </h2>
-    <!--<div>
-      <dx-list class="dx-home-search" style="margin-left:150px;width:60%;"
-        #list
-        [dataSource]="clients"
-        [height]="400"
-        [searchEnabled]="true"
-        searchExpr="raisonSocial"
-        searchMode="contains">
-          <div *dxTemplate="let data of 'item'">
-              <div>{{data.raisonSocial}}</div>
-          </div>
-      </dx-list>
-    </div> -->
   </div>
   <div class="content-block client-page">
       <dx-box direction="row">
-        <dxi-item [ratio]="1">
+        <dxi-item [ratio]="1"
+          [visible]="!createMode"
+          >
           <h4 class="entity-id">N° {{ client?.id }}</h4>
           <dx-button
             height="auto"
@@ -60,14 +51,15 @@
             #valideCheckBox
             class="vertical"
             formControlName="valide"
-            [text]="clientForm.get('valide') ? 'valide' : 'invalide' | localize"
             (onValueChanged)="onValideChange($event)"
+            [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
+            [readOnly]="readOnlyMode"
           ></dx-check-box>
           <app-prompt-popup
             title="{{ 'valide-comment-title' | localize }}"
             [placeholder]="'valide-comment' | localize"
             [(visible)]="this.validateCommentPromptVisible"
-            (cancel)="valideCheckBox.value = !valideCheckBox.value"
+            (cancel)="valideCheckBox.value= !valideCheckBox.value"
           ></app-prompt-popup>
           <app-historique-valide [historique]="client?.historique"></app-historique-valide>
           <dx-button
@@ -77,7 +69,7 @@
             text="{{ 'btn-docsjoints' | localize }}">
           </dx-button>
         </dxi-item>
-        <dxi-item [ratio]="0.3">
+        <dxi-item [ratio]="0.3" [visible]="!createMode">
         </dxi-item>
         <dxi-item [ratio]="4">
           <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
@@ -91,10 +83,12 @@
                   <dx-text-box
                     formControlName="code"
                     [readOnly]="readOnlyMode"
+                    [inputAttr]="{'style':  'text-transform: uppercase'}" 
                   >
                     <dx-validator name="{{ 'tiers-clients-code' | localize }}">
                       <dxi-validation-rule type="required"></dxi-validation-rule>
                       <dxi-validation-rule type="stringLength" max="18"></dxi-validation-rule>
+                      <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                     </dx-validator>
                     <dxi-button
                       name="help"
@@ -113,7 +107,6 @@
                   </dx-popover>
                 </div>
               </div>
-
               <!-- Secteur -->
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
@@ -466,6 +459,18 @@
                 </div>
               </div>
 
+              <!-- Nombre jours litige -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-nbJourLimiteLitige' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="nbJourLimiteLitige" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-clients-nbJourLimiteLitige' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+
               <!-- Devise -->
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-devise' | localize }}</div>
@@ -522,7 +527,18 @@
                   </dx-select-box>
                 </div>
               </div>
-
+              <!-- Compte comptable -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}" onValidated="toto()">
+                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -579,10 +595,10 @@
 
               <!-- Lieu fonction EAN -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-clients-lieuFonctionEAN' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-clients-lieuFonctionEan' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-clients-lieuFonctionEAN' | localize }}">
+                    <dx-validator name="{{ 'tiers-clients-lieuFonctionEan' | localize }}">
                       <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
@@ -746,6 +762,16 @@
                   </dx-text-box>
                 </div>
               </div>
+              <!-- soumis CTFIL -->
+              <!-- <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-soumisCtifl' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-clients-soumisCtifl' | localize }}">
+                    </dx-validator>
+                  </dx-check-box>
+                </div>
+              </div> -->
               <!-- Mode de calcul Courtage -->
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-fraisMarketingModeCalcul' | localize }}</div>
@@ -829,6 +855,24 @@
                 </div>
               </div>
             </div>
+            <!-- Conditions de vente -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-clients-conditionsVente' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="conditionVente"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="conditionsVente"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                >
+                <dx-validator name="{{ 'tiers-clients-conditionsVente' | localize }}">
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-select-box>
+              </div>
+            </div>
 
             <!-- Raison sociale Palox -->
             <div class="dx-field">
@@ -854,29 +898,7 @@
               </div>
             </div>
 
-            <!-- Délai bon à facturer -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-clients-delaiBonFacturer' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="delaiBonFacturer" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-clients-delaiBonFacturer' | localize }}">
-                    <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- Nombre jours litige -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-clients-nbJourLimiteLitige' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="nbJourLimiteLitige" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-clients-nbJourLimiteLitige' | localize }}">
-                    <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- debloquer Envoi Jour -->
+             <!-- debloquer Envoi Jour -->
             <div class="dx-field field-large">
               <div class="dx-field-label">{{ 'tiers-clients-debloquerEnvoieJour' | localize }}</div>
               <div class="dx-field-value">
@@ -920,10 +942,10 @@
 
                 <!-- Reference Coface -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-clients-referencecoface' | localize }}</div>
+                  <div class="dx-field-label">{{ 'tiers-clients-referenceCoface' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-text-box formControlName="referenceCoface" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-clients-referencecoface' | localize }}">
+                      <dx-validator name="{{ 'tiers-clients-referenceCoface' | localize }}">
                         <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -933,7 +955,10 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label">{{ 'tiers-clients-soumisCtifl' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-clients-soumisCtifl' | localize }}">
+                      </dx-validator>
+                    </dx-check-box>
                   </div>
                 </div>
                 <!-- Type client -->
@@ -950,17 +975,6 @@
                     ></dx-select-box>
                   </div>
                 </div>
-                <!-- Compte comptable -->
-                <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
               </dxi-item>
             </dx-accordion>
 
@@ -969,8 +983,8 @@
         </dxi-item>
       </dx-box>
         <br>
-        <dx-box
-        direction="row">
+
+        <dx-box direction="row">
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-commentaires' | localize }}</span>
@@ -1005,11 +1019,34 @@
           </dxi-item>
         </dx-box>
         <br>
+        <dx-box direction="row">
+          <dxi-item [ratio]="3">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-fournisseurs-details-groupe-certifications' | localize }}</span>
+              <div class="dx-form-group-content">
+                <!-- Certifications -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-typeCertification' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-tag-box
+                      formControlName="certifications"
+                      [dataSource]="certifications"
+                      displayExpr="description"
+                      placeholder="Sélectionner une ou plusieurs certifications..."
+                      [readOnly]="readOnlyMode"
+                    ></dx-tag-box>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </dxi-item>
+        </dx-box>
+        <br>
         <dx-box
         direction="row">
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-instructionCommercial' | localize }}</span>
+              <span class="dx-form-group-caption">{{ 'tiers-clients-instructionCommercial' | localize }}</span>
               <div class="dx-form-group-content">
                 <!-- Instructions internes -->
                 <div class="dx-field">
@@ -1024,7 +1061,7 @@
           </dxi-item>
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-instructionLogistique' | localize }}</span>
+              <span class="dx-form-group-caption">{{ 'tiers-clients-instructionLogistique' | localize }}</span>
               <div class="dx-form-group-content">
                 <!-- Instructions logistique -->
                 <div class="dx-field">
@@ -1036,22 +1073,6 @@
             </div>
           </dxi-item>
         </dx-box>
-        <br>
-        <dx-box direction="row">
-          <dxi-item [ratio]="3">
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-certifications' | localize }}</span>
-              <div class="dx-form-group-content">
-                <!-- Certifications -->
-                <div class="dx-field">
-                  <!-- <div class="dx-field-label">{{ 'tiers-clients-certifications' | localize }}</div> -->
-                  <div class="dx-field-value">
-                    <dx-text-area></dx-text-area>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </dxi-item>
-        </dx-box>
   </div>
 </form>
+<app-editing-alert></app-editing-alert>

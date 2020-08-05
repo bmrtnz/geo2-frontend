@@ -1,6 +1,11 @@
 <h2 class="content-block">{{ 'tiers-lieuxpassageaquai-title' | localize }}</h2>
 
 <div class="content-block">
+  <h2>
+  <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
+  <div style="clear:both"></div>
+  </h2>
+  
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="lieuxPassageAQuais"
     [remoteOperations]="true"
@@ -11,10 +16,13 @@
     [columnHidingEnabled]="true"
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
-    (onRowDblClick)="onRowDblClick($event)"
+    (onRowDblClick)="onRowDblClick($event);"
+    (onContentReady)="contentReadyEvent.emit($event)"
   >
 
     <!-- Grid configuration -->
+    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -24,30 +32,27 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+      [enabled]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true">
+    </dxo-column-chooser>
 
     <dxi-column
-      dataField="id"
-      [width]="90"
-      [hidingPriority]="2">
-    </dxi-column>
-    <dxi-column
-      dataField="raisonSocial"
-      [width]="190"
-      caption="{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="pays.description"
-      [width]="190"
-      caption="{{ 'tiers-lieuxpassageaquai-pays' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="ville"
-      [width]="190"
-      caption="{{ 'tiers-lieuxpassageaquai-ville' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.path"
+      [caption]="('tiers-lieuxpassageaquai-' + field.name | localize) || field.name"
+      [visible]="i < lieuxPassageAQuaiService.baseFieldsSize"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [filterValue]="field.filterValue"
+      [width]="field.width"
+    ></dxi-column>
 
   </dx-data-grid>
 

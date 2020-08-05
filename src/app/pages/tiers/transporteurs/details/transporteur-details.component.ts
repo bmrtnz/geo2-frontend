@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { TransporteursService } from '../../../../shared/services/transporteurs.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transporteur } from '../../../../shared/models';
@@ -11,15 +11,19 @@ import { PaysService } from 'app/shared/services/pays.service';
 import DataSource from 'devextreme/data/data_source';
 import { ClientsService } from 'app/shared/services';
 import notify from 'devextreme/ui/notify';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-transporteur-details',
   templateUrl: './transporteur-details.component.html',
   styleUrls: ['./transporteur-details.component.scss']
 })
-export class TransporteurDetailsComponent implements OnInit {
+export class TransporteurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  transporteurForm = this.fb.group({
+  formGroup = this.fb.group({
     id: [''],
     raisonSocial: [''],
     adresse1: [''],
@@ -42,6 +46,9 @@ export class TransporteurDetailsComponent implements OnInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   transporteur: Transporteur;
   code: string;
@@ -49,12 +56,14 @@ export class TransporteurDetailsComponent implements OnInit {
   devises: DataSource;
   moyensPaiement: DataSource;
   basesPaiement: DataSource;
+  clientsRaisonSocial: DataSource;
   regimesTva: DataSource;
   bureauxAchat: DataSource;
   typesTransporteur: DataSource;
   clients: DataSource;
   defaultVisible: boolean;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
+  createMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -69,15 +78,46 @@ export class TransporteurDetailsComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
+    this.checkCode = this.checkCode.bind(this);
+  }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
+  ngAfterViewInit(): void {
+    this.formGroup.reset(this.transporteur);
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
 
-    this.transporteursService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.transporteur = res.data.transporteur;
-      this.transporteurForm.patchValue(this.transporteur);
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
+      const url = this.route.snapshot.url;
+      this.createMode = url[url.length - 1].path === 'create';
+      this.readOnlyMode = !this.createMode;
+      if (!this.createMode) {
+        this.transporteursService
+          .getOne(params.id)
+          .subscribe( res => {
+            this.transporteur = res.data.transporteur;
+            this.formGroup.patchValue(this.transporteur);
+            this.contentReadyEvent.emit();
+          });
+      } else {
+        this.transporteur = new Transporteur({});
+        this.contentReadyEvent.emit();
+      }
     });
 
     this.pays = this.paysService.getDataSource();
@@ -85,30 +125,54 @@ export class TransporteurDetailsComponent implements OnInit {
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
-    this.clients = this.clientsService.getDataSource();
+    this.clientsRaisonSocial = this.clientsService.getDataSource();
 
+  }
+
+  checkCode(params) {
+      const code = params.value.toUpperCase();
+      const transporteursSource = this.transporteursService.getDataSource({ search: `id=="${ code }"` });
+      return transporteursSource.load().then(res => !(res.length));
   }
 
   onSubmit() {
-    if (!this.transporteurForm.pristine && this.transporteurForm.valid) {
-      const transporteur = this.transporteursService
-      .extractDirty(this.transporteurForm.controls);
+
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const transporteur = this.transporteursService.extractDirty(this.formGroup.controls);
+
+      if (this.createMode) {
+        transporteur.id = this.formGroup.get('id').value.toUpperCase();
+          // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
+          // Avoir pour les valeur par defaut (qui sont not null dans la base)
+      } else {
+        transporteur.id = this.transporteur.id;
+      }
+
       this.transporteursService
-      .save({ transporteur: { ...transporteur, id: this.transporteur.id }})
-      .subscribe({
-        next: () => {
-          notify('Sauvegardé', 'success', 3000);
-          this.transporteur = { id: this.transporteur.id, ...this.transporteurForm.getRawValue() };
-          this.readOnlyMode = true;
-        },
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
-    }
+      .save({ transporteur })
+        .subscribe({
+          next: () => {
+            notify('Sauvegardé', 'success', 3000);
+            if (!this.createMode) {
+              this.transporteur = { id: this.transporteur.id, ...this.formGroup.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.editing = false;
+              this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
+            }
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
+      }
   }
 
   onCancel() {
-    this.transporteurForm.reset(this.transporteur);
-    this.readOnlyMode = true;
+    if (!this.createMode) {
+      this.formGroup.reset(this.transporteur);
+      this.readOnlyMode = true;
+    } else {
+      this.router.navigate([`/tiers/transporteurs`]);
+    }
   }
 
   toggleVisible() {
@@ -116,10 +180,7 @@ export class TransporteurDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    const search = `codeTiers=="${ this.transporteur.id }" and typeTiers==${ this.transporteur.typeTiers }`;
-    this.router.navigate([`/tiers/contacts/${ this.transporteur.id }/${ this.transporteur.typeTiers }`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/contacts/${ this.transporteur.id }/${ this.transporteur.typeTiers }`]);
   }
 
 }

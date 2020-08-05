@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class LieuxPassageAQuaiService extends ApiService implements APIRead {
 
-  listRegexp = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|codePostal|adresse1|valide)$/i;
 
   constructor(
     apollo: Apollo,
@@ -28,15 +28,16 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
-    const query = this.buildGetAll(1, this.listRegexp);
+    const query = this.buildGetAll();
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const variables = {
-            ...inputVariables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -50,7 +51,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
+    const mutation = this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

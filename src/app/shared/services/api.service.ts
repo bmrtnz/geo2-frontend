@@ -6,19 +6,27 @@ import { FetchResult } from 'apollo-link';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
-import { take } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 import { AbstractControl } from '@angular/forms';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { Model } from '../models/model';
 
-const DEFAULT_ID = 'id';
+const DEFAULT_KEY = 'id';
+const DEFAULT_GQL_KEY_TYPE = 'String';
 const DEFAULT_PAGE_SIZE = 10;
+const BASE_FIELDS_SIZE = 7;
 
 export type PageInfo = {
   startCursor?: string
   endCursor?: string
   hasPreviousPage?: boolean
   hasNextPage?: boolean
+};
+
+export type DistinctInfo = {
+  count: number
+  key: string
+  items: DistinctInfo[]
 };
 
 export type RelayPage<T> = {
@@ -51,6 +59,12 @@ export type RelayPageVariables = OperationVariables & {
   pageable: Pageable
 };
 
+export type LocateVariables = {
+  pageSize?: number
+  type?: string
+  key: any[]
+};
+
 export interface APIRead {
   getAll?(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
   getOne?(id: string): Observable<ApolloQueryResult<any>>;
@@ -63,15 +77,19 @@ export interface APIPersist {
 
 export abstract class ApiService {
 
-  keyField = DEFAULT_ID;
   pageSize = DEFAULT_PAGE_SIZE;
+  baseFieldsSize = BASE_FIELDS_SIZE;
+  keyField: string;
+  gqlKeyType = DEFAULT_GQL_KEY_TYPE;
   model: typeof Model;
+  storeConfiguration: CustomStoreOptions;
 
   constructor(
     private apollo: Apollo,
     model: typeof Model,
   ) {
     this.model = model;
+    this.keyField = this.model.getKeyField() || DEFAULT_KEY;
   }
 
   /**
@@ -123,18 +141,42 @@ export abstract class ApiService {
   public extractDirty(controls: {
     [key: string]: AbstractControl;
   }) {
+    const clean = (value) => {
+      if (value && value.__typename)
+        for (const field of Object.keys(value))
+          if (field !== this.keyField)
+            delete value[field];
+      return value;
+    };
     return Object.entries(controls)
     .filter(([key, control]) => key === this.keyField || control.dirty )
     .map(([key, control]) => {
-      const value = { ...control.value };
-
-      if (value.__typename)
-        for (const field of Object.keys(value))
-          if (field !== 'id')
-            delete value[field];
-      return { [key]: value };
+      const value = JSON.parse(JSON.stringify(control.value));
+      const cleanValue = typeof value === 'object' ?
+        (value as []).map( v => clean(v) ) :
+        clean(value);
+      return { [key]: cleanValue };
     })
     .reduce((acm, current) => ({...acm, ...current}));
+  }
+
+  /**
+   * Locate page and index of entity in paginated list
+   * @param inputVariables Page location variables
+   */
+  public locatePage(inputVariables: LocateVariables) {
+    const type = `Geo${this.model.name}`;
+    const pageSize = this.pageSize;
+    const query = this.buildLocate();
+
+    return this.
+    query<{locatePage: number}>(query, {
+      variables: {pageSize, type, ...inputVariables},
+    } as WatchQueryOptions<any>)
+    .pipe(
+      map( res => res.data ),
+      take(1),
+    );
   }
 
   /**
@@ -228,7 +270,7 @@ export abstract class ApiService {
   }
 
   /**
-   * Build query
+   * Build getOne query
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
@@ -236,7 +278,7 @@ export abstract class ApiService {
     const operation = this.withLowerCaseFirst(this.model.name);
     const alias = this.withUpperCaseFirst(operation);
     return `
-      query ${ alias }($${ this.keyField }: String!) {
+      query ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
         ${ operation }(${ this.keyField }:$${ this.keyField }) {
           ${ this.model.getGQLFields(depth, filter) }
         }
@@ -244,6 +286,11 @@ export abstract class ApiService {
     `;
   }
 
+  /**
+   * Build save query
+   * @param depth Save response depth
+   * @param filter Fields filter
+   */
   protected buildSave(depth?: number, filter?: RegExp) {
     const entity = this.withLowerCaseFirst(this.model.name);
     const operation = `save${this.model.name}`;
@@ -258,11 +305,14 @@ export abstract class ApiService {
     `;
   }
 
+  /**
+   * Build delete query
+   */
   protected buildDelete() {
     const operation = `delete${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      mutation ${ alias }($${ this.keyField }: String!) {
+      mutation ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
         ${ operation }(${ this.keyField }: $${ this.keyField }) {
           id
         }
@@ -271,13 +321,93 @@ export abstract class ApiService {
   }
 
   /**
+   * Build distinct query
+   */
+  protected buildDistinct() {
+    const operation = `distinct`;
+    const alias = this.withUpperCaseFirst(operation);
+    const type = `Geo${this.model.name}`;
+    return `
+      query ${ alias }($field: String!, $search: String, $pageable: PaginationInput!) {
+        ${ operation }(type: "${ type }", field: $field, search: $search, pageable: $pageable) {
+          edges {
+            node {
+              count
+              key
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          totalPage
+          totalCount
+        }
+      }
+    `;
+  }
+
+  /**
    * Create DX CustomStore with preconfigured key
+   * @param options DXCustomStore options
    */
   protected createCustomStore(options?: CustomStoreOptions) {
+    this.storeConfiguration = options;
     return new CustomStore({
       key: this.keyField,
       ...options,
     });
+  }
+
+  /**
+   * Build and prepare distinct query
+   * @param options DX LoadOptions object
+   * @param inputVariables User variables
+   */
+  protected getDistinct(options: LoadOptions, inputVariables?: OperationVariables | RelayPageVariables) {
+    const field = options.group[0].selector;
+    const distinctQuery = this.buildDistinct();
+    type DistinctResponse = { distinct: RelayPage<DistinctInfo> };
+
+    // Full filter fix
+    // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
+    if (options.filter) {
+      const withDepth = options.filter
+      .find( res => typeof res === 'object' );
+      const withOperator = options.filter
+      .find( res => ['or', 'and'].includes(res) );
+      if (withDepth && !withOperator)
+        options.filter = [options.filter[0], 'and', options.filter[1]];
+    }
+
+    const distinctVariables = this.mergeVariables(
+      inputVariables,
+      {field},
+      this.mapLoadOptionsToVariables(options),
+    );
+    return this.
+    query<DistinctResponse>(distinctQuery, {
+      variables: distinctVariables,
+    } as WatchQueryOptions<any>)
+    .pipe(
+      map( res => this.asListCount(res.data.distinct)),
+      take(1),
+    );
+  }
+
+  /**
+   * Build locate query
+   */
+  protected buildLocate() {
+    const operation = `locatePage`;
+    const alias = this.withUpperCaseFirst(operation);
+    return `
+      query ${ alias }($pageSize: Int!, $type: String!, $key: [String]!) {
+        ${ operation }(pageSize: $pageSize, type: $type, key: $key)
+      }
+    `;
   }
 
   /**
@@ -319,8 +449,12 @@ export abstract class ApiService {
    */
   protected mapDXFilterToRSQL(dxFilter: any[]) {
 
-    if (typeof dxFilter[0] === 'string')
-      dxFilter = [dxFilter];
+    // Avoid modify original
+    let clonedFilter = JSON.parse(JSON.stringify(dxFilter));
+
+    // Make filter structure consistant: [string|[]]
+    if (typeof clonedFilter[0] === 'string')
+      clonedFilter = [clonedFilter];
 
     const next = (filter: any[], index = 0) => {
       const node = filter[index];
@@ -328,54 +462,65 @@ export abstract class ApiService {
 
         // Deep filter
         if (typeof node[0] === 'object')
-          filter[index] = next(node).join(' ');
-        else {
-          const [selector, operator, value] = node;
+          filter[index] = `(${ next(node).join(' ') })`;
+          else {
+            /* tslint:disable-next-line:prefer-const */
+            let [selector, operator, value] = node;
+            const dxOperator = operator;
 
-          // Map operator
-          let mappedOperator = '';
-          switch (operator) {
-            case '=': mappedOperator = '=='; break;
-            case 'contains': mappedOperator = '=ilike='; break;
-            case 'startswith': mappedOperator = '=ilike='; break;
-            case 'endswith': mappedOperator = '=ilike='; break;
-            case 'notcontains': mappedOperator = '=inotlike='; break;
-            case '<>': mappedOperator = '!='; break;
-            default: mappedOperator = operator; break;
+            // Map operator
+            switch (operator) {
+              case '=': operator = '=='; break;
+              case 'contains': operator = '=ilike='; break;
+              case 'startswith': operator = '=ilike='; break;
+              case 'endswith': operator = '=ilike='; break;
+              case 'notcontains': operator = '=inotlike='; break;
+              case '<>': operator = '!='; break;
+            }
+
+            // Map value
+            if (selector === 'this') {
+              const mappedFilter = Object
+                .entries(value)
+                .filter(([key]) => key !== '__typename')
+                .map(([k, v]) => JSON.stringify([k, '=', v]))
+                .join(`¤${JSON.stringify('and')}¤`)
+                .split('¤')
+                .map(v => JSON.parse(v));
+              filter[index] = this.mapDXFilterToRSQL(mappedFilter);
+            } else {
+
+              if (['contains', 'notcontains'].includes(dxOperator))
+                value = `%${value}%`;
+              if (dxOperator === 'startswith') value = `${value}%`;
+              if (dxOperator === 'endswith') value = `%${value}`;
+              value = JSON.stringify(value);
+              filter[index] = [selector, operator, value].join('');
+
+            }
           }
-
-          // Map value
-          let mappedValue = value;
-          if (['contains', 'notcontains'].includes(operator))
-            mappedValue = `%${mappedValue}%`;
-          if (operator === 'startswith') mappedValue = `${mappedValue}%`;
-          if (operator === 'endswith') mappedValue = `%${mappedValue}`;
-          mappedValue = parseInt(value, 2) || `"${mappedValue}"`;
-
-          filter[index] =  [selector, mappedOperator, mappedValue].join('');
-        }
       } else filter[index] =  node;
       if (index < filter.length - 1)
         return next(filter, index + 1);
       else return filter;
     };
-    return next(dxFilter).flat().join(' ');
+    return next(clonedFilter).flat().join(' ');
   }
 
   protected mapLoadOptionsToVariables(options: LoadOptions) {
     const variables: RelayPageVariables = {
       pageable: {
-        pageNumber: options.skip / options.take,
-        pageSize: options.take,
+        pageNumber: options.skip / options.take || 0,
+        pageSize: options.take || DEFAULT_PAGE_SIZE,
       },
     };
     this.pageSize = options.take;
 
     // Search / filter
     variables.search = null;
-    if (options.filter)
+    if (options.filter) // row/header filters
       variables.search = this.mapDXFilterToRSQL(options.filter);
-    if (options.searchValue)
+    if (options.searchValue) // global search
       variables.search = this
       .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options));
 
@@ -390,6 +535,22 @@ export abstract class ApiService {
       };
 
     return variables;
+  }
+
+  /**
+   * Merge variables, last item as priority if merge is impossible
+   * @param variables Variables list
+   */
+  protected mergeVariables(...variables: OperationVariables[]|RelayPageVariables[]) {
+    return variables.reduce((acm, current) => ({
+      ...acm,
+      ...current,
+      // search: `${ acm.search || '' }${ current.search ? `and ${ current.search }` : '' }`,
+      search: [acm ? acm.search : '', current ? current.search : '']
+      .filter( v => v )
+      .map( v => `(${v})` )
+      .join(' and '),
+    }));
   }
 
 }

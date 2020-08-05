@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit, EventEmitter, ViewChild} from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { PersonnesService } from 'app/shared/services/personnes.service';
@@ -15,17 +15,21 @@ import { TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { TypesCamionService } from 'app/shared/services/types-camion.service';
 import { TransitairesService } from 'app/shared/services/transitaires.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entrepot-details',
   templateUrl: './entrepot-details.component.html',
   styleUrls: ['./entrepot-details.component.scss']
 })
-export class EntrepotDetailsComponent implements OnInit {
+export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  entrepotForm = this.fb.group({
-    id: [''],
+  formGroup = this.fb.group({
     code: [''],
+    client: [''],
     raisonSocial: [''],
     societe: [''],
     adresse1: [''],
@@ -62,6 +66,9 @@ export class EntrepotDetailsComponent implements OnInit {
     valide: [false]
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  editing = false;
 
   entrepot: Entrepot;
   personnes: DataSource;
@@ -75,7 +82,8 @@ export class EntrepotDetailsComponent implements OnInit {
   typesCamion: DataSource;
   transitaires: DataSource;
   defaultVisible: boolean;
-  readOnlyMode = true;
+  isReadOnlyMode = true;
+  createMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -94,15 +102,55 @@ export class EntrepotDetailsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.defaultVisible = false;
+    this.checkCode = this.checkCode.bind(this);
+  }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
+  ngAfterViewInit(): void {
+    this.formGroup.reset();
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
-    this.entrepotsService
-      .getOne(this.route.snapshot.paramMap.get('id'))
-      .subscribe( res => {
-        this.entrepot = res.data.entrepot;
-        this.entrepotForm.patchValue(this.entrepot);
-      });
+
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
+      const url = this.route.snapshot.url;
+      this.createMode = url[url.length - 2].path === 'create';
+      this.readOnlyMode = !this.createMode;
+      if (!this.createMode) {
+        this.entrepotsService
+          .getOne(params.id)
+          .subscribe( res => {
+            this.entrepot = res.data.entrepot;
+            this.formGroup.patchValue(this.entrepot);
+            this.contentReadyEvent.emit();
+          });
+      } else {
+        this.entrepot = new Entrepot({});
+        // console.log(this.route.snapshot)
+        // this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
+        //   res => {
+        //     this.entrepot.client = res.data.client;
+        //     console.log(this.entrepot)
+        //     }
+        // );
+        this.contentReadyEvent.emit();
+      }
+    });
+
     this.personnes = this.personnesService.getDataSource();
     this.modesLivraison = this.modesLivraisonService.getDataSource();
     this.pays = this.paysService.getDataSource();
@@ -115,25 +163,50 @@ export class EntrepotDetailsComponent implements OnInit {
     this.transitaires = this.transitairesService.getDataSource();
   }
 
+  checkCode(params) {
+      const code = params.value.toUpperCase();
+      const entrepotsSource = this.entrepotsService.getDataSource({ search: `code=="${ code }"` });
+      return entrepotsSource.load().then(res => !(res.length));
+  }
+
   onSubmit() {
-    if (!this.entrepotForm.pristine && this.entrepotForm.valid) {
-      const entrepot = this.entrepotsService.extractDirty(this.entrepotForm.controls);
+
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const entrepot = this.entrepotsService.extractDirty(this.formGroup.controls);
+
+      if (!this.createMode) {
+        entrepot.id = this.entrepot.id;
+      } else {
+        entrepot.code = this.formGroup.get('code').value.toUpperCase();
+        entrepot.client = {id: this.route.snapshot.params.client};
+      }
+
       this.entrepotsService
-        .save({ entrepot: { ...entrepot, id: this.entrepot.id } })
+      .save({ entrepot })
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
-            this.entrepot = { id: this.entrepot.id, ...this.entrepotForm.getRawValue() };
-            this.readOnlyMode = true;
+            if (!this.createMode) {
+              this.entrepot = { id: this.entrepot.id, ...this.formGroup.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.editing = false;
+              this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
+            }
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
     }
+
   }
 
   onCancel() {
-    this.entrepotForm.reset(this.entrepot);
-    this.readOnlyMode = true;
+    if (!this.createMode) {
+      this.formGroup.reset(this.entrepot);
+      this.readOnlyMode = true;
+    } else {
+      this.router.navigate([`/tiers/entrepots`]);
+    }
   }
 
   toggleVisible() {
@@ -141,9 +214,6 @@ export class EntrepotDetailsComponent implements OnInit {
   }
 
   contactsBtnClick() {
-    const search = encodeURIComponent(`codeTiers=="${ this.entrepot.id }" and typeTiers==${ this.entrepot.typeTiers }`);
-    this.router.navigate([`/tiers/contacts/${ this.entrepot.id }/${ this.entrepot.typeTiers }`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/contacts/${ this.entrepot.code }/${ this.entrepot.typeTiers }`]);
   }
 }

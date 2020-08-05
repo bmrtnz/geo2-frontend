@@ -1,0 +1,3 @@
+<router-outlet (activate)="onActivate($event)"></router-outlet>
+<app-grid-navigator [hidden]="!dataGrid" [dataGrid]="dataGrid"></app-grid-navigator>
+<router-outlet name="details" (activate)="onActivateDetails($event)"></router-outlet>

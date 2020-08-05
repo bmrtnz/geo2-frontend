@@ -8,14 +8,15 @@ import { Devise } from './devise.model';
 
 export class LieuPassageAQuai extends Model {
 
-  @Field() public id: string;
-  @Field() public raisonSocial: string;
-  @Field() public adresse1: string;
-  @Field() public adresse2: string;
-  @Field() public adresse3: string;
-  @Field() public codePostal: string;
+  @Field({asKey: true, width: 150}) public id: string;
+  @Field({asLabel: true}) public raisonSocial: string;
   @Field() public ville: string;
   @Field({model: Pays}) public pays: Pays;
+  @Field() public codePostal: string;
+  @Field() public adresse1: string;
+  @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field() public adresse2: string;
+  @Field() public adresse3: string;
   @Field({model: RegimeTva}) public regimeTva: RegimeTva;
   @Field() public nbJourEcheance: number;
   @Field() public echeanceLe: number;
@@ -25,7 +26,6 @@ export class LieuPassageAQuai extends Model {
   @Field({model: Pays}) public langue: Pays;
   @Field({model: Devise}) public devise: Devise;
   @Field() public lieuFonctionEan: string;
-  @Field() public typeTiers: TypeTiers;
-  @Field() public valide: boolean;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
 
 }

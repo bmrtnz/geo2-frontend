@@ -29,7 +29,7 @@ body {
      -moz-user-select:none;
 }
 
-.fournisseur-page, .client-page, .transporteur-page, .lieupassageaquai-page, .entrepot-page {
+.fournisseur-page, .article-page, .client-page, .transporteur-page, .entrepot-page, .lieupassageaquai-page, .entrepot-page {
 
   .dx-accordion-item-title::before {
     font-size: 18px;
@@ -57,4 +57,10 @@ body {
 
 .black .dx-button-text {
   color: #1E1E1E !important;
+}
+
+// Button placed in hx
+.title-button {
+  float: right;
+  margin-left: 10px;
 }

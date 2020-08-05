@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services/entrepots.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-entrepots-list',
@@ -11,25 +13,31 @@ import DataSource from 'devextreme/data/data_source';
 export class EntrepotsListComponent implements OnInit {
 
   entrepots: DataSource;
+  clientID: string;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
+  contentReadyEvent = new EventEmitter<any>();
 
   constructor(
-    private entrepotsService: EntrepotsService,
+    public entrepotsService: EntrepotsService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
   }
 
   ngOnInit(): void {
-    this.route.queryParams
-    .subscribe(({ search }) => {
-      this.entrepots = this.entrepotsService.getDataSource({
-        search: decodeURIComponent(search),
-      });
+    this.clientID = this.route.snapshot.paramMap.get('client');
+    this.entrepots = this.entrepotsService.getDataSource({
+      search: `client.id=="${ this.clientID }"`,
     });
+    this.detailedFields = this.entrepotsService.model.getDetailedFields();
   }
 
   onRowDblClick(e) {
     this.router.navigate([`/tiers/entrepots/${e.data.id}`]);
+  }
+  onCreate() {
+    this.router.navigate([`/tiers/entrepots/create/${this.clientID}`]);
   }
   onRowPrepared(e) {
     if (e.rowType === 'data') {

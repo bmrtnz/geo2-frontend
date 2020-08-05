@@ -10,6 +10,7 @@ import { Transporteur } from './transporteur.model';
 import { TypeCamion } from './type-camion.model';
 import { BaseTarif } from './base-tarif.model';
 import { Transitaire } from './transitaire.model';
+import { Client } from './client.model';
 
 export enum ModeLivraison {
   DIRECT = 'D',
@@ -18,15 +19,15 @@ export enum ModeLivraison {
 }
 
 export class Entrepot extends Model {
-  @Field() public id: string;
+  @Field({asKey: true, width: 150}) public id: string;
   @Field() public code: string;
-  @Field() public raisonSocial: string;
+  @Field({asLabel: true}) public raisonSocial: string;
+  @Field() public ville: string;
+  @Field({model: Pays}) public pays: Pays;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field() public codePostal: string;
-  @Field() public ville: string;
-  @Field({model: Pays}) public pays: Pays;
   @Field({model: Pays}) public langue: Pays;
   @Field({model: Incoterm}) public incoterm: Incoterm;
   @Field() public tvaCee: string;
@@ -34,7 +35,7 @@ export class Entrepot extends Model {
   @Field({model: TypePalette}) public typePalette: TypePalette;
   @Field({model: Personne}) public commercial: Personne;
   @Field({model: Personne}) public assistante: Personne;
-  @Field() public modeLivraison: ModeLivraison;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public modeLivraison: ModeLivraison;
   @Field({model: Transporteur}) public transporteur: Transporteur;
   @Field({model: TypeCamion}) public typeCamion: TypeCamion;
   @Field({model: BaseTarif}) public baseTarifTransport: BaseTarif;
@@ -50,9 +51,10 @@ export class Entrepot extends Model {
   @Field() public envoieAutomatiqueDetail: boolean;
   @Field() public controlReferenceClient: string;
   @Field() public mentionClientSurFacture: string;
-  @Field() public valide: boolean;
-  @Field() public typeTiers: TypeTiers;
+  @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
   @Field() public prixUnitaireTarifTransport: number;
   @Field() public prixUnitaireTarifTransit: number;
+  @Field({model: Client}) public client: Client;
 
 }

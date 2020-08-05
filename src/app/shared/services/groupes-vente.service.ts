@@ -22,12 +22,13 @@ export class GroupesClientService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, variables).toPromise();
+
           const query = this.buildGetAll();
           type Response = { allGroupeClient: RelayPage<GroupeClient> };
-          variables = {
-            ...variables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
+          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -39,7 +40,7 @@ export class GroupesClientService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { groupeClient: GroupeClient };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

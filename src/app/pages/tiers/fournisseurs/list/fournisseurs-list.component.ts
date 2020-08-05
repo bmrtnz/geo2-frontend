@@ -1,29 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
-import { Router } from '@angular/router';
+import { Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { NestedMain } from 'app/pages/nested/nested.component';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment } from 'environments/environment';
+import { ApiService } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-fournisseurs-list',
   templateUrl: './fournisseurs-list.component.html',
   styleUrls: ['./fournisseurs-list.component.scss']
 })
-export class FournisseursListComponent implements OnInit {
+export class FournisseursListComponent implements OnInit, NestedMain {
 
   fournisseurs: DataSource;
+  contentReadyEvent = new EventEmitter<any>();
+  apiService: ApiService;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  columnChooser = environment.columnChooser;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
-    private fournisseursService: FournisseursService,
-    private router: Router
-  ) { }
+    public fournisseursService: FournisseursService,
+    private router: Router,
+  ) {
+    this.apiService = this.fournisseursService;
+  }
 
   ngOnInit() {
     this.fournisseurs = this.fournisseursService.getDataSource();
+    this.detailedFields = this.fournisseursService.model.getDetailedFields();
   }
 
-  onRowDblClick(e) {
-    this.router.navigate([`/tiers/fournisseurs/${e.data.id}`]);
+  onRowDblClick(event) {
+    this.router.navigate([`/tiers/fournisseurs/${event.data.id}`]);
   }
+
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {
@@ -31,4 +45,8 @@ export class FournisseursListComponent implements OnInit {
       }
     }
   }
+  onCreate() {
+    this.router.navigate([`/tiers/fournisseurs/create`]);
+  }
+
 }

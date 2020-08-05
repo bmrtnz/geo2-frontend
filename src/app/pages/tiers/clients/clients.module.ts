@@ -7,24 +7,30 @@ import {
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule,
-    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule, DxValidatorModule, DxDateBoxModule
+    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxSwitchModule, DxTextAreaModule,
+    DxTextBoxModule, DxValidatorModule, DxTagBoxModule, DxDateBoxModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HistoriqueValideModule} from '../../../shared/components/historique-valide/historique-valide.component';
 import {PromptPopupModule} from '../../../shared/components/prompt-popup/prompt-popup.component';
+import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EntrepotsModule } from '../entrepots/entrepots.module';
+import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 
 
 @NgModule({
     imports: [
         SharedModule,
         ClientsRoutingModule,
+        EntrepotsModule,
         FormsModule,
         ReactiveFormsModule,
         DxFormModule,
         DxDataGridModule,
         DxButtonModule,
         DxAccordionModule,
+        DxTagBoxModule,
         DxListModule,
         DxSelectBoxModule,
         DxTextBoxModule,
@@ -34,13 +40,16 @@ import {PromptPopupModule} from '../../../shared/components/prompt-popup/prompt-
         DxPopoverModule,
         DxNumberBoxModule,
         DxValidatorModule,
+        DxSwitchModule,
         DxDateBoxModule,
         HistoriqueValideModule,
-        PromptPopupModule
+        PromptPopupModule,
+        EditingAlertModule
     ],
-  declarations: [
-    ClientsListComponent,
-    ClientDetailsComponent
-  ]
+    declarations: [
+        ClientsListComponent,
+        ClientDetailsComponent
+    ],
+    providers: [NestedGuard, EditingGuard],
 })
 export class ClientsModule { }

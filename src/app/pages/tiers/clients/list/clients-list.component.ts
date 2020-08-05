@@ -1,28 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
+import { ModelFieldOptions } from 'app/shared/models/model';
+import { environment} from 'environments/environment';
+import { ApiService } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-clients-list',
   templateUrl: './clients-list.component.html',
-  styleUrls: ['./clients-list.component.scss']
+  styleUrls: ['./clients-list.component.scss'],
 })
-export class ClientsListComponent implements OnInit {
+export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
 
   clients: DataSource;
+  contentReadyEvent = new EventEmitter<any>();
+  apiService: ApiService;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  columnChooser = environment.columnChooser;
 
   constructor(
-    private clientsService: ClientsService,
-    private router: Router
-  ) { }
+    public clientsService: ClientsService,
+    private router: Router,
+  ) {
+    this.apiService = this.clientsService;
+  }
 
   ngOnInit() {
     this.clients = this.clientsService.getDataSource();
+    this.detailedFields = this.clientsService.model.getDetailedFields();
   }
 
-  onRowDblClick(e) {
-    this.router.navigate([`/tiers/clients/${e.data.id}`]);
+  onRowDblClick(event) {
+    this.router.navigate([`/tiers/clients/${event.data.id}`]);
+  }
+
+  onCreate() {
+    this.router.navigate([`/tiers/clients/create`]);
   }
 
   onRowPrepared(e) {

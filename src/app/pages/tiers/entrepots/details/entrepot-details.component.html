@@ -1,25 +1,26 @@
-<form [formGroup]="entrepotForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
   <div class="content-block">
-    <h2>
+    <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-entrepots-details-title' | localize }}
       <div class="right">
-        <dx-button
-          type="normal"
-          text="{{ 'btn-annuler' | localize }}"
-          [visible]="!readOnlyMode"
-          (onClick)="onCancel()"
-        ></dx-button>
-        <dx-button
+        <dx-button class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
           [useSubmitBehavior]="true"
         ></dx-button>
-        <dx-button
+        <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
-          [visible]="readOnlyMode"
+          [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
+        ></dx-button>
+        <dx-button class="upperButton"
+          type="normal"
+          text="{{ 'btn-annuler' | localize }}"
+          [visible]="!readOnlyMode"
+          (onClick)="onCancel()"
         ></dx-button>
       </div>
     </h2>
@@ -27,7 +28,9 @@
 
   <div class="content-block entrepot-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1">
+      <dxi-item [ratio]="1"
+      [visible]="!createMode"
+      >
         <h4 class="entity-id">N° {{ entrepot?.id }}</h4>
         <dx-button
           height="auto"
@@ -40,7 +43,8 @@
         <dx-check-box
           class="vertical"
           formControlName="valide"
-          [text]="entrepotForm.get('valide') ? 'valide' : 'invalide' | localize"
+          [readOnly]="readOnlyMode"
+          [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
       </dxi-item>
       <dxi-item [ratio]="0.3">
@@ -54,10 +58,15 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-entrepots-code' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="code" [readOnly]="true">
+                <dx-text-box
+                formControlName="code"
+                [readOnly]="!createMode"
+                [inputAttr]="{'style':  'text-transform: uppercase'}"
+                >
                   <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxi-validation-rule type="stringLength" max="18"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="createMode" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
               </div>
@@ -75,9 +84,9 @@
                   [searchEnabled]="true"
                   [searchExpr]="['id','nomUtilisateur']"
                 >
-            	  <dx-validator name="{{ 'tiers-entrepots-commercial' | localize }}">
+            	  <!-- <dx-validator name="{{ 'tiers-entrepots-commercial' | localize }}">
             	    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
+                  </dx-validator> -->
                 </dx-select-box>
               </div>
             </div>
@@ -224,7 +233,7 @@
 
             <!-- Lieu fonction EAN Dépôt-->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEANDepot' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEanDepot' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="lieuFonctionEanDepot" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-entrepots-lieuFonctionEanDepot' | localize }}">
@@ -236,7 +245,7 @@
 
             <!-- Lieu fonction EAN Acheteur-->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEANAcheteur' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEanAcheteur' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="lieuFonctionEanAcheteur" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-entrepots-lieuFonctionEanAcheteur' | localize }}">
@@ -267,10 +276,10 @@
 
             <!-- tvaCee -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-entrepots-idTVA' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-entrepots-tvaCee' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="tvaCee" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-entrepots-idTVA' | localize }}">
+                  <dx-validator name="{{ 'tiers-entrepots-tvaCee' | localize }}">
                     <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
@@ -318,7 +327,7 @@
 
               <!-- Mention client facture -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-mentionClientFacture' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-entrepots-mentionClientSurFacture' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-text-area formControlName="mentionClientSurFacture" [readOnly]="readOnlyMode">
                     <dx-validator name="{{ 'tiers-entrepots-mentionClientSurFacture' | localize }}">
@@ -351,13 +360,17 @@
                   displayExpr="description"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
-                ></dx-select-box>
+                >
+                <dx-validator name="{{ 'tiers-entrepots-regimeTva' | localize }}">
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+                </dx-select-box>
               </div>
             </div>
 
             <!-- Type entrepot -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-entrepots-Transporteur' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-entrepots-transporteur' | localize }}</div>
               <div class="dx-field-value">
                 <dx-select-box
                   formControlName="transporteur"
@@ -387,10 +400,10 @@
 
             <!-- PU Tarif transport -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-entrepots-PUTarifTransport' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-entrepots-prixUnitaireTarifTransport' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="PUTarifTransport" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-entrepots-PUTarifTransport' | localize }}">
+                <dx-text-box formControlName="prixUnitaireTarifTransport" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-entrepots-prixUnitaireTarifTransport' | localize }}">
                     <dxi-validation-rule type="numeric"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
@@ -446,7 +459,7 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-entrepots-PUTarifTransit' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="PUTarifTransit" [readOnly]="readOnlyMode"></dx-text-box>
+                <dx-text-box formControlName="prixUnitaireTarifTransit" [readOnly]="readOnlyMode"></dx-text-box>
               </div>
             </div>
 
@@ -462,10 +475,10 @@
 
               <!-- gestionnaire CHEP -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireCHEP' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireChep' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="gestionnaireCHEP" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-entrepots-gestionnaireCHEP' | localize }}">
+                  <dx-text-box formControlName="gestionnaireChep" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}">
                       <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
@@ -474,10 +487,10 @@
 
               <!-- référence n° CHEP -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-referenceCHEP' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-entrepots-referenceChep' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="referenceCHEP" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-entrepots-referenceCHEP' | localize }}">
+                  <dx-text-box formControlName="referenceChep" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-entrepots-referenceChep' | localize }}">
                       <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
@@ -486,26 +499,26 @@
 
               <!-- declaration EUR1 -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-declarationEUR1' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-entrepots-declarationEur1' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-check-box formControlName="declarationEUR1" [readOnly]="readOnlyMode"></dx-check-box>
+                  <dx-check-box formControlName="declarationEur1" [readOnly]="readOnlyMode"></dx-check-box>
                 </div>
               </div>
 
               <!-- Envoi auto détail -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-envoiAutoDetail' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-entrepots-envoieAutomatiqueDetail' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-check-box formControlName="envoiAutoDetail" [readOnly]="readOnlyMode"></dx-check-box>
+                  <dx-check-box formControlName="envoieAutomatiqueDetail" [readOnly]="readOnlyMode"></dx-check-box>
                 </div>
               </div>
 
               <!-- Contrôle réf client -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-controleRefClient' | localize }}</div>
+                <div class="dx-field-label">{{ 'tiers-entrepots-controlReferenceClient' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="controleRefClient" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-entrepots-controleRefClient' | localize }}">
+                  <dx-text-box formControlName="controlReferenceClient" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-entrepots-controlReferenceClient' | localize }}">
                       <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
@@ -522,13 +535,13 @@
     <dx-box direction="row">
       <dxi-item [ratio]="4">
         <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-          <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-instructSecrComm' | localize }}</span>
+          <span class="dx-form-group-caption">{{ 'tiers-entrepots-instructionSecretaireCommercial' | localize }}</span>
           <div class="dx-form-group-content">
             <!-- Instructions secr comm -->
             <div class="dx-field">
               <div class="dx-field-value">
-                <dx-text-area formControlName="instructSecrComm" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-entrepots-instructSecrComm' | localize }}">
+                <dx-text-area formControlName="instructionSecretaireCommercial" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-entrepots-instructionSecretaireCommercial' | localize }}">
                     <dxi-validation-rule type="stringLength" max="140"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-area>
@@ -541,13 +554,13 @@
       <dxi-item [ratio]="4">
         <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
           <span
-            class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-instructLogistique' | localize }}</span>
+            class="dx-form-group-caption">{{ 'tiers-entrepots-instructionLogistique' | localize }}</span>
           <div class="dx-form-group-content">
             <!-- Instructions logistique -->
             <div class="dx-field">
               <div class="dx-field-value">
-                <dx-text-area formControlName="instructLogistique" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-entrepots-instructSecrComm' | localize }}">
+                <dx-text-area formControlName="instructionLogistique" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-entrepots-instructionLogistique' | localize }}">
                     <dxi-validation-rule type="stringLength" max="280"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-area>
@@ -560,3 +573,4 @@
 
   </div>
 </form>
+<app-editing-alert></app-editing-alert>

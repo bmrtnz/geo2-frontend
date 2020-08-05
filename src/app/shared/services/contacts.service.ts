@@ -12,8 +12,6 @@ import { map, take, tap } from 'rxjs/operators';
 })
 export class ContactsService extends ApiService implements APIRead {
 
-  // listRegexp = /.*\.(?:id|description|raisonSocial|nom|prenom|codeTiers|typeTiers)$/i;
-
   constructor(
     apollo: Apollo,
   ) {
@@ -24,18 +22,14 @@ export class ContactsService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
           const query = this.buildGetAll();
           type Response = { allContact: RelayPage<Contact> };
 
-          // Merge search
-          const search = [];
-          const loadVariables = this.mapLoadOptionsToVariables(options);
-          if (inputVariables.search) search.push(inputVariables.search);
-          if (loadVariables.search) search.push(loadVariables.search);
-          const variables = {
-            ...loadVariables,
-            search: search.join(' and ')
-          };
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
 
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)

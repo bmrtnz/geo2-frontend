@@ -1,6 +1,6 @@
 import { Model, Field } from './model';
 
 export class BureauAchat extends Model {
-  @Field() id: string;
-  @Field() raisonSocial: string;
+  @Field({asKey: true}) id: string;
+  @Field({asLabel: true}) raisonSocial: string;
 }

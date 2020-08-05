@@ -2,49 +2,52 @@
 
 <div class="content-block articles-page">
   <dx-data-grid class="dx-card wide-card"
-                [dataSource]="dataSource"
-                [showBorders]="false"
-                [focusedRowEnabled]="true"
-                [focusedRowIndex]="0"
-                [columnAutoWidth]="true"
-                [columnHidingEnabled]="true"
-                (onRowDblClick)="onRowDblClick($event)">
+    [dataSource]="articles"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="true"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onRowDblClick)="onRowDblClick($event);"
+    (onContentReady)="contentReadyEvent.emit($event)"
+  >
 
-    <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
-    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [allowedPageSizes]="[10, 25, 50, 100]"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+      [enabled]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true">
+    </dxo-column-chooser>
+
     <dxi-column
-      dataField="id"
-      [width]="90"
-      [hidingPriority]="2">
-    </dxi-column>
-    <dxi-column
-      dataField="espece"
-      [width]="190"
-      caption="{{ 'articles-espece' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="variete"
-      [width]="190"
-      caption="{{ 'articles-variete' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="type"
-      [width]="190"
-      caption="{{ 'articles-type' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
-    <dxi-column
-      dataField="modeCulture"
-      [width]="190"
-      caption="{{ 'articles-modeCulture' | localize }}"
-      [hidingPriority]="8">
-    </dxi-column>
+      *ngFor="let field of detailedFields;let i=index"
+      [dataField]="field.path"
+      [caption]="('articles-' + field.name | localize) || field.name"
+      [visible]="i < articlesService.baseFieldsSize"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [filterValue]="field.filterValue"
+      [width]="field.width"
+    ></dxi-column>
+
+
   </dx-data-grid>
 </div>

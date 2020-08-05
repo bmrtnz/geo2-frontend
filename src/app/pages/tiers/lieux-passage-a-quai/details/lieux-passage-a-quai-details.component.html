@@ -1,25 +1,25 @@
-<form [formGroup]="lieupassageaquaiForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div class="content-block">
-    <h2>
+    <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
       {{ 'tiers-lieuxpassageaquai-details-title' | localize }}
       <div class="right">
-        <dx-button
-          type="normal"
-          text="{{ 'btn-annuler' | localize }}"
-          [visible]="!readOnlyMode"
-          (onClick)="onCancel()"
-        ></dx-button>
-        <dx-button
+        <dx-button class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
           [useSubmitBehavior]="true"
         ></dx-button>
-        <dx-button
+        <dx-button class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
-          [visible]="readOnlyMode"
+          [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
+        ></dx-button>
+        <dx-button class="upperButton"
+          type="normal"
+          text="{{ 'btn-annuler' | localize }}"
+          [visible]="!readOnlyMode"
+          (onClick)="onCancel()"
         ></dx-button>
       </div>
     </h2>
@@ -27,8 +27,10 @@
 
   <div class="content-block lieupassageaquai-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1">
-        <h4 class="entity-id">N° {{ lieupassageaquai?.id }}</h4>
+      <dxi-item [ratio]="1"
+      [visible]="!createMode"
+      >
+        <h5 class="entity-id">{{ lieupassageaquai?.id }}</h5>
         <dx-button
           height="auto"
           type="danger"
@@ -40,7 +42,8 @@
         <dx-check-box
           class="vertical"
           formControlName="valide"
-          [text]="lieupassageaquaiForm.get('valide') ? 'valide' : 'invalide' | localize"
+          [readOnly]="readOnlyMode"
+          [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
         <dx-button
           class="black"
@@ -60,10 +63,15 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-code' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="id" [readOnly]="true">
+                <dx-text-box
+                formControlName="id" 
+                [readOnly]="!createMode"
+                [inputAttr]="{'style':  'text-transform: uppercase'}"  
+                >
                   <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                 </dx-validator>
                 </dx-text-box>
               </div>
@@ -184,10 +192,10 @@
 
             <!-- Lieu fonction EAN -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEAN' | localize }}">
+                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}">
                     <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
@@ -333,3 +341,4 @@
     </dx-box>
   </div>
 </form>
+<app-editing-alert></app-editing-alert>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, EventEmitter } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Client, Courtier } from '../../../../shared/models';
@@ -13,20 +13,29 @@ import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import { CertificationsService } from 'app/shared/services/certification.service';
 import notify from 'devextreme/ui/notify';
 import { TypesVenteService } from 'app/shared/services/types-vente.service';
 import { CourtierService } from 'app/shared/services/courtiers.service';
 import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
+import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { tap } from 'rxjs/operators';
+import { DxCheckBoxComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent implements OnInit {
+export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPart, Editable {
 
-  clientForm = this.fb.group({
+  private requiredFields = ['soumisCtifl'];
+
+  formGroup = this.fb.group({
     code: [''],
     raisonSocial: [''],
     societe: [''],
@@ -75,6 +84,7 @@ export class ClientDetailsComponent implements OnInit {
     agrement: [''],
     courtageModeCalcul: [''],
     courtageValeur: [''],
+    conditionVente: [''],
     typeClient: [''],
     typeVente: [''],
     groupeClient: [''],
@@ -89,7 +99,7 @@ export class ClientDetailsComponent implements OnInit {
     fraisRamasse: [''],
     refusCoface: [''],
     enCoursDateLimite: [''],
-    // certifications: [''],
+    certifications: [''],
     fraisMarketingModeCalcul: [''],
     formatDluo: [''],
     dateDebutIfco: [''],
@@ -97,10 +107,15 @@ export class ClientDetailsComponent implements OnInit {
     detailAutomatique: [''],
     venteACommission: ['']
   });
+  contentReadyEvent = new EventEmitter<any>();
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
+  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
+  editing = false;
 
   client: Client;
   code: string;
+  gridBoxValue: number[];
   secteurs: DataSource;
   personnes: DataSource;
   pays: DataSource;
@@ -116,8 +131,11 @@ export class ClientDetailsComponent implements OnInit {
   clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
-  readOnlyMode = true;
   validateCommentPromptVisible = false;
+  conditionsVente: DataSource;
+  certifications: DataSource;
+  isReadOnlyMode = true;
+  createMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -134,20 +152,57 @@ export class ClientDetailsComponent implements OnInit {
     private courtiersService: CourtierService,
     private basesTarifService: BasesTarifService,
     private groupesClientService: GroupesClientService,
+    private certificationsService: CertificationsService,
     private moyensPaiementService: MoyensPaiementService,
+    private conditionsVenteService: ConditionsVenteService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
     this.defaultVisible = false;
+    this.checkCode = this.checkCode.bind(this);
+  }
+
+  get readOnlyMode() {
+    return this.isReadOnlyMode;
+  }
+  set readOnlyMode(value: boolean) {
+    this.editing = !value;
+    this.isReadOnlyMode = value;
+  }
+
+  ngAfterViewInit(): void {
+    this.formGroup.reset();
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
   }
 
   ngOnInit() {
 
-    this.clientsService
-    .getOne(this.route.snapshot.paramMap.get('id'))
-    .subscribe( res => {
-      this.client = res.data.client;
-      this.clientForm.patchValue(this.client);
+    this.route.params
+    .pipe(tap( _ => this.formGroup.reset()))
+    .subscribe(params => {
+      const url = this.route.snapshot.url;
+      this.createMode = url[url.length - 1].path === 'create';
+      this.readOnlyMode = !this.createMode;
+      if (!this.createMode) {
+        this.clientsService
+          .getOne(params.id)
+          .subscribe( res => {
+            this.client = res.data.client;
+            this.formGroup.patchValue(this.client);
+            this.contentReadyEvent.emit();
+          });
+      } else {
+        // Apply default value
+        this.client = new Client({
+          soumisCtifl: false
+        });
+        this.formGroup.patchValue(this.client);
+        this.contentReadyEvent.emit();
+      }
     });
 
     this.secteurs = this.secteursService.getDataSource();
@@ -164,19 +219,47 @@ export class ClientDetailsComponent implements OnInit {
     this.courtiers = this.courtiersService.getDataSource();
     this.clients = this.clientsService.getDataSource();
     this.basesTarif = this.basesTarifService.getDataSource();
+    this.conditionsVente = this.conditionsVenteService.getDataSource();
+    this.certifications = this.certificationsService.getDataSource();
+
+  }
+
+  checkCode(params) {
+
+    const code = params.value.toUpperCase();
+    const clientsSource = this.clientsService.getDataSource({ search: `code=="${ code }"` });
+    return clientsSource.load().then(res => !(res.length));
 
   }
 
   onSubmit() {
-    if (!this.clientForm.pristine && this.clientForm.valid) {
-      const client = this.clientsService.extractDirty(this.clientForm.controls);
+
+    if (!this.formGroup.pristine && this.formGroup.valid) {
+      const client = this.clientsService.extractDirty(this.formGroup.controls);
+
+      if (!this.createMode) {
+        client.id = this.client.id;
+      } else {
+        for (const f of this.requiredFields) {
+          client[f] = this.formGroup.controls[f].value;
+        }
+        // Fake -> pour passer l'étape de création
+        client.societe = { id: 'SA' };
+        client.code = this.formGroup.get('code').value.toUpperCase();
+      }
+
       this.clientsService
-        .save({ client: { ...client, id: this.client.id } })
+      .save({ client })
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
-            this.client = { id: this.client.id, ...this.clientForm.getRawValue() };
-            this.readOnlyMode = true;
+            if (!this.createMode) {
+              this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.editing = false;
+              this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+            }
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
@@ -184,8 +267,12 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   onCancel() {
-    this.clientForm.reset(this.client);
-    this.readOnlyMode = true;
+    if (!this.createMode) {
+      // this.clientForm.reset(this.client);
+      this.readOnlyMode = true;
+    } else {
+      this.router.navigate([`/tiers/clients`]);
+    }
   }
 
   toggleVisible() {
@@ -199,17 +286,11 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   entrepotsBtnClick() {
-    const search = `client.id=="${ this.client.id }"`;
-    this.router.navigate([`/tiers/entrepots`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/clients/${ this.client.id }/entrepots`]);
   }
 
   contactsBtnClick() {
-    const search = `codeTiers=="${ this.client.code }" and typeTiers=="${ this.client.typeTiers }"`;
-    this.router.navigate([`/tiers/contacts/${ this.client.id }/${ this.client.typeTiers }`], {
-      queryParams: { search },
-    });
+    this.router.navigate([`/tiers/contacts/${ this.client.code }/${ this.client.typeTiers }`]);
   }
 
 }

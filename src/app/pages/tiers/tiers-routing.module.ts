@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ContactsComponent } from './contacts/contacts.component';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ const routes: Routes = [
   }, {
     path: 'transporteurs',
     loadChildren: './transporteurs/transporteurs.module#TransporteursModule'
-  } , {
+  }, {
     path: 'lieux-passage-a-quai',
     loadChildren: './lieux-passage-a-quai/lieux-passage-a-quai.module#LieuxPassageAQuaiModule'
   }, {
@@ -20,7 +21,8 @@ const routes: Routes = [
     loadChildren: './entrepots/entrepots.module#EntrepotsModule'
   },  {
     path: 'contacts/:codeTiers/:typeTiers',
-    component: ContactsComponent
+    component: ContactsComponent,
+    canActivate: [NestedGuard],
   },
 ];
 

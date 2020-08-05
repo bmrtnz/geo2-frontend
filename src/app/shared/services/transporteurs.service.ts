@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class TransporteursService extends ApiService implements APIRead {
 
-  listRegexp = /.\.*(?:id|raisonSocial|description|ville|valide)$/i;
+  fieldsFilter = /.\.*(?:id|raisonSocial|description|ville|codePostal|adresse1|valide)$/i;
 
   constructor(
     apollo: Apollo,
@@ -31,12 +31,13 @@ export class TransporteursService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const query = this.buildGetAll(1, this.listRegexp);
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
+          const query = this.buildGetAll();
           type Response = { allTransporteur: RelayPage<Transporteur> };
-          const variables = {
-            ...inputVariables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -46,7 +47,7 @@ export class TransporteursService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(1, this.listRegexp);
+          const query = this.buildGetOne(1, this.fieldsFilter);
           type Response = { transporteur: Transporteur };
           const variables = { ...inputVariables, id: key };
           return this.
@@ -62,7 +63,7 @@ export class TransporteursService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
+    const mutation = this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

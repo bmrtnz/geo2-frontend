@@ -24,12 +24,13 @@ export class RegimesTvaService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options, variables).toPromise();
+
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allRegimeTva: RelayPage<RegimeTva> };
-          variables = {
-            ...variables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
+          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -41,7 +42,7 @@ export class RegimesTvaService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { regimeTva: RegimeTva };
-          variables = { ...variables, id: key };
+          variables = { ...variables, [this.keyField]: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

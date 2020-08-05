@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class FournisseursService extends ApiService implements APIRead {
 
-  listRegexp = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
@@ -28,19 +28,33 @@ export class FournisseursService extends ApiService implements APIRead {
   }
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
-    const query = this.buildGetAll(1, this.listRegexp);
-    type Response = { allFournisseur: RelayPage<Fournisseur> };
+
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
-          const variables = {
-            ...inputVariables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
+
+          if (options.group)
+            return this.getDistinct(options, inputVariables).toPromise();
+
+          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
+          const query = this.buildGetAll();
+          type Response = { allFournisseur: RelayPage<Fournisseur> };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
             map( res => this.asListCount(res.data.allFournisseur)),
+            take(1),
+          )
+          .toPromise();
+        },
+        byKey: (key) => {
+          const query = this.buildGetOne(1, this.fieldsFilter);
+          type Response = { fournisseur: Fournisseur };
+          const variables = { ...inputVariables, id: key };
+          return this.
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
+          .pipe(
+            map( res => res.data.fournisseur),
             take(1),
           )
           .toPromise();
@@ -50,7 +64,7 @@ export class FournisseursService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.listRegexp);
+    const mutation = this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 
