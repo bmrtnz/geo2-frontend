@@ -91,7 +91,7 @@
         margin:0;
     }
 }
-::ng-deep .advancedsearch, ::ng-deep .quicksearch {
+::ng-deep .stock-page .advancedsearch, ::ng-deep .stock-page .quicksearch {
     width:90px;
     color:#00759c;
     left:0;
@@ -99,8 +99,12 @@
     font-size:16px;
     font-weight:bold;
 }
-::ng-deep .quicksearch {
-    width:auto;
+::ng-deep .stock-page .quicksearch {
+    width:160px;
+    height:65px;
+}
+::ng-deep .stock-page .dx-texteditor.dx-editor-underlined::after {
+    width:160px;
 }
 ::ng-deep .quicksearch-container {
     position: relative;
@@ -117,7 +121,7 @@
 ::ng-deep .dx-datagrid-text-content {
     text-overflow:initial;
 }
-::ng-deep .dx-datagrid .dx-item.dx-toolbar-item.dx-toolbar-button:nth-of-type(3) {
+::ng-deep .stock-page .dx-datagrid .dx-item.dx-toolbar-item.dx-toolbar-button:nth-of-type(3) {
     position:fixed !important;
     left:0;
     top:70px;
