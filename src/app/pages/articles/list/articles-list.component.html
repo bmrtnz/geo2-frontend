@@ -39,7 +39,7 @@
     <dxi-column
       *ngFor="let field of detailedFields;let i=index"
       [dataField]="field.path"
-      [caption]="('articles-' + field.name | localize) || field.name"
+      [caption]="((field.path.includes('.id') || field.path.includes('.espece')) ? ('articles-' + field.path.replace('.', '-') | localize) : ('articles-' + field.name | localize)) || field.name"
       [visible]="i < articlesService.baseFieldsSize"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
@@ -47,7 +47,8 @@
       [filterValue]="field.filterValue"
       [width]="field.width"
     ></dxi-column>
-
+<!-- 
+    [caption]="('articles-' + field.name | localize) || field.name" -->
 
   </dx-data-grid>
 </div>

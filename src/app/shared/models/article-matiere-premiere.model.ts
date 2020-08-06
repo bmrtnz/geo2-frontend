@@ -8,7 +8,6 @@ import { CalibreUnifie } from './calibre-unifie.model';
 import { TypeVente } from './type-vente.model';
 
 export class ArticleMatierePremiere extends Model {
-  @Field({asKey: true, asLabel: true}) public id: string;
   @Field({model: Espece}) public espece: Espece;
   @Field({model: Variete}) public variete: Variete;
   @Field({model: Type}) public type: Type;
@@ -16,4 +15,5 @@ export class ArticleMatierePremiere extends Model {
   @Field({model: Origine}) public origine: Origine;
   @Field({model: CalibreUnifie}) public calibreUnifie: CalibreUnifie;
   @Field({model: TypeVente}) public typeVente: TypeVente;
+  @Field({asKey: true, asLabel: true}) public id: string;
 }
