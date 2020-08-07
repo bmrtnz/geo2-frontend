@@ -125,6 +125,13 @@ export class StockListComponent implements OnInit {
     this.emballages = this.emballagesService.getDataSource(dsOptions);
   }
 
+  onCellPrepared(e) {
+    // Fond jaune pour les stocks J21
+    if (e.column.dataField === 'stockJ21' && e.rowType === 'data') {
+      e.cellElement.classList.add('highlight-stockJ21-cell');
+    }
+  }
+
   onSelectClick(e) {
     alert('selection');
   }

@@ -172,6 +172,7 @@
                     [showColumnLines]="true"
                     [columnAutoWidth]="true"
                     [rowAlternationEnabled]="true"
+                    (onCellPrepared)="onCellPrepared($event)"
                     [allowColumnReordering]="true">
     
                         <dxo-search-panel [visible]="true" [width]="240" placeholder="Mot clé…"></dxo-search-panel>
