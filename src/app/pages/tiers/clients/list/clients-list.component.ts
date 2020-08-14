@@ -30,7 +30,12 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   }
 
   ngOnInit() {
-    this.clients = this.clientsService.getDataSource();
+    // Filtrage selon société sélectionnée
+    const dsOptions = {
+      search: 'societe.id==' + environment.societe.id
+    };
+
+    this.clients = this.clientsService.getDataSource(dsOptions);
     this.detailedFields = this.clientsService.model.getDetailedFields();
   }
 

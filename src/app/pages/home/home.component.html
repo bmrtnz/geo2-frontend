@@ -7,13 +7,32 @@
                     <dx-button class="BW-khaki-dark"
                     type="default"
                     icon="material-icons group"
+                    (onClick)="onClickMultipleMenu($event)"
                     text="Tiers">
                     </dx-button>
+                    <dx-drawer 
+                        openedStateMode='shrink'
+                        position="top"
+                        revealMode="expand"
+                        template="template"
+                        [opened]="false"
+                        [height]="400"
+                        [closeOnOutsideClick]="true">
+                        <div *dxTemplate="let data of 'template'">
+                            <dx-list class="panel-list dx-theme-accent-as-background-color"
+                                [hoverStateEnabled]="true"
+                                [activeStateEnabled]="false"
+                                [focusStateEnabled]="false"
+                                (onItemClick)="navigate($event)"
+                                [dataSource]="navigation">
+                            </dx-list>
+                        </div>
+                    </dx-drawer>
                     <dx-button class="BW-purple-dark"
                     type="default"
                     icon="material-icons list"
                     text="Articles"
-                    routerLink="/articles"
+                    routerLink="/nested/n/(/articles)"
                     >
                     </dx-button>
                 </div>

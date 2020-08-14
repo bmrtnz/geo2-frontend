@@ -106,8 +106,8 @@
 }
 
 ::ng-deep .buttons-container .dx-button {
-  height: 80px;
   width: 80px;
+  height: 80px;
   border-radius: 0 12px;
   padding: 0;
   margin: 5px;
@@ -138,7 +138,7 @@
   position: relative;
   display: block;
   height: 90px;
-  overflow: hidden;
+  overflow: visible;
   text-align: center;
 }
 
@@ -148,4 +148,52 @@
   height: 100%;
   width: 90px;
   float: left;
+}
+
+::ng-deep .main-buttons-container {
+
+  .dx-drawer {
+    position: fixed;
+    left:50%;
+    transform:translateX(-50%);
+    top:86px;
+    width:200px;
+    z-index:1000;
+  }
+  .dx-list-item {
+    margin:0;
+  }
+
+  .dx-list-item-icon-container {
+    width: 36px;
+    padding-right: 0px !important;
+    text-align: center;
+  }
+  
+  .dx-list-item-content {
+    padding-left: 10px !important;
+    font-size:13px;
+  }
+  
+  .dx-drawer-shrink #content {
+    overflow: hidden;
+    transition: all 0.4s ease-out;
+    column-width: 200px;
+  }
+  
+  .dx-drawer-shrink.dx-drawer-opened #content {
+    column-width: 100%;
+    margin-right: -10px;
+  }
+
+  .panel-list {
+    height: auto;
+  }
+  
+  .panel-list .dx-list-item {
+    color: #fff;
+    text-align: center;
+    border-top: 1px solid rgba(221, 221, 221, 0.2);
+  }
+
 }

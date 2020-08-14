@@ -47,6 +47,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
+  refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   editing = false;
 
@@ -153,6 +154,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
         .subscribe({
           next: () => {
             notify('Sauvegardé', 'success', 3000);
+            this.refreshGrid.emit();
             if (!this.createMode) {
               this.transporteur = { id: this.transporteur.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;

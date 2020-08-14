@@ -1,8 +1,10 @@
 import {Component, NgModule, Input, Output, EventEmitter, HostListener} from '@angular/core';
 import {CommonModule} from '@angular/common';
-
+import DataSource from 'devextreme/data/data_source';
 import {AuthService, LocalizationService} from '../../services';
+import {SocietesService} from 'app/shared/services/societes.service';
 import {UserPanelModule} from '../user-panel/user-panel.component';
+import {CompanyChooserModule} from '../company-chooser/company-chooser.component';
 import {DxButtonModule} from 'devextreme-angular/ui/button';
 import {DxToolbarModule} from 'devextreme-angular/ui/toolbar';
 
@@ -22,11 +24,14 @@ export class HeaderComponent {
   @Input()
   title: string;
 
+  // societeSource: any[];
+  societeSource: DataSource;
   userMenuItems: any[];
 
   constructor(
     private localizeService: LocalizationService,
-    private authService: AuthService
+    private authService: AuthService,
+    public societeService: SocietesService,
   ) {
     this.userMenuItems = [{
       text: 'Profil',
@@ -38,34 +43,16 @@ export class HeaderComponent {
         this.authService.logOut();
       }
     }];
+    const dsOptions = {
+      search: 'valide==true'
+    };
+    this.societeSource = this.societeService.getDataSource(dsOptions);
   }
 
   @HostListener('scroll', ['$event']) onScrollEvent($event) {
-    // console.log($event['Window']);
      console.log('scrolling');
   }
 
-  // @HostListener('window:scroll', ['$event']) onWindowScroll(e) {
-  //   console.log('scrolling');
-  //   // console.log(e.target['scrollingElement'].scrollTop)
-
-  //   // Your Code Here
-
-  // }
-
-  // tslint:disable-next-line: use-lifecycle-interface
-  // ngAfterViewInit(): void {
-  //   const myElement =  document.querySelector('.content') as HTMLElement;
-
-  //   myElement.addEventListener('scroll', (e) => {
-  //     const aa = e.target as HTMLElement;
-  //     console.log(aa.scrollTop)
-  //     if (aa.scrollTop > 100) {
-  //         console.log('>100')
-  //     };
-  //   });
-
-  // }
   toggleMenu = () => {
     this.menuToggle.emit();
   }
@@ -77,6 +64,7 @@ export class HeaderComponent {
     CommonModule,
     DxButtonModule,
     UserPanelModule,
+    CompanyChooserModule,
     DxToolbarModule
   ],
   declarations: [HeaderComponent],

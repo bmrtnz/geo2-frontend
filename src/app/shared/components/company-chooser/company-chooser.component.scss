@@ -1,0 +1,54 @@
+@import "../../../../themes/generated/variables.base.scss";
+
+.company-info {
+  display: flex;
+  align-items: center;
+
+  :host-context(.dx-toolbar-menu-section) & {
+    padding: 10px 6px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .company-name {
+    font-size: 14px;
+    margin: 0 9px;
+    font-weight: bold;
+    padding:4px 0;
+  }
+}
+
+.company-chooser-panel ::ng-deep {
+  .dx-list-item .dx-icon {
+    vertical-align: middle;
+    color: $base-text-color;
+    margin-right: 16px;
+  }
+  .dx-rtl .dx-list-item .dx-icon {
+    margin-right: 0;
+    margin-left: 16px;
+  }
+}
+
+::ng-deep .company-chooser-panel {
+  display:inline-block;
+}
+
+::ng-deep .dx-context-menu.company-chooser-menu {
+  &.dx-rtl {
+    .dx-submenu .dx-menu-items-container .dx-icon {
+      margin-left: 16px;
+    }
+  }
+  .dx-submenu .dx-menu-items-container .dx-icon {
+    margin-right: 16px;
+  }
+  .dx-menu-item .dx-menu-item-content {
+      padding: 3px 15px 4px;
+      color: $base-text-color;
+      text-align:center !important;
+  }
+}
+
+::ng-deep .dx-theme-generic .company-chooser-menu .dx-menu-item-content .dx-menu-item-text {
+  padding-left: 4px;
+  padding-right: 4px;
+}

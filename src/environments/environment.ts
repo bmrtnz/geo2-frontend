@@ -10,6 +10,10 @@ export const environment = {
     width: 500,
     height: 500
   },
+  societe: {
+    id: 'SA',
+    raisonSocial: 'Blue Whale S.A.S.'
+  },
 };
 
 /*

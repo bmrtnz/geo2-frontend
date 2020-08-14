@@ -33,11 +33,20 @@
                         <app-user-panel [menuItems]="userMenuItems" menuMode="context"></app-user-panel>
                     </div>
                 </dx-button>
+                <dx-button
+                    class="company-button"
+                    height="100%"
+                    stylingMode="text">
+                    <div *dxTemplate="let data of 'content'">
+                        <app-company-chooser-panel [companyItems]="societeSource" menuMode="context"></app-company-chooser-panel>
+                    </div>
+                </dx-button>
             </div>
         </dxi-item>
         <div *dxTemplate="let data of 'menuItem'">
             <app-user-panel [menuItems]="userMenuItems" menuMode="list"></app-user-panel>
         </div>
+
     </dx-toolbar>
 </header>
 

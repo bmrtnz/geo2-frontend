@@ -85,6 +85,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
+  refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   editing = false;
 
@@ -211,6 +212,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         .subscribe({
           next: () => {
             notify('Sauvegardé', 'success', 3000);
+            this.refreshGrid.emit();
             if (!this.createMode) {
               this.fournisseur = { id: this.fournisseur.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;

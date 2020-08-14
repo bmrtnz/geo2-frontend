@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, EventEmitter, Input } from '@angular/core';
 import { ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Client, Courtier } from '../../../../shared/models';
@@ -24,7 +24,9 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { tap } from 'rxjs/operators';
-import { DxCheckBoxComponent } from 'devextreme-angular';
+import { DxCheckBoxComponent, DxDataGridComponent } from 'devextreme-angular';
+import { environment } from 'environments/environment';
+import dxDataGrid from 'devextreme/ui/data_grid';
 
 @Component({
   selector: 'app-client-details',
@@ -108,6 +110,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     venteACommission: ['']
   });
   contentReadyEvent = new EventEmitter<any>();
+  refreshGrid = new EventEmitter();
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
@@ -171,7 +174,6 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   }
 
   ngAfterViewInit(): void {
-    this.formGroup.reset();
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
       const Element = document.querySelector('.submit') as HTMLElement;
@@ -243,8 +245,9 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
         for (const f of this.requiredFields) {
           client[f] = this.formGroup.controls[f].value;
         }
-        // Fake -> pour passer l'étape de création
-        client.societe = { id: 'SA' };
+        // On spécifie l'ID de la société pour passer l'étape de création
+        client.societe = { id: environment.societe.id };
+        // client.societe = { id: 'SA' };
         client.code = this.formGroup.get('code').value.toUpperCase();
       }
 
@@ -253,6 +256,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
+            this.refreshGrid.emit();
             if (!this.createMode) {
               this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;

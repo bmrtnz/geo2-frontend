@@ -6,6 +6,7 @@ import {HomeComponent} from './pages/home/home.component';
 import {ProfileComponent} from './pages/exemple/profile/profile.component';
 import {DisplayDataComponent} from './pages/exemple/display-data/display-data.component';
 import {DxDataGridModule, DxFormModule, DxButtonModule} from 'devextreme-angular';
+import { DxDrawerComponent, DxDrawerModule, DxListModule } from 'devextreme-angular';
 import {SharedModule} from './shared/shared.module';
 import {TestGridFormComponent} from './pages/exemple/test-grid-form/test-grid-form.component';
 import { environment } from '../environments/environment';
@@ -69,6 +70,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { enableTracing: environment.debugRouting }),
     DxDataGridModule,
     DxFormModule,
+    DxDrawerModule, DxListModule,
     DxButtonModule,
     SharedModule
   ],

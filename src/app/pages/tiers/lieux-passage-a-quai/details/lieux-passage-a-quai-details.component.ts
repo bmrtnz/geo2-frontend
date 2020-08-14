@@ -45,6 +45,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
+  refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   editing = false;
 
@@ -147,6 +148,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         .subscribe({
           next: () => {
             notify('Sauvegardé', 'success', 3000);
+            this.refreshGrid.emit();
             if (!this.createMode) {
               this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.formGroup.getRawValue() };
               this.readOnlyMode = true;

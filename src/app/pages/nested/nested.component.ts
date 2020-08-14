@@ -18,6 +18,7 @@ export interface NestedMain {
  */
 export interface NestedPart {
   contentReadyEvent: EventEmitter<any>;
+  refreshGrid?: EventEmitter<any>;
 }
 
 @Component({
@@ -62,6 +63,11 @@ export class NestedComponent {
     partComponent.contentReadyEvent
     .pipe(take(1))
     .subscribe(() => this.gridNav.scrollToDetails({behavior: 'auto'}));
+
+    // Rafraichissement datagrid list
+    partComponent.refreshGrid
+    .pipe(take(1))
+    .subscribe(() => this.dataGrid.instance.refresh());
 
   }
 
