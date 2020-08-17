@@ -113,6 +113,12 @@ export class StockListComponent implements OnInit {
         search: event.value ? 'espece.id==' + event.value.id : '',
     };
     this.subGetDataSource(dsOptions);
+  }
+
+  onFilterChange(e) {
+
+    const columnVisible = (e.value === null);
+    this.dataGrid.instance.columnOption(e.element.id, 'visible', columnVisible);
 
   }
 

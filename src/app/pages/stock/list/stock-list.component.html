@@ -86,7 +86,10 @@
                                     [searchEnabled]="true"
                                     [dataSource]="varietes"
                                     valueExpr="id"
-                                    displayExpr="description">
+                                    displayExpr="description"
+                                    id="variete"
+                                    (onValueChanged)="onFilterChange($event)"
+                                    >
                                     </dx-select-box>
                                 </div>
                             </div>
@@ -99,7 +102,10 @@
                                     [searchEnabled]="true"
                                     [dataSource]="calibresUnifies"
                                     valueExpr="id"
-                                    displayExpr="description">
+                                    displayExpr="description"
+                                    id="calibresUnifies"
+                                    (onValueChanged)="onFilterChange($event)"
+                                    >
                                     </dx-select-box>
                                 </div>
                             </div>
@@ -208,7 +214,8 @@
                         </dxi-column>
                         <dxi-column
                         dataField="variete"
-                        caption="{{ 'articles-variete' | localize }}">  
+                        caption="{{ 'articles-variete' | localize }}"
+                        >
                         </dxi-column>
                         <dxi-column
                         dataField="calibresUnifies"
