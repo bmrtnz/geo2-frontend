@@ -216,4 +216,5 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${ this.entrepot.code }/${ this.entrepot.typeTiers }`]);
   }
+
 }

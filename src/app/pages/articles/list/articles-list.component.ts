@@ -46,4 +46,17 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
   }
 
+  loadDataGridState() {
+    const data = window.localStorage.getItem('articlesStorage');
+    if (data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  saveDataGridState(data) {
+    window.localStorage.setItem('articlesStorage', JSON.stringify(data));
+  }
+
 }

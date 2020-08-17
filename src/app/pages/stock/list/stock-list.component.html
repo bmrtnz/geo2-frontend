@@ -182,7 +182,14 @@
                           [showPageSizeSelector]="true"
                           [allowedPageSizes]="[10, 25, 50, 100]"
                           [showInfo]="true"
-                          [showNavigationButtons]="true">  </dxo-pager>
+                          [showNavigationButtons]="true">
+                        </dxo-pager>
+                        <dxo-state-storing 
+                            [enabled]="true" 
+                            type="custom" 
+                            [customLoad]="loadDataGridState"
+                            [customSave]="saveDataGridState">
+                        </dxo-state-storing>
                         <dxo-filter-row [visible]="true"></dxo-filter-row>
                         <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
                         <dxo-column-chooser

@@ -37,6 +37,9 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
 
     this.clients = this.clientsService.getDataSource(dsOptions);
     this.detailedFields = this.clientsService.model.getDetailedFields();
+
+    // Configuration datagrid
+    this.loadDataGridState();
   }
 
   onRowDblClick(event) {
@@ -53,6 +56,19 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
         e.rowElement.classList.add('highlight-datagrid-row');
       }
     }
+  }
+
+  loadDataGridState() {
+    const data = window.localStorage.getItem('clientStorage');
+    if (data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  saveDataGridState(data) {
+    window.localStorage.setItem('clientStorage', JSON.stringify(data));
   }
 
 }

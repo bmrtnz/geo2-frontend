@@ -81,4 +81,17 @@ export class ContactsComponent implements OnInit, NestedPart {
       cell.setValue({[key]: event.value[key]});
   }
 
+  loadDataGridState() {
+    const data = window.localStorage.getItem('contactStorage');
+    if (data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  saveDataGridState(data) {
+    window.localStorage.setItem('contactStorage', JSON.stringify(data));
+  }
+
 }

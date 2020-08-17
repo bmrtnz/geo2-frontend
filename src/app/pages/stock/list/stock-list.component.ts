@@ -148,13 +148,17 @@ export class StockListComponent implements OnInit {
     alert('client');
   }
 
-  onQuickSearchChange(e) {
-    /*const divs = document.getElementsByClassName('dx-texteditor-input')[10];
-    divs.focus();
-    divs.value = e.value;*/
-    setTimeout(() => {
-      e.element.querySelector('input').focus();
-    }, 20);
+  loadDataGridState() {
+    const data = window.localStorage.getItem('stockStorage');
+    if (data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  saveDataGridState(data) {
+    window.localStorage.setItem('stockStorage', JSON.stringify(data));
   }
 
 }

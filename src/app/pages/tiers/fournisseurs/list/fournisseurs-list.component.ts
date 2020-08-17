@@ -49,4 +49,17 @@ export class FournisseursListComponent implements OnInit, NestedMain {
     this.router.navigate([`/tiers/fournisseurs/create`]);
   }
 
+  loadDataGridState() {
+    const data = window.localStorage.getItem('fournisseurStorage');
+    if (data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  saveDataGridState(data) {
+    window.localStorage.setItem('fournisseurStorage', JSON.stringify(data));
+  }
+
 }

@@ -46,4 +46,18 @@ export class EntrepotsListComponent implements OnInit {
       }
     }
   }
+
+  loadDataGridState() {
+    const data = window.localStorage.getItem('entrepotStorage');
+    if (data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  saveDataGridState(data) {
+    window.localStorage.setItem('entrepotStorage', JSON.stringify(data));
+  }
+
 }

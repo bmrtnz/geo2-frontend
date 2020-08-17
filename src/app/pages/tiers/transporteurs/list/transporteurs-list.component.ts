@@ -49,4 +49,18 @@ export class TransporteursListComponent implements OnInit, NestedMain {
       }
     }
   }
+
+  loadDataGridState() {
+    const data = window.localStorage.getItem('transporteurStorage');
+    if (data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  saveDataGridState(data) {
+    window.localStorage.setItem('transporteurStorage', JSON.stringify(data));
+  }
+
 }

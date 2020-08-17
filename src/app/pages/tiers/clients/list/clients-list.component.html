@@ -28,6 +28,12 @@
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-state-storing 
+      [enabled]="true" 
+      type="custom" 
+      [customLoad]="loadDataGridState"
+      [customSave]="saveDataGridState">
+    </dxo-state-storing>
     <dxo-pager
       [showPageSizeSelector]="true"
       [allowedPageSizes]="[10, 25, 50, 100]"
