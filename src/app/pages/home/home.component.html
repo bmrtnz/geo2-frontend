@@ -23,7 +23,7 @@
                                 [hoverStateEnabled]="true"
                                 [activeStateEnabled]="false"
                                 [focusStateEnabled]="false"
-                                (onItemClick)="navigate($event)"
+                                (onItemClick)="navigateItemList($event)"
                                 [dataSource]="navigation">
                             </dx-list>
                         </div>
@@ -32,7 +32,7 @@
                     type="default"
                     icon="material-icons list"
                     text="Articles"
-                    routerLink="/nested/n/(/articles)"
+                    (onClick)="navigate('articles/list')"
                     >
                     </dx-button>
                 </div>

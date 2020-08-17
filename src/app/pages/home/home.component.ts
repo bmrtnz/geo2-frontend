@@ -29,7 +29,11 @@ export class HomeComponent {
     this.router.navigate([`/stock`]);
   }
 
-  navigate(e) {
+  navigate(view) {
+    this.router.navigateByUrl('/nested/n/(' + view  + ')');
+  }
+
+  navigateItemList(e) {
     this.router.navigateByUrl('/nested/n/(' + e.itemData.path + '/list)');
   }
 
