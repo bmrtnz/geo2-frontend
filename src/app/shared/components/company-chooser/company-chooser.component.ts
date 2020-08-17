@@ -28,12 +28,23 @@ export class CompanyChooserComponent implements OnInit {
 
   ngOnInit() {
     this.societe = environment.societe.raisonSocial;
+    const data = window.localStorage.getItem('companyStorage');
+    // Rappel stockage (temporaire) local Storage
+    if (data !== null) {
+      const state = JSON.parse(data);
+      environment.societe.id = state.id;
+      environment.societe.raisonSocial = state.raisonSocial;
+      this.societe = environment.societe.raisonSocial;
+    }
+
   }
 
   selectCompany(e) {
     environment.societe.id = e.itemData.id;
     environment.societe.raisonSocial = e.itemData.raisonSocial;
     this.societe = environment.societe.raisonSocial;
+    // Stockage (temporaire) local Storage 
+    window.localStorage.setItem('companyStorage', JSON.stringify(environment.societe));
     // Back home
     this.router.navigate([`/**`]);
   }

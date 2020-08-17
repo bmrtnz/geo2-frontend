@@ -1,10 +1,8 @@
-<h2 class="content-block">{{ 'tiers-lieuxpassageaquai-title' | localize }}</h2>
+<h2 class="content-block">{{ 'tiers-lieuxpassageaquai-title' | localize }}
+  <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
+</h2>
 
 <div class="content-block">
-  <h2>
-  <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
-  <div style="clear:both"></div>
-  </h2>
   
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="lieuxPassageAQuais"
