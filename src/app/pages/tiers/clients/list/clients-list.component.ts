@@ -5,7 +5,7 @@ import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
 import { ModelFieldOptions } from 'app/shared/models/model';
-import { environment} from 'environments/environment';
+import { environment, loada} from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 
 @Component({
@@ -61,10 +61,19 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   loadDataGridState() {
     const data = window.localStorage.getItem('clientStorage');
     if (data !== null) {
-      return JSON.parse(data);
+
+      // Suppression filtres/recherche
+      const state = JSON.parse(data);
+      for (const myColumn of state.columns) {
+        myColumn.filterValue = null;
+      }
+      state.searchText = '';
+
+      return state;
     } else {
       return null;
     }
+
   }
 
   saveDataGridState(data) {

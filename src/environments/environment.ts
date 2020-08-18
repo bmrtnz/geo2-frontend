@@ -2,6 +2,8 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { loadavg } from 'os';
+
 export const environment = {
   production: false,
   debugRouting: false,
@@ -14,7 +16,12 @@ export const environment = {
     id: 'SA',
     raisonSocial: 'Blue Whale S.A.S.'
   },
+
 };
+
+export function loada() {
+  alert('ttt');
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

@@ -16,20 +16,12 @@
   }
 }
 
-.company-chooser-panel ::ng-deep {
-  .dx-list-item .dx-icon {
-    vertical-align: middle;
-    color: $base-text-color;
-    margin-right: 16px;
-  }
-  .dx-rtl .dx-list-item .dx-icon {
-    margin-right: 0;
-    margin-left: 16px;
-  }
+::ng-deep .company-chooser-panel {
+  display: inline-block;
 }
 
-::ng-deep .company-chooser-panel {
-  display:inline-block;
+::ng-deep .company-chooser-menu {
+  background:red !important;
 }
 
 ::ng-deep .dx-context-menu.company-chooser-menu {
@@ -44,7 +36,6 @@
   .dx-menu-item .dx-menu-item-content {
       padding: 3px 15px 4px;
       color: $base-text-color;
-      text-align:center !important;
   }
 }
 

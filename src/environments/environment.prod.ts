@@ -11,3 +11,7 @@ export const environment = {
     raisonSocial: 'Blue Whale S.A.S.'
   },
 };
+
+export function loada() {
+  alert('ttt');
+}

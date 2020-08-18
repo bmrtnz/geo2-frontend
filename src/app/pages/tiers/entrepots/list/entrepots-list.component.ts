@@ -48,12 +48,21 @@ export class EntrepotsListComponent implements OnInit {
   }
 
   loadDataGridState() {
-    const data = window.localStorage.getItem('entrepotStorage');
+    const data = window.localStorage.getItem('clientStorage');
     if (data !== null) {
-      return JSON.parse(data);
+
+      // Suppression filtres/recherche
+      const state = JSON.parse(data);
+      for (const myColumn of state.columns) {
+        myColumn.filterValue = null;
+      }
+      state.searchText = '';
+
+      return state;
     } else {
       return null;
     }
+
   }
 
   saveDataGridState(data) {

@@ -1,8 +1,5 @@
 <div class="company-chooser-panel">
     <div class="company-info">
-        <!-- <div class="image-container">
-            <div class="user-image"></div>
-        </div> -->
         <div class="company-name">{{ societe }}</div>
     </div>
     <dx-context-menu
@@ -11,11 +8,10 @@
         target=".company-button"
         showEvent="dxclick"
         (onItemClick)="selectCompany($event)"
-        hoverStateEnabled="true"
         width="170px"
         [position]="{ my: 'top center', at: 'bottom center' }"
         displayExpr="raisonSocial"
-        cssClass="user-menu">
+        cssClass="company-chooser-menu">
     </dx-context-menu>
     <dx-list
         *ngIf="menuMode === 'list'"

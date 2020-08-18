@@ -82,12 +82,21 @@ export class ContactsComponent implements OnInit, NestedPart {
   }
 
   loadDataGridState() {
-    const data = window.localStorage.getItem('contactStorage');
+    const data = window.localStorage.getItem('clientStorage');
     if (data !== null) {
-      return JSON.parse(data);
+
+      // Suppression filtres/recherche
+      const state = JSON.parse(data);
+      for (const myColumn of state.columns) {
+        myColumn.filterValue = null;
+      }
+      state.searchText = '';
+
+      return state;
     } else {
       return null;
     }
+
   }
 
   saveDataGridState(data) {
