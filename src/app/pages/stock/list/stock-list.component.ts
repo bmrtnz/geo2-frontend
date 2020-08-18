@@ -154,17 +154,17 @@ export class StockListComponent implements OnInit {
     alert('client');
   }
 
-  loadDataGridState() {
-    const data = window.localStorage.getItem('stockStorage');
-    if (data !== null) {
-      return JSON.parse(data);
-    } else {
-      return null;
-    }
-  }
+  // loadDataGridState() {
+  //   const data = window.localStorage.getItem('stockStorage');
+  //   if (data !== null) {
+  //     return JSON.parse(data);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
-  saveDataGridState(data) {
-    window.localStorage.setItem('stockStorage', JSON.stringify(data));
-  }
+  // saveDataGridState(data) {
+  //   window.localStorage.setItem('stockStorage', JSON.stringify(data));
+  // }
 
 }

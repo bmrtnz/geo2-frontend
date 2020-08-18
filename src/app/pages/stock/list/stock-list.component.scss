@@ -79,18 +79,20 @@
         }
     }
 }
-::ng-deep .dx-list-item {
-    height:20px;
-    .dx-list-item-content {
-        font-size:12px;
-        line-height:12px;
-        padding-top:3px !important;
-        padding-bottom:3px !important;
-    }  
-    .dx-list-item-content:first-of-type {
-        margin:0;
-    }
-}
+
+// ::ng-deep .stock-page .dx-list-item {
+//     height:20px;
+//     .dx-list-item-content {
+//         font-size:12px;
+//         line-height:12px;
+//         padding-top:3px !important;
+//         padding-bottom:3px !important;
+//     }  
+//     .dx-list-item-content:first-of-type {
+//         margin:0;
+//     }
+// }
+
 ::ng-deep .stock-page .advancedsearch, ::ng-deep .stock-page .quicksearch {
     width:90px;
     color:#00759c;
