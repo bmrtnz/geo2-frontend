@@ -53,7 +53,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       // Suppression filtres/recherche
       const state = JSON.parse(data);
       for (const myColumn of state.columns) {
-        myColumn.filterValue = null;
+        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
       }
       state.searchText = '';
 

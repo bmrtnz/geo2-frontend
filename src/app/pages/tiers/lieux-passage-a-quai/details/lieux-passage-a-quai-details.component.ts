@@ -14,6 +14,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { tap } from 'rxjs/operators';
+import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -47,7 +48,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
-  editing = false;
+  @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+   editing = false;
 
   lieupassageaquai: LieuPassageAQuai;
   code: string;
@@ -174,6 +176,10 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
+  }
+
+  fileManagerClick() {
+    this.fileManagerComponent.visible = true;
   }
 
   contactsBtnClick() {

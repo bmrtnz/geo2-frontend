@@ -15,6 +15,7 @@ import { LieuxPassageAQuaiListComponent } from './list/lieux-passage-a-quai-list
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
+import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-
     DxPopoverModule,
     DxValidatorModule,
     EditingAlertModule,
+    FileManagerModule
   ],
   declarations: [
     LieuxPassageAQuaiListComponent,

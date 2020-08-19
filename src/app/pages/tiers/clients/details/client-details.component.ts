@@ -22,6 +22,7 @@ import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { tap } from 'rxjs/operators';
 import { DxCheckBoxComponent, DxDataGridComponent } from 'devextreme-angular';
@@ -113,6 +114,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   refreshGrid = new EventEmitter();
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
   editing = false;
 
@@ -277,6 +279,10 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     } else {
       this.router.navigate([`/tiers/clients`]);
     }
+  }
+
+  fileManagerClick() {
+    this.fileManagerComponent.visible = true;
   }
 
   toggleVisible() {

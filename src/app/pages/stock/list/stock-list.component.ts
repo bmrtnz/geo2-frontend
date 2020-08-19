@@ -22,7 +22,7 @@ import { EspecesService } from 'app/shared/services/especes.service';
 @Component({
   selector: 'app-stock-list',
   templateUrl: './stock-list.component.html',
-  styleUrls: ['./stock-list.component.scss'],
+  styleUrls: ['./stock-list.component.scss']
 })
 
 export class StockListComponent implements OnInit {

@@ -7,6 +7,7 @@ import {UserPanelModule} from '../user-panel/user-panel.component';
 import {CompanyChooserModule} from '../company-chooser/company-chooser.component';
 import {DxButtonModule} from 'devextreme-angular/ui/button';
 import {DxToolbarModule} from 'devextreme-angular/ui/toolbar';
+import {FileManagerModule} from '../file-manager/file-manager-popup.component';
 
 @Component({
   selector: 'app-header',
@@ -24,7 +25,6 @@ export class HeaderComponent {
   @Input()
   title: string;
 
-  // societeSource: any[];
   societeSource: DataSource;
   userMenuItems: any[];
 
@@ -65,6 +65,7 @@ export class HeaderComponent {
     DxButtonModule,
     UserPanelModule,
     CompanyChooserModule,
+    FileManagerModule,
     DxToolbarModule
   ],
   declarations: [HeaderComponent],

@@ -20,6 +20,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { tap } from 'rxjs/operators';
+import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -87,6 +88,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -233,6 +235,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     } else {
       this.router.navigate([`/tiers/fournisseurs`]);
     }
+  }
+
+  fileManagerClick() {
+    this.fileManagerComponent.visible = true;
   }
 
   toggleVisible() {

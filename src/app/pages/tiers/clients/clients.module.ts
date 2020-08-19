@@ -17,6 +17,7 @@ import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EntrepotsModule } from '../entrepots/entrepots.module';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { EditingGuard } from 'app/shared/guards/editing-guard';
         DxDateBoxModule,
         HistoriqueValideModule,
         PromptPopupModule,
-        EditingAlertModule
+        EditingAlertModule,
+        FileManagerModule
     ],
     declarations: [
         ClientsListComponent,

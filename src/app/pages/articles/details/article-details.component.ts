@@ -33,6 +33,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { switchMap, tap } from 'rxjs/operators';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 @Component({
     selector: 'app-articles',
@@ -92,6 +93,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     });
     contentReadyEvent = new EventEmitter<any>();
     @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+    @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
     editing = false;
 
     article: Article;
@@ -238,5 +240,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
           this.validateCommentPromptVisible = true;
         }
       }
+
+    fileManagerClick() {
+    this.fileManagerComponent.visible = true;
+    }
 
 }

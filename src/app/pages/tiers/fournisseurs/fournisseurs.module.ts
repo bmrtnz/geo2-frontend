@@ -17,6 +17,7 @@ import {PromptPopupModule} from '../../../shared/components/prompt-popup/prompt-
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
+import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-
         HistoriqueValideModule,
         PromptPopupModule,
         EditingAlertModule,
+        FileManagerModule
     ],
   declarations: [
     FournisseursListComponent,

@@ -15,6 +15,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { tap } from 'rxjs/operators';
+import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -49,7 +50,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
-  editing = false;
+  @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+   editing = false;
 
   transporteur: Transporteur;
   code: string;
@@ -179,6 +181,10 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
+  }
+
+  fileManagerClick() {
+    this.fileManagerComponent.visible = true;
   }
 
   contactsBtnClick() {

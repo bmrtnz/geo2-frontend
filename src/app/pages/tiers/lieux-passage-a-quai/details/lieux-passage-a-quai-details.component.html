@@ -49,6 +49,7 @@
           class="black"
           height="auto"
           icon="material-icons folder"
+          (onClick)="fileManagerClick()"
           text="{{ 'btn-docsjoints' | localize }}">
         </dx-button>
       </dxi-item>
@@ -342,3 +343,4 @@
   </div>
 </form>
 <app-editing-alert></app-editing-alert>
+<app-file-manager-popup></app-file-manager-popup>
