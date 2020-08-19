@@ -11,19 +11,19 @@ const fileItems: FileItem[] = [{
     name: 'Documents',
     isDirectory: true,
     items: [{
-        name: 'Projects',
+        name: 'Projets',
         isDirectory: true,
         items: [{
-            name: 'About.rtf',
+            name: 'A propos.rtf',
             isDirectory: false,
             size: 1024
         }, {
-            name: 'Passwords.rtf',
+            name: 'Mots de passe.rtf',
             isDirectory: false,
             size: 2048
         }]
     }, {
-        name: 'About.xml',
+        name: 'A propos.xml',
         isDirectory: false,
         size: 1024
     }, {
@@ -31,7 +31,7 @@ const fileItems: FileItem[] = [{
         isDirectory: false,
         size: 2048
     }, {
-        name: 'ToDo.txt',
+        name: 'A faire.txt',
         isDirectory: false,
         size: 3072
     }],
@@ -43,19 +43,19 @@ const fileItems: FileItem[] = [{
         isDirectory: false,
         size: 20480
     }, {
-        name: 'banner.gif',
+        name: 'banniere.gif',
         isDirectory: false,
         size: 10240
     }]
 }, {
-    name: 'System',
+    name: 'Système',
     isDirectory: true,
     items: [{
-        name: 'Employees.txt',
+        name: 'Employés.txt',
         isDirectory: false,
         size: 3072
     }, {
-        name: 'PasswordList.txt',
+        name: 'Liste mots de passe.txt',
         isDirectory: false,
         size: 5120
     }]

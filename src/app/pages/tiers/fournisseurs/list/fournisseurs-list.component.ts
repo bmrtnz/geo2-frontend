@@ -50,7 +50,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   }
 
   loadDataGridState() {
-    const data = window.localStorage.getItem('clientStorage');
+    const data = window.localStorage.getItem('fournisseurStorage');
     if (data !== null) {
 
       // Suppression filtres/recherche

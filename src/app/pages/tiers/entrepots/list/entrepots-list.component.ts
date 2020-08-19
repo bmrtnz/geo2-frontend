@@ -48,7 +48,7 @@ export class EntrepotsListComponent implements OnInit {
   }
 
   loadDataGridState() {
-    const data = window.localStorage.getItem('clientStorage');
+    const data = window.localStorage.getItem('entrepotStorage');
     if (data !== null) {
 
       // Suppression filtres/recherche

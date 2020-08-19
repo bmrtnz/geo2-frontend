@@ -82,7 +82,7 @@ export class ContactsComponent implements OnInit, NestedPart {
   }
 
   loadDataGridState() {
-    const data = window.localStorage.getItem('clientStorage');
+    const data = window.localStorage.getItem('contactStorage');
     if (data !== null) {
 
       // Suppression filtres/recherche

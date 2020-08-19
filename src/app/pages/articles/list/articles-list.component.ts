@@ -47,7 +47,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   }
 
   loadDataGridState() {
-    const data = window.localStorage.getItem('clientStorage');
+    const data = window.localStorage.getItem('articlesStorage');
     if (data !== null) {
 
       // Suppression filtres/recherche
