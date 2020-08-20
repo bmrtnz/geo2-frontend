@@ -237,7 +237,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     onValideChange(e) {
         if (e.event) { // Changed by user
-          this.validateCommentPromptVisible = true;
+            if (e.value) {
+                // this.article.preSaisie = false;
+            }
+            this.validateCommentPromptVisible = true;
         }
       }
 

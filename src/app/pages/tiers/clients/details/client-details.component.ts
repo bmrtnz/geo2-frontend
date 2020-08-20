@@ -211,7 +211,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
     this.secteurs = this.secteursService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
-    this.pays = this.paysService.getDataSource();
+    this.pays = this.paysService.getDataSource({search: 'valide==true'});
     this.typesClient = this.typesClientService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -291,6 +291,9 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   onValideChange(e) {
     if (e.event) { // Changed by user
+      if (e.value) {
+        // this.client.preSaisie = false;
+      }
       this.validateCommentPromptVisible = true;
     }
   }

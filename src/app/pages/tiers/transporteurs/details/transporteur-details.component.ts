@@ -123,7 +123,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       }
     });
 
-    this.pays = this.paysService.getDataSource();
+    this.pays = this.paysService.getDataSource({search: 'valide==true'});
     this.regimesTva = this.regimesTvaService.getDataSource();
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();

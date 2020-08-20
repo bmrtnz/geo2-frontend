@@ -161,7 +161,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           .getOne(params.id)
           .subscribe( res => {
             this.fournisseur = res.data.fournisseur;
-            console.log(this.fournisseur.fournisseurDeRattachement);
+            // console.log(this.fournisseur.fournisseurDeRattachement);
             this.formGroup.patchValue(this.fournisseur);
             this.contentReadyEvent.emit();
           });
@@ -171,7 +171,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       }
     });
 
-    this.pays = this.paysService.getDataSource();
+    this.pays = this.paysService.getDataSource({search: 'valide==true'});
     this.bureauxAchat = this.bureauxAchatService.getDataSource();
     this.typesFournisseur = this.typesFournisseurService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -247,6 +247,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   onValideChange(e) {
     if (e.event) { // Changed by user
+      if (e.value) {
+        // this.fournisseur.preSaisie = false;
+      }
       this.validateCommentPromptVisible = true;
     }
   }

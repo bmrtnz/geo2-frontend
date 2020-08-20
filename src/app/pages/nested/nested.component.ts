@@ -65,9 +65,11 @@ export class NestedComponent {
     .subscribe(() => this.gridNav.scrollToDetails({behavior: 'auto'}));
 
     // Rafraichissement datagrid list
-    partComponent.refreshGrid
-    .pipe(take(1))
-    .subscribe(() => this.dataGrid.instance.refresh());
+    if (partComponent.refreshGrid) {
+      partComponent.refreshGrid
+      .pipe(take(1))
+      .subscribe(() => this.dataGrid.instance.refresh());
+    }
 
   }
 
