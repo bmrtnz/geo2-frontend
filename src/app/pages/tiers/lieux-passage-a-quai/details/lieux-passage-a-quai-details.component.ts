@@ -167,7 +167,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   onCancel() {
     if (!this.createMode) {
-      this.formGroup.reset(this.formGroup);
+      this.formGroup.reset(this.lieupassageaquai);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/lieux-passage-a-quai`]);
