@@ -51,6 +51,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   }
 
   loadDataGridState() {
+    
     const data = window.localStorage.getItem('lieupassageaquaiStorage');
     if (data !== null) {
 
