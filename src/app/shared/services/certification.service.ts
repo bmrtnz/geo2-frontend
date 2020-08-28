@@ -23,6 +23,9 @@ export class CertificationsService extends ApiService implements APIRead {
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
+      sort: [
+        { selector: 'description' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 

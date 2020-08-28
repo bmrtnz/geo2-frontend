@@ -23,6 +23,9 @@ export class PenetrosService extends ApiService implements APIRead {
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
+      sort: [
+        { selector: 'description' }
+      ],
       store: this.createCustomStore({
         key: ['id', 'especeId'],
         load: (options: LoadOptions) => {

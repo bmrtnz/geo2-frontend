@@ -25,9 +25,8 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { tap } from 'rxjs/operators';
-import { DxCheckBoxComponent, DxDataGridComponent } from 'devextreme-angular';
+import { DxCheckBoxComponent } from 'devextreme-angular';
 import { environment } from 'environments/environment';
-import dxDataGrid from 'devextreme/ui/data_grid';
 
 @Component({
   selector: 'app-client-details',
@@ -124,6 +123,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   secteurs: DataSource;
   personnes: DataSource;
   pays: DataSource;
+  paysFacturation: DataSource;
+  langue: DataSource;
   typesClient: DataSource;
   incoterms: DataSource;
   devises: DataSource;
@@ -212,6 +213,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     this.secteurs = this.secteursService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
     this.pays = this.paysService.getDataSource({search: 'valide==true'});
+    this.paysFacturation = this.paysService.getDataSource({search: 'valide==true'});
+    this.langue = this.paysService.getDataSource({search: 'valide==true'});
     this.typesClient = this.typesClientService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();

@@ -21,6 +21,9 @@ export class ArticlesMatieresPremieresService extends ApiService implements APIR
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
+      sort: [
+        { selector: 'description' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 

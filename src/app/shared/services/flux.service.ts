@@ -20,6 +20,9 @@ export class FluxService extends ApiService implements APIRead {
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
+      sort: [
+        { selector: 'description' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 

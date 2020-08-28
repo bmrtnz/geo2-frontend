@@ -30,6 +30,9 @@ export class FournisseursService extends ApiService implements APIRead {
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
 
     return new DataSource({
+      sort: [
+        { selector: 'raisonSocial' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 

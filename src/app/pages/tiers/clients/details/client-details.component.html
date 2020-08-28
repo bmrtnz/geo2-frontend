@@ -354,14 +354,14 @@
                   </div>
                 </div>
 
-                <!-- Pays -->
+                <!-- Pays facturation -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-clients-facturationPays' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="facturationPays"
                       [readOnly]="readOnlyMode"
-                      [dataSource]="pays"
+                      [dataSource]="paysFacturation"
                       displayExpr="description"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
@@ -601,7 +601,7 @@
                   <dx-select-box
                     formControlName="langue"
                     [readOnly]="readOnlyMode"
-                    [dataSource]="pays"
+                    [dataSource]="langue"
                     displayExpr="description"
                     [searchEnabled]="true"
                     [searchExpr]="['id','description']"

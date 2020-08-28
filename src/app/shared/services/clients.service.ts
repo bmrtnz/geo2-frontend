@@ -29,6 +29,9 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
 
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
+      sort: [
+        { selector: 'raisonSocial' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 

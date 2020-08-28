@@ -22,6 +22,9 @@ export class BureauxAchatService extends ApiService implements APIRead {
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
+      sort: [
+        { selector: 'raisonSocial' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 

@@ -25,6 +25,7 @@ export class Entrepot extends Model {
   @Field() public ville: string;
   @Field({model: Pays}) public pays: Pays;
   @Field() public adresse1: string;
+  @Field({filterValue: true, width: 100}) public valide: boolean;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field() public codePostal: string;
@@ -51,7 +52,6 @@ export class Entrepot extends Model {
   @Field() public envoieAutomatiqueDetail: boolean;
   @Field() public controlReferenceClient: string;
   @Field() public mentionClientSurFacture: string;
-  @Field({filterValue: true, width: 100}) public valide: boolean;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
   @Field() public prixUnitaireTarifTransport: number;
   @Field() public prixUnitaireTarifTransit: number;

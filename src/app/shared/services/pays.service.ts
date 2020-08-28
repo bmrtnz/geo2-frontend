@@ -22,6 +22,9 @@ export class PaysService extends ApiService implements APIRead {
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
+      sort: [
+        { selector: 'description' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 
@@ -31,6 +34,13 @@ export class PaysService extends ApiService implements APIRead {
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allPays: RelayPage<Pays> };
           variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
+
+          // variables.pageable.sort = {
+          //   orders: [{
+          //     property: 'description'
+          //   }]
+          // };
+
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
