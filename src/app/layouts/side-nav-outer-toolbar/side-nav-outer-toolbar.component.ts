@@ -66,10 +66,6 @@ export class SideNavOuterToolbarComponent implements OnInit {
     });
   }
 
-  // scrollToTop() {
-  //   this.scrollView.instance.scrollTo(0);
-  // }
-
   updateDrawer() {
     const isXSmall = this.screen.sizes['screen-x-small'];
     const isLarge = this.screen.sizes['screen-large'];
@@ -93,21 +89,43 @@ export class SideNavOuterToolbarComponent implements OnInit {
     const pointerEvent = event.event;
 
     if (path && this.menuOpened) {
-      if (event.node.selected) {
-        pointerEvent.preventDefault();
-      } else {
-        this.router.navigateByUrl(path);
-      }
+      // if (event.node.selected) {
+      //   pointerEvent.preventDefault();
+      // } else {
+      pointerEvent.preventDefault();
+      this.router.navigateByUrl(path);
+      // }
 
-      if (this.hideMenuAfterNavigation) {
-        this.temporaryMenuOpened = false;
-        this.menuOpened = false;
-        pointerEvent.stopPropagation();
-      }
+      // if (this.hideMenuAfterNavigation && this.menuOpened) {
+        // this.temporaryMenuOpened = false;
+        // this.menuOpened = false;
+        // pointerEvent.stopPropagation();
+      // }
+
     } else {
       pointerEvent.preventDefault();
     }
   }
+
+  // if (path && this.menuOpened) {
+  //   // if (event.node.selected) {
+  //   //   pointerEvent.preventDefault();
+  //   //   console.log('pointerEvent.preventDefault()')
+  //   // } else {
+  //   this.router.navigateByUrl(path);
+  //   // }
+
+  //   if (this.hideMenuAfterNavigation && this.menuOpened) {
+  //     // this.temporaryMenuOpened = false;
+  //     // this.menuOpened = false;
+  //     // pointerEvent.stopPropagation();
+  //   }
+
+  // } else {
+  //   pointerEvent.preventDefault();
+  // }
+
+
 
   navigationClick() {
     if (this.showMenuAfterClick) {
