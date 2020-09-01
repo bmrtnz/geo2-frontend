@@ -213,8 +213,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     this.secteurs = this.secteursService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
     this.pays = this.paysService.getDataSource({search: 'valide==true'});
-    this.paysFacturation = this.paysService.getDataSource({search: 'valide==true'});
-    this.langue = this.paysService.getDataSource({search: 'valide==true'});
+    // this.paysFacturation = this.paysService.getDataSource({search: 'valide==true'});
+    // this.langue = this.paysService.getDataSource({search: 'valide==true'});
     this.typesClient = this.typesClientService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
