@@ -361,7 +361,7 @@
                     <dx-select-box
                       formControlName="facturationPays"
                       [readOnly]="readOnlyMode"
-                      [dataSource]="paysFacturation"
+                      [dataSource]="pays"
                       displayExpr="description"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
@@ -601,7 +601,7 @@
                   <dx-select-box
                     formControlName="langue"
                     [readOnly]="readOnlyMode"
-                    [dataSource]="langue"
+                    [dataSource]="pays"
                     displayExpr="description"
                     [searchEnabled]="true"
                     [searchExpr]="['id','description']"

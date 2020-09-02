@@ -109,10 +109,17 @@ export class StockListComponent implements OnInit {
   }
 
   onEspeceChange(event) {
+    const fields = ['groupeEmballage', 'calibreMarquage', 'calibreUnifie', 'variete', 'origine', 'emballage'];
+
     const dsOptions = {
         search: event.value ? 'espece.id==' + event.value.id : '',
     };
     this.subGetDataSource(dsOptions);
+
+    // Reset des champs liés à l'espèce
+    for (const f of fields) {
+      this.stockForm.get(f).reset();
+    }
   }
 
   onFilterChange(e) {
