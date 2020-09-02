@@ -58,3 +58,4 @@ export * from './frais-marketing-mode-calcul.model';
 export * from './moyen-communication.model';
 export * from './condition-vente.model';
 export * from './certification.model';
+export * from './grid-config.model';
