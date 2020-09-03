@@ -10,19 +10,21 @@ import { map, take } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class GridsConfigsService extends ApiService implements APIRead,APIPersist {
+export class GridsConfigsService extends ApiService implements APIRead, APIPersist {
 
-  fieldsFilter = /.*\.(?:id|nomUtilisateur)$/i;
+  fieldsFilter = /.*\.(?:id|nomUtilisateur|grid)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, GridConfig);
+    this.gqlKeyType = 'GeoGridConfigKeyInput';
   }
 
   getDataSource(variables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       store: this.createCustomStore({
+        key: ['utilisateur', 'grid'],
         load: (options: LoadOptions) => {
 
           if (options.group)
