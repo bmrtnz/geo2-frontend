@@ -7,6 +7,10 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
+import { LoadsavedatagridstateService } from 'app/shared/services/loadsavedatagridstate.service';
+import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+
+let self: FournisseursListComponent;
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -24,9 +28,12 @@ export class FournisseursListComponent implements OnInit, NestedMain {
 
   constructor(
     public fournisseursService: FournisseursService,
+    public gridService: GridsConfigsService,
+    public loadsavedatagridstateService: LoadsavedatagridstateService,
     private router: Router,
   ) {
     this.apiService = this.fournisseursService;
+    self = this;
   }
 
   ngOnInit() {
@@ -49,26 +56,39 @@ export class FournisseursListComponent implements OnInit, NestedMain {
     this.router.navigate([`/tiers/fournisseurs/create`]);
   }
 
-  loadDataGridState() {
-    const data = window.localStorage.getItem('fournisseurStorage');
-    if (data !== null) {
+  async loadDataGridState() {
 
-      // Suppression filtres/recherche
-      const state = JSON.parse(data);
-      for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
-      }
-      state.searchText = '';
+    // Lecture
+    return self.gridService.getDataSource({
+        search: `utilisateur.nomUtilisateur==7 and grid==fournisseurStorage`,
+      }).load().then( res => {
+        if (!res.length) return null;
+        const data = res[0].config;
+        if (data !== null) {
+          // Suppression filtres/recherche
+          for (const myColumn of data.columns) {
+            if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
+          }
+          data.searchText = '';
 
-      return state;
-    } else {
-      return null;
+          return data;
+        } else {
+          return null;
+        }
+      });
+
     }
 
-  }
-
   saveDataGridState(data) {
-    window.localStorage.setItem('fournisseurStorage', JSON.stringify(data));
+
+    // Ecriture
+    self.gridService.save({gridConfig: {
+      utilisateur: {nomUtilisateur: '7'},
+      grid: 'fournisseurStorage',
+      config: data
+    }})
+    .subscribe();
+
   }
 
 }

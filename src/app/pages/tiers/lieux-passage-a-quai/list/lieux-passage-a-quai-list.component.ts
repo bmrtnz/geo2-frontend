@@ -7,6 +7,9 @@ import { NestedMain } from 'app/pages/nested/nested.component';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
+import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+
+let self: LieuxPassageAQuaiListComponent;
 
 @Component({
   selector: 'app-lieux-passage-a-quai-list',
@@ -24,9 +27,11 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
 
   constructor(
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
+    public gridService : GridsConfigsService,
     private router: Router,
   ) {
     this.apiService = this.lieuxPassageAQuaiService;
+    self = this;
   }
 
   ngOnInit() {
@@ -50,27 +55,39 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
     }
   }
 
-  loadDataGridState() {
-    
-    const data = window.localStorage.getItem('lieupassageaquaiStorage');
-    if (data !== null) {
+  async loadDataGridState() {
 
-      // Suppression filtres/recherche
-      const state = JSON.parse(data);
-      for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
-      }
-      state.searchText = '';
+    // Lecture
+    return self.gridService.getDataSource({
+        search: `utilisateur.nomUtilisateur==7 and grid==lieudepassageaquaiStorage`,
+      }).load().then( res => {
+        if (!res.length) return null;
+        const data = res[0].config;
+        if (data !== null) {
+          // Suppression filtres/recherche
+          for (const myColumn of data.columns) {
+            if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
+          }
+          data.searchText = '';
 
-      return state;
-    } else {
-      return null;
+          return data;
+        } else {
+          return null;
+        }
+      });
+
     }
 
-  }
-
   saveDataGridState(data) {
-    window.localStorage.setItem('lieupassageaquaiStorage', JSON.stringify(data));
+
+    // Ecriture
+    self.gridService.save({gridConfig: {
+      utilisateur: {nomUtilisateur: '7'},
+      grid: 'lieudepassageaquaiStorage',
+      config: data
+    }})
+    .subscribe();
+
   }
 
 }
