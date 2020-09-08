@@ -4,6 +4,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
+import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+
+let self: EntrepotsListComponent;
 
 @Component({
   selector: 'app-entrepots-list',
@@ -20,9 +23,11 @@ export class EntrepotsListComponent implements OnInit {
 
   constructor(
     public entrepotsService: EntrepotsService,
+    public gridService: GridsConfigsService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
+    self = this;
   }
 
   ngOnInit(): void {
@@ -47,26 +52,39 @@ export class EntrepotsListComponent implements OnInit {
     }
   }
 
-  loadDataGridState() {
-    const data = window.localStorage.getItem('entrepotStorage');
-    if (data !== null) {
+  async loadDataGridState() {
 
-      // Suppression filtres/recherche
-      const state = JSON.parse(data);
-      for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
-      }
-      state.searchText = '';
+    // Lecture
+    return self.gridService.getDataSource({
+        search: `utilisateur.nomUtilisateur==7 and grid==entrepotStorage`,
+      }).load().then( res => {
+        if (!res.length) return null;
+        const data = res[0].config;
+        if (data !== null) {
+          // Suppression filtres/recherche
+          for (const myColumn of data.columns) {
+            if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
+          }
+          data.searchText = '';
 
-      return state;
-    } else {
-      return null;
+          return data;
+        } else {
+          return null;
+        }
+      });
+
     }
 
-  }
-
   saveDataGridState(data) {
-    window.localStorage.setItem('entrepotStorage', JSON.stringify(data));
+
+    // Ecriture
+    self.gridService.save({gridConfig: {
+      utilisateur: {nomUtilisateur: '7'},
+      grid: 'entrepotStorage',
+      config: data
+    }})
+    .subscribe();
+
   }
 
 }

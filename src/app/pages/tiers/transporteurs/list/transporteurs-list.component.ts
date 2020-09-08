@@ -7,6 +7,9 @@ import { NestedMain } from 'app/pages/nested/nested.component';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
+import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+
+let self: TransporteursListComponent;
 
 @Component({
   selector: 'app-transporteurs-list',
@@ -24,9 +27,11 @@ export class TransporteursListComponent implements OnInit, NestedMain {
 
   constructor(
     public transporteursService: TransporteursService,
+    public gridService: GridsConfigsService,
     private router: Router,
   ) {
     this.apiService = transporteursService;
+    self = this;
   }
 
   ngOnInit() {
@@ -50,26 +55,39 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     }
   }
 
-  loadDataGridState() {
-    const data = window.localStorage.getItem('transporteurStorage');
-    if (data !== null) {
+  async loadDataGridState() {
 
-      // Suppression filtres/recherche
-      const state = JSON.parse(data);
-      for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
-      }
-      state.searchText = '';
+    // Lecture
+    return self.gridService.getDataSource({
+        search: `utilisateur.nomUtilisateur==7 and grid==transporteurStorage`,
+      }).load().then( res => {
+        if (!res.length) return null;
+        const data = res[0].config;
+        if (data !== null) {
+          // Suppression filtres/recherche
+          for (const myColumn of data.columns) {
+            if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
+          }
+          data.searchText = '';
 
-      return state;
-    } else {
-      return null;
+          return data;
+        } else {
+          return null;
+        }
+      });
+
     }
 
-  }
-
   saveDataGridState(data) {
-    window.localStorage.setItem('transporteurStorage', JSON.stringify(data));
+
+    // Ecriture
+    self.gridService.save({gridConfig: {
+      utilisateur: {nomUtilisateur: '7'},
+      grid: 'transporteurStorage',
+      config: data
+    }})
+    .subscribe();
+
   }
 
 }
