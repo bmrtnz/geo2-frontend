@@ -79,7 +79,7 @@ export abstract class ApiService {
 
   pageSize = DEFAULT_PAGE_SIZE;
   baseFieldsSize = BASE_FIELDS_SIZE;
-  keyField: string;
+  keyField: string | string[];
   gqlKeyType = DEFAULT_GQL_KEY_TYPE;
   model: typeof Model;
   storeConfiguration: CustomStoreOptions;

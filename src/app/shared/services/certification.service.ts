@@ -50,7 +50,7 @@ export class CertificationsService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { certification: Certification };
-          inputVariables = { ...inputVariables, [this.keyField]: key };
+          inputVariables = { ...inputVariables, id: key };
           return this.
           query<Response>(query, { variables: inputVariables } as WatchQueryOptions)
           .pipe(

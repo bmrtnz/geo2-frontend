@@ -18,6 +18,8 @@ import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.s
 import { EmballagesService } from 'app/shared/services/emballages.service';
 import { environment } from 'environments/environment';
 import { EspecesService } from 'app/shared/services/especes.service';
+import { StockArticlesAgeService } from 'app/shared/services/stock-articles-age.service';
+import { ModelFieldOptions } from 'app/shared/models/model';
 
 @Component({
   selector: 'app-stock-list',
@@ -56,6 +58,7 @@ export class StockListComponent implements OnInit {
   calibresMarquage: DataSource;
   groupesEmballage: DataSource;
   especes: DataSource;
+  stockArticlesAge: DataSource;
   colorations: any[];
   typesVente: any[];
   stickeurs: any[];
@@ -78,6 +81,7 @@ export class StockListComponent implements OnInit {
   articles: DataSource;
   itemCount: number;
   columnChooser = environment.columnChooser;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
     private articlesService: ArticlesService,
@@ -93,6 +97,7 @@ export class StockListComponent implements OnInit {
     public clientsService: ClientsService,
     public stocksService: StockService,
     public emballagesService: EmballagesService,
+    public stockArticlesAgeService: StockArticlesAgeService,
     private fb: FormBuilder,
 
   ) { }
@@ -105,6 +110,8 @@ export class StockListComponent implements OnInit {
     this.fournisseurs = this.fournisseursService.getDataSource();
     this.clients = this.clientsService.getDataSource();
     this.modesCulture = this.modesCultureService.getDataSource();
+    this.stockArticlesAge = this.stockArticlesAgeService.getDataSource();
+    this.detailedFields = this.stockArticlesAgeService.model.getDetailedFields(3);
     this.subGetDataSource('');
   }
 
@@ -140,7 +147,7 @@ export class StockListComponent implements OnInit {
 
   onCellPrepared(e) {
     // Fond jaune pour les stocks J21
-    if (e.column.dataField === 'stockJ21' && e.rowType === 'data') {
+    if (e.column.dataField === 'j21aX' && e.rowType === 'data') {
       e.cellElement.classList.add('highlight-stockJ21-cell');
     }
   }

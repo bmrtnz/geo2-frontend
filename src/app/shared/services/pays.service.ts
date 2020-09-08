@@ -52,7 +52,7 @@ export class PaysService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { pays: Pays };
-          variables = { ...variables, [this.keyField]: key };
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

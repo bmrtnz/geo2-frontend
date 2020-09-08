@@ -49,7 +49,7 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { gridConfig: GridConfig };
-          variables = { ...variables, [this.keyField]: key };
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

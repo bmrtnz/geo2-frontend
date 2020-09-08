@@ -43,7 +43,7 @@ export class FluxService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { flux: Flux };
-          variables = { ...variables, [this.keyField]: key };
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

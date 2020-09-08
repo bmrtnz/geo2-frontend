@@ -45,7 +45,7 @@ export class TransitairesService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { transitaire: Transitaire };
-          variables = { ...variables, [this.keyField]: key };
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(

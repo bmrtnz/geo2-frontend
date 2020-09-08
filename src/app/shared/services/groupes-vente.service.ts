@@ -40,7 +40,7 @@ export class GroupesClientService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { groupeClient: GroupeClient };
-          variables = { ...variables, [this.keyField]: key };
+          variables = { ...variables, id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions)
           .pipe(
