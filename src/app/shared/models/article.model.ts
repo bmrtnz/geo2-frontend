@@ -12,5 +12,6 @@ export class Article extends Model {
   @Field({model: ArticleCahierDesCharges}) public cahierDesCharge: ArticleCahierDesCharges;
   @Field({model: ArticleNormalisation}) public normalisation: ArticleNormalisation;
   @Field() public valide: boolean;
+  @Field() public preSaisie: boolean;
   @Field({model: ArticleEmballage}) public emballage: ArticleEmballage;
 }

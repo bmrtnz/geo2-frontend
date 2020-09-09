@@ -44,7 +44,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     langue: [''],
     devise: [''],
     lieuFonctionEan: [''],
-    valide: [false]
+    valide: [false],
+    preSaisie: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
@@ -67,6 +68,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   defaultVisible: boolean;
   isReadOnlyMode = true;
   createMode = false;
+  preSaisie: string;
 
   constructor(
     private fb: FormBuilder,
@@ -116,6 +118,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
             this.transporteur = res.data.transporteur;
             this.formGroup.patchValue(this.transporteur);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.transporteur.preSaisie === true ? 'preSaisie' : '';
           });
       } else {
         this.transporteur = new Transporteur({});
@@ -147,6 +150,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
         transporteur.id = this.formGroup.get('id').value.toUpperCase();
           // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
           // Avoir pour les valeur par defaut (qui sont not null dans la base)
+        transporteur.preSaisie = true;
+        transporteur.valide = false;
       } else {
         transporteur.id = this.transporteur.id;
       }
@@ -189,6 +194,14 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${ this.transporteur.id }/${ this.transporteur.typeTiers }`]);
+  }
+
+  onValideChange(e) {
+    if (e.event) { // Changed by user
+      if (e.value) {
+        this.transporteur.preSaisie = false;
+      }
+    }
   }
 
 }

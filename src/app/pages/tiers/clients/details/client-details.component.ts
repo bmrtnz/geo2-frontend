@@ -37,6 +37,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   private requiredFields = ['soumisCtifl'];
 
+  preSaisie: string;
+
   formGroup = this.fb.group({
     code: [''],
     raisonSocial: [''],
@@ -116,6 +118,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
   editing = false;
+
 
   client: Client;
   code: string;
@@ -199,6 +202,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
             this.client = res.data.client;
             this.formGroup.patchValue(this.client);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
           });
       } else {
         // Apply default value
@@ -254,6 +258,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
         client.societe = { id: environment.societe.id };
         // client.societe = { id: 'SA' };
         client.code = this.formGroup.get('code').value.toUpperCase();
+        client.valide = false;
+        client.preSaisie = true;
       }
 
       this.clientsService
@@ -295,7 +301,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   onValideChange(e) {
     if (e.event) { // Changed by user
       if (e.value) {
-        // this.client.preSaisie = false;
+        this.client.preSaisie = false;
       }
       this.validateCommentPromptVisible = true;
     }

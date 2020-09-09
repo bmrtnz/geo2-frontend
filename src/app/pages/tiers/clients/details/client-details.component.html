@@ -2,7 +2,7 @@
 
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
-      {{ 'tiers-clients-details-title' | localize }}
+      {{ 'tiers-clients-details-title' | localize }} {{ preSaisie | localize}}
       <div class="right">
 
         <dx-button class="upperButton submit"

@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
-      {{ 'tiers-transporteurs-details-title' | localize }}
+      {{ 'tiers-transporteurs-details-title' | localize }} {{ preSaisie | localize}}
       <div class="right">
         <dx-button class="upperButton submit"
           type="default"
@@ -43,6 +43,7 @@
           class="vertical"
           formControlName="valide"
           [readOnly]="readOnlyMode"
+          (onValueChanged)="onValideChange($event)"
           [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
         <dx-button

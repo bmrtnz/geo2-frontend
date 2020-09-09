@@ -13,7 +13,7 @@ import { MutationOptions } from 'apollo-client';
 })
 export class EntrepotsService extends ApiService implements APIRead {
 
-  fieldsFilter = /.*\.(?:id|description|raisonSocial|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|code|raisonSocial|ville|valide)$/i;
 
   constructor(
     apollo: Apollo,
@@ -31,7 +31,7 @@ export class EntrepotsService extends ApiService implements APIRead {
   getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
     return new DataSource({
       sort: [
-        { selector: 'description' }
+        { selector: 'raisonSocial' }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {

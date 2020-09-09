@@ -28,6 +28,7 @@ export class Fournisseur extends Model {
   @Field({model: Devise}) public devise: Devise;
   @Field({model: Pays}) public langue: Pays;
   @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field() public preSaisie: boolean;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
   @Field() public adresse3: string;

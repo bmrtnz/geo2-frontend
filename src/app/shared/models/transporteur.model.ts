@@ -16,6 +16,7 @@ export class Transporteur extends Model {
   @Field() public codePostal: string;
   @Field() public adresse1: string;
   @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field() public preSaisie: boolean;
   @Field() public adresse2: string;
   @Field() public adresse3: string;
   @Field({model: RegimeTva}) public regimeTva: RegimeTva;

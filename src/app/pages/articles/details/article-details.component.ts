@@ -47,6 +47,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         description: [''],
         blueWhaleStock: [''],
         valide: [''],
+        preSaisie: [''],
         matierePremiere: this.fb.group({
             espece: [''],
             variete: [''],
@@ -189,6 +190,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     onSubmit() {
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
+            if (this.cloneMode) {
+                article.valide = false;
+                article.preSaisie = true;
+            }
             this.articlesService
                 .save({ article, clone: this.cloneMode })
                 .subscribe({
@@ -238,7 +243,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     onValideChange(e) {
         if (e.event) { // Changed by user
             if (e.value) {
-                // this.article.preSaisie = false;
+                this.article.preSaisie = false;
             }
             this.validateCommentPromptVisible = true;
         }

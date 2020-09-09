@@ -63,7 +63,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     referenceChep: [''],
     lieuFonctionEanDepot: [''],
     lieuFonctionEanAcheteur: [''],
-    valide: [false]
+    valide: [false],
+    preSaisie: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
@@ -84,6 +85,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   defaultVisible: boolean;
   isReadOnlyMode = true;
   createMode = false;
+  preSaisie: string;
 
   constructor(
     private fb: FormBuilder,
@@ -137,6 +139,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
             this.entrepot = res.data.entrepot;
             this.formGroup.patchValue(this.entrepot);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.entrepot.preSaisie === true ? 'preSaisie' : '';
           });
       } else {
         this.entrepot = new Entrepot({});
@@ -179,6 +182,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       } else {
         entrepot.code = this.formGroup.get('code').value.toUpperCase();
         entrepot.client = {id: this.route.snapshot.params.client};
+        entrepot.valide = false;
+        entrepot.preSaisie = true;
       }
 
       this.entrepotsService
@@ -215,6 +220,14 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${ this.entrepot.code }/${ this.entrepot.typeTiers }`]);
+  }
+
+  onValideChange(e) {
+    if (e.event) { // Changed by user
+      if (e.value) {
+        this.entrepot.preSaisie = false;
+      }
+    }
   }
 
 }

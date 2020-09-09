@@ -28,6 +28,7 @@ export class Client extends Model {
   @Field({model: Pays}) public pays: Pays;
   @Field({model: Secteur}) public secteur: Secteur;
   @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field() public preSaisie: boolean;
   @Field({model: Societe}) public societe: Societe;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
