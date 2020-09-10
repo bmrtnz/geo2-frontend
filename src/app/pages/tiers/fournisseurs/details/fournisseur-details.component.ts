@@ -211,6 +211,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.preSaisie = true;
         fournisseur.valide = false;
       } else {
+        if (fournisseur.valide === true) {
+          fournisseur.preSaisie = false;
+          this.preSaisie = '';
+        }
         fournisseur.id = this.fournisseur.id;
       }
 
@@ -252,9 +256,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   onValideChange(e) {
     if (e.event) { // Changed by user
-      if (e.value) {
-        this.fournisseur.preSaisie = false;
-      }
       this.validateCommentPromptVisible = true;
     }
   }

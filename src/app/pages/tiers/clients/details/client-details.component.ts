@@ -250,6 +250,10 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
       if (!this.createMode) {
         client.id = this.client.id;
+        if (client.valide === true) {
+          client.preSaisie = false;
+          this.preSaisie = '';
+        }
       } else {
         for (const f of this.requiredFields) {
           client[f] = this.formGroup.controls[f].value;
@@ -300,9 +304,6 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   onValideChange(e) {
     if (e.event) { // Changed by user
-      if (e.value) {
-        this.client.preSaisie = false;
-      }
       this.validateCommentPromptVisible = true;
     }
   }

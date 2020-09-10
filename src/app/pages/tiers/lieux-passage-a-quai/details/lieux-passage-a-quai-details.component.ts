@@ -147,6 +147,10 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         lieuPassageAQuai.valide = false;
         lieuPassageAQuai.preSaisie = true;
       } else {
+        if (lieuPassageAQuai.valide === true) {
+          lieuPassageAQuai.preSaisie = false;
+          this.preSaisie = '';
+        }
         lieuPassageAQuai.id = this.lieupassageaquai.id;
       }
 
@@ -189,14 +193,6 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${ this.lieupassageaquai.id }/${ this.lieupassageaquai.typeTiers }`]);
-  }
-
-  onValideChange(e) {
-    if (e.event) { // Changed by user
-      if (e.value) {
-        this.lieupassageaquai.preSaisie = false;
-      }
-     }
   }
 
 }

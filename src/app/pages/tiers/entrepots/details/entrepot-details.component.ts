@@ -179,6 +179,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
+        if (entrepot.valide === true) {
+          entrepot.preSaisie = false;
+          this.preSaisie = '';
+        }
       } else {
         entrepot.code = this.formGroup.get('code').value.toUpperCase();
         entrepot.client = {id: this.route.snapshot.params.client};
@@ -220,14 +224,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${ this.entrepot.code }/${ this.entrepot.typeTiers }`]);
-  }
-
-  onValideChange(e) {
-    if (e.event) { // Changed by user
-      if (e.value) {
-        this.entrepot.preSaisie = false;
-      }
-    }
   }
 
 }

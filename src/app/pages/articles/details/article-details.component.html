@@ -2,7 +2,7 @@
 
     <div class="content-block">
         <h2><span *ngIf="cloneMode === true">{{ 'create' | localize }}</span>
-        {{ 'articles-details-title' | localize }} <!-- {{ article.id }} -->
+        {{ 'articles-details-title' | localize }}<span class="red-font"> {{ preSaisie | localize}}</span><!-- {{ article.id }} -->
         <span *ngIf="cloneMode === true">({{ 'clone' | localize }})</span>
         <dx-button class="upperButton"
             type="default"

@@ -153,6 +153,10 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
         transporteur.preSaisie = true;
         transporteur.valide = false;
       } else {
+        if (transporteur.valide === true) {
+          transporteur.preSaisie = false;
+          this.preSaisie = '';
+        }
         transporteur.id = this.transporteur.id;
       }
 
@@ -194,14 +198,6 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${ this.transporteur.id }/${ this.transporteur.typeTiers }`]);
-  }
-
-  onValideChange(e) {
-    if (e.event) { // Changed by user
-      if (e.value) {
-        this.transporteur.preSaisie = false;
-      }
-    }
   }
 
 }

@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
-      {{ 'tiers-fournisseurs-details-title' | localize }} {{ preSaisie | localize}}
+      {{ 'tiers-fournisseurs-details-title' | localize }}<span class="red-font"> {{ preSaisie | localize}}</span>
       <div class="right">
         <dx-button class="upperButton submit"
           type="default"
