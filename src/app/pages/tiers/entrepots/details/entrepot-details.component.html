@@ -60,7 +60,7 @@
               <div class="dx-field-value">
                 <dx-text-box
                 formControlName="code"
-                [readOnly]="!createMode"
+                [readOnly]="!createMode || mandatoryCode"
                 [inputAttr]="{'style':  'text-transform: uppercase'}"
                 >
                   <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">

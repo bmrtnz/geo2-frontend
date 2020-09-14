@@ -1,5 +1,5 @@
 import {Component, OnInit, AfterViewInit, EventEmitter, ViewChild} from '@angular/core';
-import { EntrepotsService } from '../../../../shared/services';
+import { EntrepotsService, ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
@@ -86,11 +86,13 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
+  mandatoryCode: boolean;
 
   constructor(
     private fb: FormBuilder,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
+    private clientsService: ClientsService,
     private modesLivraisonService: ModesLivraisonService,
     private paysService: PaysService,
     private typesPaletteService: TypesPaletteService,
@@ -143,13 +145,22 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           });
       } else {
         this.entrepot = new Entrepot({});
-        // console.log(this.route.snapshot)
-        // this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
-        //   res => {
-        //     this.entrepot.client = res.data.client;
-        //     console.log(this.entrepot)
-        //     }
-        // );
+        this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
+          result => {
+            // On reprend le code client (si pas existant) pour le code entrepôt
+            const code = result.data.client.code.toUpperCase();
+            const entrepotsSource = this.entrepotsService.getDataSource({ search: `code=="${ code }"` });
+            entrepotsSource.load().then(res => {
+              if (!res.length) {
+                this.mandatoryCode = true;
+                this.entrepot.code = code;
+                this.formGroup.patchValue(this.entrepot);
+              } else {
+                //
+              }
+             });
+            }
+        );
         this.contentReadyEvent.emit();
       }
     });

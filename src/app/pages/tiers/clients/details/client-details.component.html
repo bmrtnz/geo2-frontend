@@ -88,7 +88,7 @@
                   >
                     <dx-validator name="{{ 'tiers-clients-code' | localize }}">
                       <dxi-validation-rule type="required"></dxi-validation-rule>
-                      <dxi-validation-rule type="stringLength" max="18"></dxi-validation-rule>
+                      <dxi-validation-rule type="stringLength" max="13"></dxi-validation-rule>
                       <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                     </dx-validator>
                     <dxi-button
@@ -118,6 +118,7 @@
                     [dataSource]="secteurs"
                     displayExpr="description"
                     [searchEnabled]="true"
+                    (onValueChanged)="onSecteurChange($event)"
                     [searchExpr]="['id','description']"
                   >
                     <dx-validator name="{{ 'tiers-clients-secteur' | localize }}">
@@ -139,6 +140,9 @@
                     [searchEnabled]="true"
                     [searchExpr]="['id','nomUtilisateur']"
                   >
+                    <dx-validator name="{{ 'tiers-clients-commercial' | localize }}">
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
                   </dx-select-box>
                 </div>
               </div>
@@ -155,6 +159,9 @@
                     [searchEnabled]="true"
                     [searchExpr]="['id','nomUtilisateur']"
                   >
+                    <dx-validator name="{{ 'tiers-clients-assistante' | localize }}">
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
                   </dx-select-box>
                 </div>
               </div>
@@ -170,6 +177,9 @@
                     [searchEnabled]="true"
                     [searchExpr]="['id','description']"
                   >
+                    <dx-validator name="{{ 'tiers-clients-typeVente' | localize }}">
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
                   </dx-select-box>
                 </div>
               </div>
@@ -383,7 +393,10 @@
                     <div class="dx-field field-large">
                       <div class="dx-field-label">{{ 'tiers-clients-nbJourEcheance' | localize }}</div>
                       <div class="dx-field-value">
-                        <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
+                        <dx-text-box
+                          formControlName="nbJourEcheance"
+                          [readOnly]="readOnlyMode || (formGroup.get('secteur').value ? formGroup.get('secteur').value.id == 'F' : false)"
+                          >
                           <dx-validator name="{{ 'tiers-clients-nbJourEcheance' | localize }}">
                             <dxi-validation-rule type="required"></dxi-validation-rule>
                             <dxi-validation-rule type="numeric"></dxi-validation-rule>
@@ -545,6 +558,7 @@
                 <div class="dx-field-value">
                   <dx-text-box formControlName="siret" [readOnly]="readOnlyMode">
                     <dx-validator name="{{ 'tiers-clients-siret' | localize }}">
+                      <dxi-validation-rule *ngIf="(formGroup.get('secteur').value ? formGroup.get('secteur').value.id === 'MAR' : false)" type="required"></dxi-validation-rule>
                       <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
@@ -644,6 +658,7 @@
                           <dx-text-box formControlName="agrement" [readOnly]="readOnlyMode">
                             <dx-validator name="{{ 'tiers-clients-agrement' | localize }}">
                               <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                              <dxi-validation-rule type="required"></dxi-validation-rule>
                             </dx-validator>
                           </dx-text-box>
                         </div>
@@ -812,6 +827,7 @@
                     [dataSource]="courtiers"
                     displayExpr="raisonSocial"
                     [searchEnabled]="true"
+                    (onValueChanged)="onCourtierChange($event)"
                     [searchExpr]="['id','raisonSocial']"
                   >
                   </dx-select-box>
@@ -823,7 +839,7 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="courtageModeCalcul"
-                    [readOnly]="readOnlyMode"
+                    [readOnly]="readOnlyMode || (formGroup.get('courtier').value ? false : true)"
                     [dataSource]="basesTarif"
                     displayExpr="description"
                     [searchEnabled]="true"
@@ -836,7 +852,10 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-courtageValeur' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="courtageValeur" [readOnly]="readOnlyMode">
+                  <dx-text-box 
+                    formControlName="courtageValeur"
+                    [readOnly]="readOnlyMode || (formGroup.get('courtier').value ? false : true)"
+                  >
                     <dx-validator name="{{ 'tiers-clients-fraisPlateforme' | localize }}">
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                     </dx-validator>
@@ -973,7 +992,11 @@
                       displayExpr="description"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
-                    ></dx-select-box>
+                    >
+                      <dx-validator name="{{ 'tiers-clients-typeClient' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
               </dxi-item>

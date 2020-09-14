@@ -207,7 +207,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
       } else {
         // Apply default value
         this.client = new Client({
-          soumisCtifl: false
+          soumisCtifl: false,
+          delaiBonFacturer: 8 // Donné par Léa 7-09-2020
         });
         this.formGroup.patchValue(this.client);
         this.contentReadyEvent.emit();
@@ -305,6 +306,27 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   onValideChange(e) {
     if (e.event) { // Changed by user
       this.validateCommentPromptVisible = true;
+    }
+  }
+
+  onSecteurChange(e) {
+    // France => Echéance 30 J (et non modifiable voir html)
+    if (this.editing) {
+      if (e.value.id === 'F') {
+        this.formGroup.get('nbJourEcheance').setValue(30);
+      } else {
+        this.formGroup.get('nbJourEcheance').reset();
+      }
+    }
+  }
+
+  onCourtierChange(e) {
+    // Si pas de courtier, on supprime les infos connexes de courtage
+    if (this.editing) {
+      if (e.value === null) {
+        this.formGroup.get('courtageModeCalcul').reset();
+        this.formGroup.get('courtageValeur').reset();
+      }
     }
   }
 
