@@ -2,7 +2,7 @@
 
   <div class="content-block">
     <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
-      {{ 'tiers-entrepots-details-title' | localize }}
+      {{ 'tiers-entrepots-details-title' | localize }}<span class="red-font"> {{ preSaisie | localize}}</span>
       <div class="right">
         <dx-button class="upperButton submit"
           type="default"
@@ -60,7 +60,7 @@
               <div class="dx-field-value">
                 <dx-text-box
                 formControlName="code"
-                [readOnly]="!createMode"
+                [readOnly]="!createMode || mandatoryCode"
                 [inputAttr]="{'style':  'text-transform: uppercase'}"
                 >
                   <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">

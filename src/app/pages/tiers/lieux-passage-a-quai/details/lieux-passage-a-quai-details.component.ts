@@ -42,7 +42,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     moyenPaiement: [''],
     basePaiement: [''],
     contacts: [''],
-    valide: [false]
+    valide: [false],
+    preSaisie: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
@@ -63,6 +64,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   defaultVisible: boolean;
   isReadOnlyMode = true;
   createMode = false;
+  preSaisie: string;
 
   constructor(
     private fb: FormBuilder,
@@ -111,6 +113,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
             this.lieupassageaquai = res.data.lieuPassageAQuai;
             this.formGroup.patchValue(this.lieupassageaquai);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.lieupassageaquai.preSaisie === true ? 'preSaisie' : '';
           });
       } else {
         this.lieupassageaquai = new LieuPassageAQuai({});
@@ -142,7 +145,13 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         lieuPassageAQuai.id = this.formGroup.get('id').value.toUpperCase();
           // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
           // Avoir pour les valeur par defaut (qui sont not null dans la base)
+        lieuPassageAQuai.valide = false;
+        lieuPassageAQuai.preSaisie = true;
       } else {
+        if (lieuPassageAQuai.valide === true) {
+          lieuPassageAQuai.preSaisie = false;
+          this.preSaisie = '';
+        }
         lieuPassageAQuai.id = this.lieupassageaquai.id;
       }
 

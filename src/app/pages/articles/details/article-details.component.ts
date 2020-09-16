@@ -47,6 +47,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         description: [''],
         blueWhaleStock: [''],
         valide: [''],
+        preSaisie: [''],
         matierePremiere: this.fb.group({
             espece: [''],
             variete: [''],
@@ -123,6 +124,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     validateCommentPromptVisible = false;
     readOnlyMode = true;
     cloneMode = false;
+    preSaisie: string;
 
     id: string;
 
@@ -166,6 +168,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             this.article = new Article(res.data.article);
             this.formGroup.patchValue(this.article);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
         });
 
     }
@@ -189,6 +192,15 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     onSubmit() {
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
+            if (this.cloneMode) {
+                article.valide = false;
+                article.preSaisie = true;
+            } else {
+                if (article.valide === true) {
+                    article.preSaisie = false;
+                    this.preSaisie = '';
+                }
+            }
             this.articlesService
                 .save({ article, clone: this.cloneMode })
                 .subscribe({
@@ -254,9 +266,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     onValideChange(e) {
         if (e.event) { // Changed by user
-            if (e.value) {
-                // this.article.preSaisie = false;
-            }
             this.validateCommentPromptVisible = true;
         }
       }

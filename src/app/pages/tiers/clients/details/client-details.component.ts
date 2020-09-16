@@ -37,6 +37,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   private requiredFields = ['soumisCtifl'];
 
+  preSaisie: string;
+
   formGroup = this.fb.group({
     code: [''],
     raisonSocial: [''],
@@ -116,6 +118,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
   editing = false;
+
 
   client: Client;
   code: string;
@@ -199,11 +202,13 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
             this.client = res.data.client;
             this.formGroup.patchValue(this.client);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
           });
       } else {
         // Apply default value
         this.client = new Client({
-          soumisCtifl: false
+          soumisCtifl: false,
+          delaiBonFacturer: 8 // Donné par Léa 7-09-2020
         });
         this.formGroup.patchValue(this.client);
         this.contentReadyEvent.emit();
@@ -248,6 +253,10 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
       if (!this.createMode) {
         client.id = this.client.id;
+        if (client.valide === true) {
+          client.preSaisie = false;
+          this.preSaisie = '';
+        }
       } else {
         for (const f of this.requiredFields) {
           client[f] = this.formGroup.controls[f].value;
@@ -256,6 +265,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
         client.societe = { id: environment.societe.id };
         // client.societe = { id: 'SA' };
         client.code = this.formGroup.get('code').value.toUpperCase();
+        client.valide = false;
+        client.preSaisie = true;
       }
 
       this.clientsService
@@ -296,10 +307,28 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   onValideChange(e) {
     if (e.event) { // Changed by user
-      if (e.value) {
-        // this.client.preSaisie = false;
-      }
       this.validateCommentPromptVisible = true;
+    }
+  }
+
+  onSecteurChange(e) {
+    // France => Echéance 30 J (et non modifiable voir html)
+    if (this.editing) {
+      if (e.value.id === 'F') {
+        this.formGroup.get('nbJourEcheance').setValue(30);
+      } else {
+        this.formGroup.get('nbJourEcheance').reset();
+      }
+    }
+  }
+
+  onCourtierChange(e) {
+    // Si pas de courtier, on supprime les infos connexes de courtage
+    if (this.editing) {
+      if (e.value === null) {
+        this.formGroup.get('courtageModeCalcul').reset();
+        this.formGroup.get('courtageValeur').reset();
+      }
     }
   }
 

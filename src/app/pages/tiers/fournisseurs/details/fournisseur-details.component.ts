@@ -64,6 +64,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     tvaId:  [''],
     rcs:  [''],
     valide: [false],
+    preSaisie: [''],
     paramAvances: [''],
     certifications: [''],
     autoFacturation: [''],
@@ -109,6 +110,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   groupesFournisseur: DataSource;
   isReadOnlyMode = true;
   createMode = false;
+  preSaisie: string;
 
   constructor(
     private fb: FormBuilder,
@@ -164,6 +166,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             // console.log(this.fournisseur.fournisseurDeRattachement);
             this.formGroup.patchValue(this.fournisseur);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
           });
       } else {
         this.fournisseur = new Fournisseur({});
@@ -207,7 +210,13 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.formGroup.get('id').value.toUpperCase();
           // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
           // Avoir pour les valeur par defaut (qui sont not null dans la base)
+        fournisseur.preSaisie = true;
+        fournisseur.valide = false;
       } else {
+        if (fournisseur.valide === true) {
+          fournisseur.preSaisie = false;
+          this.preSaisie = '';
+        }
         fournisseur.id = this.fournisseur.id;
       }
 
@@ -249,9 +258,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   onValideChange(e) {
     if (e.event) { // Changed by user
-      if (e.value) {
-        // this.fournisseur.preSaisie = false;
-      }
       this.validateCommentPromptVisible = true;
     }
   }

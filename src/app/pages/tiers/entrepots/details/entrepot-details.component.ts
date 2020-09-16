@@ -1,5 +1,5 @@
 import {Component, OnInit, AfterViewInit, EventEmitter, ViewChild} from '@angular/core';
-import { EntrepotsService } from '../../../../shared/services';
+import { EntrepotsService, ClientsService } from '../../../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entrepot } from '../../../../shared/models';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
@@ -63,7 +63,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     referenceChep: [''],
     lieuFonctionEanDepot: [''],
     lieuFonctionEanAcheteur: [''],
-    valide: [false]
+    valide: [false],
+    preSaisie: ['']
   });
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
@@ -84,11 +85,14 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   defaultVisible: boolean;
   isReadOnlyMode = true;
   createMode = false;
+  preSaisie: string;
+  mandatoryCode: boolean;
 
   constructor(
     private fb: FormBuilder,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
+    private clientsService: ClientsService,
     private modesLivraisonService: ModesLivraisonService,
     private paysService: PaysService,
     private typesPaletteService: TypesPaletteService,
@@ -137,16 +141,26 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
             this.entrepot = res.data.entrepot;
             this.formGroup.patchValue(this.entrepot);
             this.contentReadyEvent.emit();
+            this.preSaisie = this.entrepot.preSaisie === true ? 'preSaisie' : '';
           });
       } else {
         this.entrepot = new Entrepot({});
-        // console.log(this.route.snapshot)
-        // this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
-        //   res => {
-        //     this.entrepot.client = res.data.client;
-        //     console.log(this.entrepot)
-        //     }
-        // );
+        this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
+          result => {
+            // On reprend le code client (si pas existant) pour le code entrepôt
+            const code = result.data.client.code.toUpperCase();
+            const entrepotsSource = this.entrepotsService.getDataSource({ search: `code=="${ code }"` });
+            entrepotsSource.load().then(res => {
+              if (!res.length) {
+                this.mandatoryCode = true;
+                this.entrepot.code = code;
+                this.formGroup.patchValue(this.entrepot);
+              } else {
+                //
+              }
+             });
+            }
+        );
         this.contentReadyEvent.emit();
       }
     });
@@ -178,9 +192,15 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
+        if (entrepot.valide === true) {
+          entrepot.preSaisie = false;
+          this.preSaisie = '';
+        }
       } else {
         entrepot.code = this.formGroup.get('code').value.toUpperCase();
         entrepot.client = {id: this.route.snapshot.params.client};
+        entrepot.valide = false;
+        entrepot.preSaisie = true;
       }
 
       this.entrepotsService
