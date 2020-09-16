@@ -4,7 +4,7 @@ import { Espece } from './espece.model';
 
 export abstract class BaseStock extends Model {
 
-  @Field({asKey: true}) public id: string;
+  @Field({asKey: true, asLabel: true}) public id: string;
   @Field({model: Fournisseur}) public fournisseur: Fournisseur;
   @Field({model: Espece}) public espece: Espece;
   @Field() public valide: boolean;

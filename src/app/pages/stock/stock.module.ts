@@ -5,12 +5,10 @@ import { SharedModule } from 'app/shared/shared.module';
 import { StockRoutingModule } from './stock-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
-  DxAccordionModule, DxBoxModule,
-  DxButtonModule, DxCheckBoxModule,
+  DxBoxModule,
+  DxButtonModule,
   DxDataGridModule, DxTabPanelModule,
-  DxTemplateModule, DxAutocompleteModule,
-  DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-  DxTextBoxModule, DxValidatorModule
+  DxTemplateModule, DxTagBoxModule, DxFormModule
 } from 'devextreme-angular';
 
 @NgModule({
@@ -20,12 +18,13 @@ import {
     FormsModule,
     ReactiveFormsModule,
     StockRoutingModule,
-    DxAccordionModule, DxBoxModule,
-    DxButtonModule, DxCheckBoxModule,
-    DxDataGridModule, DxTabPanelModule, DxAutocompleteModule,
+    DxBoxModule,
+    DxButtonModule,
+    DxDataGridModule,
+    DxFormModule,
+    DxTabPanelModule,
+    DxTagBoxModule,
     DxTemplateModule,
-    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule, DxValidatorModule
   ],
   declarations: [StockListComponent],
 })

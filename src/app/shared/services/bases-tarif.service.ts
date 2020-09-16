@@ -20,20 +20,20 @@ export class BasesTarifService extends ApiService implements APIRead {
     super(apollo, BaseTarif);
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     return new DataSource({
       sort: [
-        { selector: 'description' }
+        { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, variables).toPromise();
+            return this.getDistinct(options).toPromise();
 
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allBaseTarif: RelayPage<BaseTarif> };
-          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
+          const variables = this.mapLoadOptionsToVariables(options);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -45,9 +45,9 @@ export class BasesTarifService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { baseTarif: BaseTarif };
-          variables = { ...variables, id: key };
+          const variables = { id: key };
           return this.
-          query<Response>(query, { variables } as WatchQueryOptions)
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
             map( res => res.data.baseTarif),
             take(1),

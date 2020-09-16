@@ -12,7 +12,8 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class FournisseursService extends ApiService implements APIRead {
 
-  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  byKeyFilter = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  noStockFournisseurFilter = /^(?!.*Stock\.fournisseur).*/i;
 
   constructor(
     apollo: Apollo,
@@ -27,20 +28,20 @@ export class FournisseursService extends ApiService implements APIRead {
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
-  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
 
     return new DataSource({
       sort: [
-        { selector: 'raisonSocial' }
+        { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, inputVariables).toPromise();
+            return this.getDistinct(options).toPromise();
 
-          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
-          const query = this.buildGetAll();
+          const variables = this.mapLoadOptionsToVariables(options);
+          const query = this.buildGetAll(1, this.noStockFournisseurFilter);
           type Response = { allFournisseur: RelayPage<Fournisseur> };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
@@ -51,9 +52,9 @@ export class FournisseursService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(1, this.fieldsFilter);
+          const query = this.buildGetOne(1, this.byKeyFilter);
           type Response = { fournisseur: Fournisseur };
-          const variables = { ...inputVariables, id: key };
+          const variables = { id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
@@ -67,7 +68,7 @@ export class FournisseursService extends ApiService implements APIRead {
   }
 
   save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.fieldsFilter);
+    const mutation = this.buildSave(1, this.byKeyFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService, RelayPage, APIRead, RelayPageVariables } from './api.service';
 import { Apollo } from 'apollo-angular';
 import { OperationVariables, WatchQueryOptions } from 'apollo-client';
-import { map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { LoadOptions } from 'devextreme/data/load_options';
 import DataSource from 'devextreme/data/data_source';
 import { StockArticleAge } from '../models/stock-article-age.model';
@@ -21,17 +21,18 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     this.gqlKeyType = 'GeoStockArticleAgeKeyInput';
   }
 
-  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
         key: this.model.getKeyField(),
         load: (options: LoadOptions) => {
+
           if (options.group)
-            return this.getDistinct(options, inputVariables).toPromise();
+            return this.getDistinct(options).toPromise();
 
           const query = this.buildGetAll(3);
           type Response = { allStockArticleAge: RelayPage<StockArticleAge> };
-          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
+          const variables = this.mapLoadOptionsToVariables(options);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -43,7 +44,7 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { stockArticleAge: StockArticleAge };
-          const variables = { ...inputVariables, id: key };
+          const variables = { id: key };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
@@ -54,6 +55,27 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
         },
       }),
     });
+  }
+
+  getFilterDatasource(selector: string) {
+    const dt = new DataSource({
+      store: this.createCustomStore({
+        key: this.model.getKeyField(),
+        load: (options: LoadOptions) => {
+
+          if (options.group)
+            return this.getDistinct(options).toPromise();
+
+          const [value] = options.filter.slice(-1);
+          options.filter = [ selector, '=', value ];
+          return this
+          .getDistinct({...options, group: {selector}})
+          .toPromise();
+        }
+      }),
+    });
+    dt.group({selector});
+    return dt;
   }
 
 }

@@ -171,7 +171,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       }
     });
 
-    this.pays = this.paysService.getDataSource({search: 'valide==true'});
+    this.pays = this.paysService.getDataSource();
+    this.pays.filter(['valide', '=', 'true']);
     this.bureauxAchat = this.bureauxAchatService.getDataSource();
     this.typesFournisseur = this.typesFournisseurService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -192,7 +193,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   checkCode(params) {
       const code = params.value.toUpperCase();
-      const fournisseursSource = this.fournisseursService.getDataSource({ search: `id=="${ code }"` });
+      const fournisseursSource = this.fournisseursService.getDataSource();
+      fournisseursSource.filter(['id', '=', code]);
       return fournisseursSource.load().then(res => !(res.length));
   }
 

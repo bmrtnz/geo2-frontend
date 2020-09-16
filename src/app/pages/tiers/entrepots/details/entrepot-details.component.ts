@@ -153,7 +153,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
     this.personnes = this.personnesService.getDataSource();
     this.modesLivraison = this.modesLivraisonService.getDataSource();
-    this.pays = this.paysService.getDataSource({search: 'valide==true'});
+    this.pays = this.paysService.getDataSource();
+    this.pays.filter(['valide', '=', 'true']);
     this.typesPalette = this.typesPaletteService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -165,7 +166,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   checkCode(params) {
       const code = params.value.toUpperCase();
-      const entrepotsSource = this.entrepotsService.getDataSource({ search: `code=="${ code }"` });
+      const entrepotsSource = this.entrepotsService.getDataSource();
+      entrepotsSource.filter(['code', '=', code]);
       return entrepotsSource.load().then(res => !(res.length));
   }
 

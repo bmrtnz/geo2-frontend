@@ -21,18 +21,18 @@ export class RangementsService extends ApiService implements APIRead {
     this.gqlKeyType = 'GeoProduitWithEspeceIdInput';
   }
 
-  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
         key: ['id', 'especeId'],
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, inputVariables).toPromise();
+            return this.getDistinct(options).toPromise();
 
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allRangement: RelayPage<Rangement> };
-          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
+          const variables = this.mapLoadOptionsToVariables(options);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -49,7 +49,7 @@ export class RangementsService extends ApiService implements APIRead {
           const query = this.buildGetOne();
           type Response = { rangement: Rangement };
           const id = key ? {id: key.id, espece: key.especeId || ''} : {};
-          const variables = { ...inputVariables, id };
+          const variables = { id };
           return this.
           query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(

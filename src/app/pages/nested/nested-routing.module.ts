@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NestedComponent } from '../nested/nested.component';
+import { NestedComponent } from './nested.component';
 import { AuthGuardService } from 'app/shared/services';
 import { ArticleDetailsComponent } from '../articles/details/article-details.component';
 import { ArticlesListComponent } from '../articles/list/articles-list.component';

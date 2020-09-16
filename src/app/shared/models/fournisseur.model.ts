@@ -11,6 +11,7 @@ import { Historique } from './historique.model';
 import { ConditionVente } from './condition-vente.model';
 import { GroupeFournisseur } from './groupe-fournisseur.model';
 import { Certification } from './certification.model';
+import { Stock } from './stock.model';
 
 export enum NatureStation {
   EXPEDITEUR_EMBALLEUR = 'O',
@@ -74,5 +75,6 @@ export class Fournisseur extends Model {
   @Field({model: Fournisseur}) public fournisseurDeRattachement: Fournisseur;
   @Field({model: GroupeFournisseur}) public groupeFournisseur: GroupeFournisseur;
   @Field({model: Certification}) public certifications: Certification[];
+  @Field({model: Stock}) public stocks: Stock[];
 
 }

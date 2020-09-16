@@ -35,12 +35,12 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   }
 
   ngOnInit() {
-    // Filtrage selon société sélectionnée
-    const dsOptions = {
-      search: 'societe.id==' + environment.societe.id
-    };
 
-    this.clients = this.clientsService.getDataSource(dsOptions);
+    // Filtrage selon société sélectionnée
+    this.clients = this.clientsService.getDataSource();
+    this.clients.searchExpr('societe.id');
+    this.clients.searchOperation('=');
+    this.clients.searchValue(environment.societe.id);
     this.detailedFields = this.clientsService.model.getDetailedFields();
 
     // Configuration datagrid
@@ -66,9 +66,13 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   async loadDataGridState() {
 
     // Lecture
-    return self.gridService.getDataSource({
-        search: `utilisateur.nomUtilisateur==7 and grid==clientStorage`,
-      }).load().then( res => {
+    const gridSource = self.gridService.getDataSource();
+    gridSource.filter([
+      ['utilisateur.nomUtilisateur', '=', '7'],
+      'and',
+      ['grid', '=', 'clientStorage'],
+    ]);
+    return gridSource.load().then( res => {
         if (!res.length) return null;
         const data = res[0].config;
         if (data !== null) {

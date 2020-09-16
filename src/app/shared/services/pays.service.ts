@@ -20,20 +20,20 @@ export class PaysService extends ApiService implements APIRead {
     super(apollo, Pays);
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     return new DataSource({
       sort: [
-        { selector: 'description' }
+        { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, variables).toPromise();
+            return this.getDistinct(options).toPromise();
 
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allPays: RelayPage<Pays> };
-          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
+          const variables = this.mapLoadOptionsToVariables(options);
 
           // variables.pageable.sort = {
           //   orders: [{
@@ -52,9 +52,9 @@ export class PaysService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { pays: Pays };
-          variables = { ...variables, id: key };
+          const variables = { id: key };
           return this.
-          query<Response>(query, { variables } as WatchQueryOptions)
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
             map( res => res.data.pays),
             take(1),
