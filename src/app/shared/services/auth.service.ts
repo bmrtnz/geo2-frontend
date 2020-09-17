@@ -1,24 +1,56 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, UrlTree } from '@angular/router';
+import { UtilisateursService } from './utilisateurs.service';
+import { Utilisateur } from '../models/utilisateur.model';
+import notify from 'devextreme/ui/notify';
 
 @Injectable()
 export class AuthService {
-  loggedIn = true;
+  loggedIn = false;
+  currentUser: Utilisateur;
+  readonly LAST_USER_STORE_KEY = 'GEO2:LAST-USER';
+  readonly CURRENT_USER_STORE_KEY = 'GEO2:CURRENT-USER';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private utilisateursService: UtilisateursService,
+  ) {
+    const stored = window.localStorage.getItem(this.CURRENT_USER_STORE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this.loggedIn = true;
+      this.currentUser = parsed;
+    }
+  }
 
-  logIn(login: string, passord: string) {
-    this.loggedIn = true;
-    this.router.navigate(['/']);
+  logIn(id: string, password: string) {
+    this.utilisateursService.getOne(id, password)
+    .subscribe( res => {
+      if (res.data.utilisateur) {
+        this.loggedIn = true;
+        this.currentUser = res.data.utilisateur;
+        window.localStorage.setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(res.data.utilisateur));
+        window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
+        this.router.navigate(['/']);
+      } else {
+        this.loggedIn = false;
+        notify('Utilisateur et/ou mot de passe inconnu', 'error');
+      }
+    });
   }
 
   logOut() {
     this.loggedIn = false;
+    window.localStorage.removeItem(this.CURRENT_USER_STORE_KEY);
     this.router.navigate(['/login']);
   }
 
   get isLoggedIn() {
     return this.loggedIn;
+  }
+
+  get lastUsername() {
+    return window.localStorage.getItem(this.LAST_USER_STORE_KEY) || '';
   }
 }
 
@@ -26,17 +58,16 @@ export class AuthService {
 export class AuthGuardService implements CanActivate {
     constructor(private router: Router, private authService: AuthService) {}
 
-    canActivate(route: ActivatedRouteSnapshot): boolean {
+    canActivate(route: ActivatedRouteSnapshot): boolean|UrlTree {
         const isLoggedIn = this.authService.isLoggedIn;
         const isLoginForm = route.routeConfig.path === 'login';
 
         if (isLoggedIn && isLoginForm) {
-            this.router.navigate(['/']);
-            return false;
+          return this.router.createUrlTree(['/']);
         }
 
         if (!isLoggedIn && !isLoginForm) {
-            this.router.navigate(['/login']);
+            return this.router.createUrlTree(['/login']);
         }
 
         return isLoggedIn || isLoginForm;
