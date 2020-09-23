@@ -148,15 +148,25 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
           result => {
             // On reprend le code client (si pas existant) pour le code entrepôt
+            // ainsi que les autres infos liées au client
             const code = result.data.client.code.toUpperCase();
             const entrepotsSource = this.entrepotsService.getDataSource({ search: `code=="${ code }"` });
             entrepotsSource.load().then(res => {
               if (!res.length) {
                 this.mandatoryCode = true;
-                this.entrepot.code = code;
+
+                const fields = ['code', 'commercial', 'assistante', 'raisonSocial',
+                 'adresse1', 'adresse2', 'adresse3', 'codePostal', 'ville', 'pays',
+                 'langue', 'tvaCee', 'typePalette', 'incoterm', 'regimeTva',
+                 'transporteur']
+                this.entrepot.envoieAutomatiqueDetail = result.data.client.detailAutomatique;
+                this.entrepot.lieuFonctionEanDepot = result.data.client.lieuFonctionEan;
+
+                for (const field of fields) {
+                  this.entrepot[field] = result.data.client[field];
+                }
+
                 this.formGroup.patchValue(this.entrepot);
-              } else {
-                //
               }
              });
             }

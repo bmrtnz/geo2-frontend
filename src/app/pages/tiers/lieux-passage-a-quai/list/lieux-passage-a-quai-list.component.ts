@@ -69,6 +69,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
             if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
           }
           data.searchText = '';
+          data.focusedRowKey = null;
 
           return data;
         } else {

@@ -77,6 +77,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
             if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
           }
           data.searchText = '';
+          data.focusedRowKey = null;
 
           return data;
         } else {
