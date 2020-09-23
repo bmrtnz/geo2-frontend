@@ -43,10 +43,10 @@ export class HeaderComponent {
         this.authService.logOut();
       }
     }];
-    const dsOptions = {
-      search: 'valide==true'
-    };
-    this.societeSource = this.societeService.getDataSource(dsOptions);
+    this.societeSource = this.societeService.getDataSource();
+    this.societeSource.searchExpr('valide');
+    this.societeSource.searchOperation('=');
+    this.societeSource.searchValue('true');
   }
 
   @HostListener('scroll', ['$event']) onScrollEvent($event) {

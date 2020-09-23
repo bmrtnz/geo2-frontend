@@ -50,9 +50,12 @@ export class ContactsComponent implements OnInit, NestedPart {
     .map( value => value.toLowerCase() )
     .shift();
 
-    this.contacts = this.contactsService.getDataSource({
-      search: `codeTiers=="${ this.codeTiers }" and typeTiers=="${ this.typeTiers }"`,
-    });
+    this.contacts = this.contactsService.getDataSource();
+    this.contacts.filter([
+      ['codeTiers', '=', this.codeTiers],
+      'and',
+      ['typeTiers', '=', this.typeTiers],
+    ]);
     this.societeSource = this.societeService.getDataSource();
     this.fluxSource = this.fluxService.getDataSource();
     this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
@@ -88,7 +91,8 @@ export class ContactsComponent implements OnInit, NestedPart {
       // Suppression filtres/recherche
       const state = JSON.parse(data);
       for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
+        if (myColumn.dataField !== 'valide')
+          myColumn.filterValue = null;
       }
       state.searchText = '';
 

@@ -1,8 +1,10 @@
-import {Component, Input, NgModule} from '@angular/core';
+import {Component, Input, NgModule, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {DxListModule} from 'devextreme-angular/ui/list';
 import {DxContextMenuModule} from 'devextreme-angular/ui/context-menu';
+import { AuthService } from 'app/shared/services';
+import { Utilisateur } from 'app/shared/models/utilisateur.model';
 
 @Component({
   selector: 'app-user-panel',
@@ -16,7 +18,9 @@ export class UserPanelComponent {
   @Input()
   menuMode: string;
 
-  constructor() {
+  constructor(
+    public authService: AuthService,
+  ) {
   }
 }
 

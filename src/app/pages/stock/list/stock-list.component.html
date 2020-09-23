@@ -3,7 +3,7 @@
 <div class="content-block stock-page">
     <dx-tab-panel
         #tabPanel
-        [dataSource]="stockCategories"
+        [items]="stockCategories"
         [selectedIndex]="0"
         [loop]="false"
         [animationEnabled]="true"
@@ -20,40 +20,41 @@
                         <div class="quicksearch">Recherche rapide</div>
                     </div>
                     <div class="search-criteria-container">
-                        <div class="search-criteria-subcontainer">
+                        <!-- <div class="search-criteria-subcontainer">
                             <div class="advancedsearch">Recherche avancée</div>
                             <dx-button class="upperButton" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
-                        </div>
+                        </div> -->
                         <div class="search-criteria-subcontainer" style="width:auto">
                             <!-- espèce -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-espece' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="espece"
-                                    [searchEnabled]="true"
-                                    [dataSource]="especes"
-                                    displayExpr="description"
-                                    (onValueChanged)="onEspeceChange($event)">
-                                    </dx-select-box>
+                                    <dx-tag-box
+                                        [dataSource]="especes"
+                                        [showClearButton]="true"
+                                        (valueChange)="onFieldValueChange($event,'article.matierePremiere.espece.description')"
+                                        [searchEnabled]="true"
+                                        searchExpr="article.matierePremiere.espece.description"
+                                        displayExpr="key"
+                                        valueExpr="key"
+                                    ></dx-tag-box>
                                 </div>
                             </div>
                             <!-- fournisseur -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="fournisseur"
-                                    [searchEnabled]="true"
-                                    [dataSource]="fournisseurs"
-                                    displayExpr="raisonSocial">
-                                    </dx-select-box>
+                                    <dx-tag-box
+                                        [disabled]="true"
+                                        [dataSource]="fournisseurs"
+                                        displayExpr="raisonSocial">
+                                    </dx-tag-box>
                                 </div>
                             </div>
                         </div>
                         <div class="search-criteria-subcontainer">
                             <!-- Bureau achat -->
-                            <div class="dx-field">
+                            <!-- <div class="dx-field">
                                 <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
                                 <div class="dx-field-value">
                                     <dx-select-box
@@ -63,50 +64,50 @@
                                     displayExpr="raisonSocial">
                                     </dx-select-box>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- Origine -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-origine' | localize }}</div>
                                 <div class="dx-field-value">
-                                <dx-select-box
-                                formControlName="origine"
-                                [searchEnabled]="true"
-                                [dataSource]="origines"
-                                displayExpr="description"
-                                >
-                                </dx-select-box>
+                                <dx-tag-box
+                                        [dataSource]="origines"
+                                        [showClearButton]="true"
+                                        (valueChange)="onFieldValueChange($event,'article.matierePremiere.origine.description')"
+                                        [searchEnabled]="true"
+                                        searchExpr="article.matierePremiere.origine.description"
+                                        displayExpr="key"
+                                        valueExpr="key"
+                                    ></dx-tag-box>
                                 </div>
                             </div>
                             <!-- variété -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-variete' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="variete"
-                                    [searchEnabled]="true"
+                                    <dx-tag-box
                                     [dataSource]="varietes"
-                                    valueExpr="id"
-                                    displayExpr="description"
-                                    id="variete"
-                                    (onValueChanged)="onFilterChange($event)"
-                                    >
-                                    </dx-select-box>
+                                    [showClearButton]="true"
+                                    (valueChange)="onFieldValueChange($event,'article.matierePremiere.variete.description')"
+                                    [searchEnabled]="true"
+                                    searchExpr="article.matierePremiere.variete.description"
+                                    displayExpr="key"
+                                    valueExpr="key"
+                                ></dx-tag-box>
                                 </div>
                             </div>
                             <!-- calibre Unifie -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-calibreUnifie' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="calibreUnifie"
-                                    [searchEnabled]="true"
-                                    [dataSource]="calibresUnifies"
-                                    valueExpr="id"
-                                    displayExpr="description"
-                                    id="calibresUnifies"
-                                    (onValueChanged)="onFilterChange($event)"
-                                    >
-                                    </dx-select-box>
+                                    <dx-tag-box
+                                        [dataSource]="calibresUnifies"
+                                        [showClearButton]="true"
+                                        (valueChange)="onFieldValueChange($event,'article.matierePremiere.calibreUnifie.description')"
+                                        [searchEnabled]="true"
+                                        searchExpr="article.matierePremiere.calibreUnifie.description"
+                                        displayExpr="key"
+                                        valueExpr="key"
+                                    ></dx-tag-box>
                                 </div>
                             </div>
                         </div>
@@ -115,62 +116,70 @@
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="calibreMarquage"
-                                    [searchEnabled]="true"
-                                    [dataSource]="calibresMarquage"
-                                    valueExpr="id"
-                                    displayExpr="description">
-                                    </dx-select-box>
+                                    <dx-tag-box
+                                        [dataSource]="calibresMarquages"
+                                        [showClearButton]="true"
+                                        (valueChange)="onFieldValueChange($event,'article.normalisation.calibreMarquage.description')"
+                                        [searchEnabled]="true"
+                                        searchExpr="article.normalisation.calibreMarquage.description"
+                                        displayExpr="key"
+                                        valueExpr="key"
+                                    ></dx-tag-box>
                                 </div>
                             </div>
                             <!-- Groupe emballage -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'stocks-groupeEmballage' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="groupeEmballage"
-                                    [searchEnabled]="true"
-                                    [dataSource]="groupesEmballage"
-                                    displayExpr="description"
-                                    >
-                                    </dx-select-box>
+                                    <dx-tag-box
+                                        [dataSource]="emballages"
+                                        [showClearButton]="true"
+                                        (valueChange)="onFieldValueChange($event,'article.emballage.emballage.description')"
+                                        [searchEnabled]="true"
+                                        searchExpr="article.emballage.emballage.description"
+                                        displayExpr="key"
+                                        valueExpr="key"
+                                    ></dx-tag-box>
                                 </div>
                             </div>
                             <!-- Mode Culture -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-modeCulture' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="modeCulture"
-                                    [searchEnabled]="true"
-                                    [dataSource]="modesCulture"
-                                    displayExpr="description">
-                                    </dx-select-box>
+                                    <dx-tag-box
+                                        [dataSource]="matieresPremieres"
+                                        [showClearButton]="true"
+                                        (valueChange)="onFieldValueChange($event,'article.matierePremiere.modeCulture.description')"
+                                        [searchEnabled]="true"
+                                        searchExpr="article.matierePremiere.modeCulture.description"
+                                        displayExpr="key"
+                                        valueExpr="key"
+                                    ></dx-tag-box>
                                 </div>
                             </div>
                             <!-- Clients -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
                                 <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="client"
-                                    [searchEnabled]="true"
-                                    [dataSource]="clients"
-                                    valueExpr="id"
-                                    displayExpr="raisonSocial"
-                                    >
-                                </dx-select-box>
+                                    <dx-tag-box
+                                        [disabled]="true"
+                                        [dataSource]="clients"
+                                        displayExpr="raisonSocial">
+                                    </dx-tag-box>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div style="clear:both"></div>
 
-                    <div class="stock-grid-title">STOCK {{ stockCategory.stockName }} consolidé du 17/05/20 09:25:47 - 7 lignes</div>
+                </form>
+                    
+                <div class="stock-grid-title">STOCK {{ stockCategory.stockName }} consolidé du 17/05/20 09:25:47 - 7 lignes</div>
 
-                    <dx-data-grid class="dx-card wide-card"
-                    [dataSource]="articles"
+                <dx-data-grid
+                    class="dx-card wide-card"
+                    [dataSource]="stockArticlesAge"
+                    [remoteOperations]="true"
                     [columnHidingEnabled]="true"
                     [showBorders]="false"
                     [focusedRowEnabled]="true"
@@ -178,128 +187,71 @@
                     [showColumnLines]="true"
                     [columnAutoWidth]="true"
                     [rowAlternationEnabled]="true"
+                    [allowColumnReordering]="true"
                     (onCellPrepared)="onCellPrepared($event)"
-                    [allowColumnReordering]="true">
-    
-                        <dxo-search-panel [visible]="true" [width]="160" placeholder="Mot clé…"></dxo-search-panel>
-                        <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
-                        <dxo-paging [pageSize]="10"></dxo-paging>
-                        <dxo-pager
-                          [showPageSizeSelector]="true"
-                          [allowedPageSizes]="[10, 25, 50, 100]"
-                          [showInfo]="true"
-                          [showNavigationButtons]="true">
-                        </dxo-pager>
-                        <!-- <dxo-state-storing 
-                            [enabled]="true" 
-                            type="custom" 
-                            [customLoad]="loadDataGridState"
-                            [customSave]="saveDataGridState">
-                        </dxo-state-storing> -->
-                        <dxo-filter-row [visible]="true"></dxo-filter-row>
-                        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-                        <dxo-column-chooser
-                            [enabled]="true"
-                            [width]="columnChooser.width"
-                            [height]="columnChooser.height"
-                            mode="select"
-                            title="{{ 'columnChooser' | localize }}"
-                            allowSearch="true">
-                        </dxo-column-chooser>
-                        <dxi-column
-                        dataField="id"
-                        [width]="90"
-                        caption="{{ 'stocks-articles-numero' | localize }}"
-                        [hidingPriority]="2">
-                        </dxi-column>
-                        <dxi-column
-                        dataField="variete"
-                        caption="{{ 'articles-variete' | localize }}"
-                        >
-                        </dxi-column>
-                        <dxi-column
-                        dataField="calibresUnifies"
-                        [width]="100"
-                        caption="{{ 'articles-calibreUnifie' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="categorie"
-                        [width]="90"
-                        caption="{{ 'articles-categorie' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="emballage"
-                        caption="{{ 'articles-emballage' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="typeVente"
-                        [width]="90"
-                        caption="{{ 'articles-typeVente' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="marque"
-                        caption="{{ 'articles-marque' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        class="toto"
-                        dataField="stockJ"
-                        [width]="60"
-                        caption="{{ 'stocks-articles-stockJ' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="stockJ18"
-                        [width]="60"
-                        caption="{{ 'stocks-articles-stockJ18' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="stockJ920"
-                        [width]="60"
-                        caption="{{ 'stocks-articles-stockJ920' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="stockJ21"
-                        [width]="60"
-                        caption="{{ 'stocks-articles-stockJ21' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
+                >
+                    <dxo-search-panel [visible]="true" [width]="160" placeholder="Mot clé…"></dxo-search-panel>
+                    <dxo-header-filter [visible]="false" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
+                    <dxo-paging [pageSize]="10"></dxo-paging>
+                    <dxo-pager
+                        [showPageSizeSelector]="true"
+                        [allowedPageSizes]="[10, 25, 50, 100]"
+                        [showInfo]="true"
+                        [showNavigationButtons]="true">
+                    </dxo-pager>
+                    <dxo-filter-row [visible]="true"></dxo-filter-row>
+                    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                    <dxo-column-chooser
+                        [enabled]="true"
+                        [width]="columnChooser.width"
+                        [height]="columnChooser.height"
+                        mode="select"
+                        title="{{ 'columnChooser' | localize }}"
+                        allowSearch="true">
+                    </dxo-column-chooser>
+                    <dxi-column
+                        *ngFor="let field of detailedFields;let i=index"
+                        [dataField]="field.path"
+                        [caption]="field.name"
+                        [visible]="i < stockArticlesAgeService.baseFieldsSize"
+                        [dataType]="field.dataType"
+                        [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+                        [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+                        [filterValue]="field.filterValue"
+                        [width]="field.width"
+                    ></dxi-column>
+                    <dxi-column
                         dataField="actions"
                         type="buttons"
                         [width]="132"
-                        caption="{{ 'stocks-articles-actions' | localize }}">  
-                            <dxi-button
-                                icon="material-icons play_arrow"
-                                [onClick]="onSelectClick"
-                                hint="Sélection">
-                            </dxi-button>
-                            <dxi-button
-                                icon="material-icons visibility"
-                                [onClick]="onDetailClick"
-                                hint="Détail">
-                            </dxi-button>
-                            <dxi-button
-                                icon="material-icons search"
-                                [onClick]="onViewClick"
-                                hint="Fiche article">
-                            </dxi-button>
-                            <dxi-button
-                                icon="user"
-                                [onClick]="onClientClick"
-                                hint="Client">
-                            </dxi-button>
-                        </dxi-column>
-                        <dxi-column
-                        dataField="total"
-                        [width]="60"
-                        [allowFiltering]="false"
-                        caption="{{ 'stocks-articles-total' | localize }}">  
-                        </dxi-column>
-                        <dxi-column
-                        dataField="commentaires"
-                        [width]="150"
-                        caption="{{ 'stocks-articles-comm' | localize }}">  
-                        </dxi-column>
-                    </dx-data-grid>
-                </form>
+                        [allowHeaderFiltering]="false"
+                        [allowSearch]="false"
+                        caption="{{ 'stocks-articles-actions' | localize }}"
+                    >
+                        <dxi-button
+                            icon="material-icons play_arrow"
+                            [onClick]="onSelectClick"
+                            hint="Sélection">
+                        </dxi-button>
+                        <dxi-button
+                            icon="material-icons visibility"
+                            [onClick]="onDetailClick"
+                            hint="Détail">
+                        </dxi-button>
+                        <dxi-button
+                            icon="material-icons search"
+                            [onClick]="onViewClick"
+                            hint="Fiche article">
+                        </dxi-button>
+                        <dxi-button
+                            icon="user"
+                            [onClick]="onClientClick"
+                            hint="Client">
+                        </dxi-button>
+                    </dxi-column>
+                </dx-data-grid>
+
             </div>
         </div>
     </dx-tab-panel>

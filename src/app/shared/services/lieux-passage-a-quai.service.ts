@@ -27,7 +27,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
-  getDataSource(inputVariables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     const query = this.buildGetAll();
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
@@ -35,9 +35,9 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, inputVariables).toPromise();
+            return this.getDistinct(options).toPromise();
 
-          const variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), inputVariables);
+          const variables = this.mapLoadOptionsToVariables(options);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(

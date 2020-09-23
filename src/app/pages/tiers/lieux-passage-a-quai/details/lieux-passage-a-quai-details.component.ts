@@ -118,11 +118,11 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
       } else {
         this.lieupassageaquai = new LieuPassageAQuai({});
         this.contentReadyEvent.emit();
-        console.log('hi')
       }
     });
 
-    this.pays = this.paysService.getDataSource({search: 'valide==true'});
+    this.pays = this.paysService.getDataSource();
+    this.pays.filter(['valide', '=', 'true']);
     this.regimesTva = this.regimesTvaService.getDataSource();
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
@@ -131,7 +131,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   checkCode(params) {
       const code = params.value.toUpperCase();
-      const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource({ search: `id=="${ code }"` });
+      const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource();
+      lieuxpassageaquaiSource.filter(['id', '=', code]);
       return lieuxpassageaquaiSource.load().then(res => !(res.length));
   }
 

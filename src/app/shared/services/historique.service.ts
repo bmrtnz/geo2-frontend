@@ -20,19 +20,13 @@ export class HistoriqueService extends ApiService {
     super(apollo, Historique);
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
           const query = this.buildGetAll(1, this.listRegexp);
           type Response = { allHistorique: RelayPage<Historique> };
-          variables = {
-            ...variables,
-            ...this.mapLoadOptionsToVariables(options),
-          };
-          if (options.searchValue) {
-            variables.search = options.searchValue;
-          }
+          const variables = this.mapLoadOptionsToVariables(options);
           return this.query<Response>(query, {variables, fetchPolicy: 'no-cache'} as WatchQueryOptions<RelayPageVariables>)
             .pipe(
               map(res => this.asListCount(res.data.allHistorique)),
@@ -43,8 +37,8 @@ export class HistoriqueService extends ApiService {
         byKey: (key) => {
           const query = this.buildGetOne(1, this.listRegexp);
           type Response = { historique: Historique };
-          variables = {...variables, id: key};
-          return this.query<Response>(query, {variables} as WatchQueryOptions)
+          const variables = { id: key};
+          return this.query<Response>(query, { variables } as WatchQueryOptions<any>)
             .pipe(
               map(res => res.data.historique),
               take(1),

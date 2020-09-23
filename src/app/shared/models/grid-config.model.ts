@@ -1,5 +1,5 @@
 import { Model, Field } from './model';
-import { Utilisateur } from './utilisateur';
+import { Utilisateur } from './utilisateur.model';
 
 export class GridConfig extends Model {
 

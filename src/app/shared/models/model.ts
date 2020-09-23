@@ -149,38 +149,37 @@ export abstract class Model {
   }
 
   /**
-   * Return the field decorated with attribute
+   * Return the field decorated with provided attribute
    * @param attribute Field attribute
    * @param value Attribute value
    */
-  static getFieldWithAttribute(attribute: string, value?: any) {
-    const withAttributes = Object.entries(this.getFields())
+  static getFieldsWithAttribute(attribute: string, value?: any): string[] {
+    return Object
+    .entries(this.getFields())
     .filter(([, options]) => {
 
       if (!options) return false;
-      if (options.model) return false;
       if (options[attribute] === undefined) return false;
       return value ? value === options[attribute] : true;
 
     })
     .map(([propertyName]) => propertyName);
-
-    return withAttributes.length ? withAttributes.shift() : false;
-
   }
 
   /**
    * Return the field decorated as key
    */
   static getKeyField() {
-    return this.getFieldWithAttribute('asKey');
+    const fields = this.getFieldsWithAttribute('asKey');
+    return fields.length === 1 ? fields.shift() : fields ;
   }
 
   /**
    * Return the field decorated as label
    */
   static getLabelField() {
-    return this.getFieldWithAttribute('asLabel') || '';
+    const fields = this.getFieldsWithAttribute('asLabel');
+    return fields.length ? fields.shift() : false;
   }
 
   /**

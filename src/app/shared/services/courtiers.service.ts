@@ -18,17 +18,17 @@ export class CourtierService extends ApiService implements APIRead {
     super(apollo, Courtier);
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, variables).toPromise();
+            return this.getDistinct(options).toPromise();
 
           const query = this.buildGetAll();
           type Response = { allCourtier: RelayPage<Courtier> };
-          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
+          const variables = this.mapLoadOptionsToVariables(options);
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(
@@ -40,9 +40,9 @@ export class CourtierService extends ApiService implements APIRead {
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { courtier: Courtier };
-          variables = { ...variables, [this.keyField]: key };
+          const variables = { id: key };
           return this.
-          query<Response>(query, { variables } as WatchQueryOptions)
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
             map( res => res.data.courtier),
             take(1),

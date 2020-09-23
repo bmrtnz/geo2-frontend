@@ -217,9 +217,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
     this.secteurs = this.secteursService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
-    this.pays = this.paysService.getDataSource({search: 'valide==true'});
-    // this.paysFacturation = this.paysService.getDataSource({search: 'valide==true'});
-    // this.langue = this.paysService.getDataSource({search: 'valide==true'});
+    this.pays = this.paysService.getDataSource();
+    this.pays.filter(['valide', '=', 'true']);
     this.typesClient = this.typesClientService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -239,7 +238,10 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   checkCode(params) {
 
     const code = params.value.toUpperCase();
-    const clientsSource = this.clientsService.getDataSource({ search: `code=="${ code }"` });
+    const clientsSource = this.clientsService.getDataSource();
+    clientsSource.searchExpr('code');
+    clientsSource.searchOperation('=');
+    clientsSource.searchValue(code);
     return clientsSource.load().then(res => !(res.length));
 
   }

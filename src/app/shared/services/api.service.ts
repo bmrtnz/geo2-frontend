@@ -68,7 +68,7 @@ export type LocateVariables = {
 export interface APIRead {
   getAll?(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
   getOne?(id: string): Observable<ApolloQueryResult<any>>;
-  getDataSource(variables?: RelayPageVariables): DataSource;
+  getDataSource(): DataSource;
 }
 
 export interface APIPersist {
@@ -79,7 +79,7 @@ export abstract class ApiService {
 
   pageSize = DEFAULT_PAGE_SIZE;
   baseFieldsSize = BASE_FIELDS_SIZE;
-  keyField: string;
+  keyField: string | string[];
   gqlKeyType = DEFAULT_GQL_KEY_TYPE;
   model: typeof Model;
   storeConfiguration: CustomStoreOptions;
@@ -365,10 +365,11 @@ export abstract class ApiService {
   /**
    * Build and prepare distinct query
    * @param options DX LoadOptions object
-   * @param inputVariables User variables
    */
-  protected getDistinct(options: LoadOptions, inputVariables?: OperationVariables | RelayPageVariables) {
-    const field = options.group[0].selector;
+  protected getDistinct(options: LoadOptions) {
+
+    // API only support one field
+    const field = options.group.length ? options.group[0].selector : options.group.selector;
     const distinctQuery = this.buildDistinct();
     type DistinctResponse = { distinct: RelayPage<DistinctInfo> };
 
@@ -383,15 +384,12 @@ export abstract class ApiService {
         options.filter = [options.filter[0], 'and', options.filter[1]];
     }
 
-    const distinctVariables = this.mergeVariables(
-      inputVariables,
+    const variables = this.mergeVariables(
       {field},
       this.mapLoadOptionsToVariables(options),
     );
     return this.
-    query<DistinctResponse>(distinctQuery, {
-      variables: distinctVariables,
-    } as WatchQueryOptions<any>)
+    query<DistinctResponse>(distinctQuery, { variables } as WatchQueryOptions<any>)
     .pipe(
       map( res => this.asListCount(res.data.distinct)),
       take(1),
@@ -462,44 +460,44 @@ export abstract class ApiService {
       if (typeof node === 'object') { // comparison
 
         // Deep filter
-        if (typeof node[0] === 'object')
+        if (typeof node[0] === 'object') {
           filter[index] = `(${ next(node).join(' ') })`;
-          else {
-            /* tslint:disable-next-line:prefer-const */
-            let [selector, operator, value] = node;
-            const dxOperator = operator;
+        } else {
+          /* tslint:disable-next-line:prefer-const */
+          let [selector, operator, value] = node;
+          const dxOperator = operator;
 
-            // Map operator
-            switch (operator) {
-              case '=': operator = '=='; break;
-              case 'contains': operator = '=ilike='; break;
-              case 'startswith': operator = '=ilike='; break;
-              case 'endswith': operator = '=ilike='; break;
-              case 'notcontains': operator = '=inotlike='; break;
-              case '<>': operator = '!='; break;
-            }
-
-            // Map value
-            if (selector === 'this') {
-              const mappedFilter = Object
-                .entries(value)
-                .filter(([key]) => key !== '__typename')
-                .map(([k, v]) => JSON.stringify([k, '=', v]))
-                .join(`¤${JSON.stringify('and')}¤`)
-                .split('¤')
-                .map(v => JSON.parse(v));
-              filter[index] = this.mapDXFilterToRSQL(mappedFilter);
-            } else {
-
-              if (['contains', 'notcontains'].includes(dxOperator))
-                value = `%${value}%`;
-              if (dxOperator === 'startswith') value = `${value}%`;
-              if (dxOperator === 'endswith') value = `%${value}`;
-              value = JSON.stringify(value);
-              filter[index] = [selector, operator, value].join('');
-
-            }
+          // Map operator
+          switch (operator) {
+            case '=': operator = '=='; break;
+            case 'contains': operator = '=ilike='; break;
+            case 'startswith': operator = '=ilike='; break;
+            case 'endswith': operator = '=ilike='; break;
+            case 'notcontains': operator = '=inotlike='; break;
+            case '<>': operator = '!='; break;
           }
+
+          // Map value
+          if (selector === 'this') {
+            const mappedFilter = Object
+              .entries(value)
+              .filter(([key]) => key !== '__typename')
+              .map(([k, v]) => JSON.stringify([k, '=', v]))
+              .join(`¤${JSON.stringify('and')}¤`)
+              .split('¤')
+              .map(v => JSON.parse(v));
+            filter[index] = this.mapDXFilterToRSQL(mappedFilter);
+          } else {
+
+            if (['contains', 'notcontains'].includes(dxOperator))
+              value = `%${value}%`;
+            if (dxOperator === 'startswith') value = `${value}%`;
+            if (dxOperator === 'endswith') value = `%${value}`;
+            value = JSON.stringify(value);
+            filter[index] = [selector, operator, value].join('');
+
+          }
+        }
       } else filter[index] =  node;
       if (index < filter.length - 1)
         return next(filter, index + 1);
@@ -518,12 +516,15 @@ export abstract class ApiService {
     this.pageSize = options.take;
 
     // Search / filter
-    variables.search = null;
+    const search = [];
     if (options.filter) // row/header filters
-      variables.search = this.mapDXFilterToRSQL(options.filter);
+      search.push(this.mapDXFilterToRSQL(options.filter));
     if (options.searchValue) // global search
-      variables.search = this
-      .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options));
+      search.push(this
+      .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options)));
+    variables.search = search
+    .map( v => `(${v})` )
+    .join(' and ');
 
     // Sort
     if (options.sort)

@@ -21,18 +21,18 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
     this.gqlKeyType = 'GeoGridConfigKeyInput';
   }
 
-  getDataSource(variables?: OperationVariables | RelayPageVariables) {
+  getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
         key: ['utilisateur', 'grid'],
         load: (options: LoadOptions) => {
 
           if (options.group)
-            return this.getDistinct(options, variables).toPromise();
+            return this.getDistinct(options).toPromise();
 
           const query = this.buildGetAll();
           type Response = { allGridConfig: RelayPage<GridConfig> };
-          variables = this.mergeVariables(this.mapLoadOptionsToVariables(options), variables);
+          const variables = this.mapLoadOptionsToVariables(options);
 
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
@@ -49,9 +49,9 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
         byKey: (key) => {
           const query = this.buildGetOne();
           type Response = { gridConfig: GridConfig };
-          variables = { ...variables, [this.keyField]: key };
+          const variables = { id: key };
           return this.
-          query<Response>(query, { variables } as WatchQueryOptions)
+          query<Response>(query, { variables } as WatchQueryOptions<any>)
           .pipe(
             map( res => new GridConfig(res.data.gridConfig)),
             take(1),

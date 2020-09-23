@@ -219,32 +219,49 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
       }
 
     onEspeceChange(event) {
-        const dsOptions = {
-            search: event.value ? 'espece.id==' + event.value.id : '',
-        };
+        const filter = event.value ? ['espece.id', '=', event.value.id] : [];
 
         this.especes = this.especesService.getDataSource();
-        this.varietes = this.varietesService.getDataSource(dsOptions);
-        this.types = this.typesService.getDataSource(dsOptions);
+        this.varietes = this.varietesService.getDataSource();
+        this.varietes.filter(filter);
+        this.types = this.typesService.getDataSource();
+        this.types.filter(filter);
         this.modesCulture = this.modesCultureService.getDataSource();
-        this.origines = this.originesService.getDataSource(dsOptions);
-        this.calibresUnifies = this.calibresUnifiesService.getDataSource(dsOptions);
-        this.calibresMarquage = this.calibresMarquageService.getDataSource(dsOptions);
-        this.colorations = this.colorationsService.getDataSource(dsOptions);
+        this.origines = this.originesService.getDataSource();
+        this.origines.filter(filter);
+        this.calibresUnifies = this.calibresUnifiesService.getDataSource();
+        this.calibresUnifies.filter(filter);
+        this.calibresMarquage = this.calibresMarquageService.getDataSource();
+        this.calibresMarquage.filter(filter);
+        this.colorations = this.colorationsService.getDataSource();
+        this.colorations.filter(filter);
         this.typesVente = this.typesVenteService.getDataSource();
-        this.stickeurs = this.stickeursService.getDataSource(dsOptions);
-        this.marques = this.marquesService.getDataSource(dsOptions);
-        this.emballages = this.emballagesService.getDataSource(dsOptions);
-        this.conditionsSpecials = this.conditionsSpecialesService.getDataSource(dsOptions);
-        this.alveoles = this.alveolesService.getDataSource(dsOptions);
-        this.categories = this.categoriesService.getDataSource(dsOptions);
-        this.sucres = this.sucresService.getDataSource(dsOptions);
-        this.penetros = this.penetrosService.getDataSource(dsOptions);
-        this.cirages = this.ciragesService.getDataSource(dsOptions);
-        this.rangements = this.rangementsService.getDataSource(dsOptions);
-        this.etiquettesColis = this.etiquettesColisService.getDataSource(dsOptions);
-        this.etiquettesUc = this.etiquettesUcService.getDataSource(dsOptions);
-        this.etiquettesEvenementielle = this.etiquettesEvenementiellesService.getDataSource(dsOptions);
+        this.stickeurs = this.stickeursService.getDataSource();
+        this.stickeurs.filter(filter);
+        this.marques = this.marquesService.getDataSource();
+        this.marques.filter(filter);
+        this.emballages = this.emballagesService.getDataSource();
+        this.emballages.filter(filter);
+        this.conditionsSpecials = this.conditionsSpecialesService.getDataSource();
+        this.conditionsSpecials.filter(filter);
+        this.alveoles = this.alveolesService.getDataSource();
+        this.alveoles.filter(filter);
+        this.categories = this.categoriesService.getDataSource();
+        this.categories.filter(filter);
+        this.sucres = this.sucresService.getDataSource();
+        this.sucres.filter(filter);
+        this.penetros = this.penetrosService.getDataSource();
+        this.penetros.filter(filter);
+        this.cirages = this.ciragesService.getDataSource();
+        this.cirages.filter(filter);
+        this.rangements = this.rangementsService.getDataSource();
+        this.rangements.filter(filter);
+        this.etiquettesColis = this.etiquettesColisService.getDataSource();
+        this.etiquettesColis.filter(filter);
+        this.etiquettesUc = this.etiquettesUcService.getDataSource();
+        this.etiquettesUc.filter(filter);
+        this.etiquettesEvenementielle = this.etiquettesEvenementiellesService.getDataSource();
+        this.etiquettesEvenementielle.filter(filter);
     }
 
     onValideChange(e) {

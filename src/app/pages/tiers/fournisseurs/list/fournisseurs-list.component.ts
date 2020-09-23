@@ -59,9 +59,13 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   async loadDataGridState() {
 
     // Lecture
-    return self.gridService.getDataSource({
-        search: `utilisateur.nomUtilisateur==7 and grid==fournisseurStorage`,
-      }).load().then( res => {
+    const gridSource = self.gridService.getDataSource();
+    gridSource.filter([
+      ['utilisateur.nomUtilisateur', '=', '7'],
+      'and',
+      ['grid', '=', 'fournisseurStorage'],
+    ]);
+    return gridSource.load().then( res => {
         if (!res.length) return null;
         const data = res[0].config;
         if (data !== null) {

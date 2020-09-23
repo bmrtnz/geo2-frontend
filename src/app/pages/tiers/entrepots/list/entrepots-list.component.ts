@@ -32,9 +32,8 @@ export class EntrepotsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.clientID = this.route.snapshot.paramMap.get('client');
-    this.entrepots = this.entrepotsService.getDataSource({
-      search: `client.id=="${ this.clientID }"`,
-    });
+    this.entrepots = this.entrepotsService.getDataSource();
+    this.entrepots.filter(['client.id', '=', this.clientID]);
     this.detailedFields = this.entrepotsService.model.getDetailedFields();
   }
 
@@ -55,9 +54,13 @@ export class EntrepotsListComponent implements OnInit {
   async loadDataGridState() {
 
     // Lecture
-    return self.gridService.getDataSource({
-        search: `utilisateur.nomUtilisateur==7 and grid==entrepotStorage`,
-      }).load().then( res => {
+    const gridSource = self.gridService.getDataSource();
+    gridSource.filter([
+      ['utilisateur.nomUtilisateur', '=', '7'],
+      'and',
+      ['grid', '=', 'entrepotStorage'],
+    ]);
+    return gridSource.load().then( res => {
         if (!res.length) return null;
         const data = res[0].config;
         if (data !== null) {

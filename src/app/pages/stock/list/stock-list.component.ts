@@ -8,7 +8,7 @@ import { VarietesService } from '../../../shared/services/varietes.service';
 import { ClientsService } from '../../../shared/services/clients.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import DataSource from 'devextreme/data/data_source';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxSelectBoxComponent, DxTagBoxComponent } from 'devextreme-angular';
 import { valueFromAST } from 'graphql';
 import { OriginesService } from 'app/shared/services/origines.service';
 import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
@@ -18,6 +18,10 @@ import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.s
 import { EmballagesService } from 'app/shared/services/emballages.service';
 import { environment } from 'environments/environment';
 import { EspecesService } from 'app/shared/services/especes.service';
+import { StockArticlesAgeService } from 'app/shared/services/stock-articles-age.service';
+import { ModelFieldOptions } from 'app/shared/models/model';
+import { from, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-stock-list',
@@ -29,7 +33,6 @@ export class StockListComponent implements OnInit {
 
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
-  produitGrid: DxDataGridComponent;
   stockForm = this.fb.group({
     id: [''],
     bureauAchat: [''],
@@ -45,81 +48,56 @@ export class StockListComponent implements OnInit {
     groupeEmballage: ['']
   });
 
-  bureauxAchat: DataSource;
+  stockArticlesAge: DataSource;
+  especes: DataSource;
+  origines: DataSource;
   varietes: DataSource;
+  calibresUnifies: DataSource;
+  calibresMarquages: DataSource;
+  emballages: DataSource;
+  matieresPremieres: DataSource;
   fournisseurs: DataSource;
   clients: DataSource;
-  typesVarietal: any[];
-  modesCulture: DataSource;
-  origines: DataSource;
-  calibresUnifies: DataSource;
-  calibresMarquage: DataSource;
-  groupesEmballage: DataSource;
-  especes: DataSource;
-  colorations: any[];
-  typesVente: any[];
-  stickeurs: any[];
-  marques: any[];
-  emballages: DataSource;
-  conditionsSpecial: any[];
-  alveoles: any[];
-  categories: any[];
-  sucres: any[];
-  penetros: any[];
-  cirages: any[];
-  rangements: any[];
-  etiquettesClient: any[];
-  etiquettesUC: any[];
-  etiquettesEvenementielle: any[];
-
-  id: string;
 
   stockCategories: StockCategory[];
-  articles: DataSource;
-  itemCount: number;
   columnChooser = environment.columnChooser;
+  detailedFields: ({ name: string } & ModelFieldOptions)[];
 
   constructor(
-    private articlesService: ArticlesService,
-    private especesService: EspecesService,
-    private bureauxAchatService: BureauxAchatService,
-    private fournisseursService: FournisseursService,
-    private varietesService: VarietesService,
-    private originesService: OriginesService,
-    private modesCultureService: ModesCultureService,
-    private calibresUnifiesService: CalibresUnifiesService,
-    private calibresMarquageService: CalibresMarquageService,
-    private groupesEmballageService: GroupesEmballageService,
-    public clientsService: ClientsService,
     public stocksService: StockService,
-    public emballagesService: EmballagesService,
+    public stockArticlesAgeService: StockArticlesAgeService,
+    public fournisseursService: FournisseursService,
+    public clientsService: ClientsService,
     private fb: FormBuilder,
-
   ) { }
 
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
-    this.articles = this.articlesService.getDataSource();
-    this.especes = this.especesService.getDataSource();
-    this.bureauxAchat = this.bureauxAchatService.getDataSource();
+    this.stockArticlesAge = this.stockArticlesAgeService.getDataSource();
+    this.detailedFields = this.stockArticlesAgeService.model.getDetailedFields(3);
+
+    this.especes = this.stockArticlesAgeService
+    .getFilterDatasource('article.matierePremiere.espece.description');
+    this.origines = this.stockArticlesAgeService
+    .getFilterDatasource('article.matierePremiere.origine.description');
+    this.varietes = this.stockArticlesAgeService
+    .getFilterDatasource('article.matierePremiere.variete.description');
+    this.calibresUnifies = this.stockArticlesAgeService
+    .getFilterDatasource('article.matierePremiere.calibreUnifie.description');
+    this.calibresMarquages = this.stockArticlesAgeService
+    .getFilterDatasource('article.normalisation.calibreMarquage.description');
+    this.emballages = this.stockArticlesAgeService
+    .getFilterDatasource('article.emballage.emballage.description');
+    this.matieresPremieres = this.stockArticlesAgeService
+    .getFilterDatasource('article.matierePremiere.modeCulture.description');
+    // TODO Filter when fournisseurs.stocks not empty
     this.fournisseurs = this.fournisseursService.getDataSource();
     this.clients = this.clientsService.getDataSource();
-    this.modesCulture = this.modesCultureService.getDataSource();
-    this.subGetDataSource('');
+
   }
 
-  onEspeceChange(event) {
-    const fields = ['groupeEmballage', 'calibreMarquage', 'calibreUnifie', 'variete', 'origine', 'emballage'];
-
-    const dsOptions = {
-        search: event.value ? 'espece.id==' + event.value.id : '',
-    };
-    this.subGetDataSource(dsOptions);
-
-    // Reset des champs liés à l'espèce
-    for (const f of fields) {
-      this.stockForm.get(f).reset();
-    }
+  onFieldValueChange(event: {key: string}[], dataField: string) {
+    this.dataGrid.instance.columnOption(dataField, 'filterValues', event);
   }
 
   onFilterChange(e) {
@@ -129,49 +107,27 @@ export class StockListComponent implements OnInit {
 
   }
 
-  subGetDataSource(dsOptions) {
-    this.groupesEmballage = this.groupesEmballageService.getDataSource(dsOptions);
-    this.calibresMarquage = this.calibresMarquageService.getDataSource(dsOptions);
-    this.calibresUnifies = this.calibresUnifiesService.getDataSource(dsOptions);
-    this.varietes = this.varietesService.getDataSource(dsOptions);
-    this.origines = this.originesService.getDataSource(dsOptions);
-    this.emballages = this.emballagesService.getDataSource(dsOptions);
-  }
-
   onCellPrepared(e) {
     // Fond jaune pour les stocks J21
-    if (e.column.dataField === 'stockJ21' && e.rowType === 'data') {
+    if (e.column.dataField === 'j21aX' && e.rowType === 'data') {
       e.cellElement.classList.add('highlight-stockJ21-cell');
     }
   }
 
   onSelectClick(e) {
-    alert('selection');
+    console.log('selection');
   }
 
   onDetailClick(e) {
-    alert('détail');
+    console.log('détail');
   }
 
   onViewClick(e) {
-    alert('fiche article');
+    console.log('fiche article');
   }
 
   onClientClick(e) {
-    alert('client');
+    console.log('client');
   }
-
-  // loadDataGridState() {
-  //   const data = window.localStorage.getItem('stockStorage');
-  //   if (data !== null) {
-  //     return JSON.parse(data);
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  // saveDataGridState(data) {
-  //   window.localStorage.setItem('stockStorage', JSON.stringify(data));
-  // }
 
 }

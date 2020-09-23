@@ -126,7 +126,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       }
     });
 
-    this.pays = this.paysService.getDataSource({search: 'valide==true'});
+    this.pays = this.paysService.getDataSource();
+    this.pays.filter(['valide', '=', 'true']);
     this.regimesTva = this.regimesTvaService.getDataSource();
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
@@ -137,7 +138,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   checkCode(params) {
       const code = params.value.toUpperCase();
-      const transporteursSource = this.transporteursService.getDataSource({ search: `id=="${ code }"` });
+      const transporteursSource = this.transporteursService.getDataSource();
+      transporteursSource.filter(['id', '=', code]);
       return transporteursSource.load().then(res => !(res.length));
   }
 

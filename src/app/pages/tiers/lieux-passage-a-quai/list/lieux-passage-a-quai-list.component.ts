@@ -27,7 +27,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
 
   constructor(
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
-    public gridService : GridsConfigsService,
+    public gridService: GridsConfigsService,
     private router: Router,
   ) {
     this.apiService = this.lieuxPassageAQuaiService;
@@ -58,9 +58,13 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   async loadDataGridState() {
 
     // Lecture
-    return self.gridService.getDataSource({
-        search: `utilisateur.nomUtilisateur==7 and grid==lieudepassageaquaiStorage`,
-      }).load().then( res => {
+    const gridSource = self.gridService.getDataSource();
+    gridSource.filter([
+      ['utilisateur.nomUtilisateur', '=', '7'],
+      'and',
+      ['grid', '=', 'lieudepassageaquaiStorage'],
+    ]);
+    return gridSource.load().then( res => {
         if (!res.length) return null;
         const data = res[0].config;
         if (data !== null) {
