@@ -3,6 +3,7 @@ import { CanActivate, Router, ActivatedRouteSnapshot, UrlTree } from '@angular/r
 import { UtilisateursService } from './utilisateurs.service';
 import { Utilisateur } from '../models/utilisateur.model';
 import notify from 'devextreme/ui/notify';
+import {Observable, Observer} from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -24,18 +25,23 @@ export class AuthService {
   }
 
   logIn(id: string, password: string) {
-    this.utilisateursService.getOne(id, password)
-    .subscribe( res => {
-      if (res.data.utilisateur) {
-        this.loggedIn = true;
-        this.currentUser = res.data.utilisateur;
-        window.localStorage.setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(res.data.utilisateur));
-        window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
-        this.router.navigate(['/']);
-      } else {
-        this.loggedIn = false;
-        notify('Utilisateur et/ou mot de passe inconnu', 'error');
-      }
+    return new Observable((observer: Observer<void>) => {
+      this.utilisateursService.getOne(id, password)
+        .subscribe(res => {
+          if (res.data.utilisateur) {
+            this.loggedIn = true;
+            this.currentUser = res.data.utilisateur;
+            window.localStorage.setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(res.data.utilisateur));
+            window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
+            this.router.navigate(['/']);
+          } else {
+            this.loggedIn = false;
+            notify('Utilisateur et/ou mot de passe inconnu', 'error');
+          }
+
+          observer.next();
+          observer.complete();
+        });
     });
   }
 

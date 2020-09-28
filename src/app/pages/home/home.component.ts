@@ -1,4 +1,4 @@
-import { Component, NgModule, ViewChild } from '@angular/core';
+import {Component, isDevMode, ViewChild} from '@angular/core';
 import { NavHomeList, NavHomeService } from 'app/shared/services/home.service';
 import { Router } from '@angular/router';
 import { DxDrawerComponent } from 'devextreme-angular';
@@ -14,6 +14,7 @@ export class HomeComponent {
   @ViewChild(DxDrawerComponent, { static: false }) drawer: DxDrawerComponent;
   public currentDate: Date;
   public navigation: NavHomeList[];
+  public prod = !isDevMode();
 
   constructor(private router: Router, service: NavHomeService) {
     this.currentDate = new Date();

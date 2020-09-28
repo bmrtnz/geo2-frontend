@@ -37,8 +37,7 @@ export class LoginFormComponent implements OnInit {
     this.authService.logIn(
       this.form.get('nomUtilisateur').value,
       this.form.get('password').value,
-    );
-    this.form.patchValue({password: ''});
+    ).subscribe(() => this.form.patchValue({password: ''}));
   }
 }
 @NgModule({
