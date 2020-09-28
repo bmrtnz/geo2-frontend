@@ -42,11 +42,13 @@ export const navigation = [
     ]
   },
   {
+    dev: true,
     text: 'Articles',
     icon: 'box',
     path: '/nested/n/(articles/list)'
   },
   {
+    dev: true,
     text: 'Stock',
     icon: 'material-icons dashboard',
     path: 'stock'
