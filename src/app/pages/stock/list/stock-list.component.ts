@@ -22,6 +22,8 @@ import { StockArticlesAgeService } from 'app/shared/services/stock-articles-age.
 import { ModelFieldOptions } from 'app/shared/models/model';
 import { from, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { OrdreLignesService } from 'app/shared/services/ordres-lignes.service';
+import { SecteursService } from 'app/shared/services/secteurs.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -32,6 +34,8 @@ import { tap } from 'rxjs/operators';
 export class StockListComponent implements OnInit {
 
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  now: number;
+  linesCount: number;
 
   stockForm = this.fb.group({
     id: [''],
@@ -56,8 +60,11 @@ export class StockListComponent implements OnInit {
   calibresMarquages: DataSource;
   emballages: DataSource;
   matieresPremieres: DataSource;
+  categories: DataSource;
   fournisseurs: DataSource;
   clients: DataSource;
+  secteurs: DataSource;
+  lignes: DataSource;
 
   stockCategories: StockCategory[];
   columnChooser = environment.columnChooser;
@@ -68,12 +75,18 @@ export class StockListComponent implements OnInit {
     public stockArticlesAgeService: StockArticlesAgeService,
     public fournisseursService: FournisseursService,
     public clientsService: ClientsService,
+    public secteursService: SecteursService,
+    public ordresLignesService: OrdreLignesService,
     private fb: FormBuilder,
   ) { }
 
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
-    this.stockArticlesAge = this.stockArticlesAgeService.getDataSource();
+    this.stockArticlesAge = this.stockArticlesAgeService.getFetchDatasource();
+    this.stockArticlesAge.on('changed', _ => {
+      this.linesCount = this.dataGrid.instance.totalCount();
+      this.now = Date.now();
+    });
     this.detailedFields = this.stockArticlesAgeService.model.getDetailedFields(3);
 
     this.especes = this.stockArticlesAgeService
@@ -90,14 +103,33 @@ export class StockListComponent implements OnInit {
     .getFilterDatasource('article.emballage.emballage.description');
     this.matieresPremieres = this.stockArticlesAgeService
     .getFilterDatasource('article.matierePremiere.modeCulture.description');
+    this.categories = this.stockArticlesAgeService
+    .getFilterDatasource('article.cahierDesCharge.categorie.description');
+
     // TODO Filter when fournisseurs.stocks not empty
+    this.lignes = this.ordresLignesService.getDataSource();
+    this.secteurs = this.secteursService.getDataSource();
     this.fournisseurs = this.fournisseursService.getDataSource();
+    this.fournisseurs.filter(['valide', '=', true]);
     this.clients = this.clientsService.getDataSource();
 
   }
 
   onFieldValueChange(event: {key: string}[], dataField: string) {
     this.dataGrid.instance.columnOption(dataField, 'filterValues', event);
+  }
+
+  onCustomFilterChange(items: any[], selector: string) {
+    const filters = items
+    .map( item =>  JSON.stringify([selector, '=', item.id]))
+    .join(`¤${JSON.stringify(['or'])}¤`)
+    .split('¤')
+    .map(v => JSON.parse(v));
+    console.log(filters);
+    this.lignes.filter([
+      ...filters,
+    ]);
+    this.lignes.load().then( res => console.log(res));
   }
 
   onFilterChange(e) {
