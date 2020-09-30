@@ -5,3 +5,5 @@ export class PaloxRaisonSocial {
   public valide: boolean;
 
 }
+
+export default PaloxRaisonSocial;

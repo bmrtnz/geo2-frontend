@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 export type ModelFieldOptions<T = typeof Model> = {
-  model?: T
+  model?: Promise<{default: T}>
   asLabel?: boolean
   asKey?: boolean
   details?: ModelFieldOptions[]
@@ -45,7 +45,7 @@ export abstract class Model {
   /**
    * Get model fields as list
    */
-  static getListFields(depth = 1, filter = DefaultGridFilter, prefix?: string) {
+  static async getListFields(depth = 1, filter = DefaultGridFilter, prefix?: string) {
     const getFieldName = (property: string) => prefix ? `${prefix}.${property}` : property;
     return Object.entries(this.getFields())
     .filter(([propertyName, options]) => {
@@ -57,12 +57,12 @@ export abstract class Model {
 
       return !options.model || (options.model && depth > 0);
     })
-    .map(([propertyName, options]) => {
+    .map(async ([propertyName, options]) => {
 
       const fieldName = getFieldName(propertyName);
       if (!options.model) return fieldName;
 
-      const type: typeof Model = options.model;
+      const type: typeof Model = (await options.model).default;
       if (type && type.getLabelField())
         return type.getListFields(depth - 1, filter, fieldName);
 
@@ -76,7 +76,7 @@ export abstract class Model {
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
-  static getGQLFields(depth = 1, filter?: RegExp) {
+  static async getGQLFields(depth = 1, filter?: RegExp) {
     return Object.keys(this.getFields())
     .filter( propertyName => {
 
@@ -88,12 +88,12 @@ export abstract class Model {
       return !options.model || (options.model && depth > 0);
 
     })
-    .map( propertyName => {
+    .map( async propertyName => {
 
       const {model} = this.getFields()[propertyName];
       if (!model) return propertyName;
 
-      const type: typeof Model = model;
+      const type: typeof Model = (await model).default;
       return `${propertyName} {\n${type.getGQLFields(depth - 1, filter)}\n}`;
 
     })
@@ -105,7 +105,10 @@ export abstract class Model {
    * @param depth Sub model fetch depth
    * @param flat Get one level detail
    */
-  static getDetailedFields(depth = 1, flat = true, filter = /^(?:raisonSocial|description)$/): ({name: string} & ModelFieldOptions)[] {
+  static async getDetailedFields(
+    depth = 1,
+    flat = true,
+    filter = /^(?:raisonSocial|description)$/): Promise<ModelFieldOptions[]> {
 
     enum DXDataType {
       'String' = 'string',
@@ -118,10 +121,12 @@ export abstract class Model {
 
     const res = Object.entries(this.getFields())
     .filter(([name, options]) => depth > 0 || options.model || filter.test(name))
-    .map(([name, options]) => {
+    .map(async ([name, options]) => {
 
-      if (options.model && depth > 1)
-        options.details = options.model.getDetailedFields(depth - 1, false, filter);
+      if (options.model && depth > 1) {
+        const model = (await options.model).default;
+        options.details = model.getDetailedFields(depth - 1, false, filter);
+      }
       const type = Reflect.getMetadata('design:type', this.prototype, name).name;
       return {
         name,
@@ -134,12 +139,13 @@ export abstract class Model {
 
     if (flat) {
       const mapDetails = (fields: ModelFieldOptions[]) => fields
-      .map( field => {
+      .map( async field => {
         if (field.details) {
           return mapDetails(field.details
           .map( v => ({...v, path: `${field.path || field.name}.${v.name}`})));
         }
-        return [{...field, path: field.model ? `${field.path || field.name}.${field.model.getLabelField()}` : field.path || field.name}];
+        const model = (await field.model).default;
+        return [{...field, path: model ? `${field.path || field.name}.${model.getLabelField()}` : field.path || field.name}];
       });
       return mapDetails(res).flat(depth) as any;
     }

@@ -8,3 +8,5 @@ export class BaseTarif extends Model {
   @Field() public valideLig: boolean;
   @Field() public valide: boolean;
 }
+
+export default BaseTarif;

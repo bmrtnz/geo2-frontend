@@ -9,14 +9,16 @@ import { Espece } from './espece.model';
 
 export class ArticleNormalisation extends Model {
   @Field({asKey: true, asLabel: true}) public id: string;
-  @Field({model: Espece}) public espece: Espece;
-  @Field({model: Stickeur}) public stickeur: Stickeur;
-  @Field({model: Marque}) public marque: Marque;
-  @Field({model: EtiquetteColis}) public etiquetteColis: EtiquetteColis;
-  @Field({model: EtiquetteUc}) public etiquetteUc: EtiquetteUc;
-  @Field({model: EtiquetteEvenementielle}) public etiquetteEvenementielle: EtiquetteEvenementielle;
-  @Field({model: CalibreMarquage}) public calibreMarquage: CalibreMarquage;
+  @Field({model: import('./espece.model')}) public espece: Espece;
+  @Field({model: import('./stickeur.model')}) public stickeur: Stickeur;
+  @Field({model: import('./marque.model')}) public marque: Marque;
+  @Field({model: import('./etiquette-colis.model')}) public etiquetteColis: EtiquetteColis;
+  @Field({model: import('./etiquette-UC.model')}) public etiquetteUc: EtiquetteUc;
+  @Field({model: import('./etiquette-evt.model')}) public etiquetteEvenementielle: EtiquetteEvenementielle;
+  @Field({model: import('./calibre-marquage.model')}) public calibreMarquage: CalibreMarquage;
   @Field() public gtinUc: string;
   @Field() public gtinColis: string;
   @Field() public articleClient: string;
 }
+
+export default ArticleNormalisation;

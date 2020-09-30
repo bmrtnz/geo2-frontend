@@ -7,3 +7,5 @@ export class Secteur extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default Secteur;

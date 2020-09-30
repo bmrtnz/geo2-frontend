@@ -9,3 +9,5 @@ export class Historique extends Model {
   @Field() public dateModification: Date;
 
 }
+
+export default Historique;

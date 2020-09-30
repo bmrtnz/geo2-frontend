@@ -7,3 +7,5 @@ export class TypeFournisseur extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default TypeFournisseur;

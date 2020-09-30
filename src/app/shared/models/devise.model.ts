@@ -9,3 +9,5 @@ export class Devise extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default Devise;

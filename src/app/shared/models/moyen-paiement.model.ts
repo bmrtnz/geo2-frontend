@@ -7,3 +7,5 @@ export class MoyenPaiement extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default MoyenPaiement;

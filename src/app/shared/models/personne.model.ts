@@ -16,3 +16,5 @@ export class Personne extends Model {
   }
 
 }
+
+export default Personne;
