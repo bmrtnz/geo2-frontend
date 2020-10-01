@@ -40,31 +40,6 @@
                                     ></dx-tag-box>
                                 </div>
                             </div>
-                            <!-- fournisseur -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [disabled]="true"
-                                        [dataSource]="fournisseurs"
-                                        displayExpr="raisonSocial">
-                                    </dx-tag-box>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="search-criteria-subcontainer">
-                            <!-- Bureau achat -->
-                            <!-- <div class="dx-field">
-                                <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="bureauAchat"
-                                    [searchEnabled]="true"
-                                    [dataSource]="bureauxAchat"
-                                    displayExpr="raisonSocial">
-                                    </dx-select-box>
-                                </div>
-                            </div> -->
                             <!-- Origine -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-origine' | localize }}</div>
@@ -95,6 +70,35 @@
                                 ></dx-tag-box>
                                 </div>
                             </div>
+                            <!-- categories -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'articles-categorie' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                    [dataSource]="categories"
+                                    [showClearButton]="true"
+                                    (valueChange)="onFieldValueChange($event,'article.cahierDesCharge.categorie.description')"
+                                    [searchEnabled]="true"
+                                    searchExpr="article.cahierDesCharge.categorie.description"
+                                    displayExpr="key"
+                                    valueExpr="key"
+                                ></dx-tag-box>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-criteria-subcontainer">
+                            <!-- Bureau achat -->
+                            <!-- <div class="dx-field">
+                                <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box
+                                    formControlName="bureauAchat"
+                                    [searchEnabled]="true"
+                                    [dataSource]="bureauxAchat"
+                                    displayExpr="raisonSocial">
+                                    </dx-select-box>
+                                </div>
+                            </div> -->
                             <!-- calibre Unifie -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-calibreUnifie' | localize }}</div>
@@ -110,8 +114,6 @@
                                     ></dx-tag-box>
                                 </div>
                             </div>
-                        </div>
-                        <div class="search-criteria-subcontainer">
                             <!-- Calibre Marquage -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-calibreMarquage' | localize }}</div>
@@ -142,6 +144,47 @@
                                     ></dx-tag-box>
                                 </div>
                             </div>
+                        </div>
+                        <div class="search-criteria-subcontainer">
+                            <!-- Secteurs -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="secteurs"
+                                        displayExpr="description"
+                                        [searchEnabled]="true"
+                                        searchExpr="description"
+                                        (valueChange)="onCustomFilterChange($event, 'ordre.secteurCommercial.id')"
+                                    ></dx-tag-box>
+                                </div>
+                            </div>
+                            <!-- Clients -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [disabled]="true"
+                                        [dataSource]="clients"
+                                        [searchEnabled]="true"
+                                        searchExpr="raisonSocial"
+                                        displayExpr="raisonSocial">
+                                    </dx-tag-box>
+                                </div>
+                            </div>
+                            <!-- fournisseur -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="fournisseurs"
+                                        displayExpr="raisonSocial"
+                                        [searchEnabled]="true"
+                                        searchExpr="raisonSocial"
+                                        (valueChange)="onCustomFilterChange($event, 'ordre.fournisseur.id')"
+                                    ></dx-tag-box>
+                                </div>
+                            </div>
                             <!-- Mode Culture -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-modeCulture' | localize }}</div>
@@ -157,24 +200,13 @@
                                     ></dx-tag-box>
                                 </div>
                             </div>
-                            <!-- Clients -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [disabled]="true"
-                                        [dataSource]="clients"
-                                        displayExpr="raisonSocial">
-                                    </dx-tag-box>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div style="clear:both"></div>
 
                 </form>
                     
-                <div class="stock-grid-title">STOCK {{ stockCategory.stockName }} consolidé du 17/05/20 09:25:47 - 7 lignes</div>
+                <div class="stock-grid-title">STOCK {{ stockCategory.stockName }} consolidé du {{ now | date:'medium' }} - {{ linesCount }} lignes</div>
 
                 <dx-data-grid
                     class="dx-card wide-card"

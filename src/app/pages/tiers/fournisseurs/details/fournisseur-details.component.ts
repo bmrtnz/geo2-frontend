@@ -223,7 +223,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       this.fournisseursService
       .save({ fournisseur })
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
@@ -233,6 +233,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
               this.editing = false;
               this.router.navigate([`/tiers/fournisseurs/${fournisseur.id}`]);
             }
+            this.fournisseur.historique = e.data.saveFournisseur.historique;
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });

@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class FournisseursService extends ApiService implements APIRead {
 
-  byKeyFilter = /.*\.(?:id|raisonSocial|description|ville|valide)$/i;
+  byKeyFilter = /.*\.(?:id|raisonSocial|description|ville|valide|commentaire|userModification|dateModification)$/i;
   noStockFournisseurFilter = /^(?!.*Stock\.fournisseur).*/i;
 
   constructor(
@@ -52,7 +52,7 @@ export class FournisseursService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: (key) => {
-          const query = this.buildGetOne(1, this.byKeyFilter);
+          const query = this.buildGetOne(1);
           type Response = { fournisseur: Fournisseur };
           const variables = { id: key };
           return this.

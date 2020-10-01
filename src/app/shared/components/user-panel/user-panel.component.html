@@ -1,10 +1,5 @@
 <div class="user-panel">
-    <div class="user-info">
-        <div class="image-container">
-            <!-- <div class="user-image"></div> -->
-        </div>
-        <div class="user-name">{{ authService.currentUser.nomInterne }}</div>
-    </div>
+    <div class="user-name">{{ authService.currentUser.nomInterne }}</div>
     <dx-context-menu
         *ngIf="menuMode === 'context'"
         [items]="menuItems"

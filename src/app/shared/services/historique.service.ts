@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ApiService, RelayPage, RelayPageVariables} from './api.service';
 import {Apollo} from 'apollo-angular';
 import {Historique} from '../models';
-import {OperationVariables, WatchQueryOptions} from 'apollo-client';
+import {MutationOptions, OperationVariables, WatchQueryOptions} from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import {LoadOptions} from 'devextreme/data/load_options';
 import {map, take} from 'rxjs/operators';
@@ -47,6 +47,11 @@ export class HistoriqueService extends ApiService {
         },
       }),
     });
+  }
+
+  save(variables: OperationVariables) {
+    const mutation = this.buildSave(1);
+    return this.mutate(mutation, { variables } as MutationOptions);
   }
 
 }
