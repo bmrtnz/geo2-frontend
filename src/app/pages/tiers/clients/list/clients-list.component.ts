@@ -5,7 +5,7 @@ import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
 import { ModelFieldOptions } from 'app/shared/models/model';
-import { environment, loada} from 'environments/environment';
+import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
 

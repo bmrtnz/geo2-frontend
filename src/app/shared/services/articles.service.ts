@@ -13,7 +13,8 @@ import { map, take } from 'rxjs/operators';
 
 export class ArticlesService extends ApiService implements APIRead {
 
-  fieldsFilter = /.\.*(?:id|description|espece|variete|blueWhaleStock|type|modeCulture|valide)$/i;
+  /* tslint:disable-next-line max-line-length */
+  fieldsFilter = /.\.*(?:id|description|espece|variete|blueWhaleStock|type|modeCulture|valide|commentaire|userModification|dateModification)$/i;
 
   constructor(
     apollo: Apollo,

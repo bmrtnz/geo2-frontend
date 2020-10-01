@@ -27,6 +27,7 @@ import { Editable } from 'app/shared/guards/editing-guard';
 import { tap } from 'rxjs/operators';
 import { DxCheckBoxComponent } from 'devextreme-angular';
 import { environment } from 'environments/environment';
+import { HistoriqueService } from 'app/shared/services/historique.service';
 
 @Component({
   selector: 'app-client-details',
@@ -164,6 +165,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     private certificationsService: CertificationsService,
     private moyensPaiementService: MoyensPaiementService,
     private conditionsVenteService: ConditionsVenteService,
+    private historiqueService: HistoriqueService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -282,6 +284,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
               this.editing = false;
               this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
             }
+            this.client.historique = e.data.saveClient.historique;
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
