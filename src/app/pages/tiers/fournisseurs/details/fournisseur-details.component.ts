@@ -234,6 +234,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
               this.router.navigate([`/tiers/fournisseurs/${fournisseur.id}`]);
             }
             this.fournisseur.historique = e.data.saveFournisseur.historique;
+            this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });

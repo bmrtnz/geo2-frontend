@@ -12,7 +12,7 @@ import {
 } from 'devextreme-angular';
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {PromptPopupModule} from '../../shared/components/prompt-popup/prompt-popup.component';
+import {PushHistoryPopupModule} from '../../shared/components/push-history-popup/push-history-popup.component';
 import { CommonModule } from '@angular/common';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
@@ -33,7 +33,7 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
     DxTemplateModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule,
-    EditingAlertModule, PromptPopupModule,
+    EditingAlertModule, PushHistoryPopupModule,
     HistoriqueValideModule,
     FileManagerModule
   ],

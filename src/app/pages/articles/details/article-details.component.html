@@ -49,7 +49,6 @@
                 <app-prompt-popup
                     title="{{ 'valide-comment-title' | localize }}"
                     [placeholder]="'valide-comment' | localize"
-                    [(visible)]="this.validateCommentPromptVisible"
                     (cancel)="valideCheckBox.value = !valideCheckBox.value"
                 ></app-prompt-popup>
                 <!-- <app-historique-valide [historique]="article?.historique"></app-historique-valide> -->

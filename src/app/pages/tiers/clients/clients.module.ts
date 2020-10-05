@@ -11,7 +11,7 @@ import {
     DxTextBoxModule, DxValidatorModule, DxTagBoxModule, DxDateBoxModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {PromptPopupModule} from '../../../shared/components/prompt-popup/prompt-popup.component';
+import {PushHistoryPopupModule} from '../../../shared/components/push-history-popup/push-history-popup.component';
 import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EntrepotsModule } from '../entrepots/entrepots.module';
@@ -44,7 +44,7 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
         DxSwitchModule,
         DxDateBoxModule,
         HistoriqueValideModule,
-        PromptPopupModule,
+        PushHistoryPopupModule,
         EditingAlertModule,
         FileManagerModule
     ],

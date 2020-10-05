@@ -7,6 +7,12 @@ import DataSource from 'devextreme/data/data_source';
 import {LoadOptions} from 'devextreme/data/load_options';
 import {map, take} from 'rxjs/operators';
 
+export enum HistoryType {
+  CLIENT = 'HistoriqueClient',
+  FOURNISSEUR = 'HistoriqueFournisseur',
+  ARTICLE = 'HistoriqueArticle',
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -49,8 +55,11 @@ export class HistoriqueService extends ApiService {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1);
+  async save(variables: OperationVariables, type: HistoryType) {
+    const models = await import('../models/historique.model');
+    this.model = models[type];
+    const mutation = this.buildSave(2);
+    console.log(mutation);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

@@ -24,10 +24,13 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { tap } from 'rxjs/operators';
+import { combineAll, mergeAll, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { DxCheckBoxComponent } from 'devextreme-angular';
 import { environment } from 'environments/environment';
-import { HistoriqueService } from 'app/shared/services/historique.service';
+import { HistoryType } from 'app/shared/services/historique.service';
+import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
+import { FetchResult } from 'apollo-link';
+import { concat, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-client-details',
@@ -118,6 +121,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
+  @ViewChild(PushHistoryPopupComponent, { static: false })
+  validatePopup: PushHistoryPopupComponent;
   editing = false;
 
 
@@ -141,7 +146,6 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
-  validateCommentPromptVisible = false;
   conditionsVente: DataSource;
   certifications: DataSource;
   isReadOnlyMode = true;
@@ -165,7 +169,6 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
     private certificationsService: CertificationsService,
     private moyensPaiementService: MoyensPaiementService,
     private conditionsVenteService: ConditionsVenteService,
-    private historiqueService: HistoriqueService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -248,7 +251,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const client = this.clientsService.extractDirty(this.formGroup.controls);
@@ -271,29 +274,47 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
         client.preSaisie = true;
       }
 
-      this.clientsService
-      .save({ client })
-        .subscribe({
-          next: (e) => {
-            notify('Sauvegardé', 'success', 3000);
-            this.refreshGrid.emit();
-            if (!this.createMode) {
-              this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
-              this.readOnlyMode = true;
-            } else {
-              this.editing = false;
-              this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
-            }
-            this.client.historique = e.data.saveClient.historique;
-          },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
+      // Validity change
+      if (client.valide !== undefined && this.client.valide !== client.valide) {
+        const saveHistory = (await this.validatePopup.present(HistoryType.CLIENT, {client: {id: client.id}, valide: client.valide}));
+        return concat(
+          saveHistory.pipe(mergeAll()),
+          this.clientsService.save({ client }),
+        )
+        .subscribe(res => console.log(res));
+        // .pipe(
+        //   switchMap(([histo,client]) => )
+        // )
+      }
+
+      this.save(client);
     }
+  }
+
+  save(client) {
+    this.clientsService
+    .save({ client })
+    .subscribe({
+      next: (e) => {
+        notify('Sauvegardé', 'success', 3000);
+        this.refreshGrid.emit();
+        if (!this.createMode) {
+          this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
+          this.readOnlyMode = true;
+        } else {
+          this.editing = false;
+          this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+        }
+        this.client.historique = e.data.saveClient.historique;
+        this.formGroup.markAsPristine();
+      },
+      error: () => notify('Echec de la sauvegarde', 'error', 3000),
+    });
   }
 
   onCancel() {
     if (!this.createMode) {
-      // this.clientForm.reset(this.client);
+      this.formGroup.reset(this.client);
       this.readOnlyMode = true;
     } else {
       this.router.navigate([`/tiers/clients`]);
@@ -306,12 +327,6 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
-  }
-
-  onValideChange(e) {
-    if (e.event) { // Changed by user
-      this.validateCommentPromptVisible = true;
-    }
   }
 
   onSecteurChange(e) {

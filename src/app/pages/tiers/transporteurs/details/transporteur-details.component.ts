@@ -175,6 +175,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
               this.editing = false;
               this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
             }
+            this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });

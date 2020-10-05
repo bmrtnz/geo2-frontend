@@ -168,6 +168,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
               this.editing = false;
               this.router.navigate([`/tiers/lieux-passage-a-quai/${lieuPassageAQuai.id}`]);
             }
+            this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });

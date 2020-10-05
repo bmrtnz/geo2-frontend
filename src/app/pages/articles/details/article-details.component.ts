@@ -212,6 +212,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     this.cloneMode = false;
                     this.readOnlyMode = true;
                     this.editing = false;
+                    this.formGroup.markAsPristine();
                 },
                 error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });

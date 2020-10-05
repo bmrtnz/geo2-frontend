@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PromptPopupComponent } from './prompt-popup.component';
+import { PushHistoryPopupComponent } from './prompt-popup.component';
 
 describe('PromptPopupComponent', () => {
-  let component: PromptPopupComponent;
-  let fixture: ComponentFixture<PromptPopupComponent>;
+  let component: PushHistoryPopupComponent;
+  let fixture: ComponentFixture<PushHistoryPopupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PromptPopupComponent ]
+      declarations: [ PushHistoryPopupComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PromptPopupComponent);
+    fixture = TestBed.createComponent(PushHistoryPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
