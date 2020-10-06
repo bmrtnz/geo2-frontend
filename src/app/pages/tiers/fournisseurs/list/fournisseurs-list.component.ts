@@ -4,11 +4,12 @@ import { Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { ModelFieldOptions } from 'app/shared/models/model';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 import { LoadsavedatagridstateService } from 'app/shared/services/loadsavedatagridstate.service';
 import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { Observable } from 'rxjs';
 
 let self: FournisseursListComponent;
 
@@ -24,7 +25,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   columnChooser = environment.columnChooser;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
 
   constructor(
     public fournisseursService: FournisseursService,
@@ -83,14 +84,14 @@ export class FournisseursListComponent implements OnInit, NestedMain {
 
     }
 
-  saveDataGridState(data) {
+  async saveDataGridState(data) {
 
     // Ecriture
-    self.gridService.save({gridConfig: {
+    (await self.gridService.save({gridConfig: {
       utilisateur: {nomUtilisateur: '7'},
       grid: 'fournisseurStorage',
       config: data
-    }})
+    }}))
     .subscribe();
 
   }

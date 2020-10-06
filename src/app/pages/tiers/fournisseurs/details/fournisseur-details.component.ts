@@ -154,13 +154,13 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
     this.route.params
     .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
+    .subscribe(async params => {
       const url = this.route.snapshot.url;
       this.createMode = url[url.length - 1].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
-        this.fournisseursService
-          .getOne(params.id)
+        (await this.fournisseursService
+          .getOne(params.id))
           .subscribe( res => {
             this.fournisseur = res.data.fournisseur;
             // console.log(this.fournisseur.fournisseurDeRattachement);
@@ -201,7 +201,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       return fournisseursSource.load().then(res => !(res.length));
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const fournisseur = this.fournisseursService.extractDirty(this.formGroup.controls);
@@ -220,8 +220,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
       }
 
-      this.fournisseursService
-      .save({ fournisseur })
+      (await this.fournisseursService
+      .save({ fournisseur }))
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);

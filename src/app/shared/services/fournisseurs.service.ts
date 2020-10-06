@@ -13,7 +13,6 @@ import DataSource from 'devextreme/data/data_source';
 export class FournisseursService extends ApiService implements APIRead {
 
   byKeyFilter = /.*\.(?:id|raisonSocial|description|ville|valide|commentaire|userModification|dateModification)$/i;
-  noStockFournisseurFilter = /^(?!.*Stock\.fournisseur).*/i;
 
   constructor(
     apollo: Apollo,
@@ -21,8 +20,8 @@ export class FournisseursService extends ApiService implements APIRead {
     super(apollo, Fournisseur);
   }
 
-  getOne(id: string) {
-    const query = this.buildGetOne();
+  async getOne(id: string) {
+    const query = await this.buildGetOne();
     type Response = { fournisseur: Fournisseur };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -35,13 +34,13 @@ export class FournisseursService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
           const variables = this.mapLoadOptionsToVariables(options);
-          const query = this.buildGetAll(1, this.noStockFournisseurFilter);
+          const query = await this.buildGetAll(1);
           type Response = { allFournisseur: RelayPage<Fournisseur> };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
@@ -51,8 +50,8 @@ export class FournisseursService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne(1);
+        byKey: async (key) => {
+          const query = await this.buildGetOne(1);
           type Response = { fournisseur: Fournisseur };
           const variables = { id: key };
           return this.
@@ -67,8 +66,8 @@ export class FournisseursService extends ApiService implements APIRead {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.byKeyFilter);
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1, this.byKeyFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

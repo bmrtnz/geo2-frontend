@@ -19,7 +19,7 @@ import { EmballagesService } from 'app/shared/services/emballages.service';
 import { environment } from 'environments/environment';
 import { EspecesService } from 'app/shared/services/especes.service';
 import { StockArticlesAgeService } from 'app/shared/services/stock-articles-age.service';
-import { ModelFieldOptions } from 'app/shared/models/model';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { from, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { OrdreLignesService } from 'app/shared/services/ordres-lignes.service';
@@ -68,7 +68,7 @@ export class StockListComponent implements OnInit {
 
   stockCategories: StockCategory[];
   columnChooser = environment.columnChooser;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
 
   constructor(
     public stocksService: StockService,

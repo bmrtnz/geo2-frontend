@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { ModelFieldOptions } from 'app/shared/models/model';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { Observable } from 'rxjs';
 
 let self: LieuxPassageAQuaiListComponent;
 
@@ -22,7 +23,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
 
   constructor(
@@ -82,14 +83,14 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
 
     }
 
-  saveDataGridState(data) {
+  async saveDataGridState(data) {
 
     // Ecriture
-    self.gridService.save({gridConfig: {
+    (await self.gridService.save({gridConfig: {
       utilisateur: {nomUtilisateur: '7'},
       grid: 'lieudepassageaquaiStorage',
       config: data
-    }})
+    }}))
     .subscribe();
 
   }

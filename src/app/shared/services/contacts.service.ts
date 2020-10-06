@@ -21,12 +21,12 @@ export class ContactsService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allContact: RelayPage<Contact> };
 
           const variables = this.mapLoadOptionsToVariables(options);
@@ -39,8 +39,8 @@ export class ContactsService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { contact: Contact };
           const variables = { id: key };
           return this.
@@ -51,16 +51,16 @@ export class ContactsService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        insert: (values) => {
+        insert: async (values) => {
           const variables = { contact: values };
-          const mutation = this.buildSave();
+          const mutation = await this.buildSave();
           return this
           .mutate(mutation, { variables } as MutationOptions<any, any>)
           .toPromise();
         },
-        update: (key, values) => {
+        update: async (key, values) => {
           const variables = { contact: { id: key, ...values }};
-          const mutation = this.buildSave();
+          const mutation = await this.buildSave();
           return this
           .mutate(mutation, { variables } as MutationOptions<any, any>)
           .toPromise();

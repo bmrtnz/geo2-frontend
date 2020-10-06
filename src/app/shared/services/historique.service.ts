@@ -23,8 +23,8 @@ export class HistoriqueService extends ApiService {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
-          const query = this.buildGetAll(1, this.listRegexp);
+        load: async (options: LoadOptions) => {
+          const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allHistorique: RelayPage<Historique> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.query<Response>(query, {variables, fetchPolicy: 'no-cache'} as WatchQueryOptions<RelayPageVariables>)
@@ -34,8 +34,8 @@ export class HistoriqueService extends ApiService {
             )
             .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne(1, this.listRegexp);
+        byKey: async (key) => {
+          const query = await this.buildGetOne(1, this.listRegexp);
           type Response = { historique: Historique };
           const variables = { id: key};
           return this.query<Response>(query, { variables } as WatchQueryOptions<any>)
@@ -49,8 +49,8 @@ export class HistoriqueService extends ApiService {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1);
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

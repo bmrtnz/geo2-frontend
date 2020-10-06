@@ -130,13 +130,13 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
     this.route.params
     .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
+    .subscribe(async params => {
       const url = this.route.snapshot.url;
       this.createMode = url[url.length - 2].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
-        this.entrepotsService
-          .getOne(params.id)
+        (await this.entrepotsService
+          .getOne(params.id))
           .subscribe( res => {
             this.entrepot = res.data.entrepot;
             this.formGroup.patchValue(this.entrepot);
@@ -145,7 +145,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           });
       } else {
         this.entrepot = new Entrepot({});
-        this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
+        (await this.clientsService.getOne(this.route.snapshot.params.client)).subscribe(
           result => {
             // On reprend le code client (si pas existant) pour le code entrepôt
             const code = result.data.client.code.toUpperCase();
@@ -186,7 +186,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       return entrepotsSource.load().then(res => !(res.length));
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const entrepot = this.entrepotsService.extractDirty(this.formGroup.controls);
@@ -204,8 +204,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         entrepot.preSaisie = true;
       }
 
-      this.entrepotsService
-      .save({ entrepot })
+      (await this.entrepotsService
+      .save({ entrepot }))
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);

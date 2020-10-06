@@ -102,13 +102,13 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
     this.route.params
     .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
+    .subscribe(async params => {
       const url = this.route.snapshot.url;
       this.createMode = url[url.length - 1].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
-        this.lieupassageaquaiService
-          .getOne(params.id)
+        (await this.lieupassageaquaiService
+          .getOne(params.id))
           .subscribe( res => {
             this.lieupassageaquai = res.data.lieuPassageAQuai;
             this.formGroup.patchValue(this.lieupassageaquai);
@@ -136,7 +136,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
       return lieuxpassageaquaiSource.load().then(res => !(res.length));
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const lieuPassageAQuai = this.lieupassageaquaiService.extractDirty(this.formGroup.controls);
@@ -155,8 +155,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         lieuPassageAQuai.id = this.lieupassageaquai.id;
       }
 
-      this.lieupassageaquaiService
-      .save({ lieuPassageAQuai })
+      (await this.lieupassageaquaiService
+      .save({ lieuPassageAQuai }))
         .subscribe({
           next: () => {
             notify('Sauvegardé', 'success', 3000);

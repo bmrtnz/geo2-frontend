@@ -23,12 +23,12 @@ export class StocksService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allStock: RelayPage<Stock> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -39,8 +39,8 @@ export class StocksService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { stock: Stock };
           const variables = { id: key };
           return this.

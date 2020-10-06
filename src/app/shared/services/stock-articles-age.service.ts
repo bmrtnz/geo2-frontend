@@ -21,8 +21,8 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     this.gqlKeyType = 'GeoStockArticleAgeKeyInput';
   }
 
-  byKey = (key) => {
-    const query = this.buildGetOne();
+  byKey = async (key) => {
+    const query = await this.buildGetOne();
     type Response = { stockArticleAge: StockArticleAge };
     const variables = { id: key };
     return this.
@@ -38,12 +38,12 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         key: this.model.getKeyField(),
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll(3);
+          const query = await this.buildGetAll(3);
           type Response = { allStockArticleAge: RelayPage<StockArticleAge> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -63,7 +63,7 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     const dt = new DataSource({
       store: this.createCustomStore({
         key: this.model.getKeyField(),
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
@@ -84,7 +84,7 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         key: this.model.getKeyField(),
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();

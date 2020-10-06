@@ -25,12 +25,12 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
     return new DataSource({
       store: this.createCustomStore({
         key: ['utilisateur', 'grid'],
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allGridConfig: RelayPage<GridConfig> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -46,8 +46,8 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { gridConfig: GridConfig };
           const variables = { id: key };
           return this.
@@ -62,8 +62,8 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.fieldsFilter);
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

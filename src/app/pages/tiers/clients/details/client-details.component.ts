@@ -193,13 +193,13 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
     this.route.params
     .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
+    .subscribe(async params => {
       const url = this.route.snapshot.url;
       this.createMode = url[url.length - 1].path === 'create';
       this.readOnlyMode = !this.createMode;
       if (!this.createMode) {
-        this.clientsService
-          .getOne(params.id)
+        (await this.clientsService
+          .getOne(params.id))
           .subscribe( res => {
             this.client = res.data.client;
             this.formGroup.patchValue(this.client);
@@ -248,7 +248,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const client = this.clientsService.extractDirty(this.formGroup.controls);
@@ -271,8 +271,8 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
         client.preSaisie = true;
       }
 
-      this.clientsService
-      .save({ client })
+      (await this.clientsService
+      .save({ client }))
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);

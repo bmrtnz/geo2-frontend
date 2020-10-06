@@ -3,8 +3,8 @@ import { ArticlesService } from '../../../shared/services/articles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     Article
-  } from '../../../shared/models';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+} from '../../../shared/models';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import notify from 'devextreme/ui/notify';
 import DataSource from 'devextreme/data/data_source';
 import { EspecesService } from 'app/shared/services/especes.service';
@@ -30,7 +30,7 @@ import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.ser
 import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
 import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchAll, switchMap, tap } from 'rxjs/operators';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -155,21 +155,22 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
-    ) {}
+    ) { }
 
     ngOnInit() {
 
         this.route.params
-        .pipe(
-            tap( _ => this.formGroup.reset()),
-            switchMap( params => this.articlesService.getOne(params.id)),
-        )
-        .subscribe( res => {
-            this.article = new Article(res.data.article);
-            this.formGroup.patchValue(this.article);
-            this.contentReadyEvent.emit();
-            this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
-        });
+            .pipe(
+                tap(_ => this.formGroup.reset()),
+                switchMap(async params => await this.articlesService.getOne(params.id)),
+                switchAll(),
+            )
+            .subscribe(res => {
+                this.article = new Article(res.data.article);
+                this.formGroup.patchValue(this.article);
+                this.contentReadyEvent.emit();
+                this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
+            });
 
     }
 
@@ -189,7 +190,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         });
     }
 
-    onSubmit() {
+    async onSubmit() {
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
             if (this.cloneMode) {
@@ -201,22 +202,22 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     this.preSaisie = '';
                 }
             }
-            this.articlesService
-                .save({ article, clone: this.cloneMode })
+            (await this.articlesService
+                .save({ article, clone: this.cloneMode }))
                 .subscribe({
-                next: (event) => {
-                    notify('Sauvegardé', 'success', 3000);
-                    this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
-                    if (this.cloneMode)
-                        this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
-                    this.cloneMode = false;
-                    this.readOnlyMode = true;
-                    this.editing = false;
-                },
-                error: () => notify('Echec de la sauvegarde', 'error', 3000),
+                    next: (event) => {
+                        notify('Sauvegardé', 'success', 3000);
+                        this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
+                        if (this.cloneMode)
+                            this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
+                        this.cloneMode = false;
+                        this.readOnlyMode = true;
+                        this.editing = false;
+                    },
+                    error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });
         }
-      }
+    }
 
     onEspeceChange(event) {
         const filter = event.value ? ['espece.id', '=', event.value.id] : [];
@@ -268,10 +269,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         if (e.event) { // Changed by user
             this.validateCommentPromptVisible = true;
         }
-      }
+    }
 
     fileManagerClick() {
-    this.fileManagerComponent.visible = true;
+        this.fileManagerComponent.visible = true;
     }
 
 }

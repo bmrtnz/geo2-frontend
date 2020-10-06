@@ -2,9 +2,10 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { EntrepotsService } from '../../../../shared/services/entrepots.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
-import { ModelFieldOptions } from 'app/shared/models/model';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { Observable } from 'rxjs';
 
 let self: EntrepotsListComponent;
 
@@ -17,7 +18,7 @@ export class EntrepotsListComponent implements OnInit {
 
   entrepots: DataSource;
   clientID: string;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
   contentReadyEvent = new EventEmitter<any>();
 
@@ -78,14 +79,14 @@ export class EntrepotsListComponent implements OnInit {
 
     }
 
-  saveDataGridState(data) {
+  async saveDataGridState(data) {
 
     // Ecriture
-    self.gridService.save({gridConfig: {
+    (await self.gridService.save({gridConfig: {
       utilisateur: {nomUtilisateur: '7'},
       grid: 'entrepotStorage',
       config: data
-    }})
+    }}))
     .subscribe();
 
   }
