@@ -26,12 +26,12 @@ export class ArticlesEmballagesService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll(1, this.listRegexp);
+          const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allArticleEmballage: RelayPage<ArticleEmballage> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -42,8 +42,8 @@ export class ArticlesEmballagesService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { articleEmballage: ArticleEmballage };
           const variables = { id: key };
           return this.

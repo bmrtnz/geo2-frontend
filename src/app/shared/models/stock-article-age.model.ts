@@ -10,9 +10,9 @@ import { CalibreFournisseur } from './calibre-fournisseur.model';
 
 export class StockArticleAge extends Model {
 
-  @Field({model: Article}) public article: Article;
-  @Field({model: Variete}) public variete: Variete;
-  @Field({model: Categorie}) public categorie: Categorie;
+  @Field({model: import('./article.model')}) public article: Article;
+  @Field({model: import('./variete.model')}) public variete: Variete;
+  @Field({model: import('./categorie.model')}) public categorie: Categorie;
   @Field({width: 60}) public j: number;
   @Field({width: 60}) public j1a8: number;
   @Field({width: 60}) public j9a20: number;
@@ -22,12 +22,14 @@ export class StockArticleAge extends Model {
   @Field() public quantiteHebdomadaire: number;
   @Field() public prevision3j: number;
   @Field() public prevision7j: number;
-  @Field({model: Espece}) public espece: Espece;
-  @Field({model: CalibreFournisseur}) public calibreFournisseur: CalibreFournisseur;
-  @Field({model: CalibreMarquage}) public calibreMarquage: CalibreMarquage;
-  @Field({model: Origine}) public origine: Origine;
-  @Field({model: Colis}) public colis: Colis;
+  @Field({model: import('./espece.model')}) public espece: Espece;
+  @Field({model: import('./calibre-fournisseur.model')}) public calibreFournisseur: CalibreFournisseur;
+  @Field({model: import('./calibre-marquage.model')}) public calibreMarquage: CalibreMarquage;
+  @Field({model: import('./origine.model')}) public origine: Origine;
+  @Field({model: import('./colis.model')}) public colis: Colis;
   @Field({asKey: true, asLabel: true}) public age: string;
   // @Field() public dateModification: string;
 
 }
+
+export default StockArticleAge;

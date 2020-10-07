@@ -5,3 +5,5 @@ export class TypeCamion extends Model {
     @Field({asLabel: true}) public description: string;
     @Field() public valide: boolean;
 }
+
+export default TypeCamion;

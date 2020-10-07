@@ -1,24 +1,25 @@
-import {Component, OnInit, AfterViewInit, EventEmitter, ViewChild} from '@angular/core';
-import { EntrepotsService, ClientsService } from '../../../../shared/services';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Entrepot } from '../../../../shared/models';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import DataSource from 'devextreme/data/data_source';
-import notify from 'devextreme/ui/notify';
-import { PersonnesService } from 'app/shared/services/personnes.service';
-import { ModesLivraisonService } from 'app/shared/services/modes-livraison.service';
-import { PaysService } from 'app/shared/services/pays.service';
-import { TypesPaletteService } from 'app/shared/services/types-palette.service';
-import { IncotermsService } from 'app/shared/services/incoterms.service';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { Editable } from 'app/shared/guards/editing-guard';
 import { TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
-import { TypesCamionService } from 'app/shared/services/types-camion.service';
+import { IncotermsService } from 'app/shared/services/incoterms.service';
+import { ModesLivraisonService } from 'app/shared/services/modes-livraison.service';
+import { PaysService } from 'app/shared/services/pays.service';
+import { PersonnesService } from 'app/shared/services/personnes.service';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { TransitairesService } from 'app/shared/services/transitaires.service';
-import { NestedPart } from 'app/pages/nested/nested.component';
-import { Editable } from 'app/shared/guards/editing-guard';
-import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
-import { tap } from 'rxjs/operators';
+import { TypesCamionService } from 'app/shared/services/types-camion.service';
+import { TypesPaletteService } from 'app/shared/services/types-palette.service';
+import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
+import { from } from 'rxjs';
+import { mergeAll, tap } from 'rxjs/operators';
+import { Entrepot } from '../../../../shared/models';
+import { ClientsService, EntrepotsService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -129,42 +130,44 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   ngOnInit() {
 
     this.route.params
-    .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
-      const url = this.route.snapshot.url;
-      this.createMode = url[url.length - 2].path === 'create';
-      this.readOnlyMode = !this.createMode;
-      if (!this.createMode) {
-        this.entrepotsService
-          .getOne(params.id)
-          .subscribe( res => {
-            this.entrepot = res.data.entrepot;
-            this.formGroup.patchValue(this.entrepot);
-            this.contentReadyEvent.emit();
-            this.preSaisie = this.entrepot.preSaisie === true ? 'preSaisie' : '';
-          });
-      } else {
-        this.entrepot = new Entrepot({});
-        this.clientsService.getOne(this.route.snapshot.params.client).subscribe(
-          result => {
-            // On reprend le code client (si pas existant) pour le code entrepôt
-            const code = result.data.client.code.toUpperCase();
-            const entrepotsSource = this.entrepotsService.getDataSource();
-            this.pays.filter(['code', '=', code]);
-            entrepotsSource.load().then(res => {
-              if (!res.length) {
-                this.mandatoryCode = true;
-                this.entrepot.code = code;
-                this.formGroup.patchValue(this.entrepot);
-              } else {
-                //
+      .pipe(tap(_ => this.formGroup.reset()))
+      .subscribe(params => {
+        const url = this.route.snapshot.url;
+        this.createMode = url[url.length - 2].path === 'create';
+        this.readOnlyMode = !this.createMode;
+        if (!this.createMode) {
+          from(this.entrepotsService.getOne(params.id))
+            .pipe(mergeAll())
+            .subscribe(res => {
+              this.entrepot = res.data.entrepot;
+              this.formGroup.patchValue(this.entrepot);
+              this.contentReadyEvent.emit();
+              this.preSaisie = this.entrepot.preSaisie === true ? 'preSaisie' : '';
+            });
+        } else {
+          this.entrepot = new Entrepot({});
+          from(this.clientsService.getOne(this.route.snapshot.params.client))
+            .pipe(mergeAll())
+            .subscribe(
+              result => {
+                // On reprend le code client (si pas existant) pour le code entrepôt
+                const code = result.data.client.code.toUpperCase();
+                const entrepotsSource = this.entrepotsService.getDataSource();
+                this.pays.filter(['code', '=', code]);
+                entrepotsSource.load().then(res => {
+                  if (!res.length) {
+                    this.mandatoryCode = true;
+                    this.entrepot.code = code;
+                    this.formGroup.patchValue(this.entrepot);
+                  } else {
+                    //
+                  }
+                });
               }
-             });
-            }
-        );
-        this.contentReadyEvent.emit();
-      }
-    });
+            );
+          this.contentReadyEvent.emit();
+        }
+      });
 
     this.personnes = this.personnesService.getDataSource();
     this.modesLivraison = this.modesLivraisonService.getDataSource();
@@ -180,10 +183,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   checkCode(params) {
-      const code = params.value.toUpperCase();
-      const entrepotsSource = this.entrepotsService.getDataSource();
-      entrepotsSource.filter(['code', '=', code]);
-      return entrepotsSource.load().then(res => !(res.length));
+    const code = params.value.toUpperCase();
+    const entrepotsSource = this.entrepotsService.getDataSource();
+    entrepotsSource.filter(['code', '=', code]);
+    return entrepotsSource.load().then(res => !(res.length));
   }
 
   onSubmit() {
@@ -199,13 +202,13 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         }
       } else {
         entrepot.code = this.formGroup.get('code').value.toUpperCase();
-        entrepot.client = {id: this.route.snapshot.params.client};
+        entrepot.client = { id: this.route.snapshot.params.client };
         entrepot.valide = false;
         entrepot.preSaisie = true;
       }
 
-      this.entrepotsService
-      .save({ entrepot })
+      from(this.entrepotsService.save({ entrepot }))
+        .pipe(mergeAll())
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
@@ -237,7 +240,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${ this.entrepot.code }/${ this.entrepot.typeTiers }`]);
+    this.router.navigate([`/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`]);
   }
 
 }

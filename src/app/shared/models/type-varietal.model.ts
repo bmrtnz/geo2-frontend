@@ -5,3 +5,5 @@ export class TypeVarietal {
   public valide: boolean;
 
 }
+
+export default TypeVarietal;

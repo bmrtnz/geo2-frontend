@@ -1,10 +1,11 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
-import { EntrepotsService } from '../../../../shared/services/entrepots.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import DataSource from 'devextreme/data/data_source';
-import { ModelFieldOptions } from 'app/shared/models/model';
-import { environment } from 'environments/environment';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
+import { from, Observable } from 'rxjs';
+import { EntrepotsService } from '../../../../shared/services/entrepots.service';
 
 let self: EntrepotsListComponent;
 
@@ -17,7 +18,7 @@ export class EntrepotsListComponent implements OnInit {
 
   entrepots: DataSource;
   clientID: string;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
   contentReadyEvent = new EventEmitter<any>();
 
@@ -60,33 +61,35 @@ export class EntrepotsListComponent implements OnInit {
       'and',
       ['grid', '=', 'entrepotStorage'],
     ]);
-    return gridSource.load().then( res => {
-        if (!res.length) return null;
-        const data = res[0].config;
-        if (data !== null) {
-          // Suppression filtres/recherche
-          for (const myColumn of data.columns) {
-            if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
-          }
-          data.searchText = '';
-
-          return data;
-        } else {
-          return null;
+    return gridSource.load().then(res => {
+      if (!res.length) return null;
+      const data = res[0].config;
+      if (data !== null) {
+        // Suppression filtres/recherche
+        for (const myColumn of data.columns) {
+          if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
         }
-      });
+        data.searchText = '';
 
-    }
+        return data;
+      } else {
+        return null;
+      }
+    });
+
+  }
 
   saveDataGridState(data) {
 
     // Ecriture
-    self.gridService.save({gridConfig: {
-      utilisateur: {nomUtilisateur: '7'},
-      grid: 'entrepotStorage',
-      config: data
-    }})
-    .subscribe();
+    from(self.gridService.save({
+      gridConfig: {
+        utilisateur: { nomUtilisateur: '7' },
+        grid: 'entrepotStorage',
+        config: data
+      }
+    }))
+      .subscribe();
 
   }
 

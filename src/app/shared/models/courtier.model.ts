@@ -7,3 +7,5 @@ export class Courtier extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default Courtier;

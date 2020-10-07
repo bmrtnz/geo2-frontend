@@ -47,7 +47,7 @@
       [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-      *ngFor="let field of detailedFields;let i=index"
+      *ngFor="let field of detailedFields | async; index as i"
       [dataField]="field.path"
       [caption]="('tiers-transporteurs-'+ field.name.replace('.description', '').split('.').pop() | localize) || field.name"
       [visible]="i < transporteursService.baseFieldsSize"

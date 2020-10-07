@@ -7,3 +7,5 @@ export class RegimeTva extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default RegimeTva;

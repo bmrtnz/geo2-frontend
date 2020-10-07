@@ -6,3 +6,5 @@ export class FraisMarketingModeCalcul {
   public valideLig: boolean;
   public valide: boolean;
 }
+
+export default FraisMarketingModeCalcul;

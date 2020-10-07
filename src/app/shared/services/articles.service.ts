@@ -22,8 +22,8 @@ export class ArticlesService extends ApiService implements APIRead {
     super(apollo, Article);
   }
 
-  getOne(id: string) {
-    const query = this.buildGetOne(3);
+  async getOne(id: string) {
+    const query = await this.buildGetOne(3);
     type Response = { article: Article };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -35,12 +35,12 @@ export class ArticlesService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll(2);
+          const query = await this.buildGetAll(2);
           type Response = { allArticle: RelayPage<Article> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -51,8 +51,8 @@ export class ArticlesService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne(1, this.fieldsFilter);
+        byKey: async (key) => {
+          const query = await this.buildGetOne(1, this.fieldsFilter);
           type Response = { article: Article };
           const variables = { id: key };
           return this.
@@ -67,16 +67,16 @@ export class ArticlesService extends ApiService implements APIRead {
     });
   }
 
-  save(variables: OperationVariables & { clone: boolean }) {
-    const mutation = this.buildSaveWithClone(2, this.fieldsFilter);
+  async save(variables: OperationVariables & { clone: boolean }) {
+    const mutation = await this.buildSaveWithClone(2, this.fieldsFilter);
     return this.mutate(mutation, { variables } as any);
   }
 
-  protected buildSaveWithClone(depth?: number, filter?: RegExp) {
+  protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
     return `
       mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {
         saveArticle(article: $article,clone: $clone) {
-          ${ this.model.getGQLFields(depth, filter) }
+          ${ await this.model.getGQLFields(depth, filter).toPromise() }
         }
       }
     `;

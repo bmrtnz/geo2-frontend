@@ -13,14 +13,4 @@ export abstract class Historique extends Model {
 
 }
 
-export class HistoriqueClient extends Historique {
-  @Field({model: Client}) public client: Client;
-}
-
-export class HistoriqueFournisseur extends Historique {
-  @Field({model: Fournisseur}) public fournisseur: Fournisseur;
-}
-
-export class HistoriqueArticle extends Historique {
-  @Field({model: Article}) public article: Article;
-}
+export default Historique;

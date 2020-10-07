@@ -7,3 +7,5 @@ export class Certification extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default Certification;

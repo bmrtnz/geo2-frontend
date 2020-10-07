@@ -6,3 +6,5 @@ export class CourtageModeCalcul {
   public valideLig: boolean;
   public valide: boolean;
 }
+
+export default CourtageModeCalcul;

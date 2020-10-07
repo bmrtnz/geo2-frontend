@@ -1,43 +1,42 @@
-import { Component, OnInit, AfterViewInit, ViewChild, EventEmitter, Input } from '@angular/core';
-import { ClientsService } from '../../../../shared/services';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Client, Courtier } from '../../../../shared/models';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { SecteursService } from 'app/shared/services/secteurs.service';
-import DataSource from 'devextreme/data/data_source';
-import { PersonnesService } from 'app/shared/services/personnes.service';
-import { PaysService } from 'app/shared/services/pays.service';
-import { TypesClientService } from 'app/shared/services/types-client.service';
-import { IncotermsService } from 'app/shared/services/incoterms.service';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
-import { DevisesService } from 'app/shared/services/devises.service';
-import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
-import { CertificationsService } from 'app/shared/services/certification.service';
-import notify from 'devextreme/ui/notify';
-import { TypesVenteService } from 'app/shared/services/types-vente.service';
-import { CourtierService } from 'app/shared/services/courtiers.service';
-import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
-import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
-import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
-import { Editable } from 'app/shared/guards/editing-guard';
-import { combineAll, mergeAll, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { DxCheckBoxComponent } from 'devextreme-angular';
-import { environment } from 'environments/environment';
-import { HistoryType } from 'app/shared/services/historique.service';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
-import { FetchResult } from 'apollo-link';
-import { concat, Observable } from 'rxjs';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
+import { CertificationsService } from 'app/shared/services/certification.service';
+import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
+import { CourtierService } from 'app/shared/services/courtiers.service';
+import { DevisesService } from 'app/shared/services/devises.service';
+import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
+import { HistoryType } from 'app/shared/services/historique.service';
+import { IncotermsService } from 'app/shared/services/incoterms.service';
+import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
+import { PaysService } from 'app/shared/services/pays.service';
+import { PersonnesService } from 'app/shared/services/personnes.service';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { SecteursService } from 'app/shared/services/secteurs.service';
+import { TypesClientService } from 'app/shared/services/types-client.service';
+import { TypesVenteService } from 'app/shared/services/types-vente.service';
+import { DxCheckBoxComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
+import { environment } from 'environments/environment';
+import { concat, from } from 'rxjs';
+import { mergeAll, tap } from 'rxjs/operators';
+import { Client } from '../../../../shared/models';
+import { ClientsService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.scss']
 })
-export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPart, Editable {
+export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
   private requiredFields = ['soumisCtifl'];
 
@@ -195,30 +194,30 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   ngOnInit() {
 
     this.route.params
-    .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
-      const url = this.route.snapshot.url;
-      this.createMode = url[url.length - 1].path === 'create';
-      this.readOnlyMode = !this.createMode;
-      if (!this.createMode) {
-        this.clientsService
-          .getOne(params.id)
-          .subscribe( res => {
-            this.client = res.data.client;
-            this.formGroup.patchValue(this.client);
-            this.contentReadyEvent.emit();
-            this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
+      .pipe(tap(_ => this.formGroup.reset()))
+      .subscribe(params => {
+        const url = this.route.snapshot.url;
+        this.createMode = url[url.length - 1].path === 'create';
+        this.readOnlyMode = !this.createMode;
+        if (!this.createMode) {
+          from(this.clientsService.getOne(params.id))
+            .pipe(mergeAll())
+            .subscribe(res => {
+              this.client = res.data.client;
+              this.formGroup.patchValue(this.client);
+              this.contentReadyEvent.emit();
+              this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
+            });
+        } else {
+          // Apply default value
+          this.client = new Client({
+            soumisCtifl: false,
+            delaiBonFacturer: 8 // Donné par Léa 7-09-2020
           });
-      } else {
-        // Apply default value
-        this.client = new Client({
-          soumisCtifl: false,
-          delaiBonFacturer: 8 // Donné par Léa 7-09-2020
-        });
-        this.formGroup.patchValue(this.client);
-        this.contentReadyEvent.emit();
-      }
-    });
+          this.formGroup.patchValue(this.client);
+          this.contentReadyEvent.emit();
+        }
+      });
 
     this.secteurs = this.secteursService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
@@ -251,7 +250,7 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
   }
 
-  async onSubmit() {
+  onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const client = this.clientsService.extractDirty(this.formGroup.controls);
@@ -276,12 +275,12 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
 
       // Validity change
       if (client.valide !== undefined && this.client.valide !== client.valide) {
-        const saveHistory = (await this.validatePopup.present(HistoryType.CLIENT, {client: {id: client.id}, valide: client.valide}));
+        const saveHistory = from(this.validatePopup.present(HistoryType.CLIENT, { client: { id: client.id }, valide: client.valide }));
         return concat(
           saveHistory.pipe(mergeAll()),
           this.clientsService.save({ client }),
         )
-        .subscribe(res => console.log(res));
+          .subscribe(res => console.log(res));
         // .pipe(
         //   switchMap(([histo,client]) => )
         // )
@@ -292,24 +291,24 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   }
 
   save(client) {
-    this.clientsService
-    .save({ client })
-    .subscribe({
-      next: (e) => {
-        notify('Sauvegardé', 'success', 3000);
-        this.refreshGrid.emit();
-        if (!this.createMode) {
-          this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
-          this.readOnlyMode = true;
-        } else {
-          this.editing = false;
-          this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
-        }
-        this.client.historique = e.data.saveClient.historique;
-        this.formGroup.markAsPristine();
-      },
-      error: () => notify('Echec de la sauvegarde', 'error', 3000),
-    });
+    from(this.clientsService.save({ client }))
+      .pipe(mergeAll())
+      .subscribe({
+        next: (e) => {
+          notify('Sauvegardé', 'success', 3000);
+          this.refreshGrid.emit();
+          if (!this.createMode) {
+            this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
+            this.readOnlyMode = true;
+          } else {
+            this.editing = false;
+            this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+          }
+          this.client.historique = e.data.saveClient.historique;
+          this.formGroup.markAsPristine();
+        },
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
   }
 
   onCancel() {
@@ -351,11 +350,11 @@ export class ClientDetailsComponent  implements OnInit, AfterViewInit, NestedPar
   }
 
   entrepotsBtnClick() {
-    this.router.navigate([`/tiers/clients/${ this.client.id }/entrepots`]);
+    this.router.navigate([`/tiers/clients/${this.client.id}/entrepots`]);
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${ this.client.code }/${ this.client.typeTiers }`]);
+    this.router.navigate([`/tiers/contacts/${this.client.code}/${this.client.typeTiers}`]);
   }
 
 }

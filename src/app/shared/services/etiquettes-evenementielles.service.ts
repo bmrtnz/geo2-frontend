@@ -28,12 +28,12 @@ export class EtiquettesEvenementiellesService extends ApiService implements APIR
       ],
       store: this.createCustomStore({
         key: ['id', 'especeId'],
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll(1, this.listRegexp);
+          const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allEtiquetteEvenementielle: RelayPage<EtiquetteEvenementielle> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -48,8 +48,8 @@ export class EtiquettesEvenementiellesService extends ApiService implements APIR
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { etiquetteEvenementielle: EtiquetteEvenementielle };
           const id = key ? {id: key.id, espece: key.especeId || ''} : {};
           const variables = { id };
