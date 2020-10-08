@@ -295,6 +295,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
               this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
             }
             this.client.historique = e.data.saveClient.historique;
+            this.client.typeTiers = e.data.saveClient.typeTiers;
             this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),

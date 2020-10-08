@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class LieuxPassageAQuaiService extends ApiService implements APIRead {
 
-  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|codePostal|adresse1|valide)$/i;
+  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|codePostal|adresse1|valide|typeTiers)$/i;
 
   constructor(
     apollo: Apollo,

@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class ClientsService extends ApiService implements APIRead, APIPersist {
 
-  fieldsFilter = /.*\.(?:id|code|raisonSocial|description|ville|valide|commentaire|userModification|dateModification)$/i;
+  fieldsFilter = /.*\.(?:id|code|raisonSocial|description|ville|valide|commentaire|userModification|dateModification|typeTiers)$/i;
 
   constructor(
     apollo: Apollo,

@@ -220,6 +220,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
               this.editing = false;
               this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
             }
+            this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });

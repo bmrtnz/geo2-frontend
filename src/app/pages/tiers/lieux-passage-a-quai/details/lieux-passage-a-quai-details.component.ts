@@ -161,7 +161,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
       from(this.lieupassageaquaiService.save({ lieuPassageAQuai }))
         .pipe(mergeAll())
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
@@ -171,6 +171,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
               this.editing = false;
               this.router.navigate([`/tiers/lieux-passage-a-quai/${lieuPassageAQuai.id}`]);
             }
+            this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
             this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),

@@ -167,7 +167,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       from(this.transporteursService.save({ transporteur }))
         .pipe(mergeAll())
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
@@ -177,6 +177,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
               this.editing = false;
               this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
             }
+            this.transporteur.typeTiers = e.data.saveTransporteur.typeTiers;
             this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),

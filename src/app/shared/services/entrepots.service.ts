@@ -13,7 +13,7 @@ import { MutationOptions } from 'apollo-client';
 })
 export class EntrepotsService extends ApiService implements APIRead {
 
-  fieldsFilter = /.*\.(?:id|code|raisonSocial|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|code|raisonSocial|ville|valide|typeTiers)$/i;
 
   constructor(
     apollo: Apollo,
