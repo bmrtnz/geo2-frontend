@@ -70,7 +70,7 @@ export class EntrepotsListComponent implements OnInit {
           if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
         }
         data.searchText = '';
-
+        data.focusedRowKey = null;
         return data;
       } else {
         return null;

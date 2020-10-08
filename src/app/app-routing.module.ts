@@ -44,6 +44,11 @@ const routes: Routes = [
     loadChildren: './pages/nested/nested.module#NestedModule',
   },
   {
+    path: 'ordres',
+    canActivate: [AuthGuardService],
+    loadChildren: './pages/ordres/ordres.module#OrdresModule'
+  },
+  {
     path: 'tiers',
     canActivate: [AuthGuardService],
     loadChildren: './pages/tiers/tiers.module#TiersModule'

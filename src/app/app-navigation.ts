@@ -23,6 +23,20 @@ export const navigation = [
     ]
   },
   {
+    dev: true,
+    text: 'Ordres de commande',
+    icon: 'material-icons euro_symbol',
+    items: [
+      {
+        text: 'Accueil',
+        path: '/ordres/accueil'
+      }, {
+        text: 'Ordres',
+        path: '/ordres/details'
+      }
+    ]
+  },
+  {
     text: 'Tiers',
     icon: 'user',
     items: [

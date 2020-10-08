@@ -29,13 +29,14 @@ body {
      -moz-user-select:none;
 }
 
-.fournisseur-page, .article-page, .client-page, .transporteur-page, .entrepot-page, .lieupassageaquai-page, .entrepot-page {
+.fournisseur-page, .article-page, .client-page, .transporteur-page, .entrepot-page, 
+.lieupassageaquai-page, .entrepot-page, .ordre-page {
 
   .dx-accordion-item-title::before {
     font-size: 18px;
   }
 
-  .dx-button {
+  .dx-button:not(.subButton) {
     margin-bottom:10px;
     .dx-button-content {
       padding: 10px 3px;
