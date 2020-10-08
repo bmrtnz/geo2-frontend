@@ -52,7 +52,7 @@
             class="vertical"
             formControlName="valide"
             [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
-            [readOnly]="readOnlyMode"
+            [readOnly]="readOnlyMode || !authService.currentUser.accessGeoTiers"
           ></dx-check-box>
           <app-historique-valide [historique]="client?.historique"></app-historique-valide>
           <dx-button

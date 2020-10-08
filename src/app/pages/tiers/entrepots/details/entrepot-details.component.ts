@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { TransporteursService } from 'app/shared/services';
+import { AuthService, TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
 import { IncotermsService } from 'app/shared/services/incoterms.service';
 import { ModesLivraisonService } from 'app/shared/services/modes-livraison.service';
@@ -104,7 +104,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     private typesCamionService: TypesCamionService,
     private transitairesService: TransitairesService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public authService: AuthService,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -133,7 +134,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       .pipe(tap(_ => this.formGroup.reset()))
       .subscribe(params => {
         const url = this.route.snapshot.url;
-        this.createMode = url[url.length - 2].path === 'create';
+        this.createMode = url[0].path === 'create';
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
           from(this.entrepotsService.getOne(params.id))

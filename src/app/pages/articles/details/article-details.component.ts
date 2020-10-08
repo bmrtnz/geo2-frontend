@@ -6,6 +6,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
+import { AuthService } from 'app/shared/services';
 import { AlveolesService } from 'app/shared/services/alveoles.service';
 import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
 import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
@@ -160,6 +161,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
+        public authService: AuthService,
     ) { }
 
     ngOnInit() {

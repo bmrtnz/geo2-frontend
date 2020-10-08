@@ -6,6 +6,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
+import { AuthService } from 'app/shared/services';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { BureauxAchatService } from 'app/shared/services/bureaux-achat.service';
 import { CertificationsService } from 'app/shared/services/certification.service';
@@ -133,6 +134,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     private paysService: PaysService,
     private router: Router,
     private route: ActivatedRoute,
+    public authService: AuthService,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);

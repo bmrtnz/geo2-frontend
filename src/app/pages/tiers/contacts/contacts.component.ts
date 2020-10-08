@@ -12,6 +12,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { environment} from 'environments/environment';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { Observable } from 'rxjs';
+import { AuthService } from 'app/shared/services';
 
 @Component({
   selector: 'app-contacts',
@@ -38,6 +39,7 @@ export class ContactsComponent implements OnInit, NestedPart {
     public fluxService: FluxService,
     public moyenCommunicationService: MoyenCommunicationService,
     private route: ActivatedRoute,
+    public authService: AuthService,
   ) {}
 
   ngOnInit() {

@@ -5,7 +5,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { ClientsService } from 'app/shared/services';
+import { AuthService, ClientsService } from 'app/shared/services';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
@@ -82,6 +82,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     private clientsService: ClientsService,
     private router: Router,
     private route: ActivatedRoute,
+    public authService: AuthService,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);

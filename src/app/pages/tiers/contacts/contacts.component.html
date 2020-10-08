@@ -56,7 +56,7 @@
       [dataField]="field.name"
       [caption]="('tiers-contacts-' + field.name | localize) || field.name"
       [visible]="i < contactsService.baseFieldsSize"
-      [allowEditing]="field.allowEditing"
+      [allowEditing]="(field.name === 'valide' && authService.currentUser.accessGeoTiers) || (field.name !== 'valide' && field?.allowEditing !== false)"
       [filterValue]="field.name === 'valide' ? true : undefined"
       [width]="field.name === 'valide' ? 100 : field.name === 'fluxComplement' ? 75 : field.name === 'moyenCommunication' ? 150 :undefined"
       [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"

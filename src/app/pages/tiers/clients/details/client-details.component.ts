@@ -29,7 +29,7 @@ import { environment } from 'environments/environment';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { Client } from '../../../../shared/models';
-import { ClientsService } from '../../../../shared/services';
+import { AuthService, ClientsService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-client-details',
@@ -170,6 +170,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     private conditionsVenteService: ConditionsVenteService,
     private router: Router,
     private route: ActivatedRoute,
+    public authService: AuthService,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);

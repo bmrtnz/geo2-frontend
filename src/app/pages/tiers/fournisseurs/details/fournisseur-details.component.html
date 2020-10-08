@@ -49,7 +49,7 @@
           #valideCheckBox
           class="vertical"
           formControlName="valide"
-          [readOnly]="readOnlyMode"
+          [readOnly]="readOnlyMode || !authService.currentUser.accessGeoTiers"
           [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
         <app-historique-valide [historique]="fournisseur?.historique"></app-historique-valide>

@@ -43,7 +43,7 @@
                     class="vertical"
                     formControlName="valide"
                     [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
-                    [readOnly]="readOnlyMode"
+                    [readOnly]="readOnlyMode || !authService.currentUser.accessGeoProduct"
                 ></dx-check-box>
                 <app-historique-valide [historique]="article?.historique"></app-historique-valide>
                 <dx-button

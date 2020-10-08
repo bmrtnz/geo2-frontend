@@ -42,7 +42,7 @@
         <dx-check-box
           class="vertical"
           formControlName="valide"
-          [readOnly]="readOnlyMode"
+          [readOnly]="readOnlyMode || !authService.currentUser.accessGeoTiers"
           [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
         <dx-button
