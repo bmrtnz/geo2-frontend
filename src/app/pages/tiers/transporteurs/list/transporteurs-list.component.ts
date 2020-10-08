@@ -75,7 +75,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
         }
         data.searchText = '';
         data.focusedRowKey = null;
-        
+
         return data;
       } else {
         return null;
