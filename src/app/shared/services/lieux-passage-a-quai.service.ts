@@ -20,20 +20,20 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     super(apollo, LieuPassageAQuai);
   }
 
-  getOne(id: string) {
-    const query = this.buildGetOne();
+  async getOne(id: string) {
+    const query = await this.buildGetOne();
     type Response = { lieuPassageAQuai: LieuPassageAQuai };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource() {
-    const query = this.buildGetAll();
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
+          const query = await this.buildGetAll();
           if (options.group)
             return this.getDistinct(options).toPromise();
 
@@ -50,8 +50,8 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.fieldsFilter);
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

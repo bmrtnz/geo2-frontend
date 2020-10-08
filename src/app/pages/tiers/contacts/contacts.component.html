@@ -52,7 +52,7 @@
     <dxo-selection mode="single"></dxo-selection>
 
     <dxi-column
-      *ngFor="let field of detailedFields;let i=index"
+      *ngFor="let field of detailedFields | async; index as i"
       [dataField]="field.name"
       [caption]="('tiers-contacts-' + field.name | localize) || field.name"
       [visible]="i < contactsService.baseFieldsSize"

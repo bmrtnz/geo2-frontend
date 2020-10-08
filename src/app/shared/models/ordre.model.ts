@@ -7,9 +7,11 @@ import { OrdreLigne } from './ordre-ligne.model';
 export class Ordre extends Model {
 
   @Field({asKey: true}) public id: string;
-  @Field({model: Societe}) public societe: Societe;
-  @Field({model: Secteur}) public secteurCommercial: Secteur;
-  @Field({model: Client}) public client: Client;
-  @Field({model: OrdreLigne}) public lignes: OrdreLigne[];
+  @Field({model: import('./societe.model')}) public societe: Societe;
+  @Field({model: import('./secteur.model')}) public secteurCommercial: Secteur;
+  @Field({model: import('./client.model')}) public client: Client;
+  @Field({model: import('./ordre-ligne.model')}) public lignes: OrdreLigne[];
 
 }
+
+export default Ordre;

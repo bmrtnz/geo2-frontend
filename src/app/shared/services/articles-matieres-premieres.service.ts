@@ -25,12 +25,12 @@ export class ArticlesMatieresPremieresService extends ApiService implements APIR
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allArticleMatierePremiere: RelayPage<ArticleMatierePremiere> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -41,8 +41,8 @@ export class ArticlesMatieresPremieresService extends ApiService implements APIR
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { articleMatierePremiere: ArticleMatierePremiere };
           const variables = { id: key };
           return this.

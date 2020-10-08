@@ -1,26 +1,29 @@
-import { Component, OnInit, AfterViewInit, EventEmitter, ViewChild } from '@angular/core';
-import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Fournisseur } from '../../../../shared/models';
-import { NaturesStationService } from 'app/shared/services/natures-station.service';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import DataSource from 'devextreme/data/data_source';
-import { PaysService } from 'app/shared/services/pays.service';
-import { BureauxAchatService } from 'app/shared/services/bureaux-achat.service';
-import { TypesFournisseurService } from 'app/shared/services/types-fournisseur.service';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
-import { DevisesService } from 'app/shared/services/devises.service';
-import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
-import { CertificationsService } from 'app/shared/services/certification.service';
-import notify from 'devextreme/ui/notify';
-import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
-import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
-import { Editable } from 'app/shared/guards/editing-guard';
-import { tap } from 'rxjs/operators';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
+import { BureauxAchatService } from 'app/shared/services/bureaux-achat.service';
+import { CertificationsService } from 'app/shared/services/certification.service';
+import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
+import { DevisesService } from 'app/shared/services/devises.service';
+import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
+import { HistoryType } from 'app/shared/services/historique.service';
+import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
+import { NaturesStationService } from 'app/shared/services/natures-station.service';
+import { PaysService } from 'app/shared/services/pays.service';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { TypesFournisseurService } from 'app/shared/services/types-fournisseur.service';
+import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
+import { from, of } from 'rxjs';
+import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
+import { Fournisseur } from '../../../../shared/models';
+import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -59,10 +62,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     idTracabilite: [''],
     type: [''],
     lieuFonctionEan: [''],
-    formeJuridique:  [''],
-    siretAPE:  [''],
-    tvaId:  [''],
-    rcs:  [''],
+    formeJuridique: [''],
+    siretAPE: [''],
+    tvaId: [''],
+    rcs: [''],
     valide: [false],
     preSaisie: [''],
     paramAvances: [''],
@@ -90,6 +93,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+  @ViewChild(PushHistoryPopupComponent, { static: false })
+  validatePopup: PushHistoryPopupComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -153,26 +158,26 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   ngOnInit() {
 
     this.route.params
-    .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
-      const url = this.route.snapshot.url;
-      this.createMode = url[url.length - 1].path === 'create';
-      this.readOnlyMode = !this.createMode;
-      if (!this.createMode) {
-        this.fournisseursService
-          .getOne(params.id)
-          .subscribe( res => {
-            this.fournisseur = res.data.fournisseur;
-            // console.log(this.fournisseur.fournisseurDeRattachement);
-            this.formGroup.patchValue(this.fournisseur);
-            this.contentReadyEvent.emit();
-            this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
-          });
-      } else {
-        this.fournisseur = new Fournisseur({});
-        this.contentReadyEvent.emit();
-      }
-    });
+      .pipe(tap(_ => this.formGroup.reset()))
+      .subscribe(params => {
+        const url = this.route.snapshot.url;
+        this.createMode = url[url.length - 1].path === 'create';
+        this.readOnlyMode = !this.createMode;
+        if (!this.createMode) {
+          from(this.fournisseursService.getOne(params.id))
+            .pipe(mergeAll())
+            .subscribe(res => {
+              this.fournisseur = res.data.fournisseur;
+              // console.log(this.fournisseur.fournisseurDeRattachement);
+              this.formGroup.patchValue(this.fournisseur);
+              this.contentReadyEvent.emit();
+              this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
+            });
+        } else {
+          this.fournisseur = new Fournisseur({});
+          this.contentReadyEvent.emit();
+        }
+      });
 
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
@@ -195,10 +200,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   checkCode(params) {
-      const code = params.value.toUpperCase();
-      const fournisseursSource = this.fournisseursService.getDataSource();
-      fournisseursSource.filter(['id', '=', code]);
-      return fournisseursSource.load().then(res => !(res.length));
+    const code = params.value.toUpperCase();
+    const fournisseursSource = this.fournisseursService.getDataSource();
+    fournisseursSource.filter(['id', '=', code]);
+    return fournisseursSource.load().then(res => !(res.length));
   }
 
   onSubmit() {
@@ -208,8 +213,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
       if (this.createMode) {
         fournisseur.id = this.formGroup.get('id').value.toUpperCase();
-          // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
-          // Avoir pour les valeur par defaut (qui sont not null dans la base)
+        // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
+        // Avoir pour les valeur par defaut (qui sont not null dans la base)
         fournisseur.preSaisie = true;
         fournisseur.valide = false;
       } else {
@@ -220,8 +225,15 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
       }
 
-      this.fournisseursService
-      .save({ fournisseur })
+      (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide ?
+        this.validatePopup.present(
+          HistoryType.FOURNISSEUR,
+          { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
+        ) : of(undefined))
+        .pipe(
+          switchMap(_ => this.fournisseursService.save({ fournisseur })),
+          concatAll(),
+        )
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
@@ -234,10 +246,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
               this.router.navigate([`/tiers/fournisseurs/${fournisseur.id}`]);
             }
             this.fournisseur.historique = e.data.saveFournisseur.historique;
+            this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
-      }
+    }
   }
 
   onCancel() {
@@ -257,14 +270,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.defaultVisible = !this.defaultVisible;
   }
 
-  onValideChange(e) {
-    if (e.event) { // Changed by user
-      this.validateCommentPromptVisible = true;
-    }
-  }
-
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${ this.fournisseur.id }/${ this.fournisseur.typeTiers }`]);
+    this.router.navigate([`/tiers/contacts/${this.fournisseur.id}/${this.fournisseur.typeTiers}`]);
   }
 
 }

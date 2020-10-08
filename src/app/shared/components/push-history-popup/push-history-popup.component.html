@@ -1,0 +1,42 @@
+<dx-popup
+  width="600"
+  height="200"
+  [dragEnabled]="false"
+  [title]="title"
+  (onHiding)="onHiding($event)"
+  (onHidden)="onHidden($event)"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+  [closeOnOutsideClick]="true"
+>
+  <div *dxTemplate="let d of 'content'">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <dx-text-box
+        ngModel
+        name="commentaire"
+        valueChangeEvent="keyup"
+        [placeholder]="placeholder"
+      >
+        <dx-validator
+          #validator
+          [validationRules]="commentValidationRules"
+          name="{{ 'valide-comment' | localize }}"
+        ></dx-validator>
+      </dx-text-box>
+      <div class="prompt-action">
+        <dx-button
+          text="{{ 'btn-annuler' | localize }}"
+          type="normal"
+          (onClick)="popupComponent.instance.hide()"
+        ></dx-button>
+        <dx-button
+          text="{{ 'btn-valider' | localize }}"
+          type="default"
+          *ngIf="validator.instance"
+          [disabled]="!validator.instance.validate().isValid"
+          [useSubmitBehavior]="true"
+        ></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>

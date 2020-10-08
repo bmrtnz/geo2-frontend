@@ -20,8 +20,8 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     super(apollo, Client);
   }
 
-  getOne(id: string) {
-    const query = this.buildGetOne();
+  async getOne(id: string) {
+    const query = await this.buildGetOne();
     type Response = { client: Client };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -33,12 +33,12 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allClient: RelayPage<Client> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -49,8 +49,8 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { client: Client };
           const variables = { id: key };
           return this.
@@ -65,8 +65,8 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.fieldsFilter);
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

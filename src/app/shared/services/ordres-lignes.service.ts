@@ -26,12 +26,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll(1, this.listRegexp);
+          const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
           const variables = this.mapLoadOptionsToVariables(options);
           if (options.searchValue) variables.search = options.searchValue;
@@ -43,8 +43,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne(1, this.listRegexp);
+        byKey: async (key) => {
+          const query = await this.buildGetOne(1, this.listRegexp);
           type Response = { ordreLigne: OrdreLigne };
           const variables = { id: key };
           return this.

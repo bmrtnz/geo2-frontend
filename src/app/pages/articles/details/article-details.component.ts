@@ -1,39 +1,42 @@
-import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
-import { ArticlesService } from '../../../shared/services/articles.service';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-    Article
-  } from '../../../shared/models';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import notify from 'devextreme/ui/notify';
-import DataSource from 'devextreme/data/data_source';
-import { EspecesService } from 'app/shared/services/especes.service';
-import { VarietesService } from 'app/shared/services/varietes.service';
-import { TypesService } from 'app/shared/services/types.service';
-import { ModesCultureService } from 'app/shared/services/modes-culture.service';
-import { OriginesService } from 'app/shared/services/origines.service';
-import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
-import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
-import { ColorationsService } from 'app/shared/services/colorations.service';
-import { TypesVenteService } from 'app/shared/services/types-vente.service';
-import { StickeursService } from 'app/shared/services/stickeurs.service';
-import { MarquesService } from 'app/shared/services/marques.service';
-import { EmballagesService } from 'app/shared/services/emballages.service';
-import { ConditionsSpecialesService } from 'app/shared/services/conditions-speciales.service';
-import { AlveolesService } from 'app/shared/services/alveoles.service';
-import { CategoriesService } from 'app/shared/services/categories.service';
-import { SucresService } from 'app/shared/services/sucres.service';
-import { PenetrosService } from 'app/shared/services/penetros.service';
-import { CiragesService } from 'app/shared/services/cirages.service';
-import { RangementsService } from 'app/shared/services/rangements.service';
-import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.service';
-import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
-import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
 import { NestedPart } from 'app/pages/nested/nested.component';
-import { switchMap, tap } from 'rxjs/operators';
-import { Editable } from 'app/shared/guards/editing-guard';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { AlveolesService } from 'app/shared/services/alveoles.service';
+import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
+import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
+import { CategoriesService } from 'app/shared/services/categories.service';
+import { CiragesService } from 'app/shared/services/cirages.service';
+import { ColorationsService } from 'app/shared/services/colorations.service';
+import { ConditionsSpecialesService } from 'app/shared/services/conditions-speciales.service';
+import { EmballagesService } from 'app/shared/services/emballages.service';
+import { EspecesService } from 'app/shared/services/especes.service';
+import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.service';
+import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
+import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
+import { HistoryType } from 'app/shared/services/historique.service';
+import { MarquesService } from 'app/shared/services/marques.service';
+import { ModesCultureService } from 'app/shared/services/modes-culture.service';
+import { OriginesService } from 'app/shared/services/origines.service';
+import { PenetrosService } from 'app/shared/services/penetros.service';
+import { RangementsService } from 'app/shared/services/rangements.service';
+import { StickeursService } from 'app/shared/services/stickeurs.service';
+import { SucresService } from 'app/shared/services/sucres.service';
+import { TypesVenteService } from 'app/shared/services/types-vente.service';
+import { TypesService } from 'app/shared/services/types.service';
+import { VarietesService } from 'app/shared/services/varietes.service';
+import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
+import { of } from 'rxjs';
+import { concatAll, switchAll, switchMap, tap } from 'rxjs/operators';
+import {
+    Article
+} from '../../../shared/models';
+import { ArticlesService } from '../../../shared/services/articles.service';
 
 @Component({
     selector: 'app-articles',
@@ -95,6 +98,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     contentReadyEvent = new EventEmitter<any>();
     @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
     @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+    @ViewChild(PushHistoryPopupComponent, { static: false })
+    validatePopup: PushHistoryPopupComponent;
     editing = false;
 
     article: Article;
@@ -155,21 +160,22 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
-    ) {}
+    ) { }
 
     ngOnInit() {
 
         this.route.params
-        .pipe(
-            tap( _ => this.formGroup.reset()),
-            switchMap( params => this.articlesService.getOne(params.id)),
-        )
-        .subscribe( res => {
-            this.article = new Article(res.data.article);
-            this.formGroup.patchValue(this.article);
-            this.contentReadyEvent.emit();
-            this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
-        });
+            .pipe(
+                tap(_ => this.formGroup.reset()),
+                switchMap(async params => await this.articlesService.getOne(params.id)),
+                switchAll(),
+            )
+            .subscribe(res => {
+                this.article = new Article(res.data.article);
+                this.formGroup.patchValue(this.article);
+                this.contentReadyEvent.emit();
+                this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
+            });
 
     }
 
@@ -193,7 +199,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
             if (this.cloneMode) {
-                article.valide = false;
                 article.preSaisie = true;
             } else {
                 if (article.valide === true) {
@@ -201,22 +206,36 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     this.preSaisie = '';
                 }
             }
-            this.articlesService
-                .save({ article, clone: this.cloneMode })
+
+            (article.valide !== undefined && this.article.valide !== article.valide ?
+                this.validatePopup.present(
+                    HistoryType.ARTICLE,
+                    { article: { id: article.id }, valide: article.valide },
+                ) : of(undefined))
+                .pipe(
+                    tap( _ => console.log(article)),
+                    switchMap(_ => this.articlesService.save({
+                        article,
+                        clone: this.cloneMode,
+                    })),
+                    concatAll(),
+                )
                 .subscribe({
-                next: (event) => {
-                    notify('Sauvegardé', 'success', 3000);
-                    this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
-                    if (this.cloneMode)
-                        this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
-                    this.cloneMode = false;
-                    this.readOnlyMode = true;
-                    this.editing = false;
-                },
-                error: () => notify('Echec de la sauvegarde', 'error', 3000),
+                    next: (event) => {
+                        notify('Sauvegardé', 'success', 3000);
+                        this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
+                        if (this.cloneMode)
+                            this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
+                        this.cloneMode = false;
+                        this.readOnlyMode = true;
+                        this.editing = false;
+                        this.article.historique = event.data.saveArticle.historique;
+                        this.formGroup.markAsPristine();
+                    },
+                    error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });
         }
-      }
+    }
 
     onEspeceChange(event) {
         const filter = event.value ? ['espece.id', '=', event.value.id] : [];
@@ -264,14 +283,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.etiquettesEvenementielle.filter(filter);
     }
 
-    onValideChange(e) {
-        if (e.event) { // Changed by user
-            this.validateCommentPromptVisible = true;
-        }
-      }
-
     fileManagerClick() {
-    this.fileManagerComponent.visible = true;
+        this.fileManagerComponent.visible = true;
     }
 
 }

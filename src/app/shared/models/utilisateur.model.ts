@@ -6,3 +6,5 @@ export class Utilisateur extends Model {
   @Field() public nomInterne: string;
 
 }
+
+export default Utilisateur;

@@ -12,3 +12,5 @@ export class TypePalette extends Model {
     @Field() public poids: number;
     @Field() public referenceChep: number;
 }
+
+export default TypePalette;

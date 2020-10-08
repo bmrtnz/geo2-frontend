@@ -5,3 +5,5 @@ export class GroupeFournisseur extends Model {
   @Field({asLabel: true}) public description: string;
 }
 
+
+export default GroupeFournisseur;

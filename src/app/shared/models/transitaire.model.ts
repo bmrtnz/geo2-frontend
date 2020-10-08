@@ -5,3 +5,5 @@ export class Transitaire extends Model {
   @Field({asLabel: true}) public raisonSocial: string;
   @Field() public valide: boolean;
 }
+
+export default Transitaire;

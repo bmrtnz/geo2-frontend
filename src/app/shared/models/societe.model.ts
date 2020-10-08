@@ -10,6 +10,8 @@ export class Societe extends Model {
   @Field() public adresse3: string;
   @Field() public codePostal: string;
   @Field() public ville: string;
-  @Field({model: Pays}) public pays: Pays;
+  @Field({model: import('./pays.model')}) public pays: Pays;
 
 }
+
+export default Societe;

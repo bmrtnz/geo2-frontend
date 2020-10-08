@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
-import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
-import { Router} from '@angular/router';
-import DataSource from 'devextreme/data/data_source';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { ModelFieldOptions } from 'app/shared/models/model';
-import { environment } from 'environments/environment';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { ApiService } from 'app/shared/services/api.service';
-import { LoadsavedatagridstateService } from 'app/shared/services/loadsavedatagridstate.service';
 import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { LoadsavedatagridstateService } from 'app/shared/services/loadsavedatagridstate.service';
+import { DxDataGridComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
+import { from, Observable } from 'rxjs';
+import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
 
 let self: FournisseursListComponent;
 
@@ -24,7 +25,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   columnChooser = environment.columnChooser;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
 
   constructor(
     public fournisseursService: FournisseursService,
@@ -65,34 +66,35 @@ export class FournisseursListComponent implements OnInit, NestedMain {
       'and',
       ['grid', '=', 'fournisseurStorage'],
     ]);
-    return gridSource.load().then( res => {
-        if (!res.length) return null;
-        const data = res[0].config;
-        if (data !== null) {
-          // Suppression filtres/recherche
-          for (const myColumn of data.columns) {
-            if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
-          }
-          data.searchText = '';
-          data.focusedRowKey = null;
-
-          return data;
-        } else {
-          return null;
+    return gridSource.load().then(res => {
+      if (!res.length) return null;
+      const data = res[0].config;
+      if (data !== null) {
+        // Suppression filtres/recherche
+        for (const myColumn of data.columns) {
+          if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
         }
-      });
+        data.searchText = '';
+        data.focusedRowKey = null;
+        return data;
+      } else {
+        return null;
+      }
+    });
 
-    }
+  }
 
   saveDataGridState(data) {
 
     // Ecriture
-    self.gridService.save({gridConfig: {
-      utilisateur: {nomUtilisateur: '7'},
-      grid: 'fournisseurStorage',
-      config: data
-    }})
-    .subscribe();
+    from(self.gridService.save({
+      gridConfig: {
+        utilisateur: { nomUtilisateur: '7' },
+        grid: 'fournisseurStorage',
+        config: data
+      }
+    }))
+      .subscribe();
 
   }
 

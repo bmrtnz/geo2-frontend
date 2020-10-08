@@ -16,11 +16,11 @@ export class UtilisateursService extends ApiService {
     super(apollo, Utilisateur);
   }
 
-  getOne(nomUtilisateur: string, motDePasse: string) {
+  async getOne(nomUtilisateur: string, motDePasse: string) {
     const query = `
       query Utilisateur($nomUtilisateur: String!,$motDePasse: String!) {
         utilisateur(nomUtilisateur:$nomUtilisateur,motDePasse:$motDePasse) {
-          ${ this.model.getGQLFields() }
+          ${ await this.model.getGQLFields().toPromise() }
         }
       }
     `;

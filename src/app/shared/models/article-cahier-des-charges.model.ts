@@ -10,11 +10,13 @@ import { Espece } from './espece.model';
 export class ArticleCahierDesCharges extends Model {
   @Field({asKey: true, asLabel: true}) public id: string;
   @Field() public instructionStation: string;
-  @Field({model: Espece}) public espece: Espece;
-  @Field({model: Coloration}) public coloration: Coloration;
-  @Field({model: Categorie}) public categorie: Categorie;
-  @Field({model: Sucre}) public sucre: Sucre;
-  @Field({model: Penetro}) public penetro: Penetro;
-  @Field({model: Cirage}) public cirage: Cirage;
-  @Field({model: Rangement}) public rangement: Rangement;
+  @Field({model: import('./espece.model')}) public espece: Espece;
+  @Field({model: import('./coloration.model')}) public coloration: Coloration;
+  @Field({model: import('./categorie.model')}) public categorie: Categorie;
+  @Field({model: import('./sucre.model')}) public sucre: Sucre;
+  @Field({model: import('./penetro.model')}) public penetro: Penetro;
+  @Field({model: import('./cirage.model')}) public cirage: Cirage;
+  @Field({model: import('./rangement.model')}) public rangement: Rangement;
 }
+
+export default ArticleCahierDesCharges;

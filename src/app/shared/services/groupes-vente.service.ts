@@ -21,12 +21,12 @@ export class GroupesClientService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allGroupeClient: RelayPage<GroupeClient> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -37,8 +37,8 @@ export class GroupesClientService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne();
+        byKey: async (key) => {
+          const query = await this.buildGetOne();
           type Response = { groupeClient: GroupeClient };
           const variables = { id: key };
           return this.

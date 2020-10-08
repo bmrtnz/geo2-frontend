@@ -7,3 +7,5 @@ export class TypeClient extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default TypeClient;
