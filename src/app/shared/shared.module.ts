@@ -13,7 +13,7 @@ import DataGrid from 'devextreme/ui/data_grid';
     ReactiveFormsModule
   ],
   declarations: [LocalizePipe],
-  exports: [CommonModule, LocalizePipe]
+  exports: [CommonModule, LocalizePipe],
 })
 
 export class SharedModule {

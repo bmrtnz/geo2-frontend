@@ -8,7 +8,8 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
-import { TransporteursService } from '../../../../shared/services';
+import { mergeAll } from 'rxjs/operators';
+import { AuthService, TransporteursService } from '../../../../shared/services';
 
 let self: TransporteursListComponent;
 
@@ -30,6 +31,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     private router: Router,
+    private authService: AuthService,
   ) {
     this.apiService = transporteursService;
     self = this;
@@ -61,7 +63,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     // Lecture
     const gridSource = self.gridService.getDataSource();
     gridSource.filter([
-      ['utilisateur.nomUtilisateur', '=', '7'],
+      ['utilisateur.nomUtilisateur', '=', self.authService.currentUser.nomUtilisateur],
       'and',
       ['grid', '=', 'transporteurStorage'],
     ]);
@@ -88,11 +90,12 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     // Ecriture
     from(self.gridService.save({
       gridConfig: {
-        utilisateur: { nomUtilisateur: '7' },
+        utilisateur: { nomUtilisateur: self.authService.currentUser.nomUtilisateur },
         grid: 'transporteurStorage',
         config: data
       }
     }))
+      .pipe(mergeAll())
       .subscribe();
 
   }
