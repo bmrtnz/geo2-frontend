@@ -44,7 +44,9 @@ export abstract class Model {
     for (const [field, options] of fieldsEntries) {
       if (rawEntity[field] === null || rawEntity[field] === undefined) continue;
       if (options.fetchedModel)
-        this[field] = new (options.fetchedModel as any)(rawEntity[field]);
+        this[field] = rawEntity[field].length !== undefined ?
+          rawEntity[field].map( e => new (options.fetchedModel as any)(e)) :
+        new (options.fetchedModel as any)(rawEntity[field]);
       else
         this[field] = rawEntity[field];
     }

@@ -3,6 +3,7 @@ import { ArticleMatierePremiere } from './article-matiere-premiere.model';
 import { ArticleCahierDesCharges } from './article-cahier-des-charges.model';
 import { ArticleNormalisation } from './article-normalisation.model';
 import { ArticleEmballage } from './article-emballage.model';
+import Historique from './historique.model';
 
 export class Article extends Model {
   @Field({asKey: true}) public id: string;
@@ -14,6 +15,7 @@ export class Article extends Model {
   @Field() public valide: boolean;
   @Field() public preSaisie: boolean;
   @Field({model: import('./article-emballage.model')}) public emballage: ArticleEmballage;
+  @Field({model: import('./historique.model')}) public historique: Historique[];
 }
 
 export default Article;

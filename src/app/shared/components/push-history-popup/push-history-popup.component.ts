@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, NgModule, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, NgModule, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { FetchResult } from 'apollo-link';
 import { HistoriqueService, HistoryType } from 'app/shared/services/historique.service';
@@ -13,10 +13,11 @@ import {
 } from 'devextreme-angular';
 import { RangeRule, RequiredRule } from 'devextreme/ui/validation_engine';
 import { Observable } from 'rxjs';
+import { mergeAll, take } from 'rxjs/operators';
 import { SharedModule } from '../../shared.module';
 
 @Component({
-  selector: 'app-prompt-popup',
+  selector: 'app-push-history-popup',
   templateUrl: './push-history-popup.component.html',
   styleUrls: ['./push-history-popup.component.scss']
 })
@@ -44,15 +45,12 @@ export class PushHistoryPopupComponent {
   ) { }
 
   async onSubmit(form: NgForm) {
-    const withLowerCaseFirst = ([first, ...rest]: string) => [ first.toLowerCase(), ...rest ].join('');
     if (this.commentValidator.instance.validate().isValid) {
       const save = await this.historiqueService
-      .save({
-        [withLowerCaseFirst(this.historyType)]: {
+        .saveByType(this.historyType, {
           ...this.sourceData,
           commentaire: form.value.commentaire,
-        }
-      }, this.historyType);
+        });
       this.persist.emit(save);
       this.popupComponent.instance.hide();
     }
@@ -60,6 +58,10 @@ export class PushHistoryPopupComponent {
 
   onHiding() {
     this.commentValidationRules = [];
+  }
+
+  onHidden() {
+    this.commentBox.instance.reset();
   }
 
   onShowing() {
@@ -73,11 +75,12 @@ export class PushHistoryPopupComponent {
     this.commentBox.instance.focus();
   }
 
-  async present(type: HistoryType, data) {
+  present(type: HistoryType, data) {
     this.historyType = type;
     this.sourceData = data;
     this.popupComponent.instance.show();
-    return this.persist.asObservable();
+    return this.persist.asObservable()
+      .pipe(take(1), mergeAll());
   }
 
 }

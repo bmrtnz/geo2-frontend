@@ -42,16 +42,10 @@
                     #valideCheckBox
                     class="vertical"
                     formControlName="valide"
-                    (onValueChanged)="onValideChange($event)"
                     [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
                     [readOnly]="readOnlyMode"
                 ></dx-check-box>
-                <app-prompt-popup
-                    title="{{ 'valide-comment-title' | localize }}"
-                    [placeholder]="'valide-comment' | localize"
-                    (cancel)="valideCheckBox.value = !valideCheckBox.value"
-                ></app-prompt-popup>
-                <!-- <app-historique-valide [historique]="article?.historique"></app-historique-valide> -->
+                <app-historique-valide [historique]="article?.historique"></app-historique-valide>
                 <dx-button
                 class="black"
                 height="auto"
@@ -603,3 +597,7 @@
 </form>
 <app-editing-alert></app-editing-alert>
 <app-file-manager-popup></app-file-manager-popup>
+<app-push-history-popup
+    title="{{ 'valide-comment-title' | localize }}"
+    [placeholder]="'valide-comment' | localize"
+></app-push-history-popup>

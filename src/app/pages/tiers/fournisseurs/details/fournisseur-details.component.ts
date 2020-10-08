@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { BureauxAchatService } from 'app/shared/services/bureaux-achat.service';
@@ -11,6 +12,7 @@ import { CertificationsService } from 'app/shared/services/certification.service
 import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
+import { HistoryType } from 'app/shared/services/historique.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
 import { NaturesStationService } from 'app/shared/services/natures-station.service';
 import { PaysService } from 'app/shared/services/pays.service';
@@ -18,8 +20,8 @@ import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import { TypesFournisseurService } from 'app/shared/services/types-fournisseur.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { from } from 'rxjs';
-import { mergeAll, tap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
+import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { Fournisseur } from '../../../../shared/models';
 import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
 
@@ -91,6 +93,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+  @ViewChild(PushHistoryPopupComponent, { static: false })
+  validatePopup: PushHistoryPopupComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -221,8 +225,15 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
       }
 
-      from(this.fournisseursService.save({ fournisseur }))
-        .pipe(mergeAll())
+      (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide ?
+        this.validatePopup.present(
+          HistoryType.FOURNISSEUR,
+          { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
+        ) : of(undefined))
+        .pipe(
+          switchMap(_ => this.fournisseursService.save({ fournisseur })),
+          concatAll(),
+        )
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
@@ -257,12 +268,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   toggleVisible() {
     this.defaultVisible = !this.defaultVisible;
-  }
-
-  onValideChange(e) {
-    if (e.event) { // Changed by user
-      this.validateCommentPromptVisible = true;
-    }
   }
 
   contactsBtnClick() {

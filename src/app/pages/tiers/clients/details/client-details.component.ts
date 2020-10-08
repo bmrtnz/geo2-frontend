@@ -26,8 +26,8 @@ import { DxCheckBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
-import { concat, from } from 'rxjs';
-import { mergeAll, tap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
+import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { Client } from '../../../../shared/models';
 import { ClientsService } from '../../../../shared/services';
 
@@ -273,42 +273,32 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         client.preSaisie = true;
       }
 
-      // Validity change
-      if (client.valide !== undefined && this.client.valide !== client.valide) {
-        const saveHistory = from(this.validatePopup.present(HistoryType.CLIENT, { client: { id: client.id }, valide: client.valide }));
-        return concat(
-          saveHistory.pipe(mergeAll()),
-          this.clientsService.save({ client }),
+      (client.valide !== undefined && this.client.valide !== client.valide ?
+        this.validatePopup.present(
+          HistoryType.CLIENT,
+          { client: { id: client.id }, valide: client.valide },
+        ) : of(undefined))
+        .pipe(
+          switchMap(_ => this.clientsService.save({ client })),
+          concatAll(),
         )
-          .subscribe(res => console.log(res));
-        // .pipe(
-        //   switchMap(([histo,client]) => )
-        // )
-      }
-
-      this.save(client);
+        .subscribe({
+          next: (e) => {
+            notify('Sauvegardé', 'success', 3000);
+            this.refreshGrid.emit();
+            if (!this.createMode) {
+              this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
+              this.readOnlyMode = true;
+            } else {
+              this.editing = false;
+              this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+            }
+            this.client.historique = e.data.saveClient.historique;
+            this.formGroup.markAsPristine();
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
     }
-  }
-
-  save(client) {
-    from(this.clientsService.save({ client }))
-      .pipe(mergeAll())
-      .subscribe({
-        next: (e) => {
-          notify('Sauvegardé', 'success', 3000);
-          this.refreshGrid.emit();
-          if (!this.createMode) {
-            this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
-            this.readOnlyMode = true;
-          } else {
-            this.editing = false;
-            this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
-          }
-          this.client.historique = e.data.saveClient.historique;
-          this.formGroup.markAsPristine();
-        },
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
   }
 
   onCancel() {
