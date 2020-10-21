@@ -113,7 +113,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
           from(this.lieupassageaquaiService.getOne(params.id))
             .pipe(mergeAll())
             .subscribe(res => {
-              this.lieupassageaquai = res.data.lieuPassageAQuai;
+              this.lieupassageaquai = new LieuPassageAQuai(res.data.lieuPassageAQuai);
               this.formGroup.patchValue(this.lieupassageaquai);
               this.contentReadyEvent.emit();
               this.preSaisie = this.lieupassageaquai.preSaisie === true ? 'preSaisie' : '';
@@ -165,11 +165,14 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
-              this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.formGroup.getRawValue() };
+              this.lieupassageaquai = {
+                ...this.lieupassageaquai,
+                ...this.formGroup.getRawValue(),
+              };
               this.readOnlyMode = true;
             } else {
               this.editing = false;
-              this.router.navigate([`/tiers/lieux-passage-a-quai/${lieuPassageAQuai.id}`]);
+              this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
             }
             this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
             this.formGroup.markAsPristine();

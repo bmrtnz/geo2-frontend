@@ -140,7 +140,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           from(this.entrepotsService.getOne(params.id))
             .pipe(mergeAll())
             .subscribe(res => {
-              this.entrepot = res.data.entrepot;
+              this.entrepot = new Entrepot(res.data.entrepot);
               this.formGroup.patchValue(this.entrepot);
               this.contentReadyEvent.emit();
               this.preSaisie = this.entrepot.preSaisie === true ? 'preSaisie' : '';
@@ -214,7 +214,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             if (!this.createMode) {
-              this.entrepot = { id: this.entrepot.id, ...this.formGroup.getRawValue() };
+              this.entrepot = {
+                ...this.entrepot,
+                ...this.formGroup.getRawValue(),
+              };
               this.readOnlyMode = true;
             } else {
               this.editing = false;

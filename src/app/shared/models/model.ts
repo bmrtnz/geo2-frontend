@@ -47,6 +47,8 @@ export abstract class Model {
         this[field] = rawEntity[field].length !== undefined ?
           rawEntity[field].map( e => new (options.fetchedModel as any)(e)) :
         new (options.fetchedModel as any)(rawEntity[field]);
+      else if (options.dataType && options.dataType === 'date')
+        this[field] = new Date(rawEntity[field]).toISOString();
       else
         this[field] = rawEntity[field];
     }

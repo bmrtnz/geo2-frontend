@@ -34,7 +34,7 @@ import { FournisseursService } from '../../../../shared/services/fournisseurs.se
 export class FournisseurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
 
   formGroup = this.fb.group({
-    id: [''],
+    code: [''],
     raisonSocial: [''],
     stockActif: [''],
     stockPrecalibre: [''],
@@ -169,7 +169,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           from(this.fournisseursService.getOne(params.id))
             .pipe(mergeAll())
             .subscribe(res => {
-              this.fournisseur = res.data.fournisseur;
+              this.fournisseur = new Fournisseur(res.data.fournisseur);
               // console.log(this.fournisseur.fournisseurDeRattachement);
               this.formGroup.patchValue(this.fournisseur);
               this.contentReadyEvent.emit();
@@ -204,7 +204,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   checkCode(params) {
     const code = params.value.toUpperCase();
     const fournisseursSource = this.fournisseursService.getDataSource();
-    fournisseursSource.filter(['id', '=', code]);
+    fournisseursSource.searchExpr('code');
+    fournisseursSource.searchOperation('=');
+    fournisseursSource.searchValue(code);
     return fournisseursSource.load().then(res => !(res.length));
   }
 
@@ -214,7 +216,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       const fournisseur = this.fournisseursService.extractDirty(this.formGroup.controls);
 
       if (this.createMode) {
-        fournisseur.id = this.formGroup.get('id').value.toUpperCase();
+        // fournisseur.id = this.formGroup.get('id').value.toUpperCase();
+        fournisseur.code = this.formGroup.get('code').value.toUpperCase();
         // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
         // Avoir pour les valeur par defaut (qui sont not null dans la base)
         fournisseur.preSaisie = true;
@@ -227,7 +230,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
       }
 
-      (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide ?
+      (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode ?
         this.validatePopup.present(
           HistoryType.FOURNISSEUR,
           { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
@@ -241,11 +244,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
-              this.fournisseur = { id: this.fournisseur.id, ...this.formGroup.getRawValue() };
+              this.fournisseur = {
+                ...this.fournisseur,
+                ...this.formGroup.getRawValue(),
+              };
               this.readOnlyMode = true;
             } else {
               this.editing = false;
-              this.router.navigate([`/tiers/fournisseurs/${fournisseur.id}`]);
+              this.router.navigate([`/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
             }
             this.fournisseur.historique = e.data.saveFournisseur.historique;
             this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;

@@ -162,6 +162,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private route: ActivatedRoute,
         private fb: FormBuilder,
         public authService: AuthService,
+        
     ) { }
 
     ngOnInit() {
@@ -225,7 +226,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 .subscribe({
                     next: (event) => {
                         notify('Sauvegardé', 'success', 3000);
-                        this.article = { id: this.article.id, ...this.formGroup.getRawValue() };
+                        this.article = {
+                            ...this.article,
+                            ...this.formGroup.getRawValue(),
+                        };
                         if (this.cloneMode)
                             this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
                         this.cloneMode = false;

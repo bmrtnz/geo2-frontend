@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class FournisseursService extends ApiService implements APIRead {
 
-  byKeyFilter = /.*\.(?:id|raisonSocial|description|ville|valide|commentaire|userModification|dateModification|typeTiers)$/i;
+  byKeyFilter = /.*\.(?:id|code|raisonSocial|description|ville|valide|commentaire|userModification|dateModification|typeTiers)$/i;
 
   constructor(
     apollo: Apollo,

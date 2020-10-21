@@ -117,7 +117,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
           from(this.transporteursService.getOne(params.id))
             .pipe(mergeAll())
             .subscribe(res => {
-              this.transporteur = res.data.transporteur;
+              this.transporteur = new Transporteur(res.data.transporteur);
               this.formGroup.patchValue(this.transporteur);
               this.contentReadyEvent.emit();
               this.preSaisie = this.transporteur.preSaisie === true ? 'preSaisie' : '';
@@ -171,11 +171,14 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
-              this.transporteur = { id: this.transporteur.id, ...this.formGroup.getRawValue() };
+              this.transporteur = {
+                ...this.transporteur,
+                ...this.formGroup.getRawValue(),
+              };
               this.readOnlyMode = true;
             } else {
               this.editing = false;
-              this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
+              this.router.navigate([`/tiers/transporteurs/${e.data.saveTransporteur.id}`]);
             }
             this.transporteur.typeTiers = e.data.saveTransporteur.typeTiers;
             this.formGroup.markAsPristine();

@@ -23,6 +23,7 @@ export enum NatureStation {
 export class Fournisseur extends Model {
 
   @Field({asKey: true, width: 150}) public id: string;
+  @Field() public code: string;
   @Field({asLabel: true}) public raisonSocial: string;
   @Field() public ville: string;
   @Field({model: import('./pays.model')}) public pays: Pays;

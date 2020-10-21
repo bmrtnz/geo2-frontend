@@ -204,7 +204,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           from(this.clientsService.getOne(params.id))
             .pipe(mergeAll())
             .subscribe(res => {
-              this.client = res.data.client;
+              this.client = new Client(res.data.client);
               this.formGroup.patchValue(this.client);
               this.contentReadyEvent.emit();
               this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
@@ -274,7 +274,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         client.preSaisie = true;
       }
 
-      (client.valide !== undefined && this.client.valide !== client.valide ?
+      (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
         this.validatePopup.present(
           HistoryType.CLIENT,
           { client: { id: client.id }, valide: client.valide },
@@ -288,7 +288,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
-              this.client = { id: this.client.id, ...this.formGroup.getRawValue() };
+              this.client = {
+                ...this.client,
+                ...this.formGroup.getRawValue(),
+              };
               this.readOnlyMode = true;
             } else {
               this.editing = false;
