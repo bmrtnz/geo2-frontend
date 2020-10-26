@@ -94,10 +94,10 @@ export class OrdresDetailsComponent implements OnInit {
   }
 
   scrollToOnClick(e) {
-  
-    const extractField = '.' + (e.element.className.split(' ')[0]).replace('Button', '') + '-field';
-    const Element = document.querySelector(extractField) as HTMLElement;
+
     const key = e.element.dataset.accordion;
+    const extractField = '.' + key + '-field';
+    const Element = document.querySelector(extractField) as HTMLElement;
 
     this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key).instance.expandItem(0);
 
