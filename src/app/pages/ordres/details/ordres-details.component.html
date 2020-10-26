@@ -10,435 +10,464 @@
     ></dx-button>
     <div style="clear:both"></div>
 </div>
+<dx-box>
+    <dxi-item [ratio]="0.1"></dxi-item>
+    <dxi-item [ratio]="0.7" class="left-buttons-box" [visible]="tabs.selectedIndex || 0">
+        <dx-button
+            class="articlesButton black"
+            height="auto"
+            icon="box"
+            text="{{ 'ordres-details-articles' | localize }}"
+            (onClick)="scrollToOnClick($event)">
+        </dx-button>
+        <dx-button
+            class="logistiqueButton black"
+            data-accordion="logistique"
+            height="auto"
+            icon="material-icons local_shipping"
+            text="{{ 'ordres-details-logistique' | localize }}"
+            (onClick)="scrollToOnClick($event)">
+        </dx-button>
+        <dx-button
+            class="litigesButton black"
+            data-accordion="litiges"
+            height="auto"
+            icon="material-icons offline_bolt"
+            (onClick)="scrollToOnClick($event)"
+            text="{{ 'ordres-details-litiges' | localize }}">
+        </dx-button>
+        <dx-button
+            class="margesButton black"
+            data-accordion="marges"
+            height="auto"
+            icon="material-icons euro_symbol"
+            (onClick)="scrollToOnClick($event)"
+            text="{{ 'ordres-details-marges' | localize }}">
+        </dx-button>
+        <dx-button
+            class="black"
+            height="auto"
+            icon="material-icons folder"
+            (onClick)="fileManagerClick()"
+            text="{{ 'ordres-details-documents' | localize }}">
+        </dx-button>
+        <dx-button
+            class="CQButton black"
+            data-accordion="CQ"
+            height="auto"
+            icon="material-icons insert_chart_outlined"
+            (onClick)="scrollToOnClick($event)"
+            text="{{ 'ordres-details-CQ' | localize }}">
+        </dx-button>
+        <dx-button
+            class="commentairesButton black"
+            data-accordion="commentaires"
+            height="auto"
+            icon="material-icons message"
+            (onClick)="scrollToOnClick($event)"
+            text="{{ 'ordres-details-commentaires' | localize }}">
+        </dx-button>
+        <dx-button
+            class="logButton black"
+            data-accordion="log"
+            height="auto"
+            icon="material-icons view_headline"
+            (onClick)="scrollToOnClick($event)"
+            text="{{ 'ordres-details-log' | localize }}">
+        </dx-button>
 
-<dx-sortable
-    filter=".dx-tab"
-    [data]="contents"
-    itemOrientation="horizontal"
-    dragDirection="horizontal"
-    (onDragStart)="onTabDragStart($event)"
-    (onReorder)="onTabDrop($event)"
->
+    </dxi-item>
 
-        <dx-tab-panel
-            [dataSource]="contents"
-            itemTitleTemplate="title"
-            itemTemplate="item"
-            [deferRendering]="false"
-            [showNavButtons]="true"
-            [repaintChangesOnly]="true"
-            [selectedIndex]="selectedIndex"
+    <dxi-item [ratio]="8">
+        <dx-sortable
+            filter=".dx-tab"
+            [data]="contents"
+            itemOrientation="horizontal"
+            dragDirection="horizontal"
+            (onDragStart)="onTabDragStart($event)"
+            (onReorder)="onTabDrop($event)"
         >
 
-            <div *dxTemplate="let content of 'title'; let i = index">
-                <span>{{content.tabTitle}}</span><i *ngIf="i" class="dx-icon dx-icon-close" (click)="closeButtonHandler(content)"></i>
-            </div>
-            <div *dxTemplate="let content of 'item'; let i = index">
-                 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-                    <div class="content-block">
+                <dx-tab-panel
+                    #tabs
+                    [dataSource]="contents"
+                    itemTitleTemplate="title"
+                    itemTemplate="item"
+                    [deferRendering]="false"
+                    [showNavButtons]="true"
+                    [repaintChangesOnly]="true"
+                    [selectedIndex]="selectedIndex"
+                >
+
+                    <div *dxTemplate="let content of 'title'; let i = index">
+                        <span>{{content.tabTitle}}</span><i *ngIf="i" class="dx-icon dx-icon-close" (click)="closeButtonHandler(content)"></i>
                     </div>
-                    <div class="content-block ordre-page">
-                        <dx-box direction="row">
-                            <dxi-item [ratio]="1" class="left-buttons-box" *ngIf="i">
-                                <dx-button
-                                    class="articlesButton black"
-                                    height="auto"
-                                    icon="box"
-                                    text="{{ 'ordres-details-articles' | localize }}"
-                                    (onClick)="scrollToOnClick($event)">
-                                </dx-button>
-                                <dx-button
-                                    class="logistiqueButton black"
-                                    height="auto"
-                                    icon="material-icons local_shipping"
-                                    text="{{ 'ordres-details-logistique' | localize }}"
-                                    (onClick)="scrollToOnClick($event)">
-                                </dx-button>
-                                <dx-button
-                                    class="litigesButton black"
-                                    height="auto"
-                                    icon="material-icons offline_bolt"
-                                    (onClick)="scrollToOnClick($event)"
-                                    text="{{ 'ordres-details-litiges' | localize }}">
-                                </dx-button>
-                                <dx-button
-                                    class="margesButton black"
-                                    height="auto"
-                                    icon="material-icons euro_symbol"
-                                    (onClick)="scrollToOnClick($event)"
-                                    text="{{ 'ordres-details-marges' | localize }}">
-                                </dx-button>
-                                <dx-button
-                                    class="black"
-                                    height="auto"
-                                    icon="material-icons folder"
-                                    (onClick)="fileManagerClick()"
-                                    text="{{ 'ordres-details-documents' | localize }}">
-                                </dx-button>
-                                <dx-button
-                                    class="CQButton black"
-                                    height="auto"
-                                    icon="material-icons insert_chart_outlined"
-                                    (onClick)="scrollToOnClick($event)"
-                                    text="{{ 'ordres-details-CQ' | localize }}">
-                                </dx-button>
-                                <dx-button
-                                    class="logButton black"
-                                    height="auto"
-                                    icon="material-icons view_headline"
-                                    (onClick)="scrollToOnClick($event)"
-                                    text="{{ 'ordres-details-log' | localize }}">
-                                </dx-button>
-                                <dx-button
-                                    class="commentairesButton black"
-                                    height="auto"
-                                    icon="material-icons message"
-                                    (onClick)="scrollToOnClick($event)"
-                                    text="{{ 'ordres-details-commentaires' | localize }}">
-                                </dx-button>
-                            </dxi-item>
-                            <dxi-item [ratio]="1" class="left-buttons-box" *ngIf="!i">
-                                <dx-button
-                                    type="danger"
-                                    height="auto"
-                                    icon="material-icons restore"
-                                    text="{{ 'ordres-details-historiqueordres' | localize }}"
-                                    (onClick)="scrollToOnClick()">
-                                </dx-button>
-                                <dx-button
-                                    class="black"
-                                    height="auto"
-                                    icon="material-icons dynamic_feed"
-                                    text="{{ 'ordres-details-traitmasse' | localize }}"
-                                    (onClick)="scrollToOnClick()">
-                                </dx-button>
-                            </dxi-item>
-                            <dxi-item [ratio]="0.3">
-                            </dxi-item>
-                            <dxi-item [ratio]="8">
-
-                                <h2>{{ content.tabTitle }}
-                                    <div class="right" *ngIf="i">
-                                        <dx-button class="upperButton subButton submit "
-                                            type="default"
-                                            text="{{ 'btn-valider' | localize }}"
-                                            [useSubmitBehavior]="true"
-                                        ></dx-button>
-                                        <dx-button class="upperButton subButton"
+                    <div *dxTemplate="let content of 'item'; let i = index">
+                        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+                            <div class="content-block">
+                            </div>
+                            <div class="content-block ordre-page">
+                                <dx-box direction="row">
+                                    <dxi-item [ratio]="1" *ngIf="!i">
+                                        <dx-button
                                             type="danger"
-                                            text="{{ 'btn-deleteorder' | localize }}"
-                                        ></dx-button>
-                                        <dx-button class="upperButton subButton"
-                                            type="default"
-                                            text="{{ 'btn-cloneorder' | localize }}"
-                                        ></dx-button>
-                                            <dx-button class="upperButton subButton"
-                                            type="default"
-                                            text="{{ 'btn-complorder' | localize }}"
-                                        ></dx-button>
+                                            height="auto"
+                                            icon="material-icons restore"
+                                            text="{{ 'ordres-details-historiqueordres' | localize }}"
+                                            (onClick)="scrollToOnClick()">
+                                        </dx-button>
+                                        <dx-button
+                                            class="black"
+                                            height="auto"
+                                            icon="material-icons dynamic_feed"
+                                            text="{{ 'ordres-details-traitmasse' | localize }}"
+                                            (onClick)="scrollToOnClick()">
+                                        </dx-button>
+                                    </dxi-item>
+                                    <dxi-item [ratio]="0.3" [visible]="!tabs.selectedIndex || 0">
+                                    </dxi-item>
+                                    <dxi-item [ratio]="8">
 
-                                    </div>
-                                </h2>
-                                <div class="order-tabs" *ngIf="i">
-                                    <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
-                                        
-                                        <div class="dx-form-group-content">
-                                            <dx-box>
-                                                <dxi-item [ratio]="4">
-                                                    <!-- Client -->
-                                                    <div class="dx-field">
-                                                        <div class="dx-field-label">{{ 'ordres-client' | localize }}</div>
-                                                        <div class="dx-field-value">
-                                                            <dx-text-box formControlName="id">
-                                                            <dx-validator name="{{ 'ordres-client' | localize }}">
-                                                                <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                            </dx-validator>
-                                                            </dx-text-box>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Réf Client -->
-                                                    <div class="dx-field">
-                                                        <div class="dx-field-label">{{ 'ordres-refClient' | localize }}</div>
-                                                        <div class="dx-field-value">
-                                                            <dx-text-box formControlName="id">
-                                                            <dx-validator name="{{ 'ordres-refClient' | localize }}">
-                                                                <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                            </dx-validator>
-                                                            </dx-text-box>
-                                                        </div>
-                                                    </div>
-                                                    <!-- commercial -->
-                                                    <div class="dx-field">
-                                                        <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
-                                                        <div class="dx-field-value">
-                                                            <dx-text-box formControlName="id">
-                                                            <dx-validator name="{{ 'ordres-commercial' | localize }}">
-                                                                <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                            </dx-validator>
-                                                            </dx-text-box>
-                                                        </div>
-                                                    </div>
-                                                    <!-- assistante -->
-                                                    <div class="dx-field">
-                                                        <div class="dx-field-label">{{ 'ordres-assistante' | localize }}</div>
-                                                        <div class="dx-field-value">
-                                                            <dx-text-box formControlName="id">
-                                                            <dx-validator name="{{ 'ordres-assistante' | localize }}">
-                                                                <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                            </dx-validator>
-                                                            </dx-text-box>
-                                                        </div>
-                                                    </div>
-                    
-                                                    <dx-accordion
-                                                    [collapsible]="true"
-                                                    [multiple]="false"
-                                                    [selectedIndex]="-1"
-                                                    >
-                                                        <dxi-item title="{{ 'ordres-ordrePlus' | localize }}">
-                                                        <!-- Ordre + -->
-                                                        <!-- <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'tiers-clients-facturationRaisonSocial' | localize }}</div>
-                                                            <div class="dx-field-value">
-                                                            <dx-text-box formControlName="facturationRaisonSocial" [readOnly]="readOnlyMode">
-                                                                <dx-validator name="{{ 'tiers-entrepots-facturationRaisonSocial' | localize }}">
-                                                                <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
-                                                                </dx-validator>
-                                                            </dx-text-box>
-                                                            </div>
-                                                        </div> -->
-                                                        </dxi-item>
-                                                    </dx-accordion>
-                                                    <dx-accordion
-                                                    [collapsible]="true"
-                                                    [multiple]="false"
-                                                    [selectedIndex]="-1"
-                                                    >
-                                                        <dxi-item title="{{ 'ordres-instructLogistique' | localize }}">
-                                                        <!-- Instructions Logistique -->
-                                                        <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-instructLogistique' | localize }}</div>
-                                                            <div class="dx-field-value">
-                                                            <dx-text-box formControlName="instructLogistique" [readOnly]="readOnlyMode">
-                                                                <dx-validator name="{{ 'ordres-instructLogistique' | localize }}">
-                                                                <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
-                                                                </dx-validator>
-                                                            </dx-text-box>
-                                                            </div>
-                                                        </div>
-                                                        </dxi-item>
-                                                    </dx-accordion>
-                                                </dxi-item>
-                                                <dxi-item [ratio]="1"></dxi-item>
-                                                <dxi-item [ratio]="4">
+                                        <h2>{{ content.tabTitle }}
+                                            <div class="right" *ngIf="i">
+                                                <dx-button class="upperButton subButton submit "
+                                                    type="default"
+                                                    text="{{ 'btn-valider' | localize }}"
+                                                    [useSubmitBehavior]="true"
+                                                ></dx-button>
+                                                <dx-button class="upperButton subButton"
+                                                    type="danger"
+                                                    text="{{ 'btn-deleteorder' | localize }}"
+                                                ></dx-button>
+                                                <dx-button class="upperButton subButton"
+                                                    type="default"
+                                                    text="{{ 'btn-cloneorder' | localize }}"
+                                                ></dx-button>
+                                                    <dx-button class="upperButton subButton"
+                                                    type="default"
+                                                    text="{{ 'btn-complorder' | localize }}"
+                                                ></dx-button>
+
+                                            </div>
+                                        </h2>
+                                        <div class="order-tabs" *ngIf="i">
+                                            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
+                                                
+                                                <div class="dx-form-group-content">
                                                     <dx-box>
                                                         <dxi-item [ratio]="4">
-                                                            <!-- Date départ -->
+                                                            <!-- Client -->
                                                             <div class="dx-field">
-                                                                <div class="dx-field-label">{{ 'ordres-depart' | localize }}</div>
+                                                                <div class="dx-field-label">{{ 'ordres-client' | localize }}</div>
+                                                                <div class="dx-field-value">
+                                                                    <!-- <dx-text-box formControlName="id">
+                                                                    <dx-validator name="{{ 'ordres-client' | localize }}">
+                                                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                                                                    </dx-validator>
+                                                                    </dx-text-box> -->
+                                                                    <dx-select-box
+                                                                        [dataSource]="clients"
+                                                                        [searchEnabled]="true"
+                                                                        searchExpr="raisonSocial"
+                                                                        displayExpr="raisonSocial">
+                                                                        <dx-validator name="{{ 'ordres-client' | localize }}">
+                                                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                            <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                                                                        </dx-validator>
+                                                                    </dx-select-box>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Réf Client -->
+                                                            <div class="dx-field">
+                                                                <div class="dx-field-label">{{ 'ordres-refClient' | localize }}</div>
                                                                 <div class="dx-field-value">
                                                                     <dx-text-box formControlName="id">
-                                                                    <dx-validator name="{{ 'ordres-depart' | localize }}">
+                                                                    <dx-validator name="{{ 'ordres-refClient' | localize }}">
                                                                         <dxi-validation-rule type="required"></dxi-validation-rule>
                                                                         <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
                                                                     </dx-validator>
                                                                     </dx-text-box>
                                                                 </div>
                                                             </div>
+                                                            <!-- commercial -->
+                                                            <div class="dx-field">
+                                                                <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
+                                                                <div class="dx-field-value">
+                                                                    <dx-text-box formControlName="id">
+                                                                    <dx-validator name="{{ 'ordres-commercial' | localize }}">
+                                                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                                                                    </dx-validator>
+                                                                    </dx-text-box>
+                                                                </div>
+                                                            </div>
+                                                            <!-- assistante -->
+                                                            <div class="dx-field">
+                                                                <div class="dx-field-label">{{ 'ordres-assistante' | localize }}</div>
+                                                                <div class="dx-field-value">
+                                                                    <dx-text-box formControlName="id">
+                                                                    <dx-validator name="{{ 'ordres-assistante' | localize }}">
+                                                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                                                                    </dx-validator>
+                                                                    </dx-text-box>
+                                                                </div>
+                                                            </div>
+                            
+                                                            <dx-accordion
+                                                            [collapsible]="true"
+                                                            [multiple]="false"
+                                                            [selectedIndex]="-1"
+                                                            >
+                                                                <dxi-item title="{{ 'ordres-ordrePlus' | localize }}">
+                                                                <!-- Ordre + -->
+                                                                <!-- <div class="dx-field">
+                                                                    <div class="dx-field-label">{{ 'tiers-clients-facturationRaisonSocial' | localize }}</div>
+                                                                    <div class="dx-field-value">
+                                                                    <dx-text-box formControlName="facturationRaisonSocial" [readOnly]="readOnlyMode">
+                                                                        <dx-validator name="{{ 'tiers-entrepots-facturationRaisonSocial' | localize }}">
+                                                                        <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
+                                                                        </dx-validator>
+                                                                    </dx-text-box>
+                                                                    </div>
+                                                                </div> -->
+                                                                </dxi-item>
+                                                            </dx-accordion>
+                                                            <dx-accordion
+                                                            [collapsible]="true"
+                                                            [multiple]="false"
+                                                            [selectedIndex]="-1"
+                                                            >
+                                                                <dxi-item title="{{ 'ordres-instructLogistique' | localize }}">
+                                                                <!-- Instructions Logistique -->
+                                                                <div class="dx-field">
+                                                                    <div class="dx-field-label">{{ 'ordres-instructLogistique' | localize }}</div>
+                                                                    <div class="dx-field-value">
+                                                                    <dx-text-box formControlName="instructLogistique" [readOnly]="readOnlyMode">
+                                                                        <dx-validator name="{{ 'ordres-instructLogistique' | localize }}">
+                                                                        <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
+                                                                        </dx-validator>
+                                                                    </dx-text-box>
+                                                                    </div>
+                                                                </div>
+                                                                </dxi-item>
+                                                            </dx-accordion>
                                                         </dxi-item>
                                                         <dxi-item [ratio]="1"></dxi-item>
                                                         <dxi-item [ratio]="4">
-                                                            <!-- Date livraison -->
-                                                            <div class="dx-field">
-                                                                <div class="dx-field-label">{{ 'ordres-livraison' | localize }}</div>
-                                                                <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="id">
-                                                                    <dx-validator name="{{ 'ordres-livraison' | localize }}">
-                                                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                                    </dx-validator>
-                                                                    </dx-text-box>
-                                                                </div>
+                                                            <dx-box>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- Date départ -->
+                                                                    <div class="dx-field">
+                                                                        <div class="dx-field-label">{{ 'ordres-depart' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                            <dx-text-box formControlName="id">
+                                                                            <dx-validator name="{{ 'ordres-depart' | localize }}">
+                                                                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                                <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                                                                            </dx-validator>
+                                                                            </dx-text-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                                <dxi-item [ratio]="1"></dxi-item>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- Date livraison -->
+                                                                    <div class="dx-field">
+                                                                        <div class="dx-field-label">{{ 'ordres-livraison' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                            <dx-text-box formControlName="id">
+                                                                            <dx-validator name="{{ 'ordres-livraison' | localize }}">
+                                                                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                                <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                                                                            </dx-validator>
+                                                                            </dx-text-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                            </dx-box>
+                                                        
+                                                        <!-- Vente Commission -->
+                                                        <div class="dx-field">
+                                                            <div class="dx-field-label">{{ 'ordres-venteCommission' | localize }}</div>
+                                                            <div class="dx-field-value">
+                                                            <dx-check-box formControlName="venteCommission" [readOnly]="readOnlyMode"></dx-check-box>
                                                             </div>
+                                                        </div>
+                                                        <!-- Bon à facturer -->
+                                                        <div class="dx-field">
+                                                            <div class="dx-field-label">{{ 'ordres-bonAFacturer' | localize }}</div>
+                                                            <div class="dx-field-value">
+                                                            <dx-check-box formControlName="bonAFacturer" [readOnly]="readOnlyMode"></dx-check-box>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Facturé -->
+                                                        <div class="dx-field">
+                                                            <div class="dx-field-label">{{ 'ordres-facture' | localize }}</div>
+                                                            <div class="dx-field-value">
+                                                            <dx-check-box formControlName="facture" [readOnly]="readOnlyMode"></dx-check-box>
+                                                            </div>
+                                                        </div>
+                                                        <!-- EDI -->
+                                                        <div class="dx-field">
+                                                            <div class="dx-field-label">{{ 'ordres-EDI' | localize }}</div>
+                                                            <div class="dx-field-value">
+                                                            <dx-check-box formControlName="EDI" [readOnly]="readOnlyMode"></dx-check-box>
+                                                            </div>
+                                                        </div>
                                                         </dxi-item>
                                                     </dx-box>
-                                                
-                                                <!-- Vente Commission -->
-                                                <div class="dx-field">
-                                                    <div class="dx-field-label">{{ 'ordres-venteCommission' | localize }}</div>
-                                                    <div class="dx-field-value">
-                                                    <dx-check-box formControlName="venteCommission" [readOnly]="readOnlyMode"></dx-check-box>
-                                                    </div>
+                            
                                                 </div>
-                                                <!-- Bon à facturer -->
-                                                <div class="dx-field">
-                                                    <div class="dx-field-label">{{ 'ordres-bonAFacturer' | localize }}</div>
-                                                    <div class="dx-field-value">
-                                                    <dx-check-box formControlName="bonAFacturer" [readOnly]="readOnlyMode"></dx-check-box>
-                                                    </div>
+                            
+                                            </div>
+                            
+                                            <div class="articles-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-articles' | localize }}</span>
+                                                <dx-button class="upperButton subButton"
+                                                    type="default"
+                                                    text="{{ 'btn-stock' | localize }}"
+                                                ></dx-button>
+                                                <dx-button class="upperButton subButton"
+                                                    type="default"
+                                                    text="{{ 'btn-historique' | localize }}"
+                                                ></dx-button>
+                                                <dx-button class="upperButton subButton"
+                                                    type="default"
+                                                    text="{{ 'btn-manuel' | localize }}"
+                                                ></dx-button>
+                                                <dx-button class="upperButton subButton shiftedRight"
+                                                    type="default"
+                                                    height="auto"
+                                                    icon="material-icons loupe"
+                                                    text="{{ 'btn-detailExp' | localize }}"
+                                                ></dx-button>
+                                                <div class="dx-form-group-content">
                                                 </div>
-                                                <!-- Facturé -->
-                                                <div class="dx-field">
-                                                    <div class="dx-field-label">{{ 'ordres-facture' | localize }}</div>
-                                                    <div class="dx-field-value">
-                                                    <dx-check-box formControlName="facture" [readOnly]="readOnlyMode"></dx-check-box>
-                                                    </div>
-                                                </div>
-                                                <!-- EDI -->
-                                                <div class="dx-field">
-                                                    <div class="dx-field-label">{{ 'ordres-EDI' | localize }}</div>
-                                                    <div class="dx-field-value">
-                                                    <dx-check-box formControlName="EDI" [readOnly]="readOnlyMode"></dx-check-box>
-                                                    </div>
-                                                </div>
-                                                </dxi-item>
-                                            </dx-box>
-                    
+                            
+                                            </div>
+                            
+                                            <div class="logistique-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-logistique' | localize }}</span>
+                                                <dx-accordion
+                                                data-name="logistique"
+                                                [collapsible]="true"
+                                                [multiple]="false"
+                                                [selectedIndex]="-1"
+                                                >
+                                                    <dxi-item>
+                                                        <div class="dx-form-group-content">
+                                                        </div>
+                                                    </dxi-item>
+                                                </dx-accordion>
+                                            </div>
+                            
+                                            <div class="litiges-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-litiges' | localize }}</span>
+                                                <dx-accordion
+                                                data-name="litiges"
+                                                [collapsible]="true"
+                                                [multiple]="false"
+                                                [selectedIndex]="-1"
+                                                >
+                                                    <dxi-item>
+                                                        <div class="dx-form-group-content">
+                                                        </div>
+                                                    </dxi-item>
+                                                </dx-accordion>
+                                            </div>
+                            
+                                            <div class="marges-field accordion3 dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-marges' | localize }}</span>
+                                                <dx-accordion
+                                                data-name="marges"
+                                                [collapsible]="true"
+                                                [multiple]="false"
+                                                [selectedIndex]="-1"
+                                                >
+                                                    <dxi-item>
+                                                        <div class="dx-form-group-content">
+                                                        </div>
+                                                    </dxi-item>
+                                                </dx-accordion>
+                                            </div>
+                            
+                                            <div class="CQ-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-CQ' | localize }}</span>
+                                                <dx-accordion
+                                                data-name="CQ"
+                                                [collapsible]="true"
+                                                [multiple]="false"
+                                                [selectedIndex]="-1"
+                                                >
+                                                    <dxi-item>
+                                                        <div class="dx-form-group-content">
+                                                        </div>
+                                                    </dxi-item>
+                                                </dx-accordion>
+                                            </div>
+                                            <div class="commentaires-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-commentaires' | localize }}</span>
+                                                <dx-accordion
+                                                data-name="commentaires"
+                                                [collapsible]="true"
+                                                [multiple]="false"
+                                                [selectedIndex]="-1"
+                                                >
+                                                    <dxi-item>
+                                                        <dx-data-grid
+                                                            id="gridContainer"
+                                                            [width]=800
+                                                            [dataSource]="commentaires"
+                                                            [columns]="['Quand', 'Qui', 'Quoi']"
+                                                            [showBorders]="true">
+                            
+                                                            <dxo-editing
+                                                            [allowUpdating]="true"
+                                                            [allowDeleting]="true"
+                                                            [allowAdding]="true"
+                                                            >
+                                    >                       </dxo-editing>
+                            
+                                                        </dx-data-grid>
+                                                    </dxi-item>
+                                                </dx-accordion>
+                                            </div>
+                            
+                                            <div class="log-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-log' | localize }}</span>
+                                                <dx-accordion
+                                                data-name="log"
+                                                [collapsible]="true"
+                                                [multiple]="false"
+                                                [selectedIndex]="-1"
+                                                >
+                                                    <dxi-item>
+                                                        <dx-data-grid
+                                                            id="gridContainer"
+                                                            [width]=500
+                                                            [dataSource]="logs"
+                                                            [columns]="['DateHeureSauvegarde', 'Qui']"
+                                                            [showBorders]="true">
+                                                        </dx-data-grid>
+                                                    </dxi-item>
+                                                </dx-accordion>
+                                            </div>
                                         </div>
+                                    </dxi-item>
+                                </dx-box>
+                            </div>
                     
-                                    </div>
-                    
-                                    <div class="articles-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-articles' | localize }}</span>
-                                        <dx-button class="upperButton subButton"
-                                            type="default"
-                                            text="{{ 'btn-stock' | localize }}"
-                                        ></dx-button>
-                                        <dx-button class="upperButton subButton"
-                                            type="default"
-                                            text="{{ 'btn-historique' | localize }}"
-                                        ></dx-button>
-                                        <dx-button class="upperButton subButton"
-                                            type="default"
-                                            text="{{ 'btn-manuel' | localize }}"
-                                        ></dx-button>
-                                        <dx-button class="upperButton subButton shiftedRight"
-                                            type="default"
-                                            height="auto"
-                                            icon="material-icons loupe"
-                                            text="{{ 'btn-detailExp' | localize }}"
-                                        ></dx-button>
-                                        <div class="dx-form-group-content">
-                                        </div>
-                    
-                                    </div>
-                    
-                                    <div class="logistique-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-logistique' | localize }}</span>
-                                        <dx-accordion
-                                        [collapsible]="true"
-                                        [multiple]="false"
-                                        [selectedIndex]="-1"
-                                        >
-                                            <dxi-item>
-                                                <div class="dx-form-group-content">
-                                                </div>
-                                            </dxi-item>
-                                        </dx-accordion>
-                                    </div>
-                    
-                                    <div class="litiges-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-litiges' | localize }}</span>
-                                        <dx-accordion
-                                        [collapsible]="true"
-                                        [multiple]="false"
-                                        [selectedIndex]="-1"
-                                        >
-                                            <dxi-item>
-                                                <div class="dx-form-group-content">
-                                                </div>
-                                            </dxi-item>
-                                        </dx-accordion>
-                                    </div>
-                    
-                                    <div class="marges-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-marges' | localize }}</span>
-                                        <dx-accordion
-                                        [collapsible]="true"
-                                        [multiple]="false"
-                                        [selectedIndex]="-1"
-                                        >
-                                            <dxi-item>
-                                                <div class="dx-form-group-content">
-                                                </div>
-                                            </dxi-item>
-                                        </dx-accordion>
-                                    </div>
-                    
-                                    <div class="CQ-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-CQ' | localize }}</span>
-                                        <dx-accordion
-                                        [collapsible]="true"
-                                        [multiple]="false"
-                                        [selectedIndex]="-1"
-                                        >
-                                            <dxi-item>
-                                                <div class="dx-form-group-content">
-                                                </div>
-                                            </dxi-item>
-                                        </dx-accordion>
-                                    </div>
-                                    <div class="commentaires-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-commentaires' | localize }}</span>
-                                        <dx-accordion
-                                        [collapsible]="true"
-                                        [multiple]="false"
-                                        [selectedIndex]="-1"
-                                        >
-                                            <dxi-item>
-                                                <dx-data-grid
-                                                    id="gridContainer"
-                                                    [width]=800
-                                                    [dataSource]="commentaires"
-                                                    [columns]="['Quand', 'Qui', 'Quoi']"
-                                                    [showBorders]="true">
-                    
-                                                    <dxo-editing
-                                                    [allowUpdating]="true"
-                                                    [allowDeleting]="true"
-                                                    [allowAdding]="true"
-                                                    >
-                            >                       </dxo-editing>
-                    
-                                                </dx-data-grid>
-                                            </dxi-item>
-                                        </dx-accordion>
-                                    </div>
-                    
-                                    <div class="log-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                        <span class="dx-form-group-caption">{{ 'ordres-details-groupe-log' | localize }}</span>
-                                        <dx-accordion
-                                        [collapsible]="true"
-                                        [multiple]="false"
-                                        [selectedIndex]="-1"
-                                        >
-                                            <dxi-item>
-                                                <dx-data-grid
-                                                    id="gridContainer"
-                                                    [width]=500
-                                                    [dataSource]="logs"
-                                                    [columns]="['DateHeureSauvegarde', 'Qui']"
-                                                    [showBorders]="true">
-                                                </dx-data-grid>
-                                            </dxi-item>
-                                        </dx-accordion>
-                                    </div>
-                                </div>
-                            </dxi-item>
-                        </dx-box>
+                        </form>
                     </div>
-            
-                </form>
-            </div>
 
-        </dx-tab-panel>
-    
-    </dx-sortable>
+                </dx-tab-panel>
+            
+            </dx-sortable>
+    </dxi-item>
+</dx-box>
 
 <app-editing-alert></app-editing-alert>
 <app-file-manager-popup></app-file-manager-popup>

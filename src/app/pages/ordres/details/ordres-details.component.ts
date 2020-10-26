@@ -1,9 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { ClientsService } from 'app/shared/services/clients.service';
 import { Log, LogService, CommService, Comm } from 'app/shared/services/log.service';
 import { Content, FakeOrdresService } from 'app/shared/services/ordres-fake.service';
+import { DxAccordionComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import dxAccordion from 'devextreme/ui/accordion';
 
 @Component({
   selector: 'app-ordres-details',
@@ -17,6 +21,7 @@ export class OrdresDetailsComponent implements OnInit {
   allContents: Content[];
   contents: Content[];
   selectedIndex: number;
+  clients: DataSource;
 
   logs: Log[];
   commentaires: Comm[];
@@ -50,6 +55,7 @@ export class OrdresDetailsComponent implements OnInit {
   });
 
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+  @ViewChildren(DxAccordionComponent) accordion: any;
 
   isReadOnlyMode = true;
   orderNumber = '000034';
@@ -57,6 +63,7 @@ export class OrdresDetailsComponent implements OnInit {
   constructor(
     logService: LogService,
     fakeOrdresService: FakeOrdresService,
+    public clientsService: ClientsService,
     commService: CommService,
     private fb: FormBuilder,
     private router: Router,
@@ -66,10 +73,10 @@ export class OrdresDetailsComponent implements OnInit {
     this.commentaires = commService.getComm();
     this.allContents = fakeOrdresService.getContents();
     this.contents = fakeOrdresService.getContents().slice(0, 1);
-    this.selectedIndex = 0;
   }
 
   ngOnInit() {
+    this.clients = this.clientsService.getDataSource();
   }
 
   onSubmit() {
@@ -87,9 +94,12 @@ export class OrdresDetailsComponent implements OnInit {
   }
 
   scrollToOnClick(e) {
+  
     const extractField = '.' + (e.element.className.split(' ')[0]).replace('Button', '') + '-field';
-    console.log(extractField)
     const Element = document.querySelector(extractField) as HTMLElement;
+    const key = e.element.dataset.accordion;
+
+    this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key).instance.expandItem(0);
 
     Element.scrollIntoView({behavior: 'smooth'});
 
