@@ -7,7 +7,7 @@ import { loadavg } from 'os';
 export const environment = {
   production: false,
   debugRouting: false,
-  apiEndpoint: 'http://192.168.2.161:8089/graphql',
+  apiEndpoint: 'http://localhost:8081/graphql',
   columnChooser: {
     width: 500,
     height: 500
@@ -18,10 +18,6 @@ export const environment = {
   },
 
 };
-
-export function loada() {
-  alert('ttt');
-}
 
 /*
  * For easier debugging in development mode, you can import the following file

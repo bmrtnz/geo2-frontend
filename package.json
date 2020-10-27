@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve --open",
     "build": "ng build",
+    "build:prod": "ng build --prod",
+    "build:webdev": "ng build --configuration=webdev",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
