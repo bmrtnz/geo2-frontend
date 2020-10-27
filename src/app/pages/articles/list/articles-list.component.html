@@ -43,7 +43,7 @@
     </dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of detailedFields;let i=index"
+      *ngFor="let field of detailedFields | async; index as i"
       [dataField]="field.path"
       [caption]="((field.path.includes('.id') || field.path.includes('.espece')) ? ('articles-' + field.path.replace('.', '-') | localize) : ('articles-' + field.name | localize)) || field.name"
       [visible]="i < articlesService.baseFieldsSize"

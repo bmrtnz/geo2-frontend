@@ -7,3 +7,5 @@ export class GroupeClient extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default GroupeClient;

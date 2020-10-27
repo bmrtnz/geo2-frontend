@@ -1,14 +1,14 @@
+import { AbstractControl } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { ApolloQueryResult, WatchQueryOptions, MutationOptions, OperationVariables } from 'apollo-client';
-import { Observable, Subscriber } from 'rxjs';
+import { ApolloQueryResult, MutationOptions, OperationVariables, WatchQueryOptions } from 'apollo-client';
 import { FetchResult } from 'apollo-link';
 import ArrayStore from 'devextreme/data/array_store';
-import DataSource from 'devextreme/data/data_source';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
-import { take, map } from 'rxjs/operators';
-import { AbstractControl } from '@angular/forms';
+import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
+import gql from 'graphql-tag';
+import { Observable, Subscriber } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { Model } from '../models/model';
 
 const DEFAULT_KEY = 'id';
@@ -67,12 +67,16 @@ export type LocateVariables = {
 
 export interface APIRead {
   getAll?(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
-  getOne?(id: string): Observable<ApolloQueryResult<any>>;
+  getOne?(id: string):
+    Observable<ApolloQueryResult<any>> |
+    Promise<Observable<ApolloQueryResult<any>>>;
   getDataSource(): DataSource;
 }
 
 export interface APIPersist {
-  save(variables: OperationVariables): Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  save(variables: OperationVariables):
+    Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
+    Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
 export abstract class ApiService {
@@ -110,8 +114,8 @@ export abstract class ApiService {
    */
   public asArrayStore<T = any>(relayPage: RelayPage<T>) {
     return new ArrayStore({
-        key: this.keyField,
-        data: this.asList(relayPage),
+      key: this.keyField,
+      data: this.asList(relayPage),
     });
   }
 
@@ -131,7 +135,7 @@ export abstract class ApiService {
    * @param relayPage Input RelayPage
    */
   public asList<T = any>(relayPage: RelayPage<T>) {
-    return relayPage.edges.map(({node}) => node );
+    return relayPage.edges.map(({ node }) => node);
   }
 
   /**
@@ -149,16 +153,15 @@ export abstract class ApiService {
       return value;
     };
     return Object.entries(controls)
-    .filter(([key, control]) => key === this.keyField || control.dirty )
-    .map(([key, control]) => {
-      const value = JSON.parse(JSON.stringify(control.value));
-      // console.log('key: ' , key + ' ***  ' , value)
-      const cleanValue = typeof value === 'object' && value.length !== undefined ?
-        (value as []).map( v => clean(v) ) :
-        clean(value);
-      return { [key]: cleanValue };
-    })
-    .reduce((acm, current) => ({...acm, ...current}));
+      .filter(([key, control]) => key === this.keyField || control.dirty)
+      .map(([key, control]) => {
+        const value = JSON.parse(JSON.stringify(control.value));
+        const cleanValue = typeof value === 'object' && value.length !== undefined ?
+          (value as []).map(v => clean(v)) :
+          clean(value);
+        return { [key]: cleanValue };
+      })
+      .reduce((acm, current) => ({ ...acm, ...current }));
   }
 
   /**
@@ -171,13 +174,13 @@ export abstract class ApiService {
     const query = this.buildLocate();
 
     return this.
-    query<{locatePage: number}>(query, {
-      variables: {pageSize, type, ...inputVariables},
-    } as WatchQueryOptions<any>)
-    .pipe(
-      map( res => res.data ),
-      take(1),
-    );
+      query<{ locatePage: number }>(query, {
+        variables: { pageSize, type, ...inputVariables },
+      } as WatchQueryOptions<any>)
+      .pipe(
+        map(res => res.data),
+        take(1),
+      );
   }
 
   /**
@@ -186,8 +189,8 @@ export abstract class ApiService {
    * @param dataSource Input Datasource
    */
   protected fillDataSource<T = any>(relayPage: RelayPage<T>, dataSource: DataSource) {
-    this.asList( relayPage )
-    .forEach( (entity: T) => (dataSource.store() as ArrayStore).insert(entity));
+    this.asList(relayPage)
+      .forEach((entity: T) => (dataSource.store() as ArrayStore).insert(entity));
     dataSource.reload();
     return dataSource;
   }
@@ -199,12 +202,12 @@ export abstract class ApiService {
    */
   protected query<T>(gqlQuery: string, options?: WatchQueryOptions) {
     return this.apollo
-    .watchQuery<T>({
-      query: gql(gqlQuery),
-      ...options,
-    })
-    .valueChanges
-    .pipe(take(1));
+      .watchQuery<T>({
+        query: gql(gqlQuery),
+        ...options,
+      })
+      .valueChanges
+      .pipe(take(1));
   }
 
   /**
@@ -219,13 +222,13 @@ export abstract class ApiService {
     options?: WatchQueryOptions,
   ) {
     const nextPage = (observer: Subscriber<ApolloQueryResult<T>>, page = 0) => this
-    .query<T>(gqlQuery, {...options, variables: {...options.variables, page}})
-    .pipe(take(1))
-    .subscribe((res) => {
-      observer.next(res);
-      if (fetchNext(res)) nextPage(observer, page + 1);
-      else observer.complete();
-    });
+      .query<T>(gqlQuery, { ...options, variables: { ...options.variables, page } })
+      .pipe(take(1))
+      .subscribe((res) => {
+        observer.next(res);
+        if (fetchNext(res)) nextPage(observer, page + 1);
+        else observer.complete();
+      });
     return new Observable<ApolloQueryResult<T>>(observer => nextPage(observer));
   }
 
@@ -235,11 +238,11 @@ export abstract class ApiService {
    */
   protected mutate(gqlMutation: string, options?: MutationOptions) {
     return this.apollo
-    .mutate({
-      mutation: gql(gqlMutation),
-      ...options,
-    })
-    .pipe(take(1));
+      .mutate({
+        mutation: gql(gqlMutation),
+        ...options,
+      })
+      .pipe(take(1));
   }
 
   /**
@@ -247,15 +250,15 @@ export abstract class ApiService {
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
-  protected buildGetAll(depth?: number, filter?: RegExp) {
+  protected async buildGetAll(depth?: number, filter?: RegExp) {
     const operation = `all${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      query ${ alias }($search: String, $pageable: PaginationInput!) {
-        ${ operation }(search:$search, pageable:$pageable) {
+      query ${alias}($search: String, $pageable: PaginationInput!) {
+        ${operation}(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${ this.model.getGQLFields(depth, filter) }
+              ${await this.model.getGQLFields(depth, filter).toPromise()}
             }
           }
           pageInfo {
@@ -275,13 +278,13 @@ export abstract class ApiService {
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
-  protected buildGetOne(depth?: number, filter?: RegExp) {
+  protected async buildGetOne(depth?: number, filter?: RegExp) {
     const operation = this.withLowerCaseFirst(this.model.name);
     const alias = this.withUpperCaseFirst(operation);
     return `
-      query ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
-        ${ operation }(${ this.keyField }:$${ this.keyField }) {
-          ${ this.model.getGQLFields(depth, filter) }
+      query ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
+        ${operation}(${this.keyField}:$${this.keyField}) {
+          ${await this.model.getGQLFields(depth, filter).toPromise()}
         }
       }
     `;
@@ -292,15 +295,15 @@ export abstract class ApiService {
    * @param depth Save response depth
    * @param filter Fields filter
    */
-  protected buildSave(depth?: number, filter?: RegExp) {
+  protected async buildSave(depth?: number, filter?: RegExp) {
     const entity = this.withLowerCaseFirst(this.model.name);
     const operation = `save${this.model.name}`;
     const type = `Geo${this.model.name}Input`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      mutation ${ alias }($${ entity }: ${ type }!) {
-        ${ operation }(${ entity }: $${ entity }) {
-          ${ this.model.getGQLFields(depth, filter) }
+      mutation ${alias}($${entity}: ${type}!) {
+        ${operation}(${entity}: $${entity}) {
+          ${await this.model.getGQLFields(depth, filter).toPromise()}
         }
       }
     `;
@@ -313,8 +316,8 @@ export abstract class ApiService {
     const operation = `delete${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      mutation ${ alias }($${ this.keyField }: ${ this.gqlKeyType }!) {
-        ${ operation }(${ this.keyField }: $${ this.keyField }) {
+      mutation ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
+        ${operation}(${this.keyField}: $${this.keyField}) {
           id
         }
       }
@@ -329,8 +332,8 @@ export abstract class ApiService {
     const alias = this.withUpperCaseFirst(operation);
     const type = `Geo${this.model.name}`;
     return `
-      query ${ alias }($field: String!, $search: String, $pageable: PaginationInput!) {
-        ${ operation }(type: "${ type }", field: $field, search: $search, pageable: $pageable) {
+      query ${alias}($field: String!, $search: String, $pageable: PaginationInput!) {
+        ${operation}(type: "${type}", field: $field, search: $search, pageable: $pageable) {
           edges {
             node {
               count
@@ -377,23 +380,23 @@ export abstract class ApiService {
     // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
     if (options.filter) {
       const withDepth = options.filter
-      .find( res => typeof res === 'object' );
+        .find(res => typeof res === 'object');
       const withOperator = options.filter
-      .find( res => ['or', 'and'].includes(res) );
+        .find(res => ['or', 'and'].includes(res));
       if (withDepth && !withOperator)
         options.filter = [options.filter[0], 'and', options.filter[1]];
     }
 
     const variables = this.mergeVariables(
-      {field},
+      { field },
       this.mapLoadOptionsToVariables(options),
     );
     return this.
-    query<DistinctResponse>(distinctQuery, { variables } as WatchQueryOptions<any>)
-    .pipe(
-      map( res => this.asListCount(res.data.distinct)),
-      take(1),
-    );
+      query<DistinctResponse>(distinctQuery, { variables } as WatchQueryOptions<any>)
+      .pipe(
+        map(res => this.asListCount(res.data.distinct)),
+        take(1),
+      );
   }
 
   /**
@@ -403,8 +406,8 @@ export abstract class ApiService {
     const operation = `locatePage`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      query ${ alias }($pageSize: Int!, $type: String!, $key: [String]!) {
-        ${ operation }(pageSize: $pageSize, type: $type, key: $key)
+      query ${alias}($pageSize: Int!, $type: String!, $key: [String]!) {
+        ${operation}(pageSize: $pageSize, type: $type, key: $key)
       }
     `;
   }
@@ -414,7 +417,7 @@ export abstract class ApiService {
    * @param param0 value
    */
   private withUpperCaseFirst([first, ...rest]: string) {
-    return [ first.toUpperCase(), ...rest ].join('');
+    return [first.toUpperCase(), ...rest].join('');
   }
 
   /**
@@ -422,7 +425,7 @@ export abstract class ApiService {
    * @param param0 value
    */
   private withLowerCaseFirst([first, ...rest]: string) {
-    return [ first.toLowerCase(), ...rest ].join('');
+    return [first.toLowerCase(), ...rest].join('');
   }
 
   /**
@@ -432,13 +435,13 @@ export abstract class ApiService {
   protected mapDXSearchToDXFilter(options: LoadOptions) {
     return typeof options.searchExpr === 'object' ?
       (options.searchExpr as [])
-      .map( expr => [expr, options.searchOperation, options.searchValue])
-      .join('-or-')
-      .split('-')
-      .map((value: any) => {
-        const mapped = value.split(',');
-        return mapped.length > 1 ? mapped : mapped.shift();
-      }) :
+        .map(expr => [expr, options.searchOperation, options.searchValue])
+        .join('-or-')
+        .split('-')
+        .map((value: any) => {
+          const mapped = value.split(',');
+          return mapped.length > 1 ? mapped : mapped.shift();
+        }) :
       [options.searchExpr, options.searchOperation, options.searchValue];
   }
 
@@ -461,7 +464,7 @@ export abstract class ApiService {
 
         // Deep filter
         if (typeof node[0] === 'object') {
-          filter[index] = `(${ next(node).join(' ') })`;
+          filter[index] = `(${next(node).join(' ')})`;
         } else {
           /* tslint:disable-next-line:prefer-const */
           let [selector, operator, value] = node;
@@ -498,7 +501,7 @@ export abstract class ApiService {
 
           }
         }
-      } else filter[index] =  node;
+      } else filter[index] = node;
       if (index < filter.length - 1)
         return next(filter, index + 1);
       else return filter;
@@ -521,19 +524,19 @@ export abstract class ApiService {
       search.push(this.mapDXFilterToRSQL(options.filter));
     if (options.searchValue) // global search
       search.push(this
-      .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options)));
+        .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options)));
     variables.search = search
-    .map( v => `(${v})` )
-    .join(' and ');
+      .map(v => `(${v})`)
+      .join(' and ');
 
     // Sort
     if (options.sort)
       variables.pageable.sort = {
         orders: options.sort
-        .map(({selector: property, desc}) => ({
-          property,
-          direction: desc ? Direction.DESC : Direction.ASC
-        } as OrderedField)),
+          .map(({ selector: property, desc }) => ({
+            property,
+            direction: desc ? Direction.DESC : Direction.ASC
+          } as OrderedField)),
       };
 
     return variables;
@@ -543,15 +546,15 @@ export abstract class ApiService {
    * Merge variables, last item as priority if merge is impossible
    * @param variables Variables list
    */
-  protected mergeVariables(...variables: OperationVariables[]|RelayPageVariables[]) {
+  protected mergeVariables(...variables: OperationVariables[] | RelayPageVariables[]) {
     return variables.reduce((acm, current) => ({
       ...acm,
       ...current,
       // search: `${ acm.search || '' }${ current.search ? `and ${ current.search }` : '' }`,
       search: [acm ? acm.search : '', current ? current.search : '']
-      .filter( v => v )
-      .map( v => `(${v})` )
-      .join(' and '),
+        .filter(v => v)
+        .map(v => `(${v})`)
+        .join(' and '),
     }));
   }
 

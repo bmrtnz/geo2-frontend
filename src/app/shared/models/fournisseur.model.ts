@@ -23,11 +23,12 @@ export enum NatureStation {
 export class Fournisseur extends Model {
 
   @Field({asKey: true, width: 150}) public id: string;
+  @Field() public code: string;
   @Field({asLabel: true}) public raisonSocial: string;
   @Field() public ville: string;
-  @Field({model: Pays}) public pays: Pays;
-  @Field({model: Devise}) public devise: Devise;
-  @Field({model: Pays}) public langue: Pays;
+  @Field({model: import('./pays.model')}) public pays: Pays;
+  @Field({model: import('./devise.model')}) public devise: Devise;
+  @Field({model: import('./pays.model')}) public langue: Pays;
   @Field({filterValue: true, width: 100}) public valide: boolean;
   @Field() public preSaisie: boolean;
   @Field() public adresse1: string;
@@ -36,18 +37,18 @@ export class Fournisseur extends Model {
   @Field() public codePostal: string;
   @Field() public latitude: string;
   @Field() public longitude: string;
-  @Field({model: MoyenPaiement}) public moyenPaiement: MoyenPaiement;
-  @Field({model: BasePaiement}) public basePaiement: BasePaiement;
-  @Field({model: RegimeTva}) public regimeTva: RegimeTva;
+  @Field({model: import('./moyen-paiement.model')}) public moyenPaiement: MoyenPaiement;
+  @Field({model: import('./base.paiement.model')}) public basePaiement: BasePaiement;
+  @Field({model: import('./regime-tva.model')}) public regimeTva: RegimeTva;
   @Field() public nbJourEcheance: number;
   @Field() public echeanceLe: number;
   @Field() public tvaCee: string;
-  @Field({model: BureauAchat}) public bureauAchat: BureauAchat;
+  @Field({model: import('./bureau-achat.model')}) public bureauAchat: BureauAchat;
   @Field() public margeObjectifEuroKilo: number;
   @Field() public margeObjectifPourcentCa: number;
   @Field() public stockActif: boolean;
   @Field() public stockPrecalibre: boolean;
-  @Field({model: TypeFournisseur}) public type: TypeFournisseur;
+  @Field({model: import('./type.fournisseur.model')}) public type: TypeFournisseur;
   @Field() public listeSocietes: string;
   @Field() public idTracabilite: string;
   @Field() public agrementBW: string;
@@ -68,14 +69,16 @@ export class Fournisseur extends Model {
   @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
   @Field() public autoFacturation: boolean;
   @Field() public tvaId: string;
-  @Field({model: Historique}) public historique: Historique[];
+  @Field({model: import('./historique.model')}) public historique: Historique[];
   @Field() public indicateurModificationDetail: boolean;
   @Field({dataType: 'date'}) public dateConditionGeneraleAchatSignee: string;
   @Field() public declarantBacsCHEP: boolean;
-  @Field({model: ConditionVente}) public conditionVente: ConditionVente;
-  @Field({model: Fournisseur}) public fournisseurDeRattachement: Fournisseur;
-  @Field({model: GroupeFournisseur}) public groupeFournisseur: GroupeFournisseur;
-  @Field({model: Certification}) public certifications: Certification[];
-  @Field({model: Stock}) public stocks: Stock[];
+  @Field({model: import('./condition-vente.model')}) public conditionVente: ConditionVente;
+  @Field({model: import('./fournisseur.model')}) public fournisseurDeRattachement: Fournisseur;
+  @Field({model: import('./groupe-fournisseur.model')}) public groupeFournisseur: GroupeFournisseur;
+  @Field({model: import('./certification.model')}) public certifications: Certification[];
+  @Field({model: import('./stock.model')}) public stocks: Stock[];
 
 }
+
+export default Fournisseur;

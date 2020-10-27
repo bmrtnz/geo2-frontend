@@ -12,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
 })
 export class TransporteursService extends ApiService implements APIRead {
 
-  fieldsFilter = /.\.*(?:id|raisonSocial|description|ville|codePostal|adresse1|valide)$/i;
+  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|codePostal|adresse1|valide|typeTiers)$/i;
 
   constructor(
     apollo: Apollo,
@@ -20,8 +20,8 @@ export class TransporteursService extends ApiService implements APIRead {
     super(apollo, Transporteur);
   }
 
-  getOne(id: string) {
-    const query = this.buildGetOne();
+  async getOne(id: string) {
+    const query = await this.buildGetOne();
     type Response = { transporteur: Transporteur };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -30,12 +30,12 @@ export class TransporteursService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allTransporteur: RelayPage<Transporteur> };
           const variables = this.mapLoadOptionsToVariables(options);
           return this.
@@ -46,8 +46,8 @@ export class TransporteursService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne(1, this.fieldsFilter);
+        byKey: async (key) => {
+          const query = await this.buildGetOne(1);
           type Response = { transporteur: Transporteur };
           const variables = { id: key };
           return this.
@@ -62,8 +62,8 @@ export class TransporteursService extends ApiService implements APIRead {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.fieldsFilter);
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

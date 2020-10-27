@@ -1,21 +1,22 @@
-import { Component, OnInit, AfterViewInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { TransporteursService } from '../../../../shared/services/transporteurs.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Transporteur } from '../../../../shared/models';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { AuthService, ClientsService } from 'app/shared/services';
+import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { PaysService } from 'app/shared/services/pays.service';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import DataSource from 'devextreme/data/data_source';
-import { ClientsService } from 'app/shared/services';
 import notify from 'devextreme/ui/notify';
-import { NestedPart } from 'app/pages/nested/nested.component';
-import { Editable } from 'app/shared/guards/editing-guard';
-import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
-import { tap } from 'rxjs/operators';
-import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { from } from 'rxjs';
+import { mergeAll, tap } from 'rxjs/operators';
+import { Transporteur } from '../../../../shared/models';
+import { TransporteursService } from '../../../../shared/services/transporteurs.service';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -52,7 +53,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
-   editing = false;
+  editing = false;
 
   transporteur: Transporteur;
   code: string;
@@ -81,6 +82,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     private clientsService: ClientsService,
     private router: Router,
     private route: ActivatedRoute,
+    public authService: AuthService,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -106,25 +108,25 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   ngOnInit() {
 
     this.route.params
-    .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
-      const url = this.route.snapshot.url;
-      this.createMode = url[url.length - 1].path === 'create';
-      this.readOnlyMode = !this.createMode;
-      if (!this.createMode) {
-        this.transporteursService
-          .getOne(params.id)
-          .subscribe( res => {
-            this.transporteur = res.data.transporteur;
-            this.formGroup.patchValue(this.transporteur);
-            this.contentReadyEvent.emit();
-            this.preSaisie = this.transporteur.preSaisie === true ? 'preSaisie' : '';
-          });
-      } else {
-        this.transporteur = new Transporteur({});
-        this.contentReadyEvent.emit();
-      }
-    });
+      .pipe(tap(_ => this.formGroup.reset()))
+      .subscribe(params => {
+        const url = this.route.snapshot.url;
+        this.createMode = url[url.length - 1].path === 'create';
+        this.readOnlyMode = !this.createMode;
+        if (!this.createMode) {
+          from(this.transporteursService.getOne(params.id))
+            .pipe(mergeAll())
+            .subscribe(res => {
+              this.transporteur = new Transporteur(res.data.transporteur);
+              this.formGroup.patchValue(this.transporteur);
+              this.contentReadyEvent.emit();
+              this.preSaisie = this.transporteur.preSaisie === true ? 'preSaisie' : '';
+            });
+        } else {
+          this.transporteur = new Transporteur({});
+          this.contentReadyEvent.emit();
+        }
+      });
 
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
@@ -137,10 +139,10 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   checkCode(params) {
-      const code = params.value.toUpperCase();
-      const transporteursSource = this.transporteursService.getDataSource();
-      transporteursSource.filter(['id', '=', code]);
-      return transporteursSource.load().then(res => !(res.length));
+    const code = params.value.toUpperCase();
+    const transporteursSource = this.transporteursService.getDataSource();
+    transporteursSource.filter(['id', '=', code]);
+    return transporteursSource.load().then(res => !(res.length));
   }
 
   onSubmit() {
@@ -150,8 +152,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
       if (this.createMode) {
         transporteur.id = this.formGroup.get('id').value.toUpperCase();
-          // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
-          // Avoir pour les valeur par defaut (qui sont not null dans la base)
+        // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
+        // Avoir pour les valeur par defaut (qui sont not null dans la base)
         transporteur.preSaisie = true;
         transporteur.valide = false;
       } else {
@@ -162,23 +164,28 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
         transporteur.id = this.transporteur.id;
       }
 
-      this.transporteursService
-      .save({ transporteur })
+      from(this.transporteursService.save({ transporteur }))
+        .pipe(mergeAll())
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
-              this.transporteur = { id: this.transporteur.id, ...this.formGroup.getRawValue() };
+              this.transporteur = {
+                ...this.transporteur,
+                ...this.formGroup.getRawValue(),
+              };
               this.readOnlyMode = true;
             } else {
               this.editing = false;
-              this.router.navigate([`/tiers/transporteurs/${transporteur.id}`]);
+              this.router.navigate([`/tiers/transporteurs/${e.data.saveTransporteur.id}`]);
             }
+            this.transporteur.typeTiers = e.data.saveTransporteur.typeTiers;
+            this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
-      }
+    }
   }
 
   onCancel() {
@@ -199,7 +206,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${ this.transporteur.id }/${ this.transporteur.typeTiers }`]);
+    this.router.navigate([`/tiers/contacts/${this.transporteur.id}/${this.transporteur.typeTiers}`]);
   }
 
 }

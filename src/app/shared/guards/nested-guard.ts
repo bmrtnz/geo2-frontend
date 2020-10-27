@@ -12,8 +12,8 @@ export class NestedGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean|UrlTree {
     if (this.router.url.startsWith('/nested')) {
       return this.router.createUrlTree([
-        { outlets: { details: state.url.substring(1) }}
-      ], { relativeTo: this.activatedRoute.firstChild.firstChild });
+        { outlets: { details: decodeURI(state.url.substring(1)) }}
+      ], { relativeTo: this.activatedRoute.firstChild.firstChild, });
     }
     return true;
   }

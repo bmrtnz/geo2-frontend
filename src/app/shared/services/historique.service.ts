@@ -1,11 +1,37 @@
-import {Injectable} from '@angular/core';
-import {ApiService, RelayPage, RelayPageVariables} from './api.service';
-import {Apollo} from 'apollo-angular';
-import {Historique} from '../models';
-import {MutationOptions, OperationVariables, WatchQueryOptions} from 'apollo-client';
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { OperationVariables, WatchQueryOptions } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
-import {LoadOptions} from 'devextreme/data/load_options';
-import {map, take} from 'rxjs/operators';
+import { LoadOptions } from 'devextreme/data/load_options';
+import { map, take } from 'rxjs/operators';
+import { Historique } from '../models';
+import { ApiService, RelayPage, RelayPageVariables } from './api.service';
+
+
+
+export enum HistoryType {
+  CLIENT = 'CLIENT',
+  FOURNISSEUR = 'FOURNISSEUR',
+  ARTICLE = 'ARTICLE',
+}
+
+enum HistoryModel {
+  CLIENT = 'HistoriqueClient',
+  FOURNISSEUR = 'HistoriqueFournisseur',
+  ARTICLE = 'HistoriqueArticle',
+}
+
+enum HistoryModule {
+  CLIENT = 'historique-client',
+  FOURNISSEUR = 'historique-fournisseur',
+  ARTICLE = 'historique-article',
+}
+
+// export enum HistoryModule = {
+//   CLIENT = historique-client',
+//   FOURNISSEUR = historique-fournisseur',
+//   ARTICLE = historique-article',
+// };
 
 @Injectable({
   providedIn: 'root'
@@ -23,21 +49,21 @@ export class HistoriqueService extends ApiService {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
-          const query = this.buildGetAll(1, this.listRegexp);
+        load: async (options: LoadOptions) => {
+          const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allHistorique: RelayPage<Historique> };
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.query<Response>(query, {variables, fetchPolicy: 'no-cache'} as WatchQueryOptions<RelayPageVariables>)
+          return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
             .pipe(
               map(res => this.asListCount(res.data.allHistorique)),
               take(1),
             )
             .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne(1, this.listRegexp);
+        byKey: async (key) => {
+          const query = await this.buildGetOne(1, this.listRegexp);
           type Response = { historique: Historique };
-          const variables = { id: key};
+          const variables = { id: key };
           return this.query<Response>(query, { variables } as WatchQueryOptions<any>)
             .pipe(
               map(res => res.data.historique),
@@ -49,9 +75,15 @@ export class HistoriqueService extends ApiService {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1);
-    return this.mutate(mutation, { variables } as MutationOptions);
+  async saveByType(type: HistoryType, properties: OperationVariables) {
+    const withLowerCaseFirst = ([first, ...rest]: string) => [first.toLowerCase(), ...rest].join('');
+    this.model = (await import(`../models/${HistoryModule[type]}.model`)).default;
+    const mutation = await this.buildSave(2);
+    return this.mutate(mutation, {
+      variables: {
+        [withLowerCaseFirst(HistoryModel[type])]: properties,
+      }
+    } as any).pipe(take(1));
   }
 
 }

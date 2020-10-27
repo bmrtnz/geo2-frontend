@@ -8,3 +8,5 @@ export class Pays extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default Pays;

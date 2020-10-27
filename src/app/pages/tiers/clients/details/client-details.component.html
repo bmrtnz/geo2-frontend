@@ -51,16 +51,9 @@
             #valideCheckBox
             class="vertical"
             formControlName="valide"
-            (onValueChanged)="onValideChange($event)"
             [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
-            [readOnly]="readOnlyMode"
+            [readOnly]="readOnlyMode || !authService.currentUser.accessGeoTiers"
           ></dx-check-box>
-          <app-prompt-popup
-            title="{{ 'valide-comment-title' | localize }}"
-            [placeholder]="'valide-comment' | localize"
-            [(visible)]="this.validateCommentPromptVisible"
-            (cancel)="valideCheckBox.value= !valideCheckBox.value"
-          ></app-prompt-popup>
           <app-historique-valide [historique]="client?.historique"></app-historique-valide>
           <dx-button
             class="black"
@@ -1101,3 +1094,7 @@
 </form>
 <app-editing-alert></app-editing-alert>
 <app-file-manager-popup></app-file-manager-popup>
+<app-push-history-popup
+  [title]="'valide-comment-title' | localize"
+  [placeholder]="'valide-comment' | localize"
+></app-push-history-popup>

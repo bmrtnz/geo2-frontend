@@ -7,3 +7,5 @@ export class BasePaiement extends Model {
   @Field() public valide: boolean;
 
 }
+
+export default BasePaiement;

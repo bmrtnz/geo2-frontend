@@ -3,7 +3,7 @@ import DataSource from 'devextreme/data/data_source';
 import { ContactsService } from 'app/shared/services/contacts.service';
 import { ActivatedRoute } from '@angular/router';
 import { Contact } from 'app/shared/models';
-import { ModelFieldOptions } from 'app/shared/models/model';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { TypeTiers } from 'app/shared/models/tier.model';
 import { SocietesService } from 'app/shared/services/societes.service';
 import { FluxService } from 'app/shared/services/flux.service';
@@ -11,6 +11,8 @@ import { MoyenCommunicationService } from 'app/shared/services/moyens-communicat
 import { DxDataGridComponent } from 'devextreme-angular';
 import { environment} from 'environments/environment';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { Observable } from 'rxjs';
+import { AuthService } from 'app/shared/services';
 
 @Component({
   selector: 'app-contacts',
@@ -26,7 +28,7 @@ export class ContactsComponent implements OnInit, NestedPart {
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
@@ -37,6 +39,7 @@ export class ContactsComponent implements OnInit, NestedPart {
     public fluxService: FluxService,
     public moyenCommunicationService: MoyenCommunicationService,
     private route: ActivatedRoute,
+    public authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -103,7 +106,7 @@ export class ContactsComponent implements OnInit, NestedPart {
 
   }
 
-  saveDataGridState(data) {
+  async saveDataGridState(data) {
     window.localStorage.setItem('contactStorage', JSON.stringify(data));
   }
 

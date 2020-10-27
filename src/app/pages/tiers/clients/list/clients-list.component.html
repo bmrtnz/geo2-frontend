@@ -49,7 +49,7 @@
     </dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of detailedFields;let i=index"
+      *ngFor="let field of detailedFields | async; index as i"
       [dataField]="field.path"
       [caption]="('tiers-clients-' + field.name | localize) || field.name"
       [visible]="i < clientsService.baseFieldsSize"

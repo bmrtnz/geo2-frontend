@@ -1,20 +1,22 @@
-import { Component, OnInit, AfterViewInit, EventEmitter, ViewChild } from '@angular/core';
-import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LieuPassageAQuai } from '../../../../shared/models';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NestedPart } from 'app/pages/nested/nested.component';
+import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { Editable } from 'app/shared/guards/editing-guard';
+import { AuthService } from 'app/shared/services';
+import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { DevisesService } from 'app/shared/services/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
 import { PaysService } from 'app/shared/services/pays.service';
+import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { NestedPart } from 'app/pages/nested/nested.component';
-import { Editable } from 'app/shared/guards/editing-guard';
-import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
-import { tap } from 'rxjs/operators';
-import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { from } from 'rxjs';
+import { mergeAll, tap } from 'rxjs/operators';
+import { LieuPassageAQuai } from '../../../../shared/models';
+import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -50,7 +52,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
-   editing = false;
+  editing = false;
 
   lieupassageaquai: LieuPassageAQuai;
   code: string;
@@ -76,6 +78,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     private paysService: PaysService,
     private router: Router,
     private route: ActivatedRoute,
+    public authService: AuthService,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -101,25 +104,25 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   ngOnInit() {
 
     this.route.params
-    .pipe(tap( _ => this.formGroup.reset()))
-    .subscribe(params => {
-      const url = this.route.snapshot.url;
-      this.createMode = url[url.length - 1].path === 'create';
-      this.readOnlyMode = !this.createMode;
-      if (!this.createMode) {
-        this.lieupassageaquaiService
-          .getOne(params.id)
-          .subscribe( res => {
-            this.lieupassageaquai = res.data.lieuPassageAQuai;
-            this.formGroup.patchValue(this.lieupassageaquai);
-            this.contentReadyEvent.emit();
-            this.preSaisie = this.lieupassageaquai.preSaisie === true ? 'preSaisie' : '';
-          });
-      } else {
-        this.lieupassageaquai = new LieuPassageAQuai({});
-        this.contentReadyEvent.emit();
-      }
-    });
+      .pipe(tap(_ => this.formGroup.reset()))
+      .subscribe(params => {
+        const url = this.route.snapshot.url;
+        this.createMode = url[url.length - 1].path === 'create';
+        this.readOnlyMode = !this.createMode;
+        if (!this.createMode) {
+          from(this.lieupassageaquaiService.getOne(params.id))
+            .pipe(mergeAll())
+            .subscribe(res => {
+              this.lieupassageaquai = new LieuPassageAQuai(res.data.lieuPassageAQuai);
+              this.formGroup.patchValue(this.lieupassageaquai);
+              this.contentReadyEvent.emit();
+              this.preSaisie = this.lieupassageaquai.preSaisie === true ? 'preSaisie' : '';
+            });
+        } else {
+          this.lieupassageaquai = new LieuPassageAQuai({});
+          this.contentReadyEvent.emit();
+        }
+      });
 
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
@@ -130,10 +133,10 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   }
 
   checkCode(params) {
-      const code = params.value.toUpperCase();
-      const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource();
-      lieuxpassageaquaiSource.filter(['id', '=', code]);
-      return lieuxpassageaquaiSource.load().then(res => !(res.length));
+    const code = params.value.toUpperCase();
+    const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource();
+    lieuxpassageaquaiSource.filter(['id', '=', code]);
+    return lieuxpassageaquaiSource.load().then(res => !(res.length));
   }
 
   onSubmit() {
@@ -143,8 +146,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
       if (this.createMode) {
         lieuPassageAQuai.id = this.formGroup.get('id').value.toUpperCase();
-          // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
-          // Avoir pour les valeur par defaut (qui sont not null dans la base)
+        // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
+        // Avoir pour les valeur par defaut (qui sont not null dans la base)
         lieuPassageAQuai.valide = false;
         lieuPassageAQuai.preSaisie = true;
       } else {
@@ -155,23 +158,28 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         lieuPassageAQuai.id = this.lieupassageaquai.id;
       }
 
-      this.lieupassageaquaiService
-      .save({ lieuPassageAQuai })
+      from(this.lieupassageaquaiService.save({ lieuPassageAQuai }))
+        .pipe(mergeAll())
         .subscribe({
-          next: () => {
+          next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             this.refreshGrid.emit();
             if (!this.createMode) {
-              this.lieupassageaquai = { id: this.lieupassageaquai.id, ...this.formGroup.getRawValue() };
+              this.lieupassageaquai = {
+                ...this.lieupassageaquai,
+                ...this.formGroup.getRawValue(),
+              };
               this.readOnlyMode = true;
             } else {
               this.editing = false;
-              this.router.navigate([`/tiers/lieux-passage-a-quai/${lieuPassageAQuai.id}`]);
+              this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
             }
+            this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
+            this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
-      }
+    }
 
   }
 
@@ -193,7 +201,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${ this.lieupassageaquai.id }/${ this.lieupassageaquai.typeTiers }`]);
+    this.router.navigate([`/tiers/contacts/${this.lieupassageaquai.id}/${this.lieupassageaquai.typeTiers}`]);
   }
 
 }

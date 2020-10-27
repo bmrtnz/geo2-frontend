@@ -1,13 +1,16 @@
-import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
-import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import DataSource from 'devextreme/data/data_source';
-import { DxDataGridComponent } from 'devextreme-angular';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { ModelFieldOptions } from 'app/shared/models/model';
-import { environment } from 'environments/environment';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { AuthService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { DxDataGridComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
+import { from, Observable } from 'rxjs';
+import { mergeAll } from 'rxjs/operators';
+import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
 
 let self: LieuxPassageAQuaiListComponent;
 
@@ -22,13 +25,14 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  detailedFields: ({ name: string } & ModelFieldOptions)[];
+  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
 
   constructor(
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
     public gridService: GridsConfigsService,
     private router: Router,
+    private authService: AuthService,
   ) {
     this.apiService = this.lieuxPassageAQuaiService;
     self = this;
@@ -60,37 +64,40 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
     // Lecture
     const gridSource = self.gridService.getDataSource();
     gridSource.filter([
-      ['utilisateur.nomUtilisateur', '=', '7'],
+      ['utilisateur.nomUtilisateur', '=', self.authService.currentUser.nomUtilisateur],
       'and',
       ['grid', '=', 'lieudepassageaquaiStorage'],
     ]);
-    return gridSource.load().then( res => {
-        if (!res.length) return null;
-        const data = res[0].config;
-        if (data !== null) {
-          // Suppression filtres/recherche
-          for (const myColumn of data.columns) {
-            if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
-          }
-          data.searchText = '';
-
-          return data;
-        } else {
-          return null;
+    return gridSource.load().then(res => {
+      if (!res.length) return null;
+      const data = res[0].config;
+      if (data !== null) {
+        // Suppression filtres/recherche
+        for (const myColumn of data.columns) {
+          if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
         }
-      });
+        data.searchText = '';
+        data.focusedRowKey = null;
+        return data;
+      } else {
+        return null;
+      }
+    });
 
-    }
+  }
 
   saveDataGridState(data) {
 
     // Ecriture
-    self.gridService.save({gridConfig: {
-      utilisateur: {nomUtilisateur: '7'},
-      grid: 'lieudepassageaquaiStorage',
-      config: data
-    }})
-    .subscribe();
+    from(self.gridService.save({
+      gridConfig: {
+        utilisateur: { nomUtilisateur: self.authService.currentUser.nomUtilisateur },
+        grid: 'lieudepassageaquaiStorage',
+        config: data
+      }
+    }))
+      .pipe(mergeAll())
+      .subscribe();
 
   }
 

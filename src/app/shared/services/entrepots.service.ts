@@ -13,7 +13,7 @@ import { MutationOptions } from 'apollo-client';
 })
 export class EntrepotsService extends ApiService implements APIRead {
 
-  fieldsFilter = /.*\.(?:id|code|raisonSocial|ville|valide)$/i;
+  fieldsFilter = /.*\.(?:id|code|raisonSocial|ville|valide|typeTiers)$/i;
 
   constructor(
     apollo: Apollo,
@@ -21,8 +21,8 @@ export class EntrepotsService extends ApiService implements APIRead {
     super(apollo, Entrepot);
   }
 
-  getOne(id: string) {
-    const query = this.buildGetOne();
+  async getOne(id: string) {
+    const query = await this.buildGetOne();
     type Response = { entrepot: Entrepot };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -34,12 +34,12 @@ export class EntrepotsService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => {
+        load: async (options: LoadOptions) => {
 
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = this.buildGetAll();
+          const query = await this.buildGetAll();
           type Response = { allEntrepot: RelayPage<Entrepot> };
 
           const variables = this.mapLoadOptionsToVariables(options);
@@ -52,8 +52,8 @@ export class EntrepotsService extends ApiService implements APIRead {
           )
           .toPromise();
         },
-        byKey: (key) => {
-          const query = this.buildGetOne(1, this.fieldsFilter);
+        byKey: async (key) => {
+          const query = await this.buildGetOne(1, this.fieldsFilter);
           type Response = { entrepot: Entrepot };
           const variables = { id: key };
           return this.
@@ -68,8 +68,8 @@ export class EntrepotsService extends ApiService implements APIRead {
     });
   }
 
-  save(variables: OperationVariables) {
-    const mutation = this.buildSave(1, this.fieldsFilter);
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 
