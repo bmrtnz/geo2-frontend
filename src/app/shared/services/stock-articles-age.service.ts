@@ -13,6 +13,7 @@ import { StockArticleAge } from '../models/stock-article-age.model';
 export class StockArticlesAgeService extends ApiService implements APIRead {
 
   fieldsFilter = /.*\.(?:article|age)$/i;
+  customVariables: {[key: string]: any|any[]} = {};
 
   constructor(
     apollo: Apollo,
@@ -91,16 +92,24 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
 
           const query = `
             query FetchStock(
+              $societe: GeoSocieteInput,
+              $secteurs: [GeoSecteurInput],
+              $clients: [GeoClientInput],
+              $fournisseurs: [GeoFournisseurInput],
               $search: String,
               $pageable: PaginationInput!
             ){
               fetchStock(
+                societe:$societe,
+                secteurs:$secteurs,
+                clients:$clients,
+                fournisseurs:$fournisseurs,
                 search:$search,
                 pageable:$pageable
               ){
                 edges {
                   node {
-                    ${ this.model.getGQLFields(3) }
+                    ${ await this.model.getGQLFields(2).toPromise() }
                   }
                 }
                 pageInfo {
@@ -115,7 +124,10 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
           `;
 
           type Response = { fetchStock: RelayPage<StockArticleAge> };
-          const variables = this.mapLoadOptionsToVariables(options);
+          const variables = {
+            ...this.mapLoadOptionsToVariables(options),
+            ...this.customVariables,
+          };
           return this.
           query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
           .pipe(

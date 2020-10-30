@@ -1,29 +1,16 @@
-import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import ArrayStore from 'devextreme/data/array_store';
-import { StockCategory, StockService } from '../../../shared/services/stock.service';
-import { ArticlesService } from '../../../shared/services/articles.service';
-import { BureauxAchatService } from '../../../shared/services/bureaux-achat.service';
-import { FournisseursService } from '../../../shared/services/fournisseurs.service';
-import { VarietesService } from '../../../shared/services/varietes.service';
-import { ClientsService } from '../../../shared/services/clients.service';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import DataSource from 'devextreme/data/data_source';
-import { DxDataGridComponent, DxSelectBoxComponent, DxTagBoxComponent } from 'devextreme-angular';
-import { valueFromAST } from 'graphql';
-import { OriginesService } from 'app/shared/services/origines.service';
-import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
-import { ModesCultureService } from 'app/shared/services/modes-culture.service';
-import { GroupesEmballageService } from 'app/shared/services/groupes-emballage.service';
-import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
-import { EmballagesService } from 'app/shared/services/emballages.service';
-import { environment } from 'environments/environment';
-import { EspecesService } from 'app/shared/services/especes.service';
-import { StockArticlesAgeService } from 'app/shared/services/stock-articles-age.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { from, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { OrdreLignesService } from 'app/shared/services/ordres-lignes.service';
 import { SecteursService } from 'app/shared/services/secteurs.service';
+import { StockArticlesAgeService } from 'app/shared/services/stock-articles-age.service';
+import { DxDataGridComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
+import { ClientsService } from '../../../shared/services/clients.service';
+import { FournisseursService } from '../../../shared/services/fournisseurs.service';
+import { StockCategory, StockService } from '../../../shared/services/stock.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -64,11 +51,11 @@ export class StockListComponent implements OnInit {
   fournisseurs: DataSource;
   clients: DataSource;
   secteurs: DataSource;
-  lignes: DataSource;
 
   stockCategories: StockCategory[];
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  tagFilters: { [path: string]: string[] } = {};
 
   constructor(
     public stocksService: StockService,
@@ -76,38 +63,37 @@ export class StockListComponent implements OnInit {
     public fournisseursService: FournisseursService,
     public clientsService: ClientsService,
     public secteursService: SecteursService,
-    public ordresLignesService: OrdreLignesService,
     private fb: FormBuilder,
+    private router: Router,
   ) { }
 
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
+    this.stockArticlesAgeService.customVariables.societe = environment.societe;
     this.stockArticlesAge = this.stockArticlesAgeService.getFetchDatasource();
     this.stockArticlesAge.on('changed', _ => {
       this.linesCount = this.dataGrid.instance.totalCount();
       this.now = Date.now();
     });
-    this.detailedFields = this.stockArticlesAgeService.model.getDetailedFields(3);
+    this.detailedFields = this.stockArticlesAgeService.model.getDetailedFields(2);
 
     this.especes = this.stockArticlesAgeService
-    .getFilterDatasource('article.matierePremiere.espece.description');
+      .getFilterDatasource('article.matierePremiere.espece.description');
     this.origines = this.stockArticlesAgeService
-    .getFilterDatasource('article.matierePremiere.origine.description');
+      .getFilterDatasource('article.matierePremiere.origine.description');
     this.varietes = this.stockArticlesAgeService
-    .getFilterDatasource('article.matierePremiere.variete.description');
+      .getFilterDatasource('article.matierePremiere.variete.description');
     this.calibresUnifies = this.stockArticlesAgeService
-    .getFilterDatasource('article.matierePremiere.calibreUnifie.description');
+      .getFilterDatasource('article.matierePremiere.calibreUnifie.description');
     this.calibresMarquages = this.stockArticlesAgeService
-    .getFilterDatasource('article.normalisation.calibreMarquage.description');
+      .getFilterDatasource('article.normalisation.calibreMarquage.description');
     this.emballages = this.stockArticlesAgeService
-    .getFilterDatasource('article.emballage.emballage.description');
+      .getFilterDatasource('article.emballage.emballage.description');
     this.matieresPremieres = this.stockArticlesAgeService
-    .getFilterDatasource('article.matierePremiere.modeCulture.description');
+      .getFilterDatasource('article.matierePremiere.modeCulture.description');
     this.categories = this.stockArticlesAgeService
-    .getFilterDatasource('article.cahierDesCharge.categorie.description');
+      .getFilterDatasource('article.cahierDesCharge.categorie.description');
 
-    // TODO Filter when fournisseurs.stocks not empty
-    this.lignes = this.ordresLignesService.getDataSource();
     this.secteurs = this.secteursService.getDataSource();
     this.fournisseurs = this.fournisseursService.getDataSource();
     this.fournisseurs.filter(['valide', '=', true]);
@@ -115,21 +101,37 @@ export class StockListComponent implements OnInit {
 
   }
 
-  onFieldValueChange(event: {key: string}[], dataField: string) {
-    this.dataGrid.instance.columnOption(dataField, 'filterValues', event);
+  /**
+   * Apply filters from tag boxs
+   * @param event List of field values
+   * @param dataField Field path
+   */
+  onFieldValueChange(event: string[], dataField: string) {
+    this.tagFilters[dataField] = event;
+    const filters = Object
+      .entries(this.tagFilters)
+      .filter(([, values]) => values.length)
+      .map(([path, values]) => values
+        .map(value => [path, '=', value])
+        .map(value => JSON.stringify(value))
+        .join(`¤${JSON.stringify(['or'])}¤`)
+        .split('¤')
+        .map(v => JSON.parse(v))
+      )
+      .map(value => JSON.stringify(value))
+      .join(`¤${JSON.stringify(['and'])}¤`)
+      .split('¤')
+      .map(v => JSON.parse(v));
+
+    this.stockArticlesAge.filter(filters);
+    this.stockArticlesAge.reload();
   }
 
   onCustomFilterChange(items: any[], selector: string) {
-    const filters = items
-    .map( item =>  JSON.stringify([selector, '=', item.id]))
-    .join(`¤${JSON.stringify(['or'])}¤`)
-    .split('¤')
-    .map(v => JSON.parse(v));
-    console.log(filters);
-    this.lignes.filter([
-      ...filters,
-    ]);
-    this.lignes.load().then( res => console.log(res));
+    items.length ?
+      this.stockArticlesAgeService.customVariables[selector] = items.map(value => (delete value.__typename, value)) :
+      delete this.stockArticlesAgeService.customVariables[selector];
+    this.stockArticlesAge.reload();
   }
 
   onFilterChange(e) {
@@ -154,8 +156,12 @@ export class StockListComponent implements OnInit {
     console.log('détail');
   }
 
-  onViewClick(e) {
-    console.log('fiche article');
+  onViewClick() {
+    const self = this;
+    return (e) => {
+      e.event.preventDefault();
+      self.router.navigate([`/articles/${e.row.data.article.id}`]);
+    };
   }
 
   onClientClick(e) {

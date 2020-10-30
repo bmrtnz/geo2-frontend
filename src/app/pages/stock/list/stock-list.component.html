@@ -144,47 +144,6 @@
                                     ></dx-tag-box>
                                 </div>
                             </div>
-                        </div>
-                        <div class="search-criteria-subcontainer">
-                            <!-- Secteurs -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [dataSource]="secteurs"
-                                        displayExpr="description"
-                                        [searchEnabled]="true"
-                                        searchExpr="description"
-                                        (valueChange)="onCustomFilterChange($event, 'ordre.secteurCommercial.id')"
-                                    ></dx-tag-box>
-                                </div>
-                            </div>
-                            <!-- Clients -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [disabled]="true"
-                                        [dataSource]="clients"
-                                        [searchEnabled]="true"
-                                        searchExpr="raisonSocial"
-                                        displayExpr="raisonSocial">
-                                    </dx-tag-box>
-                                </div>
-                            </div>
-                            <!-- fournisseur -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [dataSource]="fournisseurs"
-                                        displayExpr="raisonSocial"
-                                        [searchEnabled]="true"
-                                        searchExpr="raisonSocial"
-                                        (valueChange)="onCustomFilterChange($event, 'ordre.fournisseur.id')"
-                                    ></dx-tag-box>
-                                </div>
-                            </div>
                             <!-- Mode Culture -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-modeCulture' | localize }}</div>
@@ -197,6 +156,47 @@
                                         searchExpr="article.matierePremiere.modeCulture.description"
                                         displayExpr="key"
                                         valueExpr="key"
+                                    ></dx-tag-box>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-criteria-subcontainer">
+                            <!-- Secteurs -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="secteurs"
+                                        displayExpr="description"
+                                        [searchEnabled]="true"
+                                        searchExpr="description"
+                                        (valueChange)="onCustomFilterChange($event, 'secteurs')"
+                                    ></dx-tag-box>
+                                </div>
+                            </div>
+                            <!-- Clients -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="clients"
+                                        displayExpr="raisonSocial"
+                                        [searchEnabled]="true"
+                                        searchExpr="raisonSocial"
+                                        (valueChange)="onCustomFilterChange($event, 'clients')">
+                                    </dx-tag-box>
+                                </div>
+                            </div>
+                            <!-- fournisseur -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="fournisseurs"
+                                        displayExpr="raisonSocial"
+                                        [searchEnabled]="true"
+                                        searchExpr="raisonSocial"
+                                        (valueChange)="onCustomFilterChange($event, 'fournisseurs')"
                                     ></dx-tag-box>
                                 </div>
                             </div>
@@ -245,7 +245,7 @@
                     <dxi-column
                         *ngFor="let field of detailedFields | async; index as i"
                         [dataField]="field.path"
-                        [caption]="field.name"
+                        [caption]="(field.name | localize) || field.path"
                         [visible]="i < stockArticlesAgeService.baseFieldsSize"
                         [dataType]="field.dataType"
                         [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
@@ -273,7 +273,7 @@
                         </dxi-button>
                         <dxi-button
                             icon="material-icons search"
-                            [onClick]="onViewClick"
+                            [onClick]="onViewClick()"
                             hint="Fiche article">
                         </dxi-button>
                         <dxi-button
