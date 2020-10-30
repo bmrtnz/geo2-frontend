@@ -1,0 +1,43 @@
+::ng-deep .dx-tile-content {
+    overflow: hidden;
+    .indicator-container {
+        position: relative;
+        top:50%;
+        transform: translateY(-50%);
+    }
+    .indicator, .parameter, .subParameter {
+        color:#FFF;
+    }
+    .indicator {
+        font-size:4em;
+        text-align:center;
+        padding-bottom:10px;
+    }
+    .parameter {
+        font-size:2em;
+        text-align:center;
+    }
+    .subParameter {
+        font-size:1.7em;
+        text-align:center;
+    }
+}
+::ng-deep .configuration {
+    width:400px;
+    float:right;
+    .dx-tag {
+        display:none;
+    }
+    .dx-field-label {
+        font-size:1.3em;
+        color:#444;
+        left: 130px;
+        position: absolute;
+    }
+    .dx-dropdowneditor-input-wrapper {
+        display:none
+    }
+    .dx-editor-underlined::after {
+        display:none;
+    }
+}
