@@ -135,12 +135,12 @@ export abstract class Model {
         filter(([name, options]) => depth > 0 || !!options.fetchedModel || fieldFilter.test(name)),
         this.takeToLastField(depth),
         concatMap(([name, options]) => {
-          if (options.fetchedModel && depth > 1)
+          let path = prefix ? `${prefix}.${name}` : name;
+          if (options.fetchedModel && depth > 0)
             return options.fetchedModel
-              .getDetailedFields(depth - 1, fieldFilter, name)
+              .getDetailedFields(depth - 1, fieldFilter, path)
               .pipe(concatAll());
           const type = Reflect.getMetadata('design:type', this.prototype, name).name;
-          let path = prefix ? `${prefix}.${name}` : name;
           if (options.fetchedModel)
             path = `${path}.${options.fetchedModel.getLabelField()}`;
           return of({
