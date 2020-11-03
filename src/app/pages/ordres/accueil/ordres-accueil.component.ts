@@ -23,11 +23,12 @@ export class OrdresAccueilComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.allIndicators = fakeOrdresService.getIndicators();
-    this.indicators = this.allIndicators.slice(0, 4);
+    this.indicators = this.allIndicators /*.slice(0, 4);*/
   }
 
   ngOnInit() {
-  }
+
+ }
 
   displayExpr(data) {
     return data ? data.parameter + ' ' + data.subParameter : null;
@@ -42,5 +43,6 @@ export class OrdresAccueilComponent implements OnInit {
 
   openTagBox() {
     this.tagBox.instance.open();
-   }
+  }
+
 }

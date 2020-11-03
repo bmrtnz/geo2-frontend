@@ -4,7 +4,7 @@
         <div class="dx-field-label">{{ 'ordres-configuration' | localize }}</div>
         <div class="dx-field-value">
             <dx-button
-                style="float:right"
+                style="float:right;"
                 icon= 'material-icons settings'
                 (onClick)="openTagBox()"
                 text=""
@@ -12,13 +12,11 @@
             </dx-button>
             <dx-tag-box
                 [items]="allIndicators"
-                [value]="[{id: 0}]"
                 [showClearButton]="true"
                 [showSelectionControls]="true"
                 [searchEnabled]="false"
                 applyValueMode="useButtons"
                 (valueChange)="onFieldValueChange($event)"
-                searchExpr="parameter"
                 [displayExpr]="displayExpr"
                 valueExpr="id"
             ></dx-tag-box>
@@ -42,6 +40,7 @@
             [widthRatio]="1.5"
             [heightRatio]="1.5"
             [style.background]="'' + indicator.tileBkg + ''"
+            [routerLink]="'' + indicator.goTo ? indicator.goTo : '/ordres/accueil' + ''"
             >
             <div class="indicator-container">
                 <div class="indicator" style="background: ' + {{indicator.tileBkg}} + '">{{indicator.number}}</div>

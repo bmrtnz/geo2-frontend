@@ -15,7 +15,7 @@ export class Indicator {
   number: string;
   parameter: string;
   subParameter: string;
-  data1: number;
+  goTo: string;
   tileBkg: string;
 }
 
@@ -24,70 +24,70 @@ const indicators: Indicator[] = [{
   number: '',
   parameter: 'Suivi',
   subParameter: 'des ordres',
-  data1: 780000,
+  goTo: '/ordres/details',
   tileBkg: '#01AA9B'
 }, {
   id: 1,
   number: '',
   parameter: 'Supervision',
   subParameter: 'livraison',
-  data1: 350000,
+  goTo: '',
   tileBkg: '#9199B4'
 }, {
   id: 2,
   number: '35',
   parameter: 'Taches',
   subParameter: 'en attente',
-  data1: 780000,
+  goTo: '',
   tileBkg: '#01779B'
 }, {
   id: 3,
   number: '4',
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
-  data1: 350000,
+  goTo: '',
   tileBkg: '#4199B4'
 }, {
   id: 4,
   number: '8',
   parameter: 'Ordres',
   subParameter: 'non clôturés',
-  data1: 250000,
+  goTo: '',
   tileBkg: '#F26C5A'
 }, {
   id: 5,
   number: '6',
   parameter: 'Ordres',
   subParameter: 'non confirmés',
-  data1: 320000,
+  goTo: '',
   tileBkg: '#5A6382'
 }, {
   id: 6,
   number: '3',
   parameter: 'Litiges',
   subParameter: 'en cours',
-  data1: 1700000,
+  goTo: '',
   tileBkg: '#1B715C'
 }, {
   id: 7,
-  number: '5',
-  parameter: 'San Antonio',
-  subParameter: 'TX',
-  data1: 455000,
+  number: '',
+  parameter: 'Stock',
+  subParameter: '',
+  goTo: '/stock',
   tileBkg: '#60895E',
 }, {
   id: 8,
   number: '71',
   parameter: 'Worcester',
   subParameter: 'MA',
-  data1: 555000,
+  goTo: '',
   tileBkg: '#71BF45',
 }, {
   id: 9,
   number: '20',
   parameter: 'Riverbank',
   subParameter: 'CA',
-  data1: 1750000,
+  goTo: '',
   tileBkg: '#8E4A21'
 }];
 
