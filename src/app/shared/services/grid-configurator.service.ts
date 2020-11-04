@@ -15,6 +15,8 @@ export enum Grid {
   Fournisseur = 'fournisseur',
   Transporteur = 'transporteur',
   LieuPassageAQuai = 'lieuPassageAQuai',
+  Entrepot = 'entrepot',
+  Contact = 'contact',
   Article = 'article',
   Stock = 'stock',
 }

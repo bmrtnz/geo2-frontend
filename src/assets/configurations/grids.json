@@ -124,5 +124,36 @@
         "visible": true
       }
     ]
+  },
+  "transporteur": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      }
+    ]
   }
 }
