@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { ApiService } from 'app/shared/services/api.service';
-import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';

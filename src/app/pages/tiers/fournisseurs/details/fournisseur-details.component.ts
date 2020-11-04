@@ -7,24 +7,24 @@ import { FileManagerComponent } from 'app/shared/components/file-manager/file-ma
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { AuthService } from 'app/shared/services';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
-import { BureauxAchatService } from 'app/shared/services/bureaux-achat.service';
-import { CertificationsService } from 'app/shared/services/certification.service';
-import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
-import { DevisesService } from 'app/shared/services/devises.service';
-import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
-import { HistoryType } from 'app/shared/services/historique.service';
-import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { NaturesStationService } from 'app/shared/services/natures-station.service';
-import { PaysService } from 'app/shared/services/pays.service';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
-import { TypesFournisseurService } from 'app/shared/services/types-fournisseur.service';
+import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
+import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
+import { CertificationsService } from 'app/shared/services/api/certification.service';
+import { ConditionsVenteService } from 'app/shared/services/api/conditions-vente.service';
+import { DevisesService } from 'app/shared/services/api/devises.service';
+import { GroupesFournisseurService } from 'app/shared/services/api/groupes-fournisseur.service';
+import { HistoryType } from 'app/shared/services/api/historique.service';
+import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
+import { NaturesStationService } from 'app/shared/services/api/natures-station.service';
+import { PaysService } from 'app/shared/services/api/pays.service';
+import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
+import { TypesFournisseurService } from 'app/shared/services/api/types-fournisseur.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { Fournisseur } from '../../../../shared/models';
-import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
+import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
 
 @Component({
   selector: 'app-fournisseur-details',

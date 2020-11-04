@@ -1,11 +1,11 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
-import { EntrepotsService } from '../../../../shared/services/entrepots.service';
+import { EntrepotsService } from '../../../../shared/services/api/entrepots.service';
 
 let self: EntrepotsListComponent;
 

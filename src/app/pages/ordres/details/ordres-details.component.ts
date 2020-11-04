@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
-import { ClientsService } from 'app/shared/services/clients.service';
+import { ClientsService } from 'app/shared/services/api/clients.service';
 import { Log, LogService, CommService, Comm } from 'app/shared/services/log.service';
 import { Content, FakeOrdresService } from 'app/shared/services/ordres-fake.service';
 import { DxAccordionComponent } from 'devextreme-angular';

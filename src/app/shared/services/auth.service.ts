@@ -5,7 +5,7 @@ import notify from 'devextreme/ui/notify';
 import { from } from 'rxjs';
 import { mergeAll, tap } from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';
-import { UtilisateursService } from './utilisateurs.service';
+import { UtilisateursService } from './api/utilisateurs.service';
 
 @Injectable()
 export class AuthService {

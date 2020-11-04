@@ -2,15 +2,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { SecteursService } from 'app/shared/services/secteurs.service';
-import { StockArticlesAgeService } from 'app/shared/services/stock-articles-age.service';
+import { SecteursService } from 'app/shared/services/api/secteurs.service';
+import { StockArticlesAgeService } from 'app/shared/services/api/stock-articles-age.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { ClientsService } from '../../../shared/services/clients.service';
-import { FournisseursService } from '../../../shared/services/fournisseurs.service';
-import { StockCategory, StockService } from '../../../shared/services/stock.service';
+import { ClientsService } from '../../../shared/services/api/clients.service';
+import { FournisseursService } from '../../../shared/services/api/fournisseurs.service';
+import { StockCategory, StockService } from '../../../shared/services/api/stock.service';
 
 @Component({
   selector: 'app-stock-list',

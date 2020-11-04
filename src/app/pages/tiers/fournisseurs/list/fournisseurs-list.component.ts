@@ -2,18 +2,14 @@ import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { AuthService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
-import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
-import { LoadsavedatagridstateService } from 'app/shared/services/loadsavedatagridstate.service';
+import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
+import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { from, Observable } from 'rxjs';
-import { mergeAll } from 'rxjs/operators';
-import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
-
-let self: FournisseursListComponent;
+import { Observable } from 'rxjs';
+import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -32,12 +28,11 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   constructor(
     public fournisseursService: FournisseursService,
     public gridService: GridsConfigsService,
-    public loadsavedatagridstateService: LoadsavedatagridstateService,
+    public gridConfiguratorService: GridConfiguratorService,
     private router: Router,
-    private authService: AuthService,
   ) {
+    gridConfiguratorService.as(Grid.Fournisseur);
     this.apiService = this.fournisseursService;
-    self = this;
   }
 
   ngOnInit() {
@@ -58,48 +53,6 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   }
   onCreate() {
     this.router.navigate([`/tiers/fournisseurs/create`]);
-  }
-
-  async loadDataGridState() {
-
-    // Lecture
-    const gridSource = self.gridService.getDataSource();
-    gridSource.filter([
-      ['utilisateur.nomUtilisateur', '=', self.authService.currentUser.nomUtilisateur],
-      'and',
-      ['grid', '=', 'fournisseurStorage'],
-    ]);
-    return gridSource.load().then(res => {
-      if (!res.length) return null;
-      const data = res[0].config;
-      if (data !== null) {
-        // Suppression filtres/recherche
-        for (const myColumn of data.columns) {
-          if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
-        }
-        data.searchText = '';
-        data.focusedRowKey = null;
-        return data;
-      } else {
-        return null;
-      }
-    });
-
-  }
-
-  saveDataGridState(data) {
-
-    // Ecriture
-    from(self.gridService.save({
-      gridConfig: {
-        utilisateur: { nomUtilisateur: self.authService.currentUser.nomUtilisateur },
-        grid: 'fournisseurStorage',
-        config: data
-      }
-    }))
-      .pipe(mergeAll())
-      .subscribe();
-
   }
 
 }

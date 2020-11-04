@@ -21,13 +21,13 @@ import { Certification } from './certification.model';
 
 export class Client extends Model {
 
-  @Field({asKey: true, width: 100}) public id: string;
+  @Field({asKey: true}) public id: string;
   @Field() public code: string;
   @Field({asLabel: true}) public raisonSocial: string;
   @Field() public ville: string;
   @Field({model: import('./pays.model')}) public pays: Pays;
   @Field({model: import('./secteur.model')}) public secteur: Secteur;
-  @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field() public valide: boolean;
   @Field() public preSaisie: boolean;
   @Field({model: import('./societe.model')}) public societe: Societe;
   @Field() public adresse1: string;
@@ -69,7 +69,7 @@ export class Client extends Model {
   @Field({model: import('./type.client.model')}) public typeClient: TypeClient;
   @Field({model: import('./groupe-client.model')}) public groupeClient: GroupeClient;
   @Field() public soumisCtifl: boolean;
-  // @Field({model: import('./entrepot.model')}) public entrepots: Entrepot[];
+  @Field({model: import('./entrepot.model')}) public entrepots: Entrepot[];
   @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
   @Field() public lieuFonctionEan: string;
   @Field() public delaiBonFacturer: number;
@@ -87,7 +87,7 @@ export class Client extends Model {
   @Field({model: import('./base-tarif.model')}) public fraisMarketingModeCalcul: BaseTarif;
   @Field() public fraisPlateforme: number;
   @Field({model: import('./courtier.model')}) public courtier: Courtier;
-  @Field({model: import('./client.model')}) public paloxRaisonSocial: Client;
+  @Field({model: import('./client.model'), allowHeaderFiltering: false, allowSearch: false}) public paloxRaisonSocial: Client;
   @Field() public formatDluo: string;
   @Field() public nbJourLimiteLitige: number;
   @Field() public clotureAutomatique: boolean;

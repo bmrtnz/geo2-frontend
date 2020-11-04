@@ -6,17 +6,17 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { AuthService } from 'app/shared/services';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
-import { DevisesService } from 'app/shared/services/devises.service';
-import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { PaysService } from 'app/shared/services/pays.service';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
+import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
+import { DevisesService } from 'app/shared/services/api/devises.service';
+import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
+import { PaysService } from 'app/shared/services/api/pays.service';
+import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { from } from 'rxjs';
 import { mergeAll, tap } from 'rxjs/operators';
 import { LieuPassageAQuai } from '../../../../shared/models';
-import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
+import { LieuxPassageAQuaiService } from '../../../../shared/services/api/lieux-passage-a-quai.service';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',

@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
-import { ContactsService } from 'app/shared/services/contacts.service';
+import { ContactsService } from 'app/shared/services/api/contacts.service';
 import { ActivatedRoute } from '@angular/router';
 import { Contact } from 'app/shared/models';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { TypeTiers } from 'app/shared/models/tier.model';
-import { SocietesService } from 'app/shared/services/societes.service';
-import { FluxService } from 'app/shared/services/flux.service';
-import { MoyenCommunicationService } from 'app/shared/services/moyens-communication.service';
+import { SocietesService } from 'app/shared/services/api/societes.service';
+import { FluxService } from 'app/shared/services/api/flux.service';
+import { MoyenCommunicationService } from 'app/shared/services/api/moyens-communication.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { environment} from 'environments/environment';
 import { NestedPart } from 'app/pages/nested/nested.component';

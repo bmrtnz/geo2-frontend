@@ -1,5 +1,5 @@
 import {Component, OnInit, EventEmitter, ViewChild} from '@angular/core';
-import {ArticlesService} from '../../../shared/services/articles.service';
+import {ArticlesService} from '../../../shared/services/api/articles.service';
 import {Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';

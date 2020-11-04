@@ -22,14 +22,14 @@ export enum NatureStation {
 
 export class Fournisseur extends Model {
 
-  @Field({asKey: true, width: 150}) public id: string;
+  @Field({asKey: true}) public id: string;
   @Field() public code: string;
   @Field({asLabel: true}) public raisonSocial: string;
   @Field() public ville: string;
   @Field({model: import('./pays.model')}) public pays: Pays;
   @Field({model: import('./devise.model')}) public devise: Devise;
   @Field({model: import('./pays.model')}) public langue: Pays;
-  @Field({filterValue: true, width: 100}) public valide: boolean;
+  @Field() public valide: boolean;
   @Field() public preSaisie: boolean;
   @Field() public adresse1: string;
   @Field() public adresse2: string;
@@ -74,7 +74,11 @@ export class Fournisseur extends Model {
   @Field({dataType: 'date'}) public dateConditionGeneraleAchatSignee: string;
   @Field() public declarantBacsCHEP: boolean;
   @Field({model: import('./condition-vente.model')}) public conditionVente: ConditionVente;
-  @Field({model: import('./fournisseur.model')}) public fournisseurDeRattachement: Fournisseur;
+  @Field({
+    model: import('./fournisseur.model'),
+    allowHeaderFiltering: false,
+    allowSearch: false,
+  }) public fournisseurDeRattachement: Fournisseur;
   @Field({model: import('./groupe-fournisseur.model')}) public groupeFournisseur: GroupeFournisseur;
   @Field({model: import('./certification.model')}) public certifications: Certification[];
   @Field({model: import('./stock.model')}) public stocks: Stock[];

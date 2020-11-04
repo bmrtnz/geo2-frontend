@@ -7,29 +7,29 @@ import { FileManagerComponent } from 'app/shared/components/file-manager/file-ma
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { AuthService } from 'app/shared/services';
-import { AlveolesService } from 'app/shared/services/alveoles.service';
-import { CalibresMarquageService } from 'app/shared/services/calibres-marquage.service';
-import { CalibresUnifiesService } from 'app/shared/services/calibres-unifies.service';
-import { CategoriesService } from 'app/shared/services/categories.service';
-import { CiragesService } from 'app/shared/services/cirages.service';
-import { ColorationsService } from 'app/shared/services/colorations.service';
-import { ConditionsSpecialesService } from 'app/shared/services/conditions-speciales.service';
-import { EmballagesService } from 'app/shared/services/emballages.service';
-import { EspecesService } from 'app/shared/services/especes.service';
-import { EtiquettesColisService } from 'app/shared/services/etiquettes-colis.service';
-import { EtiquettesEvenementiellesService } from 'app/shared/services/etiquettes-evenementielles.service';
-import { EtiquettesUcService } from 'app/shared/services/etiquettes-uc.service';
-import { HistoryType } from 'app/shared/services/historique.service';
-import { MarquesService } from 'app/shared/services/marques.service';
-import { ModesCultureService } from 'app/shared/services/modes-culture.service';
-import { OriginesService } from 'app/shared/services/origines.service';
-import { PenetrosService } from 'app/shared/services/penetros.service';
-import { RangementsService } from 'app/shared/services/rangements.service';
-import { StickeursService } from 'app/shared/services/stickeurs.service';
-import { SucresService } from 'app/shared/services/sucres.service';
-import { TypesVenteService } from 'app/shared/services/types-vente.service';
-import { TypesService } from 'app/shared/services/types.service';
-import { VarietesService } from 'app/shared/services/varietes.service';
+import { AlveolesService } from 'app/shared/services/api/alveoles.service';
+import { CalibresMarquageService } from 'app/shared/services/api/calibres-marquage.service';
+import { CalibresUnifiesService } from 'app/shared/services/api/calibres-unifies.service';
+import { CategoriesService } from 'app/shared/services/api/categories.service';
+import { CiragesService } from 'app/shared/services/api/cirages.service';
+import { ColorationsService } from 'app/shared/services/api/colorations.service';
+import { ConditionsSpecialesService } from 'app/shared/services/api/conditions-speciales.service';
+import { EmballagesService } from 'app/shared/services/api/emballages.service';
+import { EspecesService } from 'app/shared/services/api/especes.service';
+import { EtiquettesColisService } from 'app/shared/services/api/etiquettes-colis.service';
+import { EtiquettesEvenementiellesService } from 'app/shared/services/api/etiquettes-evenementielles.service';
+import { EtiquettesUcService } from 'app/shared/services/api/etiquettes-uc.service';
+import { HistoryType } from 'app/shared/services/api/historique.service';
+import { MarquesService } from 'app/shared/services/api/marques.service';
+import { ModesCultureService } from 'app/shared/services/api/modes-culture.service';
+import { OriginesService } from 'app/shared/services/api/origines.service';
+import { PenetrosService } from 'app/shared/services/api/penetros.service';
+import { RangementsService } from 'app/shared/services/api/rangements.service';
+import { StickeursService } from 'app/shared/services/api/stickeurs.service';
+import { SucresService } from 'app/shared/services/api/sucres.service';
+import { TypesVenteService } from 'app/shared/services/api/types-vente.service';
+import { TypesService } from 'app/shared/services/api/types.service';
+import { VarietesService } from 'app/shared/services/api/varietes.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
@@ -37,7 +37,7 @@ import { concatAll, switchAll, switchMap, tap } from 'rxjs/operators';
 import {
     Article
 } from '../../../shared/models';
-import { ArticlesService } from '../../../shared/services/articles.service';
+import { ArticlesService } from '../../../shared/services/api/articles.service';
 
 @Component({
     selector: 'app-articles',
@@ -162,7 +162,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private route: ActivatedRoute,
         private fb: FormBuilder,
         public authService: AuthService,
-        
     ) { }
 
     ngOnInit() {

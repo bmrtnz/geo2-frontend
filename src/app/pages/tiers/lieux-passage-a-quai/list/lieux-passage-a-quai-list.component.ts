@@ -4,13 +4,13 @@ import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { AuthService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
-import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { mergeAll } from 'rxjs/operators';
-import { LieuxPassageAQuaiService } from '../../../../shared/services/lieux-passage-a-quai.service';
+import { LieuxPassageAQuaiService } from '../../../../shared/services/api/lieux-passage-a-quai.service';
 
 let self: LieuxPassageAQuaiListComponent;
 

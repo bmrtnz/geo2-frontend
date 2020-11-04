@@ -1,0 +1,128 @@
+{
+  "common": {
+    "allowedPageSizes": [ 10,25,50,100 ],
+    "filterPanel": {
+      "filterEnabled": true
+    },
+    "filterValue": null,
+    "pageIndex": 0,
+    "pageSize": 10,
+    "searchText": ""
+  },
+  "client": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 100,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "secteur.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "visible": true
+      }
+    ]
+  },
+  "fournisseur": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "devise.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "langue.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "visible": true
+      }
+    ]
+  }
+}
