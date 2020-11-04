@@ -98,9 +98,12 @@ export class OrdresDetailsComponent implements OnInit {
     const key = e.element.dataset.accordion;
     const extractField = '.' + key + '-field';
     const Element = document.querySelector(extractField) as HTMLElement;
+    const Accordion = this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key);
 
-    this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key).instance.expandItem(0);
-
+    // Some elements are not accordion type
+    if (Accordion) {
+      Accordion.instance.expandItem(0);
+    }
     Element.scrollIntoView({behavior: 'smooth'});
 
   }

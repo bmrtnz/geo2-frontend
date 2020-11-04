@@ -15,6 +15,7 @@
     <dxi-item [ratio]="0.7" class="left-buttons-box" [visible]="tabs.selectedIndex || 0">
         <dx-button
             class="black"
+            data-accordion="articles"
             height="auto"
             icon="box"
             text="{{ 'ordres-details-articles' | localize }}"
@@ -106,7 +107,7 @@
                         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
                             <div class="content-block">
                             </div>
-                            <div class="content-block ordre-page">
+                            <div class="content-block details-ordres-page">
                                 <dx-box direction="row">
                                     <dxi-item [ratio]="1" *ngIf="!i">
                                         <dx-button

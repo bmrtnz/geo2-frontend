@@ -1,1 +1,53 @@
-<p>ordres-accueil works!</p>
+<h2 class="content-block">{{ 'ordres-accueil-ordre-title' | localize }}
+
+    <div class="dx-field configuration">
+        <div class="dx-field-label">{{ 'ordres-configuration' | localize }}</div>
+        <div class="dx-field-value">
+            <dx-button
+                style="float:right;"
+                icon= 'material-icons settings'
+                (onClick)="openTagBox()"
+                text=""
+            >
+            </dx-button>
+            <dx-tag-box
+                [items]="allIndicators"
+                [showClearButton]="true"
+                [showSelectionControls]="true"
+                [searchEnabled]="false"
+                applyValueMode="useButtons"
+                (valueChange)="onFieldValueChange($event)"
+                [displayExpr]="displayExpr"
+                valueExpr="id"
+            ></dx-tag-box>
+        </div>
+    </div>
+</h2>
+
+<div class="content-block accueilOrdres-page">
+
+    <dx-tile-view 
+        class="dx-tile-content"
+        width="100%"
+        height="100%"
+        [baseItemWidth]="145"
+        [baseItemHeight]="120"
+        [itemMargin]="20"
+        direction="vertical"
+    >
+        <dxi-item
+            *ngFor="let indicator of indicators"
+            [widthRatio]="1.5"
+            [heightRatio]="1.5"
+            [style.background]="'' + indicator.tileBkg + ''"
+            [routerLink]="'' + indicator.goTo ? indicator.goTo : '/ordres/accueil' + ''"
+            >
+            <div class="indicator-container">
+                <div class="indicator" style="background: ' + {{indicator.tileBkg}} + '">{{indicator.number}}</div>
+                <div class="parameter">{{indicator.parameter}}</div>
+                <div class="subParameter">{{indicator.subParameter}}</div>
+            </div>
+        </dxi-item>
+    </dx-tile-view>
+
+</div>

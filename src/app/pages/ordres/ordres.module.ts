@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DxBoxModule, DxButtonModule, DxDataGridModule, DxFormModule, DxTabPanelModule, 
   DxTagBoxModule, DxTemplateModule, DxAccordionModule, DxListModule, DxSelectBoxModule,
   DxTextBoxModule, DxCheckBoxModule, DxTextAreaModule, DxPopoverModule, DxValidatorModule,
-  DxSortableModule
+  DxSortableModule, DxTileViewModule
   } from 'devextreme-angular';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -22,9 +22,11 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
     FormsModule,
     ReactiveFormsModule,
     DxFormModule,
+    DxTagBoxModule,
     DxDataGridModule,
     DxButtonModule,
     DxAccordionModule,
+    DxTileViewModule,
     DxListModule,
     DxSelectBoxModule,
     DxSortableModule,
