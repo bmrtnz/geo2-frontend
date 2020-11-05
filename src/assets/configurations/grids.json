@@ -303,5 +303,128 @@
         "visible": true
       }
     ]
+  },
+  "article": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "blueWhaleStock",
+        "dataType": "boolean",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "matierePremiere.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "matierePremiere.espece.description",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
+  "stock": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "article.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "article.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "j",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "j1a8",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "j9a20",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "j21aX",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "total",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "commentaire",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "quantiteHebdomadaire",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "prevision3j",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "prevision7j",
+        "dataType": "number",
+        "visible": true
+      }
+    ]
   }
 }

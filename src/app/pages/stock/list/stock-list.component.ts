@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { StockArticlesAgeService } from 'app/shared/services/api/stock-articles-age.service';
+import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -65,6 +66,7 @@ export class StockListComponent implements OnInit {
     public secteursService: SecteursService,
     private fb: FormBuilder,
     private router: Router,
+    public gridConfiguratorService: GridConfiguratorService,
   ) { }
 
   ngOnInit() {

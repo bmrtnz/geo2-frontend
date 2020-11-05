@@ -8,6 +8,7 @@ import { ApiService } from 'app/shared/services/api.service';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Observable } from 'rxjs';
+import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 
 @Component({
   selector: 'app-articles-list',
@@ -25,7 +26,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   constructor(
     public articlesService: ArticlesService,
-    private router: Router
+    private router: Router,
+    public gridConfiguratorService: GridConfiguratorService,
   ) {
     this.apiService = this.articlesService;
   }

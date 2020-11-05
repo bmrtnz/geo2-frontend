@@ -39,6 +39,11 @@ export class GridConfiguratorService {
     this.dataSource = this.gridsConfigsService.getDataSource();
   }
 
+  // Make enum available in templates
+  get Grid() {
+    return Grid;
+  }
+
   /**
    * Set current grid name
    * @param gridName Grid name, act as identifier
@@ -102,10 +107,10 @@ export class GridConfiguratorService {
    * Fetch default grid configuration, merging common config with specified grid config
    * @param gridName Grid name
    */
-  fetchDefaultConfig() {
-    if (!this.currentGrid)
+  fetchDefaultConfig(grid = this.currentGrid) {
+    if (!grid)
       throw Error('Grid name required, use GridConfiguratorService.with(gridName)');
-    const keys = ['common', this.currentGrid];
+    const keys = ['common', grid];
     return this.httpClient
       .get(this.GRID_CONFIG_FILE)
       .pipe(
@@ -124,7 +129,7 @@ export class GridConfiguratorService {
    * @param event Event object
    * @param cbk Callback to apply after restoring default state
    */
-  onToolbarPreparing({component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, cbk?: () => void) {
+  onToolbarPreparing({component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, grid: Grid, cbk?: () => void) {
     toolbarOptions.items.unshift({
       location: 'after',
       widget: 'dxButton',
@@ -132,7 +137,7 @@ export class GridConfiguratorService {
         icon: 'refresh',
         onClick: async () => {
           component.clearFilter();
-          const defaultState = await this.fetchDefaultConfig();
+          const defaultState = await this.fetchDefaultConfig(grid);
           component.state(defaultState);
           if (cbk) cbk();
         }

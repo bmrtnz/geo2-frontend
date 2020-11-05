@@ -16,7 +16,7 @@
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.LieuPassageAQuai)"
   >
 
     <!-- Grid configuration -->
@@ -32,8 +32,8 @@
     <dxo-state-storing 
       [enabled]="true" 
       type="custom" 
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
+      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.LieuPassageAQuai).load"
+      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.LieuPassageAQuai).save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>

@@ -13,12 +13,12 @@ export class StockArticleAge extends Model {
   @Field({model: import('./article.model')}) public article: Article;
   @Field({model: import('./variete.model')}) public variete: Variete;
   @Field({model: import('./categorie.model')}) public categorie: Categorie;
-  @Field({width: 60}) public j: number;
-  @Field({width: 60}) public j1a8: number;
-  @Field({width: 60}) public j9a20: number;
-  @Field({width: 60}) public j21aX: number;
-  @Field({width: 60}) public total: number;
-  @Field({width: 150}) public commentaire: string;
+  @Field() public j: number;
+  @Field() public j1a8: number;
+  @Field() public j9a20: number;
+  @Field() public j21aX: number;
+  @Field() public total: number;
+  @Field() public commentaire: string;
   @Field() public quantiteHebdomadaire: number;
   @Field() public prevision3j: number;
   @Field() public prevision7j: number;

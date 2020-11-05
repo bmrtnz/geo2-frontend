@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
-import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -27,9 +27,7 @@ export class EntrepotsListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public gridConfiguratorService: GridConfiguratorService,
-  ) {
-    gridConfiguratorService.as(Grid.Entrepot);
-  }
+  ) {}
 
   ngOnInit() {
     this.clientID = this.route.snapshot.paramMap.get('client');

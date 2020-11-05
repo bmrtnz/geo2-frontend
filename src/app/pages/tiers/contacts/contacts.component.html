@@ -15,7 +15,7 @@
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Contact, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -28,8 +28,8 @@
     <dxo-state-storing 
       [enabled]="true" 
       type="custom" 
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
+      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.Contact).load"
+      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.Contact).save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-editing
