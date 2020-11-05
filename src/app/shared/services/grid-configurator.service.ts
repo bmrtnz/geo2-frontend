@@ -121,9 +121,10 @@ export class GridConfiguratorService {
 
   /**
    * Add reset button to binded datagrid
-   * @param param0 Event object
+   * @param event Event object
+   * @param cbk Callback to apply after restoring default state
    */
-  onToolbarPreparing({component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}) {
+  onToolbarPreparing({component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, cbk?: () => void) {
     toolbarOptions.items.unshift({
       location: 'after',
       widget: 'dxButton',
@@ -133,6 +134,7 @@ export class GridConfiguratorService {
           component.clearFilter();
           const defaultState = await this.fetchDefaultConfig();
           component.state(defaultState);
+          if (cbk) cbk();
         }
       }
     });

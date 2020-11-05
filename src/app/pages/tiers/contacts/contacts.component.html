@@ -15,24 +15,22 @@
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
-    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
-    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
-    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
-      [allowedPageSizes]="[10, 25, 50, 100]"
       [showInfo]="true"
       [showNavigationButtons]="true"
     ></dxo-pager>
     <dxo-state-storing 
       [enabled]="true" 
       type="custom" 
-      [customLoad]="loadDataGridState"
-      [customSave]="saveDataGridState">
-    </dxo-state-storing>
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-editing
       [allowUpdating]="true"
@@ -52,13 +50,11 @@
     <dxo-selection mode="single"></dxo-selection>
 
     <dxi-column
-      *ngFor="let field of detailedFields | async; index as i"
+      *ngFor="let field of detailedFields | async"
       [dataField]="field.name"
       [caption]="('tiers-contacts-' + field.name | localize) || field.name"
-      [visible]="i < contactsService.baseFieldsSize"
+      [visible]="false"
       [allowEditing]="(field.name === 'valide' && authService.currentUser.accessGeoTiers) || (field.name !== 'valide' && field?.allowEditing !== false)"
-      [filterValue]="field.name === 'valide' ? true : undefined"
-      [width]="field.name === 'valide' ? 100 : field.name === 'fluxComplement' ? 75 : field.name === 'moyenCommunication' ? 150 :undefined"
       [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
     ></dxi-column>

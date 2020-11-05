@@ -39,11 +39,16 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
 
     // Filtrage selon société sélectionnée
     this.clients = this.clientsService.getDataSource();
+    this.enableFilters();
+    this.detailedFields = this.clientsService.model.getDetailedFields();
+
+  }
+
+  enableFilters() {
     this.clients.searchExpr('societe.id');
     this.clients.searchOperation('=');
     this.clients.searchValue(environment.societe.id);
-    this.detailedFields = this.clientsService.model.getDetailedFields();
-
+    this.clients.reload();
   }
 
   onRowDblClick(event) {

@@ -2,12 +2,11 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
+import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { EntrepotsService } from '../../../../shared/services/api/entrepots.service';
-
-let self: EntrepotsListComponent;
 
 @Component({
   selector: 'app-entrepots-list',
@@ -27,15 +26,21 @@ export class EntrepotsListComponent implements OnInit {
     public gridService: GridsConfigsService,
     private router: Router,
     private route: ActivatedRoute,
+    public gridConfiguratorService: GridConfiguratorService,
   ) {
-    self = this;
+    gridConfiguratorService.as(Grid.Entrepot);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.clientID = this.route.snapshot.paramMap.get('client');
     this.entrepots = this.entrepotsService.getDataSource();
-    this.entrepots.filter(['client.id', '=', this.clientID]);
+    this.enableFilters();
     this.detailedFields = this.entrepotsService.model.getDetailedFields();
+  }
+
+  enableFilters() {
+    this.entrepots.filter(['client.id', '=', this.clientID]);
+    this.entrepots.reload();
   }
 
   onRowDblClick(e) {
@@ -50,47 +55,6 @@ export class EntrepotsListComponent implements OnInit {
         e.rowElement.classList.add('highlight-datagrid-row');
       }
     }
-  }
-
-  async loadDataGridState() {
-
-    // Lecture
-    const gridSource = self.gridService.getDataSource();
-    gridSource.filter([
-      ['utilisateur.nomUtilisateur', '=', '7'],
-      'and',
-      ['grid', '=', 'entrepotStorage'],
-    ]);
-    return gridSource.load().then(res => {
-      if (!res.length) return null;
-      const data = res[0].config;
-      if (data !== null) {
-        // Suppression filtres/recherche
-        for (const myColumn of data.columns) {
-          if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
-        }
-        data.searchText = '';
-        data.focusedRowKey = null;
-        return data;
-      } else {
-        return null;
-      }
-    });
-
-  }
-
-  saveDataGridState(data) {
-
-    // Ecriture
-    from(self.gridService.save({
-      gridConfig: {
-        utilisateur: { nomUtilisateur: '7' },
-        grid: 'entrepotStorage',
-        config: data
-      }
-    }))
-      .subscribe();
-
   }
 
 }

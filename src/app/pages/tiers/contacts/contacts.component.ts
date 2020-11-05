@@ -1,18 +1,19 @@
-import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import { ContactsService } from 'app/shared/services/api/contacts.service';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NestedPart } from 'app/pages/nested/nested.component';
 import { Contact } from 'app/shared/models';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { TypeTiers } from 'app/shared/models/tier.model';
-import { SocietesService } from 'app/shared/services/api/societes.service';
+import { AuthService } from 'app/shared/services';
+import { ContactsService } from 'app/shared/services/api/contacts.service';
 import { FluxService } from 'app/shared/services/api/flux.service';
 import { MoyenCommunicationService } from 'app/shared/services/api/moyens-communication.service';
+import { SocietesService } from 'app/shared/services/api/societes.service';
+import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { environment} from 'environments/environment';
-import { NestedPart } from 'app/pages/nested/nested.component';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { AuthService } from 'app/shared/services';
 
 @Component({
   selector: 'app-contacts',
@@ -30,7 +31,7 @@ export class ContactsComponent implements OnInit, NestedPart {
   typeTiersLabel: string;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
-  @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
 
   constructor(
@@ -40,7 +41,10 @@ export class ContactsComponent implements OnInit, NestedPart {
     public moyenCommunicationService: MoyenCommunicationService,
     private route: ActivatedRoute,
     public authService: AuthService,
-  ) {}
+    public gridConfiguratorService: GridConfiguratorService,
+  ) {
+    gridConfiguratorService.as(Grid.Contact);
+  }
 
   ngOnInit() {
     this.detailedFields = this.contactsService.model.getDetailedFields();
@@ -48,20 +52,26 @@ export class ContactsComponent implements OnInit, NestedPart {
     this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
 
     this.typeTiersLabel = Object
-    .entries(TypeTiers)
-    .find(([, value]) => value === this.typeTiers)
-    .map( value => value.toLowerCase() )
-    .shift();
+      .entries(TypeTiers)
+      .find(([, value]) => value === this.typeTiers)
+      .map(value => value.toLowerCase())
+      .shift();
 
     this.contacts = this.contactsService.getDataSource();
+    this.enableFilters();
+    this.societeSource = this.societeService.getDataSource();
+    this.fluxSource = this.fluxService.getDataSource();
+    this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
+  }
+
+  enableFilters() {
     this.contacts.filter([
       ['codeTiers', '=', this.codeTiers],
       'and',
       ['typeTiers', '=', this.typeTiers],
     ]);
-    this.societeSource = this.societeService.getDataSource();
-    this.fluxSource = this.fluxService.getDataSource();
-    this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
+    this.contacts.reload();
+
   }
 
   onRowPrepared(e) {
@@ -77,37 +87,14 @@ export class ContactsComponent implements OnInit, NestedPart {
     (event.data as Contact).typeTiers = this.typeTiers;
   }
 
-  onRowClick({rowIndex}) {
+  onRowClick({ rowIndex }) {
     this.dataGrid.instance.editRow(rowIndex);
   }
 
   onValueChanged(event, cell) {
     const key = this[cell.column.dataField + 'Service'].keyField;
     if (cell.setValue)
-      cell.setValue({[key]: event.value[key]});
-  }
-
-  loadDataGridState() {
-    const data = window.localStorage.getItem('contactStorage');
-    if (data !== null) {
-
-      // Suppression filtres/recherche
-      const state = JSON.parse(data);
-      for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide')
-          myColumn.filterValue = null;
-      }
-      state.searchText = '';
-
-      return state;
-    } else {
-      return null;
-    }
-
-  }
-
-  async saveDataGridState(data) {
-    window.localStorage.setItem('contactStorage', JSON.stringify(data));
+      cell.setValue({ [key]: event.value[key] });
   }
 
 }
