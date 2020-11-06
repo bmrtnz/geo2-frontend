@@ -23,7 +23,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
-import { Fournisseur } from '../../../../shared/models';
+import { Certification, CertificationFournisseur, Fournisseur } from '../../../../shared/models';
 import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
 
 @Component({
@@ -170,15 +170,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             .pipe(mergeAll())
             .subscribe(res => {
               this.fournisseur = new Fournisseur(res.data.fournisseur);
-              // console.log(this.fournisseur.fournisseurDeRattachement);
-              this.formGroup.patchValue(this.fournisseur);
-              this.contentReadyEvent.emit();
+              const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
+              this.formGroup.patchValue({ ...this.fournisseur, certifications });
               this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
             });
         } else {
           this.fournisseur = new Fournisseur({});
-          this.contentReadyEvent.emit();
         }
+        this.contentReadyEvent.emit();
       });
 
     this.pays = this.paysService.getDataSource();
@@ -230,13 +229,20 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
       }
 
+      const certifications = this.mapCertificationsForSave(fournisseur.certifications);
+
       (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode ?
         this.validatePopup.present(
           HistoryType.FOURNISSEUR,
           { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
         ) : of(undefined))
         .pipe(
-          switchMap(_ => this.fournisseursService.save({ fournisseur })),
+          switchMap(_ => this.fournisseursService.save({
+            fournisseur: {
+              ...fournisseur,
+              certifications,
+            }
+          })),
           concatAll(),
         )
         .subscribe({
@@ -255,6 +261,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             }
             this.fournisseur.historique = e.data.saveFournisseur.historique;
             this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
+            this.fournisseur.certifications = e.data.saveFournisseur.certifications;
             this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
@@ -281,6 +288,26 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${this.fournisseur.id}/${this.fournisseur.typeTiers}`]);
+  }
+
+  private mapCertificationsForDisplay(certifications: CertificationFournisseur[]): Certification[] {
+    if (!certifications.length) return [];
+    return certifications.map(({ certification }) => certification);
+  }
+
+  private mapCertificationsForSave(certifications: Certification[]): CertificationFournisseur[] {
+    if (!certifications.length) return [];
+
+    return certifications
+      .map(({ id }) => {
+        const cc = this.fournisseur.certifications && this.fournisseur.certifications
+          .find(({ certification }) => certification.id === id);
+        return {
+          id: cc ? cc.id : null,
+          certification: { id },
+          dateValidite: new Date().toISOString(),
+        };
+      });
   }
 
 }

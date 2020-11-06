@@ -28,7 +28,7 @@ import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
-import { Client } from '../../../../shared/models';
+import { Certification, CertificationClient, Client } from '../../../../shared/models';
 import { AuthService, ClientsService } from '../../../../shared/services';
 
 @Component({
@@ -205,8 +205,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             .pipe(mergeAll())
             .subscribe(res => {
               this.client = new Client(res.data.client);
-              this.formGroup.patchValue(this.client);
-              this.contentReadyEvent.emit();
+              const certifications = this.mapCertificationsForDisplay(this.client.certifications);
+              this.formGroup.patchValue({ ...this.client, certifications });
               this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
             });
         } else {
@@ -216,8 +216,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             delaiBonFacturer: 8 // Donné par Léa 7-09-2020
           });
           this.formGroup.patchValue(this.client);
-          this.contentReadyEvent.emit();
         }
+        this.contentReadyEvent.emit();
       });
 
     this.secteurs = this.secteursService.getDataSource();
@@ -274,13 +274,20 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         client.preSaisie = true;
       }
 
+      const certifications = this.mapCertificationsForSave(client.certifications);
+
       (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
         this.validatePopup.present(
           HistoryType.CLIENT,
           { client: { id: client.id }, valide: client.valide },
         ) : of(undefined))
         .pipe(
-          switchMap(_ => this.clientsService.save({ client })),
+          switchMap(_ => this.clientsService.save({
+            client: {
+              ...client,
+              certifications,
+            }
+          })),
           concatAll(),
         )
         .subscribe({
@@ -299,6 +306,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             }
             this.client.historique = e.data.saveClient.historique;
             this.client.typeTiers = e.data.saveClient.typeTiers;
+            this.client.certifications = e.data.saveClient.certifications;
             this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
@@ -350,6 +358,24 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${this.client.code}/${this.client.typeTiers}`]);
+  }
+
+  private mapCertificationsForDisplay(certifications: CertificationClient[]): Certification[] {
+    if (!certifications.length) return [];
+    return certifications.map(({ certification }) => certification);
+  }
+
+  private mapCertificationsForSave(certifications: Certification[]): CertificationClient[] {
+    if (!certifications.length) return [];
+
+    return certifications
+      .map(({ id }) => {
+        const cc = this.client.certifications && this.client.certifications.find(({ certification }) => certification.id === id);
+        return {
+          id: cc ? cc.id : null,
+          certification: { id },
+        };
+      });
   }
 
 }

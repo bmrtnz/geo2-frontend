@@ -21,7 +21,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
   }
 
   async getOne(id: string) {
-    const query = await this.buildGetOne();
+    const query = await this.buildGetOne(2);
     type Response = { client: Client };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -66,7 +66,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
   }
 
   async save(variables: OperationVariables) {
-    const mutation = await this.buildSave(1, this.fieldsFilter);
+    const mutation = await this.buildSave(2, this.fieldsFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

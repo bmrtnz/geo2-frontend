@@ -21,7 +21,7 @@ export class FournisseursService extends ApiService implements APIRead {
   }
 
   async getOne(id: string) {
-    const query = await this.buildGetOne();
+    const query = await this.buildGetOne(2);
     type Response = { fournisseur: Fournisseur };
     const variables: OperationVariables = { id };
     return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
@@ -67,7 +67,7 @@ export class FournisseursService extends ApiService implements APIRead {
   }
 
   async save(variables: OperationVariables) {
-    const mutation = await this.buildSave(1, this.byKeyFilter);
+    const mutation = await this.buildSave(2, this.byKeyFilter);
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 

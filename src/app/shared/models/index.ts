@@ -59,3 +59,5 @@ export * from './moyen-communication.model';
 export * from './condition-vente.model';
 export * from './certification.model';
 export * from './grid-config.model';
+export * from './certification-client.model';
+export * from './certification-fournisseur.model';
