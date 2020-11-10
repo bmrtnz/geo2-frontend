@@ -1,6 +1,4 @@
 ::ng-deep .dx-tile-content {
-    cursor: pointer;
-    overflow: hidden;
     .indicator-container {
         position: relative;
         top:50%;
@@ -10,9 +8,29 @@
         color:#FFF;
     }
     .indicator {
+        display:inline-block;
+        position:relative;
         font-size:4em;
         text-align:center;
+        left:50%;
+        transform:translateX(-50%);
         // padding-bottom:10px;
+    }
+    .indicator-button {
+        left:50%;
+        transform:translateX(-50%);
+        margin:0 auto;
+        background-color:transparent;
+    }
+    .warning-button {
+        position: absolute;
+        right:90px;
+    }
+    .number-container {
+        // background:#DDD;
+    }
+    .tile-button:hover, .tile-button:focus {
+        background-color:transparent;
     }
     .parameter {
         font-size:2em;
@@ -22,6 +40,13 @@
         font-size:1.7em;
         text-align:center;
     }
+}
+::ng-deep .dx-tile {
+    cursor: pointer;
+    transition:0.15s; 
+}
+::ng-deep .dx-tile:hover {
+    transform: scale(102%,102%);
 }
 ::ng-deep .configuration {
     width:400px;

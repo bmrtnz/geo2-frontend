@@ -17,6 +17,8 @@ export class Indicator {
   subParameter: string;
   goTo: string;
   tileBkg: string;
+  indicatorIcon: string;
+  warningIcon: string;
 }
 
 const indicators: Indicator[] = [{
@@ -25,70 +27,90 @@ const indicators: Indicator[] = [{
   parameter: 'Suivi',
   subParameter: 'des ordres',
   goTo: '/ordres/details',
-  tileBkg: '#01AA9B'
+  tileBkg: '#01AA9B',
+  indicatorIcon: 'material-icons euro_symbol',
+  warningIcon: ''
 }, {
   id: 1,
   number: '',
   parameter: 'Supervision',
   subParameter: 'livraison',
   goTo: '',
-  tileBkg: '#9199B4'
+  tileBkg: '#9199B4',
+  indicatorIcon: 'material-icons directions',
+  warningIcon: ''
 }, {
   id: 2,
-  number: '35',
+  number: '13',
   parameter: 'Taches',
   subParameter: 'en attente',
   goTo: '',
-  tileBkg: '#01779B'
+  tileBkg: '#01779B',
+  indicatorIcon: 'material-icons list_alt',
+  warningIcon: 'material-icons warning'
 }, {
   id: 3,
   number: '4',
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
   goTo: '',
-  tileBkg: '#4199B4'
+  tileBkg: '#4199B4',
+  indicatorIcon: 'user',
+  warningIcon: 'material-icons warning'
 }, {
   id: 4,
   number: '8',
   parameter: 'Ordres',
   subParameter: 'non clôturés',
   goTo: '',
-  tileBkg: '#F26C5A'
+  tileBkg: '#F26C5A',
+  indicatorIcon: 'material-icons help',
+  warningIcon: ''
 }, {
   id: 5,
   number: '6',
   parameter: 'Ordres',
   subParameter: 'non confirmés',
   goTo: '',
-  tileBkg: '#5A6382'
+  tileBkg: '#5A6382',
+  indicatorIcon: 'material-icons help',
+  warningIcon: ''
 }, {
   id: 6,
   number: '3',
   parameter: 'Litiges',
   subParameter: 'en cours',
   goTo: '',
-  tileBkg: '#1B715C'
+  tileBkg: '#1B715C',
+  indicatorIcon: 'material-icons offline_bolt',
+  warningIcon: 'material-icons warning'
 }, {
   id: 7,
   number: '',
   parameter: 'Stock',
-  subParameter: '',
+  subParameter: 'dispo',
   goTo: '/stock',
   tileBkg: '#60895E',
+  indicatorIcon: 'box',
+  warningIcon: ''
 }, {
   id: 8,
-  number: '71',
-  parameter: 'Worcester',
-  subParameter: 'MA',
+  number: '',
+  parameter: 'Planning',
+  subParameter: 'départ',
   goTo: '',
   tileBkg: '#71BF45',
+  indicatorIcon: 'material-icons calendar_today',
+  warningIcon: ''
 }, {
   id: 9,
-  number: '20',
-  parameter: 'Riverbank',
-  subParameter: 'CA',
+  number: '',
+  parameter: 'Commandes',
+  subParameter: 'en transit',
   goTo: '',
-  tileBkg: '#8E4A21'
+  tileBkg: '#8E4A21',
+  indicatorIcon: 'material-icons local_shipping',
+  warningIcon: ''
 }];
 
 @Injectable()

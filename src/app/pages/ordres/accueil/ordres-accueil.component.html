@@ -42,8 +42,12 @@
             [style.background]="'' + indicator.tileBkg + ''"
             [routerLink]="'' + indicator.goTo ? indicator.goTo : '/ordres/accueil' + ''"
             >
-            <div class="indicator-container">
-                <div class="indicator" style="background: ' + {{indicator.tileBkg}} + '">{{indicator.number}}</div>
+            <div class="indicator-container" style="background: ' + {{indicator.tileBkg}} + '">
+                <dx-button *ngIf="indicator.indicatorIcon" type="danger" icon="{{indicator.indicatorIcon}}" class="tile-button indicator-button"></dx-button>
+                <div class="number-container">
+                    <div *ngIf="indicator.number" class="indicator">{{indicator.number}}</div>
+                    <dx-button *ngIf="indicator.warningIcon" type="danger" icon="{{indicator.warningIcon}}" class="tile-button warning-button"></dx-button>
+                </div>
                 <div class="parameter">{{indicator.parameter}}</div>
                 <div class="subParameter">{{indicator.subParameter}}</div>
             </div>

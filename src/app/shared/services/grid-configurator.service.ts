@@ -130,11 +130,13 @@ export class GridConfiguratorService {
    * @param cbk Callback to apply after restoring default state
    */
   onToolbarPreparing({component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, grid: Grid, cbk?: () => void) {
+    console.log(toolbarOptions.items)
     toolbarOptions.items.unshift({
       location: 'after',
       widget: 'dxButton',
       options: {
-        icon: 'refresh',
+        icon: 'material-icons settings_backup_restore',
+        hint: 'Réinitialiser les colonnes affichées',
         onClick: async () => {
           component.clearFilter();
           const defaultState = await this.fetchDefaultConfig(grid);
