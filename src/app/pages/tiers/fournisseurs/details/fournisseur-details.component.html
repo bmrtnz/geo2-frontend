@@ -733,15 +733,13 @@
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-fournisseurs-typeCertification' | localize }}</div>
               <div class="dx-field-value">
-                <!-- formControlName="certifications" -->
                 <dx-tag-box
                   formControlName="certifications"
                   [dataSource]="certifications"
                   displayExpr="description"
                   placeholder="Sélectionner une ou plusieurs certifications..."
                   [readOnly]="readOnlyMode"
-                  >
-                </dx-tag-box>
+                ></dx-tag-box>
               </div>
             </div>
             <!-- Date cond achat signée -->
@@ -767,3 +765,4 @@
   title="{{ 'valide-comment-title' | localize }}"
   [placeholder]="'valide-comment' | localize"
 ></app-push-history-popup>
+<app-certification-date-popup></app-certification-date-popup>

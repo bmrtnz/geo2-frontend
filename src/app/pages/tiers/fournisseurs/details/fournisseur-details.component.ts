@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angu
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { CertificationDatePopupComponent } from 'app/shared/components/certification-date-popup/certification-date-popup.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
@@ -96,6 +97,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
+  @ViewChild(CertificationDatePopupComponent, { static: false })
+  certDatePopup: CertificationDatePopupComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -229,7 +232,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
       }
 
-      const certifications = this.mapCertificationsForSave(fournisseur.certifications);
+      /* tslint:disable-next-line max-line-length */
+      const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
 
       (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode ?
         this.validatePopup.present(
@@ -237,10 +241,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
         ) : of(undefined))
         .pipe(
-          switchMap(_ => this.fournisseursService.save({
+          switchMap(_ => certifications ? this.certDatePopup.present(certifications) : of(undefined)),
+          switchMap(certs => this.fournisseursService.save({
             fournisseur: {
               ...fournisseur,
-              certifications,
+              certifications: certs,
             }
           })),
           concatAll(),
@@ -291,21 +296,23 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   private mapCertificationsForDisplay(certifications: CertificationFournisseur[]): Certification[] {
-    if (!certifications.length) return [];
+    if (!certifications || !certifications.length) return [];
     return certifications.map(({ certification }) => certification);
   }
 
   private mapCertificationsForSave(certifications: Certification[]): CertificationFournisseur[] {
-    if (!certifications.length) return [];
+    if (!certifications || !certifications.length) return [];
 
     return certifications
-      .map(({ id }) => {
+      .map((certification) => {
         const cc = this.fournisseur.certifications && this.fournisseur.certifications
-          .find(({ certification }) => certification.id === id);
+          .find(({ certification: cert }) => cert.id === certification.id);
         return {
           id: cc ? cc.id : null,
-          certification: { id },
-          dateValidite: new Date().toISOString(),
+          certification,
+          dateValidite: cc ?
+            new Date(cc.dateValidite).toISOString() :
+            null,
         };
       });
   }
