@@ -361,12 +361,12 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   private mapCertificationsForDisplay(certifications: CertificationClient[]): Certification[] {
-    if (!certifications.length) return [];
+    if (!certifications || !certifications.length) return [];
     return certifications.map(({ certification }) => certification);
   }
 
   private mapCertificationsForSave(certifications: Certification[]): CertificationClient[] {
-    if (!certifications.length) return [];
+    if (!certifications || !certifications.length) return [];
 
     return certifications
       .map(({ id }) => {
