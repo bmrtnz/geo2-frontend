@@ -23,7 +23,7 @@ export class OrdresAccueilComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.allIndicators = fakeOrdresService.getIndicators();
-    this.indicators = this.allIndicators /*.slice(0, 4);*/
+    this.indicators = this.allIndicators.slice(0, 6);
   }
 
   ngOnInit() {
