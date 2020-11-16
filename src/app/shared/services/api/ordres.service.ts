@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
+import { ApiService, APIRead, RelayPageVariables, RelayPage, APIPersist } from '../api.service';
 import { Apollo } from 'apollo-angular';
-import { WatchQueryOptions } from 'apollo-client';
+import { MutationOptions, OperationVariables, WatchQueryOptions } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { map, take } from 'rxjs/operators';
@@ -10,14 +10,21 @@ import { Ordre } from '../../models/ordre.model';
 @Injectable({
   providedIn: 'root'
 })
-export class OrdresService extends ApiService implements APIRead {
+export class OrdresService extends ApiService implements APIRead, APIPersist {
 
-  listRegexp = /.*\.(?:id)$/i;
+  queryFilter = /.*(?:id|numero|referenceClient|nomUtilisateur|raisonSocial)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, Ordre);
+  }
+
+  async getOne(id: string) {
+    const query = await this.buildGetOne();
+    type Response = { ordre: Ordre };
+    const variables: OperationVariables = { id };
+    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
   }
 
   getDataSource() {
@@ -31,7 +38,7 @@ export class OrdresService extends ApiService implements APIRead {
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = await this.buildGetAll(1, this.listRegexp);
+          const query = await this.buildGetAll(1, this.queryFilter);
           type Response = { allOrdre: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);
           if (options.searchValue) variables.search = options.searchValue;
@@ -44,7 +51,7 @@ export class OrdresService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: async (key) => {
-          const query = await this.buildGetOne(1, this.listRegexp);
+          const query = await this.buildGetOne();
           type Response = { ordre: Ordre };
           const variables = { id: key };
           return this.
@@ -57,6 +64,11 @@ export class OrdresService extends ApiService implements APIRead {
         },
       }),
     });
+  }
+
+  async save(variables: OperationVariables) {
+    const mutation = await this.buildSave(1, this.queryFilter);
+    return this.mutate(mutation, { variables } as MutationOptions);
   }
 
 }

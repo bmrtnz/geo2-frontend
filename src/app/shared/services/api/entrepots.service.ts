@@ -53,7 +53,7 @@ export class EntrepotsService extends ApiService implements APIRead {
           .toPromise();
         },
         byKey: async (key) => {
-          const query = await this.buildGetOne(1, this.fieldsFilter);
+          const query = await this.buildGetOne(1);
           type Response = { entrepot: Entrepot };
           const variables = { id: key };
           return this.

@@ -1,21 +1,28 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
-import { OrdresDetailsComponent } from './details/ordres-details.component';
-import { OrdresRoutingModule } from './ordres-routing.module';
-import { SharedModule } from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DxBoxModule, DxButtonModule, DxDataGridModule, DxFormModule, DxTabPanelModule, 
-  DxTagBoxModule, DxTemplateModule, DxAccordionModule, DxListModule, DxSelectBoxModule,
-  DxTextBoxModule, DxCheckBoxModule, DxTextAreaModule, DxPopoverModule, DxValidatorModule,
-  DxSortableModule, DxTileViewModule
-  } from 'devextreme-angular';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { SharedModule } from 'app/shared/shared.module';
+import {
+  DxAccordionModule, DxBoxModule, DxButtonModule,
+
+  DxCheckBoxModule, DxDataGridModule, DxFormModule,
+  DxListModule,
+  DxPopoverModule, DxSelectBoxModule,
+
+  DxSortableModule, DxTabPanelModule,
+  DxTagBoxModule,
+  DxTextAreaModule, DxTextBoxModule,
+  DxTileViewModule, DxValidatorModule
+} from 'devextreme-angular';
+import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
+import { OrdresDetailsComponent } from './details/ordres-details.component';
+import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
+import { OrdresRoutingModule } from './ordres-routing.module';
 
 
 @NgModule({
-  declarations: [OrdresAccueilComponent, OrdresDetailsComponent],
+  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent],
   imports: [
     OrdresRoutingModule,
     SharedModule,

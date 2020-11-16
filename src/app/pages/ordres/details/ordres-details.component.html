@@ -12,7 +12,7 @@
 </div>
 <dx-box>
     <dxi-item [ratio]="0.1"></dxi-item>
-    <dxi-item [ratio]="0.7" class="left-buttons-box" [visible]="tabs.selectedIndex || 0">
+    <dxi-item [ratio]="0.7" class="left-buttons-box" [visible]="!this.isIndexTab">
         <dx-button
             class="black"
             data-accordion="articles"
@@ -97,7 +97,8 @@
                     [deferRendering]="false"
                     [showNavButtons]="true"
                     [repaintChangesOnly]="true"
-                    [selectedIndex]="selectedIndex"
+                    (onSelectionChanged)="onSelectionChange($event)"
+                    (onTitleRendered)="onTitleRendered($event)"
                 >
 
                     <div *dxTemplate="let content of 'title'; let i = index">
@@ -125,7 +126,7 @@
                                             (onClick)="scrollToOnClick()">
                                         </dx-button>
                                     </dxi-item>
-                                    <dxi-item [ratio]="0.3" [visible]="!tabs.selectedIndex || 0">
+                                    <dxi-item [ratio]="0.3" [visible]="this.isIndexTab">
                                     </dxi-item>
                                     <dxi-item [ratio]="8">
 
@@ -151,6 +152,7 @@
 
                                             </div>
                                         </h2>
+                                        <app-grid-suivi *ngIf="!i" (ordreSelected)="addButtonHandler($event)"></app-grid-suivi>
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
@@ -162,20 +164,15 @@
                                                             <div class="dx-field">
                                                                 <div class="dx-field-label">{{ 'ordres-client' | localize }}</div>
                                                                 <div class="dx-field-value">
-                                                                    <!-- <dx-text-box formControlName="id">
-                                                                    <dx-validator name="{{ 'ordres-client' | localize }}">
-                                                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                                    </dx-validator>
-                                                                    </dx-text-box> -->
                                                                     <dx-select-box
-                                                                        [dataSource]="clients"
-                                                                        [searchEnabled]="true"
-                                                                        searchExpr="raisonSocial"
-                                                                        displayExpr="raisonSocial">
+                                                                      formControlName="client"
+                                                                      [dataSource]="clients"
+                                                                      displayExpr="raisonSocial"
+                                                                      [searchEnabled]="true"
+                                                                      [searchExpr]="['id','raisonSocial']"
+                                                                    >
                                                                         <dx-validator name="{{ 'ordres-client' | localize }}">
                                                                             <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                            <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
                                                                         </dx-validator>
                                                                     </dx-select-box>
                                                                 </div>
@@ -184,10 +181,10 @@
                                                             <div class="dx-field">
                                                                 <div class="dx-field-label">{{ 'ordres-refClient' | localize }}</div>
                                                                 <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="id">
+                                                                    <dx-text-box formControlName="referenceClient">
                                                                     <dx-validator name="{{ 'ordres-refClient' | localize }}">
                                                                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
+                                                                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
                                                                     </dx-validator>
                                                                     </dx-text-box>
                                                                 </div>
@@ -196,24 +193,34 @@
                                                             <div class="dx-field">
                                                                 <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
                                                                 <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="id">
-                                                                    <dx-validator name="{{ 'ordres-commercial' | localize }}">
-                                                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                                    </dx-validator>
-                                                                    </dx-text-box>
+                                                                    <dx-select-box
+                                                                        formControlName="commercial"
+                                                                        [dataSource]="personnes"
+                                                                        displayExpr="nomUtilisateur"
+                                                                        [searchEnabled]="true"
+                                                                        [searchExpr]="['id','nomUtilisateur']"
+                                                                    >
+                                                                        <dx-validator name="{{ 'ordres-commercial' | localize }}">
+                                                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                        </dx-validator>
+                                                                    </dx-select-box>
                                                                 </div>
                                                             </div>
                                                             <!-- assistante -->
                                                             <div class="dx-field">
                                                                 <div class="dx-field-label">{{ 'ordres-assistante' | localize }}</div>
                                                                 <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="id">
-                                                                    <dx-validator name="{{ 'ordres-assistante' | localize }}">
-                                                                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                        <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
-                                                                    </dx-validator>
-                                                                    </dx-text-box>
+                                                                    <dx-select-box
+                                                                        formControlName="assistante"
+                                                                        [dataSource]="personnes"
+                                                                        displayExpr="nomUtilisateur"
+                                                                        [searchEnabled]="true"
+                                                                        [searchExpr]="['id','nomUtilisateur']"
+                                                                    >
+                                                                        <dx-validator name="{{ 'ordres-assistante' | localize }}">
+                                                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                        </dx-validator>
+                                                                    </dx-select-box>
                                                                 </div>
                                                             </div>
                             
@@ -227,7 +234,7 @@
                                                                 <!-- <div class="dx-field">
                                                                     <div class="dx-field-label">{{ 'tiers-clients-facturationRaisonSocial' | localize }}</div>
                                                                     <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="facturationRaisonSocial" [readOnly]="readOnlyMode">
+                                                                    <dx-text-box formControlName="facturationRaisonSocial">
                                                                         <dx-validator name="{{ 'tiers-entrepots-facturationRaisonSocial' | localize }}">
                                                                         <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
                                                                         </dx-validator>
@@ -246,7 +253,7 @@
                                                                 <div class="dx-field">
                                                                     <div class="dx-field-label">{{ 'ordres-instructLogistique' | localize }}</div>
                                                                     <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="instructLogistique" [readOnly]="readOnlyMode">
+                                                                    <dx-text-box formControlName="instructionsLogistiques">
                                                                         <dx-validator name="{{ 'ordres-instructLogistique' | localize }}">
                                                                         <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
                                                                         </dx-validator>
@@ -264,7 +271,7 @@
                                                                     <div class="dx-field">
                                                                         <div class="dx-field-label">{{ 'ordres-depart' | localize }}</div>
                                                                         <div class="dx-field-value">
-                                                                            <dx-text-box formControlName="id">
+                                                                            <dx-text-box formControlName="dateDepartPrevue">
                                                                             <dx-validator name="{{ 'ordres-depart' | localize }}">
                                                                                 <dxi-validation-rule type="required"></dxi-validation-rule>
                                                                                 <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
@@ -279,7 +286,7 @@
                                                                     <div class="dx-field">
                                                                         <div class="dx-field-label">{{ 'ordres-livraison' | localize }}</div>
                                                                         <div class="dx-field-value">
-                                                                            <dx-text-box formControlName="id">
+                                                                            <dx-text-box formControlName="dateLivraisonPrevue">
                                                                             <dx-validator name="{{ 'ordres-livraison' | localize }}">
                                                                                 <dxi-validation-rule type="required"></dxi-validation-rule>
                                                                                 <dxi-validation-rule type="stringLength" max="12"></dxi-validation-rule>
@@ -294,28 +301,28 @@
                                                         <div class="dx-field">
                                                             <div class="dx-field-label">{{ 'ordres-venteCommission' | localize }}</div>
                                                             <div class="dx-field-value">
-                                                            <dx-check-box formControlName="venteCommission" [readOnly]="readOnlyMode"></dx-check-box>
+                                                            <dx-check-box formControlName="venteACommission"></dx-check-box>
                                                             </div>
                                                         </div>
                                                         <!-- Bon à facturer -->
                                                         <div class="dx-field">
                                                             <div class="dx-field-label">{{ 'ordres-bonAFacturer' | localize }}</div>
                                                             <div class="dx-field-value">
-                                                            <dx-check-box formControlName="bonAFacturer" [readOnly]="readOnlyMode"></dx-check-box>
+                                                            <dx-check-box formControlName="bonAFacturer"></dx-check-box>
                                                             </div>
                                                         </div>
                                                         <!-- Facturé -->
                                                         <div class="dx-field">
                                                             <div class="dx-field-label">{{ 'ordres-facture' | localize }}</div>
                                                             <div class="dx-field-value">
-                                                            <dx-check-box formControlName="facture" [readOnly]="readOnlyMode"></dx-check-box>
+                                                            <dx-check-box formControlName="facture"></dx-check-box>
                                                             </div>
                                                         </div>
                                                         <!-- EDI -->
                                                         <div class="dx-field">
                                                             <div class="dx-field-label">{{ 'ordres-EDI' | localize }}</div>
                                                             <div class="dx-field-value">
-                                                            <dx-check-box formControlName="EDI" [readOnly]="readOnlyMode"></dx-check-box>
+                                                            <dx-check-box formControlName="factureEDI"></dx-check-box>
                                                             </div>
                                                         </div>
                                                         </dxi-item>

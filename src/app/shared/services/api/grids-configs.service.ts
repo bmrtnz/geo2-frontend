@@ -12,7 +12,7 @@ import { APIPersist, APIRead, ApiService, RelayPage, RelayPageVariables } from '
 })
 export class GridsConfigsService extends ApiService implements APIRead, APIPersist {
 
-  fieldsFilter = /.*\.(?:id|nomUtilisateur|grid)$/i;
+  fieldsFilter = /.*/i;
 
   constructor(
     apollo: Apollo,
@@ -30,7 +30,7 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = await this.buildGetAll();
+          const query = await this.buildGetAll(1, this.fieldsFilter);
           type Response = { allGridConfig: RelayPage<GridConfig> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -63,7 +63,7 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
   }
 
   async save(variables: OperationVariables) {
-    const mutation = await this.buildSave(1, this.fieldsFilter);
+    const mutation = await this.buildSave();
     return this.mutate(mutation, { variables } as MutationOptions).pipe(take(1));
   }
 

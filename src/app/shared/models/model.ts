@@ -16,7 +16,7 @@ export type ModelFieldOptions<T = typeof Model> = {
  */
 type FieldDescriptor = [string, ModelFieldOptions<typeof Model>];
 
-const DefaultGridFilter = /(?:^\w?|\.raisonSocial|\.description)$/i;
+const DEFAULT_FILTER = /.*/;
 
 /**
  * Field property decorator
@@ -59,7 +59,7 @@ export abstract class Model {
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
-  static getListFields(depth = 1, fieldFilter = DefaultGridFilter, prefix?: string):
+  static getListFields(depth = 1, fieldFilter = DEFAULT_FILTER, prefix?: string):
     Observable<string | string[]> {
     const getFieldName = (property: string) => prefix ? `${prefix}.${property}` : property;
     return from(Object.entries(this.getFields()))
@@ -85,14 +85,15 @@ export abstract class Model {
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
-  static getGQLFields(depth = 1, fieldFilter?: RegExp, prefix?: string): Observable<string> {
+  static getGQLFields(depth = 1, fieldFilter = DEFAULT_FILTER, prefix?: string): Observable<string> {
     return from(Object.entries(this.getFields()))
       .pipe(
         this.fetchMapModel(),
         filter(([propertyName, options]) => {
           const path = prefix ? `${prefix}.${propertyName}` : propertyName;
-          if (fieldFilter && fieldFilter.test(path)) return true;
-          return !options.fetchedModel || (options.fetchedModel && depth > 0);
+          if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
+          if (options.fetchedModel && depth > 0) return true;
+          return options.asKey || options.asLabel;
         }),
         this.takeToLastField(depth),
         concatMap(([propertyName, options]) => {
@@ -117,7 +118,7 @@ export abstract class Model {
    */
   static getDetailedFields(
     depth = 1,
-    fieldFilter = /^(?:raisonSocial|description)$/,
+    fieldFilter = DEFAULT_FILTER,
     prefix?: string): Observable<ModelFieldOptions[]> {
 
     enum DXDataType {
