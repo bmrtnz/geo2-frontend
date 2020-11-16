@@ -9,8 +9,8 @@ import { Comm, CommService, Log, LogService } from 'app/shared/services/log.serv
 import { Content, FakeOrdresService, INDEX_TAB } from 'app/shared/services/ordres-fake.service';
 import { DxAccordionComponent, DxTabPanelComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { from } from 'rxjs';
-import { mergeAll } from 'rxjs/operators';
+import { from, iif, of } from 'rxjs';
+import { map, mergeAll } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ordres-details',
@@ -122,7 +122,7 @@ export class OrdresDetailsComponent implements OnInit {
     if (!addedItems.length) return;
     const { id, ordre } = addedItems[0];
     setTimeout(() => this.isIndexTab = id === INDEX_TAB);
-    if (ordre) this.formGroup.patchValue(ordre);
+    if (ordre) this.formGroup.reset(ordre);
   }
 
   onTitleRendered({ itemData, itemIndex }: {
@@ -130,15 +130,18 @@ export class OrdresDetailsComponent implements OnInit {
     itemIndex: number,
   }) {
     if (itemData.id === INDEX_TAB) return;
-    if (!itemData.id)
-      this.contents[itemIndex].ordre = {};
-    else
-      from(this.ordresService.getOne(itemData.id))
-        .pipe(mergeAll())
-        .subscribe(res => {
-          this.contents[itemIndex].ordre = res.data.ordre;
-          this.tabPanelComponent.selectedIndex = itemIndex;
-        });
+    iif(
+      () => !!itemData.id,
+      from(this.ordresService.getOne(itemData.id)).pipe(
+        mergeAll(),
+        map(res => res.data.ordre),
+      ),
+      of({} as Ordre),
+    )
+      .subscribe(res => {
+        this.contents[itemIndex].ordre = res;
+        this.tabPanelComponent.selectedIndex = itemIndex;
+      });
   }
 
 }
