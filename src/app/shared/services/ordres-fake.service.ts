@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
+import Ordre from '../models/ordre.model';
 
+export const INDEX_TAB = 'INDEX';
 export class Content {
-  id: number;
+  id?: string;
   tabTitle: string;
+  ordre?: Ordre;
 }
 
 const contents: Content[] = [{
-  id: 1,
+  id: INDEX_TAB,
   tabTitle: 'Suivi des ordres'
 }];
 

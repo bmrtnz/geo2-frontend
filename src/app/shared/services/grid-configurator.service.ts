@@ -19,6 +19,7 @@ export enum Grid {
   Contact = 'contact',
   Article = 'article',
   Stock = 'stock',
+  Ordre = 'ordre',
 }
 
 @Injectable({
@@ -130,7 +131,6 @@ export class GridConfiguratorService {
    * @param cbk Callback to apply after restoring default state
    */
   onToolbarPreparing({component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, grid: Grid, cbk?: () => void) {
-    console.log(toolbarOptions.items)
     toolbarOptions.items.unshift({
       location: 'after',
       widget: 'dxButton',
