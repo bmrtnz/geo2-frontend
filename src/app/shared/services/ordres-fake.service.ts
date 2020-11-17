@@ -16,6 +16,7 @@ export class Indicator {
   parameter: string;
   subParameter: string;
   goTo: string;
+  goToParams?: {};
   tileBkg: string;
   indicatorIcon: string;
   warningIcon: string;
@@ -36,15 +37,17 @@ const indicators: Indicator[] = [{
   parameter: 'Supervision',
   subParameter: 'livraison',
   goTo: '',
+  goToParams: {},
   tileBkg: '#9199B4',
   indicatorIcon: 'material-icons directions',
   warningIcon: ''
 }, {
   id: 2,
   number: '13',
-  parameter: 'Taches',
-  subParameter: 'en attente',
-  goTo: '',
+  parameter: 'Bons',
+  subParameter: 'à facturer',
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'bonsafacturer'},
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning'
@@ -62,7 +65,8 @@ const indicators: Indicator[] = [{
   number: '8',
   parameter: 'Ordres',
   subParameter: 'non clôturés',
-  goTo: '',
+  goToParams: {filtre: 'ordresnonclotures'},
+  goTo: '/ordres/indicateurs',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
   warningIcon: ''
@@ -71,7 +75,8 @@ const indicators: Indicator[] = [{
   number: '6',
   parameter: 'Ordres',
   subParameter: 'non confirmés',
-  goTo: '',
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'ordresnonconfirmes'},
   tileBkg: '#5A6382',
   indicatorIcon: 'material-icons help',
   warningIcon: ''
@@ -89,7 +94,7 @@ const indicators: Indicator[] = [{
   number: '',
   parameter: 'Stock',
   subParameter: 'dispo',
-  goTo: '/stock',
+  goTo: '/ordres/stock',
   tileBkg: '#60895E',
   indicatorIcon: 'box',
   warningIcon: ''
@@ -107,7 +112,8 @@ const indicators: Indicator[] = [{
   number: '',
   parameter: 'Commandes',
   subParameter: 'en transit',
-  goTo: '',
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'commandesentransit'},
   tileBkg: '#8E4A21',
   indicatorIcon: 'material-icons local_shipping',
   warningIcon: ''
