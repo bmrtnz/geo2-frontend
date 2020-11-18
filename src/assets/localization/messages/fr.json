@@ -450,6 +450,11 @@
     "ordres-facture": "Facturé",
     "ordres-EDI": "EDI",
     "ordres-ordrePlus": "Informations complémentaires",
-    "ordres-instructLogistique": "Instructions logistique"
+    "ordres-instructLogistique": "Instructions logistique",
+    "ordres-bonsafacturer": "Bons à facturer",
+    "ordres-ordresnonconfirmes": "Ordres non confirmés",
+    "ordres-ordresnonclotures": "Ordres non cloturés",
+    "ordres-commandesentransit": "Commandes en transit"
+   
   }
 }

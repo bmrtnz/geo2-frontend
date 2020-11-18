@@ -41,6 +41,7 @@
             [heightRatio]="1.5"
             [style.background]="'' + indicator.tileBkg + ''"
             [routerLink]="'' + indicator.goTo ? indicator.goTo : '/ordres/accueil' + ''"
+            [queryParams]="indicator.goToParams"
             >
             <div class="indicator-container" style="background: ' + {{indicator.tileBkg}} + '">
                 <dx-button *ngIf="indicator.indicatorIcon" type="danger" icon="{{indicator.indicatorIcon}}" class="tile-button indicator-button"></dx-button>

@@ -1,4 +1,9 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
+import { OrdresDetailsComponent } from './details/ordres-details.component';
+import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
+import { OrdresRoutingModule } from './ordres-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -15,14 +20,11 @@ import {
   DxTextAreaModule, DxTextBoxModule,
   DxTileViewModule, DxValidatorModule
 } from 'devextreme-angular';
-import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
-import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
-import { OrdresRoutingModule } from './ordres-routing.module';
 
 
 @NgModule({
-  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent],
+  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent, OrdresIndicateursComponent],
   imports: [
     OrdresRoutingModule,
     SharedModule,
