@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
@@ -9,8 +9,8 @@ import { Comm, CommService, Log, LogService } from 'app/shared/services/log.serv
 import { Content, FakeOrdresService, INDEX_TAB } from 'app/shared/services/ordres-fake.service';
 import { DxAccordionComponent, DxTabPanelComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { from, iif, of } from 'rxjs';
-import { map, mergeAll } from 'rxjs/operators';
+import { from, iif, of, Subscription } from 'rxjs';
+import { map, mergeAll, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ordres-details',
@@ -19,7 +19,7 @@ import { map, mergeAll } from 'rxjs/operators';
   providers: [LogService, CommService, FakeOrdresService]
 })
 
-export class OrdresDetailsComponent implements OnInit {
+export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   isIndexTab = true;
   allContents: Content[];
@@ -43,6 +43,7 @@ export class OrdresDetailsComponent implements OnInit {
     facture: [''],
     factureEDI: [''],
   });
+  private formValuesChange: Subscription;
 
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
@@ -66,6 +67,17 @@ export class OrdresDetailsComponent implements OnInit {
   ngOnInit() {
     this.clients = this.clientsService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
+    this.formValuesChange = this.formGroup.valueChanges
+      .subscribe(_ => {
+        if (this.formGroup.pristine) return;
+        const selectedIndex = this.tabPanelComponent.selectedIndex;
+        const patch = this.ordresService.extractDirty(this.formGroup.controls);
+        this.contents[selectedIndex].patch = patch;
+      });
+  }
+
+  ngOnDestroy() {
+    this.formValuesChange.unsubscribe();
   }
 
   onSubmit() {
@@ -99,14 +111,14 @@ export class OrdresDetailsComponent implements OnInit {
     e.toData.splice(e.toIndex, 0, e.itemData);
   }
 
-  addButtonHandler(ordre: Ordre) {
+  pushTab(ordre: Ordre) {
     this.contents.push({
       id: ordre ? ordre.id : null,
       tabTitle: ordre ? `Ordre N° ${ordre.numero}` : 'Nouvel ordre',
     });
   }
 
-  closeButtonHandler(itemData) {
+  closeTab(itemData) {
     const index = this.contents.indexOf(itemData);
 
     this.contents.splice(index, 1);
@@ -120,15 +132,20 @@ export class OrdresDetailsComponent implements OnInit {
 
   onSelectionChange({ addedItems }: { addedItems: Content[] }) {
     if (!addedItems.length) return;
-    const { id, ordre } = addedItems[0];
+    const { id, ordre, patch } = addedItems[0];
     setTimeout(() => this.isIndexTab = id === INDEX_TAB);
-    if (ordre) this.formGroup.reset(ordre);
+    if (ordre)
+      this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
+    if (patch)
+      Object.entries(patch)
+        .forEach(([key]) => this.formGroup.get(key).markAsDirty());
   }
 
   onTitleRendered({ itemData, itemIndex }: {
     itemData: Content,
     itemIndex: number,
   }) {
+    if (itemIndex === this.tabPanelComponent.selectedIndex) return;
     if (itemData.id === INDEX_TAB) return;
     iif(
       () => !!itemData.id,
@@ -138,6 +155,7 @@ export class OrdresDetailsComponent implements OnInit {
       ),
       of({} as Ordre),
     )
+      .pipe(take(1))
       .subscribe(res => {
         this.contents[itemIndex].ordre = res;
         this.tabPanelComponent.selectedIndex = itemIndex;

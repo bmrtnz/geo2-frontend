@@ -6,6 +6,7 @@ export class Content {
   id?: string;
   tabTitle: string;
   ordre?: Ordre;
+  patch?: Ordre;
 }
 
 const contents: Content[] = [{

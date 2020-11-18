@@ -6,7 +6,7 @@
     icon="add"
     type="default"
     [disabled]="disableButton()"
-    (onClick)="addButtonHandler()"
+    (onClick)="pushTab()"
     ></dx-button>
     <div style="clear:both"></div>
 </div>
@@ -102,10 +102,13 @@
                 >
 
                     <div *dxTemplate="let content of 'title'; let i = index">
-                        <span>{{content.tabTitle}}</span><i *ngIf="i" class="dx-icon dx-icon-close" (click)="closeButtonHandler(content)"></i>
+                        <span>{{content.tabTitle}}</span><i *ngIf="i" class="dx-icon dx-icon-close" (click)="closeTab(content)"></i>
                     </div>
                     <div *dxTemplate="let content of 'item'; let i = index">
-                        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+                        <form
+                            [formGroup]="formGroup"
+                            (ngSubmit)="onSubmit()"
+                        >
                             <div class="content-block">
                             </div>
                             <div class="content-block details-ordres-page">
@@ -152,7 +155,7 @@
 
                                             </div>
                                         </h2>
-                                        <app-grid-suivi *ngIf="!i" (ordreSelected)="addButtonHandler($event)"></app-grid-suivi>
+                                        <app-grid-suivi *ngIf="!i" (ordreSelected)="pushTab($event)"></app-grid-suivi>
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
