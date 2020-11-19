@@ -6,29 +6,29 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
-import { BasesTarifService } from 'app/shared/services/bases-tarif.service';
-import { CertificationsService } from 'app/shared/services/certification.service';
-import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
-import { CourtierService } from 'app/shared/services/courtiers.service';
-import { DevisesService } from 'app/shared/services/devises.service';
-import { GroupesClientService } from 'app/shared/services/groupes-vente.service';
-import { HistoryType } from 'app/shared/services/historique.service';
-import { IncotermsService } from 'app/shared/services/incoterms.service';
-import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { PaysService } from 'app/shared/services/pays.service';
-import { PersonnesService } from 'app/shared/services/personnes.service';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
-import { SecteursService } from 'app/shared/services/secteurs.service';
-import { TypesClientService } from 'app/shared/services/types-client.service';
-import { TypesVenteService } from 'app/shared/services/types-vente.service';
+import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
+import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
+import { CertificationsService } from 'app/shared/services/api/certification.service';
+import { ConditionsVenteService } from 'app/shared/services/api/conditions-vente.service';
+import { CourtierService } from 'app/shared/services/api/courtiers.service';
+import { DevisesService } from 'app/shared/services/api/devises.service';
+import { GroupesClientService } from 'app/shared/services/api/groupes-vente.service';
+import { HistoryType } from 'app/shared/services/api/historique.service';
+import { IncotermsService } from 'app/shared/services/api/incoterms.service';
+import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
+import { PaysService } from 'app/shared/services/api/pays.service';
+import { PersonnesService } from 'app/shared/services/api/personnes.service';
+import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
+import { SecteursService } from 'app/shared/services/api/secteurs.service';
+import { TypesClientService } from 'app/shared/services/api/types-client.service';
+import { TypesVenteService } from 'app/shared/services/api/types-vente.service';
 import { DxCheckBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
-import { Client } from '../../../../shared/models';
+import { Certification, CertificationClient, Client } from '../../../../shared/models';
 import { AuthService, ClientsService } from '../../../../shared/services';
 
 @Component({
@@ -205,8 +205,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             .pipe(mergeAll())
             .subscribe(res => {
               this.client = new Client(res.data.client);
-              this.formGroup.patchValue(this.client);
-              this.contentReadyEvent.emit();
+              const certifications = this.mapCertificationsForDisplay(this.client.certifications);
+              this.formGroup.patchValue({ ...this.client, certifications });
               this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
             });
         } else {
@@ -216,8 +216,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             delaiBonFacturer: 8 // Donné par Léa 7-09-2020
           });
           this.formGroup.patchValue(this.client);
-          this.contentReadyEvent.emit();
         }
+        this.contentReadyEvent.emit();
       });
 
     this.secteurs = this.secteursService.getDataSource();
@@ -274,13 +274,20 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         client.preSaisie = true;
       }
 
+      const certifications = this.mapCertificationsForSave(client.certifications);
+
       (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
         this.validatePopup.present(
           HistoryType.CLIENT,
           { client: { id: client.id }, valide: client.valide },
         ) : of(undefined))
         .pipe(
-          switchMap(_ => this.clientsService.save({ client })),
+          switchMap(_ => this.clientsService.save({
+            client: {
+              ...client,
+              certifications,
+            }
+          })),
           concatAll(),
         )
         .subscribe({
@@ -299,6 +306,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             }
             this.client.historique = e.data.saveClient.historique;
             this.client.typeTiers = e.data.saveClient.typeTiers;
+            this.client.certifications = e.data.saveClient.certifications;
             this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
@@ -350,6 +358,24 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${this.client.code}/${this.client.typeTiers}`]);
+  }
+
+  private mapCertificationsForDisplay(certifications: CertificationClient[]): Certification[] {
+    if (!certifications || !certifications.length) return [];
+    return certifications.map(({ certification }) => certification);
+  }
+
+  private mapCertificationsForSave(certifications: Certification[]): CertificationClient[] {
+    if (!certifications || !certifications.length) return [];
+
+    return certifications
+      .map(({ id }) => {
+        const cc = this.client.certifications && this.client.certifications.find(({ certification }) => certification.id === id);
+        return {
+          id: cc ? cc.id : null,
+          certification: { id },
+        };
+      });
   }
 
 }

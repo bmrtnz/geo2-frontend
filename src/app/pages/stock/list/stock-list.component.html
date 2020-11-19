@@ -20,10 +20,6 @@
                         <div class="quicksearch">Recherche rapide</div>
                     </div>
                     <div class="search-criteria-container">
-                        <!-- <div class="search-criteria-subcontainer">
-                            <div class="advancedsearch">Recherche avancée</div>
-                            <dx-button class="upperButton" type="default" text="{{ 'btn-valider' | localize }}" [useSubmitBehavior]="true"></dx-button>
-                        </div> -->
                         <div class="search-criteria-subcontainer" style="width:auto">
                             <!-- espèce -->
                             <div class="dx-field">
@@ -87,18 +83,6 @@
                             </div>
                         </div>
                         <div class="search-criteria-subcontainer">
-                            <!-- Bureau achat -->
-                            <!-- <div class="dx-field">
-                                <div class="dx-field-label">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-select-box
-                                    formControlName="bureauAchat"
-                                    [searchEnabled]="true"
-                                    [dataSource]="bureauxAchat"
-                                    displayExpr="raisonSocial">
-                                    </dx-select-box>
-                                </div>
-                            </div> -->
                             <!-- calibre Unifie -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-calibreUnifie' | localize }}</div>
@@ -144,47 +128,6 @@
                                     ></dx-tag-box>
                                 </div>
                             </div>
-                        </div>
-                        <div class="search-criteria-subcontainer">
-                            <!-- Secteurs -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [dataSource]="secteurs"
-                                        displayExpr="description"
-                                        [searchEnabled]="true"
-                                        searchExpr="description"
-                                        (valueChange)="onCustomFilterChange($event, 'ordre.secteurCommercial.id')"
-                                    ></dx-tag-box>
-                                </div>
-                            </div>
-                            <!-- Clients -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [disabled]="true"
-                                        [dataSource]="clients"
-                                        [searchEnabled]="true"
-                                        searchExpr="raisonSocial"
-                                        displayExpr="raisonSocial">
-                                    </dx-tag-box>
-                                </div>
-                            </div>
-                            <!-- fournisseur -->
-                            <div class="dx-field">
-                                <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
-                                <div class="dx-field-value">
-                                    <dx-tag-box
-                                        [dataSource]="fournisseurs"
-                                        displayExpr="raisonSocial"
-                                        [searchEnabled]="true"
-                                        searchExpr="raisonSocial"
-                                        (valueChange)="onCustomFilterChange($event, 'ordre.fournisseur.id')"
-                                    ></dx-tag-box>
-                                </div>
-                            </div>
                             <!-- Mode Culture -->
                             <div class="dx-field">
                                 <div class="dx-field-label">{{ 'articles-modeCulture' | localize }}</div>
@@ -197,6 +140,47 @@
                                         searchExpr="article.matierePremiere.modeCulture.description"
                                         displayExpr="key"
                                         valueExpr="key"
+                                    ></dx-tag-box>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-criteria-subcontainer">
+                            <!-- Secteurs -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="secteurs"
+                                        displayExpr="description"
+                                        [searchEnabled]="true"
+                                        searchExpr="description"
+                                        (valueChange)="onCustomFilterChange($event, 'secteurs')"
+                                    ></dx-tag-box>
+                                </div>
+                            </div>
+                            <!-- Clients -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="clients"
+                                        displayExpr="raisonSocial"
+                                        [searchEnabled]="true"
+                                        searchExpr="raisonSocial"
+                                        (valueChange)="onCustomFilterChange($event, 'clients')">
+                                    </dx-tag-box>
+                                </div>
+                            </div>
+                            <!-- fournisseur -->
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{ 'stocks-fournisseurs-title' | localize }}</div>
+                                <div class="dx-field-value">
+                                    <dx-tag-box
+                                        [dataSource]="fournisseurs"
+                                        displayExpr="raisonSocial"
+                                        [searchEnabled]="true"
+                                        searchExpr="raisonSocial"
+                                        (valueChange)="onCustomFilterChange($event, 'fournisseurs')"
                                     ></dx-tag-box>
                                 </div>
                             </div>
@@ -221,14 +205,14 @@
                     [rowAlternationEnabled]="true"
                     [allowColumnReordering]="true"
                     (onCellPrepared)="onCellPrepared($event)"
+                    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Stock)"
                 >
                     <dxo-search-panel [visible]="true" [width]="160" placeholder="Mot clé…"></dxo-search-panel>
                     <dxo-header-filter [visible]="false" [allowSearch]="true"></dxo-header-filter>
                     <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
-                    <dxo-paging [pageSize]="10"></dxo-paging>
+                    <dxo-paging></dxo-paging>
                     <dxo-pager
                         [showPageSizeSelector]="true"
-                        [allowedPageSizes]="[10, 25, 50, 100]"
                         [showInfo]="true"
                         [showNavigationButtons]="true">
                     </dxo-pager>
@@ -242,16 +226,20 @@
                         title="{{ 'columnChooser' | localize }}"
                         allowSearch="true">
                     </dxo-column-chooser>
+                    <dxo-state-storing 
+                        [enabled]="true" 
+                        type="custom"
+                        [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.Stock).load"
+                        [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.Stock).save"
+                        ></dxo-state-storing>
                     <dxi-column
-                        *ngFor="let field of detailedFields | async; index as i"
+                        *ngFor="let field of detailedFields | async"
                         [dataField]="field.path"
-                        [caption]="field.name"
-                        [visible]="i < stockArticlesAgeService.baseFieldsSize"
+                        [caption]="(field.name | localize) || field.path"
+                        [visible]="false"
                         [dataType]="field.dataType"
                         [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
                         [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
-                        [filterValue]="field.filterValue"
-                        [width]="field.width"
                     ></dxi-column>
                     <dxi-column
                         dataField="actions"
@@ -273,7 +261,7 @@
                         </dxi-button>
                         <dxi-button
                             icon="material-icons search"
-                            [onClick]="onViewClick"
+                            [onClick]="onViewClick()"
                             hint="Fiche article">
                         </dxi-button>
                         <dxi-button

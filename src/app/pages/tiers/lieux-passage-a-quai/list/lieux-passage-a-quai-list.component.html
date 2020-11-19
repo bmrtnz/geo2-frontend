@@ -16,15 +16,15 @@
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.LieuPassageAQuai)"
   >
 
     <!-- Grid configuration -->
     <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
-      [allowedPageSizes]="[10, 25, 50, 100]"
       [showInfo]="true"
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
@@ -32,9 +32,9 @@
     <dxo-state-storing 
       [enabled]="true" 
       type="custom" 
-      [customLoad]="loadDataGridState"
-      [customSave]="saveDataGridState">
-    </dxo-state-storing>
+      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.LieuPassageAQuai).load"
+      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.LieuPassageAQuai).save"
+    ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
@@ -47,15 +47,13 @@
     </dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of detailedFields | async; index as i"
+      *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
       [caption]="('tiers-lieuxpassageaquai-' + field.name | localize) || field.name"
-      [visible]="i < lieuxPassageAQuaiService.baseFieldsSize"
+      [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
-      [filterValue]="field.filterValue"
-      [width]="field.width"
     ></dxi-column>
 
   </dx-data-grid>

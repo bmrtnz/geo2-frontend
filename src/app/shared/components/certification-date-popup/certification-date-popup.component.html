@@ -1,0 +1,52 @@
+<dx-popup
+  [dragEnabled]="false"
+  [height]="'auto'"
+  title="{{ 'valide-date-title' | localize }}"
+  (onHiding)="onHiding($event)"
+  (onShowing)="onShowing($event)"
+  [closeOnOutsideClick]="true"
+>
+  <div *dxTemplate="let d of 'content'">
+    <div>
+      <dx-data-grid
+        [dataSource]="certifications"
+        (onCellPrepared)="onCellPrepared($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+      >
+
+        <dxo-editing
+          [allowUpdating]="true"
+          [mode]="'batch'"
+        ></dxo-editing>
+
+        <dxi-column
+          dataField="certification.description"
+          [allowEditing]="false"
+        ></dxi-column>
+        <dxi-column
+          dataField="dateValidite"
+          [allowEditing]="true"
+          [showEditorAlways]="true"
+          [validationRules]="this.dateValidationRules"
+          dataType="date"
+        ></dxi-column>
+
+      </dx-data-grid>
+
+      <br>
+
+      <div class="prompt-action">
+        <dx-button
+          text="{{ 'btn-annuler' | localize }}"
+          type="normal"
+          (onClick)="popupComponent.instance.hide()"
+        ></dx-button>
+        <dx-button
+          text="{{ 'btn-valider' | localize }}"
+          type="default"
+          (onClick)="onSubmit()"
+        ></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

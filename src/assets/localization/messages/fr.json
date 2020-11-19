@@ -7,6 +7,7 @@
     "valide": "Validé",
     "valide-comment": "Commentaire",
     "valide-comment-title": "Commentaire de validation",
+    "valide-date-title": "Date de validité des certifications",
     "invalide": "Non Validé",
     "user-modification": "Modifié par",
     "date-modification": "Date de modification",
@@ -35,7 +36,9 @@
     "btn-stock": "Stock",
     "btn-manuel": "Manuel",
     "btn-detailExp": "Détail expéditions",
-
+    "btn-confirm": "Confirmer",
+    "btn-close": "Clôturer",
+  
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
     "saveError": "Sauvegardé",    
@@ -109,7 +112,7 @@
     "tiers-clients-tauxRemiseParFacture": "Tx ristourne/facture",
     "tiers-clients-tauxRemiseHorsFacture": "Tx ristourne hors fact.",
     "tiers-clients-fraisExcluArticlePasOrigineFrance": "Exclu frais article pas orig France",
-    "tiers-clients-fraisMarketing": "Frais marketting - P.U.",
+    "tiers-clients-fraisMarketing": "Frais marketing - P.U.",
     "tiers-clients-fraisPlateforme": "Frais plateforme (€/kg)",
     "tiers-clients-groupeClient": "Groupe client",
     "tiers-clients-courtier": "Courtier",
@@ -415,6 +418,8 @@
     "stocks-articles-total": "Total",
     "stocks-articles-comm": "Commentaires",
 
+    "ordres-accueil-ordre-title": "Accueil Ordres de commande",
+    "ordres-configuration": "Configuration",
     "ordres-details-ordre-title": "Ordre de commande",
     "ordres-details-infoComplm": "Informations complémentaires",
     "ordres-details-InstructLogistique": "Instructions logistique",
@@ -447,6 +452,11 @@
     "ordres-facture": "Facturé",
     "ordres-EDI": "EDI",
     "ordres-ordrePlus": "Informations complémentaires",
-    "ordres-instructLogistique": "Instructions logistique"
+    "ordres-instructLogistique": "Instructions logistique",
+    "ordres-bonsafacturer": "Bons à facturer",
+    "ordres-ordresnonconfirmes": "Ordres non confirmés",
+    "ordres-ordresnonclotures": "Ordres non clôturés",
+    "ordres-commandesentransit": "Commandes en transit"
+   
   }
 }

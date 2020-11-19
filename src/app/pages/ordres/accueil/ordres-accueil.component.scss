@@ -1,0 +1,66 @@
+::ng-deep .dx-tile-content {
+    .indicator-container {
+        position: relative;
+        top:50%;
+        transform: translateY(-50%);
+    }
+    .indicator, .parameter, .subParameter {
+        color:#FFF;
+    }
+    .indicator {
+        display:inline-block;
+        position:relative;
+        font-size:4em;
+        text-align:center;
+        left:50%;
+        transform:translateX(-50%);
+        // padding-bottom:10px;
+    }
+    .indicator-button {
+        left:50%;
+        transform:translateX(-50%);
+        margin:0 auto;
+        background-color:transparent;
+    }
+    .warning-button {
+        position: absolute;
+        right:90px;
+    }
+    .tile-button:hover, .tile-button:focus {
+        background-color:transparent !important;
+    }
+    .parameter {
+        font-size:2em;
+        text-align:center;
+    }
+    .subParameter {
+        font-size:1.7em;
+        text-align:center;
+    }
+}
+::ng-deep .dx-tile {
+    cursor: pointer;
+    transition:0.15s; 
+}
+::ng-deep .dx-tile:hover {
+    transform: scale(102%,102%);
+}
+::ng-deep .configuration {
+    width:400px;
+    float:right;
+    .dx-tag {
+        display:none;
+    }
+    .dx-field-label {
+        font-size:1.3em;
+        color:#444;
+        left: 130px;
+        position: absolute;
+    }
+    .dx-dropdowneditor-input-wrapper {
+        display:none
+    }
+    .dx-editor-underlined::after {
+        display:none;
+    }
+}

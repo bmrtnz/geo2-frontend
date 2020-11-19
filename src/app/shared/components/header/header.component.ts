@@ -2,7 +2,7 @@ import {Component, NgModule, Input, Output, EventEmitter, HostListener} from '@a
 import {CommonModule} from '@angular/common';
 import DataSource from 'devextreme/data/data_source';
 import {AuthService, LocalizationService} from '../../services';
-import {SocietesService} from 'app/shared/services/societes.service';
+import {SocietesService} from 'app/shared/services/api/societes.service';
 import {UserPanelModule} from '../user-panel/user-panel.component';
 import {CompanyChooserModule} from '../company-chooser/company-chooser.component';
 import {DxButtonModule} from 'devextreme-angular/ui/button';

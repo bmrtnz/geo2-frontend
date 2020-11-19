@@ -7,7 +7,7 @@ import { loadavg } from 'os';
 export const environment = {
   production: false,
   debugRouting: false,
-  apiEndpoint: 'http://localhost:8081/graphql',
+  apiEndpoint: 'http://192.168.2.161:8081/graphql',
   columnChooser: {
     width: 500,
     height: 500

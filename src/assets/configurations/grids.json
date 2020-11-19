@@ -1,0 +1,446 @@
+{
+  "common": {
+    "allowedPageSizes": [ 10,25,50,100 ],
+    "filterPanel": {
+      "filterEnabled": true
+    },
+    "filterValue": null,
+    "pageIndex": 0,
+    "pageSize": 10,
+    "searchText": ""
+  },
+  "client": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 100,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "secteur.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "visible": true
+      }
+    ]
+  },
+  "fournisseur": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "devise.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "langue.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "visible": true
+      }
+    ]
+  },
+  "transporteur": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      }
+    ]
+  },
+  "lieuPassageAQuai": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "codePostal",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      }
+    ]
+  },
+  "entrepot": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "adresse1",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "visible": true
+      }
+    ]
+  },
+  "contact": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "fluxComplement",
+        "dataType": "string",
+        "width": 75,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "moyenCommunication.description",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "nom",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "prenom",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "codeTiers",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
+  "article": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "blueWhaleStock",
+        "dataType": "boolean",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "visible": true,
+        "filterValue": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "matierePremiere.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "matierePremiere.espece.description",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
+  "stock": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "article.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "article.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "j",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "j1a8",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "j9a20",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "j21aX",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "total",
+        "dataType": "number",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "commentaire",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "quantiteHebdomadaire",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "prevision3j",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "prevision7j",
+        "dataType": "number",
+        "visible": true
+      }
+    ]
+  },
+  "ordre": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "numero",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "referenceClient",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  }
+}

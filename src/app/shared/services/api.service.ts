@@ -156,7 +156,7 @@ export abstract class ApiService {
       .filter(([key, control]) => key === this.keyField || control.dirty)
       .map(([key, control]) => {
         const value = JSON.parse(JSON.stringify(control.value));
-        const cleanValue = typeof value === 'object' && value.length !== undefined ?
+        const cleanValue = typeof value === 'object' && value && value.length !== undefined ?
           (value as []).map(v => clean(v)) :
           clean(value);
         return { [key]: cleanValue };

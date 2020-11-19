@@ -2,29 +2,30 @@ import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angu
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { CertificationDatePopupComponent } from 'app/shared/components/certification-date-popup/certification-date-popup.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { AuthService } from 'app/shared/services';
-import { BasesPaiementService } from 'app/shared/services/bases-paiement.service';
-import { BureauxAchatService } from 'app/shared/services/bureaux-achat.service';
-import { CertificationsService } from 'app/shared/services/certification.service';
-import { ConditionsVenteService } from 'app/shared/services/conditions-vente.service';
-import { DevisesService } from 'app/shared/services/devises.service';
-import { GroupesFournisseurService } from 'app/shared/services/groupes-fournisseur.service';
-import { HistoryType } from 'app/shared/services/historique.service';
-import { MoyensPaiementService } from 'app/shared/services/moyens-paiement.service';
-import { NaturesStationService } from 'app/shared/services/natures-station.service';
-import { PaysService } from 'app/shared/services/pays.service';
-import { RegimesTvaService } from 'app/shared/services/regimes-tva.service';
-import { TypesFournisseurService } from 'app/shared/services/types-fournisseur.service';
+import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
+import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
+import { CertificationsService } from 'app/shared/services/api/certification.service';
+import { ConditionsVenteService } from 'app/shared/services/api/conditions-vente.service';
+import { DevisesService } from 'app/shared/services/api/devises.service';
+import { GroupesFournisseurService } from 'app/shared/services/api/groupes-fournisseur.service';
+import { HistoryType } from 'app/shared/services/api/historique.service';
+import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
+import { NaturesStationService } from 'app/shared/services/api/natures-station.service';
+import { PaysService } from 'app/shared/services/api/pays.service';
+import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
+import { TypesFournisseurService } from 'app/shared/services/api/types-fournisseur.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
-import { Fournisseur } from '../../../../shared/models';
-import { FournisseursService } from '../../../../shared/services/fournisseurs.service';
+import { Certification, CertificationFournisseur, Fournisseur } from '../../../../shared/models';
+import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -96,6 +97,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
+  @ViewChild(CertificationDatePopupComponent, { static: false })
+  certDatePopup: CertificationDatePopupComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -170,15 +173,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             .pipe(mergeAll())
             .subscribe(res => {
               this.fournisseur = new Fournisseur(res.data.fournisseur);
-              // console.log(this.fournisseur.fournisseurDeRattachement);
-              this.formGroup.patchValue(this.fournisseur);
-              this.contentReadyEvent.emit();
+              const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
+              this.formGroup.patchValue({ ...this.fournisseur, certifications });
               this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
             });
         } else {
           this.fournisseur = new Fournisseur({});
-          this.contentReadyEvent.emit();
         }
+        this.contentReadyEvent.emit();
       });
 
     this.pays = this.paysService.getDataSource();
@@ -230,13 +232,22 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
       }
 
+      /* tslint:disable-next-line max-line-length */
+      const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
+
       (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode ?
         this.validatePopup.present(
           HistoryType.FOURNISSEUR,
           { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
         ) : of(undefined))
         .pipe(
-          switchMap(_ => this.fournisseursService.save({ fournisseur })),
+          switchMap(_ => certifications ? this.certDatePopup.present(certifications) : of(undefined)),
+          switchMap(certs => this.fournisseursService.save({
+            fournisseur: {
+              ...fournisseur,
+              certifications: certs,
+            }
+          })),
           concatAll(),
         )
         .subscribe({
@@ -255,6 +266,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             }
             this.fournisseur.historique = e.data.saveFournisseur.historique;
             this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
+            this.fournisseur.certifications = e.data.saveFournisseur.certifications;
             this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
@@ -281,6 +293,28 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${this.fournisseur.id}/${this.fournisseur.typeTiers}`]);
+  }
+
+  private mapCertificationsForDisplay(certifications: CertificationFournisseur[]): Certification[] {
+    if (!certifications || !certifications.length) return [];
+    return certifications.map(({ certification }) => certification);
+  }
+
+  private mapCertificationsForSave(certifications: Certification[]): CertificationFournisseur[] {
+    if (!certifications || !certifications.length) return [];
+
+    return certifications
+      .map((certification) => {
+        const cc = this.fournisseur.certifications && this.fournisseur.certifications
+          .find(({ certification: cert }) => cert.id === certification.id);
+        return {
+          id: cc ? cc.id : null,
+          certification,
+          dateValidite: cc ?
+            new Date(cc.dateValidite).toISOString() :
+            null,
+        };
+      });
   }
 
 }

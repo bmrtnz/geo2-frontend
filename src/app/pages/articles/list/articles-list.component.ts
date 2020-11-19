@@ -1,5 +1,5 @@
 import {Component, OnInit, EventEmitter, ViewChild} from '@angular/core';
-import {ArticlesService} from '../../../shared/services/articles.service';
+import {ArticlesService} from '../../../shared/services/api/articles.service';
 import {Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
@@ -8,6 +8,7 @@ import { ApiService } from 'app/shared/services/api.service';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Observable } from 'rxjs';
+import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 
 @Component({
   selector: 'app-articles-list',
@@ -25,7 +26,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   constructor(
     public articlesService: ArticlesService,
-    private router: Router
+    private router: Router,
+    public gridConfiguratorService: GridConfiguratorService,
   ) {
     this.apiService = this.articlesService;
   }
@@ -45,28 +47,6 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         e.rowElement.classList.add('highlight-datagrid-row');
       }
     }
-  }
-
-  loadDataGridState() {
-    const data = window.localStorage.getItem('articlesStorage');
-    if (data !== null) {
-
-      // Suppression filtres/recherche
-      const state = JSON.parse(data);
-      for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
-      }
-      state.searchText = '';
-
-      return state;
-    } else {
-      return null;
-    }
-
-  }
-
-  async saveDataGridState(data) {
-    window.localStorage.setItem('articlesStorage', JSON.stringify(data));
   }
 
 }

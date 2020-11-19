@@ -3,15 +3,13 @@ import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { ApiService } from 'app/shared/services/api.service';
-import { GridsConfigsService } from 'app/shared/services/grids-configs.service';
+import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
+import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { from, Observable } from 'rxjs';
-import { mergeAll } from 'rxjs/operators';
-import { AuthService, TransporteursService } from '../../../../shared/services';
-
-let self: TransporteursListComponent;
+import { Observable } from 'rxjs';
+import { TransporteursService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-transporteurs-list',
@@ -30,11 +28,10 @@ export class TransporteursListComponent implements OnInit, NestedMain {
   constructor(
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
+    public gridConfiguratorService: GridConfiguratorService,
     private router: Router,
-    private authService: AuthService,
   ) {
     this.apiService = transporteursService;
-    self = this;
   }
 
   ngOnInit() {
@@ -56,49 +53,6 @@ export class TransporteursListComponent implements OnInit, NestedMain {
         e.rowElement.classList.add('highlight-datagrid-row');
       }
     }
-  }
-
-  async loadDataGridState() {
-
-    // Lecture
-    const gridSource = self.gridService.getDataSource();
-    gridSource.filter([
-      ['utilisateur.nomUtilisateur', '=', self.authService.currentUser.nomUtilisateur],
-      'and',
-      ['grid', '=', 'transporteurStorage'],
-    ]);
-    return gridSource.load().then(res => {
-      if (!res.length) return null;
-      const data = res[0].config;
-      if (data !== null) {
-        // Suppression filtres/recherche
-        for (const myColumn of data.columns) {
-          if (myColumn.dataField !== 'valide') { myColumn.filterValue = null; }
-        }
-        data.searchText = '';
-        data.focusedRowKey = null;
-
-        return data;
-      } else {
-        return null;
-      }
-    });
-
-  }
-
-  saveDataGridState(data) {
-
-    // Ecriture
-    from(self.gridService.save({
-      gridConfig: {
-        utilisateur: { nomUtilisateur: self.authService.currentUser.nomUtilisateur },
-        grid: 'transporteurStorage',
-        config: data
-      }
-    }))
-      .pipe(mergeAll())
-      .subscribe();
-
   }
 
 }
