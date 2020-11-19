@@ -75,6 +75,9 @@ export class GridConfiguratorService {
     self.filterGrid();
     const res: GridConfig[] = await self.dataSource.load();
     if (!res.length) return self.fetchDefaultConfig();
+    // Clear search text and pagination
+    res[0].config.searchText = '';
+    res[0].config.focusedRowKey = null;
     return res[0].config;
   }
 
