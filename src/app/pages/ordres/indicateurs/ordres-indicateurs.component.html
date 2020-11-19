@@ -1,1 +1,9 @@
-<h2 class="content-block">{{ 'ordres-' + indicator | localize }}</h2>
+<h2 class="content-block">{{ 'ordres-' + indicator | localize }}
+    <dx-button *ngIf="indicator == 'ordresnonconfirmes'" class="upperButton" type="default" text="{{ 'btn-confirm' | localize }}" (onClick)="onConfirm()"></dx-button>
+    <dx-button *ngIf="indicator == 'ordresnonclotures'" class="upperButton" type="default" text="{{ 'btn-close' | localize }}" (onClick)="onClose()"></dx-button>
+</h2>
+
+<div class="content-block">
+    <app-grid-suivi [filter]="filter" (ordreSelected)="onRowDblClick($event)"></app-grid-suivi>
+</div>
+  

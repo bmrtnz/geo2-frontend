@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 export class GridSuiviComponent implements OnInit {
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
+  @Input() public filter: [];
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -25,15 +26,17 @@ export class GridSuiviComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
   ) {
     this.dataSource = ordresService.getDataSource();
-    this.dataSource.filter([
-      ['valide', '=', true],
-      'and',
-      ['societe.id', '=', environment.societe.id],
-    ]);
     this.detailedFields = this.ordresService.model.getDetailedFields();
   }
 
   ngOnInit() {
+    let filters = [
+      ['valide', '=', true],
+      'and',
+      ['societe.id', '=', environment.societe.id],
+    ];
+    if (this.filter) filters = [...filters, 'and', this.filter];
+    this.dataSource.filter(filters);
   }
 
 }

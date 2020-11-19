@@ -26,11 +26,8 @@
         position: absolute;
         right:90px;
     }
-    .number-container {
-        // background:#DDD;
-    }
     .tile-button:hover, .tile-button:focus {
-        background-color:transparent;
+        background-color:transparent !important;
     }
     .parameter {
         font-size:2em;

@@ -74,6 +74,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         const patch = this.ordresService.extractDirty(this.formGroup.controls);
         this.contents[selectedIndex].patch = patch;
       });
+    // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
+    const data = window.localStorage.getItem('orderNumber');
+    if (data) {
+      const order = JSON.parse(data);
+      window.localStorage.removeItem('orderNumber');
+      this.pushTab(order);
+    }
   }
 
   ngOnDestroy() {
