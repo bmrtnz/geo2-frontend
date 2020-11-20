@@ -7,6 +7,7 @@
     type="default"
     [disabled]="disableButton()"
     (onClick)="pushTab()"
+
     ></dx-button>
     <div style="clear:both"></div>
 </div>
@@ -119,14 +120,14 @@
                                             height="auto"
                                             icon="material-icons restore"
                                             text="{{ 'ordres-details-historiqueordres' | localize }}"
-                                            (onClick)="scrollToOnClick()">
+                                            (onClick)="scrollToOnClick($event)">
                                         </dx-button>
                                         <dx-button
                                             class="black"
                                             height="auto"
                                             icon="material-icons dynamic_feed"
                                             text="{{ 'ordres-details-traitmasse' | localize }}"
-                                            (onClick)="scrollToOnClick()">
+                                            (onClick)="scrollToOnClick($event)">
                                         </dx-button>
                                     </dxi-item>
                                     <dxi-item [ratio]="0.3" [visible]="this.isIndexTab">
@@ -159,7 +160,7 @@
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
-                                                
+
                                                 <div class="dx-form-group-content">
                                                     <dx-box>
                                                         <dxi-item [ratio]="4">
@@ -226,7 +227,7 @@
                                                                     </dx-select-box>
                                                                 </div>
                                                             </div>
-                            
+
                                                             <dx-accordion
                                                             [collapsible]="true"
                                                             [multiple]="false"
@@ -299,7 +300,7 @@
                                                                     </div>
                                                                 </dxi-item>
                                                             </dx-box>
-                                                        
+
                                                         <!-- Vente Commission -->
                                                         <div class="dx-field">
                                                             <div class="dx-field-label">{{ 'ordres-venteCommission' | localize }}</div>
@@ -330,11 +331,11 @@
                                                         </div>
                                                         </dxi-item>
                                                     </dx-box>
-                            
+
                                                 </div>
-                            
+
                                             </div>
-                            
+
                                             <div class="articles-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-articles' | localize }}</span>
                                                 <dx-button class="upperButton subButton"
@@ -357,9 +358,9 @@
                                                 ></dx-button>
                                                 <div class="dx-form-group-content">
                                                 </div>
-                            
+
                                             </div>
-                            
+
                                             <div class="logistique-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-logistique' | localize }}</span>
                                                 <dx-accordion
@@ -374,7 +375,7 @@
                                                     </dxi-item>
                                                 </dx-accordion>
                                             </div>
-                            
+
                                             <div class="litiges-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-litiges' | localize }}</span>
                                                 <dx-accordion
@@ -389,7 +390,7 @@
                                                     </dxi-item>
                                                 </dx-accordion>
                                             </div>
-                            
+
                                             <div class="marges-field accordion3 dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-marges' | localize }}</span>
                                                 <dx-accordion
@@ -404,7 +405,7 @@
                                                     </dxi-item>
                                                 </dx-accordion>
                                             </div>
-                            
+
                                             <div class="CQ-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-CQ' | localize }}</span>
                                                 <dx-accordion
@@ -434,19 +435,19 @@
                                                             [dataSource]="commentaires"
                                                             [columns]="['Quand', 'Qui', 'Quoi']"
                                                             [showBorders]="true">
-                            
+
                                                             <dxo-editing
                                                             [allowUpdating]="true"
                                                             [allowDeleting]="true"
                                                             [allowAdding]="true"
                                                             >
                                     >                       </dxo-editing>
-                            
+
                                                         </dx-data-grid>
                                                     </dxi-item>
                                                 </dx-accordion>
                                             </div>
-                            
+
                                             <div class="log-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-log' | localize }}</span>
                                                 <dx-accordion
@@ -470,12 +471,12 @@
                                     </dxi-item>
                                 </dx-box>
                             </div>
-                    
+
                         </form>
                     </div>
 
                 </dx-tab-panel>
-            
+
             </dx-sortable>
     </dxi-item>
 </dx-box>
