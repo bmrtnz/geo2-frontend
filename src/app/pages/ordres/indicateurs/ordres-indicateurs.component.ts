@@ -45,7 +45,7 @@ export class OrdresIndicateursComponent implements OnInit {
         this.filter = ['bonAFacturer', '=', true];
       }
       if (this.indicator === 'ordresnonclotures') {
-         this.filter = ['cloture', '=', false];
+        this.filter = ['livre', '=', false];
       }
     });
   }
