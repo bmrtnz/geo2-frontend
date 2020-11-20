@@ -98,7 +98,7 @@ const indicators: Indicator[] = [{
   number: '',
   parameter: 'Stock',
   subParameter: 'dispo',
-  goTo: '/ordres/stock',
+  goTo: '/stock',
   tileBkg: '#60895E',
   indicatorIcon: 'box',
   warningIcon: ''

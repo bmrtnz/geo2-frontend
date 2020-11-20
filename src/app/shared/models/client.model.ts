@@ -95,7 +95,7 @@ export class Client extends Model {
   @Field() public fraisRamasse: boolean;
   @Field() public venteACommission: boolean;
   @Field({ model: import('./condition-vente.model') }) public conditionVente: ConditionVente;
-  @Field({ model: import('./certification-client.model') }) public certifications: CertificationClient[];
+  @Field({ model: import('./certification-client.model'), allowSearch: false }) public certifications: CertificationClient[];
 }
 
 export default Client;
