@@ -1,7 +1,8 @@
 export const environment = {
   production: true,
   debugRouting: false,
-  apiEndpoint: 'https://geo-bw.microtec.fr/api/graphql',
+  // apiEndpoint: 'http://geo2.bluewhale.fr/api/graphql',
+  apiEndpoint: 'http://192.168.2.32/api/graphql',
   columnChooser: {
     width: 500,
     height: 500
@@ -11,7 +12,3 @@ export const environment = {
     raisonSocial: 'Blue Whale S.A.S.'
   },
 };
-
-export function loada() {
-  alert('ttt');
-}

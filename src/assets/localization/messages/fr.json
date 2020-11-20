@@ -36,7 +36,9 @@
     "btn-stock": "Stock",
     "btn-manuel": "Manuel",
     "btn-detailExp": "Détail expéditions",
-
+    "btn-confirm": "Confirmer",
+    "btn-close": "Clôturer",
+  
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
     "saveError": "Sauvegardé",    
@@ -110,7 +112,7 @@
     "tiers-clients-tauxRemiseParFacture": "Tx ristourne/facture",
     "tiers-clients-tauxRemiseHorsFacture": "Tx ristourne hors fact.",
     "tiers-clients-fraisExcluArticlePasOrigineFrance": "Exclu frais article pas orig France",
-    "tiers-clients-fraisMarketing": "Frais marketting - P.U.",
+    "tiers-clients-fraisMarketing": "Frais marketing - P.U.",
     "tiers-clients-fraisPlateforme": "Frais plateforme (€/kg)",
     "tiers-clients-groupeClient": "Groupe client",
     "tiers-clients-courtier": "Courtier",
@@ -454,7 +456,7 @@
     "ordres-instructLogistique": "Instructions logistique",
     "ordres-bonsafacturer": "Bons à facturer",
     "ordres-ordresnonconfirmes": "Ordres non confirmés",
-    "ordres-ordresnonclotures": "Ordres non cloturés",
+    "ordres-ordresnonclotures": "Ordres non clôturés",
     "ordres-commandesentransit": "Commandes en transit"
    
   }

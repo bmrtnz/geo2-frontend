@@ -49,26 +49,4 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
   }
 
-  loadDataGridState() {
-    const data = window.localStorage.getItem('articlesStorage');
-    if (data !== null) {
-
-      // Suppression filtres/recherche
-      const state = JSON.parse(data);
-      for (const myColumn of state.columns) {
-        if (myColumn.dataField !== 'valide') {myColumn.filterValue = null;}
-      }
-      state.searchText = '';
-
-      return state;
-    } else {
-      return null;
-    }
-
-  }
-
-  async saveDataGridState(data) {
-    window.localStorage.setItem('articlesStorage', JSON.stringify(data));
-  }
-
 }
