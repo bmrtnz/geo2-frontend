@@ -4,6 +4,7 @@ import { OrdreLigne } from './ordre-ligne.model';
 import Personne from './personne.model';
 import { Secteur } from './secteur.model';
 import { Societe } from './societe.model';
+import Transporteur from './transporteur.model';
 
 export class Ordre extends Model {
 
@@ -16,6 +17,7 @@ export class Ordre extends Model {
   @Field() public referenceClient?: string;
   @Field({ model: import('./personne.model') }) public commercial?: Personne;
   @Field({ model: import('./personne.model') }) public assistante?: Personne;
+  @Field({ model: import('./transporteur.model') }) public transporteur?: Transporteur;
   @Field({ dataType: 'date' }) public dateDepartPrevue?: string;
   @Field({ dataType: 'date' }) public dateLivraisonPrevue?: string;
   @Field() public venteACommission?: boolean;

@@ -11,7 +11,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import {
   DxAccordionModule, DxBoxModule, DxButtonModule,
 
-  DxCheckBoxModule, DxDataGridModule, DxFormModule,
+  DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule,
   DxListModule,
   DxPopoverModule, DxSelectBoxModule,
 
@@ -47,7 +47,8 @@ import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
     DxPopoverModule,
     DxValidatorModule,
     EditingAlertModule,
-    FileManagerModule
+    FileManagerModule,
+    DxDateBoxModule,
   ]
 })
 export class OrdresModule { }
