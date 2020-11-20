@@ -142,8 +142,10 @@ export abstract class Model {
               .getDetailedFields(depth - 1, fieldFilter, path)
               .pipe(concatAll());
           const type = Reflect.getMetadata('design:type', this.prototype, name).name;
-          if (options.fetchedModel)
-            path = `${path}.${options.fetchedModel.getLabelField()}`;
+          if (options.fetchedModel) {
+            const descriptor = options.fetchedModel.getLabelField() || options.fetchedModel.getKeyField();
+            path = `${path}.${descriptor}`;
+          }
           return of({
             name,
             path,
