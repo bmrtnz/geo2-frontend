@@ -42,6 +42,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     bonAFacturer: [''],
     facture: [''],
     factureEDI: [''],
+    livre: [''],
   });
   private formValuesChange: Subscription;
 
@@ -118,7 +119,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     e.toData.splice(e.toIndex, 0, e.itemData);
   }
 
-  pushTab(ordre: Ordre) {
+  pushTab(ordre?: Ordre) {
     this.contents.push({
       id: ordre ? ordre.id : null,
       tabTitle: ordre ? `Ordre N° ${ordre.numero}` : 'Nouvel ordre',

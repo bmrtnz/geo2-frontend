@@ -22,6 +22,7 @@ export class Ordre extends Model {
   @Field() public bonAFacturer?: boolean;
   @Field() public facture?: boolean;
   @Field() public factureEDI?: boolean;
+  @Field() public livre?: boolean;
   @Field() public instructionsLogistiques?: string;
 
 }
