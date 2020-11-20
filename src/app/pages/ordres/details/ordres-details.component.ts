@@ -82,6 +82,16 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       window.localStorage.removeItem('orderNumber');
       this.pushTab(order);
     }
+    // On affiche les ordres déjà ouverts le cas échéant
+    const myData = window.localStorage.getItem('openOrders');
+    console.log(myData) // A virer
+    if (myData !== null) {
+      const myOrders = JSON.parse(myData);
+      JSON.parse(myData).forEach(value => {
+        this.pushTab(value);
+      });
+    }
+
   }
 
   ngOnDestroy() {
@@ -120,6 +130,25 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
+
+    if (ordre) {
+      // We store id and numero when a tab is opened
+      // so that we can further recreate bunch of tabs (saved)
+      if (Object.keys(ordre).length > 2) {
+        const myData = window.localStorage.getItem('openOrders');
+        let myOrders = [];
+        if (myData !== null) {
+          myOrders = JSON.parse(myData);
+        }
+        const shortOrder = {
+          id: ordre.id,
+          numero: ordre.numero
+        };
+        myOrders.push(shortOrder);
+        window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
+        // console.log(window.localStorage.getItem('openOrders')) // A virer
+      }
+    }
     this.contents.push({
       id: ordre ? ordre.id : null,
       tabTitle: ordre ? `Ordre N° ${ordre.numero}` : 'Nouvel ordre',
@@ -129,9 +158,24 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   closeTab(itemData) {
     const index = this.contents.indexOf(itemData);
 
+    // Suppression onglet dans le localStorage
+    console.log(this.contents[1].id)
+    const myData = window.localStorage.getItem('openOrders');
+    const myOrders = JSON.parse(myData);
+    let i = 0;
+    myOrders.forEach(value => {
+      if (this.contents[1].id === value.id) {
+        myOrders.splice(i, 1);
+        window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
+        return false;
+      }
+      i++;
+    });
+
     this.contents.splice(index, 1);
     if (index >= this.contents.length)
       this.tabPanelComponent.selectedIndex = index - 1;
+
   }
 
   disableButton() {
