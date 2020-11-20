@@ -80,7 +80,7 @@ export class Fournisseur extends Model {
     allowSearch: false,
   }) public fournisseurDeRattachement: Fournisseur;
   @Field({ model: import('./groupe-fournisseur.model') }) public groupeFournisseur: GroupeFournisseur;
-  @Field({ model: import('./certification-fournisseur.model') }) public certifications: CertificationFournisseur[];
+  @Field({ model: import('./certification-fournisseur.model'), allowSearch: false}) public certifications: CertificationFournisseur[];
   @Field({ model: import('./stock.model') }) public stocks: Stock[];
 
 }
