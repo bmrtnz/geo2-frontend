@@ -13,7 +13,7 @@ export class Ordre extends Model {
   @Field({ model: import('./secteur.model') }) public secteurCommercial?: Secteur;
   @Field({ model: import('./client.model') }) public client?: Client;
   @Field({ model: import('./ordre-ligne.model') }) public lignes?: OrdreLigne[];
-  @Field() public numero?: string;
+  @Field({ asLabel: true }) public numero?: string;
   @Field() public referenceClient?: string;
   @Field({ model: import('./personne.model') }) public commercial?: Personne;
   @Field({ model: import('./personne.model') }) public assistante?: Personne;
