@@ -1,12 +1,12 @@
 {
   "name": "geo2",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
     "start:dev": "ng serve --open --liveReload=false --proxy-config proxy.conf.json",
     "build": "ng build",
-    "build:prod": "ng build --prod",
+    "build:prod": "ng build --prod && node script/archive ./dist/geo2-{version}.tar.gz ./dist/geo2/",
     "build:webdev": "ng build --configuration=webdev",
     "test": "ng test",
     "lint": "ng lint",
@@ -51,6 +51,7 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
+    "archiver": "^5.1.0",
     "codelyzer": "^5.0.0",
     "devextreme-cli": "^1.1.13",
     "devextreme-themebuilder": "latest",
