@@ -181,7 +181,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
-
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -199,6 +198,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
         // console.log(window.localStorage.getItem('openOrders')) // A virer
       }
+      const knownIndex = this.contents
+      .findIndex(({id}) => ordre.id === id );
+      if (knownIndex >= 0)
+        return this.tabPanelComponent.selectedIndex = knownIndex;
     }
     this.contents.push({
       id: ordre ? ordre.id : null,
