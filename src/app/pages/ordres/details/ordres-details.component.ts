@@ -172,6 +172,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
+    if (ordre) {
+      const knownIndex = this.contents
+      .findIndex(({id}) => ordre.id === id );
+      if (knownIndex >= 0)
+        return this.tabPanelComponent.selectedIndex = knownIndex;
+    }
+
     this.contents.push({
       id: ordre ? ordre.id : null,
       tabTitle: ordre ? `Ordre N° ${ordre.numero}` : 'Nouvel ordre',
