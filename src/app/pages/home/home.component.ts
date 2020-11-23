@@ -1,4 +1,4 @@
-import {Component, isDevMode, ViewChild} from '@angular/core';
+import {Component, isDevMode, ViewChild, OnInit} from '@angular/core';
 import { NavHomeList, NavHomeService } from 'app/shared/services/home.service';
 import { Router } from '@angular/router';
 import { DxDrawerComponent } from 'devextreme-angular';
@@ -9,7 +9,7 @@ import { DxDrawerComponent } from 'devextreme-angular';
   providers: [NavHomeService],
 })
 
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   @ViewChild(DxDrawerComponent, { static: false }) drawer: DxDrawerComponent;
   public currentDate: Date;
@@ -19,6 +19,10 @@ export class HomeComponent {
   constructor(private router: Router, service: NavHomeService) {
     this.currentDate = new Date();
     this.navigation = service.getNavigationList();
+  }
+
+  ngOnInit() {
+    window.localStorage.removeItem('openOrders');
   }
 
   onClickMultipleMenu(e) {
