@@ -3,7 +3,7 @@
 </h2>
 
 <div class="content-block">
-  
+
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="lieuxPassageAQuais"
     [remoteOperations]="true"
@@ -20,7 +20,7 @@
   >
 
     <!-- Grid configuration -->
-    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
+<!--    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>-->
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-paging></dxo-paging>
     <dxo-pager
@@ -29,9 +29,9 @@
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing 
-      [enabled]="true" 
-      type="custom" 
+    <dxo-state-storing
+      [enabled]="true"
+      type="custom"
       [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.LieuPassageAQuai).load"
       [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.LieuPassageAQuai).save"
     ></dxo-state-storing>
