@@ -3,10 +3,10 @@
   height="200"
   [dragEnabled]="false"
   [title]="title"
-  (onHiding)="onHiding($event)"
-  (onHidden)="onHidden($event)"
-  (onShowing)="onShowing($event)"
-  (onShown)="onShown($event)"
+  (onHiding)="onHiding()"
+  (onHidden)="onHidden()"
+  (onShowing)="onShowing()"
+  (onShown)="onShown()"
   [closeOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
