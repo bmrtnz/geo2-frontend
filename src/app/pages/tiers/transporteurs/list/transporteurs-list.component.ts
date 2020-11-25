@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { LocalizeFn } from '@angular/localize/init';
 import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
@@ -8,14 +9,16 @@ import { GridConfiguratorService } from 'app/shared/services/grid-configurator.s
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
-import { TransporteursService } from '../../../../shared/services';
+import { Observable, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { LocalizationService, TransporteursService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-transporteurs-list',
   templateUrl: './transporteurs-list.component.html',
   styleUrls: ['./transporteurs-list.component.scss']
 })
+
 export class TransporteursListComponent implements OnInit, NestedMain {
 
   transporteurs: DataSource;
@@ -28,6 +31,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
   constructor(
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
+    public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
     private router: Router,
   ) {
@@ -36,7 +40,15 @@ export class TransporteursListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.transporteurs = this.transporteursService.getDataSource();
-    this.detailedFields = this.transporteursService.model.getDetailedFields();
+    this.detailedFields = this.transporteursService.model.getDetailedFields()
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field =>
+          !!(this.localizeService.localize('tiers-transporteurs-' + field.path.replace('.description', ''))).length);
+       }),
+    );
+
   }
 
   onCreate() {

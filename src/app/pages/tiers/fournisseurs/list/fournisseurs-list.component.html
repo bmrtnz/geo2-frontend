@@ -49,7 +49,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('tiers-fournisseurs-' + field.name | localize) || field.name"
+      [caption]="('tiers-fournisseurs-' + field.path.replace('.description', '') | localize) || field.path"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

@@ -858,7 +858,7 @@
             </div>
             <!-- Conditions de vente -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-clients-conditionsVente' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-clients-conditionVente' | localize }}</div>
               <div class="dx-field-value">
                 <dx-select-box
                   formControlName="conditionVente"
@@ -868,7 +868,7 @@
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
-                <dx-validator name="{{ 'tiers-clients-conditionsVente' | localize }}">
+                <dx-validator name="{{ 'tiers-clients-conditionVente' | localize }}">
                   <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dx-validator>
               </dx-select-box>
