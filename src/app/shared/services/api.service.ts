@@ -77,6 +77,9 @@ export interface APIPersist {
   save(variables: OperationVariables):
     Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
     Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  delete?(variables: OperationVariables):
+    Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
+    Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
 export abstract class ApiService {
@@ -313,13 +316,13 @@ export abstract class ApiService {
    * Build delete query
    */
   protected buildDelete() {
+    const entity = this.withLowerCaseFirst(this.model.name);
+    const type = `Geo${this.model.name}Input`;
     const operation = `delete${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
-      mutation ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
-        ${operation}(${this.keyField}: $${this.keyField}) {
-          id
-        }
+      mutation ${alias}($${entity}: ${type}!) {
+        ${operation}(${entity}: $${entity})
       }
     `;
   }
