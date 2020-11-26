@@ -2,8 +2,8 @@ import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import notify from 'devextreme/ui/notify';
-import { from } from 'rxjs';
-import { mergeAll, tap } from 'rxjs/operators';
+import {from, throwError} from 'rxjs';
+import {catchError, mergeAll, tap} from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
 
@@ -39,11 +39,20 @@ export class AuthService {
             window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
             this.location.back();
           } else {
-            this.loggedIn = false;
-            notify('Utilisateur et/ou mot de passe inconnu', 'error');
+            this.loginError();
           }
+        }),
+        catchError((e: any) => {
+          this.loginError();
+
+          return throwError(e);
         })
       );
+  }
+
+  private loginError() {
+    this.loggedIn = false;
+    notify('Utilisateur et/ou mot de passe inconnu', 'error');
   }
 
   logOut() {

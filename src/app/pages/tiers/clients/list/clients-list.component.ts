@@ -9,7 +9,8 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { ClientsService } from '../../../../shared/services';
+import { map } from 'rxjs/operators';
+import { ClientsService, LocalizationService } from '../../../../shared/services';
 
 @Component({
   selector: 'app-clients-list',
@@ -28,6 +29,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   constructor(
     public clientsService: ClientsService,
     public gridService: GridsConfigsService,
+    public localizeService: LocalizationService,
     private router: Router,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
@@ -39,7 +41,14 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     // Filtrage selon société sélectionnée
     this.clients = this.clientsService.getDataSource();
     this.enableFilters();
-    this.detailedFields = this.clientsService.model.getDetailedFields();
+    this.detailedFields = this.clientsService.model.getDetailedFields()
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field =>
+          !!(this.localizeService.localize('tiers-clients-' + field.path.replace('.description', ''))).length);
+       }),
+    );
 
   }
 

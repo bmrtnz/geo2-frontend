@@ -2,8 +2,8 @@
   [dragEnabled]="false"
   [height]="'auto'"
   title="{{ 'valide-date-title' | localize }}"
-  (onHiding)="onHiding($event)"
-  (onShowing)="onShowing($event)"
+  (onHiding)="onHiding()"
+  (onShowing)="onShowing()"
   [closeOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
