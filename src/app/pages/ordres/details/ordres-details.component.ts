@@ -211,6 +211,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   closeTab(itemData) {
     const index = this.contents.indexOf(itemData);
+    // console.log(itemData)
+    console.log(index)
+    return
 
     // Suppression onglet dans le localStorage
     const myData = window.localStorage.getItem('openOrders');
