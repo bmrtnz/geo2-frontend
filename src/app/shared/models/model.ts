@@ -85,12 +85,24 @@ export abstract class Model {
    * @param depth Sub model selection depth
    * @param filter Regexp field filter
    */
-  static getGQLFields(depth = 1, fieldFilter = DEFAULT_FILTER, prefix?: string): Observable<string> {
+  static getGQLFields(
+    depth = 1,
+    fieldFilter = DEFAULT_FILTER,
+    prefix?: string,
+    config?: {noList?: boolean},
+  ): Observable<string> {
     return from(Object.entries(this.getFields()))
       .pipe(
         this.fetchMapModel(),
         filter(([propertyName, options]) => {
           const path = prefix ? `${prefix}.${propertyName}` : propertyName;
+
+          // Disable requesting list fields
+          if (config && config.noList) {
+            const type = Reflect.getMetadata('design:type', this.prototype, propertyName);
+            if (type && type.name === 'Array') return false;
+          }
+
           if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
           if (options.fetchedModel && depth > 0) return true;
           return options.asKey || options.asLabel;
@@ -100,7 +112,7 @@ export abstract class Model {
           if (!options.fetchedModel) return of(propertyName);
           const path = prefix ? `${prefix}.${propertyName}` : propertyName;
           return options.fetchedModel
-            .getGQLFields(depth - 1, fieldFilter, path)
+            .getGQLFields(depth - 1, fieldFilter, path, config)
             .pipe(
               map(res => `${res}`),
               startWith(`${propertyName} {`),

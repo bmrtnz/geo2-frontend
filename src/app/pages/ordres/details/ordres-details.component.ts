@@ -14,6 +14,7 @@ import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { from, iif, of, Subscription } from 'rxjs';
 import { map, mergeAll, take } from 'rxjs/operators';
+import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 @Component({
   selector: 'app-ordres-details',
@@ -54,6 +55,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
+  @ViewChild(GridSuiviComponent, { static: false }) suiviGrid: GridSuiviComponent;
 
   constructor(
     logService: LogService,
@@ -107,23 +109,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const ordre = this.ordresService.extractDirty(this.formGroup.controls);
-
-      // if (this.createMode) {
-      //   transporteur.id = this.formGroup.get('id').value.toUpperCase();
-      //   // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
-      //   // Avoir pour les valeur par defaut (qui sont not null dans la base)
-      //   transporteur.preSaisie = true;
-      //   transporteur.valide = false;
-      // } else {
-      //   if (transporteur.valide === true) {
-      //     transporteur.preSaisie = false;
-      //     this.preSaisie = '';
-      //   }
-      //   transporteur.id = this.transporteur.id;
-      // }
-
       const isNew = !ordre.id;
       ordre.societe = { id: environment.societe.id };
+
       from(this.ordresService.save({ ordre }))
         .pipe(mergeAll())
         .subscribe({
@@ -133,23 +121,24 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
               this.closeTab(this.tabPanelComponent.selectedIndex);
               this.pushTab(e.data.saveOrdre);
             }
-      //       this.refreshGrid.emit();
-      //       if (!this.createMode) {
-      //         this.transporteur = {
-      //           ...this.transporteur,
-      //           ...this.formGroup.getRawValue(),
-      //         };
-      //         this.readOnlyMode = true;
-      //       } else {
-      //         this.editing = false;
-      //         this.router.navigate([`/tiers/transporteurs/${e.data.saveTransporteur.id}`]);
-      //       }
-      //       this.transporteur.typeTiers = e.data.saveTransporteur.typeTiers;
-      //       this.formGroup.markAsPristine();
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
     }
+  }
+
+  onDeleteClick() {
+    const ordre = this.ordresService.extractDirty(this.formGroup.controls);
+    if (!ordre.id) return;
+    from(this.ordresService.delete({ ordre }))
+    .subscribe({
+      next: _ => {
+        notify('Ordre supprimé', 'success', 3000);
+        this.closeTab(this.tabPanelComponent.selectedIndex);
+        this.suiviGrid.reload();
+      },
+      error: _ => notify('Echec de la suppression', 'error', 3000),
+    });
   }
 
   fileManagerClick() {
@@ -200,7 +189,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       }
       const knownIndex = this.contents
       .findIndex(({id}) => ordre.id === id );
-      if (knownIndex >= 0)
+      if (knownIndex >= 0 && this.tabPanelComponent)
         return this.tabPanelComponent.selectedIndex = knownIndex;
     }
     this.contents.push({

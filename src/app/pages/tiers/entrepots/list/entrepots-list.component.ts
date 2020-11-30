@@ -1,11 +1,13 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { LocalizationService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EntrepotsService } from '../../../../shared/services/api/entrepots.service';
 
 @Component({
@@ -24,6 +26,7 @@ export class EntrepotsListComponent implements OnInit {
   constructor(
     public entrepotsService: EntrepotsService,
     public gridService: GridsConfigsService,
+    public localizeService: LocalizationService,
     private router: Router,
     private route: ActivatedRoute,
     public gridConfiguratorService: GridConfiguratorService,
@@ -33,7 +36,14 @@ export class EntrepotsListComponent implements OnInit {
     this.clientID = this.route.snapshot.paramMap.get('client');
     this.entrepots = this.entrepotsService.getDataSource();
     this.enableFilters();
-    this.detailedFields = this.entrepotsService.model.getDetailedFields();
+    this.detailedFields = this.entrepotsService.model.getDetailedFields()
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field =>
+          !!(this.localizeService.localize('tiers-entrepots-' + field.path.replace('.description', ''))).length);
+       }),
+    );
   }
 
   enableFilters() {
