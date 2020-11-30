@@ -39,4 +39,8 @@ export class GridSuiviComponent implements OnInit {
     this.dataSource.filter(filters);
   }
 
+  reload() {
+    this.dataSource.reload();
+  }
+
 }

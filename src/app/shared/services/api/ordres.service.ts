@@ -71,4 +71,10 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     return this.mutate(mutation, { variables } as MutationOptions);
   }
 
+  async delete(variables: OperationVariables) {
+    const mutation = this.buildDelete();
+    return this
+    .mutate(mutation, { variables } as MutationOptions<any, any>);
+  }
+
 }
