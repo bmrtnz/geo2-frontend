@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
-import { LocalizeFn } from '@angular/localize/init';
 import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
