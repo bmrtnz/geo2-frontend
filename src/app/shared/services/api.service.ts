@@ -8,7 +8,7 @@ import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import gql from 'graphql-tag';
 import { Observable, Subscriber } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { Model } from '../models/model';
 
 const DEFAULT_KEY = 'id';
@@ -261,7 +261,7 @@ export abstract class ApiService {
         ${operation}(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${await this.model.getGQLFields(depth, filter).toPromise()}
+              ${await this.model.getGQLFields(depth, filter, null, {noList: true}).toPromise()}
             }
           }
           pageInfo {
