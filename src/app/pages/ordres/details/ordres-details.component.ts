@@ -131,6 +131,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const ordre = this.ordresService.extractDirty(this.formGroup.controls);
     if (!ordre.id) return;
     from(this.ordresService.delete({ ordre }))
+    .pipe(mergeAll())
     .subscribe({
       next: _ => {
         notify('Ordre supprimé', 'success', 3000);
