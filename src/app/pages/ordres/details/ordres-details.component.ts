@@ -84,13 +84,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         const patch = this.ordresService.extractDirty(this.formGroup.controls);
         this.contents[selectedIndex].patch = patch;
       });
-    // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
-    const data = window.localStorage.getItem('orderNumber');
-    if (data) {
-      const order = JSON.parse(data);
-      window.localStorage.removeItem('orderNumber');
-      this.pushTab(order);
-    }
     // On affiche les ordres déjà ouverts le cas échéant
     const myData = window.localStorage.getItem('openOrders');
     if (myData !== null) {
@@ -98,6 +91,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       JSON.parse(myData).forEach(value => {
         this.pushTab(value);
       });
+    }
+    // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
+    const data = window.localStorage.getItem('orderNumber');
+    if (data) {
+      const order = JSON.parse(data);
+      window.localStorage.removeItem('orderNumber');
+      this.pushTab(order);
     }
 
   }
@@ -170,7 +170,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
-    console.log('pushTab')
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -186,12 +185,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         };
         myOrders.push(shortOrder);
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
-        console.log(window.localStorage.getItem('openOrders')) // A virer
       }
       const knownIndex = this.contents
       .findIndex(({id}) => ordre.id === id );
-      if (knownIndex >= 0 && this.tabPanelComponent)
-        return this.tabPanelComponent.selectedIndex = knownIndex;
+      if (knownIndex >= 0) {
+        if (this.tabPanelComponent) this.tabPanelComponent.selectedIndex = knownIndex;
+        return;
+      }
     }
     this.contents.push({
       id: ordre ? ordre.id : null,
@@ -201,7 +201,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   closeTab(itemData) {
     const index = this.contents.indexOf(itemData);
-    console.log('index onglet : ' + index)
 
     // Suppression onglet dans le localStorage
     const myData = window.localStorage.getItem('openOrders');
@@ -211,7 +210,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       if (this.contents[index].id === value.id) {
         myOrders.splice(i, 1);
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
-        console.log('openOrders : ' + window.localStorage.getItem('openOrders'))
         return false;
       }
       i++;
