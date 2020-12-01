@@ -170,6 +170,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
+    console.log('pushTab')
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -185,7 +186,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         };
         myOrders.push(shortOrder);
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
-        // console.log(window.localStorage.getItem('openOrders')) // A virer
+        console.log(window.localStorage.getItem('openOrders')) // A virer
       }
       const knownIndex = this.contents
       .findIndex(({id}) => ordre.id === id );
@@ -200,18 +201,17 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   closeTab(itemData) {
     const index = this.contents.indexOf(itemData);
-    // console.log(itemData)
-    console.log(index)
-    return
+    console.log('index onglet : ' + index)
 
     // Suppression onglet dans le localStorage
     const myData = window.localStorage.getItem('openOrders');
     const myOrders = JSON.parse(myData);
     let i = 0;
     myOrders.forEach(value => {
-      if (this.contents[1].id === value.id) {
+      if (this.contents[index].id === value.id) {
         myOrders.splice(i, 1);
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
+        console.log('openOrders : ' + window.localStorage.getItem('openOrders'))
         return false;
       }
       i++;
