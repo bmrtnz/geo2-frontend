@@ -21,10 +21,11 @@ import {
   DxTileViewModule, DxValidatorModule
 } from 'devextreme-angular';
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
+import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
 
 
 @NgModule({
-  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent, OrdresIndicateursComponent],
+  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent, OrdresIndicateursComponent, GridLignesComponent],
   imports: [
     OrdresRoutingModule,
     SharedModule,

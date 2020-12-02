@@ -156,7 +156,7 @@
       }
     ]
   },
-  "lieuPassageAQuai": {
+  "lieu-passage-a-quai": {
     "columns": [
       {
         "visibleIndex": 0,
@@ -438,6 +438,22 @@
       {
         "visibleIndex": 1,
         "dataField": "referenceClient",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
+  "ordre-ligne": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "article.description",
         "dataType": "string",
         "visible": true
       }
