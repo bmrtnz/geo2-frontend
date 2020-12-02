@@ -260,4 +260,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
+  public getSelectedOrdre() {
+    const index = this.tabPanelComponent.selectedIndex;
+    return this.contents[index].ordre;
+  }
+
 }

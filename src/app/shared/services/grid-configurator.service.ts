@@ -14,12 +14,13 @@ export enum Grid {
   Client = 'client',
   Fournisseur = 'fournisseur',
   Transporteur = 'transporteur',
-  LieuPassageAQuai = 'lieuPassageAQuai',
+  LieuPassageAQuai = 'lieu-passage-a-quai',
   Entrepot = 'entrepot',
   Contact = 'contact',
   Article = 'article',
   Stock = 'stock',
   Ordre = 'ordre',
+  OrdreLigne = 'ordre-ligne',
 }
 
 @Injectable({
