@@ -84,6 +84,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         const patch = this.ordresService.extractDirty(this.formGroup.controls);
         this.contents[selectedIndex].patch = patch;
       });
+
+  }
+
+  ngAfterinit() {
+
     // On affiche les ordres déjà ouverts le cas échéant
     const myData = window.localStorage.getItem('openOrders');
     if (myData !== null) {
@@ -256,6 +261,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         this.contents[itemIndex].ordre = res;
         this.tabPanelComponent.selectedIndex = itemIndex;
       });
+  }
+
+  public getSelectedOrdre() {
+    const index = this.tabPanelComponent.selectedIndex;
+    return this.contents[index].ordre;
   }
 
 }
