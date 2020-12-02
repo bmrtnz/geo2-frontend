@@ -84,13 +84,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         const patch = this.ordresService.extractDirty(this.formGroup.controls);
         this.contents[selectedIndex].patch = patch;
       });
-    // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
-    const data = window.localStorage.getItem('orderNumber');
-    if (data) {
-      const order = JSON.parse(data);
-      window.localStorage.removeItem('orderNumber');
-      this.pushTab(order);
-    }
     // On affiche les ordres déjà ouverts le cas échéant
     const myData = window.localStorage.getItem('openOrders');
     if (myData !== null) {
@@ -98,6 +91,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       JSON.parse(myData).forEach(value => {
         this.pushTab(value);
       });
+    }
+    // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
+    const data = window.localStorage.getItem('orderNumber');
+    if (data) {
+      const order = JSON.parse(data);
+      window.localStorage.removeItem('orderNumber');
+      this.pushTab(order);
     }
 
   }
@@ -131,6 +131,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const ordre = this.ordresService.extractDirty(this.formGroup.controls);
     if (!ordre.id) return;
     from(this.ordresService.delete({ ordre }))
+    .pipe(mergeAll())
     .subscribe({
       next: _ => {
         notify('Ordre supprimé', 'success', 3000);
@@ -185,12 +186,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         };
         myOrders.push(shortOrder);
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
-        // console.log(window.localStorage.getItem('openOrders')) // A virer
       }
       const knownIndex = this.contents
       .findIndex(({id}) => ordre.id === id );
-      if (knownIndex >= 0 && this.tabPanelComponent)
-        return this.tabPanelComponent.selectedIndex = knownIndex;
+      if (knownIndex >= 0) {
+        if (this.tabPanelComponent) this.tabPanelComponent.selectedIndex = knownIndex;
+        return;
+      }
     }
     this.contents.push({
       id: ordre ? ordre.id : null,
@@ -206,7 +208,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const myOrders = JSON.parse(myData);
     let i = 0;
     myOrders.forEach(value => {
-      if (this.contents[1].id === value.id) {
+      if (this.contents[index].id === value.id) {
         myOrders.splice(i, 1);
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
         return false;

@@ -103,7 +103,7 @@
                 >
 
                     <div *dxTemplate="let content of 'title'; let i = index">
-                        <span>{{content.tabTitle}}</span><i *ngIf="i" class="dx-icon dx-icon-close" (click)="closeTab(i)"></i>
+                        <span>{{content.tabTitle}}</span><i *ngIf="i" class="dx-icon dx-icon-close" (click)="closeTab(content)"></i>
                     </div>
                     <div *dxTemplate="let content of 'item'; let i = index">
                         <form
