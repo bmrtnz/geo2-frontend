@@ -185,10 +185,10 @@
                                                             </div>
                                                             <!-- Réf Client -->
                                                             <div class="dx-field">
-                                                                <div class="dx-field-label">{{ 'ordres-refClient' | localize }}</div>
+                                                                <div class="dx-field-label">{{ 'ordres-referenceClient' | localize }}</div>
                                                                 <div class="dx-field-value">
                                                                     <dx-text-box formControlName="referenceClient">
-                                                                    <dx-validator name="{{ 'ordres-refClient' | localize }}">
+                                                                    <dx-validator name="{{ 'ordres-referenceClient' | localize }}">
                                                                         <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
                                                                     </dx-validator>
                                                                     </dx-text-box>
@@ -270,13 +270,13 @@
                                                             [multiple]="false"
                                                             [selectedIndex]="-1"
                                                             >
-                                                                <dxi-item title="{{ 'ordres-instructLogistique' | localize }}">
+                                                                <dxi-item title="{{ 'ordres-instructionsLogistiques' | localize }}">
                                                                 <!-- Instructions Logistique -->
                                                                 <div class="dx-field">
-                                                                    <div class="dx-field-label">{{ 'ordres-instructLogistique' | localize }}</div>
+                                                                    <div class="dx-field-label">{{ 'ordres-instructionsLogistiques' | localize }}</div>
                                                                     <div class="dx-field-value">
                                                                     <dx-text-box formControlName="instructionsLogistiques">
-                                                                        <dx-validator name="{{ 'ordres-instructLogistique' | localize }}">
+                                                                        <dx-validator name="{{ 'ordres-instructionsLogistiques' | localize }}">
                                                                         <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
                                                                         </dx-validator>
                                                                     </dx-text-box>
@@ -291,11 +291,11 @@
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- Date départ -->
                                                                     <div class="dx-field">
-                                                                        <div class="dx-field-label">{{ 'ordres-depart' | localize }}</div>
+                                                                        <div class="dx-field-label">{{ 'ordres-dateDepartPrevue' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                             <dx-date-box formControlName="dateDepartPrevue"
                                                                             type="date">
-                                                                            <dx-validator name="{{ 'ordres-depart' | localize }}">
+                                                                            <dx-validator name="{{ 'ordres-dateDepartPrevue' | localize }}">
                                                                                 <dxi-validation-rule type="required"></dxi-validation-rule>
                                                                             </dx-validator>
                                                                             </dx-date-box>
@@ -306,11 +306,11 @@
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- Date livraison -->
                                                                     <div class="dx-field">
-                                                                        <div class="dx-field-label">{{ 'ordres-livraison' | localize }}</div>
+                                                                        <div class="dx-field-label">{{ 'ordres-dateLivraisonPrevue' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                             <dx-date-box formControlName="dateLivraisonPrevue"
                                                                             type="date">
-                                                                            <dx-validator name="{{ 'ordres-livraison' | localize }}">
+                                                                            <dx-validator name="{{ 'ordres-dateLivraisonPrevue' | localize }}">
                                                                                 <dxi-validation-rule type="required"></dxi-validation-rule>
                                                                             </dx-validator>
                                                                             </dx-date-box>
@@ -321,7 +321,7 @@
 
                                                         <!-- Vente Commission -->
                                                         <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-venteCommission' | localize }}</div>
+                                                            <div class="dx-field-label">{{ 'ordres-venteACommission' | localize }}</div>
                                                             <div class="dx-field-value">
                                                             <dx-check-box formControlName="venteACommission"></dx-check-box>
                                                             </div>
@@ -342,7 +342,7 @@
                                                         </div>
                                                         <!-- EDI -->
                                                         <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-EDI' | localize }}</div>
+                                                            <div class="dx-field-label">{{ 'ordres-factureEDI' | localize }}</div>
                                                             <div class="dx-field-value">
                                                             <dx-check-box formControlName="factureEDI"></dx-check-box>
                                                             </div>
