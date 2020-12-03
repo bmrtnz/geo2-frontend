@@ -38,7 +38,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = await this.buildGetAll(1, this.queryFilter);
+          const query = await this.buildGetAll(2, this.queryFilter);
           type Response = { allOrdre: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);
           if (options.searchValue) variables.search = options.searchValue;
