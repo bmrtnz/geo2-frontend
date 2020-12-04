@@ -16,19 +16,20 @@ const contents: Content[] = [{
 
 export class Indicator {
   id: number;
-  number: string;
+  number?: string;
   parameter: string;
   subParameter: string;
   goTo: string;
   goToParams?: {};
+  filter?: any[];
   tileBkg: string;
   indicatorIcon: string;
   warningIcon: string;
+  loading: boolean;
 }
 
 const indicators: Indicator[] = [{
   id: 0,
-  number: '',
   parameter: 'Suivi',
   subParameter: 'des ordres',
   goTo: '/ordres/details',
@@ -37,7 +38,6 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 1,
-  number: '',
   parameter: 'Supervision',
   subParameter: 'livraison',
   goTo: '',
@@ -52,6 +52,7 @@ const indicators: Indicator[] = [{
   subParameter: 'à facturer',
   goTo: '/ordres/indicateurs',
   goToParams: {filtre: 'bonsafacturer'},
+  filter: ['bonAFacturer', '=', true],
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning'
@@ -70,6 +71,7 @@ const indicators: Indicator[] = [{
   parameter: 'Ordres',
   subParameter: 'non clôturés',
   goToParams: {filtre: 'ordresnonclotures'},
+  filter: ['livre', '=', false],
   goTo: '/ordres/indicateurs',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
@@ -95,7 +97,6 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 7,
-  number: '',
   parameter: 'Stock',
   subParameter: 'dispo',
   goTo: '/stock',
@@ -104,7 +105,6 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 8,
-  number: '',
   parameter: 'Planning',
   subParameter: 'départ',
   goTo: '',
@@ -113,7 +113,6 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 9,
-  number: '',
   parameter: 'Commandes',
   subParameter: 'en transit',
   goTo: '/ordres/indicateurs',
@@ -121,7 +120,8 @@ const indicators: Indicator[] = [{
   tileBkg: '#8E4A21',
   indicatorIcon: 'material-icons local_shipping',
   warningIcon: ''
-}];
+}]
+.map( indicator => ({...indicator, loading: false}));
 
 @Injectable()
 export class FakeOrdresService {

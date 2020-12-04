@@ -13,6 +13,7 @@ import {
 
   DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule,
   DxListModule,
+  DxLoadIndicatorModule,
   DxPopoverModule, DxSelectBoxModule,
 
   DxSortableModule, DxTabPanelModule,
@@ -50,7 +51,8 @@ import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
     EditingAlertModule,
     FileManagerModule,
     DxDateBoxModule,
-    DxValidationGroupModule
+    DxValidationGroupModule,
+    DxLoadIndicatorModule,
   ]
 })
 export class OrdresModule { }
