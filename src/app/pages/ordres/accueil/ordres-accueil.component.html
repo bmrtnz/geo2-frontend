@@ -16,9 +16,8 @@
                 [showSelectionControls]="true"
                 [searchEnabled]="false"
                 applyValueMode="useButtons"
-                (valueChange)="onFieldValueChange($event)"
                 [displayExpr]="displayExpr"
-                valueExpr="id"
+                (valueChange)="indicatorsChange.emit($event)"
             ></dx-tag-box>
         </div>
     </div>
@@ -46,8 +45,11 @@
             <div class="indicator-container" style="background: ' + {{indicator.tileBkg}} + '">
                 <dx-button *ngIf="indicator.indicatorIcon" type="danger" icon="{{indicator.indicatorIcon}}" class="tile-button indicator-button"></dx-button>
                 <div class="number-container">
-                    <div *ngIf="indicator.number" class="indicator">{{indicator.number}}</div>
-                    <dx-button *ngIf="indicator.warningIcon" type="danger" icon="{{indicator.warningIcon}}" class="tile-button warning-button"></dx-button>
+                    <div *ngIf="indicator.number" class="indicator">
+                        <dx-load-indicator [visible]="indicator.loading" height="40" width="40"></dx-load-indicator>
+                        <span *ngIf="!indicator.loading">{{indicator.number}}</span>
+                    </div>
+                    <dx-button *ngIf="!indicator.loading && indicator.warningIcon" type="danger" icon="{{indicator.warningIcon}}" class="tile-button warning-button"></dx-button>
                 </div>
                 <div class="parameter">{{indicator.parameter}}</div>
                 <div class="subParameter">{{indicator.subParameter}}</div>

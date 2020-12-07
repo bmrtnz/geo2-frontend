@@ -13,12 +13,13 @@ import {
 
   DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule,
   DxListModule,
+  DxLoadIndicatorModule,
   DxPopoverModule, DxSelectBoxModule,
 
   DxSortableModule, DxTabPanelModule,
   DxTagBoxModule,
   DxTextAreaModule, DxTextBoxModule,
-  DxTileViewModule, DxValidatorModule
+  DxTileViewModule, DxValidationGroupModule, DxValidatorModule
 } from 'devextreme-angular';
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
@@ -50,6 +51,8 @@ import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
     EditingAlertModule,
     FileManagerModule,
     DxDateBoxModule,
+    DxValidationGroupModule,
+    DxLoadIndicatorModule,
   ]
 })
 export class OrdresModule { }

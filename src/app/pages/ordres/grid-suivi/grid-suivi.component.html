@@ -8,7 +8,7 @@
     [columnHidingEnabled]="true"
     [allowColumnReordering]="true"
     (onRowDblClick)="ordreSelected.emit($event.data)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Ordre)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Ordre, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->

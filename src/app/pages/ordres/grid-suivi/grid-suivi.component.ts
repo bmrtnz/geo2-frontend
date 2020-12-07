@@ -30,6 +30,10 @@ export class GridSuiviComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.enableFilters();
+  }
+
+  enableFilters() {
     let filters = [
       ['valide', '=', true],
       'and',
@@ -39,6 +43,7 @@ export class GridSuiviComponent implements OnInit {
     ];
     if (this.filter) filters = [...filters, 'and', this.filter];
     this.dataSource.filter(filters);
+    this.dataSource.reload();
   }
 
   reload() {

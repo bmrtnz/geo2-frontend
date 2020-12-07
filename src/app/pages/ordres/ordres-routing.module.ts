@@ -7,6 +7,10 @@ import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.com
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'accueil'
+  },
+  {
     path: 'accueil',
     component: OrdresAccueilComponent,
     canActivate: [AuthGuardService]

@@ -110,6 +110,7 @@
                             [formGroup]="formGroup"
                             (ngSubmit)="onSubmit()"
                         >
+                        <dx-validation-group name="loginGroup">
                             <div class="content-block">
                             </div>
                             <div class="content-block details-ordres-page">
@@ -149,6 +150,8 @@
                                                 <dx-button class="upperButton subButton"
                                                     type="default"
                                                     text="{{ 'btn-cloneorder' | localize }}"
+                                                    [disabled]="!canDuplicate"
+                                                    (onClick)="duplicate()"
                                                 ></dx-button>
                                                     <dx-button class="upperButton subButton"
                                                     type="default"
@@ -496,7 +499,7 @@
                                     </dxi-item>
                                 </dx-box>
                             </div>
-
+                        </dx-validation-group>
                         </form>
                     </div>
 

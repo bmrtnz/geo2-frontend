@@ -38,7 +38,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
           if (options.group)
             return this.getDistinct(options).toPromise();
 
-          const query = await this.buildGetAll(1, this.queryFilter);
+          const query = await this.buildGetAll(2, this.queryFilter);
           type Response = { allOrdre: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);
           if (options.searchValue) variables.search = options.searchValue;
@@ -75,6 +75,21 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     const mutation = this.buildDelete();
     return this
     .mutate(mutation, { variables } as MutationOptions<any, any>);
+  }
+
+  async clone(variables: OperationVariables) {
+    const mutation = await this.buildSaveWithClone(1, this.queryFilter);
+    return this.mutate(mutation, { variables } as any);
+  }
+
+  protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
+    return `
+      mutation CloneOrdre($ordre: GeoOrdreInput!) {
+        cloneOrdre(ordre: $ordre) {
+          ${ await this.model.getGQLFields(depth, filter).toPromise() }
+        }
+      }
+    `;
   }
 
 }

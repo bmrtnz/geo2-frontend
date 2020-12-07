@@ -8,7 +8,7 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { Comm, CommService, Log, LogService } from 'app/shared/services/log.service';
 import { Content, FakeOrdresService, INDEX_TAB } from 'app/shared/services/ordres-fake.service';
-import { DxAccordionComponent, DxTabPanelComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
@@ -33,6 +33,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   transporteurs: DataSource;
   logs: Log[];
   commentaires: Comm[];
+  canDuplicate = false;
 
   formGroup = this.fb.group({
     id: [''],
@@ -56,6 +57,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
   @ViewChild(GridSuiviComponent, { static: false }) suiviGrid: GridSuiviComponent;
+  @ViewChild(DxValidationGroupComponent, { static: false }) validationGroup: DxValidationGroupComponent;
 
   constructor(
     logService: LogService,
@@ -123,7 +125,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
             if (isNew) {
-              this.closeTab(this.tabPanelComponent.selectedIndex);
+              this.contents.splice(this.tabPanelComponent.selectedIndex, 1);
               this.pushTab(e.data.saveOrdre);
             }
           },
@@ -132,19 +134,36 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  duplicate() {
+    if (this.formGroup.pristine && this.formGroup.valid) {
+      const ordre = this.ordresService.extractDirty(this.formGroup.controls);
+
+      from(this.ordresService.clone({ ordre }))
+        .pipe(mergeAll())
+        .subscribe({
+          next: (e) => {
+            notify('Dupliqué', 'success', 3000);
+            this.contents.splice(this.tabPanelComponent.selectedIndex, 1);
+            this.pushTab(e.data.cloneOrdre);
+          },
+          error: () => notify('Echec de la duplication', 'error', 3000),
+        });
+    }
+  }
+
   onDeleteClick() {
     const ordre = this.ordresService.extractDirty(this.formGroup.controls);
     if (!ordre.id) return;
     from(this.ordresService.delete({ ordre }))
-    .pipe(mergeAll())
-    .subscribe({
-      next: _ => {
-        notify('Ordre supprimé', 'success', 3000);
-        this.closeTab(this.tabPanelComponent.selectedIndex);
-        this.suiviGrid.reload();
-      },
-      error: _ => notify('Echec de la suppression', 'error', 3000),
-    });
+      .pipe(mergeAll())
+      .subscribe({
+        next: _ => {
+          notify('Ordre supprimé', 'success', 3000);
+          this.closeTab(this.tabPanelComponent.selectedIndex);
+          this.suiviGrid.reload();
+        },
+        error: _ => notify('Echec de la suppression', 'error', 3000),
+      });
   }
 
   fileManagerClick() {
@@ -193,7 +212,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
       }
       const knownIndex = this.contents
-      .findIndex(({id}) => ordre.id === id );
+        .findIndex(({ id }) => ordre.id === id);
       if (knownIndex >= 0) {
         if (this.tabPanelComponent) this.tabPanelComponent.selectedIndex = knownIndex;
         return;
@@ -232,9 +251,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChange({ addedItems }: { addedItems: Content[] }) {
+    this.validationGroup.instance.validate();
     if (!addedItems.length) return;
     const { id, ordre, patch } = addedItems[0];
     setTimeout(() => this.isIndexTab = id === INDEX_TAB);
+    this.canDuplicate = !!id;
     if (ordre)
       this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
     if (patch)
