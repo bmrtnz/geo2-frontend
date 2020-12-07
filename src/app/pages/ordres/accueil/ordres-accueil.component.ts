@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { Event as NavigationEvent, NavigationEnd, Router } from '@angular/router';
+import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { FakeOrdresService, Indicator } from 'app/shared/services/ordres-fake.service';
 import { DxTagBoxComponent } from 'devextreme-angular';
+import { environment } from 'environments/environment';
+import { combineLatest, from, Observable, Subscription } from 'rxjs';
+import { filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ordres-accueil',
@@ -10,35 +13,64 @@ import { DxTagBoxComponent } from 'devextreme-angular';
   styleUrls: ['./ordres-accueil.component.scss'],
   providers: [FakeOrdresService]
 })
-export class OrdresAccueilComponent implements OnInit {
+export class OrdresAccueilComponent implements OnDestroy {
 
   indicators: Indicator[];
   allIndicators: Indicator[];
+  indicatorsSubscription: Subscription;
+  indicatorsObservable: Observable<Indicator[]>;
+  indicatorsChange = new EventEmitter<Indicator[]>();
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
 
   constructor(
     fakeOrdresService: FakeOrdresService,
-    private fb: FormBuilder,
+    private ordresService: OrdresService,
     private router: Router,
-    private route: ActivatedRoute,
   ) {
     this.allIndicators = fakeOrdresService.getIndicators();
-    this.indicators = this.allIndicators; /* .slice(0, 6); */
+
+    const navigationEndEvent = this.router.events
+      .pipe(
+        filter((event: NavigationEvent) => event instanceof NavigationEnd),
+      );
+
+    const selectIndicators = this.indicatorsChange
+      .pipe(startWith(fakeOrdresService.getIndicators()));
+
+    this.indicatorsSubscription = combineLatest(navigationEndEvent, selectIndicators)
+      .pipe(
+        tap(_ => this.indicators = []),
+        switchMap(([, indicators]) => from(indicators)),
+        map(indicator => ({ ...indicator, loading: !!indicator.filter })),
+        tap(indicator => this.indicators.push(indicator)),
+        filter(indicator => indicator.loading),
+        mergeMap(async indicator => {
+          const dataSource = this.ordresService.getDataSource();
+          dataSource.filter([
+            ['societe.id', '=', environment.societe.id],
+            'and',
+            indicator.filter,
+          ]);
+          await dataSource.load();
+          const value = indicator.number ?
+            dataSource.totalCount().toString() :
+            '?';
+          return [indicator.id, value] as [number, string];
+        }),
+      )
+      .subscribe(([id, value]) => {
+        const index = this.indicators.findIndex(indicator => id === indicator.id);
+        this.indicators[index].number = value;
+        this.indicators[index].loading = false;
+      });
   }
 
-  ngOnInit() {
-
- }
+  ngOnDestroy() {
+    this.indicatorsSubscription.unsubscribe();
+  }
 
   displayExpr(data) {
     return data ? data.parameter + ' ' + data.subParameter : null;
-  }
-
-  onFieldValueChange(data) {
-    this.indicators = [];
-    data.forEach(index => {
-      this.indicators.push(this.allIndicators[index]);
-    });
   }
 
   openTagBox() {

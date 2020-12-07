@@ -33,6 +33,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   transporteurs: DataSource;
   logs: Log[];
   commentaires: Comm[];
+  canDuplicate = false;
 
   formGroup = this.fb.group({
     id: [''],
@@ -125,6 +126,23 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
             }
           },
           error: () => notify('Echec de la sauvegarde', 'error', 3000),
+        });
+    }
+  }
+
+  duplicate() {
+    if (this.formGroup.pristine && this.formGroup.valid) {
+      const ordre = this.ordresService.extractDirty(this.formGroup.controls);
+
+      from(this.ordresService.clone({ ordre }))
+        .pipe(mergeAll())
+        .subscribe({
+          next: (e) => {
+            notify('Dupliqué', 'success', 3000);
+            this.contents.splice(this.tabPanelComponent.selectedIndex, 1);
+            this.pushTab(e.data.cloneOrdre);
+          },
+          error: () => notify('Echec de la duplication', 'error', 3000),
         });
     }
   }
@@ -233,6 +251,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     if (!addedItems.length) return;
     const { id, ordre, patch } = addedItems[0];
     setTimeout(() => this.isIndexTab = id === INDEX_TAB);
+    this.canDuplicate = !!id;
     if (ordre)
       this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
     if (patch)
