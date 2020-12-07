@@ -77,4 +77,19 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     .mutate(mutation, { variables } as MutationOptions<any, any>);
   }
 
+  async clone(variables: OperationVariables) {
+    const mutation = await this.buildSaveWithClone(1, this.queryFilter);
+    return this.mutate(mutation, { variables } as any);
+  }
+
+  protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
+    return `
+      mutation CloneOrdre($ordre: GeoOrdreInput!) {
+        cloneOrdre(ordre: $ordre) {
+          ${ await this.model.getGQLFields(depth, filter).toPromise() }
+        }
+      }
+    `;
+  }
+
 }

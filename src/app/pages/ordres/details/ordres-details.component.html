@@ -150,6 +150,8 @@
                                                 <dx-button class="upperButton subButton"
                                                     type="default"
                                                     text="{{ 'btn-cloneorder' | localize }}"
+                                                    [disabled]="!canDuplicate"
+                                                    (onClick)="duplicate()"
                                                 ></dx-button>
                                                     <dx-button class="upperButton subButton"
                                                     type="default"
