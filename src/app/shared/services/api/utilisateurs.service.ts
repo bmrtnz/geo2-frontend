@@ -27,7 +27,11 @@ export class UtilisateursService extends ApiService {
     type Response = { utilisateur: Utilisateur };
     const variables: OperationVariables = { nomUtilisateur, motDePasse };
     return this
-    .query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+    .query<Response>(query, {
+      variables,
+      fetchPolicy: 'no-cache',
+      returnPartialData: false,
+    } as WatchQueryOptions)
     .pipe(take(1));
   }
 }

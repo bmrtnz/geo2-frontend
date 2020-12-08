@@ -207,10 +207,10 @@ export abstract class ApiService {
     return this.apollo
       .watchQuery<T>({
         query: gql(gqlQuery),
+        returnPartialData: true,
         ...options,
       })
-      .valueChanges
-      .pipe(take(1));
+      .valueChanges;
   }
 
   /**

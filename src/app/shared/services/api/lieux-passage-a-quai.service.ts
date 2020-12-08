@@ -4,8 +4,9 @@ import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.servi
 import { Apollo } from 'apollo-angular';
 import { WatchQueryOptions, OperationVariables, MutationOptions } from 'apollo-client';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { map, take } from 'rxjs/operators';
+import { map, take, takeLast, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import DataSource from 'devextreme/data/data_source';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,28 +25,41 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     const query = await this.buildGetOne();
     type Response = { lieuPassageAQuai: LieuPassageAQuai };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
+    return this.query<Response>(query, { variables, fetchPolicy: 'network-only' } as WatchQueryOptions);
   }
 
   getDataSource() {
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        // DX doesn't support observable here,
+        // and we can only emit a single response as Promise
+        load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
 
-          const query = await this.buildGetAll();
           if (options.group)
             return this.getDistinct(options).toPromise();
 
+          const query = await this.buildGetAll();
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allLieuPassageAQuai)),
-            take(1),
-          )
-          .toPromise();
-        },
+          const done = new Subject();
+
+          this.query<Response>(query, {
+            variables,
+            fetchPolicy: 'cache-and-network',
+          } as WatchQueryOptions<RelayPageVariables>)
+          .pipe(takeUntil(done))
+          .subscribe(res => {
+            console.log(res);
+            if (res.data && res.data.allLieuPassageAQuai) {
+              console.log('resolving with :', JSON.stringify(res.data.allLieuPassageAQuai));
+              resolve(this.asListCount(res.data.allLieuPassageAQuai));
+            }
+            if (!res.loading) {
+              done.next();
+              done.complete();
+            }
+          });
+        }),
       }),
     });
   }
