@@ -60,6 +60,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             origine: [''],
             calibreUnifie: [''],
             typeVente: [''],
+            codePlu: [''],
         }),
         cahierDesCharge: this.fb.group({
             instructionStation: [''],
@@ -91,9 +92,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             poidsNetGaranti: [''],
         }),
         // poidsNetUC: [''],
-        // codePLU: [''],
-        // categorie: [''],
-        // calibreMarquage: [''],
         // descrSpecialeCalClt: [''],
     });
     contentReadyEvent = new EventEmitter<any>();
