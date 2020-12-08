@@ -1,6 +1,7 @@
+import {FetchResult} from '@apollo/client/core';
 import { Component, EventEmitter, Input, NgModule, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { FetchResult } from 'apollo-link';
+
 import { HistoriqueService, HistoryType } from 'app/shared/services/api/historique.service';
 import {
   DxButtonModule,

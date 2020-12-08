@@ -1,7 +1,9 @@
+import {Apollo} from 'apollo-angular';
+import {OperationVariables, WatchQueryOptions} from '@apollo/client/core';
 import { Injectable } from '@angular/core';
 import { ApiService, APIRead, RelayPage, RelayPageVariables } from '../api.service';
-import { Apollo } from 'apollo-angular';
-import { OperationVariables, WatchQueryOptions } from 'apollo-client';
+
+
 import { LoadOptions } from 'devextreme/data/load_options';
 import DataSource from 'devextreme/data/data_source';
 import { ConditionVente } from '../../models';

@@ -1,8 +1,10 @@
+import {Apollo} from 'apollo-angular';
+import {WatchQueryOptions, OperationVariables} from '@apollo/client/core';
 import { Injectable } from '@angular/core';
 import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
-import { Apollo } from 'apollo-angular';
+
 import { RegimeTva } from '../../models';
-import { WatchQueryOptions, OperationVariables } from 'apollo-client';
+
 import { take, map } from 'rxjs/operators';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';

@@ -1,14 +1,12 @@
 import { AbstractControl } from '@angular/forms';
+import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
-import { ApolloQueryResult, MutationOptions, OperationVariables, WatchQueryOptions } from 'apollo-client';
-import { FetchResult } from 'apollo-link';
 import ArrayStore from 'devextreme/data/array_store';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import gql from 'graphql-tag';
 import { Observable, Subscriber } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Model } from '../models/model';
 
 const DEFAULT_KEY = 'id';

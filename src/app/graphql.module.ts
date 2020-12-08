@@ -1,11 +1,10 @@
 import { Injector, NgModule } from '@angular/core';
-import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
-import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { environment } from 'environments/environment';
-import { from } from 'apollo-link';
-import { onError } from 'apollo-link-error';
+import { from, InMemoryCache } from '@apollo/client/core';
+import { onError } from '@apollo/client/link/error';
+import { APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
 import { AuthService } from './shared/services';
+import { environment } from '../environments/environment';
 
 const uri = environment.apiEndpoint;
 
@@ -24,14 +23,13 @@ export function createApollo(httpLink: HttpLink) {
   return {
     link: from([
       errorLink,
-      httpLink.create({uri, withCredentials: true})
+      httpLink.create({ uri, withCredentials: true })
     ]),
     cache: new InMemoryCache()
   };
 }
 
 @NgModule({
-  exports: [ApolloModule, HttpLinkModule],
   providers: [
     {
       provide: APOLLO_OPTIONS,
