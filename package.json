@@ -16,6 +16,9 @@
     "devx": "devextreme"
   },
   "private": true,
+  "pre-commit": [
+    "build"
+  ],
   "dependencies": {
     "@angular/animations": "~9.1.12",
     "@angular/cdk": "^9.2.4",
