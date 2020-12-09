@@ -95,6 +95,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         // descrSpecialeCalClt: [''],
     });
     contentReadyEvent = new EventEmitter<any>();
+    refreshGrid = new EventEmitter();
     @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
     @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
     @ViewChild(PushHistoryPopupComponent, { static: false })
@@ -223,6 +224,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 .subscribe({
                     next: (event) => {
                         notify('Sauvegardé', 'success', 3000);
+                        this.refreshGrid.emit();
                         this.article = {
                             ...this.article,
                             ...this.formGroup.getRawValue(),
