@@ -12,7 +12,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-themes": "devextreme build",
-    "postinstall": "npm run build-themes",
+    "postinstall": "npm run build-themes && ngcc",
     "devx": "devextreme"
   },
   "private": true,
@@ -45,7 +45,7 @@
     "@angular/language-service": "~9.1.12",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
+    "@types/node": "^9.6.61",
     "archiver": "^5.1.0",
     "codelyzer": "^6.0.1",
     "devextreme-cli": "^1.1.13",
