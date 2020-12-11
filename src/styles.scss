@@ -1,14 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 .img-responsive {
-  max-width: 100%;
-  height: auto;
+  max-width:100%;
+  height:auto;
 }
 
 .right {
-  float: right;
+  float:right;
 }
 
-$base-fonts-path: './scss/fonts/';
+$base-fonts-path:'./scss/fonts/';
 
 // Var
 @import "~themes/generated/variables.base";
@@ -36,42 +36,43 @@ body {
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
   .dx-field-label {
     font-size:16px;
+    overflow:visible;
   }
 
   .dx-accordion-item-title::before {
-    font-size: 18px;
+    font-size:18px;
   }
 
   .dx-button:not(.subButton) {
     margin-bottom:10px;
     .dx-button-content {
-      padding: 10px 3px;
+      padding:10px 3px;
     }
     .dx-icon {
       padding:0;
       margin:0;
     }
     .dx-button-text {
-      display: block;
-      margin-top: 5px;
-      line-height: 18px;
-      white-space: normal;
+      display:block;
+      margin-top:5px;
+      line-height:18px;
+      white-space:normal;
       color:#FFF;
-      width: 100%;
+      width:100%;
     }
   }
 }
 
 .left-buttons-box {
-  position: fixed;
+  position:fixed;
 }
 
 .black .dx-button-text {
-  color: #1E1E1E !important;
+  color:#1E1E1E !important;
 }
 
 // Button placed in hx
 .title-button {
-  float: right;
-  margin-left: 10px;
+  float:right;
+  margin-left:10px;
 }

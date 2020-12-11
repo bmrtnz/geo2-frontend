@@ -321,41 +321,62 @@
                                                                 </dxi-item>
                                                             </dx-box>
 
-                                                        <!-- Vente Commission -->
-                                                        <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-venteACommission' | localize }}</div>
-                                                            <div class="dx-field-value">
-                                                            <dx-check-box formControlName="venteACommission"></dx-check-box>
-                                                            </div>
-                                                        </div>
-                                                        <!-- Bon à facturer -->
-                                                        <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-bonAFacturer' | localize }}</div>
-                                                            <div class="dx-field-value">
-                                                            <dx-check-box formControlName="bonAFacturer"></dx-check-box>
-                                                            </div>
-                                                        </div>
-                                                        <!-- Facturé -->
-                                                        <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-facture' | localize }}</div>
-                                                            <div class="dx-field-value">
-                                                            <dx-check-box formControlName="facture"></dx-check-box>
-                                                            </div>
-                                                        </div>
-                                                        <!-- EDI -->
-                                                        <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-factureEDI' | localize }}</div>
-                                                            <div class="dx-field-value">
-                                                            <dx-check-box formControlName="factureEDI"></dx-check-box>
-                                                            </div>
-                                                        </div>
-                                                        <!-- Livré -->
-                                                        <div class="dx-field">
-                                                            <div class="dx-field-label">{{ 'ordres-livre' | localize }}</div>
-                                                            <div class="dx-field-value">
-                                                            <dx-check-box formControlName="livre"></dx-check-box>
-                                                            </div>
-                                                        </div>
+                                                            <dx-box>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- Vente Commission -->
+                                                                    <div class="dx-field field-large">
+                                                                        <div class="dx-field-label">{{ 'ordres-venteACommission' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                        <dx-check-box formControlName="venteACommission"></dx-check-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                                <dxi-item [ratio]="1"></dxi-item>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- Bon à facturer -->
+                                                                    <div class="dx-field field-large">
+                                                                        <div class="dx-field-label">{{ 'ordres-bonAFacturer' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                        <dx-check-box formControlName="bonAFacturer"></dx-check-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                            </dx-box>
+                                                            <dx-box>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- Facturé -->
+                                                                    <div class="dx-field field-large">
+                                                                        <div class="dx-field-label">{{ 'ordres-facture' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                        <dx-check-box formControlName="facture"></dx-check-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                                <dxi-item [ratio]="1"></dxi-item>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- EDI -->
+                                                                    <div class="dx-field field-large">
+                                                                        <div class="dx-field-label">{{ 'ordres-factureEDI' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                        <dx-check-box formControlName="factureEDI"></dx-check-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                            </dx-box>
+                                                            <dx-box>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- Livré -->
+                                                                    <div class="dx-field field-large">
+                                                                        <div class="dx-field-label">{{ 'ordres-livre' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                        <dx-check-box formControlName="livre"></dx-check-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                                <dxi-item [ratio]="1"></dxi-item>
+                                                                <dxi-item [ratio]="4">
+                                                                </dxi-item>
+                                                            </dx-box>
                                                         </dxi-item>
                                                     </dx-box>
 
