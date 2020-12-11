@@ -1,14 +1,14 @@
 import {Apollo} from 'apollo-angular';
-import {WatchQueryOptions, OperationVariables, MutationOptions} from '@apollo/client/core';
-import { Injectable } from '@angular/core';
+import {WatchQueryOptions, OperationVariables, MutationOptions, defaultDataIdFromObject, ApolloQueryResult} from '@apollo/client/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { LieuPassageAQuai } from '../../models';
 import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
 
 
 import { LoadOptions } from 'devextreme/data/load_options';
-import { map, take, takeLast, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { concatMap, filter, map, mergeAll, mergeMap, switchMap, take, takeLast, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import DataSource from 'devextreme/data/data_source';
-import { Subject } from 'rxjs';
+import { from, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,43 +23,30 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     super(apollo, LieuPassageAQuai);
   }
 
-  async getOne(id: string) {
-    const query = await this.buildGetOne();
-    type Response = { lieuPassageAQuai: LieuPassageAQuai };
+  getOne(id: string) {
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables, fetchPolicy: 'network-only' } as WatchQueryOptions);
+    type Response = { lieuPassageAQuai: LieuPassageAQuai };
+    return this.watchGetOneQuery<Response>({variables});
   }
 
   getDataSource() {
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
-        // DX doesn't support observable here,
-        // and we can only emit a single response as Promise
         load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const query = await this.buildGetAll();
           const variables = this.mapLoadOptionsToVariables(options);
-          const done = new Subject();
 
-          this.query<Response>(query, {
-            variables,
-            fetchPolicy: 'cache-and-network',
-          } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(takeUntil(done))
-          .subscribe(res => {
-            console.log(res);
-            if (res.data && res.data.allLieuPassageAQuai) {
-              console.log('resolving with :', JSON.stringify(res.data.allLieuPassageAQuai));
-              resolve(this.asListCount(res.data.allLieuPassageAQuai));
-            }
-            if (!res.loading) {
-              done.next();
-              done.complete();
-            }
+          this.loadPaginatedQuery<Response>(query, {variables}, res => {
+            if (res.data && res.data.allLieuPassageAQuai)
+              resolve(this.asInstancedListCount(res.data.allLieuPassageAQuai));
           });
         }),
       }),

@@ -77,10 +77,8 @@ export class GridConfiguratorService {
     const res: GridConfig[] = await self.dataSource.load();
     if (!res.length) return self.fetchDefaultConfig();
     // Clear search text and pagination
-    // @ts-ignore
-    res[0].config.searchText = '';
-    // @ts-ignore
-    res[0].config.focusedRowKey = null;
+    delete res[0].config.searchText;
+    delete res[0].config.focusedRowKey;
     return res[0].config;
   }
 

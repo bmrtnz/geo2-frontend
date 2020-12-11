@@ -110,10 +110,9 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         this.createMode = url[url.length - 1].path === 'create';
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          from(this.lieupassageaquaiService.getOne(params.id))
-            .pipe(mergeAll())
+          this.lieupassageaquaiService.getOne(params.id)
             .subscribe(res => {
-              this.lieupassageaquai = new LieuPassageAQuai(res.data.lieuPassageAQuai);
+              this.lieupassageaquai = res.data.lieuPassageAQuai;
               this.formGroup.patchValue(this.lieupassageaquai);
               this.contentReadyEvent.emit();
               this.preSaisie = this.lieupassageaquai.preSaisie === true ? 'preSaisie' : '';

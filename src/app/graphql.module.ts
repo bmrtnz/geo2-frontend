@@ -1,10 +1,11 @@
 import { Injector, NgModule } from '@angular/core';
-import { from, InMemoryCache } from '@apollo/client/core';
+import { defaultDataIdFromObject, from, InMemoryCache, StoreObject } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { AuthService } from './shared/services';
 import { environment } from '../environments/environment';
+import { Edge } from './shared/services/api.service';
 
 const uri = environment.apiEndpoint;
 
@@ -25,7 +26,17 @@ export function createApollo(httpLink: HttpLink) {
       errorLink,
       httpLink.create({ uri, withCredentials: true })
     ]),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache({
+      dataIdFromObject(responseObject: Readonly<StoreObject> | Readonly<Edge>) {
+        if (responseObject.node) {
+          if (responseObject.node.id)
+            return `${responseObject.node.__typename}:${responseObject.node.id}`;
+          if (responseObject.node.key)
+            return `${responseObject.node.__typename}:${responseObject.node.key}`;
+        }
+        return defaultDataIdFromObject(responseObject);
+      },
+    }),
   };
 }
 

@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
@@ -5,8 +6,8 @@ import ArrayStore from 'devextreme/data/array_store';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { Observable, Subscriber } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { from, Observable, Subject, Subscriber, Subscription } from 'rxjs';
+import { filter, map, mergeMap, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { Model } from '../models/model';
 
 const DEFAULT_KEY = 'id';
@@ -28,9 +29,14 @@ export type DistinctInfo = {
 };
 
 export type RelayPage<T> = {
-  edges: { node: T, __typename: string }[]
+  edges: Edge<T>[]
   pageInfo: PageInfo
   totalCount: number
+};
+
+export type Edge<T = any> = {
+  node: T,
+  __typename: string,
 };
 
 export enum Direction {
@@ -80,21 +86,27 @@ export interface APIPersist {
     Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
-export abstract class ApiService {
+export abstract class ApiService implements OnDestroy {
 
   pageSize = DEFAULT_PAGE_SIZE;
   baseFieldsSize = BASE_FIELDS_SIZE;
   keyField: string | string[];
   gqlKeyType = DEFAULT_GQL_KEY_TYPE;
-  model: typeof Model;
+  model: typeof Model & (new () => Model);
   storeConfiguration: CustomStoreOptions;
+  destroy = new Subject<boolean>();
 
   constructor(
     private apollo: Apollo,
-    model: typeof Model,
+    model: typeof Model & (new () => Model),
   ) {
     this.model = model;
     this.keyField = this.model.getKeyField() || DEFAULT_KEY;
+  }
+
+  ngOnDestroy() {
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
   }
 
   /**
@@ -121,12 +133,23 @@ export abstract class ApiService {
   }
 
   /**
-   * Map RelayPage as Object for CustomStore
+   * Map RelayPage as Object
    * @param relayPage Input RelayPage
    */
   public asListCount<T = any>(relayPage: RelayPage<T>) {
     return {
       data: this.asList(relayPage),
+      totalCount: relayPage.totalCount,
+    };
+  }
+
+  /**
+   * Map RelayPage as Model instance
+   * @param relayPage Input RelayPage
+   */
+  public asInstancedListCount<T = any>(relayPage: RelayPage<T>) {
+    return {
+      data: this.asList(relayPage).map(v => new this.model(v)),
       totalCount: relayPage.totalCount,
     };
   }
@@ -205,6 +228,7 @@ export abstract class ApiService {
     return this.apollo
       .watchQuery<T>({
         query: gql(gqlQuery),
+        fetchPolicy: 'cache-and-network',
         returnPartialData: true,
         ...options,
       })
@@ -369,6 +393,7 @@ export abstract class ApiService {
   /**
    * Build and prepare distinct query
    * @param options DX LoadOptions object
+   * @deprecated Use 'watchDistinctQuery' instead
    */
   protected getDistinct(options: LoadOptions) {
 
@@ -557,6 +582,110 @@ export abstract class ApiService {
         .map(v => `(${v})`)
         .join(' and '),
     }));
+  }
+
+  /**
+   * Utility method to listen for paginated query request
+   * @param query GraphQL query
+   * @param options Apollo WatchQueryOptions
+   * @param cbk Callback called each time data is received
+   */
+  protected loadPaginatedQuery<T>(
+    query: string,
+    options: Partial<WatchQueryOptions<RelayPageVariables>>,
+    cbk: (res: ApolloQueryResult<T>) => void,
+  ) {
+    const done = new Subject<ApolloQueryResult<T>>();
+    this.query<T>(query, {
+      fetchPolicy: 'cache-and-network',
+      ...options,
+    } as WatchQueryOptions<RelayPageVariables>)
+    .pipe(
+      takeUntil(this.destroy),
+      filter( res => !!Object.keys(res.data).length),
+      takeUntil(done),
+    )
+    .subscribe(res => {
+      cbk(res);
+      done.next(res);
+      if (!res.loading)
+        done.complete();
+    });
+    return done;
+  }
+
+  /**
+   * Utility method to listen for `getOne()` query
+   * @param options Apollo WatchQueryOptions
+   */
+  protected watchGetOneQuery<T>(
+    options: Partial<WatchQueryOptions<OperationVariables>>,
+  ) {
+    const done = new Subject<ApolloQueryResult<T>>();
+    from(this.buildGetOne())
+    .pipe(
+      takeUntil(this.destroy),
+      takeUntil(done),
+      mergeMap( query => this.query<T>(query, {
+        fetchPolicy: 'cache-and-network',
+        ...options,
+      } as WatchQueryOptions)),
+      filter( res => !!Object.keys(res.data).length),
+    )
+    .subscribe(res => {
+      done.next(res);
+      if (!res.loading)
+        done.complete();
+    });
+    return done;
+  }
+
+  /**
+   * Utility method to listen for distrinct query request
+   * @param options Apollo WatchQueryOptions
+   * @param cbk Callback called each time data is received
+   */
+  protected loadDistinctQuery<T = { distinct: RelayPage<DistinctInfo> }>(
+    options: Partial<LoadOptions>,
+    cbk: (res: ApolloQueryResult<T>) => void,
+  ) {
+    const done = new Subject();
+
+    // API only support one field
+    const field = options.group.length ? options.group[0].selector : options.group.selector;
+    const distinctQuery = this.buildDistinct();
+
+    // Full filter fix
+    // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
+    if (options.filter) {
+      const withDepth = options.filter
+        .find(r => typeof r === 'object');
+      const withOperator = options.filter
+        .find(r => ['or', 'and'].includes(r));
+      if (withDepth && !withOperator)
+        options.filter = [options.filter[0], 'and', options.filter[1]];
+    }
+
+    const variables = this.mergeVariables(
+      { field },
+      this.mapLoadOptionsToVariables(options),
+    );
+
+    return this.query<T>(distinctQuery, {
+      fetchPolicy: 'cache-and-network',
+      variables,
+    } as WatchQueryOptions<RelayPageVariables>)
+    .pipe(
+      takeUntil(this.destroy),
+      takeUntil(done)
+    )
+    .subscribe( res => {
+      cbk(res);
+      if (!res.loading) {
+        done.next(res);
+        done.complete();
+      }
+    });
   }
 
 }
