@@ -29,8 +29,14 @@ body {
      -moz-user-select:none;
 }
 
+
 .fournisseur-page, .article-page, .client-page, .transporteur-page, .entrepot-page, 
 .lieupassageaquai-page, .entrepot-page, .details-ordres-page, .left-buttons-box, .accueil-ordres-page {
+
+  // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
+  .dx-field-label {
+    font-size:16px;
+  }
 
   .dx-accordion-item-title::before {
     font-size: 18px;
