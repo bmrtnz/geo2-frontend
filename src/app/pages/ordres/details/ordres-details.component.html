@@ -49,9 +49,10 @@
         <dx-button
             class="black"
             height="auto"
+            data-accordion="fluxdocs"
             icon="material-icons folder"
-            (onClick)="fileManagerClick()"
-            text="{{ 'ordres-details-documents' | localize }}">
+            (onClick)="scrollToOnClick($event)"
+            text="{{ 'ordres-details-fluxdocs' | localize }}">
         </dx-button>
         <dx-button
             class="black"
@@ -77,7 +78,13 @@
             (onClick)="scrollToOnClick($event)"
             text="{{ 'ordres-details-log' | localize }}">
         </dx-button>
-
+        <dx-button
+            class="black"
+            height="auto"
+            icon="material-icons folder"
+            (onClick)="fileManagerClick()"
+            text="{{ 'ordres-details-documents' | localize }}">
+        </dx-button>
     </dxi-item>
 
     <dxi-item [ratio]="8">
@@ -444,6 +451,21 @@
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-marges' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="marges"
+                                                [collapsible]="true"
+                                                [multiple]="false"
+                                                [selectedIndex]="-1"
+                                                >
+                                                    <dxi-item>
+                                                        <div class="dx-form-group-content">
+                                                        </div>
+                                                    </dxi-item>
+                                                </dx-accordion>
+                                            </div>
+
+                                            <div class="fluxdocs-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-fluxdocs' | localize }}</span>
+                                                <dx-accordion
+                                                data-name="fluxdocs"
                                                 [collapsible]="true"
                                                 [multiple]="false"
                                                 [selectedIndex]="-1"

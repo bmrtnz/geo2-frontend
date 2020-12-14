@@ -175,9 +175,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
     // Some elements are not accordion type
     if (Accordion) {
-      Accordion.instance.expandItem(0);
+      Accordion.instance.expandItem(0).then((r) => Element.scrollIntoView({ behavior: 'smooth' }))
+    } else {
+      Element.scrollIntoView({ behavior: 'smooth' });
     }
-    Element.scrollIntoView({ behavior: 'smooth' });
 
   }
 

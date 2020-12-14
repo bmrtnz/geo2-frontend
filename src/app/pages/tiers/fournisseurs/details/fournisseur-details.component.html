@@ -701,13 +701,21 @@
           >
             <dxi-item title="{{ 'tiers-fournisseurs-autoFacturation' | localize }}">
 
-              <!-- Auto facturation ? -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-fournisseurs-autoFacturation' | localize }} ?</div>
-                <div class="dx-field-value">
-                  <dx-check-box formControlName="autoFacturation" [readOnly]="readOnlyMode"></dx-check-box>
-                </div>
-              </div>
+              <dx-box>
+                <dxi-item [ratio]="4">
+                  <!-- Auto facturation ? -->
+                  <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-fournisseurs-autoFacturation' | localize }} ?</div>
+                    <div class="dx-field-value">
+                      <dx-check-box formControlName="autoFacturation" [readOnly]="readOnlyMode"></dx-check-box>
+                    </div>
+                  </div>
+                </dxi-item>
+                <dxi-item [ratio]="1"></dxi-item>
+                <dxi-item [ratio]="4">
+                </dxi-item>
+              </dx-box>
+
               <!-- Forme juridique -->
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-fournisseurs-formeJuridique' | localize }}</div>
