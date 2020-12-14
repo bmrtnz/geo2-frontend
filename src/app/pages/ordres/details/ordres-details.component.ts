@@ -174,11 +174,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const Accordion = this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key);
 
     // Some elements are not accordion type
-    if (Accordion) {
-      Accordion.instance.expandItem(0).then((r) => Element.scrollIntoView({ behavior: 'smooth' }))
-    } else {
-      Element.scrollIntoView({ behavior: 'smooth' });
-    }
+    Accordion.instance.expandItem(0).then((r) => Element.scrollIntoView({ behavior: 'smooth' }))
+    Element.scrollIntoView({ behavior: 'smooth' });
 
   }
 
