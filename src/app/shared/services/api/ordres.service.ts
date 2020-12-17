@@ -1,13 +1,12 @@
-import {Apollo} from 'apollo-angular';
-import {MutationOptions, OperationVariables, WatchQueryOptions} from '@apollo/client/core';
 import { Injectable } from '@angular/core';
-import { ApiService, APIRead, RelayPageVariables, RelayPage, APIPersist } from '../api.service';
-
-
+import { gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
+import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { map, take } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { mergeMap, take, takeUntil } from 'rxjs/operators';
 import { Ordre } from '../../models/ordre.model';
+import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +21,10 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     super(apollo, Ordre);
   }
 
-  async getOne(id: string) {
-    const query = await this.buildGetOne();
+  getOne(id: string) {
     type Response = { ordre: Ordre };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
+    return this.watchGetOneQuery<Response>({variables});
   }
 
   getDataSource() {
@@ -35,60 +33,62 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const query = await this.buildGetAll(2, this.queryFilter);
           type Response = { allOrdre: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);
-          if (options.searchValue) variables.search = options.searchValue;
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allOrdre)),
-            take(1),
-          )
-          .toPromise();
-        },
-        byKey: async (key) => {
+
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allOrdre)
+              resolve(this.asInstancedListCount(res.data.allOrdre));
+          });
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne();
           type Response = { ordre: Ordre };
           const variables = { id: key };
-          return this.
-          query<Response>(query, { variables } as WatchQueryOptions<any>)
-          .pipe(
-            map( res => res.data.ordre),
-            take(1),
-          )
-          .toPromise();
-        },
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.ordre)
+              resolve(res.data.ordre);
+          });
+        }),
       }),
     });
   }
 
-  async save(variables: OperationVariables) {
-    const mutation = await this.buildSave(1, this.queryFilter);
-    return this.mutate(mutation, { variables } as MutationOptions);
+  save(variables: OperationVariables) {
+    return this.watchSaveQuery({ variables }, 1, this.queryFilter);
   }
 
-  async delete(variables: OperationVariables) {
-    const mutation = this.buildDelete();
-    return this
-    .mutate(mutation, { variables } as MutationOptions<any, any>);
+  delete(variables: OperationVariables) {
+    return this.watchDeleteQuery({ variables });
   }
 
-  async clone(variables: OperationVariables) {
-    const mutation = await this.buildSaveWithClone(1, this.queryFilter);
-    return this.mutate(mutation, { variables } as any);
+  clone(variables: OperationVariables) {
+    return from(this.buildSaveWithClone(1, this.queryFilter))
+    .pipe(
+      takeUntil(this.destroy),
+      mergeMap( query => this.apollo.mutate({
+        mutation: gql(query),
+        fetchPolicy: 'no-cache',
+        variables,
+      } as MutationOptions)),
+      take(1),
+    );
   }
 
   protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
     return `
       mutation CloneOrdre($ordre: GeoOrdreInput!) {
         cloneOrdre(ordre: $ordre) {
-          ${ await this.model.getGQLFields(depth, filter).toPromise() }
+          ${await this.model.getGQLFields(depth, filter).toPromise()}
         }
       }
     `;

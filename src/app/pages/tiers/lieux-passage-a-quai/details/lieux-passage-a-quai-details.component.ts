@@ -157,8 +157,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         lieuPassageAQuai.id = this.lieupassageaquai.id;
       }
 
-      from(this.lieupassageaquaiService.save({ lieuPassageAQuai }))
-        .pipe(mergeAll())
+      this.lieupassageaquaiService.save({ lieuPassageAQuai })
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);

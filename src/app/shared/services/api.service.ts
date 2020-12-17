@@ -97,7 +97,7 @@ export abstract class ApiService implements OnDestroy {
   destroy = new Subject<boolean>();
 
   constructor(
-    private apollo: Apollo,
+    protected apollo: Apollo,
     model: typeof Model & (new () => Model),
   ) {
     this.model = model;
@@ -260,14 +260,14 @@ export abstract class ApiService implements OnDestroy {
   /**
    * Run GraphQL mutation
    * @param gqlMutation GraphQL mutation
+   * @deprecated Use Apollo `mutate()` function
    */
   protected mutate(gqlMutation: string, options?: MutationOptions) {
     return this.apollo
       .mutate({
         mutation: gql(gqlMutation),
         ...options,
-      })
-      .pipe(take(1));
+      });
   }
 
   /**
@@ -585,14 +585,14 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
-   * Utility method to listen for paginated query request
+   * Utility method to listen for query request, useful within DX datasource
    * @param query GraphQL query
    * @param options Apollo WatchQueryOptions
    * @param cbk Callback called each time data is received
    */
-  protected loadPaginatedQuery<T>(
+  protected listenQuery<T>(
     query: string,
-    options: Partial<WatchQueryOptions<RelayPageVariables>>,
+    options: Partial<WatchQueryOptions<RelayPageVariables|OperationVariables>>,
     cbk: (res: ApolloQueryResult<T>) => void,
   ) {
     const done = new Subject<ApolloQueryResult<T>>();
@@ -617,12 +617,16 @@ export abstract class ApiService implements OnDestroy {
   /**
    * Utility method to listen for `getOne()` query
    * @param options Apollo WatchQueryOptions
+   * @param depth Query fields depth
+   * @param fieldsFilter Query fields filter
    */
   protected watchGetOneQuery<T>(
     options: Partial<WatchQueryOptions<OperationVariables>>,
+    depth = 1,
+    fieldsFilter?: RegExp,
   ) {
     const done = new Subject<ApolloQueryResult<T>>();
-    from(this.buildGetOne())
+    from(this.buildGetOne(depth, fieldsFilter))
     .pipe(
       takeUntil(this.destroy),
       takeUntil(done),
@@ -641,7 +645,7 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
-   * Utility method to listen for distrinct query request
+   * Utility method to listen for distinct query request
    * @param options Apollo WatchQueryOptions
    * @param cbk Callback called each time data is received
    */
@@ -686,6 +690,47 @@ export abstract class ApiService implements OnDestroy {
         done.complete();
       }
     });
+  }
+
+  /**
+   * Utility method to listen for `save()` query
+   * @param options Apollo MutationOptions
+   * @param depth Query fields depth
+   * @param fieldsFilter Query fields filter
+   */
+  protected watchSaveQuery(
+    options: Partial<MutationOptions>,
+    depth = 1,
+    fieldsFilter?: RegExp,
+  ) {
+    return from(this.buildSave(depth, fieldsFilter))
+    .pipe(
+      takeUntil(this.destroy),
+      mergeMap( query => this.apollo.mutate({
+        mutation: gql(query),
+        fetchPolicy: 'no-cache',
+        ...options,
+      } as MutationOptions)),
+      take(1),
+    );
+  }
+
+  /**
+   * Utility method to listen for `delete()` query
+   * @param options Apollo MutationOptions
+   */
+  protected watchDeleteQuery(
+    options: Partial<MutationOptions>,
+  ) {
+    return this.apollo.mutate({
+      mutation: gql(this.buildDelete()),
+      fetchPolicy: 'no-cache',
+      ...options,
+    } as MutationOptions)
+    .pipe(
+      takeUntil(this.destroy),
+      take(1),
+    );
   }
 
 }

@@ -1,14 +1,10 @@
-import {Apollo} from 'apollo-angular';
-import {OperationVariables, WatchQueryOptions} from '@apollo/client/core';
 import { Injectable } from '@angular/core';
-import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
-
-import { Article } from '../../models';
-
-import { ArticleMatierePremiere } from '../../models/article-matiere-premiere.model';
+import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { map, take } from 'rxjs/operators';
+import { Article } from '../../models';
+import { ArticleMatierePremiere } from '../../models/article-matiere-premiere.model';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,34 +23,32 @@ export class ArticlesMatieresPremieresService extends ApiService implements APIR
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
-          const query = await this.buildGetAll();
           type Response = { allArticleMatierePremiere: RelayPage<ArticleMatierePremiere> };
+          const query = await this.buildGetAll();
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allArticleMatierePremiere)),
-            take(1),
-          )
-          .toPromise();
-        },
-        byKey: async (key) => {
+
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allArticleMatierePremiere)
+              resolve(this.asInstancedListCount(res.data.allArticleMatierePremiere));
+          });
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne();
           type Response = { articleMatierePremiere: ArticleMatierePremiere };
           const variables = { id: key };
-          return this.
-          query<Response>(query, { variables } as WatchQueryOptions<any>)
-          .pipe(
-            map( res => res.data.articleMatierePremiere),
-            take(1),
-          )
-          .toPromise();
-        },
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.articleMatierePremiere)
+              resolve(res.data.articleMatierePremiere);
+          });
+        }),
       }),
     });
   }

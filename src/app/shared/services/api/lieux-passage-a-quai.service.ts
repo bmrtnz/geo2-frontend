@@ -33,7 +33,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
             return this.loadDistinctQuery(options, res => {
@@ -44,7 +44,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
           const query = await this.buildGetAll();
           const variables = this.mapLoadOptionsToVariables(options);
 
-          this.loadPaginatedQuery<Response>(query, {variables}, res => {
+          this.listenQuery<Response>(query, {variables}, res => {
             if (res.data && res.data.allLieuPassageAQuai)
               resolve(this.asInstancedListCount(res.data.allLieuPassageAQuai));
           });
@@ -53,9 +53,8 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     });
   }
 
-  async save(variables: OperationVariables) {
-    const mutation = await this.buildSave(1, this.fieldsFilter);
-    return this.mutate(mutation, { variables } as MutationOptions);
+  save(variables: OperationVariables) {
+    return this.watchSaveQuery({ variables });
   }
 
 }

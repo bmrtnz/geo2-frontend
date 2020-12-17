@@ -12,8 +12,8 @@ import { DxAccordionComponent, DxTabPanelComponent, DxValidationGroupComponent }
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
-import { from, iif, of, Subscription } from 'rxjs';
-import { map, mergeAll, take } from 'rxjs/operators';
+import { iif, of, Subscription } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 @Component({
@@ -119,8 +119,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       const isNew = !ordre.id;
       ordre.societe = { id: environment.societe.id };
 
-      from(this.ordresService.save({ ordre }))
-        .pipe(mergeAll())
+      this.ordresService.save({ ordre })
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);
@@ -138,8 +137,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     if (this.formGroup.pristine && this.formGroup.valid) {
       const ordre = this.ordresService.extractDirty(this.formGroup.controls);
 
-      from(this.ordresService.clone({ ordre }))
-        .pipe(mergeAll())
+      this.ordresService.clone({ ordre })
         .subscribe({
           next: (e) => {
             notify('Dupliqué', 'success', 3000);
@@ -154,8 +152,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   onDeleteClick() {
     const ordre = this.ordresService.extractDirty(this.formGroup.controls);
     if (!ordre.id) return;
-    from(this.ordresService.delete({ ordre }))
-      .pipe(mergeAll())
+    this.ordresService.delete({ ordre })
       .subscribe({
         next: _ => {
           notify('Ordre supprimé', 'success', 3000);
@@ -271,13 +268,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     if (itemData.id === INDEX_TAB) return;
     iif(
       () => !!itemData.id,
-      from(this.ordresService.getOne(itemData.id)).pipe(
-        mergeAll(),
+      this.ordresService
+      .getOne(itemData.id)
+      .pipe(
         map(res => res.data.ordre),
       ),
-      of({} as Ordre),
+      of({} as Ordre).pipe(take(1)),
     )
-      .pipe(take(1))
       .subscribe(res => {
         this.contents[itemIndex].ordre = res;
         this.tabPanelComponent.selectedIndex = itemIndex;

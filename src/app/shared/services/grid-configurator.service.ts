@@ -77,9 +77,10 @@ export class GridConfiguratorService {
     const res: GridConfig[] = await self.dataSource.load();
     if (!res.length) return self.fetchDefaultConfig();
     // Clear search text and pagination
-    delete res[0].config.searchText;
-    delete res[0].config.focusedRowKey;
-    return res[0].config;
+    const config = {...res[0].config}; // clone config (original is sealed)
+    delete config.searchText;
+    delete config.focusedRowKey;
+    return config;
   }
 
   /**
@@ -101,11 +102,9 @@ export class GridConfiguratorService {
    */
   async save(config: {}) {
     const gridConfig = self.prepareGrid();
-    from(self.gridsConfigsService.save({
+    self.gridsConfigsService.save({
       gridConfig: { ...gridConfig, config }
-    }))
-      .pipe(mergeAll())
-      .subscribe();
+    }).subscribe();
   }
 
   /**
