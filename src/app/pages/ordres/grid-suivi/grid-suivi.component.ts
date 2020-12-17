@@ -38,6 +38,8 @@ export class GridSuiviComponent implements OnInit {
       ['valide', '=', true],
       'and',
       ['societe.id', '=', environment.societe.id],
+      'and',
+      ['facture', '=', false]
     ];
     if (this.filter) filters = [...filters, 'and', this.filter];
     this.dataSource.filter(filters);
