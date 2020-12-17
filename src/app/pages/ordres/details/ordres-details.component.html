@@ -142,31 +142,41 @@
                                     </dxi-item>
                                     <dxi-item [ratio]="8">
 
-                                        <h2>{{ content.tabTitle }}
-                                            <div class="right" *ngIf="i">
-                                                <dx-button class="upperButton subButton submit "
+                                        <h2><span class="order-number">{{ content.tabTitle }}</span>
+                                            <span *ngIf="i">
+                                                <span *ngIf="linkedOrdersSearch" class="search-linkedOrders">Recherche ordres liés...</span>
+                                                <dx-button *ngFor="let linkedOrder of linkedOrders"
+                                                    class="small-button"
                                                     type="default"
-                                                    text="{{ 'btn-valider' | localize }}"
-                                                    [useSubmitBehavior]="true"
-                                                ></dx-button>
-                                                <dx-button class="upperButton subButton"
-                                                    type="danger"
-                                                    text="{{ 'btn-deleteorder' | localize }}"
-                                                    (onClick)="onDeleteClick()"
-                                                ></dx-button>
-                                                <dx-button class="upperButton subButton"
-                                                    type="default"
-                                                    text="{{ 'btn-cloneorder' | localize }}"
-                                                    [disabled]="!canDuplicate"
-                                                    (onClick)="duplicate()"
-                                                ></dx-button>
-                                                    <dx-button class="upperButton subButton"
-                                                    type="default"
-                                                    text="{{ 'btn-complorder' | localize }}"
-                                                ></dx-button>
-
-                                            </div>
+                                                    text="{{ linkedOrder.numero }}"
+                                                    (onClick)="openLinkedOrder(linkedOrder.id, linkedOrder.numero)"
+                                                >
+                                                </dx-button>
+                                            </span>
                                         </h2>
+                                        <div class="right" *ngIf="i">
+                                            <dx-button class="upperButton subButton submit "
+                                                type="default"
+                                                text="{{ 'btn-valider' | localize }}"
+                                                [useSubmitBehavior]="true"
+                                            ></dx-button>
+                                            <dx-button class="upperButton subButton"
+                                                type="danger"
+                                                text="{{ 'btn-deleteorder' | localize }}"
+                                                (onClick)="onDeleteClick()"
+                                            ></dx-button>
+                                            <dx-button class="upperButton subButton"
+                                                type="default"
+                                                text="{{ 'btn-cloneorder' | localize }}"
+                                                [disabled]="!canDuplicate"
+                                                (onClick)="duplicate()"
+                                            ></dx-button>
+                                                <dx-button class="upperButton subButton"
+                                                type="default"
+                                                text="{{ 'btn-complorder' | localize }}"
+                                            ></dx-button>
+
+                                        </div>
                                         <app-grid-suivi *ngIf="!i" (ordreSelected)="pushTab($event)"></app-grid-suivi>
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
