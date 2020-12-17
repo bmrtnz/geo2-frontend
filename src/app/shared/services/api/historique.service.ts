@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { OperationVariables } from '@apollo/client/core';
+import { gql, MutationOptions, OperationVariables } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { take } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { mergeMap, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { Historique } from '../../models';
 import { ApiService, RelayPage } from '../api.service';
 
@@ -71,15 +72,22 @@ export class HistoriqueService extends ApiService {
     });
   }
 
-  async saveByType(type: HistoryType, properties: OperationVariables) {
+  saveByType(type: HistoryType, properties: OperationVariables) {
     const withLowerCaseFirst = ([first, ...rest]: string) => [first.toLowerCase(), ...rest].join('');
-    this.model = (await import(`../../models/${HistoryModule[type]}.model`)).default;
-    const mutation = await this.buildSave(2);
-    return this.mutate(mutation, {
-      variables: {
-        [withLowerCaseFirst(HistoryModel[type])]: properties,
-      }
-    } as any).pipe(take(1));
+    return from(import(`../../models/${HistoryModule[type]}.model`))
+    .pipe(
+      tap( model => this.model = model.default),
+      switchMap( _ => this.buildSave(2)),
+      takeUntil(this.destroy),
+      mergeMap( query => this.apollo.mutate({
+        mutation: gql(query),
+        fetchPolicy: 'no-cache',
+        variables: {
+          [withLowerCaseFirst(HistoryModel[type])]: properties,
+        },
+      } as MutationOptions)),
+      take(1),
+    );
   }
 
 }
