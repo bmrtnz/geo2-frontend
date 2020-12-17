@@ -9,6 +9,8 @@ import { NestedMain } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Observable } from 'rxjs';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { map } from 'rxjs/operators';
+import { LocalizationService } from 'app/shared/services';
 
 @Component({
   selector: 'app-articles-list',
@@ -27,6 +29,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   constructor(
     public articlesService: ArticlesService,
     private router: Router,
+    public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
     this.apiService = this.articlesService;
@@ -34,8 +37,17 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.articles = this.articlesService.getDataSource();
-    this.detailedFields = this.articlesService.model.getDetailedFields(2);
+    this.detailedFields = this.articlesService.model.getDetailedFields(2)
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field =>
+          !!(this.localizeService.localize('articles-' + field.path.replace('.description', '').replace('.', '-'))).length);
+       }),
+    );
   }
+
+  // 'articles-' + field.path.replace('.description', '').replace('.', '-') | localize) || field.path"
 
   onRowDblClick(e) {
     this.router.navigate([`/articles/${e.data.id}`]);

@@ -85,39 +85,51 @@
                 </dx-text-box>
               </div>
             </div>
+            <dx-box>
+              <dxi-item [ratio]="4">
+                <!-- Stock actif -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-stockActif' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box
+                      formControlName="stockActif"
+                      [readOnly]="readOnlyMode"
+                    ></dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+              <dxi-item [ratio]="1"></dxi-item>
+              <dxi-item [ratio]="4">
+                <!-- Suivi précalibré -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-stockPrecalibre' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box
+                      formControlName="stockPrecalibre"
+                      [readOnly]="readOnlyMode"
+                    ></dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+            </dx-box>
 
-            <!-- Stock actif -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-stockActif' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box
-                  formControlName="stockActif"
-                  [readOnly]="readOnlyMode"
-                ></dx-check-box>
-              </div>
-            </div>
-
-            <!-- Suivi précalibré -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-stockPrecalibre' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box
-                  formControlName="stockPrecalibre"
-                  [readOnly]="readOnlyMode"
-                ></dx-check-box>
-              </div>
-            </div>
-
-            <!-- Indicateur modifie détail -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-indicateurModificationDetail' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box
-                  formControlName="indicateurModificationDetail"
-                  [readOnly]="readOnlyMode"
-                ></dx-check-box>
-              </div>
-            </div>
+            <dx-box>
+              <dxi-item [ratio]="4">
+                <!-- Indicateur modifie détail -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-indicateurModificationDetail' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box
+                      formControlName="indicateurModificationDetail"
+                      [readOnly]="readOnlyMode"
+                    ></dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+              <dxi-item [ratio]="1"></dxi-item>
+              <dxi-item [ratio]="4">
+              </dxi-item>
+          </dx-box>
 
           </div>
         </div>
@@ -356,30 +368,47 @@
                 </dx-text-box>
               </div>
             </div>
-            <!-- Déclarant CHEP  -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-declarantCHEP' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box formControlName="declarantCHEP" [readOnly]="readOnlyMode">
-                </dx-check-box>
-              </div>
-            </div>
-            <!-- Bacs CHEP  -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-declarantBacsCHEP' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box formControlName="declarantBacsCHEP" [readOnly]="readOnlyMode">
-                </dx-check-box>
-              </div>
-            </div>
-            <!-- Suivi destockage  -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-suiviDestockage' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box formControlName="suiviDestockage" [readOnly]="readOnlyMode">
-                </dx-check-box>
-              </div>
-            </div>
+
+            <dx-box>
+              <dxi-item [ratio]="4">
+                <!-- Déclarant CHEP  -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-declarantCHEP' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box formControlName="declarantCHEP" [readOnly]="readOnlyMode">
+                    </dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+              <dxi-item [ratio]="1"></dxi-item>
+              <dxi-item [ratio]="4">
+                <!-- Bacs CHEP  -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-declarantBacsCHEP' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box formControlName="declarantBacsCHEP" [readOnly]="readOnlyMode">
+                    </dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+            </dx-box>
+
+            <dx-box>
+              <dxi-item [ratio]="4">
+                <!-- Suivi destockage  -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-suiviDestockage' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box formControlName="suiviDestockage" [readOnly]="readOnlyMode">
+                    </dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+              <dxi-item [ratio]="1"></dxi-item>
+              <dxi-item [ratio]="4">
+              </dxi-item>
+            </dx-box>
+
             <!-- Fournisseur de rattachement -->
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-fournisseurs-fournisseurDeRattachement' | localize }}</div>
@@ -421,22 +450,30 @@
                 ></dx-select-box>
               </div>
             </div>
-            <!-- Consigne Palox SA  -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-consignePaloxSa' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box formControlName="consignePaloxSa" [readOnly]="readOnlyMode">
-                </dx-check-box>
-              </div>
-            </div>
-            <!-- Consigne Palox UDC  -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-fournisseurs-consignePaloxUdc' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-check-box formControlName="consignePaloxUdc" [readOnly]="readOnlyMode">
-                </dx-check-box>
-              </div>
-            </div>
+
+            <dx-box>
+              <dxi-item [ratio]="4">
+                <!-- Consigne Palox SA  -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-consignePaloxSa' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box formControlName="consignePaloxSa" [readOnly]="readOnlyMode">
+                    </dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+              <dxi-item [ratio]="1"></dxi-item>
+              <dxi-item [ratio]="4">
+                <!-- Consigne Palox UDC  -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-fournisseurs-consignePaloxUdc' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-check-box formControlName="consignePaloxUdc" [readOnly]="readOnlyMode">
+                    </dx-check-box>
+                  </div>
+                </div>
+              </dxi-item>
+            </dx-box>
 
             <!-- Langue -->
             <div class="dx-field">

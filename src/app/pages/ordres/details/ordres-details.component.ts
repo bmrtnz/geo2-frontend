@@ -87,10 +87,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         this.contents[selectedIndex].patch = patch;
       });
 
-  }
-
-  ngAfterinit() {
-
     // On affiche les ordres déjà ouverts le cas échéant
     const myData = window.localStorage.getItem('openOrders');
     if (myData !== null) {

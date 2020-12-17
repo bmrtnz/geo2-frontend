@@ -40,8 +40,8 @@ const indicators: Indicator[] = [{
   id: 1,
   parameter: 'Supervision',
   subParameter: 'livraison',
-  goTo: '',
-  goToParams: {},
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'supervisionlivraison'},
   tileBkg: '#9199B4',
   indicatorIcon: 'material-icons directions',
   warningIcon: ''

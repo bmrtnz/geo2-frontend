@@ -3,9 +3,11 @@ import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { LocalizationService } from 'app/shared/services/localization.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-suivi',
@@ -23,10 +25,18 @@ export class GridSuiviComponent implements OnInit {
 
   constructor(
     private ordresService: OrdresService,
+    public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
     this.dataSource = ordresService.getDataSource();
-    this.detailedFields = this.ordresService.model.getDetailedFields();
+    this.detailedFields = this.ordresService.model.getDetailedFields()
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field =>
+          !!(this.localizeService.localize('ordres-' + field.path.replace('.description', ''))).length);
+       }),
+    );
   }
 
   ngOnInit() {

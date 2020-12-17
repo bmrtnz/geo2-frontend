@@ -15,6 +15,7 @@ export class ArticleMatierePremiere extends Model {
   @Field({model: import('./origine.model')}) public origine: Origine;
   @Field({model: import('./calibre-unifie.model')}) public calibreUnifie: CalibreUnifie;
   @Field({model: import('./type-vente.model')}) public typeVente: TypeVente;
+  @Field({asKey: true, asLabel: true}) public codePlu: string;
   @Field({asKey: true, asLabel: true}) public id: string;
 }
 
