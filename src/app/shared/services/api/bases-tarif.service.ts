@@ -47,7 +47,7 @@ export class BasesTarifService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.baseTarif)
-              resolve(res.data.baseTarif);
+              resolve(new this.model(res.data.baseTarif));
           });
         }),
       }),

@@ -47,7 +47,7 @@ export class EspecesService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.espece)
-              resolve(res.data.espece);
+              resolve(new this.model(res.data.espece));
           });
         }),
       }),

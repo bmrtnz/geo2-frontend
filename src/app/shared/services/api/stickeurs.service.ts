@@ -50,7 +50,7 @@ export class StickeursService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.stickeur)
-              resolve(res.data.stickeur);
+              resolve(new this.model(res.data.stickeur));
           });
         }),
       }),

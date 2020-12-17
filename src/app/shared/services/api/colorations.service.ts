@@ -50,7 +50,7 @@ export class ColorationsService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.coloration)
-              resolve(res.data.coloration);
+              resolve(new this.model(res.data.coloration));
           });
         }),
       }),

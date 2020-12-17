@@ -42,7 +42,7 @@ export class MoyenCommunicationService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.moyenCommunication)
-              resolve(res.data.moyenCommunication);
+              resolve(new this.model(res.data.moyenCommunication));
           });
         }),
       }),

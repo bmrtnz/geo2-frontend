@@ -42,7 +42,7 @@ export class GroupesFournisseurService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.groupeFournisseur)
-              resolve(res.data.groupeFournisseur);
+              resolve(new this.model(res.data.groupeFournisseur));
           });
         }),
       }),

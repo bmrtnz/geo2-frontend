@@ -54,7 +54,7 @@ export class EntrepotsService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.entrepot)
-              resolve(res.data.entrepot);
+              resolve(new this.model(res.data.entrepot));
           });
         }),
       }),

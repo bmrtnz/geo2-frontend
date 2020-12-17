@@ -16,7 +16,7 @@ export class EtiquettesColisService extends ApiService implements APIRead {
     apollo: Apollo,
   ) {
     super(apollo, EtiquetteColis);
-    this.gqlKeyType = 'GeoProduitWith.etiquetteColisIdInput';
+    this.gqlKeyType = 'GeoProduitWithEspeceIdInput';
   }
 
   getDataSource() {
@@ -50,7 +50,7 @@ export class EtiquettesColisService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.etiquetteColis)
-              resolve(res.data.etiquetteColis);
+              resolve(new this.model(res.data.etiquetteColis));
           });
         }),
       }),

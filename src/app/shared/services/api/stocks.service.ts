@@ -44,7 +44,7 @@ export class StocksService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.stock)
-              resolve(res.data.stock);
+              resolve(new this.model(res.data.stock));
           });
         }),
       }),

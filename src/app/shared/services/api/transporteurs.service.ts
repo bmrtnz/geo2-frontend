@@ -51,7 +51,7 @@ export class TransporteursService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.transporteur)
-              resolve(res.data.transporteur);
+              resolve(new this.model(res.data.transporteur));
           });
         }),
       }),

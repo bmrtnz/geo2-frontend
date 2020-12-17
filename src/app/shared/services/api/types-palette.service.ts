@@ -47,7 +47,7 @@ export class TypesPaletteService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.typePalette)
-              resolve(res.data.typePalette);
+              resolve(new this.model(res.data.typePalette));
           });
         }),
       }),

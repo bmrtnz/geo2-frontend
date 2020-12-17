@@ -47,7 +47,7 @@ export class TransitairesService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.transitaire)
-              resolve(res.data.transitaire);
+              resolve(new this.model(res.data.transitaire));
           });
         }),
       }),

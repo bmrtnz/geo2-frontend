@@ -42,7 +42,7 @@ export class CourtierService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.courtier)
-              resolve(res.data.courtier);
+              resolve(new this.model(res.data.courtier));
           });
         }),
       }),

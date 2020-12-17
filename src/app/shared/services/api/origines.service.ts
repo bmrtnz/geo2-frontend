@@ -50,7 +50,7 @@ export class OriginesService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.origine)
-              resolve(res.data.origine);
+              resolve(new this.model(res.data.origine));
           });
         }),
       }),

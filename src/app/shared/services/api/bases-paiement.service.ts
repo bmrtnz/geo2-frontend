@@ -47,7 +47,7 @@ export class BasesPaiementService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.basePaiement)
-              resolve(res.data.basePaiement);
+              resolve(new this.model(res.data.basePaiement));
           });
         }),
       }),

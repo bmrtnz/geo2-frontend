@@ -50,7 +50,7 @@ export class EmballagesService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.emballage)
-              resolve(res.data.emballage);
+              resolve(new this.model(res.data.emballage));
           });
         }),
       }),

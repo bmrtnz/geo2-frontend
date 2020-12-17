@@ -47,7 +47,7 @@ export class AlveolesService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.alveole)
-              resolve(res.data.alveole);
+              resolve(new this.model(res.data.alveole));
           });
         }),
       }),

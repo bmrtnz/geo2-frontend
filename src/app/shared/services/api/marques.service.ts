@@ -49,8 +49,9 @@ export class MarquesService extends ApiService implements APIRead {
           const id = key ? {id: key.id, espece: key.especeId || ''} : {};
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.marque)
-              resolve(res.data.marque);
+            if (res.data && res.data.marque) {
+              resolve(new this.model(res.data.marque));
+            }
           });
         }),
       }),

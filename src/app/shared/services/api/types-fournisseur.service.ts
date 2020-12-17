@@ -47,7 +47,7 @@ export class TypesFournisseurService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.typeFournisseur)
-              resolve(res.data.typeFournisseur);
+              resolve(new this.model(res.data.typeFournisseur));
           });
         }),
       }),

@@ -52,7 +52,7 @@ export class EtiquettesUcService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.etiquetteUc)
-              resolve(res.data.etiquetteUc);
+              resolve(new this.model(res.data.etiquetteUc));
           });
         }),
       }),

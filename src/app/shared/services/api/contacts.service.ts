@@ -42,7 +42,7 @@ export class ContactsService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.contact)
-              resolve(res.data.contact);
+              resolve(new this.model(res.data.contact));
           });
         }),
         insert: (values) => {
