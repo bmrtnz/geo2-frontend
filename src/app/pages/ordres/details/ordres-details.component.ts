@@ -33,6 +33,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   transporteurs: DataSource;
   logs: Log[];
   commentaires: Comm[];
+  linkedOrders: any;
+  linkedOrdersSearch: boolean;
   canDuplicate = false;
 
   formGroup = this.fb.group({
@@ -76,6 +78,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.clients = this.clientsService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
     this.transporteurs = this.transporteursService.getDataSource();
@@ -168,13 +171,39 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const key = e.element.dataset.accordion;
     const extractField = '.' + key + '-field';
     const Element = document.querySelector(extractField) as HTMLElement;
+
     const Accordion = this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key);
 
     // Some elements are not accordion type
-    if (Accordion) {
-      Accordion.instance.expandItem(0);
-    }
+    Accordion.instance.expandItem(0).then((r) => Element.scrollIntoView({ behavior: 'smooth' }))
     Element.scrollIntoView({ behavior: 'smooth' });
+
+  }
+
+  addLinkedOrders(ordre) {
+
+    this.linkedOrdersSearch = false;
+    this.linkedOrders = [];
+    const refClt = ordre.referenceClient;
+    if (!refClt) return
+
+    this.linkedOrdersSearch = true;
+    const numero = ordre.numero;
+    const ordresSource = this.ordresService.getDataSource();
+    ordresSource.filter(['referenceClient', '=', refClt]);
+    ordresSource.load().then(res => {
+      this.linkedOrders = [];
+      let i = 0;
+      res.forEach(value => {
+        if (numero === value.numero) {
+          res.splice(i, 1);
+        } else {
+          this.linkedOrders.push(value);
+        }
+        i++;
+      });
+      this.linkedOrdersSearch = false;
+    })
 
   }
 
@@ -188,6 +217,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
+
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -244,16 +274,29 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChange({ addedItems }: { addedItems: Content[] }) {
+    this.linkedOrders = [];
     this.validationGroup.instance.validate();
     if (!addedItems.length) return;
     const { id, ordre, patch } = addedItems[0];
     setTimeout(() => this.isIndexTab = id === INDEX_TAB);
     this.canDuplicate = !!id;
-    if (ordre)
+    if (ordre) {
       this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
+      this.addLinkedOrders(ordre);
+    }
     if (patch)
       Object.entries(patch)
         .forEach(([key]) => this.formGroup.get(key).markAsDirty());
+  }
+
+  openLinkedOrder(id, numero) {
+
+    const shortOrder = {
+      id: id,
+      numero: numero
+    };
+    this.pushTab(shortOrder);
+
   }
 
   onTitleRendered({ itemData, itemIndex }: {

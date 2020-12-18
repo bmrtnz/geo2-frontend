@@ -232,7 +232,7 @@
           <div class="dx-form-group-content">
 
             <!-- Lieu fonction EAN Dépôt-->
-            <div class="dx-field">
+            <div class="dx-field field-large">
               <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEanDepot' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="lieuFonctionEanDepot" [readOnly]="readOnlyMode">
@@ -244,7 +244,7 @@
             </div>
 
             <!-- Lieu fonction EAN Acheteur-->
-            <div class="dx-field">
+            <div class="dx-field field-large">
               <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEanAcheteur' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="lieuFonctionEanAcheteur" [readOnly]="readOnlyMode">
@@ -497,21 +497,27 @@
                 </div>
               </div>
 
-              <!-- declaration EUR1 -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-declarationEur1' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-check-box formControlName="declarationEur1" [readOnly]="readOnlyMode"></dx-check-box>
-                </div>
-              </div>
-
-              <!-- Envoi auto détail -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-envoieAutomatiqueDetail' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-check-box formControlName="envoieAutomatiqueDetail" [readOnly]="readOnlyMode"></dx-check-box>
-                </div>
-              </div>
+              <dx-box>
+                <dxi-item [ratio]="4">
+                  <!-- declaration EUR1 -->
+                  <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-entrepots-declarationEur1' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-check-box formControlName="declarationEur1" [readOnly]="readOnlyMode"></dx-check-box>
+                    </div>
+                  </div>
+                </dxi-item>
+                <dxi-item [ratio]="1"></dxi-item>
+                <dxi-item [ratio]="4">
+                  <!-- Envoi auto détail -->
+                  <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-entrepots-envoieAutomatiqueDetail' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-check-box formControlName="envoieAutomatiqueDetail" [readOnly]="readOnlyMode"></dx-check-box>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dx-box>
 
               <!-- Contrôle réf client -->
               <div class="dx-field">
