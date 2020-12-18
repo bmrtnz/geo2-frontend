@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { LocalizePipe } from 'app/shared/pipes';
 
 import { CertificationDatePopupComponent } from './certification-date-popup.component';
 
@@ -8,7 +9,10 @@ describe('CertificationDatePopupComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CertificationDatePopupComponent ]
+      declarations: [
+        CertificationDatePopupComponent,
+        LocalizePipe,
+      ],
     })
     .compileComponents();
   }));
