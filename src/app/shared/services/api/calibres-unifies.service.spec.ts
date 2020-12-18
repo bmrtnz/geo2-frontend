@@ -6,7 +6,7 @@ describe('CalibresUnifiesService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: CalibresUnifiesService = TestBed.get(CalibresUnifiesService);
+    const service: CalibresUnifiesService = TestBed.inject(CalibresUnifiesService);
     expect(service).toBeTruthy();
   });
 });

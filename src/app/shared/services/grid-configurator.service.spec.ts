@@ -5,7 +5,7 @@ describe('DataGridConfigService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: GridConfiguratorService = TestBed.get(GridConfiguratorService);
+    const service: GridConfiguratorService = TestBed.inject(GridConfiguratorService);
     expect(service).toBeTruthy();
   });
 });

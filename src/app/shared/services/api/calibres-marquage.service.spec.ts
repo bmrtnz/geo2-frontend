@@ -6,7 +6,7 @@ describe('CalibresMarquageService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: CalibresMarquageService = TestBed.get(CalibresMarquageService);
+    const service: CalibresMarquageService = TestBed.inject(CalibresMarquageService);
     expect(service).toBeTruthy();
   });
 });

@@ -33,7 +33,7 @@ import { VarietesService } from 'app/shared/services/api/varietes.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
-import { concatAll, switchAll, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import {
     Article
 } from '../../../shared/models';

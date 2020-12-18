@@ -6,7 +6,7 @@ describe('PenetrosService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: PenetrosService = TestBed.get(PenetrosService);
+    const service: PenetrosService = TestBed.inject(PenetrosService);
     expect(service).toBeTruthy();
   });
 });

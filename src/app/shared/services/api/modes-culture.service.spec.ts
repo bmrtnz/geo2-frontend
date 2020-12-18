@@ -6,7 +6,7 @@ describe('ModesCultureService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ModesCultureService = TestBed.get(ModesCultureService);
+    const service: ModesCultureService = TestBed.inject(ModesCultureService);
     expect(service).toBeTruthy();
   });
 });

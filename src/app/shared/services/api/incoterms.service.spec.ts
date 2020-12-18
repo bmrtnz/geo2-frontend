@@ -6,7 +6,7 @@ describe('IncotermsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: IncotermsService = TestBed.get(IncotermsService);
+    const service: IncotermsService = TestBed.inject(IncotermsService);
     expect(service).toBeTruthy();
   });
 });
