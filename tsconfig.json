@@ -24,7 +24,8 @@
       "jszip": [
         "node_modules/jszip/dist/jszip.min.js"
       ]
-    }
+    },
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
@@ -32,5 +33,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowJs": true
-  }
+  },
+  "exclude": [
+    "dist"
+  ]
 }

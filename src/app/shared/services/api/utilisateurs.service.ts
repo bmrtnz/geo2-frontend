@@ -1,8 +1,10 @@
+import {Apollo} from 'apollo-angular';
+import {OperationVariables, WatchQueryOptions} from '@apollo/client/core';
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Utilisateur } from '../../models/utilisateur.model';
-import { Apollo } from 'apollo-angular';
-import { OperationVariables, WatchQueryOptions } from 'apollo-client';
+
+
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -27,7 +29,11 @@ export class UtilisateursService extends ApiService {
     type Response = { utilisateur: Utilisateur };
     const variables: OperationVariables = { nomUtilisateur, motDePasse };
     return this
-    .query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions)
+    .query<Response>(query, {
+      variables,
+      fetchPolicy: 'no-cache',
+      returnPartialData: false,
+    } as WatchQueryOptions)
     .pipe(take(1));
   }
 }

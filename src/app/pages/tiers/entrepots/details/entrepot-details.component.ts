@@ -137,18 +137,16 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.createMode = url[0].path === 'create';
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          from(this.entrepotsService.getOne(params.id))
-            .pipe(mergeAll())
+          this.entrepotsService.getOne(params.id)
             .subscribe(res => {
-              this.entrepot = new Entrepot(res.data.entrepot);
+              this.entrepot = res.data.entrepot;
               this.formGroup.patchValue(this.entrepot);
               this.contentReadyEvent.emit();
               this.preSaisie = this.entrepot.preSaisie === true ? 'preSaisie' : '';
             });
         } else {
           this.entrepot = new Entrepot({});
-          from(this.clientsService.getOne(this.route.snapshot.params.client))
-            .pipe(mergeAll())
+          this.clientsService.getOne(this.route.snapshot.params.client)
             .subscribe(
               result => {
                 // On reprend le code client (si pas existant) pour le code entrepôt
@@ -208,8 +206,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         entrepot.preSaisie = true;
       }
 
-      from(this.entrepotsService.save({ entrepot }))
-        .pipe(mergeAll())
+      this.entrepotsService.save({ entrepot })
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);

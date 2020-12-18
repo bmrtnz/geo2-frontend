@@ -37,7 +37,7 @@ export class OrdresAccueilComponent implements OnDestroy {
     const selectIndicators = this.indicatorsChange
       .pipe(startWith(fakeOrdresService.getIndicators()));
 
-    this.indicatorsSubscription = combineLatest(navigationEndEvent, selectIndicators)
+    this.indicatorsSubscription = combineLatest([navigationEndEvent, selectIndicators])
       .pipe(
         tap(_ => this.indicators = []),
         switchMap(([, indicators]) => from(indicators)),

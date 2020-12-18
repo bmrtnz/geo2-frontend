@@ -114,10 +114,9 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
         this.createMode = url[url.length - 1].path === 'create';
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          from(this.transporteursService.getOne(params.id))
-            .pipe(mergeAll())
+          this.transporteursService.getOne(params.id)
             .subscribe(res => {
-              this.transporteur = new Transporteur(res.data.transporteur);
+              this.transporteur = res.data.transporteur;
               this.formGroup.patchValue(this.transporteur);
               this.contentReadyEvent.emit();
               this.preSaisie = this.transporteur.preSaisie === true ? 'preSaisie' : '';
@@ -164,8 +163,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
         transporteur.id = this.transporteur.id;
       }
 
-      from(this.transporteursService.save({ transporteur }))
-        .pipe(mergeAll())
+      this.transporteursService.save({ transporteur })
         .subscribe({
           next: (e) => {
             notify('Sauvegardé', 'success', 3000);

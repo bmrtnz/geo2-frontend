@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiService, RelayPageVariables, RelayPage, APIRead } from '../api.service';
 import { Apollo } from 'apollo-angular';
-import { MoyenPaiement } from '../../models';
-import { WatchQueryOptions, OperationVariables } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { take, map } from 'rxjs/operators';
+import { MoyenPaiement } from '../../models';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,34 +24,32 @@ export class MoyensPaiementService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allMoyenPaiement: RelayPage<MoyenPaiement> };
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allMoyenPaiement)),
-            take(1),
-          )
-          .toPromise();
-        },
-        byKey: async (key) => {
+
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allMoyenPaiement)
+              resolve(this.asInstancedListCount(res.data.allMoyenPaiement));
+          });
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne(1, this.listRegexp);
           type Response = { moyenPaiement: MoyenPaiement };
           const variables = { id: key };
-          return this.
-          query<Response>(query, { variables } as WatchQueryOptions<any>)
-          .pipe(
-            map( res => res.data.moyenPaiement),
-            take(1),
-          )
-          .toPromise();
-        },
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.moyenPaiement)
+              resolve(new this.model(res.data.moyenPaiement));
+          });
+        }),
       }),
     });
   }

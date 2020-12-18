@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
 import { Apollo } from 'apollo-angular';
-import { Personne } from '../../models';
-import { WatchQueryOptions, OperationVariables } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { map, take } from 'rxjs/operators';
+import { Personne } from '../../models';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,34 +21,32 @@ export class PersonnesService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allPersonne: RelayPage<Personne> };
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allPersonne)),
-            take(1),
-          )
-          .toPromise();
-        },
-        byKey: async (key) => {
+
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allPersonne)
+              resolve(this.asInstancedListCount(res.data.allPersonne));
+          });
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne(1, this.listRegexp);
           type Response = { personne: Personne };
           const variables = { id: key };
-          return this.
-          query<Response>(query, { variables } as WatchQueryOptions<any>)
-          .pipe(
-            map( res => res.data.personne),
-            take(1),
-          )
-          .toPromise();
-        },
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.personne)
+              resolve(new this.model(res.data.personne));
+          });
+        }),
       }),
     });
   }

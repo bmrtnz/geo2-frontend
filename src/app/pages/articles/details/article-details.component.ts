@@ -168,8 +168,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.route.params
             .pipe(
                 tap(_ => this.formGroup.reset()),
-                switchMap(async params => await this.articlesService.getOne(params.id)),
-                switchAll(),
+                switchMap(params => this.articlesService.getOne(params.id)),
             )
             .subscribe(res => {
                 this.article = new Article(res.data.article);
@@ -214,12 +213,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     { article: { id: article.id }, valide: article.valide },
                 ) : of(undefined))
                 .pipe(
-                    tap( _ => console.log(article)),
                     switchMap(_ => this.articlesService.save({
                         article,
                         clone: this.cloneMode,
                     })),
-                    concatAll(),
                 )
                 .subscribe({
                     next: (event) => {

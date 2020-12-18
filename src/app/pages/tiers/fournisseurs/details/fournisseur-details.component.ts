@@ -169,10 +169,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         this.createMode = url[url.length - 1].path === 'create';
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          from(this.fournisseursService.getOne(params.id))
-            .pipe(mergeAll())
+          this.fournisseursService.getOne(params.id)
             .subscribe(res => {
-              this.fournisseur = new Fournisseur(res.data.fournisseur);
+              this.fournisseur = res.data.fournisseur;
               const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
               this.formGroup.patchValue({ ...this.fournisseur, certifications });
               this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
@@ -248,7 +247,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
               certifications: certs,
             }
           })),
-          concatAll(),
         )
         .subscribe({
           next: (e) => {
@@ -306,11 +304,17 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     return certifications
       .map((certification) => {
         const cc = this.fournisseur.certifications && this.fournisseur.certifications
-          .find(({ certification: cert }) => cert.id === certification.id);
+        .find(({ certification: cert }) => cert.id === certification.id);
+
+        // removing __typename or it fail
+        certification = { ...certification };
+        if ((certification as any).__typename)
+          delete (certification as any).__typename;
+
         return {
           id: cc ? cc.id : null,
           certification,
-          dateValidite: cc ?
+          dateValidite: cc && cc.dateValidite ?
             new Date(cc.dateValidite).toISOString() :
             null,
         };

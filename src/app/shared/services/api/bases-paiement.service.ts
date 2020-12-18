@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
 import { Apollo } from 'apollo-angular';
-import { BasePaiement } from '../../models';
-import { WatchQueryOptions, OperationVariables } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { take, map } from 'rxjs/operators';
+import { BasePaiement } from '../../models';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,34 +24,32 @@ export class BasesPaiementService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
-          const query = await this.buildGetAll(1, this.listRegexp);
           type Response = { allBasePaiement: RelayPage<BasePaiement> };
+          const query = await this.buildGetAll(1, this.listRegexp);
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allBasePaiement)),
-            take(1),
-          )
-          .toPromise();
-        },
-        byKey: async (key) => {
+
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allBasePaiement)
+              resolve(this.asInstancedListCount(res.data.allBasePaiement));
+          });
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne(1, this.listRegexp);
           type Response = { basePaiement: BasePaiement };
           const variables = { id: key };
-          return this.
-          query<Response>(query, { variables } as WatchQueryOptions<any>)
-          .pipe(
-            map( res => res.data.basePaiement),
-            take(1),
-          )
-          .toPromise();
-        },
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.basePaiement)
+              resolve(new this.model(res.data.basePaiement));
+          });
+        }),
       }),
     });
   }

@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiService, RelayPage, APIRead, RelayPageVariables } from '../api.service';
 import { Apollo } from 'apollo-angular';
-import { OperationVariables, WatchQueryOptions } from 'apollo-client';
-import { map, take, tap } from 'rxjs/operators';
-import { LoadOptions } from 'devextreme/data/load_options';
 import DataSource from 'devextreme/data/data_source';
+import { LoadOptions } from 'devextreme/data/load_options';
 import { StockArticleAge } from '../../models/stock-article-age.model';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +11,7 @@ import { StockArticleAge } from '../../models/stock-article-age.model';
 export class StockArticlesAgeService extends ApiService implements APIRead {
 
   fieldsFilter = /.*\.(?:article|age)$/i;
-  customVariables: {[key: string]: any|any[]} = {};
+  customVariables: { [key: string]: any | any[] } = {};
 
   constructor(
     apollo: Apollo,
@@ -22,39 +20,37 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     this.gqlKeyType = 'GeoStockArticleAgeKeyInput';
   }
 
-  byKey = async (key) => {
+  byKey = (key) => new Promise(async (resolve) => {
     const query = await this.buildGetOne();
     type Response = { stockArticleAge: StockArticleAge };
     const variables = { id: key };
-    return this.
-    query<Response>(query, { variables } as WatchQueryOptions<any>)
-    .pipe(
-      map( res => res.data.stockArticleAge),
-      take(1),
-    )
-    .toPromise();
-  }
+    this.listenQuery<Response>(query, { variables }, res => {
+      if (res.data && res.data.stockArticleAge)
+        resolve(new this.model(res.data.stockArticleAge));
+    });
+  })
 
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
         key: this.model.getKeyField(),
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const query = await this.buildGetAll(3);
           type Response = { allStockArticleAge: RelayPage<StockArticleAge> };
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allStockArticleAge)),
-            take(1),
-          )
-          .toPromise();
-        },
+
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allStockArticleAge)
+              resolve(this.asInstancedListCount(res.data.allStockArticleAge));
+          });
+        }),
         byKey: this.byKey,
       }),
     });
@@ -64,20 +60,25 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     const dt = new DataSource({
       store: this.createCustomStore({
         key: this.model.getKeyField(),
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const [value] = options.filter.slice(-1);
-          options.filter = [ selector, '=', value ];
+          options.filter = [selector, '=', value];
           return this
-          .getDistinct({...options, group: {selector}})
-          .toPromise();
-        }
+            .loadDistinctQuery({ ...options, group: { selector } }, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+        }),
       }),
     });
-    dt.group({selector});
+    dt.group({ selector });
     return dt;
   }
 
@@ -85,10 +86,13 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     return new DataSource({
       store: this.createCustomStore({
         key: this.model.getKeyField(),
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const query = `
             query FetchStock(
@@ -109,7 +113,7 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
               ){
                 edges {
                   node {
-                    ${ await this.model.getGQLFields(2).toPromise() }
+                    ${await this.model.getGQLFields(2).toPromise()}
                   }
                 }
                 pageInfo {
@@ -128,14 +132,11 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
             ...this.mapLoadOptionsToVariables(options),
             ...this.customVariables,
           };
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.fetchStock)),
-            take(1),
-          )
-          .toPromise();
-        },
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.fetchStock)
+              resolve(this.asInstancedListCount(res.data.fetchStock));
+          });
+        }),
         byKey: this.byKey,
       }),
     });

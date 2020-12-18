@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
+import { gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
-import { Article } from '../../models';
-import { OperationVariables, WatchQueryOptions, MutationOptions } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { map, take } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { mergeMap, take, takeUntil } from 'rxjs/operators';
+import { Article } from '../../models';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +23,10 @@ export class ArticlesService extends ApiService implements APIRead {
     super(apollo, Article);
   }
 
-  async getOne(id: string) {
-    const query = await this.buildGetOne(3);
+  getOne(id: string) {
     type Response = { article: Article };
     const variables: OperationVariables = { id };
-    return this.query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions);
+    return this.watchGetOneQuery<Response>({variables}, 3);
   }
 
   getDataSource() {
@@ -35,48 +35,54 @@ export class ArticlesService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
-          const query = await this.buildGetAll(2);
           type Response = { allArticle: RelayPage<Article> };
+          const query = await this.buildGetAll(2);
           const variables = this.mapLoadOptionsToVariables(options);
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allArticle)),
-            take(1),
-          )
-          .toPromise();
-        },
-        byKey: async (key) => {
+
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allArticle)
+              resolve(this.asInstancedListCount(res.data.allArticle));
+          });
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne(1);
           type Response = { article: Article };
           const variables = { id: key };
-          return this.
-          query<Response>(query, { variables } as WatchQueryOptions<any>)
-          .pipe(
-            map( res => res.data.article),
-            take(1),
-          )
-          .toPromise();
-        },
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.article)
+              resolve(new this.model(res.data.article));
+          });
+        }),
       }),
     });
   }
 
-  async save(variables: OperationVariables & { clone: boolean }) {
-    const mutation = await this.buildSaveWithClone(2, this.fieldsFilter);
-    return this.mutate(mutation, { variables } as any);
+  save(variables: OperationVariables & { clone: boolean }) {
+    return from(this.buildSaveWithClone(2, this.fieldsFilter))
+    .pipe(
+      takeUntil(this.destroy),
+      mergeMap( query => this.apollo.mutate({
+        mutation: gql(query),
+        fetchPolicy: 'no-cache',
+        variables,
+      } as MutationOptions)),
+      take(1),
+    );
   }
 
   protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
     return `
       mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {
         saveArticle(article: $article,clone: $clone) {
-          ${ await this.model.getGQLFields(depth, filter).toPromise() }
+          ${await this.model.getGQLFields(depth, filter).toPromise()}
         }
       }
     `;

@@ -201,10 +201,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         this.createMode = url[url.length - 1].path === 'create';
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          from(this.clientsService.getOne(params.id))
-            .pipe(mergeAll())
+          this.clientsService.getOne(params.id)
             .subscribe(res => {
-              this.client = new Client(res.data.client);
+              this.client = res.data.client;
               const certifications = this.mapCertificationsForDisplay(this.client.certifications);
               this.formGroup.patchValue({ ...this.client, certifications });
               this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
@@ -288,7 +287,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
               certifications,
             }
           })),
-          concatAll(),
         )
         .subscribe({
           next: (e) => {

@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
 import { Apollo } from 'apollo-angular';
-import { Contact } from '../../models';
-import { OperationVariables, WatchQueryOptions, MutationOptions } from 'apollo-client';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { map, take, tap } from 'rxjs/operators';
+import { Contact } from '../../models';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,55 +19,43 @@ export class ContactsService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        load: async (options: LoadOptions) => {
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
-            return this.getDistinct(options).toPromise();
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
 
           const query = await this.buildGetAll();
           type Response = { allContact: RelayPage<Contact> };
-
           const variables = this.mapLoadOptionsToVariables(options);
 
-          return this.
-          query<Response>(query, { variables, fetchPolicy: 'no-cache' } as WatchQueryOptions<RelayPageVariables>)
-          .pipe(
-            map( res => this.asListCount(res.data.allContact)),
-            take(1),
-          )
-          .toPromise();
-        },
-        byKey: async (key) => {
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allContact)
+              resolve(this.asInstancedListCount(res.data.allContact));
+          });
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne();
           type Response = { contact: Contact };
           const variables = { id: key };
-          return this.
-          query<Response>(query, { variables } as WatchQueryOptions<any>)
-          .pipe(
-            map( res => res.data.contact),
-            take(1),
-          )
-          .toPromise();
-        },
-        insert: async (values) => {
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.contact)
+              resolve(new this.model(res.data.contact));
+          });
+        }),
+        insert: (values) => {
           const variables = { contact: values };
-          const mutation = await this.buildSave();
-          return this
-          .mutate(mutation, { variables } as MutationOptions<any, any>)
-          .toPromise();
+          return this.watchSaveQuery({ variables }).toPromise();
         },
-        update: async (key, values) => {
-          const variables = { contact: { id: key, ...values }};
-          const mutation = await this.buildSave();
-          return this
-          .mutate(mutation, { variables } as MutationOptions<any, any>)
-          .toPromise();
+        update: (key, values) => {
+          const variables = { contact: { id: key, ...values } };
+          return this.watchSaveQuery({ variables }).toPromise();
         },
         remove: (key) => {
-          const mutation = this.buildDelete();
-          return this
-          .mutate(mutation, { variables: { id: key } } as MutationOptions<any, any>)
-          .toPromise();
+          const variables = { id: key };
+          return this.watchDeleteQuery({ variables }).toPromise();
         },
       }),
     });
