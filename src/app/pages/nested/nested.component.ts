@@ -41,10 +41,10 @@ export class NestedComponent {
 
     const detailsOutlet = this.activatedRoute.children
     .find(({outlet}) => outlet === 'details' );
-    combineLatest(
+    combineLatest([
       detailsOutlet ? detailsOutlet.params : of({}),
       mainComponent.contentReadyEvent.pipe(take(1)),
-    )
+    ])
     .pipe(
       tap( _ => this.gridNav.scrollToDetails()),
       map(([params]) => params.id),

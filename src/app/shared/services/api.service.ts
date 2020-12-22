@@ -66,7 +66,7 @@ export type RelayPageVariables = OperationVariables & {
 export type LocateVariables = {
   pageSize?: number
   type?: string
-  key: any[]
+  key: any|any[]
 };
 
 export interface APIRead {
@@ -110,35 +110,12 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
-   * Map RelayPage as ArrayStore DataSource
-   * @param relayPage Input RelayPage
-   */
-  public asDataSource<T = any>(relayPage: RelayPage<T>) {
-    return new DataSource({
-      store: this.asArrayStore(relayPage),
-      paginate: true,
-      pageSize: this.pageSize,
-    });
-  }
-
-  /**
-   * Map RelayPage as ArrayStore
-   * @param relayPage Input RelayPage
-   */
-  public asArrayStore<T = any>(relayPage: RelayPage<T>) {
-    return new ArrayStore({
-      key: this.keyField,
-      data: this.asList(relayPage),
-    });
-  }
-
-  /**
    * Map RelayPage as Object
    * @param relayPage Input RelayPage
    */
   public asListCount<T = any>(relayPage: RelayPage<T>) {
     return {
-      data: this.asList(relayPage),
+      data: this.asList<T>(relayPage),
       totalCount: relayPage.totalCount,
     };
   }
@@ -149,7 +126,7 @@ export abstract class ApiService implements OnDestroy {
    */
   public asInstancedListCount<T = any>(relayPage: RelayPage<T>) {
     return {
-      data: this.asList(relayPage).map(v => new this.model(v)),
+      data: this.asList<T>(relayPage).map(v => new this.model(v) as T),
       totalCount: relayPage.totalCount,
     };
   }
@@ -158,7 +135,7 @@ export abstract class ApiService implements OnDestroy {
    * Map RelayPage as Array
    * @param relayPage Input RelayPage
    */
-  public asList<T = any>(relayPage: RelayPage<T>) {
+  private asList<T = any>(relayPage: RelayPage<T>) {
     return relayPage.edges.map(({ node }) => node);
   }
 
@@ -199,24 +176,14 @@ export abstract class ApiService implements OnDestroy {
 
     return this.
       query<{ locatePage: number }>(query, {
+        fetchPolicy: 'no-cache',
         variables: { pageSize, type, ...inputVariables },
       } as WatchQueryOptions<any>)
       .pipe(
+        takeUntil(this.destroy),
         map(res => res.data),
         take(1),
       );
-  }
-
-  /**
-   * Fill DataSource from RelayPage
-   * @param relayPage Input RelayPage
-   * @param dataSource Input Datasource
-   */
-  protected fillDataSource<T = any>(relayPage: RelayPage<T>, dataSource: DataSource) {
-    this.asList(relayPage)
-      .forEach((entity: T) => (dataSource.store() as ArrayStore).insert(entity));
-    dataSource.reload();
-    return dataSource;
   }
 
   /**
@@ -236,46 +203,11 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
-   * Run GraphQL query ( paginated )
-   * @param gqlQuery GraphQL query
-   * @param fetchNext Do next fetch callback
-   * @param options Query options
-   */
-  protected queryAll<T>(
-    gqlQuery: string,
-    fetchNext: (res: ApolloQueryResult<T>) => boolean,
-    options?: WatchQueryOptions,
-  ) {
-    const nextPage = (observer: Subscriber<ApolloQueryResult<T>>, page = 0) => this
-      .query<T>(gqlQuery, { ...options, variables: { ...options.variables, page } })
-      .pipe(take(1))
-      .subscribe((res) => {
-        observer.next(res);
-        if (fetchNext(res)) nextPage(observer, page + 1);
-        else observer.complete();
-      });
-    return new Observable<ApolloQueryResult<T>>(observer => nextPage(observer));
-  }
-
-  /**
-   * Run GraphQL mutation
-   * @param gqlMutation GraphQL mutation
-   * @deprecated Use Apollo `mutate()` function
-   */
-  protected mutate(gqlMutation: string, options?: MutationOptions) {
-    return this.apollo
-      .mutate({
-        mutation: gql(gqlMutation),
-        ...options,
-      });
-  }
-
-  /**
    * Build paginated query
    * @param depth Sub model selection depth
-   * @param filter Regexp field filter
+   * @param regExpFilter Regexp field filter
    */
-  protected async buildGetAll(depth?: number, filter?: RegExp) {
+  protected async buildGetAll(depth?: number, regExpFilter?: RegExp) {
     const operation = `all${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
@@ -283,7 +215,7 @@ export abstract class ApiService implements OnDestroy {
         ${operation}(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${await this.model.getGQLFields(depth, filter, null, {noList: true}).toPromise()}
+              ${await this.model.getGQLFields(depth, regExpFilter, null, {noList: true}).toPromise()}
             }
           }
           pageInfo {
@@ -301,15 +233,15 @@ export abstract class ApiService implements OnDestroy {
   /**
    * Build getOne query
    * @param depth Sub model selection depth
-   * @param filter Regexp field filter
+   * @param regExpFilter Regexp field filter
    */
-  protected async buildGetOne(depth?: number, filter?: RegExp) {
+  protected async buildGetOne(depth?: number, regExpFilter?: RegExp) {
     const operation = this.withLowerCaseFirst(this.model.name);
     const alias = this.withUpperCaseFirst(operation);
     return `
       query ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
         ${operation}(${this.keyField}:$${this.keyField}) {
-          ${await this.model.getGQLFields(depth, filter).toPromise()}
+          ${await this.model.getGQLFields(depth, regExpFilter).toPromise()}
         }
       }
     `;
@@ -318,9 +250,9 @@ export abstract class ApiService implements OnDestroy {
   /**
    * Build save query
    * @param depth Save response depth
-   * @param filter Fields filter
+   * @param regExpFilter Fields filter
    */
-  protected async buildSave(depth?: number, filter?: RegExp) {
+  protected async buildSave(depth?: number, regExpFilter?: RegExp) {
     const entity = this.withLowerCaseFirst(this.model.name);
     const operation = `save${this.model.name}`;
     const type = `Geo${this.model.name}Input`;
@@ -328,7 +260,7 @@ export abstract class ApiService implements OnDestroy {
     return `
       mutation ${alias}($${entity}: ${type}!) {
         ${operation}(${entity}: $${entity}) {
-          ${await this.model.getGQLFields(depth, filter).toPromise()}
+          ${await this.model.getGQLFields(depth, regExpFilter).toPromise()}
         }
       }
     `;
@@ -382,7 +314,7 @@ export abstract class ApiService implements OnDestroy {
    * Create DX CustomStore with preconfigured key
    * @param options DXCustomStore options
    */
-  protected createCustomStore(options?: CustomStoreOptions) {
+  public createCustomStore(options?: CustomStoreOptions) {
     this.storeConfiguration = options;
     return new CustomStore({
       key: this.keyField,
@@ -391,44 +323,9 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
-   * Build and prepare distinct query
-   * @param options DX LoadOptions object
-   * @deprecated Use 'watchDistinctQuery' instead
-   */
-  protected getDistinct(options: LoadOptions) {
-
-    // API only support one field
-    const field = options.group.length ? options.group[0].selector : options.group.selector;
-    const distinctQuery = this.buildDistinct();
-    type DistinctResponse = { distinct: RelayPage<DistinctInfo> };
-
-    // Full filter fix
-    // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
-    if (options.filter) {
-      const withDepth = options.filter
-        .find(res => typeof res === 'object');
-      const withOperator = options.filter
-        .find(res => ['or', 'and'].includes(res));
-      if (withDepth && !withOperator)
-        options.filter = [options.filter[0], 'and', options.filter[1]];
-    }
-
-    const variables = this.mergeVariables(
-      { field },
-      this.mapLoadOptionsToVariables(options),
-    );
-    return this.
-      query<DistinctResponse>(distinctQuery, { variables } as WatchQueryOptions<any>)
-      .pipe(
-        map(res => this.asListCount(res.data.distinct)),
-        take(1),
-      );
-  }
-
-  /**
    * Build locate query
    */
-  protected buildLocate() {
+  public buildLocate() {
     const operation = `locatePage`;
     const alias = this.withUpperCaseFirst(operation);
     return `
@@ -458,7 +355,7 @@ export abstract class ApiService implements OnDestroy {
    * Map DX Search to DX Filter
    * @param options DX CustomSource load options
    */
-  protected mapDXSearchToDXFilter(options: LoadOptions) {
+  public mapDXSearchToDXFilter(options: LoadOptions) {
     return typeof options.searchExpr === 'object' ?
       (options.searchExpr as [])
         .map(expr => [expr, options.searchOperation, options.searchValue])
@@ -475,7 +372,7 @@ export abstract class ApiService implements OnDestroy {
    * Map DX filters to RSQL
    * @param dxFilter DX filters arrays
    */
-  protected mapDXFilterToRSQL(dxFilter: any[]) {
+  public mapDXFilterToRSQL(dxFilter: any[]) {
 
     // Avoid modify original
     let clonedFilter = JSON.parse(JSON.stringify(dxFilter));
@@ -535,7 +432,7 @@ export abstract class ApiService implements OnDestroy {
     return next(clonedFilter).flat().join(' ');
   }
 
-  protected mapLoadOptionsToVariables(options: LoadOptions) {
+  public mapLoadOptionsToVariables(options: LoadOptions) {
     const variables: RelayPageVariables = {
       pageable: {
         pageNumber: options.skip / options.take || 0,
@@ -576,7 +473,6 @@ export abstract class ApiService implements OnDestroy {
     return variables.reduce((acm, current) => ({
       ...acm,
       ...current,
-      // search: `${ acm.search || '' }${ current.search ? `and ${ current.search }` : '' }`,
       search: [acm ? acm.search : '', current ? current.search : '']
         .filter(v => v)
         .map(v => `(${v})`)
