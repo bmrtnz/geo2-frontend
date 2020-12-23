@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
+import { InMemoryCache } from '@apollo/client/core';
 import { Apollo, gql } from 'apollo-angular';
-import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
+import { ApolloTestingController, ApolloTestingModule, APOLLO_TESTING_CACHE } from 'apollo-angular/testing';
+import { delay } from 'rxjs/operators';
 import { Field, Model } from '../models/model';
 import { ApiService, Direction, RelayPage } from './api.service';
 
@@ -184,6 +186,41 @@ describe('ApiService', () => {
     expect(variables.search).toEqual('');
     expect(variables.pageable.sort.orders)
     .toEqual([{ property: 'id', direction: Direction.ASC }]);
+  });
+
+  it('should handle `mergeVariables()`', () => {
+    const service: TestApiService = TestBed.inject(TestApiService);
+    const merged = service.mergeVariables({search: 'valide==true'}, {search: 'description=ilike="%one%"'});
+
+    expect(merged.search).toEqual('(valide==true) and (description=ilike="%one%")');
+  });
+
+  it('should handle `listenQuery()`', (done) => {
+    const service: TestApiService = TestBed.inject(TestApiService);
+    const controller: ApolloTestingController = TestBed.inject(ApolloTestingController);
+    const query = `
+      query Test($id: Int!) {
+        test(id: $id) {
+          id
+          valide
+        }
+      }
+    `;
+
+    service.listenQuery<{ test: Test }>(query, { variables: { id: '002' }}, res => {
+      expect(res.data.test.id).toEqual('002');
+      expect(res.data.test.valide).toEqual(false);
+      done();
+    });
+
+    const operation = controller.expectOne('Test');
+    expect(operation.operation.variables.id).toEqual('002');
+    operation.flush({data: {
+      test: mockRelayPage.edges
+      .find(({node}) => node.id === '002')
+      .node,
+    }});
+    controller.verify();
   });
 
 });

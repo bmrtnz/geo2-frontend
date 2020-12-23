@@ -469,7 +469,7 @@ export abstract class ApiService implements OnDestroy {
    * Merge variables, last item as priority if merge is impossible
    * @param variables Variables list
    */
-  protected mergeVariables(...variables: OperationVariables[] | RelayPageVariables[]) {
+  public mergeVariables(...variables: OperationVariables[] | RelayPageVariables[]) {
     return variables.reduce((acm, current) => ({
       ...acm,
       ...current,
@@ -486,7 +486,7 @@ export abstract class ApiService implements OnDestroy {
    * @param options Apollo WatchQueryOptions
    * @param cbk Callback called each time data is received
    */
-  protected listenQuery<T>(
+  public listenQuery<T>(
     query: string,
     options: Partial<WatchQueryOptions<RelayPageVariables|OperationVariables>>,
     cbk: (res: ApolloQueryResult<T>) => void,
@@ -516,7 +516,7 @@ export abstract class ApiService implements OnDestroy {
    * @param depth Query fields depth
    * @param fieldsFilter Query fields filter
    */
-  protected watchGetOneQuery<T>(
+  public watchGetOneQuery<T>(
     options: Partial<WatchQueryOptions<OperationVariables>>,
     depth = 1,
     fieldsFilter?: RegExp,
