@@ -545,7 +545,7 @@ export abstract class ApiService implements OnDestroy {
    * @param options Apollo WatchQueryOptions
    * @param cbk Callback called each time data is received
    */
-  protected loadDistinctQuery<T = { distinct: RelayPage<DistinctInfo> }>(
+  public loadDistinctQuery<T = { distinct: RelayPage<DistinctInfo>, totalCount: number, totalPage: number }>(
     options: Partial<LoadOptions>,
     cbk: (res: ApolloQueryResult<T>) => void,
   ) {
@@ -577,7 +577,8 @@ export abstract class ApiService implements OnDestroy {
     } as WatchQueryOptions<RelayPageVariables>)
     .pipe(
       takeUntil(this.destroy),
-      takeUntil(done)
+      takeUntil(done),
+      filter( res => !!Object.keys(res.data).length),
     )
     .subscribe( res => {
       cbk(res);
@@ -594,7 +595,7 @@ export abstract class ApiService implements OnDestroy {
    * @param depth Query fields depth
    * @param fieldsFilter Query fields filter
    */
-  protected watchSaveQuery(
+  public watchSaveQuery(
     options: Partial<MutationOptions>,
     depth = 1,
     fieldsFilter?: RegExp,
@@ -615,7 +616,7 @@ export abstract class ApiService implements OnDestroy {
    * Utility method to listen for `delete()` query
    * @param options Apollo MutationOptions
    */
-  protected watchDeleteQuery(
+  public watchDeleteQuery(
     options: Partial<MutationOptions>,
   ) {
     return this.apollo.mutate({
