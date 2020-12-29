@@ -169,7 +169,6 @@ describe('Model class', () => {
 
     it('should return fields', () => {
       const fields = Entity.getFields();
-      console.log(fields);
       expect(fields.id).toEqual({
         asKey: true,
       } as ModelFieldOptions);
