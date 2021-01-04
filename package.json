@@ -12,6 +12,7 @@
     "test:headless": "ng test --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "e2e:no-serve": "ng e2e --devServerTarget=",
     "build-themes": "devextreme build",
     "postinstall": "npm run build-themes && ngcc",
     "devx": "devextreme"
