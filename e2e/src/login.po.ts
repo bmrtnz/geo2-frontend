@@ -1,4 +1,4 @@
-import { $, browser } from 'protractor';
+import { $, browser, by } from 'protractor';
 import { protractor } from 'protractor/built/ptor';
 
 const USER = 'LEROY';
@@ -18,9 +18,10 @@ export class LoginPage {
     const form = this.getForm();
     await browser.wait(form.isPresent());
     await $('input[type="text"]').sendKeys(USER);
-    await $('input[type="password"]')
-    .sendKeys(PASS, protractor.Key.TAB);
-    await browser.sleep(1000);
-    return $('input[type="password"]').sendKeys(protractor.Key.ENTER);
+    await $('input[type="password"]').clear();
+    await $('input[type="password"]').sendKeys(PASS);
+    const submitBtn = form.element(by.css('dx-button'));
+    await submitBtn.click();
+    await browser.wait(protractor.ExpectedConditions.invisibilityOf(form), 10000);
   }
 }
