@@ -19,8 +19,13 @@
 }
 
 ::ng-deep .order-number {
-    margin:0 10px;
+    margin-right:10px;
 }
+
+::ng-deep .main-search-container {
+    width:600px;
+}
+
 ::ng-deep .search-linkedOrders {
     font-size:13px;
     color:#00759C;

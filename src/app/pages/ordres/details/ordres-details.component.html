@@ -177,7 +177,22 @@
                                             ></dx-button>
 
                                         </div>
-                                        <app-grid-suivi *ngIf="!i" (ordreSelected)="pushTab($event)"></app-grid-suivi>
+                                        <!-- <app-grid-suivi *ngIf="!i" (ordreSelected)="pushTab($event)"></app-grid-suivi> -->
+                                        
+                                        <div *ngIf="!i" class="main-search-container">
+                                            <div class="dx-field">
+                                                <div class="dx-field-label">Rechercher un ordre</div>
+                                                <div class="dx-field-value">
+                                                    <!-- [(value)]="numero" -->
+                                                    <dx-autocomplete
+                                                        placeholder="Numéro, réf. code clt, N° facture..."
+                                                        (onEnterKey)="findOrder($event)"
+                                                        [dataSource]="ordres">
+                                                    </dx-autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                                
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
@@ -342,7 +357,7 @@
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- Vente Commission -->
                                                                     <div class="dx-field field-large">
-                                                                        <div class="dx-field-label">{{ 'ordres-venteACommission' | localize }}</div>
+                                                                        <div class="dx-field-label checkbox-label">{{ 'ordres-venteACommission' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                         <dx-check-box formControlName="venteACommission"></dx-check-box>
                                                                         </div>
@@ -352,7 +367,7 @@
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- Bon à facturer -->
                                                                     <div class="dx-field field-large">
-                                                                        <div class="dx-field-label">{{ 'ordres-bonAFacturer' | localize }}</div>
+                                                                        <div class="dx-field-label checkbox-label">{{ 'ordres-bonAFacturer' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                         <dx-check-box formControlName="bonAFacturer"></dx-check-box>
                                                                         </div>
@@ -363,7 +378,7 @@
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- Facturé -->
                                                                     <div class="dx-field field-large">
-                                                                        <div class="dx-field-label">{{ 'ordres-facture' | localize }}</div>
+                                                                        <div class="dx-field-label checkbox-label">{{ 'ordres-facture' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                         <dx-check-box formControlName="facture"></dx-check-box>
                                                                         </div>
@@ -373,7 +388,7 @@
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- EDI -->
                                                                     <div class="dx-field field-large">
-                                                                        <div class="dx-field-label">{{ 'ordres-factureEDI' | localize }}</div>
+                                                                        <div class="dx-field-label checkbox-label">{{ 'ordres-factureEDI' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                         <dx-check-box formControlName="factureEDI"></dx-check-box>
                                                                         </div>
@@ -384,7 +399,7 @@
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- Livré -->
                                                                     <div class="dx-field field-large">
-                                                                        <div class="dx-field-label">{{ 'ordres-livre' | localize }}</div>
+                                                                        <div class="dx-field-label checkbox-label">{{ 'ordres-livre' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                         <dx-check-box formControlName="livre"></dx-check-box>
                                                                         </div>

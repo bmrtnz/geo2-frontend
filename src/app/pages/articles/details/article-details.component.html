@@ -107,7 +107,7 @@
                             <dxi-item [ratio]="4">
                                 <!-- BWSTOCK -->
                                 <div class="dx-field">
-                                    <div class="dx-field-label">{{ 'articles-blueWhaleStock' | localize }}</div>
+                                    <div class="dx-field-label checkbox-label">{{ 'articles-blueWhaleStock' | localize }}</div>
                                     <div class="dx-field-value">
                                         <dx-check-box formControlName="blueWhaleStock" [readOnly]="readOnlyMode"></dx-check-box>
                                     </div>
@@ -449,13 +449,21 @@
                                 </dx-text-box>
                             </div>
                         </div>
-                        <!-- Pré-pesé -->
-                        <div class="dx-field">
-                            <div class="dx-field-label">{{ 'articles-emballage-prepese' | localize }}</div>
-                            <div class="dx-field-value" formGroupName="emballage">
-                                <dx-check-box formControlName="prepese" [readOnly]="readOnlyMode"></dx-check-box>
-                            </div>
-                        </div>
+
+                        <dx-box>
+                            <dxi-item [ratio]="4">
+                                <!-- Pré-pesé -->
+                                <div class="dx-field">
+                                    <div class="dx-field-label checkbox-label">{{ 'articles-emballage-prepese' | localize }}</div>
+                                    <div class="dx-field-value" formGroupName="emballage">
+                                        <dx-check-box formControlName="prepese" [readOnly]="readOnlyMode"></dx-check-box>
+                                    </div>
+                                </div>
+                            </dxi-item>
+                            <dxi-item [ratio]="1"></dxi-item>
+                            <dxi-item [ratio]="4">
+                            </dxi-item>
+                        </dx-box>
 
                     </div>
                 </div>

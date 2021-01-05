@@ -34,8 +34,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   logs: Log[];
   commentaires: Comm[];
   linkedOrders: any;
+  orders: any;
   linkedOrdersSearch: boolean;
   canDuplicate = false;
+  public ordres: DataSource;
 
   formGroup = this.fb.group({
     id: [''],
@@ -71,6 +73,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     commService: CommService,
     private fb: FormBuilder,
   ) {
+    this.ordres = ordresService.getDataSource();
     this.logs = logService.getLog();
     this.commentaires = commService.getComm();
     this.allContents = fakeOrdresService.getContents();
@@ -318,6 +321,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         this.contents[itemIndex].ordre = res;
         this.tabPanelComponent.selectedIndex = itemIndex;
       });
+  }
+
+  findOrder(e) {
+    console.log(e.component._changedValue)
   }
 
   public getSelectedOrdre() {
