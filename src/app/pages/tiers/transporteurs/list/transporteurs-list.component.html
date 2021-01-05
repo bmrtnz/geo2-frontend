@@ -31,10 +31,11 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.Transporteur"
       [enabled]="true"
       type="custom"
-      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.Transporteur).load"
-      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.Transporteur).save"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>

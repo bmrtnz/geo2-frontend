@@ -4,7 +4,6 @@ import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { LocalizationService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
-import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -30,7 +29,6 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   constructor(
     public fournisseursService: FournisseursService,
     public localizeService: LocalizationService,
-    public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
     private router: Router,
   ) {

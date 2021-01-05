@@ -27,10 +27,11 @@
     <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging></dxo-paging>
     <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.Client"
       [enabled]="true"
       type="custom"
-      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.Client).load"
-      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.Client).save"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-pager
       [showPageSizeSelector]="true"

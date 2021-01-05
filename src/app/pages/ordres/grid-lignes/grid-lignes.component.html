@@ -21,10 +21,11 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing 
-      [enabled]="true" 
-      type="custom" 
-      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.OrdreLigne).load"
-      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.OrdreLigne).save"
+      [storageKey]="gridConfiguratorService.Grid.OrdreLigne"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
