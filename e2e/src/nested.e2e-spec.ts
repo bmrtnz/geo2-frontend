@@ -1,5 +1,5 @@
-import { $, browser, by, element } from "protractor";
-import { protractor } from "protractor/built/ptor";
+import { $, browser, by, element } from 'protractor';
+import { protractor } from 'protractor/built/ptor';
 
 describe('Nested', () => {
 
