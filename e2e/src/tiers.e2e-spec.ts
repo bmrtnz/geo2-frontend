@@ -22,6 +22,13 @@ describe('Tiers', () => {
         expect(url).toMatch(new RegExp(`${ name }\/list$`));
       });
 
+      it('should navigate to create page', async () => {
+        await $('dx-button[aria-label="Nouveau"]').click();
+        const textBox = $(`dx-text-box[formcontrolname="raisonSocial"]`);
+        expect(await textBox.element(by.css('input')).getAttribute('value')).toBeFalsy();
+        await browser.navigate().back();
+      });
+
       it('should display grid with rows', async () => {
         expect($('.content dx-data-grid').isPresent()).toBeTruthy();
         const firstRow = element.all(by.css('.content .dx-datagrid-rowsview tbody tr')).first();
