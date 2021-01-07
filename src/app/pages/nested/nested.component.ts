@@ -1,10 +1,10 @@
-import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GridNavigatorComponent } from 'app/shared/components/grid-navigator/grid-navigator.component';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { take, filter, map, switchMap, tap } from 'rxjs/operators';
-import { combineLatest, of } from 'rxjs';
 import { ApiService } from 'app/shared/services/api.service';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { combineLatest, of } from 'rxjs';
+import { filter, map, take, tap } from 'rxjs/operators';
 
 /**
  * Nested view main component
@@ -49,12 +49,8 @@ export class NestedComponent {
       tap( _ => this.gridNav.scrollToDetails()),
       map(([params]) => params.id),
       filter( key => key ),
-      switchMap( key => mainComponent.apiService.locatePage({key}).pipe(map( res => ({...res, key}) ))),
     )
-    .subscribe(async ({locatePage, key}) => {
-      await this.dataGrid.instance.pageIndex(locatePage);
-      this.dataGrid.focusedRowKey = key;
-    });
+    .subscribe(key => this.dataGrid.focusedRowKey = key);
 
   }
 
