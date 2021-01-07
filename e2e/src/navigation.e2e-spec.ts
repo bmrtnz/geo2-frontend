@@ -33,7 +33,6 @@ describe('Navigation', () => {
       }
       await browser.wait(protractor.ExpectedConditions.presenceOf($('dx-data-grid,dx-tile-view')), 5000);
       expect(await browser.getCurrentUrl()).toMatch(new RegExp(match));
-      await browser.waitForAngularEnabled(true);
     };
 
     it('to "clients"', async () => await testButton('Clients', 'clients', true));
@@ -51,14 +50,16 @@ describe('Navigation', () => {
     const testNav = async (text: string, match: string, toggleSection = '') => {
       await browser.waitForAngularEnabled(false);
 
-      if (toggleSection)
+      if (toggleSection) {
+        await browser.wait(protractor.ExpectedConditions.elementToBeClickable(appPage.getNavByText(toggleSection)), 5000);
         await appPage.getNavByText(toggleSection).click();
+      }
 
+      await browser.wait(protractor.ExpectedConditions.elementToBeClickable(appPage.getNavByText(text)), 5000);
       await appPage.getNavByText(text).click();
-
+      await browser.sleep(1000);
       await browser.wait(protractor.ExpectedConditions.presenceOf($('dx-data-grid,dx-tile-view')), 5000);
       expect(await browser.getCurrentUrl()).toMatch(new RegExp(match));
-      await browser.waitForAngularEnabled(true);
     };
 
     it('to "clients"', async () => await testNav('Clients', 'clients', 'Tiers'));

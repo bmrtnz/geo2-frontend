@@ -8,6 +8,7 @@ describe('Nested', () => {
     // Nav
     await browser.get('/nested/n/(tiers/transporteurs/list)');
     await browser.wait(protractor.ExpectedConditions.visibilityOf($('.content dx-data-grid')), 10000);
+    await browser.waitForAngularEnabled(true);
 
     // Select first row
     const firstRow = element.all(by.css('.content .dx-datagrid-rowsview tbody tr')).first();
