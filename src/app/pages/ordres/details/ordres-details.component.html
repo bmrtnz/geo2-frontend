@@ -177,7 +177,6 @@
                                             ></dx-button>
 
                                         </div>
-                                        <!-- <app-grid-suivi *ngIf="!i" (ordreSelected)="pushTab($event)"></app-grid-suivi> -->
                                         
                                         <div *ngIf="!i" class="main-search-container">
                                             <div class="dx-field">
@@ -185,13 +184,15 @@
                                                 <div class="dx-field-value">
                                                     <!-- [(value)]="numero" -->
                                                     <dx-autocomplete
-                                                        placeholder="Numéro, réf. code clt, N° facture..."
+                                                        placeholder="Numéro ou référence client"
+                                                        [(value)]="numero"
                                                         (onEnterKey)="findOrder($event)"
-                                                        [dataSource]="ordres">
+                                                        >
                                                     </dx-autocomplete>
                                                 </div>
                                             </div>
                                         </div>
+                                        <app-grid-suivi [filter]="filter" *ngIf="!i && showGridResults" (ordreSelected)="pushTab($event)"></app-grid-suivi>
                                                                                 
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">

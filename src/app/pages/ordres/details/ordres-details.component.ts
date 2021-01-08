@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
@@ -25,6 +25,7 @@ import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
+  filter: any;
   isIndexTab = true;
   allContents: Content[];
   contents: Content[];
@@ -35,9 +36,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   commentaires: Comm[];
   linkedOrders: any;
   orders: any;
+  numero: string;
   linkedOrdersSearch: boolean;
   canDuplicate = false;
   public ordres: DataSource;
+  showGridResults: boolean;
 
   formGroup = this.fb.group({
     id: [''],
@@ -56,7 +59,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     livre: [''],
   });
   private formValuesChange: Subscription;
-
+  refreshGrid = new EventEmitter();
+  
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
@@ -82,6 +86,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    // this.enableFilters();
     this.clients = this.clientsService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
     this.transporteurs = this.transporteursService.getDataSource();
@@ -113,6 +118,24 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.formValuesChange.unsubscribe();
+  }
+
+  enableFilters(criteria) {
+
+    let filter = [
+      ['valide', '=', true],
+      'and',
+      ['societe.id', '=', environment.societe.id],
+      'and',
+      ['facture', '=', false],
+      'and',
+      [['numero', '=', criteria], 'or', ['referenceClient', '=', criteria]]
+    ];
+
+    this.filter = filter;
+    // this.ordres.filter(filters);
+    // this.ordres.reload();
+
   }
 
   onSubmit() {
@@ -195,14 +218,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const ordresSource = this.ordresService.getDataSource();
     ordresSource.filter(['referenceClient', '=', refClt]);
     ordresSource.load().then(res => {
+      console.log(numero,res)
       this.linkedOrders = [];
       let i = 0;
       res.forEach(value => {
-        if (numero === value.numero) {
-          res.splice(i, 1);
-        } else {
-          this.linkedOrders.push(value);
-        }
+        if (numero !== value.numero) {this.linkedOrders.push(value);}
         i++;
       });
       this.linkedOrdersSearch = false;
@@ -324,7 +344,15 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   findOrder(e) {
-    console.log(e.component._changedValue)
+    this.showGridResults = false;
+    setTimeout(() => {
+      const criteria = e.component._changedValue;
+      if (criteria.length) {
+        this.enableFilters(criteria);
+        this.showGridResults = true;
+      }
+    }, 1);
+
   }
 
   public getSelectedOrdre() {
