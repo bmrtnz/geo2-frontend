@@ -10,7 +10,7 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
 import { SharedModule } from 'app/shared/shared.module';
 import {
   DxAccordionModule, DxBoxModule, DxButtonModule,
-
+  DxAutocompleteModule,
   DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule,
   DxListModule,
   DxLoadIndicatorModule,
@@ -23,6 +23,7 @@ import {
 } from 'devextreme-angular';
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
+// import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
     DxDataGridModule,
     DxButtonModule,
     DxAccordionModule,
+    DxAutocompleteModule,
     DxTileViewModule,
     DxListModule,
     DxSelectBoxModule,

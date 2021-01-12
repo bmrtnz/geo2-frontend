@@ -46,6 +46,7 @@ export class OrdresIndicateursComponent implements OnInit {
       }
       if (this.indicator === 'ordresnonclotures') {
         this.filter = ['livre', '=', false];
+        console.log('this.filter = ["livre", "=", false];')
       }
     });
   }

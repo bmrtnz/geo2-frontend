@@ -36,6 +36,9 @@ body {
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
   .dx-field-label {
     font-size:16px;
+  }
+
+  .checkbox-label {
     overflow:visible;
   }
 
@@ -75,4 +78,9 @@ body {
 .title-button {
   float:right;
   margin-left:10px;
+}
+
+// Thinner grids
+.dx-datagrid .dx-row > td {
+  line-height:0;
 }
