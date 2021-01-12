@@ -355,6 +355,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   }
 
+  clearSearchField() {
+     this.showGridResults = false;
+  }
+
   public getSelectedOrdre() {
     const index = this.tabPanelComponent.selectedIndex;
     return this.contents[index].ordre;

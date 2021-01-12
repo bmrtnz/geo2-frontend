@@ -23,11 +23,11 @@ import {
 } from 'devextreme-angular';
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
-// import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
+import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
 
 
 @NgModule({
-  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent, OrdresIndicateursComponent, GridLignesComponent],
+  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent, OrdresIndicateursComponent, GridLignesComponent, GridHistoriqueComponent],
   imports: [
     OrdresRoutingModule,
     SharedModule,

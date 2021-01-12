@@ -24,8 +24,9 @@
     <dxo-state-storing 
       [enabled]="true" 
       type="custom" 
-      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.Ordre).load"
-      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.Ordre).save"
+      [storageKey]="gridConfiguratorService.Grid.Historique"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>

@@ -10,7 +10,7 @@ import { UtilisateursService } from './api/utilisateurs.service';
 @Injectable()
 export class AuthService {
   loggedIn = false;
-  currentUser: Utilisateur;
+  public currentUser: Utilisateur;
   readonly LAST_USER_STORE_KEY = 'GEO2:LAST-USER';
   readonly CURRENT_USER_STORE_KEY = 'GEO2:CURRENT-USER';
 

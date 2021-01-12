@@ -188,6 +188,7 @@
                                                         placeholder="Numéro ou référence client"
                                                         [(value)]="numero"
                                                         (onEnterKey)="findOrder($event)"
+                                                        (onKeyDown)='clearSearchField()'
                                                         >
                                                     </dx-autocomplete>
                                                 </div>
@@ -195,8 +196,8 @@
                                         </div>
                                         <app-grid-suivi [filter]="filter" *ngIf="!i && showGridResults" (ordreSelected)="pushTab($event)"></app-grid-suivi>
                                         
-                                        <h2><span class="order-number">{{ 'ordres-details-historiqueordres' | localize }}</span></h2>
-                                        <!-- <app-grid-historique (ordreSelected)="pushTab($event)"></app-grid-historique> -->
+                                        <h2 *ngIf="!i"><span class="order-number">{{ 'ordres-details-historiqueordres' | localize }}</span></h2>
+                                        <app-grid-historique *ngIf="!i" (ordreSelected)="pushTab($event)"></app-grid-historique>
 
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
