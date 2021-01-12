@@ -6,7 +6,7 @@ describe('RegimesTvaService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: RegimesTvaService = TestBed.get(RegimesTvaService);
+    const service: RegimesTvaService = TestBed.inject(RegimesTvaService);
     expect(service).toBeTruthy();
   });
 });

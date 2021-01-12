@@ -1,11 +1,11 @@
-import { browser, by, element } from 'protractor';
+import { $, browser } from 'protractor';
 
 export class AppPage {
   navigateTo() {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root .dx-drawer-content .dx-card p:nth-child(2)')).getText();
+  getNavByText(text: string) {
+    return $(`dx-tree-view [role="treeitem"][aria-label="${ text }"]`);
   }
 }

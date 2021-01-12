@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MoyensCommunicationService } from './moyens-communication.service';
+import { MoyenCommunicationService } from './moyens-communication.service';
 
 describe('MoyensCommunicationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MoyensCommunicationService = TestBed.get(MoyensCommunicationService);
+    const service: MoyenCommunicationService = TestBed.inject(MoyenCommunicationService);
     expect(service).toBeTruthy();
   });
 });

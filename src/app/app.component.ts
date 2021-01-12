@@ -16,7 +16,6 @@ export class AppComponent {
   public copyrightYear = '';
 
   constructor(
-    private localizationService: LocalizationService,
     private authService: AuthService,
     private screen: ScreenService
   ) {

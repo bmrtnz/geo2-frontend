@@ -6,7 +6,7 @@ describe('EtiquettesColisService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: EtiquettesColisService = TestBed.get(EtiquettesColisService);
+    const service: EtiquettesColisService = TestBed.inject(EtiquettesColisService);
     expect(service).toBeTruthy();
   });
 });

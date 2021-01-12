@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { LocalizePipe } from 'app/shared/pipes';
 
 import { HistoriqueValideComponent } from './historique-valide.component';
 
@@ -8,7 +9,10 @@ describe('HistoriqueValideComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HistoriqueValideComponent ]
+      declarations: [
+        HistoriqueValideComponent,
+        LocalizePipe,
+      ]
     })
     .compileComponents();
   }));

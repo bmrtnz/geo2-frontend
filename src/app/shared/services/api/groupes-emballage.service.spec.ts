@@ -6,7 +6,7 @@ describe('GroupesEmballageService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: GroupesEmballageService = TestBed.get(GroupesEmballageService);
+    const service: GroupesEmballageService = TestBed.inject(GroupesEmballageService);
     expect(service).toBeTruthy();
   });
 });

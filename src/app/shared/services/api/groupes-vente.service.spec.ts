@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GroupesVenteService } from './groupes-vente.service';
+import { GroupesClientService } from './groupes-vente.service';
 
 describe('GroupesVenteService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: GroupesVenteService = TestBed.get(GroupesVenteService);
+    const service: GroupesClientService = TestBed.inject(GroupesClientService);
     expect(service).toBeTruthy();
   });
 });

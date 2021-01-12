@@ -47,6 +47,7 @@ export class EntrepotsListComponent implements OnInit {
   }
 
   enableFilters() {
+    if (!this.clientID) return;
     this.entrepots.filter(['client.id', '=', this.clientID]);
     this.entrepots.reload();
   }

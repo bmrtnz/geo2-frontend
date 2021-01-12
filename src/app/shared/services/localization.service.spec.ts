@@ -6,7 +6,7 @@ describe('LocalService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: LocalizationService = TestBed.get(LocalizationService);
+    const service: LocalizationService = TestBed.inject(LocalizationService);
     expect(service).toBeTruthy();
   });
 });

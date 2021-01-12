@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { DxoStateStoringComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
-import { from } from 'rxjs';
-import { map, mergeAll } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { GridConfig } from '../models';
 import { GridsConfigsService } from './api/grids-configs.service';
 import { AuthService } from './auth.service';
@@ -31,7 +31,6 @@ export class GridConfiguratorService {
 
   private readonly GRID_CONFIG_FILE = '/assets/configurations/grids.json';
   private dataSource: DataSource;
-  private currentGrid: Grid;
 
   constructor(
     private gridsConfigsService: GridsConfigsService,
@@ -48,25 +47,13 @@ export class GridConfiguratorService {
   }
 
   /**
-   * Set current grid name
-   * @param gridName Grid name, act as identifier
-   */
-  as(gridName: Grid) {
-    this.currentGrid = gridName;
-    return self;
-  }
-
-  /**
    * Configure datasource filter with current grid and user
-   * @throws Throw error if current grid is not defined
    */
-  private filterGrid() {
-    if (!this.currentGrid)
-      throw Error('Grid name required, use GridConfiguratorService.with(gridName)');
+  private filterGrid(grid: Grid) {
     this.dataSource.filter([
       ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
       'and',
-      ['grid', '=', this.currentGrid],
+      ['grid', '=', grid],
     ]);
   }
 
@@ -74,9 +61,10 @@ export class GridConfiguratorService {
    * DX DataGrid CustomLoad callback, read and load configuration, load default configuration as fallback
    */
   async load() {
-    self.filterGrid();
+    const context = this as unknown as DxoStateStoringComponent;
+    self.filterGrid(context.storageKey as Grid);
     const res: GridConfig[] = await self.dataSource.load();
-    if (!res.length) return self.fetchDefaultConfig();
+    if (!res.length) return self.fetchDefaultConfig(context.storageKey as Grid);
     // Clear search text and pagination
     const config = {...res[0].config}; // clone config (original is sealed)
     delete config.searchText;
@@ -86,14 +74,11 @@ export class GridConfiguratorService {
 
   /**
    * Build grid configuration object with current grid and user
-   * @throws Throw error if current grid is not defined
    */
-  private prepareGrid() {
-    if (!this.currentGrid)
-      throw Error('Grid name required, use GridConfiguratorService.with(gridName)');
+  private prepareGrid(grid: Grid) {
     return {
       utilisateur: { nomUtilisateur: this.authService.currentUser.nomUtilisateur },
-      grid: this.currentGrid,
+      grid,
     };
   }
 
@@ -102,7 +87,8 @@ export class GridConfiguratorService {
    * @param config GridConfig object
    */
   async save(config: {}) {
-    const gridConfig = self.prepareGrid();
+    const context = this as unknown as DxoStateStoringComponent;
+    const gridConfig = self.prepareGrid(context.storageKey as Grid);
     self.gridsConfigsService.save({
       gridConfig: { ...gridConfig, config }
     }).subscribe();
@@ -112,7 +98,7 @@ export class GridConfiguratorService {
    * Fetch default grid configuration, merging common config with specified grid config
    * @param gridName Grid name
    */
-  fetchDefaultConfig(grid = this.currentGrid) {
+  fetchDefaultConfig(grid: Grid) {
     if (!grid)
       throw Error('Grid name required, use GridConfiguratorService.with(gridName)');
     const keys = ['common', grid];

@@ -25,11 +25,12 @@
       [showInfo]="true"
       [showNavigationButtons]="true"
     ></dxo-pager>
-    <dxo-state-storing 
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.Contact"
       [enabled]="true" 
       type="custom" 
-      [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.Contact).load"
-      [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.Contact).save"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-editing

@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HomeService } from './home.service';
+import { NavHomeService } from './home.service';
 
 describe('HomeService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [ NavHomeService ],
+  }));
 
   it('should be created', () => {
-    const service: HomeService = TestBed.get(HomeService);
+    const service: NavHomeService = TestBed.inject(NavHomeService);
     expect(service).toBeTruthy();
   });
 });

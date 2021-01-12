@@ -45,8 +45,8 @@ export abstract class Model {
       if (rawEntity[field] === null || rawEntity[field] === undefined) continue;
       if (options.fetchedModel)
         this[field] = rawEntity[field].length !== undefined ?
-          rawEntity[field].map( e => new (options.fetchedModel as any)(e)) :
-        new (options.fetchedModel as any)(rawEntity[field]);
+          rawEntity[field].map(e => new (options.fetchedModel as any)(e)) :
+          new (options.fetchedModel as any)(rawEntity[field]);
       else if (options.dataType && options.dataType === 'date')
         this[field] = new Date(rawEntity[field]).toISOString();
       else
@@ -57,25 +57,20 @@ export abstract class Model {
   /**
    * Get model fields as paths list
    * @param depth Sub model selection depth
-   * @param filter Regexp field filter
+   * @deprecated Use `getDetailedFields()` instead
    */
-  static getListFields(depth = 1, fieldFilter = DEFAULT_FILTER, prefix?: string):
+  static getListFields(depth = 1, prefix?: string):
     Observable<string | string[]> {
     const getFieldName = (property: string) => prefix ? `${prefix}.${property}` : property;
     return from(Object.entries(this.getFields()))
       .pipe(
         this.fetchMapModel(),
-        filter(([propertyName, options]) => {
-          const path = prefix ? `${prefix}.${propertyName}` : propertyName;
-          if (fieldFilter && fieldFilter.test(path)) return true;
-          return !options.fetchedModel || (options.fetchedModel && depth > 0);
-        }),
         this.takeToLastField(depth),
         concatMap(([propertyName, options]) => {
           const fieldName = getFieldName(propertyName);
-          if (!options.fetchedModel) return of(fieldName);
-          if (options.fetchedModel && options.fetchedModel.getLabelField())
-            return options.fetchedModel.getListFields(depth - 1, fieldFilter, fieldName);
+          return options.fetchedModel ?
+            options.fetchedModel.getListFields(depth - 1, fieldName) :
+            of(fieldName);
         }),
       );
   }
@@ -83,13 +78,13 @@ export abstract class Model {
   /**
    * Get model fields as GraphQL structure
    * @param depth Sub model selection depth
-   * @param filter Regexp field filter
+   * @param filter Regexp filter, does not filter required fields, like keys or labels
    */
   static getGQLFields(
     depth = 1,
     fieldFilter = DEFAULT_FILTER,
     prefix?: string,
-    config?: {noList?: boolean},
+    config?: { noList?: boolean },
   ): Observable<string> {
     return from(Object.entries(this.getFields()))
       .pipe(
@@ -126,7 +121,7 @@ export abstract class Model {
   /**
    * Get model detailed fields
    * @param depth Sub model fetch depth
-   * @param filter Regexp field filter
+   * @param filter Regexp filter, does not filter required fields, like keys or 
    */
   static getDetailedFields(
     depth = 1,
@@ -145,7 +140,12 @@ export abstract class Model {
     return from(Object.entries(this.getFields()))
       .pipe(
         this.fetchMapModel(),
-        filter(([name, options]) => depth > 0 || !!options.fetchedModel || fieldFilter.test(name)),
+        filter(([name, options]) => {
+          const path = prefix ? `${prefix}.${name}` : name;
+          if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
+          if (options.fetchedModel && depth > 0) return true;
+          return options.asKey || options.asLabel;
+        }),
         this.takeToLastField(depth),
         concatMap(([name, options]) => {
           let path = prefix ? `${prefix}.${name}` : name;
@@ -223,20 +223,13 @@ export abstract class Model {
   }
 
   /**
-   * Filter fields containing options
-   */
-  private static filterWithOptions(): MonoTypeOperatorFunction<FieldDescriptor> {
-    return filter(([, options]) => !!options);
-  }
-
-  /**
    * Emit values until last field
    * @param currentDepth Current field depth
    */
   private static takeToLastField(currentDepth: number): MonoTypeOperatorFunction<FieldDescriptor> {
     return takeWhile(([propertyName]) => {
       return Object.keys(this.getFields()).pop() !== propertyName || currentDepth > 0;
-    }, true);
+    }, false);
   }
 
 }

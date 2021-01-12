@@ -6,7 +6,7 @@ describe('StockArticlesAgeService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: StockArticlesAgeService = TestBed.get(StockArticlesAgeService);
+    const service: StockArticlesAgeService = TestBed.inject(StockArticlesAgeService);
     expect(service).toBeTruthy();
   });
 });

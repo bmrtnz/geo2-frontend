@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { GridNavigatorComponent } from './grid-navigator.component';
 
@@ -8,7 +10,10 @@ describe('GridNavigatorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GridNavigatorComponent ]
+      declarations: [ GridNavigatorComponent ],
+      imports: [
+        RouterTestingModule
+      ],
     })
     .compileComponents();
   }));

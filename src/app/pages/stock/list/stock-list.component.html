@@ -227,11 +227,12 @@
                         allowSearch="true">
                     </dxo-column-chooser>
                     <dxo-state-storing 
-                        [enabled]="true" 
+                        [storageKey]="gridConfiguratorService.Grid.Stock"
+                        [enabled]="true"
                         type="custom"
-                        [customLoad]="gridConfiguratorService.as(gridConfiguratorService.Grid.Stock).load"
-                        [customSave]="gridConfiguratorService.as(gridConfiguratorService.Grid.Stock).save"
-                        ></dxo-state-storing>
+                        [customLoad]="gridConfiguratorService.load"
+                        [customSave]="gridConfiguratorService.save"
+                    ></dxo-state-storing>
                     <dxi-column
                         *ngFor="let field of detailedFields | async"
                         [dataField]="field.path"

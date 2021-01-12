@@ -8,8 +8,12 @@ const { SpecReporter } = require('jasmine-spec-reporter');
  * @type { import("protractor").Config }
  */
 exports.config = {
-  allScriptsTimeout: 11000,
+  SELENIUM_PROMISE_MANAGER: false,
+  allScriptsTimeout: 21000,
+  getPageTimeout: 20000,
   specs: [
+    './src/**/app.e2e-spec.ts',
+    './src/**/login.e2e-spec.ts',
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
