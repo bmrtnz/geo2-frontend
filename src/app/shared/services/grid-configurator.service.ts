@@ -20,7 +20,8 @@ export enum Grid {
   Article = 'article',
   Stock = 'stock',
   Ordre = 'ordre',
-  OrdreLigne = 'ordre-ligne',
+  Historique = 'historique',
+  OrdreLigne = 'ordre-ligne'
 }
 
 @Injectable({

@@ -23,6 +23,7 @@ import {
 } from 'devextreme-angular';
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
+// import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
 
 
 @NgModule({
