@@ -142,9 +142,9 @@
                                     </dxi-item>
                                     <dxi-item [ratio]="8">
 
-                                        <h2>
-                                            <!-- <span class="order-number">{{ content.tabTitle }}</span> -->
-                                            <span *ngIf="i">
+                                        <h2 *ngIf="i">
+                                            <span class="order-number">{{ content.tabTitle }}</span>
+                                            <span>
                                                 <span *ngIf="linkedOrdersSearch" class="search-linkedOrders">Recherche ordres liés...</span>
                                                 <dx-button *ngFor="let linkedOrder of linkedOrders"
                                                     class="small-button"
@@ -196,9 +196,10 @@
                                         </div>
                                         <app-grid-suivi [filter]="filter" *ngIf="!i && showGridResults" (ordreSelected)="pushTab($event)"></app-grid-suivi>
                                         
-                                        <h2 *ngIf="!i"><span class="order-number">{{ 'ordres-details-historiqueordres' | localize }}</span></h2>
-                                        <app-grid-historique *ngIf="!i" (ordreSelected)="pushTab($event)"></app-grid-historique>
-
+                                        <div *ngIf="!i" class="histo-container">
+                                            <h2>{{ 'ordres-details-historiqueordres' | localize }}</h2>
+                                            <app-grid-historique (ordreSelected)="pushTab($event)"></app-grid-historique>
+                                        </div>
                                         <div class="order-tabs" *ngIf="i">
                                             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
