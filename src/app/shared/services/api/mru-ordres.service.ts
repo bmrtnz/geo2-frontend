@@ -14,13 +14,11 @@ export class MruOrdresService extends ApiService implements APIRead {
     apollo: Apollo,
   ) {
     super(apollo, MRUOrdre);
-    this.gqlKeyType = 'GeoMRUOrdreKeyInput';
   }
 
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        key: ['utilisateur', 'ordre'],
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
@@ -30,7 +28,7 @@ export class MruOrdresService extends ApiService implements APIRead {
             });
 
           type Response = { allMRUOrdre: RelayPage<MRUOrdre> };
-          const query = await this.buildGetAll();
+          const query = await this.buildGetAll(2);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
@@ -39,13 +37,9 @@ export class MruOrdresService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne();
+          const query = await this.buildGetOne(2);
           type Response = { MRUOrdre: MRUOrdre };
-          const id = key ? {
-            utilisateur: key.utilisateur || '',
-            espece: key.especeId || '',
-          } : {};
-          const variables = { id };
+          const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.MRUOrdre)
               resolve(new this.model(res.data.MRUOrdre));
