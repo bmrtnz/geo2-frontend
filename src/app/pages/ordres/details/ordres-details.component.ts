@@ -344,7 +344,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   findOrder(e) {
-    this.showGridResults = false;
+    this.clearSearchField();
     setTimeout(() => {
       const criteria = e.component._changedValue;
       if (criteria.length) {
