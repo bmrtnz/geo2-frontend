@@ -457,6 +457,13 @@
         "dataType": "string",
         "visible": true
       }
+      ,
+      {
+        "visibleIndex": 2,
+        "dataField": "dateModification",
+        "dataType": "datetime",
+        "visible": true
+      }
     ]
   },
   "ordre-ligne": {
