@@ -450,6 +450,12 @@
         "dataField": "numero",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ordre.referenceClient",
+        "dataType": "string",
+        "visible": true
       }
     ]
   },
