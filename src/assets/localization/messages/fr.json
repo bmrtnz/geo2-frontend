@@ -456,6 +456,9 @@
     "ordres-client": "Client",
     "ordres-numero": "Numéro",
     "ordres-referenceClient": "Réf. client",
+    "ordres-ordre-referenceClient": "Réf. client",
+    "ordres-ordre-client-raisonSocial": "Client",
+    "ordres-dateModification": "Date de modification",
     "ordres-transporteur": "Transporteur",
     "ordres-commercial": "Commercial",
     "ordres-commercial.nomUtilisateur": "Commercial",
@@ -475,6 +478,6 @@
     "ordres-ordresnonconfirmes": "Ordres non confirmés",
     "ordres-ordresnonclotures": "Ordres non clôturés",
     "ordres-commandesentransit": "Commandes en transit"
-   
+
   }
 }

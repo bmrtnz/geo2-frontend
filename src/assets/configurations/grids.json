@@ -451,17 +451,23 @@
         "dataType": "string",
         "visible": true
       },
-      {
-        "visibleIndex": 1,
-        "dataField": "ordre.referenceClient",
-        "dataType": "string",
-        "visible": true
-      }
       ,
       {
-        "visibleIndex": 2,
+        "visibleIndex": 1,
         "dataField": "dateModification",
         "dataType": "datetime",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordre.client.raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ordre.referenceClient",
+        "dataType": "string",
         "visible": true
       }
     ]

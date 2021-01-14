@@ -218,7 +218,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const ordresSource = this.ordresService.getDataSource();
     ordresSource.filter(['referenceClient', '=', refClt]);
     ordresSource.load().then(res => {
-      console.log(numero,res)
       this.linkedOrders = [];
       let i = 0;
       res.forEach(value => {

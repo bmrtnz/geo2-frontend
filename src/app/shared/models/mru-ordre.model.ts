@@ -8,7 +8,7 @@ export class MRUOrdre extends Model {
   @Field({asKey: true, asLabel: true}) public numero: string;
   @Field({model: import('./ordre.model')}) public ordre: Ordre;
   @Field({model: import('./utilisateur.model')}) public utilisateur: Utilisateur;
-  @Field({model: import('./mru-entrepot.model')}) public mruEntrepots: MRUEntrepot;
+  // @Field({model: import('./mru-entrepot.model')}) public mruEntrepots: MRUEntrepot;
   @Field({model: import('./societe.model')}) public societe: Societe;
   @Field({ dataType: 'datetime' }) public dateModification: string;
 }
