@@ -1,5 +1,4 @@
 import { Field, Model } from "./model";
-import MRUEntrepot from "./mru-entrepot.model";
 import Ordre from "./ordre.model";
 import Societe from "./societe.model";
 import Utilisateur from "./utilisateur.model";

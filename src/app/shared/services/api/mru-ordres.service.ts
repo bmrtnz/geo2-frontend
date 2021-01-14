@@ -14,11 +14,13 @@ export class MruOrdresService extends ApiService implements APIRead {
     apollo: Apollo,
   ) {
     super(apollo, MRUOrdre);
+    this.gqlKeyType = 'GeoMRUOrdreKeyInput';
   }
 
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
+        key: ['utilisateur', 'ordre'],
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
@@ -39,7 +41,11 @@ export class MruOrdresService extends ApiService implements APIRead {
         byKey: (key) => new Promise(async (resolve) => {
           const query = await this.buildGetOne(2);
           type Response = { MRUOrdre: MRUOrdre };
-          const variables = { id: key };
+          const id = key ? {
+            utilisateur: key.utilisateur || '',
+            espece: key.especeId || '',
+          } : {};
+          const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.MRUOrdre)
               resolve(new this.model(res.data.MRUOrdre));
