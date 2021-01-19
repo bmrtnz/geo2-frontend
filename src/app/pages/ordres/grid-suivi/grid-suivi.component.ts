@@ -36,7 +36,7 @@ export class GridSuiviComponent implements OnInit {
         return fields.filter( field => 
         //   console.log('ordres-' + field.path.replaceAll('.', '-').replace('.description', ''))
         // });
-          !!(this.localizeService.localize('ordres-' + field.path.replaceAll('.', '-').replace('.description', ''))).length);
+          !!(this.localizeService.localize('rechOrdres-' + field.path.replaceAll('.', '-').replace('.description', ''))).length);
       }),
     );
   }

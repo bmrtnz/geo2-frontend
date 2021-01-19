@@ -457,7 +457,6 @@
     "ordres-numero": "Numéro",
     "ordres-referenceClient": "Réf. client",
     "ordres-ordre-referenceClient": "Réf. client",
-    "ordres-client-raisonSocial": "Client",
     "ordres-ordre-client-raisonSocial": "Client",
     "ordres-dateModification": "Date de modification",
     "ordres-transporteur": "Transporteur",
@@ -480,7 +479,13 @@
     "ordres-supervisionlivraison": "Supervision livraison",
     "ordres-ordresnonconfirmes": "Ordres non confirmés",
     "ordres-ordresnonclotures": "Ordres non clôturés",
-    "ordres-commandesentransit": "Commandes en transit"
+    "ordres-commandesentransit": "Commandes en transit",
+
+    "rechOrdres-numero": "Numéro",
+    "rechOrdres-client-raisonSocial": "Client",
+    "rechOrdres-referenceClient": "Réf. client",
+    "rechOrdres-dateDepartPrevue": "Départ",
+    "rechOrdres-dateLivraisonPrevue": "Livraison"
 
   }
 }
