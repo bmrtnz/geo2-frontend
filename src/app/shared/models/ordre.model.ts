@@ -18,8 +18,8 @@ export class Ordre extends Model {
   @Field({ model: import('./personne.model') }) public commercial?: Personne;
   @Field({ model: import('./personne.model') }) public assistante?: Personne;
   @Field({ model: import('./transporteur.model') }) public transporteur?: Transporteur;
-  @Field({ dataType: 'date' }) public dateDepartPrevue?: string;
-  @Field({ dataType: 'date' }) public dateLivraisonPrevue?: string;
+  @Field({ dataType: 'localdate' }) public dateDepartPrevue?: string;
+  @Field({ dataType: 'localdate' }) public dateLivraisonPrevue?: string;
   @Field() public venteACommission?: boolean;
   @Field() public bonAFacturer?: boolean;
   @Field() public facture?: boolean;

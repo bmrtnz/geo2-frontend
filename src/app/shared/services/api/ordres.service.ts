@@ -13,7 +13,7 @@ import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 })
 export class OrdresService extends ApiService implements APIRead, APIPersist {
 
-  queryFilter = /.*(?:id|numero|referenceClient|nomUtilisateur|raisonSocial)$/i;
+  queryFilter = /.*(?:id|numero|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue)$/i;
 
   constructor(
     apollo: Apollo,

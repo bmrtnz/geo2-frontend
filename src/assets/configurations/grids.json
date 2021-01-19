@@ -437,7 +437,25 @@
       },
       {
         "visibleIndex": 1,
+        "dataField": "client.raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
         "dataField": "referenceClient",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "dateDepartPrevue",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "dateLivraisonPrevue",
         "dataType": "string",
         "visible": true
       }
@@ -451,22 +469,27 @@
         "dataType": "string",
         "visible": true
       },
-      ,
       {
         "visibleIndex": 1,
-        "dataField": "dateModification",
-        "dataType": "datetime",
-        "visible": true
-      },
-      {
-        "visibleIndex": 2,
         "dataField": "ordre.client.raisonSocial",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 2,
         "dataField": "ordre.referenceClient",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ordre.dateDepartPrevue",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ordre.dateLivraisonPrevue",
         "dataType": "string",
         "visible": true
       }
