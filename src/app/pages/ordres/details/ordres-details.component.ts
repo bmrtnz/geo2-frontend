@@ -2,19 +2,22 @@ import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, ViewChildren } f
 import { FormBuilder } from '@angular/forms';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
-import { TransporteursService } from 'app/shared/services';
+import { LocalizationService, TransporteursService } from 'app/shared/services';
 import { ClientsService } from 'app/shared/services/api/clients.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { Comm, CommService, Log, LogService } from 'app/shared/services/log.service';
 import { Content, FakeOrdresService, INDEX_TAB } from 'app/shared/services/ordres-fake.service';
-import { DxAccordionComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxAutocompleteComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
+import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { iif, of, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
+
+let self;
 
 @Component({
   selector: 'app-ordres-details',
@@ -25,6 +28,7 @@ import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
+  searchItems: any;
   filter: any;
   isIndexTab = true;
   allContents: Content[];
@@ -41,6 +45,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   canDuplicate = false;
   public ordres: DataSource;
   showGridResults: boolean;
+  @ViewChild(DxAutocompleteComponent, { static: false }) autocomplete: DxAutocompleteComponent;
 
   formGroup = this.fb.group({
     id: [''],
@@ -57,6 +62,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     facture: [''],
     factureEDI: [''],
     livre: [''],
+    search: ['']
   });
   private formValuesChange: Subscription;
   refreshGrid = new EventEmitter();
@@ -70,6 +76,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   constructor(
     logService: LogService,
     fakeOrdresService: FakeOrdresService,
+    public localizeService: LocalizationService,
     private ordresService: OrdresService,
     public clientsService: ClientsService,
     public personnesService: PersonnesService,
@@ -77,16 +84,19 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     commService: CommService,
     private fb: FormBuilder,
   ) {
+    self = this;
     this.ordres = ordresService.getDataSource();
     this.logs = logService.getLog();
     this.commentaires = commService.getComm();
     this.allContents = fakeOrdresService.getContents();
     this.contents = fakeOrdresService.getContents().slice(0, 1);
+    this.searchItems = ['numero', 'referenceClient', 'client.raisonSocial'];
   }
 
   ngOnInit() {
 
     // this.enableFilters();
+    this.formGroup.get('search').setValue(this.searchItems[0]);
     this.clients = this.clientsService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
     this.transporteurs = this.transporteursService.getDataSource();
@@ -120,7 +130,24 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.formValuesChange.unsubscribe();
   }
 
-  enableFilters(criteria) {
+  searchDisplayExpr(item) {
+    return item ? self.localizeService.localize('rechOrdres-' + item.replaceAll('.', '-')) : null;
+  }
+
+  changeSearchCriteria() {
+    const toSearch = this.autocomplete.value;
+    this.showGridResults = false;
+    if (toSearch.length) {
+      setTimeout(() => {
+        this.enableFilters(toSearch);
+        this.showGridResults = true;
+      }, 1);
+    }
+  }
+
+  enableFilters(value) {
+
+    const criteria = this.formGroup.get('search').value;
 
     let filter = [
       ['valide', '=', true],
@@ -129,12 +156,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       'and',
       ['facture', '=', false],
       'and',
-      [['numero', '=', criteria], 'or', ['referenceClient', '=', criteria]]
+      [criteria , 'contains', value]
     ];
 
     this.filter = filter;
-    // this.ordres.filter(filters);
-    // this.ordres.reload();
 
   }
 
@@ -343,7 +368,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   findOrder(e) {
-    this.clearSearchField();
+    this.hideSearchResults();
     setTimeout(() => {
       const criteria = e.component._changedValue;
       if (criteria.length) {
@@ -354,7 +379,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   }
 
-  clearSearchField() {
+  hideSearchResults() {
      this.showGridResults = false;
   }
 

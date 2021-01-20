@@ -178,12 +178,24 @@
                                                 <div class="dx-field-value">
                                                     <!-- [(value)]="numero" -->
                                                     <dx-autocomplete
-                                                        placeholder="Numéro ou référence client"
+                                                        placeholder="Selon le critère ci-dessous..."
                                                         [(value)]="numero"
                                                         (onEnterKey)="findOrder($event)"
-                                                        (onKeyDown)='clearSearchField()'
+                                                        (onKeyDown)='hideSearchResults()'
                                                         >
                                                     </dx-autocomplete>
+                                                </div>
+                                            </div>
+                                            <div class="dx-field">
+                                            <div class="dx-field-label">{{ 'rechOrdres-critere' | localize }}</div>
+                                                <div class="dx-field-value">
+                                                <dx-select-box
+                                                    formControlName="search"
+                                                    [items]="searchItems"
+                                                    [displayExpr]="searchDisplayExpr"
+                                                    (valueChange)="changeSearchCriteria()"
+                                                >
+                                                </dx-select-box>
                                                 </div>
                                             </div>
                                         </div>

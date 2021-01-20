@@ -455,8 +455,8 @@
     "ordres-details-groupe-log": "Log",
     "ordres-client": "Client",
     "ordres-numero": "Numéro",
-    "ordres-referenceClient": "Réf. client",
-    "ordres-ordre-referenceClient": "Réf. client",
+    "ordres-referenceClient": "Référence client",
+    "ordres-ordre-referenceClient": "Référence client",
     "ordres-ordre-client-raisonSocial": "Client",
     "ordres-dateModification": "Date de modification",
     "ordres-transporteur": "Transporteur",
@@ -483,9 +483,10 @@
 
     "rechOrdres-numero": "Numéro",
     "rechOrdres-client-raisonSocial": "Client",
-    "rechOrdres-referenceClient": "Réf. client",
+    "rechOrdres-referenceClient": "Référence client",
     "rechOrdres-dateDepartPrevue": "Départ",
-    "rechOrdres-dateLivraisonPrevue": "Livraison"
+    "rechOrdres-dateLivraisonPrevue": "Livraison",
+    "rechOrdres-critere": "Critère"
 
   }
 }
