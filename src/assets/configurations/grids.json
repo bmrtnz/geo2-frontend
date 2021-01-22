@@ -451,7 +451,6 @@
         "dataType": "string",
         "visible": true
       },
-      ,
       {
         "visibleIndex": 1,
         "dataField": "dateModification",
