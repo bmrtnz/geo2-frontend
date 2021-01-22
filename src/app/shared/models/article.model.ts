@@ -1,10 +1,11 @@
-import { Model, Field } from './model';
-import { ArticleMatierePremiere } from './article-matiere-premiere.model';
-import { ArticleCahierDesCharges } from './article-cahier-des-charges.model';
-import { ArticleNormalisation } from './article-normalisation.model';
-import { ArticleEmballage } from './article-emballage.model';
+import {Field, Model, ModelName} from './model';
+import {ArticleMatierePremiere} from './article-matiere-premiere.model';
+import {ArticleCahierDesCharges} from './article-cahier-des-charges.model';
+import {ArticleNormalisation} from './article-normalisation.model';
+import {ArticleEmballage} from './article-emballage.model';
 import Historique from './historique.model';
 
+@ModelName('Article')
 export class Article extends Model {
   @Field({asKey: true}) public id: string;
   @Field({model: import('./article-matiere-premiere.model')}) public matierePremiere: ArticleMatierePremiere;

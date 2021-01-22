@@ -1,5 +1,5 @@
-import { toArray } from 'rxjs/operators';
-import { Field, Model, ModelFieldOptions } from '../models/model';
+import {toArray} from 'rxjs/operators';
+import {Field, Model, ModelFieldOptions} from '../models/model';
 
 class Stamp extends Model {
   @Field({ asKey: true }) public id?: number;

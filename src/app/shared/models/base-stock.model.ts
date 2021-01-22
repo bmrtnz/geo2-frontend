@@ -1,6 +1,6 @@
-import { Field, Model } from './model';
-import { Fournisseur } from './fournisseur.model';
-import { Espece } from './espece.model';
+import {Field, Model, ModelName} from './model';
+import {Fournisseur} from './fournisseur.model';
+import {Espece} from './espece.model';
 
 export abstract class BaseStock extends Model {
 

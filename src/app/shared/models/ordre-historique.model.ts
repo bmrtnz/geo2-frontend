@@ -1,9 +1,10 @@
-import { Ordre } from './ordre.model';
-import { Field, Model } from './model';
-import { Entrepot } from './entrepot.model';
-import { Societe } from './societe.model';
+import {Ordre} from './ordre.model';
+import {Field, Model, ModelName} from './model';
+import {Entrepot} from './entrepot.model';
+import {Societe} from './societe.model';
 import Personne from './personne.model';
 
+@ModelName('MRUOrdre')
 export class MRUOrdre extends Model {
 
   @Field({ asKey: true }) public id?: string;

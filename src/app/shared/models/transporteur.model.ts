@@ -1,12 +1,13 @@
-import { Client } from './client.model';
-import { TypeTiers } from './tier.model';
-import { Model, Field } from './model';
-import { Pays } from './pays.model';
-import { RegimeTva } from './regime-tva.model';
-import { MoyenPaiement } from './moyen-paiement.model';
-import { BasePaiement } from './base.paiement.model';
-import { Devise } from './devise.model';
+import {Client} from './client.model';
+import {TypeTiers} from './tier.model';
+import {Field, Model, ModelName} from './model';
+import {Pays} from './pays.model';
+import {RegimeTva} from './regime-tva.model';
+import {MoyenPaiement} from './moyen-paiement.model';
+import {BasePaiement} from './base.paiement.model';
+import {Devise} from './devise.model';
 
+@ModelName('Transporteur')
 export class Transporteur extends Model {
 
   @Field({asKey: true}) public id: string;

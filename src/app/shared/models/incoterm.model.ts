@@ -1,5 +1,6 @@
-import { Model, Field } from './model';
+import {Field, Model, ModelName} from './model';
 
+@ModelName('Incoterm')
 export class Incoterm extends Model {
 
   @Field({asKey: true}) public id: string;

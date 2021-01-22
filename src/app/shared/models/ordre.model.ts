@@ -1,11 +1,12 @@
-import { Client } from './client.model';
-import { Field, Model } from './model';
-import { OrdreLigne } from './ordre-ligne.model';
+import {Client} from './client.model';
+import {Field, Model, ModelName} from './model';
+import {OrdreLigne} from './ordre-ligne.model';
 import Personne from './personne.model';
-import { Secteur } from './secteur.model';
-import { Societe } from './societe.model';
+import {Secteur} from './secteur.model';
+import {Societe} from './societe.model';
 import Transporteur from './transporteur.model';
 
+@ModelName('Ordre')
 export class Ordre extends Model {
 
   @Field({ asKey: true }) public id?: string;

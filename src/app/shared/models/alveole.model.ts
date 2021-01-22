@@ -1,6 +1,7 @@
-import { Field, Model } from './model';
-import { Espece } from './espece.model';
+import {Field, Model, ModelName} from './model';
+import {Espece} from './espece.model';
 
+@ModelName('Alveole')
 export class Alveole extends Model {
   @Field({asKey: true}) public id: string;
   @Field({asLabel: true}) public description: string;

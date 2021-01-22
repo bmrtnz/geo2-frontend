@@ -1,8 +1,9 @@
-import { Field, Model } from "./model";
-import Ordre from "./ordre.model";
-import Societe from "./societe.model";
-import Utilisateur from "./utilisateur.model";
+import {Field, Model, ModelName} from './model';
+import Ordre from './ordre.model';
+import Societe from './societe.model';
+import Utilisateur from './utilisateur.model';
 
+@ModelName('MRUOrdre')
 export class MRUOrdre extends Model {
   @Field({asKey: true, asLabel: true}) public numero: string;
   @Field({model: import('./ordre.model')}) public ordre: Ordre;
