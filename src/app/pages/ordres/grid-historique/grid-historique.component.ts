@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { MruOrdresService } from 'app/shared/services/api/mru-ordres.service';
@@ -9,6 +9,7 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-grid-historique',
@@ -19,6 +20,7 @@ export class GridHistoriqueComponent implements OnInit {
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
   @Input() public filter: [];
+  @ViewChild(DxDataGridComponent, {static :true}) dataGrid : DxDataGridComponent;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -45,6 +47,12 @@ export class GridHistoriqueComponent implements OnInit {
 
   ngOnInit() {
     this.enableFilters();
+    console.log(this.dataGrid)
+    // this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
+  }
+
+  sortGrid() {
+    this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
   }
 
   enableFilters() {

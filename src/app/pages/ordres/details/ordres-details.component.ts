@@ -15,6 +15,7 @@ import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { iif, of, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 let self;
@@ -123,6 +124,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       window.localStorage.removeItem('orderNumber');
       this.pushTab(order);
     }
+     
 
   }
 
