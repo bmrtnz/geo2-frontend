@@ -1,6 +1,7 @@
-import { Model, Field } from './model';
-import { Utilisateur } from './utilisateur.model';
+import {Field, Model, ModelName} from './model';
+import {Utilisateur} from './utilisateur.model';
 
+@ModelName('GridConfig')
 export class GridConfig extends Model {
 
   @Field({asKey: true, model: import('./utilisateur.model')}) public utilisateur: Utilisateur;

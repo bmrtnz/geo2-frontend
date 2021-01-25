@@ -23,6 +23,7 @@ export const navigation = [
     ]
   },
   {
+    dev: true,
     text: 'Ordres de commande',
     icon: 'material-icons euro_symbol',
     path: '/ordres/accueil'
@@ -56,7 +57,6 @@ export const navigation = [
     ]
   },
   {
-    dev: true,
     text: 'Articles',
     icon: 'box',
     path: '/nested/n/(articles/list)'

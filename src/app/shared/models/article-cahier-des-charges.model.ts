@@ -1,12 +1,13 @@
-import { Model, Field } from './model';
-import { Coloration } from './coloration.model';
-import { Categorie } from './categorie.model';
-import { Sucre } from './sucre.model';
-import { Penetro } from './penetro.model';
-import { Cirage } from './cirage.model';
-import { Rangement } from './rangement.model';
-import { Espece } from './espece.model';
+import {Field, Model, ModelName} from './model';
+import {Coloration} from './coloration.model';
+import {Categorie} from './categorie.model';
+import {Sucre} from './sucre.model';
+import {Penetro} from './penetro.model';
+import {Cirage} from './cirage.model';
+import {Rangement} from './rangement.model';
+import {Espece} from './espece.model';
 
+@ModelName('ArticleCahierDesCharges')
 export class ArticleCahierDesCharges extends Model {
   @Field({asKey: true, asLabel: true}) public id: string;
   @Field() public instructionStation: string;

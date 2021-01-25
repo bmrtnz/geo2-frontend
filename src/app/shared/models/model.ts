@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { from, MonoTypeOperatorFunction, Observable, of, OperatorFunction } from 'rxjs';
-import { concatAll, concatMap, endWith, filter, map, mergeMap, reduce, startWith, takeWhile, toArray } from 'rxjs/operators';
+import {from, MonoTypeOperatorFunction, Observable, of, OperatorFunction} from 'rxjs';
+import {concatAll, concatMap, endWith, filter, map, mergeMap, reduce, startWith, takeWhile, toArray} from 'rxjs/operators';
 
 export type ModelFieldOptions<T = typeof Model> = {
   model?: Promise<{ default: T }>
@@ -121,7 +121,7 @@ export abstract class Model {
   /**
    * Get model detailed fields
    * @param depth Sub model fetch depth
-   * @param filter Regexp filter, does not filter required fields, like keys or 
+   * @param filter Regexp filter, does not filter required fields, like keys or
    */
   static getDetailedFields(
     depth = 1,
@@ -233,3 +233,18 @@ export abstract class Model {
   }
 
 }
+
+/**
+ * Model decorator for fix 'name' property when code is minified
+ * @param modelName Name of model
+ */
+export const ModelName = (modelName: string) => {
+  return (target: any) => {
+    Object.defineProperty(target, 'name', {
+      value: modelName,
+      enumerable: false,
+      writable: false,
+      configurable: true
+    });
+  };
+};

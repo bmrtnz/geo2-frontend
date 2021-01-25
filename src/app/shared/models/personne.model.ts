@@ -1,5 +1,6 @@
-import { Model, Field } from './model';
+import {Field, Model, ModelName} from './model';
 
+@ModelName('Personne')
 export class Personne extends Model {
 
   @Field({asKey: true}) public id: string;

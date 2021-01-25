@@ -1,5 +1,6 @@
-import { Model, Field } from './model';
+import {Field, Model, ModelName} from './model';
 
+@ModelName('TypeClient')
 export class TypeClient extends Model {
 
   @Field({asKey: true}) public id: string;

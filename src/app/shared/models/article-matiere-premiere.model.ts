@@ -1,12 +1,13 @@
-import { Model, Field } from './model';
-import { Espece } from './espece.model';
-import { ModeCulture } from './mode-culture.model';
-import { Type } from './type.model';
-import { Variete } from './variete.model';
-import { Origine } from './origine.model';
-import { CalibreUnifie } from './calibre-unifie.model';
-import { TypeVente } from './type-vente.model';
+import {Field, Model, ModelName} from './model';
+import {Espece} from './espece.model';
+import {ModeCulture} from './mode-culture.model';
+import {Type} from './type.model';
+import {Variete} from './variete.model';
+import {Origine} from './origine.model';
+import {CalibreUnifie} from './calibre-unifie.model';
+import {TypeVente} from './type-vente.model';
 
+@ModelName('ArticleMatierePremiere')
 export class ArticleMatierePremiere extends Model {
   @Field({model: import('./espece.model')}) public espece: Espece;
   @Field({model: import('./variete.model')}) public variete: Variete;

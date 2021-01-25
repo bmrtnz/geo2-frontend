@@ -381,13 +381,13 @@ export abstract class ApiService implements OnDestroy {
     if (typeof clonedFilter[0] === 'string')
       clonedFilter = [clonedFilter];
 
-    const next = (filter: any[], index = 0) => {
-      const node = filter[index];
+    const next = (currentFilter: any[], index = 0) => {
+      const node = currentFilter[index];
       if (typeof node === 'object') { // comparison
 
         // Deep filter
         if (typeof node[0] === 'object') {
-          filter[index] = `(${next(node).join(' ')})`;
+          currentFilter[index] = `(${next(node).join(' ')})`;
         } else {
           /* tslint:disable-next-line:prefer-const */
           let [selector, operator, value] = node;
@@ -403,6 +403,13 @@ export abstract class ApiService implements OnDestroy {
             case '<>': operator = '!='; break;
           }
 
+          // Format object
+          if (typeof value === 'object') {
+            const firstField = Object.entries(value).shift();
+            selector = `${selector}.${firstField.shift()}`;
+            value = firstField.shift();
+          }
+
           // Map value
           if (selector === 'this') {
             const mappedFilter = Object
@@ -412,7 +419,7 @@ export abstract class ApiService implements OnDestroy {
               .join(`¤${JSON.stringify('and')}¤`)
               .split('¤')
               .map(v => JSON.parse(v));
-            filter[index] = this.mapDXFilterToRSQL(mappedFilter);
+            currentFilter[index] = this.mapDXFilterToRSQL(mappedFilter);
           } else {
 
             if (['contains', 'notcontains'].includes(dxOperator))
@@ -420,14 +427,14 @@ export abstract class ApiService implements OnDestroy {
             if (dxOperator === 'startswith') value = `${value}%`;
             if (dxOperator === 'endswith') value = `%${value}`;
             value = JSON.stringify(value);
-            filter[index] = [selector, operator, value].join('');
+            currentFilter[index] = [selector, operator, value].join('');
 
           }
         }
-      } else filter[index] = node;
-      if (index < filter.length - 1)
-        return next(filter, index + 1);
-      else return filter;
+      } else currentFilter[index] = node;
+      if (index < currentFilter.length - 1)
+        return next(currentFilter, index + 1);
+      else return currentFilter;
     };
     return next(clonedFilter).flat().join(' ');
   }
@@ -563,7 +570,9 @@ export abstract class ApiService implements OnDestroy {
       const withOperator = options.filter
         .find(r => ['or', 'and'].includes(r));
       if (withDepth && !withOperator)
-        options.filter = [options.filter[0], 'and', options.filter[1]];
+        options.filter = options.filter.length > 1 ?
+          [options.filter[0], 'and', options.filter[1]] :
+          options.filter;
     }
 
     const variables = this.mergeVariables(

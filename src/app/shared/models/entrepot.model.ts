@@ -1,16 +1,15 @@
-import { TypeTiers } from './tier.model';
-import { Model, Field } from './model';
-import { Societe } from './societe.model';
-import { Pays } from './pays.model';
-import { Incoterm } from './incoterm.model';
-import { RegimeTva } from './regime-tva.model';
-import { TypePalette } from './type-palette.model';
-import { Personne } from './personne.model';
-import { Transporteur } from './transporteur.model';
-import { TypeCamion } from './type-camion.model';
-import { BaseTarif } from './base-tarif.model';
-import { Transitaire } from './transitaire.model';
-import { Client } from './client.model';
+import {TypeTiers} from './tier.model';
+import {Field, Model, ModelName} from './model';
+import {Pays} from './pays.model';
+import {Incoterm} from './incoterm.model';
+import {RegimeTva} from './regime-tva.model';
+import {TypePalette} from './type-palette.model';
+import {Personne} from './personne.model';
+import {Transporteur} from './transporteur.model';
+import {TypeCamion} from './type-camion.model';
+import {BaseTarif} from './base-tarif.model';
+import {Transitaire} from './transitaire.model';
+import {Client} from './client.model';
 
 export enum ModeLivraison {
   DIRECT = 'D',
@@ -18,6 +17,7 @@ export enum ModeLivraison {
   SORTIE_STOCK = 'ST',
 }
 
+@ModelName('Entrepot')
 export class Entrepot extends Model {
   @Field({asKey: true}) public id: string;
   @Field() public code: string;

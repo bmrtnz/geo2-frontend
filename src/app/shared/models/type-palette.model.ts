@@ -1,5 +1,6 @@
-import { Model, Field } from './model';
+import {Field, Model, ModelName} from './model';
 
+@ModelName('TypePalette')
 export class TypePalette extends Model {
     @Field({asKey: true}) public id: string;
     @Field({asLabel: true}) public description: string;

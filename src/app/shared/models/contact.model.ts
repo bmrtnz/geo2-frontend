@@ -1,9 +1,10 @@
-import { Flux } from './flux.model';
-import { Societe } from './societe.model';
-import { TypeTiers } from './tier.model';
-import { MoyenCommunication } from './moyen-communication.model';
-import { Model, Field } from './model';
+import {Flux} from './flux.model';
+import {Societe} from './societe.model';
+import {TypeTiers} from './tier.model';
+import {MoyenCommunication} from './moyen-communication.model';
+import {Field, Model, ModelName} from './model';
 
+@ModelName('Contact')
 export class Contact extends Model {
   @Field({model: import('./moyen-communication.model')}) public moyenCommunication: MoyenCommunication;
   @Field({model: import('./flux.model')}) public flux: Flux;

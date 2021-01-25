@@ -1,24 +1,25 @@
-import { BaseTarif } from './base-tarif.model';
-import { BasePaiement } from './base.paiement.model';
+import {BaseTarif} from './base-tarif.model';
+import {BasePaiement} from './base.paiement.model';
 import CertificationClient from './certification-client.model';
-import { ConditionVente } from './condition-vente.model';
-import { Courtier } from './courtier.model';
-import { Devise } from './devise.model';
-import { Entrepot } from './entrepot.model';
-import { GroupeClient } from './groupe-client.model';
-import { Historique } from './historique.model';
-import { Incoterm } from './incoterm.model';
-import { Field, Model } from './model';
-import { MoyenPaiement } from './moyen-paiement.model';
-import { Pays } from './pays.model';
-import { Personne } from './personne.model';
-import { RegimeTva } from './regime-tva.model';
-import { Secteur } from './secteur.model';
-import { Societe } from './societe.model';
-import { TypeTiers } from './tier.model';
-import { TypeVente } from './type-vente.model';
-import { TypeClient } from './type.client.model';
+import {ConditionVente} from './condition-vente.model';
+import {Courtier} from './courtier.model';
+import {Devise} from './devise.model';
+import {Entrepot} from './entrepot.model';
+import {GroupeClient} from './groupe-client.model';
+import {Historique} from './historique.model';
+import {Incoterm} from './incoterm.model';
+import {Field, Model, ModelName} from './model';
+import {MoyenPaiement} from './moyen-paiement.model';
+import {Pays} from './pays.model';
+import {Personne} from './personne.model';
+import {RegimeTva} from './regime-tva.model';
+import {Secteur} from './secteur.model';
+import {Societe} from './societe.model';
+import {TypeTiers} from './tier.model';
+import {TypeVente} from './type-vente.model';
+import {TypeClient} from './type.client.model';
 
+@ModelName('Client')
 export class Client extends Model {
 
   @Field({ asKey: true }) public id: string;

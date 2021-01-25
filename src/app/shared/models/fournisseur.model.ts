@@ -1,17 +1,17 @@
-import { BasePaiement } from './base.paiement.model';
-import { BureauAchat } from './bureau-achat.model';
+import {BasePaiement} from './base.paiement.model';
+import {BureauAchat} from './bureau-achat.model';
 import CertificationFournisseur from './certification-fournisseur.model';
-import { ConditionVente } from './condition-vente.model';
-import { Devise } from './devise.model';
-import { GroupeFournisseur } from './groupe-fournisseur.model';
-import { Historique } from './historique.model';
-import { Field, Model } from './model';
-import { MoyenPaiement } from './moyen-paiement.model';
-import { Pays } from './pays.model';
-import { RegimeTva } from './regime-tva.model';
-import { Stock } from './stock.model';
-import { TypeTiers } from './tier.model';
-import { TypeFournisseur } from './type.fournisseur.model';
+import {ConditionVente} from './condition-vente.model';
+import {Devise} from './devise.model';
+import {GroupeFournisseur} from './groupe-fournisseur.model';
+import {Historique} from './historique.model';
+import {Field, Model, ModelName} from './model';
+import {MoyenPaiement} from './moyen-paiement.model';
+import {Pays} from './pays.model';
+import {RegimeTva} from './regime-tva.model';
+import {Stock} from './stock.model';
+import {TypeTiers} from './tier.model';
+import {TypeFournisseur} from './type.fournisseur.model';
 
 export enum NatureStation {
   EXPEDITEUR_EMBALLEUR = 'O',
@@ -20,6 +20,7 @@ export enum NatureStation {
   EXCLUSIVEMENT_EXPEDITEUR = 'F'
 }
 
+@ModelName('Fournisseur')
 export class Fournisseur extends Model {
 
   @Field({ asKey: true }) public id: string;

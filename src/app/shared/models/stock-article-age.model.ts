@@ -1,13 +1,14 @@
-import { Field, Model } from './model';
-import { Article } from './article.model';
-import { Espece } from './espece.model';
-import { Variete } from './variete.model';
-import { CalibreMarquage } from './calibre-marquage.model';
-import { Categorie } from './categorie.model';
-import { Origine } from './origine.model';
-import { Colis } from './colis.model';
-import { CalibreFournisseur } from './calibre-fournisseur.model';
+import {Field, Model, ModelName} from './model';
+import {Article} from './article.model';
+import {Espece} from './espece.model';
+import {Variete} from './variete.model';
+import {CalibreMarquage} from './calibre-marquage.model';
+import {Categorie} from './categorie.model';
+import {Origine} from './origine.model';
+import {Colis} from './colis.model';
+import {CalibreFournisseur} from './calibre-fournisseur.model';
 
+@ModelName('StockArticleAge')
 export class StockArticleAge extends Model {
 
   @Field({model: import('./article.model')}) public article: Article;

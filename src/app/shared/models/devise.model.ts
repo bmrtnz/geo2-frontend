@@ -1,5 +1,6 @@
-import { Model, Field } from './model';
+import {Field, Model, ModelName} from './model';
 
+@ModelName('Devise')
 export class Devise extends Model {
 
   @Field({asKey: true}) public id: string;

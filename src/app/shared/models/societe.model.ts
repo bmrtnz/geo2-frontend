@@ -1,6 +1,7 @@
-import { Pays } from './pays.model';
-import { Model, Field } from './model';
+import {Pays} from './pays.model';
+import {Field, Model, ModelName} from './model';
 
+@ModelName('Societe')
 export class Societe extends Model {
 
   @Field({asKey: true}) public id: string;
