@@ -43,7 +43,7 @@ export class MruOrdresService extends ApiService implements APIRead {
           type Response = { MRUOrdre: MRUOrdre };
           const id = key ? {
             utilisateur: key.utilisateur || '',
-            espece: key.especeId || '',
+            ordre: key.ordre || '',
           } : {};
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
