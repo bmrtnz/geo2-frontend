@@ -142,8 +142,8 @@
                                                 <dx-button *ngFor="let linkedOrder of linkedOrders"
                                                     class="small-button"
                                                     type="default"
-                                                    text="{{ linkedOrder.numero }}"
-                                                    (onClick)="openLinkedOrder(linkedOrder.id, linkedOrder.numero)"
+                                                    text="{{ linkedOrder.ordre.numero }} ({{ linkedOrder.criteria }})"
+                                                    (onClick)="openLinkedOrder(linkedOrder.ordre.id, linkedOrder.ordre.numero)"
                                                 >
                                                 </dx-button>
                                             </span>

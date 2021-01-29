@@ -44,7 +44,7 @@ export class ArticlesService extends ApiService implements APIRead {
             });
 
           type Response = { allArticle: RelayPage<Article> };
-          const query = await this.buildGetAll(2);
+          const query = await this.buildGetAll(3);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {

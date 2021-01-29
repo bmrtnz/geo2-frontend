@@ -235,6 +235,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   addLinkedOrders(ordre) {
 
+    // Accole au numéro d'ordre les ordres liés
+    // Pour le moment, uniquement basé sur la référence client
+
     this.linkedOrdersSearch = false;
     this.linkedOrders = [];
     const refClt = ordre.referenceClient;
@@ -248,7 +251,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       this.linkedOrders = [];
       let i = 0;
       res.forEach(value => {
-        if (numero !== value.numero) {this.linkedOrders.push(value);}
+        if (numero !== value.numero) {this.linkedOrders.push({ordre:value, criteria:'ref. clt'});}
         i++;
       });
       this.linkedOrdersSearch = false;

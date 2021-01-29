@@ -37,7 +37,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.articles = this.articlesService.getDataSource();
-    this.detailedFields = this.articlesService.model.getDetailedFields(2)
+    this.detailedFields = this.articlesService.model.getDetailedFields(3)
     .pipe(
       // Filtrage headers possibles columnchooser
       map(fields => {
