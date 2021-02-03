@@ -46,6 +46,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   linkedOrdersSearch: boolean;
   canDuplicate = false;
   validationPopupVisible = false;
+  ordreASupp : string;
   public ordres: DataSource;
   showGridResults: boolean;
   @ViewChild(DxAutocompleteComponent, { static: false }) autocomplete: DxAutocompleteComponent;
@@ -414,7 +415,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     return this.contents[index].ordre;
   }
 
-  continueClick() {
+  deleteClick() {
     this.validationPopupVisible = false;
     this.deleteOrder();
   }
