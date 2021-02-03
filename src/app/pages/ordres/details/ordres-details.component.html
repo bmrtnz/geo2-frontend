@@ -591,3 +591,16 @@
 
 <app-editing-alert></app-editing-alert>
 <app-file-manager-popup></app-file-manager-popup>
+<dx-popup
+  [width]="400"
+  [height]="165"
+  [showTitle]="false"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="true"
+  [(visible)]="validationPopupVisible"
+>
+    <p>Cet ordre va être supprimé, voulez-vous continuer ?</p>
+    <br>
+    <dx-button type="default" text="Supprimer" (onClick)="cancelClick()"></dx-button>
+    <dx-button type="normal" text="Annuler" (onClick)="continueClick()"></dx-button>
+</dx-popup>
