@@ -32,7 +32,7 @@ export class GridHistoriqueComponent implements OnInit {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.dataSource = ordresService.getDataSource();
+    this.dataSource = ordresService.getDataSourceGrouped();
     this.detailedFields = this.ordresService.model.getDetailedFields(2)
     .pipe(
       // Filtrage headers possibles columnchooser

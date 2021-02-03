@@ -17,6 +17,22 @@ export class MruOrdresService extends ApiService implements APIRead {
     this.gqlKeyType = 'GeoMRUOrdreKeyInput';
   }
 
+  private byKey(key) {
+    return new Promise(async (resolve) => {
+      const query = await this.buildGetOne(2);
+      type Response = { MRUOrdre: MRUOrdre };
+      const id = key ? {
+        utilisateur: key.utilisateur || '',
+        ordre: key.ordre || '',
+      } : {};
+      const variables = { id };
+      this.listenQuery<Response>(query, { variables }, res => {
+        if (res.data && res.data.MRUOrdre)
+          resolve(new this.model(res.data.MRUOrdre));
+      });
+    });
+  }
+
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
@@ -38,19 +54,50 @@ export class MruOrdresService extends ApiService implements APIRead {
               resolve(this.asInstancedListCount(res.data.allMRUOrdre));
           });
         }),
-        byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(2);
-          type Response = { MRUOrdre: MRUOrdre };
-          const id = key ? {
-            utilisateur: key.utilisateur || '',
-            ordre: key.ordre || '',
-          } : {};
-          const variables = { id };
+        byKey: this.byKey,
+      }),
+    });
+  }
+
+  getDataSourceGrouped() {
+    return new DataSource({
+      store: this.createCustomStore({
+        key: ['utilisateur', 'ordre'],
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allGroupedMRUOrdre: RelayPage<MRUOrdre> };
+          const query = `
+            query AllGroupedMRUOrdre($search: String, $pageable: PaginationInput!) {
+              allGroupedMRUOrdre(search:$search, pageable:$pageable) {
+                edges {
+                  node {
+                    ${await this.model.getGQLFields(2, undefined, null, {noList: true}).toPromise()}
+                  }
+                }
+                pageInfo {
+                  startCursor
+                  endCursor
+                  hasPreviousPage
+                  hasNextPage
+                }
+                totalCount
+              }
+            }
+          `;
+          const variables = this.mapLoadOptionsToVariables(options);
+
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.MRUOrdre)
-              resolve(new this.model(res.data.MRUOrdre));
+            if (res.data && res.data.allGroupedMRUOrdre)
+              resolve(this.asInstancedListCount(res.data.allGroupedMRUOrdre));
           });
         }),
+        byKey: this.byKey,
       }),
     });
   }
