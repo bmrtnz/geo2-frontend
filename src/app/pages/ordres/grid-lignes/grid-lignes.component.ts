@@ -6,6 +6,8 @@ import { environment } from 'environments/environment';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
 import { Observable } from 'rxjs';
 import Ordre from 'app/shared/models/ordre.model';
+import { map } from 'rxjs/operators';
+import { LocalizationService } from 'app/shared/services/localization.service';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -22,9 +24,19 @@ export class GridLignesComponent implements OnChanges {
   constructor(
     private ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
+    public localizeService: LocalizationService
   ) {
     this.dataSource = ordreLignesService.getDataSource();
-    this.detailedFields = this.ordreLignesService.model.getDetailedFields();
+    this.detailedFields = this.ordreLignesService.model.getDetailedFields()
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field => {
+          // console.log('articles-' + field.path.replaceAll('.', '-').replace('.description', ''))
+        });
+          // !!(this.localizeService.localize('articles-' + field.path.replace('.description', '').replaceAll('.', '-'))).length);
+      }),
+    );
   }
 
   ngOnChanges() {

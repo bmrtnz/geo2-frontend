@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
 import { LocalizationService, TransporteursService } from 'app/shared/services';
 import { ClientsService } from 'app/shared/services/api/clients.service';
@@ -8,7 +9,7 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { Comm, CommService, Log, LogService } from 'app/shared/services/log.service';
 import { Content, FakeOrdresService, INDEX_TAB } from 'app/shared/services/ordres-fake.service';
-import { DxAccordionComponent, DxAutocompleteComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
@@ -44,9 +45,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   numero: string;
   linkedOrdersSearch: boolean;
   canDuplicate = false;
+  validationPopupVisible = false;
   public ordres: DataSource;
   showGridResults: boolean;
   @ViewChild(DxAutocompleteComponent, { static: false }) autocomplete: DxAutocompleteComponent;
+  validatePopup: PushHistoryPopupComponent;
 
   formGroup = this.fb.group({
     id: [''],
@@ -73,6 +76,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
   @ViewChild(GridSuiviComponent, { static: false }) suiviGrid: GridSuiviComponent;
   @ViewChild(DxValidationGroupComponent, { static: false }) validationGroup: DxValidationGroupComponent;
+  @ViewChild(DxPopupComponent, { static: false }) validationPopup: DxPopupComponent;
 
   constructor(
     logService: LogService,
@@ -202,6 +206,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteClick() {
+
+    this.validationPopupVisible = true;
+
+  }
+
+  deleteOrder() {
+
     const ordre = this.ordresService.extractDirty(this.formGroup.controls);
     if (!ordre.id) return;
     this.ordresService.delete({ ordre })
@@ -213,6 +224,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         },
         error: _ => notify('Echec de la suppression', 'error', 3000),
       });
+
   }
 
   fileManagerClick() {
@@ -228,12 +240,17 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const Accordion = this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key);
 
     // Some elements are not accordion type
-    Accordion.instance.expandItem(0).then((r) => Element.scrollIntoView({ behavior: 'smooth' }))
+    if (Accordion) {
+      Accordion.instance.expandItem(0).then((r) => Element.scrollIntoView({ behavior: 'smooth' }))
+    }
     Element.scrollIntoView({ behavior: 'smooth' });
 
   }
 
   addLinkedOrders(ordre) {
+
+    // Accole au numéro d'ordre les ordres liés
+    // Pour le moment, uniquement basé sur la référence client
 
     this.linkedOrdersSearch = false;
     this.linkedOrders = [];
@@ -248,7 +265,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       this.linkedOrders = [];
       let i = 0;
       res.forEach(value => {
-        if (numero !== value.numero) {this.linkedOrders.push(value);}
+        if (numero !== value.numero) {this.linkedOrders.push({ordre:value, criteria:'ref. clt'});}
         i++;
       });
       this.linkedOrdersSearch = false;
@@ -296,8 +313,15 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  closeTab(itemData) {
-    const index = this.contents.indexOf(itemData);
+  closeTab(param) {
+
+    let index;
+    if (isNaN(param)) {
+      index = this.contents.indexOf(param);
+    } else {
+      index = param;
+    }
+    // const index = this.contents.indexOf(itemData);
 
     // Suppression onglet dans le localStorage
     const myData = window.localStorage.getItem('openOrders');
@@ -388,6 +412,15 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   public getSelectedOrdre() {
     const index = this.tabPanelComponent.selectedIndex;
     return this.contents[index].ordre;
+  }
+
+  continueClick() {
+    this.validationPopupVisible = false;
+    this.deleteOrder();
+  }
+
+  cancelClick() {
+    this.validationPopupVisible = false;
   }
 
 }

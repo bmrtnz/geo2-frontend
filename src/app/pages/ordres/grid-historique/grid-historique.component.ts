@@ -47,7 +47,6 @@ export class GridHistoriqueComponent implements OnInit {
 
   ngOnInit() {
     this.enableFilters();
-    console.log(this.dataGrid)
     // this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
   }
 
