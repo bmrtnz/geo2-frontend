@@ -325,7 +325,7 @@
     "tiers-entrepots-typeCamion": "Type de camion",
     "tiers-entrepots-transitaire": "Transitaire",
     "tiers-entrepots-baseTarifTransit": "Base tarif transit",
-    "tiers-entrepots-prixUnitaireTarifTransit": "P.U. tarif transit",
+    "tiers-entrepots-PUTarifTransit": "P.U. tarif transit",
     "tiers-entrepots-details-groupe-autres": "Autres infos",
     "tiers-entrepots-gestionnaireChep": "Gestionnaire CHEP",
     "tiers-entrepots-referenceChep": "Référence (n° CHEP)",
