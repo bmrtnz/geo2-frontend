@@ -5,7 +5,7 @@ import {Ordre} from './ordre.model';
 @ModelName('OrdreLigne')
 export class OrdreLigne extends Model {
 
-  @Field({asKey: true}) public id: string;
+  @Field({asKey: true, asLabel: true}) public id: string;
   @Field({model: import('./ordre.model')}) public ordre: Ordre;
   @Field({model: import('./article.model')}) public article: Article;
 
