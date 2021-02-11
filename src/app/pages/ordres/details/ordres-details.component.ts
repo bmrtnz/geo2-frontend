@@ -102,7 +102,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     // this.enableFilters();
-    this.formGroup.get('search').setValue(this.searchItems[0]);
+    this.resetCriteria();
     this.clients = this.clientsService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
     this.transporteurs = this.transporteursService.getDataSource();
@@ -237,6 +237,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const key = e.element.dataset.accordion;
     const extractField = '.' + key + '-field';
     const Element = document.querySelector(extractField) as HTMLElement;
+    console.log(`.dx-tabpanel-container .dx-tab-selected[role="tabpanel"] ${​​​​​​​extractField}​​​​​​​​​​​​​​`)
+    // const Element = document.querySelector(`.dx-tabpanel-container .dx-tab-selected[role="tabpanel"] ${​​​​​​​extractField}​​​​​​​​​​​​​​`) as HTMLElement;
 
     const Accordion = this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key);
 
@@ -348,6 +350,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChange({ addedItems }: { addedItems: Content[] }) {
+    this.resetCriteria();
     this.linkedOrders = [];
     this.validationGroup.instance.validate();
     if (!addedItems.length) return;
@@ -371,6 +374,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     };
     this.pushTab(shortOrder);
 
+  }
+
+  resetCriteria() {
+    this.formGroup.get('search').setValue(this.searchItems[0]);
   }
 
   onTitleRendered({ itemData, itemIndex }: {
