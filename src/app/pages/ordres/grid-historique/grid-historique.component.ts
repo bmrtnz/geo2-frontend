@@ -32,7 +32,8 @@ export class GridHistoriqueComponent implements OnInit {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.dataSource = ordresService.getDataSourceGrouped();
+    // this.dataSource = ordresService.getDataSourceGrouped(); // Groupé
+    this.dataSource = ordresService.getDataSource(); // Normal
     this.detailedFields = this.ordresService.model.getDetailedFields(2)
     .pipe(
       // Filtrage headers possibles columnchooser
@@ -47,7 +48,6 @@ export class GridHistoriqueComponent implements OnInit {
 
   ngOnInit() {
     this.enableFilters();
-    // this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
   }
 
   sortGrid() {

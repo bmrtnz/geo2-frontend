@@ -84,13 +84,13 @@
                       <dxi-validation-rule type="stringLength" max="13"></dxi-validation-rule>
                       <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                     </dx-validator>
-                    <dxi-button
+                    <!-- <dxi-button
                       name="help"
                       location="after"
                       [options]="helpBtnOptions">
-                    </dxi-button>
+                    </dxi-button> -->
                   </dx-text-box>
-                  <dx-popover
+                  <!-- <dx-popover
                     target="#help-1"
                     position="bottom"
                     [width]="300"
@@ -98,7 +98,7 @@
                     <div *dxTemplate="let data = model of 'content'">
                       Texte d'aide contextuelle
                     </div>
-                  </dx-popover>
+                  </dx-popover> -->
                 </div>
               </div>
               <!-- Secteur -->
