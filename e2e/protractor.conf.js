@@ -2,6 +2,8 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
+// exemple command test clients certifications: npm run e2e:no-serve -- --specs src/login** --specs src/tiers** --grep "(Login|Clients.*certifications)"
+
 const { SpecReporter } = require('jasmine-spec-reporter');
 
 /**

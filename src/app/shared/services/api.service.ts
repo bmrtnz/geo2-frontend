@@ -405,8 +405,11 @@ export abstract class ApiService implements OnDestroy {
 
           // Format object
           if (typeof value === 'object') {
-            const firstField = Object.entries(value).shift();
-            selector = `${selector}.${firstField.shift()}`;
+            const firstField = Object
+            .entries(value)
+            .filter(([key]) => key !== '__typename')
+            .shift();
+            selector = selector !== 'this' ? `${selector}.${firstField.shift()}` : firstField.shift();
             value = firstField.shift();
           }
 
