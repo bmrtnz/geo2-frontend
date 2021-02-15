@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GridNavigatorComponent } from 'app/shared/components/grid-navigator/grid-navigator.component';
 import { ApiService } from 'app/shared/services/api.service';
 import { DxDataGridComponent } from 'devextreme-angular';
-import { combineLatest, of } from 'rxjs';
-import { filter, map, take, tap } from 'rxjs/operators';
+import { combineLatest, of, Subject } from 'rxjs';
+import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 
 /**
  * Nested view main component
@@ -26,14 +26,20 @@ export interface NestedPart {
   templateUrl: './nested.component.html',
   styleUrls: ['./nested.component.scss']
 })
-export class NestedComponent {
+export class NestedComponent implements OnDestroy {
 
   @ViewChild(GridNavigatorComponent, { static: true }) gridNav: GridNavigatorComponent;
   @Output() dataGrid: DxDataGridComponent;
+  destroy = new Subject<boolean>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
   ) {}
+
+  ngOnDestroy() {
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
+  }
 
   onActivate(mainComponent: NestedMain & NestedPart) {
 
@@ -63,7 +69,7 @@ export class NestedComponent {
     // Rafraichissement datagrid list
     if (partComponent.refreshGrid) {
       partComponent.refreshGrid
-      .pipe(take(1))
+      .pipe(takeUntil(this.destroy))
       .subscribe(() => this.dataGrid.instance.refresh());
     }
 
