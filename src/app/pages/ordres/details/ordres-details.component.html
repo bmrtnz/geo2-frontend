@@ -340,6 +340,7 @@
                                                                         <div class="dx-field-label">{{ 'ordres-dateDepartPrevue' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                             <dx-date-box formControlName="dateDepartPrevue"
+                                                                            dateSerializationFormat="yyyy-MM-dd"
                                                                             type="date">
                                                                             <dx-validator name="{{ 'ordres-dateDepartPrevue' | localize }}">
                                                                                 <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -355,6 +356,7 @@
                                                                         <div class="dx-field-label">{{ 'ordres-dateLivraisonPrevue' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                             <dx-date-box formControlName="dateLivraisonPrevue"
+                                                                            dateSerializationFormat="yyyy-MM-dd"
                                                                             type="date">
                                                                             <dx-validator name="{{ 'ordres-dateLivraisonPrevue' | localize }}">
                                                                                 <dxi-validation-rule type="required"></dxi-validation-rule>
