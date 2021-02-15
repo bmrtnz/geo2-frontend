@@ -4,7 +4,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { Contact } from 'app/shared/models';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { TypeTiers } from 'app/shared/models/tier.model';
-import { AuthService } from 'app/shared/services';
+import { AuthService, LocalizationService } from 'app/shared/services';
 import { ContactsService } from 'app/shared/services/api/contacts.service';
 import { FluxService } from 'app/shared/services/api/flux.service';
 import { MoyenCommunicationService } from 'app/shared/services/api/moyens-communication.service';
@@ -14,6 +14,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contacts',
@@ -40,12 +41,20 @@ export class ContactsComponent implements OnInit, NestedPart {
     public fluxService: FluxService,
     public moyenCommunicationService: MoyenCommunicationService,
     private route: ActivatedRoute,
+    public localizeService: LocalizationService,
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {}
 
   ngOnInit() {
-    this.detailedFields = this.contactsService.model.getDetailedFields();
+    this.detailedFields = this.contactsService.model.getDetailedFields()
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field =>
+          !!(this.localizeService.localize('tiers-contacts-' + field.path.replace('.description', ''))).length);
+       }),
+    );
     this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
     this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
 
