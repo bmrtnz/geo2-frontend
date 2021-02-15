@@ -152,7 +152,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                 // On reprend le code client (si pas existant) pour le code entrepôt
                 const code = result.data.client.code.toUpperCase();
                 const entrepotsSource = this.entrepotsService.getDataSource();
-                this.pays.filter(['code', '=', code]);
                 entrepotsSource.load().then(res => {
                   if (!res.length) {
                     this.mandatoryCode = true;

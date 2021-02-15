@@ -1,6 +1,8 @@
 import { $, browser, by, element } from 'protractor';
 import { protractor } from 'protractor/built/ptor';
 
+const ARTICLE_TEST_ID = '091912'
+
 describe('Articles', () => {
 
   it('should navigate to list', async () => {
@@ -26,6 +28,8 @@ describe('Articles', () => {
   });
 
   it('should handle save with form', async () => {
+    await browser.get(`articles/${ARTICLE_TEST_ID}`);
+    await browser.wait(protractor.ExpectedConditions.visibilityOf($('.content form')), 10000);
     await $('dx-button[aria-label="Éditer"]').click();
     const textBox = $(`dx-text-box[formcontrolname="description"]`);
     await textBox.element(by.css('input')).click();

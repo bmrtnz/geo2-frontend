@@ -3,6 +3,9 @@ import { protractor } from 'protractor/built/ptor';
 
 const CLIENT_TEST_ID = '007528';
 const FOURNISSEUR_TEST_ID = '000344';
+const TRANSPORTEUR_TEST_ID = 'TEST-E2E';
+const LIEUPASSAGEAQUAI_TEST_ID = 'TEST-E2E';
+const ENTREPOT_TEST_ID = '014891';
 
 const withUpperCaseFirst = ([first, ...rest]: string) =>
   [first.toUpperCase(), ...rest].join('');
@@ -21,9 +24,18 @@ describe('Tiers', () => {
       id: FOURNISSEUR_TEST_ID,
       hasCertifications: true,
     },
-    { name: 'transporteurs' },
-    { name: 'lieux-passage-a-quai' },
-    { name: 'entrepots' },
+    {
+      name: 'transporteurs',
+      id: TRANSPORTEUR_TEST_ID,
+    },
+    {
+      name: 'lieux-passage-a-quai',
+      id: LIEUPASSAGEAQUAI_TEST_ID,
+    },
+    {
+      name: 'entrepots',
+      id: ENTREPOT_TEST_ID,
+    },
   ])
     describe(withUpperCaseFirst(name), () => {
 
@@ -57,6 +69,8 @@ describe('Tiers', () => {
       });
 
       it('should handle save with form', async () => {
+        await browser.get(`tiers/${name}/${id}`);
+        await browser.wait(protractor.ExpectedConditions.visibilityOf($('.content form')), 10000);
         await $('dx-button[aria-label="Éditer"]').click();
         const textBox = $(`dx-text-box[formcontrolname="raisonSocial"]`);
         await textBox.element(by.css('input')).click();
