@@ -13,8 +13,7 @@ import { PaysService } from 'app/shared/services/api/pays.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { from } from 'rxjs';
-import { mergeAll, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Transporteur } from '../../../../shared/models';
 import { TransporteursService } from '../../../../shared/services/api/transporteurs.service';
 

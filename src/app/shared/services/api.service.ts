@@ -2,12 +2,11 @@ import { OnDestroy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
-import ArrayStore from 'devextreme/data/array_store';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { from, Observable, Subject, Subscriber, Subscription } from 'rxjs';
-import { filter, map, mergeMap, take, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { from, Observable, Subject } from 'rxjs';
+import { filter, map, mergeMap, take, takeUntil } from 'rxjs/operators';
 import { Model } from '../models/model';
 
 const DEFAULT_KEY = 'id';
@@ -617,7 +616,6 @@ export abstract class ApiService implements OnDestroy {
       takeUntil(this.destroy),
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
-        fetchPolicy: 'no-cache',
         ...options,
       } as MutationOptions)),
       take(1),
