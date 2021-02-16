@@ -454,7 +454,7 @@
     "ordres-details-groupe-commentaires": "Commentaires",
     "ordres-details-groupe-log": "Log",
     "ordres-client": "Client",
-    "ordres-numero": "Numéro",
+    "ordres-numero": "Numéro d'ordre",
     "ordres-referenceClient": "Référence client",
     "ordres-ordre-referenceClient": "Référence client",
     "ordres-ordre-client-raisonSocial": "Client",
@@ -481,7 +481,7 @@
     "ordres-ordresnonclotures": "Ordres non clôturés",
     "ordres-commandesentransit": "Commandes en transit",
 
-    "rechOrdres-numero": "Numéro",
+    "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",
     "rechOrdres-referenceClient": "Référence client",
     "rechOrdres-dateDepartPrevue": "Départ",
