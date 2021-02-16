@@ -85,6 +85,11 @@ export class ContactsComponent implements OnInit, NestedPart {
     (event.data as Contact).typeTiers = this.typeTiers;
   }
 
+  // onSaved(event) {
+  //   this.contacts.reload();
+  //   this.dataGrid.instance.refresh();
+  // }
+
   onRowClick({ rowIndex }) {
     this.dataGrid.instance.editRow(rowIndex);
   }

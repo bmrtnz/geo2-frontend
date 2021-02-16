@@ -11,6 +11,7 @@
     [remoteOperations]="true"
     [allowColumnReordering]="true"
     [showBorders]="true"
+    dateSerializationFormat="yyyy-MM-dd"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
@@ -55,6 +56,7 @@
       [caption]="('tiers-contacts-' + field.name | localize) || field.name"
       [visible]="false"
       [allowEditing]="(field.name === 'valide' && authService.currentUser.accessGeoTiers) || (field.name !== 'valide' && field?.allowEditing !== false)"
+      [validationRules]="field.validationRules || {}"
       [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
     ></dxi-column>

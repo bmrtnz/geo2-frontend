@@ -8,7 +8,12 @@ import {Field, Model, ModelName} from './model';
 export class Contact extends Model {
   @Field({model: import('./moyen-communication.model')}) public moyenCommunication: MoyenCommunication;
   @Field({model: import('./flux.model')}) public flux: Flux;
-  @Field() public fluxComplement: string;
+  @Field({
+    validationRules: [{
+      type: 'stringLength',
+      max: 6,
+    }]
+  }) public fluxComplement: string;
   @Field() public fluxAccess1: string;
   @Field({asLabel: true}) public nom: string;
   @Field() public prenom: string;

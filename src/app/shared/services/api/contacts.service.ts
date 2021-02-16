@@ -31,7 +31,10 @@ export class ContactsService extends ApiService implements APIRead {
           type Response = { allContact: RelayPage<Contact> };
           const variables = this.mapLoadOptionsToVariables(options);
 
-          this.listenQuery<Response>(query, { variables }, res => {
+          this.listenQuery<Response>(query, {
+            variables,
+            fetchPolicy: 'network-only', // to work with editable dx-grid
+          }, res => {
             if (res.data && res.data.allContact)
               resolve(this.asInstancedListCount(res.data.allContact));
           });
