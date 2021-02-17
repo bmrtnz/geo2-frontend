@@ -34,6 +34,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     public gridConfiguratorService: GridConfiguratorService,
   ) {
     this.apiService = this.clientsService;
+
   }
 
   ngOnInit() {
