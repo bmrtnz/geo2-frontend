@@ -8172,7 +8172,7 @@
 }
 .dx-toast-content {
   color: rgba(255,255,255,.87);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   padding: 0 16px;
   border-radius: 0;
@@ -8192,7 +8192,13 @@
   display: none;
 }
 .dx-toast-message {
+  position: absolute;
+  display: inline-block;
   padding: 0;
+  left: 50%;
+  top: 50%;
+  text-align: center;
+  transform: translate(-50%,-50%);
 }
 .dx-toast-info {
   background-color: rgba(0,0,0,.87);
