@@ -13,12 +13,12 @@ export class GridNavigatorComponent {
   backBtnDisabled = true;
   @Input() dataGrid: DxDataGridComponent;
 
-  closest(elem, selector) {
-    for (; elem && elem !== document; elem = elem.parentNode) {
-      if (elem.matches(selector)) return elem;
-    }
-    return null;
-  }
+  // closest(elem, selector) {
+  //   for (; elem && elem !== document; elem = elem.parentNode) {
+  //     if (elem.matches(selector)) return elem;
+  //   }
+  //   return null;
+  // }
 
   constructor(
     public location: Location,
@@ -31,14 +31,14 @@ export class GridNavigatorComponent {
         this.backBtnDisabled = !/^\/nested\/.*details.*/.test(event.url);
     });
 
-    // Close columnchooser on outside click (non standard)
-    let that = this;
+    // // Close columnchooser on outside click (non standard)
+    // let that = this;
 
-    document.addEventListener('mousedown', e => {
-      let chooser = that.closest(e.target, ".dx-datagrid-column-chooser");
+    // document.addEventListener('mousedown', e => {
+    //   let chooser = that.closest(e.target, ".dx-datagrid-column-chooser");
 
-      if (!chooser) {that.dataGrid.instance.hideColumnChooser();}
-     });
+    //   if (!chooser) {that.dataGrid.instance.hideColumnChooser();}
+    //  });
 
   }
 
