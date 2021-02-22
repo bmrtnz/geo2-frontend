@@ -71,7 +71,6 @@ export class ArticlesService extends ApiService implements APIRead {
       takeUntil(this.destroy),
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
-        fetchPolicy: 'no-cache',
         variables,
       } as MutationOptions)),
       take(1),
