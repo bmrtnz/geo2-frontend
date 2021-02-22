@@ -173,31 +173,37 @@
                                         </div>
                                         
                                         <div *ngIf="!i" class="main-search-container">
-                                            <div class="dx-field">
-                                                <div class="dx-field-label">Rechercher un ordre</div>
-                                                <div class="dx-field-value">
-                                                    <!-- [(value)]="numero" -->
-                                                    <dx-autocomplete
-                                                        placeholder="Selon le critère ci-dessous..."
-                                                        [(value)]="numero"
-                                                        (onEnterKey)="findOrder($event)"
-                                                        (onKeyDown)="hideSearchResults()"
+                                            <dx-box direction="row">
+                                            <dxi-item [ratio]="12">
+                                                <div class="dx-field">
+                                                    <div class="dx-field-label">Rechercher</div>
+                                                    <div class="dx-field-value">
+                                                        <dx-autocomplete
+                                                            placeholder="Selon le critère ci-dessous..."
+                                                            [(value)]="numero"
+                                                            (onEnterKey)="findOrder($event)"
+                                                            (onKeyDown)="hideSearchResults()"
+                                                            >
+                                                        </dx-autocomplete>
+                                                    </div>
+                                                </div>
+                                            </dxi-item>
+                                            <dxi-item [ratio]="0.25"></dxi-item>
+                                            <dxi-item [ratio]="8">
+                                                <div class="dx-field">
+                                                    <div class="dx-field-label">{{ 'rechOrdres-critere' | localize }}</div>
+                                                        <div class="dx-field-value">
+                                                        <dx-select-box
+                                                            formControlName="search"
+                                                            [items]="searchItems"
+                                                            [displayExpr]="searchDisplayExpr"
+                                                            (valueChange)="changeSearchCriteria()"
                                                         >
-                                                    </dx-autocomplete>
+                                                        </dx-select-box>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="dx-field">
-                                            <div class="dx-field-label">{{ 'rechOrdres-critere' | localize }}</div>
-                                                <div class="dx-field-value">
-                                                <dx-select-box
-                                                    formControlName="search"
-                                                    [items]="searchItems"
-                                                    [displayExpr]="searchDisplayExpr"
-                                                    (valueChange)="changeSearchCriteria()"
-                                                >
-                                                </dx-select-box>
-                                                </div>
-                                            </div>
+                                            </dxi-item>
+                                            </dx-box>
                                         </div>
                                         <app-grid-suivi [filter]="filter" *ngIf="!i && showGridResults" (ordreSelected)="pushTab($event)"></app-grid-suivi>
                                         
