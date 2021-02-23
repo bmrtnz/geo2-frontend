@@ -96,7 +96,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.commentaires = commService.getComm();
     this.allContents = fakeOrdresService.getContents();
     this.contents = fakeOrdresService.getContents().slice(0, 1);
-    this.searchItems = ['numero', 'referenceClient', 'client.raisonSocial'];
+    this.searchItems = ['numero', 'numeroFacture', 'referenceClient', 'client.raisonSocial'];
   }
 
   ngOnInit() {
@@ -161,8 +161,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       'and',
       ['societe.id', '=', environment.societe.id],
       'and',
-      ['facture', '=', false],
-      'and',
+      // ['facture', '=', false],
+      // 'and',
       [criteria , 'contains', value]
     ];
 
