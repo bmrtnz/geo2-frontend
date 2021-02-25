@@ -12,3 +12,7 @@
         }
     }
 }
+
+::ng-deep .dx-datagrid-search-panel {
+    display:none;
+}
