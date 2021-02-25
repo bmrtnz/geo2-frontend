@@ -442,6 +442,7 @@
     "ordres-details-documents": "documents",
     "ordres-details-CQ": "C.Q.",
     "ordres-details-log": "log",
+    "ordres-details-numeroFacture": "Numéro de facture",
     "ordres-details-commentaires": "commentaires",
     "ordres-details-traitmasse": "Traitement en masse",
     "ordres-details-historiqueordres": "Historique ordres",
@@ -455,6 +456,7 @@
     "ordres-details-groupe-log": "Log",
     "ordres-client": "Client",
     "ordres-numero": "Numéro d'ordre",
+    "ordres-numeroFacture": "Numéro de facture",
     "ordres-referenceClient": "Référence client",
     "ordres-ordre-referenceClient": "Référence client",
     "ordres-ordre-client-raisonSocial": "Client",
@@ -485,6 +487,7 @@
     "rechOrdres-client-raisonSocial": "Client",
     "rechOrdres-referenceClient": "Référence client",
     "rechOrdres-dateDepartPrevue": "Départ",
+    "rechOrdres-numeroFacture": "Numéro de facture",
     "rechOrdres-dateLivraisonPrevue": "Livraison",
     "rechOrdres-critere": "Critère"
 
