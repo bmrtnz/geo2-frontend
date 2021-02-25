@@ -167,7 +167,12 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
         this.route.params
             .pipe(
-                tap(_ => this.formGroup.reset()),
+                tap(_ => {
+                    this.formGroup.reset();
+                    this.readOnlyMode = true;
+                    this.editing = false;
+                    this.cloneMode = false;
+                }),
                 switchMap(params => this.articlesService.getOne(params.id)),
             )
             .subscribe(res => {
