@@ -31,10 +31,10 @@ export class GridLignesComponent implements OnChanges {
     .pipe(
       // Filtrage headers possibles columnchooser
       map(fields => {
-        return fields.filter( field => {
-          // console.log('articles-' + field.path.replaceAll('.', '-').replace('.description', ''))
-        });
-          // !!(this.localizeService.localize('articles-' + field.path.replace('.description', '').replaceAll('.', '-'))).length);
+        return fields.filter( field => 
+        //   console.log('articles-' + field.path.replaceAll('.', '-'))
+        // });
+          !!(this.localizeService.localize('articles-' + field.path.replaceAll('.', '-'))).length);
       }),
     );
   }

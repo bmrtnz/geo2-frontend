@@ -511,6 +511,12 @@
       },
       {
         "visibleIndex": 1,
+        "dataField": "ordre.numero",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
         "dataField": "article.description",
         "dataType": "string",
         "visible": true

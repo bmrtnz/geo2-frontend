@@ -245,6 +245,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     onEspeceChange(event) {
+
         const filter = event.value ? ['espece.id', '=', event.value.id] : [];
 
         this.especes = this.especesService.getDataSource();
