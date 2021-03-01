@@ -231,6 +231,12 @@
                             <div class="dx-field-label">{{ 'articles-matierePremiere-codePlu' | localize }}</div>
                             <div class="dx-field-value" formGroupName="matierePremiere">
                                 <dx-text-box formControlName="codePlu" [readOnly]="readOnlyMode">
+                                    <dx-validator name="{{ 'articles-matierePremiere-codePlu' | localize }}">
+                                        <dxi-validation-rule
+                                            type="stringLength"
+                                            max="4"
+                                        ></dxi-validation-rule>
+                                    </dx-validator>
                                 </dx-text-box>
                             </div>
                         </div>
