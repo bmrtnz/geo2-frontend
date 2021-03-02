@@ -50,12 +50,11 @@ export class OrdresIndicateursComponent implements OnInit {
         console.log('this.filter = ["livre", "=", false];')
       }
       if (this.indicator === 'supervisionlivraison') {
-        if (this.authService.currentUser.limitationSecteur)
-          this.filter = [
-            ['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id],
-            'and',
-            ['codeClient', '<>', 'PREORDRE%'],
-          ];
+        this.filter = [['codeClient', '<>', 'PREORDRE%']];
+        if (this.authService.currentUser.limitationSecteur) {
+          this.filter.push('and');
+          this.filter.push(['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
+        }
       }
     });
   }
