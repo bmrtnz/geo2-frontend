@@ -53,7 +53,11 @@ export class GridSuiviComponent implements OnInit {
       'and',
       ['facture', '=', false]
     ];
-    if (this.filter) filters = [...filters, 'and', this.filter];
+
+    if (this.filter) filters = this.filter;
+
+    console.log(filters)
+
     this.dataSource.filter(filters);
     this.dataSource.reload();
   }
