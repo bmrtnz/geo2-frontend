@@ -1,4 +1,4 @@
-import { OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
@@ -85,6 +85,7 @@ export interface APIPersist {
     Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
+@Injectable()
 export abstract class ApiService implements OnDestroy {
 
   pageSize = DEFAULT_PAGE_SIZE;
@@ -97,7 +98,7 @@ export abstract class ApiService implements OnDestroy {
 
   constructor(
     protected apollo: Apollo,
-    model: typeof Model & (new () => Model),
+    @Inject('model') model: typeof Model & (new () => Model),
   ) {
     this.model = model;
     this.keyField = this.model.getKeyField() || DEFAULT_KEY;
