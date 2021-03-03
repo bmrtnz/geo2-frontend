@@ -201,7 +201,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     onSubmit() {
-
+        
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
             if (this.cloneMode) {
