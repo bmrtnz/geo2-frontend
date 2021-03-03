@@ -41,7 +41,7 @@ export class OrdresAccueilComponent implements OnDestroy {
       .pipe(
         tap(_ => this.indicators = []),
         switchMap(([, indicators]) => from(indicators)),
-        map(indicator => ({ ...indicator, loading: !!indicator.filter })),
+        map(indicator => ({ ...indicator, loading: !!indicator.tileCountFilter})),
         tap(indicator => this.indicators.push(indicator)),
         filter(indicator => indicator.loading),
         mergeMap(async indicator => {
@@ -49,7 +49,7 @@ export class OrdresAccueilComponent implements OnDestroy {
           dataSource.filter([
             ['societe.id', '=', environment.societe.id],
             'and',
-            indicator.filter,
+            indicator.tileCountFilter,
           ]);
           await dataSource.load();
           const value = indicator.number ?

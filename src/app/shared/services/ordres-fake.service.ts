@@ -21,7 +21,7 @@ export class Indicator {
   subParameter: string;
   goTo: string;
   goToParams?: {};
-  filter?: any[];
+  tileCountFilter?: any[];
   tileBkg: string;
   indicatorIcon: string;
   warningIcon: string;
@@ -52,7 +52,7 @@ const indicators: Indicator[] = [{
   subParameter: 'à facturer',
   goTo: '/ordres/indicateurs',
   goToParams: {filtre: 'bonsafacturer'},
-  filter: ['bonAFacturer', '=', true],
+  tileCountFilter: ['bonAFacturer', '=', true],
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning'
@@ -71,7 +71,7 @@ const indicators: Indicator[] = [{
   parameter: 'Ordres',
   subParameter: 'non clôturés',
   goToParams: {filtre: 'ordresnonclotures'},
-  filter: ['livre', '=', false],
+  tileCountFilter: ['livre', '=', false],
   goTo: '/ordres/indicateurs',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',

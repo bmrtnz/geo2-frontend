@@ -1,4 +1,5 @@
 import {Client} from './client.model';
+import Entrepot from './entrepot.model';
 import {Field, Model, ModelName} from './model';
 import {OrdreLigne} from './ordre-ligne.model';
 import Personne from './personne.model';
@@ -20,6 +21,7 @@ export class Ordre extends Model {
   @Field({ model: import('./personne.model') }) public commercial?: Personne;
   @Field({ model: import('./personne.model') }) public assistante?: Personne;
   @Field({ model: import('./transporteur.model') }) public transporteur?: Transporteur;
+  @Field({ model: import('./entrepot.model') }) public entrepot?: Entrepot;
   @Field({ dataType: 'localdate' }) public dateDepartPrevue?: string;
   @Field({ dataType: 'localdate' }) public dateLivraisonPrevue?: string;
   @Field() public venteACommission?: boolean;
