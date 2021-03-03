@@ -24,6 +24,7 @@ import {
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
 import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
+import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 
 
 @NgModule({
@@ -57,6 +58,9 @@ import { GridHistoriqueComponent } from './grid-historique/grid-historique.compo
     DxValidationGroupModule,
     DxLoadIndicatorModule,
   ],
-  providers: [DatePipe],
+  providers: [
+    OrdresIndicatorsService,
+    DatePipe,
+  ],
 })
 export class OrdresModule { }

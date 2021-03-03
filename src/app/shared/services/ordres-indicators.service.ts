@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import Ordre from '../models/ordre.model';
+import { DatePipe } from '@angular/common';
+import { AuthService } from './auth.service';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -20,8 +22,8 @@ export class Indicator {
   parameter: string;
   subParameter: string;
   goTo: string;
-  goToParams?: {};
-  tileCountFilter?: any[];
+  goToParams?: {filtre: string};
+  filter?: any[];
   tileBkg: string;
   indicatorIcon: string;
   warningIcon: string;
@@ -52,7 +54,6 @@ const indicators: Indicator[] = [{
   subParameter: 'à facturer',
   goTo: '/ordres/indicateurs',
   goToParams: {filtre: 'bonsafacturer'},
-  tileCountFilter: ['bonAFacturer', '=', true],
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning'
@@ -71,7 +72,6 @@ const indicators: Indicator[] = [{
   parameter: 'Ordres',
   subParameter: 'non clôturés',
   goToParams: {filtre: 'ordresnonclotures'},
-  tileCountFilter: ['livre', '=', false],
   goTo: '/ordres/indicateurs',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
@@ -124,11 +124,56 @@ const indicators: Indicator[] = [{
 .map( indicator => ({...indicator, loading: false}));
 
 @Injectable()
-export class FakeOrdresService {
+export class OrdresIndicatorsService {
+
+  private indicators = indicators;
+
+  constructor(
+    private datePipe: DatePipe,
+    private authService: AuthService,
+  ) {
+    this.indicators = this.indicators.map(indicator => {
+
+      // Bon a facturer
+      if (indicator.id === 2) {
+        indicator.filter = [
+          ['bonAFacturer', '=', false],
+          'and',
+          ['client.usageInterne', '<>', true],
+          'and',
+          ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
+        ];
+        indicator.filter = this.handleSecteurLimitation(indicator.filter);
+      }
+
+      // Ordres non cloturés
+      if (indicator.id === 4) {
+        indicator.filter = [
+          ['livre', '=', false],
+        ];
+      }
+
+      return indicator;
+    });
+  }
+
+  handleSecteurLimitation(filter: any[]) {
+    if (this.authService.currentUser.limitationSecteur) {
+      filter.push('and');
+      filter.push(['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
+    }
+    return filter;
+  }
+
   getContents() {
     return contents;
   }
   getIndicators(): Indicator[] {
-    return indicators;
+    return this.indicators;
+  }
+  getIndicatorByName(name: string) {
+    return this.indicators.find(i => i?.goToParams?.filtre === name);
   }
 }

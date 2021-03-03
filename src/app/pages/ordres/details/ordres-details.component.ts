@@ -8,7 +8,7 @@ import { ClientsService } from 'app/shared/services/api/clients.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { Comm, CommService, Log, LogService } from 'app/shared/services/log.service';
-import { Content, FakeOrdresService, INDEX_TAB } from 'app/shared/services/ordres-fake.service';
+import { Content, OrdresIndicatorsService, INDEX_TAB } from 'app/shared/services/ordres-indicators.service';
 import { DxAccordionComponent, DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
@@ -25,7 +25,7 @@ let self;
   selector: 'app-ordres-details',
   templateUrl: './ordres-details.component.html',
   styleUrls: ['./ordres-details.component.scss'],
-  providers: [LogService, CommService, FakeOrdresService]
+  providers: [LogService, CommService, OrdresIndicatorsService]
 })
 
 export class OrdresDetailsComponent implements OnInit, OnDestroy {
@@ -81,7 +81,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     logService: LogService,
-    fakeOrdresService: FakeOrdresService,
+    ordresIndicatorsService: OrdresIndicatorsService,
     public localizeService: LocalizationService,
     private ordresService: OrdresService,
     public clientsService: ClientsService,
@@ -94,8 +94,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.ordres = ordresService.getDataSource();
     this.logs = logService.getLog();
     this.commentaires = commService.getComm();
-    this.allContents = fakeOrdresService.getContents();
-    this.contents = fakeOrdresService.getContents().slice(0, 1);
+    this.allContents = ordresIndicatorsService.getContents();
+    this.contents = ordresIndicatorsService.getContents().slice(0, 1);
     this.searchItems = ['numero', 'numeroFacture', 'referenceClient', 'client.raisonSocial'];
   }
 

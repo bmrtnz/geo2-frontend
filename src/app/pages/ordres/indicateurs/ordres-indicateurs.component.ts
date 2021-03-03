@@ -8,7 +8,7 @@ import { AuthService, TransporteursService } from '../../../shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { DatePipe } from '@angular/common';
+import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 
 @Component({
   selector: 'app-ordres-indicateurs',
@@ -32,7 +32,7 @@ export class OrdresIndicateursComponent implements OnInit {
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
     public authService: AuthService,
-    private datePipe: DatePipe,
+    private ordresIndicatorsService: OrdresIndicatorsService,
   ) {
     // this.apiService = transporteursService;
    }
@@ -47,19 +47,7 @@ export class OrdresIndicateursComponent implements OnInit {
       const dateTomorrow = new Date();
       dateTomorrow.setDate(dateTomorrow.getDate() + 1);
       if (this.indicator === 'bonsafacturer') {
-        this.filter = [
-          ['bonAFacturer', '=', false],
-          'and',
-          ['client.usageInterne', '<>', true],
-          'and',
-          ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
-          'and',
-          ['dateLivraisonPrevue', '<', this.datePipe.transform(dateTomorrow.valueOf(), 'yyyy-MM-dd')],
-        ];
-        if (this.authService.currentUser.limitationSecteur) {
-          this.filter.push('and');
-          this.filter.push(['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
-        }
+        this.filter = this.ordresIndicatorsService.getIndicatorByName(this.indicator).filter;
       }
       if (this.indicator === 'ordresnonclotures') {
         this.filter = [['livre', '=', false]];
