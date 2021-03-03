@@ -44,15 +44,9 @@ export class OrdresIndicateursComponent implements OnInit {
     this.route.queryParams.subscribe(res => {
       this.options = res;
       this.indicator = res.filtre;
-      const dateTomorrow = new Date();
-      dateTomorrow.setDate(dateTomorrow.getDate() + 1);
-      if (this.indicator === 'bonsafacturer') {
-        this.filter = this.ordresIndicatorsService.getIndicatorByName(this.indicator).filter;
-      }
-      if (this.indicator === 'ordresnonclotures') {
-        this.filter = [['livre', '=', false]];
-        console.log('this.filter = ["livre", "=", false];')
-      }
+
+      this.filter = this.ordresIndicatorsService.getIndicatorByName(this.indicator).filter;
+
       if (this.indicator === 'supervisionlivraison') {
         this.filter = [['codeClient', '<>', 'PREORDRE%']];
         if (this.authService.currentUser.limitationSecteur) {

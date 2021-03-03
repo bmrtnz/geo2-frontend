@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import Ordre from '../models/ordre.model';
 import { DatePipe } from '@angular/common';
 import { AuthService } from './auth.service';
+import { environment } from 'environments/environment';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -134,9 +135,18 @@ export class OrdresIndicatorsService {
   ) {
     this.indicators = this.indicators.map(indicator => {
 
+      // Filtres communs
+      indicator.filter = [
+        ['valide', '=', true],
+        'and',
+        ['societe.id', '=', environment.societe.id],
+      ];
+
       // Bon a facturer
       if (indicator.id === 2) {
         indicator.filter = [
+          ...indicator.filter,
+          'and',
           ['bonAFacturer', '=', false],
           'and',
           ['client.usageInterne', '<>', true],
@@ -151,6 +161,8 @@ export class OrdresIndicatorsService {
       // Ordres non cloturés
       if (indicator.id === 4) {
         indicator.filter = [
+          ...indicator.filter,
+          'and',
           ['livre', '=', false],
         ];
       }
