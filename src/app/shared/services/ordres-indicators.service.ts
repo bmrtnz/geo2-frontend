@@ -63,7 +63,8 @@ const indicators: Indicator[] = [{
   number: '4',
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
-  goTo: '',
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'clientsdepassementencours'},
   tileBkg: '#4199B4',
   indicatorIcon: 'user',
   warningIcon: 'material-icons warning'
@@ -158,12 +159,29 @@ export class OrdresIndicatorsService {
         indicator.filter = this.handleSecteurLimitation(indicator.filter);
       }
 
+      // Ordres clients depassement en cours
+      if (indicator.id === 3) {
+        indicator.filter = [
+          ...indicator.filter,
+        ];
+      }
+
       // Ordres non cloturés
       if (indicator.id === 4) {
         indicator.filter = [
           ...indicator.filter,
           'and',
-          ['livre', '=', false],
+          ['logistiques.expedieStation', '<>', true],
+          'and',
+          ['client.usageInterne', '<>', true],
+          'and',
+          ['client.detailAutomatique', '=', true],
+          'and',
+          ['logistiques.dateDepartPrevueFournisseur', '=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
+          'and',
+          ['lignes.valide', '=', true],
         ];
       }
 
