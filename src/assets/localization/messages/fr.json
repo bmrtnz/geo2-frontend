@@ -39,6 +39,7 @@
     "btn-confirm": "Confirmer",
     "btn-close": "Clôturer",
     "btn-invoice": "Passer \"bon à facturer\"",
+    "btn-envoiBL": "Envoyer automatiquement les BL",
   
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
@@ -485,6 +486,7 @@
     "ordres-ordresnonconfirmes": "Ordres non confirmés",
     "ordres-ordresnonclotures": "Ordres non clôturés",
     "ordres-commandesentransit": "Commandes en transit",
+    "ordres-periodejours": "Sur une période rétroactive de",
 
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",
@@ -492,7 +494,8 @@
     "rechOrdres-dateDepartPrevue": "Départ",
     "rechOrdres-numeroFacture": "Numéro de facture",
     "rechOrdres-dateLivraisonPrevue": "Livraison",
-    "rechOrdres-critere": "Critère"
+    "rechOrdres-critere": "Critère",
+    "rechOrdres-secteurCommercial": "Secteur"
 
   }
 }

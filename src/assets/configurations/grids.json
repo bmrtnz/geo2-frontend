@@ -464,6 +464,12 @@
         "dataField": "dateLivraisonPrevue",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "secteurCommercial.description",
+        "dataType": "string",
+        "visible": true
       }
     ]
   },

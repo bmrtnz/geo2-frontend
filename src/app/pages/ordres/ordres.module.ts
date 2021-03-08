@@ -18,7 +18,7 @@ import {
   DxPopoverModule, DxSelectBoxModule,
   DxSortableModule, DxTabPanelModule,
   DxTagBoxModule,
-  DxTextAreaModule, DxTextBoxModule,
+  DxTextAreaModule, DxTextBoxModule, DxNumberBoxModule,
   DxTileViewModule, DxValidationGroupModule, DxValidatorModule
 } from 'devextreme-angular';
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
@@ -33,6 +33,7 @@ import { GridHistoriqueComponent } from './grid-historique/grid-historique.compo
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    DxNumberBoxModule,
     DxFormModule,
     DxTagBoxModule,
     DxDataGridModule,

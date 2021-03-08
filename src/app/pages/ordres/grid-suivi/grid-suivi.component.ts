@@ -34,9 +34,9 @@ export class GridSuiviComponent implements OnInit {
       // Filtrage headers possibles columnchooser
       map(fields => {
         return fields.filter( field => 
-        //   console.log('ordres-' + field.path.replaceAll('.', '-').replace('.description', ''))
+        //   console.log('rechOrdres-' + field.path.replaceAll('.', '-').replace('.description', '')))
         // });
-          !!(this.localizeService.localize('rechOrdres-' + field.path.replaceAll('.', '-').replace('.description', ''))).length);
+          !!(this.localizeService.localize('rechOrdres-' + field.path.replaceAll('.', '-').replace('-description', ''))).length);
       }),
     );
   }
@@ -55,8 +55,6 @@ export class GridSuiviComponent implements OnInit {
     ];
 
     if (this.filter) filters = this.filter;
-
-    console.log(filters)
 
     this.dataSource.filter(filters);
     this.dataSource.reload();
