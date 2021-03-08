@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Event as NavigationEvent, NavigationEnd, Router } from '@angular/router';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
-import { FakeOrdresService, Indicator } from 'app/shared/services/ordres-fake.service';
+import { OrdresIndicatorsService, Indicator } from 'app/shared/services/ordres-indicators.service';
 import { DxTagBoxComponent } from 'devextreme-angular';
 import { environment } from 'environments/environment';
 import { combineLatest, from, Observable, Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import { filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators
   selector: 'app-ordres-accueil',
   templateUrl: './ordres-accueil.component.html',
   styleUrls: ['./ordres-accueil.component.scss'],
-  providers: [FakeOrdresService]
+  providers: [OrdresIndicatorsService]
 })
 export class OrdresAccueilComponent implements OnDestroy {
 
@@ -23,11 +23,11 @@ export class OrdresAccueilComponent implements OnDestroy {
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
 
   constructor(
-    fakeOrdresService: FakeOrdresService,
+    ordresIndicatorsService: OrdresIndicatorsService,
     private ordresService: OrdresService,
     private router: Router,
   ) {
-    this.allIndicators = fakeOrdresService.getIndicators();
+    this.allIndicators = ordresIndicatorsService.getIndicators();
 
     const navigationEndEvent = this.router.events
       .pipe(
@@ -35,13 +35,13 @@ export class OrdresAccueilComponent implements OnDestroy {
       );
 
     const selectIndicators = this.indicatorsChange
-      .pipe(startWith(fakeOrdresService.getIndicators()));
+      .pipe(startWith(ordresIndicatorsService.getIndicators()));
 
     this.indicatorsSubscription = combineLatest([navigationEndEvent, selectIndicators])
       .pipe(
         tap(_ => this.indicators = []),
         switchMap(([, indicators]) => from(indicators)),
-        map(indicator => ({ ...indicator, loading: !!indicator.filter })),
+        map(indicator => ({ ...indicator, loading: !!indicator.filter})),
         tap(indicator => this.indicators.push(indicator)),
         filter(indicator => indicator.loading),
         mergeMap(async indicator => {

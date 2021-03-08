@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FakeOrdresService } from './ordres-fake.service';
+import { OrdresIndicatorsService } from './ordres-indicators.service';
 
 describe('OrdresFakeService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      FakeOrdresService,
+      OrdresIndicatorsService,
     ],
   }));
 
   it('should be created', () => {
-    const service: FakeOrdresService = TestBed.inject(FakeOrdresService);
+    const service: OrdresIndicatorsService = TestBed.inject(OrdresIndicatorsService);
     expect(service).toBeTruthy();
   });
 });

@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import Ordre from '../models/ordre.model';
+import { DatePipe } from '@angular/common';
+import { AuthService } from './auth.service';
+import { environment } from 'environments/environment';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -20,7 +23,7 @@ export class Indicator {
   parameter: string;
   subParameter: string;
   goTo: string;
-  goToParams?: {};
+  goToParams?: {filtre: string};
   filter?: any[];
   tileBkg: string;
   indicatorIcon: string;
@@ -52,7 +55,6 @@ const indicators: Indicator[] = [{
   subParameter: 'à facturer',
   goTo: '/ordres/indicateurs',
   goToParams: {filtre: 'bonsafacturer'},
-  filter: ['bonAFacturer', '=', true],
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning'
@@ -61,7 +63,8 @@ const indicators: Indicator[] = [{
   number: '4',
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
-  goTo: '',
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'clientsdepassementencours'},
   tileBkg: '#4199B4',
   indicatorIcon: 'user',
   warningIcon: 'material-icons warning'
@@ -71,7 +74,6 @@ const indicators: Indicator[] = [{
   parameter: 'Ordres',
   subParameter: 'non clôturés',
   goToParams: {filtre: 'ordresnonclotures'},
-  filter: ['livre', '=', false],
   goTo: '/ordres/indicateurs',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
@@ -124,11 +126,93 @@ const indicators: Indicator[] = [{
 .map( indicator => ({...indicator, loading: false}));
 
 @Injectable()
-export class FakeOrdresService {
+export class OrdresIndicatorsService {
+
+  private indicators = indicators;
+
+  constructor(
+    private datePipe: DatePipe,
+    private authService: AuthService,
+  ) {
+    this.indicators = this.indicators.map(indicator => {
+
+      // Filtres communs
+      indicator.filter = [
+        ['valide', '=', true],
+        'and',
+        ['societe.id', '=', environment.societe.id],
+      ];
+
+      // Supervision livraison
+      if (indicator.id === 1) {
+        indicator.filter = [
+          ...indicator.filter,
+          'and',
+          ['codeClient', '<>', 'PREORDRE%']];
+
+      }
+
+      // Bon a facturer
+      if (indicator.id === 2) {
+        indicator.filter = [
+          ...indicator.filter,
+          'and',
+          ['bonAFacturer', '=', false],
+          'and',
+          ['client.usageInterne', '<>', true],
+          'and',
+          ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
+        ];
+        indicator.filter = this.handleSecteurLimitation(indicator.filter);
+      }
+
+      // Ordres clients depassement en cours
+      if (indicator.id === 3) {
+        indicator.filter = [
+          ...indicator.filter,
+        ];
+      }
+
+      // Ordres non cloturés
+      if (indicator.id === 4) {
+        indicator.filter = [
+          ...indicator.filter,
+          'and',
+          ['logistiques.expedieStation', '<>', true],
+          'and',
+          ['client.usageInterne', '<>', true],
+          'and',
+          ['client.detailAutomatique', '=', true],
+          'and',
+          ['logistiques.dateDepartPrevueFournisseur', '=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
+          'and',
+          ['lignes.valide', '=', true],
+        ];
+      }
+
+      return indicator;
+    });
+  }
+
+  handleSecteurLimitation(filter: any[]) {
+    if (this.authService.currentUser.limitationSecteur) {
+      filter.push('and');
+      filter.push(['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
+    }
+    return filter;
+  }
+
   getContents() {
     return contents;
   }
   getIndicators(): Indicator[] {
-    return indicators;
+    return this.indicators;
+  }
+  getIndicatorByName(name: string) {
+    return this.indicators.find(i => i?.goToParams?.filtre === name);
   }
 }

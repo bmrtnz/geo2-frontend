@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
@@ -24,6 +24,7 @@ import {
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
 import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
+import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 
 
 @NgModule({
@@ -57,6 +58,10 @@ import { GridHistoriqueComponent } from './grid-historique/grid-historique.compo
     DxDateBoxModule,
     DxValidationGroupModule,
     DxLoadIndicatorModule,
-  ]
+  ],
+  providers: [
+    OrdresIndicatorsService,
+    DatePipe,
+  ],
 })
 export class OrdresModule { }
