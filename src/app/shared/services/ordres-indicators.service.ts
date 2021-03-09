@@ -143,6 +143,15 @@ export class OrdresIndicatorsService {
         ['societe.id', '=', environment.societe.id],
       ];
 
+      // Supervision livraison
+      if (indicator.id === 1) {
+        indicator.filter = [
+          ...indicator.filter,
+          'and',
+          ['codeClient', '<>', 'PREORDRE%']];
+
+      }
+
       // Bon a facturer
       if (indicator.id === 2) {
         indicator.filter = [

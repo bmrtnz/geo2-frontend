@@ -41,7 +41,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('rechOrdres-' + field.path.replaceAll('.', '-').replace('.description', '') | localize) || field.name"
+      [caption]="('rechOrdres-' + field.path.replaceAll('.', '-').replace('-description', '') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

@@ -5,6 +5,58 @@
 </h2>
 
 <div class="content-block">
+
+    <dx-box>
+        <dxi-item [ratio]="4">
+
+            <!-- Secteurs -->
+            <div class="dx-field" *ngIf="indicator == 'supervisionlivraison'">
+                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box #toto
+                        [dataSource]="secteurs"
+                        displayExpr="description"
+                        [searchEnabled]="true"
+                        searchExpr="description"
+                        (valueChange)="onSecteurChange($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+
+        </dxi-item>
+        <dxi-item [ratio]="1"></dxi-item>
+        <dxi-item [ratio]="2">
+            <!-- Différence date -->
+            <div  class="dx-field">
+                <div class="dx-field-value" style="width:20px">
+                  <dx-check-box
+                    alignment = "right"
+                    [value]="true"
+                  ></dx-check-box>
+                </div>
+                <div class="dx-field-label" style="width:225px;margin-left:10px">{{ 'ordres-periodejours' | localize }}</div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
+        <dxi-item [ratio]="4">
+            <div class="dx-field">
+                <div class="dx-field-value" style="width:50px">
+                    <dx-number-box
+                        alignment = "center"
+                        [value]="1"
+                        [min]="0"
+                        [max]="365"
+                        [showSpinButtons]="true"
+                    ></dx-number-box>
+                </div>
+                <div class="dx-field-label">jours</div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="4">
+            <dx-button class="upperButton" type="default" text="{{ 'btn-envoiBL' | localize }}" (onClick)="onConfirm()"></dx-button>
+        </dxi-item>
+    </dx-box>   
+    <br>
     <app-grid-suivi [filter]="filter" (ordreSelected)="onRowDblClick($event)"></app-grid-suivi>
 </div>
   
