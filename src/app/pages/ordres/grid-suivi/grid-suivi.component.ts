@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -18,6 +19,7 @@ export class GridSuiviComponent implements OnInit {
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
   @Input() public filter: [];
+  @ViewChild(DxDataGridComponent, {static: false}) datagrid:DxDataGridComponent;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -44,7 +46,6 @@ export class GridSuiviComponent implements OnInit {
   ngOnInit() {
     this.enableFilters();
   }
-
   enableFilters() {
     let filters = [
       ['valide', '=', true],

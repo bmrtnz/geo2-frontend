@@ -24,36 +24,36 @@
             </div>
 
         </dxi-item>
-        <dxi-item [ratio]="1"></dxi-item>
-        <dxi-item [ratio]="2">
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="1.5">
             <!-- Différence date -->
-            <div  class="dx-field">
+            <div  class="dx-field daysDiffCheckbox">
                 <div class="dx-field-value" style="width:20px">
                   <dx-check-box
                     alignment = "right"
                     [value]="true"
                   ></dx-check-box>
                 </div>
-                <div class="dx-field-label" style="width:225px;margin-left:10px">{{ 'ordres-periodejours' | localize }}</div>
+                <div class="dx-field-label diffQty">{{ 'ordres-differenceQuantites' | localize }}</div>
             </div>
         </dxi-item>
-        <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="4">
             <div class="dx-field">
-                <div class="dx-field-value" style="width:50px">
+                <div class="dx-field-label days">Sur</div>
+                <div class="dx-field-value daysNumber">
                     <dx-number-box
                         alignment = "center"
                         [value]="1"
-                        [min]="0"
-                        [max]="365"
+                        [min]="1"
+                        [max]="9"
                         [showSpinButtons]="true"
                     ></dx-number-box>
                 </div>
-                <div class="dx-field-label">jours</div>
+                <div class="dx-field-label days">jour(s)</div>
             </div>
         </dxi-item>
         <dxi-item [ratio]="4">
-            <dx-button class="upperButton" type="default" text="{{ 'btn-envoiBL' | localize }}" (onClick)="onConfirm()"></dx-button>
+            <dx-button class="upperButton" type="default" text="{{ 'btn-envoiBL' | localize }}" (onClick)="autoSendDeliveryNotes()"></dx-button>
         </dxi-item>
     </dx-box>   
     <br>

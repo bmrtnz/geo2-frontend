@@ -13,6 +13,7 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
+import { DatePipe, SlicePipe } from '@angular/common';
 
 @Component({
   selector: 'app-ordres-indicateurs',
@@ -26,6 +27,8 @@ export class OrdresIndicateursComponent implements OnInit {
   secteurs: DataSource;
   indicator: string;
   filter: any;
+  a: any;
+  basicFilter: any;
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   rowSelected: boolean;
@@ -38,6 +41,7 @@ export class OrdresIndicateursComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private datePipe: DatePipe,
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -60,10 +64,11 @@ export class OrdresIndicateursComponent implements OnInit {
       this.indicator = res.filtre;
 
       this.filter = this.ordresIndicatorsService.getIndicatorByName(this.indicator).filter;
+      this.a = this.filter;
 
     });
 
-    // console.log(this.dxSelectBoxComponent.instance);
+    console.log(this.filter);
     
   }
 
@@ -78,19 +83,36 @@ export class OrdresIndicateursComponent implements OnInit {
 
   onSecteurChange(e) {
 
-    if (this.indicator === 'supervisionlivraison') {
-      if (this.authService.currentUser.limitationSecteur) {
-        this.filter.push('and');
-        this.filter.push(['secteurCommercial.id', '=', e.id ? e.id : this.authService.currentUser.secteurCommercial.id]);
-      } else {
-        if (e.id) {
+    console.log('this.a : '+this.a)
+    console.log('this.a.slice(0) : '+this.a.slice(0))
+    console.log('this.filter before : '+this.filter);
+    this.filter = this.a;
+
+    if (e) {
+      if (this.indicator === 'supervisionlivraison') {
+        if (this.authService.currentUser.limitationSecteur) {
           this.filter.push('and');
-          this.filter.push(['secteurCommercial.id', '=', e.id]);
+          this.filter.push(['secteurCommercial.id', '=', e.id ? e.id : this.authService.currentUser.secteurCommercial.id]);
+        } else {
+          if (e.id) {
+            this.filter.push('and');
+            this.filter.push(['secteurCommercial.id', '=', e.id]);
+          }
         }
       }
     }
+    // this.filter.push(
+    // 'and',
+    // ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+    // 'and',
+    // ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
+
+    console.log('this.filter after : '+this.filter);
     this.gridSuiviComponent.reload();
 
+  }
+
+  autoSendDeliveryNotes() {
   }
 
   onConfirm() {

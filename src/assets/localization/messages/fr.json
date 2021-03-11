@@ -486,7 +486,7 @@
     "ordres-ordresnonconfirmes": "Ordres non confirmés",
     "ordres-ordresnonclotures": "Ordres non clôturés",
     "ordres-commandesentransit": "Commandes en transit",
-    "ordres-periodejours": "Sur une période rétroactive de",
+    "ordres-differenceQuantites": "Différence sur expédition et/ou sans détail client",
 
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",
