@@ -8,6 +8,11 @@ import {Secteur} from './secteur.model';
 import {Societe} from './societe.model';
 import Transporteur from './transporteur.model';
 
+export enum FactureAvoir {
+  FACTURE = 'F',
+  AVOIR = 'A',
+}
+
 @ModelName('Ordre')
 export class Ordre extends Model {
 
@@ -33,6 +38,8 @@ export class Ordre extends Model {
   @Field() public livre?: boolean;
   @Field() public instructionsLogistiques?: string;
   @Field() public codeClient?: string;
+  @Field() public version?: string;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public factureAvoir?: FactureAvoir;
 
 }
 

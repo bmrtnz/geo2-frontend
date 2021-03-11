@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Ordre from '../models/ordre.model';
+import Ordre, { FactureAvoir } from '../models/ordre.model';
 import { DatePipe } from '@angular/common';
 import { AuthService } from './auth.service';
 import { environment } from 'environments/environment';
@@ -191,6 +191,17 @@ export class OrdresIndicatorsService {
           ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
           'and',
           ['lignes.valide', '=', true],
+        ];
+      }
+
+      // Ordres non confirmés
+      if (indicator.id === 5) {
+        indicator.filter = [
+          ...indicator.filter,
+          'and',
+          ['version', '<>', 'null'],
+          'and',
+          ['factureAvoir', '=', FactureAvoir.AVOIR],
         ];
       }
 
