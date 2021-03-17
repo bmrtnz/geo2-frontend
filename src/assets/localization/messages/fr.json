@@ -487,6 +487,10 @@
     "ordres-ordresnonclotures": "Ordres non clôturés",
     "ordres-commandesentransit": "Commandes en transit",
     "ordres-differenceQuantites": "Différence sur expédition et/ou sans détail client",
+    "ordres-entrepôt": "Entrepôt",
+    "ordres-periode": "période",
+    "ordres-du": "du",
+    "ordres-au": "au",  
 
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",

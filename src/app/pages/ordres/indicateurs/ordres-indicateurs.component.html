@@ -56,6 +56,133 @@
             <dx-button class="upperButton" type="default" text="{{ 'btn-envoiBL' | localize }}" (onClick)="autoSendDeliveryNotes()"></dx-button>
         </dxi-item>
     </dx-box>   
+    <dx-box *ngIf="indicator == 'bonsafacturer'">
+        <dxi-item [ratio]="3">
+
+            <!-- Secteurs -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [dataSource]="secteurs"
+                        displayExpr="description"
+                        [searchEnabled]="true"
+                        searchExpr="description"
+                        (valueChange)="onSecteurChange($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+            <!-- Client -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [dataSource]="clients"
+                        displayExpr="raisonSocial"
+                        [searchEnabled]="true"
+                        searchExpr="raisonSocial"
+                        (valueChange)="onSecteurChange($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+            <!-- Entrepôt -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-entrepôt' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [dataSource]="entrepot"
+                        displayExpr="raisonSocial"
+                        [searchEnabled]="true"
+                        searchExpr="raisonSocial"
+                        (valueChange)="onSecteurChange($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+            <!-- Commercial -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [dataSource]="commercial"
+                        displayExpr="nomUtilisateur"
+                        [searchEnabled]="true"
+                        searchExpr="nomUtilisateur"
+                        (valueChange)="onSecteurChange($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+        </dxi-item>
+
+    </dx-box>
+    <dx-box *ngIf="indicator == 'bonsafacturer'">
+        <dxi-item [ratio]="3">
+            <!-- Assistante -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-assistante' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [dataSource]="assistante"
+                        displayExpr="nomUtilisateur"
+                        [searchEnabled]="true"
+                        searchExpr="nomUtilisateur"
+                        (valueChange)="onSecteurChange($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+            <!-- Période -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-periode' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [items]="periodes"
+                        (valueChange)="findDates($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+            <!-- Date de début -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-du' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-date-box
+                        [value]="dateStart"
+                        type="date"
+                        dateSerializationFormat="yyyy-MM-dd"
+                    ></dx-date-box>
+                </div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+            <!-- Date de fin -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-au' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-date-box
+                        [value]="dateEnd"
+                        type="date"
+                        dateSerializationFormat="yyyy-MM-dd"
+                    ></dx-date-box>
+                </div>
+            </div>
+        </dxi-item>
+
+    </dx-box> 
     <br>
     <app-grid-suivi [filter]="filter" (ordreSelected)="onRowDblClick($event)"></app-grid-suivi>
 </div>

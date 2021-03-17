@@ -160,10 +160,10 @@ export class OrdresIndicatorsService {
           ['bonAFacturer', '=', false],
           'and',
           ['client.usageInterne', '<>', true],
-          'and',
-          ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
-          'and',
-          ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
+          // 'and',
+          // ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          // 'and',
+          // ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
         ];
         indicator.filter = this.handleSecteurLimitation(indicator.filter);
       }
