@@ -13,20 +13,19 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id",
-        "dataType": "string",
-        "width": 100,
-        "visible": true
-      },
-      {
-        "visibleIndex": 1,
         "dataField": "code",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 1,
         "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "typeClient.description",
         "dataType": "string",
         "visible": true
       },
@@ -55,12 +54,6 @@
         "width": 100,
         "visible": true,
         "filterValue": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "preSaisie",
-        "dataType": "boolean",
-        "visible": true
       }
     ]
   },
@@ -68,26 +61,25 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id",
-        "dataType": "string",
-        "width": 150,
-        "visible": true
-      },
-      {
-        "visibleIndex": 1,
         "dataField": "code",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 1,
         "dataField": "raisonSocial",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 2,
         "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "bureauAchat.raisonSocial",
         "dataType": "string",
         "visible": true
       },
@@ -99,29 +91,17 @@
       },
       {
         "visibleIndex": 5,
-        "dataField": "devise.description",
+        "dataField": "natureStation",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "langue.description",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
         "dataField": "valide",
         "dataType": "boolean",
         "width": 100,
         "visible": true,
         "filterValue": true
-      },
-      {
-        "visibleIndex": 8,
-        "dataField": "preSaisie",
-        "dataType": "boolean",
-        "visible": true
       }
     ]
   },
@@ -136,18 +116,30 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "ville",
+        "dataField": "raisonSocial",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "pays.description",
+        "dataField": "ville",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 3,
+        "dataField": "codePostal",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "pays.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
         "dataField": "valide",
         "dataType": "boolean",
         "width": 100,
@@ -314,40 +306,64 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "description",
+        "dataField": "matierePremiere.espece.description",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "blueWhaleStock",
-        "dataType": "boolean",
+        "dataField": "matierePremiere.variete.description",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "valide",
-        "dataType": "boolean",
-        "visible": true,
-        "filterValue": true
+        "dataField": "emballage.emballage.description",
+        "dataType": "string",
+        "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "preSaisie",
-        "dataType": "boolean",
+        "dataField": "cahierDesCharge.categorie.description",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "matierePremiere.id",
+        "dataField": "matierePremiere.calibreUnifie.description",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "matierePremiere.espece.description",
+        "dataField": "normalisation.calibreMarquage.description",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "matierePremiere.modeCulture.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "normalisation.marque.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "matierePremiere.origine.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "visible": true,
+        "filterValue": true
       }
     ]
   },
