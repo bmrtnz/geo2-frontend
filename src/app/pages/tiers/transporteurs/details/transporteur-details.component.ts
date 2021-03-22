@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -11,6 +11,7 @@ import { DevisesService } from 'app/shared/services/api/devises.service';
 import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
 import { PaysService } from 'app/shared/services/api/pays.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
+import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { tap } from 'rxjs/operators';
@@ -52,6 +53,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+  @ViewChildren(DxAccordionComponent) accordion: any;
   editing = false;
 
   transporteur: Transporteur;
@@ -96,6 +98,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   ngAfterViewInit(): void {
+    // Ouverture ou fermeture accordéons (création)
+    this.openCloseAccordions(this.createMode);
     this.formGroup.reset(this.transporteur);
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
@@ -141,6 +145,17 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     const transporteursSource = this.transporteursService.getDataSource();
     transporteursSource.filter(['id', '=', code]);
     return transporteursSource.load().then(res => !(res.length));
+  }
+
+  openCloseAccordions(action) {
+    if (!this.accordion) return;
+    this.accordion.toArray().forEach(element => {
+      if (action) {
+        element.instance.expandItem(0);
+      } else {
+        element.instance.collapseItem(0);
+      }
+    });
   }
 
   onSubmit() {
