@@ -161,11 +161,9 @@ export class OrdresIndicatorsService {
           'and',
           ['client.usageInterne', '<>', true],
           'and',
-          ['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id],
-          // 'and',
-          // ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
-          // 'and',
-          // ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
+          ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
         ];
       }
 

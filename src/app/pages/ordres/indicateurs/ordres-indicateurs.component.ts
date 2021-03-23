@@ -78,8 +78,6 @@ export class OrdresIndicateursComponent implements OnInit {
   ngOnInit() {
     this.transporteurs = this.transporteursService.getDataSource();
     this.detailedFields = this.transporteursService.model.getDetailedFields();
-
-    // this.dateStart = this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd');
     this.dateStart = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
     this.dateEnd = this.dateStart;
 
@@ -127,10 +125,11 @@ export class OrdresIndicateursComponent implements OnInit {
     }
     // this.filter.push(
     // 'and',
-    // ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+    // ['dateLivraisonPrevue', '>=', this.datePipe.transform(this.dateStart, 'yyyy-MM-dd')],
     // 'and',
-    // ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
-
+    // ['dateLivraisonPrevue', '<', this.datePipe.transform(this.dateEnd, 'yyyy-MM-dd')],
+    // )
+    
     console.log('this.filter after : '+this.filter);
     this.gridSuiviComponent.reload();
 
@@ -138,18 +137,65 @@ export class OrdresIndicateursComponent implements OnInit {
 
   findDates(periode) {
 
-    let deb, fin;
-    const now = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
+    let deb, fin, temp;
+    // const dateNow = new Date(2021, 0, 4);
+    const dateNow = new Date();
+    console.log(this.getWeekNumber(dateNow))
+    const now = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
+    const year = dateNow.getFullYear();
+    const month = dateNow.getMonth() + 1;
+    const date = dateNow.getDate();
     
+    const day = dateNow.getDay();
+    const quarter = Math.floor((month + 2) / 3); // Current quarter
+    const quarterStart = 1 + ((quarter - 1) * 3); // Current quarter first month
+    const prevQuarterStart = quarter === 1 ? 10 : quarterStart - 3; // Current quarter first month
+
     switch(periode) {
-      case 'hier': 	deb = this.datePipe.transform((new Date()).setDate((new Date()).getDate() - 1).valueOf(), 'yyyy-MM-dd');break;
+      case 'hier': 	deb = this.findDate(-1); break;
       case 'aujourd\'hui': deb = now; break;
+      case 'demain': deb = this.findDate(1); break;
+      case 'semaine dernière': deb = year + '-' + month +'-' + (date - day - 6); fin = year + '-' + month +'-' + (date - day); break;
+      case 'semaine en cours': deb = year + '-' + month +'-' + (date - day + 1); fin = year + '-' + month +'-' + (date - day + 7); break;
+      case 'semaine prochaine': deb = year + '-' + month +'-' + (date - day + 8); fin = year + '-' + month +'-' + (date - day+ 14); break;
+      case '7 prochains jours': deb = now; fin = this.findDate(7); break;
+      case '30 prochains jours': deb = now; fin = this.findDate(30); break;
+      case 'mois à cheval': // equiv. depuis 1 mois
+      case 'depuis 1 mois': deb = (month === 1 ? year-1 : year) + '-' + (month === 1 ? 12 : month - 1) + '-' + date; fin = (month === 12 ? year + 1 : year) + '-' + (month === 12 ? 1 : month + 1) + '-' + date ; break;
+      case 'depuis 30 jours': deb = this.findDate(-30); fin = now; break;     
+      case 'depuis 2 mois': deb = (month <= 2 ? year-1 : year) + '-' + (month <= 2 ? 12 : month - 2) + '-' + date; fin = (month >= 11 ? year + 1 : year) + '-' + (month >= 11 ? 1 : month + 1) + '-' + date ; break;
+      case 'depuis 3 mois': deb = (month <= 3 ? year-1 : year) + '-' + (month <= 3 ? 12 : month - 3) + '-' + date; fin = (month >= 10 ? year + 1 : year) + '-' + (month >= 11 ? 1 : month + 1) + '-' + date ; break;
+      case 'depuis 12 mois': deb = (year-1) + '-' + month + '-' + date; fin = year + '-' + (month === 12 ? 1 : month + 1) + '-' + date ; break;
+      case 'mois dernier': temp = (month === 1 ? year - 1 : year) + '-' + (month === 1 ? 12 : month - 1); deb = temp + '-01'; fin = temp + '-' + this.daysInMonth((month === 1 ? year - 1 : year), (month === 1 ? 12 : month - 1)) ;break;
+      case 'mois en cours': temp = year + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year, month) ;break;
+      case 'trimestre dernier': deb = (quarter === 1 ? year - 1 : year) + '-' + prevQuarterStart + '-01'; fin = (quarter === 1 ? year - 1 : year) + '-' + (prevQuarterStart + 2) + '-' + this.daysInMonth((quarter === 1 ? year - 1 : year), prevQuarterStart + 2);break;
+      case 'trimestre en cours': deb = year + '-' + quarterStart + '-01'; fin = year + '-' + (quarterStart + 3) + '-' + this.daysInMonth(year, quarterStart + 3);break;
+      case 'année civile en cours': deb = year + '-01-01'; fin = year + '-12-31' ; break;
+      case 'campagne en cours': ;break;
+      case 'même semaine année dernière': ;break;
+      case 'même mois année dernière': temp = (year - 1) + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year-1, month); break;
     }
+
     if (!fin) {fin = deb;}
 
     this.dateStart = deb;
     this.dateEnd = fin;
 
+  }
+
+  findDate(delta) {
+    return this.datePipe.transform((new Date()).setDate((new Date()).getDate() + delta).valueOf(), 'yyyy-MM-dd');
+  }
+
+  getWeekNumber(d, delta?) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    return Math.ceil(( ( (d - yearStart.valueOf()) / 86400000) + 1)/7);
+  }
+
+  daysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
   }
 
   autoSendDeliveryNotes() {
