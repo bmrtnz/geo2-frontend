@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
@@ -15,7 +16,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { iif, of, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { filter, map, mergeMap, take } from 'rxjs/operators';
 import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
@@ -89,6 +90,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     public transporteursService: TransporteursService,
     commService: CommService,
     private fb: FormBuilder,
+    private route: ActivatedRoute,
   ) {
     self = this;
     this.ordres = ordresService.getDataSource();
@@ -106,12 +108,20 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.clients = this.clientsService.getDataSource();
     this.personnes = this.personnesService.getDataSource();
     this.transporteurs = this.transporteursService.getDataSource();
+
+    this.route.queryParams
+    .pipe(
+      mergeMap(params => this.ordresService.getOne(params.pushordres)),
+      filter(response => !this.contents.find(({id}) => id === response.data.ordre.id ))
+    )
+    .subscribe(response => this.pushTab(response.data.ordre));
+
     this.formValuesChange = this.formGroup.valueChanges
-      .subscribe(_ => {
-        if (this.formGroup.pristine) return;
-        const selectedIndex = this.tabPanelComponent.selectedIndex;
-        const patch = this.ordresService.extractDirty(this.formGroup.controls);
-        this.contents[selectedIndex].patch = patch;
+    .subscribe(_ => {
+      if (this.formGroup.pristine) return;
+      const selectedIndex = this.tabPanelComponent.selectedIndex;
+      const patch = this.ordresService.extractDirty(this.formGroup.controls);
+      this.contents[selectedIndex].patch = patch;
       });
 
     // On affiche les ordres déjà ouverts le cas échéant
