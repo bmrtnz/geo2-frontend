@@ -40,6 +40,7 @@ export class Ordre extends Model {
   @Field() public codeClient?: string;
   @Field() public version?: string;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public factureAvoir?: FactureAvoir;
+  @Field() public codeChargement?: string;
 
 }
 

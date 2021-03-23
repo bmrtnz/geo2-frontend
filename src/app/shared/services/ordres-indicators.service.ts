@@ -107,9 +107,11 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 8,
+  number: '?',
   parameter: 'Planning',
   subParameter: 'départ',
-  goTo: '',
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'planningdeparts'},
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
   warningIcon: ''
@@ -211,6 +213,21 @@ export class OrdresIndicatorsService {
           ['valide', '=', true],
           'and',
           ['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]
+        ];
+      }
+
+      // Planning departs
+      if (indicator.id === 8) {
+        indicator.filter = [
+          ['valide', '=', true],
+          'and',
+          ['logistiques.dateDepartPrevueFournisseur', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          [
+            'logistiques.dateDepartPrevueFournisseur',
+            '<',
+            this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd'),
+          ],
         ];
       }
 
