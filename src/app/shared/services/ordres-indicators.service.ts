@@ -211,8 +211,8 @@ export class OrdresIndicatorsService {
         // Model LitigeLigne
         indicator.filter = [
           ['valide', '=', true],
-          'and',
-          ['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]
+          // 'and',
+          // ['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]
         ];
       }
 
