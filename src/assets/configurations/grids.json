@@ -544,5 +544,21 @@
         "visible": true
       }
     ]
+  },
+  "litige-ligne": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "commentaireResponsable",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
   }
 }

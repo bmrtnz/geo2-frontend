@@ -93,7 +93,7 @@ const indicators: Indicator[] = [{
   number: '3',
   parameter: 'Litiges',
   subParameter: 'en cours',
-  goTo: '',
+  goTo: '/ordres/indicateurs/litiges',
   tileBkg: '#1B715C',
   indicatorIcon: 'material-icons offline_bolt',
   warningIcon: 'material-icons warning'
@@ -107,9 +107,11 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 8,
+  number: '?',
   parameter: 'Planning',
   subParameter: 'départ',
-  goTo: '',
+  goTo: '/ordres/indicateurs',
+  goToParams: {filtre: 'planningdeparts'},
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
   warningIcon: ''
@@ -165,7 +167,6 @@ export class OrdresIndicatorsService {
           'and',
           ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
         ];
-        indicator.filter = this.handleSecteurLimitation(indicator.filter);
       }
 
       // Ordres clients depassement en cours
@@ -205,16 +206,33 @@ export class OrdresIndicatorsService {
         ];
       }
 
+      // Litiges
+      if (indicator.id === 6) {
+        // Model LitigeLigne
+        indicator.filter = [
+          ['valide', '=', true],
+          'and',
+          ['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]
+        ];
+      }
+
+      // Planning departs
+      if (indicator.id === 8) {
+        indicator.filter = [
+          ['valide', '=', true],
+          'and',
+          ['logistiques.dateDepartPrevueFournisseur', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          [
+            'logistiques.dateDepartPrevueFournisseur',
+            '<',
+            this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd'),
+          ],
+        ];
+      }
+
       return indicator;
     });
-  }
-
-  handleSecteurLimitation(filter: any[]) {
-    if (this.authService.currentUser.limitationSecteur) {
-      filter.push('and');
-      filter.push(['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
-    }
-    return filter;
   }
 
   getContents() {
@@ -224,6 +242,6 @@ export class OrdresIndicatorsService {
     return this.indicators;
   }
   getIndicatorByName(name: string) {
-    return this.indicators.find(i => i?.goToParams?.filtre === name);
+    return this.indicators.find(i => i?.goToParams?.filtre === name || i?.parameter === name);
   }
 }

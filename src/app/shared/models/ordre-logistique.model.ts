@@ -1,6 +1,7 @@
 import {Field, Model, ModelName} from './model';
 import {Fournisseur} from './fournisseur.model';
 import {Ordre} from './ordre.model';
+import Groupage from './groupage.model';
 
 @ModelName('OrdreLogistique')
 export class OrdreLogistique extends Model {
@@ -10,6 +11,8 @@ export class OrdreLogistique extends Model {
   @Field({model: import('./fournisseur.model')}) public fournisseur?: Fournisseur;
   @Field() public expedieStation?: boolean;
   @Field({ dataType: 'localdate' }) public dateDepartPrevueFournisseur?: string;
+  @Field({ dataType: 'localdate' }) public dateDepartPrevueGroupage?: string;
+  @Field({model: import('./groupage.model')}) public groupage?: Groupage;
 
 }
 

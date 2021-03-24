@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
@@ -25,10 +25,19 @@ import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
 import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 
 
 @NgModule({
-  declarations: [OrdresAccueilComponent, OrdresDetailsComponent, GridSuiviComponent, OrdresIndicateursComponent, GridLignesComponent, GridHistoriqueComponent],
+  declarations: [
+    OrdresAccueilComponent,
+    OrdresDetailsComponent,
+    GridSuiviComponent,
+    OrdresIndicateursComponent,
+    GridLignesComponent,
+    GridHistoriqueComponent,
+    LitigesComponent,
+  ],
   imports: [
     OrdresRoutingModule,
     SharedModule,
