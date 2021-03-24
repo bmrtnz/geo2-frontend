@@ -138,9 +138,8 @@ export class OrdresIndicateursComponent implements OnInit {
   findDates(periode) {
 
     let deb, fin, temp;
-    // const dateNow = new Date(2021, 0, 4);
+    // const dateNow = new Date(2021, 11, 31);
     const dateNow = new Date();
-    console.log(this.getWeekNumber(dateNow))
     const now = this.datePipe.transform(dateNow, 'yyyy-MM-dd');
     const year = dateNow.getFullYear();
     const month = dateNow.getMonth() + 1;
@@ -172,7 +171,14 @@ export class OrdresIndicateursComponent implements OnInit {
       case 'trimestre en cours': deb = year + '-' + quarterStart + '-01'; fin = year + '-' + (quarterStart + 3) + '-' + this.daysInMonth(year, quarterStart + 3);break;
       case 'année civile en cours': deb = year + '-01-01'; fin = year + '-12-31' ; break;
       case 'campagne en cours': ;break;
-      case 'même semaine année dernière': ;break;
+      case 'même semaine année dernière': {
+        deb = this.getDateOfISOWeek(this.getWeekNumber(dateNow), year - 1);
+        const temp = new Date(deb);
+        fin = temp.setDate(temp.getDate() + 6);
+        deb = this.datePipe.transform(deb.valueOf(), 'yyyy-MM-dd');
+        fin = this.datePipe.transform(fin.valueOf(), 'yyyy-MM-dd');
+        ;break;
+      } 
       case 'même mois année dernière': temp = (year - 1) + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year-1, month); break;
     }
 
@@ -187,12 +193,23 @@ export class OrdresIndicateursComponent implements OnInit {
     return this.datePipe.transform((new Date()).setDate((new Date()).getDate() + delta).valueOf(), 'yyyy-MM-dd');
   }
 
-  getWeekNumber(d, delta?) {
+  getWeekNumber(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     return Math.ceil(( ( (d - yearStart.valueOf()) / 86400000) + 1)/7);
   }
+
+  getDateOfISOWeek(w, y) {
+    var simple = new Date(y, 0, 1 + (w - 1) * 7);
+    var dow = simple.getDay();
+    var ISOweekStart = simple;
+    if (dow <= 4)
+        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    else
+        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    return ISOweekStart;
+}
 
   daysInMonth(year, month) {
     return new Date(year, month, 0).getDate();

@@ -13,7 +13,7 @@
             <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
                 <div class="dx-field-value">
-                    <dx-select-box #toto
+                    <dx-select-box
                         [dataSource]="secteurs"
                         displayExpr="description"
                         [searchEnabled]="true"
@@ -183,6 +183,25 @@
         </dxi-item>
 
     </dx-box> 
+    <dx-box *ngIf="indicator == 'ordresnonconfirmes'">
+        <dxi-item [ratio]="4">
+            <!-- Secteurs -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        [dataSource]="secteurs"
+                        displayExpr="description"
+                        [searchEnabled]="true"
+                        searchExpr="description"
+                        (valueChange)="onSecteurChange($event)"
+                    ></dx-select-box>
+                </div>
+            </div>
+
+        </dxi-item>
+        <dxi-item [ratio]="10.5"></dxi-item>
+    </dx-box>  
     <br>
     <app-grid-suivi [filter]="filter" (ordreSelected)="onRowDblClick($event)"></app-grid-suivi>
 </div>

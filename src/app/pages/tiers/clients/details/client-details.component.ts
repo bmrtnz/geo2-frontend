@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -22,7 +22,7 @@ import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { TypesClientService } from 'app/shared/services/api/types-client.service';
 import { TypesVenteService } from 'app/shared/services/api/types-vente.service';
-import { DxCheckBoxComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxCheckBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
@@ -121,6 +121,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
+  @ViewChildren(DxAccordionComponent) accordion: any;
+  
   validatePopup: PushHistoryPopupComponent;
   editing = false;
 
@@ -185,6 +187,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   ngAfterViewInit(): void {
+    // Ouverture ou fermeture accordéons (création)
+    this.openCloseAccordions(this.createMode);
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
       const Element = document.querySelector('.submit') as HTMLElement;
@@ -249,6 +253,18 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     return clientsSource.load().then(res => !(res.length));
 
   }
+
+  openCloseAccordions(action) {
+    if (!this.accordion) return;
+    this.accordion.toArray().forEach(element => {
+      if (action) {
+        element.instance.expandItem(0);
+      } else {
+        element.instance.collapseItem(0);
+      }
+    });
+  }
+
 
   onSubmit() {
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -20,6 +20,7 @@ import { NaturesStationService } from 'app/shared/services/api/natures-station.s
 import { PaysService } from 'app/shared/services/api/pays.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import { TypesFournisseurService } from 'app/shared/services/api/types-fournisseur.service';
+import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { from, of } from 'rxjs';
@@ -98,6 +99,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
   @ViewChild(CertificationDatePopupComponent, { static: false })
+  @ViewChildren(DxAccordionComponent) accordion: any;
   certDatePopup: CertificationDatePopupComponent;
   editing = false;
 
@@ -152,6 +154,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   ngAfterViewInit(): void {
+    // Ouverture ou fermeture accordéons (création)
+    this.openCloseAccordions(this.createMode);
     this.formGroup.reset(this.fournisseur);
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
@@ -209,6 +213,17 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     fournisseursSource.searchOperation('=');
     fournisseursSource.searchValue(code);
     return fournisseursSource.load().then(res => !(res.length));
+  }
+
+  openCloseAccordions(action) {
+    if (!this.accordion) return;
+    this.accordion.toArray().forEach(element => {
+      if (action) {
+        element.instance.expandItem(0);
+      } else {
+        element.instance.collapseItem(0);
+      }
+    });
   }
 
   onSubmit() {

@@ -181,21 +181,21 @@ export class OrdresIndicatorsService {
 
       // Ordres non cloturés
       if (indicator.id === 4) {
-        indicator.filter = [
-          ...indicator.filter,
-          'and',
-          ['logistiques.expedieStation', '<>', true],
-          'and',
-          ['client.usageInterne', '<>', true],
-          'and',
-          ['client.detailAutomatique', '=', true],
-          'and',
-          ['logistiques.dateDepartPrevueFournisseur', '=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
-          'and',
-          ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
-          'and',
-          ['lignes.valide', '=', true],
-        ];
+        // indicator.filter = [
+        //   ...indicator.filter,
+        //   'and',
+        //   ['logistiques.expedieStation', '<>', true],
+        //   'and',
+        //   ['client.usageInterne', '<>', true],
+        //   'and',
+        //   ['client.detailAutomatique', '=', true],
+        //   'and',
+        //   ['logistiques.dateDepartPrevueFournisseur', '=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+        //   'and',
+        //   ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
+        //   'and',
+        //   ['lignes.valide', '=', true],
+        // ];
       }
 
       // Ordres non confirmés
