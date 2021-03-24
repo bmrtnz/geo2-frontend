@@ -29,6 +29,7 @@ export class Indicator {
   indicatorIcon: string;
   warningIcon: string;
   loading: boolean;
+  fetchCount?: boolean;
 }
 
 const indicators: Indicator[] = [{
@@ -41,6 +42,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 1,
+  fetchCount: true,
   parameter: 'Supervision',
   subParameter: 'livraison',
   goTo: '/ordres/indicateurs',
@@ -50,7 +52,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 2,
-  number: '13',
+  fetchCount: true,
   parameter: 'Bons',
   subParameter: 'à facturer',
   goTo: '/ordres/indicateurs',
@@ -60,7 +62,7 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 3,
-  number: '4',
+  fetchCount: true,
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
   goTo: '/ordres/indicateurs',
@@ -70,7 +72,7 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 4,
-  number: '8',
+  fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
   goToParams: {filtre: 'ordresnonclotures'},
@@ -80,7 +82,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 5,
-  number: '6',
+  fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non confirmés',
   goTo: '/ordres/indicateurs',
@@ -90,7 +92,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 6,
-  number: '3',
+  fetchCount: true,
   parameter: 'Litiges',
   subParameter: 'en cours',
   goTo: '/ordres/indicateurs/litiges',
@@ -107,7 +109,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 8,
-  number: '?',
+  fetchCount: true,
   parameter: 'Planning',
   subParameter: 'départ',
   goTo: '/ordres/indicateurs',
@@ -117,6 +119,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 9,
+  fetchCount: true,
   parameter: 'Commandes',
   subParameter: 'en transit',
   goTo: '/ordres/indicateurs',
@@ -211,15 +214,17 @@ export class OrdresIndicatorsService {
         // Model LitigeLigne
         indicator.filter = [
           ['valide', '=', true],
-          // 'and',
-          // ['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]
         ];
+        if (this.authService.currentUser.limitationSecteur) {
+          indicator.filter.push('and');
+          indicator.filter.push(['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
+        }
       }
 
       // Planning departs
       if (indicator.id === 8) {
         indicator.filter = [
-          ['valide', '=', true],
+          ...indicator.filter,
           'and',
           ['logistiques.dateDepartPrevueFournisseur', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
           'and',
@@ -228,6 +233,13 @@ export class OrdresIndicatorsService {
             '<',
             this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd'),
           ],
+        ];
+      }
+
+      // Commandes en transit
+      if (indicator.id === 9) {
+        indicator.filter = [
+          ...indicator.filter,
         ];
       }
 
