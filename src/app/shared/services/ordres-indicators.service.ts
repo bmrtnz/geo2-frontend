@@ -214,9 +214,11 @@ export class OrdresIndicatorsService {
         // Model LitigeLigne
         indicator.filter = [
           ['valide', '=', true],
-          'and',
-          ['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]
         ];
+        if (this.authService.currentUser.limitationSecteur) {
+          indicator.filter.push('and');
+          indicator.filter.push(['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
+        }
       }
 
       // Planning departs
