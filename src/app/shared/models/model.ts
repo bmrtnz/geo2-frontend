@@ -42,7 +42,10 @@ export abstract class Model {
   constructor(rawEntity = {}) {
     const fieldsEntries = Object.entries<ModelFieldOptions>(this.constructor.prototype.fields);
     for (const [field, options] of fieldsEntries) {
-      if (rawEntity[field] === null || rawEntity[field] === undefined) continue;
+      if (rawEntity[field] === null || rawEntity[field] === undefined) {
+        const type = Reflect.getMetadata('design:type', this, field);
+        if (type.name !== 'String') continue;
+      }
       if (options.fetchedModel)
         this[field] = rawEntity[field].length !== undefined ?
           rawEntity[field].map(e => new (options.fetchedModel as any)(e)) :
