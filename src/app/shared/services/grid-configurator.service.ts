@@ -22,6 +22,7 @@ export enum Grid {
   Ordre = 'ordre',
   Historique = 'historique',
   OrdreLigne = 'ordre-ligne',
+  OrdreLogistique = 'ordre-logistique',
   LitigeLigne = 'litige-ligne',
 }
 
