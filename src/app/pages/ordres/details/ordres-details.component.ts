@@ -111,6 +111,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
     this.route.queryParams
     .pipe(
+      filter(params => params?.pushordres),
       mergeMap(params => this.ordresService.getOne(params.pushordres)),
       filter(response => !this.contents.find(({id}) => id === response.data.ordre.id ))
     )
