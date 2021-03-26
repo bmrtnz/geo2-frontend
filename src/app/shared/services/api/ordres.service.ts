@@ -13,7 +13,7 @@ import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 })
 export class OrdresService extends ApiService implements APIRead, APIPersist {
 
-  queryFilter = /.*(?:id|numero|numeroFacture|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue)$/i;
+  queryFilter = /.*(?:id|numero|numeroFacture|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer)$/i;
 
   constructor(
     apollo: Apollo,
@@ -63,7 +63,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     });
   }
 
-  save(variables: OperationVariables) {
+  save(variables: OperationVariables & {ordre: Ordre}) {
     return this.watchSaveQuery({ variables }, 1, this.queryFilter);
   }
 
@@ -92,6 +92,11 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
         }
       }
     `;
+  }
+
+  saveAll(variables: OperationVariables & {allOrdre: Ordre[]}) {
+    // type Response = { allOrdre: RelayPage<Ordre> };
+    return this.watchSaveAllQuery({ variables }, 1, this.queryFilter);
   }
 
 }

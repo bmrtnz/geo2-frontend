@@ -1,7 +1,7 @@
 <h2 class="content-block">{{ 'ordres-' + indicator | localize }}
     <dx-button *ngIf="indicator == 'ordresnonconfirmes'" class="upperButton" type="default" text="{{ 'btn-confirm' | localize }}" (onClick)="onConfirm()"></dx-button>
     <!-- <dx-button *ngIf="indicator == 'ordresnonclotures'" class="upperButton" type="default" text="{{ 'btn-close' | localize }}" (onClick)="onClose()"></dx-button> -->
-    <dx-button *ngIf="indicator == 'bonsafacturer'" class="upperButton" type="default" text="{{ 'btn-invoice' | localize }}" (onClick)="onClose()"></dx-button>
+    <dx-button *ngIf="indicator == 'bonsafacturer'" class="upperButton" type="default" text="{{ 'btn-invoice' | localize }}" (onClick)="updateAsBonAFacturer()"></dx-button>
 </h2>
 
 <div class="content-block">

@@ -1,20 +1,19 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from 'environments/environment';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import { DxDataGridComponent, DxSelectBoxComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import { AuthService, ClientsService, EntrepotsService, TransporteursService } from '../../../shared/services';
-import { SecteursService } from 'app/shared/services/api/secteurs.service';
-import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
-import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import Ordre from 'app/shared/models/ordre.model';
+import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
-import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
-import { DxoGridComponent } from 'devextreme-angular/ui/nested';
-import { DatePipe, SlicePipe } from '@angular/common';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
+import { SecteursService } from 'app/shared/services/api/secteurs.service';
+import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
+import { AuthService, ClientsService, EntrepotsService, TransporteursService } from '../../../shared/services';
+import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 @Component({
   selector: 'app-ordres-indicateurs',
@@ -221,7 +220,17 @@ export class OrdresIndicateursComponent implements OnInit {
   onConfirm() {
   }
 
-  onClose() {
+  updateAsBonAFacturer() {
+    const allOrdre: Ordre[] = this.gridSuiviComponent.datagrid.instance
+    .getSelectedRowsData()
+    .map((ordre: Ordre) => ({...ordre, bonAFacturer: true}));
+
+    if (allOrdre.length)
+      this.ordresService.saveAll({allOrdre})
+      .subscribe( res => {
+        console.log(res);
+        // this.gridSuiviComponent.datagrid.instance.refresh();
+      });
   }
 
 }

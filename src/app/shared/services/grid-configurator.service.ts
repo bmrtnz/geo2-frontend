@@ -71,6 +71,7 @@ export class GridConfiguratorService {
     const config = {...res[0].config}; // clone config (original is sealed)
     delete config.searchText;
     delete config.focusedRowKey;
+    delete config.selectedRowKeys;
     return config;
   }
 
