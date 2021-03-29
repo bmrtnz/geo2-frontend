@@ -47,7 +47,7 @@ export class VarietesService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.variete)
-              resolve(new this.model(res.data.variete));
+              resolve(new Variete(res.data.variete));
           });
         }),
       }),

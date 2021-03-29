@@ -50,7 +50,7 @@ export class PenetrosService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.penetro)
-              resolve(new this.model(res.data.penetro));
+              resolve(new Penetro(res.data.penetro));
           });
         }),
       }),

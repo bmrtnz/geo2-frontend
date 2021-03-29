@@ -267,6 +267,25 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
+   * Build save-all query
+   * @param depth Save response depth
+   * @param regExpFilter Fields filter
+   */
+  protected async buildSaveAll(depth?: number, regExpFilter?: RegExp) {
+    const entity = `all${this.model.name}`;
+    const operation = `saveAll${this.model.name}`;
+    const type = `Geo${this.model.name}Input`;
+    const alias = this.withUpperCaseFirst(operation);
+    return `
+      mutation ${alias}($${entity}: [${type}]!) {
+        ${operation}(${entity}: $${entity}) {
+          ${await this.model.getGQLFields(depth, regExpFilter).toPromise()}
+        }
+      }
+    `;
+  }
+
+  /**
    * Build delete query
    */
   protected buildDelete() {
@@ -617,6 +636,29 @@ export abstract class ApiService implements OnDestroy {
       takeUntil(this.destroy),
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
+        ...options,
+      } as MutationOptions)),
+      take(1),
+    );
+  }
+
+  /**
+   * Utility method to listen for `saveAll()` query
+   * @param options Apollo MutationOptions
+   * @param depth Query fields depth
+   * @param fieldsFilter Query fields filter
+   */
+  public watchSaveAllQuery(
+    options: Partial<MutationOptions>,
+    depth = 1,
+    fieldsFilter?: RegExp,
+  ) {
+    return from(this.buildSaveAll(depth, fieldsFilter))
+    .pipe(
+      takeUntil(this.destroy),
+      mergeMap( query => this.apollo.mutate({
+        mutation: gql(query),
+        fetchPolicy: 'no-cache',
         ...options,
       } as MutationOptions)),
       take(1),

@@ -111,6 +111,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
     this.route.queryParams
     .pipe(
+      filter(params => params?.pushordres),
       mergeMap(params => this.ordresService.getOne(params.pushordres)),
       filter(response => !this.contents.find(({id}) => id === response.data.ordre.id ))
     )
@@ -154,7 +155,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   changeSearchCriteria() {
     const toSearch = this.autocomplete.value;
     this.showGridResults = false;
-    if (toSearch.length) {
+    if (toSearch) {
       setTimeout(() => {
         this.enableFilters(toSearch);
         this.showGridResults = true;
@@ -246,17 +247,17 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
     const key = e.element.dataset.accordion;
     const extractField = '.' + key + '-field';
-    const Element = document.querySelector(extractField) as HTMLElement;
-    console.log(`.dx-tabpanel-container .dx-tab-selected[role="tabpanel"] ${​​​​​​​extractField}​​​​​​​​​​​​​​`)
-    // const Element = document.querySelector(`.dx-tabpanel-container .dx-tab-selected[role="tabpanel"] ${​​​​​​​extractField}​​​​​​​​​​​​​​`) as HTMLElement;
+    const Element = document.querySelectorAll(extractField);
+    const tabIndex = this.tabPanelComponent.selectedIndex - 1;
 
-    const Accordion = this.accordion.toArray().find(v => v.element.nativeElement.dataset.name === key);
-
+    // Find corresponding accordion to scroll to/open
+    const Accordion = this.accordion.toArray().filter(v => v.element.nativeElement.dataset.name === key )[tabIndex];
+ 
     // Some elements are not accordion type
     if (Accordion) {
-      Accordion.instance.expandItem(0).then((r) => Element.scrollIntoView({ behavior: 'smooth' }))
+      Accordion.instance.expandItem(0).then((r) => Element[tabIndex].scrollIntoView({ behavior: 'smooth' }))
     }
-    Element.scrollIntoView({ behavior: 'smooth' });
+    Element[tabIndex].scrollIntoView({ behavior: 'smooth' });
 
   }
 

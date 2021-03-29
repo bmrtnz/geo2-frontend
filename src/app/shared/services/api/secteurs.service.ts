@@ -47,7 +47,7 @@ export class SecteursService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.secteur)
-              resolve(new this.model(res.data.secteur));
+              resolve(new Secteur(res.data.secteur));
           });
         }),
       }),

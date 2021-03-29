@@ -54,7 +54,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.client)
-              resolve(new this.model(res.data.client));
+              resolve(new Client(res.data.client));
           });
         }),
       }),

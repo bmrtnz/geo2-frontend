@@ -52,7 +52,7 @@ export class OrdresAccueilComponent implements OnDestroy {
             indicator.filter,
           ]);
           await dataSource.load();
-          const value = indicator.number ?
+          const value = indicator.fetchCount ?
             dataSource.totalCount().toString() :
             '?';
           return [indicator.id, value] as [number, string];

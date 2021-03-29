@@ -7,9 +7,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [selection]="{ mode: 'multiple' }"
-    (onRowDblClick)="ordreSelected.emit($event.data)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Ordre, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLogistique,enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -23,7 +21,7 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing 
-      [storageKey]="gridConfiguratorService.Grid.Ordre"
+      [storageKey]="gridConfiguratorService.Grid.OrdreLogistique"
       [enabled]="true"
       type="custom"
       [customLoad]="gridConfiguratorService.load"
@@ -42,7 +40,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('rechOrdres-' + field.path.replaceAll('.', '-').replace('-description', '') | localize) || field.name"
+      [caption]="('articles-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
