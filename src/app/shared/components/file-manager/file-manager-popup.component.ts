@@ -1,8 +1,10 @@
-import {Component, NgModule} from '@angular/core';
+import {Component, Input, NgModule, OnChanges, SimpleChanges} from '@angular/core';
 
 import {FileManagerService, FileItem} from 'app/shared/services/file-manager.service';
 import {DxFileManagerModule, DxPopupModule} from 'devextreme-angular';
 import {CommonModule} from '@angular/common';
+import CustomFileSystemProvider from 'devextreme/file_management/custom_provider';
+import {SharedModule} from '../../shared.module';
 
 
 @Component({
@@ -12,15 +14,23 @@ import {CommonModule} from '@angular/common';
   providers: [FileManagerService]
 })
 
-export class FileManagerComponent {
+export class FileManagerComponent implements OnChanges {
+
+  @Input() key: string;
+
+  @Input() id: any;
 
   visible = false;
-  fileItems: FileItem[];
+  fileProvider: CustomFileSystemProvider;
 
   constructor(
     public fileManagerService: FileManagerService
-  ) {
-    this.fileItems = fileManagerService.getFileItems();
+  ) { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const key = changes.key ? changes.key.currentValue : this.key;
+
+    this.fileProvider = this.fileManagerService.getProvider(key, changes.id.currentValue);
   }
 
 }
@@ -29,7 +39,8 @@ export class FileManagerComponent {
   imports: [
     CommonModule,
     DxFileManagerModule,
-    DxPopupModule
+    DxPopupModule,
+    SharedModule
   ],
   declarations: [FileManagerComponent],
   exports: [FileManagerComponent]

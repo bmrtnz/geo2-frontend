@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   debugRouting: false,
-  apiEndpoint: 'https://geo-bw.microtec.fr/api/graphql',
+  apiEndpoint: 'https://geo-bw.microtec.fr/api',
   columnChooser: {
     width: 500,
     height: 500

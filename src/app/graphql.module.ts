@@ -7,7 +7,7 @@ import { AuthService } from './shared/services';
 import { environment } from '../environments/environment';
 import { Edge } from './shared/services/api.service';
 
-const uri = environment.apiEndpoint;
+const uri = environment.apiEndpoint + '/graphql';
 
 const errorLink = onError(({ networkError }) => {
   // @ts-ignore

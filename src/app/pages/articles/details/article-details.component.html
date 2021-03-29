@@ -19,7 +19,7 @@
         <dx-button class="upperButton"
             type="default"
             [visible]="readOnlyMode"
-            text="{{ 'btn-cloner' | localize }}" 
+            text="{{ 'btn-cloner' | localize }}"
             (onClick)="onClone()">
         </dx-button>
         <dx-button class="upperButton"
@@ -37,7 +37,7 @@
             [height]=800
             >
                 <h4 class="entity-id">N°&nbsp;{{ article?.id }}</h4>
-   
+
                 <dx-check-box
                     #valideCheckBox
                     class="vertical"
@@ -352,7 +352,7 @@
                     </div>
                 </div>
             </dxi-item>
-            <dxi-item [ratio]="0.2">    
+            <dxi-item [ratio]="0.2">
             </dxi-item>
             <dxi-item [ratio]="4">
                 <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
@@ -626,7 +626,7 @@
 
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup></app-file-manager-popup>
+<app-file-manager-popup key="articles" [id]="article?.id"></app-file-manager-popup>
 <app-push-history-popup
     title="{{ 'valide-comment-title' | localize }}"
     [placeholder]="'valide-comment' | localize"

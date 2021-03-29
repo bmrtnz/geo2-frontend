@@ -3,13 +3,15 @@
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
   width="1000"
+  title="{{ 'documents' | localize }}"
   [(visible)]="visible"
 >
-    <dx-file-manager 
+    <dx-file-manager
         id="fileManager"
-        [fileSystemProvider]="fileItems"
-        height="450">
-        <dxo-permissions 
+        [fileSystemProvider]="fileProvider"
+        height="450"
+        *ngIf="this.fileProvider">
+        <dxo-permissions
             create="true"
             copy="true"
             move="true"

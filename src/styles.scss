@@ -64,7 +64,7 @@ body {
 }
 
 
-.fournisseur-page, .article-page, .client-page, .transporteur-page, .entrepot-page, 
+.fournisseur-page, .article-page, .client-page, .transporteur-page, .entrepot-page,
 .lieupassageaquai-page, .entrepot-page, .details-ordres-page, .left-buttons-box, .accueil-ordres-page {
 
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
@@ -117,4 +117,8 @@ body {
 // Thinner grids
 .dx-datagrid .dx-row > td {
   line-height:0;
+
+  & > .dx-filemanager-details-item-name-wrapper {
+    line-height: initial;
+  }
 }
