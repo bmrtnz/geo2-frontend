@@ -344,7 +344,7 @@
                 </dx-text-box>
               </div>
             </div>
-            
+
             <!-- Contrat achat -->
             <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-fournisseurs-conditionVente' | localize }}</div>
@@ -807,7 +807,7 @@
   </div>
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup></app-file-manager-popup>
+<app-file-manager-popup key="fournisseurs" [id]="fournisseur?.id"></app-file-manager-popup>
 <app-push-history-popup
   title="{{ 'valide-comment-title' | localize }}"
   [placeholder]="'valide-comment' | localize"

@@ -4,6 +4,7 @@
     "home": "Accueil",
     "copyright": "Copyright © 2020{0} Microtec Informatique ",
 
+    "documents": "Documents",
     "valide": "Validé",
     "valide-comment": "Commentaire",
     "valide-comment-title": "Commentaire de validation",
@@ -24,7 +25,7 @@
     "btn-historique": "Historique",
     "btn-docsjoints": "Docs joints",
     "btn-affecter": "Affecter",
-    "btn-valider": "Valider", 
+    "btn-valider": "Valider",
     "btn-annuler": "Annuler",
     "btn-editer": "Éditer",
     "btn-cloner": "Cloner",
@@ -40,10 +41,10 @@
     "btn-close": "Clôturer",
     "btn-invoice": "Passer \"bon à facturer\"",
     "btn-envoiBL": "Envoi automatique des BL",
-  
+
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
-    "saveError": "Sauvegardé",    
+    "saveError": "Sauvegardé",
     "saveKO": "Échec de la sauvegarde",
     "create": "Création",
     "clone": "Clone",
@@ -359,8 +360,8 @@
     "articles-title" : "Articles",
     "articles-detailTitle": "Détail",
     "articles-of": "de",
-    "articles-id": "Code", 
-       
+    "articles-id": "Code",
+
     "articles-groupe-CDC": "CDC",
     "articles-groupe-matierePremiere": "Matière première",
     "articles-groupe-normalisation": "Normalisation",
@@ -490,7 +491,7 @@
     "ordres-entrepôt": "Entrepôt",
     "ordres-periode": "période",
     "ordres-du": "du",
-    "ordres-au": "au",  
+    "ordres-au": "au",
 
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",
