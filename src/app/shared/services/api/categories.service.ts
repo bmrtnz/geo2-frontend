@@ -50,7 +50,7 @@ export class CategoriesService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.categorie)
-              resolve(new this.model(res.data.categorie));
+              resolve(new Categorie(res.data.categorie));
           });
         }),
       }),

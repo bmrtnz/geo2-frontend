@@ -46,7 +46,7 @@ export class ArticlesMatieresPremieresService extends ApiService implements APIR
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.articleMatierePremiere)
-              resolve(new this.model(res.data.articleMatierePremiere));
+              resolve(new ArticleMatierePremiere(res.data.articleMatierePremiere));
           });
         }),
       }),

@@ -50,7 +50,7 @@ export class CalibresUnifiesService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.calibreUnifie)
-              resolve(new this.model(res.data.calibreUnifie));
+              resolve(new CalibreUnifie(res.data.calibreUnifie));
           });
         }),
       }),

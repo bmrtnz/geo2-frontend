@@ -50,7 +50,7 @@ export class EtiquettesEvenementiellesService extends ApiService implements APIR
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.etiquetteEvenementielle)
-              resolve(new this.model(res.data.etiquetteEvenementielle));
+              resolve(new EtiquetteEvenementielle(res.data.etiquetteEvenementielle));
           });
         }),
       }),

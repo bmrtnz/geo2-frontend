@@ -47,7 +47,7 @@ export class IncotermsService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.incoterm)
-              resolve(new this.model(res.data.incoterm));
+              resolve(new Incoterm(res.data.incoterm));
           });
         }),
       }),

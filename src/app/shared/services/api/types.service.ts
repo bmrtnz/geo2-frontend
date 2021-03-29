@@ -47,7 +47,7 @@ export class TypesService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.type)
-              resolve(new this.model(res.data.type));
+              resolve(new Type(res.data.type));
           });
         }),
       }),

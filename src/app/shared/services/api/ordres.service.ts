@@ -57,7 +57,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.ordre)
-              resolve(new this.model(res.data.ordre));
+              resolve(new Ordre(res.data.ordre));
           });
         }),
       }),

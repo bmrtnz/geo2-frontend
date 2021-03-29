@@ -42,7 +42,7 @@ export class TypesVenteService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.typeVente)
-              resolve(new this.model(res.data.typeVente));
+              resolve(new TypeVente(res.data.typeVente));
           });
         }),
       }),

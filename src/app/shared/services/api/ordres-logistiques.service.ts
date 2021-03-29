@@ -47,7 +47,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.ordreLogistique)
-              resolve(new this.model(res.data.ordreLogistique));
+              resolve(new OrdreLogistique(res.data.ordreLogistique));
           });
         }),
       }),
