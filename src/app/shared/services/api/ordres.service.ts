@@ -13,6 +13,7 @@ import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 })
 export class OrdresService extends ApiService implements APIRead, APIPersist {
 
+  /* tslint:disable-next-line */
   queryFilter = /.*(?:id|numero|numeroFacture|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer)$/i;
 
   constructor(
@@ -45,7 +46,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
           type Response = { allOrdre: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);
 
-          this.listenQuery<Response>(query, { variables }, res => {
+          this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
             if (res.data && res.data.allOrdre)
               resolve(this.asInstancedListCount(res.data.allOrdre));
           });

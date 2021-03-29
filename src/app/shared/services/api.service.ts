@@ -658,6 +658,7 @@ export abstract class ApiService implements OnDestroy {
       takeUntil(this.destroy),
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
+        fetchPolicy: 'no-cache',
         ...options,
       } as MutationOptions)),
       take(1),

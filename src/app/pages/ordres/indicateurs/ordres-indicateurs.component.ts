@@ -229,7 +229,7 @@ export class OrdresIndicateursComponent implements OnInit {
       this.ordresService.saveAll({allOrdre})
       .subscribe( res => {
         console.log(res);
-        // this.gridSuiviComponent.datagrid.instance.refresh();
+        this.gridSuiviComponent.datagrid.instance.refresh();
       });
   }
 
