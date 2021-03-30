@@ -234,7 +234,7 @@ export class FileManagerService {
       args = Object.assign({}, this.baseArgs, args);
     }
 
-    return this.httpClient.post(url, args).toPromise();
+    return this.httpClient.post(url, args, { withCredentials: true }).toPromise();
   }
 
 }
