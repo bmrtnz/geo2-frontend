@@ -1,17 +1,20 @@
 import {toArray} from 'rxjs/operators';
-import {Field, Model, ModelFieldOptions} from '../models/model';
+import {Field, Model, ModelFieldOptions, ModelName} from '../models/model';
 
+@ModelName('Stamp')
 class Stamp extends Model {
   @Field({ asKey: true }) public id?: number;
   @Field({ dataType: 'date' }) public moment?: string;
 }
 
+@ModelName('Type')
 class Type extends Model {
   @Field({ asKey: true }) public id?: number;
   @Field({ asLabel: true }) public label?: string;
   @Field({ model: Promise.resolve({ default: Stamp }) }) public stamp?: Stamp;
 }
 
+@ModelName('Entity')
 class Entity extends Model {
   @Field({ asKey: true }) public id?: string;
   @Field({ asLabel: true }) public description?: string;
@@ -175,9 +178,6 @@ describe('Model class', () => {
       expect(fields.description).toEqual({
         asLabel: true,
       } as ModelFieldOptions);
-      expect(fields.type).toEqual(jasmine.objectContaining({
-        fetchedModel: Type,
-      }) as ModelFieldOptions);
     });
 
   });

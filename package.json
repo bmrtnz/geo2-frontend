@@ -11,7 +11,7 @@
     "build:stats": "ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/geo2/stats.json",
     "test": "ng test",
-    "test:headless": "ng test --watch=false --browsers=ChromeHeadless",
+    "test:headless": "ng test --watch=false --browsers=HeadlessChrome",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:no-serve": "ng e2e --devServerTarget=",
