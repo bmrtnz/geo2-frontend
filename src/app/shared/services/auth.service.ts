@@ -1,22 +1,23 @@
-import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import notify from 'devextreme/ui/notify';
-import {from, throwError} from 'rxjs';
-import {catchError, mergeAll, tap} from 'rxjs/operators';
+import { from, throwError } from 'rxjs';
+import { catchError, mergeAll, take, tap } from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
 
 @Injectable()
 export class AuthService {
-  loggedIn = false;
+
+  private loggedIn = false;
   public currentUser: Utilisateur;
+
   readonly LAST_USER_STORE_KEY = 'GEO2:LAST-USER';
   readonly CURRENT_USER_STORE_KEY = 'GEO2:CURRENT-USER';
 
   constructor(
     private router: Router,
-    private location: Location,
+    private activatedRoute: ActivatedRoute,
     private utilisateursService: UtilisateursService,
   ) {
     const stored = window.localStorage.getItem(this.CURRENT_USER_STORE_KEY);
@@ -31,13 +32,17 @@ export class AuthService {
     return from(this.utilisateursService.getOne(id, password))
       .pipe(
         mergeAll(),
+        take(1),
         tap(res => {
           if (res.data.utilisateur) {
             this.loggedIn = true;
             this.currentUser = res.data.utilisateur;
             window.localStorage.setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(res.data.utilisateur));
             window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
-            this.location.back();
+
+            // Handle redirection
+            const redirectionURL = this.activatedRoute.snapshot.queryParams?.redirect;
+            this.router.navigateByUrl(redirectionURL ?? '/');
           } else {
             this.loginError();
           }
@@ -72,20 +77,21 @@ export class AuthService {
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService) { }
+
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     const isLoggedIn = this.authService.isLoggedIn;
-    const isLoginForm = route.routeConfig.path === 'login';
+    const isLoginRoute = route.routeConfig.path === 'login';
+    
+    if (!isLoggedIn && !isLoginRoute)
+      return this.router.createUrlTree(['/login'],{
+        queryParams:{ redirect: route.url.toString() },
+      });
 
-    if (isLoggedIn && isLoginForm) {
-      return this.router.createUrlTree(['/']);
-    }
-
-    if (!isLoggedIn && !isLoginForm) {
-      return this.router.createUrlTree(['/login']);
-    }
-
-    return isLoggedIn || isLoginForm;
+    return isLoggedIn || isLoginRoute;
   }
 }

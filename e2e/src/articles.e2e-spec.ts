@@ -1,7 +1,7 @@
 import { $, browser, by, element } from 'protractor';
 import { protractor } from 'protractor/built/ptor';
 
-const ARTICLE_TEST_ID = '091912'
+const ARTICLE_TEST_ID = '091912';
 
 describe('Articles', () => {
 

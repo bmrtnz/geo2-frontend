@@ -1,4 +1,4 @@
-import {Component, NgModule, Input, Output, EventEmitter, HostListener} from '@angular/core';
+import {Component, NgModule, Input, Output, EventEmitter, HostListener, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import DataSource from 'devextreme/data/data_source';
 import {AuthService, LocalizationService} from '../../services';
@@ -15,7 +15,7 @@ import {FileManagerModule} from '../file-manager/file-manager-popup.component';
   styleUrls: ['./header.component.scss']
 })
 
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Output()
   menuToggle = new EventEmitter<boolean>();
 
@@ -43,6 +43,9 @@ export class HeaderComponent {
         this.authService.logOut();
       }
     }];
+  }
+  
+  ngOnInit() {
     this.societeSource = this.societeService.getDataSource();
     this.societeSource.searchExpr('valide');
     this.societeSource.searchOperation('=');

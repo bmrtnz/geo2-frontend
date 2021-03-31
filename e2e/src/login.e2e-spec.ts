@@ -16,6 +16,6 @@ describe('Login', () => {
   it('should connect', async () => {
     await page.connect();
     const url = await browser.getCurrentUrl();
-    expect(url).not.toMatch(/login$/);
+    expect(url).not.toMatch(/\/login/);
   });
 });
