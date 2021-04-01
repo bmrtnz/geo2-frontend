@@ -18,6 +18,7 @@ import { Observable } from 'rxjs';
 export class LitigesComponent implements OnInit {
 
   readonly INDICATOR_NAME = 'Litiges';
+  typeLitiges: any;
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
 
@@ -33,6 +34,7 @@ export class LitigesComponent implements OnInit {
   ) {
     this.dataSource = litigesLignesService.getDataSource();
     this.detailedFields = this.litigesLignesService.model.getDetailedFields();
+    this.typeLitiges = ['clôture commercial', 'clôture commercial (détail)', 'clôture administratif'];
   }
 
   ngOnInit() {
@@ -50,6 +52,12 @@ export class LitigesComponent implements OnInit {
     this.router.navigate(['ordres', 'details'], {
       queryParams: {pushordres: (event.data as LitigeLigne).litige.ordreOrigine.id},
     });
+  }
+
+  onTypeLitigeChange() {
+  }
+
+  onClotAdmin() {
   }
 
 }
