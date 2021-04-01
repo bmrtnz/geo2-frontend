@@ -545,6 +545,28 @@
       }
     ]
   },
+  "ordre-logistique": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ordre.numero",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "groupage.id",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
   "litige-ligne": {
     "columns": [
       {

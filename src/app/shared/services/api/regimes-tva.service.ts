@@ -47,7 +47,7 @@ export class RegimesTvaService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.regimeTva)
-              resolve(new this.model(res.data.regimeTva));
+              resolve(new RegimeTva(res.data.regimeTva));
           });
         }),
       }),

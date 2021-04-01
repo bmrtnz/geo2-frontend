@@ -47,7 +47,7 @@ export class RangementsService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.rangement)
-              resolve(new this.model(res.data.rangement));
+              resolve(new Rangement(res.data.rangement));
           });
         }),
       }),

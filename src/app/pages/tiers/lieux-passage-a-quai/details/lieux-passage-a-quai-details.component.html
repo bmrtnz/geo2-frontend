@@ -65,9 +65,9 @@
               <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-code' | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box
-                formControlName="id" 
+                formControlName="id"
                 [readOnly]="!createMode"
-                [inputAttr]="{'style':  'text-transform: uppercase'}"  
+                [inputAttr]="{'style':  'text-transform: uppercase'}"
                 >
                   <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -343,4 +343,4 @@
   </div>
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup></app-file-manager-popup>
+<app-file-manager-popup key="lieux_passage_a_quai" [id]="lieupassageaquai?.id"></app-file-manager-popup>

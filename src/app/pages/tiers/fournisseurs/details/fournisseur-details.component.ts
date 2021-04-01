@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -98,8 +99,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
-  @ViewChild(CertificationDatePopupComponent, { static: false })
   @ViewChildren(DxAccordionComponent) accordion: any;
+  @ViewChild(CertificationDatePopupComponent, { static: false })
   certDatePopup: CertificationDatePopupComponent;
   editing = false;
 
@@ -140,6 +141,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     private router: Router,
     private route: ActivatedRoute,
     public authService: AuthService,
+    private datePipe: DatePipe,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -282,7 +284,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             this.fournisseur.certifications = e.data.saveFournisseur.certifications;
             this.formGroup.markAsPristine();
           },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
+          error: (err) => console.log(err),
+          // error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
     }
   }
@@ -330,7 +333,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           id: cc ? cc.id : null,
           certification,
           dateValidite: cc && cc.dateValidite ?
-            new Date(cc.dateValidite).toISOString() :
+            this.datePipe.transform(cc.dateValidite, 'yyyy-MM-dd') :
             null,
         };
       });

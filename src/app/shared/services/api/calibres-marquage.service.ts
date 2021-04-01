@@ -50,7 +50,7 @@ export class CalibresMarquageService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.calibreMarquage)
-              resolve(new this.model(res.data.calibreMarquage));
+              resolve(new CalibreMarquage(res.data.calibreMarquage));
           });
         }),
       }),

@@ -65,7 +65,7 @@ export class HistoriqueService extends ApiService {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.historique)
-              resolve(new this.model(res.data.historique));
+              resolve(new Historique(res.data.historique));
           });
         }),
       }),

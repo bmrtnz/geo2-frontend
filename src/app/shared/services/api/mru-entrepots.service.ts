@@ -28,7 +28,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
       const variables = { id };
       this.listenQuery<Response>(query, { variables }, res => {
         if (res.data && res.data.MRUEntrepot)
-          resolve(new this.model(res.data.MRUEntrepot));
+          resolve(new MRUEntrepot(res.data.MRUEntrepot));
       });
     });
   }

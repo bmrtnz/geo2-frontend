@@ -47,7 +47,7 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
             if (res.data && res.data.gridConfig)
-              resolve(new this.model(res.data.gridConfig));
+              resolve(new GridConfig(res.data.gridConfig));
           });
         }),
       }),

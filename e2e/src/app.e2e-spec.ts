@@ -13,6 +13,6 @@ describe('App', () => {
     await page.navigateTo();
     await browser.wait(protractor.ExpectedConditions.visibilityOf($('.content')), 10000);
     const url = await browser.getCurrentUrl();
-    expect(url).toMatch(/login$/);
+    expect(url).toMatch(/\/login/);
   });
 });

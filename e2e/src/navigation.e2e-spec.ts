@@ -26,7 +26,8 @@ describe('Navigation', () => {
       await homePage.navigateTo();
       if (toggleTiers) {
         homePage.getTileByText('Tiers').click();
-        expect(await $('.content .dx-scrollview-content').isDisplayed()).toBeTruthy();
+        expect(await $('.dx-drawer-opened').isDisplayed()).toBeTruthy();
+        await browser.sleep(2000);
         await element(by.cssContainingText('.content .dx-item-content', text)).click();
       } else {
         homePage.getTileByText(text).click();

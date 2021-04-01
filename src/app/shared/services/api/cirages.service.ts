@@ -50,7 +50,7 @@ export class CiragesService extends ApiService implements APIRead {
           const variables = { id };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.cirage)
-              resolve(new this.model(res.data.cirage));
+              resolve(new Cirage(res.data.cirage));
           });
         }),
       }),

@@ -22,6 +22,7 @@ export enum Grid {
   Ordre = 'ordre',
   Historique = 'historique',
   OrdreLigne = 'ordre-ligne',
+  OrdreLogistique = 'ordre-logistique',
   LitigeLigne = 'litige-ligne',
 }
 
@@ -70,6 +71,7 @@ export class GridConfiguratorService {
     const config = {...res[0].config}; // clone config (original is sealed)
     delete config.searchText;
     delete config.focusedRowKey;
+    delete config.selectedRowKeys;
     return config;
   }
 

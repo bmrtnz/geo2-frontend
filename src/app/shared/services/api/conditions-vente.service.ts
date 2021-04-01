@@ -47,7 +47,7 @@ export class ConditionsVenteService extends ApiService implements APIRead {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.conditionVente)
-              resolve(new this.model(res.data.conditionVente));
+              resolve(new ConditionVente(res.data.conditionVente));
           });
         }),
       }),

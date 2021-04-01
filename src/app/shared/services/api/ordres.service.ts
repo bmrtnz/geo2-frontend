@@ -13,7 +13,8 @@ import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 })
 export class OrdresService extends ApiService implements APIRead, APIPersist {
 
-  queryFilter = /.*(?:id|numero|numeroFacture|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue)$/i;
+  /* tslint:disable-next-line */
+  queryFilter = /.*(?:id|numero|numeroFacture|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer)$/i;
 
   constructor(
     apollo: Apollo,
@@ -45,7 +46,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
           type Response = { allOrdre: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);
 
-          this.listenQuery<Response>(query, { variables }, res => {
+          this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
             if (res.data && res.data.allOrdre)
               resolve(this.asInstancedListCount(res.data.allOrdre));
           });
@@ -56,14 +57,14 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.ordre)
-              resolve(new this.model(res.data.ordre));
+              resolve(new Ordre(res.data.ordre));
           });
         }),
       }),
     });
   }
 
-  save(variables: OperationVariables) {
+  save(variables: OperationVariables & {ordre: Ordre}) {
     return this.watchSaveQuery({ variables }, 1, this.queryFilter);
   }
 
@@ -92,6 +93,11 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
         }
       }
     `;
+  }
+
+  saveAll(variables: OperationVariables & {allOrdre: Ordre[]}) {
+    // type Response = { allOrdre: RelayPage<Ordre> };
+    return this.watchSaveAllQuery({ variables }, 1, this.queryFilter);
   }
 
 }
