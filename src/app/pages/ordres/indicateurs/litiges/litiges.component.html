@@ -11,7 +11,7 @@
         ></dx-select-box>
     </div>
   </div>
-  <dx-button class="upperButton" type="default" text="{{ 'btn-clotAdmin' | localize }}" (onClick)="onClotAdmin()"></dx-button>
+  <dx-button *ngIf="clotAdmin" class="upperButton" type="default" text="{{ 'btn-clotAdmin' | localize }}" (onClick)="onClotAdmin()"></dx-button>
   <div style="clear:both"></div>
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="dataSource"

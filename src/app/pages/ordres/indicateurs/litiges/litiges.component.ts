@@ -19,6 +19,7 @@ export class LitigesComponent implements OnInit {
 
   readonly INDICATOR_NAME = 'Litiges';
   typeLitiges: any;
+  clotAdmin = false;
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
 
@@ -54,7 +55,8 @@ export class LitigesComponent implements OnInit {
     });
   }
 
-  onTypeLitigeChange() {
+  onTypeLitigeChange(e) {
+    this.clotAdmin = (e === this.typeLitiges[2]);
   }
 
   onClotAdmin() {

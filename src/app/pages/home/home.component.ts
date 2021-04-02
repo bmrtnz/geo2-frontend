@@ -34,8 +34,12 @@ export class HomeComponent implements OnInit {
     this.router.navigate([`/stock`]);
   }
 
-  navigate(view) {
-    this.router.navigateByUrl('/nested/n/(' + view  + ')');
+  navigate(view, nested?) {
+    if (nested) {
+      this.router.navigateByUrl('/nested/n/(' + view  + ')');
+    } else {
+      this.router.navigateByUrl(view);
+    }
   }
 
   navigateItemList(e) {
