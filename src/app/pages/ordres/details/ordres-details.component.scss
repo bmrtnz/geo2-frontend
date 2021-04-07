@@ -13,9 +13,12 @@
 .subButton {
     top:-10px;
 }
-::ng-deep .left-buttons-box .dx-button-text {
-    padding-right:3px;
-    padding-left:3px;
+::ng-deep .left-buttons-box {
+    z-index:100;
+    .left-buttons-box .dx-button-text {
+        padding-right:3px;
+        padding-left:3px;
+    }
 }
 
 ::ng-deep .order-number {

@@ -106,6 +106,9 @@
           "configurations": {
             "production": {
               "browserTarget": "geo2:build:production"
+            },
+            "webdev": {
+              "browserTarget": "geo2:build:webdev"
             }
           }
         },
@@ -154,6 +157,9 @@
           "configurations": {
             "production": {
               "devServerTarget": "geo2:serve:production"
+            },
+            "headless": {
+              "devServerTarget": "geo2:serve:webdev"
             }
           }
         }

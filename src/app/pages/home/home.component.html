@@ -33,7 +33,7 @@
                       type="default"
                       icon="material-icons list"
                       text="Articles"
-                      (onClick)="navigate('articles/list')"
+                      (onClick)="navigate('articles/list', 'nested')"
                     >
                     </dx-button>
                 </div>
@@ -82,6 +82,7 @@
                       type="default"
                       icon="material-icons flash_on"
                       text="Litiges"
+                      (onClick)="navigate('ordres/indicateurs/litiges')"
                       [disabled]="prod"
                     >
                     </dx-button>

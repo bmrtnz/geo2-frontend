@@ -153,9 +153,9 @@ export class OrdresIndicateursComponent implements OnInit {
       case 'hier': 	deb = this.findDate(-1); break;
       case 'aujourd\'hui': deb = now; break;
       case 'demain': deb = this.findDate(1); break;
-      case 'semaine dernière': deb = year + '-' + month +'-' + (date - day - 6); fin = year + '-' + month +'-' + (date - day); break;
-      case 'semaine en cours': deb = year + '-' + month +'-' + (date - day + 1); fin = year + '-' + month +'-' + (date - day + 7); break;
-      case 'semaine prochaine': deb = year + '-' + month +'-' + (date - day + 8); fin = year + '-' + month +'-' + (date - day+ 14); break;
+      case 'semaine dernière': deb = year + '-' + month + '-' + (date - day - 6); fin = year + '-' + month + '-' + (date - day); break;
+      case 'semaine en cours': deb = year + '-' + month + '-' + (date - day + 1); fin = year + '-' + month + '-' + (date - day + 7); break;
+      case 'semaine prochaine': deb = year + '-' + month + '-' + (date - day + 8); fin = year + '-' + month + '-' + (date - day+ 14); break;
       case '7 prochains jours': deb = now; fin = this.findDate(7); break;
       case '30 prochains jours': deb = now; fin = this.findDate(30); break;
       case 'mois à cheval': // equiv. depuis 1 mois
@@ -169,7 +169,7 @@ export class OrdresIndicateursComponent implements OnInit {
       case 'trimestre dernier': deb = (quarter === 1 ? year - 1 : year) + '-' + prevQuarterStart + '-01'; fin = (quarter === 1 ? year - 1 : year) + '-' + (prevQuarterStart + 2) + '-' + this.daysInMonth((quarter === 1 ? year - 1 : year), prevQuarterStart + 2);break;
       case 'trimestre en cours': deb = year + '-' + quarterStart + '-01'; fin = year + '-' + (quarterStart + 3) + '-' + this.daysInMonth(year, quarterStart + 3);break;
       case 'année civile en cours': deb = year + '-01-01'; fin = year + '-12-31' ; break;
-      case 'campagne en cours': ;break;
+      case 'campagne en cours': deb = ((month <= 6) ? year - 1 : year) + '-07-01'; fin = ((month > 6) ? year + 1 : year) + '-06-30' ; break;
       case 'même semaine année dernière': {
         deb = this.getDateOfISOWeek(this.getWeekNumber(dateNow), year - 1);
         const temp = new Date(deb);

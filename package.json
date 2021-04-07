@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
-    "start:dev": "ng serve --open --liveReload=false --proxy-config proxy.conf.json",
+    "start:dev": "ng serve --open --liveReload=false",
+    "start:webdev": "ng serve --open --liveReload=false --configuration=webdev",
     "build": "ng build",
     "build:prod": "ng build --prod && node script/archive ./dist/geo2-{version}.tar.gz ./dist/geo2/",
     "build:webdev": "ng build --configuration=webdev",
@@ -15,6 +16,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:no-serve": "ng e2e --devServerTarget=",
+    "e2e:headless": "ng e2e --configuration=headless",
     "build-themes": "devextreme build",
     "postinstall": "npm run build-themes && ngcc",
     "devx": "devextreme"

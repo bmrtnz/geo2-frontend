@@ -41,6 +41,7 @@
     "btn-close": "Clôturer",
     "btn-invoice": "Passer \"bon à facturer\"",
     "btn-envoiBL": "Envoi automatique des BL",
+    "btn-clotAdmin": "Clôture administratif",
 
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
@@ -492,6 +493,8 @@
     "ordres-periode": "période",
     "ordres-du": "du",
     "ordres-au": "au",
+    "ordres-litiges": "Litiges en cours",
+    "ordres-litiges-attente": "En attente",
 
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",
