@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '../../shared/services';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
+import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
 
@@ -28,7 +29,12 @@ const routes: Routes = [
     path: 'indicateurs/litiges',
     component: LitigesComponent,
     canActivate: [AuthGuardService],
-  }
+  },
+  {
+    path: 'indicateurs/bonAFacturer',
+    component: BonAFacturerComponent,
+    canActivate: [AuthGuardService],
+  },
 ];
 
 @NgModule({

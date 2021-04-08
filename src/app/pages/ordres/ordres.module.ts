@@ -27,6 +27,7 @@ import { GridHistoriqueComponent } from './grid-historique/grid-historique.compo
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { GridLogistiquesComponent } from './grid-logistiques/grid-logistiques.component';
+import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { GridLogistiquesComponent } from './grid-logistiques/grid-logistiques.co
     GridHistoriqueComponent,
     LitigesComponent,
     GridLogistiquesComponent,
+    BonAFacturerComponent,
   ],
   imports: [
     OrdresRoutingModule,

@@ -1,9 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import LitigeLigne from 'app/shared/models/litige-ligne.model';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
-import { LitigesLignesService } from 'app/shared/services/api/litiges-lignes.service';
+import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import DataSource from 'devextreme/data/data_source';
@@ -11,13 +10,13 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-litiges',
-  templateUrl: './litiges.component.html',
-  styleUrls: ['./litiges.component.scss']
+  selector: 'app-bon-a-facturer',
+  templateUrl: './bon-a-facturer.component.html',
+  styleUrls: ['./bon-a-facturer.component.scss']
 })
-export class LitigesComponent implements OnInit {
+export class BonAFacturerComponent implements OnInit {
 
-  readonly INDICATOR_NAME = 'Litiges';
+  readonly INDICATOR_NAME = 'Bons';
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
 
@@ -26,13 +25,13 @@ export class LitigesComponent implements OnInit {
   public detailedFields: Observable<ModelFieldOptions<typeof Model>[]>;
 
   constructor(
-    private litigesLignesService: LitigesLignesService,
+    private ordresService: OrdresService,
     public gridConfiguratorService: GridConfiguratorService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     private router: Router,
   ) {
-    this.dataSource = this.litigesLignesService.getDataSource();
-    this.detailedFields = this.litigesLignesService.model.getDetailedFields();
+    this.dataSource = this.ordresService.getDataSource();
+    this.detailedFields = this.ordresService.model.getDetailedFields();
   }
 
   ngOnInit() {
@@ -48,7 +47,7 @@ export class LitigesComponent implements OnInit {
 
   onRowDblClick(event) {
     this.router.navigate(['ordres', 'details'], {
-      queryParams: {pushordres: (event.data as LitigeLigne).litige.ordreOrigine.id},
+      queryParams: {pushordres: (event.data as Ordre).id},
     });
   }
 
