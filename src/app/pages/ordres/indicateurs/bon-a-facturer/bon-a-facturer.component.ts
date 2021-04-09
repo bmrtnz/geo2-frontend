@@ -3,6 +3,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } fro
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
+import { Role } from 'app/shared/models/personne.model';
 import { AuthService, ClientsService, EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
@@ -91,11 +92,11 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     this.assistante = personnesService.getDataSource();
     this.entrepot = entrepotsService.getDataSource();
     this.dataSource = ordresService.getDataSource();
-    this.periodes = ['hier', 'aujourd\'hui', 'demain', 'semaine dernière', 'semaine en cours', 'semaine prochaine',
-     '7 prochains jours', '30 prochains jours', 'mois à cheval', 'depuis 30 jours', 'depuis 1 mois',
-     'depuis 2 mois', 'depuis 3 mois', 'depuis 12 mois', 'mois dernier', 'mois en cours', 'trimestre dernier',
-     'trimestre en cours', 'année civile en cours', 'campagne en cours', 'même semaine année dernière',
-    'même mois année dernière'];
+    this.periodes = ['Hier', 'Aujourd\'hui', 'Demain', 'Semaine dernière', 'Semaine en cours', 'Semaine prochaine',
+     '7 prochains jours', '30 prochains jours', 'Mois à cheval', 'Depuis 30 jours', 'Depuis 1 mois',
+     'Depuis 2 mois', 'Depuis 3 mois', 'Depuis 12 mois', 'Mois dernier', 'Mois en cours', 'Trimestre dernier',
+     'Trimestre en cours', 'Année civile en cours', 'Campagne en cours', 'Même semaine année dernière',
+    'Même mois année dernière'];
     this.days = this.localizeService.localize('ordres-day');
   }
 
@@ -126,14 +127,14 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     this.commercial.filter([
       ['valide', '=', true],
       'and',
-      ['role', '=', 'Role.COMMERCIAL'],
+      ['role', '=', Role.COMMERCIAL],
     ]);
 
     this.assistante = this.personnesService.getDataSource();
     this.assistante.filter([
       ['valide', '=', true],
       'and',
-      ['role', '=', 'Role.ASSISTANTE'],
+      ['role', '=', Role.ASSISTANT],
     ]);
 
   }
@@ -176,7 +177,6 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
 
   onFilterChange() {
     
-    console.log(this.secteurSB.value);
     this.updateFilters();
     // console.log('this.a : '+this.a)
     // console.log('this.a.slice(0) : '+this.a.slice(0))
@@ -198,12 +198,35 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
 
   }
 
-  manualDate() {
+  manualDate(e) {
+
+    // We check that this change is coming from the user, not following a period change
+    if (!e.event) return;
+
+    // Checking that date period is consistent otherwise, we set the other date to the new date
+    const deb = new Date(this.dateStartSB.value);
+    const fin = new Date(this.dateEndSB.value);
+    const diffJours = fin.getDate() - deb.getDate();
+
+    if (diffJours < 0) {
+      if (e.element.classList.contains('dateStart')) {
+        this.dateEndSB.value = this.dateStartSB.value;
+      } else {
+        this.dateStartSB.value = this.dateEndSB.value;
+      }
+    }
+
     this.periodeSB.value = '';
     this.updateFilters();
+
   }
 
-  setDates(periode) {
+  setDates(e) {
+
+    // We check that this change is coming from the user, not following a prog change
+    if (!e.event) return;
+
+    const periode = e.value;
 
     let deb, fin, temp;
     // const dateNow = new Date(2021, 11, 31);
@@ -219,27 +242,27 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     const prevQuarterStart = quarter === 1 ? 10 : quarterStart - 3; // Current quarter first month
 
     switch(periode) {
-      case 'hier': 	deb = this.findDate(-1); break;
-      case 'aujourd\'hui': deb = now; break;
-      case 'demain': deb = this.findDate(1); break;
-      case 'semaine dernière': deb = this.findDate(-day - 6); fin = this.findDate(-day); break;
-      case 'semaine en cours': deb = this.findDate(-day + 1); fin = this.findDate(-day + 7); break;
-      case 'semaine prochaine': deb = this.findDate(-day + 8); fin = this.findDate(-day + 14); break;
+      case 'Hier': 	deb = this.findDate(-1); break;
+      case 'Aujourd\'hui': deb = now; break;
+      case 'Demain': deb = this.findDate(1); break;
+      case 'Semaine dernière': deb = this.findDate(-day - 6); fin = this.findDate(-day); break;
+      case 'Semaine en cours': deb = this.findDate(-day + 1); fin = this.findDate(-day + 7); break;
+      case 'Semaine prochaine': deb = this.findDate(-day + 8); fin = this.findDate(-day + 14); break;
       case '7 prochains jours': deb = now; fin = this.findDate(7); break;
       case '30 prochains jours': deb = now; fin = this.findDate(30); break;
-      case 'mois à cheval': // equiv. 'depuis 1 mois' selon Géo1
-      case 'depuis 1 mois': deb = (month === 1 ? year-1 : year) + '-' + (month === 1 ? 12 : month - 1) + '-' + date; fin = (month === 12 ? year + 1 : year) + '-' + (month === 12 ? 1 : month + 1) + '-' + date ; break;
-      case 'depuis 30 jours': deb = this.findDate(-30); fin = now; break;     
-      case 'depuis 2 mois': deb = (month <= 2 ? year-1 : year) + '-' + (month <= 2 ? 12 : month - 2) + '-' + date; fin = (month >= 11 ? year + 1 : year) + '-' + (month >= 11 ? 1 : month + 1) + '-' + date ; break;
-      case 'depuis 3 mois': deb = (month <= 3 ? year-1 : year) + '-' + (month <= 3 ? 12 : month - 3) + '-' + date; fin = (month >= 10 ? year + 1 : year) + '-' + (month >= 11 ? 1 : month + 1) + '-' + date ; break;
-      case 'depuis 12 mois': deb = (year-1) + '-' + month + '-' + date; fin = year + '-' + (month === 12 ? 1 : month + 1) + '-' + date ; break;
-      case 'mois dernier': temp = (month === 1 ? year - 1 : year) + '-' + (month === 1 ? 12 : month - 1); deb = temp + '-01'; fin = temp + '-' + this.daysInMonth((month === 1 ? year - 1 : year), (month === 1 ? 12 : month - 1)) ;break;
-      case 'mois en cours': temp = year + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year, month) ;break;
-      case 'trimestre dernier': deb = (quarter === 1 ? year - 1 : year) + '-' + prevQuarterStart + '-01'; fin = (quarter === 1 ? year - 1 : year) + '-' + (prevQuarterStart + 2) + '-' + this.daysInMonth((quarter === 1 ? year - 1 : year), prevQuarterStart + 2);break;
-      case 'trimestre en cours': deb = year + '-' + quarterStart + '-01'; fin = year + '-' + (quarterStart + 3) + '-' + this.daysInMonth(year, quarterStart + 3);break;
-      case 'année civile en cours': deb = year + '-01-01'; fin = year + '-12-31' ; break;
-      case 'campagne en cours': deb = ((month <= 6) ? year - 1 : year) + '-07-01'; fin = ((month > 6) ? year + 1 : year) + '-06-30' ; break;
-      case 'même semaine année dernière': {
+      case 'Mois à cheval': // equiv. 'depuis 1 mois' selon Géo1
+      case 'Depuis 1 mois': deb = (month === 1 ? year-1 : year) + '-' + (month === 1 ? 12 : month - 1) + '-' + date; fin = (month === 12 ? year + 1 : year) + '-' + (month === 12 ? 1 : month + 1) + '-' + date ; break;
+      case 'Depuis 30 jours': deb = this.findDate(-30); fin = now; break;     
+      case 'Depuis 2 mois': deb = (month <= 2 ? year-1 : year) + '-' + (month <= 2 ? 12 : month - 2) + '-' + date; fin = (month >= 11 ? year + 1 : year) + '-' + (month >= 11 ? 1 : month + 1) + '-' + date ; break;
+      case 'Depuis 3 mois': deb = (month <= 3 ? year-1 : year) + '-' + (month <= 3 ? 12 : month - 3) + '-' + date; fin = (month >= 10 ? year + 1 : year) + '-' + (month >= 11 ? 1 : month + 1) + '-' + date ; break;
+      case 'Depuis 12 mois': deb = (year-1) + '-' + month + '-' + date; fin = year + '-' + (month === 12 ? 1 : month + 1) + '-' + date ; break;
+      case 'Mois dernier': temp = (month === 1 ? year - 1 : year) + '-' + (month === 1 ? 12 : month - 1); deb = temp + '-01'; fin = temp + '-' + this.daysInMonth((month === 1 ? year - 1 : year), (month === 1 ? 12 : month - 1)) ;break;
+      case 'Mois en cours': temp = year + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year, month) ;break;
+      case 'Trimestre dernier': deb = (quarter === 1 ? year - 1 : year) + '-' + prevQuarterStart + '-01'; fin = (quarter === 1 ? year - 1 : year) + '-' + (prevQuarterStart + 2) + '-' + this.daysInMonth((quarter === 1 ? year - 1 : year), prevQuarterStart + 2);break;
+      case 'Trimestre en cours': deb = year + '-' + quarterStart + '-01'; fin = year + '-' + (quarterStart + 3) + '-' + this.daysInMonth(year, quarterStart + 3);break;
+      case 'Année civile en cours': deb = year + '-01-01'; fin = year + '-12-31' ; break;
+      case 'Campagne en cours': deb = ((month <= 6) ? year - 1 : year) + '-07-01'; fin = ((month > 6) ? year + 1 : year) + '-06-30' ; break;
+      case 'Même semaine année dernière': {
         deb = this.getDateOfISOWeek(this.getWeekNumber(dateNow), year - 1);
         const temp = new Date(deb);
         fin = temp.setDate(temp.getDate() + 6);
