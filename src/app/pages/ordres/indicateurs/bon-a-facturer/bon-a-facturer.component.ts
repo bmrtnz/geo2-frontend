@@ -157,14 +157,16 @@ export class BonAFacturerComponent implements OnInit {
     const quarter = Math.floor((month + 2) / 3); // Current quarter
     const quarterStart = 1 + ((quarter - 1) * 3); // Current quarter first month
     const prevQuarterStart = quarter === 1 ? 10 : quarterStart - 3; // Current quarter first month
+    console.log(date)
+    console.log(day)
 
     switch(periode) {
       case 'hier': 	deb = this.findDate(-1); break;
       case 'aujourd\'hui': deb = now; break;
       case 'demain': deb = this.findDate(1); break;
-      case 'semaine dernière': deb = year + '-' + month + '-' + (date - day - 6); fin = year + '-' + month + '-' + (date - day); break;
-      case 'semaine en cours': deb = year + '-' + month + '-' + (date - day + 1); fin = year + '-' + month + '-' + (date - day + 7); break;
-      case 'semaine prochaine': deb = year + '-' + month + '-' + (date - day + 8); fin = year + '-' + month + '-' + (date - day+ 14); break;
+      case 'semaine dernière': deb = this.findDate(-day - 6); fin = this.findDate(-day); break;
+      case 'semaine en cours': deb = this.findDate(-day + 1); fin = this.findDate(-day + 7); break;
+      case 'semaine prochaine': deb = this.findDate(-day + 8); fin = this.findDate(-day + 14); break;
       case '7 prochains jours': deb = now; fin = this.findDate(7); break;
       case '30 prochains jours': deb = now; fin = this.findDate(30); break;
       case 'mois à cheval': // equiv. 'depuis 1 mois' selon Géo1
