@@ -250,49 +250,49 @@
     "columns": [
       {
         "visibleIndex": 0,
+        "dataField": "nom",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "prenom",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "moyenCommunication.description",
+        "dataType": "string",
+        "width": 250,
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "flux.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
         "dataField": "fluxComplement",
         "dataType": "string",
         "width": 75,
         "visible": true
       },
       {
-        "visibleIndex": 1,
-        "dataField": "moyenCommunication.description",
-        "dataType": "string",
-        "width": 150,
-        "visible": true
-      },
-      {
-        "visibleIndex": 2,
-        "dataField": "nom",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "prenom",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 4,
-        "dataField": "valide",
-        "dataType": "boolean",
-        "width": 100,
-        "visible": true,
-        "filterValue": true
-      },
-      {
         "visibleIndex": 5,
-        "dataField": "id",
+        "dataField": "fluxAccess1",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "codeTiers",
-        "dataType": "string",
-        "visible": true
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 100,
+        "visible": true,
+        "filterValue": true
       }
     ]
   },

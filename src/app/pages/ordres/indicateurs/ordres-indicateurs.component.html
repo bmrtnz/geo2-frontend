@@ -47,9 +47,10 @@
                         [min]="1"
                         [max]="9"
                         [showSpinButtons]="true"
+                        (valueChange)="changeDays($event)"
                     ></dx-number-box>
                 </div>
-                <div class="dx-field-label days">jour(s)</div>
+                <div class="dx-field-label days">{{ days }}</div>
             </div>
         </dxi-item>
         <dxi-item [ratio]="2">
@@ -63,7 +64,7 @@
             <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
                 <div class="dx-field-value">
-                    <dx-select-box
+                    <dx-select-box #secteur
                         [dataSource]="secteurs"
                         displayExpr="description"
                         [searchEnabled]="true"

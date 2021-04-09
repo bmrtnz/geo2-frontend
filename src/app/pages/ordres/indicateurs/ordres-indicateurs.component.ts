@@ -9,11 +9,13 @@ import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { LocalizationService } from 'app/shared/services';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { AuthService, ClientsService, EntrepotsService, TransporteursService } from '../../../shared/services';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
+import { DxSelectBoxComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-ordres-indicateurs',
@@ -35,6 +37,7 @@ export class OrdresIndicateursComponent implements OnInit {
   indicator: string;
   filter: any;
   a: any;
+  days: string;
   basicFilter: any;
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
@@ -42,6 +45,7 @@ export class OrdresIndicateursComponent implements OnInit {
   
   // @ViewChild('toto', { static: false }) dxSelectBoxComponent: DxSelectBoxComponent;
   @ViewChild(GridSuiviComponent, { static: false }) gridSuiviComponent: GridSuiviComponent;
+  @ViewChild('secteur', { static: false }) secteursSB: DxSelectBoxComponent;
 
   public dataSource: DataSource;
 
@@ -58,11 +62,22 @@ export class OrdresIndicateursComponent implements OnInit {
     public ordresService: OrdresService,
     public clientsService: ClientsService,
     public authService: AuthService,
+    public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
   ) {
     // this.apiService = transporteursService;
     this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter([
+      ['valide', '=', true],
+      'and',
+      ['societes', 'contains', environment.societe.id]
+    ])
     this.clients = clientsService.getDataSource();
+    this.clients.filter([
+      ['societe.id', '=', environment.societe.id],
+      // 'and',
+      // ['secteur.id', '=', this.secteursSB.selectedItem],
+    ])
     this.commercial = personnesService.getDataSource();
     this.assistante = personnesService.getDataSource();
     this.entrepot = entrepotsService.getDataSource();
@@ -72,6 +87,7 @@ export class OrdresIndicateursComponent implements OnInit {
      'depuis 2 mois', 'depuis 3 mois', 'depuis 12 mois', 'mois dernier', 'mois en cours', 'trimestre dernier',
      'trimestre en cours', 'année civile en cours', 'campagne en cours', 'même semaine année dernière',
     'même mois année dernière'];
+    this.days = this.localizeService.localize('ordres-day');
    }
 
   ngOnInit() {
@@ -86,9 +102,11 @@ export class OrdresIndicateursComponent implements OnInit {
 
       this.filter = this.ordresIndicatorsService.getIndicatorByName(this.indicator).filter;
       this.a = this.filter;
-
     });
-
+    // Set sector depending on user
+    if (this.authService.currentUser.limitationSecteur) {
+      // this.secteursSB.value =  this.authService.currentUser.secteurCommercial.id;
+    }
     console.log(this.filter);
     
   }
@@ -103,7 +121,7 @@ export class OrdresIndicateursComponent implements OnInit {
   }
 
   onSecteurChange(e) {
-
+    
     console.log('this.a : '+this.a)
     console.log('this.a.slice(0) : '+this.a.slice(0))
     console.log('this.filter before : '+this.filter);
@@ -132,6 +150,10 @@ export class OrdresIndicateursComponent implements OnInit {
     console.log('this.filter after : '+this.filter);
     this.gridSuiviComponent.reload();
 
+  }
+
+  changeDays(e) {
+    this.days = this.localizeService.localize('ordres-day' + (e > 1 ? 's' : ''));
   }
 
   findDates(periode) {

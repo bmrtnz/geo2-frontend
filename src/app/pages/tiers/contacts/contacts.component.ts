@@ -47,12 +47,14 @@ export class ContactsComponent implements OnInit, NestedPart {
   ) {}
 
   ngOnInit() {
-    this.detailedFields = this.contactsService.model.getDetailedFields()
+    this.detailedFields = this.contactsService.model.getDetailedFields(2)
     .pipe(
       // Filtrage headers possibles columnchooser
       map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('tiers-contacts-' + field.path.replace('.description', ''))).length);
+        return fields.filter( field => 
+          //   console.log('tiers-contacts-' + field.path.replaceAll('.', '-'))
+          // });
+          !!(this.localizeService.localize('tiers-contacts-' + field.path.replaceAll('.', '-'))).length);
        }),
     );
     this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
