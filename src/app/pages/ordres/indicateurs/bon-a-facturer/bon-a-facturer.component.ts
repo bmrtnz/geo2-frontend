@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -11,17 +11,17 @@ import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxSelectBoxComponent } from 'devextreme-angular';
+import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { GridSuiviComponent } from '../../grid-suivi/grid-suivi.component';
 
 @Component({
   selector: 'app-bon-a-facturer',
   templateUrl: './bon-a-facturer.component.html',
   styleUrls: ['./bon-a-facturer.component.scss']
 })
-export class BonAFacturerComponent implements OnInit {
+export class BonAFacturerComponent implements OnInit, AfterViewInit  {
 
   readonly INDICATOR_NAME = 'Bons';
   transporteurs: DataSource;
@@ -44,8 +44,15 @@ export class BonAFacturerComponent implements OnInit {
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
 
-  @ViewChild(GridSuiviComponent, { static: false }) gridSuiviComponent: GridSuiviComponent;
-  @ViewChild('secteur', { static: false }) secteursSB: DxSelectBoxComponent;
+  @ViewChild('gridBAF', { static: false }) gridBAFComponent: DxoGridComponent;
+  @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
+  @ViewChild('clientValue', { static: false }) clientSB: DxSelectBoxComponent;
+  @ViewChild('entrepotValue', { static: false }) entrepotSB: DxSelectBoxComponent;
+  @ViewChild('commercialValue', { static: false }) commercialSB: DxSelectBoxComponent;
+  @ViewChild('assistanteValue', { static: false }) assistanteSB: DxSelectBoxComponent;
+  @ViewChild('periodeValue', { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild('dateStartValue', { static: false }) dateStartSB: DxSelectBoxComponent;
+  @ViewChild('dateEndValue', { static: false }) dateEndSB: DxSelectBoxComponent;
 
   public dataSource: DataSource;
 
@@ -77,8 +84,9 @@ export class BonAFacturerComponent implements OnInit {
     this.clients.filter([
       ['societe.id', '=', environment.societe.id],
       // 'and',
-      // ['secteur.id', '=', this.secteursSB.selectedItem],
+      // ['secteur.id', '=', this.secteurSB.selectedItem],
     ]);
+
     this.commercial = personnesService.getDataSource();
     this.assistante = personnesService.getDataSource();
     this.entrepot = entrepotsService.getDataSource();
@@ -93,23 +101,68 @@ export class BonAFacturerComponent implements OnInit {
 
   ngOnInit() {
     this.enableFilters();
+    this.dateStart = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
+    this.dateEnd = this.dateStart;
   }
+  
+  ngAfterViewInit() {
 
+    if (this.authService.currentUser.limitationSecteur) {
+      this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
+    }
+    
+    this.updateFilters();
+
+  }
+  
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
 
     this.dataSource.filter(filters);
+
     this.dataSource.reload();
+
+    this.commercial = this.personnesService.getDataSource();
+    this.commercial.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', 'Role.COMMERCIAL'],
+    ]);
+
+    this.assistante = this.personnesService.getDataSource();
+    this.assistante.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', 'Role.ASSISTANTE'],
+    ]);
+
   }
 
-  onRowDblClick({data: ordre}: {data: Ordre}) {
+  updateFilters() {
+
+    this.clients = this.clientsService.getDataSource();
+    this.clients.filter([
+      ['societe.id', '=', environment.societe.id],
+      'and',
+      ['secteur.id', '=', this.secteurSB.value],
+    ]);
+    if (this.clientSB.value) {
+      this.entrepot = this.entrepotsService.getDataSource();
+      this.entrepot.filter([
+        ['client.id', '=', this.clientSB.value.id]
+      ]);
+    }
+
+  }
+
+  onRowDblClick(event) {
     this.router.navigate(['ordres', 'details'], {
-      queryParams: {pushordres: ordre.id},
+      queryParams: {pushordres: (event.data as Ordre).id},
     });
   }
 
   updateAsBonAFacturer() {
-    const allOrdre: Ordre[] = this.gridSuiviComponent.datagrid.instance
+    const allOrdre: Ordre[] = this.gridBAFComponent.instance
     .getSelectedRowsData()
     .map((ordre: Ordre) => ({...ordre, bonAFacturer: true}));
 
@@ -117,33 +170,40 @@ export class BonAFacturerComponent implements OnInit {
       this.ordresService.saveAll({allOrdre})
       .subscribe( res => {
         console.log(res);
-        this.gridSuiviComponent.datagrid.instance.refresh();
+        this.gridBAFComponent.instance.refresh();
       });
   }
 
-  onSecteurChange(e) {
+  onFilterChange() {
     
-    console.log('this.a : '+this.a)
-    console.log('this.a.slice(0) : '+this.a.slice(0))
-    console.log('this.filter before : '+this.filter);
-    this.filter = this.a;
+    console.log(this.secteurSB.value);
+    this.updateFilters();
+    // console.log('this.a : '+this.a)
+    // console.log('this.a.slice(0) : '+this.a.slice(0))
+    // console.log('this.filter before : '+this.filter);
+    // this.filter = this.a;
 
-    if (e) {
+    // if (e) {
 
-    }
-    // this.filter.push(
-    // 'and',
-    // ['dateLivraisonPrevue', '>=', this.datePipe.transform(this.dateStart, 'yyyy-MM-dd')],
-    // 'and',
-    // ['dateLivraisonPrevue', '<', this.datePipe.transform(this.dateEnd, 'yyyy-MM-dd')],
-    // )
+    // }
+    // // this.filter.push(
+    // // 'and',
+    // // ['dateLivraisonPrevue', '>=', this.datePipe.transform(this.dateStart, 'yyyy-MM-dd')],
+    // // 'and',
+    // // ['dateLivraisonPrevue', '<', this.datePipe.transform(this.dateEnd, 'yyyy-MM-dd')],
+    // // )
     
-    console.log('this.filter after : '+this.filter);
-    this.gridSuiviComponent.reload();
+    // console.log('this.filter after : '+this.filter);
+    // this.gridBAFComponent.instance.reload();
 
   }
 
-  findDates(periode) {
+  manualDate() {
+    this.periodeSB.value = '';
+    this.updateFilters();
+  }
+
+  setDates(periode) {
 
     let deb, fin, temp;
     // const dateNow = new Date(2021, 11, 31);
@@ -157,8 +217,6 @@ export class BonAFacturerComponent implements OnInit {
     const quarter = Math.floor((month + 2) / 3); // Current quarter
     const quarterStart = 1 + ((quarter - 1) * 3); // Current quarter first month
     const prevQuarterStart = quarter === 1 ? 10 : quarterStart - 3; // Current quarter first month
-    console.log(date)
-    console.log(day)
 
     switch(periode) {
       case 'hier': 	deb = this.findDate(-1); break;
@@ -197,6 +255,8 @@ export class BonAFacturerComponent implements OnInit {
     this.dateStart = deb;
     this.dateEnd = fin;
 
+    this.onFilterChange();
+
   }
 
   findDate(delta) {
@@ -219,7 +279,7 @@ export class BonAFacturerComponent implements OnInit {
     else
         ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
     return ISOweekStart;
-}
+  }
 
   daysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
