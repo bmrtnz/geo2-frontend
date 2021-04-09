@@ -1,7 +1,7 @@
 <div class="content-block">
   <h2>
-    {{ 'tiers-contacts-title' | localize }}
-    :
+    {{ 'tiers-contacts-title' | localize }} 
+    -
     {{ typeTiersLabel | localize }} {{ codeTiers }}
   </h2>
 </div>
@@ -52,8 +52,8 @@
 
     <dxi-column
       *ngFor="let field of detailedFields | async"
-      [dataField]="field.name"
-      [caption]="('tiers-contacts-' + field.name | localize) || field.name"
+      [dataField]="field.path"
+      [caption]="('tiers-contacts-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [allowEditing]="(field.name === 'valide' && authService.currentUser.accessGeoTiers) || (field.name !== 'valide' && field?.allowEditing !== false)"
       [validationRules]="field.validationRules || {}"
