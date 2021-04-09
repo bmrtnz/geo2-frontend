@@ -102,9 +102,9 @@ export class BonAFacturerComponent implements OnInit {
     this.dataSource.reload();
   }
 
-  onRowDblClick(event) {
+  onRowDblClick({data: ordre}: {data: Ordre}) {
     this.router.navigate(['ordres', 'details'], {
-      queryParams: {pushordres: (event.data as Ordre).id},
+      queryParams: {pushordres: ordre.id},
     });
   }
 

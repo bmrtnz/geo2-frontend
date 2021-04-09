@@ -570,15 +570,29 @@
   "ordre-bon-a-facturer": {
     "columns": [
       {
-        "visibleIndex": 0,
         "dataField": "id",
-        "dataType": "string",
+        "fixed": true,
         "visible": true
       },
       {
-        "visibleIndex": 1,
-        "dataField": "numero",
-        "dataType": "string",
+        "fixed": true,
+        "dataField": "bonAFacturer",
+        "visible": true
+      },
+      {
+        "dataField": "dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "dataField": "client.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "referenceClient",
         "visible": true
       }
     ]

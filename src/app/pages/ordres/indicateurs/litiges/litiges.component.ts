@@ -49,9 +49,9 @@ export class LitigesComponent implements OnInit {
     this.dataSource.reload();
   }
 
-  onRowDblClick(event) {
+  onRowDblClick({data: litigeLigne}: {data: LitigeLigne}) {
     this.router.navigate(['ordres', 'details'], {
-      queryParams: {pushordres: (event.data as LitigeLigne).litige.ordreOrigine.id},
+      queryParams: {pushordres: litigeLigne.litige.ordreOrigine.id},
     });
   }
 
