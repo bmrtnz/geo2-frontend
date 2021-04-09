@@ -55,8 +55,7 @@ const indicators: Indicator[] = [{
   fetchCount: true,
   parameter: 'Bons',
   subParameter: 'à facturer',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'bonsafacturer'},
+  goTo: '/ordres/indicateurs/bonAFacturer',
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning'
