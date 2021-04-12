@@ -82,12 +82,6 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       ['societes', 'contains', environment.societe.id]
     ])
     this.clients = clientsService.getDataSource();
-    this.clients.filter([
-      ['societe.id', '=', environment.societe.id],
-      // 'and',
-      // ['secteur.id', '=', this.secteurSB.selectedItem],
-    ]);
-
     this.commercial = personnesService.getDataSource();
     this.assistante = personnesService.getDataSource();
     this.entrepot = entrepotsService.getDataSource();
