@@ -60,12 +60,15 @@ export class AuthService {
     notify('Utilisateur et/ou mot de passe inconnu', 'error');
   }
 
-  logOut() {
+  async logOut() {
     this.loggedIn = false;
     window.localStorage.removeItem(this.CURRENT_USER_STORE_KEY);
-    this.router.navigate(['/login'], {
+    await this.router.navigate(['/login'], {
+      skipLocationChange: true,
       queryParams: { redirect: this.router.url },
     });
+    // TODO Extends BaseRouteReuseStrategy(v10) to not reload route from cache on redirect, fixing with location.reload() for now
+    // window.location.reload();
   }
 
   get isLoggedIn() {
@@ -91,6 +94,7 @@ export class AuthGuardService implements CanActivate {
 
     if (!isLoggedIn && !isLoginRoute)
       return this.router.createUrlTree(['/login'], {
+        skipLocationChange: true,
         queryParams: { redirect: state.url },
       });
 
