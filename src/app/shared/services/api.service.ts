@@ -416,6 +416,7 @@ export abstract class ApiService implements OnDestroy {
           switch (operator) {
             case '=': operator = '=='; break;
             case 'contains': operator = '=ilike='; break;
+            case 'in': operator = '=in='; break;
             case 'startswith': operator = '=ilike='; break;
             case 'endswith': operator = '=ilike='; break;
             case 'notcontains': operator = '=inotlike='; break;

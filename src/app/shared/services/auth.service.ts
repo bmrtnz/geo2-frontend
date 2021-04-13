@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import notify from 'devextreme/ui/notify';
+import { environment } from 'environments/environment';
 import { from, throwError } from 'rxjs';
 import { catchError, mergeAll, take, tap } from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';

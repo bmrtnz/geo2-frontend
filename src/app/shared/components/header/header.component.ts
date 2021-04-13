@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
 
   @Input()
   title: string;
+  perimetre: string; 
 
   societeSource: DataSource;
   userMenuItems: any[];
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     public societeService: SocietesService,
   ) {
+    this.perimetre = this.authService.currentUser.perimetre;
     this.userMenuItems = [{
       text: 'Profil',
       icon: 'user'
@@ -46,10 +48,24 @@ export class HeaderComponent implements OnInit {
   }
   
   ngOnInit() {
+
+    let filter = [];
+    let filter2 = [];
     this.societeSource = this.societeService.getDataSource();
-    this.societeSource.searchExpr('valide');
-    this.societeSource.searchOperation('=');
-    this.societeSource.searchValue('true');
+    filter.push(['valide', '=', true]);
+    this.societeSource.filter(filter)
+
+    // Authorized companies -> '*' all
+    if (this.perimetre !== '*') {
+      this.perimetre.split(',').forEach(element => {
+        filter2.push(['id', '=', element]);
+        filter2.push('or');
+      });
+      filter2.pop(); // Remove last 'or'
+      this.societeSource.filter([filter2])
+    }
+    
+
   }
 
   @HostListener('scroll', ['$event']) onScrollEvent($event) {

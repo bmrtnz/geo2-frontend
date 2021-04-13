@@ -7,7 +7,7 @@ export const environment = {
     height: 500
   },
   societe: {
-    id: 'SA',
-    raisonSocial: 'Blue Whale S.A.S.'
+    id: '',
+    raisonSocial: ''
   },
 };
