@@ -9,6 +9,7 @@ import { GridsConfigsService } from 'app/shared/services/api/grids-configs.servi
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxSelectBoxComponent } from 'devextreme-angular';
@@ -62,6 +63,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     private ordresService: OrdresService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    public currentCompanyService: CurrentCompanyService,
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -79,7 +81,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     this.secteurs.filter([
       ['valide', '=', true],
       'and',
-      ['societes', 'contains', environment.societe.id]
+      ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
     this.clients = clientsService.getDataSource();
     this.commercial = personnesService.getDataSource();
@@ -137,7 +139,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
 
     this.clients = this.clientsService.getDataSource();
     this.clients.filter([
-      ['societe.id', '=', environment.societe.id],
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
       'and',
       ['secteur.id', '=', this.secteurSB.value],
     ]);

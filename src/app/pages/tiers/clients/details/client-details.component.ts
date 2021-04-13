@@ -22,6 +22,7 @@ import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { TypesClientService } from 'app/shared/services/api/types-client.service';
 import { TypesVenteService } from 'app/shared/services/api/types-vente.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { DxAccordionComponent, DxCheckBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
@@ -172,6 +173,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     private conditionsVenteService: ConditionsVenteService,
     private router: Router,
     private route: ActivatedRoute,
+    private currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
   ) {
     this.defaultVisible = false;
@@ -282,8 +284,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           client[f] = this.formGroup.controls[f].value;
         }
         // On spécifie l'ID de la société pour passer l'étape de création
-        client.societe = { id: environment.societe.id };
-        // client.societe = { id: 'SA' };
+        client.societe = { id: this.currentCompanyService.getCompany().id };
         client.code = this.formGroup.get('code').value.toUpperCase();
         client.valide = false;
         client.preSaisie = true;

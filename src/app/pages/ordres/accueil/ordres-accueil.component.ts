@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Event as NavigationEvent, NavigationEnd, Router } from '@angular/router';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { OrdresIndicatorsService, Indicator } from 'app/shared/services/ordres-indicators.service';
 import { DxTagBoxComponent } from 'devextreme-angular';
 import { environment } from 'environments/environment';
@@ -25,6 +26,7 @@ export class OrdresAccueilComponent implements OnDestroy {
   constructor(
     ordresIndicatorsService: OrdresIndicatorsService,
     private ordresService: OrdresService,
+    public currentCompanyService: CurrentCompanyService,
     private router: Router,
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
@@ -47,7 +49,7 @@ export class OrdresAccueilComponent implements OnDestroy {
         mergeMap(async indicator => {
           const dataSource = this.ordresService.getDataSource();
           dataSource.filter([
-            ['societe.id', '=', environment.societe.id],
+            ['societe.id', '=', this.currentCompanyService.getCompany().id],
             'and',
             indicator.filter,
           ]);

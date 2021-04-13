@@ -10,6 +10,7 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 
 @Component({
   selector: 'app-grid-historique',
@@ -28,6 +29,7 @@ export class GridHistoriqueComponent implements OnInit {
 
   constructor(
     private ordresService: MruOrdresService,
+    public currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -59,7 +61,7 @@ export class GridHistoriqueComponent implements OnInit {
       // A voir si à prendre en compte
       // ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
       // 'and',
-      ['societe.id', '=', environment.societe.id],
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
     ];
     this.dataSource.filter(filters);
     this.dataSource.reload();

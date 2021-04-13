@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { StockArticlesAgeService } from 'app/shared/services/api/stock-articles-age.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -63,6 +64,7 @@ export class StockListComponent implements OnInit {
     public stockArticlesAgeService: StockArticlesAgeService,
     public fournisseursService: FournisseursService,
     public clientsService: ClientsService,
+    public currentCompanyService: CurrentCompanyService,
     public secteursService: SecteursService,
     private fb: FormBuilder,
     private router: Router,
@@ -71,7 +73,7 @@ export class StockListComponent implements OnInit {
 
   ngOnInit() {
     this.stockCategories = this.stocksService.getStockCategories();
-    this.stockArticlesAgeService.customVariables.societe = environment.societe;
+    this.stockArticlesAgeService.customVariables.societe = this.currentCompanyService.getCompany();
     this.stockArticlesAge = this.stockArticlesAgeService.getFetchDatasource();
     this.stockArticlesAge.on('changed', _ => {
       this.linesCount = this.dataGrid.instance.totalCount();

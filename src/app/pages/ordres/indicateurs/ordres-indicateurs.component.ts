@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 import { AuthService, ClientsService, EntrepotsService, TransporteursService } from '../../../shared/services';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 import { DxSelectBoxComponent } from 'devextreme-angular';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 
 @Component({
   selector: 'app-ordres-indicateurs',
@@ -57,6 +58,7 @@ export class OrdresIndicateursComponent implements OnInit {
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
     public secteursService: SecteursService,
+    public currentCompanyService: CurrentCompanyService,
     public personnesService: PersonnesService,
     public entrepotsService: EntrepotsService,
     public ordresService: OrdresService,
@@ -70,11 +72,11 @@ export class OrdresIndicateursComponent implements OnInit {
     this.secteurs.filter([
       ['valide', '=', true],
       'and',
-      ['societes', 'contains', environment.societe.id]
+      ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
     this.clients = clientsService.getDataSource();
     this.clients.filter([
-      ['societe.id', '=', environment.societe.id],
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
       // 'and',
       // ['secteur.id', '=', this.secteursSB.selectedItem],
     ])

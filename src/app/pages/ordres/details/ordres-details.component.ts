@@ -8,6 +8,7 @@ import { LocalizationService, TransporteursService } from 'app/shared/services';
 import { ClientsService } from 'app/shared/services/api/clients.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Comm, CommService, Log, LogService } from 'app/shared/services/log.service';
 import { Content, OrdresIndicatorsService, INDEX_TAB } from 'app/shared/services/ordres-indicators.service';
 import { DxAccordionComponent, DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
@@ -85,6 +86,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     ordresIndicatorsService: OrdresIndicatorsService,
     public localizeService: LocalizationService,
     private ordresService: OrdresService,
+    public currentCompanyService: CurrentCompanyService,
     public clientsService: ClientsService,
     public personnesService: PersonnesService,
     public transporteursService: TransporteursService,
@@ -170,7 +172,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     let filter = [
       ['valide', '=', true],
       'and',
-      ['societe.id', '=', environment.societe.id],
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
       'and',
       // ['facture', '=', false],
       // 'and',
@@ -185,7 +187,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const ordre = this.ordresService.extractDirty(this.formGroup.controls);
       const isNew = !ordre.id;
-      ordre.societe = { id: environment.societe.id };
+      ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
       this.ordresService.save({ ordre })
         .subscribe({

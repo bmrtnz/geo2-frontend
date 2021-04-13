@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { DxDataGridComponent } from 'devextreme-angular';
@@ -28,6 +29,7 @@ export class GridSuiviComponent implements OnInit {
   constructor(
     private ordresService: OrdresService,
     public localizeService: LocalizationService,
+    public currentCompanyService: CurrentCompanyService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
     this.dataSource = ordresService.getDataSource();
@@ -50,7 +52,7 @@ export class GridSuiviComponent implements OnInit {
     let filters = [
       ['valide', '=', true],
       'and',
-      ['societe.id', '=', environment.societe.id],
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
       'and',
       ['facture', '=', false]
     ];

@@ -4,6 +4,7 @@ import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -30,6 +31,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     public clientsService: ClientsService,
     public gridService: GridsConfigsService,
     public localizeService: LocalizationService,
+    public currentCompanyService: CurrentCompanyService,
     private router: Router,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
@@ -55,7 +57,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   enableFilters() {
     this.clients.searchExpr('societe.id');
     this.clients.searchOperation('=');
-    this.clients.searchValue(environment.societe.id);
+    this.clients.searchValue(this.currentCompanyService.getCompany().id);
     this.clients.reload();
   }
 

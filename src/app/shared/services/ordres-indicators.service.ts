@@ -3,6 +3,7 @@ import Ordre, { FactureAvoir } from '../models/ordre.model';
 import { DatePipe } from '@angular/common';
 import { AuthService } from './auth.service';
 import { environment } from 'environments/environment';
+import { CurrentCompanyService } from './current-company.service';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -137,6 +138,7 @@ export class OrdresIndicatorsService {
   constructor(
     private datePipe: DatePipe,
     private authService: AuthService,
+    public currentCompanyService: CurrentCompanyService
   ) {
     this.indicators = this.indicators.map(indicator => {
 
@@ -144,7 +146,7 @@ export class OrdresIndicatorsService {
       indicator.filter = [
         ['valide', '=', true],
         'and',
-        ['societe.id', '=', environment.societe.id],
+        ['societe.id', '=', this.currentCompanyService.getCompany().id],
       ];
 
       // Supervision livraison

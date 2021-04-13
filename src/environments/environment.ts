@@ -12,14 +12,6 @@ export const environment = {
     width: 500,
     height: 500
   },
-  societe: {
-    id: '',
-    raisonSocial: ''
-  },
-  societesUtilisateur: {
-    idList: ''
-  }
-
 };
 
 /*

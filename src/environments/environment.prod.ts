@@ -11,7 +11,4 @@ export const environment = {
     id: '',
     raisonSocial: ''
   },
-  societesUtilisateur: {
-    idList: ''
-  }
 };
