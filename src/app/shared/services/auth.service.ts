@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { from, throwError } from 'rxjs';
@@ -64,7 +64,9 @@ export class AuthService {
   logOut() {
     this.loggedIn = false;
     window.localStorage.removeItem(this.CURRENT_USER_STORE_KEY);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], {
+      queryParams: { redirect: this.router.url },
+    });
   }
 
   get isLoggedIn() {
@@ -84,13 +86,13 @@ export class AuthGuardService implements CanActivate {
     private authService: AuthService
   ) { }
 
-  canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
     const isLoggedIn = this.authService.isLoggedIn;
     const isLoginRoute = route.routeConfig.path === 'login';
-    
+
     if (!isLoggedIn && !isLoginRoute)
-      return this.router.createUrlTree(['/login'],{
-        queryParams:{ redirect: route.url.toString() },
+      return this.router.createUrlTree(['/login'], {
+        queryParams: { redirect: state.url },
       });
 
     return isLoggedIn || isLoginRoute;
