@@ -102,7 +102,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   
   ngAfterViewInit() {
 
-    if (this.authService.currentUser.limitationSecteur) {
+      if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
     
@@ -169,7 +169,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       });
   }
 
-  onFilterChange() {
+  onFilterChange(e?) {
     
     this.updateFilters();
     // console.log('this.a : '+this.a)
