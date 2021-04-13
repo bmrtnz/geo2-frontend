@@ -6,6 +6,7 @@ import {DxContextMenuModule} from 'devextreme-angular/ui/context-menu';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 
 @Component({
   selector: 'app-company-chooser-panel',
@@ -23,28 +24,34 @@ export class CompanyChooserComponent implements OnInit {
   societe: {};
 
   constructor(
-    private router: Router
+    private router: Router,
+    public currentCompanyService: CurrentCompanyService,
   ) {}
 
   ngOnInit() {
-    this.societe = environment.societe.raisonSocial;
-    const data = window.localStorage.getItem('companyStorage');
-    // Rappel stockage (en attente BDD) local Storage
-    if (data !== null) {
-      const state = JSON.parse(data);
-      environment.societe.id = state.id;
-      environment.societe.raisonSocial = state.raisonSocial;
-      this.societe = environment.societe.raisonSocial;
-    }
 
+    // Local storage
+    let data =this.currentCompanyService.getCompany();
+    if (data !== null) {
+      this.societe = data.raisonSocial;
+    } else {
+      this.companyItems.load().then(res => {
+        this.selectCompany(res[0]);
+      })
+    }
+ 
   }
 
   selectCompany(e) {
-    environment.societe.id = e.itemData.id;
-    environment.societe.raisonSocial = e.itemData.raisonSocial;
-    this.societe = environment.societe.raisonSocial;
-    // Stockage (en attente BDD) local Storage
-    window.localStorage.setItem('companyStorage', JSON.stringify(environment.societe));
+    if (e.itemData) {e = e.itemData;}
+
+    const societe = {
+      id : e.id,
+      raisonSocial : e.raisonSocial
+    }
+    // Local storage
+    this.currentCompanyService.setCompany(societe);
+    this.societe = societe.raisonSocial;
     // Back home
     this.router.navigate([`/**`]);
   }
