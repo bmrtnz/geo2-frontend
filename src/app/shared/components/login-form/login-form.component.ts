@@ -32,7 +32,6 @@ export class LoginFormComponent implements OnInit {
     this.form.reset({
       nomUtilisateur: this.authService.lastUsername,
     });
-    this.currentCompanyService.setCompany(null);
   }
 
   onSubmit() {

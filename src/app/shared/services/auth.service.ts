@@ -6,6 +6,7 @@ import { from, throwError } from 'rxjs';
 import { catchError, mergeAll, take, tap } from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
+import { CurrentCompanyService } from './current-company.service';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,7 @@ export class AuthService {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private utilisateursService: UtilisateursService,
+    public currentCompanyService: CurrentCompanyService
   ) {
     const stored = window.localStorage.getItem(this.CURRENT_USER_STORE_KEY);
     if (stored) {
@@ -37,6 +39,12 @@ export class AuthService {
         tap(res => {
           if (res.data.utilisateur) {
             this.loggedIn = true;
+
+            // We do not change the company in case the user has been time disconnected
+            if (window.localStorage.getItem(this.LAST_USER_STORE_KEY) !== res.data.utilisateur.nomUtilisateur) {
+              this.currentCompanyService.setCompany(null);
+            }
+
             this.currentUser = res.data.utilisateur;
             window.localStorage.setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(res.data.utilisateur));
             window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
