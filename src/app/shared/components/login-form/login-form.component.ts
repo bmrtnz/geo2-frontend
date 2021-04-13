@@ -8,6 +8,7 @@ import {DxValidatorModule} from 'devextreme-angular/ui/validator';
 import {DxValidationGroupModule} from 'devextreme-angular/ui/validation-group';
 import {SharedModule} from '../../shared.module';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 
 @Component({
   selector: 'app-login-form',
@@ -20,6 +21,7 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
+    public currentCompanyService: CurrentCompanyService,
   ) { }
 
   ngOnInit() {
@@ -30,6 +32,7 @@ export class LoginFormComponent implements OnInit {
     this.form.reset({
       nomUtilisateur: this.authService.lastUsername,
     });
+    this.currentCompanyService.setCompany(null);
   }
 
   onSubmit() {

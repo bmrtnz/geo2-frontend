@@ -44,6 +44,8 @@ export class AuthService {
             // Handle redirection
             const redirectionURL = this.activatedRoute.snapshot.queryParams?.redirect;
             this.router.navigateByUrl(redirectionURL ?? '/');
+            const name = res.data.utilisateur.nomUtilisateur;
+            notify('Bienvenue ' + name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() + ' !', 'info');
           } else {
             this.loginError();
           }
