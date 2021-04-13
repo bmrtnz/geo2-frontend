@@ -8201,7 +8201,8 @@
   transform: translate(-50%,-50%);
 }
 .dx-toast-info {
-  background-color: rgba(0,0,0,.87);
+  /* background-color: rgba(0,0,0,.87); */
+  background-color: #00759c;
 }
 .dx-toast-warning {
   background-color: #ffc107;

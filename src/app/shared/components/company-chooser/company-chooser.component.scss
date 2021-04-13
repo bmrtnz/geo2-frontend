@@ -20,10 +20,6 @@
   display: inline-block;
 }
 
-::ng-deep .company-chooser-menu {
-  background:red !important;
-}
-
 ::ng-deep .dx-context-menu.company-chooser-menu {
   &.dx-rtl {
     .dx-submenu .dx-menu-items-container .dx-icon {
