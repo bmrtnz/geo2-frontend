@@ -76,10 +76,11 @@ export class AuthService {
     window.localStorage.removeItem(this.CURRENT_USER_STORE_KEY);
     await this.router.navigate(['/login'], {
       skipLocationChange: true,
+      queryParamsHandling: 'merge',
       queryParams: { redirect: this.router.url },
     });
     // TODO Extends BaseRouteReuseStrategy(v10) to not reload route from cache on redirect, fixing with location.reload() for now
-    // window.location.reload();
+    window.location.reload();
   }
 
   get isLoggedIn() {
@@ -106,6 +107,7 @@ export class AuthGuardService implements CanActivate {
     if (!isLoggedIn && !isLoginRoute)
       return this.router.createUrlTree(['/login'], {
         skipLocationChange: true,
+        queryParamsHandling: 'merge',
         queryParams: { redirect: state.url },
       });
 
