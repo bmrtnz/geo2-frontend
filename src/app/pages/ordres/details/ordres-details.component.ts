@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
+import { Role } from 'app/shared/models';
 import Ordre from 'app/shared/models/ordre.model';
 import { LocalizationService, TransporteursService } from 'app/shared/services';
 import { ClientsService } from 'app/shared/services/api/clients.service';
@@ -38,7 +39,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   allContents: Content[];
   contents: Content[];
   clients: DataSource;
-  personnes: DataSource;
+  commercial: DataSource;
+  assistante: DataSource;
   transporteurs: DataSource;
   logs: Log[];
   commentaires: Comm[];
@@ -108,7 +110,19 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     // this.enableFilters();
     this.resetCriteria();
     this.clients = this.clientsService.getDataSource();
-    this.personnes = this.personnesService.getDataSource();
+    this.commercial = this.personnesService.getDataSource();
+    this.commercial.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.COMMERCIAL],
+    ]);
+
+    this.assistante = this.personnesService.getDataSource();
+    this.assistante.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.ASSISTANT],
+    ]);
     this.transporteurs = this.transporteursService.getDataSource();
 
     this.route.queryParams

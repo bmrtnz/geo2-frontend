@@ -18,7 +18,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { from } from 'rxjs';
 import { mergeAll, tap } from 'rxjs/operators';
-import { Entrepot } from '../../../../shared/models';
+import { Entrepot, Role } from '../../../../shared/models';
 import { ClientsService, EntrepotsService } from '../../../../shared/services';
 
 @Component({
@@ -73,7 +73,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   editing = false;
 
   entrepot: Entrepot;
-  personnes: DataSource;
+  commercial: DataSource;
+  assistante: DataSource;
   modesLivraison: DataSource;
   typesPalette: DataSource;
   pays: DataSource;
@@ -167,7 +168,18 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         }
       });
 
-    this.personnes = this.personnesService.getDataSource();
+    this.commercial = this.personnesService.getDataSource();
+    this.commercial.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.COMMERCIAL],
+    ]);
+    this.assistante = this.personnesService.getDataSource();
+    this.assistante.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.ASSISTANT],
+    ]);
     this.modesLivraison = this.modesLivraisonService.getDataSource();
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);

@@ -29,7 +29,7 @@ import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
-import { Certification, CertificationClient, Client } from '../../../../shared/models';
+import { Certification, CertificationClient, Client, Role } from '../../../../shared/models';
 import { AuthService, ClientsService } from '../../../../shared/services';
 
 @Component({
@@ -132,7 +132,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   code: string;
   gridBoxValue: number[];
   secteurs: DataSource;
-  personnes: DataSource;
+  commercial: DataSource;
+  assistante: DataSource;
   pays: DataSource;
   paysFacturation: DataSource;
   langue: DataSource;
@@ -226,7 +227,19 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       });
 
     this.secteurs = this.secteursService.getDataSource();
-    this.personnes = this.personnesService.getDataSource();
+    this.commercial = this.personnesService.getDataSource();
+    this.commercial.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.COMMERCIAL],
+    ]);
+
+    this.assistante = this.personnesService.getDataSource();
+    this.assistante.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.ASSISTANT],
+    ]);
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
     this.typesClient = this.typesClientService.getDataSource();
