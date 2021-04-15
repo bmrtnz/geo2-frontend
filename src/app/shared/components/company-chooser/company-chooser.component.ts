@@ -7,6 +7,7 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-company-chooser-panel',
@@ -36,7 +37,11 @@ export class CompanyChooserComponent implements OnInit {
       this.societe = data.raisonSocial;
     } else {
       this.companyItems.load().then(res => {
-        this.selectCompany(res[0]);
+        if (res.length) {
+          this.selectCompany(res[0]);
+        } else {
+          notify('Aucune société liée au compte', 'error');
+        }
       })
     }
  
