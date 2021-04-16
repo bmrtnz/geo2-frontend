@@ -74,8 +74,7 @@ const indicators: Indicator[] = [{
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
-  goToParams: {filtre: 'ordresnonclotures'},
-  goTo: '/ordres/indicateurs',
+  goTo: '/ordres/indicateurs/ordresNonClotures',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
   warningIcon: ''
@@ -166,9 +165,9 @@ export class OrdresIndicatorsService {
           'and',
           ['client.usageInterne', '<>', true],
           'and',
-          ['dateLivraisonPrevue', '=', this.getFormatedDate(Date.now())],
-          // 'and',
-          // ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
+          ['dateLivraisonPrevue', '>=', this.getFormatedDate(Date.now())],
+          'and',
+          ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
         ];
       }
 
