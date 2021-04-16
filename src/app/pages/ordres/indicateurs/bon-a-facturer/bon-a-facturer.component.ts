@@ -147,11 +147,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       ['secteur.id', '=', this.secteurSB.value.id],
     ]);
     this.entrepot = this.entrepotsService.getDataSource();
-    if (this.clientSB.value) {
-      this.entrepot.filter([
-        ['client.id', '=', this.clientSB.value.id]
-      ]);
-    }
+    if (this.clientSB.value) this.entrepot.filter(['client.id', '=', this.clientSB.value.id]);
 
     // Retrieves the initial filter while removing date criteria
     let filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
