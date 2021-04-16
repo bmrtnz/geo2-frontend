@@ -16,29 +16,26 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'supervision-livraison',
-  templateUrl: './supervision-livraison.component.html',
-  styleUrls: ['./supervision-livraison.component.scss']
+  selector: 'ordres-non-clotures',
+  templateUrl: './ordres-non-clotures.component.html',
+  styleUrls: ['./ordres-non-clotures.component.scss']
 })
-export class SupervisionLivraisonComponent implements OnInit {
+export class OrdresNonCloturesComponent implements OnInit {
 
-  readonly INDICATOR_NAME = 'Supervision';
+  readonly INDICATOR_NAME = 'OrdresNonClotures';
   options: {};
   secteurs: DataSource;
   indicator: string;
   filter: any;
-  initialFilterLengh: number;
+  a: any;
   days: string;
   basicFilter: any;
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   rowSelected: boolean;
   
-  @ViewChild('gridSUPERVISION', { static: false }) gridSUPERVISIONComponent: DxoGridComponent;
+  @ViewChild('gridORDRESNONCLOTURES', { static: false }) gridSUPERVISIONComponent: DxoGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
-  @ViewChild('diffDateCheckboxValue', { static: false }) diffDateCB: DxSelectBoxComponent;
-  @ViewChild('diffDateValue', { static: false }) diffDateSB: DxSelectBoxComponent;
-
   
   public dataSource: DataSource;
 
@@ -77,17 +74,32 @@ export class SupervisionLivraisonComponent implements OnInit {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
-  
-    this.updateFilters();
 
   }
 
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
-    this.initialFilterLengh = filters.length;
 
     this.dataSource.filter(filters);
+    this.dataSource.reload();
 
+  }
+
+  updateFilters() {
+
+    // Retrieves the initial filter while removing date criteria
+    const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    // filters.splice(-4,4);
+
+    // filters.push(
+    //   'and',
+    //   ['dateLivraisonPrevue', '>=', this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value)],
+    //   'and',
+    //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
+    // )
+    
+    // console.log(filters)
+    this.dataSource.filter(filters);
     this.dataSource.reload();
 
   }
@@ -99,18 +111,6 @@ export class SupervisionLivraisonComponent implements OnInit {
   onRowDblClick(e) {
     window.localStorage.setItem('orderNumber', JSON.stringify(e));
     this.router.navigate([`/ordres/details`]);
-  }
-
-  changeDays(e) {
-    this.days = this.localizeService.localize('ordres-day' + (e > 1 ? 's' : ''));
-    this.updateFilters();
-  }
-
-  updateFilters() {
-
-  }
-
-  autoSendDeliveryNotes() {
   }
 
 }

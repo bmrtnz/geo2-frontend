@@ -6,6 +6,7 @@ import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
+import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures/ordres-non-clotures.component';
 import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison/supervision-livraison.component';
 
 const routes: Routes = [
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: 'indicateurs/supervisionLivraison',
     component: SupervisionLivraisonComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'indicateurs/ordresNonClotures',
+    component: OrdresNonCloturesComponent,
     canActivate: [AuthGuardService],
   },
 ];

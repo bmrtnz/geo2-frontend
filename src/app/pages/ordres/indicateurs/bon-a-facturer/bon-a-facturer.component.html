@@ -1,4 +1,4 @@
-<h2 class="content-block">{{ 'ordres-bonsafacturer' | localize }}
+<h2 class="content-block">{{ 'ordres-bonsAFacturer' | localize }}
   <dx-button class="upperButton" type="default" text="{{ 'btn-invoice' | localize }}" (onClick)="updateAsBonAFacturer()"></dx-button>
 </h2>
 
@@ -16,7 +16,7 @@
                     displayExpr="description"
                     [searchEnabled]="true"
                     searchExpr="description"
-                    (valueChange)="updateFilters()"
+                    (valueChange)="onSecteurChange()"
                 ></dx-select-box>
             </div>
         </div>

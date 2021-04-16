@@ -29,6 +29,8 @@ import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { GridLogistiquesComponent } from './grid-logistiques/grid-logistiques.component';
 import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
 import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison/supervision-livraison.component';
+import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures/ordres-non-clotures.component';
+import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes/ordres-non-confirmes.component';
 
 
 @NgModule({
@@ -43,6 +45,8 @@ import { SupervisionLivraisonComponent } from './indicateurs/supervision-livrais
     GridLogistiquesComponent,
     BonAFacturerComponent,
     SupervisionLivraisonComponent,
+    OrdresNonCloturesComponent,
+    OrdresNonConfirmesComponent,
   ],
   imports: [
     OrdresRoutingModule,

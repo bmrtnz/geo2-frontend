@@ -36,6 +36,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   dateStart: any;
   dateEnd: any;
   periodes: any;
+  initialFilterLengh: number;
   filter: any;
   a: any;
   days: string;
@@ -105,15 +106,17 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   ngAfterViewInit() {
 
     if (this.authService.currentUser.limitationSecteur) {
-      this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
+      this.secteurSB.value = {
+        id : this.authService.currentUser.secteurCommercial.id,
+        description : this.authService.currentUser.secteurCommercial.description
+      }
     }
-    
-    // this.updateFilters();
 
   }
   
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    this.initialFilterLengh = filters.length;
 
     this.dataSource.filter(filters);
     this.dataSource.reload();
@@ -137,21 +140,22 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   updateFilters() {
 
     this.clients = this.clientsService.getDataSource();
+
     this.clients.filter([
       ['societe.id', '=', this.currentCompanyService.getCompany().id],
       'and',
-      ['secteur.id', '=', this.secteurSB.value],
+      ['secteur.id', '=', this.secteurSB.value.id],
     ]);
+    this.entrepot = this.entrepotsService.getDataSource();
     if (this.clientSB.value) {
-      this.entrepot = this.entrepotsService.getDataSource();
       this.entrepot.filter([
         ['client.id', '=', this.clientSB.value.id]
       ]);
     }
 
     // Retrieves the initial filter while removing date criteria
-    const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
-    filters.splice(-4,4);
+    let filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    filters = filters.slice(0, this.initialFilterLengh - 4);
 
     filters.push(
       'and',
@@ -167,6 +171,15 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     // console.log(filters)
     this.dataSource.filter(filters);
     this.dataSource.reload();
+
+  }
+
+  onSecteurChange() {
+    
+    // We clear client/entrepot
+    this.entrepotSB.value = null;
+    this.clientSB.value = null;
+    this.updateFilters();
 
   }
 
