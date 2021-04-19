@@ -14,7 +14,7 @@ import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 export class OrdresService extends ApiService implements APIRead, APIPersist {
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|numeroFacture|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer)$/i;
+  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer)$/i;
 
   constructor(
     apollo: Apollo,

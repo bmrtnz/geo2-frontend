@@ -594,6 +594,10 @@
       {
         "dataField": "referenceClient",
         "visible": true
+      },
+      {
+        "dataField": "marge",
+        "visible": true
       }
     ]
   },
