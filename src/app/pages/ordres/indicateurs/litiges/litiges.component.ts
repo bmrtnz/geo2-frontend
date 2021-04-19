@@ -20,6 +20,7 @@ export class LitigesComponent implements OnInit {
   readonly INDICATOR_NAME = 'Litiges';
   typeLitiges: any;
   clotAdmin = false;
+  initialFilterLengh: number;
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
 
@@ -44,6 +45,7 @@ export class LitigesComponent implements OnInit {
 
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    this.initialFilterLengh = filters.length;
 
     this.dataSource.filter(filters);
     this.dataSource.reload();

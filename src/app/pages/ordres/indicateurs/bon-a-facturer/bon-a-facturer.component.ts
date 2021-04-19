@@ -36,6 +36,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   dateStart: any;
   dateEnd: any;
   periodes: any;
+  initialFilterLengh: number;
   filter: any;
   a: any;
   days: string;
@@ -104,19 +105,20 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   
   ngAfterViewInit() {
 
-      if (this.authService.currentUser.limitationSecteur) {
-      this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
+    if (this.authService.currentUser.limitationSecteur) {
+      this.secteurSB.value = {
+        id : this.authService.currentUser.secteurCommercial.id,
+        description : this.authService.currentUser.secteurCommercial.description
+      }
     }
-    
-    this.updateFilters();
 
   }
   
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    this.initialFilterLengh = filters.length;
 
     this.dataSource.filter(filters);
-
     this.dataSource.reload();
 
     this.commercial = this.personnesService.getDataSource();
@@ -138,17 +140,42 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   updateFilters() {
 
     this.clients = this.clientsService.getDataSource();
+
     this.clients.filter([
       ['societe.id', '=', this.currentCompanyService.getCompany().id],
       'and',
-      ['secteur.id', '=', this.secteurSB.value],
+      ['secteur.id', '=', this.secteurSB.value.id],
     ]);
-    if (this.clientSB.value) {
-      this.entrepot = this.entrepotsService.getDataSource();
-      this.entrepot.filter([
-        ['client.id', '=', this.clientSB.value.id]
-      ]);
-    }
+    this.entrepot = this.entrepotsService.getDataSource();
+    if (this.clientSB.value) this.entrepot.filter(['client.id', '=', this.clientSB.value.id]);
+
+    // Retrieves the initial filter while removing date criteria
+    let filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    filters = filters.slice(0, this.initialFilterLengh - 4);
+
+    filters.push(
+      'and',
+      ['dateLivraisonPrevue', '>=', this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value)],
+      'and',
+      ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
+    )
+    if (this.assistanteSB.value) filters.push('and', ['assistante.id', '=', this.assistanteSB.value.id])
+    if (this.commercialSB.value) filters.push('and', ['commercial.id', '=', this.commercialSB.value.id]);
+    if (this.clientSB.value)     filters.push('and', ['client.id', '=', this.clientSB.value.id]);
+    if (this.entrepotSB.value)   filters.push('and', ['entrepot.id', '=', this.entrepotSB.value.id]);
+    
+    // console.log(filters)
+    this.dataSource.filter(filters);
+    this.dataSource.reload();
+
+  }
+
+  onSecteurChange() {
+    
+    // We clear client/entrepot
+    this.entrepotSB.value = null;
+    this.clientSB.value = null;
+    this.updateFilters();
 
   }
 
@@ -171,29 +198,6 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       });
   }
 
-  onFilterChange(e?) {
-    
-    this.updateFilters();
-    // console.log('this.a : '+this.a)
-    // console.log('this.a.slice(0) : '+this.a.slice(0))
-    // console.log('this.filter before : '+this.filter);
-    // this.filter = this.a;
-
-    // if (e) {
-
-    // }
-    // // this.filter.push(
-    // // 'and',
-    // // ['dateLivraisonPrevue', '>=', this.datePipe.transform(this.dateStart, 'yyyy-MM-dd')],
-    // // 'and',
-    // // ['dateLivraisonPrevue', '<', this.datePipe.transform(this.dateEnd, 'yyyy-MM-dd')],
-    // // )
-    
-    // console.log('this.filter after : '+this.filter);
-    // this.gridBAFComponent.instance.reload();
-
-  }
-
   manualDate(e) {
 
     // We check that this change is coming from the user, not following a period change
@@ -212,7 +216,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       }
     }
 
-    this.periodeSB.value = '';
+    this.periodeSB.value = null;
     this.updateFilters();
 
   }
@@ -266,20 +270,21 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
         fin = this.datePipe.transform(fin.valueOf(), 'yyyy-MM-dd');
         ;break;
       } 
-      case 'même mois année dernière': temp = (year - 1) + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year-1, month); break;
+      case 'Même mois année dernière': 
+      temp = (year - 1) + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year-1, month); break;
     }
 
     if (!fin) {fin = deb;}
 
-    this.dateStart = deb;
-    this.dateEnd = fin;
+    this.dateStartSB.value = deb;
+    this.dateEndSB.value = fin;
 
-    this.onFilterChange();
+    this.updateFilters();
 
   }
 
   findDate(delta) {
-    return this.datePipe.transform((new Date()).setDate((new Date()).getDate() + delta).valueOf(), 'yyyy-MM-dd');
+    return this.ordresIndicatorsService.getFormatedDate((new Date()).setDate((new Date()).getDate() + delta).valueOf());
   }
 
   getWeekNumber(d) {

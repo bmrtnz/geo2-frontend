@@ -46,8 +46,7 @@ const indicators: Indicator[] = [{
   fetchCount: true,
   parameter: 'Supervision',
   subParameter: 'livraison',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'supervisionlivraison'},
+  goTo: '/ordres/indicateurs/supervisionLivraison',
   tileBkg: '#9199B4',
   indicatorIcon: 'material-icons directions',
   warningIcon: ''
@@ -75,8 +74,7 @@ const indicators: Indicator[] = [{
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
-  goToParams: {filtre: 'ordresnonclotures'},
-  goTo: '/ordres/indicateurs',
+  goTo: '/ordres/indicateurs/ordresNonClotures',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
   warningIcon: ''
@@ -167,7 +165,7 @@ export class OrdresIndicatorsService {
           'and',
           ['client.usageInterne', '<>', true],
           'and',
-          ['dateLivraisonPrevue', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          ['dateLivraisonPrevue', '>=', this.getFormatedDate(Date.now())],
           'and',
           ['dateLivraisonPrevue', '<', this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd')],
         ];
@@ -227,13 +225,13 @@ export class OrdresIndicatorsService {
         indicator.filter = [
           ...indicator.filter,
           'and',
-          ['logistiques.dateDepartPrevueFournisseur', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
-          'and',
-          [
-            'logistiques.dateDepartPrevueFournisseur',
-            '<',
-            this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd'),
-          ],
+          ['logistiques.dateDepartPrevueFournisseur', '>=', this.getFormatedDate(Date.now())],
+          // 'and',
+          // [
+          //   'logistiques.dateDepartPrevueFournisseur',
+          //   '<',
+          //   this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd'),
+          // ],
         ];
       }
 
@@ -256,5 +254,9 @@ export class OrdresIndicatorsService {
   }
   getIndicatorByName(name: string) {
     return this.indicators.find(i => i?.goToParams?.filtre === name || i?.parameter === name);
+  }
+
+  getFormatedDate(date) {
+    return this.datePipe.transform(date, 'yyyy-MM-dd');
   }
 }

@@ -25,6 +25,8 @@ export enum Grid {
   OrdreLogistique = 'ordre-logistique',
   LitigeLigne = 'litige-ligne',
   OrdreBonAFacturer = 'ordre-bon-a-facturer',
+  OrdreOrdresNonClotures = 'ordre-ordres-non-clotures',
+  OrdreSupervisionLivraison= 'ordre-supervision-livraison'
 }
 
 @Injectable({
