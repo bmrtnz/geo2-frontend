@@ -22,7 +22,7 @@ import { Observable } from 'rxjs';
 })
 export class SupervisionLivraisonComponent implements OnInit {
 
-  readonly INDICATOR_NAME = 'Supervision';
+  readonly INDICATOR_NAME = 'SupervisionLivraison';
   options: {};
   secteurs: DataSource;
   indicator: string;
@@ -87,8 +87,11 @@ export class SupervisionLivraisonComponent implements OnInit {
     this.initialFilterLengh = filters.length;
 
     this.dataSource.filter(filters);
-
     this.dataSource.reload();
+
+  }
+  
+  updateFilters() {
 
   }
 
@@ -104,10 +107,6 @@ export class SupervisionLivraisonComponent implements OnInit {
   changeDays(e) {
     this.days = this.localizeService.localize('ordres-day' + (e > 1 ? 's' : ''));
     this.updateFilters();
-  }
-
-  updateFilters() {
-
   }
 
   autoSendDeliveryNotes() {

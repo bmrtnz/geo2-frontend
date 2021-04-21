@@ -27,9 +27,6 @@ export class OrdresNonCloturesComponent implements OnInit {
   secteurs: DataSource;
   indicator: string;
   filter: any;
-  a: any;
-  days: string;
-  basicFilter: any;
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   rowSelected: boolean;
@@ -59,7 +56,6 @@ export class OrdresNonCloturesComponent implements OnInit {
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
-    this.days = this.localizeService.localize('ordres-day');
     this.detailedFields = this.ordresService.model.getDetailedFields();
     this.dataSource = ordresService.getDataSource();
    }
@@ -78,6 +74,7 @@ export class OrdresNonCloturesComponent implements OnInit {
   }
 
   enableFilters() {
+
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
 
     this.dataSource.filter(filters);
@@ -86,10 +83,12 @@ export class OrdresNonCloturesComponent implements OnInit {
   }
 
   updateFilters() {
-
+    return
     // Retrieves the initial filter while removing date criteria
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
     // filters.splice(-4,4);
+
+    if (this.secteurSB.value)    filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
 
     // filters.push(
     //   'and',

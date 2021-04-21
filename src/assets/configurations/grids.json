@@ -597,6 +597,46 @@
       }
     ]
   },
+  "ordres-non-clotures": {
+    "columns": [
+      {
+        "dataField": "dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "dataField": "client.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "referenceClient",
+        "visible": true
+      }
+    ]
+  },
+  "ordre-non-confirmes": {
+    "columns": [
+      {
+        "dataField": "dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "dataField": "client.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "referenceClient",
+        "visible": true
+      }
+    ]
+  },
   "litige-ligne": {
     "columns": [
       {

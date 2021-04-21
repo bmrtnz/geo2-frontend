@@ -145,6 +145,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const myData = window.localStorage.getItem('openOrders');
     if (myData !== null) {
       const myOrders = JSON.parse(myData);
+      console.log('avant ')
+      console.log(myOrders)
       JSON.parse(myData).forEach(value => {
         this.pushTab(value);
       });
@@ -152,6 +154,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
     const data = window.localStorage.getItem('orderNumber');
     if (data) {
+      console.log('après ')
+      console.log(JSON.parse(data))
       const order = JSON.parse(data);
       window.localStorage.removeItem('orderNumber');
       this.pushTab(order);
@@ -315,17 +319,20 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   pushTab(ordre?: Ordre) {
 
     if (ordre) {
+
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
-      if (Object.keys(ordre).length > 2) {
+      if (Object.keys(ordre).length > 5) {
         const myData = window.localStorage.getItem('openOrders');
         let myOrders = [];
         if (myData !== null) {
           myOrders = JSON.parse(myData);
         }
+        console.log(ordre.campagne.id)
         const shortOrder = {
           id: ordre.id,
-          numero: ordre.numero
+          numero: ordre.numero,
+          campagne: ordre.campagne ? ordre.campagne.id :null
         };
         myOrders.push(shortOrder);
         window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
@@ -338,8 +345,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       }
     }
     this.contents.push({
-      id: ordre ? ordre.id : null,
-      tabTitle: ordre ? `Ordre N° ${ordre.numero}` : 'Nouvel ordre',
+      id: ordre ? ordre.id : 'inconnu',
+      tabTitle: ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : 'Nouvel ordre',
     });
   }
 
@@ -393,11 +400,12 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         .forEach(([key]) => this.formGroup.get(key).markAsDirty());
   }
 
-  openLinkedOrder(id, numero) {
+  openLinkedOrder(id, numero,campagne) {
 
     const shortOrder = {
       id: id,
-      numero: numero
+      numero: numero,
+      campagne: campagne
     };
     this.pushTab(shortOrder);
 

@@ -34,7 +34,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreOrdresNonClotures, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdresNonClotures, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -47,7 +47,7 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing 
-      [storageKey]="gridConfiguratorService.Grid.OrdreOrdresNonClotures"
+      [storageKey]="gridConfiguratorService.Grid.OrdresNonClotures"
       [enabled]="true"
       type="custom"
       [customLoad]="gridConfiguratorService.load"
