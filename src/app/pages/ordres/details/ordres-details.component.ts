@@ -145,8 +145,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const myData = window.localStorage.getItem('openOrders');
     if (myData !== null) {
       const myOrders = JSON.parse(myData);
-      console.log('avant ')
-      console.log(myOrders)
       JSON.parse(myData).forEach(value => {
         this.pushTab(value);
       });
@@ -154,8 +152,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
     const data = window.localStorage.getItem('orderNumber');
     if (data) {
-      console.log('après ')
-      console.log(JSON.parse(data))
       const order = JSON.parse(data);
       window.localStorage.removeItem('orderNumber');
       this.pushTab(order);
@@ -328,7 +324,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         if (myData !== null) {
           myOrders = JSON.parse(myData);
         }
-        console.log(ordre.campagne.id)
         const shortOrder = {
           id: ordre.id,
           numero: ordre.numero,

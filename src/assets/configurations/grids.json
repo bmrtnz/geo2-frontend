@@ -652,5 +652,45 @@
         "visible": true
       }
     ]
+  },
+  "commandes-transit": {
+    "columns": [
+      {
+        "dataField": "dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "dataField": "client.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "referenceClient",
+        "visible": true
+      }
+    ]
+  },
+  "planning-depart": {
+    "columns": [
+      {
+        "dataField": "dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "dataField": "client.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "dataField": "referenceClient",
+        "visible": true
+      }
+    ]
   }
 }

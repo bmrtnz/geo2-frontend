@@ -16,23 +16,29 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'ordres-non-confirmes',
-  templateUrl: './ordres-non-confirmes.component.html',
-  styleUrls: ['./ordres-non-confirmes.component.scss']
+  selector: 'supervision-livraison',
+  templateUrl: './supervision-livraison.component.html',
+  styleUrls: ['./supervision-livraison.component.scss']
 })
-export class OrdresNonConfirmesComponent implements OnInit {
+export class SupervisionLivraisonComponent implements OnInit {
 
-  readonly INDICATOR_NAME = 'OrdresNonConfirmes';
+  readonly INDICATOR_NAME = 'SupervisionLivraison';
   options: {};
   secteurs: DataSource;
   indicator: string;
   filter: any;
+  initialFilterLengh: number;
+  days: string;
+  basicFilter: any;
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   rowSelected: boolean;
   
-  @ViewChild('gridORDRESNONCONFIRMES', { static: false }) gridSUPERVISIONComponent: DxoGridComponent;
+  @ViewChild('gridSUPERVISION', { static: false }) gridSUPERVISIONComponent: DxoGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
+  @ViewChild('diffDateCheckboxValue', { static: false }) diffDateCB: DxSelectBoxComponent;
+  @ViewChild('diffDateValue', { static: false }) diffDateSB: DxSelectBoxComponent;
+
   
   public dataSource: DataSource;
 
@@ -56,6 +62,7 @@ export class OrdresNonConfirmesComponent implements OnInit {
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
+    this.days = this.localizeService.localize('ordres-day');
     this.detailedFields = this.ordresService.model.getDetailedFields();
     this.dataSource = ordresService.getDataSource();
    }
@@ -68,8 +75,13 @@ export class OrdresNonConfirmesComponent implements OnInit {
   ngAfterViewInit() {
 
     if (this.authService.currentUser.limitationSecteur) {
-      this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
+      this.secteurSB.value = {
+        id : this.authService.currentUser.secteurCommercial.id,
+        description : this.authService.currentUser.secteurCommercial.description
+      }
     }
+  
+    this.updateFilters();
 
   }
 
@@ -80,23 +92,11 @@ export class OrdresNonConfirmesComponent implements OnInit {
     this.dataSource.reload();
 
   }
-
+  
   updateFilters() {
 
-    // Retrieves the initial filter while removing date criteria
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
-    // filters.splice(-4,4);
     if (this.secteurSB.value)    filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
-    // filters.push(
-    //   'and',
-    //   ['dateLivraisonPrevue', '>=', this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value)],
-    //   'and',
-    //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
-    // )
-    
-    // console.log(filters)
-    this.dataSource.filter(filters);
-    this.dataSource.reload();
 
   }
 
@@ -109,8 +109,12 @@ export class OrdresNonConfirmesComponent implements OnInit {
     this.router.navigate([`/ordres/details`]);
   }
 
-  onConfirm() {
+  changeDays(e) {
+    this.days = this.localizeService.localize('ordres-day' + (e > 1 ? 's' : ''));
+    this.updateFilters();
+  }
 
+  autoSendDeliveryNotes() {
   }
 
 }

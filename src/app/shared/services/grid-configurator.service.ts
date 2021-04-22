@@ -28,6 +28,8 @@ export enum Grid {
   OrdreBonAFacturer = 'ordre-bon-a-facturer',
   OrdresNonClotures = 'ordres-non-clotures',
   OrdresNonConfirmes = 'ordres-non-confirmes',
+  CommandesTransit = 'commandes-transit',
+  PlanningDepart = 'planning-depart',
 }
 
 @Injectable({

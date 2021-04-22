@@ -4,11 +4,14 @@ import {AuthGuardService} from '../../shared/services';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
+import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/clients-dep-encours.component';
+import { CommandesTransitComponent } from './indicateurs/commandes-transit/commandes-transit.component';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
-import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures/ordres-non-clotures.component';
-import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes/ordres-non-confirmes.component';
-import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison/supervision-livraison.component';
+import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures.component';
+import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes.component';
+import { PlanningDepartComponent } from './indicateurs/planning-depart/planning-depart.component';
+import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison.component';
 
 const routes: Routes = [
   {
@@ -53,6 +56,21 @@ const routes: Routes = [
     component: OrdresNonConfirmesComponent,
     canActivate: [AuthGuardService],
   },
+  {
+    path: 'indicateurs/commandesTransit',
+    component: CommandesTransitComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'indicateurs/planningDepart',
+    component: PlanningDepartComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'indicateurs/clientsDepEncours',
+    component: ClientsDepEncoursComponent,
+    canActivate: [AuthGuardService],
+  }
 ];
 
 @NgModule({

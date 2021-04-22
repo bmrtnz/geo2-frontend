@@ -16,31 +16,26 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'supervision-livraison',
-  templateUrl: './supervision-livraison.component.html',
-  styleUrls: ['./supervision-livraison.component.scss']
+  selector: 'commandes-transit',
+  templateUrl: './commandes-transit.component.html',
+  styleUrls: ['./commandes-transit.component.scss']
 })
-export class SupervisionLivraisonComponent implements OnInit {
+export class CommandesTransitComponent implements OnInit {
 
-  readonly INDICATOR_NAME = 'SupervisionLivraison';
+  readonly INDICATOR_NAME = 'CommandesTransit';
   options: {};
   secteurs: DataSource;
   indicator: string;
   filter: any;
-  initialFilterLengh: number;
-  days: string;
-  basicFilter: any;
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   rowSelected: boolean;
   
-  @ViewChild('gridSUPERVISION', { static: false }) gridSUPERVISIONComponent: DxoGridComponent;
+  @ViewChild('gridCOMMANDESTRANSIT', { static: false }) gridCOMMANDESTRANSITComponent: DxoGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
-  @ViewChild('diffDateCheckboxValue', { static: false }) diffDateCB: DxSelectBoxComponent;
-  @ViewChild('diffDateValue', { static: false }) diffDateSB: DxSelectBoxComponent;
-
   
   public dataSource: DataSource;
+  initialFilterLengh: number;
 
   constructor(
     private router: Router,
@@ -62,7 +57,6 @@ export class SupervisionLivraisonComponent implements OnInit {
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
-    this.days = this.localizeService.localize('ordres-day');
     this.detailedFields = this.ordresService.model.getDetailedFields();
     this.dataSource = ordresService.getDataSource();
    }
@@ -77,21 +71,34 @@ export class SupervisionLivraisonComponent implements OnInit {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
-  
-    this.updateFilters();
 
   }
 
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
     this.initialFilterLengh = filters.length;
-
+    
     this.dataSource.filter(filters);
     this.dataSource.reload();
 
   }
-  
+
   updateFilters() {
+
+    // Retrieves the initial filter while removing date criteria
+    const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    // filters.splice(-4,4);
+    if (this.secteurSB.value)    filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
+    // filters.push(
+    //   'and',
+    //   ['dateLivraisonPrevue', '>=', this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value)],
+    //   'and',
+    //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
+    // )
+    
+    // console.log(filters)
+    this.dataSource.filter(filters);
+    this.dataSource.reload();
 
   }
 
@@ -104,12 +111,8 @@ export class SupervisionLivraisonComponent implements OnInit {
     this.router.navigate([`/ordres/details`]);
   }
 
-  changeDays(e) {
-    this.days = this.localizeService.localize('ordres-day' + (e > 1 ? 's' : ''));
-    this.updateFilters();
-  }
+  onConfirm() {
 
-  autoSendDeliveryNotes() {
   }
 
 }

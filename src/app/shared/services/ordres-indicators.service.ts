@@ -64,8 +64,7 @@ const indicators: Indicator[] = [{
   fetchCount: true,
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'clientsdepassementencours'},
+  goTo: '/ordres/indicateurs/clientsDepEncours',
   tileBkg: '#4199B4',
   indicatorIcon: 'user',
   warningIcon: 'material-icons warning'
@@ -109,8 +108,7 @@ const indicators: Indicator[] = [{
   fetchCount: true,
   parameter: 'Planning',
   subParameter: 'départ',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'planningdeparts'},
+  goTo: '/ordres/indicateurs/planningDepart',
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
   warningIcon: ''
@@ -119,8 +117,7 @@ const indicators: Indicator[] = [{
   fetchCount: true,
   parameter: 'Commandes',
   subParameter: 'en transit',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'commandesentransit'},
+  goTo: '/ordres/indicateurs/commandesTransit',
   tileBkg: '#8E4A21',
   indicatorIcon: 'material-icons local_shipping',
   warningIcon: ''
