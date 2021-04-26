@@ -24,7 +24,6 @@ export class Indicator {
   parameter: string;
   subParameter: string;
   goTo: string;
-  goToParams?: {filtre: string};
   filter?: any[];
   tileBkg: string;
   indicatorIcon: string;
@@ -149,7 +148,6 @@ export class OrdresIndicatorsService {
           ...indicator.filter,
           'and',
           ['codeClient', '<>', 'PREORDRE%']];
-
       }
 
       // Bon a facturer
@@ -250,10 +248,11 @@ export class OrdresIndicatorsService {
   }
   getIndicatorByName(name: string) {
 
-    return this.indicators.find(i => i?.goToParams?.filtre === name || i?.id === name);
+    return this.indicators.find(i => i?.id === name);
   }
 
   getFormatedDate(date) {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
   }
+
 }
