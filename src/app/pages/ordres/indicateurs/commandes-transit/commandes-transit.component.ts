@@ -96,7 +96,6 @@ export class CommandesTransitComponent implements OnInit {
     //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
     // )
     
-    // console.log(filters)
     this.dataSource.filter(filters);
     this.dataSource.reload();
 

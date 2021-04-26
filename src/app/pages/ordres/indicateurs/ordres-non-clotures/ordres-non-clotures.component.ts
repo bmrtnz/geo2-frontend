@@ -83,7 +83,7 @@ export class OrdresNonCloturesComponent implements OnInit {
   }
 
   updateFilters() {
-    return
+
     // Retrieves the initial filter while removing date criteria
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
     // filters.splice(-4,4);
@@ -97,7 +97,6 @@ export class OrdresNonCloturesComponent implements OnInit {
     //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
     // )
     
-    // console.log(filters)
     this.dataSource.filter(filters);
     this.dataSource.reload();
 

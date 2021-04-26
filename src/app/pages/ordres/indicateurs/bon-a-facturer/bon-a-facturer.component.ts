@@ -165,7 +165,6 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     if (this.entrepotSB.value)   filters.push('and', ['entrepot.id', '=', this.entrepotSB.value.id]);
     if (this.secteurSB.value)    filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
     
-    // console.log(filters)
     this.dataSource.filter(filters);
     this.dataSource.reload();
 
@@ -194,7 +193,6 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     if (allOrdre.length)
       this.ordresService.saveAll({allOrdre})
       .subscribe( res => {
-        console.log(res);
         this.gridBAFComponent.instance.refresh();
       });
   }

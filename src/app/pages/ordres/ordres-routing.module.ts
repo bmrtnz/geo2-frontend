@@ -7,7 +7,6 @@ import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-factur
 import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/clients-dep-encours.component';
 import { CommandesTransitComponent } from './indicateurs/commandes-transit/commandes-transit.component';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
-import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
 import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures.component';
 import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes.component';
 import { PlanningDepartComponent } from './indicateurs/planning-depart/planning-depart.component';
@@ -22,14 +21,11 @@ const routes: Routes = [
     path: 'accueil',
     component: OrdresAccueilComponent,
     canActivate: [AuthGuardService]
-  }, {
+  }, 
+  {
     path: 'details',
     component: OrdresDetailsComponent,
     canActivate: [AuthGuardService]
-  }, {
-    path: 'indicateurs',
-    component: OrdresIndicateursComponent,
-    canActivate: [AuthGuardService],
   },
   {
     path: 'indicateurs/litiges',

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
-import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
 import { OrdresRoutingModule } from './ordres-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
@@ -41,7 +40,6 @@ import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/cl
     OrdresAccueilComponent,
     OrdresDetailsComponent,
     GridSuiviComponent,
-    OrdresIndicateursComponent,
     GridLignesComponent,
     GridHistoriqueComponent,
     LitigesComponent,
