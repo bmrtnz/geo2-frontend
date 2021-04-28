@@ -8,6 +8,10 @@ import { mergeMap, take, takeUntil } from 'rxjs/operators';
 import { Ordre } from '../../models/ordre.model';
 import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 
+export enum OrdreDatasourceOperation {
+  BAF = 'allOrdreBAF',
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,7 +32,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     return this.watchGetOneQuery<Response>({variables});
   }
 
-  getDataSource() {
+  getDataSource(indicator?: OrdreDatasourceOperation) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -42,13 +46,14 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(2, this.queryFilter);
-          type Response = { allOrdre: RelayPage<Ordre> };
+          const query = await this.buildGetAll(2, this.queryFilter, indicator);
+          const key: string = indicator ?? 'allOrdre';
+          type Response = { [key: string]: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
-            if (res.data && res.data.allOrdre)
-              resolve(this.asInstancedListCount(res.data.allOrdre));
+            if (res.data && res.data[key])
+              resolve(this.asInstancedListCount(res.data[key]));
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {

@@ -6,7 +6,7 @@ import Ordre from 'app/shared/models/ordre.model';
 import { Role } from 'app/shared/models/personne.model';
 import { AuthService, ClientsService, EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
-import { OrdresService } from 'app/shared/services/api/ordres.service';
+import { OrdreDatasourceOperation, OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
@@ -76,7 +76,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
   ) {
-    this.dataSource = this.ordresService.getDataSource();
+    this.dataSource = this.ordresService.getDataSource(OrdreDatasourceOperation.BAF);
     this.detailedFields = this.ordresService.model.getDetailedFields();
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -88,7 +88,6 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     this.commercial = personnesService.getDataSource();
     this.assistante = personnesService.getDataSource();
     this.entrepot = entrepotsService.getDataSource();
-    this.dataSource = ordresService.getDataSource();
     this.periodes = ['Hier', 'Aujourd\'hui', 'Demain', 'Semaine dernière', 'Semaine en cours', 'Semaine prochaine',
      '7 prochains jours', '30 prochains jours', 'Mois à cheval', 'Depuis 30 jours', 'Depuis 1 mois',
      'Depuis 2 mois', 'Depuis 3 mois', 'Depuis 12 mois', 'Mois dernier', 'Mois en cours', 'Trimestre dernier',
