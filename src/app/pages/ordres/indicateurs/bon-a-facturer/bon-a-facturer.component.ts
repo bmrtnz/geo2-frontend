@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 })
 export class BonAFacturerComponent implements OnInit, AfterViewInit  {
 
-  readonly INDICATOR_NAME = 'Bons';
+  readonly INDICATOR_NAME = 'BonsAFacturer';
   transporteurs: DataSource;
   options: {};
   secteurs: DataSource;
@@ -162,8 +162,8 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     if (this.commercialSB.value) filters.push('and', ['commercial.id', '=', this.commercialSB.value.id]);
     if (this.clientSB.value)     filters.push('and', ['client.id', '=', this.clientSB.value.id]);
     if (this.entrepotSB.value)   filters.push('and', ['entrepot.id', '=', this.entrepotSB.value.id]);
+    if (this.secteurSB.value)    filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
     
-    // console.log(filters)
     this.dataSource.filter(filters);
     this.dataSource.reload();
 
@@ -192,7 +192,6 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     if (allOrdre.length)
       this.ordresService.saveAll({allOrdre})
       .subscribe( res => {
-        console.log(res);
         this.gridBAFComponent.instance.refresh();
       });
   }

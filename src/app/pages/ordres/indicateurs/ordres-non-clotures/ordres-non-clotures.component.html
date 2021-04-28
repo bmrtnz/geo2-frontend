@@ -1,0 +1,77 @@
+<h2 class="content-block">{{ 'ordres-ordresNonClotures' | localize }}</h2>
+
+<div class="content-block">
+
+    <dx-box>
+        <dxi-item [ratio]="4">
+            <!-- Secteurs -->
+            <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box #secteurValue
+                        [dataSource]="secteurs"
+                        displayExpr="description"
+                        [searchEnabled]="true"
+                        searchExpr="description"
+                        (valueChange)="updateFilters()"
+                    ></dx-select-box>
+                </div>
+            </div>
+
+        </dxi-item>
+        <dxi-item [ratio]="10.5"></dxi-item>
+    </dx-box>   
+
+    <br>
+
+    <dx-data-grid class="dx-card wide-card" #gridORDRESNONCLOTURES
+    [dataSource]="dataSource"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    (onRowDblClick)="onRowDblClick($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdresNonClotures, enableFilters.bind(this))"
+  >
+
+    <!-- Grid configuration -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+      [storageKey]="gridConfiguratorService.Grid.OrdresNonClotures"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+      *ngFor="let field of detailedFields | async"
+      [dataField]="field.path"
+      [visible]="false"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    ></dxi-column>
+
+  </dx-data-grid>
+</div>
+  

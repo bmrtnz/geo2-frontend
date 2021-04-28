@@ -19,7 +19,7 @@ const contents: Content[] = [{
 }];
 
 export class Indicator {
-  id: number;
+  id: string;
   number?: string;
   parameter: string;
   subParameter: string;
@@ -34,7 +34,7 @@ export class Indicator {
 }
 
 const indicators: Indicator[] = [{
-  id: 0,
+  id: 'SuiviDesOrdres',
   parameter: 'Suivi',
   subParameter: 'des ordres',
   goTo: '/ordres/details',
@@ -42,7 +42,7 @@ const indicators: Indicator[] = [{
   indicatorIcon: 'material-icons euro_symbol',
   warningIcon: ''
 }, {
-  id: 1,
+  id: 'SupervisionLivraison',
   fetchCount: true,
   parameter: 'Supervision',
   subParameter: 'livraison',
@@ -51,7 +51,7 @@ const indicators: Indicator[] = [{
   indicatorIcon: 'material-icons directions',
   warningIcon: ''
 }, {
-  id: 2,
+  id: 'BonsAFacturer',
   fetchCount: true,
   parameter: 'Bons',
   subParameter: 'à facturer',
@@ -60,17 +60,16 @@ const indicators: Indicator[] = [{
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning'
 }, {
-  id: 3,
+  id: 'ClientsDepEncours',
   fetchCount: true,
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'clientsdepassementencours'},
+  goTo: '/ordres/indicateurs/clientsDepEncours',
   tileBkg: '#4199B4',
   indicatorIcon: 'user',
   warningIcon: 'material-icons warning'
 }, {
-  id: 4,
+  id: 'OrdresNonClotures',
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
@@ -79,17 +78,16 @@ const indicators: Indicator[] = [{
   indicatorIcon: 'material-icons help',
   warningIcon: ''
 }, {
-  id: 5,
+  id: 'OrdresNonConfirmes',
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non confirmés',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'ordresnonconfirmes'},
+  goTo: '/ordres/indicateurs/ordresNonConfirmes',
   tileBkg: '#5A6382',
   indicatorIcon: 'material-icons help',
   warningIcon: ''
 }, {
-  id: 6,
+  id: 'Litiges',
   fetchCount: true,
   parameter: 'Litiges',
   subParameter: 'en cours',
@@ -98,7 +96,7 @@ const indicators: Indicator[] = [{
   indicatorIcon: 'material-icons offline_bolt',
   warningIcon: 'material-icons warning'
 }, {
-  id: 7,
+  id: 'Stock',
   parameter: 'Stock',
   subParameter: 'dispo',
   goTo: '/stock',
@@ -106,22 +104,20 @@ const indicators: Indicator[] = [{
   indicatorIcon: 'box',
   warningIcon: ''
 }, {
-  id: 8,
+  id: 'PlanningDepart',
   fetchCount: true,
   parameter: 'Planning',
   subParameter: 'départ',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'planningdeparts'},
+  goTo: '/ordres/indicateurs/planningDepart',
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
   warningIcon: ''
 }, {
-  id: 9,
+  id: 'CommandesTransit',
   fetchCount: true,
   parameter: 'Commandes',
   subParameter: 'en transit',
-  goTo: '/ordres/indicateurs',
-  goToParams: {filtre: 'commandesentransit'},
+  goTo: '/ordres/indicateurs/commandesTransit',
   tileBkg: '#8E4A21',
   indicatorIcon: 'material-icons local_shipping',
   warningIcon: ''
@@ -148,7 +144,7 @@ export class OrdresIndicatorsService {
       ];
 
       // Supervision livraison
-      if (indicator.id === 1) {
+      if (indicator.id === 'SupervisionLivraison') {
         indicator.filter = [
           ...indicator.filter,
           'and',
@@ -157,7 +153,7 @@ export class OrdresIndicatorsService {
       }
 
       // Bon a facturer
-      if (indicator.id === 2) {
+      if (indicator.id === 'BonsAFacturer') {
         indicator.filter = [
           ...indicator.filter,
           'and',
@@ -172,33 +168,33 @@ export class OrdresIndicatorsService {
       }
 
       // Ordres clients depassement en cours
-      if (indicator.id === 3) {
+      if (indicator.id === 'ClientsDepEncours') {
         indicator.filter = [
           ...indicator.filter,
         ];
       }
 
       // Ordres non cloturés
-      if (indicator.id === 4) {
-        // indicator.filter = [
-        //   ...indicator.filter,
-        //   'and',
-        //   ['logistiques.expedieStation', '<>', true],
-        //   'and',
-        //   ['client.usageInterne', '<>', true],
-        //   'and',
-        //   ['client.detailAutomatique', '=', true],
-        //   'and',
-        //   ['logistiques.dateDepartPrevueFournisseur', '=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
-        //   'and',
-        //   ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
-        //   'and',
-        //   ['lignes.valide', '=', true],
-        // ];
+      if (indicator.id === 'OrdresNonClotures') {
+        indicator.filter = [
+          ...indicator.filter,
+          'and',
+          ['logistiques.expedieStation', '<>', true],
+          'and',
+          ['client.usageInterne', '<>', true],
+          'and',
+          ['client.detailAutomatique', '=', true],
+          'and',
+          ['logistiques.dateDepartPrevueFournisseur', '=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          'and',
+          ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
+          'and',
+          ['lignes.valide', '=', true],
+        ];
       }
 
       // Ordres non confirmés
-      if (indicator.id === 5) {
+      if (indicator.id === 'OrdresNonConfirmes') {
         indicator.filter = [
           ...indicator.filter,
           'and',
@@ -209,7 +205,7 @@ export class OrdresIndicatorsService {
       }
 
       // Litiges
-      if (indicator.id === 6) {
+      if (indicator.id === 'Litiges') {
         // Model LitigeLigne
         indicator.filter = [
           ['valide', '=', true],
@@ -221,7 +217,7 @@ export class OrdresIndicatorsService {
       }
 
       // Planning departs
-      if (indicator.id === 8) {
+      if (indicator.id === 'PlanningDepart') {
         indicator.filter = [
           ...indicator.filter,
           'and',
@@ -236,7 +232,7 @@ export class OrdresIndicatorsService {
       }
 
       // Commandes en transit
-      if (indicator.id === 9) {
+      if (indicator.id === 'CommandesTransit') {
         indicator.filter = [
           ...indicator.filter,
         ];
@@ -253,7 +249,8 @@ export class OrdresIndicatorsService {
     return this.indicators;
   }
   getIndicatorByName(name: string) {
-    return this.indicators.find(i => i?.goToParams?.filtre === name || i?.parameter === name);
+
+    return this.indicators.find(i => i?.goToParams?.filtre === name || i?.id === name);
   }
 
   getFormatedDate(date) {

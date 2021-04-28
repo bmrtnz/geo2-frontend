@@ -41,8 +41,6 @@ export class GridHistoriqueComponent implements OnInit {
       // Filtrage headers possibles columnchooser
       map(fields => {
         return fields.filter( field => 
-        //   console.log('ordres-' + field.path.replaceAll('.', '-').replace('.description', ''))
-        // });
           !!(this.localizeService.localize('ordres-' + field.path.replaceAll('.', '-').replace('.description', ''))).length);
       }),
     );

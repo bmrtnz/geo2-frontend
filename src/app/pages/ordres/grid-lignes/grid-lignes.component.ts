@@ -32,8 +32,6 @@ export class GridLignesComponent implements OnChanges {
       // Filtrage headers possibles columnchooser
       map(fields => {
         return fields.filter( field => 
-        //   console.log('articles-' + field.path.replaceAll('.', '-'))
-        // });
           !!(this.localizeService.localize('articles-' + field.path.replaceAll('.', '-'))).length);
       }),
     );

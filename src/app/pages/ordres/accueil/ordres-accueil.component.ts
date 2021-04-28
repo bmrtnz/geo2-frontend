@@ -57,7 +57,7 @@ export class OrdresAccueilComponent implements OnDestroy {
           const value = indicator.fetchCount ?
             dataSource.totalCount().toString() :
             '?';
-          return [indicator.id, value] as [number, string];
+          return [indicator.id, value] as [string, string];
         }),
       )
       .subscribe(([id, value]) => {

@@ -6,6 +6,7 @@ import { OrdreLogistique } from './ordre-logistique.model';
 import Personne from './personne.model';
 import {Secteur} from './secteur.model';
 import {Societe} from './societe.model';
+import {Campagne} from './campagne.model';
 import Transporteur from './transporteur.model';
 
 export enum FactureAvoir {
@@ -18,6 +19,7 @@ export class Ordre extends Model {
 
   @Field({ asKey: true }) public id?: string;
   @Field({ model: import('./societe.model') }) public societe?: Societe;
+  @Field({ model: import('./campagne.model') }) public campagne?: Campagne;
   @Field({ model: import('./secteur.model') }) public secteurCommercial?: Secteur;
   @Field({ model: import('./client.model') }) public client?: Client;
   @Field({ model: import('./ordre-ligne.model') }) public lignes?: OrdreLigne[];

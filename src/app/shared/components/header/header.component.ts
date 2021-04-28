@@ -69,7 +69,6 @@ export class HeaderComponent implements OnInit {
   }
 
   @HostListener('scroll', ['$event']) onScrollEvent($event) {
-     console.log('scrolling');
   }
 
   toggleMenu = () => {

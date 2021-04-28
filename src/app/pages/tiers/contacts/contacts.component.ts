@@ -52,8 +52,6 @@ export class ContactsComponent implements OnInit, NestedPart {
       // Filtrage headers possibles columnchooser
       map(fields => {
         return fields.filter( field => 
-          //   console.log('tiers-contacts-' + field.path.replaceAll('.', '-'))
-          // });
           !!(this.localizeService.localize('tiers-contacts-' + field.path.replaceAll('.', '-'))).length);
        }),
     );

@@ -1,10 +1,11 @@
-<h2 class="content-block">{{ 'ordres-supervisionLivraison' | localize }}</h2>
+<h2 class="content-block">{{ 'ordres-ordresNonConfirmes' | localize }}
+    <dx-button class="upperButton" type="default" text="{{ 'btn-confirm' | localize }}" (onClick)="onConfirm()"></dx-button>
+</h2>
 
 <div class="content-block">
 
     <dx-box>
         <dxi-item [ratio]="4">
-
             <!-- Secteurs -->
             <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
@@ -20,44 +21,12 @@
             </div>
 
         </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
-        <dxi-item [ratio]="1.5">
-            <!-- Différence date -->
-            <div  class="dx-field daysDiffCheckbox">
-                <div class="dx-field-value" style="width:20px">
-                  <dx-check-box #diffDateCheckboxValue
-                    alignment = "right"
-                    [value]="true"
-                    (valueChange)="updateFilters()"
-                  ></dx-check-box>
-                </div>
-                <div class="dx-field-label diffQty">{{ 'ordres-differenceQuantites' | localize }}</div>
-            </div>
-        </dxi-item>
-        <dxi-item [ratio]="4">
-            <div class="dx-field">
-                <div class="dx-field-label days">Sur</div>
-                <div class="dx-field-value daysNumber">
-                    <dx-number-box #diffDateValue
-                        alignment = "center"
-                        [value]="1"
-                        [min]="1"
-                        [max]="9"
-                        [showSpinButtons]="true"
-                        (valueChange)="changeDays($event)"
-                    ></dx-number-box>
-                </div>
-                <div class="dx-field-label days">{{ days }}</div>
-            </div>
-        </dxi-item>
-        <dxi-item [ratio]="2">
-            <dx-button class="upperButton" type="default" text="{{ 'btn-envoiBL' | localize }}" (onClick)="autoSendDeliveryNotes()"></dx-button>
-        </dxi-item>
+        <dxi-item [ratio]="10.5"></dxi-item>
     </dx-box>   
 
     <br>
 
-    <dx-data-grid class="dx-card wide-card" #gridSUPERVISION
+    <dx-data-grid class="dx-card wide-card" #gridORDRESNONCONFIRMES
     [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
@@ -67,7 +36,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreSupervisionLivraison, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdresNonConfirmes, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -80,7 +49,7 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing 
-      [storageKey]="gridConfiguratorService.Grid.OrdreSupervisionLivraison"
+      [storageKey]="gridConfiguratorService.Grid.OrdresNonConfirmes"
       [enabled]="true"
       type="custom"
       [customLoad]="gridConfiguratorService.load"

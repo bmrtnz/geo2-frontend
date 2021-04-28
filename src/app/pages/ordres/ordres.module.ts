@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
-import { OrdresIndicateursComponent } from './indicateurs/ordres-indicateurs.component';
 import { OrdresRoutingModule } from './ordres-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
@@ -28,9 +27,12 @@ import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.s
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { GridLogistiquesComponent } from './grid-logistiques/grid-logistiques.component';
 import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
-import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison/supervision-livraison.component';
-import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures/ordres-non-clotures.component';
-import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes/ordres-non-confirmes.component';
+import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison.component';
+import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures.component';
+import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes.component';
+import { PlanningDepartComponent } from './indicateurs/planning-depart/planning-depart.component';
+import { CommandesTransitComponent } from './indicateurs/commandes-transit/commandes-transit.component';
+import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/clients-dep-encours.component';
 
 
 @NgModule({
@@ -38,7 +40,6 @@ import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/
     OrdresAccueilComponent,
     OrdresDetailsComponent,
     GridSuiviComponent,
-    OrdresIndicateursComponent,
     GridLignesComponent,
     GridHistoriqueComponent,
     LitigesComponent,
@@ -47,6 +48,9 @@ import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/
     SupervisionLivraisonComponent,
     OrdresNonCloturesComponent,
     OrdresNonConfirmesComponent,
+    PlanningDepartComponent,
+    CommandesTransitComponent,
+    ClientsDepEncoursComponent,
   ],
   imports: [
     OrdresRoutingModule,

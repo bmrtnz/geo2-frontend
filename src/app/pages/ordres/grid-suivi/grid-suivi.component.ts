@@ -38,8 +38,6 @@ export class GridSuiviComponent implements OnInit {
       // Filtrage headers possibles columnchooser
       map(fields => {
         return fields.filter( field => 
-        //   console.log('rechOrdres-' + field.path.replaceAll('.', '-').replace('.description', '')))
-        // });
           !!(this.localizeService.localize('rechOrdres-' + field.path.replaceAll('.', '-').replace('-description', ''))).length);
       }),
     );
