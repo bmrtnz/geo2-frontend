@@ -246,8 +246,8 @@ export class OrdresIndicatorsService {
   getIndicators(): Indicator[] {
     return this.indicators;
   }
-  getIndicatorByName(name: string) {
 
+  getIndicatorByName(name: string) {
     return this.indicators.find(i => i?.id === name);
   }
 
