@@ -575,11 +575,6 @@
         "visible": true
       },
       {
-        "fixed": true,
-        "dataField": "bonAFacturer",
-        "visible": true
-      },
-      {
         "dataField": "dateLivraisonPrevue",
         "visible": true
       },
@@ -593,6 +588,10 @@
       },
       {
         "dataField": "referenceClient",
+        "visible": true
+      },
+      {
+        "dataField": "marge",
         "visible": true
       }
     ]

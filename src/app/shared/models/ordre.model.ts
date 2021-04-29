@@ -43,6 +43,7 @@ export class Ordre extends Model {
   @Field() public version?: string;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public factureAvoir?: FactureAvoir;
   @Field() public codeChargement?: string;
+  // @Field() public marge?: number;
 
 }
 

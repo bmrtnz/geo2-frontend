@@ -121,9 +121,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
-  @ViewChild(PushHistoryPopupComponent, { static: false })
   @ViewChildren(DxAccordionComponent) accordion: any;
   
+  @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
   editing = false;
 

@@ -206,9 +206,10 @@ export abstract class ApiService implements OnDestroy {
    * Build paginated query
    * @param depth Sub model selection depth
    * @param regExpFilter Regexp field filter
+   * @param operationName Name of the operation, default to `all{ModelName}`
    */
-  protected async buildGetAll(depth?: number, regExpFilter?: RegExp) {
-    const operation = `all${this.model.name}`;
+  protected async buildGetAll(depth?: number, regExpFilter?: RegExp, operationName?: string) {
+    const operation = operationName ?? `all${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
       query ${alias}($search: String, $pageable: PaginationInput!) {
