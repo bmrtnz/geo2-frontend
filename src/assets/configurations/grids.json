@@ -575,11 +575,6 @@
         "visible": true
       },
       {
-        "fixed": true,
-        "dataField": "bonAFacturer",
-        "visible": true
-      },
-      {
         "dataField": "dateLivraisonPrevue",
         "visible": true
       },
