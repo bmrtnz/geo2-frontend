@@ -18,6 +18,7 @@ export class OrdresAccueilComponent implements OnDestroy {
 
   indicators: Indicator[];
   allIndicators: Indicator[];
+  tiles: any;
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<Indicator[]>();
@@ -30,6 +31,7 @@ export class OrdresAccueilComponent implements OnDestroy {
     private router: Router,
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
+    this.tiles = this.allIndicators;
 
     const navigationEndEvent = this.router.events
       .pipe(
@@ -77,6 +79,15 @@ export class OrdresAccueilComponent implements OnDestroy {
 
   openTagBox() {
     this.tagBox.instance.open();
+  }
+
+  tileNumber(e) {
+
+    console.log(e.value.length)
+    if (e.value.length < 1) {
+        e.component.option("value", this.tiles);
+    }
+
   }
 
 }

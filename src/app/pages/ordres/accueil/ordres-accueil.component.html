@@ -19,6 +19,7 @@
                 applyValueMode="useButtons"
                 [displayExpr]="displayExpr"
                 (valueChange)="indicatorsChange.emit($event)"
+                (onValueChanged)="tileNumber($event)"
             ></dx-tag-box>
         </div>
     </div>
