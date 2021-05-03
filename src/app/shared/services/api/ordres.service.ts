@@ -18,7 +18,7 @@ export enum OrdreDatasourceOperation {
 export class OrdresService extends ApiService implements APIRead, APIPersist {
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer)$/i;
+  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
 
   constructor(
     apollo: Apollo,
