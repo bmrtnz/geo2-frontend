@@ -9,6 +9,7 @@
     "build": "ng build",
     "build:prod": "ng build --prod && node script/archive ./dist/geo2-{version}.tar.gz ./dist/geo2/",
     "build:webdev": "ng build --configuration=webdev",
+    "build:bwdev": "ng build --configuration=bwdev && node script/archive ./dist/geo2-bwtest-{version}.tar.gz ./dist/geo2/",
     "build:stats": "ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/geo2/stats.json",
     "test": "ng test",
