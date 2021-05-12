@@ -11,3 +11,5 @@ export const environment = {
     raisonSocial: ''
   },
 };
+
+//  apiEndpoint: 'http://192.168.2.161:8081',

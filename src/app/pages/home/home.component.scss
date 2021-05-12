@@ -154,11 +154,11 @@
 
   .dx-drawer {
     position: fixed;
-    left:50%;
-    transform:translateX(-50%);
-    top:86px;
-    width:200px;
-    z-index:1000;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 86px;
+    width: 200px;
+    z-index: 1000;
   }
   .dx-list-item {
     margin:0;
@@ -172,7 +172,7 @@
   
   .dx-list-item-content {
     padding-left: 10px !important;
-    font-size:13px;
+    font-size: 13px;
   }
   
   .dx-drawer-shrink #content {

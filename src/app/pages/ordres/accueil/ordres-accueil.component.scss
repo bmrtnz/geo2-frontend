@@ -1,11 +1,24 @@
 ::ng-deep .dx-tile-content {
     .indicator-container {
-        position: relative;
+        position:relative;
         top:50%;
-        transform: translateY(-50%);
+        transform:translateY(-50%);
     }
     .indicator, .parameter, .subParameter {
         color:#FFF;
+    }
+    .dx-loadindicator-segment0 .dx-loadindicator-segment-inner {
+        border-top-color:#FFF;
+        border-right-color: #FFF;
+    }
+    .dx-loadindicator-segment1 .dx-loadindicator-segment-inner {
+        border-top-color:#FFF;
+        border-right-color: #FFF;
+        border-left-color: #FFF;
+    }
+    .dx-loadindicator-segment2 .dx-loadindicator-segment-inner {
+        border-top-color:#FFF;
+        border-left-color: #FFF;
     }
     .indicator {
         display:inline-block;
@@ -23,7 +36,7 @@
         background-color:transparent;
     }
     .warning-button {
-        position: absolute;
+        position:absolute;
         right:90px;
     }
     .tile-button:hover, .tile-button:focus {
@@ -39,11 +52,11 @@
     }
 }
 ::ng-deep .dx-tile {
-    cursor: pointer;
+    cursor:pointer;
     transition:0.15s; 
 }
 ::ng-deep .dx-tile:hover {
-    transform: scale(102%,102%);
+    transform:scale(102%,102%);
 }
 ::ng-deep .configuration {
     width:400px;
@@ -55,9 +68,9 @@
     .dx-field-label {
         font-size:1.3em;
         color:#444;
-        left: 130px;
+        left:130px;
         margin-top:-3px;
-        position: absolute;
+        position:absolute;
     }
     .dx-dropdowneditor-input-wrapper {
         display:none

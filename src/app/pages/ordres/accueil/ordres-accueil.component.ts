@@ -83,7 +83,6 @@ export class OrdresAccueilComponent implements OnDestroy {
 
   tileNumber(e) {
 
-    console.log(e.value.length)
     if (e.value.length < 1) {
         e.component.option("value", this.tiles);
     }

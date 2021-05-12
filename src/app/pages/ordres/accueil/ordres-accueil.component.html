@@ -5,7 +5,7 @@
         <div class="dx-field-value">
             <dx-button
                 style="float:right;"
-                icon= 'material-icons settings'
+                icon='material-icons settings'
                 (onClick)="openTagBox()"
                 text=""
             >
@@ -48,9 +48,9 @@
                 <div class="number-container">
                     <div *ngIf="indicator.fetchCount" class="indicator">
                         <dx-load-indicator [visible]="indicator.loading" height="40" width="40"></dx-load-indicator>
-                        <span *ngIf="!indicator.loading">{{indicator.number}}</span>
+                        <span *ngIf="!indicator.loading && indicator.number !=='0'">{{indicator.number}}</span>
                     </div>
-                    <dx-button *ngIf="!indicator.loading && indicator.warningIcon" type="danger" icon="{{indicator.warningIcon}}" class="tile-button warning-button"></dx-button>
+                    <dx-button *ngIf="!indicator.loading && indicator.warningIcon && indicator.number !=='0'" type="danger" icon="{{indicator.warningIcon}}" class="tile-button warning-button"></dx-button>
                 </div>
                 <div class="parameter">{{indicator.parameter}}</div>
                 <div class="subParameter">{{indicator.subParameter}}</div>

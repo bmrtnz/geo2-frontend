@@ -489,6 +489,7 @@
     "ordres-ordresNonClotures": "Ordres non clôturés",
     "ordres-commandesTransit": "Commandes en transit",
     "ordres-planningDepart": "Planning départ",
+    "ordres-clientsDepEncours": "Clients en dépassement encours",
     "ordres-differenceQuantites": "Différence sur expédition et/ou sans détail client",
     "ordres-entrepôt": "Entrepôt",
     "ordres-periode": "période",
