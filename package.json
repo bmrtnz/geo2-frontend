@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
-    "start:dev": "ng serve --open --liveReload=false",
+    "start:dev": "ng serve --open --liveReload=true",
     "start:webdev": "ng serve --open --liveReload=false --configuration=webdev",
     "build": "ng build",
     "build:prod": "ng build --prod && node script/archive ./dist/geo2-{version}.tar.gz ./dist/geo2/",
