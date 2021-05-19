@@ -107,7 +107,7 @@ export class PlanningDepartComponent implements OnInit {
   }
 
   onRowDblClick(e) {
-    window.localStorage.setItem('orderNumber', JSON.stringify(e));
+    window.sessionStorage.setItem('orderNumber', JSON.stringify(e));
     this.router.navigate([`/ordres/details`]);
   }
 
