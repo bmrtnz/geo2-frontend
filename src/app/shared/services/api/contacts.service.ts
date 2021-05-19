@@ -27,7 +27,7 @@ export class ContactsService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll();
+          const query = await this.buildGetAll(2);
           type Response = { allContact: RelayPage<Contact> };
           const variables = this.mapLoadOptionsToVariables(options);
 

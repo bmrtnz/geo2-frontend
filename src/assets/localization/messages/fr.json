@@ -58,6 +58,7 @@
     "auth-password": "Mot de passe",
     "auth-validation-password": "Le mot de passe est obligatoire",
     "auth-login-btn": "Connexion",
+    "auth-societe": "Société",
 
     "tiers-clients-title": "Clients",
     "tiers-clients-id": "ID",

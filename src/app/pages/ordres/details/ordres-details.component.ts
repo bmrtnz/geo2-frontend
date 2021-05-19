@@ -142,7 +142,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       });
 
     // On affiche les ordres déjà ouverts le cas échéant
-    const myData = window.localStorage.getItem('openOrders');
+    const myData = window.sessionStorage.getItem('openOrders');
     if (myData !== null) {
       const myOrders = JSON.parse(myData);
       JSON.parse(myData).forEach(value => {
@@ -150,10 +150,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       });
     }
     // On récupère l'ordre à afficher le cas échéant (ordres-indicateurs.component.ts)
-    const data = window.localStorage.getItem('orderNumber');
+    const data = window.sessionStorage.getItem('orderNumber');
     if (data) {
       const order = JSON.parse(data);
-      window.localStorage.removeItem('orderNumber');
+      window.sessionStorage.removeItem('orderNumber');
       this.pushTab(order);
     }
      
@@ -319,7 +319,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
       if (Object.keys(ordre).length > 5) {
-        const myData = window.localStorage.getItem('openOrders');
+        const myData = window.sessionStorage.getItem('openOrders');
         let myOrders = [];
         if (myData !== null) {
           myOrders = JSON.parse(myData);
@@ -330,7 +330,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
           campagne: ordre.campagne ? ordre.campagne.id :null
         };
         myOrders.push(shortOrder);
-        window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
+        window.sessionStorage.setItem('openOrders', JSON.stringify(myOrders));
       }
       const knownIndex = this.contents
         .findIndex(({ id }) => ordre.id === id);
@@ -355,14 +355,14 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     }
     // const index = this.contents.indexOf(itemData);
 
-    // Suppression onglet dans le localStorage
-    const myData = window.localStorage.getItem('openOrders');
+    // Suppression onglet dans le sessionStorage
+    const myData = window.sessionStorage.getItem('openOrders');
     const myOrders = JSON.parse(myData);
     let i = 0;
     myOrders.forEach(value => {
       if (this.contents[index].id === value.id) {
         myOrders.splice(i, 1);
-        window.localStorage.setItem('openOrders', JSON.stringify(myOrders));
+        window.sessionStorage.setItem('openOrders', JSON.stringify(myOrders));
         return false;
       }
       i++;

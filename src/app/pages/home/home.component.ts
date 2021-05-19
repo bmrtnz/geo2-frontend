@@ -22,7 +22,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    window.localStorage.removeItem('openOrders');
   }
 
   onClickMultipleMenu(e) {

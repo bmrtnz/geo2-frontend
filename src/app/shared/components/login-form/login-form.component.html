@@ -10,7 +10,11 @@
 
     <!-- username field -->
     <div class="dx-field">
-      <dx-text-box formControlName="nomUtilisateur" placeholder="{{ 'auth-login' | localize }}" width="100%">
+      <dx-text-box
+        formControlName="nomUtilisateur"
+        placeholder="{{ 'auth-login' | localize }}"
+        width="100%"
+        (onFocusOut)="nomUtilisateurOnFocusOut($event)">
         <dx-validator>
           <dxi-validation-rule type="required" message="{{ 'auth-validation-login' | localize }}"></dxi-validation-rule>
         </dx-validator>
@@ -19,11 +23,27 @@
 
     <!-- password field -->
     <div class="dx-field">
-      <dx-text-box mode="password" formControlName="password" placeholder="{{ 'auth-password' | localize }}" width="100%">
+      <dx-text-box
+        mode="password"
+        formControlName="password"
+        placeholder="{{ 'auth-password' | localize }}"
+        (onFocusOut)="nomUtilisateurOnFocusOut($event)"
+        width="100%">
         <dx-validator>
           <dxi-validation-rule type="required" message="{{ 'auth-validation-password' | localize }}"></dxi-validation-rule>
         </dx-validator>
       </dx-text-box>
+    </div>
+
+    <!-- sélection société -->
+    <div class="dx-field">
+        <dx-select-box
+            placeholder="{{ 'auth-societe' | localize }}"
+            [dataSource]="societe"
+            displayExpr="raisonSocial"
+            (onSelectionChanged)="societeOnChange($event)"
+            [value]="['']">
+        </dx-select-box>
     </div>
     <br>
 
