@@ -64,7 +64,6 @@ export class HeaderComponent implements OnInit {
       filter2.pop(); // Remove last 'or'
       this.societeSource.filter([filter2])
     }
-    
 
   }
 
