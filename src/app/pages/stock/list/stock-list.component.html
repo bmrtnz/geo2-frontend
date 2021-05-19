@@ -204,7 +204,11 @@
                     [columnAutoWidth]="true"
                     [rowAlternationEnabled]="true"
                     [allowColumnReordering]="true"
-                    (onCellPrepared)="onCellPrepared($event)"
+                    scrolling="{
+                        useNative:false,
+                        showScrollBar:'always'
+                      }"
+                                      (onCellPrepared)="onCellPrepared($event)"
                     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Stock)"
                 >
                     <dxo-search-panel [visible]="true" [width]="160" placeholder="Mot clé…"></dxo-search-panel>

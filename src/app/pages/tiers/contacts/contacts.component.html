@@ -12,6 +12,11 @@
     [allowColumnReordering]="true"
     [showBorders]="true"
     dateSerializationFormat="yyyy-MM-dd"
+    [columnAutoWidth]="true"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
