@@ -10,7 +10,7 @@ const navigation: NavHomeList[] = [
     { id: 1, text: 'Clients', path: 'tiers/clients' },
     { id: 2, text: 'Fournisseurs', path: 'tiers/fournisseurs' },
     { id: 3, text: 'Transporteurs', path: 'tiers/transporteurs' },
-    { id: 4, text: 'Passage à quai', path: 'tiers/lieux-passage-a-quai' }
+    { id: 4, text: 'Passages à quai', path: 'tiers/lieux-passage-a-quai' }
 ];
 
 @Injectable()

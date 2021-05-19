@@ -5,9 +5,5 @@ export const environment = {
   columnChooser: {
     width: 500,
     height: 500
-  },
-  societe: {
-    id: '',
-    raisonSocial: ''
-  },
+  }
 };
