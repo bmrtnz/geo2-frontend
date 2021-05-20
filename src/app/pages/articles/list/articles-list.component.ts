@@ -47,8 +47,6 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     );
   }
 
-  // 'articles-' + field.path.replace('.description', '').replace('.', '-') | localize) || field.path"
-
   onRowDblClick(e) {
     this.router.navigate([`/articles/${e.data.id}`]);
   }
@@ -57,6 +55,9 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     if (e.rowType === 'data') {
       if (!e.data.valide) {
         e.rowElement.classList.add('highlight-datagrid-row');
+        if (e.data.preSaisie) {
+          e.rowElement.classList.add('tovalidate-datagrid-row');
+        }
       }
     }
   }
