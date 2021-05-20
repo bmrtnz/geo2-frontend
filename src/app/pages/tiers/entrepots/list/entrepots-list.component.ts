@@ -1,9 +1,12 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { LocalizationService } from 'app/shared/services';
+import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -15,13 +18,16 @@ import { EntrepotsService } from '../../../../shared/services/api/entrepots.serv
   templateUrl: './entrepots-list.component.html',
   styleUrls: ['./entrepots-list.component.scss']
 })
-export class EntrepotsListComponent implements OnInit {
+export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
 
   entrepots: DataSource;
   clientID: string;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
   contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(DxDataGridComponent, {static:true})
+  dataGrid: DxDataGridComponent;
+  apiService: ApiService; 
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -30,7 +36,9 @@ export class EntrepotsListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public gridConfiguratorService: GridConfiguratorService,
-  ) {}
+  ) {
+    this.apiService = this.entrepotsService;
+  }
 
   ngOnInit() {
     this.clientID = this.route.snapshot.paramMap.get('client');
