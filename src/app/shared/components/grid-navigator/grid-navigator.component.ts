@@ -103,7 +103,7 @@ export class GridNavigatorComponent {
   navToDetail(id: string) {
     const details = this.router.createUrlTree([])
     .root.children.primary.children.primary.segments
-    .map(({ path }) => path === 'list' ? id : path )
+    .map(({ path }) => path === 'list' ? id : path)
     .join('/');
     return this.router.navigate(
       [ { outlets: { details } } ],

@@ -6,6 +6,7 @@ import { LocalizationService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -36,6 +37,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     private router: Router,
     private route: ActivatedRoute,
     public gridConfiguratorService: GridConfiguratorService,
+    public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = this.entrepotsService;
   }
@@ -67,14 +69,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     this.router.navigate([`/tiers/entrepots/create/${this.clientID}`]);
   }
   onRowPrepared(e) {
-    if (e.rowType === 'data') {
-      if (!e.data.valide) {
-        e.rowElement.classList.add('highlight-datagrid-row');
-        if (e.data.preSaisie) {
-          e.rowElement.classList.add('tovalidate-datagrid-row');
-        }
-      }
-    }
+    this.gridRowStyleService.applyGridRowStyle(e);
   }
   
 }

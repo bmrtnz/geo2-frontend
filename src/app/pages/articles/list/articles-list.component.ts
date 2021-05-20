@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { map } from 'rxjs/operators';
 import { LocalizationService } from 'app/shared/services';
+import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 
 @Component({
   selector: 'app-articles-list',
@@ -31,7 +32,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     private router: Router,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
-  ) {
+    public gridRowStyleService: GridRowStyleService,
+    ) {
     this.apiService = this.articlesService;
   }
 
@@ -52,14 +54,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === 'data') {
-      if (!e.data.valide) {
-        e.rowElement.classList.add('highlight-datagrid-row');
-        if (e.data.preSaisie) {
-          e.rowElement.classList.add('tovalidate-datagrid-row');
-        }
-      }
-    }
+    this.gridRowStyleService.applyGridRowStyle(e);
   }
 
 }

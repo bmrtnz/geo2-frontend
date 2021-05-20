@@ -42,17 +42,3 @@
     border-bottom: none;
 }
 
-::ng-deep .dx-row.dx-data-row {
-
-    & {
-        &.highlight-datagrid-row > td {
-            background:#EEE;
-        }
-    }
-
-    &.dx-row-focused {
-        &.highlight-datagrid-row > td {
-            color:#CCC;
-        }
-    }
-}

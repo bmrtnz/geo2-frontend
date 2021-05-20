@@ -6,6 +6,7 @@ import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -34,6 +35,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     public currentCompanyService: CurrentCompanyService,
     private router: Router,
     public gridConfiguratorService: GridConfiguratorService,
+    public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = this.clientsService;
   }
@@ -70,14 +72,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === 'data') {
-      if (!e.data.valide) {
-        e.rowElement.classList.add('highlight-datagrid-row');
-        if (e.data.preSaisie) {
-          e.rowElement.classList.add('tovalidate-datagrid-row');
-        }
-      }
-    }
+    this.gridRowStyleService.applyGridRowStyle(e);
   }
 
 }

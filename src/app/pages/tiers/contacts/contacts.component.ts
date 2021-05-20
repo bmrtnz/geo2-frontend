@@ -10,6 +10,7 @@ import { FluxService } from 'app/shared/services/api/flux.service';
 import { MoyenCommunicationService } from 'app/shared/services/api/moyens-communication.service';
 import { SocietesService } from 'app/shared/services/api/societes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -44,7 +45,8 @@ export class ContactsComponent implements OnInit, NestedPart {
     public localizeService: LocalizationService,
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
-  ) {}
+    public gridRowStyleService: GridRowStyleService,
+    ) {}
 
   ngOnInit() {
     this.detailedFields = this.contactsService.model.getDetailedFields(2)
