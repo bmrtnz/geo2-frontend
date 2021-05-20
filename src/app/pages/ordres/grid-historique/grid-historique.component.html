@@ -7,6 +7,10 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
     (onContentReady)="sortGrid()"
     (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Historique, enableFilters.bind(this))"

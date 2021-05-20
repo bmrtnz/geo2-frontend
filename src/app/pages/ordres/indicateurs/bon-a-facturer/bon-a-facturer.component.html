@@ -146,7 +146,11 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [selection]="{ mode: 'multiple' }"
-    (onRowDblClick)="onRowDblClick($event)"
+    scrolling="{
+        useNative:false,
+        showScrollBar:'always'
+      }"
+      (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreBonAFacturer, enableFilters.bind(this))"
   >
 

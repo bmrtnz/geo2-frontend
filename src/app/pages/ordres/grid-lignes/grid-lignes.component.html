@@ -8,6 +8,10 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
   >
 
     <!-- Grid configuration -->

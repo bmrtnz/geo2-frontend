@@ -33,6 +33,10 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.CommandesTransit, enableFilters.bind(this))"
   >

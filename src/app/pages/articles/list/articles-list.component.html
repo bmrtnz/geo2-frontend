@@ -10,6 +10,10 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"

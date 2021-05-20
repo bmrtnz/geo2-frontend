@@ -554,6 +554,11 @@
                                                             [width]=800
                                                             [dataSource]="commentaires"
                                                             [columns]="['Quand', 'Qui', 'Quoi']"
+                                                            [columnAutoWidth]="true"
+                                                            scrolling="{
+                                                                useNative:false,
+                                                                showScrollBar:'always'
+                                                              }"
                                                             [showBorders]="true">
 
                                                             <dxo-editing
@@ -581,6 +586,11 @@
                                                             id="gridContainer"
                                                             [width]=500
                                                             [dataSource]="logs"
+                                                            [columnAutoWidth]="true"
+                                                            scrolling="{
+                                                                useNative:false,
+                                                                showScrollBar:'always'
+                                                              }"
                                                             [columns]="['DateHeureSauvegarde', 'Qui']"
                                                             [showBorders]="true">
                                                         </dx-data-grid>

@@ -7,6 +7,10 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLogistique,enableFilters.bind(this))"
   >
 

@@ -16,8 +16,13 @@
   [(visible)]="this.visible"
   [closeOnOutsideClick]="true">
   <div *dxTemplate="let d of 'content'">
-    <dx-data-grid [dataSource]="this.historique">
-
+    <dx-data-grid 
+      [columnAutoWidth]="true"
+      scrolling="{
+        useNative:false,
+        showScrollBar:'always'
+      }"
+      [dataSource]="this.historique">
       <dxi-column
         caption="{{ 'date-modification' | localize }}"
         dataField="dateModification"

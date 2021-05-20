@@ -10,6 +10,11 @@
     <div>
       <dx-data-grid
         [dataSource]="certifications"
+        [columnAutoWidth]="true"
+        scrolling="{
+          useNative:false,
+          showScrollBar:'always'
+        }"
         (onCellPrepared)="onCellPrepared($event)"
         (onToolbarPreparing)="onToolbarPreparing($event)"
         dateSerializationFormat="yyyy-MM-dd"
