@@ -53,7 +53,16 @@ const routes: Routes = [
       {
         path: 'tiers/clients/:client/entrepots',
         component: EntrepotsListComponent,
+      },
+      {
+        path: 'tiers/clients/:client/entrepots/list',
+        component: EntrepotsListComponent,
+      },
+      {
+        path: 'tiers/clients/:client/entrepots/:id',
+        component: EntrepotDetailsComponent,
         outlet: 'details',
+        canDeactivate: [EditingGuard],
       },
       {
         path: 'tiers/fournisseurs/list',
