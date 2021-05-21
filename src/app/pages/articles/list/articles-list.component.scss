@@ -1,24 +1,3 @@
-::ng-deep .dx-row.dx-data-row {
-
-    & {
-        &.highlight-datagrid-row > td {
-            background:#EEE;
-        }
-        &.tovalidate-datagrid-row > td {
-            color:#F76300;
-        }
-        
-    }
-
-    &.dx-row-focused {
-        &.highlight-datagrid-row > td {
-            color:#CCC;
-        }
-        &.tovalidate-datagrid-row > td {
-            color:#FF325A;
-        }
-    }
-}
 
 ::ng-deep .dx-datagrid-search-panel {
     display:none;

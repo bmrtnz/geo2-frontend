@@ -5,6 +5,7 @@ import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -33,6 +34,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
     private router: Router,
+    public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = transporteursService;
   }
@@ -59,14 +61,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === 'data') {
-      if (!e.data.valide) {
-        e.rowElement.classList.add('highlight-datagrid-row');
-        if (e.data.preSaisie) {
-          e.rowElement.classList.add('tovalidate-datagrid-row');
-        }
-      }
-    }
+    this.gridRowStyleService.applyGridRowStyle(e);
   }
 
 }
