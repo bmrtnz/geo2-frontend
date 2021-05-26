@@ -8,6 +8,7 @@ import {CompanyChooserModule} from '../company-chooser/company-chooser.component
 import {DxButtonModule} from 'devextreme-angular/ui/button';
 import {DxToolbarModule} from 'devextreme-angular/ui/toolbar';
 import {FileManagerModule} from '../file-manager/file-manager-popup.component';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 
 @Component({
   selector: 'app-header',
@@ -24,7 +25,7 @@ export class HeaderComponent implements OnInit {
 
   @Input()
   title: string;
-  perimetre: string; 
+  perimetre: string;
 
   societeSource: DataSource;
   userMenuItems: any[];
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit {
     private localizeService: LocalizationService,
     private authService: AuthService,
     public societeService: SocietesService,
+    public currentCompanyService: CurrentCompanyService
   ) {
     this.perimetre = this.authService.currentUser.perimetre;
     this.userMenuItems = [{
