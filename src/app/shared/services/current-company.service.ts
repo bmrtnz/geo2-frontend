@@ -13,6 +13,7 @@ export class CurrentCompanyService {
     if (processedData) {this.showCompanyColorOnLogo(processedData);}
     return processedData;
   }
+  
   setCompany(societe) {
     window.sessionStorage.removeItem('openOrders');
     window.sessionStorage.setItem('companyStorage', JSON.stringify(societe));
@@ -24,21 +25,19 @@ export class CurrentCompanyService {
     const list = document.getElementsByClassName('header-logo')[0];
     if (list) {
       list.setAttribute("style", "background-color: " + this.stringToHexaColor(societe.raisonSocial) + ";");
-      console.log(societe.id+ '  ' + this.stringToHexaColor(societe.raisonSocial))
     }
   }
 
-  stringToHexaColor(str) { // java String#hashCode
+  stringToHexaColor(str) { // Converts any string into a specific hex color #XXXXXX
     let hash = 0;
     for (var i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
 
-    let c = (hash & 0x00FFFFFF)
+    let color = (hash & 0x00FFFFFF)
       .toString(16)
       .toUpperCase();
-    return "#000000".substring(0, 7 - c.length) + c;
-
+    return "#000000".substring(0, 7 - color.length) + color;
   } 
 
 }
