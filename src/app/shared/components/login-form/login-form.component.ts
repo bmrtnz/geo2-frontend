@@ -52,7 +52,10 @@ export class LoginFormComponent implements OnInit {
     ).subscribe(() => this.form.patchValue({password: ''}));
   }
 
-  nomUtilisateurOnFocusOut(event) {
+  findAssociatedCompanies(e) {
+
+    if (!this.form.get('nomUtilisateur').value.length || !this.form.get('password').value.length) return;
+
     //const textBoxComponent: DxTextBoxComponent = event.component;
     from(this.utilisateursService.getOne(this.form.get('nomUtilisateur').value, this.form.get('password').value))
     .pipe(
@@ -72,7 +75,7 @@ export class LoginFormComponent implements OnInit {
       filter.push(['valide', '=', true]);
       this.societe.filter(filter)
   
-      // Authorized companies -> '*' all
+      // Authorized companies -> '*' = all
       if (perimetre !== '*') {
         perimetre.split(',').forEach(element => {
           filter2.push(['id', '=', element]);
@@ -84,8 +87,8 @@ export class LoginFormComponent implements OnInit {
     })
   }
 
-  societeOnChange(event) {
-    this.currentCompanyService.setCompany(event.selectedItem);
+  societeOnChange(e) {
+    this.currentCompanyService.setCompany(e.selectedItem);
   }
 }
 @NgModule({

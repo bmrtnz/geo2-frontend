@@ -13,8 +13,7 @@
       <dx-text-box
         formControlName="nomUtilisateur"
         placeholder="{{ 'auth-login' | localize }}"
-        width="100%"
-        (onFocusOut)="nomUtilisateurOnFocusOut($event)">
+        width="100%">
         <dx-validator>
           <dxi-validation-rule type="required" message="{{ 'auth-validation-login' | localize }}"></dxi-validation-rule>
         </dx-validator>
@@ -27,7 +26,6 @@
         mode="password"
         formControlName="password"
         placeholder="{{ 'auth-password' | localize }}"
-        (onFocusOut)="nomUtilisateurOnFocusOut($event)"
         width="100%">
         <dx-validator>
           <dxi-validation-rule type="required" message="{{ 'auth-validation-password' | localize }}"></dxi-validation-rule>
@@ -41,6 +39,7 @@
             placeholder="{{ 'auth-societe' | localize }}"
             [dataSource]="societe"
             displayExpr="raisonSocial"
+            (onFocusIn)="findAssociatedCompanies($event)"
             (onSelectionChanged)="societeOnChange($event)"
             [value]="['']">
         </dx-select-box>
