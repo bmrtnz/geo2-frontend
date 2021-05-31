@@ -31,7 +31,7 @@ export class CompanyChooserComponent implements OnInit {
 
   ngOnInit() {
 
-    // Local storage
+    // Session storage
     let data =this.currentCompanyService.getCompany();
     if (data !== null) {
       this.societe = data.raisonSocial;
@@ -54,7 +54,7 @@ export class CompanyChooserComponent implements OnInit {
       id : e.id,
       raisonSocial : e.raisonSocial
     }
-    // Local storage
+    // Session storage
     this.currentCompanyService.setCompany(societe);
     this.societe = societe.raisonSocial;
     // Back home
