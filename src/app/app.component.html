@@ -3,6 +3,7 @@
         <router-outlet></router-outlet>
         <app-footer>
             {{ 'copyright' | localize:copyrightYear }}
+            - {{ 'version' | localize }} {{ version }}
         </app-footer>
     </app-side-nav-outer-toolbar>
 </ng-container>

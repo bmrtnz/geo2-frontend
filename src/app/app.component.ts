@@ -9,6 +9,7 @@ import {AuthService, ScreenService, LocalizationService} from './shared/services
 })
 export class AppComponent {
   public static readonly START_DEV_YEAR: number = 2020;
+  public version = require( '../../package.json').version;
 
   @HostBinding('class') get getClass() {
     return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
