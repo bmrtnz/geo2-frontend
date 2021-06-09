@@ -10,7 +10,6 @@
 
 /* Toasts */
 
-
 .dx-toast-content {
   color: rgba(255,255,255,.87);
   font-size: 16px;
@@ -40,6 +39,10 @@
   top: 50%;
   text-align: center;
   transform: translate(-50%,-50%);
+}
+
+.dx-toast-info {
+  background-color: #00759c;
 }
 
 $base-fonts-path:'./scss/fonts/';
