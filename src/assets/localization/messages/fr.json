@@ -3,6 +3,7 @@
     "title": "Geo2",
     "home": "Accueil",
     "copyright": "Copyright © 2020{0} Microtec Informatique ",
+    "version": "v",
 
     "documents": "Documents",
     "valide": "Validé",
@@ -155,6 +156,7 @@
     "tiers-fournisseurs-title": "Fournisseurs",
     "tiers-fournisseurs-details-groupe-infos": "Infos générales",
     "tiers-fournisseurs-id": "ID",
+    "tiers-fournisseurs-identifiant": "Identifiant fournisseur",
     "tiers-fournisseurs-valide": "Valide",
     "tiers-fournisseurs-preSaisie": "Pré-saisie",
     "tiers-fournisseurs-code": "Code fournisseur",
@@ -482,6 +484,7 @@
     "ordres-facture": "Facturé",
     "ordres-factureEDI": "EDI",
     "ordres-livre": "Livré",
+    "ordres-entrepotLivre": "Entrepôt livré",
     "ordres-ordrePlus": "Informations complémentaires",
     "ordres-instructionsLogistiques": "Instructions logistique",
     "ordres-bonsAFacturer": "Bons à facturer",

@@ -5,6 +5,7 @@ import {ConditionVente} from './condition-vente.model';
 import {Devise} from './devise.model';
 import {GroupeFournisseur} from './groupe-fournisseur.model';
 import {Historique} from './historique.model';
+import IdentifiantFournisseur from './identifiant.fournisseur.model';
 import {Field, Model, ModelName} from './model';
 import {MoyenPaiement} from './moyen-paiement.model';
 import {Pays} from './pays.model';
@@ -25,6 +26,7 @@ export class Fournisseur extends Model {
 
   @Field({ asKey: true }) public id: string;
   @Field() public code: string;
+  @Field({ model: import('./identifiant.fournisseur.model') }) public identifiant: IdentifiantFournisseur;
   @Field({ asLabel: true }) public raisonSocial: string;
   @Field() public ville: string;
   @Field({ model: import('./pays.model') }) public pays: Pays;

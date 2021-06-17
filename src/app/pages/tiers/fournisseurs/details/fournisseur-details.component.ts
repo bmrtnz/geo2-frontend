@@ -8,6 +8,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
+import IdentifiantFournisseur from 'app/shared/models/identifiant.fournisseur.model';
 import { AuthService } from 'app/shared/services';
 import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
 import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
@@ -16,6 +17,7 @@ import { ConditionsVenteService } from 'app/shared/services/api/conditions-vente
 import { DevisesService } from 'app/shared/services/api/devises.service';
 import { GroupesFournisseurService } from 'app/shared/services/api/groupes-fournisseur.service';
 import { HistoryType } from 'app/shared/services/api/historique.service';
+import { IdentifiantsFournisseurService } from 'app/shared/services/api/identifiants-fournisseur.service';
 import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
 import { NaturesStationService } from 'app/shared/services/api/natures-station.service';
 import { PaysService } from 'app/shared/services/api/pays.service';
@@ -38,6 +40,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   formGroup = this.fb.group({
     code: [''],
+    identifiant: [''],
     raisonSocial: [''],
     stockActif: [''],
     stockPrecalibre: [''],
@@ -105,6 +108,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   editing = false;
 
   fournisseur: Fournisseur;
+  identifiant: DataSource;
   pays: DataSource;
   devises: DataSource;
   moyensPaiement: DataSource;
@@ -129,6 +133,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     private fournisseursService: FournisseursService,
     private bureauxAchatService: BureauxAchatService,
     private conditionsVenteService: ConditionsVenteService,
+    private identifiantsFournisseurService: IdentifiantsFournisseurService,
     private typesFournisseurService: TypesFournisseurService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
@@ -191,6 +196,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
     this.bureauxAchat = this.bureauxAchatService.getDataSource();
+    this.identifiant = this.identifiantsFournisseurService.getDataSource();
     this.typesFournisseur = this.typesFournisseurService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
     this.devises = this.devisesService.getDataSource();
