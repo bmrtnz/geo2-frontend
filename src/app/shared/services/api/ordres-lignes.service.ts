@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import OrdreLigneTotauxDetail from 'app/shared/models/ordre-ligne-totaux-detail';
+import OrdreLigneTotauxDetail from 'app/shared/models/ordre-ligne-totaux-detail.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { OrdreLigne } from '../../models/ordre-ligne.model';
