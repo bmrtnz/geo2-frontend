@@ -72,7 +72,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
               allOrdreLigneTotauxDetail(ordre:$ordre, pageable:$pageable) {
                 edges {
                   node {
-                    ${await OrdreLigneTotauxDetail.getGQLFields(1, undefined, null, {noList: true}).toPromise()}
+                    ${await OrdreLigneTotauxDetail.getGQLFields(2, undefined, null, {noList: true}).toPromise()}
                   }
                 }
                 pageInfo {

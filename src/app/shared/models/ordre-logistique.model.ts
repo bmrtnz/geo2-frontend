@@ -10,6 +10,10 @@ export class OrdreLogistique extends Model {
   @Field({model: import('./ordre.model')}) public ordre?: Ordre;
   @Field({model: import('./fournisseur.model')}) public fournisseur?: Fournisseur;
   @Field() public expedieStation?: boolean;
+  @Field() public nombrePalettesAuSol?: number;
+  @Field() public nombrePalettes100x120?: number;
+  @Field() public nombrePalettes80x120?: number;
+  @Field() public nombrePalettes60X80?: number;
   @Field({ dataType: 'localdate' }) public dateDepartPrevueFournisseur?: string;
   @Field({ dataType: 'localdate' }) public dateDepartPrevueGroupage?: string;
   @Field({model: import('./groupage.model')}) public groupage?: Groupage;
