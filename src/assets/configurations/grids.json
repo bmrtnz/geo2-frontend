@@ -939,5 +939,25 @@
         "visible": true
       }
     ]
+  },
+  "commentaire-ordre": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "dateModification",
+        "visible": true,
+        "sortOrder": "desc"
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "userModification",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "commentaires",
+        "visible": true
+      }
+    ]
   }
 }
