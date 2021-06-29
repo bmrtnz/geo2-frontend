@@ -5,10 +5,10 @@ import Utilisateur from './utilisateur.model';
 @ModelName('OrdreSaveLog')
 export class OrdreSaveLog extends Model {
 
-  @Field({asKey: true}) public id: string;
-  @Field({model: import('./utilisateur.model')}) public utilisateur: Utilisateur;
-  @Field({model: import('./ordre.model')}) public ordre: Ordre;
-  @Field({ dataType: 'localdate' }) public dateModification?: string;
+  @Field({asKey: true}) public id?: string;
+  @Field() public utilisateur?: string;
+  @Field({model: import('./ordre.model')}) public ordre?: Ordre;
+  @Field({ dataType: 'datetime' }) public dateModification?: string;
 
 }
 
