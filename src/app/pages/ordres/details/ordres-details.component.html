@@ -652,18 +652,9 @@
                                                 [selectedIndex]="-1"
                                                 >
                                                     <dxi-item>
-                                                        <dx-data-grid
-                                                            id="gridContainer"
-                                                            [width]=500
-                                                            [dataSource]="logs"
-                                                            [columnAutoWidth]="true"
-                                                            scrolling="{
-                                                                useNative:false,
-                                                                showScrollBar:'always'
-                                                              }"
-                                                            [columns]="['DateHeureSauvegarde', 'Qui']"
-                                                            [showBorders]="true">
-                                                        </dx-data-grid>
+                                                        <div class="dx-form-group-content">
+                                                            <app-grid-save-log [ordre]="getSelectedOrdre()"></app-grid-save-log>
+                                                        </div>
                                                     </dxi-item>
                                                 </dx-accordion>
                                             </div>
