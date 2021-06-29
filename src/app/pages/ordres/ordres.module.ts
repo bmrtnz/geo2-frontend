@@ -35,6 +35,7 @@ import { PlanningDepartComponent } from './indicateurs/planning-depart/planning-
 import { CommandesTransitComponent } from './indicateurs/commandes-transit/commandes-transit.component';
 import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/clients-dep-encours.component';
 import { GridLignesDetailsComponent } from './grid-lignes-details/grid-lignes-details.component';
+import { GridSaveLogComponent } from './grid-save-log/grid-save-log.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { GridLignesDetailsComponent } from './grid-lignes-details/grid-lignes-de
     CommandesTransitComponent,
     ClientsDepEncoursComponent,
     GridLignesDetailsComponent,
+    GridSaveLogComponent,
   ],
   imports: [
     OrdresRoutingModule,
