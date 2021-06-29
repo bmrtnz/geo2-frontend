@@ -40,11 +40,11 @@
         </dx-button>
         <dx-button
             class="black"
-            data-accordion="marges"
+            data-accordion="synthese"
             height="auto"
             icon="material-icons euro_symbol"
             (onClick)="scrollToOnClick($event)"
-            text="{{ 'ordres-details-marges' | localize }}">
+            text="{{ 'ordres-details-synthese' | localize }}">
         </dx-button>
         <dx-button
             class="black"
@@ -148,6 +148,7 @@
                                                 </dx-button>
                                             </span>
                                         </h2>
+                                        <span *ngIf="i" class="order-id">{{ 'ordres-ref' | localize }} : {{ content.id }}</span>
                                         <div class="right" *ngIf="i">
                                             <dx-button class="upperButton subButton submit "
                                                 type="default"
@@ -235,6 +236,23 @@
                                                                     </dx-select-box>
                                                                 </div>
                                                             </div>
+                                                            <!-- Entrepôt livré -->
+                                                            <div class="dx-field">
+                                                                <div class="dx-field-label">{{ 'ordres-entrepotLivre' | localize }}</div>
+                                                                <div class="dx-field-value">
+                                                                    <dx-select-box
+                                                                      formControlName="entrepot"
+                                                                      [dataSource]="entrepot"
+                                                                      displayExpr="raisonSocial"
+                                                                      [searchEnabled]="true"
+                                                                      [searchExpr]="['id','raisonSocial']"
+                                                                    >
+                                                                        <dx-validator name="{{ 'ordres-entrepotLivre' | localize }}">
+                                                                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                        </dx-validator>
+                                                                    </dx-select-box>
+                                                                </div>
+                                                            </div>
                                                             <!-- Réf Client -->
                                                             <div class="dx-field">
                                                                 <div class="dx-field-label">{{ 'ordres-referenceClient' | localize }}</div>
@@ -246,24 +264,7 @@
                                                                     </dx-text-box>
                                                                 </div>
                                                             </div>
-                                                            <!-- transporteur -->
-                                                            <div class="dx-field">
-                                                                <div class="dx-field-label">{{ 'ordres-transporteur' | localize }}</div>
-                                                                <div class="dx-field-value">
-                                                                    <dx-select-box
-                                                                        formControlName="transporteur"
-                                                                        [dataSource]="transporteurs"
-                                                                        displayExpr="raisonSocial"
-                                                                        [searchEnabled]="true"
-                                                                        [searchExpr]="['id','raisonSocial']"
-                                                                    >
-                                                                        <dx-validator name="{{ 'ordres-transporteur' | localize }}">
-                                                                            <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                        </dx-validator>
-                                                                    </dx-select-box>
-                                                                </div>
-                                                            </div>
-                                                            <!-- commercial -->
+                                                             <!-- commercial -->
                                                             <div class="dx-field">
                                                                 <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
                                                                 <div class="dx-field-value">
@@ -297,24 +298,30 @@
                                                                     </dx-select-box>
                                                                 </div>
                                                             </div>
-
+                                                            <!-- Ordre + -->
                                                             <dx-accordion
                                                             [collapsible]="true"
                                                             [multiple]="false"
                                                             [selectedIndex]="-1"
                                                             >
                                                                 <dxi-item title="{{ 'ordres-ordrePlus' | localize }}">
-                                                                <!-- Ordre + -->
-                                                                <!-- <div class="dx-field">
-                                                                    <div class="dx-field-label">{{ 'tiers-clients-facturationRaisonSocial' | localize }}</div>
+                                                                <!-- Devise -->
+                                                                <div class="dx-field">
+                                                                    <div class="dx-field-label">{{ 'ordres-devise' | localize }}</div>
                                                                     <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="facturationRaisonSocial">
-                                                                        <dx-validator name="{{ 'tiers-entrepots-facturationRaisonSocial' | localize }}">
-                                                                        <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
-                                                                        </dx-validator>
-                                                                    </dx-text-box>
+                                                                        <dx-select-box
+                                                                        formControlName="devise"
+                                                                        [dataSource]="devise"
+                                                                        [displayExpr] = "deviseDisplayExpr"
+                                                                        [searchEnabled]="true"
+                                                                        [searchExpr]="['id','description']"
+                                                                      >
+                                                                          <dx-validator name="{{ 'ordres-devise' | localize }}">
+                                                                              <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                          </dx-validator>
+                                                                      </dx-select-box>
                                                                     </div>
-                                                                </div> -->
+                                                                </div>
                                                                 </dxi-item>
                                                             </dx-accordion>
                                                             <dx-accordion
@@ -418,17 +425,27 @@
                                                             <dx-box>
                                                                 <dxi-item [ratio]="4">
                                                                     <!-- Livré -->
-                                                                    <div class="dx-field field-large">
+                                                                    <!-- <div class="dx-field field-large">
                                                                         <div class="dx-field-label checkbox-label">{{ 'ordres-livre' | localize }}</div>
                                                                         <div class="dx-field-value">
                                                                         <dx-check-box [disabled] = true formControlName="livre"></dx-check-box>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> -->
                                                                 </dxi-item>
                                                                 <dxi-item [ratio]="1"></dxi-item>
                                                                 <dxi-item [ratio]="4">
                                                                 </dxi-item>
                                                             </dx-box>
+                                                                <div class="dx-field field-large">
+                                                                    <div class="dx-field-label">{{ 'ordres-commentaireUsageInterne' | localize }}</div>
+                                                                    <div class="dx-field-value">
+                                                                        <dx-text-area formControlName="commentaireUsageInterne">
+                                                                        <dx-validator name="{{ 'ordres-commentaireUsageInterne' | localize }}">
+                                                                            <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                                                                        </dx-validator>
+                                                                        </dx-text-area>
+                                                                    </div>
+                                                                </div>
                                                         </dxi-item>
                                                     </dx-box>
 
@@ -454,11 +471,13 @@
                                                     type="default"
                                                     height="auto"
                                                     icon="material-icons loupe"
-                                                    text="{{ 'btn-detailExp' | localize }}"
+                                                    text="{{ (ordresLignesViewExp ? 'btn-ordreLignes' : 'btn-detailExp') | localize }}"
+                                                    (onClick)="detailExp()"
                                                 ></dx-button>
                                                 <div style="clear:both"></div>
                                                 <div class="dx-form-group-content">
-                                                    <app-grid-lignes [ordre]="getSelectedOrdre()"></app-grid-lignes>
+                                                    <app-grid-lignes *ngIf="!ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-lignes>
+                                                    <app-grid-lignes-details *ngIf="ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-lignes-details>
                                                 </div>
 
                                             </div>
@@ -474,6 +493,23 @@
                                                     <dxi-item>
                                                         <div class="dx-form-group-content">
                                                             <div class="dx-form-group-content">
+                                                                <!-- transporteur -->
+                                                                <div class="dx-field">
+                                                                    <div class="dx-field-label">{{ 'ordres-transporteur' | localize }}</div>
+                                                                    <div class="dx-field-value">
+                                                                        <dx-select-box
+                                                                            formControlName="transporteur"
+                                                                            [dataSource]="transporteurs"
+                                                                            displayExpr="raisonSocial"
+                                                                            [searchEnabled]="true"
+                                                                            [searchExpr]="['id','raisonSocial']"
+                                                                        >
+                                                                            <dx-validator name="{{ 'ordres-transporteur' | localize }}">
+                                                                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                            </dx-validator>
+                                                                        </dx-select-box>
+                                                                    </div>
+                                                                </div>
                                                                 <app-grid-logistiques [ordre]="getSelectedOrdre()"></app-grid-logistiques>
                                                             </div>
                                                         </div>
@@ -491,15 +527,48 @@
                                                 >
                                                     <dxi-item>
                                                         <div class="dx-form-group-content">
+
+                                                            <dx-box>
+                                                                <dxi-item [ratio]="4">
+                                                                    <!-- No Litige -->
+                                                                    <div class="dx-field">
+                                                                        <div class="dx-field-label">{{ 'ordres-litiges-numero' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                            <dx-text-box
+                                                                              formControlName="litigeNumero"
+                                                                              displayExpr="id"
+                                                                            >
+                                                                            </dx-text-box>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Client -->
+                                                                    <div class="dx-field">
+                                                                        <div class="dx-field-label">{{ 'ordres-entrepotLivre' | localize }}</div>
+                                                                        <div class="dx-field-value">
+                                                                            <dx-select-box
+                                                                              formControlName="entrepot"
+                                                                              [dataSource]="entrepot"
+                                                                              displayExpr="raisonSocial"
+                                                                              [searchEnabled]="true"
+                                                                              [searchExpr]="['id','raisonSocial']"
+                                                                            >
+                                                                                <dx-validator name="{{ 'ordres-entrepotLivre' | localize }}">
+                                                                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                                                                </dx-validator>
+                                                                            </dx-select-box>
+                                                                        </div>
+                                                                    </div>
+                                                                </dxi-item>
+                                                            </dx-box>
                                                         </div>
                                                     </dxi-item>
                                                 </dx-accordion>
                                             </div>
 
-                                            <div class="marges-field accordion3 dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-marges' | localize }}</span>
+                                            <div class="synthese-field accordion3 dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-synthese' | localize }}</span>
                                                 <dx-accordion
-                                                data-name="marges"
+                                                data-name="synthese"
                                                 [collapsible]="true"
                                                 [multiple]="false"
                                                 [selectedIndex]="-1"
@@ -521,6 +590,7 @@
                                                 >
                                                     <dxi-item>
                                                         <div class="dx-form-group-content">
+                                                            <app-grid-envois [ordre]="getSelectedOrdre()"></app-grid-envois>
                                                         </div>
                                                     </dxi-item>
                                                 </dx-accordion>

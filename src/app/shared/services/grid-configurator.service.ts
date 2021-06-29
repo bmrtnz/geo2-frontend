@@ -22,6 +22,7 @@ export enum Grid {
   Ordre = 'ordre',
   Historique = 'historique',
   OrdreLigne = 'ordre-ligne',
+  OrdreLigneDetails = 'ordre-ligne-detail',
   OrdreLogistique = 'ordre-logistique',
   LitigeLigne = 'litige-ligne',
   OrdreSupervisionLivraison = 'ordre-supervision-livraison',
@@ -30,6 +31,7 @@ export enum Grid {
   OrdresNonConfirmes = 'ordres-non-confirmes',
   CommandesTransit = 'commandes-transit',
   PlanningDepart = 'planning-depart',
+  Envois = 'envois'
 }
 
 @Injectable({

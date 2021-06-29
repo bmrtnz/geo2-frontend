@@ -2,25 +2,27 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { Devise } from '../../models';
+import Envois from 'app/shared/models/envois.model';
 import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DevisesService extends ApiService implements APIRead {
+export class EnvoisService extends ApiService implements APIRead {
+
+  // listRegexp = /.*\.(?:id|libelle)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, Devise);
+    super(apollo, Envois);
   }
 
   getDataSource() {
     return new DataSource({
-      sort: [
-        { selector: this.model.getLabelField() }
-      ],
+      // sort: [
+      //   { selector: this.model.getLabelField() }
+      // ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
@@ -30,22 +32,24 @@ export class DevisesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
+          // const query = await this.buildGetAll(1, this.listRegexp);
           const query = await this.buildGetAll(1);
-          type Response = { allDevise: RelayPage<Devise> };
+          type Response = { allEnvois: RelayPage<Envois> };
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allDevise)
-              resolve(this.asInstancedListCount(res.data.allDevise));
+            if (res.data && res.data.allEnvois)
+              resolve(this.asInstancedListCount(res.data.allEnvois));
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
+          // const query = await this.buildGetOne(1, this.listRegexp);
           const query = await this.buildGetOne(1);
-          type Response = { devise: Devise };
+          type Response = { envois: Envois };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.devise)
-              resolve(new Devise(res.data.devise));
+            if (res.data && res.data.envois)
+              resolve(new Envois(res.data.envois));
           });
         }),
       }),

@@ -12,7 +12,7 @@
             </dx-button>
             <dx-tag-box
                 [items]="allIndicators"
-                [value]="allIndicators"
+                [value]="loadedIndicators"
                 [showClearButton]="true"
                 [showSelectionControls]="true"
                 [searchEnabled]="false"
@@ -37,7 +37,7 @@
         direction="vertical"
     >
         <dxi-item
-            *ngFor="let indicator of indicators"
+            *ngFor="let indicator of loadedIndicators"
             [widthRatio]="1.5"
             [heightRatio]="1.5"
             [style.background]="'' + indicator.tileBkg + ''"

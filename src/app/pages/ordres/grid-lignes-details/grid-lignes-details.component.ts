@@ -10,11 +10,11 @@ import { map } from 'rxjs/operators';
 import { LocalizationService } from 'app/shared/services/localization.service';
 
 @Component({
-  selector: 'app-grid-lignes',
-  templateUrl: './grid-lignes.component.html',
-  styleUrls: ['./grid-lignes.component.scss']
+  selector: 'app-grid-lignes-details',
+  templateUrl: './grid-lignes-details.component.html',
+  styleUrls: ['./grid-lignes-details.component.scss']
 })
-export class GridLignesComponent implements OnChanges {
+export class GridLignesDetailsComponent implements OnChanges {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;

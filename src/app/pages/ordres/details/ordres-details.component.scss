@@ -25,6 +25,11 @@
     margin-right:10px;
 }
 
+::ng-deep .order-id {
+    font-size:18px;
+    margin-top:-20px;
+}
+
 ::ng-deep .main-search-container {
     width:800px;
     margin-bottom:20px;

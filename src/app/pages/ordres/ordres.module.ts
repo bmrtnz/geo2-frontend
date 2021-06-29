@@ -23,6 +23,7 @@ import {
 import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { GridLignesComponent } from './grid-lignes/grid-lignes.component';
 import { GridHistoriqueComponent } from './grid-historique/grid-historique.component';
+import { GridEnvoisComponent } from './grid-envois/grid-envois.component';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { GridLogistiquesComponent } from './grid-logistiques/grid-logistiques.component';
@@ -33,6 +34,7 @@ import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/
 import { PlanningDepartComponent } from './indicateurs/planning-depart/planning-depart.component';
 import { CommandesTransitComponent } from './indicateurs/commandes-transit/commandes-transit.component';
 import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/clients-dep-encours.component';
+import { GridLignesDetailsComponent } from './grid-lignes-details/grid-lignes-details.component';
 
 
 @NgModule({
@@ -41,6 +43,7 @@ import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/cl
     OrdresDetailsComponent,
     GridSuiviComponent,
     GridLignesComponent,
+    GridEnvoisComponent,
     GridHistoriqueComponent,
     LitigesComponent,
     GridLogistiquesComponent,
@@ -51,6 +54,7 @@ import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/cl
     PlanningDepartComponent,
     CommandesTransitComponent,
     ClientsDepEncoursComponent,
+    GridLignesDetailsComponent,
   ],
   imports: [
     OrdresRoutingModule,

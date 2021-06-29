@@ -1,9 +1,12 @@
 import { Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Event as NavigationEvent, NavigationEnd, Router } from '@angular/router';
+import { AuthService } from 'app/shared/services';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
+import { UtilisateursService } from 'app/shared/services/api/utilisateurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { OrdresIndicatorsService, Indicator } from 'app/shared/services/ordres-indicators.service';
 import { DxTagBoxComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { combineLatest, from, Observable, Subscription } from 'rxjs';
 import { filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
@@ -18,7 +21,8 @@ export class OrdresAccueilComponent implements OnDestroy {
 
   indicators: Indicator[];
   allIndicators: Indicator[];
-  tiles: any;
+  loadedIndicators: any;
+  tilesReady: boolean;
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<Indicator[]>();
@@ -27,11 +31,22 @@ export class OrdresAccueilComponent implements OnDestroy {
   constructor(
     ordresIndicatorsService: OrdresIndicatorsService,
     private ordresService: OrdresService,
+    public authService: AuthService,
+    public utilisateursService: UtilisateursService,
     public currentCompanyService: CurrentCompanyService,
     private router: Router,
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
-    this.tiles = this.allIndicators;
+
+    console.log('start : ',authService.currentUser.configTuilesOrdres)
+
+    if (!authService.currentUser.configTuilesOrdres) {
+      authService.currentUser.configTuilesOrdres = {indicators : this.allIndicators}
+    }
+
+    this.loadedIndicators = authService.currentUser.configTuilesOrdres.indicators;
+    console.log('start : ',this.loadedIndicators)
+    this.indicators = this.loadedIndicators;
 
     const navigationEndEvent = this.router.events
       .pipe(
@@ -39,7 +54,19 @@ export class OrdresAccueilComponent implements OnDestroy {
       );
 
     const selectIndicators = this.indicatorsChange
-      .pipe(startWith(ordresIndicatorsService.getIndicators()));
+      .pipe(startWith(ordresIndicatorsService.getIndicators()),tap(indicators=>{
+        authService.currentUser.configTuilesOrdres = {indicators};
+        this.utilisateursService.save({
+          utilisateur: {
+            nomUtilisateur: authService.currentUser.nomUtilisateur,
+            configTuilesOrdres: {indicators}
+          }
+        }).subscribe();
+        console.log('configTuilesOrdres : ',authService.currentUser.configTuilesOrdres.indicators)
+        console.log('this.loadedIndicators : ',this.loadedIndicators)
+        if (this.tilesReady) {this.loadedIndicators = authService.currentUser.configTuilesOrdres.indicators}
+        this.tilesReady = true;
+      }));
 
     this.indicatorsSubscription = combineLatest([navigationEndEvent, selectIndicators])
       .pipe(
@@ -83,8 +110,9 @@ export class OrdresAccueilComponent implements OnDestroy {
 
   tileNumber(e) {
 
+    // console.log(this.indicators)
     if (e.value.length < 1) {
-        e.component.option("value", this.tiles);
+        e.component.option("value", this.allIndicators);
     }
 
   }

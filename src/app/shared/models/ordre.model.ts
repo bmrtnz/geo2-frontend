@@ -6,6 +6,7 @@ import { OrdreLogistique } from './ordre-logistique.model';
 import Personne from './personne.model';
 import {Secteur} from './secteur.model';
 import {Societe} from './societe.model';
+import {Devise} from './devise.model';
 import {Campagne} from './campagne.model';
 import Transporteur from './transporteur.model';
 
@@ -19,6 +20,8 @@ export class Ordre extends Model {
 
   @Field({ asKey: true }) public id?: string;
   @Field({ model: import('./societe.model') }) public societe?: Societe;
+  @Field({ model: import('./devise.model') }) public devise?: Devise;
+  @Field() public commentaireUsageInterne?: string;
   @Field({ model: import('./campagne.model') }) public campagne?: Campagne;
   @Field({ model: import('./secteur.model') }) public secteurCommercial?: Secteur;
   @Field({ model: import('./client.model') }) public client?: Client;

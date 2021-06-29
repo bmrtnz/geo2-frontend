@@ -2,18 +2,20 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { Devise } from '../../models';
+import Litige from 'app/shared/models/litige.model';
 import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DevisesService extends ApiService implements APIRead {
+export class LitigesService extends ApiService implements APIRead {
+
+  // listRegexp = /.*\.(?:id|libelle)$/i;
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, Devise);
+    super(apollo, Litige);
   }
 
   getDataSource() {
@@ -30,22 +32,24 @@ export class DevisesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
+          // const query = await this.buildGetAll(1, this.listRegexp);
           const query = await this.buildGetAll(1);
-          type Response = { allDevise: RelayPage<Devise> };
+          type Response = { allLitige: RelayPage<Litige> };
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allDevise)
-              resolve(this.asInstancedListCount(res.data.allDevise));
+            if (res.data && res.data.allLitige)
+              resolve(this.asInstancedListCount(res.data.allLitige));
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
+          // const query = await this.buildGetOne(1, this.listRegexp);
           const query = await this.buildGetOne(1);
-          type Response = { devise: Devise };
+          type Response = { litige: Litige };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.devise)
-              resolve(new Devise(res.data.devise));
+            if (res.data && res.data.litige)
+              resolve(new Litige(res.data.litige));
           });
         }),
       }),

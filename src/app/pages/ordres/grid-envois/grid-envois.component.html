@@ -7,11 +7,13 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
     scrolling="{
       useNative:false,
       showScrollBar:'always'
     }"
+    (onContentReady)="sortGrid()"
+    (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Envois, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -25,9 +27,9 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing 
-      [storageKey]="gridConfiguratorService.Grid.OrdreLigne"
-      [enabled]="true"
-      type="custom"
+      [enabled]="true" 
+      type="custom" 
+      [storageKey]="gridConfiguratorService.Grid.Envois"
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
@@ -44,7 +46,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('ordreLignes-' + field.path.replaceAll('.', '-') | localize) || field.name"
+      [caption]="('ordreEnvois-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

@@ -5,8 +5,10 @@ import { FileManagerComponent } from 'app/shared/components/file-manager/file-ma
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Role } from 'app/shared/models';
 import Ordre from 'app/shared/models/ordre.model';
-import { LocalizationService, TransporteursService } from 'app/shared/services';
+import { EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { ClientsService } from 'app/shared/services/api/clients.service';
+import { DevisesService } from 'app/shared/services/api/devises.service';
+import { LitigesService } from 'app/shared/services/api/litiges.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
@@ -39,9 +41,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   allContents: Content[];
   contents: Content[];
   clients: DataSource;
+  litiges: DataSource;
+  devise: DataSource;
+  entrepot: DataSource;
   commercial: DataSource;
   assistante: DataSource;
   transporteurs: DataSource;
+  commentaireInterne: DataSource;
   logs: Log[];
   commentaires: Comm[];
   linkedOrders: any;
@@ -55,10 +61,12 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   showGridResults: boolean;
   @ViewChild(DxAutocompleteComponent, { static: false }) autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
+  ordresLignesViewExp: boolean;
 
   formGroup = this.fb.group({
     id: [''],
     client: [''],
+    entrepot: [''],
     referenceClient: [''],
     transporteur: [''],
     commercial: [''],
@@ -67,7 +75,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     dateDepartPrevue: [''],
     dateLivraisonPrevue: [''],
     venteACommission: [''],
+    devise: [''],
+    litigeNumero: [''],
     bonAFacturer: [''],
+    commentaireUsageInterne: [''],
     facture: [''],
     factureEDI: [''],
     livre: [''],
@@ -90,6 +101,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     private ordresService: OrdresService,
     public currentCompanyService: CurrentCompanyService,
     public clientsService: ClientsService,
+    public devisesService: DevisesService,
+    public litigesService: LitigesService,
+    public entrepotsService: EntrepotsService,
     public personnesService: PersonnesService,
     public transporteursService: TransporteursService,
     commService: CommService,
@@ -99,6 +113,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     self = this;
     this.ordres = ordresService.getDataSource();
     this.logs = logService.getLog();
+    this.litiges = litigesService.getDataSource();
     this.commentaires = commService.getComm();
     this.allContents = ordresIndicatorsService.getContents();
     this.contents = ordresIndicatorsService.getContents().slice(0, 1);
@@ -110,6 +125,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     // this.enableFilters();
     this.resetCriteria();
     this.clients = this.clientsService.getDataSource();
+    this.entrepot = this.entrepotsService.getDataSource();
+    this.devise = this.devisesService.getDataSource();
     this.commercial = this.personnesService.getDataSource();
     this.commercial.filter([
       ['valide', '=', true],
@@ -162,6 +179,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.formValuesChange.unsubscribe();
+  }
+
+  deviseDisplayExpr(item) {
+    return item ? item.description + " (" + item.taux + ")" : null;
   }
 
   searchDisplayExpr(item) {
@@ -450,6 +471,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   public getSelectedOrdre() {
     const index = this.tabPanelComponent.selectedIndex;
     return this.contents[index].ordre;
+  }
+
+  detailExp() {
+    this.ordresLignesViewExp = !this.ordresLignesViewExp;
   }
 
   deleteClick() {

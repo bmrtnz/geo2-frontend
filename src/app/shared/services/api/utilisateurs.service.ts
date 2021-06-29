@@ -36,4 +36,9 @@ export class UtilisateursService extends ApiService {
     } as WatchQueryOptions)
     .pipe(take(1));
   }
+
+  save(variables: OperationVariables) {
+    return this.watchSaveQuery({ variables });
+  }
+
 }

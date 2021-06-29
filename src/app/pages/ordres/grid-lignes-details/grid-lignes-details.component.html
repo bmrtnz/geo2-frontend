@@ -7,7 +7,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLigneDetails,enableFilters.bind(this))"
     scrolling="{
       useNative:false,
       showScrollBar:'always'
@@ -25,7 +25,7 @@
       [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing 
-      [storageKey]="gridConfiguratorService.Grid.OrdreLigne"
+      [storageKey]="gridConfiguratorService.Grid.OrdreLigneDetails"
       [enabled]="true"
       type="custom"
       [customLoad]="gridConfiguratorService.load"

@@ -6783,8 +6783,7 @@
   padding: 0;
 }
 .dx-toast-info {
-  /* background-color: rgba(0, 0, 0, 0.87); */
-  background-color: #00759c;
+  background-color: rgba(0, 0, 0, 0.87);
 }
 .dx-toast-warning {
   background-color: #FFC107;
