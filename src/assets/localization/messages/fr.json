@@ -556,6 +556,9 @@
 
     "ordres-litiges-numero": "Litige n°",
 
+    "ordreSaveLog-dateModification": "Date/Heure Sauvegarde",
+    "ordreSaveLog-utilisateur": "Qui",
+
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",
     "rechOrdres-referenceClient": "Référence client",
