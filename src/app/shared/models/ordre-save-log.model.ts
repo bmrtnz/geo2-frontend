@@ -8,6 +8,7 @@ export class OrdreSaveLog extends Model {
   @Field({asKey: true}) public id: string;
   @Field({model: import('./utilisateur.model')}) public utilisateur: Utilisateur;
   @Field({model: import('./ordre.model')}) public ordre: Ordre;
+  @Field({ dataType: 'localdate' }) public dateModification?: string;
 
 }
 
