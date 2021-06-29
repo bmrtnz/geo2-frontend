@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
+import { OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
+import LitigeLigneTotaux from 'app/shared/models/litige-ligne-totaux.model';
 import LitigeLigne from 'app/shared/models/litige-ligne.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
+import { mergeAll, take } from 'rxjs/operators';
 import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
@@ -52,6 +55,67 @@ export class LitigesLignesService extends ApiService implements APIRead {
         }),
       }),
     });
+  }
+
+  // getTotauxDataSource(litige: string) {
+  //   return new DataSource({
+  //     store: this.createCustomStore({
+  //       load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+  //         if (options.group)
+  //           return this.loadDistinctQuery(options, res => {
+  //             if (res.data && res.data.distinct)
+  //               resolve(this.asListCount(res.data.distinct));
+  //           });
+
+  //         type Response = { allLitigeLigneTotaux: RelayPage<LitigeLigneTotaux> };
+  //         const query = `
+  //           query AllLitigeLigneTotaux($litige: String!, $pageable: PaginationInput!) {
+  //             allLitigeLigneTotaux(litige:$litige, pageable:$pageable) {
+  //               edges {
+  //                 node {
+  //                   ${await LitigeLigneTotaux.getGQLFields(1, undefined, null, {noList: true}).toPromise()}
+  //                 }
+  //               }
+  //               pageInfo {
+  //                 startCursor
+  //                 endCursor
+  //                 hasPreviousPage
+  //                 hasNextPage
+  //               }
+  //               totalCount
+  //             }
+  //           }
+  //         `;
+
+  //         const variables = { ...this.mapLoadOptionsToVariables(options), litige };
+  //         this.listenQuery<Response>(query, { variables }, res => {
+  //           if (res.data && res.data.allLitigeLigneTotaux)
+  //             resolve(this.asInstancedListCount(res.data.allLitigeLigneTotaux, v => new LitigeLigneTotaux(v)));
+  //         });
+
+  //       }),
+  //     }),
+  //   });
+  // }
+
+  async getTotaux(litige: string) {
+    const query = `
+    query LitigeLigneTotaux($litige: String!) {
+        litigeLigneTotaux(litige:$litige) {
+          ${await LitigeLigneTotaux.getGQLFields().toPromise()}
+        }
+      }
+    `;
+    type Response = { litigeLigneTotaux: LitigeLigneTotaux };
+    const variables: OperationVariables = { litige };
+    return this
+    .query<Response>(query, {
+      variables,
+      fetchPolicy: 'no-cache',
+      returnPartialData: false,
+    } as WatchQueryOptions)
+    .pipe(take(1));
   }
 
 }
