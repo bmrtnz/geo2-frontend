@@ -1,6 +1,5 @@
-import {Field, Model, ModelName} from './model';
+import { Field, Model, ModelName } from './model';
 import Ordre from './ordre.model';
-import Utilisateur from './utilisateur.model';
 
 @ModelName('OrdreSaveLog')
 export class OrdreSaveLog extends Model {
