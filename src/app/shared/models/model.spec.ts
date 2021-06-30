@@ -147,6 +147,17 @@ describe('Model class', () => {
         });
     });
 
+    it('with filter (forcedFilter options)', (done) => {
+      Entity.getDetailedFields(1, /description$/, {forceFilter: true})
+        .subscribe(fields => {
+          expect(fields.length).toEqual(1);
+          expect(fields).toContain(jasmine.objectContaining({
+            path: 'description',
+          } as ModelFieldOptions));
+          done();
+        });
+    });
+
   });
 
   describe('should handle getKeyField()', () => {

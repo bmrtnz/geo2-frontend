@@ -33,7 +33,8 @@ export class GridCommentaireOrdreComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService
   ) {
     this.dataSource = this.commentairesOrdresService.getDataSource();
-    this.detailedFields = this.commentairesOrdresService.model.getDetailedFields(1);
+    this.detailedFields = this.commentairesOrdresService.model
+    .getDetailedFields(1, /^(?:commentaires|userModification|dateModification)$/i, {forceFilter: true});
   }
 
   ngOnChanges() {

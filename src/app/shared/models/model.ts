@@ -122,12 +122,14 @@ export abstract class Model {
   /**
    * Get model detailed fields
    * @param depth Sub model fetch depth
-   * @param filter Regexp filter, does not filter required fields, like keys or
+   * @param filter Regexp filter, does not filter required fields
+   * @param opt.prefix Prepend string to the field path
+   * @param opt.forceFilter Apply filter on required fields too
    */
   static getDetailedFields(
     depth = 1,
     fieldFilter = DEFAULT_FILTER,
-    prefix?: string): Observable<ModelFieldOptions[]> {
+    opt?: {forceFilter?: boolean, prefix?: string}): Observable<ModelFieldOptions[]> {
 
     enum DXDataType {
       'String' = 'string',
@@ -142,17 +144,17 @@ export abstract class Model {
       .pipe(
         this.fetchMapModel(),
         filter(([name, options]) => {
-          const path = prefix ? `${prefix}.${name}` : name;
+          const path = opt?.prefix ? `${opt?.prefix}.${name}` : name;
           if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
           if (options.fetchedModel && depth > 0) return true;
-          return options.asKey || options.asLabel;
+          return opt?.forceFilter ? false : options.asKey || options.asLabel;
         }),
         this.takeToLastField(depth),
         concatMap(([name, options]) => {
-          let path = prefix ? `${prefix}.${name}` : name;
+          let path = opt?.prefix ? `${opt?.prefix}.${name}` : name;
           if (options.fetchedModel && depth > 0)
             return options.fetchedModel
-              .getDetailedFields(depth - 1, fieldFilter, path)
+              .getDetailedFields(depth - 1, fieldFilter, {...opt, prefix: path})
               .pipe(concatAll());
           const type = Reflect.getMetadata('design:type', this.prototype, name).name;
           if (options.fetchedModel) {
