@@ -231,8 +231,9 @@ export abstract class Model {
    */
   private static takeToLastField(currentDepth: number): MonoTypeOperatorFunction<FieldDescriptor> {
     return takeWhile(([propertyName]) => {
-      return Object.keys(this.getFields()).pop() !== propertyName || currentDepth > 0;
-    }, false);
+      const isLastProperty = Object.keys(this.getFields()).pop() !== propertyName;
+      return currentDepth === 0 && isLastProperty || currentDepth > 0;
+    }, true);
   }
 
 }
