@@ -544,7 +544,7 @@
     "ordreEnvois-nombreTentatives": "Nb",
     "ordreEnvois-numeroOrdre": "n° ordre",
     "ordreEnvois-codeTiers": "Destinataire",
-    "ordreEnvois-typeTiers": "Type Dest.",
+    "ordreEnvois-typeTiers-description": "Type Dest.",
     "ordreEnvois-numeroAcces1": "email / fax",
     "ordreEnvois-versionOrdre": "V ordre",
     "ordreEnvois-assistante-id": "Assist.",
