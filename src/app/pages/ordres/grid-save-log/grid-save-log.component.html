@@ -1,0 +1,53 @@
+<dx-data-grid class="dx-card wide-card"
+    [dataSource]="dataSource"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreSaveLog, enableFilters.bind(this))"
+  >
+
+    <!-- Grid configuration -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+      [enabled]="true" 
+      type="custom" 
+      [storageKey]="gridConfiguratorService.Grid.OrdreSaveLog"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+      *ngFor="let field of detailedFields | async"
+      [dataField]="field.path"
+      [caption]="('ordreSaveLog-' + field.path | localize) || field.name"
+      [visible]="false"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    ></dxi-column>
+
+  </dx-data-grid>

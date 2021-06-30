@@ -178,7 +178,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.formValuesChange.unsubscribe();
+    if (this.formValuesChange)
+      this.formValuesChange.unsubscribe();
   }
 
   deviseDisplayExpr(item) {

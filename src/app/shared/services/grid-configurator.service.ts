@@ -24,6 +24,8 @@ export enum Grid {
   OrdreLigne = 'ordre-ligne',
   OrdreLigneDetails = 'ordre-ligne-detail',
   OrdreLogistique = 'ordre-logistique',
+  OrdreSaveLog = 'ordre-save-log',
+  CommentaireOrdre = 'commentaire-ordre',
   LitigeLigne = 'litige-ligne',
   OrdreSupervisionLivraison = 'ordre-supervision-livraison',
   OrdreBonAFacturer = 'ordre-bon-a-facturer',
