@@ -46,6 +46,14 @@ export class GridEnvoisComponent implements OnInit, OnChanges {
       }),
     );
 
+        // .pipe(
+    //   map(fields => {
+    //     return fields.filter( field => {
+    //       console.log('ordreLignes-' + field.path.replaceAll('.', '-'))
+    //     })
+    //   }),
+    // );
+
   }
 
   ngOnInit() {

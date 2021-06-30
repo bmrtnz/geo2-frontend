@@ -2,6 +2,7 @@ import {Field, Model, ModelName} from './model';
 import {Personne} from './personne.model';
 import {Flux} from './flux.model';
 import {Ordre} from './ordre.model';
+import {TypeTiers} from './type-tiers.model';
 import {MoyenCommunication} from './moyen-communication.model'
 
 @ModelName('Envois')
@@ -22,8 +23,8 @@ export class Envois extends Model {
   @Field() public numeroAcces1: string;
   @Field() public numeroOrdre: string;
   @Field({model: import('./ordre.model')}) public ordre: Ordre;
+  @Field({model: import('./type-tiers.model')}) public typeTiers: TypeTiers;
   @Field() public codeTiers: string;
-  @Field() public typeTiers: string;
   // @Field() public userModification: string;
   @Field() public versionOrdre: string;
 }

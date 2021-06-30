@@ -837,7 +837,7 @@
       },
       {
         "visibleIndex": 6,
-        "dataField": "typeTiers",
+        "dataField": "typeTiers.description",
         "dataType": "string",
         "visible": true
       },
