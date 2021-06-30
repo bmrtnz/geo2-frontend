@@ -931,6 +931,7 @@
         "visibleIndex": 0,
         "dataField": "dateModification",
         "visible": true,
+        "selectedFilterOperation": "<",
         "sortOrder": "desc"
       },
       {
@@ -946,6 +947,7 @@
         "visibleIndex": 0,
         "dataField": "dateModification",
         "visible": true,
+        "selectedFilterOperation": "<",
         "sortOrder": "desc"
       },
       {
