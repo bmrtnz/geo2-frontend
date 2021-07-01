@@ -34,7 +34,7 @@ export class GridControleQualiteComponent implements OnChanges {
   ) {
     this.dataSource = this.cqLignesService.getDataSource();
     this.detailedFields = this.cqLignesService.model
-    .getDetailedFields(1);
+    .getDetailedFields(1, /(?!.*\.id$)/i, {forceFilter: true});
   }
 
   ngOnChanges() {
