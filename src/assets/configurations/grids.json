@@ -961,5 +961,44 @@
         "visible": true
       }
     ]
+  },
+  "controle-qualite": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "isExp",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "nombrePalettes",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "nombreColis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "poidsNetTheoriqueParColis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "fournisseur.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "description",
+        "visible": true
+      }
+    ]
   }
 }

@@ -37,6 +37,7 @@ import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/cl
 import { GridLignesDetailsComponent } from './grid-lignes-details/grid-lignes-details.component';
 import { GridSaveLogComponent } from './grid-save-log/grid-save-log.component';
 import { GridCommentaireOrdreComponent } from './grid-commentaire-ordre/grid-commentaire-ordre.component';
+import { GridControleQualiteComponent } from './grid-controle-qualite/grid-controle-qualite.component';
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import { GridCommentaireOrdreComponent } from './grid-commentaire-ordre/grid-com
     GridLignesDetailsComponent,
     GridSaveLogComponent,
     GridCommentaireOrdreComponent,
+    GridControleQualiteComponent,
   ],
   imports: [
     OrdresRoutingModule,

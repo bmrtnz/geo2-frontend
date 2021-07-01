@@ -33,7 +33,8 @@ export enum Grid {
   OrdresNonConfirmes = 'ordres-non-confirmes',
   CommandesTransit = 'commandes-transit',
   PlanningDepart = 'planning-depart',
-  Envois = 'envois'
+  Envois = 'envois',
+  ControleQualite = 'controle-qualite',
 }
 
 @Injectable({

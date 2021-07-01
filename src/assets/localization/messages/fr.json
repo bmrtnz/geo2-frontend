@@ -563,6 +563,12 @@
     "ordreCommentaire-userModification": "Qui",
     "ordreCommentaire-commentaires": "Quoi",
 
+    "ControleQualite-nombrePalettes": "pal",
+    "ControleQualite-nombreColis": "col",
+    "ControleQualite-poidsNetTheoriqueParColis": "poids",
+    "ControleQualite-fournisseur.raisonSocial": "fournisseur",
+    "ControleQualite-description": "description abrégée - données du contrôle",
+
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-client-raisonSocial": "Client",
     "rechOrdres-referenceClient": "Référence client",
