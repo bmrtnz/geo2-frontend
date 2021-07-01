@@ -56,6 +56,7 @@ export class CQLigne extends Model {
   @Field() public ordreDescription?: string;
   @Field() public articleReference?: string;
   @Field() public nombreColisControles?: number;
+  @Field() public description?: string;
 }
 
 export default CQLigne;
