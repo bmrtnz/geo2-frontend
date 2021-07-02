@@ -32,7 +32,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(1, this.listRegexp);
+          const query = await this.buildGetAll(1);
           type Response = { allOrdreLogistique: RelayPage<OrdreLogistique> };
           const variables = this.mapLoadOptionsToVariables(options);
 

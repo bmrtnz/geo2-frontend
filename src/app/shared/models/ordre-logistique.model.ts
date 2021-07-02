@@ -14,7 +14,16 @@ export class OrdreLogistique extends Model {
   @Field() public nombrePalettes100x120?: number;
   @Field() public nombrePalettes80x120?: number;
   @Field() public nombrePalettes60X80?: number;
+  @Field() public numeroImmatriculation?: string;
+  @Field() public numeroContainer?: string;
+  @Field() public certificatControle?: string;
+  @Field() public numeroPlomb?: string;
+  @Field() public locusTrace?: string;
+  @Field() public detecteurTemperature?: string;
+  @Field() public certificatPhytosanitaire?: string;
+  @Field() public billOfLanding?: string;
   @Field({ dataType: 'localdate' }) public dateDepartPrevueFournisseur?: string;
+  @Field({ dataType: 'localdate' }) public dateDepartReelleFournisseur?: string;
   @Field({ dataType: 'localdate' }) public dateDepartPrevueGroupage?: string;
   @Field({model: import('./groupage.model')}) public groupage?: Groupage;
 
