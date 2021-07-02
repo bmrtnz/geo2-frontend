@@ -50,7 +50,7 @@ describe('Model class', () => {
       Entity.getListFields()
         .pipe(toArray())
         .subscribe(fields => {
-          expect(fields.length).toEqual(5);
+          expect(fields.length).toEqual(6);
           expect(fields).toContain('id');
           expect(fields).toContain('description');
           expect(fields).toContain('valide');
@@ -64,7 +64,7 @@ describe('Model class', () => {
       Entity.getListFields(2)
         .pipe(toArray())
         .subscribe(fields => {
-          expect(fields.length).toEqual(6);
+          expect(fields.length).toEqual(7);
           expect(fields).toContain('type.stamp.id');
           done();
         });
@@ -142,6 +142,17 @@ describe('Model class', () => {
           expect(fields.length).toEqual(4);
           expect(fields).not.toContain(jasmine.objectContaining({
             path: 'valide',
+          } as ModelFieldOptions));
+          done();
+        });
+    });
+
+    it('with filter (forcedFilter options)', (done) => {
+      Entity.getDetailedFields(1, /description$/, {forceFilter: true})
+        .subscribe(fields => {
+          expect(fields.length).toEqual(1);
+          expect(fields).toContain(jasmine.objectContaining({
+            path: 'description',
           } as ModelFieldOptions));
           done();
         });

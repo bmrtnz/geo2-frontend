@@ -39,6 +39,8 @@ import { GridSaveLogComponent } from './grid-save-log/grid-save-log.component';
 import { GridCommentaireOrdreComponent } from './grid-commentaire-ordre/grid-commentaire-ordre.component';
 import { GridOrdreLigneLogistiqueComponent } from './grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component';
 import { FormLitigesComponent } from './form-litiges/form-litiges.component';
+import { GridControleQualiteComponent } from './grid-controle-qualite/grid-controle-qualite.component';
+import { GridLignesTotauxDetailComponent } from './grid-lignes-totaux-detail/grid-lignes-totaux-detail.component';
 
 
 @NgModule({
@@ -63,6 +65,8 @@ import { FormLitigesComponent } from './form-litiges/form-litiges.component';
     GridCommentaireOrdreComponent,
     GridOrdreLigneLogistiqueComponent,
     FormLitigesComponent,
+    GridControleQualiteComponent,
+    GridLignesTotauxDetailComponent,
   ],
   imports: [
     OrdresRoutingModule,

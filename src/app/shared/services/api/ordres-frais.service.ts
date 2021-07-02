@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
+import OrdreFrais from 'app/shared/models/ordre-frais.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { OrdreLigne } from '../../models/ordre-ligne.model';
 import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrdreLignesService extends ApiService implements APIRead {
-
-  listRegexp = /.*\.(?:id)$/i;
+export class OrdresFraisService extends ApiService implements APIRead {
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, OrdreLigne);
+    super(apollo, OrdreFrais);
   }
 
   getDataSource() {
@@ -30,21 +28,21 @@ export class OrdreLignesService extends ApiService implements APIRead {
             });
 
           const query = await this.buildGetAll(1);
-          type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
+          type Response = { allOrdreFrais: RelayPage<OrdreFrais> };
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allOrdreLigne)
-              resolve(this.asInstancedListCount(res.data.allOrdreLigne));
+            if (res.data && res.data.allOrdreFrais)
+              resolve(this.asInstancedListCount(res.data.allOrdreFrais));
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1, this.listRegexp);
-          type Response = { ordreLigne: OrdreLigne };
+          const query = await this.buildGetOne(1);
+          type Response = { ordreFrais: OrdreFrais };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.ordreLigne)
-              resolve(new OrdreLigne(res.data.ordreLigne));
+            if (res.data && res.data.ordreFrais)
+              resolve(new OrdreFrais(res.data.ordreFrais));
           });
         }),
       }),

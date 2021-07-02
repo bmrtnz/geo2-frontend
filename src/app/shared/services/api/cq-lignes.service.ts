@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
+import CQLigne from 'app/shared/models/cq-ligne.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { OrdreLigne } from '../../models/ordre-ligne.model';
 import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrdreLignesService extends ApiService implements APIRead {
-
-  listRegexp = /.*\.(?:id)$/i;
+export class CQLignesService extends ApiService implements APIRead {
 
   constructor(
     apollo: Apollo,
   ) {
-    super(apollo, OrdreLigne);
+    super(apollo, CQLigne);
   }
 
   getDataSource() {
@@ -30,21 +28,21 @@ export class OrdreLignesService extends ApiService implements APIRead {
             });
 
           const query = await this.buildGetAll(1);
-          type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
+          type Response = { allCQLigne: RelayPage<CQLigne> };
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allOrdreLigne)
-              resolve(this.asInstancedListCount(res.data.allOrdreLigne));
+            if (res.data && res.data.allCQLigne)
+              resolve(this.asInstancedListCount(res.data.allCQLigne));
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1, this.listRegexp);
-          type Response = { ordreLigne: OrdreLigne };
+          const query = await this.buildGetOne(1);
+          type Response = { CQLigne: CQLigne };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.ordreLigne)
-              resolve(new OrdreLigne(res.data.ordreLigne));
+            if (res.data && res.data.CQLigne)
+              resolve(new CQLigne(res.data.CQLigne));
           });
         }),
       }),

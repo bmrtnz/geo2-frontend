@@ -33,7 +33,8 @@ export class GridSaveLogComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService
   ) {
     this.dataSource = this.ordresSaveLogsService.getDataSource();
-    this.detailedFields = this.ordresSaveLogsService.model.getDetailedFields(1);
+    this.detailedFields = this.ordresSaveLogsService.model
+    .getDetailedFields(1, /^(?:utilisateur|dateModification)$/i, {forceFilter: true});
   }
 
   ngOnChanges() {

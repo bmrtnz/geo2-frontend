@@ -3,7 +3,7 @@ import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import OrdreSaveLog from 'app/shared/models/ordre-save-log.model';
 import Ordre from 'app/shared/models/ordre.model';
-import { CommentairesOrdresService } from 'app/shared/services/api/commentaires-ordres.service';
+import { CQLignesService } from 'app/shared/services/api/cq-lignes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -11,11 +11,11 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-grid-commentaire-ordre',
-  templateUrl: './grid-commentaire-ordre.component.html',
-  styleUrls: ['./grid-commentaire-ordre.component.scss']
+  selector: 'app-grid-controle-qualite',
+  templateUrl: './grid-controle-qualite.component.html',
+  styleUrls: ['./grid-controle-qualite.component.scss']
 })
-export class GridCommentaireOrdreComponent implements OnChanges {
+export class GridControleQualiteComponent implements OnChanges {
   @Output() public ordreSelected = new EventEmitter<OrdreSaveLog>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
@@ -29,12 +29,12 @@ export class GridCommentaireOrdreComponent implements OnChanges {
   >;
 
   constructor(
-    private commentairesOrdresService: CommentairesOrdresService,
+    private cqLignesService: CQLignesService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
-    this.dataSource = this.commentairesOrdresService.getDataSource();
-    this.detailedFields = this.commentairesOrdresService.model
-    .getDetailedFields(1, /^(?:commentaires|userModification|dateModification)$/i, {forceFilter: true});
+    this.dataSource = this.cqLignesService.getDataSource();
+    this.detailedFields = this.cqLignesService.model
+    .getDetailedFields(1, /(?!.*\.id$)/i, {forceFilter: true});
   }
 
   ngOnChanges() {

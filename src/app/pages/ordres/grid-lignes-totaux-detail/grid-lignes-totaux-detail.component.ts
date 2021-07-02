@@ -3,7 +3,7 @@ import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import OrdreSaveLog from 'app/shared/models/ordre-save-log.model';
 import Ordre from 'app/shared/models/ordre.model';
-import { CommentairesOrdresService } from 'app/shared/services/api/commentaires-ordres.service';
+import { OrdreLignesTotauxDetailService } from 'app/shared/services/api/ordres-lignes-totaux-detail.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -11,11 +11,11 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-grid-commentaire-ordre',
-  templateUrl: './grid-commentaire-ordre.component.html',
-  styleUrls: ['./grid-commentaire-ordre.component.scss']
+  selector: 'app-grid-lignes-totaux-detail',
+  templateUrl: './grid-lignes-totaux-detail.component.html',
+  styleUrls: ['./grid-lignes-totaux-detail.component.scss']
 })
-export class GridCommentaireOrdreComponent implements OnChanges {
+export class GridLignesTotauxDetailComponent implements OnChanges {
   @Output() public ordreSelected = new EventEmitter<OrdreSaveLog>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
@@ -29,15 +29,17 @@ export class GridCommentaireOrdreComponent implements OnChanges {
   >;
 
   constructor(
-    private commentairesOrdresService: CommentairesOrdresService,
+    private ordreLignesTotauxDetailService: OrdreLignesTotauxDetailService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
-    this.dataSource = this.commentairesOrdresService.getDataSource();
-    this.detailedFields = this.commentairesOrdresService.model
-    .getDetailedFields(1, /^(?:commentaires|userModification|dateModification)$/i, {forceFilter: true});
+    this.detailedFields = this.ordreLignesTotauxDetailService.model.getDetailedFields(1);
   }
 
   ngOnChanges() {
+    if (this.ordre) {
+      this.dataSource = this.ordreLignesTotauxDetailService
+      .getTotauxDetailDataSource(this.ordre.id);
+    }
     this.enableFilters();
   }
 
