@@ -8,6 +8,13 @@ import Palette from './type-palette.model';
 @ModelName('OrdreLigne')
 export class OrdreLigne extends Model {
 
+  @Field() public poidsBrutCommande: number;
+  @Field() public poidsBrutExpedie: number;
+  @Field() public poidsNetCommande: number;
+  @Field() public poidsNetExpedie: number;
+  @Field() public venteQuantite: number;
+  @Field() public achatQuantite: number;
+  @Field({model: import('./base-tarif.model')}) public venteUnite: BaseTarif;
   @Field({asKey: true, asLabel: true}) public id?: string;
   @Field({model: import('./ordre.model')}) public ordre?: Ordre;
   @Field({model: import('./article.model')}) public article?: Article;

@@ -1,0 +1,57 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  
+    <div class="content-block">
+      <dx-box direction="row">
+        <dxi-item [ratio]="4">
+          <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+            <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-infos' | localize }}</span>
+  
+            <div class="dx-form-group-content">
+              <!-- Numéro -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-litiges-id' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="id"></dx-text-box>
+                </div>
+              </div>
+                <!-- Avoir client -->
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-text-box formControlName="ordreAvoirClient"></dx-text-box>
+                    </div>
+                </div>
+                <!-- Avoir fournisseur -->
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirFournisseurReference' | localize }}</div>
+                    <div class="dx-field-value">
+                        <dx-text-box formControlName="ordreAvoirFournisseurReference"></dx-text-box>
+                    </div>
+                </div>
+            </div>
+          </div>
+  
+        </dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
+        <dxi-item [ratio]="4">
+          <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+            <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-references' | localize }}</span>
+  
+            <div class="dx-form-group-content">
+  
+              <!-- Lieu fonction EAN -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="dateCreation">
+                  </dx-text-box>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+
+        </dxi-item>
+      </dx-box>
+    </div>
+</form>

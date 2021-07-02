@@ -29,7 +29,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(1, this.listRegexp);
+          const query = await this.buildGetAll(1);
           type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
           const variables = this.mapLoadOptionsToVariables(options);
 

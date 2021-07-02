@@ -1,13 +1,5 @@
-<h2 class="content-block">{{ 'tiers-entrepots-title' | localize }} ({{ clientName }})
-  <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
-  <div style="clear:both"></div>
-</h2>
-
-<div class="content-block">
-
-  <dx-data-grid
-    class="dx-card wide-card"
-    [dataSource]="entrepots"
+<dx-data-grid class="dx-card wide-card"
+    [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -19,24 +11,21 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onRowPrepared)="onRowPrepared($event)"
-    (onRowDblClick)="onRowDblClick($event)"
-    (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Entrepot, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLigneLogistique,enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
-<!--    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>-->
+    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-export [enabled]="true" fileName="Entrepôts" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
       [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.Entrepot"
+    <dxo-state-storing 
+      [storageKey]="gridConfiguratorService.Grid.OrdreLigneLogistique"
       [enabled]="true"
       type="custom"
       [customLoad]="gridConfiguratorService.load"
@@ -52,11 +41,10 @@
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
-
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('tiers-entrepots-' + field.path.replace('.description', '') | localize) || field.path"
+      [caption]="('ordreLogistique-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
@@ -64,4 +52,3 @@
     ></dxi-column>
 
   </dx-data-grid>
-</div>

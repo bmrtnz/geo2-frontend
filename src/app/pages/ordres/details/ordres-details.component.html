@@ -476,6 +476,7 @@
                                                 ></dx-button>
                                                 <div style="clear:both"></div>
                                                 <div class="dx-form-group-content">
+                                                    <app-grid-ordre-ligne-logistique *ngIf="!ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-ordre-ligne-logistique>
                                                     <app-grid-lignes *ngIf="!ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-lignes>
                                                     <app-grid-lignes-details *ngIf="ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-lignes-details>
                                                 </div>
@@ -525,43 +526,9 @@
                                                 [multiple]="false"
                                                 [selectedIndex]="-1"
                                                 >
-                                                    <dxi-item>
-                                                        <div class="dx-form-group-content">
-
-                                                            <dx-box>
-                                                                <dxi-item [ratio]="4">
-                                                                    <!-- No Litige -->
-                                                                    <div class="dx-field">
-                                                                        <div class="dx-field-label">{{ 'ordres-litiges-numero' | localize }}</div>
-                                                                        <div class="dx-field-value">
-                                                                            <dx-text-box
-                                                                              formControlName="litigeNumero"
-                                                                              displayExpr="id"
-                                                                            >
-                                                                            </dx-text-box>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- Client -->
-                                                                    <div class="dx-field">
-                                                                        <div class="dx-field-label">{{ 'ordres-entrepotLivre' | localize }}</div>
-                                                                        <div class="dx-field-value">
-                                                                            <dx-select-box
-                                                                              formControlName="entrepot"
-                                                                              [dataSource]="entrepot"
-                                                                              displayExpr="raisonSocial"
-                                                                              [searchEnabled]="true"
-                                                                              [searchExpr]="['id','raisonSocial']"
-                                                                            >
-                                                                                <dx-validator name="{{ 'ordres-entrepotLivre' | localize }}">
-                                                                                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                                                                                </dx-validator>
-                                                                            </dx-select-box>
-                                                                        </div>
-                                                                    </div>
-                                                                </dxi-item>
-                                                            </dx-box>
-                                                        </div>
-                                                    </dxi-item>
+                                                <dxi-item>
+                                                    <app-form-litiges></app-form-litiges>
+                                                </dxi-item>
                                                 </dx-accordion>
                                             </div>
 

@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { LocalizationService } from 'app/shared/services';
+import { ClientsService, LocalizationService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
@@ -23,6 +23,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
 
   entrepots: DataSource;
   clientID: string;
+  clientName: string;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   columnChooser = environment.columnChooser;
   contentReadyEvent = new EventEmitter<any>();
@@ -32,6 +33,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
 
   constructor(
     public entrepotsService: EntrepotsService,
+    public clientsService: ClientsService,
     public gridService: GridsConfigsService,
     public localizeService: LocalizationService,
     private router: Router,
@@ -44,6 +46,9 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
 
   ngOnInit() {
     this.clientID = this.route.snapshot.paramMap.get('client');
+    this.clientsService.getOne(this.clientID).subscribe(res => {
+      this.clientName = res.data.client.raisonSocial;
+    });
     this.entrepots = this.entrepotsService.getDataSource();
     this.enableFilters();
     this.detailedFields = this.entrepotsService.model.getDetailedFields()
