@@ -34,7 +34,7 @@ export class OrdreLignesTotauxDetailService extends ApiService {
               allOrdreLigneTotauxDetail(ordre:$ordre, pageable:$pageable) {
                 edges {
                   node {
-                    ${await OrdreLigneTotauxDetail.getGQLFields(2, undefined, null, {noList: true}).toPromise()}
+                    ${await OrdreLigneTotauxDetail.getGQLFields(1, undefined, null, {noList: true}).toPromise()}
                   }
                 }
                 pageInfo {
@@ -54,6 +54,15 @@ export class OrdreLignesTotauxDetailService extends ApiService {
               resolve(this.asInstancedListCount(res.data.allOrdreLigneTotauxDetail, v => new OrdreLigneTotauxDetail(v)));
           });
 
+        }),
+        byKey: (key) => new Promise(async (resolve) => {
+          const query = await this.buildGetOne(1);
+          type Response = { ordreLigneTotauxDetail: OrdreLigneTotauxDetail };
+          const variables = { id: key };
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.ordreLigneTotauxDetail)
+              resolve(new OrdreLigneTotauxDetail(res.data.ordreLigneTotauxDetail));
+          });
         }),
       }),
     });
