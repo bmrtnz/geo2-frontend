@@ -563,6 +563,16 @@
     "ordreCommentaire-userModification": "Qui",
     "ordreCommentaire-commentaires": "Quoi",
 
+    "ordreLignesTotauxDetail-fournisseur.raisonSocial": "Fournisseur",
+    "ordreLignesTotauxDetail-totalNombrePalettesExpediees": "Pal",
+    "ordreLignesTotauxDetail-totalNombreColisExpedies": "Colis",
+    "ordreLignesTotauxDetail-totalPoidsBrutExpedie": "Pds Brut",
+    "ordreLignesTotauxDetail-totalPoidsNetExpedie": "Pds Net",
+    "ordreLignesTotauxDetail-nombrePalettesAuSol": "pal.sol",
+    "ordreLignesTotauxDetail-nombrePalettes100x120": "100x120",
+    "ordreLignesTotauxDetail-nombrePalettes80x120": "80x120",
+    "ordreLignesTotauxDetail-nombrePalettes60X80": "60x80",
+
     "ControleQualite-nombrePalettes": "pal",
     "ControleQualite-nombreColis": "col",
     "ControleQualite-poidsNetTheoriqueParColis": "poids",
