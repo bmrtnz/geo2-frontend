@@ -1000,5 +1000,54 @@
         "visible": true
       }
     ]
+  },
+  "ordre-lignes-totaux-detail": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "fournisseur.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "totalNombrePalettesExpediees",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "totalNombreColisExpedies",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "totalPoidsBrutExpedie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "totalPoidsNetExpedie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "nombrePalettesAuSol",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "nombrePalettes100x120",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "nombrePalettes80x120",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "nombrePalettes60X80",
+        "visible": true
+      }
+    ]
   }
 }

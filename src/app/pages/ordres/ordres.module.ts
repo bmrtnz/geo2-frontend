@@ -38,6 +38,7 @@ import { GridLignesDetailsComponent } from './grid-lignes-details/grid-lignes-de
 import { GridSaveLogComponent } from './grid-save-log/grid-save-log.component';
 import { GridCommentaireOrdreComponent } from './grid-commentaire-ordre/grid-commentaire-ordre.component';
 import { GridControleQualiteComponent } from './grid-controle-qualite/grid-controle-qualite.component';
+import { GridLignesTotauxDetailComponent } from './grid-lignes-totaux-detail/grid-lignes-totaux-detail.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { GridControleQualiteComponent } from './grid-controle-qualite/grid-contr
     GridSaveLogComponent,
     GridCommentaireOrdreComponent,
     GridControleQualiteComponent,
+    GridLignesTotauxDetailComponent,
   ],
   imports: [
     OrdresRoutingModule,
