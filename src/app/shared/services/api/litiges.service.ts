@@ -10,7 +10,7 @@ import { APIRead, ApiService, RelayPage } from '../api.service';
 })
 export class LitigesService extends ApiService implements APIRead {
 
-  // listRegexp = /.*\.(?:id|libelle)$/i;
+  listRegexp = /.*\.(?:id|libelle)$/i;
 
   constructor(
     apollo: Apollo,
@@ -20,9 +20,9 @@ export class LitigesService extends ApiService implements APIRead {
 
   getDataSource() {
     return new DataSource({
-      sort: [
-        { selector: this.model.getLabelField() }
-      ],
+      // sort: [
+      //   { selector: this.model.getLabelField() }
+      // ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 

@@ -8,6 +8,7 @@
 
 ::ng-deep .dx-row.dx-data-row {
 
+//   Valide/pré-saisie  
   & {
       &.highlight-datagrid-row > td {
           background:#EEE;
@@ -26,4 +27,8 @@
           color:#FF325A;
       }
   }
+
+  
 }
+
+

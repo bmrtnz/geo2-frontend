@@ -58,4 +58,12 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     }
   }
 
+  applySentGridRowStyle(e) {
+    if (e.rowType === 'data') {
+      if (e.data.expedieStation) {
+        e.rowElement.classList.add('sent-highlight-datagrid-row');
+      }
+    }
+  }
+
 }

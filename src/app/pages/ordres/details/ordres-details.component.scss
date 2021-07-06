@@ -1,4 +1,4 @@
-::ng-deep .details-ordres-page .dx-checkbox {
+::ng-deep .details-ordres-page .thin-checkbox {
     margin:12px 0 !important;
 }
 
@@ -132,3 +132,20 @@
 
 dx-button[type="normal"] { float:right; }
 
+//   Lignes cloturées 
+::ng-deep .dx-row.dx-data-row {
+    
+        & {
+            &.sent-highlight-datagrid-row > td {
+                background:#66FF66;
+            }
+            
+        }
+      
+        &.dx-row-focused {
+            &.sent-highlight-datagrid-row > td, .dx-checkbox-icon {
+                color:#66FF66;
+            }
+    
+        }
+}
