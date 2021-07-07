@@ -1,49 +1,144 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   
-    <div class="content-block">
+    <div class="content-block form-litiges">
       <dx-box direction="row">
         <dxi-item [ratio]="4">
-          <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-            <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-infos' | localize }}</span>
-  
-            <div class="dx-form-group-content">
-              <!-- Numéro -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'ordres-litiges-id' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="id"></dx-text-box>
-                </div>
-              </div>
-                <!-- Avoir client -->
-                <div class="dx-field">
-                    <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-text-box formControlName="ordreAvoirClient"></dx-text-box>
+          <div class="dx-form-group dx-card responsive-paddings">
+            <dx-box direction="row">
+                <dxi-item [ratio]="6">
+                    <div class="dx-form-group-content">
+                    <!-- Numéro -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'ordres-litiges-id' | localize }}</div>
+                        <div class="dx-field-value">
+                        <dx-text-box formControlName="id"></dx-text-box>
+                        </div>
                     </div>
-                </div>
-                <!-- Avoir fournisseur -->
-                <div class="dx-field">
-                    <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirFournisseurReference' | localize }}</div>
-                    <div class="dx-field-value">
-                        <dx-text-box formControlName="ordreAvoirFournisseurReference"></dx-text-box>
+                        <!-- Avoir client -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
+                            <div class="dx-field-value">
+                            <dx-text-box formControlName="ordreAvoirClient"></dx-text-box>
+                            </div>
+                        </div>
+                        <!-- Avoir fournisseur -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirFournisseurReference' | localize }}</div>
+                            <div class="dx-field-value">
+                                <dx-text-box formControlName="ordreAvoirFournisseurReference"></dx-text-box>
+                            </div>
+                        </div>
                     </div>
+                </dxi-item>
+                <dxi-item [ratio]="4">
+                    <!-- Date création -->
+                    <div class="dx-field">
+                      <div class="dx-field-label">&nbsp;</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="dateCreation"></dx-text-box>
+                        </div>
+                    </div>
+                    <!-- Date avoir client-->
+                    <div class="dx-field">
+                      <div class="dx-field-label">&nbsp;</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="dateAvoirClient"></dx-text-box>
+                        </div>
+                    </div>
+                    <!-- Date avoir fournisseur-->
+                    <div class="dx-field">
+                      <div class="dx-field-label">&nbsp;</div>
+                        <div class="dx-field-value">
+                          <dx-text-box formControlName="dateAvoirFournisseur"></dx-text-box>
+                        </div>
+                    </div>
+                </dxi-item>
+            </dx-box>
+            <dx-box>
+              <dxi-item [ratio]="4">
+                  <!--  Client Clôturé -->
+                  <div class="dx-field">
+                      <div class="dx-field-label checkbox-label">{{ 'ordres-litiges-clientCloture' | localize }}</div>
+                      <div class="dx-field-value">
+                      <dx-check-box class="thin-checkbox" [disabled] = true formControlName="clientCloture"></dx-check-box>
+                      </div>
+                  </div>
+              </dxi-item>
+              <dxi-item [ratio]="1"></dxi-item>
+              <dxi-item [ratio]="4">
+                  <!-- OK Admin -->
+                  <div class="dx-field">
+                      <div class="dx-field-label checkbox-label">{{ 'ordres-litiges-clientValideAdmin' | localize }}</div>
+                      <div class="dx-field-value">
+                      <dx-check-box class="thin-checkbox" [disabled] = true formControlName="clientValideAdmin"></dx-check-box>
+                      </div>
+                  </div>
+              </dxi-item>
+          </dx-box>
+          <dx-box>
+              <dxi-item [ratio]="4">
+                  <!-- Fournisseur Clôturé -->
+                  <div class="dx-field">
+                      <div class="dx-field-label checkbox-label">{{ 'ordres-litiges-fournisseurCloture' | localize }}</div>
+                      <div class="dx-field-value">
+                      <dx-check-box class="thin-checkbox" [disabled] = true formControlName="fournisseurCloture"></dx-check-box>
+                      </div>
+                  </div>
+              </dxi-item>
+              <dxi-item [ratio]="1"></dxi-item>
+              <dxi-item [ratio]="4">
+                  <!-- OK Admin -->
+                  <div class="dx-field">
+                      <div class="dx-field-label checkbox-label">{{ 'ordres-litiges-fournisseurValideAdmin' | localize }}</div>
+                      <div class="dx-field-value">
+                      <dx-check-box class="thin-checkbox" [disabled] = true formControlName="fournisseurValideAdmin"></dx-check-box>
+                      </div>
+                  </div>
+              </dxi-item>
+          </dx-box>
+            <dx-box direction="row">
+              <dxi-item [ratio]="4">
+                <!-- Réf Client-->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'ordres-litiges-referenceClient' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="referenceClient"></dx-text-box>
+                  </div>
                 </div>
-            </div>
+              </dxi-item>
+            </dx-box>
+            <dx-box direction="row">
+              <dxi-item [ratio]="4">
+                <!-- Réf Client-->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'ordres-litiges-commentairesInternes' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="commentairesInternes"></dx-text-box>
+                  </div>
+                </div>
+              </dxi-item>
+            </dx-box>
           </div>
   
         </dxi-item>
         <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="4">
-          <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-            <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-references' | localize }}</span>
-  
+          <div class="dx-form-group dx-card responsive-paddings">
             <div class="dx-form-group-content">
   
-              <!-- Lieu fonction EAN -->
+              <!-- Avoir au client -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}</div>
+                <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="dateCreation">
+                  <dx-text-box formControlName="ordreAvoirClient">
+                  </dx-text-box>
+                </div>
+              </div>
+              <!-- Dde avoir fourni -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="ordreAvoirClient">
                   </dx-text-box>
                 </div>
               </div>

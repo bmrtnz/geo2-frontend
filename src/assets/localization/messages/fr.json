@@ -561,7 +561,7 @@
     "ordreEnvois-ordre-id": "Id Ordre",
     "ordreEnvois-ordre-numero": "n° ordre",
 
-    "ordreLogistique-fournisseur-raisonSocial": "-",
+    "ordreLogistique-fournisseur-raisonSocial": " ",
     "ordreLogistique-nombrePalettesAuSol": "Pal Sol",
     "ordreLogistique-nombrePalettes100x120": "100x120",
     "ordreLogistique-nombrePalettes60X80": "60x80",
@@ -578,9 +578,16 @@
     "ordreLogistique-certificatPhytosanitaire": "Certif. Phyto",
     "ordreLogistique-billOfLanding": "Bill of landing",
 
-    "ordres-litiges-numero": "Litige n°",
+    "ordres-litiges-id": "Litige n°",
     "ordres-litiges-ordreAvoirClient": "Avoir client",
     "ordres-litiges-ordreAvoirFournisseurReference": "Avoir fournisseur",
+    "ordres-litiges-referenceClient": "Référence client",
+    "ordres-litiges-clientCloture": "Client clôturé",
+    "ordres-litiges-fournisseurCloture": "Responsable clôturé",
+    "ordres-litiges-clientValideAdmin": "OK Admin",
+    "ordres-litiges-fournisseurValideAdmin": "OK Admin",
+    "ordres-litiges-commentairesInternes": "Commentaires",
+
 
     "ordreSaveLog-dateModification": "Date/Heure Sauvegarde",
     "ordreSaveLog-utilisateur": "Qui",
