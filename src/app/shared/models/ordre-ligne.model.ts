@@ -33,7 +33,6 @@ export class OrdreLigne extends Model {
   @Field() public gratuit?: boolean;
   @Field() public achatPrixUnitaire?: number;
   @Field() public achatDevise?: string;
-  @Field() public libelleDLV?: string;
   @Field({model: import('./base-tarif.model')}) public achatUnite?: BaseTarif;
   @Field({model: import('./type-palette.model')}) public typePalette?: Palette;
   @Field({model: import('./type-palette.model')}) public paletteInter?: Palette;
@@ -45,7 +44,6 @@ export class OrdreLigne extends Model {
   @Field() public numero?: string;
   @Field() public referenceProdet?: string;
   @Field() public nombreColisExpedies?: number;
-  @Field() public nombrePalettesExpediees?: number;
   @Field() public totalVenteBrut?: number;
   @Field() public totalRemise?: number;
   @Field() public totalRestitue?: number;
