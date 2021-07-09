@@ -1257,7 +1257,8 @@
       {
         "visibleIndex": 0,
         "dataField": "fournisseur.raisonSocial",
-        "visible": true
+        "visible": true,
+        "sortOrder": "asc"
       },
       {
         "visibleIndex": 1,
@@ -1297,6 +1298,48 @@
       {
         "visibleIndex": 8,
         "dataField": "nombrePalettes60X80",
+        "visible": true
+      }
+    ]
+  },
+  "ordre-detail-palettes": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "ordreLigne.fournisseur.code",
+        "visible": true,
+        "sortIndex": 0,
+        "sortOrder": "asc"
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "tracabiliteDetailPalette.SSCC",
+        "visible": true,
+        "sortIndex": 3,
+        "sortOrder": "asc"
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordreLigne.numero",
+        "visible": true,
+        "sortIndex": 1,
+        "sortOrder": "asc"
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ordreLigne.article.id",
+        "visible": true,
+        "sortIndex": 2,
+        "sortOrder": "asc"
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ordreLigne.article.matierePremiere.variete.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "ordreLigne.article.description",
         "visible": true
       }
     ]

@@ -2,6 +2,7 @@ import { Article } from './article.model';
 import { BaseTarif } from './base-tarif.model';
 import Fournisseur from './fournisseur.model';
 import { Field, Model, ModelName } from './model';
+import OrdreLogistique from './ordre-logistique.model';
 import { Ordre } from './ordre.model';
 import Palette from './type-palette.model';
 
@@ -17,6 +18,7 @@ export class OrdreLigne extends Model {
   @Field({model: import('./base-tarif.model')}) public venteUnite: BaseTarif;
   @Field({asKey: true, asLabel: true}) public id?: string;
   @Field({model: import('./ordre.model')}) public ordre?: Ordre;
+  @Field({ model: import('./ordre-logistique.model') }) public logistique?: OrdreLogistique;
   @Field({model: import('./article.model')}) public article?: Article;
   @Field({model: import('./fournisseur.model')}) public fournisseur?: Fournisseur;
   @Field({model: import('./base-tarif.model')}) public fraisUnite?: BaseTarif;
@@ -25,6 +27,7 @@ export class OrdreLigne extends Model {
   @Field() public nombrePalettesIntermediaires?: number;
   @Field() public nombreColisPalette?: number;
   @Field() public nombreColisCommandes?: number;
+  @Field() public libelleDLV?: string;
   @Field() public proprietaireMarchandise?: string;
   @Field() public ventePrixUnitaire?: number;
   @Field() public gratuit?: boolean;
@@ -42,6 +45,7 @@ export class OrdreLigne extends Model {
   @Field() public numero?: string;
   @Field() public referenceProdet?: string;
   @Field() public nombreColisExpedies?: number;
+  @Field() public nombrePalettesExpediees?: number;
   @Field() public totalVenteBrut?: number;
   @Field() public totalRemise?: number;
   @Field() public totalRestitue?: number;

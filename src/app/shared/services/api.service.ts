@@ -33,6 +33,10 @@ export type RelayPage<T> = {
   totalCount: number
 };
 
+export type SummarisedRelayPage<T> = RelayPage<T> & {
+  summary: number[]
+};
+
 export type Edge<T = any> = {
   node: T,
   __typename: string,
@@ -49,6 +53,19 @@ export type OrderedField = {
   ignoreCase?: boolean
 };
 
+export enum SummaryType {
+  SUM = 'sum' as any,
+  AVG = 'avg' as any,
+  MIN = 'min' as any,
+  MAX = 'max' as any,
+  COUNT = 'count' as any,
+}
+
+export type Summary = {
+  selector: string
+  summaryType: SummaryType
+};
+
 export type Pageable = {
   pageNumber: number
   pageSize: number
@@ -60,6 +77,7 @@ export type Pageable = {
 export type RelayPageVariables = OperationVariables & {
   search?: string
   pageable: Pageable
+  summary?: Summary[]
 };
 
 export type LocateVariables = {
@@ -125,13 +143,19 @@ export abstract class ApiService implements OnDestroy {
    * @param relayPage Input RelayPage
    */
   public asInstancedListCount<T = any>(
-    relayPage: RelayPage<T>,
+    relayPage: RelayPage<T> | SummarisedRelayPage<T>,
     mapper = (v: Record<string, any>) => new this.model(v) as T
   ) {
     return {
       data: this.asList<T>(relayPage).map(mapper),
       totalCount: relayPage.totalCount,
+      ...this.isSummarisedRelayPage(relayPage) ?
+        {summary: (relayPage as SummarisedRelayPage<T>).summary} : {},
     };
+  }
+
+  public isSummarisedRelayPage<T = any>(relayPage: RelayPage<T> | SummarisedRelayPage<T>): relayPage is RelayPage<T> {
+    return (relayPage as SummarisedRelayPage<T>).summary !== undefined;
   }
 
   /**
@@ -495,6 +519,14 @@ export abstract class ApiService implements OnDestroy {
             direction: desc ? Direction.DESC : Direction.ASC
           } as OrderedField)),
       };
+
+    // totalSummary
+    if (options.totalSummary)
+      variables.summary = options.totalSummary
+      .map(({selector, summaryType}) => ({
+        selector,
+        summaryType: SummaryType[summaryType],
+      }));
 
     return variables;
   }

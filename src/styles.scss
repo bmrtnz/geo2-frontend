@@ -83,7 +83,7 @@ body {
     font-size:18px;
   }
 
-  .dx-button:not(.subButton) {
+  .dx-button:not(.subButton):not(.icon-btn) {
     margin-bottom:10px;
     .dx-button-content {
       padding:10px 3px;
@@ -118,7 +118,7 @@ body {
 }
 
 // Thinner grids
-.dx-datagrid .dx-row > td {
+.dx-datagrid-rowsview .dx-row > td {
   line-height:0;
 
   & > .dx-filemanager-details-item-name-wrapper {

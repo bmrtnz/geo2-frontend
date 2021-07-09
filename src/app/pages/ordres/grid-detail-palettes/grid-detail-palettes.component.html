@@ -11,7 +11,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLignesTotauxDetail, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreDetailPalettes, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -26,7 +26,7 @@
     <dxo-state-storing 
       [enabled]="true" 
       type="custom" 
-      [storageKey]="gridConfiguratorService.Grid.OrdreLignesTotauxDetail"
+      [storageKey]="gridConfiguratorService.Grid.OrdreDetailPalettes"
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
@@ -40,11 +40,10 @@
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
-    <dxo-summary [totalItems]="totalItems"></dxo-summary>
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('ordreLignesTotauxDetail-' + field.path | localize) || field.name"
+      [caption]="('ordreDetailPalettes-' + field.path | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import OrdreLigneTotauxDetail from 'app/shared/models/ordre-ligne-totaux-detail.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { ApiService, RelayPage } from '../api.service';
+import { ApiService, SummarisedRelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class OrdreLignesTotauxDetailService extends ApiService {
     return new DataSource({
       store: this.createCustomStore({
         key: 'fournisseur.id',
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
 
           if (options.group)
             return this.loadDistinctQuery(options, res => {
@@ -28,10 +28,13 @@ export class OrdreLignesTotauxDetailService extends ApiService {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          type Response = { allOrdreLigneTotauxDetail: RelayPage<OrdreLigneTotauxDetail> };
+          if (!options.totalSummary)
+            return reject('Summary request is needed');
+
+          type Response = { allOrdreLigneTotauxDetail: SummarisedRelayPage<OrdreLigneTotauxDetail> };
           const query = `
-            query AllOrdreLigneTotauxDetail($ordre: String!, $pageable: PaginationInput!) {
-              allOrdreLigneTotauxDetail(ordre:$ordre, pageable:$pageable) {
+            query AllOrdreLigneTotauxDetail($ordre: String!, $pageable: PaginationInput!, $summary: [SummaryInput]) {
+              allOrdreLigneTotauxDetail(ordre:$ordre, pageable:$pageable, summary:$summary) {
                 edges {
                   node {
                     ${await OrdreLigneTotauxDetail.getGQLFields(1, undefined, null, {noList: true}).toPromise()}
@@ -44,6 +47,7 @@ export class OrdreLignesTotauxDetailService extends ApiService {
                   hasNextPage
                 }
                 totalCount
+                summary
               }
             }
           `;
