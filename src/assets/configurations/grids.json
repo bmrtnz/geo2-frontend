@@ -1133,6 +1133,12 @@
         "dataField": "imprimanteID",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "commentairesAvancement",
+        "dataType": "string",
+        "visible": true
       }
     ]
   },

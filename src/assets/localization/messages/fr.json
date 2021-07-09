@@ -542,7 +542,6 @@
     "ordreLignes-referenceControleQualite": "Contrôle Qualité",
 
     "ordreEnvois-id": "n°",
-    "ordreEnvois-commentairesAvancement": "Comm. avanc.",
     "ordreEnvois-imprimanteID": "Imprimante",
     "ordreEnvois-dateEnvoi": "Date Envoi",
     "ordreEnvois-dateAccuseReception": "Reçu le",
@@ -560,6 +559,7 @@
     "ordreEnvois-moyenCommunication-id": "Moy. Comm.",
     "ordreEnvois-ordre-id": "Id Ordre",
     "ordreEnvois-ordre-numero": "n° ordre",
+    "ordreEnvois-commentairesAvancement": "Statut",
 
     "ordreLogistique-fournisseur-raisonSocial": " ",
     "ordreLogistique-nombrePalettesAuSol": "Pal Sol",
