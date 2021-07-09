@@ -3,12 +3,12 @@ import {SharedModule} from '../../shared/shared.module';
 import {ArticleDetailsComponent} from './details/article-details.component';
 import { ArticlesListComponent } from './list/articles-list.component';
 import {
-  DxAccordionModule, DxBoxModule,
-  DxButtonModule, DxCheckBoxModule,
-  DxDataGridModule, DxTabPanelModule,
-  DxTemplateModule,
-  DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-  DxTextBoxModule, DxValidatorModule
+    DxAccordionModule, DxBoxModule,
+    DxButtonModule, DxCheckBoxModule,
+    DxDataGridModule, DxTabPanelModule,
+    DxTemplateModule,
+    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
+    DxTextBoxModule, DxValidatorModule, DxPopupModule
 } from 'devextreme-angular';
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,22 +21,22 @@ import { HistoriqueValideModule } from 'app/shared/components/historique-valide/
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ArticlesRoutingModule,
-    DxAccordionModule, DxBoxModule,
-    DxButtonModule, DxCheckBoxModule,
-    DxDataGridModule, DxTabPanelModule,
-    DxTemplateModule,
-    DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-    DxTextBoxModule, DxValidatorModule,
-    EditingAlertModule, PushHistoryPopupModule,
-    HistoriqueValideModule,
-    FileManagerModule
-  ],
+    imports: [
+        SharedModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ArticlesRoutingModule,
+        DxAccordionModule, DxBoxModule,
+        DxButtonModule, DxCheckBoxModule,
+        DxDataGridModule, DxTabPanelModule,
+        DxTemplateModule,
+        DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
+        DxTextBoxModule, DxValidatorModule,
+        EditingAlertModule, PushHistoryPopupModule,
+        HistoriqueValideModule,
+        FileManagerModule, DxPopupModule
+    ],
   declarations: [ArticleDetailsComponent, ArticlesListComponent],
   providers: [NestedGuard, EditingGuard],
 })

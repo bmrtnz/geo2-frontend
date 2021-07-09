@@ -6,7 +6,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { AuthService } from 'app/shared/services';
+import {AuthService, LocalizationService} from 'app/shared/services';
 import { AlveolesService } from 'app/shared/services/api/alveoles.service';
 import { CalibresMarquageService } from 'app/shared/services/api/calibres-marquage.service';
 import { CalibresUnifiesService } from 'app/shared/services/api/calibres-unifies.service';
@@ -37,7 +37,14 @@ import { switchMap, tap } from 'rxjs/operators';
 import {
     Article
 } from '../../../shared/models';
-import { ArticlesService } from '../../../shared/services/api/articles.service';
+import { ArticlesService } from '../../../shared/services';
+import {DomSanitizer, SafeValue} from '@angular/platform-browser';
+
+interface Etiquette {
+  title: string;
+  type: string;
+  url: SafeValue;
+}
 
 @Component({
     selector: 'app-articles',
@@ -131,6 +138,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     cloneMode = false;
     preSaisie: string;
 
+    etiquetteVisible = false;
+    currentEtiquette: Etiquette;
+
     id: string;
 
     constructor(
@@ -161,6 +171,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private route: ActivatedRoute,
         private fb: FormBuilder,
         public authService: AuthService,
+        private sanitizer: DomSanitizer,
+        private localization: LocalizationService
     ) { }
 
     ngOnInit() {
@@ -294,6 +306,20 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     fileManagerClick() {
         this.fileManagerComponent.visible = true;
+    }
+
+    async viewEtiquette(titleKey: string, filename: string) {
+        const isPdf = filename.endsWith('.pdf');
+        const unsafeUrl = `http://localhost:8081/file-manager/etiquette/${filename}${isPdf ? '?embedded=true' : ''}`;
+        const sanitizerUrl = isPdf ? this.sanitizer.bypassSecurityTrustResourceUrl : this.sanitizer.bypassSecurityTrustUrl;
+
+        this.currentEtiquette = {
+          title: this.localization.localize(titleKey),
+          type: isPdf ? 'iframe' : 'img',
+          url: sanitizerUrl(unsafeUrl)
+        };
+
+        this.etiquetteVisible = true;
     }
 
 }

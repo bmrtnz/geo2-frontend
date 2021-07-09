@@ -56,7 +56,7 @@ export class LoginFormComponent implements OnInit {
 
     if (!this.form.get('nomUtilisateur').value.length || !this.form.get('password').value.length) return;
 
-    //const textBoxComponent: DxTextBoxComponent = event.component;
+    // const textBoxComponent: DxTextBoxComponent = event.component;
     from(this.utilisateursService.getOne(this.form.get('nomUtilisateur').value, this.form.get('password').value))
     .pipe(
       mergeAll(),
@@ -64,27 +64,27 @@ export class LoginFormComponent implements OnInit {
       catchError((e: any) => {
          this.societe = null;
          return throwError(e);
-      }) 
-      ).subscribe(response=>{
+      })
+      ).subscribe(response => {
 
-      const perimetre = response.data.utilisateur.perimetre;
-      let filter = [];
-      let filter2 = [];
+        const perimetre = response.data.utilisateur.perimetre;
+        const filter = [];
+        const filter2 = [];
 
-      this.societe = this.societesService.getDataSource();
-      filter.push(['valide', '=', true]);
-      this.societe.filter(filter)
-  
-      // Authorized companies -> '*' = all
-      if (perimetre !== '*') {
-        perimetre.split(',').forEach(element => {
-          filter2.push(['id', '=', element]);
-          filter2.push('or');
-        });
-        filter2.pop(); // Remove last 'or'
-        this.societe.filter([filter2])
-      }
-    })
+        this.societe = this.societesService.getDataSource();
+        filter.push(['valide', '=', true]);
+        this.societe.filter(filter);
+
+        // Authorized companies -> '*' = all
+        if (perimetre !== '*') {
+          perimetre.split(',').forEach(element => {
+            filter2.push(['id', '=', element]);
+            filter2.push('or');
+          });
+          filter2.pop(); // Remove last 'or'
+          this.societe.filter([filter2]);
+        }
+    });
   }
 
   societeOnChange(e) {
