@@ -57,48 +57,6 @@ export class LitigesLignesService extends ApiService implements APIRead {
     });
   }
 
-  // getTotauxDataSource(litige: string) {
-  //   return new DataSource({
-  //     store: this.createCustomStore({
-  //       load: (options: LoadOptions) => new Promise(async (resolve) => {
-
-  //         if (options.group)
-  //           return this.loadDistinctQuery(options, res => {
-  //             if (res.data && res.data.distinct)
-  //               resolve(this.asListCount(res.data.distinct));
-  //           });
-
-  //         type Response = { allLitigeLigneTotaux: RelayPage<LitigeLigneTotaux> };
-  //         const query = `
-  //           query AllLitigeLigneTotaux($litige: String!, $pageable: PaginationInput!) {
-  //             allLitigeLigneTotaux(litige:$litige, pageable:$pageable) {
-  //               edges {
-  //                 node {
-  //                   ${await LitigeLigneTotaux.getGQLFields(1, undefined, null, {noList: true}).toPromise()}
-  //                 }
-  //               }
-  //               pageInfo {
-  //                 startCursor
-  //                 endCursor
-  //                 hasPreviousPage
-  //                 hasNextPage
-  //               }
-  //               totalCount
-  //             }
-  //           }
-  //         `;
-
-  //         const variables = { ...this.mapLoadOptionsToVariables(options), litige };
-  //         this.listenQuery<Response>(query, { variables }, res => {
-  //           if (res.data && res.data.allLitigeLigneTotaux)
-  //             resolve(this.asInstancedListCount(res.data.allLitigeLigneTotaux, v => new LitigeLigneTotaux(v)));
-  //         });
-
-  //       }),
-  //     }),
-  //   });
-  // }
-
   async getTotaux(litige: string) {
     const query = `
     query LitigeLigneTotaux($litige: String!) {

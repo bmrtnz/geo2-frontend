@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
-import OrdreSaveLog from 'app/shared/models/ordre-save-log.model';
 import Ordre from 'app/shared/models/ordre.model';
 import { CQLignesService } from 'app/shared/services/api/cq-lignes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
@@ -16,7 +15,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./grid-controle-qualite.component.scss']
 })
 export class GridControleQualiteComponent implements OnChanges {
-  @Output() public ordreSelected = new EventEmitter<OrdreSaveLog>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })

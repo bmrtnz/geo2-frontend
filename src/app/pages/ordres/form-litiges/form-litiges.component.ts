@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { resetFakeAsyncZone } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import Litige from 'app/shared/models/litige.model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -11,7 +12,7 @@ import DataSource from 'devextreme/data/data_source';
   templateUrl: './form-litiges.component.html',
   styleUrls: ['./form-litiges.component.scss']
 })
-export class FormLitigesComponent implements OnInit {
+export class FormLitigesComponent implements OnChanges {
 
   @Output() public ordreSelected = new EventEmitter<Litige>();
   @Input() public ordre: Ordre;
@@ -20,6 +21,15 @@ export class FormLitigesComponent implements OnInit {
     id: [''],
     ordreAvoirClient: [''],
     ordreAvoirFournisseurReference: [''],
+    dateCreation: [''],
+    dateAvoirClient: [''],
+    dateAvoirFournisseur: [''],
+    referenceClient: [''],
+    clientCloture: [''],
+    fournisseurCloture: [''],
+    clientValideAdmin: [''],
+    fournisseurValideAdmin: [''],
+    commentairesInternes: [''],
 
   });
 
@@ -36,21 +46,15 @@ export class FormLitigesComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  ngOnChanges() {
 
-    this.litiges = this.litigesService.getDataSource();
-    const ordre = this.ordresService.extractDirty(this.formGroup.controls);
-    if (ordre.id) {
-      this.litiges.filter(
-        ['ordreOrigine', '=', ordre.id],
-      )
+    const ds = this.litigesService.getDataSource();
+    if (this.ordre?.id) {
+      ds.filter(['ordreOrigine.id', '=', this.ordre.id]);
+      ds.load().then(res => this.formGroup.patchValue(res[0])); // Array [{​​​​​​​​​…}​​​​​​​​​]
     }
-    
-    this.litiges.load().then(res => {
-      console.log(res)
-    })
-    
-    // this.formGroup.patchValue(this.litiges);
+
+    // this.formGroup.patchValue(res)
 
   }
 
