@@ -21,6 +21,7 @@ export class OrdreLigne extends Model {
   @Field({model: import('./fournisseur.model')}) public fournisseur?: Fournisseur;
   @Field({model: import('./base-tarif.model')}) public fraisUnite?: BaseTarif;
   @Field() public nombrePalettesCommandees?: number;
+  @Field() public nombrePalettesExpediees?: number;
   @Field() public nombrePalettesIntermediaires?: number;
   @Field() public nombreColisPalette?: number;
   @Field() public nombreColisCommandes?: number;
@@ -29,6 +30,7 @@ export class OrdreLigne extends Model {
   @Field() public gratuit?: boolean;
   @Field() public achatPrixUnitaire?: number;
   @Field() public achatDevise?: string;
+  @Field() public libelleDLV?: string;
   @Field({model: import('./base-tarif.model')}) public achatUnite?: BaseTarif;
   @Field({model: import('./type-palette.model')}) public typePalette?: Palette;
   @Field({model: import('./type-palette.model')}) public paletteInter?: Palette;

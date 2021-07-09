@@ -1,12 +1,14 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  
+<!-- LITIGES -->
+
+<div *ngIf="noLitiges" class="nolitiges">{{ 'ordres-litiges-noLitiges' | localize }}</div>
+<form *ngIf="!noLitiges" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <div class="content-block form-litiges">
       <dx-box direction="row">
         <dxi-item [ratio]="4">
-          <div class="dx-form-group dx-card responsive-paddings">
+          <div class="dx-form-group">
             <dx-box direction="row">
                 <dxi-item [ratio]="6">
-                    <div class="dx-form-group-content">
+                  <div class="dx-form-group-content">
                     <!-- Numéro -->
                     <div class="dx-field">
                         <div class="dx-field-label">{{ 'ordres-litiges-id' | localize }}</div>
@@ -14,21 +16,28 @@
                         <dx-text-box formControlName="id"></dx-text-box>
                         </div>
                     </div>
-                        <!-- Avoir client -->
-                        <div class="dx-field">
-                            <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
-                            <div class="dx-field-value">
-                            <dx-text-box formControlName="ordreAvoirClient"></dx-text-box>
-                            </div>
-                        </div>
-                        <!-- Avoir fournisseur -->
-                        <div class="dx-field">
-                            <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirFournisseurReference' | localize }}</div>
-                            <div class="dx-field-value">
-                                <dx-text-box formControlName="ordreAvoirFournisseurReference"></dx-text-box>
-                            </div>
+                    <!-- Avoir client -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
+                        <div class="dx-field-value">
+                          <dx-select-box
+                          formControlName="ordreAvoirClient"
+                          [readOnly]="true"
+                          [dataSource]="ordres"
+                          displayExpr="id"
+                          [searchEnabled]="true"
+                          [searchExpr]="['id','numero']">
+                          </dx-select-box>
                         </div>
                     </div>
+                    <!-- Avoir fournisseur -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirFournisseurReference' | localize }}</div>
+                        <div class="dx-field-value">
+                            <dx-text-box formControlName="ordreAvoirFournisseurReference"></dx-text-box>
+                        </div>
+                    </div>
+                  </div>
                 </dxi-item>
                 <dxi-item [ratio]="4">
                     <!-- Date création -->
@@ -109,7 +118,7 @@
             </dx-box>
             <dx-box direction="row">
               <dxi-item [ratio]="4">
-                <!-- Réf Client-->
+                <!-- Commentaires -->
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'ordres-litiges-commentairesInternes' | localize }}</div>
                   <div class="dx-field-value">
@@ -121,32 +130,92 @@
           </div>
   
         </dxi-item>
-        <dxi-item [ratio]="0.2"></dxi-item>
+        <dxi-item [ratio]="0.4"></dxi-item>
         <dxi-item [ratio]="4">
-          <div class="dx-form-group dx-card responsive-paddings">
+        <dx-box>
+          <dxi-item [ratio]="4">
+          <div class="dx-form-group">
             <div class="dx-form-group-content">
-  
-              <!-- Avoir au client -->
+                <!-- Avoir au client -->
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="ordreAvoirClient">
-                  </dx-text-box>
+                  <dx-number-box formControlName="avoirClient"
+                     [format]="{ style: 'currency', currency: devise }">
+                  </dx-number-box>
+                </div>
+              </div>
+              <!-- Remise sur facture -->
+              <div *ngIf="totalMontantRistourne" class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-litiges-totalMontantRistourne' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-number-box formControlName="totalMontantRistourne"
+                    [format]="{ style: 'currency', currency: devise }">
+                  </dx-number-box>
                 </div>
               </div>
               <!-- Dde avoir fourni -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
+                <div class="dx-field-label">{{ 'ordres-litiges-ddeAvoirFournisseur' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="ordreAvoirClient">
-                  </dx-text-box>
+                  <dx-number-box formControlName="avoirFournisseur"
+                  [format]="{ style: 'currency', currency: devise }">
+                  </dx-number-box>
+                </div>
+              </div>
+              <!-- fraisAnnexes -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'ordres-litiges-fraisAnnexes' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-number-box formControlName="fraisAnnexes"
+                  [format]="{ style: 'currency', currency: devise }">
+                  </dx-number-box>
+                </div>
+              </div>
+              <br>
+              <!-- Résultat -->
+              <div class="dx-field border-top">
+                <div class="dx-field-label">{{ 'ordres-litiges-resultat' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-number-box formControlName="resultat"
+                  [format]="{ style: 'currency', currency: devise }">
+                  </dx-number-box>
                 </div>
               </div>
             </div>
           </div>
-  
-
+        </dxi-item>
+        <dxi-item [ratio]="0.4"></dxi-item>
+        <dxi-item [ratio]="1">
+          <div class="dx-form-group">
+            <div class="dx-form-group-content">
+                <!-- Avoir au client Taux-->
+              <div class="dx-field field-small">
+                <!-- <div class="dx-field-label"></div> -->
+                <div class="dx-field-value">
+                  <dx-number-box formControlName="avoirClientTaux"></dx-number-box>
+                </div>
+              </div>
+              <!-- Remise sur facture Taux-->
+              <div *ngIf="totalMontantRistourne" class="dx-field field-small">
+                <!-- <div class="dx-field-label"></div> -->
+                <div class="dx-field-value">
+                  <dx-number-box formControlName="totalMontantRistourneTaux"></dx-number-box>
+                </div>
+              </div>
+              <!-- Dde avoir fourni Taux -->
+              <div class="dx-field field-small">
+                <!-- <div class="dx-field-label"></div> -->
+                <div class="dx-field-value">
+                  <dx-number-box formControlName="avoirFournisseurTaux"></dx-number-box>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+        </dx-box>
         </dxi-item>
       </dx-box>
     </div>
 </form>
+

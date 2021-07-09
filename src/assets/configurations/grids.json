@@ -952,15 +952,99 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id",
+        "dataField": "numeroGroupementLitige",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 1,
+        "dataField": "ordreLigne.article.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordreLigne.proprietaireMarchandise",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ordreLigne.fournisseur.code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ordreLigne.nombrePalettesExpediees",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "ordreLigne.nombreColisExpedies",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "ordreLigne.poidsNetExpedie",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "cause.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "consequence.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "responsableTypeCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "tiersCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "ordreLigne.libelleDLV",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
         "dataField": "commentaireResponsable",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 13,
+        "dataField": "numeroOrdreReplacement",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "ordreReferenceRemplacement",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 15,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
       }
     ]
   },

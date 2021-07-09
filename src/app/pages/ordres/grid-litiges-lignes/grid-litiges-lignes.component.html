@@ -1,0 +1,107 @@
+<dx-data-grid class="dx-card wide-card"
+    [dataSource]="dataSource"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
+    (onContentReady)="sortGrid()"
+    (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.LitigeLigne, enableFilters.bind(this))"
+  >
+
+    <!-- Grid configuration -->
+    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+      [enabled]="true" 
+      type="custom" 
+      [storageKey]="gridConfiguratorService.Grid.LitigeLigne"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+      *ngFor="let field of detailedFields | async"
+      [dataField]="field.path"
+      [caption]="('ordreLitigesLignes-' + field.path.replaceAll('.', '-') | localize) || field.name"
+      [visible]="false"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    ></dxi-column>
+    <!-- [autoExpandAll]="true" pour déroulés d'office -->
+    <dxo-master-detail [enabled]="true" template="detail" [autoExpandAll]="false"></dxo-master-detail>
+    <div *dxTemplate="let ds of 'detail'">
+
+      <div class="master-detail">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="table-responsive" data-pattern="priority-columns">
+              <table class="table table-bordered table-hover master-detail-color">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>{{ 'ordreLitigesLignes-nombrePalettesExpediees' | localize }}</th>
+                    <th data-priority="1">{{ 'ordreLitigesLignes-nombreColisExpedies' | localize }}</th>
+                    <th data-priority="2">{{ 'ordreLitigesLignes-ordreLigne-poidsNetExpedie' | localize }}</th>
+                    <th data-priority="3">{{ 'ordreLitigesLignes-prixUnitaire' | localize }}</th>
+                    <th data-priority="4">{{ 'ordreLitigesLignes-deviseCode' | localize }}</th>
+                    <th data-priority="5">{{ 'ordreLitigesLignes-quantite' | localize }}</th>
+                    <th data-priority="5">{{ 'ordreLitigesLignes-unite' | localize }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Avoir client -->
+                  <tr class="client-color">
+                    <td>{{ 'ordreLitigesLignes-avoirClient' | localize }}</td>
+                    <td>{{ ds.data.clientNombrePalettes }}</td>
+                    <td>{{ ds.data.clientNombreColisReclamation }}</td>
+                    <td>{{ ds.data.clientPoidsNet }}</td>
+                    <td>{{ ds.data.clientPrixUnitaire }}</td>
+                    <td>{{ ds.data.deviseCode }}</td>
+                    <td>{{ ds.data.clientQuantite }}</td>
+                    <td>{{ ds.data.clientUniteFactureCode }}</td>
+                  </tr>
+                  <!-- Demande avoir fournisseur -->
+                  <tr>
+                    <td>{{ 'ordreLitigesLignes-ddeAvoirFournisseur' | localize }}</td>
+                    <td>{{ ds.data.responsableNombrePalettes }}</td>
+                    <td>{{ ds.data.responsableNombreColis }}</td>
+                    <td>{{ ds.data.responsablePoidsNet }}</td>
+                    <td>{{ ds.data.responsablePrixUnitaire }}</td>
+                    <td>{{ ds.data.deviseCode }}</td>
+                    <td>{{ ds.data.responsableQuantite }}</td>
+                    <td>{{ ds.data.responsableUniteFactureCode }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </dx-data-grid>
