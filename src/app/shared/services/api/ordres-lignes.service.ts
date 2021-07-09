@@ -10,15 +10,13 @@ import { APIRead, ApiService, RelayPage } from '../api.service';
 })
 export class OrdreLignesService extends ApiService implements APIRead {
 
-  listRegexp = /.*\.(?:id)$/i;
-
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, OrdreLigne);
   }
 
-  getDataSource() {
+  getDataSource(depth = 1, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
@@ -29,7 +27,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(1);
+          const query = await this.buildGetAll(depth, filter);
           type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -39,7 +37,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1, this.listRegexp);
+          const query = await this.buildGetOne(depth, filter);
           type Response = { ordreLigne: OrdreLigne };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
