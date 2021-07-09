@@ -16,7 +16,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./grid-lignes-totaux-detail.component.scss']
 })
 export class GridLignesTotauxDetailComponent implements OnChanges {
-  @Input() public filter: [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;

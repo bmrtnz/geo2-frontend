@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./grid-controle-qualite.component.scss']
 })
 export class GridControleQualiteComponent implements OnChanges {
-  @Input() public filter: [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;

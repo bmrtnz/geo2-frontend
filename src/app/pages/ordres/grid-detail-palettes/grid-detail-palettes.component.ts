@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./grid-detail-palettes.component.scss']
 })
 export class GridDetailPalettesComponent implements OnChanges {
-  @Input() public filter: [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
