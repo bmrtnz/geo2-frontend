@@ -22,12 +22,6 @@ export class OrdreLignesTotauxDetailService extends ApiService {
         key: 'fournisseur.id',
         load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
-
           if (!options.totalSummary)
             return reject('Summary request is needed');
 
