@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./grid-save-log.component.scss'],
 })
 export class GridSaveLogComponent implements OnChanges {
-  @Input() public filter: [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;

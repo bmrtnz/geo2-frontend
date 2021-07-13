@@ -28,6 +28,7 @@ export enum Grid {
   OrdreSaveLog = 'ordre-save-log',
   OrdreLignesTotauxDetail = 'ordre-lignes-totaux-detail',
   OrdreDetailPalettes = 'ordre-detail-palettes',
+  OrdreMarge = 'ordre-marge',
   CommentaireOrdre = 'commentaire-ordre',
   LitigeLigne = 'litige-ligne',
   

@@ -44,17 +44,34 @@ export class OrdreLigne extends Model {
   @Field() public numero?: string;
   @Field() public referenceProdet?: string;
   @Field() public nombreColisExpedies?: number;
-  @Field() public totalVenteBrut?: number;
-  @Field() public totalRemise?: number;
-  @Field() public totalRestitue?: number;
-  @Field() public totalFraisMarketing?: number;
-  @Field() public totalAchat?: number;
-  @Field() public totalObjectifMarge?: number;
-  @Field() public totalTransport?: number;
-  @Field() public totalTransit?: number;
-  @Field() public totalCourtage?: number;
-  @Field() public totalFraisAdditionnels?: number;
-  @Field() public totalFraisPlateforme?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalVenteBrut?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalRemise?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalRestitue?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalFraisMarketing?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalAchat?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalObjectifMarge?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalTransport?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalTransit?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalCourtage?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalFraisAdditionnels?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public totalFraisPlateforme?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public margeBrute?: number;
+  @Field({format: { type: 'percent', precision: 2 }})
+  public pourcentageMargeBrute?: number;
+  @Field({format: { type: 'percent', precision: 2 }})
+  public pourcentageMargeNette?: number;
 
 }
 

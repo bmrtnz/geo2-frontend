@@ -15,13 +15,12 @@ import { Observable } from 'rxjs';
   styleUrls: ['./grid-detail-palettes.component.scss']
 })
 export class GridDetailPalettesComponent implements OnChanges {
-  @Input() public filter: [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
 
   /* tslint:disable-next-line max-line-length */
-  gridFilter: RegExp = /^(?:arboCode|nombreColis|ordreLigne\.(?:nombrePalettesExpediees|numero|nombreColisExpedies|libelleDLV|fournisseur\.code|ordre\.(?:id|numero|client\.raisonSocial|referenceClient)|logistique\.(?:nombrePalettesAuSol|totalPalettesExpediees|dateDepartReelleFournisseur)|article\.(?:id|description|matierePremiere\.(?:variete\.description|espece\.description)|normalisation\.calibreMarquage\.description|emballage.\.emballage\.(?:description)))|tracabiliteDetailPalette\.(?:SSCC|poidsNet|poidsBrut|paletteAuSol|typePalette\.description))$/;
+  gridFilter: RegExp = /^(?:arboCode|nombreColis|ordreLigne\.(?:nombrePalettesExpediees|numero|nombreColisExpedies|libelleDLV|fournisseur\.code|ordre\.(?:id|numero|client\.raisonSocial|referenceClient)|logistique\.(?:nombrePalettesAuSol|totalPalettesExpediees|dateDepartReelleFournisseur)|article\.(?:id|description|matierePremiere\.(?:variete\.description|espece\.description)|normalisation\.calibreMarquage\.description|emballage\.emballage\.description))|tracabiliteDetailPalette\.(?:SSCC|poidsNet|poidsBrut|paletteAuSol|typePalette\.description))$/;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;

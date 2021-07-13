@@ -1349,5 +1349,100 @@
         "visible": true
       }
     ]
+  },
+  "ordre-marge": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "numero",
+        "visible": true,
+        "sortOrder": "asc"
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "article.matierePremiere.variete.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "article.cahierDesCharge.categorie.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "article.normalisation.calibreMarquage.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "article.emballage.emballage.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "totalVenteBrut",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "totalRemise",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "totalFraisMarketing",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "totalAchat",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "totalTransport",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "totalTransit",
+        "visible": true
+      },
+      {
+        "visibleIndex": 13,
+        "dataField": "totalCourtage",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "totalFraisAdditionnels",
+        "visible": true
+      },
+      {
+        "visibleIndex": 15,
+        "dataField": "margeBrute",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "pourcentageMargeBrute",
+        "visible": true
+      },
+      {
+        "visibleIndex": 17,
+        "dataField": "pourcentageMargeNette",
+        "visible": true
+      }
+    ]
   }
 }
