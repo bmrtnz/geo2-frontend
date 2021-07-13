@@ -12,7 +12,7 @@
       showScrollBar:'always'
     }"
     (onContentReady)="sortGrid()"
-    (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
+    (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Envois, enableFilters.bind(this))"
   >
 
@@ -26,9 +26,9 @@
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing 
-      [enabled]="true" 
-      type="custom" 
+    <dxo-state-storing
+      [enabled]="true"
+      type="custom"
       [storageKey]="gridConfiguratorService.Grid.Envois"
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
@@ -54,3 +54,7 @@
     ></dxi-column>
 
   </dx-data-grid>
+<app-view-document-popup
+  [document]="this.currentDocument"
+  [(visible)]="this.documentVisible"
+></app-view-document-popup>

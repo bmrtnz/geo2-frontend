@@ -493,8 +493,8 @@
                                     </dx-validator>
                                 </dx-select-box>
                                 <dx-button
-                                  *ngIf="article?.normalisation?.stickeur?.etiquette.isPresent"
-                                  (onClick)="viewEtiquette('articles-normalisation-stickeur', article.normalisation.stickeur.etiquette.filename)"
+                                  *ngIf="article?.normalisation?.stickeur?.document.isPresent"
+                                  (onClick)="viewEtiquette('articles-normalisation-stickeur', article.normalisation.stickeur.document.filename)"
                                   class="icon-btn"
                                   icon="material-icons sm visibility"
                                 ></dx-button>
@@ -551,8 +551,8 @@
                                 </dx-validator> -->
                               </dx-select-box>
                               <dx-button
-                                *ngIf="article?.normalisation?.etiquetteColis?.etiquette.isPresent"
-                                (onClick)="viewEtiquette('articles-normalisation-etiquetteColis', article.normalisation.etiquetteColis.etiquette.filename)"
+                                *ngIf="article?.normalisation?.etiquetteColis?.document.isPresent"
+                                (onClick)="viewEtiquette('articles-normalisation-etiquetteColis', article.normalisation.etiquetteColis.document.filename)"
                                 class="icon-btn"
                                 icon="material-icons sm visibility"
                               ></dx-button>
@@ -574,8 +574,8 @@
                                 </dx-validator> -->
                                 </dx-select-box>
                                 <dx-button
-                                  *ngIf="article?.normalisation?.etiquetteUc?.etiquette.isPresent"
-                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteUc', article.normalisation.etiquetteUc.etiquette.filename)"
+                                  *ngIf="article?.normalisation?.etiquetteUc?.document.isPresent"
+                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteUc', article.normalisation.etiquetteUc.document.filename)"
                                   class="icon-btn"
                                   icon="material-icons sm visibility"
                                 ></dx-button>
@@ -597,8 +597,8 @@
                                 </dx-validator> -->
                                 </dx-select-box>
                                 <dx-button
-                                  *ngIf="article?.normalisation?.etiquetteEvenementielle?.etiquette.isPresent"
-                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteEvenementielle', article.normalisation.etiquetteEvenementielle.etiquette.filename)"
+                                  *ngIf="article?.normalisation?.etiquetteEvenementielle?.document.isPresent"
+                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteEvenementielle', article.normalisation.etiquetteEvenementielle.document.filename)"
                                   class="icon-btn"
                                   icon="material-icons sm visibility"
                                 ></dx-button>
@@ -655,27 +655,7 @@
     title="{{ 'valide-comment-title' | localize }}"
     [placeholder]="'valide-comment' | localize"
 ></app-push-history-popup>
-<!-- If it's use at another location in project, must be extract in component -->
-<dx-popup
-  [showTitle]="true"
-  [title]="currentEtiquette?.title"
-  [closeOnOutsideClick]="true"
-  [(visible)]="etiquetteVisible">
-  <div *dxTemplate="let data of 'content'">
-      <img
-        [src]="currentEtiquette?.url"
-        *ngIf="this.currentEtiquette?.type === 'img'"
-        width="auto" height="100%"
-        style="margin: auto; display: block; border: 1px solid black"
-      />
-      <object
-        [data]="currentEtiquette?.url"
-        *ngIf="this.currentEtiquette?.type === 'iframe'"
-        type="application/pdf"
-        width="100%"
-        height="100%"
-      >
-        <embed [src]="currentEtiquette?.url" type="application/pdf" />
-      </object>
-  </div>
-</dx-popup>
+<app-view-document-popup
+  [document]="this.currentEtiquette"
+  [(visible)]="this.etiquetteVisible"
+></app-view-document-popup>

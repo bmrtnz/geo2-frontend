@@ -3,7 +3,8 @@ import {Personne} from './personne.model';
 import {Flux} from './flux.model';
 import {Ordre} from './ordre.model';
 import {TypeTiers} from './type-tiers.model';
-import {MoyenCommunication} from './moyen-communication.model'
+import {MoyenCommunication} from './moyen-communication.model';
+import {Document} from './document.model';
 
 @ModelName('Envois')
 export class Envois extends Model {
@@ -27,6 +28,7 @@ export class Envois extends Model {
   @Field() public codeTiers: string;
   // @Field() public userModification: string;
   @Field() public versionOrdre: string;
+  @Field({model: import('./document.model')}) public document: Document;
 }
 
 export default Envois;

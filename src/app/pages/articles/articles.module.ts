@@ -19,6 +19,7 @@ import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { HistoriqueValideModule } from 'app/shared/components/historique-valide/historique-valide.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { ViewDocumentPopupModule } from 'app/shared/components/view-document-popup/view-document-popup.component';
 
 @NgModule({
     imports: [
@@ -35,7 +36,7 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
         DxTextBoxModule, DxValidatorModule,
         EditingAlertModule, PushHistoryPopupModule,
         HistoriqueValideModule,
-        FileManagerModule, DxPopupModule
+        FileManagerModule, ViewDocumentPopupModule
     ],
   declarations: [ArticleDetailsComponent, ArticlesListComponent],
   providers: [NestedGuard, EditingGuard],

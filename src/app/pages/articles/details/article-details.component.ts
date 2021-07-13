@@ -34,17 +34,9 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import {
-    Article
-} from '../../../shared/models';
-import { ArticlesService } from '../../../shared/services';
-import {DomSanitizer, SafeValue} from '@angular/platform-browser';
-
-interface Etiquette {
-  title: string;
-  type: string;
-  url: SafeValue;
-}
+import { Article } from 'app/shared/models';
+import { ArticlesService } from 'app/shared/services';
+import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
 
 @Component({
     selector: 'app-articles',
@@ -139,7 +131,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     preSaisie: string;
 
     etiquetteVisible = false;
-    currentEtiquette: Etiquette;
+    currentEtiquette: ViewDocument;
 
     id: string;
 
@@ -171,7 +163,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private route: ActivatedRoute,
         private fb: FormBuilder,
         public authService: AuthService,
-        private sanitizer: DomSanitizer,
         private localization: LocalizationService
     ) { }
 
@@ -309,14 +300,11 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     async viewEtiquette(titleKey: string, filename: string) {
-        const isPdf = filename.endsWith('.pdf');
-        const unsafeUrl = `http://localhost:8081/file-manager/etiquette/${filename}${isPdf ? '?embedded=true' : ''}`;
-        const sanitizerUrl = isPdf ? this.sanitizer.bypassSecurityTrustResourceUrl : this.sanitizer.bypassSecurityTrustUrl;
+        const unsafeUrl = `/file-manager/etiquette/${filename}`;
 
         this.currentEtiquette = {
           title: this.localization.localize(titleKey),
-          type: isPdf ? 'iframe' : 'img',
-          url: sanitizerUrl(unsafeUrl)
+          url: unsafeUrl
         };
 
         this.etiquetteVisible = true;

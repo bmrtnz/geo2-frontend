@@ -1,0 +1,24 @@
+<dx-popup
+  [showTitle]="true"
+  [title]="this.document?.title"
+  [closeOnOutsideClick]="true"
+  [(visible)]="this.visible"
+  (onHidden)="this.onClose()"
+  [fullScreen]="this.fullScreen"
+>
+  <div *dxTemplate="let data of 'content'">
+    <img
+      [src]="this.safeUrl"
+      *ngIf="this.document?.type === 'img'"
+      class="view-document-img"
+    />
+    <object
+      [data]="this.safeUrl"
+      *ngIf="this.document?.type === 'iframe'"
+      type="application/pdf"
+      class="view-document-iframe"
+    >
+      <embed [src]="this.safeUrl" type="application/pdf" />
+    </object>
+  </div>
+</dx-popup>
