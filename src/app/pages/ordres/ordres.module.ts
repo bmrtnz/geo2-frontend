@@ -6,6 +6,7 @@ import { OrdresRoutingModule } from './ordres-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { ViewDocumentPopupModule } from 'app/shared/components/view-document-popup/view-document-popup.component';
 import { SharedModule } from 'app/shared/shared.module';
 import {
   DxAccordionModule, DxBoxModule, DxButtonModule,
@@ -105,6 +106,7 @@ import { GridFraisComponent } from './grid-frais/grid-frais.component';
     DxDateBoxModule,
     DxValidationGroupModule,
     DxLoadIndicatorModule,
+    ViewDocumentPopupModule
   ],
   providers: [
     OrdresIndicatorsService,
