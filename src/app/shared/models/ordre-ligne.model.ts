@@ -23,6 +23,7 @@ export class OrdreLigne extends Model {
   @Field({model: import('./fournisseur.model')}) public fournisseur?: Fournisseur;
   @Field({model: import('./base-tarif.model')}) public fraisUnite?: BaseTarif;
   @Field() public nombrePalettesCommandees?: number;
+  @Field() public nombrePalettesExpediees?: number;
   @Field() public nombrePalettesIntermediaires?: number;
   @Field() public nombreColisPalette?: number;
   @Field() public nombreColisCommandes?: number;
@@ -43,7 +44,6 @@ export class OrdreLigne extends Model {
   @Field() public numero?: string;
   @Field() public referenceProdet?: string;
   @Field() public nombreColisExpedies?: number;
-  @Field() public nombrePalettesExpediees?: number;
   @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
   public totalVenteBrut?: number;
   @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})

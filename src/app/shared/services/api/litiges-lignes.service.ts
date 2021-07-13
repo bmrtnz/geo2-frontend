@@ -35,7 +35,8 @@ export class LitigesLignesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(2, this.listRegexp);
+          // const query = await this.buildGetAll(2, this.listRegexp);
+          const query = await this.buildGetAll(3);
           type Response = { allLitigeLigne: RelayPage<LitigeLigne> };
           const variables = this.mapLoadOptionsToVariables(options);
 
