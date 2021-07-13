@@ -15,7 +15,6 @@
   >
 
     <!-- Grid configuration -->
-    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-paging></dxo-paging>
     <dxo-pager
@@ -44,9 +43,10 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('articles-' + field.path.replaceAll('.', '-') | localize) || field.name"
+      [caption]="('ordreLogistique-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
+      [format]="field.format"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
     ></dxi-column>

@@ -860,21 +860,63 @@
   "ordre-logistique": {
     "columns": [
       {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "dataType": "string",
-        "visible": true
-      },
-      {
         "visibleIndex": 1,
-        "dataField": "numero",
-        "dataType": "string",
+        "dataField": "transporteurGroupage.id",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "groupage.id",
-        "dataType": "string",
+        "dataField": "ordre.typeTransport.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ordre.prixUnitaireTarifTransport",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ordre.transporteurDEVCode",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "ordre.baseTarifTransport",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "ordre.codeChargement",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "ordre.ETDDate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "ordre.ETADate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "ordre.ETDLocation",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ordre.ETALocation",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "ordre.incoterm.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "ordre.incotermLieu",
         "visible": true
       }
     ]

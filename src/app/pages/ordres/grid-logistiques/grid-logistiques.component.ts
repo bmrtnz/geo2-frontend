@@ -25,8 +25,10 @@ export class GridLogistiquesComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
   ) {
-    this.dataSource = ordresLogistiquesService.getDataSource();
-    this.detailedFields = this.ordresLogistiquesService.model.getDetailedFields(2);
+    this.dataSource = ordresLogistiquesService
+    .getDataSource(3, null);
+    this.detailedFields = this.ordresLogistiquesService.model
+    .getDetailedFields(2);
   }
 
   ngOnChanges() {
