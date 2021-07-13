@@ -20,7 +20,7 @@ export class GridDetailPalettesComponent implements OnChanges {
   dataGrid: DxDataGridComponent;
 
   /* tslint:disable-next-line max-line-length */
-  gridFilter: RegExp = /^(?:arboCode|nombreColis|ordreLigne\.(?:nombrePalettesExpediees|numero|nombreColisExpedies|libelleDLV|fournisseur\.code|ordre\.(?:id|numero|client\.raisonSocial|referenceClient)|logistique\.(?:nombrePalettesAuSol|totalPalettesExpediees|dateDepartReelleFournisseur)|article\.(?:id|description|matierePremiere\.(?:variete\.description|espece\.description)|normalisation\.calibreMarquage\.description|emballage.\.emballage\.(?:description)))|tracabiliteDetailPalette\.(?:SSCC|poidsNet|poidsBrut|paletteAuSol|typePalette\.description))$/;
+  gridFilter: RegExp = /^(?:arboCode|nombreColis|ordreLigne\.(?:nombrePalettesExpediees|numero|nombreColisExpedies|libelleDLV|fournisseur\.code|ordre\.(?:id|numero|client\.raisonSocial|referenceClient)|logistique\.(?:nombrePalettesAuSol|totalPalettesExpediees|dateDepartReelleFournisseur)|article\.(?:id|description|matierePremiere\.(?:variete\.description|espece\.description)|normalisation\.calibreMarquage\.description|emballage\.emballage\.description))|tracabiliteDetailPalette\.(?:SSCC|poidsNet|poidsBrut|paletteAuSol|typePalette\.description))$/;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
