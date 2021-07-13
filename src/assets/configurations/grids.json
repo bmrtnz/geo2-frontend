@@ -1480,7 +1480,9 @@
       {
         "visibleIndex": 6,
         "dataField": "montantTotal",
-        "visible": true
+        "visible": true,
+        "fixed": true,
+        "fixedPosition": "right"
       }
     ]
   }
