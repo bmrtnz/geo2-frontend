@@ -16,7 +16,7 @@ export class OrdresFraisService extends ApiService implements APIRead {
     super(apollo, OrdreFrais);
   }
 
-  getDataSource() {
+  getDataSource(depth = 1, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
@@ -27,7 +27,7 @@ export class OrdresFraisService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(1);
+          const query = await this.buildGetAll(depth, filter);
           type Response = { allOrdreFrais: RelayPage<OrdreFrais> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -37,7 +37,7 @@ export class OrdresFraisService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1);
+          const query = await this.buildGetOne(depth, filter);
           type Response = { ordreFrais: OrdreFrais };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
