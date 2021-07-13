@@ -23,7 +23,7 @@ export class OrdreLignesTotauxDetailService extends ApiService {
         load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
 
           if (!options.totalSummary)
-            return reject('Summary request is needed');
+          return resolve({});
 
           type Response = { allOrdreLigneTotauxDetail: SummarisedRelayPage<OrdreLigneTotauxDetail> };
           const query = `
