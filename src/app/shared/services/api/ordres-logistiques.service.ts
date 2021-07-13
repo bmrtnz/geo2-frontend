@@ -18,7 +18,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
     super(apollo, OrdreLogistique);
   }
 
-  getDataSource() {
+  getDataSource(depth = 1, filter = this.listRegexp) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -32,7 +32,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(1);
+          const query = await this.buildGetAll(depth, filter);
           type Response = { allOrdreLogistique: RelayPage<OrdreLogistique> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -42,7 +42,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1, this.listRegexp);
+          const query = await this.buildGetOne(depth, filter);
           type Response = { ordreLogistique: OrdreLogistique };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {

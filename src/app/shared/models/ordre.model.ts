@@ -9,6 +9,9 @@ import {Societe} from './societe.model';
 import {Devise} from './devise.model';
 import {Campagne} from './campagne.model';
 import Transporteur from './transporteur.model';
+import TypeCamion from './type-camion.model';
+import BaseTarif from './base-tarif.model';
+import Incoterm from './incoterm.model';
 
 export enum FactureAvoir {
   FACTURE = 'F',
@@ -47,6 +50,17 @@ export class Ordre extends Model {
   @Field({allowHeaderFiltering: false, allowSearch: false}) public factureAvoir?: FactureAvoir;
   @Field() public codeChargement?: string;
   @Field() public pourcentageMargeBrut?: number;
+  @Field({ model: import('./type-camion.model') }) public typeTransport?: TypeCamion;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public prixUnitaireTarifTransport?: number;
+  @Field() public transporteurDEVCode?: string;
+  @Field({ model: import('./base-tarif.model') }) public baseTarifTransport?: BaseTarif;
+  @Field({ dataType: 'localdate' }) public ETDDate?: string;
+  @Field({ dataType: 'localdate' }) public ETADate?: string;
+  @Field() public ETDLocation?: string;
+  @Field() public ETALocation?: string;
+  @Field({ model: import('./incoterm.model') }) public incoterm?: Incoterm;
+  @Field() public incotermLieu?: string;
 
 }
 
