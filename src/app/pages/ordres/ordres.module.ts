@@ -42,6 +42,7 @@ import { FormLitigesComponent } from './form-litiges/form-litiges.component';
 import { GridControleQualiteComponent } from './grid-controle-qualite/grid-controle-qualite.component';
 import { GridLignesTotauxDetailComponent } from './grid-lignes-totaux-detail/grid-lignes-totaux-detail.component';
 import { GridDetailPalettesComponent } from './grid-detail-palettes/grid-detail-palettes.component';
+import { GridMargeComponent } from './grid-marge/grid-marge.component';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import { GridDetailPalettesComponent } from './grid-detail-palettes/grid-detail-
     GridControleQualiteComponent,
     GridLignesTotauxDetailComponent,
     GridDetailPalettesComponent,
+    GridMargeComponent,
   ],
   imports: [
     OrdresRoutingModule,
