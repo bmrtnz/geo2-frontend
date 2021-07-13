@@ -44,6 +44,7 @@ import { GridLignesTotauxDetailComponent } from './grid-lignes-totaux-detail/gri
 import { GridLitigesLignesComponent } from './grid-litiges-lignes/grid-litiges-lignes.component';
 import { GridDetailPalettesComponent } from './grid-detail-palettes/grid-detail-palettes.component';
 import { GridMargeComponent } from './grid-marge/grid-marge.component';
+import { GridFraisComponent } from './grid-frais/grid-frais.component';
 
 
 @NgModule({
@@ -73,6 +74,7 @@ import { GridMargeComponent } from './grid-marge/grid-marge.component';
     GridLitigesLignesComponent,
     GridDetailPalettesComponent,
     GridMargeComponent,
+    GridFraisComponent,
   ],
   imports: [
     OrdresRoutingModule,

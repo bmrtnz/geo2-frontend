@@ -674,6 +674,14 @@
     "ordreMarge-pourcentageMargeBrute": "Marge Brut %",
     "ordreMarge-pourcentageMargeNette": "Marge Nette %",
 
+    "ordreFrais-frais.description": "Type de Frais",
+    "ordreFrais-montant": "Montant",
+    "ordreFrais-devise.id": "Devise",
+    "ordreFrais-deviseTaux": "Taux",
+    "ordreFrais-codePlus": "Fournisseur / Objet",
+    "ordreFrais-description": "Description",
+    "ordreFrais-montantTotal": "Montant",
+
     "ControleQualite-nombrePalettes": "pal",
     "ControleQualite-nombreColis": "col",
     "ControleQualite-poidsNetTheoriqueParColis": "poids",
