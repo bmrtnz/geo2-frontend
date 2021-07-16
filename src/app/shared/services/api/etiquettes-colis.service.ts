@@ -25,7 +25,7 @@ export class EtiquettesColisService extends ApiService implements APIRead {
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
-        key: ['id', '.etiquetteColisId'],
+        key: ['id', 'especeId'],
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
           if (options.group)
