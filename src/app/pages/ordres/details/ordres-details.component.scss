@@ -143,7 +143,10 @@ dx-button[type="normal"] { float:right; }
         }
       
         &.dx-row-focused {
-            &.sent-highlight-datagrid-row > td, .dx-checkbox-icon {
+            &.sent-highlight-datagrid-row > td {
+                color:#66FF66;
+            }
+            &.sent-highlight-datagrid-row .dx-checkbox-icon {
                 color:#66FF66;
             }
     
