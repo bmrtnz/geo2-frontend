@@ -7,6 +7,7 @@ import { GridConfiguratorService } from 'app/shared/services/grid-configurator.s
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-logistiques',
@@ -25,10 +26,15 @@ export class GridLogistiquesComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
   ) {
-    this.dataSource = ordresLogistiquesService
-    .getDataSource(3, null);
-    this.detailedFields = this.ordresLogistiquesService.model
-    .getDetailedFields(2);
+    this.dataSource = ordresLogistiquesService.getDataSource(10, null);
+    this.detailedFields = this.ordresLogistiquesService.model.getDetailedFields(6)
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field => 
+          !!(this.localizeService.localize('ordreLogistique-' + field.path.replaceAll('.', '-'))).length);
+      }),
+    );
   }
 
   ngOnChanges() {

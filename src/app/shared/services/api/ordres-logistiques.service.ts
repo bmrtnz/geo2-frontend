@@ -32,7 +32,8 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(depth, filter);
+          // const query = await this.buildGetAll(depth, filter);
+          const query = await this.buildGetAll(depth);
           type Response = { allOrdreLogistique: RelayPage<OrdreLogistique> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -42,7 +43,8 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(depth, filter);
+          // const query = await this.buildGetOne(depth, filter);
+          const query = await this.buildGetOne(depth);
           type Response = { ordreLogistique: OrdreLogistique };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {

@@ -32,14 +32,14 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
       // Filtrage headers possibles columnchooser
       map(fields => {
         return fields.filter( field => 
-          !!(this.localizeService.localize('ordreLogistique-' + field.path.replaceAll('.', '-'))).length);
+          !!(this.localizeService.localize('ordreLigneLogistique-' + field.path.replaceAll('.', '-'))).length);
       }),
     );
 
     // .pipe(
     //   map(fields => {
     //     return fields.filter( field => {
-    //       console.log('ordreLogistique-' + field.path.replaceAll('.', '-'))
+    //       console.log('ordreLigneLogistique-' + field.path.replaceAll('.', '-'))
     //     })
     //   }),
     // );

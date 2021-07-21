@@ -10,6 +10,7 @@ export class OrdreLogistique extends Model {
   @Field({asKey: true, asLabel: true}) public id?: string;
   @Field({model: import('./ordre.model')}) public ordre?: Ordre;
   @Field({model: import('./fournisseur.model')}) public fournisseur?: Fournisseur;
+  @Field() public fournisseurReferenceDOC?: string;
   @Field() public expedieStation?: boolean;
   @Field() public nombrePalettesAuSol?: number;
   @Field() public nombrePalettes100x120?: number;
@@ -29,6 +30,8 @@ export class OrdreLogistique extends Model {
   @Field({ dataType: 'localdate' }) public dateDepartPrevueGroupage?: string;
   @Field({model: import('./groupage.model')}) public groupage?: Groupage;
   @Field({model: import('./transporteur.model')}) public transporteurGroupage?: Transporteur;
+  @Field() public referenceLogistique?: string;
+  @Field() public referenceDocument?: string;
 
 }
 
