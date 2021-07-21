@@ -4,11 +4,11 @@ import {DxPopupModule} from 'devextreme-angular';
 import {DomSanitizer, SafeUrl, SafeValue} from '@angular/platform-browser';
 import { environment } from 'environments/environment';
 import {ScreenService} from '../../services';
+import Document from '../../models/document.model';
 
 export interface ViewDocument {
   title: string;
-  type?: 'iframe' | 'img';
-  url: SafeValue;
+  document: Document;
 }
 
 @Component({
@@ -40,14 +40,13 @@ export class ViewDocumentPopupComponent implements OnInit, OnChanges {
     if (changes.document && changes.document.currentValue) {
       const document = changes.document.currentValue;
 
-      document.type = document.url.toLowerCase().endsWith('.pdf') ? 'iframe' : 'img';
       this.safeUrl = this.sanitize(document);
     }
   }
 
   private sanitize(document: ViewDocument): SafeUrl {
-    const isFrame = document.type === 'iframe';
-    let fullUrl = environment.apiEndpoint + document.url;
+    const isFrame = document.document.type === 'iframe';
+    let fullUrl = environment.apiEndpoint + document.document.uri;
     const sanitizerUrl = isFrame ? this.sanitizer.bypassSecurityTrustResourceUrl : this.sanitizer.bypassSecurityTrustUrl;
 
     if (isFrame) {

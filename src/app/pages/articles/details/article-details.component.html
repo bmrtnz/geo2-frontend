@@ -494,7 +494,7 @@
                                 </dx-select-box>
                                 <dx-button
                                   *ngIf="article?.normalisation?.stickeur?.document.isPresent"
-                                  (onClick)="viewEtiquette('articles-normalisation-stickeur', article.normalisation.stickeur.document.filename)"
+                                  (onClick)="viewEtiquette('articles-normalisation-stickeur', article.normalisation.stickeur.document)"
                                   class="icon-btn"
                                   icon="material-icons sm visibility"
                                 ></dx-button>
@@ -552,7 +552,7 @@
                               </dx-select-box>
                               <dx-button
                                 *ngIf="article?.normalisation?.etiquetteColis?.document.isPresent"
-                                (onClick)="viewEtiquette('articles-normalisation-etiquetteColis', article.normalisation.etiquetteColis.document.filename)"
+                                (onClick)="viewEtiquette('articles-normalisation-etiquetteColis', article.normalisation.etiquetteColis.document)"
                                 class="icon-btn"
                                 icon="material-icons sm visibility"
                               ></dx-button>
@@ -575,7 +575,7 @@
                                 </dx-select-box>
                                 <dx-button
                                   *ngIf="article?.normalisation?.etiquetteUc?.document.isPresent"
-                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteUc', article.normalisation.etiquetteUc.document.filename)"
+                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteUc', article.normalisation.etiquetteUc.document)"
                                   class="icon-btn"
                                   icon="material-icons sm visibility"
                                 ></dx-button>
@@ -598,7 +598,7 @@
                                 </dx-select-box>
                                 <dx-button
                                   *ngIf="article?.normalisation?.etiquetteEvenementielle?.document.isPresent"
-                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteEvenementielle', article.normalisation.etiquetteEvenementielle.document.filename)"
+                                  (onClick)="viewEtiquette('articles-normalisation-etiquetteEvenementielle', article.normalisation.etiquetteEvenementielle.document)"
                                   class="icon-btn"
                                   icon="material-icons sm visibility"
                                 ></dx-button>
