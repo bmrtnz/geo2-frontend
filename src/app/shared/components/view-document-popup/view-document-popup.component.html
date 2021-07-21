@@ -9,12 +9,12 @@
   <div *dxTemplate="let data of 'content'">
     <img
       [src]="this.safeUrl"
-      *ngIf="this.document?.type === 'img'"
+      *ngIf="this.document?.document.type === 'img'"
       class="view-document-img"
     />
     <object
       [data]="this.safeUrl"
-      *ngIf="this.document?.type === 'iframe'"
+      *ngIf="this.document?.document.type === 'iframe'"
       type="application/pdf"
       class="view-document-iframe"
     >

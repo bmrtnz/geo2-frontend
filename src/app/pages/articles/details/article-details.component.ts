@@ -37,6 +37,7 @@ import { switchMap, tap } from 'rxjs/operators';
 import { Article } from 'app/shared/models';
 import { ArticlesService } from 'app/shared/services';
 import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
+import Document from '../../../shared/models/document.model';
 
 @Component({
     selector: 'app-articles',
@@ -204,7 +205,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     onSubmit() {
-        
+
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
             if (this.cloneMode) {
@@ -299,12 +300,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.fileManagerComponent.visible = true;
     }
 
-    async viewEtiquette(titleKey: string, filename: string) {
-        const unsafeUrl = `/file-manager/etiquette/${filename}`;
-
+    async viewEtiquette(titleKey: string, document: Document) {
         this.currentEtiquette = {
           title: this.localization.localize(titleKey),
-          url: unsafeUrl
+          document
         };
 
         this.etiquetteVisible = true;

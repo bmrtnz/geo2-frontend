@@ -94,12 +94,9 @@ export class GridEnvoisComponent implements OnInit, OnChanges {
       return;
     }
 
-    const filename = envois.document.filename;
-    const unsafeUrl = `/file-manager/document/${filename}`;
-
     this.currentDocument = {
       title: `${envois.flux.description.ucFirst()} ${envois.typeTiers.description}`,
-      url: unsafeUrl
+      document: envois.document
     };
     this.documentVisible = true;
 
