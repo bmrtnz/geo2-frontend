@@ -23,7 +23,7 @@ import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { TypesClientService } from 'app/shared/services/api/types-client.service';
 import { TypesVenteService } from 'app/shared/services/api/types-vente.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { DxAccordionComponent, DxCheckBoxComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxCheckBoxComponent, DxNumberBoxComponent, DxTextBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
@@ -122,6 +122,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
+  @ViewChild('couvertureTotale', { static: false }) couvertureTotale: DxNumberBoxComponent;
   
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
@@ -132,6 +133,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   code: string;
   gridBoxValue: number[];
   secteurs: DataSource;
+  paloxRaisonSocial: DataSource;
   commercial: DataSource;
   assistante: DataSource;
   pays: DataSource;
@@ -153,6 +155,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   certifications: DataSource;
   isReadOnlyMode = true;
   createMode = false;
+  cofaceBlocked = false;
 
   constructor(
     private fb: FormBuilder,
@@ -232,6 +235,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       ['valide', '=', true],
       'and',
       ['role', '=', Role.COMMERCIAL],
+      'and',
+      ['nomUtilisateur', '<>', 'null']
     ]);
 
     this.assistante = this.personnesService.getDataSource();
@@ -239,9 +244,16 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       ['valide', '=', true],
       'and',
       ['role', '=', Role.ASSISTANT],
+      'and',
+      ['nomUtilisateur', '<>', 'null']
     ]);
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
+    this.secteurs.filter([
+      ['valide', '=', true],
+      'and',
+      ['societes', 'contains', this.currentCompanyService.getCompany().id]
+    ])
     this.typesClient = this.typesClientService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -255,6 +267,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     this.basesTarif = this.basesTarifService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
+    this.paloxRaisonSocial = this.clientsService.getDataSource();
+    this.paloxRaisonSocial.filter(['secteur.id', '=', 'PAL']);
 
   }
 
@@ -268,6 +282,22 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     return clientsSource.load().then(res => !(res.length));
 
   }
+
+  displayIDBefore(data) {
+    return data ? data.id + ' ' + data.description : null;
+  }
+
+  onRefusCofaceChange(e) {
+    const cofaceBlocked = (e.value === true);
+    this.cofaceBlocked = cofaceBlocked;
+    if (cofaceBlocked) this.formGroup.get('agrement').setValue(0);
+  }
+
+  onCofaceChange() {
+    // Sum of couverture Coface & couverture BW. Updated on any change
+    this.couvertureTotale.value = parseInt(this.formGroup.get('agrement').value || 0) + parseInt(this.formGroup.get('enCoursBlueWhale').value || 0);
+  }
+
 
   openCloseAccordions(action) {
     if (!this.accordion) return;
