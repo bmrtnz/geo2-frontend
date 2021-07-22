@@ -98,6 +98,10 @@ export class Client extends Model {
   @Field({ model: import('./condition-vente.model') }) public conditionVente: ConditionVente;
   @Field({ model: import('./certification-client.model'), allowSearch: false }) public certifications: CertificationClient[];
   @Field() public usageInterne: boolean;
+  @Field() public paloxGratuit: boolean;
+  @Field() public consignePalox: boolean;
+  @Field() public releveFactures: boolean;
+  @Field() public identifiantFiscal: string;
 }
 
 export default Client;
