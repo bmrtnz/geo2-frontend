@@ -57,6 +57,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     langue: [''],
     commercial: [''],
     assistante: [''],
+    declarationTransit: [''],
     controlReferenceClient: [''],
     declarationEur1: [''],
     envoieAutomatiqueDetail: [''],
@@ -135,7 +136,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       .subscribe(params => {
         const url = this.route.snapshot.url;
         this.createMode = url[0].path === 'create' || (url[2] ? url[2].path === 'create' : false);
-        console.log(this.createMode)
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
           this.entrepotsService.getOne(params.id)

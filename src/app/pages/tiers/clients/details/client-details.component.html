@@ -53,7 +53,7 @@
             class="vertical"
             formControlName="valide"
             [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
-            [readOnly]="readOnlyMode || !authService.currentUser.accessGeoTiers"
+            [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
           ></dx-check-box>
           <app-historique-valide [historique]="client?.historique"></app-historique-valide>
           <dx-button
@@ -492,7 +492,7 @@
               <div class="dx-field field-large">
                 <div class="dx-field-label">{{ 'tiers-clients-delaiBonFacturer' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-number-box formControlName="delaiBonFacturer" [readOnly]="readOnlyMode">
+                  <dx-number-box formControlName="delaiBonFacturer" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                     <dx-validator name="{{ 'tiers-clients-delaiBonFacturer' | localize }}">
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                     </dx-validator>
@@ -504,7 +504,7 @@
               <div class="dx-field field-large">
                 <div class="dx-field-label">{{ 'tiers-clients-nbJourLimiteLitige' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="nbJourLimiteLitige" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="nbJourLimiteLitige" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                     <dx-validator name="{{ 'tiers-clients-nbJourLimiteLitige' | localize }}">
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                     </dx-validator>
@@ -568,13 +568,24 @@
                   </dx-select-box>
                 </div>
               </div>
+              <!-- Compte comptable -->
+              <div class="dx-field field-large">
+                <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
+                    <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}" onValidated="toto()">
+                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
               <dx-box>
                 <dxi-item [ratio]="4">
                   <!-- Soumis CTIFL -->
                   <div class="dx-field field-large">
                     <div class="dx-field-label checkbox-label">{{ 'tiers-clients-soumisCtifl' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode">
+                      <dx-check-box formControlName="soumisCtifl" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                         <dx-validator name="{{ 'tiers-clients-soumisCtifl' | localize }}">
                         </dx-validator>
                       </dx-check-box>
@@ -585,24 +596,13 @@
                 <dxi-item [ratio]="4">
                 </dxi-item>
               </dx-box>
-              <!-- Compte comptable -->
-              <div class="dx-field field-large">
-                <div class="dx-field-label">{{ 'tiers-clients-compteComptable' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}" onValidated="toto()">
-                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-text-box>
-                </div>
-              </div>
               <dx-box>
                 <dxi-item [ratio]="4">
                   <!-- Relevé de factures -->
                   <div class="dx-field field-large">
                     <div class="dx-field-label checkbox-label">{{ 'tiers-clients-releveFactures' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-check-box formControlName="" [readOnly]="readOnlyMode"></dx-check-box>
+                      <dx-check-box formControlName="releveFactures" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                     </div>
                   </div>
                 </dxi-item>
@@ -645,7 +645,7 @@
               <div class="dx-field field-large">
                 <div class="dx-field-label">{{ 'tiers-clients-identifiantFiscal' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="identifiantFiscal" [readOnly]="readOnlyMode">
                   </dx-text-box>
                 </div>
               </div>
@@ -676,7 +676,7 @@
               <div class="dx-field field-large">
                 <div class="dx-field-label">{{ 'tiers-clients-referenceCoface' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="referenceCoface" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="referenceCoface" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                     <dx-validator name="{{ 'tiers-clients-referenceCoface' | localize }}">
                       <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                     </dx-validator>
@@ -691,7 +691,7 @@
                       <div class="dx-field field-large">
                         <div class="dx-field-label">{{ 'tiers-clients-agrement' | localize }}</div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="agrement"
+                          <dx-number-box formControlName="agrement"
                            [readOnly]="readOnlyMode || cofaceBlocked"
                            (onValueChanged)="onCofaceChange()"
                            >
@@ -699,7 +699,7 @@
                               <dxi-validation-rule type="numeric"></dxi-validation-rule>
                               <dxi-validation-rule type="required"></dxi-validation-rule>
                             </dx-validator>
-                          </dx-text-box>
+                          </dx-number-box>
                         </div>
                       </div>
                     </dxi-item>
@@ -711,7 +711,7 @@
                         <div class="dx-field-value">
                           <dx-check-box 
                           formControlName="refusCoface"
-                          [readOnly]="readOnlyMode"
+                          [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
                           (onValueChanged)="onRefusCofaceChange($event)">
                           </dx-check-box>
                         </div>
@@ -726,7 +726,7 @@
                 <div class="dx-field-value">
                   <dx-date-box
                     formControlName="enCoursDateLimite"
-                    [readOnly]="readOnlyMode"
+                    [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
                     type="date"
                     dateSerializationFormat="yyyy-MM-dd"
                   ></dx-date-box>
@@ -738,7 +738,7 @@
                 <div class="dx-field-value">
                   <dx-number-box
                   formControlName="enCoursBlueWhale"
-                  [readOnly]="readOnlyMode"
+                  [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
                   (onValueChanged)="onCofaceChange()"
                   >
                     <dx-validator name="{{ 'tiers-clients-enCoursBlueWhale' | localize }}">
@@ -855,7 +855,7 @@
                   <div class="dx-field field-large">
                     <div class="dx-field-label checkbox-label">{{ 'tiers-clients-consignePalox' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-check-box formControlName="refusCoface" [readOnly]="readOnlyMode"></dx-check-box>
+                      <dx-check-box formControlName="consignePalox" [readOnly]="readOnlyMode"></dx-check-box>
                     </div>
                   </div>
                 </dxi-item>
@@ -884,7 +884,7 @@
                   <div class="dx-field field-large">
                     <div class="dx-field-label checkbox-label">{{ 'tiers-clients-paloxGratuit' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-check-box formControlName="" [readOnly]="readOnlyMode"></dx-check-box>
+                      <dx-check-box formControlName="paloxGratuit" [readOnly]="readOnlyMode"></dx-check-box>
                     </div>
                   </div>
                 </dxi-item>
@@ -896,7 +896,7 @@
               <div class="dx-field field-large">
                 <div class="dx-field-label">{{ 'tiers-clients-fraisMarketing' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="fraisMarketing" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="fraisMarketing" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                     <dx-validator name="{{ 'tiers-clients-fraisMarketing' | localize }}">
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                     </dx-validator>
@@ -909,7 +909,7 @@
                 <div class="dx-field-value">
                   <dx-select-box
                     formControlName="fraisMarketingModeCalcul"
-                    [readOnly]="readOnlyMode"
+                    [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
                     [dataSource]="basesTarif"
                     displayExpr="description"
                     [searchEnabled]="true"
@@ -924,7 +924,7 @@
                   <div class="dx-field field-large">
                     <div class="dx-field-label checkbox-label">{{ 'tiers-clients-fraisExcluArticlePasOrigineFrance' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-check-box formControlName="fraisExcluArticlePasOrigineFrance" [readOnly]="readOnlyMode">
+                      <dx-check-box formControlName="fraisExcluArticlePasOrigineFrance" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                       </dx-check-box>
                     </div>
                   </div>
@@ -937,7 +937,7 @@
               <div class="dx-field field-large">
                 <div class="dx-field-label">{{ 'tiers-clients-fraisPlateforme' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="fraisPlateforme" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="fraisPlateforme" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                     <dx-validator name="{{ 'tiers-clients-fraisPlateforme' | localize }}">
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                     </dx-validator>
@@ -951,7 +951,7 @@
               <div class="dx-field-value">
                 <dx-select-box
                   formControlName="conditionVente"
-                  [readOnly]="readOnlyMode"
+                  [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
                   [dataSource]="conditionsVente"
                   displayExpr="description"
                   [searchEnabled]="true"
@@ -969,7 +969,7 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-debloquerEnvoieJour' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="debloquerEnvoieJour" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="debloquerEnvoieJour" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                   </div>
                 </div>
               </dxi-item>
@@ -979,7 +979,7 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-clotureAutomatique' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="clotureAutomatique" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="clotureAutomatique" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                   </div>
                 </div>
               </dxi-item>
@@ -990,7 +990,7 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-detailAutomatique' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="detailAutomatique" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="detailAutomatique" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                   </div>
                 </div>
               </dxi-item>
@@ -1000,7 +1000,7 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-fraisRamasse' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="fraisRamasse" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="fraisRamasse" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                   </div>
                 </div>
               </dxi-item>
@@ -1011,7 +1011,7 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-venteACommission' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="venteACommission" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="venteACommission" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                   </div>
                 </div>
               </dxi-item>
@@ -1025,7 +1025,7 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-blocageAvoirEdi' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-check-box formControlName="blocageAvoirEdi" [readOnly]="readOnlyMode"></dx-check-box>
+                    <dx-check-box formControlName="blocageAvoirEdi" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                   </div>
                 </div>
               </dxi-item>
@@ -1037,7 +1037,7 @@
             <div class="dx-field field-large">
               <div class="dx-field-label">{{ 'tiers-clients-ifco' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="ifco" [readOnly]="readOnlyMode">
+                <dx-text-box formControlName="ifco" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                   <dx-validator name="{{ 'tiers-clients-ifco' | localize }}">
                     <dxi-validation-rule type="stringLength" max="10"></dxi-validation-rule>
                   </dx-validator>
@@ -1050,7 +1050,7 @@
               <div class="dx-field-value">
                 <dx-date-box
                   formControlName="dateDebutIfco"
-                  [readOnly]="readOnlyMode"
+                  [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
                   type="date"
                   dateSerializationFormat="yyyy-MM-dd"
                 ></dx-date-box>
@@ -1060,7 +1060,7 @@
             <div class="dx-field field-large">
               <div class="dx-field-label">{{ 'tiers-clients-lieuFonctionEan' | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
+                <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                   <dx-validator name="{{ 'tiers-clients-lieuFonctionEan' | localize }}">
                     <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
                   </dx-validator>
