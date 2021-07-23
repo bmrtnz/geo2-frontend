@@ -60,7 +60,7 @@
               <div class="dx-field-value">
                 <dx-text-box
                 formControlName="code"
-                [readOnly]="!createMode || mandatoryCode"
+                [readOnly]="!createMode"
                 [inputAttr]="{'style':  'text-transform: uppercase'}"
                 >
                   <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
@@ -295,7 +295,7 @@
                 formControlName="typePalette"
                 [readOnly]="readOnlyMode"
                 [dataSource]="typesPalette"
-                displayExpr="description"
+                [displayExpr]="displayIDBefore"
                 [searchEnabled]="true"
                 [searchExpr]="['id','description']"
               ></dx-select-box>
@@ -310,10 +310,22 @@
                 formControlName="incoterm"
                 [readOnly]="readOnlyMode"
                 [dataSource]="incoterms"
-                displayExpr="description"
+                [displayExpr]="displayIDBefore"
                 [searchEnabled]="true"
                 [searchExpr]="['id','description']"
               ></dx-select-box>
+            </div>
+          </div>
+
+          <!-- gestionnaire CHEP -->
+          <div class="dx-field">
+            <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireChep' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-text-box formControlName="gestionnaireChep" [readOnly]="readOnlyMode">
+                <dx-validator name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}">
+                  <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
+                </dx-validator>
+              </dx-text-box>
             </div>
           </div>
 
@@ -472,18 +484,6 @@
             [selectedIndex]="-1"
           >
             <dxi-item title="{{ 'tiers-entrepots-details-groupe-autres' | localize }}">
-
-              <!-- gestionnaire CHEP -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireChep' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="gestionnaireChep" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}">
-                      <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-text-box>
-                </div>
-              </div>
 
               <!-- référence n° CHEP -->
               <div class="dx-field">

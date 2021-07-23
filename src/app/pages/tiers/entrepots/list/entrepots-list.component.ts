@@ -45,10 +45,14 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
   }
 
   ngOnInit() {
+    // Affichage nom client à côté Entrepôts
     this.clientID = this.route.snapshot.paramMap.get('client');
-    this.clientsService.getOne(this.clientID).subscribe(res => {
-      this.clientName = res.data.client.raisonSocial;
-    });
+    if (this.clientID) {
+      this.clientsService.getOne(this.clientID).subscribe(res => {
+        this.clientName = res.data.client.raisonSocial;
+      });
+    }
+
     this.entrepots = this.entrepotsService.getDataSource();
     this.enableFilters();
     this.detailedFields = this.entrepotsService.model.getDetailedFields()
