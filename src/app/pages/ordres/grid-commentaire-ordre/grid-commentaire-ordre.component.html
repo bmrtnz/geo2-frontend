@@ -11,7 +11,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.CommentaireOrdre, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.CommentaireOrdre, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->

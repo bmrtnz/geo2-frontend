@@ -13,7 +13,7 @@
     }"
     (onContentReady)="sortGrid()"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Envois, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Envois, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->

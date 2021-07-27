@@ -7,7 +7,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLigneDetails,enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Détail expéditions', $event, gridConfiguratorService.Grid.OrdreLigneDetails,enableFilters.bind(this))"
     scrolling="{
       useNative:false,
       showScrollBar:'always'

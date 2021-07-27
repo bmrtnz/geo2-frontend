@@ -12,7 +12,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLigneLogistique,enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Synthèse expéditions', $event, gridConfiguratorService.Grid.OrdreLigneLogistique,enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->

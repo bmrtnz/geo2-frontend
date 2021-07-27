@@ -7,11 +7,12 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    (onContentReady)="onContentReady()"
     scrolling="{
       useNative:false,
       showScrollBar:'always'
     }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreSaveLog, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.OrdreSaveLog, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->

@@ -14,6 +14,8 @@
 <dx-box>
     <dxi-item [ratio]="0.1"></dxi-item>
     <dxi-item [ratio]="0.7" class="left-buttons-box" [visible]="!this.isIndexTab">
+        <span class="top-order-number">{{ fullOrderNumber }}</span>
+        <br>
         <dx-button
             class="black"
             data-accordion="articles"
@@ -135,7 +137,7 @@
                                     <!-- </dxi-item> -->
                                     <dxi-item [ratio]="8">
 
-                                        <h2 *ngIf="i">
+                                        <h2 class="no-margin-top" *ngIf="i">
                                             <span class="order-number">{{ content.tabTitle }}</span>
                                             <span>
                                                 <span *ngIf="linkedOrdersSearch" class="search-linkedOrders">Recherche ordres liés...</span>
@@ -148,8 +150,8 @@
                                                 </dx-button>
                                             </span>
                                         </h2>
-                                        <span *ngIf="i" class="order-id">{{ 'ordres-ref' | localize }} : {{ content.id }}</span>
-                                        <div class="right" *ngIf="i">
+                                        <!-- <span *ngIf="i" class="order-id">{{ 'ordres-ref' | localize }} : {{ content.id }}</span> -->
+                                        <div class="right up-twenty-px" *ngIf="i">
                                             <dx-button class="upperButton subButton submit "
                                                 type="default"
                                                 text="{{ 'btn-valider' | localize }}"
@@ -213,10 +215,10 @@
                                             <app-grid-historique (ordreSelected)="pushTab($event)"></app-grid-historique>
                                         </div>
                                         <div class="order-tabs" *ngIf="i">
-                                            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+                                            <div class="dx-form-group no-padding-bottom dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-infos' | localize }}</span>
-
-                                                <div class="dx-form-group-content">
+                                                <span class="order-id">&nbsp;&nbsp;{{ 'ordres-ref' | localize }} : {{ content.id }}</span>
+                                                <div class="dx-form-group-content no-padding-bottom">
                                                     <dx-box>
                                                         <dxi-item [ratio]="4">
                                                             <!-- Client -->
@@ -324,14 +326,14 @@
                                                                 </div>
                                                                 </dxi-item>
                                                             </dx-accordion>
-                                                            <dx-accordion
+                                                            <!-- <dx-accordion
                                                             [collapsible]="true"
                                                             [multiple]="false"
                                                             [selectedIndex]="-1"
                                                             >
-                                                                <dxi-item title="{{ 'ordres-instructionsLogistiques' | localize }}">
+                                                                <dxi-item title="{{ 'ordres-instructionsLogistiques' | localize }}"> -->
                                                                 <!-- Instructions Logistique -->
-                                                                <div class="dx-field">
+                                                                <!-- <div class="dx-field">
                                                                     <div class="dx-field-label">{{ 'ordres-instructionsLogistiques' | localize }}</div>
                                                                     <div class="dx-field-value">
                                                                     <dx-text-box formControlName="instructionsLogistiques">
@@ -342,9 +344,9 @@
                                                                     </div>
                                                                 </div>
                                                                 </dxi-item>
-                                                            </dx-accordion>
+                                                            </dx-accordion> -->
                                                         </dxi-item>
-                                                        <dxi-item [ratio]="1"></dxi-item>
+                                                        <dxi-item [ratio]="0.4"></dxi-item>
                                                         <dxi-item [ratio]="4">
                                                             <dx-box>
                                                                 <dxi-item [ratio]="4">
@@ -436,16 +438,35 @@
                                                                 <dxi-item [ratio]="4">
                                                                 </dxi-item>
                                                             </dx-box>
-                                                                <div class="dx-field field-large">
-                                                                    <div class="dx-field-label">{{ 'ordres-commentaireUsageInterne' | localize }}</div>
+                                                            <div class="dx-field">
+                                                                <div class="dx-field-label">{{ 'ordres-commentaireUsageInterne' | localize }}</div>
+                                                                <div class="dx-field-value small-font">
+                                                                    <dx-text-box formControlName="commentaireUsageInterne">
+                                                                    <dx-validator name="{{ 'ordres-commentaireUsageInterne' | localize }}">
+                                                                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                                                                    </dx-validator>
+                                                                    </dx-text-box>
+                                                                </div>
+                                                            </div>
+                                                            <dx-accordion
+                                                            [collapsible]="true"
+                                                            [multiple]="false"
+                                                            [selectedIndex]="-1"
+                                                            >
+                                                                <dxi-item title="{{ 'ordres-instructionsLogistiques' | localize }}">
+                                                                <!-- Instructions Logistique -->
+                                                                <div class="dx-field">
+                                                                    <div class="dx-field-label">{{ 'ordres-instructionsLogistiques' | localize }}</div>
                                                                     <div class="dx-field-value">
-                                                                        <dx-text-area formControlName="commentaireUsageInterne">
-                                                                        <dx-validator name="{{ 'ordres-commentaireUsageInterne' | localize }}">
-                                                                            <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                                                                    <dx-text-box formControlName="instructionsLogistiques">
+                                                                        <dx-validator name="{{ 'ordres-instructionsLogistiques' | localize }}">
+                                                                        <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
                                                                         </dx-validator>
-                                                                        </dx-text-area>
+                                                                    </dx-text-box>
                                                                     </div>
                                                                 </div>
+                                                                </dxi-item>
+                                                            </dx-accordion>
                                                         </dxi-item>
                                                     </dx-box>
 
@@ -470,21 +491,23 @@
                                                 <dx-button class="upperButton subButton shiftedRight"
                                                     type="default"
                                                     height="auto"
-                                                    icon="material-icons loupe"
+                                                    icon="material-icons info"
                                                     text="{{ (ordresLignesViewExp ? 'btn-ordreLignes' : 'btn-detailExp') | localize }}"
                                                     (onClick)="detailExp()"
                                                 ></dx-button>
                                                 <div style="clear:both"></div>
                                                 <div class="dx-form-group-content">
-                                                    <app-grid-ordre-ligne-logistique *ngIf="!ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-ordre-ligne-logistique>
-                                                    <app-grid-lignes *ngIf="!ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-lignes>
+                                                    <app-grid-ordre-ligne-logistique [ordre]="getSelectedOrdre()"></app-grid-ordre-ligne-logistique>
+                                                    <div class="grid-separator"></div>
+                                                    <app-grid-lignes [ordre]="getSelectedOrdre()"></app-grid-lignes>
+                                                    <div *ngIf="ordresLignesViewExp" class="grid-separator"></div>
                                                     <app-grid-lignes-details *ngIf="ordresLignesViewExp" [ordre]="getSelectedOrdre()"></app-grid-lignes-details>
                                                 </div>
 
                                             </div>
 
                                             <div class="logistique-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-logistique' | localize }}</span>
+                                                <span class="dx-form-group-caption accordion-title">{{ 'ordres-details-groupe-logistique' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="logistique"
                                                 [collapsible]="true"
@@ -525,7 +548,7 @@
                                             </div>
 
                                             <div class="litiges-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-litiges' | localize }}</span>
+                                                <span class="dx-form-group-caption accordion-title">{{ 'ordres-details-groupe-litiges' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="litiges"
                                                 [collapsible]="true"
@@ -540,7 +563,7 @@
                                             </div>
 
                                             <div class="synthese-field accordion3 dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-synthese' | localize }}</span>
+                                                <span class="dx-form-group-caption accordion-title">{{ 'ordres-details-groupe-synthese' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="synthese"
                                                 [collapsible]="true"
@@ -559,7 +582,7 @@
                                             </div>
 
                                             <div class="fluxdocs-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-fluxdocs' | localize }}</span>
+                                                <span class="dx-form-group-caption accordion-title">{{ 'ordres-details-groupe-fluxdocs' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="fluxdocs"
                                                 [collapsible]="true"
@@ -575,7 +598,7 @@
                                             </div>
 
                                             <div class="CQ-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-CQ' | localize }}</span>
+                                                <span class="dx-form-group-caption accordion-title">{{ 'ordres-details-groupe-CQ' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="CQ"
                                                 [collapsible]="true"
@@ -590,7 +613,7 @@
                                                 </dx-accordion>
                                             </div>
                                             <div class="commentaires-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-commentaires' | localize }}</span>
+                                                <span class="dx-form-group-caption accordion-title">{{ 'ordres-details-groupe-commentaires' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="commentaires"
                                                 [collapsible]="true"
@@ -606,7 +629,7 @@
                                             </div>
 
                                             <div class="log-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-                                                <span class="dx-form-group-caption">{{ 'ordres-details-groupe-log' | localize }}</span>
+                                                <span class="dx-form-group-caption accordion-title">{{ 'ordres-details-groupe-log' | localize }}</span>
                                                 <dx-accordion
                                                 data-name="log"
                                                 [collapsible]="true"

@@ -40,8 +40,17 @@ export class GridSaveLogComponent implements OnChanges {
 
   enableFilters() {
     if (this.ordre) {
+      // console.log('ngOnChanges')
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
-      this.dataSource.reload();
+      this.dataSource.reload()
+      // .then(
+      //   res => {
+      //     if (res.length) {console.log(res)}
+      //   }
+      // )
     }
+  }
+
+  onContentReady() {
   }
 }

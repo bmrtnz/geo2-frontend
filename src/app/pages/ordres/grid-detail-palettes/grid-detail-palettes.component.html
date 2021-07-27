@@ -11,7 +11,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreDetailPalettes, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Détail palettes', $event, gridConfiguratorService.Grid.OrdreDetailPalettes, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -43,7 +43,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('ordreDetailPalettes-' + field.path | localize) || field.name"
+      [caption]="('ordreDetailPalettes-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

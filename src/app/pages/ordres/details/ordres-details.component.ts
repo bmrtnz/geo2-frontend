@@ -53,6 +53,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   linkedOrders: any;
   orders: any;
   numero: string;
+  fullOrderNumber: string;
   linkedOrdersSearch: boolean;
   canDuplicate = false;
   validationPopupVisible = false;
@@ -412,9 +413,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
       this.addLinkedOrders(ordre);
     }
-    if (patch)
-      Object.entries(patch)
-        .forEach(([key]) => this.formGroup.get(key).markAsDirty());
+    if (patch) Object.entries(patch).forEach(([key]) => this.formGroup.get(key).markAsDirty());
+    if (this.tabPanelComponent.selectedIndex) {
+      this.fullOrderNumber = ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : ' ';
+    }
   }
 
   openLinkedOrder(id, numero,campagne) {

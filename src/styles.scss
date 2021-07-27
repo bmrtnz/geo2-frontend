@@ -126,3 +126,8 @@ body {
   }
 }
 
+// Datagrid title customization
+.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
+.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
+    border: 0px;
+}

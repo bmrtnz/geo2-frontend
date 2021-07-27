@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
+import { LocalizationService } from 'app/shared/services';
 import { SummaryType } from 'app/shared/services/api.service';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
@@ -9,6 +10,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-marge',
@@ -36,7 +38,8 @@ export class GridMargeComponent implements OnChanges {
 
   constructor(
     private ordreLignesService: OrdreLignesService,
-    public gridConfiguratorService: GridConfiguratorService
+    public gridConfiguratorService: GridConfiguratorService,
+    public localizeService: LocalizationService
   ) {
     this.detailedFields = this.ordreLignesService.model
     .getDetailedFields(3, this.gridFilter, {forceFilter: true});
@@ -45,7 +48,14 @@ export class GridMargeComponent implements OnChanges {
   async ngOnChanges() {
     const fields = await this.ordreLignesService.model
     .getDetailedFields(1, /^(?:total.*|margeBrute)$/, {forceFilter: true})
-    .toPromise();
+    // .pipe(
+    //   // Filtrage headers possibles columnchooser
+    //   map(fields => {
+    //     return fields.filter( field => 
+    //       !!(this.localizeService.localize('ordreMarge-' + field.path.replaceAll('.', '-'))).length);
+    //   }),
+    // )
+    .toPromise()
     this.totalItems = fields
     .map(({path: column, format: valueFormat}) => ({
       column,

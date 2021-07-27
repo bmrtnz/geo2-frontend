@@ -38,7 +38,7 @@
       showScrollBar:'always'
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdresNonClotures, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.OrdresNonClotures, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
