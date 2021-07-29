@@ -32,14 +32,17 @@
             text="{{ 'ordres-details-logistique' | localize }}"
             (onClick)="scrollToOnClick($event)">
         </dx-button>
-        <dx-button
-            class="black"
-            data-accordion="litiges"
-            height="auto"
-            icon="material-icons offline_bolt"
-            (onClick)="scrollToOnClick($event)"
-            text="{{ 'ordres-details-litiges' | localize }}">
-        </dx-button>
+        <div class="button-container">
+            <div class="dot">{{ dotLitiges }}</div>
+            <dx-button
+                class="black dotted-button"
+                data-accordion="litiges"
+                height="auto"
+                icon="material-icons offline_bolt"
+                (onClick)="scrollToOnClick($event)"
+                text="{{ 'ordres-details-litiges' | localize }}">
+            </dx-button>
+        </div>
         <dx-button
             class="black"
             data-accordion="synthese"
@@ -56,22 +59,28 @@
             (onClick)="scrollToOnClick($event)"
             text="{{ 'ordres-details-fluxdocs' | localize }}">
         </dx-button>
-        <dx-button
-            class="black"
-            data-accordion="CQ"
-            height="auto"
-            icon="material-icons insert_chart_outlined"
-            (onClick)="scrollToOnClick($event)"
-            text="{{ 'ordres-details-CQ' | localize }}">
-        </dx-button>
-        <dx-button
-            class="black"
-            data-accordion="commentaires"
-            height="auto"
-            icon="material-icons message"
-            (onClick)="scrollToOnClick($event)"
-            text="{{ 'ordres-details-commentaires' | localize }}">
-        </dx-button>
+        <div class="button-container">
+            <div class="dot">{{ dotCQ }}</div>
+            <dx-button
+                class="black dotted-button"
+                data-accordion="CQ"
+                height="auto"
+                icon="material-icons insert_chart_outlined"
+                (onClick)="scrollToOnClick($event)"
+                text="{{ 'ordres-details-CQ' | localize }}">
+            </dx-button>
+        </div>
+        <div class="button-container">
+            <div class="dot">{{ dotCommentaires }}</div>
+            <dx-button
+                class="black dotted-button"
+                data-accordion="commentaires"
+                height="auto"
+                icon="material-icons message"
+                (onClick)="scrollToOnClick($event)"
+                text="{{ 'ordres-details-commentaires' | localize }}">
+            </dx-button>
+        </div>
         <dx-button
             class="black"
             data-accordion="log"
@@ -326,25 +335,6 @@
                                                                 </div>
                                                                 </dxi-item>
                                                             </dx-accordion>
-                                                            <!-- <dx-accordion
-                                                            [collapsible]="true"
-                                                            [multiple]="false"
-                                                            [selectedIndex]="-1"
-                                                            >
-                                                                <dxi-item title="{{ 'ordres-instructionsLogistiques' | localize }}"> -->
-                                                                <!-- Instructions Logistique -->
-                                                                <!-- <div class="dx-field">
-                                                                    <div class="dx-field-label">{{ 'ordres-instructionsLogistiques' | localize }}</div>
-                                                                    <div class="dx-field-value">
-                                                                    <dx-text-box formControlName="instructionsLogistiques">
-                                                                        <dx-validator name="{{ 'ordres-instructionsLogistiques' | localize }}">
-                                                                        <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
-                                                                        </dx-validator>
-                                                                    </dx-text-box>
-                                                                    </div>
-                                                                </div>
-                                                                </dxi-item>
-                                                            </dx-accordion> -->
                                                         </dxi-item>
                                                         <dxi-item [ratio]="0.4"></dxi-item>
                                                         <dxi-item [ratio]="4">
@@ -573,8 +563,11 @@
                                                     <dxi-item>
                                                         <div class="dx-form-group-content">
                                                             <app-grid-lignes-totaux-detail [ordre]="getSelectedOrdre()"></app-grid-lignes-totaux-detail>
+                                                            <div class="grid-separator"></div>
                                                             <app-grid-detail-palettes [ordre]="getSelectedOrdre()"></app-grid-detail-palettes>
+                                                            <div class="grid-separator"></div>
                                                             <app-grid-marge [ordre]="getSelectedOrdre()"></app-grid-marge>
+                                                            <div class="grid-separator"></div>
                                                             <app-grid-frais [ordre]="getSelectedOrdre()"></app-grid-frais>
                                                         </div>
                                                     </dxi-item>

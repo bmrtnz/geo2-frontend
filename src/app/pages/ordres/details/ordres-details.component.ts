@@ -63,6 +63,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   @ViewChild(DxAutocompleteComponent, { static: false }) autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
   ordresLignesViewExp: boolean;
+  dotLitiges: number;
+  dotCommentaires: number;
+  dotCQ: number;
 
   formGroup = this.fb.group({
     id: [''],
@@ -364,7 +367,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     }
     this.contents.push({
       id: ordre ? ordre.id : 'inconnu',
-      tabTitle: ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : 'Nouvel ordre',
+      tabTitle: this.updateTopLeftOrder(ordre, 'Nouvel ordre')
     });
   }
 
@@ -376,7 +379,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     } else {
       index = param;
     }
-    // const index = this.contents.indexOf(itemData);
 
     // Suppression onglet dans le sessionStorage
     const myData = window.sessionStorage.getItem('openOrders');
@@ -392,8 +394,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     });
 
     this.contents.splice(index, 1);
-    if (index >= this.contents.length)
-      this.tabPanelComponent.selectedIndex = index - 1;
+    if (index >= this.contents.length) this.tabPanelComponent.selectedIndex = index - 1;
 
   }
 
@@ -402,6 +403,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChange({ addedItems }: { addedItems: Content[] }) {
+
+    console.log("onSelectionChange")
+
     this.resetCriteria();
     this.linkedOrders = [];
     this.validationGroup.instance.validate();
@@ -415,8 +419,24 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     }
     if (patch) Object.entries(patch).forEach(([key]) => this.formGroup.get(key).markAsDirty());
     if (this.tabPanelComponent.selectedIndex) {
-      this.fullOrderNumber = ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : ' ';
+      this.fullOrderNumber = this.updateTopLeftOrder(ordre, '')
     }
+
+    // Gestion des pastilles infos boutons gauche
+    if (ordre) {
+      // this.dotLitiges = ordre.hasLitige ? 1 : 0;
+      // this.dotCQ = ordre.cqLignesCount;
+      // this.dotCommentaires = ordre.commentairesOrdreCount;
+      // console.log(this.dotLitiges)
+      // console.log(this.dotCQ)
+      // console.log(this.dotCommentaires)
+    }
+
+  }
+
+  updateTopLeftOrder(ordre, def) {
+    const topLeftOrder = ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : def;
+    return topLeftOrder;
   }
 
   openLinkedOrder(id, numero,campagne) {

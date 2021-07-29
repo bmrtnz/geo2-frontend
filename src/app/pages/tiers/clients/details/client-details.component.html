@@ -946,7 +946,7 @@
               </div>
             </div>
             <!-- Conditions de vente -->
-            <div class="dx-field field-large">
+            <div class="dx-field">
               <div class="dx-field-label">{{ 'tiers-clients-conditionVente' | localize }}</div>
               <div class="dx-field-value">
                 <dx-select-box
@@ -966,7 +966,7 @@
             <dx-box>
               <dxi-item [ratio]="4">
                 <!-- debloquer Envoi Jour -->
-                <div class="dx-field field-large">
+                <div class="dx-field">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-debloquerEnvoieJour' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-check-box formControlName="debloquerEnvoieJour" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
@@ -976,7 +976,7 @@
               <dxi-item [ratio]="1"></dxi-item>
               <dxi-item [ratio]="4">
                 <!-- Clôture automatique -->
-                <div class="dx-field field-large">
+                <div class="dx-field">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-clotureAutomatique' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-check-box formControlName="clotureAutomatique" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
@@ -987,7 +987,7 @@
             <dx-box>
               <dxi-item [ratio]="4">
                 <!-- Envoi auto détail -->
-                <div class="dx-field field-large">
+                <div class="dx-field">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-detailAutomatique' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-check-box formControlName="detailAutomatique" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
@@ -997,7 +997,7 @@
               <dxi-item [ratio]="1"></dxi-item>
               <dxi-item [ratio]="4">
                 <!-- Frais de ramasse -->
-                <div class="dx-field field-large">
+                <div class="dx-field">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-fraisRamasse' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-check-box formControlName="fraisRamasse" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
@@ -1008,7 +1008,7 @@
             <dx-box>
               <dxi-item [ratio]="4">
                 <!-- Vente à commission -->
-                <div class="dx-field field-large">
+                <div class="dx-field">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-venteACommission' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-check-box formControlName="venteACommission" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
@@ -1022,7 +1022,7 @@
             <dx-box>
               <dxi-item [ratio]="4">
                 <!-- blocage Avoir Edi -->
-                <div class="dx-field field-large">
+                <div class="dx-field">
                   <div class="dx-field-label checkbox-label">{{ 'tiers-clients-blocageAvoirEdi' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-check-box formControlName="blocageAvoirEdi" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>

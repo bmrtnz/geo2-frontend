@@ -35,7 +35,7 @@
 ::ng-deep .order-id {
     font-size:15px;
     color:#00759C;
-    float: right;
+    float:right;
 }
 
 ::ng-deep .main-search-container {
@@ -162,38 +162,58 @@ dx-button[type="normal"] { float:right; }
 }
 
 ::ng-deep .accordion-title {
-    position: absolute;
-    z-index: 1;
-    left: 130px;
-    top: auto;
-    margin-top: 12px;
+    position:absolute;
+    z-index:1;
+    left:130px;
+    top:auto;
+    margin-top:12px;
 }
 
+::ng-deep .dx-accordion-item-title .dx-accordion-item-title-caption {
+    left:60px;
+    top:13px !important;
+}
 ::ng-deep .dx-accordion-item-title-caption {
-    text-align: left !important;
+    text-align:left !important;
 }
 
 ::ng-deep .up-twenty-px {
-    margin-top: -50px;
+    margin-top:-50px;
 }
 .no-margin-top {
-    margin-top: 0;
+    margin-top:0;
 }
 .no-padding-bottom {
-    padding-bottom: 0;
+    padding-bottom:0;
 }
 // Grey background for grid headers
 ::ng-deep .order-tabs .dx-datagrid-header-panel, ::ng-deep .order-tabs .dx-toolbar {
-    background: #F5F5F5;
+    background:#F5F5F5;
 }
 .grid-separator {
     width:100%;
     height:15px;
-    // background:#F2F2F2;
 }
-.dx-form-group-content .dx-field {
-    margin-bottom:0;
-}
+
 ::ng-deep .small-font {
     font-size:13px;
+}
+.dot {
+    display:none;
+    position:absolute;
+    right:0;
+    margin:-4px -4px 0 0;
+    height:15px;
+    min-width:15px;
+    padding:0 4px;
+    background:#FE3D2C;
+    border-radius:15px;
+    font-size:12px;
+    line-height:14px;
+    color:white;
+    text-align:center;
+    z-index:1;
+}
+.dotted-button {
+    min-width:100%;
 }
