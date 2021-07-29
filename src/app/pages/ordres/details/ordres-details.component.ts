@@ -63,7 +63,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   @ViewChild(DxAutocompleteComponent, { static: false }) autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
   ordresLignesViewExp: boolean;
-  dotLitiges: number;
+  dotLitiges: string;
   dotCommentaires: number;
   dotCQ: number;
 
@@ -367,7 +367,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     }
     this.contents.push({
       id: ordre ? ordre.id : 'inconnu',
-      tabTitle: this.updateTopLeftOrder(ordre, 'Nouvel ordre')
+      tabTitle: ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : 'Nouvel ordre'
     });
   }
 
@@ -404,13 +404,14 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
 
   onSelectionChange({ addedItems }: { addedItems: Content[] }) {
 
-    console.log("onSelectionChange")
-
     this.resetCriteria();
     this.linkedOrders = [];
     this.validationGroup.instance.validate();
     if (!addedItems.length) return;
+
+    console.log(addedItems[0])
     const { id, ordre, patch } = addedItems[0];
+    
     setTimeout(() => this.isIndexTab = id === INDEX_TAB);
     this.canDuplicate = !!id;
     if (ordre) {
@@ -418,24 +419,20 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       this.addLinkedOrders(ordre);
     }
     if (patch) Object.entries(patch).forEach(([key]) => this.formGroup.get(key).markAsDirty());
-    if (this.tabPanelComponent.selectedIndex) {
-      this.fullOrderNumber = this.updateTopLeftOrder(ordre, '')
-    }
+
+      this.fullOrderNumber = this.updateTopLeftOrder(addedItems[0]);
 
     // Gestion des pastilles infos boutons gauche
     if (ordre) {
-      // this.dotLitiges = ordre.hasLitige ? 1 : 0;
-      // this.dotCQ = ordre.cqLignesCount;
-      // this.dotCommentaires = ordre.commentairesOrdreCount;
-      // console.log(this.dotLitiges)
-      // console.log(this.dotCQ)
-      // console.log(this.dotCommentaires)
+      this.dotLitiges = ordre.hasLitige ? '!' : '';
+      this.dotCQ = ordre.cqLignesCount;
+      this.dotCommentaires = ordre.commentairesOrdreCount;
     }
 
   }
 
-  updateTopLeftOrder(ordre, def) {
-    const topLeftOrder = ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : def;
+  updateTopLeftOrder(info) {
+    const topLeftOrder = (info.id !== "INDEX") ? info.tabTitle : '';
     return topLeftOrder;
   }
 

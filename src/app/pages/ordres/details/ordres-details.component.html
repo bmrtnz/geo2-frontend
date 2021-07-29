@@ -33,7 +33,7 @@
             (onClick)="scrollToOnClick($event)">
         </dx-button>
         <div class="button-container">
-            <div class="dot">{{ dotLitiges }}</div>
+            <div *ngIf="dotLitiges" class="dot">{{ dotLitiges }}</div>
             <dx-button
                 class="black dotted-button"
                 data-accordion="litiges"
@@ -60,7 +60,7 @@
             text="{{ 'ordres-details-fluxdocs' | localize }}">
         </dx-button>
         <div class="button-container">
-            <div class="dot">{{ dotCQ }}</div>
+            <div *ngIf="dotCQ" class="dot">{{ dotCQ }}</div>
             <dx-button
                 class="black dotted-button"
                 data-accordion="CQ"
@@ -71,7 +71,7 @@
             </dx-button>
         </div>
         <div class="button-container">
-            <div class="dot">{{ dotCommentaires }}</div>
+            <div *ngIf="dotCommentaires" class="dot">{{ dotCommentaires }}</div>
             <dx-button
                 class="black dotted-button"
                 data-accordion="commentaires"
@@ -547,7 +547,7 @@
                                                 >
                                                 <dxi-item>
                                                     <app-form-litiges [ordre]="getSelectedOrdre()"></app-form-litiges>
-                                                    <app-grid-litiges-lignes [ordre]="getSelectedOrdre()"></app-grid-litiges-lignes>
+                                                    <app-grid-litiges-lignes *ngIf="dotLitiges" [ordre]="getSelectedOrdre()"></app-grid-litiges-lignes>
                                                 </dxi-item>
                                                 </dx-accordion>
                                             </div>
