@@ -369,6 +369,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       id: ordre ? ordre.id : 'inconnu',
       tabTitle: ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : 'Nouvel ordre'
     });
+
   }
 
   closeTab(param) {
@@ -409,8 +410,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.validationGroup.instance.validate();
     if (!addedItems.length) return;
 
-    console.log(addedItems[0])
-    const { id, ordre, patch } = addedItems[0];
+     const { id, ordre, patch } = addedItems[0];
     
     setTimeout(() => this.isIndexTab = id === INDEX_TAB);
     this.canDuplicate = !!id;
@@ -455,7 +455,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     itemData: Content,
     itemIndex: number,
   }) {
-    if (itemIndex === this.tabPanelComponent.selectedIndex) return;
+    if (itemData.ordre) return;
+    // if (itemIndex === this.tabPanelComponent.selectedIndex) return;
     if (itemData.id === INDEX_TAB) return;
     iif(
       () => !!itemData.id,
