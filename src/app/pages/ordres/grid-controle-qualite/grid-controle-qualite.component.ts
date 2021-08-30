@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -10,13 +10,14 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-controle-qualite',
   templateUrl: './grid-controle-qualite.component.html',
   styleUrls: ['./grid-controle-qualite.component.scss']
 })
-export class GridControleQualiteComponent implements OnChanges {
+export class GridControleQualiteComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -32,7 +33,6 @@ export class GridControleQualiteComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.dataSource = this.cqLignesService.getDataSource();
     this.detailedFields = this.cqLignesService.model
     .getDetailedFields(1, /(?!.*\.id$)/i, {forceFilter: true})
     .pipe(
@@ -44,14 +44,14 @@ export class GridControleQualiteComponent implements OnChanges {
     );
   }
 
-  ngOnChanges() {
-    this.enableFilters();
-  }
-
   enableFilters() {
     if (this.ordre) {
+      this.dataSource = this.cqLignesService.getDataSource();
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
-      this.dataSource.reload();
     }
+  }
+
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : this.dataSource = null;
   }
 }
