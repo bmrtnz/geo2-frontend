@@ -56,6 +56,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   linkedOrders: any;
   orders: any;
   numero: string;
+  fullOrderNumber: string;
   linkedOrdersSearch: boolean;
   canDuplicate = false;
   validationPopupVisible = false;
@@ -66,6 +67,9 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
   ordresLignesViewExp: boolean;
+  dotLitiges: string;
+  dotCommentaires: number;
+  dotCQ: number;
 
   formGroup = this.fb.group({
     id: [''],
@@ -400,6 +404,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
           }`
         : 'Nouvel ordre',
     });
+
   }
 
   closeTab(param) {
@@ -409,7 +414,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     } else {
       index = param;
     }
-    // const index = this.contents.indexOf(itemData);
 
     // Suppression onglet dans le sessionStorage
     const myData = window.sessionStorage.getItem('openOrders');
@@ -434,6 +438,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChange({ addedItems }: { addedItems: Content[] }) {
+
     this.resetCriteria();
     this.linkedOrders = [];
     this.validationGroup.instance.validate();
@@ -445,10 +450,22 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
       this.addLinkedOrders(ordre);
     }
-    if (patch)
-      Object.entries(patch).forEach(([key]) =>
-        this.formGroup.get(key).markAsDirty()
-      );
+    if (patch) Object.entries(patch).forEach(([key]) => this.formGroup.get(key).markAsDirty());
+
+      this.fullOrderNumber = this.updateTopLeftOrder(addedItems[0]);
+
+    // Gestion des pastilles infos boutons gauche
+    if (ordre) {
+      this.dotLitiges = ordre.hasLitige ? '!' : '';
+      this.dotCQ = ordre.cqLignesCount;
+      this.dotCommentaires = ordre.commentairesOrdreCount;
+    }
+
+  }
+
+  updateTopLeftOrder(info) {
+    const topLeftOrder = (info.id !== "INDEX") ? info.tabTitle : '';
+    return topLeftOrder;
   }
 
   openLinkedOrder(id, numero, campagne) {
@@ -471,7 +488,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     itemData: Content;
     itemIndex: number;
   }) {
-    if (itemIndex === this.tabPanelComponent.selectedIndex) return;
+    if (itemData.ordre) return;
+    // if (itemIndex === this.tabPanelComponent.selectedIndex) return;
     if (itemData.id === INDEX_TAB) return;
     iif(
       () => !!itemData.id,

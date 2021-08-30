@@ -17,7 +17,7 @@
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Article)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Article)"
   >
 
     <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>

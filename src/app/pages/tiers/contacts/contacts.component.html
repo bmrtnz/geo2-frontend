@@ -21,7 +21,7 @@
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Contact, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Contact, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->

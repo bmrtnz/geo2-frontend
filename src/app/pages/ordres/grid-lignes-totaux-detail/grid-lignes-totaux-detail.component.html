@@ -11,7 +11,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreLignesTotauxDetail, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Totaux détail', $event, gridConfiguratorService.Grid.OrdreLignesTotauxDetail, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -42,7 +42,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('ordreLignesTotauxDetail-' + field.path | localize) || field.name"
+      [caption]="('ordreLignesTotauxDetail-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

@@ -2,12 +2,14 @@ import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
+import { LocalizationService } from 'app/shared/services';
 import { TracabiliteLignesService } from 'app/shared/services/api/tracabilite-lignes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-detail-palettes',
@@ -30,12 +32,20 @@ export class GridDetailPalettesComponent implements OnChanges {
 
   constructor(
     private tracabiliteLignesService: TracabiliteLignesService,
-    public gridConfiguratorService: GridConfiguratorService
+    public gridConfiguratorService: GridConfiguratorService,
+    public localizeService: LocalizationService
   ) {
     this.dataSource = this.tracabiliteLignesService
     .getDataSource(4, this.gridFilter);
     this.detailedFields = this.tracabiliteLignesService.model
-    .getDetailedFields(5, this.gridFilter, {forceFilter: true});
+    .getDetailedFields(5, this.gridFilter, {forceFilter: true})
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field => 
+          !!(this.localizeService.localize('ordreDetailPalettes-' + field.path.replaceAll('.', '-'))).length);
+      }),
+    );
   }
 
   ngOnChanges() {

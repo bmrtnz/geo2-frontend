@@ -1,4 +1,4 @@
-<h2 class="content-block">{{ 'tiers-entrepots-title' | localize }} ({{ clientName }})
+<h2 class="content-block">{{ 'tiers-entrepots-title' | localize }} {{ clientName }}
   <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
   <div style="clear:both"></div>
 </h2>
@@ -22,7 +22,7 @@
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Entrepot, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Entrepot, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->

@@ -60,7 +60,7 @@
               <div class="dx-field-value">
                 <dx-text-box
                 formControlName="code"
-                [readOnly]="!createMode || mandatoryCode"
+                [readOnly]="!createMode"
                 [inputAttr]="{'style':  'text-transform: uppercase'}"
                 >
                   <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
@@ -104,18 +104,6 @@
                   [searchExpr]="['id','nomUtilisateur']"
                 >
                 </dx-select-box>
-              </div>
-            </div>
-
-            <!-- Mode de livraion -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-entrepots-modeLivraison' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="modeLivraison"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="modesLivraison"
-                ></dx-select-box>
               </div>
             </div>
 
@@ -286,7 +274,24 @@
               </div>
             </div>
           </div>
-
+          <!-- Regime Tva -->
+          <div class="dx-field">
+            <div class="dx-field-label">{{ 'tiers-entrepots-regimeTva' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-select-box
+                formControlName="regimeTva"
+                [readOnly]="readOnlyMode"
+                [dataSource]="regimesTva"
+                displayExpr="description"
+                [searchEnabled]="true"
+                [searchExpr]="['id','description']"
+              >
+              <dx-validator name="{{ 'tiers-entrepots-regimeTva' | localize }}">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dx-validator>
+              </dx-select-box>
+            </div>
+          </div>
           <!-- Type palette -->
           <div class="dx-field">
             <div class="dx-field-label">{{ 'tiers-entrepots-typePalette' | localize }}</div>
@@ -295,7 +300,7 @@
                 formControlName="typePalette"
                 [readOnly]="readOnlyMode"
                 [dataSource]="typesPalette"
-                displayExpr="description"
+                [displayExpr]="displayIDBefore"
                 [searchEnabled]="true"
                 [searchExpr]="['id','description']"
               ></dx-select-box>
@@ -310,13 +315,48 @@
                 formControlName="incoterm"
                 [readOnly]="readOnlyMode"
                 [dataSource]="incoterms"
-                displayExpr="description"
+                [displayExpr]="displayIDBefore"
                 [searchEnabled]="true"
                 [searchExpr]="['id','description']"
               ></dx-select-box>
             </div>
           </div>
-
+          <dx-box>
+            <dxi-item [ratio]="4">
+              <!-- Déclaration transit -->
+              <div class="dx-field field-large">
+                <div class="dx-field-label checkbox-label">{{ 'tiers-entrepots-declarationTransit' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-check-box formControlName="declarationTransit" [readOnly]="readOnlyMode"></dx-check-box>
+                </div>
+              </div>
+            </dxi-item>
+            <dxi-item [ratio]="1"></dxi-item>
+            <dxi-item [ratio]="4">
+            </dxi-item>
+          </dx-box>
+          <!-- gestionnaire CHEP -->
+          <div class="dx-field">
+            <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireChep' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-text-box formControlName="gestionnaireChep" [readOnly]="readOnlyMode">
+                <dx-validator name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}">
+                  <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
+                </dx-validator>
+              </dx-text-box>
+            </div>
+          </div>
+          <!-- référence n° CHEP -->
+          <div class="dx-field">
+            <div class="dx-field-label">{{ 'tiers-entrepots-referenceChep' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-text-box formControlName="referenceChep" [readOnly]="readOnlyMode">
+                <dx-validator name="{{ 'tiers-entrepots-referenceChep' | localize }}">
+                  <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                </dx-validator>
+              </dx-text-box>
+            </div>
+          </div>
           <!-- Indications sur facture -->
           <dx-accordion
             [collapsible]="true"
@@ -343,28 +383,21 @@
 
         </div>
 
-        <!-- Infos commerciales -->
+        <!-- Logistique -->
         <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-          <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-infocomm' | localize }}</span>
+          <span class="dx-form-group-caption">{{ 'tiers-entrepots-details-groupe-logistique' | localize }}</span>
 
           <div class="dx-form-group-content">
 
-            <!-- Regime Tva -->
+            <!-- Mode de livraion -->
             <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-entrepots-regimeTva' | localize }}</div>
+              <div class="dx-field-label">{{ 'tiers-entrepots-modeLivraison' | localize }}</div>
               <div class="dx-field-value">
                 <dx-select-box
-                  formControlName="regimeTva"
+                  formControlName="modeLivraison"
                   [readOnly]="readOnlyMode"
-                  [dataSource]="regimesTva"
-                  displayExpr="description"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','description']"
-                >
-                <dx-validator name="{{ 'tiers-entrepots-regimeTva' | localize }}">
-                  <dxi-validation-rule type="required"></dxi-validation-rule>
-                </dx-validator>
-                </dx-select-box>
+                  [dataSource]="modesLivraison"
+                ></dx-select-box>
               </div>
             </div>
 
@@ -473,30 +506,6 @@
           >
             <dxi-item title="{{ 'tiers-entrepots-details-groupe-autres' | localize }}">
 
-              <!-- gestionnaire CHEP -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireChep' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="gestionnaireChep" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}">
-                      <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-text-box>
-                </div>
-              </div>
-
-              <!-- référence n° CHEP -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-entrepots-referenceChep' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="referenceChep" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-entrepots-referenceChep' | localize }}">
-                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-text-box>
-                </div>
-              </div>
-
               <dx-box>
                 <dxi-item [ratio]="4">
                   <!-- declaration EUR1 -->
@@ -513,7 +522,7 @@
                   <div class="dx-field">
                     <div class="dx-field-label checkbox-label">{{ 'tiers-entrepots-envoieAutomatiqueDetail' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-check-box formControlName="envoieAutomatiqueDetail" [readOnly]="readOnlyMode"></dx-check-box>
+                      <dx-check-box formControlName="envoieAutomatiqueDetail" [readOnly]="readOnlyMode || !authService.currentUser.adminClient"></dx-check-box>
                     </div>
                   </div>
                 </dxi-item>

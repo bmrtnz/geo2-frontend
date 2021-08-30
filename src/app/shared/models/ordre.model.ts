@@ -61,6 +61,9 @@ export class Ordre extends Model {
   @Field() public ETALocation?: string;
   @Field({ model: import('./incoterm.model') }) public incoterm?: Incoterm;
   @Field() public incotermLieu?: string;
+  @Field() public cqLignesCount?: number;
+  @Field() public commentairesOrdreCount?: number;
+  @Field() public hasLitige?: boolean;
 
 }
 

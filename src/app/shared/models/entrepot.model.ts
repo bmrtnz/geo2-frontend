@@ -50,6 +50,7 @@ export class Entrepot extends Model {
   @Field() public lieuFonctionEanDepot: string;
   @Field() public lieuFonctionEanAcheteur: string;
   @Field() public declarationEur1: boolean;
+  @Field() public declarationTransit: boolean;
   @Field() public envoieAutomatiqueDetail: boolean;
   @Field() public controlReferenceClient: string;
   @Field() public mentionClientSurFacture: string;

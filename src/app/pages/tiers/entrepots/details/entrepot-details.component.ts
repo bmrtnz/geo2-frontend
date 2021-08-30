@@ -57,6 +57,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     langue: [''],
     commercial: [''],
     assistante: [''],
+    declarationTransit: [''],
     controlReferenceClient: [''],
     declarationEur1: [''],
     envoieAutomatiqueDetail: [''],
@@ -88,7 +89,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
-  mandatoryCode: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -135,7 +135,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       .pipe(tap(_ => this.formGroup.reset()))
       .subscribe(params => {
         const url = this.route.snapshot.url;
-        this.createMode = url[0].path === 'create';
+        this.createMode = url[0].path === 'create' || (url[2] ? url[2].path === 'create' : false);
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
           this.entrepotsService.getOne(params.id)
@@ -147,23 +147,25 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
             });
         } else {
           this.entrepot = new Entrepot({});
-          this.clientsService.getOne(this.route.snapshot.params.client)
-            .subscribe(
-              result => {
-                // On reprend le code client (si pas existant) pour le code entrepôt
-                const code = result.data.client.code.toUpperCase();
-                const entrepotsSource = this.entrepotsService.getDataSource();
-                entrepotsSource.load().then(res => {
-                  if (!res.length) {
-                    this.mandatoryCode = true;
-                    this.entrepot.code = code;
-                    this.formGroup.patchValue(this.entrepot);
-                  } else {
-                    //
-                  }
-                });
-              }
-            );
+          // In case we create from the full entrepots list (no associated client)
+          if (this.route.snapshot.params.client !== 'null') {
+            this.clientsService.getOne(this.route.snapshot.params.client)
+              .subscribe(
+                result => {
+                  // On reprend le code client (si pas existant) pour le code entrepôt
+                  const code = result.data.client.code.toUpperCase();
+                  const entrepotsSource = this.entrepotsService.getDataSource();
+                  entrepotsSource.load().then(res => {
+                    if (!res.length) {
+                      this.entrepot.code = code;
+                      this.formGroup.patchValue(this.entrepot);
+                    } else {
+                      //
+                    }
+                  });
+                }
+              );
+          }
           this.contentReadyEvent.emit();
         }
       });
@@ -246,6 +248,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     } else {
       this.router.navigate([`/tiers/entrepots`]);
     }
+  }
+
+  displayIDBefore(data) {
+    return data ? data.id + ' ' + data.description : null;
   }
 
   toggleVisible() {

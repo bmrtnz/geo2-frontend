@@ -24,7 +24,7 @@
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.Client, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Client, enableFilters.bind(this))"
   >
 
     <dxo-selection mode="single"></dxo-selection>

@@ -126,3 +126,24 @@ body {
   }
 }
 
+// Datagrid title customization
+.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
+.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
+    border: 0px;
+}
+
+// Reducing space between form fields
+.dx-form-group-content, .dx-accordion-item {
+  .dx-field {
+    margin-bottom:0 !important;
+    .dx-checkbox {
+      margin:0 !important;
+      .dx-checkbox-container {
+        padding-top:19px !important;
+        .dx-checkbox-icon {
+          top:-8px !important;
+        }
+      }
+    }
+  }
+}

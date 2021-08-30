@@ -140,7 +140,7 @@ export class GridConfiguratorService {
    * @param event Event object
    * @param cbk Callback to apply after restoring default state
    */
-  onToolbarPreparing({component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, grid: Grid, cbk?: () => void) {
+  onToolbarPreparing(title, {component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, grid: Grid, cbk?: () => void) {
     toolbarOptions.items.unshift({
       location: 'after',
       widget: 'dxButton',
@@ -153,6 +153,15 @@ export class GridConfiguratorService {
           component.state(defaultState);
           if (cbk) cbk();
         }
+      }
+    }, {
+      // Datagrid title
+      location: 'left',
+      widget: 'dxTextBox',
+      options: {
+        width: 400,
+        readOnly: true,
+        text: title
       }
     });
   }

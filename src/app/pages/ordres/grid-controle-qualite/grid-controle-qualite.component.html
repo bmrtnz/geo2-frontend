@@ -11,7 +11,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.ControleQualite, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Contrôle Qualité', $event, gridConfiguratorService.Grid.ControleQualite, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
@@ -43,7 +43,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
-      [caption]="('ControleQualite-' + field.path | localize) || field.name"
+      [caption]="('ControleQualite-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

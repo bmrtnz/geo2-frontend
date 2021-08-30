@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
+import { LocalizationService } from 'app/shared/services';
 import { SummaryType } from 'app/shared/services/api.service';
 import { OrdreLignesTotauxDetailService } from 'app/shared/services/api/ordres-lignes-totaux-detail.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
@@ -9,6 +10,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-lignes-totaux-detail',
@@ -27,9 +29,17 @@ export class GridLignesTotauxDetailComponent implements OnChanges {
 
   constructor(
     private ordreLignesTotauxDetailService: OrdreLignesTotauxDetailService,
-    public gridConfiguratorService: GridConfiguratorService
+    public gridConfiguratorService: GridConfiguratorService,
+    public localizeService: LocalizationService
   ) {
-    this.detailedFields = this.ordreLignesTotauxDetailService.model.getDetailedFields(1);
+    this.detailedFields = this.ordreLignesTotauxDetailService.model.getDetailedFields(1)
+    .pipe(
+      // Filtrage headers possibles columnchooser
+      map(fields => {
+        return fields.filter( field => 
+          !!(this.localizeService.localize('ordreLignesTotauxDetail-' + field.path.replaceAll('.', '-'))).length);
+      }),
+    );
   }
 
   async ngOnChanges() {

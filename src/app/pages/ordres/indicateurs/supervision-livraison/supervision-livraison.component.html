@@ -71,7 +71,7 @@
       showScrollBar:'always'
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing($event, gridConfiguratorService.Grid.OrdreSupervisionLivraison, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.OrdreSupervisionLivraison, enableFilters.bind(this))"
   >
 
     <!-- Grid configuration -->
