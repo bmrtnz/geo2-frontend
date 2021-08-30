@@ -14,13 +14,14 @@ import { CurrentCompanyService } from 'app/shared/services/current-company.servi
 import Ordre from 'app/shared/models/ordre.model';
 import { LitigesLignesService } from 'app/shared/services/api/litiges-lignes.service';
 import LitigeLigne from 'app/shared/models/litige-ligne.model';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-litiges-lignes',
   templateUrl: './grid-litiges-lignes.component.html',
   styleUrls: ['./grid-litiges-lignes.component.scss']
 })
-export class GridLitigesLignesComponent implements OnInit, OnChanges {
+export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
 
   @Output() public ordreSelected = new EventEmitter<LitigeLigne>();
   @Input() public filter: [];
@@ -38,7 +39,6 @@ export class GridLitigesLignesComponent implements OnInit, OnChanges {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.dataSource = litigesLignesService.getDataSource();
     this.detailedFields = this.litigesLignesService.model.getDetailedFields(3)
     .pipe(
       // Filtrage headers possibles columnchooser
@@ -58,17 +58,17 @@ export class GridLitigesLignesComponent implements OnInit, OnChanges {
     // this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
   }
 
-  ngOnChanges() {
-    this.enableFilters();
-  }
-
   enableFilters() {
     if (this.ordre?.id) {
+      this.dataSource = this.litigesLignesService.getDataSource();
       this.dataSource.filter([
         ['ordreLigne.ordre.id', '=', this.ordre.id],
       ])
-      this.reload();
     }
+  }
+
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : this.dataSource = null;
   }
 
   reload() {

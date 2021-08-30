@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -10,13 +10,14 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-frais',
   templateUrl: './grid-frais.component.html',
   styleUrls: ['./grid-frais.component.scss']
 })
-export class GridFraisComponent implements OnChanges {
+export class GridFraisComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -34,8 +35,6 @@ export class GridFraisComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.dataSource = this.ordresFraisService
-    .getDataSource(2, this.gridFilter);
     this.detailedFields = this.ordresFraisService.model
     .getDetailedFields(3, this.gridFilter, {forceFilter: true})
     .pipe(
@@ -47,15 +46,16 @@ export class GridFraisComponent implements OnChanges {
     )
   }
 
-  ngOnChanges() {
-    this.enableFilters();
-  }
-
   enableFilters() {
     if (this.ordre) {
+      this.dataSource = this.ordresFraisService
+      .getDataSource(2, this.gridFilter);
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
-      this.dataSource.reload();
     }
+  }
+
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : this.dataSource = null;
   }
 }
 

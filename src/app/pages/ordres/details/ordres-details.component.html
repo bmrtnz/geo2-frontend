@@ -544,10 +544,11 @@
                                                 [collapsible]="true"
                                                 [multiple]="false"
                                                 [selectedIndex]="-1"
+                                                (onItemTitleClick)="onAccordionToggled($event,[gridLitigesLignes])"
                                                 >
                                                 <dxi-item>
                                                     <app-form-litiges [ordre]="getSelectedOrdre()"></app-form-litiges>
-                                                    <app-grid-litiges-lignes *ngIf="dotLitiges" [ordre]="getSelectedOrdre()"></app-grid-litiges-lignes>
+                                                    <app-grid-litiges-lignes [hidden]="!dotLitiges" #gridLitigesLignes [ordre]="getSelectedOrdre()"></app-grid-litiges-lignes>
                                                 </dxi-item>
                                                 </dx-accordion>
                                             </div>
@@ -559,16 +560,17 @@
                                                 [collapsible]="true"
                                                 [multiple]="false"
                                                 [selectedIndex]="-1"
+                                                (onItemTitleClick)="onAccordionToggled($event,[gridLTD,gridDetailPalettes,gridMarge,gridFrais])"
                                                 >
                                                     <dxi-item>
                                                         <div class="dx-form-group-content">
-                                                            <app-grid-lignes-totaux-detail [ordre]="getSelectedOrdre()"></app-grid-lignes-totaux-detail>
+                                                            <app-grid-lignes-totaux-detail #gridLTD [ordre]="getSelectedOrdre()"></app-grid-lignes-totaux-detail>
                                                             <div class="grid-separator"></div>
-                                                            <app-grid-detail-palettes [ordre]="getSelectedOrdre()"></app-grid-detail-palettes>
+                                                            <app-grid-detail-palettes #gridDetailPalettes [ordre]="getSelectedOrdre()"></app-grid-detail-palettes>
                                                             <div class="grid-separator"></div>
-                                                            <app-grid-marge [ordre]="getSelectedOrdre()"></app-grid-marge>
+                                                            <app-grid-marge #gridMarge [ordre]="getSelectedOrdre()"></app-grid-marge>
                                                             <div class="grid-separator"></div>
-                                                            <app-grid-frais [ordre]="getSelectedOrdre()"></app-grid-frais>
+                                                            <app-grid-frais #gridFrais [ordre]="getSelectedOrdre()"></app-grid-frais>
                                                         </div>
                                                     </dxi-item>
                                                 </dx-accordion>

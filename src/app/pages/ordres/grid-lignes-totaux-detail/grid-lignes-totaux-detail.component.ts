@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -11,13 +11,14 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-lignes-totaux-detail',
   templateUrl: './grid-lignes-totaux-detail.component.html',
   styleUrls: ['./grid-lignes-totaux-detail.component.scss']
 })
-export class GridLignesTotauxDetailComponent implements OnChanges {
+export class GridLignesTotauxDetailComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -42,22 +43,19 @@ export class GridLignesTotauxDetailComponent implements OnChanges {
     );
   }
 
-  async ngOnChanges() {
+  enableFilters() {
+    if (this.ordre) {
+      this.dataSource = this.ordreLignesTotauxDetailService
+      .getTotauxDetailDataSource(this.ordre.id);
+      this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
+    }
+  }
+
+  async onToggling(toggled: boolean) {
     const fields = await this.detailedFields.toPromise();
     this.totalItems = fields
     .filter( f => f.type === 'Number')
     .map(({path: column}) => ({column, summaryType: SummaryType.SUM}));
-
-    if (!this.ordre) return;
-    this.dataSource = this.ordreLignesTotauxDetailService
-    .getTotauxDetailDataSource(this.ordre.id);
-    this.enableFilters();
-  }
-
-  enableFilters() {
-    if (this.ordre) {
-      this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
-      this.dataSource.reload();
-    }
+    toggled ? this.enableFilters() : this.dataSource = null;
   }
 }

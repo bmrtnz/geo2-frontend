@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -10,13 +10,14 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-detail-palettes',
   templateUrl: './grid-detail-palettes.component.html',
   styleUrls: ['./grid-detail-palettes.component.scss']
 })
-export class GridDetailPalettesComponent implements OnChanges {
+export class GridDetailPalettesComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -35,8 +36,6 @@ export class GridDetailPalettesComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.dataSource = this.tracabiliteLignesService
-    .getDataSource(4, this.gridFilter);
     this.detailedFields = this.tracabiliteLignesService.model
     .getDetailedFields(5, this.gridFilter, {forceFilter: true})
     .pipe(
@@ -48,14 +47,15 @@ export class GridDetailPalettesComponent implements OnChanges {
     );
   }
 
-  ngOnChanges() {
-    this.enableFilters();
-  }
-
   enableFilters() {
     if (this.ordre) {
+      this.dataSource = this.tracabiliteLignesService
+      .getDataSource(4, this.gridFilter);
       this.dataSource.filter([['tracabiliteDetailPalette.ordre.id', '=', this.ordre.id]]);
-      this.dataSource.reload();
     }
+  }
+
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : this.dataSource = null;
   }
 }

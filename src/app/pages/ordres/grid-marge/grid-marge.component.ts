@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -10,14 +10,14 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-marge',
   templateUrl: './grid-marge.component.html',
   styleUrls: ['./grid-marge.component.scss']
 })
-export class GridMargeComponent implements OnChanges {
+export class GridMargeComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   public dataGrid: DxDataGridComponent;
@@ -45,17 +45,19 @@ export class GridMargeComponent implements OnChanges {
     .getDetailedFields(3, this.gridFilter, {forceFilter: true});
   }
 
-  async ngOnChanges() {
+  enableFilters() {
+    if (this.ordre) {
+      this.dataSource = this.ordreLignesService
+      .getSummarisedDatasource(2, this.gridFilter);
+      this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
+    }
+  }
+
+  async onToggling(toggled: boolean) {
     const fields = await this.ordreLignesService.model
     .getDetailedFields(1, /^(?:total.*|margeBrute)$/, {forceFilter: true})
-    // .pipe(
-    //   // Filtrage headers possibles columnchooser
-    //   map(fields => {
-    //     return fields.filter( field => 
-    //       !!(this.localizeService.localize('ordreMarge-' + field.path.replaceAll('.', '-'))).length);
-    //   }),
-    // )
-    .toPromise()
+    .toPromise();
+
     this.totalItems = fields
     .map(({path: column, format: valueFormat}) => ({
       column,
@@ -70,15 +72,7 @@ export class GridMargeComponent implements OnChanges {
         valueFormat: { type: 'percent', precision: 2 },
       });
 
-    this.dataSource = this.ordreLignesService
-    .getSummarisedDatasource(2, this.gridFilter);
-    this.enableFilters();
-  }
+    toggled ? this.enableFilters() : this.dataSource = null;
 
-  enableFilters() {
-    if (this.ordre) {
-      this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
-      this.dataSource.reload();
-    }
   }
 }
