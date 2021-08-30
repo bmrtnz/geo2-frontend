@@ -602,14 +602,17 @@
                                             <div class="log-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
                                                 <span class="dx-form-group-caption">{{ 'ordres-details-groupe-log' | localize }}</span>
                                                 <dx-accordion
-                                                data-name="log"
-                                                [collapsible]="true"
-                                                [multiple]="false"
-                                                [selectedIndex]="-1"
+                                                    data-name="log"
+                                                    [collapsible]="true"
+                                                    [multiple]="false"
+                                                    [selectedIndex]="-1"
+                                                    (onItemTitleClick)="onAccordionToggled($event,[gridSaveLog])"
                                                 >
                                                     <dxi-item>
                                                         <div class="dx-form-group-content">
-                                                            <app-grid-save-log [ordre]="getSelectedOrdre()"></app-grid-save-log>
+                                                            <app-grid-save-log 
+                                                            #gridSaveLog
+                                                            [ordre]="getSelectedOrdre()"></app-grid-save-log>
                                                         </div>
                                                     </dxi-item>
                                                 </dx-accordion>
