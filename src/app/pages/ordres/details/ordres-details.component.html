@@ -612,10 +612,11 @@
                                                 [collapsible]="true"
                                                 [multiple]="false"
                                                 [selectedIndex]="-1"
+                                                (onItemTitleClick)="onAccordionToggled($event,[gridCommentaire])"
                                                 >
                                                     <dxi-item>
                                                         <div class="dx-form-group-content">
-                                                            <app-grid-commentaire-ordre [ordre]="getSelectedOrdre()"></app-grid-commentaire-ordre>
+                                                            <app-grid-commentaire-ordre #gridCommentaire [ordre]="getSelectedOrdre()"></app-grid-commentaire-ordre>
                                                         </div>
                                                     </dxi-item>
                                                 </dx-accordion>

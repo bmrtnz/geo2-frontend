@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import type { Model } from 'app/shared/models/model';
 import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -8,13 +8,14 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-commentaire-ordre',
   templateUrl: './grid-commentaire-ordre.component.html',
   styleUrls: ['./grid-commentaire-ordre.component.scss']
 })
-export class GridCommentaireOrdreComponent implements OnChanges {
+export class GridCommentaireOrdreComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -29,19 +30,18 @@ export class GridCommentaireOrdreComponent implements OnChanges {
     private commentairesOrdresService: CommentairesOrdresService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
-    this.dataSource = this.commentairesOrdresService.getDataSource();
     this.detailedFields = this.commentairesOrdresService.model
     .getDetailedFields(1, /^(?:commentaires|userModification|dateModification)$/i, {forceFilter: true});
   }
 
-  ngOnChanges() {
-    this.enableFilters();
-  }
-
   enableFilters() {
     if (this.ordre) {
+      this.dataSource = this.commentairesOrdresService.getDataSource();
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
-      this.dataSource.reload();
     }
+  }
+
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : this.dataSource = null;
   }
 }
