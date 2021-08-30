@@ -43,7 +43,6 @@ export class GridLogistiquesComponent implements ToggledGrid {
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
       ]);
-      this.dataSource.reload();
     }
   }
 
