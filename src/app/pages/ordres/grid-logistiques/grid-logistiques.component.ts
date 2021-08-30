@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { LocalizationService } from 'app/shared/services';
@@ -8,13 +8,14 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-logistiques',
   templateUrl: './grid-logistiques.component.html',
   styleUrls: ['./grid-logistiques.component.scss']
 })
-export class GridLogistiquesComponent implements OnChanges {
+export class GridLogistiquesComponent implements ToggledGrid {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -26,7 +27,6 @@ export class GridLogistiquesComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
   ) {
-    this.dataSource = ordresLogistiquesService.getDataSource(10, null);
     this.detailedFields = this.ordresLogistiquesService.model.getDetailedFields(6)
     .pipe(
       // Filtrage headers possibles columnchooser
@@ -37,17 +37,18 @@ export class GridLogistiquesComponent implements OnChanges {
     );
   }
 
-  ngOnChanges() {
-    this.enableFilters();
-  }
-
   enableFilters() {
     if (this.ordre) {
+      this.dataSource = this.ordresLogistiquesService.getDataSource(10, null);
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
       ]);
       this.dataSource.reload();
     }
+  }
+
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : this.dataSource = null;
   }
 
 }

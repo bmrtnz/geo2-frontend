@@ -503,6 +503,7 @@
                                                 [collapsible]="true"
                                                 [multiple]="false"
                                                 [selectedIndex]="-1"
+                                                (onItemTitleClick)="onAccordionToggled($event,[gridLogistiques])"
                                                 >
                                                     <dxi-item>
                                                         <dx-box>
@@ -532,7 +533,7 @@
                                                         </dxi-item>
                                                         <dxi-item [ratio]="4"></dxi-item>
                                                         </dx-box>
-                                                        <app-grid-logistiques [ordre]="getSelectedOrdre()"></app-grid-logistiques>
+                                                        <app-grid-logistiques #gridLogistiques [ordre]="getSelectedOrdre()"></app-grid-logistiques>
                                                     </dxi-item>
                                                 </dx-accordion>
                                             </div>
