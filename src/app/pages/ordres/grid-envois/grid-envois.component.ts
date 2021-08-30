@@ -1,26 +1,27 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
 import Envois from 'app/shared/models/envois.model';
+import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import Ordre from 'app/shared/models/ordre.model';
 import { EnvoisService } from 'app/shared/services/api/envois.service';
+import { AuthService } from 'app/shared/services/auth.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
-import {AuthService} from 'app/shared/services/auth.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import Ordre from 'app/shared/models/ordre.model';
-import {ViewDocument} from 'app/shared/components/view-document-popup/view-document-popup.component';
-import notify from 'devextreme/ui/notify';
+import { ToggledGrid } from '../details/ordres-details.component';
 
 @Component({
   selector: 'app-grid-envois',
   templateUrl: './grid-envois.component.html',
   styleUrls: ['./grid-envois.component.scss']
 })
-export class GridEnvoisComponent implements OnInit, OnChanges {
+export class GridEnvoisComponent implements OnInit, ToggledGrid {
 
   @Output() public ordreSelected = new EventEmitter<Envois>();
   @Input() public filter: [];
@@ -41,7 +42,6 @@ export class GridEnvoisComponent implements OnInit, OnChanges {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.dataSource = envoisService.getDataSource();
     this.detailedFields = this.envoisService.model.getDetailedFields(2)
     .pipe(
       // Filtrage headers possibles columnchooser
@@ -69,16 +69,12 @@ export class GridEnvoisComponent implements OnInit, OnChanges {
     // this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
   }
 
-  ngOnChanges() {
-    this.enableFilters();
-  }
-
   enableFilters() {
     if (this.ordre) {
-       this.dataSource.filter([
+      this.dataSource = this.envoisService.getDataSource();
+      this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
       ]);
-      this.reload();
     }
   }
 
@@ -103,4 +99,7 @@ export class GridEnvoisComponent implements OnInit, OnChanges {
     this.ordreSelected.emit(event.data.ordre);
   }
 
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : this.dataSource = null;
+  }
 }
