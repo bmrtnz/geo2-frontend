@@ -13,28 +13,31 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Comm, CommService, Log, LogService } from 'app/shared/services/log.service';
-import { Content, OrdresIndicatorsService, INDEX_TAB } from 'app/shared/services/ordres-indicators.service';
+import { Content, INDEX_TAB, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxAccordionComponent, DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
-import ArrayStore from 'devextreme/data/array_store';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { environment } from 'environments/environment';
 import { iif, of, Subscription } from 'rxjs';
 import { filter, map, mergeMap, take } from 'rxjs/operators';
-import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 let self;
+
+/**
+ * Grid with loading toggled by parent
+ * Don't forget to cancel datasource loading in your component
+ */
+export interface ToggledGrid {
+  onToggling(toggled: boolean);
+}
 
 @Component({
   selector: 'app-ordres-details',
   templateUrl: './ordres-details.component.html',
   styleUrls: ['./ordres-details.component.scss'],
-  providers: [LogService, CommService, OrdresIndicatorsService]
+  providers: [LogService, CommService, OrdresIndicatorsService],
 })
-
 export class OrdresDetailsComponent implements OnInit, OnDestroy {
-
   searchItems: any;
   filter: any;
   isIndexTab = true;
@@ -56,10 +59,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   linkedOrdersSearch: boolean;
   canDuplicate = false;
   validationPopupVisible = false;
-  ordreASupp : string;
+  ordreASupp: string;
   public ordres: DataSource;
   showGridResults: boolean;
-  @ViewChild(DxAutocompleteComponent, { static: false }) autocomplete: DxAutocompleteComponent;
+  @ViewChild(DxAutocompleteComponent, { static: false })
+  autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
   ordresLignesViewExp: boolean;
 
@@ -82,17 +86,21 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     facture: [''],
     factureEDI: [''],
     livre: [''],
-    search: ['']
+    search: [''],
   });
   private formValuesChange: Subscription;
   refreshGrid = new EventEmitter();
-  
-  @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+
+  @ViewChild(FileManagerComponent, { static: false })
+  fileManagerComponent: FileManagerComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
-  @ViewChild(GridSuiviComponent, { static: false }) suiviGrid: GridSuiviComponent;
-  @ViewChild(DxValidationGroupComponent, { static: false }) validationGroup: DxValidationGroupComponent;
-  @ViewChild(DxPopupComponent, { static: false }) validationPopup: DxPopupComponent;
+  @ViewChild(GridSuiviComponent, { static: false })
+  suiviGrid: GridSuiviComponent;
+  @ViewChild(DxValidationGroupComponent, { static: false })
+  validationGroup: DxValidationGroupComponent;
+  @ViewChild(DxPopupComponent, { static: false })
+  validationPopup: DxPopupComponent;
 
   constructor(
     logService: LogService,
@@ -108,7 +116,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     public transporteursService: TransporteursService,
     commService: CommService,
     private fb: FormBuilder,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     self = this;
     this.ordres = ordresService.getDataSource();
@@ -117,11 +125,15 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.commentaires = commService.getComm();
     this.allContents = ordresIndicatorsService.getContents();
     this.contents = ordresIndicatorsService.getContents().slice(0, 1);
-    this.searchItems = ['numero', 'numeroFacture', 'referenceClient', 'client.raisonSocial'];
+    this.searchItems = [
+      'numero',
+      'numeroFacture',
+      'referenceClient',
+      'client.raisonSocial',
+    ];
   }
 
   ngOnInit() {
-
     // this.enableFilters();
     this.resetCriteria();
     this.clients = this.clientsService.getDataSource();
@@ -143,26 +155,28 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.transporteurs = this.transporteursService.getDataSource();
 
     this.route.queryParams
-    .pipe(
-      filter(params => params?.pushordres),
-      mergeMap(params => this.ordresService.getOne(params.pushordres)),
-      filter(response => !this.contents.find(({id}) => id === response.data.ordre.id ))
-    )
-    .subscribe(response => this.pushTab(response.data.ordre));
+      .pipe(
+        filter((params) => params?.pushordres),
+        mergeMap((params) => this.ordresService.getOne(params.pushordres)),
+        filter(
+          (response) =>
+            !this.contents.find(({ id }) => id === response.data.ordre.id)
+        )
+      )
+      .subscribe((response) => this.pushTab(response.data.ordre));
 
-    this.formValuesChange = this.formGroup.valueChanges
-    .subscribe(_ => {
+    this.formValuesChange = this.formGroup.valueChanges.subscribe((_) => {
       if (this.formGroup.pristine) return;
       const selectedIndex = this.tabPanelComponent.selectedIndex;
       const patch = this.ordresService.extractDirty(this.formGroup.controls);
       this.contents[selectedIndex].patch = patch;
-      });
+    });
 
     // On affiche les ordres déjà ouverts le cas échéant
     const myData = window.sessionStorage.getItem('openOrders');
     if (myData !== null) {
       const myOrders = JSON.parse(myData);
-      JSON.parse(myData).forEach(value => {
+      JSON.parse(myData).forEach((value) => {
         this.pushTab(value);
       });
     }
@@ -173,21 +187,37 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       window.sessionStorage.removeItem('orderNumber');
       this.pushTab(order);
     }
-     
+  }
 
+  onAccordionToggled(
+    {
+      overrideTogglingTo = false,
+      itemElement,
+    }: { overrideTogglingTo: boolean; itemElement: HTMLElement },
+    grids: ToggledGrid[]
+  ) {
+    if (!itemElement.dataset.toggled) itemElement.dataset.toggled = 'false';
+    itemElement.dataset.toggled =
+      itemElement.dataset.toggled === 'true' ? 'false' : 'true';
+    if (overrideTogglingTo)
+      itemElement.dataset.toggled = overrideTogglingTo.toString();
+    grids.forEach((grid) =>
+      grid.onToggling(itemElement.dataset.toggled === 'true')
+    );
   }
 
   ngOnDestroy() {
-    if (this.formValuesChange)
-      this.formValuesChange.unsubscribe();
+    if (this.formValuesChange) this.formValuesChange.unsubscribe();
   }
 
   deviseDisplayExpr(item) {
-    return item ? item.description + " (" + item.taux + ")" : null;
+    return item ? item.description + ' (' + item.taux + ')' : null;
   }
 
   searchDisplayExpr(item) {
-    return item ? self.localizeService.localize('rechOrdres-' + item.replaceAll('.', '-')) : null;
+    return item
+      ? self.localizeService.localize('rechOrdres-' + item.replaceAll('.', '-'))
+      : null;
   }
 
   changeSearchCriteria() {
@@ -202,7 +232,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   enableFilters(value) {
-
     const criteria = this.formGroup.get('search').value;
 
     let filter = [
@@ -212,11 +241,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       'and',
       // ['facture', '=', false],
       // 'and',
-      [criteria , 'contains', value]
+      [criteria, 'contains', value],
     ];
 
     this.filter = filter;
-
   }
 
   onSubmit() {
@@ -225,17 +253,16 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       const isNew = !ordre.id;
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
-      this.ordresService.save({ ordre })
-        .subscribe({
-          next: (e) => {
-            notify('Sauvegardé', 'success', 3000);
-            if (isNew) {
-              this.contents.splice(this.tabPanelComponent.selectedIndex, 1);
-              this.pushTab(e.data.saveOrdre);
-            }
-          },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
+      this.ordresService.save({ ordre }).subscribe({
+        next: (e) => {
+          notify('Sauvegardé', 'success', 3000);
+          if (isNew) {
+            this.contents.splice(this.tabPanelComponent.selectedIndex, 1);
+            this.pushTab(e.data.saveOrdre);
+          }
+        },
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
     }
   }
 
@@ -243,38 +270,32 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     if (this.formGroup.pristine && this.formGroup.valid) {
       const ordre = this.ordresService.extractDirty(this.formGroup.controls);
 
-      this.ordresService.clone({ ordre })
-        .subscribe({
-          next: (e) => {
-            notify('Dupliqué', 'success', 3000);
-            this.contents.splice(this.tabPanelComponent.selectedIndex, 1);
-            this.pushTab(e.data.cloneOrdre);
-          },
-          error: () => notify('Echec de la duplication', 'error', 3000),
-        });
+      this.ordresService.clone({ ordre }).subscribe({
+        next: (e) => {
+          notify('Dupliqué', 'success', 3000);
+          this.contents.splice(this.tabPanelComponent.selectedIndex, 1);
+          this.pushTab(e.data.cloneOrdre);
+        },
+        error: () => notify('Echec de la duplication', 'error', 3000),
+      });
     }
   }
 
   onDeleteClick() {
-
     this.validationPopupVisible = true;
-
   }
 
   deleteOrder() {
-
     const ordre = this.ordresService.extractDirty(this.formGroup.controls);
     if (!ordre.id) return;
-    this.ordresService.delete({ ordre })
-      .subscribe({
-        next: _ => {
-          notify('Ordre supprimé', 'success', 3000);
-          this.closeTab(this.tabPanelComponent.selectedIndex);
-          this.suiviGrid.reload();
-        },
-        error: _ => notify('Echec de la suppression', 'error', 3000),
-      });
-
+    this.ordresService.delete({ ordre }).subscribe({
+      next: (_) => {
+        notify('Ordre supprimé', 'success', 3000);
+        this.closeTab(this.tabPanelComponent.selectedIndex);
+        this.suiviGrid.reload();
+      },
+      error: (_) => notify('Echec de la suppression', 'error', 3000),
+    });
   }
 
   fileManagerClick() {
@@ -282,47 +303,57 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   scrollToOnClick(e) {
-
     const key = e.element.dataset.accordion;
     const extractField = '.' + key + '-field';
     const Element = document.querySelectorAll(extractField);
     const tabIndex = this.tabPanelComponent.selectedIndex - 1;
 
     // Find corresponding accordion to scroll to/open
-    const Accordion = this.accordion.toArray().filter(v => v.element.nativeElement.dataset.name === key )[tabIndex];
- 
+    const Accordion = this.accordion
+      .toArray()
+      .filter((v) => v.element.nativeElement.dataset.name === key)[tabIndex];
+
     // Some elements are not accordion type
     if (Accordion) {
-      Accordion.instance.expandItem(0).then((r) => Element[tabIndex].scrollIntoView({ behavior: 'smooth' }))
+      Accordion.instance
+        .expandItem(0)
+        .then((r) => Element[tabIndex].scrollIntoView({ behavior: 'smooth' }));
+
+      // Manually firing accordion onItemTitleClick event
+      (Accordion as DxAccordionComponent).onItemTitleClick.emit({
+        itemElement: (Accordion as DxAccordionComponent).instance
+          .element()
+          .querySelector('.dx-accordion-item'),
+          overrideTogglingTo: true,
+      });
     }
     Element[tabIndex].scrollIntoView({ behavior: 'smooth' });
-
   }
 
   addLinkedOrders(ordre) {
-
     // Accole au numéro d'ordre les ordres liés
     // Pour le moment, uniquement basé sur la référence client
 
     this.linkedOrdersSearch = false;
     this.linkedOrders = [];
     const refClt = ordre.referenceClient;
-    if (!refClt) return
+    if (!refClt) return;
 
     this.linkedOrdersSearch = true;
     const numero = ordre.numero;
     const ordresSource = this.ordresService.getDataSource();
     ordresSource.filter(['referenceClient', '=', refClt]);
-    ordresSource.load().then(res => {
+    ordresSource.load().then((res) => {
       this.linkedOrders = [];
       let i = 0;
-      res.forEach(value => {
-        if (numero !== value.numero) {this.linkedOrders.push({ordre:value, criteria:'ref. clt'});}
+      res.forEach((value) => {
+        if (numero !== value.numero) {
+          this.linkedOrders.push({ ordre: value, criteria: 'ref. clt' });
+        }
         i++;
       });
       this.linkedOrdersSearch = false;
-    })
-
+    });
   }
 
   onTabDragStart(e) {
@@ -335,9 +366,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
-
     if (ordre) {
-
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
       if (Object.keys(ordre).length > 5) {
@@ -349,26 +378,31 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         const shortOrder = {
           id: ordre.id,
           numero: ordre.numero,
-          campagne: ordre.campagne ? ordre.campagne.id :null
+          campagne: ordre.campagne ? ordre.campagne.id : null,
         };
         myOrders.push(shortOrder);
         window.sessionStorage.setItem('openOrders', JSON.stringify(myOrders));
       }
-      const knownIndex = this.contents
-        .findIndex(({ id }) => ordre.id === id);
+      const knownIndex = this.contents.findIndex(({ id }) => ordre.id === id);
       if (knownIndex >= 0) {
-        if (this.tabPanelComponent) this.tabPanelComponent.selectedIndex = knownIndex;
+        if (this.tabPanelComponent)
+          this.tabPanelComponent.selectedIndex = knownIndex;
         return;
       }
     }
     this.contents.push({
       id: ordre ? ordre.id : 'inconnu',
-      tabTitle: ordre ? `Ordre N° ${(ordre.campagne ? (ordre.campagne.id ?  ordre.campagne.id : ordre.campagne) + '-' : '') + ordre.numero}` : 'Nouvel ordre',
+      tabTitle: ordre
+        ? `Ordre N° ${
+            (ordre.campagne
+              ? (ordre.campagne.id ? ordre.campagne.id : ordre.campagne) + '-'
+              : '') + ordre.numero
+          }`
+        : 'Nouvel ordre',
     });
   }
 
   closeTab(param) {
-
     let index;
     if (isNaN(param)) {
       index = this.contents.indexOf(param);
@@ -381,7 +415,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     const myData = window.sessionStorage.getItem('openOrders');
     const myOrders = JSON.parse(myData);
     let i = 0;
-    myOrders.forEach(value => {
+    myOrders.forEach((value) => {
       if (this.contents[index].id === value.id) {
         myOrders.splice(i, 1);
         window.sessionStorage.setItem('openOrders', JSON.stringify(myOrders));
@@ -393,7 +427,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.contents.splice(index, 1);
     if (index >= this.contents.length)
       this.tabPanelComponent.selectedIndex = index - 1;
-
   }
 
   disableButton() {
@@ -406,51 +439,48 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.validationGroup.instance.validate();
     if (!addedItems.length) return;
     const { id, ordre, patch } = addedItems[0];
-    setTimeout(() => this.isIndexTab = id === INDEX_TAB);
+    setTimeout(() => (this.isIndexTab = id === INDEX_TAB));
     this.canDuplicate = !!id;
     if (ordre) {
       this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
       this.addLinkedOrders(ordre);
     }
     if (patch)
-      Object.entries(patch)
-        .forEach(([key]) => this.formGroup.get(key).markAsDirty());
+      Object.entries(patch).forEach(([key]) =>
+        this.formGroup.get(key).markAsDirty()
+      );
   }
 
-  openLinkedOrder(id, numero,campagne) {
-
+  openLinkedOrder(id, numero, campagne) {
     const shortOrder = {
       id: id,
       numero: numero,
-      campagne: campagne
+      campagne: campagne,
     };
     this.pushTab(shortOrder);
-
   }
 
   resetCriteria() {
     this.formGroup.get('search').setValue(this.searchItems[0]);
   }
 
-  onTitleRendered({ itemData, itemIndex }: {
-    itemData: Content,
-    itemIndex: number,
+  onTitleRendered({
+    itemData,
+    itemIndex,
+  }: {
+    itemData: Content;
+    itemIndex: number;
   }) {
     if (itemIndex === this.tabPanelComponent.selectedIndex) return;
     if (itemData.id === INDEX_TAB) return;
     iif(
       () => !!itemData.id,
-      this.ordresService
-      .getOne(itemData.id)
-      .pipe(
-        map(res => res.data.ordre),
-      ),
-      of({} as Ordre).pipe(take(1)),
-    )
-      .subscribe(res => {
-        this.contents[itemIndex].ordre = res;
-        this.tabPanelComponent.selectedIndex = itemIndex;
-      });
+      this.ordresService.getOne(itemData.id).pipe(map((res) => res.data.ordre)),
+      of({} as Ordre).pipe(take(1))
+    ).subscribe((res) => {
+      this.contents[itemIndex].ordre = res;
+      this.tabPanelComponent.selectedIndex = itemIndex;
+    });
   }
 
   findOrder(e) {
@@ -462,11 +492,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
         this.showGridResults = true;
       }
     }, 1);
-
   }
 
   hideSearchResults() {
-     this.showGridResults = false;
+    this.showGridResults = false;
   }
 
   public getSelectedOrdre() {
@@ -486,5 +515,4 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   cancelClick() {
     this.validationPopupVisible = false;
   }
-
 }
