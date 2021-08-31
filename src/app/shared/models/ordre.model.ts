@@ -64,6 +64,8 @@ export class Ordre extends Model {
   @Field() public cqLignesCount?: number;
   @Field() public commentairesOrdreCount?: number;
   @Field() public hasLitige?: boolean;
+  @Field() public codeAlphaEntrepot?: string;
+  @Field({ dataType: 'datetime' }) public dateModification?: string;
 
 }
 

@@ -493,7 +493,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "numero",
+        "dataField": "ordre.numero",
         "dataType": "string",
         "visible": true
       },
@@ -520,6 +520,28 @@
         "dataField": "ordre.dateLivraisonPrevue",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "ordre.secteurCommercial.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "ordre.codeClient",
+        "visible": false
+      },
+      {
+        "dataField": "ordre.codeAlphaEntrepot",
+        "visible": false
+      },
+      {
+        "dataField": "ordre.entrepot.raisonSocial",
+        "visible": false
+      },
+      {
+        "dataField": "ordre.dateModification",
+        "sortOrder": "desc",
+        "visible": false
       }
     ]
   },

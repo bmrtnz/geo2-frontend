@@ -17,23 +17,24 @@ export class MruOrdresService extends ApiService implements APIRead {
     this.gqlKeyType = 'GeoMRUOrdreKeyInput';
   }
 
-  private byKey(key) {
-    return new Promise(async (resolve) => {
-      const query = await this.buildGetOne(2);
-      type Response = { MRUOrdre: MRUOrdre };
-      const id = key ? {
-        utilisateur: key.utilisateur || '',
-        ordre: key.ordre || '',
-      } : {};
-      const variables = { id };
-      this.listenQuery<Response>(query, { variables }, res => {
-        if (res.data && res.data.MRUOrdre)
-          resolve(new MRUOrdre(res.data.MRUOrdre));
+  private byKey(depth: number, filter?: RegExp) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne(depth, filter);
+        type Response = { MRUOrdre: MRUOrdre };
+        const id = key ? {
+          utilisateur: key.utilisateur || '',
+          ordre: key.ordre || '',
+        } : {};
+        const variables = { id };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.MRUOrdre)
+            resolve(new MRUOrdre(res.data.MRUOrdre));
+        });
       });
-    });
   }
 
-  getDataSource() {
+  getDataSource(depth = 2, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({
         key: ['utilisateur', 'ordre'],
@@ -46,7 +47,7 @@ export class MruOrdresService extends ApiService implements APIRead {
             });
 
           type Response = { allMRUOrdre: RelayPage<MRUOrdre> };
-          const query = await this.buildGetAll(2);
+          const query = await this.buildGetAll(depth, filter);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
@@ -54,7 +55,7 @@ export class MruOrdresService extends ApiService implements APIRead {
               resolve(this.asInstancedListCount(res.data.allMRUOrdre));
           });
         }),
-        byKey: this.byKey,
+        byKey: this.byKey(depth, filter),
       }),
     });
   }
@@ -97,7 +98,7 @@ export class MruOrdresService extends ApiService implements APIRead {
               resolve(this.asInstancedListCount(res.data.allGroupedMRUOrdre));
           });
         }),
-        byKey: this.byKey,
+        byKey: this.byKey(2),
       }),
     });
   }

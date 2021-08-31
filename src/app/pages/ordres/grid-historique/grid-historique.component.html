@@ -11,7 +11,6 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onContentReady)="sortGrid()"
     (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Derniers ordres ouverts', $event, gridConfiguratorService.Grid.Historique, enableFilters.bind(this))"
   >
