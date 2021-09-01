@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import Ordre, { FactureAvoir } from '../models/ordre.model';
 import { DatePipe } from '@angular/common';
+import { Injectable } from '@angular/core';
+import Ordre from '../models/ordre.model';
 import { AuthService } from './auth.service';
-import { environment } from 'environments/environment';
 import { CurrentCompanyService } from './current-company.service';
 
 export const INDEX_TAB = 'INDEX';
@@ -84,7 +83,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'OrdresNonConfirmes',
-  enabled: false,
+  enabled: true,
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non confirmés',
@@ -207,9 +206,11 @@ export class OrdresIndicatorsService {
         indicator.filter = [
           ...indicator.filter,
           'and',
-          ['version', '<>', 'null'],
+          ['version', 'isnull', 'null'],
           'and',
-          ['factureAvoir', '=', FactureAvoir.AVOIR],
+          ['bonAFacturer', '=', false],
+          'and',
+          ['dateCreation', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
         ];
       }
 
@@ -259,7 +260,7 @@ export class OrdresIndicatorsService {
   }
 
   getIndicatorByName(name: string) {
-    return this.indicators.find(i => i?.id === name);
+    return JSON.parse(JSON.stringify(this.indicators.find(i => i?.id === name)));
   }
 
   getFormatedDate(date) {
