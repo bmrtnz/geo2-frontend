@@ -20,6 +20,7 @@ const contents: Content[] = [{
 
 export class Indicator {
   id: string;
+  enabled?: boolean;
   number?: string;
   parameter: string;
   subParameter: string;
@@ -34,6 +35,7 @@ export class Indicator {
 
 const indicators: Indicator[] = [{
   id: 'SuiviDesOrdres',
+  enabled: true,
   parameter: 'Suivi',
   subParameter: 'des ordres',
   goTo: '/ordres/details',
@@ -42,6 +44,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'SupervisionLivraison',
+  enabled: false,
   fetchCount: true,
   parameter: 'Supervision',
   subParameter: 'livraison',
@@ -51,6 +54,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'BonsAFacturer',
+  enabled: false,
   fetchCount: true,
   parameter: 'Bons',
   subParameter: 'à facturer',
@@ -60,6 +64,7 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 'ClientsDepEncours',
+  enabled: false,
   fetchCount: true,
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
@@ -69,6 +74,7 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 'OrdresNonClotures',
+  enabled: false,
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
@@ -78,6 +84,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'OrdresNonConfirmes',
+  enabled: false,
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non confirmés',
@@ -87,6 +94,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'Litiges',
+  enabled: false,
   fetchCount: true,
   parameter: 'Litiges',
   subParameter: 'en cours',
@@ -96,6 +104,7 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 'Stock',
+  enabled: false,
   parameter: 'Stock',
   subParameter: 'dispo',
   goTo: '/stock',
@@ -104,6 +113,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'PlanningDepart',
+  enabled: false,
   fetchCount: true,
   parameter: 'Planning',
   subParameter: 'départ',
@@ -113,6 +123,7 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'CommandesTransit',
+  enabled: false,
   fetchCount: true,
   parameter: 'Commandes',
   subParameter: 'en transit',
@@ -244,7 +255,7 @@ export class OrdresIndicatorsService {
     return contents;
   }
   getIndicators(): Indicator[] {
-    return this.indicators;
+    return this.indicators.filter( indicator => indicator.enabled );
   }
 
   getIndicatorByName(name: string) {

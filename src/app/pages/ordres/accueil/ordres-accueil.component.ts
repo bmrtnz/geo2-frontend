@@ -76,17 +76,13 @@ export class OrdresAccueilComponent implements OnDestroy {
         tap(indicator => this.indicators.push(indicator)),
         filter(indicator => indicator.loading),
         mergeMap(async indicator => {
+          if (!indicator.fetchCount)
+            return [indicator.id, ''] as [string, string];
+
           const dataSource = this.ordresService.getDataSource();
-          dataSource.filter([
-            ['societe.id', '=', this.currentCompanyService.getCompany().id],
-            'and',
-            indicator.filter,
-          ]);
+          dataSource.filter(indicator.filter);
           await dataSource.load();
-          const value = indicator.fetchCount ?
-            dataSource.totalCount().toString() :
-            '?';
-          return [indicator.id, value] as [string, string];
+          return [indicator.id, dataSource.totalCount().toString()] as [string, string];
         }),
       )
       .subscribe(([id, value]) => {
