@@ -448,6 +448,8 @@ export abstract class ApiService implements OnDestroy {
             case 'startswith': operator = '=ilike='; break;
             case 'endswith': operator = '=ilike='; break;
             case 'notcontains': operator = '=inotlike='; break;
+            case 'isnull': operator = '=isnull='; break;
+            case 'isnotnull': operator = '=isnotnull='; break;
             case '<>': operator = '!='; break;
           }
 
