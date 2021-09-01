@@ -32,7 +32,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     return this.watchGetOneQuery<Response>({variables});
   }
 
-  getDataSource(indicator?: OrdreDatasourceOperation) {
+  getDataSource(indicator?: OrdreDatasourceOperation, depth = 2, filter = this.queryFilter) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -46,7 +46,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(2, this.queryFilter, indicator);
+          const query = await this.buildGetAll(depth, filter, indicator);
           const key: string = indicator ?? 'allOrdre';
           type Response = { [key: string]: RelayPage<Ordre> };
           const variables = this.mapLoadOptionsToVariables(options);

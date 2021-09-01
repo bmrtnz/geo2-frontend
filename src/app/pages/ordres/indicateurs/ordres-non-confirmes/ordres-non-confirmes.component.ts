@@ -30,7 +30,10 @@ export class OrdresNonConfirmesComponent implements OnInit {
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   rowSelected: boolean;
-  
+
+  /* tslint:disable-next-line max-line-length */
+  private gridFilter: RegExp = /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateCreation|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/;
+
   @ViewChild('gridORDRESNONCONFIRMES', { static: false }) gridSUPERVISIONComponent: DxoGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
   
@@ -57,8 +60,9 @@ export class OrdresNonConfirmesComponent implements OnInit {
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
-    this.detailedFields = this.ordresService.model.getDetailedFields();
-    this.dataSource = ordresService.getDataSource();
+    this.detailedFields = this.ordresService.model
+    .getDetailedFields(3, this.gridFilter, {forceFilter: true});
+    this.dataSource = ordresService.getDataSource(null, 2, this.gridFilter);
    }
 
   ngOnInit() {
@@ -79,7 +83,6 @@ export class OrdresNonConfirmesComponent implements OnInit {
     this.initialFilterLengh = filters.length;
     
     this.dataSource.filter(filters);
-    this.dataSource.reload();
 
   }
 
@@ -96,7 +99,6 @@ export class OrdresNonConfirmesComponent implements OnInit {
     //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
     // )
     
-    // console.log(filters)
     this.dataSource.filter(filters);
     this.dataSource.reload();
 

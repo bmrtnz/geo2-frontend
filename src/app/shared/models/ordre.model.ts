@@ -18,6 +18,21 @@ export enum FactureAvoir {
   AVOIR = 'A',
 }
 
+export enum OrdreType {
+  COM = 'COM',
+  ORD = 'ORD',
+  ORI = 'ORI',
+  REF = 'REF',
+  REG = 'REG',
+  REP = 'REP',
+  RGP = 'RGP',
+  RPF = 'RPF',
+  RPO = 'RPO',
+  RPR = 'RPR',
+  UNK = 'UNK',
+  UKT = 'UKT',
+}
+
 @ModelName('Ordre')
 export class Ordre extends Model {
 
@@ -66,6 +81,8 @@ export class Ordre extends Model {
   @Field() public hasLitige?: boolean;
   @Field() public codeAlphaEntrepot?: string;
   @Field({ dataType: 'datetime' }) public dateModification?: string;
+  @Field({ dataType: 'datetime' }) public dateCreation?: string;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public type?: OrdreType;
 
 }
 
