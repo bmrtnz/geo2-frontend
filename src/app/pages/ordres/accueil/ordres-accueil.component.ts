@@ -54,25 +54,13 @@ export class OrdresAccueilComponent implements OnDestroy {
       );
 
     const selectIndicators = this.indicatorsChange
-      .pipe(startWith(ordresIndicatorsService.getIndicators()),tap(indicators=>{
-        authService.currentUser.configTuilesOrdres = {indicators};
-        this.utilisateursService.save({
-          utilisateur: {
-            nomUtilisateur: authService.currentUser.nomUtilisateur,
-            configTuilesOrdres: {indicators}
-          }
-        }).subscribe();
-        console.log('configTuilesOrdres : ',authService.currentUser.configTuilesOrdres.indicators)
-        console.log('this.loadedIndicators : ',this.loadedIndicators)
-        if (this.tilesReady) {this.loadedIndicators = authService.currentUser.configTuilesOrdres.indicators}
-        this.tilesReady = true;
-      }));
+      .pipe(startWith(ordresIndicatorsService.getIndicators()));
 
     this.indicatorsSubscription = combineLatest([navigationEndEvent, selectIndicators])
       .pipe(
         tap(_ => this.indicators = []),
         switchMap(([, indicators]) => from(indicators)),
-        map(indicator => ({ ...indicator, loading: !!indicator.filter})),
+        map(indicator => ({ ...indicator, loading: indicator.fetchCount})),
         tap(indicator => this.indicators.push(indicator)),
         filter(indicator => indicator.loading),
         mergeMap(async indicator => {
