@@ -67,7 +67,7 @@ export class OrdresAccueilComponent implements OnDestroy {
           if (!indicator.fetchCount)
             return [indicator.id, ''] as [string, string];
 
-          const dataSource = this.ordresService.getDataSource();
+          const dataSource = indicator.dataSource;
           dataSource.filter(indicator.filter);
           await dataSource.load();
           return [indicator.id, dataSource.totalCount().toString()] as [string, string];

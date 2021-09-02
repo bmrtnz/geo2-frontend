@@ -1,8 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
+import { Observable } from 'rxjs';
+import { OrdresService } from './api/ordres.service';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -30,6 +34,11 @@ export class Indicator {
   warningIcon: string;
   loading: boolean;
   fetchCount?: boolean;
+  dataSource?: DataSource;
+  select?: RegExp;
+  detailedFields?: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  constructor(args) { Object.assign(this, args); }
+  cloneFilter?() { return JSON.parse(JSON.stringify(this.filter)); }
 }
 
 const indicators: Indicator[] = [{
@@ -80,7 +89,9 @@ const indicators: Indicator[] = [{
   goTo: '/ordres/indicateurs/ordresNonClotures',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
-  warningIcon: ''
+  warningIcon: '',
+  /* tslint:disable-next-line max-line-length */
+  select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/,
 }, {
   id: 'OrdresNonConfirmes',
   enabled: true,
@@ -90,7 +101,9 @@ const indicators: Indicator[] = [{
   goTo: '/ordres/indicateurs/ordresNonConfirmes',
   tileBkg: '#5A6382',
   indicatorIcon: 'material-icons help',
-  warningIcon: ''
+  warningIcon: '',
+  /* tslint:disable-next-line max-line-length */
+  select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateCreation|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/,
 }, {
   id: 'Litiges',
   enabled: false,
@@ -141,29 +154,32 @@ export class OrdresIndicatorsService {
   constructor(
     private datePipe: DatePipe,
     private authService: AuthService,
-    public currentCompanyService: CurrentCompanyService
+    public currentCompanyService: CurrentCompanyService,
+    public ordresService: OrdresService,
   ) {
     this.indicators = this.indicators.map(indicator => {
 
+      const instance = new Indicator(indicator);
+
       // Filtres communs
-      indicator.filter = [
+      instance.filter = [
         ['valide', '=', true],
         'and',
         ['societe.id', '=', this.currentCompanyService.getCompany().id],
       ];
 
       // Supervision livraison
-      if (indicator.id === 'SupervisionLivraison') {
-        indicator.filter = [
-          ...indicator.filter,
+      if (instance.id === 'SupervisionLivraison') {
+        instance.filter = [
+          ...instance.filter,
           'and',
           ['codeClient', '<>', 'PREORDRE%']];
       }
 
       // Bon a facturer
-      if (indicator.id === 'BonsAFacturer') {
-        indicator.filter = [
-          ...indicator.filter,
+      if (instance.id === 'BonsAFacturer') {
+        instance.filter = [
+          ...instance.filter,
           'and',
           ['bonAFacturer', '=', false],
           'and',
@@ -176,16 +192,19 @@ export class OrdresIndicatorsService {
       }
 
       // Ordres clients depassement en cours
-      if (indicator.id === 'ClientsDepEncours') {
-        indicator.filter = [
-          ...indicator.filter,
+      if (instance.id === 'ClientsDepEncours') {
+        instance.filter = [
+          ...instance.filter,
         ];
       }
 
       // Ordres non cloturés
-      if (indicator.id === 'OrdresNonClotures') {
-        indicator.filter = [
-          ...indicator.filter,
+      if (instance.id === 'OrdresNonClotures') {
+        instance.detailedFields = this.ordresService.model
+        .getDetailedFields(3, instance.select, {forceFilter: true});
+        instance.dataSource = ordresService.getDataSource(null, 2, instance.select);
+        instance.filter = [
+          ...instance.filter,
           'and',
           ['logistiques.typeLieuDepart', '=', 'F'],
           'and',
@@ -200,9 +219,12 @@ export class OrdresIndicatorsService {
       }
 
       // Ordres non confirmés
-      if (indicator.id === 'OrdresNonConfirmes') {
-        indicator.filter = [
-          ...indicator.filter,
+      if (instance.id === 'OrdresNonConfirmes') {
+        instance.detailedFields = this.ordresService.model
+        .getDetailedFields(3, instance.select, {forceFilter: true});
+        instance.dataSource = this.ordresService.getDataSource(null, 2, instance.select);
+        instance.filter = [
+          ...instance.filter,
           'and',
           ['version', 'isnull', 'null'],
           'and',
@@ -213,21 +235,21 @@ export class OrdresIndicatorsService {
       }
 
       // Litiges
-      if (indicator.id === 'Litiges') {
+      if (instance.id === 'Litiges') {
         // Model LitigeLigne
-        indicator.filter = [
+        instance.filter = [
           ['valide', '=', true],
         ];
         if (this.authService.currentUser.limitationSecteur) {
-          indicator.filter.push('and');
-          indicator.filter.push(['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
+          instance.filter.push('and');
+          instance.filter.push(['litige.ordreOrigine.secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial.id]);
         }
       }
 
       // Planning departs
-      if (indicator.id === 'PlanningDepart') {
-        indicator.filter = [
-          ...indicator.filter,
+      if (instance.id === 'PlanningDepart') {
+        instance.filter = [
+          ...instance.filter,
           'and',
           ['logistiques.dateDepartPrevueFournisseur', '>=', this.getFormatedDate(Date.now())],
           // 'and',
@@ -240,13 +262,13 @@ export class OrdresIndicatorsService {
       }
 
       // Commandes en transit
-      if (indicator.id === 'CommandesTransit') {
-        indicator.filter = [
-          ...indicator.filter,
+      if (instance.id === 'CommandesTransit') {
+        instance.filter = [
+          ...instance.filter,
         ];
       }
 
-      return indicator;
+      return instance;
     });
   }
 
@@ -258,7 +280,7 @@ export class OrdresIndicatorsService {
   }
 
   getIndicatorByName(name: string) {
-    return JSON.parse(JSON.stringify(this.indicators.find(i => i?.id === name)));
+    return this.indicators.find(i => i?.id === name);
   }
 
   getFormatedDate(date) {

@@ -1,14 +1,20 @@
-import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
+import {
+  AuthService,
+  LocalizationService,
+  TransporteursService,
+} from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import {
+  Indicator,
+  OrdresIndicatorsService,
+} from 'app/shared/services/ordres-indicators.service';
 import { DxSelectBoxComponent } from 'devextreme-angular';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
@@ -18,32 +24,29 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'ordres-non-confirmes',
   templateUrl: './ordres-non-confirmes.component.html',
-  styleUrls: ['./ordres-non-confirmes.component.scss']
+  styleUrls: ['./ordres-non-confirmes.component.scss'],
 })
-export class OrdresNonConfirmesComponent implements OnInit {
-
+export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
   readonly INDICATOR_NAME = 'OrdresNonConfirmes';
   options: {};
   secteurs: DataSource;
-  indicator: string;
+  indicator: Indicator;
   filter: any;
   columnChooser = environment.columnChooser;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: Observable<
+    ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
+  >;
   rowSelected: boolean;
 
-  /* tslint:disable-next-line max-line-length */
-  private gridFilter: RegExp = /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateCreation|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/;
-
-  @ViewChild('gridORDRESNONCONFIRMES', { static: false }) gridSUPERVISIONComponent: DxoGridComponent;
+  @ViewChild('gridORDRESNONCONFIRMES', { static: false })
+  gridSUPERVISIONComponent: DxoGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
-  
+
   public dataSource: DataSource;
   initialFilterLengh: number;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private datePipe: DatePipe,
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -52,69 +55,56 @@ export class OrdresNonConfirmesComponent implements OnInit {
     public ordresService: OrdresService,
     public authService: AuthService,
     public localizeService: LocalizationService,
-    private ordresIndicatorsService: OrdresIndicatorsService,
+    private ordresIndicatorsService: OrdresIndicatorsService
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ['valide', '=', true],
       'and',
-      ['societes', 'contains', this.currentCompanyService.getCompany().id]
-    ])
-    this.detailedFields = this.ordresService.model
-    .getDetailedFields(3, this.gridFilter, {forceFilter: true});
-    this.dataSource = ordresService.getDataSource(null, 2, this.gridFilter);
-   }
+      ['societes', 'contains', this.currentCompanyService.getCompany().id],
+    ]);
+    this.indicator = this.ordresIndicatorsService.getIndicatorByName(
+      this.INDICATOR_NAME
+    );
+    this.detailedFields = this.indicator.detailedFields;
+    this.dataSource = this.indicator.dataSource;
+  }
 
   ngOnInit() {
     this.enableFilters();
-    
   }
 
   ngAfterViewInit() {
-
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
-
   }
 
   enableFilters() {
-    const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    const filters = this.indicator.cloneFilter();
     this.initialFilterLengh = filters.length;
-    
-    this.dataSource.filter(filters);
 
+    this.dataSource.filter(filters);
   }
 
   updateFilters() {
-
-    // Retrieves the initial filter while removing date criteria
-    const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
-    // filters.splice(-4,4);
-    if (this.secteurSB.value)    filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
-    // filters.push(
-    //   'and',
-    //   ['dateLivraisonPrevue', '>=', this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value)],
-    //   'and',
-    //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
-    // )
-    
+    const filters = this.indicator.cloneFilter();
+    if (this.secteurSB.value)
+      filters.push('and', [
+        'secteurCommercial.id',
+        '=',
+        this.secteurSB.value.id,
+      ]);
     this.dataSource.filter(filters);
     this.dataSource.reload();
-
   }
 
-  onRowClick(event) {
+  onRowClick() {
     this.rowSelected = true;
   }
 
-  onRowDblClick(e) {
-    window.sessionStorage.setItem('orderNumber', JSON.stringify(e));
+  onRowDblClick(event) {
+    window.sessionStorage.setItem('orderNumber', JSON.stringify(event));
     this.router.navigate([`/ordres/details`]);
   }
-
-  onConfirm() {
-
-  }
-
 }
