@@ -1045,20 +1045,52 @@
   "ordres-non-clotures": {
     "columns": [
       {
-        "dataField": "dateLivraisonPrevue",
+        "visibleIndex": 0,
+        "dataField": "numero",
         "visible": true
       },
       {
+        "visibleIndex": 1,
+        "dataField": "codeClient",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
         "dataField": "client.raisonSocial",
         "visible": true
       },
       {
+        "visibleIndex": 3,
+        "dataField": "codeAlphaEntrepot",
+        "visible": false
+      },
+      {
+        "visibleIndex": 4,
         "dataField": "entrepot.raisonSocial",
         "visible": true
       },
       {
+        "visibleIndex": 5,
         "dataField": "referenceClient",
         "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateDepartPrevue",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "dataField": "secteurCommercial.id",
+        "visible": false
+      },
+      {
+        "dataField": "type",
+        "visible": false
       }
     ]
   },
