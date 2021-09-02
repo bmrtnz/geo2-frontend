@@ -73,7 +73,7 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 'OrdresNonClotures',
-  enabled: false,
+  enabled: true,
   fetchCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
@@ -187,17 +187,15 @@ export class OrdresIndicatorsService {
         indicator.filter = [
           ...indicator.filter,
           'and',
-          ['logistiques.expedieStation', '<>', true],
+          ['logistiques.typeLieuDepart', '=', 'F'],
           'and',
-          ['client.usageInterne', '<>', true],
+          ['logistiques.expedieStation', '=', false],
           'and',
-          ['client.detailAutomatique', '=', true],
+          ['codeClient', 'notcontains', 'PREORD%'],
           'and',
-          ['logistiques.dateDepartPrevueFournisseur', '=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
+          ['dateDepartPrevue', '>=', this.datePipe.transform((new Date()).setDate((new Date()).getDate() - 180).valueOf(), 'yyyy-MM-dd')],
           'and',
-          ['lignes.fournisseur.bureauAchat.emailInterlocuteurBW', '<>', 'null'],
-          'and',
-          ['lignes.valide', '=', true],
+          ['bonAFacturer', '=', false],
         ];
       }
 

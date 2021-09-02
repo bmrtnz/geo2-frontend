@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
@@ -36,6 +36,9 @@ export class OrdresNonCloturesComponent implements OnInit {
   
   public dataSource: DataSource;
 
+  /* tslint:disable-next-line max-line-length */
+  private gridFilter: RegExp = /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -56,8 +59,9 @@ export class OrdresNonCloturesComponent implements OnInit {
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
-    this.detailedFields = this.ordresService.model.getDetailedFields();
-    this.dataSource = ordresService.getDataSource();
+    this.detailedFields = this.ordresService.model
+    .getDetailedFields(3, this.gridFilter, {forceFilter: true});
+    this.dataSource = ordresService.getDataSource(null, 2, this.gridFilter);
    }
 
   ngOnInit() {
@@ -78,7 +82,6 @@ export class OrdresNonCloturesComponent implements OnInit {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
 
     this.dataSource.filter(filters);
-    this.dataSource.reload();
 
   }
 
