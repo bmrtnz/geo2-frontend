@@ -32,6 +32,7 @@ export class OrdreLogistique extends Model {
   @Field({model: import('./transporteur.model')}) public transporteurGroupage?: Transporteur;
   @Field() public referenceLogistique?: string;
   @Field() public referenceDocument?: string;
+  @Field() public typeLieuDepart?: string;
 
 }
 
