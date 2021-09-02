@@ -522,6 +522,7 @@
     "ordres-litiges-attente": "En attente",
     "ordres-day": "jour",
     "ordres-days": "jours",
+    "ordre-planning-depart-diff-expe": "Différence sur expédition et/ou sans détail client",
 
     "ordreLignes-id": "Réf. ligne",
     "ordreLignes-ordre-id": "Réf. ordre",

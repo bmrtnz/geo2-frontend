@@ -9,7 +9,7 @@ import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import { DxSelectBoxComponent } from 'devextreme-angular';
+import { DxCheckBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -33,6 +33,7 @@ export class PlanningDepartComponent implements OnInit {
   
   @ViewChild('gridPLANNINGDEPART', { static: false }) gridPLANNINGDEPARTComponent: DxoGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
+  @ViewChild('diffCheckBox', { static: false }) diffCB: DxCheckBoxComponent;
   
   public dataSource: DataSource;
   initialFilterLengh: number;
