@@ -159,8 +159,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                     if (!res.length) {
                       this.entrepot.code = code;
                       this.formGroup.patchValue(this.entrepot);
-                    } else {
-                      //
                     }
                   });
                 }
