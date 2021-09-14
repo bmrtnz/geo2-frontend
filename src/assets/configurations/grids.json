@@ -1369,19 +1369,63 @@
   "planning-depart": {
     "columns": [
       {
+        "visibleIndex": 0,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "codeClient",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeAlphaEntrepot",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "transporteur.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "sommeColisCommandes",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "sommeColisExpedies",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "fournisseur.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
         "dataField": "dateLivraisonPrevue",
         "visible": true
       },
       {
-        "dataField": "client.raisonSocial",
+        "visibleIndex": 12,
+        "dataField": "fournisseurReferenceDOC",
         "visible": true
       },
       {
-        "dataField": "entrepot.raisonSocial",
+        "visibleIndex": 13,
+        "dataField": "expedieStation",
         "visible": true
       },
       {
-        "dataField": "referenceClient",
+        "visibleIndex": 14,
+        "dataField": "assistante.nomUtilisateur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 15,
+        "dataField": "commercial.nomUtilisateur",
         "visible": true
       }
     ]

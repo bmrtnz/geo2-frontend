@@ -1,12 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
+import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
+import { OrdresService } from './api/ordres.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
-import { Observable } from 'rxjs';
-import { OrdresService } from './api/ordres.service';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -125,14 +125,16 @@ const indicators: Indicator[] = [{
   warningIcon: ''
 }, {
   id: 'PlanningDepart',
-  enabled: false,
+  enabled: true,
   fetchCount: true,
   parameter: 'Planning',
   subParameter: 'départ',
   goTo: '/ordres/indicateurs/planningDepart',
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
-  warningIcon: ''
+  warningIcon: '',
+  /* tslint:disable-next-line max-line-length */
+  select: /^(?:id|sommeColisCommandes|sommeColisExpedies|numero|codeClient|codeAlphaEntrepot|versionDetail|dateLivraisonPrevue|logistiques\.(?:fournisseur\.raisonSocial|dateDepartPrevueFournisseur|dateDepartReelleFournisseur|fournisseurReferenceDOC|expedieStation|totalPalettesExpediees|nombrePalettesAuSol|nombrePalettes100x120|nombrePalettes80x120|nombrePalettes60X80)|assistante\.nomUtilisateur|commercial\.nomUtilisateur|transporteur\.raisonSocial)$/,
 }, {
   id: 'CommandesTransit',
   enabled: false,
@@ -155,7 +157,7 @@ export class OrdresIndicatorsService {
     private datePipe: DatePipe,
     private authService: AuthService,
     public currentCompanyService: CurrentCompanyService,
-    public ordresService: OrdresService,
+    private ordresService: OrdresService
   ) {
     this.indicators = this.indicators.map(indicator => {
 
@@ -248,16 +250,18 @@ export class OrdresIndicatorsService {
 
       // Planning departs
       if (instance.id === 'PlanningDepart') {
+        instance.detailedFields = this.ordresService.model
+        .getDetailedFields(2, instance.select, {forceFilter: true});
+        instance.dataSource = this.ordresService
+        .getDataSource(null, 1, instance.select);
         instance.filter = [
           ...instance.filter,
           'and',
-          ['logistiques.dateDepartPrevueFournisseur', '>=', this.getFormatedDate(Date.now())],
-          // 'and',
-          // [
-          //   'logistiques.dateDepartPrevueFournisseur',
-          //   '<',
-          //   this.datePipe.transform((new Date()).setDate((new Date()).getDate() + 1).valueOf(), 'yyyy-MM-dd'),
-          // ],
+          [
+            'logistiques.dateDepartPrevueFournisseur',
+            '<=',
+            this.datePipe.transform((new Date()).setDate((new Date()).getDate()).valueOf(), 'yyyy-MM-dd'),
+          ],
         ];
       }
 

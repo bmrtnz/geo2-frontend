@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
+import { gql, MutationOptions, OperationVariables } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';

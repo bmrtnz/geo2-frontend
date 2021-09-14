@@ -20,12 +20,31 @@
       </div>
     </dxi-item>
     <dxi-item [ratio]=".2"></dxi-item>
-    <dxi-item [ratio]="1" style="justify-content: center;">
+    <dxi-item [ratio]="1.4" style="justify-content: center;">
       <div class="dx-field">
-        <div class="dx-field-label" style="width: 2500px;">
+        <div class="dx-field-label" style="width: 3400px;">
           {{ "ordre-planning-depart-diff-expe" | localize }}
         </div>
-        <dx-check-box #diffCheckBox [value]="false" [width]="40"></dx-check-box>
+        <dx-check-box
+          #diffCheckBox
+          [value]="false"
+          [width]="40"
+          (valueChange)="updateFilters()"
+        ></dx-check-box>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]=".1"></dxi-item>
+    <dxi-item [ratio]="1" style="justify-content: center;">
+      <div class="dx-field">
+        <div class="dx-field-label" style="width: 50px;">{{ "sur" | localize }}</div>
+        <dx-number-box
+          #daysOfService
+          [value]="1"
+          [width]="50"
+          (valueChange)="updateFilters()"
+          (onContentReady)="onDaysOfServiceInputReady()"
+        ></dx-number-box>
+        <div class="dx-field-label">{{ "jours" | localize }}</div>
       </div>
     </dxi-item>
     <dxi-item [ratio]="1"></dxi-item>
@@ -54,7 +73,7 @@
         '',
         $event,
         gridConfiguratorService.Grid.PlanningDepart,
-        enableFilters.bind(this)
+        updateFilters.bind(this)
       )
     "
   >
