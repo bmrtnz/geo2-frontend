@@ -132,27 +132,6 @@
 
           </div>
 
-          <dx-accordion
-            [collapsible]="true"
-            [multiple]="false"
-            [selectedIndex]="-1"
-          >
-            <dxi-item title="{{ 'tiers-transporteurs-indicationFacture' | localize }}">
-
-              <!-- Compte comptable -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-transporteurs-compteComptable' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
-                    <dx-validator name="{{ 'tiers-transporteurs-compteComptable' | localize }}">
-                      <!-- <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCompteComptable"></dxi-validation-rule> -->
-                    </dx-validator>
-                  </dx-text-box>
-                </div>
-              </div>
-            </dxi-item>
-          </dx-accordion>
-
         </div>
 
         <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
@@ -361,6 +340,17 @@
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 ></dx-select-box>
+              </div>
+            </div>
+            <!-- Compte comptable -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-transporteurs-compteComptable' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-transporteurs-compteComptable' | localize }}">
+                    <!-- <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCompteComptable"></dxi-validation-rule> -->
+                  </dx-validator>
+                </dx-text-box>
               </div>
             </div>
 
