@@ -189,6 +189,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             });
         } else {
           this.fournisseur = new Fournisseur({});
+          // Set condit vente
+          this.formGroup.get('conditionVente').setValue('ACHATS');
         }
         this.contentReadyEvent.emit();
       });

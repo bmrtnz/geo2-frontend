@@ -67,17 +67,92 @@
                 <dx-text-box
                 formControlName="id"
                 [readOnly]="!createMode"
-                [inputAttr]="{'style':  'text-transform: uppercase'}"
+                (onValueChanged)="onCodeChange($event)"
                 >
                   <dx-validator name="{{ 'tiers-transporteurs-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" max="13"></dxi-validation-rule>
+                    <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
                     <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
+            <!-- Lieu fonction EAN -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-transporteurs-lieuFonctionEan' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode"></dx-text-box>
+              </div>
+            </div>
+            <!-- Client raison sociale -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSocial-raisonSocial' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="clientRaisonSocial"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="clientsRaisonSocial"
+                  displayExpr="raisonSocial"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','raisonSocial']"
+                >
+                </dx-select-box>
+              </div>
+            </div>
+            <!-- Langue -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-transporteurs-langue' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-select-box
+                  formControlName="langue"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="pays"
+                  displayExpr="description"
+                  [searchEnabled]="true"
+                  [searchExpr]="['id','description']"
+                >
+                  <dx-validator name="{{ 'tiers-transporteurs-langue' | localize }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-select-box>
+              </div>
+            </div>
+            <!-- tvaCee -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-transporteurs-tvaCee' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="tvaCee" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-transporteurs-tvaCee' | localize }}">
+                    <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
               </div>
             </div>
 
           </div>
+
+          <dx-accordion
+            [collapsible]="true"
+            [multiple]="false"
+            [selectedIndex]="-1"
+          >
+            <dxi-item title="{{ 'tiers-transporteurs-indicationFacture' | localize }}">
+
+              <!-- Compte comptable -->
+              <div class="dx-field">
+                <div class="dx-field-label">{{ 'tiers-transporteurs-compteComptable' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode">
+                    <dx-validator name="{{ 'tiers-transporteurs-compteComptable' | localize }}">
+                      <!-- <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCompteComptable"></dxi-validation-rule> -->
+                    </dx-validator>
+                  </dx-text-box>
+                </div>
+              </div>
+            </dxi-item>
+          </dx-accordion>
+
         </div>
 
         <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
@@ -183,86 +258,6 @@
       </dxi-item>
       <dxi-item [ratio]="0.2"></dxi-item>
       <dxi-item [ratio]="4">
-        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-          <span class="dx-form-group-caption">{{ 'tiers-transporteurs-details-groupe-references' | localize }}</span>
-
-          <div class="dx-form-group-content">
-
-            <!-- Lieu fonction EAN -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-transporteurs-lieuFonctionEan' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode"></dx-text-box>
-              </div>
-            </div>
-
-            <!-- Client raison sociale -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-transporteurs-clientRaisonSocial-raisonSocial' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="clientRaisonSocial"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="clientsRaisonSocial"
-                  displayExpr="raisonSocial"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','raisonSocial']"
-                >
-                </dx-select-box>
-              </div>
-            </div>
-
-            <!-- Langue -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-transporteurs-langue' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="langue"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="pays"
-                  displayExpr="description"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','description']"
-                >
-                  <dx-validator name="{{ 'tiers-transporteurs-langue' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-select-box>
-              </div>
-            </div>
-
-            <!-- tvaCee -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-transporteurs-tvaCee' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="tvaCee" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-transporteurs-tvaCee' | localize }}">
-                    <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-          </div>
-
-          <dx-accordion
-            [collapsible]="true"
-            [multiple]="false"
-            [selectedIndex]="-1"
-          >
-            <dxi-item title="{{ 'tiers-transporteurs-indicationFacture' | localize }}">
-
-              <!-- Compte comptable -->
-              <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-transporteurs-compteComptable' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-text-box formControlName="compteComptable" [readOnly]="readOnlyMode"></dx-text-box>
-                </div>
-              </div>
-            </dxi-item>
-          </dx-accordion>
-
-        </div>
 
         <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
           <span class="dx-form-group-caption">{{ 'tiers-transporteurs-details-groupe-paiement' | localize }}</span>
@@ -377,4 +372,5 @@
   </div>
 </form>
 <app-editing-alert></app-editing-alert>
+<app-info-popup customText="Avez-vous joint la lettre d’engagement signée par le transporteur à votre demande (OBLIGATOIRE) ?"></app-info-popup>
 <app-file-manager-popup key="transporteurs" [id]="transporteur?.id"></app-file-manager-popup>

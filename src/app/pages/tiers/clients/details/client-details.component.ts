@@ -334,7 +334,11 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   onCodeChange(e) {
     const code = e.value;
-    if (code.length && this.authService.currentUser.adminClient && this.createMode) {this.formGroup.get('compteComptable').setValue(code);}
+    if (code.length && this.authService.currentUser.adminClient && this.createMode) {
+      this.formGroup.get('compteComptable').markAsDirty()
+      this.formGroup.get('compteComptable').setValue(code);
+    }
+    
   }
 
   openCloseAccordions(action) {
