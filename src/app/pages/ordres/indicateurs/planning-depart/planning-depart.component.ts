@@ -111,6 +111,7 @@ export class PlanningDepartComponent implements AfterViewInit {
         'or',
         ['versionDetail', '<', '001'],
       ]);
+    this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
     this.dataSource.filter(filters);
     this.dataSource.reload();
   }

@@ -4,7 +4,7 @@ import DataSource from 'devextreme/data/data_source';
 import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
-import { OrdresService } from './api/ordres.service';
+import { OrdreDatasourceOperation, OrdresService } from './api/ordres.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
 
@@ -253,7 +253,7 @@ export class OrdresIndicatorsService {
         instance.detailedFields = this.ordresService.model
         .getDetailedFields(2, instance.select, {forceFilter: true});
         instance.dataSource = this.ordresService
-        .getDataSource(null, 1, instance.select);
+        .getDataSource(OrdreDatasourceOperation.SuiviDeparts, 1, instance.select);
         instance.filter = [
           ...instance.filter,
           'and',
