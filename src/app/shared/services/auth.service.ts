@@ -41,9 +41,9 @@ export class AuthService {
             this.loggedIn = true;
 
             // We do not change the company in case the user has been time disconnected
-            if (window.localStorage.getItem(this.LAST_USER_STORE_KEY) !== res.data.utilisateur.nomUtilisateur) {
-              this.currentCompanyService.setCompany(null);
-            }
+            // if (window.localStorage.getItem(this.LAST_USER_STORE_KEY) !== res.data.utilisateur.nomUtilisateur) {
+              // this.currentCompanyService.setCompany(null);
+            // }
 
             this.currentUser = res.data.utilisateur;
             window.localStorage.setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(res.data.utilisateur));
