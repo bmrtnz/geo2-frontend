@@ -1,4 +1,7 @@
-<h2 class="content-block">{{ "ordres-planningDepart" | localize }}</h2>
+<h2 class="content-block">
+  <span>{{ "ordres-planningDepart" | localize }}</span>
+  <dx-button class="upperButton" text="{{ 'btn-blAutoSend' | localize }}" [disabled]="true"></dx-button>
+</h2>
 
 <div class="content-block">
   <dx-box>
@@ -110,6 +113,7 @@
     <dxi-column
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
+      [caption]="('ordres-' + field.path | localize) || field.name"
       [visible]="false"
       [dataType]="field.dataType"
       [allowSearch]="
@@ -123,5 +127,9 @@
           : ['string'].includes(field.dataType)
       "
     ></dxi-column>
+    <dxo-master-detail [enabled]="true" template="details"></dxo-master-detail>
+    <div *dxTemplate="let masterRow of 'details'">
+        <app-grid-detail-planning-departs [masterRow]="masterRow"></app-grid-detail-planning-departs>
+    </div>
   </dx-data-grid>
 </div>

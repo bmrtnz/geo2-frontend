@@ -133,8 +133,7 @@ const indicators: Indicator[] = [{
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
   warningIcon: '',
-  /* tslint:disable-next-line max-line-length */
-  select: /^(?:id|sommeColisCommandes|sommeColisExpedies|numero|codeClient|codeAlphaEntrepot|versionDetail|dateLivraisonPrevue|logistiques\.(?:fournisseur\.raisonSocial|dateDepartPrevueFournisseur|dateDepartReelleFournisseur|fournisseurReferenceDOC|expedieStation|totalPalettesExpediees|nombrePalettesAuSol|nombrePalettes100x120|nombrePalettes80x120|nombrePalettes60X80)|assistante\.nomUtilisateur|commercial\.nomUtilisateur|transporteur\.raisonSocial)$/,
+  select: /^(?:dateLivraisonPrevue|sommeColisCommandes|sommeColisExpedies|numero|codeClient|codeAlphaEntrepot|versionDetail)$/,
 }, {
   id: 'CommandesTransit',
   enabled: false,
