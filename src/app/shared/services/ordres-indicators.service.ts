@@ -38,7 +38,7 @@ export class Indicator {
   select?: RegExp;
   detailedFields?: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   constructor(args) { Object.assign(this, args); }
-  cloneFilter?() { return JSON.parse(JSON.stringify(this.filter)); }
+  cloneFilter?(): any[] { return JSON.parse(JSON.stringify(this.filter)); }
 }
 
 const indicators: Indicator[] = [{

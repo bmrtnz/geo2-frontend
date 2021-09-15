@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Event as NavigationEvent, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'app/shared/services';
@@ -35,6 +36,7 @@ export class OrdresAccueilComponent implements OnDestroy {
     public utilisateursService: UtilisateursService,
     public currentCompanyService: CurrentCompanyService,
     private router: Router,
+    private datePipe: DatePipe,
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
 
@@ -60,15 +62,27 @@ export class OrdresAccueilComponent implements OnDestroy {
       .pipe(
         tap(_ => this.indicators = []),
         switchMap(([, indicators]) => from(indicators)),
-        map(indicator => ({ ...indicator, loading: indicator.fetchCount})),
+        map(indicator => new Indicator({ ...indicator, loading: indicator.fetchCount})),
         tap(indicator => this.indicators.push(indicator)),
         filter(indicator => indicator.loading),
-        mergeMap(async indicator => {
+        mergeMap(async (indicator: Indicator) => {
           if (!indicator.fetchCount)
             return [indicator.id, ''] as [string, string];
 
           const dataSource = indicator.dataSource;
-          dataSource.filter(indicator.filter);
+          const flt = indicator.cloneFilter();
+
+          // Mapping
+          if (indicator.id === 'PlanningDepart')
+            flt.push(
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '>=',
+                this.datePipe.transform((new Date()).setDate((new Date()).getDate() - 1).valueOf(), 'yyyy-MM-dd'),
+              ],
+            );
+          dataSource.filter(flt);
           await dataSource.load();
           return [indicator.id, dataSource.totalCount().toString()] as [string, string];
         }),
