@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
 import { OrdreDatasourceOperation, OrdresService } from './api/ordres.service';
+import { PaysService } from './api/pays.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
 
@@ -79,7 +80,8 @@ const indicators: Indicator[] = [{
   goTo: '/ordres/indicateurs/clientsDepEncours',
   tileBkg: '#4199B4',
   indicatorIcon: 'user',
-  warningIcon: 'material-icons warning'
+  warningIcon: 'material-icons warning',
+  select: /^(?:id|description|sommeAgrement)$/,
 }, {
   id: 'OrdresNonClotures',
   enabled: true,
@@ -156,7 +158,8 @@ export class OrdresIndicatorsService {
     private datePipe: DatePipe,
     private authService: AuthService,
     public currentCompanyService: CurrentCompanyService,
-    private ordresService: OrdresService
+    private ordresService: OrdresService,
+    private paysService: PaysService
   ) {
     this.indicators = this.indicators.map(indicator => {
 
@@ -194,8 +197,15 @@ export class OrdresIndicatorsService {
 
       // Ordres clients depassement en cours
       if (instance.id === 'ClientsDepEncours') {
+        instance.detailedFields = this.paysService.model
+        .getDetailedFields(1, instance.select, {forceFilter: true});
+        instance.dataSource = paysService.getDataSource(1, instance.select);
         instance.filter = [
-          ...instance.filter,
+          ['valide', '=', true],
+          'and',
+          ['clients.societe.id', '=', this.currentCompanyService.getCompany().id],
+          'and',
+          ['clients.allEnc', '<>', 0],
         ];
       }
 

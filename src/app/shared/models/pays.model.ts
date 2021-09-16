@@ -7,6 +7,8 @@ export class Pays extends Model {
   @Field({asLabel: true}) public description: string;
   @Field() public numeroIso: string;
   @Field() public valide: boolean;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public sommeAgrement: number;
 
 }
 

@@ -42,6 +42,8 @@ export enum Grid {
   PlanningDepartDetail = 'planning-depart-detail',
   Envois = 'envois',
   ControleQualite = 'controle-qualite',
+  DepassementEncoursPays = 'depassement-encours-pays',
+  DepassementEncoursClient = 'depassement-encours-client',
 }
 
 @Injectable({
