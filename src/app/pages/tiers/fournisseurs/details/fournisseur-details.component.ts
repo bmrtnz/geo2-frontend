@@ -129,7 +129,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
-  autoFacturationChecked: false;
+  autoFacturationChecked = false;
+  ifcoChecked = false;
   IDTracaexists = false;
   CCexists = false;
   
@@ -241,6 +242,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   onAutoFactChange(params) {
    this.autoFacturationChecked = params.value;
+  }
+
+  onIfcoChange(params) {
+    this.ifcoChecked = params.value;
   }
 
   displayIDBefore(data) {

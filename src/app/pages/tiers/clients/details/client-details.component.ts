@@ -164,6 +164,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   cofaceBlocked = false;
   tvaCeeFree = false;
   CCexists = false;
+  ifcoChecked = false;
+  couvTemp = false;
 
   constructor(
     private fb: FormBuilder,
@@ -315,6 +317,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     clientsSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
   }
 
+  onIfcoChange(params) {
+    this.ifcoChecked = params.value;
+  }
 
   displayIDBefore(data) {
     return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
@@ -323,12 +328,19 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   onRefusCofaceChange(e) {
     const cofaceBlocked = (e.value === true);
     this.cofaceBlocked = cofaceBlocked;
-    if (cofaceBlocked) this.formGroup.get('agrement').setValue(0);
+    if (cofaceBlocked) {
+      this.formGroup.get('agrement').setValue(0);
+      this.formGroup.get('enCoursTemporaire').setValue(0);
+    }
   }
 
-  onCofaceChange() {
+  onCofaceChange(params, el?) {
     // Sum of couverture Coface & couverture BW. & couverture temporaire Updated on any change
     this.couvertureTotale.value = parseInt(this.formGroup.get('agrement').value || 0) + parseInt(this.formGroup.get('enCoursBlueWhale').value || 0) + parseInt(this.formGroup.get('enCoursTemporaire').value || 0);
+    // If couverture temporaire, date limite is required
+    if (el) {
+      this.couvTemp = params.value;
+    }
   }
 
   onCodeChange(e) {
