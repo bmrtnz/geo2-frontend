@@ -57,9 +57,11 @@
 
     <dxi-column
       *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
+      [dataField]="field.name"
       [caption]="('tiers-contacts-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
+      trueText="Oui"
+      falseText="Non"
       [allowEditing]="(field.name === 'valide' && authService.currentUser.accessGeoTiers) || (field.name !== 'valide' && field?.allowEditing !== false)"
       [validationRules]="field.validationRules || {}"
       [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"

@@ -47,6 +47,8 @@
       [dataField]="field.path"
       [caption]="('ordreLigneLogistique-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
+      trueText="Oui"
+      falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"

@@ -43,6 +43,8 @@
       [dataField]="field.path"
       [caption]="('ordreLogistique-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
+      trueText="Oui"
+      falseText="Non"
       [dataType]="field.dataType"
       [format]="field.format"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"

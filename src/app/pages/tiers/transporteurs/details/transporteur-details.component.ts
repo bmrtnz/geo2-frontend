@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
+import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
@@ -52,6 +53,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
   editing = false;
@@ -71,6 +73,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
+  CCexists = false;
 
   constructor(
     private fb: FormBuilder,
@@ -147,6 +150,14 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     return transporteursSource.load().then(res => !(res.length));
   }
 
+  checkCompteComptable(e) {
+    const compteComptable = e.value;
+    if (!compteComptable) return;
+    const transporteursSource = this.transporteursService.getDataSource();
+    transporteursSource.filter(['compteComptable', '=', compteComptable]);
+    transporteursSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
+  }
+
   openCloseAccordions(action) {
     if (!this.accordion) return;
     this.accordion.toArray().forEach(element => {
@@ -158,49 +169,77 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     });
   }
 
+  onCodeChange(e) {
+    if (!e.value) return;
+    const code = e.value.toUpperCase();
+    this.formGroup.get('id').setValue(code);
+    if (code.length && this.createMode) {
+      this.formGroup.get('compteComptable').markAsDirty()
+      this.formGroup.get('compteComptable').setValue(code);
+    }
+  }
+
+  displayIDBefore(data) {
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+  }
+
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       const transporteur = this.transporteursService.extractDirty(this.formGroup.controls);
 
       if (this.createMode) {
-        transporteur.id = this.formGroup.get('id').value.toUpperCase();
-        // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
-        // Avoir pour les valeur par defaut (qui sont not null dans la base)
-        transporteur.preSaisie = true;
-        transporteur.valide = false;
+
+        this.infoComponent.visible = true;
+        this.infoComponent.doNavigate.subscribe(res => {
+          if (res) {
+            transporteur.id = this.formGroup.get('id').value.toUpperCase();
+            // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
+            // Avoir pour les valeur par defaut (qui sont not null dans la base)
+            transporteur.preSaisie = true;
+            transporteur.valide = false;
+            this.saveData(transporteur);
+          }
+        });
       } else {
         if (transporteur.valide === true) {
           transporteur.preSaisie = false;
           this.preSaisie = '';
         }
         transporteur.id = this.transporteur.id;
+        this.saveData(transporteur);
       }
 
-      this.transporteursService.save({ transporteur })
-        .subscribe({
-          next: (e) => {
-            notify('Sauvegardé', 'success', 3000);
-            this.refreshGrid.emit();
-            if (!this.createMode) {
-              this.transporteur = {
-                ...this.transporteur,
-                ...this.formGroup.getRawValue(),
-              };
-              this.readOnlyMode = true;
-            } else {
-              this.editing = false;
-              this.router.navigate([`/tiers/transporteurs/${e.data.saveTransporteur.id}`]);
-            }
-            this.transporteur.typeTiers = e.data.saveTransporteur.typeTiers;
-            this.formGroup.markAsPristine();
-          },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
     }
   }
 
+  saveData(transporteur) {
+
+    this.transporteursService.save({ transporteur })
+    .subscribe({
+      next: (e) => {
+        notify('Sauvegardé', 'success', 3000);
+        this.refreshGrid.emit();
+        if (!this.createMode) {
+          this.transporteur = {
+            ...this.transporteur,
+            ...this.formGroup.getRawValue(),
+          };
+          this.readOnlyMode = true;
+        } else {
+          this.editing = false;
+          this.router.navigate([`/tiers/transporteurs/${e.data.saveTransporteur.id}`]);
+        }
+        this.transporteur.typeTiers = e.data.saveTransporteur.typeTiers;
+        this.formGroup.markAsPristine();
+      },
+      error: () => notify('Echec de la sauvegarde', 'error', 3000),
+    });
+
+  }
+
   onCancel() {
+
     if (!this.createMode) {
       this.formGroup.reset(this.transporteur);
       this.readOnlyMode = true;

@@ -52,6 +52,8 @@
     [dataField]="field.path"
     [caption]="('ordreLignes-' + field.path.replaceAll('.','-') | localize) || field.name"
     [visible]="false"
+    trueText="Oui"
+    falseText="Non"
     [dataType]="field.dataType"
     [allowSearch]="
       field.allowSearch !== undefined

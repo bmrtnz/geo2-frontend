@@ -51,9 +51,16 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -99,9 +106,16 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -142,9 +156,16 @@
         "visibleIndex": 5,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -185,9 +206,16 @@
         "visibleIndex": 5,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -234,7 +262,7 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
       },
@@ -242,6 +270,7 @@
         "visibleIndex": 7,
         "dataField": "preSaisie",
         "dataType": "boolean",
+        "width": 50,
         "visible": true
       }
     ]
@@ -290,7 +319,7 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
       }
@@ -362,8 +391,16 @@
         "visibleIndex": 10,
         "dataField": "valide",
         "dataType": "boolean",
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },

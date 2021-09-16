@@ -1,0 +1,15 @@
+<dx-popup
+  [width]="450"
+  [height]="165"
+  [showTitle]="false"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  [(visible)]="visible"
+>
+  <div *dxTemplate="let data of 'content'">
+    <p>{{customText}}</p>
+    <br>
+    <dx-button type="default" text="Oui, c’est fait !" (onClick)="continueClick()"></dx-button>
+    <dx-button type="normal" text="Non, je m'en occupe !" (onClick)="cancelClick()"></dx-button>
+  </div>
+</dx-popup>

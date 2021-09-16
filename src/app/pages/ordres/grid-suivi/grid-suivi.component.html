@@ -48,6 +48,8 @@
       [dataField]="field.path"
       [caption]="('rechOrdres-' + field.path.replaceAll('.', '-').replace('-description', '') | localize) || field.name"
       [visible]="false"
+      trueText="Oui"
+      falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"

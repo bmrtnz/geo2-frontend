@@ -159,8 +159,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                     if (!res.length) {
                       this.entrepot.code = code;
                       this.formGroup.patchValue(this.entrepot);
-                    } else {
-                      //
                     }
                   });
                 }
@@ -199,6 +197,11 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     const entrepotsSource = this.entrepotsService.getDataSource();
     entrepotsSource.filter(['code', '=', code]);
     return entrepotsSource.load().then(res => !(res.length));
+  }
+
+  onCodeChange(e) {
+    if (!e.value) return;
+    this.formGroup.get('code').setValue(e.value.toUpperCase());
   }
 
   onSubmit() {
@@ -251,7 +254,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   displayIDBefore(data) {
-    return data ? data.id + ' ' + data.description : null;
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   toggleVisible() {
