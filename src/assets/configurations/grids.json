@@ -1622,6 +1622,31 @@
       }
     ]
   },
+  "depassement-encours-pays": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "description",
+        "visible": true,
+        "sortIndex": 1,
+        "sortOrder": "asc"
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "sommeAgrement",
+        "visible": true
+      }
+    ]
+  },
+  "depassement-encours-client": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": true
+      }
+    ]
+  },
   "ordre-marge": {
     "columns": [
       {

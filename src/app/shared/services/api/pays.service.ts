@@ -18,7 +18,7 @@ export class PaysService extends ApiService implements APIRead {
     super(apollo, Pays);
   }
 
-  getDataSource() {
+  getDataSource(depth = 1, filter = this.fieldsFilter) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -33,7 +33,7 @@ export class PaysService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(1, this.fieldsFilter);
+          const query = await this.buildGetAll(depth, filter);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
@@ -42,7 +42,7 @@ export class PaysService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1, this.fieldsFilter);
+          const query = await this.buildGetOne(depth, filter);
           type Response = { pays: Pays };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
