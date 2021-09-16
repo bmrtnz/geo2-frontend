@@ -39,6 +39,7 @@ export enum Grid {
   OrdresNonConfirmes = 'ordres-non-confirmes',
   CommandesTransit = 'commandes-transit',
   PlanningDepart = 'planning-depart',
+  PlanningDepartDetail = 'planning-depart-detail',
   Envois = 'envois',
   ControleQualite = 'controle-qualite',
 }

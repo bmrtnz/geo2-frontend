@@ -15,6 +15,10 @@
     "date-modification": "Date de modification",
     "commentaire": "Commentaire",
     "action": "Action",
+    "sur": "sur",
+    "jours": "jours",
+    "du": "du",
+    "au": "au",
 
     "client": "client",
     "entrepot": "entrepôt",
@@ -44,6 +48,7 @@
     "btn-invoice": "Passer \"bon à facturer\"",
     "btn-envoiBL": "Envoi automatique des BL",
     "btn-clotAdmin": "Clôture administratif",
+    "btn-blAutoSend": "Envoi automatique des BL",
 
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
@@ -478,6 +483,11 @@
     "ordres-details-groupe-log": "Log",
     "ordres-client": "Client",
     "ordres-numero": "Numéro d'ordre",
+    "ordres-codeClient": "Client",
+    "ordres-codeAlphaEntrepot": "Entrepôt",
+    "ordres-versionDetail": "Détail client",
+    "ordres-sommeColisCommandes": "Colis commandés",
+    "ordres-sommeColisExpedies": "Colis expédiés",
     "ordres-ref": "Réf. ordre",
     "ordres-devise": "Devise",
     "ordres-commentaireUsageInterne": "Commentaire interne",
@@ -525,6 +535,7 @@
     "ordres-litiges-attente": "En attente",
     "ordres-day": "jour",
     "ordres-days": "jours",
+    "ordre-planning-depart-diff-expe": "Différence sur expédition et/ou sans détail client",
 
     "ordreLignes-id": "Réf. ligne",
     "ordreLignes-ordre-id": "Réf. ordre",
@@ -557,6 +568,13 @@
     "ordreLignes-achatQuantite": "Achat Qté",
     "ordreLignes-achatUnite-description": "Unité",
     "ordreLignes-referenceControleQualite": "Contrôle Qualité",
+    "ordreLignes-ordre-transporteur-raisonSocial": "Transporteur",
+    "ordreLignes-logistique-fournisseur-code": "Fournisseur",
+    "ordreLignes-logistique-dateDepartReelleFournisseur": "Date heure clôture",
+    "ordreLignes-logistique-fournisseurReferenceDOC": "N° bon exp.",
+    "ordreLignes-logistique-expedieStation": "OK station",
+    "ordreLignes-ordre-assistante-nomUtilisateur": "Assistante",
+    "ordreLignes-ordre-commercial-nomUtilisateur": "Commercial",
 
     "ordreEnvois-id": "n°",
     "ordreEnvois-imprimanteID": "Imprimante",
@@ -739,7 +757,11 @@
     "rechOrdres-numeroFacture": "Numéro de facture",
     "rechOrdres-dateLivraisonPrevue": "Livraison",
     "rechOrdres-critere": "Critère",
-    "rechOrdres-secteurCommercial": "Secteur"
+    "rechOrdres-secteurCommercial": "Secteur",
+
+    "grid-situation-depart-title": "Situation des départs",
+    "grid-situation-depart-title-today": "Situation des départs d'aujourd'hui",
+    "grid-situation-depart-detail-title": "Détail des lignes"
 
   }
 }

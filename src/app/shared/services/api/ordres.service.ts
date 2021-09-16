@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
+import { gql, MutationOptions, OperationVariables } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
@@ -10,6 +10,7 @@ import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 
 export enum OrdreDatasourceOperation {
   BAF = 'allOrdreBAF',
+  SuiviDeparts = 'allOrdreSuiviDeparts',
 }
 
 @Injectable({
@@ -19,6 +20,8 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
 
   /* tslint:disable-next-line */
   queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
+
+  public persistantVariables = { onlyColisDiff: false };
 
   constructor(
     apollo: Apollo,
@@ -46,10 +49,18 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(depth, filter, indicator);
+          let query: string;
+          if (indicator === OrdreDatasourceOperation.SuiviDeparts)
+            query = await this.buildGetAllSuiviDeparts(depth, filter, indicator);
+          else
+            query = await this.buildGetAll(depth, filter, indicator);
+
           const key: string = indicator ?? 'allOrdre';
           type Response = { [key: string]: RelayPage<Ordre> };
-          const variables = this.mapLoadOptionsToVariables(options);
+          const variables = {
+            ...this.persistantVariables,
+            ...this.mapLoadOptionsToVariables(options)
+          };
 
           this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
             if (res.data && res.data[key])
@@ -100,8 +111,30 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     `;
   }
 
+  protected async buildGetAllSuiviDeparts(depth?: number, regExpFilter?: RegExp, operationName?: string) {
+    const operation = operationName ?? `all${this.model.name}`;
+    const alias = this.withUpperCaseFirst(operation);
+    return `
+      query ${alias}($search: String, $pageable: PaginationInput!, $onlyColisDiff: Boolean) {
+        ${operation}(search:$search, pageable:$pageable, onlyColisDiff:$onlyColisDiff) {
+          edges {
+            node {
+              ${await this.model.getGQLFields(depth, regExpFilter, null, {noList: true}).toPromise()}
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+          }
+          totalCount
+        }
+      }
+    `;
+  }
+
   saveAll(variables: OperationVariables & {allOrdre: Ordre[]}) {
-    // type Response = { allOrdre: RelayPage<Ordre> };
     return this.watchSaveAllQuery({ variables }, 1, this.queryFilter);
   }
 
