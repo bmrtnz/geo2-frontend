@@ -147,3 +147,9 @@ body {
     }
   }
 }
+// Centering Oui/Non text in datagrid filter row
+.dx-row .dx-texteditor-input[aria-haspopup="listbox"] {
+  position: relative;
+  left: 12px;
+  text-align: center;
+}
