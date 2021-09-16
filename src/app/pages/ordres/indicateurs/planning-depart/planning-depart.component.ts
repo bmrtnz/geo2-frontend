@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { LocalizePipe } from 'app/shared/pipes';
 import {
   AuthService,
   LocalizationService,
@@ -16,8 +17,12 @@ import {
   Indicator,
   OrdresIndicatorsService,
 } from 'app/shared/services/ordres-indicators.service';
-import { DxCheckBoxComponent, DxNumberBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
-import { DxoGridComponent } from 'devextreme-angular/ui/nested';
+import {
+  DxCheckBoxComponent,
+  DxDataGridComponent,
+  DxNumberBoxComponent,
+  DxSelectBoxComponent,
+} from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -40,13 +45,15 @@ export class PlanningDepartComponent implements AfterViewInit {
   rowSelected: boolean;
 
   @ViewChild('gridPLANNINGDEPART', { static: false })
-  gridPLANNINGDEPARTComponent: DxoGridComponent;
+  gridPLANNINGDEPARTComponent: DxDataGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild('diffCheckBox', { static: false }) diffCB: DxCheckBoxComponent;
   @ViewChild('daysOfService', { static: false }) daysNB: DxNumberBoxComponent;
 
   public dataSource: DataSource;
   initialFilterLengh: number;
+  public title: string;
+  private dxGridElement: HTMLElement;
   readonly DAYSNB_DEFAULT = 1;
 
   constructor(
@@ -61,6 +68,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     private datePipe: DatePipe,
+    private localizePipe: LocalizePipe
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -76,6 +84,8 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.dxGridElement =
+      this.gridPLANNINGDEPARTComponent.instance.$element()[0];
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
@@ -85,22 +95,26 @@ export class PlanningDepartComponent implements AfterViewInit {
     const filters = this.indicator.cloneFilter();
     this.initialFilterLengh = filters.length;
 
-    filters.push('and',
-    [
+    filters.push('and', [
       'logistiques.dateDepartPrevueFournisseur',
       '>=',
       this.getDaysNB(),
     ]);
 
     this.dataSource.filter(filters);
+
+    this.title = this.localizePipe.transform('grid-situation-depart-title-today');
   }
 
   updateFilters() {
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value)
-      filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
-    filters.push('and',
-    [
+      filters.push('and', [
+        'secteurCommercial.id',
+        '=',
+        this.secteurSB.value.id,
+      ]);
+    filters.push('and', [
       'logistiques.dateDepartPrevueFournisseur',
       '>=',
       this.getDaysNB(),
@@ -112,8 +126,25 @@ export class PlanningDepartComponent implements AfterViewInit {
         ['versionDetail', '<', '001'],
       ]);
     this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
+
     this.dataSource.filter(filters);
     this.dataSource.reload();
+
+    const from = this.datePipe.transform(
+      new Date()
+        .setDate(
+          new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT
+        )
+        .valueOf());
+    /* tslint:disable-next-line max-line-length */
+    this.title = `${this.localizePipe.transform('grid-situation-depart-title')} ${this.localizePipe.transform('du')} ${from} ${this.localizePipe.transform('au')} ${this.datePipe.transform(
+      Date.now()
+    )}`;
+    (
+      this.dxGridElement.querySelector(
+        '.dx-toolbar .dx-texteditor-input'
+      ) as HTMLInputElement
+    ).value = this.title;
   }
 
   onRowClick(event) {
@@ -130,7 +161,13 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   getDaysNB() {
-    return this.datePipe
-    .transform((new Date()).setDate((new Date()).getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT).valueOf(), 'yyyy-MM-dd');
+    return this.datePipe.transform(
+      new Date()
+        .setDate(
+          new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT
+        )
+        .valueOf(),
+      'yyyy-MM-dd'
+    );
   }
 }

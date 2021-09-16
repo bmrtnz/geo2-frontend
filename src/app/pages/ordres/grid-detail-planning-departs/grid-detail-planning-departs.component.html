@@ -14,7 +14,7 @@
     }"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
-      '',
+      title,
       $event,
       gridConfiguratorService.Grid.PlanningDepartDetail,
       enableFilters.bind(this)

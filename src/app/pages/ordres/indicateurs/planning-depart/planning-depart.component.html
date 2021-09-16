@@ -73,7 +73,7 @@
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        '',
+        title,
         $event,
         gridConfiguratorService.Grid.PlanningDepart,
         updateFilters.bind(this)

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { LocalizePipe } from 'app/shared/pipes';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
@@ -22,10 +23,12 @@ export class GridDetailPlanningDepartsComponent implements OnInit {
     ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
   >;
 
+  public title: string;
   private dataFilter = /* tslint:disable-next-line max-line-length */
     /^nombreColisCommandes|nombreColisExpedies|ordre\.(?:transporteur\.raisonSocial|assistante\.nomUtilisateur|commercial\.nomUtilisateur)|logistique\.(?:fournisseur\.code|dateDepartPrevueFournisseur|dateDepartReelleFournisseur|fournisseurReferenceDOC|expedieStation|totalPalettesExpediees|nombrePalettesAuSol|nombrePalettes100x120|nombrePalettes80x120|nombrePalettes60X80)$/;
 
   constructor(
+    private localizePipe: LocalizePipe,
     private ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
@@ -34,6 +37,7 @@ export class GridDetailPlanningDepartsComponent implements OnInit {
       this.dataFilter,
       { forceFilter: true }
     );
+    this.title = this.localizePipe.transform('grid-situation-depart-detail-title');
   }
 
   ngOnInit() {

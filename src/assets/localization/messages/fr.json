@@ -17,6 +17,8 @@
     "action": "Action",
     "sur": "sur",
     "jours": "jours",
+    "du": "du",
+    "au": "au",
 
     "client": "client",
     "entrepot": "entrepôt",
@@ -752,7 +754,11 @@
     "rechOrdres-numeroFacture": "Numéro de facture",
     "rechOrdres-dateLivraisonPrevue": "Livraison",
     "rechOrdres-critere": "Critère",
-    "rechOrdres-secteurCommercial": "Secteur"
+    "rechOrdres-secteurCommercial": "Secteur",
+
+    "grid-situation-depart-title": "Situation des départs",
+    "grid-situation-depart-title-today": "Situation des départs d'aujourd'hui",
+    "grid-situation-depart-detail-title": "Détail des lignes"
 
   }
 }

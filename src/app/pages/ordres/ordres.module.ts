@@ -48,6 +48,7 @@ import { GridMargeComponent } from './grid-marge/grid-marge.component';
 import { GridFraisComponent } from './grid-frais/grid-frais.component';
 import { FormLogistiqueComponent } from './form-logistique/form-logistique.component';
 import { GridDetailPlanningDepartsComponent } from './grid-detail-planning-departs/grid-detail-planning-departs.component';
+import { LocalizePipe } from 'app/shared/pipes';
 
 
 @NgModule({
@@ -115,6 +116,7 @@ import { GridDetailPlanningDepartsComponent } from './grid-detail-planning-depar
   providers: [
     OrdresIndicatorsService,
     DatePipe,
+    LocalizePipe,
   ],
 })
 export class OrdresModule { }
