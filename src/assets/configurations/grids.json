@@ -1439,7 +1439,7 @@
       },
       {
         "visibleIndex": 7,
-        "dataField": "logistique.expedieStation",
+        "dataField": "logistique.okStation",
         "visible": true
       },
       {
