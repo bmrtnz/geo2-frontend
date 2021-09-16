@@ -199,6 +199,11 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     return entrepotsSource.load().then(res => !(res.length));
   }
 
+  onCodeChange(e) {
+    if (!e.value) return;
+    this.formGroup.get('code').setValue(e.value.toUpperCase());
+  }
+
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
@@ -249,7 +254,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   displayIDBefore(data) {
-    return data ? data.id + ' ' + data.description : null;
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   toggleVisible() {

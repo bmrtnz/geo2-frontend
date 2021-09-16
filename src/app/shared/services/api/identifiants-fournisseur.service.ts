@@ -16,6 +16,7 @@ export class IdentifiantsFournisseurService extends ApiService implements APIRea
     apollo: Apollo,
   ) {
     super(apollo, IdentifiantFournisseur);
+    this.gqlKeyType = 'Int';
   }
 
   getDataSource() {

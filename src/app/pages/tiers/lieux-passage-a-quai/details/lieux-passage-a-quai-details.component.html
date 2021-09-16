@@ -67,7 +67,8 @@
                 <dx-text-box
                 formControlName="id"
                 [readOnly]="!createMode"
-                [inputAttr]="{'style':  'text-transform: uppercase'}"
+                [inputAttr]="{'style': 'text-transform: uppercase'}"
+                (onValueChanged)="onCodeChange($event)"
                 >
                   <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -98,7 +99,7 @@
                   formControlName="langue"
                   [readOnly]="readOnlyMode"
                   [dataSource]="pays"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
@@ -212,7 +213,7 @@
                   formControlName="pays"
                   [readOnly]="readOnlyMode"
                   [dataSource]="pays"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
@@ -234,36 +235,18 @@
           <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-paiement' | localize }}</span>
 
           <div class="dx-form-group-content">
-            <dx-box direction="row">
-              <dxi-item [ratio]="2">
-                <!-- Nb Jour Echeance -->
-                <div class="dx-field field-large">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}">
-                        <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
-              </dxi-item>
-              <dxi-item [ratio]="1">
-                <!-- Echeance Le -->
-                <div class="dx-field field-small">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-echeanceLe' | localize }}</div>
-                  <div class="dx-field-value">
-                    <dx-text-box formControlName="echeanceLe" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-echeanceLe' | localize }}">
-                        <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule type="stringLength" max="2"></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-box>
-                  </div>
-                </div>
-              </dxi-item>
-            </dx-box>
+            <!-- Nb Jour Echeance -->
+            <div class="dx-field">
+              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
+                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}">
+                    <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-text-box>
+              </div>
+            </div>
 
             <!-- Regime Tva -->
             <div class="dx-field">
@@ -273,7 +256,7 @@
                     formControlName="regimeTva"
                     [readOnly]="readOnlyMode"
                     [dataSource]="regimesTva"
-                    displayExpr="description"
+                    [displayExpr]="displayIDBefore"
                     [searchEnabled]="true"
                     [searchExpr]="['id','description']"
                   ></dx-select-box>
@@ -288,7 +271,7 @@
                   formControlName="devise"
                   [readOnly]="readOnlyMode"
                   [dataSource]="devises"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
@@ -307,7 +290,7 @@
                   formControlName="moyenPaiement"
                   [readOnly]="readOnlyMode"
                   [dataSource]="moyensPaiement"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 ></dx-select-box>
@@ -322,7 +305,7 @@
                   formControlName="basePaiement"
                   [readOnly]="readOnlyMode"
                   [dataSource]="basesPaiement"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 ></dx-select-box>

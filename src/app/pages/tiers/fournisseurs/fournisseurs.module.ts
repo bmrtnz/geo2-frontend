@@ -18,6 +18,7 @@ import { PushHistoryPopupModule } from '../../../shared/components/push-history-
 import { SharedModule } from '../../../shared/shared.module';
 import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
 import { FournisseursRoutingModule } from './fournisseurs-routing.module';
+import { InfoPopupModule } from 'app/shared/components/info-popup/info-popup.component';
 import { FournisseursListComponent } from './list/fournisseurs-list.component';
 
 @NgModule({
@@ -44,6 +45,7 @@ import { FournisseursListComponent } from './list/fournisseurs-list.component';
     HistoriqueValideModule,
     PushHistoryPopupModule,
     EditingAlertModule,
+    InfoPopupModule,
     FileManagerModule,
     CertificationDatePopupModule,
   ],

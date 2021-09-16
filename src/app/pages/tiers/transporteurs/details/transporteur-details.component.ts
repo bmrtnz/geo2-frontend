@@ -73,6 +73,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
+  CCexists = false;
 
   constructor(
     private fb: FormBuilder,
@@ -149,13 +150,12 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     return transporteursSource.load().then(res => !(res.length));
   }
 
-  checkCompteComptable(params) {
-    const compteComptable = params.value;
+  checkCompteComptable(e) {
+    const compteComptable = e.value;
+    if (!compteComptable) return;
     const transporteursSource = this.transporteursService.getDataSource();
-    transporteursSource.searchExpr('compteComptable');
-    transporteursSource.searchOperation('=');
-    transporteursSource.searchValue(compteComptable);
-    return transporteursSource.load().then(res => !(res.length));
+    transporteursSource.filter(['compteComptable', '=', compteComptable]);
+    transporteursSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
   }
 
   openCloseAccordions(action) {
@@ -170,11 +170,17 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   onCodeChange(e) {
-    const code = e.value;
-    if (code.length && this.authService.currentUser.adminClient && this.createMode) {
+    if (!e.value) return;
+    const code = e.value.toUpperCase();
+    this.formGroup.get('id').setValue(code);
+    if (code.length && this.createMode) {
       this.formGroup.get('compteComptable').markAsDirty()
       this.formGroup.get('compteComptable').setValue(code);
     }
+  }
+
+  displayIDBefore(data) {
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   onSubmit() {

@@ -138,6 +138,15 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     return lieuxpassageaquaiSource.load().then(res => !(res.length));
   }
 
+  onCodeChange(e) {
+    if (!e.value) return;
+    this.formGroup.get('id').setValue(e.value.toUpperCase());
+  }
+
+  displayIDBefore(data) {
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+  }
+
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {

@@ -62,6 +62,7 @@
                 formControlName="code"
                 [readOnly]="!createMode"
                 [inputAttr]="{'style':  'text-transform: uppercase'}"
+                (onValueChanged)="onCodeChange($event)"
                 >
                   <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -81,7 +82,7 @@
                   formControlName="commercial"
                   [readOnly]="readOnlyMode"
                   [dataSource]="commercial"
-                  displayExpr="nomUtilisateur"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','nomUtilisateur']"
                 >
@@ -100,7 +101,7 @@
                   formControlName="assistante"
                   [readOnly]="readOnlyMode"
                   [dataSource]="assistante"
-                  displayExpr="nomUtilisateur"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','nomUtilisateur']"
                 >
@@ -199,7 +200,7 @@
                   formControlName="pays"
                   [readOnly]="readOnlyMode"
                   [dataSource]="pays"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
@@ -252,7 +253,7 @@
                   formControlName="langue"
                   [readOnly]="readOnlyMode"
                   [dataSource]="pays"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
@@ -283,7 +284,7 @@
                 formControlName="regimeTva"
                 [readOnly]="readOnlyMode"
                 [dataSource]="regimesTva"
-                displayExpr="description"
+                [displayExpr]="displayIDBefore"
                 [searchEnabled]="true"
                 [searchExpr]="['id','description']"
               >

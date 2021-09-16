@@ -163,6 +163,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   createMode = false;
   cofaceBlocked = false;
   tvaCeeFree = false;
+  CCexists = false;
 
   constructor(
     private fb: FormBuilder,
@@ -306,19 +307,17 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   }
 
-  checkCompteComptable(params) {
-    const compteComptable = params.value;
-    console.log('checkcc')
+  checkCompteComptable(e) {
+    const compteComptable = e.value;
+    if (!compteComptable) return;
     const clientsSource = this.clientsService.getDataSource();
-    clientsSource.searchExpr('compteComptable');
-    clientsSource.searchOperation('=');
-    clientsSource.searchValue(compteComptable);
-    return clientsSource.load().then(res => !(res.length));
+    clientsSource.filter(['compteComptable', '=', compteComptable]);
+    clientsSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
   }
 
 
   displayIDBefore(data) {
-    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : data.description)) : null;
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   onRefusCofaceChange(e) {
@@ -333,12 +332,13 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   onCodeChange(e) {
-    const code = e.value;
-    if (code.length && this.authService.currentUser.adminClient && this.createMode) {
+    if (!e.value) return;
+    const code = e.value.toUpperCase();
+    this.formGroup.get('code').setValue(code);
+    if (code.length && this.createMode) {
       this.formGroup.get('compteComptable').markAsDirty()
       this.formGroup.get('compteComptable').setValue(code);
     }
-    
   }
 
   openCloseAccordions(action) {
