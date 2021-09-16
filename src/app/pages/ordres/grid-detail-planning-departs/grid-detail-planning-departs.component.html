@@ -3,8 +3,6 @@
   [dataSource]="dataSource"
   [remoteOperations]="true"
   [showBorders]="false"
-  [focusedRowEnabled]="true"
-  [focusedRowIndex]="0"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
@@ -20,6 +18,7 @@
       enableFilters.bind(this)
     )
   "
+  (onCellPrepared)="onCellPrepared($event)"
 >
   <!-- Grid configuration -->
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>

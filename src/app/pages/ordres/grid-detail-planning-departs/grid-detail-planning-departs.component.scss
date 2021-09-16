@@ -1,0 +1,10 @@
+::ng-deep {
+  .highlight-ok {
+    background:green !important;
+    color: white !important;
+  }
+  .highlight-err {
+    background:red !important;
+    color: white !important;
+  }
+}

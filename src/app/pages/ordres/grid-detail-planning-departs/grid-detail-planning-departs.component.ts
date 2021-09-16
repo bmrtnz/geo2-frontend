@@ -48,4 +48,15 @@ export class GridDetailPlanningDepartsComponent implements OnInit {
   enableFilters() {
     this.dataSource.filter([['ordre.id', '=', this.masterRow.data.id]]);
   }
+
+  onCellPrepared(event) {
+    if (event.rowType !== 'data') return;
+    const equal = event.data.nombreColisCommandes === event.data.nombreColisExpedies;
+    if (event.column.dataField === 'logistique.dateDepartReelleFournisseur')
+      event.cellElement.classList.add(event.value ? 'highlight-ok' : 'highlight-err');
+    if (event.column.dataField === 'nombreColisCommandes')
+      event.cellElement.classList.add(equal ? 'highlight-ok' : 'highlight-err');
+    if (event.column.dataField === 'nombreColisExpedies')
+      event.cellElement.classList.add(equal ? 'highlight-ok' : 'highlight-err');
+  }
 }

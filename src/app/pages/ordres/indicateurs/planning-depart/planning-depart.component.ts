@@ -160,6 +160,17 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.enableFilters();
   }
 
+  onCellPrepared(event) {
+    if (event.rowType !== 'data') return;
+    const equal = event.data.sommeColisCommandes === event.data.sommeColisExpedies;
+    if (event.column.dataField === 'versionDetail')
+      event.cellElement.classList.add(event.value ? 'highlight-ok' : 'highlight-err');
+    if (event.column.dataField === 'sommeColisCommandes')
+      event.cellElement.classList.add(equal ? 'highlight-ok' : 'highlight-err');
+    if (event.column.dataField === 'sommeColisExpedies')
+      event.cellElement.classList.add(equal ? 'highlight-ok' : 'highlight-err');
+  }
+
   getDaysNB() {
     return this.datePipe.transform(
       new Date()
