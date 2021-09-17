@@ -157,6 +157,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
+    this.displayCertifNameDate = this.displayCertifNameDate.bind(this);
   }
 
   get readOnlyMode() {
@@ -193,7 +194,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
               const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
               this.formGroup.patchValue({ ...this.fournisseur, certifications });
               this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
-              // this.certifications.reload();
+              this.certifications.reload();
             });
         } else {
           this.fournisseur = new Fournisseur({});
@@ -254,7 +255,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   displayCertifNameDate(data) {
-    return data ? data.description : null;
+    if (data && this.fournisseur) {
+      let dateCert = this.fournisseur?.certifications.find(res => res.certification.id == data.id)?.dateValidite;
+      if (dateCert) {
+        const mydate = new Date(dateCert);
+        dateCert = mydate.toLocaleDateString();
+      }
+      return data ? data.description + (dateCert ? ' (=> ' + dateCert + ')' : '') : null;
+    }
   }
 
   openCloseAccordions(action) {

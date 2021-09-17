@@ -192,6 +192,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
+    this.displayCertifNameDate = this.displayCertifNameDate.bind(this);
   }
 
   get readOnlyMode() {
@@ -323,6 +324,17 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   displayIDBefore(data) {
     return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+  }
+
+  displayCertifNameDate(data) {
+    // if (data && this.client) {
+    //   let dateCert = this.client?.certifications.find(res => res.certification.id == data.id)?.dateValidite;
+    //   if (dateCert) {
+    //     const mydate = new Date(dateCert);
+    //     dateCert = mydate.toLocaleDateString();
+    //   }
+    //   return data ? data.description + (dateCert ? ' (=> ' + dateCert + ')' : '') : null;
+    // }
   }
 
   onRefusCofaceChange(e) {
