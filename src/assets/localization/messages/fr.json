@@ -156,6 +156,15 @@
     "tiers-clients-identifiantFiscal": "Identifiant fiscal",
     "tiers-clients-consignePalox": "Consigne Palox",
     "tiers-clients-paloxGratuit": "Palox gratuit",
+    "tiers-clients-autorise": "Autorisé",
+    "tiers-clients-depassement": "Dépassement",
+    "tiers-clients-enCoursActuel": "Solde",
+    "tiers-clients-enCoursNonEchu": "Non échu",
+    "tiers-clients-enCours1a30": "1 à 30j",
+    "tiers-clients-enCours31a60": "31 à 60j",
+    "tiers-clients-enCours61a90": "61 à 90j",
+    "tiers-clients-enCours90Plus": "+ de 90j",
+    "tiers-clients-alerteCoface": "COFACE !!",
 
     "tiers-clients-details-title": "Fiche client",
     "tiers-clients-details-groupe-infos": "Infos générales",
@@ -759,9 +768,25 @@
     "rechOrdres-critere": "Critère",
     "rechOrdres-secteurCommercial": "Secteur",
 
+    "pays-description": "Pays",
+    "pays-clientsSommeAgrement": "Permanent",
+    "pays-clientsSommeEnCoursTemporaire": "Temporaire",
+    "pays-clientsSommeEnCoursBlueWhale": "+BW",
+    "pays-clientsSommeAutorise": "Autorisé",
+    "pays-clientsSommeDepassement": "Dépassement",
+    "pays-clientsSommeEnCoursActuel": "Solde",
+    "pays-clientsSommeEnCoursNonEchu": "Non échu",
+    "pays-clientsSommeEnCours1a30": "1 à 30j",
+    "pays-clientsSommeEnCours31a60": "31 à 60j",
+    "pays-clientsSommeEnCours61a90": "61 à 90j",
+    "pays-clientsSommeEnCours90Plus": "+ de 90j",
+    "pays-clientsSommeAlerteCoface": "COFACE !!",
+
     "grid-situation-depart-title": "Situation des départs",
     "grid-situation-depart-title-today": "Situation des départs d'aujourd'hui",
-    "grid-situation-depart-detail-title": "Détail des lignes"
+    "grid-situation-depart-detail-title": "Détail des lignes",
+    "grid-depassement-encours-pays-title": "Somme par pays",
+    "grid-depassement-encours-client-title": "Détail des clients"
 
   }
 }

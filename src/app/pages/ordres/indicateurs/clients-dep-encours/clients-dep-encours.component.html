@@ -95,9 +95,9 @@
           : ['string'].includes(field.dataType)
       "
     ></dxi-column>
-    <!-- <dxo-master-detail [enabled]="true" template="details"></dxo-master-detail> -->
-    <!-- <div *dxTemplate="let masterRow of 'details'">
-        <app-grid-detail-planning-departs [masterRow]="masterRow"></app-grid-detail-planning-departs>
-    </div> -->
+    <dxo-master-detail [enabled]="true" template="details"></dxo-master-detail>
+    <div *dxTemplate="let masterRow of 'details'">
+      <app-grid-clients-dep-encours-detail [masterRow]="masterRow"></app-grid-clients-dep-encours-detail>
+    </div>
   </dx-data-grid>
 </div>

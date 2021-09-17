@@ -7,7 +7,6 @@ import DataSource from 'devextreme/data/data_source';
 import { dxDataGridRowObject } from 'devextreme/ui/data_grid';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { isThisTypeNode } from 'typescript';
 
 @Component({
   selector: 'app-grid-detail-planning-departs',

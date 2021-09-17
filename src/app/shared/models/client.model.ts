@@ -64,7 +64,6 @@ export class Client extends Model {
   @Field({ model: import('./personne.model') }) public commercial: Personne;
   @Field({ model: import('./personne.model') }) public assistante: Personne;
   @Field() public referenceCoface: string;
-  @Field() public agrement: number;
   @Field({ model: import('./base-tarif.model') }) public courtageModeCalcul: BaseTarif;
   @Field() public courtageValeur: number;
   @Field({ model: import('./type.client.model') }) public typeClient: TypeClient;
@@ -78,9 +77,55 @@ export class Client extends Model {
   @Field({ model: import('./type-vente.model') }) public typeVente: TypeVente;
   @Field({ dataType: 'date' }) public dateDebutIfco: string;
   @Field() public refusCoface: boolean;
-  @Field() public enCoursBlueWhale: number;
-  @Field({ dataType: 'date' }) public enCoursDateLimite: string;
-  @Field() public enCoursTemporaire: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public agrement: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCoursTemporaire: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCoursBlueWhale: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public autorise: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public depassement: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCoursActuel: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCoursNonEchu: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCours1a30: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCours31a60: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCours90Plus: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public alerteCoface: number;
+  @Field({
+    format: {type: 'currency', precision: 2},
+    currency: 'EUR',
+  }) public enCoursDouteux: number;
+  @Field({ dataType: 'datetime' }) public enCoursDateLimite: string;
   @Field() public tauxRemiseParFacture: number;
   @Field() public tauxRemiseHorsFacture: number;
   @Field() public fraisExcluArticlePasOrigineFrance: boolean;

@@ -57,6 +57,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
+    private localizePipe: LocalizePipe,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -68,6 +69,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
       this.INDICATOR_NAME
     );
     this.detailedFields = this.indicator.detailedFields;
+    this.title = this.localizePipe.transform('grid-depassement-encours-pays-title');
   }
 
   ngAfterViewInit() {
