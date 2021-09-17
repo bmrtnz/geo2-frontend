@@ -785,7 +785,7 @@
                   <dx-tag-box
                     formControlName="certifications"
                     [dataSource]="certifications"
-                    displayExpr="description"
+                    [displayExpr]="displayCertifNameDate"
                     placeholder="Sélectionner une ou plusieurs certifications..."
                     [readOnly]="readOnlyMode"
                   ></dx-tag-box>
@@ -793,7 +793,7 @@
               </div>
               <!-- Date cond achat signée -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-fournisseurs-dateConditionGeneraleAchatSignee' | localize }}</div>
+                <div class="dx-field-label whiteSpaceNormal">{{ 'tiers-fournisseurs-dateConditionGeneraleAchatSignee' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-date-box
                     formControlName="dateConditionGeneraleAchatSignee"
