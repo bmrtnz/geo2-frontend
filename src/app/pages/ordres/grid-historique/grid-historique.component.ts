@@ -38,7 +38,7 @@ export class GridHistoriqueComponent implements OnInit {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.dataSource = mruOrdresService.getDataSource(2, this.gridFilter);
+    this.dataSource = mruOrdresService.getDataSource(2, this.gridFilter, {forceFilter: true});
     this.detailedFields = this.mruOrdresService.model
     .getDetailedFields(3, this.gridFilter, {forceFilter: true});
   }

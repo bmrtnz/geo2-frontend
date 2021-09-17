@@ -234,8 +234,9 @@ export abstract class ApiService implements OnDestroy {
    * @param depth Sub model selection depth
    * @param regExpFilter Regexp field filter
    * @param operationName Name of the operation, default to `all{ModelName}`
+   * @param option Object of configurations
    */
-  protected async buildGetAll(depth?: number, regExpFilter?: RegExp, operationName?: string) {
+  protected async buildGetAll(depth?: number, regExpFilter?: RegExp, operationName?: string, option?: {forceFilter?: boolean}) {
     const operation = operationName ?? `all${this.model.name}`;
     const alias = this.withUpperCaseFirst(operation);
     return `
@@ -243,7 +244,7 @@ export abstract class ApiService implements OnDestroy {
         ${operation}(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${await this.model.getGQLFields(depth, regExpFilter, null, {noList: true}).toPromise()}
+              ${await this.model.getGQLFields(depth, regExpFilter, null, {noList: true, forceFilter: option?.forceFilter}).toPromise()}
             }
           }
           pageInfo {
