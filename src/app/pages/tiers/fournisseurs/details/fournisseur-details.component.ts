@@ -193,6 +193,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
               const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
               this.formGroup.patchValue({ ...this.fournisseur, certifications });
               this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
+              // this.certifications.reload();
             });
         } else {
           this.fournisseur = new Fournisseur({});
@@ -252,6 +253,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
+  displayCertifNameDate(data) {
+    return data ? data.description : null;
+  }
 
   openCloseAccordions(action) {
     if (!this.accordion) return;
