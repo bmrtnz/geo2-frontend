@@ -43,6 +43,8 @@
     [dataField]="field.path"
     [caption]="('ordreFrais-' + field.path.replaceAll('.', '-') | localize) || field.name"
     [visible]="false"
+    trueText="Oui"
+    falseText="Non"
     [dataType]="field.dataType"
     [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
     [format]="field.format"

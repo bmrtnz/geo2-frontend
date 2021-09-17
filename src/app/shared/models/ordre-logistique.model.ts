@@ -33,6 +33,7 @@ export class OrdreLogistique extends Model {
   @Field() public referenceLogistique?: string;
   @Field() public referenceDocument?: string;
   @Field() public typeLieuDepart?: string;
+  @Field() public okStation?: string;
 
 }
 

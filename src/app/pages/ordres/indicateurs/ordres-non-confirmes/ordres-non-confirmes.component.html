@@ -1,5 +1,5 @@
 <h2 class="content-block">{{ 'ordres-ordresNonConfirmes' | localize }}
-    <dx-button class="upperButton" type="default" text="{{ 'btn-confirm' | localize }}" (onClick)="onConfirm()"></dx-button>
+    <dx-button class="upperButton" type="default" text="{{ 'btn-confirm' | localize }}"></dx-button>
 </h2>
 
 <div class="content-block">
@@ -73,6 +73,8 @@
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
       [visible]="false"
+      trueText="Oui"
+      falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"

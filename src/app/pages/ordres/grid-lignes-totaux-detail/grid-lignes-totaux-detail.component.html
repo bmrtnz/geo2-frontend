@@ -42,6 +42,8 @@
       [dataField]="field.path"
       [caption]="('ordreLignesTotauxDetail-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
+      trueText="Oui"
+      falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
     ></dxi-column>

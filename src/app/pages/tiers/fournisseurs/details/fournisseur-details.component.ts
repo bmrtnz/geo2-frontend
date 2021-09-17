@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { CertificationDatePopupComponent } from 'app/shared/components/certification-date-popup/certification-date-popup.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
@@ -99,6 +100,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
@@ -127,6 +129,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
+  autoFacturationChecked = false;
+  ifcoChecked = false;
+  IDTracaexists = false;
+  CCexists = false;
+  
 
   constructor(
     private fb: FormBuilder,
@@ -189,6 +196,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             });
         } else {
           this.fournisseur = new Fournisseur({});
+          // Set condit vente
+          this.formGroup.get('conditionVente').setValue('ACHATS');
         }
         this.contentReadyEvent.emit();
       });
@@ -223,6 +232,27 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     return fournisseursSource.load().then(res => !(res.length));
   }
 
+  checkCompteComptable(e) {
+    const compteComptable = e.value;
+    if (!compteComptable) return;
+    const fournisseursSource = this.fournisseursService.getDataSource();
+    fournisseursSource.filter(['compteComptable', '=', compteComptable]);
+    fournisseursSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
+  }
+
+  onAutoFactChange(params) {
+   this.autoFacturationChecked = params.value;
+  }
+
+  onIfcoChange(params) {
+    this.ifcoChecked = params.value;
+  }
+
+  displayIDBefore(data) {
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+  }
+
+
   openCloseAccordions(action) {
     if (!this.accordion) return;
     this.accordion.toArray().forEach(element => {
@@ -240,12 +270,22 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       const fournisseur = this.fournisseursService.extractDirty(this.formGroup.controls);
 
       if (this.createMode) {
-        // fournisseur.id = this.formGroup.get('id').value.toUpperCase();
-        fournisseur.code = this.formGroup.get('code').value.toUpperCase();
-        // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
-        // Avoir pour les valeur par defaut (qui sont not null dans la base)
-        fournisseur.preSaisie = true;
-        fournisseur.valide = false;
+
+
+        this.infoComponent.visible = true;
+        this.infoComponent.doNavigate.subscribe(res => {
+          if (res) {
+            // fournisseur.id = this.formGroup.get('id').value.toUpperCase();
+            fournisseur.code = this.formGroup.get('code').value.toUpperCase();
+            // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
+            // Avoir pour les valeur par defaut (qui sont not null dans la base)
+            fournisseur.preSaisie = true;
+            fournisseur.valide = false;
+            this.saveData(fournisseur);
+          }
+          return;
+        });
+
       } else {
         if (fournisseur.valide === true) {
           fournisseur.preSaisie = false;
@@ -253,50 +293,89 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         }
         fournisseur.id = this.fournisseur.id;
       }
+      this.saveData(fournisseur);
 
-      /* tslint:disable-next-line max-line-length */
-      const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
-
-      (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode ?
-        this.validatePopup.present(
-          HistoryType.FOURNISSEUR,
-          { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
-        ) : of(undefined))
-        .pipe(
-          switchMap(_ => certifications ? this.certDatePopup.present(certifications) : of(undefined)),
-          switchMap(certs => this.fournisseursService.save({
-            fournisseur: {
-              ...fournisseur,
-              certifications: certs,
-            }
-          })),
-        )
-        .subscribe({
-          next: (e) => {
-            notify('Sauvegardé', 'success', 3000);
-            this.refreshGrid.emit();
-            if (!this.createMode) {
-              this.fournisseur = {
-                ...this.fournisseur,
-                ...this.formGroup.getRawValue(),
-              };
-              this.readOnlyMode = true;
-            } else {
-              this.editing = false;
-              this.router.navigate([`/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
-            }
-            this.fournisseur.historique = e.data.saveFournisseur.historique;
-            this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
-            this.fournisseur.certifications = e.data.saveFournisseur.certifications;
-            this.formGroup.markAsPristine();
-          },
-          error: (err) => console.log(err),
-          // error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
     }
   }
 
+  saveData(fournisseur) {
+
+    /* tslint:disable-next-line max-line-length */
+    const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
+
+    (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode ?
+      this.validatePopup.present(
+        HistoryType.FOURNISSEUR,
+        { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
+      ) : of(undefined))
+      .pipe(
+        switchMap(_ => certifications ? this.certDatePopup.present(certifications) : of(undefined)),
+        switchMap(certs => this.fournisseursService.save({
+          fournisseur: {
+            ...fournisseur,
+            certifications: certs,
+          }
+        })),
+      )
+      .subscribe({
+        next: (e) => {
+          notify('Sauvegardé', 'success', 3000);
+          this.refreshGrid.emit();
+          if (!this.createMode) {
+            this.fournisseur = {
+              ...this.fournisseur,
+              ...this.formGroup.getRawValue(),
+            };
+            this.readOnlyMode = true;
+          } else {
+            this.editing = false;
+            this.router.navigate([`/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
+          }
+          this.fournisseur.historique = e.data.saveFournisseur.historique;
+          this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
+          this.fournisseur.certifications = e.data.saveFournisseur.certifications;
+          this.formGroup.markAsPristine();
+        },
+        error: (err) => {
+          console.log(err);
+          notify('Echec de la sauvegarde', 'error', 3000);
+        }
+      });
+
+  }
+
+  onCodeChange(e) {
+    if (!e.value) return;
+    const code = e.value.toUpperCase();
+    this.formGroup.get('code').setValue(code);
+    if (code.length && this.createMode) {
+      this.formGroup.get('compteComptable').markAsDirty()
+      this.formGroup.get('compteComptable').setValue(code);
+    }
+  }
+
+  onIDTracaChange(e) {
+    const idTracabilite = e.value;
+    // Code station = idTracabilite
+    if (idTracabilite.length && this.createMode) {
+      this.formGroup.get('codeStation').markAsDirty()
+      this.formGroup.get('codeStation').setValue(idTracabilite);
+    }
+    // Check if already exists
+    const fournisseursSource = this.fournisseursService.getDataSource();
+    fournisseursSource.searchExpr('idTracabilite');
+    fournisseursSource.searchOperation('=');
+    fournisseursSource.searchValue(idTracabilite);
+    fournisseursSource.load().then(res => res.length ? this.IDTracaexists = true : this.IDTracaexists = false);
+  }
+
+  toUppercase(e) {
+    console.log(e)
+    // e.value = e.value.toUpperCase();
+  } 
+
   onCancel() {
+    
     if (!this.createMode) {
       this.formGroup.reset(this.fournisseur);
       this.readOnlyMode = true;

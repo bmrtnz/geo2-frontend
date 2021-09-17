@@ -1,16 +1,28 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
+import { LocalizePipe } from 'app/shared/pipes';
+import {
+  AuthService,
+  LocalizationService,
+  TransporteursService,
+} from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import { DxSelectBoxComponent } from 'devextreme-angular';
-import { DxoGridComponent } from 'devextreme-angular/ui/nested';
+import {
+  Indicator,
+  OrdresIndicatorsService,
+} from 'app/shared/services/ordres-indicators.service';
+import {
+  DxCheckBoxComponent,
+  DxDataGridComponent,
+  DxNumberBoxComponent,
+  DxSelectBoxComponent,
+} from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -18,29 +30,34 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'planning-depart',
   templateUrl: './planning-depart.component.html',
-  styleUrls: ['./planning-depart.component.scss']
+  styleUrls: ['./planning-depart.component.scss'],
 })
-export class PlanningDepartComponent implements OnInit {
-
+export class PlanningDepartComponent implements AfterViewInit {
   readonly INDICATOR_NAME = 'PlanningDepart';
   options: {};
   secteurs: DataSource;
-  indicator: string;
+  indicator: Indicator;
   filter: any;
   columnChooser = environment.columnChooser;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: Observable<
+    ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
+  >;
   rowSelected: boolean;
-  
-  @ViewChild('gridPLANNINGDEPART', { static: false }) gridPLANNINGDEPARTComponent: DxoGridComponent;
+
+  @ViewChild('gridPLANNINGDEPART', { static: false })
+  gridPLANNINGDEPARTComponent: DxDataGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
-  
+  @ViewChild('diffCheckBox', { static: false }) diffCB: DxCheckBoxComponent;
+  @ViewChild('daysOfService', { static: false }) daysNB: DxNumberBoxComponent;
+
   public dataSource: DataSource;
   initialFilterLengh: number;
+  public title: string;
+  private dxGridElement: HTMLElement;
+  readonly DAYSNB_DEFAULT = 1;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private datePipe: DatePipe,
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -50,56 +67,84 @@ export class PlanningDepartComponent implements OnInit {
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
+    private datePipe: DatePipe,
+    private localizePipe: LocalizePipe
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ['valide', '=', true],
       'and',
-      ['societes', 'contains', this.currentCompanyService.getCompany().id]
-    ])
-    this.detailedFields = this.ordresService.model.getDetailedFields();
-    this.dataSource = ordresService.getDataSource();
-   }
-
-  ngOnInit() {
-    this.enableFilters();
-    
+      ['societes', 'contains', this.currentCompanyService.getCompany().id],
+    ]);
+    this.indicator = this.ordresIndicatorsService.getIndicatorByName(
+      this.INDICATOR_NAME
+    );
+    this.detailedFields = this.indicator.detailedFields;
+    this.dataSource = this.indicator.dataSource;
   }
 
   ngAfterViewInit() {
-
+    this.dxGridElement =
+      this.gridPLANNINGDEPARTComponent.instance.$element()[0];
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
-
   }
 
   enableFilters() {
-    const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
+    const filters = this.indicator.cloneFilter();
     this.initialFilterLengh = filters.length;
-    
-    this.dataSource.filter(filters);
-    this.dataSource.reload();
 
+    filters.push('and', [
+      'logistiques.dateDepartPrevueFournisseur',
+      '>=',
+      this.getDaysNB(),
+    ]);
+
+    this.dataSource.filter(filters);
+
+    this.title = this.localizePipe.transform('grid-situation-depart-title-today');
   }
 
   updateFilters() {
+    const filters = this.indicator.cloneFilter();
+    if (this.secteurSB.value)
+      filters.push('and', [
+        'secteurCommercial.id',
+        '=',
+        this.secteurSB.value.id,
+      ]);
+    filters.push('and', [
+      'logistiques.dateDepartPrevueFournisseur',
+      '>=',
+      this.getDaysNB(),
+    ]);
+    if (this.diffCB.value)
+      filters.push('and', [
+        ['versionDetail', 'isnull', 'null'],
+        'or',
+        ['versionDetail', '<', '001'],
+      ]);
+    this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
 
-    // Retrieves the initial filter while removing date criteria
-    const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
-    // filters.splice(-4,4);
-    if (this.secteurSB.value)    filters.push('and', ['secteurCommercial.id', '=', this.secteurSB.value.id]);
-    // filters.push(
-    //   'and',
-    //   ['dateLivraisonPrevue', '>=', this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value)],
-    //   'and',
-    //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
-    // )
-    
-    // console.log(filters)
     this.dataSource.filter(filters);
     this.dataSource.reload();
 
+    const from = this.datePipe.transform(
+      new Date()
+        .setDate(
+          new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT
+        )
+        .valueOf());
+    /* tslint:disable-next-line max-line-length */
+    this.title = `${this.localizePipe.transform('grid-situation-depart-title')} ${this.localizePipe.transform('du')} ${from} ${this.localizePipe.transform('au')} ${this.datePipe.transform(
+      Date.now()
+    )}`;
+    (
+      this.dxGridElement.querySelector(
+        '.dx-toolbar .dx-texteditor-input'
+      ) as HTMLInputElement
+    ).value = this.title;
   }
 
   onRowClick(event) {
@@ -111,8 +156,29 @@ export class PlanningDepartComponent implements OnInit {
     this.router.navigate([`/ordres/details`]);
   }
 
-  onConfirm() {
-
+  onDaysOfServiceInputReady() {
+    this.enableFilters();
   }
 
+  onCellPrepared(event) {
+    if (event.rowType !== 'data') return;
+    const equal = event.data.sommeColisCommandes === event.data.sommeColisExpedies;
+    if (event.column.dataField === 'versionDetail')
+      event.cellElement.classList.add(event.value ? 'highlight-ok' : 'highlight-err');
+    if (event.column.dataField === 'sommeColisCommandes')
+      event.cellElement.classList.add(equal ? 'highlight-ok' : 'highlight-err');
+    if (event.column.dataField === 'sommeColisExpedies')
+      event.cellElement.classList.add(equal ? 'highlight-ok' : 'highlight-err');
+  }
+
+  getDaysNB() {
+    return this.datePipe.transform(
+      new Date()
+        .setDate(
+          new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT
+        )
+        .valueOf(),
+      'yyyy-MM-dd'
+    );
+  }
 }

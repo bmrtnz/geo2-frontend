@@ -1,4 +1,5 @@
-<dx-data-grid class="dx-card wide-card"
+<dx-data-grid
+  class="dx-card wide-card"
   [dataSource]="dataSource"
   [remoteOperations]="true"
   [showBorders]="false"
@@ -6,12 +7,19 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   scrolling="{
-    useNative:false,
-    showScrollBar:'always'
-  }"
-  (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Marge', $event, gridConfiguratorService.Grid.OrdreMarge, enableFilters.bind(this))"
+      useNative:false,
+      showScrollBar:'always'
+    }"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      title,
+      $event,
+      gridConfiguratorService.Grid.PlanningDepartDetail,
+      enableFilters.bind(this)
+    )
+  "
+  (onCellPrepared)="onCellPrepared($event)"
 >
-
   <!-- Grid configuration -->
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
   <dxo-paging></dxo-paging>
@@ -21,10 +29,10 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-state-storing 
-    [enabled]="true" 
-    type="custom" 
-    [storageKey]="gridConfiguratorService.Grid.OrdreMarge"
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.PlanningDepartDetail"
+    [enabled]="true"
+    type="custom"
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
@@ -36,20 +44,26 @@
     title="{{ 'columnChooser' | localize }}"
     allowSearch="true"
     [width]="columnChooser.width"
-    [height]="columnChooser.height">
+    [height]="columnChooser.height"
+  >
   </dxo-column-chooser>
-  <dxo-summary [totalItems]="totalItems"></dxo-summary>
   <dxi-column
     *ngFor="let field of detailedFields | async"
     [dataField]="field.path"
-    [caption]="('ordreMarge-' + field.path.replaceAll('.', '-') | localize) || field.name"
+    [caption]="('ordreLignes-' + field.path.replaceAll('.','-') | localize) || field.name"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
     [dataType]="field.dataType"
-    [format]="field.format"
-    [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-    [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    [allowSearch]="
+      field.allowSearch !== undefined
+        ? field.allowSearch
+        : ['string'].includes(field.dataType)
+    "
+    [allowHeaderFiltering]="
+      field.allowHeaderFiltering !== undefined
+        ? field.allowHeaderFiltering
+        : ['string'].includes(field.dataType)
+    "
   ></dxi-column>
-
 </dx-data-grid>

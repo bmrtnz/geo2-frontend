@@ -387,7 +387,7 @@ export abstract class ApiService implements OnDestroy {
    * Transform first character to uppercase
    * @param param0 value
    */
-  private withUpperCaseFirst([first, ...rest]: string) {
+  protected withUpperCaseFirst([first, ...rest]: string) {
     return [first.toUpperCase(), ...rest].join('');
   }
 

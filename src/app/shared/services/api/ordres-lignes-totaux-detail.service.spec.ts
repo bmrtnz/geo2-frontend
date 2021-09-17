@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { OrdreLignesTotauxDetailService } from './ordres-lignes-totaux-detail.service';
 
-describe('OrdresLignesTotauxDetailService', () => {
+describe('OrdreLignesTotauxDetailService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {

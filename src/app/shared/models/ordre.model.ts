@@ -62,6 +62,7 @@ export class Ordre extends Model {
   @Field() public instructionsLogistiques?: string;
   @Field() public codeClient?: string;
   @Field() public version?: string;
+  @Field() public versionDetail?: string;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public factureAvoir?: FactureAvoir;
   @Field() public codeChargement?: string;
   @Field() public pourcentageMargeBrut?: number;
@@ -83,6 +84,8 @@ export class Ordre extends Model {
   @Field({ dataType: 'datetime' }) public dateModification?: string;
   @Field({ dataType: 'datetime' }) public dateCreation?: string;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public type?: OrdreType;
+  @Field() public sommeColisCommandes?: number;
+  @Field() public sommeColisExpedies?: number;
 
 }
 

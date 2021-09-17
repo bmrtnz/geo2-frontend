@@ -43,7 +43,7 @@
         <dx-check-box
           class="vertical"
           formControlName="valide"
-          [readOnly]="readOnlyMode || !authService.currentUser.accessGeoTiers"
+          [readOnly]="readOnlyMode"
           [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
         ></dx-check-box>
       </dxi-item>
@@ -62,10 +62,12 @@
                 formControlName="code"
                 [readOnly]="!createMode"
                 [inputAttr]="{'style':  'text-transform: uppercase'}"
+                (onValueChanged)="onCodeChange($event)"
                 >
                   <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxi-validation-rule type="stringLength" max="18"></dxi-validation-rule>
+                    <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
                     <dxi-validation-rule *ngIf="createMode" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
@@ -80,7 +82,7 @@
                   formControlName="commercial"
                   [readOnly]="readOnlyMode"
                   [dataSource]="commercial"
-                  displayExpr="nomUtilisateur"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','nomUtilisateur']"
                 >
@@ -99,7 +101,7 @@
                   formControlName="assistante"
                   [readOnly]="readOnlyMode"
                   [dataSource]="assistante"
-                  displayExpr="nomUtilisateur"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','nomUtilisateur']"
                 >
@@ -198,7 +200,7 @@
                   formControlName="pays"
                   [readOnly]="readOnlyMode"
                   [dataSource]="pays"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
@@ -251,7 +253,7 @@
                   formControlName="langue"
                   [readOnly]="readOnlyMode"
                   [dataSource]="pays"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchEnabled]="true"
                   [searchExpr]="['id','description']"
                 >
@@ -282,7 +284,7 @@
                 formControlName="regimeTva"
                 [readOnly]="readOnlyMode"
                 [dataSource]="regimesTva"
-                displayExpr="description"
+                [displayExpr]="displayIDBefore"
                 [searchEnabled]="true"
                 [searchExpr]="['id','description']"
               >

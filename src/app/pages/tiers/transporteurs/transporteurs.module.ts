@@ -14,6 +14,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
+import { InfoPopupModule } from 'app/shared/components/info-popup/info-popup.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
 
 
@@ -36,6 +37,7 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
     DxPopoverModule,
     DxValidatorModule,
     EditingAlertModule,
+    InfoPopupModule,
     FileManagerModule
   ],
   declarations: [

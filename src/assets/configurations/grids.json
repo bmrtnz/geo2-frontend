@@ -51,9 +51,16 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -99,9 +106,16 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -142,9 +156,16 @@
         "visibleIndex": 5,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -185,9 +206,16 @@
         "visibleIndex": 5,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -234,7 +262,7 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
       },
@@ -242,6 +270,7 @@
         "visibleIndex": 7,
         "dataField": "preSaisie",
         "dataType": "boolean",
+        "width": 50,
         "visible": true
       }
     ]
@@ -290,7 +319,7 @@
         "visibleIndex": 6,
         "dataField": "valide",
         "dataType": "boolean",
-        "width": 100,
+        "width": 50,
         "visible": true,
         "filterValue": true
       }
@@ -362,8 +391,16 @@
         "visibleIndex": 10,
         "dataField": "valide",
         "dataType": "boolean",
+        "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
       }
     ]
   },
@@ -1369,19 +1406,87 @@
   "planning-depart": {
     "columns": [
       {
+        "visibleIndex": 0,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "codeClient",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeAlphaEntrepot",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "versionDetail",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "sommeColisCommandes",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "sommeColisExpedies",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
         "dataField": "dateLivraisonPrevue",
         "visible": true
-      },
+      }
+    ]
+  },
+  "planning-depart-detail": {
+    "columns": [
       {
-        "dataField": "client.raisonSocial",
+        "visibleIndex": 1,
+        "dataField": "ordre.transporteur.raisonSocial",
         "visible": true
       },
       {
-        "dataField": "entrepot.raisonSocial",
+        "visibleIndex": 2,
+        "dataField": "logistique.fournisseur.code",
         "visible": true
       },
       {
-        "dataField": "referenceClient",
+        "visibleIndex": 3,
+        "dataField": "logistique.dateDepartReelleFournisseur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "nombreColisCommandes",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "nombreColisExpedies",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "logistique.fournisseurReferenceDOC",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "logistique.okStation",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "ordre.assistante.nomUtilisateur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "ordre.commercial.nomUtilisateur",
         "visible": true
       }
     ]
@@ -1550,6 +1655,31 @@
       {
         "visibleIndex": 5,
         "dataField": "ordreLigne.article.description",
+        "visible": true
+      }
+    ]
+  },
+  "depassement-encours-pays": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "description",
+        "visible": true,
+        "sortIndex": 1,
+        "sortOrder": "asc"
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "sommeAgrement",
+        "visible": true
+      }
+    ]
+  },
+  "depassement-encours-client": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
         "visible": true
       }
     ]
