@@ -342,7 +342,10 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-fournisseurs-referenceIfco' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="referenceIfco" [readOnly]="readOnlyMode">
+                  <dx-text-box formControlName="referenceIfco" 
+                    [readOnly]="readOnlyMode"
+                    (onValueChanged)="onIfcoChange($event)"
+                  >
                     <dx-validator name="{{ 'tiers-fournisseurs-referenceIfco' | localize }}">
                       <dxi-validation-rule type="stringLength" max="10"></dxi-validation-rule>
                     </dx-validator>
@@ -358,7 +361,11 @@
                     [readOnly]="readOnlyMode"
                     type="date"
                     dateSerializationFormat="yyyy-MM-dd"
-                  ></dx-date-box>
+                  >
+                  <dx-validator name="{{ 'tiers-fournisseurs-dateDebutIfco' | localize }}">
+                    <dxi-validation-rule *ngIf="ifcoChecked" type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-date-box>
                 </div>
               </div>
 
@@ -639,6 +646,7 @@
                 <dx-text-box formControlName="tvaId" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-fournisseurs-tvaId' | localize }}">
                     <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
               </div>
@@ -650,6 +658,7 @@
                 <dx-text-box formControlName="formeJuridique" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-fournisseurs-formeJuridique' | localize }}">
                     <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
               </div>
@@ -661,6 +670,7 @@
                 <dx-text-box formControlName="siretAPE" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-fournisseurs-siretAPE' | localize }}">
                     <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
               </div>
@@ -672,6 +682,7 @@
                 <dx-text-box formControlName="rcs" [readOnly]="readOnlyMode">
                   <dx-validator name="{{ 'tiers-fournisseurs-rcs' | localize }}">
                     <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                    <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
                   </dx-validator>
                 </dx-text-box>
               </div>
@@ -774,7 +785,7 @@
                   <dx-tag-box
                     formControlName="certifications"
                     [dataSource]="certifications"
-                    displayExpr="description"
+                    [displayExpr]="displayCertifNameDate"
                     placeholder="Sélectionner une ou plusieurs certifications..."
                     [readOnly]="readOnlyMode"
                   ></dx-tag-box>
@@ -782,7 +793,7 @@
               </div>
               <!-- Date cond achat signée -->
               <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-fournisseurs-dateConditionGeneraleAchatSignee' | localize }}</div>
+                <div class="dx-field-label whiteSpaceNormal">{{ 'tiers-fournisseurs-dateConditionGeneraleAchatSignee' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-date-box
                     formControlName="dateConditionGeneraleAchatSignee"

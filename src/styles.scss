@@ -1,11 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+
+// Var
+@import "~themes/generated/variables.base";
+$base-fonts-path:'./scss/fonts/';
+
+// App style
+@import "~scss/font";
+@import "~scss/icons";
+
+// Dx style customisation
+@import "~scss/dx/base";
+@import "~scss/dx/datagrid";
+@import "~scss/dx/form";
+@import "~scss/dx/accordion";
+
 .img-responsive {
-  max-width:100%;
-  height:auto;
+  max-width: 100%;
+  height: auto;
 }
 
 .right {
-  float:right;
+  float: right;
 }
 
 /* Toasts */
@@ -45,25 +60,10 @@
   background-color: #00759c;
 }
 
-$base-fonts-path:'./scss/fonts/';
-
-// Var
-@import "~themes/generated/variables.base";
-
-// App style
-@import "~scss/font";
-@import "~scss/icons";
-
-// Dx style customisation
-@import "~scss/dx/base";
-@import "~scss/dx/datagrid";
-@import "~scss/dx/form";
-@import "~scss/dx/accordion";
-
 // No text overline
 body {
-	-webkit-user-select:none;
-     -moz-user-select:none;
+	-webkit-user-select: none;
+     -moz-user-select: none;
 }
 
 
@@ -72,54 +72,54 @@ body {
 
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
   .dx-field-label {
-    font-size:16px;
+    font-size: 16px;
   }
 
   .checkbox-label {
-    overflow:visible;
+    overflow: visible;
   }
 
   .dx-accordion-item-title::before {
-    font-size:18px;
+    font-size: 18px;
   }
 
   .dx-button:not(.subButton):not(.icon-btn) {
-    margin-bottom:10px;
+    margin-bottom: 10px;
     .dx-button-content {
-      padding:10px 3px;
+      padding: 10px 3px;
     }
     .dx-icon {
-      padding:0;
-      margin:0;
+      padding: 0;
+      margin: 0;
     }
     .dx-button-text {
-      display:block;
-      margin-top:5px;
-      line-height:18px;
-      white-space:normal;
-      color:#FFF;
-      width:100%;
+      display: block;
+      margin-top: 5px;
+      line-height: 18px;
+      white-space: normal;
+      color: #FFF;
+      width: 100%;
     }
   }
 }
 
 .left-buttons-box {
-  position:fixed;
+  position: fixed;
 }
 
 .black .dx-button-text {
-  color:#1E1E1E !important;
+  color: #1E1E1E !important;
 }
 
 // Button placed in hx
 .title-button {
-  float:right;
-  margin-left:10px;
+  float: right;
+  margin-left: 10px;
 }
 
 // Thinner grids
 .dx-datagrid-rowsview .dx-row > td {
-  line-height:0;
+  line-height: 0;
 
   & > .dx-filemanager-details-item-name-wrapper {
     line-height: initial;
@@ -129,27 +129,26 @@ body {
 // Datagrid title customization
 .dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
 .dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
-    border: 0px;
+    border: 0;
 }
 
 // Reducing space between form fields
 .dx-form-group-content, .dx-accordion-item {
   .dx-field {
-    margin-bottom:0 !important;
-    .dx-checkbox {
-      margin:0 !important;
-      .dx-checkbox-container {
-        padding-top:19px !important;
-        .dx-checkbox-icon {
-          top:-8px !important;
-        }
-      }
-    }
+    margin-bottom: 0 !important;
   }
+}
+// Reducing space between checkboxes
+.dx-box .dx-field-value:not(.dx-widget) > .dx-checkbox {
+  margin: 10px 0 !important;
 }
 // Centering Oui/Non text in datagrid filter row
 .dx-row .dx-texteditor-input[aria-haspopup="listbox"] {
   position: relative;
   left: 12px;
   text-align: center;
+}
+
+.whiteSpaceNormal {
+  white-space: normal !important;
 }

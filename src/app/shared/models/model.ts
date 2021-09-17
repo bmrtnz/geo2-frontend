@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {from, MonoTypeOperatorFunction, Observable, of, OperatorFunction} from 'rxjs';
+import {from, iif, MonoTypeOperatorFunction, Observable, of, OperatorFunction} from 'rxjs';
 import {concatAll, concatMap, endWith, filter, map, mergeMap, reduce, startWith, takeWhile, toArray} from 'rxjs/operators';
 
 export type ModelFieldOptions<T = typeof Model> = {
@@ -85,7 +85,7 @@ export abstract class Model {
     depth = 1,
     fieldFilter = DEFAULT_FILTER,
     prefix?: string,
-    config?: { noList?: boolean },
+    config?: { noList?: boolean, forceFilter ?: boolean },
   ): Observable<string> {
     return from(Object.entries(this.getFields()))
       .pipe(
@@ -99,9 +99,16 @@ export abstract class Model {
             if (type && type.name === 'Array') return false;
           }
 
-          if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
-          if (options.fetchedModel && depth > 0) return true;
-          return options.asKey || options.asLabel;
+          if (config?.forceFilter && fieldFilter) {
+            if (fieldFilter.test(path)) return true;
+
+            return !!options.fetchedModel;
+          } else {
+            if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
+            if (options.fetchedModel && depth > 0) return true;
+
+            return options.asKey || options.asLabel;
+          }
         }),
         this.takeToLastField(depth),
         concatMap(([propertyName, options]) => {
@@ -110,9 +117,9 @@ export abstract class Model {
           return options.fetchedModel
             .getGQLFields(depth - 1, fieldFilter, path, config)
             .pipe(
-              map(res => `${res}`),
-              startWith(`${propertyName} {`),
-              endWith(`}`),
+              map(res => {
+                if (res !== '') return `${propertyName} {${res}}`;
+              })
             );
         }),
         reduce((acc, crt) => `${acc} ${crt}`),
