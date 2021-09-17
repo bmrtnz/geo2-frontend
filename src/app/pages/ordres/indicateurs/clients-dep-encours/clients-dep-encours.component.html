@@ -65,7 +65,7 @@
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
@@ -83,6 +83,7 @@
       [visible]="false"
       [dataType]="field.dataType"
       [format]="field.format"
+      [allowSorting]="field.allowSorting"
       [allowSearch]="
         field.allowSearch !== undefined
           ? field.allowSearch

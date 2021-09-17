@@ -5,6 +5,11 @@ import { LoadOptions } from 'devextreme/data/load_options';
 import { Pays } from '../../models';
 import { APIRead, ApiService, RelayPage } from '../api.service';
 
+export enum Operation {
+  All = 'allPays',
+  AllDistinct = 'allDistinctPays',
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,14 +23,15 @@ export class PaysService extends ApiService implements APIRead {
     super(apollo, Pays);
   }
 
-  getDataSource(depth = 1, filter = this.fieldsFilter) {
+  getDataSource(depth = 1, filter = this.fieldsFilter, operation = Operation.All) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
-          type Response = { allPays: RelayPage<Pays> };
+          const operationName = operation.valueOf();
+          type Response = { [operationName: string]: RelayPage<Pays> };
 
           if (options.group)
             return this.loadDistinctQuery(options, res => {
@@ -33,12 +39,12 @@ export class PaysService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(depth, filter);
+          const query = await this.buildGetAll(depth, filter, operationName);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allPays)
-              resolve(this.asInstancedListCount(res.data.allPays));
+            if (res.data && res.data[operationName])
+              resolve(this.asInstancedListCount(res.data[operationName]));
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {

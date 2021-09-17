@@ -68,17 +68,18 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
       this.INDICATOR_NAME
     );
     this.detailedFields = this.indicator.detailedFields;
-    this.dataSource = this.indicator.dataSource;
   }
 
   ngAfterViewInit() {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
+    this.enableFilters();
   }
 
   enableFilters() {
     const filters = this.indicator.cloneFilter();
+    this.dataSource = this.indicator.dataSource;
     this.dataSource.filter(filters);
   }
 
