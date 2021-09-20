@@ -11,6 +11,7 @@ class Stamp extends Model {
 class Type extends Model {
   @Field({ asKey: true }) public id?: number;
   @Field({ asLabel: true }) public label?: string;
+  @Field() public typeDescription?: string;
   @Field({ model: Promise.resolve({ default: Stamp }) }) public stamp?: Stamp;
 }
 
@@ -34,6 +35,7 @@ describe('Model class', () => {
       type: {
         id: 1,
         label: 'prototype',
+        typeDescription: 'Type description',
         stamp: { id: 1, moment: '1970-01-01' },
       },
     });
@@ -50,12 +52,13 @@ describe('Model class', () => {
       Entity.getListFields()
         .pipe(toArray())
         .subscribe(fields => {
-          expect(fields.length).toEqual(6);
+          expect(fields.length).toEqual(7);
           expect(fields).toContain('id');
           expect(fields).toContain('description');
           expect(fields).toContain('valide');
           expect(fields).toContain('type.id');
           expect(fields).toContain('type.label');
+          expect(fields).toContain('type.typeDescription');
           done();
         });
     });
@@ -64,7 +67,7 @@ describe('Model class', () => {
       Entity.getListFields(2)
         .pipe(toArray())
         .subscribe(fields => {
-          expect(fields.length).toEqual(7);
+          expect(fields.length).toEqual(8);
           expect(fields).toContain('type.stamp.id');
           done();
         });
@@ -78,7 +81,7 @@ describe('Model class', () => {
       Entity.getGQLFields()
         .subscribe(fields => {
           expect(fields).toMatch(/^id description/);
-          expect(fields).toMatch(/type { id label }/);
+          expect(fields).toMatch(/type {id label}/);
           done();
         });
     });
@@ -86,7 +89,7 @@ describe('Model class', () => {
     it('with depth', (done) => {
       Entity.getGQLFields(2)
         .subscribe(fields => {
-          expect(fields).toMatch(/type {.*stamp { id }.*}/);
+          expect(fields).toMatch(/type {.*stamp {id}.*}/);
           done();
         });
     });
@@ -95,6 +98,14 @@ describe('Model class', () => {
       Entity.getGQLFields(1, /id$/)
         .subscribe(fields => {
           expect(fields).not.toContain('valide');
+          done();
+        });
+    });
+
+    it('with filter and depth', (done) => {
+      Entity.getGQLFields(1, /^(valide|type.typeDescription)$/, null, {forceFilter: true})
+        .subscribe(fields => {
+          expect(fields).toMatch(/valide type {typeDescription}/);
           done();
         });
     });
@@ -127,7 +138,7 @@ describe('Model class', () => {
     it('with depth', (done) => {
       Entity.getDetailedFields(2)
         .subscribe(fields => {
-          expect(fields.length).toEqual(6);
+          expect(fields.length).toEqual(7);
           expect(fields).toContain(jasmine.objectContaining({
             path: 'type.stamp.id',
             asKey: true,

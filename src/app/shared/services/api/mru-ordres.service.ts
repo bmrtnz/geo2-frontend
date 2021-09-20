@@ -34,7 +34,8 @@ export class MruOrdresService extends ApiService implements APIRead {
       });
   }
 
-  getDataSource(depth = 2, filter?: RegExp) {
+  getDataSource(depth = 2, filter?: RegExp, option ?: {forceFilter?: boolean}) {
+    console.log(filter);
     return new DataSource({
       store: this.createCustomStore({
         key: ['utilisateur', 'ordre'],
@@ -47,7 +48,7 @@ export class MruOrdresService extends ApiService implements APIRead {
             });
 
           type Response = { allMRUOrdre: RelayPage<MRUOrdre> };
-          const query = await this.buildGetAll(depth, filter);
+          const query = await this.buildGetAll(depth, filter, null, option);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {

@@ -49,6 +49,7 @@ import { GridFraisComponent } from './grid-frais/grid-frais.component';
 import { FormLogistiqueComponent } from './form-logistique/form-logistique.component';
 import { GridDetailPlanningDepartsComponent } from './grid-detail-planning-departs/grid-detail-planning-departs.component';
 import { LocalizePipe } from 'app/shared/pipes';
+import { GridClientsDepEncoursDetailComponent } from './indicateurs/grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component';
 
 
 @NgModule({
@@ -81,6 +82,7 @@ import { LocalizePipe } from 'app/shared/pipes';
     GridFraisComponent,
     FormLogistiqueComponent,
     GridDetailPlanningDepartsComponent,
+    GridClientsDepEncoursDetailComponent,
   ],
   imports: [
     OrdresRoutingModule,

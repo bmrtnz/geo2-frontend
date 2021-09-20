@@ -84,8 +84,16 @@ export class Ordre extends Model {
   @Field({ dataType: 'datetime' }) public dateModification?: string;
   @Field({ dataType: 'datetime' }) public dateCreation?: string;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public type?: OrdreType;
-  @Field() public sommeColisCommandes?: number;
-  @Field() public sommeColisExpedies?: number;
+  @Field({
+    allowSorting: false,
+    allowHeaderFiltering: false,
+    allowSearch: false,
+  }) public sommeColisCommandes?: number;
+  @Field({
+    allowSorting: false,
+    allowHeaderFiltering: false,
+    allowSearch: false,
+  }) public sommeColisExpedies?: number;
 
 }
 

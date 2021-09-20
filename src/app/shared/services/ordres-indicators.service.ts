@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
 import { OrdreDatasourceOperation, OrdresService } from './api/ordres.service';
-import { PaysService } from './api/pays.service';
+import { Operation as PaysOperation, PaysService } from './api/pays.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
 
@@ -73,7 +73,7 @@ const indicators: Indicator[] = [{
   warningIcon: 'material-icons warning'
 }, {
   id: 'ClientsDepEncours',
-  enabled: false,
+  enabled: true,
   fetchCount: true,
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
@@ -81,7 +81,8 @@ const indicators: Indicator[] = [{
   tileBkg: '#4199B4',
   indicatorIcon: 'user',
   warningIcon: 'material-icons warning',
-  select: /^(?:id|description|sommeAgrement)$/,
+  /* tslint:disable-next-line max-line-length */
+  select: /^(?:id|description|clientsSommeAgrement|clientsSommeEnCoursTemporaire|clientsSommeEnCoursBlueWhale|clientsSommeAutorise|clientsSommeDepassement|clientsSommeEnCoursActuel|clientsSommeEnCoursNonEchu|clientsSommeEnCours1a30|clientsSommeEnCours31a60|clientsSommeEnCours61a90|clientsSommeEnCours90Plus|clientsSommeAlerteCoface)$/,
 }, {
   id: 'OrdresNonClotures',
   enabled: true,
@@ -199,13 +200,23 @@ export class OrdresIndicatorsService {
       if (instance.id === 'ClientsDepEncours') {
         instance.detailedFields = this.paysService.model
         .getDetailedFields(1, instance.select, {forceFilter: true});
-        instance.dataSource = paysService.getDataSource(1, instance.select);
+        instance.dataSource = paysService.getDataSource(1, instance.select, PaysOperation.AllDistinct);
         instance.filter = [
           ['valide', '=', true],
           'and',
           ['clients.societe.id', '=', this.currentCompanyService.getCompany().id],
           'and',
-          ['clients.allEnc', '<>', 0],
+          [
+            ['clients.enCoursNonEchu', '<>', 0],
+            'or',
+            ['clients.enCours1a30', '<>', 0],
+            'or',
+            ['clients.enCours31a60', '<>', 0],
+            'or',
+            ['clients.enCours61a90', '<>', 0],
+            'or',
+            ['clients.enCours90Plus', '<>', 0],
+          ],
         ];
       }
 

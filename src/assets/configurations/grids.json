@@ -1666,11 +1666,68 @@
         "dataField": "description",
         "visible": true,
         "sortIndex": 1,
-        "sortOrder": "asc"
+        "sortOrder": "asc",
+        "fixed": true,
+        "fixedPosition": "left"
       },
       {
         "visibleIndex": 1,
-        "dataField": "sommeAgrement",
+        "dataField": "clientsSommeAgrement",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "clientsSommeEnCoursTemporaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "clientsSommeEnCoursBlueWhale",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "clientsSommeAutorise",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "clientsSommeDepassement",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "clientsSommeEnCoursActuel",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "clientsSommeEnCoursNonEchu",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "clientsSommeEnCours1a30",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "clientsSommeEnCours31a60",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "clientsSommeEnCours61a90",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "clientsSommeEnCours90Plus",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "clientsSommeAlerteCoface",
         "visible": true
       }
     ]
@@ -1679,7 +1736,71 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id",
+        "dataField": "raisonSocial",
+        "visible": true,
+        "sortIndex": 1,
+        "sortOrder": "asc",
+        "fixed": true,
+        "fixedPosition": "left"
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "agrement",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "enCoursTemporaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "enCoursBlueWhale",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "autorise",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "depassement",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "enCoursActuel",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "enCoursNonEchu",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "enCours1a30",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "enCours31a60",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "enCours61a90",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "enCours90Plus",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "alerteCoface",
         "visible": true
       }
     ]
