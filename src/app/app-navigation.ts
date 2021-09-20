@@ -37,27 +37,31 @@ export const navigation = [
     // ]
   },
   {
-    text: 'Tiers',
-    icon: 'user',
+    html: '<i class="dx-icon dx-icon-user"></i><div>Tiers</div><div class="presaisie-indicator"></div>',
+    id: 'tiers',
     items: [
       {
-        text: 'Clients',
+        html: '<div>Clients</div><div class="presaisie-indicator"></div>',
+        id: 'clients',
         path: '/nested/n/(tiers/clients/list)'
       }, {
-        text: 'Fournisseurs',
+        html: '<div>Fournisseurs</div><div class="presaisie-indicator"></div>',
+        id: 'fournisseurs',
         path: '/nested/n/(tiers/fournisseurs/list)'
       }, {
-        text: 'Transporteurs',
+        html: '<div>Transporteurs</div><div class="presaisie-indicator"></div>',
+        id: 'transporteurs',
         path: '/nested/n/(tiers/transporteurs/list)'
       } , {
-        text: 'Passages à quai',
-        path: '/nested/n/(tiers/lieux-passage-a-quai/list)'
+        html: '<div>Passage à quai</div><div class="presaisie-indicator"></div>',
+        id: 'passages-a-quai',
+        path: '/nested/n/(tiers/lieux-passage-a-quai/list)',
       }
     ]
   },
   {
-    text: 'Articles',
-    icon: 'box',
+    html: '<i class="dx-icon dx-icon-box"></i><div>Articles</div><div class="presaisie-indicator"></div>',
+    id: 'articles',
     path: '/nested/n/(articles/list)'
   },
   {

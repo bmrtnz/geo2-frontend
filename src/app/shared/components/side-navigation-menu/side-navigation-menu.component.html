@@ -6,6 +6,7 @@
         width="100%"
         [items]="items"
         (onInitialized)="onMenuInitialized($event)"
+        (onItemRendered)="onItemRendered($event)"
         (onItemClick)="onItemClick($event)"
         (onContentReady)="updateSelection($event)"
         (onSelectionChanged)="updateSelection($event)"

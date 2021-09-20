@@ -34,3 +34,20 @@
   opacity:0;
   right:-35px;
 }
+
+::ng-deep .side-navigation-menu {
+  .dx-treeview-item-content * {
+    float: left;
+  }
+  .presaisie-indicator {
+    display: none;
+    width: 13px;
+    height: 13px;
+    margin: 5px 0 0 7px ;
+    border-radius: 100%;
+    background-color: #EE0000;
+    border: 1px solid #AAA;
+  }
+}
+
+
