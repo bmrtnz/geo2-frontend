@@ -47,10 +47,11 @@ export class PushHistoryPopupComponent {
 
   async onSubmit(form: NgForm) {
     if (this.commentValidator.instance.validate().isValid) {
+      console.log(this.sourceData)
       const save = this.historiqueService
         .saveByType(this.historyType, {
           ...this.sourceData,
-          commentaire: form.value.commentaire,
+          commentaire: form.value.commentaire
         });
       this.persist.emit(save);
       this.popupComponent.instance.hide();

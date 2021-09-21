@@ -40,14 +40,14 @@ export class OrdresAccueilComponent implements OnDestroy {
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
 
-    console.log('start : ',authService.currentUser.configTuilesOrdres)
+    // console.log('start : ',authService.currentUser.configTuilesOrdres)
 
     if (!authService.currentUser.configTuilesOrdres) {
       authService.currentUser.configTuilesOrdres = {indicators : this.allIndicators}
     }
 
     this.loadedIndicators = authService.currentUser.configTuilesOrdres.indicators;
-    console.log('start : ',this.loadedIndicators)
+    // console.log('start : ',this.loadedIndicators)
     this.indicators = this.loadedIndicators;
 
     const navigationEndEvent = this.router.events
