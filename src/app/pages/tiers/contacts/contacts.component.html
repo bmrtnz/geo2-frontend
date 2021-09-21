@@ -62,7 +62,7 @@
       [visible]="false"
       trueText="Oui"
       falseText="Non"
-      [allowEditing]="(field.name === 'valide' && authService.currentUser.accessGeoTiers) || (field.name !== 'valide' && field?.allowEditing !== false)"
+      [allowEditing]="(field.name === 'valide' && authService.currentUser.adminClient) || (field.name !== 'valide' && field?.allowEditing !== false)"
       [validationRules]="field.validationRules || {}"
       [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
