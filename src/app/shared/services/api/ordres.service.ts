@@ -62,7 +62,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
             ...this.mapLoadOptionsToVariables(options)
           };
 
-          this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
+          this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data[key])
               resolve(this.asInstancedListCount(res.data[key]));
           });

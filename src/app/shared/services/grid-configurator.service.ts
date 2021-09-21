@@ -151,7 +151,6 @@ export class GridConfiguratorService {
         icon: 'material-icons settings_backup_restore',
         hint: 'Réinitialiser les colonnes affichées',
         onClick: async () => {
-          component.clearFilter();
           const defaultState = await this.fetchDefaultConfig(grid);
           component.state(defaultState);
           if (cbk) cbk();
