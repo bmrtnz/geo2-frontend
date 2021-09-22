@@ -1,7 +1,8 @@
-import {Component, Input, NgModule, OnChanges} from '@angular/core';
-import {DxButtonModule, DxDataGridModule, DxPopupModule} from 'devextreme-angular';
+import {Component, Input, NgModule, OnChanges, ViewChild} from '@angular/core';
+import {DxButtonModule, DxDataGridComponent, DxDataGridModule, DxPopupModule} from 'devextreme-angular';
 import {SharedModule} from '../../shared.module';
 import {Historique} from '../../models';
+import dxDataGrid from 'devextreme/ui/data_grid';
 
 @Component({
   selector: 'app-historique-valide',
@@ -14,6 +15,8 @@ export class HistoriqueValideComponent implements OnChanges {
   btnVisible = false;
   visible = false;
 
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+
   constructor() { }
 
   ngOnChanges() {
@@ -21,7 +24,13 @@ export class HistoriqueValideComponent implements OnChanges {
       this.btnVisible = this.historique.length > 0;
     }
   }
+
+  sortGrid() {
+    this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
+  }
+
 }
+
 
 @NgModule({
   declarations: [HistoriqueValideComponent],
