@@ -202,12 +202,20 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         Object.keys(this.formGroup.controls).forEach(key => {
             this.formGroup.get(key).markAsDirty();
         });
+        // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+        const Element = document.querySelector('.submit') as HTMLElement;
+        Element.click();
+    }
+
+    displayIDBefore(data) {
+        return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
     }
 
     onSubmit() {
 
         if (!this.formGroup.pristine && this.formGroup.valid) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
+
             if (this.cloneMode) {
                 article.preSaisie = true;
             } else {

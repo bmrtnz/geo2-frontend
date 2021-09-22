@@ -49,6 +49,17 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     );
   }
 
+  onCellPrepared(e) {
+    // Adding code (prefix) before "variété" and "emballage"
+    if (e.rowType == 'data') {
+      if (this.localizeService.localize("articles-matierePremiere-variete") == e.column.caption) {
+        e.cellElement.innerText =  e.data.matierePremiere?.variete.id + ' ' + e.cellElement.innerText;
+      } else if (this.localizeService.localize("articles-emballage-emballage") == e.column.caption) {
+        e.cellElement.innerText =  e.data.emballage?.emballage.id + ' ' + e.cellElement.innerText;
+      }
+    }
+  }
+
   onRowDblClick(e) {
     this.router.navigate([`/articles/${e.data.id}`]);
   }

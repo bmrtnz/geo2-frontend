@@ -15,11 +15,11 @@
       showScrollBar:'always'
     }"
     (onRowPrepared)="onRowPrepared($event)"
+    (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Article)"
   >
-
     <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
