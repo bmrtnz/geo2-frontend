@@ -1,0 +1,12 @@
+<dx-tab-panel
+    class="content-block"
+    [items]="items"
+    [itemTemplate]="'item'"
+    [repaintChangesOnly]="true"
+>
+
+    <div *dxTemplate="let item of 'item'">
+        <ng-template [ngComponentOutlet]="item.component"></ng-template>
+    </div>
+
+</dx-tab-panel>

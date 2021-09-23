@@ -13,12 +13,12 @@
             <dx-tag-box
                 [items]="allIndicators"
                 [value]="loadedIndicators"
+                [valueExpr]="'id'"
                 [showClearButton]="true"
                 [showSelectionControls]="true"
                 [searchEnabled]="false"
                 applyValueMode="useButtons"
                 [displayExpr]="displayExpr"
-                (valueChange)="indicatorsChange.emit($event)"
                 (onValueChanged)="tileNumber($event)"
             ></dx-tag-box>
         </div>
@@ -35,13 +35,14 @@
         [baseItemHeight]="120"
         [itemMargin]="20"
         direction="vertical"
+        (onItemClick)="onTileClick($event)"
     >
         <dxi-item
             *ngFor="let indicator of indicators"
             [widthRatio]="1.5"
             [heightRatio]="1.5"
             [style.background]="'' + indicator.tileBkg + ''"
-            [routerLink]="'' + indicator.goTo ? indicator.goTo : '/ordres/accueil' + ''"
+            [buttonOptions]="indicator"
             >
             <div class="indicator-container">
                 <dx-button *ngIf="indicator.indicatorIcon" type="danger" icon="{{indicator.indicatorIcon}}" class="tile-button indicator-button"></dx-button>

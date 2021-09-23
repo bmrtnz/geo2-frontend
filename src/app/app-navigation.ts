@@ -25,7 +25,7 @@ export const navigation = [
   {
     text: 'Ordres de commande',
     icon: 'material-icons euro_symbol',
-    path: '/ordres/accueil'
+    path: '/ordres'
     // items: [
     //   {
     //     text: 'Accueil',
