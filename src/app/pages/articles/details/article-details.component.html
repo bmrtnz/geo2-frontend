@@ -14,7 +14,7 @@
             type="default"
             text="{{ 'btn-editer' | localize }}"
             [visible]="readOnlyMode && !cloneMode"
-            (onClick)="readOnlyMode = false; editing = true"
+            (onClick)="onEdit()"
         ></dx-button>
         <dx-button class="upperButton"
             type="default"

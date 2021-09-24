@@ -195,6 +195,14 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.formGroup.reset(this.article);
     }
 
+    onEdit() {
+
+        this.readOnlyMode = false;
+        this.editing = true;
+        this.showWarnings();
+
+    }
+
     onClone() {
         this.readOnlyMode = false;
         this.cloneMode = true;
@@ -202,9 +210,15 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         Object.keys(this.formGroup.controls).forEach(key => {
             this.formGroup.get(key).markAsDirty();
         });
+        this.showWarnings()
+    }
+
+    showWarnings() {
+
         // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
         const Element = document.querySelector('.submit') as HTMLElement;
         Element.click();
+
     }
 
     displayIDBefore(data) {
