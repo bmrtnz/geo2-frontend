@@ -30,6 +30,9 @@
         }
         .dx-field-value {
             width :70%;
+            &.small-field {
+                width: 30%;
+            }
         }
         .dx-field-label {
             width :30%;

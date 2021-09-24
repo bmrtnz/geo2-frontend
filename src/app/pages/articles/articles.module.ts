@@ -6,7 +6,7 @@ import {
     DxAccordionModule, DxBoxModule,
     DxButtonModule, DxCheckBoxModule,
     DxDataGridModule, DxTabPanelModule,
-    DxTemplateModule,
+    DxTemplateModule, DxTagBoxModule,
     DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
     DxTextBoxModule, DxValidatorModule, DxPopupModule
 } from 'devextreme-angular';
@@ -31,7 +31,7 @@ import { ViewDocumentPopupModule } from 'app/shared/components/view-document-pop
         DxAccordionModule, DxBoxModule,
         DxButtonModule, DxCheckBoxModule,
         DxDataGridModule, DxTabPanelModule,
-        DxTemplateModule,
+        DxTemplateModule, DxTagBoxModule,
         DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
         DxTextBoxModule, DxValidatorModule,
         EditingAlertModule, PushHistoryPopupModule,

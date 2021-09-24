@@ -32,7 +32,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   origines: DataSource;
   varietes: DataSource;
   emballages: DataSource;
-  matieresPremieres: DataSource;
+  modesCulture: DataSource;
   clients: DataSource;
   trueFalse: string[];
 
@@ -53,7 +53,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         .getFilterDatasource('matierePremiere.variete.description');
       this.emballages = this.articlesService
         .getFilterDatasource('emballage.emballage.description');
-      this.matieresPremieres = this.articlesService
+      this.modesCulture = this.articlesService
         .getFilterDatasource('matierePremiere.modeCulture.description');
       this.clients = this.clientsService.getDataSource();
       this.trueFalse = ['Tous', 'Oui', 'Non'];
@@ -126,7 +126,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       .map(v => JSON.parse(v));
 
       this.dataGrid.instance.filter(filters);
-      console.log(filters, this.dataGrid.instance.getCombinedFilter())
+      // console.log(filters, this.dataGrid.instance.getCombinedFilter())
+
   }
 
   capitalize(data) {

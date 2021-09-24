@@ -10,7 +10,6 @@
             <div class="dx-field-value">
                 <dx-tag-box
                     [dataSource]="especes"
-
                     (valueChange)="onFieldValueChange($event,'matierePremiere.espece.description')"
                     [searchEnabled]="true"
                     searchExpr="article.matierePremiere.espece.description"
@@ -38,7 +37,7 @@
           <div class="dx-field-label">{{ 'articles-matierePremiere-modeCulture' | localize }}</div>
           <div class="dx-field-value">
             <dx-tag-box
-                [dataSource]="matieresPremieres"
+                [dataSource]="modesCulture"
                 (valueChange)="onFieldValueChange($event,'matierePremiere.modeCulture.description')"
                 [searchEnabled]="true"
                 searchExpr="matierePremiere.modeCulture.description"
@@ -78,7 +77,7 @@
        <!-- Valide ? -->
        <div class="dx-field field-large valid-field">
         <div class="dx-field-label">{{ 'articles-valide' | localize }}</div>
-        <div class="dx-field-value">
+        <div class="dx-field-value small-field">
           <dx-select-box
               [items]="trueFalse"
               (valueChange)="onFieldValueChange($event,'valide')"
