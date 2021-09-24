@@ -392,8 +392,7 @@
         "dataField": "valide",
         "dataType": "boolean",
         "width": 50,
-        "visible": true,
-        "filterValue": true
+        "visible": true
       },
       {
         "visibleIndex": 11,

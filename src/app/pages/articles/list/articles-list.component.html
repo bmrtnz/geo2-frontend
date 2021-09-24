@@ -1,6 +1,94 @@
 <h2 class="content-block">{{ 'articles-title' | localize }}</h2>
 
 <div class="content-block articles-page">
+  <div class="search-criteria-container">
+    <h6 class="content-block">{{ 'articles-preFilter-title' | localize }}</h6>
+    <div class="search-criteria-subcontainer" style="width:auto">
+        <!-- espèce -->
+        <div class="dx-field">
+            <div class="dx-field-label">{{ 'articles-matierePremiere-espece' | localize }}</div>
+            <div class="dx-field-value">
+                <dx-tag-box
+                    [dataSource]="especes"
+
+                    (valueChange)="onFieldValueChange($event,'matierePremiere.espece.description')"
+                    [searchEnabled]="true"
+                    searchExpr="article.matierePremiere.espece.description"
+                    [displayExpr]="capitalize"
+                    valueExpr="key"
+                ></dx-tag-box>
+            </div>
+        </div>
+        <!-- variété -->
+        <div class="dx-field field-large">
+          <div class="dx-field-label">{{ 'articles-matierePremiere-variete' | localize }}</div>
+          <div class="dx-field-value">
+              <dx-tag-box
+              [dataSource]="varietes"
+              (valueChange)="onFieldValueChange($event,'matierePremiere.variete.description')"
+              [searchEnabled]="true"
+              searchExpr="matierePremiere.variete.description"
+              [displayExpr]="capitalize"
+              valueExpr="key"
+          ></dx-tag-box>
+          </div>
+        </div>
+        <!-- Mode Culture -->
+        <div class="dx-field field-large">
+          <div class="dx-field-label">{{ 'articles-matierePremiere-modeCulture' | localize }}</div>
+          <div class="dx-field-value">
+            <dx-tag-box
+                [dataSource]="matieresPremieres"
+                (valueChange)="onFieldValueChange($event,'matierePremiere.modeCulture.description')"
+                [searchEnabled]="true"
+                searchExpr="matierePremiere.modeCulture.description"
+                [displayExpr]="capitalize"
+                valueExpr="key"
+            ></dx-tag-box>
+          </div>
+        </div>
+        <!-- Emballage -->
+        <div class="dx-field field-large">
+          <div class="dx-field-label">{{ 'articles-emballage-emballage' | localize }}</div>
+          <div class="dx-field-value">
+            <dx-tag-box
+                [dataSource]="emballages"
+                (valueChange)="onFieldValueChange($event,'emballage.emballage.description')"
+                [searchEnabled]="true"
+                searchExpr="emballage.emballage.description"
+                [displayExpr]="capitalize"
+                valueExpr="key"
+            ></dx-tag-box>
+            </div>
+        </div>
+        <!-- Origine -->
+        <div class="dx-field field-large">
+          <div class="dx-field-label">{{ 'articles-matierePremiere-origine' | localize }}</div>
+          <div class="dx-field-value">
+            <dx-tag-box
+                [dataSource]="origines"
+                (valueChange)="onFieldValueChange($event,'matierePremiere.origine.description')"
+                [searchEnabled]="true"
+                searchExpr="matierePremiere.origine.description"
+                [displayExpr]="capitalize"
+                valueExpr="key"
+            ></dx-tag-box>
+          </div>
+       </div>
+       <!-- Valide ? -->
+       <div class="dx-field field-large valid-field">
+        <div class="dx-field-label">{{ 'articles-valide' | localize }}</div>
+        <div class="dx-field-value">
+          <dx-select-box
+              [items]="trueFalse"
+              (valueChange)="onFieldValueChange($event,'valide')"
+              [value]="trueFalse[0]"
+          ></dx-select-box>
+        </div>
+      </div>
+     </div>
+  </div>
+  <div style="clear:both"></div>
   <dx-data-grid class="dx-card wide-card"
     [dataSource]="articles"
     [remoteOperations]="true"
