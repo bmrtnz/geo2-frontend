@@ -12,7 +12,6 @@ import { LitigesService } from 'app/shared/services/api/litiges.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { Comm, CommService, Log, LogService } from 'app/shared/services/log.service';
 import { Content, INDEX_TAB, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxAccordionComponent, DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -34,8 +33,7 @@ export interface ToggledGrid {
 @Component({
   selector: 'app-ordres-details',
   templateUrl: './ordres-details.component.html',
-  styleUrls: ['./ordres-details.component.scss'],
-  providers: [LogService, CommService, OrdresIndicatorsService],
+  styleUrls: ['./ordres-details.component.scss']
 })
 export class OrdresDetailsComponent implements OnInit, OnDestroy {
   searchItems: any;
@@ -51,8 +49,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   assistante: DataSource;
   transporteurs: DataSource;
   commentaireInterne: DataSource;
-  logs: Log[];
-  commentaires: Comm[];
   linkedOrders: any;
   orders: any;
   numero: string;
@@ -107,7 +103,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   validationPopup: DxPopupComponent;
 
   constructor(
-    logService: LogService,
     ordresIndicatorsService: OrdresIndicatorsService,
     public localizeService: LocalizationService,
     private ordresService: OrdresService,
@@ -118,15 +113,12 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     public entrepotsService: EntrepotsService,
     public personnesService: PersonnesService,
     public transporteursService: TransporteursService,
-    commService: CommService,
     private fb: FormBuilder,
     private route: ActivatedRoute
   ) {
     self = this;
     this.ordres = ordresService.getDataSource();
-    this.logs = logService.getLog();
     this.litiges = litigesService.getDataSource();
-    this.commentaires = commService.getComm();
     this.allContents = ordresIndicatorsService.getContents();
     this.contents = ordresIndicatorsService.getContents().slice(0, 1);
     this.searchItems = [
@@ -534,3 +526,5 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.validationPopupVisible = false;
   }
 }
+
+export default OrdresDetailsComponent;

@@ -108,3 +108,5 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     this.router.navigate([`/ordres/details`]);
   }
 }
+
+export default OrdresNonConfirmesComponent;

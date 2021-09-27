@@ -1,15 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Event as NavigationEvent, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/shared/services';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { UtilisateursService } from 'app/shared/services/api/utilisateurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxTagBoxComponent } from 'devextreme-angular';
-import { combineLatest, from, Observable, Subscription } from 'rxjs';
+import { from, Observable, Subscription } from 'rxjs';
 import { filter, map, mergeMap, startWith, switchMap, take, tap } from 'rxjs/operators';
-import { QueryParams } from '../root/root.component';
 
 @Component({
   selector: 'app-ordres-accueil',
@@ -39,15 +38,12 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
 
-    console.log('start : ',authService.currentUser.configTuilesOrdres)
-
     if (!authService.currentUser.configTuilesOrdres) {
       authService.currentUser.configTuilesOrdres = this.allIndicators.map
       (({id}) => id);
     }
 
     this.loadedIndicators = authService.currentUser.configTuilesOrdres;
-    console.log('start : ',this.loadedIndicators)
     this.indicators = this.loadedIndicators
     .map( id => this.ordresIndicatorsService.getIndicatorByName(id));
 
@@ -122,11 +118,11 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParamMap
     .pipe(take(1))
     .subscribe(params =>
-      this.router.navigate([],
+      this.router.navigate(['ordres', indicator.id],
         {
           queryParams: {
             indicateur: [...new Set([...params.getAll('indicateur'), indicator.id])],
-          } as QueryParams,
+          },
           queryParamsHandling: 'merge',
         }
       )

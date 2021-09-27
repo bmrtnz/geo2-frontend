@@ -118,3 +118,5 @@ export class SupervisionLivraisonComponent implements OnInit {
   }
 
 }
+
+export default SupervisionLivraisonComponent;

@@ -115,3 +115,5 @@ export class CommandesTransitComponent implements OnInit {
   }
 
 }
+
+export default CommandesTransitComponent;

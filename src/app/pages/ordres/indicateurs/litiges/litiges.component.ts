@@ -65,3 +65,5 @@ export class LitigesComponent implements OnInit {
   }
 
 }
+
+export default LitigesComponent;

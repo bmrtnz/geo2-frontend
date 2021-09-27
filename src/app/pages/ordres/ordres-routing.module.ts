@@ -5,55 +5,15 @@ import { RootComponent } from './root/root.component';
 
 const routes: Routes = [
   {
+    path: ':tabid',
+    component: RootComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
     path: '',
     component: RootComponent,
     canActivate: [AuthGuardService],
   },
-  // {
-  //   path: 'details',
-  //   component: OrdresDetailsComponent,
-  //   canActivate: [AuthGuardService]
-  // },
-  // {
-  //   path: 'indicateurs/litiges',
-  //   component: LitigesComponent,
-  //   canActivate: [AuthGuardService],
-  // },
-  // {
-  //   path: 'indicateurs/bonAFacturer',
-  //   component: BonAFacturerComponent,
-  //   canActivate: [AuthGuardService],
-  // },
-  // {
-  //   path: 'indicateurs/supervisionLivraison',
-  //   component: SupervisionLivraisonComponent,
-  //   canActivate: [AuthGuardService],
-  // },
-  // {
-  //   path: 'indicateurs/ordresNonClotures',
-  //   component: OrdresNonCloturesComponent,
-  //   canActivate: [AuthGuardService],
-  // },
-  // {
-  //   path: 'indicateurs/ordresNonConfirmes',
-  //   component: OrdresNonConfirmesComponent,
-  //   canActivate: [AuthGuardService],
-  // },
-  // {
-  //   path: 'indicateurs/commandesTransit',
-  //   component: CommandesTransitComponent,
-  //   canActivate: [AuthGuardService],
-  // },
-  // {
-  //   path: 'indicateurs/planningDepart',
-  //   component: PlanningDepartComponent,
-  //   canActivate: [AuthGuardService],
-  // },
-  // {
-  //   path: 'indicateurs/clientsDepEncours',
-  //   component: ClientsDepEncoursComponent,
-  //   canActivate: [AuthGuardService],
-  // }
 ];
 
 @NgModule({

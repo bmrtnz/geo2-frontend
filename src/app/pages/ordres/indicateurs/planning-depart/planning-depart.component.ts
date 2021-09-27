@@ -182,3 +182,5 @@ export class PlanningDepartComponent implements AfterViewInit {
     );
   }
 }
+
+export default PlanningDepartComponent;

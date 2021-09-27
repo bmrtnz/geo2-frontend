@@ -37,7 +37,7 @@ import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
 import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/clients-dep-encours.component';
 import { CommandesTransitComponent } from './indicateurs/commandes-transit/commandes-transit.component';
-import { GridClientsDepEncoursDetailComponent } from './indicateurs/grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component';
+import { GridClientsDepEncoursDetailComponent } from './grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures.component';
 import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes.component';

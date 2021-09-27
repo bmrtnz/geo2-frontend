@@ -3,7 +3,9 @@
     [items]="items"
     [itemTemplate]="'item'"
     [repaintChangesOnly]="true"
->
+    (onTitleClick)="onTabTitleClick($event)"
+    (onContentReady)="tabPanelReady.emit($event)"
+    >
 
     <div *dxTemplate="let item of 'item'">
         <ng-template [ngComponentOutlet]="item.component"></ng-template>

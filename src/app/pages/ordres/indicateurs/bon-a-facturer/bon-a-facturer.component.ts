@@ -309,3 +309,4 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
 
 }
 
+export default BonAFacturerComponent;

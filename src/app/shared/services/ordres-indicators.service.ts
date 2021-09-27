@@ -1,5 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { OrdresDetailsComponent } from 'app/pages/ordres/details/ordres-details.component';
+import { BonAFacturerComponent } from 'app/pages/ordres/indicateurs/bon-a-facturer/bon-a-facturer.component';
+import { ClientsDepEncoursComponent } from 'app/pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component';
+import { LitigesComponent } from 'app/pages/ordres/indicateurs/litiges/litiges.component';
+import { OrdresNonCloturesComponent } from 'app/pages/ordres/indicateurs/ordres-non-clotures/ordres-non-clotures.component';
+import { OrdresNonConfirmesComponent } from 'app/pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component';
+import { PlanningDepartComponent } from 'app/pages/ordres/indicateurs/planning-depart/planning-depart.component';
+import { SupervisionLivraisonComponent } from 'app/pages/ordres/indicateurs/supervision-livraison/supervision-livraison.component';
 import DataSource from 'devextreme/data/data_source';
 import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
@@ -37,6 +45,7 @@ export class Indicator {
   fetchCount?: boolean;
   dataSource?: DataSource;
   select?: RegExp;
+  component?: Promise<any>;
   detailedFields?: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   constructor(args) { Object.assign(this, args); }
   cloneFilter?(): any[] { return JSON.parse(JSON.stringify(this.filter)); }
@@ -50,7 +59,8 @@ const indicators: Indicator[] = [{
   goTo: '/ordres/details',
   tileBkg: '#01AA9B',
   indicatorIcon: 'material-icons euro_symbol',
-  warningIcon: ''
+  warningIcon: '',
+  component: import('../../pages/ordres/details/ordres-details.component'),
 }, {
   id: 'SupervisionLivraison',
   enabled: false,
@@ -60,7 +70,8 @@ const indicators: Indicator[] = [{
   goTo: '/ordres/indicateurs/supervisionLivraison',
   tileBkg: '#9199B4',
   indicatorIcon: 'material-icons directions',
-  warningIcon: ''
+  warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/supervision-livraison/supervision-livraison.component'),
 }, {
   id: 'BonsAFacturer',
   enabled: false,
@@ -70,7 +81,8 @@ const indicators: Indicator[] = [{
   goTo: '/ordres/indicateurs/bonAFacturer',
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
-  warningIcon: 'material-icons warning'
+  warningIcon: 'material-icons warning',
+  component: import('../../pages/ordres/indicateurs/bon-a-facturer/bon-a-facturer.component'),
 }, {
   id: 'ClientsDepEncours',
   enabled: true,
@@ -81,6 +93,7 @@ const indicators: Indicator[] = [{
   tileBkg: '#4199B4',
   indicatorIcon: 'user',
   warningIcon: 'material-icons warning',
+  component: import('../../pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component'),
   /* tslint:disable-next-line max-line-length */
   select: /^(?:id|description|clientsSommeAgrement|clientsSommeEnCoursTemporaire|clientsSommeEnCoursBlueWhale|clientsSommeAutorise|clientsSommeDepassement|clientsSommeEnCoursActuel|clientsSommeEnCoursNonEchu|clientsSommeEnCours1a30|clientsSommeEnCours31a60|clientsSommeEnCours61a90|clientsSommeEnCours90Plus|clientsSommeAlerteCoface)$/,
 }, {
@@ -93,6 +106,7 @@ const indicators: Indicator[] = [{
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons help',
   warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/ordres-non-clotures/ordres-non-clotures.component'),
   /* tslint:disable-next-line max-line-length */
   select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/,
 }, {
@@ -105,6 +119,7 @@ const indicators: Indicator[] = [{
   tileBkg: '#5A6382',
   indicatorIcon: 'material-icons help',
   warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component'),
   /* tslint:disable-next-line max-line-length */
   select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateCreation|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/,
 }, {
@@ -116,7 +131,8 @@ const indicators: Indicator[] = [{
   goTo: '/ordres/indicateurs/litiges',
   tileBkg: '#1B715C',
   indicatorIcon: 'material-icons offline_bolt',
-  warningIcon: 'material-icons warning'
+  warningIcon: 'material-icons warning',
+  component: import('../../pages/ordres/indicateurs/litiges/litiges.component'),
 }, {
   id: 'Stock',
   enabled: false,
@@ -125,7 +141,7 @@ const indicators: Indicator[] = [{
   goTo: '/stock',
   tileBkg: '#60895E',
   indicatorIcon: 'box',
-  warningIcon: ''
+  warningIcon: '',
 }, {
   id: 'PlanningDepart',
   enabled: true,
@@ -136,6 +152,7 @@ const indicators: Indicator[] = [{
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
   warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/planning-depart/planning-depart.component'),
   select: /^(?:dateLivraisonPrevue|sommeColisCommandes|sommeColisExpedies|numero|codeClient|codeAlphaEntrepot|versionDetail)$/,
 }, {
   id: 'CommandesTransit',

@@ -97,3 +97,5 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     this.dataSource.reload();
   }
 }
+
+export default ClientsDepEncoursComponent;

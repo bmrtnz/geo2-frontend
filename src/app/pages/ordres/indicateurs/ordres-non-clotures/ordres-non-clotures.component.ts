@@ -105,3 +105,5 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
     this.router.navigate([`/ordres/details`]);
   }
 }
+
+export default OrdresNonCloturesComponent;
