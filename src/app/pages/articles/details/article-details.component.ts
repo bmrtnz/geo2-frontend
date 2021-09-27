@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -38,6 +38,7 @@ import { Article } from 'app/shared/models';
 import { ArticlesService } from 'app/shared/services';
 import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
 import Document from '../../../shared/models/document.model';
+import { DxSelectBoxComponent, DxTextBoxComponent } from 'devextreme-angular';
 
 @Component({
     selector: 'app-articles',
@@ -52,6 +53,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         blueWhaleStock: [''],
         valide: [''],
         preSaisie: [''],
+        gtinColisBlueWhale: [''],
+        gtinUcBlueWhale: [''],
         matierePremiere: this.fb.group({
             espece: [''],
             variete: [''],
@@ -98,8 +101,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     refreshGrid = new EventEmitter();
     @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
     @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
-    @ViewChild(PushHistoryPopupComponent, { static: false })
-    validatePopup: PushHistoryPopupComponent;
+    @ViewChild(PushHistoryPopupComponent, { static: false }) validatePopup: PushHistoryPopupComponent;
     editing = false;
 
     article: Article;
@@ -130,6 +132,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     readOnlyMode = true;
     cloneMode = false;
     preSaisie: string;
+    UC = false;
+    CNUFCode: string;
+    warningMode =  false;
 
     etiquetteVisible = false;
     currentEtiquette: ViewDocument;
@@ -165,9 +170,13 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private fb: FormBuilder,
         public authService: AuthService,
         private localization: LocalizationService
-    ) { }
+    ) { 
+        this.onUParColisChange = this.onUParColisChange.bind(this);
+    }
 
     ngOnInit() {
+
+        this.CNUFCode = '343006';
 
         this.route.params
             .pipe(
@@ -207,6 +216,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.readOnlyMode = false;
         this.cloneMode = true;
         this.editing = true;
+        // We clear GTINs BW as they depend on article's ID (unknown)
+        this.formGroup.get('gtinUcBlueWhale').reset();
+        this.formGroup.get('gtinColisBlueWhale').reset();
         Object.keys(this.formGroup.controls).forEach(key => {
             this.formGroup.get(key).markAsDirty();
         });
@@ -216,6 +228,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     showWarnings() {
 
         // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+        this.warningMode = true;
         const Element = document.querySelector('.submit') as HTMLElement;
         Element.click();
 
@@ -227,11 +240,16 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     onSubmit() {
 
-        if (!this.formGroup.pristine && this.formGroup.valid) {
+        console.log(!this.warningMode)
+
+        console.log(!this.formGroup.pristine && this.formGroup.valid && !this.warningMode)
+
+        if (!this.formGroup.pristine && this.formGroup.valid && !this.warningMode) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
 
             if (this.cloneMode) {
                 article.preSaisie = true;
+                article.valide = false;
             } else {
                 if (article.valide === true) {
                     article.preSaisie = false;
@@ -268,6 +286,18 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     },
                     error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });
+        }
+        this.warningMode = false;
+    }
+
+    onUParColisChange(event) {
+        if (this.editing && !this.cloneMode) {
+            console.log('calculate')
+            this.UC = parseInt(event.value) > 0;
+            let code = this.CNUFCode + this.formGroup.get('id').value;
+            code = this.calcGTINcheck(code);
+            this.formGroup.get(this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(code);
+            this.formGroup.get(!this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(null);
         }
     }
 
@@ -329,6 +359,23 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         };
 
         this.etiquetteVisible = true;
+    }
+
+    calcGTINcheck(code) {
+        let imp = 0;
+        let pai = 0;
+        let check = 0;
+    
+        for (let i = 0; i < code.length; i += 2) {
+          imp += parseInt(code.charAt(i))
+        }
+        for (let i = 1; i < code.length; i += 2) {
+            pai += parseInt(code.charAt(i))
+        }
+        check = imp + (3*pai);
+        check = Math.ceil(check/10)*10 - check
+      
+        return code + check
     }
 
 }
