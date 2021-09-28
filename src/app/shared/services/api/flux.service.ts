@@ -19,7 +19,7 @@ export class FluxService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       sort: [
-        { selector: this.model.getLabelField() }
+        { selector: "description" }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

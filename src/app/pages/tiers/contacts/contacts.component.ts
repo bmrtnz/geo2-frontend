@@ -57,6 +57,14 @@ export class ContactsComponent implements OnInit, NestedPart {
           !!(this.localizeService.localize('tiers-contacts-' + field.path.replaceAll('.', '-'))).length);
        }),
     );
+
+    //     .pipe(
+    //   map(fields => {
+    //     return fields.filter( field => {
+    //       console.log(field, this.localizeService.localize('tiers-contacts-' + field.path.replaceAll('.', '-')))
+    //     })
+    //   }),
+    // );
     this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
     this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
 
@@ -71,6 +79,15 @@ export class ContactsComponent implements OnInit, NestedPart {
     this.societeSource = this.societeService.getDataSource();
     this.fluxSource = this.fluxService.getDataSource();
     this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
+
+    // Léa 09/2021
+    // Moyen : les moyens EDIFACT et FTP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
+    // Flux : les flux FACTUR et FACDUP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
+    if (!this.authService.currentUser.adminClient) {
+      this.moyenCommunicationSource.filter([['id', '<>', 'FTP'], 'and', ['id', '<>', 'EFT']]);
+      this.fluxSource.filter([['id', '<>', 'FACDUP'], 'and', ['id', '<>', 'FACTUR']]);
+    }
+
   }
 
   enableFilters() {
@@ -109,6 +126,10 @@ export class ContactsComponent implements OnInit, NestedPart {
     const key = this[cell.column.dataField + 'Service'].keyField;
     if (cell.setValue)
       cell.setValue({ [key]: event.value[key] });
+  }
+
+  removeDesc(field) {
+    return field.replace('.description', '');
   }
 
 }

@@ -300,6 +300,7 @@
         "visibleIndex": 3,
         "dataField": "flux.description",
         "dataType": "string",
+        "width": 250,
         "visible": true
       },
       {
