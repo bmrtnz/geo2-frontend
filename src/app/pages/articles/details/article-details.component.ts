@@ -217,9 +217,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.cloneMode = true;
         this.editing = true;
         // We clear GTINs BW as they depend on article's ID (unknown)
-        this.formGroup.get('gtinUcBlueWhale').reset();
-        this.formGroup.get('gtinColisBlueWhale').reset();
+        this.formGroup.get('gtinUcBlueWhale').setValue('');
+        this.formGroup.get('gtinColisBlueWhale').setValue('');
         Object.keys(this.formGroup.controls).forEach(key => {
+            console.log(key)
             this.formGroup.get(key).markAsDirty();
         });
         this.showWarnings()
@@ -240,10 +241,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     onSubmit() {
 
-        console.log(!this.warningMode)
-
-        console.log(!this.formGroup.pristine && this.formGroup.valid && !this.warningMode)
-
         if (!this.formGroup.pristine && this.formGroup.valid && !this.warningMode) {
             const article = this.articlesService.extractDirty(this.formGroup.controls);
 
@@ -257,7 +254,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 }
             }
 
-            (article.valide !== undefined && this.article.valide !== article.valide ?
+            (article.valide !== undefined && this.article.valide !== article.valide && !this.cloneMode ?
                 this.validatePopup.present(
                     HistoryType.ARTICLE,
                     { article: { id: article.id }, valide: article.valide },
@@ -276,9 +273,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                             ...this.article,
                             ...this.formGroup.getRawValue(),
                         };
-                        if (this.cloneMode)
+                        if (this.cloneMode) {
                             this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
-                        this.cloneMode = false;
+                        }
                         this.readOnlyMode = true;
                         this.editing = false;
                         this.article.historique = event.data.saveArticle.historique;
@@ -291,14 +288,13 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     onUParColisChange(event) {
-        if (this.editing && !this.cloneMode) {
-            console.log('calculate')
+        // if (this.editing && !this.cloneMode) {
             this.UC = parseInt(event.value) > 0;
             let code = this.CNUFCode + this.formGroup.get('id').value;
             code = this.calcGTINcheck(code);
             this.formGroup.get(this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(code);
             this.formGroup.get(!this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(null);
-        }
+        // }
     }
 
     onEspeceChange(event) {

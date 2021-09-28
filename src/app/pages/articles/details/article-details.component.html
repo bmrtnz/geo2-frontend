@@ -1,9 +1,9 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
 
     <div class="content-block">
-        <h2><span *ngIf="cloneMode === true">{{ 'create' | localize }}</span>
-        {{ 'articles-details-title' | localize }}<span class="red-font"> {{ preSaisie | localize}}</span><!-- {{ article.id }} -->
-        <span *ngIf="cloneMode === true">({{ 'clone' | localize }})</span>
+        <h2><span *ngIf="cloneMode">{{ 'create' | localize }}</span>
+        {{ 'articles-details-title' | localize }}<span *ngIf="!cloneMode" class="red-font"> {{ preSaisie | localize }} </span><!-- {{ article.id }} -->
+        <span *ngIf="cloneMode"> ({{ 'clone' | localize }})</span>
         <dx-button class="upperButton submit"
             type="default"
             text="{{ 'btn-valider' | localize }}"
@@ -591,7 +591,7 @@
                         <div *ngIf="UC && !cloneMode" class="dx-field">
                             <div class="dx-field-label">{{ 'articles-gtinUcBlueWhale' | localize }}</div>
                             <div class="dx-field-value">
-                                <dx-text-box formControlName="gtinUcBlueWhale" #gtinUcBlueWhale
+                                <dx-text-box formControlName="gtinUcBlueWhale"
                                 [readOnly]="true"
                                 >
                                 </dx-text-box>
@@ -609,7 +609,7 @@
                         <div *ngIf="!UC && !cloneMode" class="dx-field">
                             <div class="dx-field-label">{{ 'articles-gtinColisBlueWhale' | localize }}</div>
                             <div class="dx-field-value">
-                                <dx-text-box formControlName="gtinColisBlueWhale" #gtinColisBlueWhale
+                                <dx-text-box formControlName="gtinColisBlueWhale"
                                 [readOnly]="true"
                                 >
                                 </dx-text-box>
