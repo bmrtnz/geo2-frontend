@@ -91,7 +91,7 @@ const indicators: Indicator[] = [{
   subParameter: 'en dépassement encours',
   goTo: '/ordres/indicateurs/clientsDepEncours',
   tileBkg: '#4199B4',
-  indicatorIcon: 'user',
+  indicatorIcon: 'material-icons people',
   warningIcon: 'material-icons warning',
   component: import('../../pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component'),
   /* tslint:disable-next-line max-line-length */
@@ -104,7 +104,7 @@ const indicators: Indicator[] = [{
   subParameter: 'non clôturés',
   goTo: '/ordres/indicateurs/ordresNonClotures',
   tileBkg: '#F26C5A',
-  indicatorIcon: 'material-icons help',
+  indicatorIcon: 'material-icons lock_open',
   warningIcon: '',
   component: import('../../pages/ordres/indicateurs/ordres-non-clotures/ordres-non-clotures.component'),
   /* tslint:disable-next-line max-line-length */
@@ -117,7 +117,7 @@ const indicators: Indicator[] = [{
   subParameter: 'non confirmés',
   goTo: '/ordres/indicateurs/ordresNonConfirmes',
   tileBkg: '#5A6382',
-  indicatorIcon: 'material-icons help',
+  indicatorIcon: 'material-icons remove_done',
   warningIcon: '',
   component: import('../../pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component'),
   /* tslint:disable-next-line max-line-length */

@@ -1,11 +1,21 @@
 <dx-tab-panel
     class="content-block"
     [items]="items"
-    [itemTemplate]="'item'"
     [repaintChangesOnly]="true"
+    [showNavButtons]= "true"
     (onTitleClick)="onTabTitleClick($event)"
-    (onContentReady)="tabPanelReady.emit($event)"
+    (onContentReady)="this.tabPanelReady.emit($event)"
     >
+
+    <div *dxTemplate="let content of 'title'; let index = index">
+        <div class="dx-item-content dx-tab-content" [attr.data-item-id]="content.id">
+            <span class="dx-tab-text">
+                <i class="dx-icon" [ngClass]="content.icon"></i>
+                {{content.title}}
+            </span>
+            <i class="dx-icon dx-icon-close" *ngIf="index" (click)="onTabCloseClick($event)"></i>
+        </div>
+    </div>
 
     <div *dxTemplate="let item of 'item'">
         <ng-template [ngComponentOutlet]="item.component"></ng-template>

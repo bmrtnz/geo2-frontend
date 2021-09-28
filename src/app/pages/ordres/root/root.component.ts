@@ -22,6 +22,7 @@ export class RootComponent implements OnInit {
   readonly HOME_TAB_ID = 'home';
 
   public tabPanelReady = new EventEmitter<any>();
+  public activeStateEnabled = false;
 
   @ViewChild(DxTabPanelComponent, {static: true}) tabPanel: DxTabPanelComponent;
   @ViewChild(OrdresAccueilComponent) ordresAccueilComponent: OrdresAccueilComponent;
@@ -29,7 +30,7 @@ export class RootComponent implements OnInit {
   public items: TabPanelItem[] = [
     {
       id: this.HOME_TAB_ID,
-      icon: 'home',
+      icon: 'material-icons home',
       component: OrdresAccueilComponent,
     },
   ];
@@ -72,12 +73,29 @@ export class RootComponent implements OnInit {
     });
   }
 
+  onTabCloseClick(event: MouseEvent) {
+    const pullID = (event.target as HTMLElement).parentElement.dataset.itemId;
+    const indicateur = this.route.snapshot.queryParamMap
+    .getAll(QueryParam.Indicateur)
+    .filter(param => param !== pullID);
+
+    const selectedID = this.route.snapshot.paramMap
+    .get(RouteParam.TabID);
+    const navID = pullID === selectedID ?
+      this.HOME_TAB_ID : selectedID;
+    
+    this.router.navigate(['ordres', navID], {
+      queryParams: {indicateur},
+    });
+  }
+
   private async pushTab(type: TabType, data: TabPanelItem): Promise<number> {
     if (type === TabType.Indicator) {
       const indicator = this.ordresIndicatorsService
       .getIndicatorByName(data.id);
       data.component = (await indicator.component).default;
-      if (indicator.fetchCount) data.badge = '1';
+      if (indicator.fetchCount) data.badge = indicator.number || '?';
+      data.icon = indicator.indicatorIcon;
       data.title = `${indicator.parameter} ${indicator.subParameter}`;
     }
     this.items.push(data);

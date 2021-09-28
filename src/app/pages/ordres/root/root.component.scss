@@ -1,0 +1,17 @@
+::ng-deep .dx-tab {
+  i.dx-icon-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+  
+    &:hover {
+      color: red;
+    }
+  }
+  
+  .dx-badge {
+    position: absolute;
+    left: 0;
+    top: 4px;
+  }
+}
