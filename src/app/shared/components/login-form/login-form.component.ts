@@ -1,12 +1,12 @@
-import {Component, NgModule, OnInit} from '@angular/core';
+import {AfterViewInit, Component, NgModule, OnInit, ViewChild} from '@angular/core';
 
 import {AuthService} from '../../services';
-import {DxButtonModule} from 'devextreme-angular/ui/button';
+import {DxButtonComponent, DxButtonModule} from 'devextreme-angular/ui/button';
 import {DxCheckBoxModule} from 'devextreme-angular/ui/check-box';
 import {DxTextBoxComponent, DxTextBoxModule} from 'devextreme-angular/ui/text-box';
 import {DxValidatorModule} from 'devextreme-angular/ui/validator';
 import {DxValidationGroupModule} from 'devextreme-angular/ui/validation-group';
-import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import { DxSelectBoxComponent, DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import {SharedModule} from '../../shared.module';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
@@ -15,6 +15,7 @@ import { SocietesService } from 'app/shared/services/api/societes.service';
 import { UtilisateursService } from 'app/shared/services/api/utilisateurs.service';
 import { from, throwError } from 'rxjs';
 import { catchError, mergeAll, take } from 'rxjs/operators';
+import notify from 'devextreme/ui/notify';
 
 
 @Component({
@@ -22,9 +23,13 @@ import { catchError, mergeAll, take } from 'rxjs/operators';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   societe: DataSource;
+  @ViewChild('submitButton', { static: false }) submitButton: DxButtonComponent;
+  @ViewChild('societeSB', { static: false }) societeSB: DxSelectBoxComponent;
+
+  autoSubmit = false;
   
   constructor(
     private authService: AuthService,
@@ -44,8 +49,13 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    if (this.form.invalid) return;
+  ngAfterViewInit() {
+    setTimeout( () => this.societeSB.instance.focus(), 500);
+  }
+
+  onSubmit()  {
+    if (this.form.invalid || this.submitButton.instance.option('disabled') == true) return;
+    
     this.authService.logIn(
       this.form.get('nomUtilisateur').value,
       this.form.get('password').value,
@@ -62,11 +72,10 @@ export class LoginFormComponent implements OnInit {
       mergeAll(),
       take(1),
       catchError((e: any) => {
-         this.societe = null;
+         notify('Utilisateur/Mot de passe non reconnus', 'error', 3000);
          return throwError(e);
       })
       ).subscribe(response => {
-
         const perimetre = response.data.utilisateur.perimetre;
         const filter = [];
         const filter2 = [];
@@ -76,13 +85,22 @@ export class LoginFormComponent implements OnInit {
         this.societe.filter(filter);
 
         // Authorized companies -> '*' = all
-        if (perimetre !== '*') {
-          perimetre.split(',').forEach(element => {
-            filter2.push(['id', '=', element]);
-            filter2.push('or');
+        if (perimetre !== null) {
+          if (perimetre !== '*') {
+            perimetre.split(',').forEach(element => {
+              filter2.push(['id', '=', element]);
+              filter2.push('or');
+            });
+            filter2.pop(); // Remove last 'or'
+            this.societe.filter([filter2]);
+          }
+          this.societe.load().then(res => {
+            this.showHideSubmitSociete(res.length);
+            if (!res.length) notify('Aucune société disponible', 'error', 3000);
           });
-          filter2.pop(); // Remove last 'or'
-          this.societe.filter([filter2]);
+        } else {
+          notify('Aucun périmètre société associé', 'error', 3000);
+          this.showHideSubmitSociete(false);
         }
     });
   }
@@ -90,6 +108,24 @@ export class LoginFormComponent implements OnInit {
   societeOnChange(e) {
     this.currentCompanyService.setCompany(e.selectedItem);
   }
+
+  showHideSubmitSociete(status) {
+    this.submitButton.instance.option('disabled', !status);
+    this.societeSB.instance.option('readOnly', !status);
+    if (this.autoSubmit) {
+      this.autoSubmit = false;
+      this.onSubmit();
+    }
+  }
+
+  onKeyUp(e) {
+    if (!this.form.get('nomUtilisateur').value.length || !this.form.get('password').value.length) return;
+    if (e.event.key == 'Enter') {
+      this.autoSubmit = true;
+      this.societeSB.instance.focus();
+    }
+  }
+
 }
 @NgModule({
   imports: [
