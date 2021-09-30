@@ -27,7 +27,6 @@ export class AppComponent {
   constructor(
     private authService: AuthService,
     private screen: ScreenService,
-    private elementRef : ElementRef
   ) {
     const year = new Date().getFullYear();
 
@@ -36,17 +35,11 @@ export class AppComponent {
     }
 
     // Close columnchooser on outside click (non standard)
-    let that = this;
-
     document.addEventListener('mousedown', e => {
-      let chooser = that.closest(e.target, ".dx-datagrid-column-chooser");
-
-      let allDataGrids = elementRef.nativeElement.querySelectorAll('dx-data-grid');
-      allDataGrids.forEach(element => {
-        // @ts-ignore
-        if (!chooser) {window.ng.getComponent<DxDataGridComponent>(element).instance.hideColumnChooser();}
-      });
-
+      document.querySelectorAll('.dx-datagrid-column-chooser .dx-closebutton').forEach((btn) => {
+        const closeBtn = btn as HTMLElement;
+        closeBtn.click();
+      })
      });
 
   }
