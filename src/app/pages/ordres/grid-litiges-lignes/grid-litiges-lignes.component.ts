@@ -14,7 +14,7 @@ import { CurrentCompanyService } from 'app/shared/services/current-company.servi
 import Ordre from 'app/shared/models/ordre.model';
 import { LitigesLignesService } from 'app/shared/services/api/litiges-lignes.service';
 import LitigeLigne from 'app/shared/models/litige-ligne.model';
-import { ToggledGrid } from '../details/ordres-details.component';
+import { ToggledGrid } from '../form/form.component';
 
 @Component({
   selector: 'app-grid-litiges-lignes',

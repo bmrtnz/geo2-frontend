@@ -14,7 +14,7 @@ import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ToggledGrid } from '../details/ordres-details.component';
+import { ToggledGrid } from '../form/form.component';
 
 @Component({
   selector: 'app-grid-envois',

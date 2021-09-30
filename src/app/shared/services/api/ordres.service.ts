@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { gql, MutationOptions, OperationVariables } from '@apollo/client/core';
+import { gql, MutationOptions, OperationVariables, ApolloQueryResult, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { from } from 'rxjs';
-import { mergeMap, take, takeUntil } from 'rxjs/operators';
+import { from, pipe, Subject, of } from 'rxjs';
+import { mergeMap, take, takeUntil, map, filter } from 'rxjs/operators';
 import { Ordre } from '../../models/ordre.model';
 import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 
@@ -35,7 +35,35 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     return this.watchGetOneQuery<Response>({variables});
   }
 
-  getDataSource(indicator?: OrdreDatasourceOperation, depth = 2, filter = this.queryFilter) {
+  getOneByNumeroAndSociete(
+    numero: string,
+    societe: string,
+    depth = 2,
+    fieldsFilter?: RegExp
+  ) {
+    type Response = { ordreByNumeroAndSociete: Ordre };
+    const variables: OperationVariables = { numero, societe };
+
+    const done = new Subject<ApolloQueryResult<Response>>();
+    from(this.buildGetOrdreByNumeroAndSociete(depth, fieldsFilter))
+    .pipe(
+      takeUntil(this.destroy),
+      takeUntil(done),
+      mergeMap( query => this.query<Response>(query, {
+        fetchPolicy: 'cache-and-network',
+        variables,
+      } as WatchQueryOptions)),
+      filter( res => !!Object.keys(res.data).length),
+    )
+    .subscribe(res => {
+      done.next(res);
+      if (!res.loading)
+        done.complete();
+    });
+    return done.pipe(map( res => res.data.ordreByNumeroAndSociete));
+  }
+
+  getDataSource(indicator?: OrdreDatasourceOperation, depth = 2, qFilter = this.queryFilter) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -51,9 +79,9 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
 
           let query: string;
           if (indicator === OrdreDatasourceOperation.SuiviDeparts)
-            query = await this.buildGetAllSuiviDeparts(depth, filter, indicator);
+            query = await this.buildGetAllSuiviDeparts(depth, qFilter, indicator);
           else
-            query = await this.buildGetAll(depth, filter, indicator);
+            query = await this.buildGetAll(depth, qFilter, indicator);
 
           const key: string = indicator ?? 'allOrdre';
           type Response = { [key: string]: RelayPage<Ordre> };
@@ -101,11 +129,21 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
     );
   }
 
-  protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
+  protected async buildSaveWithClone(depth?: number, fieldsFilter?: RegExp) {
     return `
       mutation CloneOrdre($ordre: GeoOrdreInput!) {
         cloneOrdre(ordre: $ordre) {
-          ${await this.model.getGQLFields(depth, filter).toPromise()}
+          ${await this.model.getGQLFields(depth, fieldsFilter).toPromise()}
+        }
+      }
+    `;
+  }
+
+  protected async buildGetOrdreByNumeroAndSociete(depth?: number, fieldsFilter?: RegExp) {
+    return `
+      query OrdreByNumeroAndSociete($numero: String!, $societe: String!) {
+        ordreByNumeroAndSociete(numero:$numero, societe:$societe) {
+          ${await this.model.getGQLFields(depth, fieldsFilter).toPromise()}
         }
       }
     `;

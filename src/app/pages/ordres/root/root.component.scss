@@ -1,17 +1,33 @@
+@import "src/themes/generated/variables.base.scss";
+
 ::ng-deep .dx-tab {
   i.dx-icon-close {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -2px;
+    right: -2px;
+    visibility: hidden;
   
     &:hover {
       color: red;
     }
   }
+
+  .dx-tab-text > i {
+    margin-right: 5px;
+    display: inline;
+  }
+
+  &:hover i.dx-icon-close {
+    visibility: visible;
+  }
   
   .dx-badge {
     position: absolute;
-    left: 0;
+    left: 2px;
     top: 4px;
+  }
+
+  &.dx-tab-selected small {
+    color: $base-tone-shade;
   }
 }

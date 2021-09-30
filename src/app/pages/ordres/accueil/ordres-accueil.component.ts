@@ -8,7 +8,8 @@ import { CurrentCompanyService } from 'app/shared/services/current-company.servi
 import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxTagBoxComponent } from 'devextreme-angular';
 import { from, Observable, Subscription } from 'rxjs';
-import { filter, map, mergeMap, startWith, switchMap, take, tap } from 'rxjs/operators';
+import { filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
+import { TabContext } from '../root/root.component';
 
 @Component({
   selector: 'app-ordres-accueil',
@@ -28,13 +29,11 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   constructor(
     public ordresIndicatorsService: OrdresIndicatorsService,
-    private ordresService: OrdresService,
     public authService: AuthService,
     public utilisateursService: UtilisateursService,
     public currentCompanyService: CurrentCompanyService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
     private datePipe: DatePipe,
+    private tabContext: TabContext,
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
 
@@ -115,18 +114,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   onTileClick(event) {
     const indicator: Indicator = event.itemData.buttonOptions;
-    this.activatedRoute.queryParamMap
-    .pipe(take(1))
-    .subscribe(params =>
-      this.router.navigate(['ordres', indicator.id],
-        {
-          queryParams: {
-            indicateur: [...new Set([...params.getAll('indicateur'), indicator.id])],
-          },
-          queryParamsHandling: 'merge',
-        }
-      )
-    );
+    this.tabContext.openIndicator(indicator.id);
   }
 
 }

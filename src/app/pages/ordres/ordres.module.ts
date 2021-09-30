@@ -7,17 +7,13 @@ import { ViewDocumentPopupModule } from 'app/shared/components/view-document-pop
 import { LocalizePipe } from 'app/shared/pipes';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { SharedModule } from 'app/shared/shared.module';
-import {
-  DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule, DxListModule,
-  DxLoadIndicatorModule, DxNumberBoxModule, DxPopoverModule, DxPopupModule, DxSelectBoxModule,
-  DxSortableModule, DxTabPanelModule,
-  DxTagBoxModule,
-  DxTextAreaModule, DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule
-} from 'devextreme-angular';
+import { DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxNumberBoxModule, DxPopoverModule, DxPopupModule, DxSelectBoxModule, DxSortableModule, DxTabPanelModule, DxTagBoxModule, DxTextAreaModule, DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule } from 'devextreme-angular';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { FormLitigesComponent } from './form-litiges/form-litiges.component';
 import { FormLogistiqueComponent } from './form-logistique/form-logistique.component';
+import { FormComponent } from './form/form.component';
+import { GridClientsDepEncoursDetailComponent } from './grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component';
 import { GridCommentaireOrdreComponent } from './grid-commentaire-ordre/grid-commentaire-ordre.component';
 import { GridControleQualiteComponent } from './grid-controle-qualite/grid-controle-qualite.component';
 import { GridDetailPalettesComponent } from './grid-detail-palettes/grid-detail-palettes.component';
@@ -37,7 +33,6 @@ import { GridSuiviComponent } from './grid-suivi/grid-suivi.component';
 import { BonAFacturerComponent } from './indicateurs/bon-a-facturer/bon-a-facturer.component';
 import { ClientsDepEncoursComponent } from './indicateurs/clients-dep-encours/clients-dep-encours.component';
 import { CommandesTransitComponent } from './indicateurs/commandes-transit/commandes-transit.component';
-import { GridClientsDepEncoursDetailComponent } from './grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component';
 import { LitigesComponent } from './indicateurs/litiges/litiges.component';
 import { OrdresNonCloturesComponent } from './indicateurs/ordres-non-clotures/ordres-non-clotures.component';
 import { OrdresNonConfirmesComponent } from './indicateurs/ordres-non-confirmes/ordres-non-confirmes.component';
@@ -45,7 +40,7 @@ import { PlanningDepartComponent } from './indicateurs/planning-depart/planning-
 import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison.component';
 import { OrdreService } from './ordre.service';
 import { OrdresRoutingModule } from './ordres-routing.module';
-import { RootComponent } from './root/root.component';
+import { RootComponent, TabContext } from './root/root.component';
 
 
 @NgModule({
@@ -80,6 +75,7 @@ import { RootComponent } from './root/root.component';
     GridDetailPlanningDepartsComponent,
     GridClientsDepEncoursDetailComponent,
     RootComponent,
+    FormComponent,
   ],
   imports: [
     OrdresRoutingModule,
@@ -117,6 +113,7 @@ import { RootComponent } from './root/root.component';
     OrdreService,
     DatePipe,
     LocalizePipe,
+    TabContext,
   ],
 })
 export class OrdresModule { }

@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import Ordre from 'app/shared/models/ordre.model';
 import {
   AuthService,
   LocalizationService,
@@ -20,6 +21,7 @@ import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { TabType } from '../../root/root.component';
 
 @Component({
   selector: 'ordres-non-clotures',
@@ -100,9 +102,11 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
     this.rowSelected = true;
   }
 
-  onRowDblClick(event) {
-    window.sessionStorage.setItem('orderNumber', JSON.stringify(event));
-    this.router.navigate([`/ordres/details`]);
+  onRowDblClick({data}: {data: Ordre}) {
+    this.router.navigate(['ordres', data.id],{
+      queryParams: { [TabType.Ordre]: data },
+      queryParamsHandling: 'merge',
+    });
   }
 }
 
