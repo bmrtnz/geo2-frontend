@@ -65,6 +65,31 @@ export class ArticlesService extends ApiService implements APIRead {
     });
   }
 
+  getFilterDatasource(selector: string) {
+    const dt = new DataSource({
+      store: this.createCustomStore({
+        key: this.model.getKeyField(),
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+          const [value] = options.filter.slice(-1);
+          options.filter = [selector, '=', value];
+          return this
+            .loadDistinctQuery({ ...options, group: { selector } }, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+        }),
+      }),
+    });
+    dt.group({ selector });
+    return dt;
+  }
+
   save(variables: OperationVariables & { clone: boolean }) {
     return from(this.buildSaveWithClone(2, this.fieldsFilter))
     .pipe(

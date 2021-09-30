@@ -12,7 +12,6 @@
     [allowColumnReordering]="true"
     [showBorders]="true"
     dateSerializationFormat="yyyy-MM-dd"
-    [columnAutoWidth]="true"
     scrolling="{
       useNative:false,
       showScrollBar:'always'
@@ -57,27 +56,25 @@
 
     <dxi-column
       *ngFor="let field of detailedFields | async"
-      [dataField]="field.name"
+      [dataField]="field.path"
       [caption]="('tiers-contacts-' + field.path.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
-      trueText="Oui"
-      falseText="Non"
-      [allowEditing]="(field.name === 'valide' && authService.currentUser.accessGeoTiers) || (field.name !== 'valide' && field?.allowEditing !== false)"
+      [allowEditing]="field.name !== 'valide' && field?.allowEditing !== false"
       [validationRules]="field.validationRules || {}"
-      [editCellTemplate]="field.model ? 'selectBoxEditTemplate' : false"
+      [editCellTemplate]="field.name == 'description' ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
     ></dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
-        [dataSource]="this[cell.column.dataField + 'Source']"
-        [displayExpr]="this[cell.column.dataField + 'Service'].model.getLabelField()"
+        [dataSource]="this[removeDesc(cell.column.dataField) + 'Source']"
+        [displayExpr]="this[removeDesc(cell.column.dataField) + 'Service'].model.getLabelField()"
         [searchExpr]="[
-          this[cell.column.dataField + 'Service'].model.getKeyField(),
-          this[cell.column.dataField + 'Service'].model.getLabelField()
+          this[removeDesc(cell.column.dataField) + 'Service'].model.getKeyField(),
+          this[removeDesc(cell.column.dataField) + 'Service'].model.getLabelField()
         ]"
         [searchEnabled]="true"
-        [value]="cell.data[cell.column.dataField]"
+        [value]="cell.data[cell.column.dataField.replace('.description', '')]"
         (onValueChanged)="onValueChanged($event, cell)"
       ></dx-select-box>
     </div>

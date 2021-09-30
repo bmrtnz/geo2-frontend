@@ -14,7 +14,7 @@
     "user-modification": "Modifié par",
     "date-modification": "Date de modification",
     "commentaire": "Commentaire",
-    "action": "Action",
+    "action": "Action (validité)",
     "sur": "sur",
     "jours": "jours",
     "du": "du",
@@ -388,9 +388,12 @@
     "tiers-contacts-societe": "Société",
 
     "articles-title" : "Articles",
+    "articles-preFilter-title" : "Pré-filtrage",
     "articles-detailTitle": "Détail",
     "articles-of": "de",
     "articles-id": "Code",
+    "articles-gtinColisBlueWhale": "GTIN Colis BW",
+    "articles-gtinUcBlueWhale": "GTIN UC BW",
 
     "articles-groupe-CDC": "CDC",
     "articles-groupe-matierePremiere": "Matière première",

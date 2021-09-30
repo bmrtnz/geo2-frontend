@@ -17,12 +17,13 @@ export class CurrentCompanyService {
   setCompany(societe) {
     window.sessionStorage.removeItem('openOrders');
     window.sessionStorage.setItem('companyStorage', JSON.stringify(societe));
-    this.showCompanyColorOnLogo(societe)
+    this.showCompanyColorOnLogo(societe);
     return;
   }
 
   showCompanyColorOnLogo(societe) {
     const list = document.getElementsByClassName('header-logo')[0];
+    document.title = 'Geo2' +  (societe ? ' - ' + societe.raisonSocial : '');
     if (list) {
       list.setAttribute("style", "background-color: " + this.stringToHexaColor(societe.raisonSocial) + ";");
     }

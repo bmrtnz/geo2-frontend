@@ -13,6 +13,8 @@
       <dx-text-box
         formControlName="nomUtilisateur"
         placeholder="{{ 'auth-login' | localize }}"
+        (onKeyUp)="onKeyUp($event)"
+        (valueChange)="showHideSubmitSociete(false)"
         width="100%">
         <dx-validator>
           <dxi-validation-rule type="required" message="{{ 'auth-validation-login' | localize }}"></dxi-validation-rule>
@@ -26,6 +28,8 @@
         mode="password"
         formControlName="password"
         placeholder="{{ 'auth-password' | localize }}"
+        (onKeyUp)="onKeyUp($event)"
+        (valueChange)="showHideSubmitSociete(false)"
         width="100%">
         <dx-validator>
           <dxi-validation-rule type="required" message="{{ 'auth-validation-password' | localize }}"></dxi-validation-rule>
@@ -35,15 +39,18 @@
 
     <!-- sélection société -->
     <div class="dx-field">
-        <dx-select-box
+        <dx-select-box #societeSB
             placeholder="{{ 'auth-societe' | localize }}"
+            readOnly="true"
             [dataSource]="societe"
             displayExpr="raisonSocial"
             (onFocusIn)="findAssociatedCompanies($event)"
             (onSelectionChanged)="societeOnChange($event)"
-            [value]="['']">
+            [value]="['']"
+            width="100%">
         </dx-select-box>
-    </div>
+        <dx-load-indicator [visible]="companiesLoading" class="companyLoader"></dx-load-indicator>
+      </div>
     <br>
 
     <!--<div class="dx-field">
@@ -52,7 +59,14 @@
 
     <!-- submit button -->
     <div class="dx-field">
-      <dx-button type="default" text="{{ 'auth-login-btn' | localize }}" [useSubmitBehavior]="true" width="100%"></dx-button>
+      <dx-button #submitButton
+        type="default"
+        disabled="true" 
+        text="{{ 'auth-login-btn' | localize }}" 
+        [useSubmitBehavior]="true"
+        width="100%"
+        >
+      </dx-button>
     </div>
 
     <!--<div class="dx-field">

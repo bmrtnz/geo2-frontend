@@ -1,8 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/shared/services';
-import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { UtilisateursService } from 'app/shared/services/api/utilisateurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
@@ -36,6 +34,8 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     private tabContext: TabContext,
   ) {
     this.allIndicators = ordresIndicatorsService.getIndicators();
+
+    // console.log('start : ',authService.currentUser.configTuilesOrdres)
 
     if (!authService.currentUser.configTuilesOrdres) {
       authService.currentUser.configTuilesOrdres = this.allIndicators.map

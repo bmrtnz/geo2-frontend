@@ -72,7 +72,7 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
   }
 
   onItemRendered(e) {
-    console.log(e.itemData.id)
+    // console.log(e.itemData.id)
   }
 
   ngAfterViewInit() {

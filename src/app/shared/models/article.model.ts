@@ -15,6 +15,8 @@ export class Article extends Model {
   @Field({model: import('./article-normalisation.model')}) public normalisation: ArticleNormalisation;
   @Field() public valide: boolean;
   @Field() public preSaisie: boolean;
+  @Field() public gtinColisBlueWhale: string;
+  @Field() public gtinUcBlueWhale: string;
   @Field({model: import('./article-emballage.model')}) public emballage: ArticleEmballage;
   @Field({model: import('./historique.model')}) public historique: Historique[];
 }
