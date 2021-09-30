@@ -3,6 +3,7 @@ import {AfterViewInit, Component, NgModule, OnInit, ViewChild} from '@angular/co
 import {AuthService} from '../../services';
 import {DxButtonComponent, DxButtonModule} from 'devextreme-angular/ui/button';
 import {DxCheckBoxModule} from 'devextreme-angular/ui/check-box';
+import {DxLoadIndicatorModule} from 'devextreme-angular';
 import {DxTextBoxComponent, DxTextBoxModule} from 'devextreme-angular/ui/text-box';
 import {DxValidatorModule} from 'devextreme-angular/ui/validator';
 import {DxValidationGroupModule} from 'devextreme-angular/ui/validation-group';
@@ -26,6 +27,7 @@ import notify from 'devextreme/ui/notify';
 export class LoginFormComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   societe: DataSource;
+  companiesLoading = false;
   @ViewChild('submitButton', { static: false }) submitButton: DxButtonComponent;
   @ViewChild('societeSB', { static: false }) societeSB: DxSelectBoxComponent;
 
@@ -94,7 +96,9 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
             filter2.pop(); // Remove last 'or'
             this.societe.filter([filter2]);
           }
+          this.companiesLoading = true; // Show companies' loader
           this.societe.load().then(res => {
+            this.companiesLoading = false;
             this.showHideSubmitSociete(res.length);
             if (!res.length) notify('Aucune société disponible', 'error', 3000);
           });
@@ -135,6 +139,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
     DxButtonModule,
     DxCheckBoxModule,
     DxTextBoxModule,
+    DxLoadIndicatorModule,
     DxValidatorModule,
     DxValidationGroupModule,
     DxSelectBoxModule
