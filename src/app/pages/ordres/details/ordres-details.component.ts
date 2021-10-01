@@ -449,10 +449,14 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     if (!addedItems.length) return;
     const { id, ordre, patch } = addedItems[0];
 
-    // Reload historique when view is Suivi des ordres
+    // Reload historique (and search results) when view is Suivi des ordres
     setTimeout(() => {
       this.isIndexTab = id === INDEX_TAB;
-      if (this.isIndexTab) this.histoGrid.reload();
+      if (this.isIndexTab) {
+        this.histoGrid.reload();
+        // Search?
+        if (this.suiviGrid) this.suiviGrid.reload();
+      }
     });
       
     this.canDuplicate = !!id;
