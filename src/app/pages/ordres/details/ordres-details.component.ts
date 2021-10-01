@@ -19,6 +19,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { iif, of, Subscription } from 'rxjs';
 import { filter, map, mergeMap, take } from 'rxjs/operators';
+import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 let self;
@@ -101,6 +102,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
   @ViewChild(GridSuiviComponent, { static: false })
   suiviGrid: GridSuiviComponent;
+  @ViewChild(GridHistoriqueComponent, { static: false })
+  histoGrid: GridHistoriqueComponent;
   @ViewChild(DxValidationGroupComponent, { static: false })
   validationGroup: DxValidationGroupComponent;
   @ViewChild(DxPopupComponent, { static: false })
@@ -370,6 +373,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
+    
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -444,7 +448,13 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.validationGroup.instance.validate();
     if (!addedItems.length) return;
     const { id, ordre, patch } = addedItems[0];
-    setTimeout(() => (this.isIndexTab = id === INDEX_TAB));
+
+    // Reload historique when view is Suivi des ordres
+    setTimeout(() => {
+      this.isIndexTab = id === INDEX_TAB;
+      if (this.isIndexTab) this.histoGrid.reload();
+    });
+      
     this.canDuplicate = !!id;
     if (ordre) {
       this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
