@@ -13,6 +13,7 @@ import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValid
 import DataSource from 'devextreme/data/data_source';
 import { iif, of, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 import { TabContext } from '../root/root.component';
 
@@ -60,6 +61,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
   @ViewChild(GridSuiviComponent, { static: false })
   suiviGrid: GridSuiviComponent;
+  @ViewChild(GridHistoriqueComponent, { static: false })
+  histoGrid: GridHistoriqueComponent;
   @ViewChild(DxValidationGroupComponent, { static: false })
   validationGroup: DxValidationGroupComponent;
   @ViewChild(DxPopupComponent, { static: false })
@@ -162,6 +165,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
+    
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -229,20 +233,30 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     // return this.contents.length === this.allContents.length;
   }
 
-  // onSelectionChange({ addedItems }: { addedItems: Content[] }) {
+  onSelectionChange({ addedItems }: { addedItems: Content[] }) {
 
-  //   this.resetCriteria();
-  //   this.linkedOrders = [];
-  //   this.validationGroup.instance.validate();
-  //   if (!addedItems.length) return;
-  //   const { id, ordre, patch } = addedItems[0];
-  //   setTimeout(() => (this.isIndexTab = id === INDEX_TAB));
-  //   this.canDuplicate = !!id;
-  //   if (ordre) {
-  //     this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
-  //     this.addLinkedOrders(ordre);
-  //   }
-  //   if (patch) Object.entries(patch).forEach(([key]) => this.formGroup.get(key).markAsDirty());
+    // this.resetCriteria();
+    // this.linkedOrders = [];
+    // this.validationGroup.instance.validate();
+    // if (!addedItems.length) return;
+    // const { id, ordre, patch } = addedItems[0];
+
+    // Reload historique (and search results) when view is Suivi des ordres
+    // setTimeout(() => {
+    //   this.isIndexTab = id === INDEX_TAB;
+    //   if (this.isIndexTab) {
+    //     this.histoGrid.reload();
+    //     // Search?
+    //     if (this.suiviGrid) this.suiviGrid.reload();
+    //   }
+    // });
+      
+    // this.canDuplicate = !!id;
+    // if (ordre) {
+    //   this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
+    //   this.addLinkedOrders(ordre);
+    // }
+    // if (patch) Object.entries(patch).forEach(([key]) => this.formGroup.get(key).markAsDirty());
 
   //     this.fullOrderNumber = this.updateTopLeftOrder(addedItems[0]);
 
@@ -253,7 +267,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   //     this.dotCommentaires = ordre.commentairesOrdreCount;
   //   }
 
-  // }
+  }
 
   updateTopLeftOrder(info) {
     const topLeftOrder = (info.id !== 'INDEX') ? info.tabTitle : '';

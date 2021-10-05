@@ -36,10 +36,15 @@ export class AppComponent {
 
     // Close columnchooser on outside click (non standard)
     document.addEventListener('mousedown', e => {
-      document.querySelectorAll('.dx-datagrid-column-chooser .dx-closebutton').forEach((btn) => {
-        const closeBtn = btn as HTMLElement;
-        closeBtn.click();
-      })
+      const el = e.target;
+      const context = el as HTMLElement;
+      const context2 = context.closest('.dx-datagrid-column-chooser');
+      if (!context2) {
+        document.querySelectorAll('.dx-datagrid-column-chooser .dx-closebutton').forEach((btn) => {
+          const closeBtn = btn as HTMLElement;
+          closeBtn.click();
+        })
+      }
      });
 
   }
