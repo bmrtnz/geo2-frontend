@@ -19,7 +19,7 @@ export class DevisesService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       sort: [
-        { selector: this.model.getLabelField() }
+        { selector: 'id' }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

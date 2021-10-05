@@ -29,7 +29,7 @@ export class GridHistoriqueComponent implements OnInit {
   public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
 
   /* tslint:disable-next-line max-line-length */
-  private gridFilter: RegExp = /^(?:ordre\.(numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateModification|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial))$/;
+  private gridFilter: RegExp = /^(?:ordre\.(numero|referenceClient|dateDepartPrevue|codeChargement|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateModification|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial))$/;
 
   constructor(
     private mruOrdresService: MruOrdresService,

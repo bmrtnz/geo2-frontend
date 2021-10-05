@@ -535,8 +535,13 @@
         "visible": true
       },
       {
+        "visibleIndex": 0,
+        "dataField": "ordre.codeClient",
+        "visible": true
+      },
+      {
         "visibleIndex": 1,
-        "dataField": "ordre.client.raisonSocial",
+        "dataField": "ordre.codeAlphaEntrepot",
         "dataType": "string",
         "visible": true
       },
@@ -559,16 +564,14 @@
         "visible": true
       },
       {
+        "visibleIndex": 5,
+        "dataField": "ordre.codeChargement",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "dataField": "ordre.secteurCommercial.id",
         "dataType": "string",
-        "visible": false
-      },
-      {
-        "dataField": "ordre.codeClient",
-        "visible": false
-      },
-      {
-        "dataField": "ordre.codeAlphaEntrepot",
         "visible": false
       },
       {
