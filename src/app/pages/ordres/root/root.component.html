@@ -10,8 +10,9 @@
 
     <div *dxTemplate="let content of 'title'">
         <div class="dx-item-content dx-tab-content" [attr.data-item-id]="content.id">
-            <span class="dx-tab-text">
-                <i class="dx-icon" [ngClass]="content.icon"></i>
+            <i class="dx-icon" [ngClass]="content.icon"></i>
+            <span *ngIf="content.title" class="tab-separator"></span>
+            <span *ngIf="content.title" class="dx-tab-text">
                 <span>{{content.title}}</span>
                 <ng-container *ngIf="content.details">
                     <br>
