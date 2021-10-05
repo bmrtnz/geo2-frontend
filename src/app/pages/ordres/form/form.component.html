@@ -9,7 +9,8 @@
         icon="box"
         text="{{ 'ordres-details-articles' | localize }}"
         [routerLink]="[]"
-      [fragment]="fragments.Articles">
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Articles">
     </dx-button>
     <dx-button
         class="black"
@@ -18,6 +19,7 @@
         icon="material-icons local_shipping"
         text="{{ 'ordres-details-logistique' | localize }}"
         [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
       [fragment]="fragments.Logistique">
     </dx-button>
     <div class="button-container">
@@ -28,6 +30,7 @@
             height="auto"
             icon="material-icons offline_bolt"
             [routerLink]="[]"
+            [queryParamsHandling]="'merge'"
             [fragment]="fragments.Litiges"
             text="{{ 'ordres-details-litiges' | localize }}">
         </dx-button>
@@ -38,6 +41,7 @@
         height="auto"
         icon="material-icons euro_symbol"
         [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
         [fragment]="fragments.Synthese"
         text="{{ 'ordres-details-synthese' | localize }}">
     </dx-button>
@@ -47,6 +51,7 @@
         data-accordion="fluxdocs"
         icon="material-icons folder"
         [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
         [fragment]="fragments.Flux"
         text="{{ 'ordres-details-fluxdocs' | localize }}">
     </dx-button>
@@ -58,6 +63,7 @@
             height="auto"
             icon="material-icons insert_chart_outlined"
             [routerLink]="[]"
+            [queryParamsHandling]="'merge'"
             [fragment]="fragments.CQ"
             text="{{ 'ordres-details-CQ' | localize }}">
         </dx-button>
@@ -70,6 +76,7 @@
             height="auto"
             icon="material-icons message"
             [routerLink]="[]"
+            [queryParamsHandling]="'merge'"
             [fragment]="fragments.Commentaires"
             text="{{ 'ordres-details-commentaires' | localize }}">
         </dx-button>
@@ -80,6 +87,7 @@
         height="auto"
         icon="material-icons view_headline"
         [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
         [fragment]="fragments.Log"
         text="{{ 'ordres-details-log' | localize }}">
     </dx-button>

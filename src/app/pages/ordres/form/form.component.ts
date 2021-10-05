@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, AfterViewInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -14,7 +14,7 @@ import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
-import { concatMap, filter, map, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, filter, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { RouteParam, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 
@@ -43,7 +43,7 @@ enum Fragments {
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, AfterViewInit {
 
   public fragments = Fragments;
   public ordre: Ordre;
@@ -136,27 +136,6 @@ export class FormComponent implements OnInit {
       this.formGroup.reset(ordre);
     });
 
-    this.router.events
-    .pipe(
-      filter( event => event instanceof NavigationEnd ),
-      switchMapTo(this.route.fragment),
-      switchMap( fragment => of(this.anchors.find(item => {
-          if (item instanceof DxAccordionComponent)
-            return item.instance.element().id === fragment;
-          return item.nativeElement.id === fragment;
-        }))
-      ),
-    )
-    .subscribe( item => {
-      const scrollTo = (elm: HTMLElement) =>
-        elm.scrollIntoView({behavior: 'smooth'});
-
-      if (item instanceof DxAccordionComponent) {
-        item.instance.expandItem(0);
-        scrollTo(item.instance.element());
-      } else scrollTo(item.nativeElement);
-    });
-
     this.resetCriteria();
     this.clientsDS = this.clientsService.getDataSource();
     this.entrepotDS = this.entrepotsService.getDataSource();
@@ -177,6 +156,30 @@ export class FormComponent implements OnInit {
     ]);
     this.transporteursDS = this.transporteursService.getDataSource();
     this.litigesDS = this.litigesService.getDataSource();
+  }
+
+  ngAfterViewInit() {
+    const scrollTo = (elm: HTMLElement) =>
+        elm.scrollIntoView({behavior: 'smooth'});
+
+    this.router.events
+    .pipe(
+      filter( event => event instanceof NavigationEnd ),
+      concatMap(_ => this.route.fragment),
+      filter(fragment => !!fragment),
+      concatMap( fragment => of(this.anchors.find(item => {
+        if (item instanceof DxAccordionComponent)
+        return item.instance.element().id === fragment;
+        return item.nativeElement.id === fragment;
+      }))
+      ),
+    )
+    .subscribe( item => {
+      if (item instanceof DxAccordionComponent) {
+        item.instance.expandItem(0);
+        scrollTo(item.instance.element());
+      } else scrollTo(item.nativeElement);
+    });
   }
 
   onSubmit() {
