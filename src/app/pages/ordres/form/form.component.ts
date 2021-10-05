@@ -16,6 +16,7 @@ import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { RouteParam, TAB_ORDRE_CREATE_ID } from '../root/root.component';
+import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 
 /**
  * Grid with loading toggled by parent
@@ -39,11 +40,19 @@ export class FormComponent implements OnInit {
     entrepot: [''],
     referenceClient: [''],
     transporteur: [''],
+    transporteurDEVCode: [''],
+    transporteurDEVPrixUnitaire: [''],
+    transporteurDEVTaux: [''],
+    typeTransport: [''],
     commercial: [''],
     assistante: [''],
     instructionsLogistiques: [''],
     dateDepartPrevue: [''],
     dateLivraisonPrevue: [''],
+    ETALocation: [''],
+    ETDLocation: [''],
+    codeChargement: [''],
+    incotermLieu: [''],
     venteACommission: [''],
     devise: [''],
     litigeNumero: [''],
@@ -76,6 +85,7 @@ export class FormComponent implements OnInit {
   public commercialDS: DataSource;
   public assistanteDS: DataSource;
   public transporteursDS: DataSource;
+  public typeTransportDS: DataSource;
   public litigesDS: DataSource;
 
   @ViewChild(FileManagerComponent, { static: false })
@@ -89,6 +99,7 @@ export class FormComponent implements OnInit {
     private ordresService: OrdresService,
     private currentCompanyService: CurrentCompanyService,
     private clientsService: ClientsService,
+    private typesCamionService: TypesCamionService,
     private devisesService: DevisesService,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
@@ -116,6 +127,7 @@ export class FormComponent implements OnInit {
     this.entrepotDS = this.entrepotsService.getDataSource();
     this.deviseDS = this.devisesService.getDataSource();
     this.commercialDS = this.personnesService.getDataSource();
+    this.typeTransportDS = this.typesCamionService.getDataSource();
     this.commercialDS.filter([
       ['valide', '=', true],
       'and',
@@ -269,6 +281,14 @@ export class FormComponent implements OnInit {
 
   cancelClick() {
     this.validationPopupVisible = false;
+  }
+
+  deviseDisplayExpr(item) {
+    return item ? item.description + ' (' + item.taux + ')' : null;
+  }
+
+  displayIDBefore(data) {
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
 }
