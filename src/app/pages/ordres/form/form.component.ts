@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Role, Societe } from 'app/shared/models';
 import Ordre from 'app/shared/models/ordre.model';
@@ -14,7 +14,7 @@ import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, filter, map, switchMap, switchMapTo } from 'rxjs/operators';
 import { RouteParam, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 
 /**
@@ -25,6 +25,18 @@ export interface ToggledGrid {
   onToggling(toggled: boolean);
 }
 
+enum Fragments {
+  Head = 'head',
+  Articles = 'articles',
+  Logistique = 'logistique',
+  Litiges = 'litiges',
+  Synthese = 'synthese',
+  Flux = 'flux',
+  CQ = 'cq',
+  Commentaires = 'commentaires',
+  Log = 'log',
+}
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -32,6 +44,7 @@ export interface ToggledGrid {
 })
 export class FormComponent implements OnInit {
 
+  public fragments = Fragments;
   public ordre: Ordre;
   public formGroup = this.formBuilder.group({
     id: [''],
@@ -81,6 +94,7 @@ export class FormComponent implements OnInit {
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
   @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
+  @ViewChildren('anchor') anchors: QueryList<ElementRef|DxAccordionComponent>;
 
   constructor(
     private router: Router,
@@ -102,13 +116,34 @@ export class FormComponent implements OnInit {
     .pipe(
       map( params => params.get(RouteParam.TabID)),
       concatMap( id => {
-        if (id === TAB_ORDRE_CREATE_ID) return of(new Ordre());
+        if (id === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
         return this.ordresService.getOneByNumeroAndSociete(id, currentCompany.id);
       }),
     )
     .subscribe( ordre => {
       this.ordre = ordre;
       this.formGroup.reset(ordre);
+    });
+
+    this.router.events
+    .pipe(
+      filter( event => event instanceof NavigationEnd ),
+      switchMapTo(this.route.fragment),
+      switchMap( fragment => of(this.anchors.find(item => {
+          if (item instanceof DxAccordionComponent)
+            return item.instance.element().id === fragment;
+          return item.nativeElement.id === fragment;
+        }))
+      ),
+    )
+    .subscribe( item => {
+      const scrollTo = (elm: HTMLElement) =>
+        elm.scrollIntoView({behavior: 'smooth'});
+
+      if (item instanceof DxAccordionComponent) {
+        item.instance.expandItem(0);
+        scrollTo(item.instance.element());
+      } else scrollTo(item.nativeElement);
     });
 
     this.resetCriteria();
@@ -170,32 +205,6 @@ export class FormComponent implements OnInit {
   deleteClick() {
     this.validationPopupVisible = false;
     this.deleteOrder();
-  }
-
-  scrollToOnClick(e) {
-    // const key = e.element.dataset.accordion;
-    // const extractField = '.' + key + '-field';
-    // const Element = document.querySelectorAll(extractField);
-
-    // // Find corresponding accordion to scroll to/open
-    // const Accordion = this.accordion
-    //   .filter((v) => v.element.nativeElement.dataset.name === key)[tabIndex];
-
-    // // Some elements are not accordion type
-    // if (Accordion) {
-    //   Accordion.instance
-    //     .expandItem(0);
-    //     // .then((r) => Element[tabIndex].scrollIntoView({ behavior: 'smooth' }));
-
-    //   // Manually firing accordion onItemTitleClick event
-    //   (Accordion as DxAccordionComponent).onItemTitleClick.emit({
-    //     itemElement: (Accordion as DxAccordionComponent).instance
-    //       .element()
-    //       .querySelector('.dx-accordion-item'),
-    //       overrideTogglingTo: true,
-    //   });
-    // }
-    // Element[tabIndex].scrollIntoView({ behavior: 'smooth' });
   }
 
   fileManagerClick() {

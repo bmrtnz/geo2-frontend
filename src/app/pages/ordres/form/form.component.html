@@ -6,16 +6,18 @@
     height="auto"
     icon="box"
     text="{{ 'ordres-details-articles' | localize }}"
-    (onClick)="scrollToOnClick($event)">
-</dx-button>
+    [routerLink]="[]"
+    [fragment]="fragments.Articles"
+></dx-button>
 <dx-button
     class="black"
     data-accordion="logistique"
     height="auto"
     icon="material-icons local_shipping"
     text="{{ 'ordres-details-logistique' | localize }}"
-    (onClick)="scrollToOnClick($event)">
-</dx-button>
+    [routerLink]="[]"
+    [fragment]="fragments.Logistique"
+></dx-button>
 <div class="button-container">
     <div *ngIf="dotLitiges" class="dot">{{ dotLitiges }}</div>
     <dx-button
@@ -23,7 +25,8 @@
         data-accordion="litiges"
         height="auto"
         icon="material-icons offline_bolt"
-        (onClick)="scrollToOnClick($event)"
+        [routerLink]="[]"
+        [fragment]="fragments.Litiges"
         text="{{ 'ordres-details-litiges' | localize }}">
     </dx-button>
 </div>
@@ -32,7 +35,8 @@
     data-accordion="synthese"
     height="auto"
     icon="material-icons euro_symbol"
-    (onClick)="scrollToOnClick($event)"
+    [routerLink]="[]"
+    [fragment]="fragments.Synthese"
     text="{{ 'ordres-details-synthese' | localize }}">
 </dx-button>
 <dx-button
@@ -40,7 +44,8 @@
     height="auto"
     data-accordion="fluxdocs"
     icon="material-icons folder"
-    (onClick)="scrollToOnClick($event)"
+    [routerLink]="[]"
+    [fragment]="fragments.Flux"
     text="{{ 'ordres-details-fluxdocs' | localize }}">
 </dx-button>
 <div class="button-container">
@@ -50,7 +55,8 @@
         data-accordion="CQ"
         height="auto"
         icon="material-icons insert_chart_outlined"
-        (onClick)="scrollToOnClick($event)"
+        [routerLink]="[]"
+        [fragment]="fragments.CQ"
         text="{{ 'ordres-details-CQ' | localize }}">
     </dx-button>
 </div>
@@ -61,7 +67,8 @@
         data-accordion="commentaires"
         height="auto"
         icon="material-icons message"
-        (onClick)="scrollToOnClick($event)"
+        [routerLink]="[]"
+        [fragment]="fragments.Commentaires"
         text="{{ 'ordres-details-commentaires' | localize }}">
     </dx-button>
 </div>
@@ -70,7 +77,8 @@
     data-accordion="log"
     height="auto"
     icon="material-icons view_headline"
-    (onClick)="scrollToOnClick($event)"
+    [routerLink]="[]"
+    [fragment]="fragments.Log"
     text="{{ 'ordres-details-log' | localize }}">
 </dx-button>
 <dx-button
@@ -140,13 +148,14 @@
 
           <div class="order-tabs">
             <div
+              #anchor
+              id="{{fragments.Head}}"
               class="
                 dx-form-group
                 no-padding-bottom
                 dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption">{{
                 "ordres-details-groupe-infos" | localize
               }}</span>
@@ -492,12 +501,13 @@
             </div>
 
             <div
+              #anchor
+              id="{{fragments.Articles}}"
               class="
                 articles-field
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption">{{
                 "ordres-details-groupe-articles" | localize
               }}</span>
@@ -547,12 +557,13 @@
                 logistique-field
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption accordion-title">{{
                 "ordres-details-groupe-logistique" | localize
               }}</span>
               <dx-accordion
+                #anchor
+                id="{{fragments.Logistique}}"
                 data-name="logistique"
                 [collapsible]="true"
                 [multiple]="false"
@@ -608,12 +619,13 @@
                 litiges-field
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption accordion-title">{{
                 "ordres-details-groupe-litiges" | localize
               }}</span>
               <dx-accordion
+                #anchor
+                id="{{fragments.Litiges}}"
                 data-name="litiges"
                 [collapsible]="true"
                 [multiple]="false"
@@ -639,12 +651,13 @@
                 accordion3
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption accordion-title">{{
                 "ordres-details-groupe-synthese" | localize
               }}</span>
               <dx-accordion
+                #anchor
+                id="{{fragments.Synthese}}"
                 data-name="synthese"
                 [collapsible]="true"
                 [multiple]="false"
@@ -683,12 +696,13 @@
                 fluxdocs-field
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption accordion-title">{{
                 "ordres-details-groupe-fluxdocs" | localize
               }}</span>
               <dx-accordion
+                #anchor
+                id="{{fragments.Flux}}"
                 data-name="fluxdocs"
                 [collapsible]="true"
                 [multiple]="false"
@@ -711,12 +725,13 @@
                 CQ-field
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption accordion-title">{{
                 "ordres-details-groupe-CQ" | localize
               }}</span>
               <dx-accordion
+                #anchor
+                id="{{fragments.CQ}}"
                 data-name="CQ"
                 [collapsible]="true"
                 [multiple]="false"
@@ -733,17 +748,19 @@
                 </dxi-item>
               </dx-accordion>
             </div>
+
             <div
               class="
                 commentaires-field
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption accordion-title">{{
                 "ordres-details-groupe-commentaires" | localize
               }}</span>
               <dx-accordion
+                #anchor
+                id="{{fragments.Commentaires}}"
                 data-name="commentaires"
                 [collapsible]="true"
                 [multiple]="false"
@@ -768,12 +785,13 @@
                 log-field
                 dx-form-group dx-form-group-with-caption dx-card
                 responsive-paddings
-              "
-            >
+              ">
               <span class="dx-form-group-caption accordion-title">{{
                 "ordres-details-groupe-log" | localize
               }}</span>
               <dx-accordion
+                #anchor
+                id="{{fragments.Log}}"
                 data-name="log"
                 [collapsible]="true"
                 [multiple]="false"
