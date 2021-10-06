@@ -16,6 +16,7 @@ import { RangeRule, RequiredRule } from 'devextreme/ui/validation_engine';
 import { Observable } from 'rxjs';
 import { mergeAll, take } from 'rxjs/operators';
 import { SharedModule } from '../../shared.module';
+import { ModifiedFieldsService } from 'app/shared/services/modified-fields.service';
 
 @Component({
   selector: 'app-push-history-popup',
@@ -35,6 +36,7 @@ export class PushHistoryPopupComponent {
 
   @Input() title = '';
   @Input() placeholder = '';
+
   persist = new EventEmitter<Observable<FetchResult>>();
 
   commentValidationRules: (RangeRule | RequiredRule)[];
@@ -43,15 +45,17 @@ export class PushHistoryPopupComponent {
 
   constructor(
     private historiqueService: HistoriqueService,
+    private modifiedFieldsService: ModifiedFieldsService,
   ) { }
 
   async onSubmit(form: NgForm) {
     if (this.commentValidator.instance.validate().isValid) {
-      console.log(this.sourceData)
+      const modifiedFields = this.modifiedFieldsService.getModifiedFields();
       const save = this.historiqueService
         .saveByType(this.historyType, {
           ...this.sourceData,
-          commentaire: form.value.commentaire
+          // Adding modified fields list to user comment
+          commentaire: form.value.commentaire + (modifiedFields ? ' ' + modifiedFields : '')
         });
       this.persist.emit(save);
       this.popupComponent.instance.hide();
@@ -59,6 +63,7 @@ export class PushHistoryPopupComponent {
   }
 
   onHiding() {
+    this.modifiedFieldsService.clearModifiedFields();
     this.commentValidationRules = [];
   }
 
