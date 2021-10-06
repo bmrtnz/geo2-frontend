@@ -1,3 +1,8 @@
+
+::ng-deep .details-ordres-page {
+    margin-right: 20px;
+}
+
 ::ng-deep .form-ordres-page .thin-checkbox {
     margin:12px 0 !important;
 }
@@ -28,13 +33,21 @@
 }
 
 ::ng-deep .order-number {
-    margin-right:10px;
+    margin: 0 10px;
+    min-height: 36px;
 }
-
+::ng-deep .order-status {
+    color: #FF325A !important;
+}
 ::ng-deep .top-order-number {
+    display: block;
     font-size:14px;
-    color:#00759C;
-    margin-bottom:13px;
+    text-align: center;
+    background: #00759C;
+    color: white;
+    padding: 1px 0 3px 0;;
+    margin-bottom: 13px;
+    min-height: 22px;
 }
 
 ::ng-deep .order-id {
@@ -146,7 +159,13 @@ dx-button[type="normal"] { float:right; }
 .dotted-button {
     min-width:100%;
 }
-
+.order-loader {
+    position: relative;
+    left: 10px;
+    top: 4px;
+    width: 25px;
+    height: 25px;
+}
 // .dx-tabpanel {
 //     border:1px solid #DDD;
 //     margin:auto 20px;

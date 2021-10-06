@@ -19,6 +19,7 @@ import { RouteParam, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { IncotermsService } from 'app/shared/services/api/incoterms.service';
 import { PortsService } from 'app/shared/services/api/ports.service';
+import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 
 /**
  * Grid with loading toggled by parent
@@ -46,6 +47,7 @@ export class FormComponent implements OnInit {
     transporteurDEVCode: [''],
     transporteurDEVPrixUnitaire: [''],
     transporteurDEVTaux: [''],
+    baseTarifTransport: [''],
     typeTransport: [''],
     commercial: [''],
     assistante: [''],
@@ -83,6 +85,7 @@ export class FormComponent implements OnInit {
   public dotLitiges: string;
   public dotCommentaires: number;
   public dotCQ: number;
+  public orderNumber: string;
   public fullOrderNumber: string;
 
   public clientsDS: DataSource;
@@ -95,6 +98,7 @@ export class FormComponent implements OnInit {
   public portTypeADS: DataSource;
   public transporteursDS: DataSource;
   public typeTransportDS: DataSource;
+  public baseTarifTransportDS: DataSource;
   public litigesDS: DataSource;
 
   @ViewChild(FileManagerComponent, { static: false })
@@ -114,6 +118,7 @@ export class FormComponent implements OnInit {
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
     private portsService: PortsService,
+    private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
   ) { }
@@ -132,6 +137,8 @@ export class FormComponent implements OnInit {
       this.ordre = ordre;
       this.formGroup.reset(ordre);
       this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
+      this.orderNumber = ordre.numero;
+      this.fullOrderNumber = 'Ordre n°' + (this.ordre.campagne?.id ? this.ordre.campagne.id + '-' : '') + this.orderNumber;
     });
 
     this.resetCriteria();
@@ -140,6 +147,7 @@ export class FormComponent implements OnInit {
     this.deviseDS = this.devisesService.getDataSource();
     this.incotermsDS = this.incotermsService.getDataSource();
     this.typeTransportDS = this.typesCamionService.getDataSource();
+    this.baseTarifTransportDS = this.basesTarifService.getDataSource();
 
     this.commercialDS = this.personnesService.getDataSource();
     this.commercialDS.filter([
@@ -158,14 +166,14 @@ export class FormComponent implements OnInit {
     this.portTypeDDS.filter([
       ['valide', '=', true],
       'and',
-      ['type', '=', Type.D]
+      ['type', '=', 'D']
     ]);
 
     this.portTypeADS = this.portsService.getDataSource();
     this.portTypeADS.filter([
       ['valide', '=', true],
       'and',
-      ['type', '=', Type.A]
+      ['type', '=', 'A']
     ]);
 
 
