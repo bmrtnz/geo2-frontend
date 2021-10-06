@@ -16,7 +16,7 @@ import { iif, of, Subscription } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
-import { TabContext } from '../root/root.component';
+import { RouteParam, TabContext } from '../root/root.component';
 
 let self;
 
@@ -92,8 +92,8 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.tabContext.getSelectedItem()
-    .pipe(filter( item => item.id === this.INDICATOR_ID))
+    this.route.paramMap
+    .pipe(filter( param => param.get(RouteParam.TabID) === this.INDICATOR_ID))
     .subscribe( _ => this.histoGrid.reload());
   }
 
