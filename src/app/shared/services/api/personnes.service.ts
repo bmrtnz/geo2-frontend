@@ -21,7 +21,7 @@ export class PersonnesService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       sort: [
-        { selector: "nomUtilisateur" }
+        { selector: 'nomUtilisateur' }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
