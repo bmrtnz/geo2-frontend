@@ -1,14 +1,12 @@
 
-::ng-deep .details-ordres-page {
+::ng-deep .form-ordres-page {
     margin-right: 20px;
-}
-
-::ng-deep .form-ordres-page .thin-checkbox {
-    margin:12px 0 !important;
-}
-
-::ng-deep .form-ordres-page .dx-toolbar-item-auto-hide .dx-item-content {
-    width:36px;
+    .thin-checkbox {
+        margin: 12px 0 !important;
+    }
+    .dx-toolbar-item-auto-hide .dx-item-content {
+        width: 36px;
+    }
 }
 
 .upperButton {
@@ -19,6 +17,8 @@
     top:-10px;
 }
 ::ng-deep .form-scrollTo-buttons-container {
+    position: relative;
+    top: 12px;
     z-index:100;
     width: 170px;
     float: left;
