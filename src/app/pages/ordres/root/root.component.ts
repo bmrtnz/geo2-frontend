@@ -4,7 +4,7 @@ import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.s
 import { DxTabPanelComponent } from 'devextreme-angular';
 import { dxTabPanelItem } from 'devextreme/ui/tab_panel';
 import { combineLatest } from 'rxjs';
-import { concatMap, map, share, take } from 'rxjs/operators';
+import { concatMap, map, share } from 'rxjs/operators';
 
 const TAB_HOME_ID = 'home';
 export const TAB_ORDRE_CREATE_ID = 'create';
@@ -192,7 +192,6 @@ export class TabContext {
   public getSelectedItem() {
     return this.componentRef.route.paramMap
     .pipe(
-      take(1),
       share(),
       map( params => {
         const selected = params.get(RouteParam.TabID);
@@ -211,7 +210,7 @@ export class TabContext {
 
   /**
    * Push and select indicator in tab panel by routing
-   * @param numero Indicator id
+   * @param id Indicator id
    */
   public openIndicator(id: string) {
     return this.openTab(TabType.Indicator, id);
@@ -234,13 +233,3 @@ export class TabContext {
   }
 
 }
-
-    // Reload historique (and search results) when view is Suivi des ordres
-    // setTimeout(() => {
-    //   this.isIndexTab = id === INDEX_TAB;
-    //   if (this.isIndexTab) {
-    //     this.histoGrid.reload();
-    //     // Search?
-    //     if (this.suiviGrid) this.suiviGrid.reload();
-    //   }
-    // });
