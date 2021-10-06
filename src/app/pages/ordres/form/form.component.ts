@@ -180,16 +180,15 @@ export class FormComponent implements OnInit, AfterViewInit {
     this.portTypeDDS.filter([
       ['valide', '=', true],
       'and',
-      ['type', '=', 'D']
+      ['type', '=', Type.PORT_DE_DEPART]
     ]);
 
     this.portTypeADS = this.portsService.getDataSource();
     this.portTypeADS.filter([
       ['valide', '=', true],
       'and',
-      ['type', '=', 'A']
+      ['type', '=', Type.PORT_D_ARRIVEE]
     ]);
-
 
     this.transporteursDS = this.transporteursService.getDataSource();
     this.litigesDS = this.litigesService.getDataSource();

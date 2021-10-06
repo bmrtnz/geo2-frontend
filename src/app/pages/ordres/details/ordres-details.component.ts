@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
 import { EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
@@ -9,7 +9,7 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Content, INDEX_TAB, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
+import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { iif, of, Subscription } from 'rxjs';
 import { map, take, filter } from 'rxjs/operators';
@@ -20,12 +20,14 @@ import { ActivatedRoute } from '@angular/router';
 
 let self;
 
+
+
 @Component({
   selector: 'app-ordres-details',
   templateUrl: './ordres-details.component.html',
   styleUrls: ['./ordres-details.component.scss']
 })
-export class OrdresDetailsComponent implements OnInit, OnDestroy {
+export class OrdresDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly INDICATOR_ID = 'SuiviDesOrdres';
 
@@ -51,7 +53,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   validationPopupVisible = false;
   ordreASupp: string;
   public ordres: DataSource;
-  showGridResults: boolean;
+  showGridResults = false;
   @ViewChild(DxAutocompleteComponent, { static: false })
   autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
@@ -69,6 +71,8 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   validationGroup: DxValidationGroupComponent;
   @ViewChild(DxPopupComponent, { static: false })
   validationPopup: DxPopupComponent;
+  @ViewChild('searchCriteria', { static: false }) searchCriteria: DxSelectBoxComponent;
+
 
   constructor(
     ordresIndicatorsService: OrdresIndicatorsService,
@@ -89,12 +93,22 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.litiges = litigesService.getDataSource();
     this.allContents = ordresIndicatorsService.getContents();
     this.contents = ordresIndicatorsService.getContents().slice(0, 1);
+    this.searchItems = [
+      'numero',
+      'numeroFacture',
+      'referenceClient',
+      'client.raisonSocial',
+    ];
   }
 
   ngOnInit() {
     this.tabContext.getSelectedItem()
     .pipe(filter( item => item.id === this.INDICATOR_ID))
     .subscribe( _ => this.histoGrid.reload());
+  }
+
+  ngAfterViewInit() {
+    this.resetCriteria();
   }
 
   ngOnDestroy() {
@@ -111,6 +125,10 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
       : null;
   }
 
+  resetCriteria() {
+    this.searchCriteria.instance.option('value', this.searchItems[0]);
+  }
+
   changeSearchCriteria() {
     const toSearch = this.autocomplete.value;
     this.showGridResults = false;
@@ -123,16 +141,16 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   enableFilters(value) {
-    // const criteria = this.formGroup.get('search').value;
+    const criteria = this.searchCriteria.instance.option('value');
 
     this.filter = [
       ['valide', '=', true],
       'and',
       ['societe.id', '=', this.currentCompanyService.getCompany().id],
-      'and',
-      // ['facture', '=', false],
       // 'and',
-      // [criteria, 'contains', value],
+      // ['facture', '=', false],
+      'and',
+      [criteria, 'contains', value],
     ];
   }
 
@@ -172,7 +190,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
-    
+
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -248,16 +266,6 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     // if (!addedItems.length) return;
     // const { id, ordre, patch } = addedItems[0];
 
-    // Reload historique (and search results) when view is Suivi des ordres
-    // setTimeout(() => {
-    //   this.isIndexTab = id === INDEX_TAB;
-    //   if (this.isIndexTab) {
-    //     this.histoGrid.reload();
-    //     // Search?
-    //     if (this.suiviGrid) this.suiviGrid.reload();
-    //   }
-    // });
-      
     // this.canDuplicate = !!id;
     // if (ordre) {
     //   this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
