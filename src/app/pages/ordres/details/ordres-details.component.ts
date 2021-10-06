@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, AfterViewInit, AfterContentInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
 import { EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
@@ -12,11 +13,10 @@ import { Content, INDEX_TAB, OrdresIndicatorsService } from 'app/shared/services
 import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { iif, of, Subscription } from 'rxjs';
-import { map, take, filter } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 import { TabContext } from '../root/root.component';
-import { ActivatedRoute } from '@angular/router';
 
 let self;
 
@@ -25,7 +25,7 @@ let self;
   templateUrl: './ordres-details.component.html',
   styleUrls: ['./ordres-details.component.scss']
 })
-export class OrdresDetailsComponent implements OnInit, OnDestroy {
+export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
 
   readonly INDICATOR_ID = 'SuiviDesOrdres';
 
@@ -91,7 +91,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.contents = ordresIndicatorsService.getContents().slice(0, 1);
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.tabContext.getSelectedItem()
     .pipe(filter( item => item.id === this.INDICATOR_ID))
     .subscribe( _ => this.histoGrid.reload());
