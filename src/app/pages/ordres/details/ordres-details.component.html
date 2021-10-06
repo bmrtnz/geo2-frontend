@@ -38,6 +38,5 @@
 ></app-grid-suivi>
 
 <div class="histo-container">
-  <h2>{{ "ordres-details-historiqueordres" | localize }}</h2>
   <app-grid-historique (ordreSelected)="tabContext.openOrdre($event.numero)"></app-grid-historique>
 </div>

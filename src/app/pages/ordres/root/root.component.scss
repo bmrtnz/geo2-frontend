@@ -34,4 +34,20 @@
       color: $base-tone-shade;
     }
   }
+
+  .dx-template-wrapper {
+    .dx-tab-content {
+      display: flex;
+      align-items: center;
+      .tab-separator {
+        width: 5px;
+      }
+      .dx-tab-text {
+        line-height: initial;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  }
 }

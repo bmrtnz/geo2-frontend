@@ -7,7 +7,9 @@
         height="auto"
         icon="box"
         text="{{ 'ordres-details-articles' | localize }}"
-        (onClick)="scrollToOnClick($event)">
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Articles">
     </dx-button>
     <dx-button
         class="black"
@@ -15,7 +17,9 @@
         height="auto"
         icon="material-icons local_shipping"
         text="{{ 'ordres-details-logistique' | localize }}"
-        (onClick)="scrollToOnClick($event)">
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+      [fragment]="fragments.Logistique">
     </dx-button>
     <div class="button-container">
         <div *ngIf="dotLitiges" class="dot">{{ dotLitiges }}</div>
@@ -24,7 +28,9 @@
             data-accordion="litiges"
             height="auto"
             icon="material-icons offline_bolt"
-            (onClick)="scrollToOnClick($event)"
+            [routerLink]="[]"
+            [queryParamsHandling]="'merge'"
+            [fragment]="fragments.Litiges"
             text="{{ 'ordres-details-litiges' | localize }}">
         </dx-button>
     </div>
@@ -33,7 +39,9 @@
         data-accordion="synthese"
         height="auto"
         icon="material-icons euro_symbol"
-        (onClick)="scrollToOnClick($event)"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Synthese"
         text="{{ 'ordres-details-synthese' | localize }}">
     </dx-button>
     <dx-button
@@ -41,7 +49,9 @@
         height="auto"
         data-accordion="fluxdocs"
         icon="material-icons folder"
-        (onClick)="scrollToOnClick($event)"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Flux"
         text="{{ 'ordres-details-fluxdocs' | localize }}">
     </dx-button>
     <div class="button-container">
@@ -51,7 +61,9 @@
             data-accordion="CQ"
             height="auto"
             icon="material-icons insert_chart_outlined"
-            (onClick)="scrollToOnClick($event)"
+            [routerLink]="[]"
+            [queryParamsHandling]="'merge'"
+            [fragment]="fragments.CQ"
             text="{{ 'ordres-details-CQ' | localize }}">
         </dx-button>
     </div>
@@ -62,7 +74,9 @@
             data-accordion="commentaires"
             height="auto"
             icon="material-icons message"
-            (onClick)="scrollToOnClick($event)"
+            [routerLink]="[]"
+            [queryParamsHandling]="'merge'"
+            [fragment]="fragments.Commentaires"
             text="{{ 'ordres-details-commentaires' | localize }}">
         </dx-button>
     </div>
@@ -71,7 +85,9 @@
         data-accordion="log"
         height="auto"
         icon="material-icons view_headline"
-        (onClick)="scrollToOnClick($event)"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Log"
         text="{{ 'ordres-details-log' | localize }}">
     </dx-button>
     <dx-button
@@ -86,7 +102,7 @@
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <dx-validation-group name="loginGroup">
       <div class="content-block"></div>
-      <div class="content-block details-ordres-page">
+      <div class="details-ordres-page">
         <dx-box direction="row">
           <dxi-item [ratio]="8">
             <h2 class="no-margin-top">
@@ -143,6 +159,8 @@
 
             <div class="order-tabs">
               <div
+                #anchor
+                id="{{fragments.Head}}"
                 class="
                   dx-form-group
                   dx-form-group-with-caption dx-card
@@ -552,6 +570,8 @@
               </div>
 
               <div
+                #anchor
+                id="{{fragments.Articles}}"
                 class="
                   articles-field
                   dx-form-group dx-form-group-with-caption dx-card
@@ -613,6 +633,8 @@
                   "ordres-details-groupe-logistique" | localize
                 }}</span>
                 <dx-accordion
+                  #anchor
+                  id="{{fragments.Logistique}}"
                   data-name="logistique"
                   [collapsible]="true"
                   [multiple]="false"
@@ -674,6 +696,8 @@
                   "ordres-details-groupe-litiges" | localize
                 }}</span>
                 <dx-accordion
+                  #anchor
+                  id="{{fragments.Litiges}}"
                   data-name="litiges"
                   [collapsible]="true"
                   [multiple]="false"
@@ -705,6 +729,8 @@
                   "ordres-details-groupe-synthese" | localize
                 }}</span>
                 <dx-accordion
+                  #anchor
+                  id="{{fragments.Synthese}}"
                   data-name="synthese"
                   [collapsible]="true"
                   [multiple]="false"
@@ -749,6 +775,8 @@
                   "ordres-details-groupe-fluxdocs" | localize
                 }}</span>
                 <dx-accordion
+                  #anchor
+                  id="{{fragments.Flux}}"
                   data-name="fluxdocs"
                   [collapsible]="true"
                   [multiple]="false"
@@ -777,6 +805,8 @@
                   "ordres-details-groupe-CQ" | localize
                 }}</span>
                 <dx-accordion
+                  #anchor
+                  id="{{fragments.CQ}}"
                   data-name="CQ"
                   [collapsible]="true"
                   [multiple]="false"
@@ -804,6 +834,8 @@
                   "ordres-details-groupe-commentaires" | localize
                 }}</span>
                 <dx-accordion
+                  #anchor
+                  id="{{fragments.Commentaires}}"
                   data-name="commentaires"
                   [collapsible]="true"
                   [multiple]="false"
@@ -834,6 +866,8 @@
                   "ordres-details-groupe-log" | localize
                 }}</span>
                 <dx-accordion
+                  #anchor
+                  id="{{fragments.Log}}"
                   data-name="log"
                   [collapsible]="true"
                   [multiple]="false"

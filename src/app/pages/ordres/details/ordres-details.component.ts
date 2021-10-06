@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, AfterViewInit, AfterContentInit } from '@angular/core';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
 import { EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
@@ -12,14 +12,13 @@ import { Content, INDEX_TAB, OrdresIndicatorsService } from 'app/shared/services
 import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { iif, of, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, filter } from 'rxjs/operators';
 import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 import { TabContext } from '../root/root.component';
+import { ActivatedRoute } from '@angular/router';
 
 let self;
-
-
 
 @Component({
   selector: 'app-ordres-details',
@@ -27,6 +26,9 @@ let self;
   styleUrls: ['./ordres-details.component.scss']
 })
 export class OrdresDetailsComponent implements OnInit, OnDestroy {
+
+  readonly INDICATOR_ID = 'SuiviDesOrdres';
+
   searchItems: any;
   filter: any;
   isIndexTab = true;
@@ -80,6 +82,7 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     public personnesService: PersonnesService,
     public transporteursService: TransporteursService,
     public tabContext: TabContext,
+    public route: ActivatedRoute,
   ) {
     self = this;
     this.ordres = ordresService.getDataSource();
@@ -88,7 +91,11 @@ export class OrdresDetailsComponent implements OnInit, OnDestroy {
     this.contents = ordresIndicatorsService.getContents().slice(0, 1);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.tabContext.getSelectedItem()
+    .pipe(filter( item => item.id === this.INDICATOR_ID))
+    .subscribe( _ => this.histoGrid.reload());
+  }
 
   ngOnDestroy() {
     if (this.formValuesChange) this.formValuesChange.unsubscribe();

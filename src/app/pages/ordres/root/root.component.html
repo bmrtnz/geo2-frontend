@@ -9,18 +9,18 @@
         (onContentReady)="this.tabPanelReady.emit($event)"
         >
 
-        <div *dxTemplate="let content of 'title'">
-            <div class="dx-item-content dx-tab-content" [attr.data-item-id]="content.id">
-                <span class="dx-tab-text">
-                    <i class="dx-icon" [ngClass]="content.icon"></i>
-                    <span>{{content.title}}</span>
-                    <ng-container *ngIf="content.details">
-                        <br>
-                        <small>{{content.details}}</small>
-                    </ng-container>
-                </span>
-                <i class="dx-icon dx-icon-close" *ngIf="!isStaticItem(content)" (click)="onTabCloseClick($event)"></i>
-            </div>
+    <div *dxTemplate="let content of 'title'">
+        <div class="dx-item-content dx-tab-content" [attr.data-item-id]="content.id">
+            <i class="dx-icon" [ngClass]="content.icon"></i>
+            <span *ngIf="content.title" class="tab-separator"></span>
+            <span *ngIf="content.title" class="dx-tab-text">
+                <span>{{content.title}}</span>
+                <ng-container *ngIf="content.details">
+                    <br>
+                    <small>{{content.details}}</small>
+                </ng-container>
+            </span>
+            <i class="dx-icon dx-icon-close" *ngIf="!isStaticItem(content)" (click)="onTabCloseClick($event)"></i>
         </div>
 
         <div *dxTemplate="let item of 'item'">
@@ -28,6 +28,7 @@
                 [ngComponentOutlet]="item.component"
             ></ng-template>
         </div>
-
+    </div>
+    
     </dx-tab-panel>
 </div>
