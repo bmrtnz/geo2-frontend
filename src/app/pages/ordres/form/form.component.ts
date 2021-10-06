@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
-import { Role, Societe } from 'app/shared/models';
+import { Role, Type, Societe } from 'app/shared/models';
 import Ordre from 'app/shared/models/ordre.model';
 import { ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
 import { DevisesService } from 'app/shared/services/api/devises.service';
@@ -17,6 +17,8 @@ import { of } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { RouteParam, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
+import { IncotermsService } from 'app/shared/services/api/incoterms.service';
+import { PortsService } from 'app/shared/services/api/ports.service';
 
 /**
  * Grid with loading toggled by parent
@@ -34,6 +36,7 @@ export interface ToggledGrid {
 export class FormComponent implements OnInit {
 
   public ordre: Ordre;
+  public status = 'Facturé';
   public formGroup = this.formBuilder.group({
     id: [''],
     client: [''],
@@ -46,11 +49,14 @@ export class FormComponent implements OnInit {
     typeTransport: [''],
     commercial: [''],
     assistante: [''],
+    incoterm: [''],
     instructionsLogistiques: [''],
     dateDepartPrevue: [''],
     dateLivraisonPrevue: [''],
-    ETALocation: [''],
-    ETDLocation: [''],
+    ETDDate: [''],
+    ETADate: [''],
+    portTypeD: [''],
+    portTypeA: [''],
     codeChargement: [''],
     incotermLieu: [''],
     venteACommission: [''],
@@ -81,9 +87,12 @@ export class FormComponent implements OnInit {
 
   public clientsDS: DataSource;
   public entrepotDS: DataSource;
+  public incotermsDS: DataSource;
   public deviseDS: DataSource;
   public commercialDS: DataSource;
   public assistanteDS: DataSource;
+  public portTypeDDS: DataSource;
+  public portTypeADS: DataSource;
   public transporteursDS: DataSource;
   public typeTransportDS: DataSource;
   public litigesDS: DataSource;
@@ -101,8 +110,10 @@ export class FormComponent implements OnInit {
     private clientsService: ClientsService,
     private typesCamionService: TypesCamionService,
     private devisesService: DevisesService,
+    private incotermsService: IncotermsService,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
+    private portsService: PortsService,
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
   ) { }
@@ -120,26 +131,44 @@ export class FormComponent implements OnInit {
     .subscribe( ordre => {
       this.ordre = ordre;
       this.formGroup.reset(ordre);
+      this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
     });
 
     this.resetCriteria();
     this.clientsDS = this.clientsService.getDataSource();
     this.entrepotDS = this.entrepotsService.getDataSource();
     this.deviseDS = this.devisesService.getDataSource();
-    this.commercialDS = this.personnesService.getDataSource();
+    this.incotermsDS = this.incotermsService.getDataSource();
     this.typeTransportDS = this.typesCamionService.getDataSource();
+
+    this.commercialDS = this.personnesService.getDataSource();
     this.commercialDS.filter([
       ['valide', '=', true],
       'and',
-      ['role', '=', Role.COMMERCIAL],
+      ['role', '=', Role.COMMERCIAL]
     ]);
 
     this.assistanteDS = this.personnesService.getDataSource();
     this.assistanteDS.filter([
       ['valide', '=', true],
       'and',
-      ['role', '=', Role.ASSISTANT],
+      ['role', '=', Role.ASSISTANT]
     ]);
+    this.portTypeDDS = this.portsService.getDataSource();
+    this.portTypeDDS.filter([
+      ['valide', '=', true],
+      'and',
+      ['type', '=', Type.D]
+    ]);
+
+    this.portTypeADS = this.portsService.getDataSource();
+    this.portTypeADS.filter([
+      ['valide', '=', true],
+      'and',
+      ['type', '=', Type.A]
+    ]);
+
+
     this.transporteursDS = this.transporteursService.getDataSource();
     this.litigesDS = this.litigesService.getDataSource();
   }
