@@ -155,7 +155,6 @@ export class FormComponent implements OnInit, AfterViewInit {
       this.fullOrderNumber = 'Ordre n°' + (this.ordre.campagne?.id ? this.ordre.campagne.id + '-' : '') + this.orderNumber;
     });
 
-    this.resetCriteria();
     this.clientsDS = this.clientsService.getDataSource();
     this.entrepotDS = this.entrepotsService.getDataSource();
     this.deviseDS = this.devisesService.getDataSource();
@@ -262,10 +261,6 @@ export class FormComponent implements OnInit, AfterViewInit {
     this.fileManagerComponent.visible = true;
   }
 
-  resetCriteria() {
-    this.formGroup.get('search').setValue(this.searchItems[0]);
-  }
-
   detailExp() {
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
   }
@@ -336,7 +331,9 @@ export class FormComponent implements OnInit, AfterViewInit {
   }
 
   displayIDBefore(data) {
-    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+    return data ?
+    (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
+     : null;
   }
 
 }

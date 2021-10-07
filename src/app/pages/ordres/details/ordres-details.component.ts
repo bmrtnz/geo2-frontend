@@ -106,13 +106,15 @@ export class OrdresDetailsComponent implements OnInit, AfterViewInit, OnDestroy 
   ngAfterViewInit() {
     this.resetCriteria();
     // Reload historique (and search results) when view is Suivi des ordres
-    this.tabContext.getSelectedItem()
-    .pipe(filter( item => item.id === this.INDICATOR_ID))
-    .subscribe( _ => {
-      this.histoGrid.reload();
-      // Search?
-      if (this.suiviGrid) {this.suiviGrid.reload();}
-    });
+    const getItem = this.tabContext.getSelectedItem();
+    if (getItem) {
+      getItem.pipe(filter( item => item.id === this.INDICATOR_ID))
+      .subscribe( _ => {
+        this.histoGrid.reload();
+        // Search?
+        if (this.suiviGrid) this.suiviGrid.reload();
+      });
+    }
   }
 
   ngOnDestroy() {
