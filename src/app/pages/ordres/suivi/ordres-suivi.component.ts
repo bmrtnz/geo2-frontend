@@ -9,7 +9,8 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Content, INDEX_TAB, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent, DxSelectBoxComponent } from 'devextreme-angular';
+import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent,
+         DxValidationGroupComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { iif, of, Subscription } from 'rxjs';
 import { map, take, filter } from 'rxjs/operators';
@@ -21,13 +22,12 @@ import { ActivatedRoute } from '@angular/router';
 let self;
 
 
-
 @Component({
-  selector: 'app-ordres-details',
-  templateUrl: './ordres-details.component.html',
-  styleUrls: ['./ordres-details.component.scss']
+  selector: 'app-ordres-suivi',
+  templateUrl: './ordres-suivi.component.html',
+  styleUrls: ['./ordres-suivi.component.scss']
 })
-export class OrdresDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OrdresSuiviComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly INDICATOR_ID = 'SuiviDesOrdres';
 
@@ -341,4 +341,4 @@ export class OrdresDetailsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 }
 
-export default OrdresDetailsComponent;
+export default OrdresSuiviComponent;

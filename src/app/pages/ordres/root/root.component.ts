@@ -5,7 +5,7 @@ import { DxTabPanelComponent } from 'devextreme-angular';
 import { dxTabPanelItem } from 'devextreme/ui/tab_panel';
 import { combineLatest } from 'rxjs';
 import { concatMap, map, share } from 'rxjs/operators';
-import OrdresDetailsComponent from '../details/ordres-details.component';
+import OrdresSuiviComponent from '../suivi/ordres-suivi.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 
 const TAB_HOME_ID = 'home';

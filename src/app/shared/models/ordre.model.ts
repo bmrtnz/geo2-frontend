@@ -1,4 +1,5 @@
 import {Client} from './client.model';
+import {Port} from './port.model';
 import Entrepot from './entrepot.model';
 import {Field, Model, ModelName} from './model';
 import {OrdreLigne} from './ordre-ligne.model';
@@ -51,6 +52,8 @@ export class Ordre extends Model {
   @Field({ model: import('./personne.model') }) public commercial?: Personne;
   @Field({ model: import('./personne.model') }) public assistante?: Personne;
   @Field({ model: import('./transporteur.model') }) public transporteur?: Transporteur;
+  @Field({ model: import('./port.model') }) public portTypeD?: Port;
+  @Field({ model: import('./port.model') }) public portTypeA?: Port;
   @Field({ model: import('./entrepot.model') }) public entrepot?: Entrepot;
   @Field({ dataType: 'localdate' }) public dateDepartPrevue?: string;
   @Field({ dataType: 'localdate' }) public dateLivraisonPrevue?: string;
@@ -73,8 +76,8 @@ export class Ordre extends Model {
   @Field({ model: import('./base-tarif.model') }) public baseTarifTransport?: BaseTarif;
   @Field({ dataType: 'localdate' }) public ETDDate?: string;
   @Field({ dataType: 'localdate' }) public ETADate?: string;
-  @Field() public ETDLocation?: string;
-  @Field() public ETALocation?: string;
+  // @Field() public ETDLocation?: string;
+  // @Field() public ETALocation?: string;
   @Field({ model: import('./incoterm.model') }) public incoterm?: Incoterm;
   @Field() public incotermLieu?: string;
   @Field() public cqLignesCount?: number;

@@ -6,7 +6,7 @@
         data-accordion="articles"
         height="auto"
         icon="box"
-        text="{{ 'ordres-details-articles' | localize }}"
+        text="{{ 'ordres-suivi-articles' | localize }}"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
         [fragment]="fragments.Articles">
@@ -16,7 +16,7 @@
         data-accordion="logistique"
         height="auto"
         icon="material-icons local_shipping"
-        text="{{ 'ordres-details-logistique' | localize }}"
+        text="{{ 'ordres-suivi-logistique' | localize }}"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
       [fragment]="fragments.Logistique">
@@ -31,7 +31,7 @@
             [routerLink]="[]"
             [queryParamsHandling]="'merge'"
             [fragment]="fragments.Litiges"
-            text="{{ 'ordres-details-litiges' | localize }}">
+            text="{{ 'ordres-suivi-litiges' | localize }}">
         </dx-button>
     </div>
     <dx-button
@@ -42,7 +42,7 @@
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
         [fragment]="fragments.Synthese"
-        text="{{ 'ordres-details-synthese' | localize }}">
+        text="{{ 'ordres-suivi-synthese' | localize }}">
     </dx-button>
     <dx-button
         class="black"
@@ -52,7 +52,7 @@
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
         [fragment]="fragments.Flux"
-        text="{{ 'ordres-details-fluxdocs' | localize }}">
+        text="{{ 'ordres-suivi-fluxdocs' | localize }}">
     </dx-button>
     <div class="button-container">
         <div *ngIf="dotCQ" class="dot">{{ dotCQ }}</div>
@@ -64,7 +64,7 @@
             [routerLink]="[]"
             [queryParamsHandling]="'merge'"
             [fragment]="fragments.CQ"
-            text="{{ 'ordres-details-CQ' | localize }}">
+            text="{{ 'ordres-suivi-CQ' | localize }}">
         </dx-button>
     </div>
     <div class="button-container">
@@ -77,7 +77,7 @@
             [routerLink]="[]"
             [queryParamsHandling]="'merge'"
             [fragment]="fragments.Commentaires"
-            text="{{ 'ordres-details-commentaires' | localize }}">
+            text="{{ 'ordres-suivi-commentaires' | localize }}">
         </dx-button>
     </div>
     <dx-button
@@ -88,14 +88,14 @@
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
         [fragment]="fragments.Log"
-        text="{{ 'ordres-details-log' | localize }}">
+        text="{{ 'ordres-suivi-log' | localize }}">
     </dx-button>
     <dx-button
         class="black"
         height="auto"
         icon="material-icons folder"
         (onClick)="fileManagerClick()"
-        text="{{ 'ordres-details-documents' | localize }}">
+        text="{{ 'ordres-suivi-documents' | localize }}">
     </dx-button>
   </div>
 
@@ -168,7 +168,7 @@
                 "
               >
                 <span class="dx-form-group-caption">{{
-                  "ordres-details-groupe-infos" | localize
+                  "ordres-suivi-groupe-infos" | localize
                 }}</span>
                 <span *ngIf="ordre" class="dx-form-group-caption order-status">&nbsp;- {{ status }}</span>
                 <span *ngIf="ordre" class="order-id"
@@ -579,7 +579,7 @@
                 "
               >
                 <span class="dx-form-group-caption">{{
-                  "ordres-details-groupe-articles" | localize
+                  "ordres-suivi-groupe-articles" | localize
                 }}</span>
                 <dx-button
                   class="upperButton subButton"
@@ -630,7 +630,7 @@
                 "
               >
                 <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-details-groupe-logistique" | localize
+                  "ordres-suivi-groupe-logistique" | localize
                 }}</span>
                 <dx-accordion
                   #anchor
@@ -693,7 +693,7 @@
                 "
               >
                 <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-details-groupe-litiges" | localize
+                  "ordres-suivi-groupe-litiges" | localize
                 }}</span>
                 <dx-accordion
                   #anchor
@@ -726,7 +726,7 @@
                 "
               >
                 <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-details-groupe-synthese" | localize
+                  "ordres-suivi-groupe-synthese" | localize
                 }}</span>
                 <dx-accordion
                   #anchor
@@ -772,7 +772,7 @@
                 "
               >
                 <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-details-groupe-fluxdocs" | localize
+                  "ordres-suivi-groupe-fluxdocs" | localize
                 }}</span>
                 <dx-accordion
                   #anchor
@@ -802,7 +802,7 @@
                 "
               >
                 <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-details-groupe-CQ" | localize
+                  "ordres-suivi-groupe-CQ" | localize
                 }}</span>
                 <dx-accordion
                   #anchor
@@ -831,7 +831,7 @@
                 "
               >
                 <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-details-groupe-commentaires" | localize
+                  "ordres-suivi-groupe-commentaires" | localize
                 }}</span>
                 <dx-accordion
                   #anchor
@@ -863,7 +863,7 @@
                 "
               >
                 <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-details-groupe-log" | localize
+                  "ordres-suivi-groupe-log" | localize
                 }}</span>
                 <dx-accordion
                   #anchor

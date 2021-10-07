@@ -149,6 +149,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     )
     .subscribe( ordre => {
       this.ordre = ordre;
+      console.log(ordre)
       this.formGroup.reset(ordre);
       this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
       this.orderNumber = ordre.numero;

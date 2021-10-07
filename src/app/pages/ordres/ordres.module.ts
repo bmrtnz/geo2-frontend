@@ -7,9 +7,11 @@ import { ViewDocumentPopupModule } from 'app/shared/components/view-document-pop
 import { LocalizePipe } from 'app/shared/pipes';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { SharedModule } from 'app/shared/shared.module';
-import { DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxNumberBoxModule, DxPopoverModule, DxPopupModule, DxSelectBoxModule, DxSortableModule, DxTabPanelModule, DxTagBoxModule, DxTextAreaModule, DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule } from 'devextreme-angular';
+import { DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule,
+         DxDataGridModule, DxDateBoxModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxNumberBoxModule,
+         DxPopoverModule, DxPopupModule, DxSelectBoxModule, DxSortableModule, DxTabPanelModule, DxTagBoxModule,
+         DxTextAreaModule, DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule } from 'devextreme-angular';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
-import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { FormLitigesComponent } from './form-litiges/form-litiges.component';
 import { FormLogistiqueComponent } from './form-logistique/form-logistique.component';
 import { FormComponent } from './form/form.component';
@@ -41,12 +43,13 @@ import { SupervisionLivraisonComponent } from './indicateurs/supervision-livrais
 import { OrdreService } from './ordre.service';
 import { OrdresRoutingModule } from './ordres-routing.module';
 import { RootComponent, TabContext } from './root/root.component';
+import { OrdresSuiviComponent } from './suivi/ordres-suivi.component';
 
 
 @NgModule({
   declarations: [
     OrdresAccueilComponent,
-    OrdresDetailsComponent,
+    OrdresSuiviComponent,
     GridSuiviComponent,
     GridLignesComponent,
     GridEnvoisComponent,

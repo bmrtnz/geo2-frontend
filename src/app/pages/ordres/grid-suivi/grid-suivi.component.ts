@@ -20,7 +20,7 @@ export class GridSuiviComponent implements OnInit {
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
   @Input() public filter: [];
-  @ViewChild(DxDataGridComponent, {static: false}) datagrid:DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, {static: false}) datagrid: DxDataGridComponent;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
