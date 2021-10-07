@@ -49,8 +49,10 @@ export class SideNavOuterToolbarComponent implements OnInit {
   }
 
   onScroll(e) {
-    const showHidePixelsFromTop = 150;
     const topValue = e.scrollOffset.top;
+
+    // Back to top button
+    const showHidePixelsFromTop = 150;
     const Element = document.querySelector('.backtotop') as HTMLElement;
 
     if (topValue < showHidePixelsFromTop) {
@@ -58,6 +60,13 @@ export class SideNavOuterToolbarComponent implements OnInit {
     } else {
       Element.classList.remove('hiddenBacktotop');
     }
+    // Sticky order scroll buttons
+    const orderScrollBtns = document.querySelector('.tabs-ordres-page .dx-item-selected .form-scrollTo-buttons-container') as HTMLElement;
+    if (orderScrollBtns) {
+      const newPos = topValue > 100 ? (topValue - 68) : 32;
+      orderScrollBtns.style.top = newPos + 'px';
+    }
+
   }
   scrollToTop() {
     const Element = document.querySelector('.content') as HTMLElement;
