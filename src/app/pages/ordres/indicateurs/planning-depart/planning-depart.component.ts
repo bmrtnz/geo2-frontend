@@ -153,7 +153,7 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   onRowDblClick(e) {
     window.sessionStorage.setItem('orderNumber', JSON.stringify(e));
-    this.router.navigate([`/ordres/details`]);
+    this.router.navigate([`/ordres/suivi`]);
   }
 
   onDaysOfServiceInputReady() {

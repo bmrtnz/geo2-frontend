@@ -19,7 +19,7 @@ export class MoyenCommunicationService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       sort: [
-        { selector: "description" }
+        { selector: 'description' }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

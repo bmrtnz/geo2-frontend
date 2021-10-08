@@ -26,15 +26,6 @@ export const navigation = [
     text: 'Ordres de commande',
     icon: 'material-icons euro_symbol',
     path: '/ordres'
-    // items: [
-    //   {
-    //     text: 'Accueil',
-    //     path: '/ordres/accueil'
-    //   }, {
-    //     text: 'Ordres',
-    //     path: '/ordres/details'
-    //   }
-    // ]
   },
   {
     html: '<i class="dx-icon dx-icon-user"></i><div>Tiers</div><div class="presaisie-indicator"></div>',

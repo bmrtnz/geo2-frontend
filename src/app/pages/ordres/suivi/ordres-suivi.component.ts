@@ -10,7 +10,7 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Content, INDEX_TAB, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import { DxAutocompleteComponent, DxPopupComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
+import { DxAutocompleteComponent, DxPopupComponent, DxSelectBoxComponent, DxTabPanelComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { iif, of, Subscription } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
@@ -20,12 +20,13 @@ import { RouteParam, TabContext } from '../root/root.component';
 
 let self;
 
+
 @Component({
-  selector: 'app-ordres-details',
-  templateUrl: './ordres-details.component.html',
-  styleUrls: ['./ordres-details.component.scss']
+  selector: 'app-ordres-suivi',
+  templateUrl: './ordres-suivi.component.html',
+  styleUrls: ['./ordres-suivi.component.scss']
 })
-export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
+export class OrdresSuiviComponent implements AfterViewInit, OnDestroy {
 
   readonly INDICATOR_ID = 'SuiviDesOrdres';
 
@@ -51,7 +52,7 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
   validationPopupVisible = false;
   ordreASupp: string;
   public ordres: DataSource;
-  showGridResults: boolean;
+  showGridResults = false;
   @ViewChild(DxAutocompleteComponent, { static: false })
   autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
@@ -69,6 +70,8 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
   validationGroup: DxValidationGroupComponent;
   @ViewChild(DxPopupComponent, { static: false })
   validationPopup: DxPopupComponent;
+  @ViewChild('searchCriteria', { static: false }) searchCriteria: DxSelectBoxComponent;
+
 
   constructor(
     ordresIndicatorsService: OrdresIndicatorsService,
@@ -89,12 +92,21 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
     this.litiges = litigesService.getDataSource();
     this.allContents = ordresIndicatorsService.getContents();
     this.contents = ordresIndicatorsService.getContents().slice(0, 1);
+    this.searchItems = [
+      'numero',
+      'numeroFacture',
+      'referenceClient',
+      'client.raisonSocial',
+    ];
   }
 
   ngAfterViewInit() {
     this.route.paramMap
     .pipe(filter( param => param.get(RouteParam.TabID) === this.INDICATOR_ID))
-    .subscribe( _ => this.histoGrid.reload());
+    .subscribe( _ => {
+      this.histoGrid.reload();
+      if (this.suiviGrid) this.suiviGrid.reload();
+    });
   }
 
   ngOnDestroy() {
@@ -111,6 +123,10 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
       : null;
   }
 
+  resetCriteria() {
+    this.searchCriteria.instance.option('value', this.searchItems[0]);
+  }
+
   changeSearchCriteria() {
     const toSearch = this.autocomplete.value;
     this.showGridResults = false;
@@ -123,16 +139,16 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
   }
 
   enableFilters(value) {
-    // const criteria = this.formGroup.get('search').value;
+    const criteria = this.searchCriteria.instance.option('value');
 
     this.filter = [
       ['valide', '=', true],
       'and',
       ['societe.id', '=', this.currentCompanyService.getCompany().id],
-      'and',
-      // ['facture', '=', false],
       // 'and',
-      // [criteria, 'contains', value],
+      // ['facture', '=', false],
+      'and',
+      [criteria, 'contains', value],
     ];
   }
 
@@ -172,7 +188,7 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
   }
 
   pushTab(ordre?: Ordre) {
-    
+
     if (ordre) {
       // We store id and numero when a tab is opened
       // so that we can further recreate bunch of tabs (saved)
@@ -248,16 +264,6 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
     // if (!addedItems.length) return;
     // const { id, ordre, patch } = addedItems[0];
 
-    // Reload historique (and search results) when view is Suivi des ordres
-    // setTimeout(() => {
-    //   this.isIndexTab = id === INDEX_TAB;
-    //   if (this.isIndexTab) {
-    //     this.histoGrid.reload();
-    //     // Search?
-    //     if (this.suiviGrid) this.suiviGrid.reload();
-    //   }
-    // });
-      
     // this.canDuplicate = !!id;
     // if (ordre) {
     //   this.formGroup.reset({ ...ordre, ...patch }, { emitEvent: false });
@@ -327,4 +333,4 @@ export class OrdresDetailsComponent implements AfterViewInit, OnDestroy {
 
 }
 
-export default OrdresDetailsComponent;
+export default OrdresSuiviComponent;

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { OrdresDetailsComponent } from 'app/pages/ordres/details/ordres-details.component';
+import { OrdresSuiviComponent } from 'app/pages/ordres/suivi/ordres-suivi.component';
 import { BonAFacturerComponent } from 'app/pages/ordres/indicateurs/bon-a-facturer/bon-a-facturer.component';
 import { ClientsDepEncoursComponent } from 'app/pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component';
 import { LitigesComponent } from 'app/pages/ordres/indicateurs/litiges/litiges.component';
@@ -56,11 +56,11 @@ const indicators: Indicator[] = [{
   enabled: true,
   parameter: 'Suivi',
   subParameter: 'des ordres',
-  goTo: '/ordres/details',
+  goTo: '/ordres/suivi',
   tileBkg: '#01AA9B',
   indicatorIcon: 'material-icons euro_symbol',
   warningIcon: '',
-  component: import('../../pages/ordres/details/ordres-details.component'),
+  component: import('../../pages/ordres/suivi/ordres-suivi.component'),
 }, {
   id: 'SupervisionLivraison',
   enabled: false,

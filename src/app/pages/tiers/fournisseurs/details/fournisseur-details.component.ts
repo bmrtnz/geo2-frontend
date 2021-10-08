@@ -31,6 +31,7 @@ import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { Certification, CertificationFournisseur, Fournisseur } from '../../../../shared/models';
 import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
+import { ModifiedFieldsService } from 'app/shared/services/modified-fields.service';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -138,6 +139,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   constructor(
     private fb: FormBuilder,
     private fournisseursService: FournisseursService,
+    private modifiedFieldsService: ModifiedFieldsService,
     private bureauxAchatService: BureauxAchatService,
     private conditionsVenteService: ConditionsVenteService,
     private identifiantsFournisseurService: IdentifiantsFournisseurService,
@@ -312,10 +314,19 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   saveData(fournisseur) {
 
+    const userNotAdmin = !this.authService.currentUser.adminClient;
+    // Sauvegarde des champs modifiés si utilisateur non-admin
+    // En attente d'infos de Stéphane/Léa cf mail Alex 22-09-2021
+    if (userNotAdmin) {
+      this.modifiedFieldsService.saveModifiedFields(fournisseur, 'id');
+      fournisseur.preSaisie = true;
+      fournisseur.valide = false;
+    }
+
     /* tslint:disable-next-line max-line-length */
     const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
 
-    (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode ?
+    (userNotAdmin || (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode) ?
       this.validatePopup.present(
         HistoryType.FOURNISSEUR,
         { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
@@ -368,8 +379,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   onIDTracaChange(e) {
     const idTracabilite = e.value;
+    if (!idTracabilite || !this.createMode) return;
     // Code station = idTracabilite
-    if (idTracabilite.length && this.createMode) {
+    if (idTracabilite) {
       this.formGroup.get('codeStation').markAsDirty()
       this.formGroup.get('codeStation').setValue(idTracabilite);
     }

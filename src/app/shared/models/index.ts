@@ -10,6 +10,7 @@ export * from './base.paiement.model';
 export * from './devise.model';
 export * from './moyen-paiement.model';
 export * from './personne.model';
+export * from './port.model';
 export * from './regime-tva.model';
 export * from './client.model';
 export * from './fournisseur.model';

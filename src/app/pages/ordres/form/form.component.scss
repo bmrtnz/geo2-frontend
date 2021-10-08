@@ -1,9 +1,17 @@
-::ng-deep .form-ordres-page .thin-checkbox {
-    margin:12px 0 !important;
-}
 
-::ng-deep .form-ordres-page .dx-toolbar-item-auto-hide .dx-item-content {
-    width:36px;
+::ng-deep .form-ordres-page {
+    margin-right: 20px;
+    .thin-checkbox {
+        margin: 12px 0 !important;
+    }
+    .dx-toolbar-item-auto-hide .dx-item-content {
+        width: 36px;
+    }
+    .ordres-page {
+        position: relative;
+        width: calc(100% - 180px);
+        left: 182px;
+    }
 }
 
 .upperButton {
@@ -14,10 +22,10 @@
     top:-10px;
 }
 ::ng-deep .form-scrollTo-buttons-container {
-    z-index:100;
+    position: fixed;
+    top: 32px;
     width: 170px;
-    float: left;
-    margin-right: 15px;
+    z-index:1000;
     .dx-button {
         width: 100%;
         .dx-button-text {
@@ -28,24 +36,27 @@
 }
 
 ::ng-deep .order-number {
-    margin-right:10px;
+    margin: 0 10px;
+    min-height: 36px;
 }
-
+::ng-deep .order-status {
+    color: #FF325A !important;
+}
 ::ng-deep .top-order-number {
+    display: block;
     font-size:14px;
-    color:#00759C;
-    margin-bottom:13px;
+    text-align: center;
+    background: #00759C;
+    color: white;
+    padding: 1px 0 3px 0;;
+    margin-bottom: 13px;
+    min-height: 22px;
 }
 
 ::ng-deep .order-id {
     font-size:15px;
     color:#00759C;
     float:right;
-}
-
-::ng-deep .main-search-container {
-    width:800px;
-    margin-bottom:20px;
 }
 
 ::ng-deep .search-linkedOrders {
@@ -146,7 +157,13 @@ dx-button[type="normal"] { float:right; }
 .dotted-button {
     min-width:100%;
 }
-
+.order-loader {
+    position: relative;
+    left: 10px;
+    top: 4px;
+    width: 25px;
+    height: 25px;
+}
 // .dx-tabpanel {
 //     border:1px solid #DDD;
 //     margin:auto 20px;

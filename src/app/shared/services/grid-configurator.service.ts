@@ -160,6 +160,7 @@ export class GridConfiguratorService {
       // Datagrid title
       location: 'left',
       widget: 'dxTextBox',
+      cssClass: 'grid-title',
       options: {
         width: 400,
         readOnly: true,

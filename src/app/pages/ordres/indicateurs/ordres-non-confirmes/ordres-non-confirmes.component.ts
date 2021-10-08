@@ -105,7 +105,7 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
 
   onRowDblClick(event) {
     window.sessionStorage.setItem('orderNumber', JSON.stringify(event));
-    this.router.navigate([`/ordres/details`]);
+    this.router.navigate([`/ordres/suivi`]);
   }
 }
 
