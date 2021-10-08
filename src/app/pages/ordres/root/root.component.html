@@ -3,23 +3,26 @@
     [items]="items"
     [repaintChangesOnly]="true"
     [showNavButtons]= "true"
-    [selectedIndex]="1"
     (onTitleClick)="onTabTitleClick($event)"
-    (onContentReady)="this.tabPanelReady.emit($event)"
+    (onContentReady)="tabPanelReady.emit($event)"
+    (onTitleRendered)="onTabTitleRendered($event)"
     >
 
-    <div *dxTemplate="let content of 'title'">
-        <div class="dx-item-content dx-tab-content" [attr.data-item-id]="content.id">
-            <i class="dx-icon" [ngClass]="content.icon"></i>
-            <span *ngIf="content.title" class="tab-separator"></span>
-            <span *ngIf="content.title" class="dx-tab-text">
-                <span>{{content.title}}</span>
-                <ng-container *ngIf="content.details">
-                    <br>
-                    <small>{{content.details}}</small>
+    <div *dxTemplate="let tab of 'title'">
+        <div [hidden]="tab.hideTab" class="dx-item-content dx-tab-content" [attr.data-item-id]="tab.id">
+            <i class="dx-icon" [ngClass]="tab.icon"></i>
+            <span *ngIf="tab.title" class="tab-separator"></span>
+            <span *ngIf="tab.title" class="dx-tab-text">
+                <span>{{tab.title}}</span>
+                <ng-container *ngIf="tab.details">
+                    <small>{{tab.details}}</small>
                 </ng-container>
             </span>
-            <i class="dx-icon dx-icon-close" *ngIf="!isStaticItem(content)" (click)="onTabCloseClick($event)"></i>
+            <i
+                class="dx-icon dx-icon-close"
+                *ngIf="!isStaticItem(tab)"
+                (click)="onTabCloseClick($event)"
+            ></i>
         </div>
     </div>
 

@@ -7,7 +7,7 @@ import { ViewDocumentPopupModule } from 'app/shared/components/view-document-pop
 import { LocalizePipe } from 'app/shared/pipes';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { SharedModule } from 'app/shared/shared.module';
-import { DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxNumberBoxModule, DxPopoverModule, DxPopupModule, DxSelectBoxModule, DxSortableModule, DxTabPanelModule, DxTagBoxModule, DxTextAreaModule, DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule } from 'devextreme-angular';
+import { DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxLoadPanelModule, DxNumberBoxModule, DxPopoverModule, DxPopupModule, DxSelectBoxModule, DxSortableModule, DxTabPanelModule, DxTagBoxModule, DxTextAreaModule, DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule } from 'devextreme-angular';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { OrdresDetailsComponent } from './details/ordres-details.component';
 import { FormLitigesComponent } from './form-litiges/form-litiges.component';
@@ -40,7 +40,7 @@ import { PlanningDepartComponent } from './indicateurs/planning-depart/planning-
 import { SupervisionLivraisonComponent } from './indicateurs/supervision-livraison/supervision-livraison.component';
 import { OrdreService } from './ordre.service';
 import { OrdresRoutingModule } from './ordres-routing.module';
-import { RootComponent, TabContext } from './root/root.component';
+import { LoadingTabComponent, RootComponent, TabContext } from './root/root.component';
 
 
 @NgModule({
@@ -75,6 +75,7 @@ import { RootComponent, TabContext } from './root/root.component';
     GridDetailPlanningDepartsComponent,
     GridClientsDepEncoursDetailComponent,
     RootComponent,
+    LoadingTabComponent,
     FormComponent,
   ],
   imports: [
@@ -106,7 +107,8 @@ import { RootComponent, TabContext } from './root/root.component';
     DxDateBoxModule,
     DxValidationGroupModule,
     DxLoadIndicatorModule,
-    ViewDocumentPopupModule
+    ViewDocumentPopupModule,
+    DxLoadPanelModule,
   ],
   providers: [
     OrdresIndicatorsService,

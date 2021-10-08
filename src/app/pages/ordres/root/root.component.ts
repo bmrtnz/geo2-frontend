@@ -1,12 +1,15 @@
 import { Component, EventEmitter, Injectable, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, ParamMap, Router } from '@angular/router';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxTabPanelComponent } from 'devextreme-angular';
+import { on } from 'devextreme/events';
 import { dxTabPanelItem } from 'devextreme/ui/tab_panel';
-import { combineLatest } from 'rxjs';
-import { concatMap, map, share } from 'rxjs/operators';
+import { concat, ConnectableObservable, defer, EMPTY, iif, Observable, of } from 'rxjs';
+import { filter, first, last, map, publishLast, share, startWith, switchMap, switchMapTo, take, tap } from 'rxjs/operators';
 
 const TAB_HOME_ID = 'home';
+const TAB_LOAD_ID = 'loading';
+const PREVIOUS_STATE = 'previous_tab_id';
 export const TAB_ORDRE_CREATE_ID = 'create';
 export enum TabType { Indicator = 'indicateur', Ordre = 'ordre' }
 export enum RouteParam { TabID = 'tabid' }
@@ -34,9 +37,10 @@ export class RootComponent implements OnInit {
   public tabPanelReady = new EventEmitter<any>();
   public activeStateEnabled = false;
 
-  @ViewChild(DxTabPanelComponent, {static: true}) tabPanel: DxTabPanelComponent;
-
   public items: TabPanelItem[];
+  private sharedFillInitialItems = this.fillInitialItems()
+  .pipe(publishLast()) as ConnectableObservable<TabPanelItem[]>;
+  @ViewChild(DxTabPanelComponent, {static: true}) tabPanel: DxTabPanelComponent;
 
   constructor(
     public route: ActivatedRoute,
@@ -45,58 +49,38 @@ export class RootComponent implements OnInit {
     private tabContext: TabContext,
   ) {
     this.tabContext.registerComponent(this);
+    this.handleRouting();
   }
 
-  async ngOnInit() {
+  ngOnInit() {
 
-    this.items = await this.getInitialItems();
-
-    this.route.queryParamMap
-    .subscribe(res => {
-
-      ([
-        ...res.getAll(TabType.Indicator)
-        .map(param => [param, TabType.Indicator]),
-        ...res.getAll(TabType.Ordre)
-        .map(param => [param, TabType.Ordre]),
-      ] as [string, TabType][])
-      .filter(([param]) => !this.items.find( item => item.id === param))
-      .forEach(([id, tabType]) => {
-        this.pushTab(tabType, {
-          id,
-          position: tabType === TabType.Indicator ?
-            Position.Start : Position.End,
-        });
-      });
-
-      this.items
-      .filter( item => ![Position.Front, Position.Back].includes(item.position))
-      .filter( item => ![
-          ...res.getAll(TabType.Indicator),
-          ...res.getAll(TabType.Ordre),
-        ].find(param => item.id === param))
-      .forEach( item => {
-        this.pullTab(item.id);
-      });
-
-    });
-
-    combineLatest([
-      this.tabPanelReady.asObservable(),
-      this.route.paramMap,
-    ])
-    .pipe(map(([, params]) => params))
-    .subscribe(res => this.selectTab(res.get(RouteParam.TabID)));
+    this.sharedFillInitialItems.connect();
+    this.sharedFillInitialItems.subscribe();
 
   }
 
-  onTabTitleClick(event: {itemData: TabPanelItem}) {
+  onTabTitleClick(event: {itemData: Partial<TabPanelItem>}) {
+    const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
     this.router.navigate(['ordres', event.itemData.id], {
-      queryParamsHandling: 'preserve',
+      queryParamsHandling: 'merge',
+      state: { [PREVIOUS_STATE]: previous },
     });
+  }
+
+  onTabTitleRendered(event) {
+    const replaceEvent = e => {
+      const id = e.currentTarget.querySelector('[data-item-id]').dataset.itemId;
+      this.onTabTitleClick({itemData: {id}});
+      e.stopPropagation();
+    };
+    on(event.itemElement, 'dxpointerdown', e => e.stopPropagation());
+    on(event.itemElement, 'dxclick', replaceEvent);
   }
 
   onTabCloseClick(event: MouseEvent) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    this.selectTab(TAB_LOAD_ID);
     const pullID = (event.target as HTMLElement).parentElement.dataset.itemId;
     const indicateur = this.route.snapshot.queryParamMap
     .getAll(TabType.Indicator)
@@ -107,11 +91,29 @@ export class RootComponent implements OnInit {
 
     const selectedID = this.route.snapshot.paramMap
     .get(RouteParam.TabID);
-    const navID = pullID === selectedID ?
-      TAB_HOME_ID : selectedID;
+    const navID = pullID === selectedID
+      ? history.state[PREVIOUS_STATE] ?? TAB_HOME_ID
+      : selectedID;
 
     this.router.navigate(['ordres', navID], {
       queryParams: {indicateur, ordre},
+    });
+  }
+
+  handleRouting() {
+    this.router.events
+    .pipe(
+      filter<NavigationEnd>( event => event instanceof NavigationEnd),
+      filter( event => event.url.startsWith('/ordres')),
+      switchMapTo(this.sharedFillInitialItems),
+      tap( _ => this.selectTab(TAB_LOAD_ID)),
+      switchMapTo(this.route.queryParamMap.pipe(first())),
+      switchMap( queries => defer(() => this.handleQueries(queries))),
+      switchMapTo(this.route.paramMap.pipe(first())),
+      switchMap( params => of(this.handleParams(params))),
+    )
+    .subscribe( selectID => {
+      this.selectTab(selectID);
     });
   }
 
@@ -119,23 +121,75 @@ export class RootComponent implements OnInit {
     return [Position.Front, Position.Back].includes(item.position);
   }
 
-  private async getInitialItems() {
-    return [
-      {
-        id: TAB_HOME_ID,
-        icon: 'material-icons home',
-        component: (await import('../accueil/ordres-accueil.component')).OrdresAccueilComponent,
-        position: Position.Front,
-      },
-      {
-        id: TAB_ORDRE_CREATE_ID,
-        title: 'nouvel',
-        details: 'ordre',
-        icon: 'material-icons note_add',
-        component: (await import('../form/form.component')).FormComponent,
-        position: Position.Back,
-      },
-    ];
+  private fillInitialItems() {
+    const items: () => Promise<TabPanelItem[]> = async () =>
+      this.items = [
+        {
+          id: TAB_LOAD_ID,
+          component: LoadingTabComponent,
+          position: Position.Front,
+        },
+        {
+          id: TAB_HOME_ID,
+          icon: 'material-icons home',
+          component: (await import('../accueil/ordres-accueil.component')).OrdresAccueilComponent,
+          position: Position.Front,
+        },
+        {
+          id: TAB_ORDRE_CREATE_ID,
+          title: 'nouvel',
+          details: 'ordre',
+          icon: 'material-icons note_add',
+          component: (await import('../form/form.component')).FormComponent,
+          position: Position.Back,
+        },
+      ];
+    return concat(defer(items), this.tabPanelReady.pipe(take(1))).pipe(last());
+  }
+
+  private handleQueries(queries: ParamMap) {
+    const mutations = [];
+    const pushMutation = (cbk: () => Observable<any>) => mutations.push(defer(cbk));
+
+    this.items
+    .filter( item => ![Position.Front, Position.Back].includes(item.position))
+    .filter( item => ![
+        ...queries.getAll(TabType.Indicator),
+        ...queries.getAll(TabType.Ordre),
+      ].find(param => item.id === param))
+    .forEach( item => {
+      pushMutation(() => {
+        this.pullTab(item.id);
+        return this.tabPanelReady.pipe(take(1));
+      });
+    });
+
+    ([
+      ...queries.getAll(TabType.Indicator)
+      .map(param => [param, TabType.Indicator]),
+      ...queries.getAll(TabType.Ordre)
+      .map(param => [param, TabType.Ordre]),
+    ] as [string, TabType][])
+    .filter(([param]) => !this.items.find( item => item.id === param))
+    .forEach(([id, tabType]) => {
+      pushMutation(() => {
+        this.pushTab(tabType, {
+          id,
+          position: tabType === TabType.Indicator ?
+            Position.Start : Position.End,
+        });
+        return this.tabPanelReady.pipe(take(1));
+      });
+    });
+
+    return iif(() => !!mutations.length , concat(...mutations).pipe(last()), EMPTY.pipe(startWith(0)));
+  }
+
+  private handleParams(params: ParamMap) {
+    const paramID = params.get(RouteParam.TabID);
+    return !this.items.find( item => item.id === paramID)
+      ? TAB_HOME_ID
+      : paramID;
   }
 
   private async pushTab(type: TabType, data: TabPanelItem): Promise<number> {
@@ -172,6 +226,20 @@ export class RootComponent implements OnInit {
 
 }
 
+@Component({
+  selector: 'app-loading-tab',
+  template: `
+  <div id="tab-load" style="height: 70vh;"></div>
+  <dx-load-panel
+    [position]="{ of: '#tab-load' }"
+    [container]="'#tab-load'"
+    [visible]="true"
+    [showIndicator]="true"
+  ></dx-load-panel>
+  `,
+})
+export class LoadingTabComponent {}
+
 @Injectable()
 export class TabContext {
 
@@ -196,7 +264,7 @@ export class TabContext {
       map( params => {
         const selected = params.get(RouteParam.TabID);
         return this.componentRef.items.find( item => item.id === selected);
-      })
+      }),
     );
   }
 
@@ -205,7 +273,7 @@ export class TabContext {
    * @param numero Ordre numero
    */
   public openOrdre(numero: string) {
-    return this.openTab(TabType.Ordre, numero);
+    return this.with(TabType.Ordre, numero);
   }
 
   /**
@@ -213,20 +281,22 @@ export class TabContext {
    * @param id Indicator id
    */
   public openIndicator(id: string) {
-    return this.openTab(TabType.Indicator, id);
+    return this.with(TabType.Indicator, id);
   }
 
-  private openTab(tabType: TabType, id: string) {
+  private with(tabType: TabType, id: string) {
+    const previous = this.componentRef.route.snapshot.paramMap.get(RouteParam.TabID);
     this.route.queryParamMap
     .pipe(
-      share(),
-      concatMap( params => this.router
+      first(),
+      switchMap( params => this.router
         .navigate(['ordres', id],
         {
           queryParams: {
             [tabType]: [...new Set([...params.getAll(tabType), id])],
           },
           queryParamsHandling: 'merge',
+          state: { [PREVIOUS_STATE]: previous },
         })
       )
     ).subscribe();

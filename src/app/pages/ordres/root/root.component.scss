@@ -32,6 +32,10 @@
     color: $base-tone-shade;
   }
 
+  &:first-child {
+    display: none;
+  }
+
   .dx-template-wrapper {
     .dx-tab-content {
       display: flex;
