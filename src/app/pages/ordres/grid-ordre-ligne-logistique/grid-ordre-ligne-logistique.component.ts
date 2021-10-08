@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ViewChild, AfterContentInit, SimpleChanges } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
@@ -8,6 +8,7 @@ import Ordre from 'app/shared/models/ordre.model';
 import { map } from 'rxjs/operators';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { OrdresLogistiquesService } from 'app/shared/services/api/ordres-logistiques.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-grid-ordre-ligne-logistique',
@@ -20,6 +21,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
   public columnChooser = environment.columnChooser;
   public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   @Input() public ordre: Ordre;
+  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   constructor(
     private ordresLogistiquesService: OrdresLogistiquesService,
@@ -45,17 +47,21 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     // );
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes ', changes);
     this.enableFilters();
   }
 
   enableFilters() {
-    if (this.ordre) {
+    if (this?.ordre?.id) {
+      console.log('FILTERING')
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
       ]);
-      this.dataSource.reload();
-    }
+      this.datagrid.dataSource = this.dataSource;
+      // this.datagrid.dataSource.reload();
+    } else if (this.datagrid)
+      this.datagrid.dataSource = null;
   }
 
   applySentGridRowStyle(e) {
