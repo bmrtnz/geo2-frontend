@@ -152,3 +152,9 @@ body {
 .whiteSpaceNormal {
   white-space: normal !important;
 }
+
+.welcome-message .dx-toast-info {
+  top: calc(100% - 130px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
