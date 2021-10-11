@@ -119,17 +119,12 @@
                   text="{{ linkedOrder.ordre.numero }} ({{
                     linkedOrder.criteria
                   }})"
-                  (onClick)="
-                    openLinkedOrder(
-                      linkedOrder.ordre.id,
-                      linkedOrder.ordre.numero,
-                      linkedOrder.ordre.campagne
-                    )
-                  "
+                  (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
                 >
                 </dx-button>
               </span>
             </h2>
+            
             <div class="right up-fifty-px">
               <dx-button
                 class="upperButton subButton submit"
@@ -829,6 +824,7 @@
                   </dxi-item>
                 </dx-accordion>
               </div>
+
               <div
                 class="
                   commentaires-field
@@ -896,6 +892,7 @@
       </div>
     </dx-validation-group>
   </form>
+
   <app-editing-alert></app-editing-alert>
   <app-file-manager-popup></app-file-manager-popup>
   <dx-popup

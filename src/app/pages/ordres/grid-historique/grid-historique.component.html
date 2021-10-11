@@ -11,7 +11,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
+    (onRowDblClick)="tabContext.openOrdre($event.data.ordre.numero)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Derniers ordres ouverts', $event, gridConfiguratorService.Grid.Historique, enableFilters.bind(this))"
   >
 

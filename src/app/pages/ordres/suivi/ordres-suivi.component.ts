@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
-import Ordre from 'app/shared/models/ordre.model';
 import { EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { ClientsService } from 'app/shared/services/api/clients.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
@@ -10,13 +9,7 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Content, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import {
-  DxAutocompleteComponent,
-  DxPopupComponent,
-  DxSelectBoxComponent,
-  DxTabPanelComponent,
-  DxValidationGroupComponent,
-} from 'devextreme-angular';
+import { DxAutocompleteComponent, DxPopupComponent, DxSelectBoxComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -65,7 +58,6 @@ export class OrdresSuiviComponent implements AfterViewInit {
   private formValuesChange: Subscription;
   refreshGrid = new EventEmitter();
 
-  @ViewChild('tabs', { static: false }) tabPanelComponent: DxTabPanelComponent;
   @ViewChild(GridSuiviComponent, { static: false })
   suiviGrid: GridSuiviComponent;
   @ViewChild(GridHistoriqueComponent, { static: false })
@@ -144,36 +136,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     ];
   }
 
-  pushTab(ordre?: Ordre) {
-
-    if (ordre) {
-      // We store id and numero when a tab is opened
-      // so that we can further recreate bunch of tabs (saved)
-      if (Object.keys(ordre).length > 5) {
-        const myData = window.sessionStorage.getItem('openOrders');
-        let myOrders = [];
-        if (myData !== null) {
-          myOrders = JSON.parse(myData);
-        }
-        const shortOrder = {
-          id: ordre.id,
-          numero: ordre.numero,
-          campagne: ordre.campagne ? ordre.campagne.id : null,
-        };
-        myOrders.push(shortOrder);
-        window.sessionStorage.setItem('openOrders', JSON.stringify(myOrders));
-      }
-      const knownIndex = this.contents.findIndex(({ id }) => ordre.id === id);
-      if (knownIndex >= 0) {
-        if (this.tabPanelComponent)
-          this.tabPanelComponent.selectedIndex = knownIndex;
-        return;
-      }
-    }
-
-  }
-
-  findOrder(e) {
+   findOrder(e) {
     this.hideSearchResults();
     setTimeout(() => {
       const criteria = e.component._changedValue;

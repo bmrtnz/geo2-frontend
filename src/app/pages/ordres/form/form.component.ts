@@ -19,7 +19,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
 import { concatMap, filter, first, map, mergeMap } from 'rxjs/operators';
-import { RouteParam, TAB_ORDRE_CREATE_ID } from '../root/root.component';
+import { RouteParam, TAB_ORDRE_CREATE_ID, TabContext } from '../root/root.component';
 
 /**
  * Grid with loading toggled by parent
@@ -135,6 +135,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
+    private tabContext: TabContext,
   ) { }
 
   ngOnInit() {
@@ -280,11 +281,8 @@ export class FormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openLinkedOrder(id, numero, campagne) {
-    this.router.navigate(['ordres', numero], {
-      queryParams: { ordre: numero },
-      queryParamsHandling: 'merge',
-    });
+  openLinkedOrder(numero: string) {
+    this.tabContext.openOrdre(numero);
   }
 
   cancelClick() {

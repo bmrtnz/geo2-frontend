@@ -10,6 +10,7 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TabContext } from '../root/root.component';
 
 @Component({
   selector: 'app-grid-suivi',
@@ -31,6 +32,7 @@ export class GridSuiviComponent implements OnInit {
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
     public gridConfiguratorService: GridConfiguratorService,
+    public tabContext: TabContext,
   ) {
     this.dataSource = ordresService.getDataSource();
     this.detailedFields = this.ordresService.model.getDetailedFields()

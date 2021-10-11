@@ -10,6 +10,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { TabContext } from '../root/root.component';
 
 @Component({
   selector: 'app-grid-historique',
@@ -18,7 +19,6 @@ import { Observable } from 'rxjs';
 })
 export class GridHistoriqueComponent implements OnInit {
 
-  @Output() public ordreSelected = new EventEmitter<Ordre>();
   @Input() public filter: [];
   @ViewChild(DxDataGridComponent, {static :true}) dataGrid : DxDataGridComponent;
 
@@ -37,6 +37,7 @@ export class GridHistoriqueComponent implements OnInit {
     private authService: AuthService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
+    public tabContext: TabContext,
   ) {
     this.dataSource = mruOrdresService.getDataSource(2, this.gridFilter, {forceFilter: true});
     this.detailedFields = this.mruOrdresService.model

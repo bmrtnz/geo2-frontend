@@ -100,7 +100,7 @@ export class RootComponent implements OnInit {
     });
   }
 
-  handleRouting() {
+  private handleRouting() {
     this.router.events
     .pipe(
       filter<NavigationEnd>( event => event instanceof NavigationEnd),
