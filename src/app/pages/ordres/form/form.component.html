@@ -1,6 +1,6 @@
 <div class="form-ordres-page">
   <div class="form-scrollTo-buttons-container">
-    <span class="top-order-number">{{ orderNumber }}</span>
+    <span class="top-order-number">{{ this?.ordre?.numero || '-' }}</span>
     <dx-button
         class="black"
         data-accordion="articles"
