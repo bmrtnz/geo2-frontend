@@ -238,7 +238,7 @@ export abstract class ApiService implements OnDestroy {
    */
   protected async buildGetAll(depth?: number, regExpFilter?: RegExp, operationName?: string, option?: {forceFilter?: boolean}) {
     const operation = operationName ?? `all${this.model.name}`;
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     return `
       query ${alias}($search: String, $pageable: PaginationInput!) {
         ${operation}(search:$search, pageable:$pageable) {
@@ -266,7 +266,7 @@ export abstract class ApiService implements OnDestroy {
    */
   protected async buildGetOne(depth?: number, regExpFilter?: RegExp) {
     const operation = this.withLowerCaseFirst(this.model.name);
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     return `
       query ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
         ${operation}(${this.keyField}:$${this.keyField}) {
@@ -285,7 +285,7 @@ export abstract class ApiService implements OnDestroy {
     const entity = this.withLowerCaseFirst(this.model.name);
     const operation = `save${this.model.name}`;
     const type = `Geo${this.model.name}Input`;
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     return `
       mutation ${alias}($${entity}: ${type}!) {
         ${operation}(${entity}: $${entity}) {
@@ -304,7 +304,7 @@ export abstract class ApiService implements OnDestroy {
     const entity = `all${this.model.name}`;
     const operation = `saveAll${this.model.name}`;
     const type = `Geo${this.model.name}Input`;
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     return `
       mutation ${alias}($${entity}: [${type}]!) {
         ${operation}(${entity}: $${entity}) {
@@ -321,7 +321,7 @@ export abstract class ApiService implements OnDestroy {
     const entity = this.withLowerCaseFirst(this.model.name);
     const type = `Geo${this.model.name}Input`;
     const operation = `delete${this.model.name}`;
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     return `
       mutation ${alias}($${entity}: ${type}!) {
         ${operation}(${entity}: $${entity})
@@ -334,7 +334,7 @@ export abstract class ApiService implements OnDestroy {
    */
   protected buildDistinct() {
     const operation = `distinct`;
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     const type = `Geo${this.model.name}`;
     return `
       query ${alias}($field: String!, $search: String, $pageable: PaginationInput!) {
@@ -375,20 +375,12 @@ export abstract class ApiService implements OnDestroy {
    */
   public buildLocate() {
     const operation = `locatePage`;
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     return `
       query ${alias}($pageSize: Int!, $type: String!, $key: [String]!) {
         ${operation}(pageSize: $pageSize, type: $type, key: $key)
       }
     `;
-  }
-
-  /**
-   * Transform first character to uppercase
-   * @param param0 value
-   */
-  protected withUpperCaseFirst([first, ...rest]: string) {
-    return [first.toUpperCase(), ...rest].join('');
   }
 
   /**
