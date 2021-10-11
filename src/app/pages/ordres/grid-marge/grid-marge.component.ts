@@ -46,7 +46,7 @@ export class GridMargeComponent implements ToggledGrid {
   }
 
   enableFilters() {
-    if (this.ordre) {
+    if (this?.ordre?.id) {
       this.dataSource = this.ordreLignesService
       .getSummarisedDatasource(2, this.gridFilter);
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);

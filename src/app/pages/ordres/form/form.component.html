@@ -133,12 +133,14 @@
             <div class="right up-fifty-px">
               <dx-button
                 class="upperButton subButton submit"
+                [disabled]="true"
                 type="default"
                 text="{{ 'btn-valider' | localize }}"
                 [useSubmitBehavior]="true"
               ></dx-button>
               <dx-button
                 class="upperButton subButton"
+                [disabled]="true"
                 type="danger"
                 text="{{ 'btn-deleteorder' | localize }}"
                 (onClick)="onDeleteClick()"
@@ -147,11 +149,12 @@
                 class="upperButton subButton"
                 type="default"
                 text="{{ 'btn-cloneorder' | localize }}"
-                [disabled]="!canDuplicate"
+                [disabled]="true || !canDuplicate"
                 (onClick)="duplicate()"
               ></dx-button>
               <dx-button
                 class="upperButton subButton"
+                [disabled]="true"
                 type="default"
                 text="{{ 'btn-complorder' | localize }}"
               ></dx-button>
@@ -583,16 +586,19 @@
                 }}</span>
                 <dx-button
                   class="upperButton subButton"
+                  [disabled]="true"
                   type="default"
                   text="{{ 'btn-stock' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
+                  [disabled]="true"
                   type="default"
                   text="{{ 'btn-historique' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
+                  [disabled]="true"
                   type="default"
                   text="{{ 'btn-manuel' | localize }}"
                 ></dx-button>

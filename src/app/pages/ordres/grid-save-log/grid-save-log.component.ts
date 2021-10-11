@@ -35,7 +35,7 @@ export class GridSaveLogComponent implements ToggledGrid {
   }
 
   enableFilters() {
-    if (this.ordre) {
+    if (this?.ordre?.id) {
       this.dataSource = this.ordresSaveLogsService.getDataSource();
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
     }

@@ -47,7 +47,7 @@ export class GridFraisComponent implements ToggledGrid {
   }
 
   enableFilters() {
-    if (this.ordre) {
+    if (this?.ordre?.id) {
       this.dataSource = this.ordresFraisService
       .getDataSource(2, this.gridFilter);
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
