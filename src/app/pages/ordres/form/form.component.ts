@@ -315,6 +315,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     )
     .subscribe( ordre => {
       this.ordre = ordre;
+      this.fetchFullOrderNumber();
       this.formGroup.reset(ordre);
     });
   }
@@ -341,6 +342,16 @@ export class FormComponent implements OnInit, AfterViewInit {
         scrollTo(item.instance.element());
       } else scrollTo(item.nativeElement);
     });
+  }
+
+  private fetchFullOrderNumber() {
+    this.fullOrderNumber = this?.ordre?.numero && this?.ordre?.campagne
+      ? `Ordre N° ${
+          (this.ordre.campagne
+            ? (this.ordre.campagne.id ? this.ordre.campagne.id : this.ordre.campagne) + '-'
+            : '') + this.ordre.numero
+        }`
+      : 'Nouvel ordre';
   }
 
 }
