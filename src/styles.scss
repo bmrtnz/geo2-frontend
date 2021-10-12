@@ -83,7 +83,7 @@ body {
     font-size: 18px;
   }
 
-  .dx-button:not(.subButton):not(.icon-btn) {
+  .dx-button:not(.subButton):not(.icon-btn):not(.upperButton) {
     margin-bottom: 10px;
     .dx-button-content {
       padding: 10px 3px;
