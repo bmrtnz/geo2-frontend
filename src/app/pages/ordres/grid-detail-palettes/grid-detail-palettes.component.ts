@@ -48,7 +48,7 @@ export class GridDetailPalettesComponent implements ToggledGrid {
   }
 
   enableFilters() {
-    if (this.ordre) {
+    if (this?.ordre?.id) {
       this.dataSource = this.tracabiliteLignesService
       .getDataSource(4, this.gridFilter);
       this.dataSource.filter([['tracabiliteDetailPalette.ordre.id', '=', this.ordre.id]]);

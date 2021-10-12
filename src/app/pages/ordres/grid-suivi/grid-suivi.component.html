@@ -12,7 +12,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onRowDblClick)="ordreSelected.emit($event.data)"
+    (onRowDblClick)="tabContext.openOrdre($event.data.ordre.numero)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Résultat(s) de recherche', $event, gridConfiguratorService.Grid.Ordre, enableFilters.bind(this))"
   >
 

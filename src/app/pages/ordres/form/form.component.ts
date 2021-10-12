@@ -1,25 +1,25 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
-import { Role, Type, Societe } from 'app/shared/models';
+import { Role, Societe, Type } from 'app/shared/models';
 import Ordre from 'app/shared/models/ordre.model';
 import { ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
+import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
+import { IncotermsService } from 'app/shared/services/api/incoterms.service';
 import { LitigesService } from 'app/shared/services/api/litiges.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
+import { PortsService } from 'app/shared/services/api/ports.service';
+import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
-import { concatMap, filter, map, switchMap, switchMapTo, tap } from 'rxjs/operators';
-import { RouteParam, TAB_ORDRE_CREATE_ID } from '../root/root.component';
-import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
-import { IncotermsService } from 'app/shared/services/api/incoterms.service';
-import { PortsService } from 'app/shared/services/api/ports.service';
-import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
+import { concatMap, filter, first, map, mergeMap } from 'rxjs/operators';
+import { RouteParam, TAB_ORDRE_CREATE_ID, TabContext } from '../root/root.component';
 
 /**
  * Grid with loading toggled by parent
@@ -55,7 +55,7 @@ enum LinkedCriterias {
 export class FormComponent implements OnInit, AfterViewInit {
 
   public fragments = Fragments;
-  public ordre: Ordre;
+  @Output() public ordre: Ordre;
   public status = 'Facturé';
   public formGroup = this.formBuilder.group({
     id: [''],
@@ -141,28 +141,11 @@ export class FormComponent implements OnInit, AfterViewInit {
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
+    private tabContext: TabContext,
   ) { }
 
   ngOnInit() {
-    const currentCompany: Societe = this.currentCompanyService.getCompany();
-    this.route.paramMap
-    .pipe(
-      map( params => params.get(RouteParam.TabID)),
-      concatMap( id => {
-        if (id === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
-        return this.ordresService.getOneByNumeroAndSociete(id, currentCompany.id);
-      }),
-    )
-    .subscribe( ordre => {
-      if (!ordre) return;
-      console.log(ordre.numero)
-      this.ordre = ordre;
-      this.formGroup.reset(ordre);
-      this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
-      this.orderNumber = ordre.numero;
-      this.fullOrderNumber = 'Ordre n°' + (this.ordre.campagne?.id ? this.ordre.campagne.id + '-' : '') + this.orderNumber;
-      this.addLinkedOrders();
-    });
+    this.initializeForm();
 
     this.clientsDS = this.clientsService.getDataSource();
     this.entrepotDS = this.entrepotsService.getDataSource();
@@ -203,27 +186,7 @@ export class FormComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const scrollTo = (elm: HTMLElement) =>
-        elm.scrollIntoView({behavior: 'smooth'});
-
-    this.router.events
-    .pipe(
-      filter( event => event instanceof NavigationEnd ),
-      concatMap(_ => this.route.fragment),
-      filter(fragment => !!fragment),
-      concatMap( fragment => of(this.anchors.find(item => {
-        if (item instanceof DxAccordionComponent)
-        return item.instance.element().id === fragment;
-        return item.nativeElement.id === fragment;
-      }))
-      ),
-    )
-    .subscribe( item => {
-      if (item instanceof DxAccordionComponent) {
-        item.instance.expandItem(0);
-        scrollTo(item.instance.element());
-      } else scrollTo(item.nativeElement);
-    });
+    this.handleAnchors();
   }
 
   onSubmit() {
@@ -352,11 +315,8 @@ export class FormComponent implements OnInit, AfterViewInit {
     if (!refClt) this.linkedOrdersSearch = false;
   }
 
-  openLinkedOrder(numero) {
-    this.router.navigate(['ordres', numero], {
-      queryParams: { ordre: numero },
-      queryParamsHandling: 'merge',
-    });
+  openLinkedOrder(numero: string) {
+    this.tabContext.openOrdre(numero);
   }
 
   cancelClick() {
@@ -371,6 +331,72 @@ export class FormComponent implements OnInit, AfterViewInit {
     return data ?
     (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
      : null;
+  }
+
+  private initializeForm() {
+    const currentCompany: Societe = this.currentCompanyService.getCompany();
+    this.route.paramMap
+    .pipe(
+      first(),
+      map( params => params.get(RouteParam.TabID)),
+      mergeMap( id => {
+        if (id === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
+        return this.ordresService
+        .getOneByNumeroAndSociete(id, currentCompany.id);
+      }),
+    )
+    .subscribe( ordre => {
+      this.ordre = ordre;
+      this.fetchFullOrderNumber();
+      this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
+      this.canDuplicate = !!this?.ordre?.id;
+      this.formGroup.reset(ordre);
+      this.addLinkedOrders();
+      this.refreshBadges();
+    });
+  }
+
+  private handleAnchors() {
+    const scrollTo = (elm: HTMLElement) =>
+      elm.scrollIntoView({behavior: 'smooth'});
+
+    this.router.events
+    .pipe(
+      filter( event => event instanceof NavigationEnd ),
+      concatMap(_ => this.route.fragment),
+      filter(fragment => !!fragment),
+      concatMap( fragment => of(this.anchors.find(item => {
+        if (item instanceof DxAccordionComponent)
+          return item.instance.element().id === fragment;
+        return item.nativeElement.id === fragment;
+      }))
+      ),
+    )
+    .subscribe( item => {
+      if (item instanceof DxAccordionComponent) {
+        item.instance.expandItem(0);
+        scrollTo(item.instance.element());
+      } else scrollTo(item.nativeElement);
+    });
+  }
+
+  private fetchFullOrderNumber() {
+    this.fullOrderNumber = this?.ordre?.numero && this?.ordre?.campagne
+      ? `Ordre N° ${
+          (this.ordre.campagne
+            ? (this.ordre.campagne.id ? this.ordre.campagne.id : this.ordre.campagne) + '-'
+            : '') + this.ordre.numero
+        }`
+      : 'Nouvel ordre';
+  }
+
+  private refreshBadges() {
+    // Gestion des pastilles infos boutons gauche
+    if (this.ordre) {
+      this.dotLitiges = this.ordre.hasLitige ? '!' : '';
+      this.dotCQ = this.ordre.cqLignesCount;
+      this.dotCommentaires = this.ordre.commentairesOrdreCount;
+    }
   }
 
 }

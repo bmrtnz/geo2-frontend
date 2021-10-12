@@ -1,31 +1,20 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import Ordre from 'app/shared/models/ordre.model';
 import { LocalizePipe } from 'app/shared/pipes';
-import {
-  AuthService,
-  LocalizationService,
-  TransporteursService,
-} from 'app/shared/services';
+import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import {
-  Indicator,
-  OrdresIndicatorsService,
-} from 'app/shared/services/ordres-indicators.service';
-import {
-  DxCheckBoxComponent,
-  DxDataGridComponent,
-  DxNumberBoxComponent,
-  DxSelectBoxComponent,
-} from 'devextreme-angular';
+import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { DxCheckBoxComponent, DxDataGridComponent, DxNumberBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { TabContext } from '../../root/root.component';
 
 @Component({
   selector: 'planning-depart',
@@ -57,7 +46,6 @@ export class PlanningDepartComponent implements AfterViewInit {
   readonly DAYSNB_DEFAULT = 1;
 
   constructor(
-    private router: Router,
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -68,7 +56,8 @@ export class PlanningDepartComponent implements AfterViewInit {
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     private datePipe: DatePipe,
-    private localizePipe: LocalizePipe
+    private localizePipe: LocalizePipe,
+    private tabContext: TabContext,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -151,9 +140,8 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.rowSelected = true;
   }
 
-  onRowDblClick(e) {
-    window.sessionStorage.setItem('orderNumber', JSON.stringify(e));
-    this.router.navigate([`/ordres/suivi`]);
+  onRowDblClick({data}: {data: Ordre}) {
+    this.tabContext.openOrdre(data.numero);
   }
 
   onDaysOfServiceInputReady() {

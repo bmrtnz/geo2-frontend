@@ -1,25 +1,19 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import {
-  AuthService,
-  LocalizationService,
-  TransporteursService,
-} from 'app/shared/services';
+import Ordre from 'app/shared/models/ordre.model';
+import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import {
-  Indicator,
-  OrdresIndicatorsService,
-} from 'app/shared/services/ordres-indicators.service';
+import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxSelectBoxComponent } from 'devextreme-angular';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { TabContext } from '../../root/root.component';
 
 @Component({
   selector: 'ordres-non-confirmes',
@@ -46,7 +40,6 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
   initialFilterLengh: number;
 
   constructor(
-    private router: Router,
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -55,7 +48,8 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     public ordresService: OrdresService,
     public authService: AuthService,
     public localizeService: LocalizationService,
-    private ordresIndicatorsService: OrdresIndicatorsService
+    private ordresIndicatorsService: OrdresIndicatorsService,
+    private tabContext: TabContext,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -103,9 +97,8 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     this.rowSelected = true;
   }
 
-  onRowDblClick(event) {
-    window.sessionStorage.setItem('orderNumber', JSON.stringify(event));
-    this.router.navigate([`/ordres/suivi`]);
+  onRowDblClick({data}: {data: Ordre}) {
+    this.tabContext.openOrdre(data.numero);
   }
 }
 

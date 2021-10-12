@@ -70,7 +70,7 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
   }
 
   enableFilters() {
-    if (this.ordre) {
+    if (this?.ordre?.id) {
       this.dataSource = this.envoisService.getDataSource();
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],

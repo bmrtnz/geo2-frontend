@@ -21,7 +21,7 @@ import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { TabType } from '../../root/root.component';
+import { TabType, TabContext } from '../../root/root.component';
 
 @Component({
   selector: 'ordres-non-clotures',
@@ -57,6 +57,7 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
+    private tabContext: TabContext,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -103,10 +104,7 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
   }
 
   onRowDblClick({data}: {data: Ordre}) {
-    this.router.navigate(['ordres', data.id],{
-      queryParams: { [TabType.Ordre]: data },
-      queryParamsHandling: 'merge',
-    });
+    this.tabContext.openOrdre(data.numero);
   }
 }
 

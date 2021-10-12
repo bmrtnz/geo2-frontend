@@ -151,7 +151,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
 
   protected async buildGetAllSuiviDeparts(depth?: number, regExpFilter?: RegExp, operationName?: string) {
     const operation = operationName ?? `all${this.model.name}`;
-    const alias = this.withUpperCaseFirst(operation);
+    const alias = operation.ucFirst();
     return `
       query ${alias}($search: String, $pageable: PaginationInput!, $onlyColisDiff: Boolean) {
         ${operation}(search:$search, pageable:$pageable, onlyColisDiff:$onlyColisDiff) {

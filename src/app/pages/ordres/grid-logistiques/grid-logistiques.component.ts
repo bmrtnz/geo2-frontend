@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { LocalizationService } from 'app/shared/services';
@@ -9,6 +9,7 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ToggledGrid } from '../form/form.component';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-grid-logistiques',
@@ -21,6 +22,7 @@ export class GridLogistiquesComponent implements ToggledGrid {
   public columnChooser = environment.columnChooser;
   public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   @Input() public ordre: Ordre;
+  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   constructor(
     private ordresLogistiquesService: OrdresLogistiquesService,
@@ -38,7 +40,7 @@ export class GridLogistiquesComponent implements ToggledGrid {
   }
 
   enableFilters() {
-    if (this.ordre) {
+    if (this?.ordre?.id) {
       this.dataSource = this.ordresLogistiquesService.getDataSource(10, null);
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
