@@ -12,6 +12,7 @@ export class Utilisateur extends Model {
   @Field() public limitationSecteur: boolean;
   @Field({ model: import('./secteur.model') }) public secteurCommercial?: Secteur;
   @Field() public configTuilesOrdres: any;
+  @Field() public configTabsOrdres: string;
   @Field() public adminClient: boolean;
 }
 

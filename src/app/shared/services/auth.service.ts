@@ -71,6 +71,18 @@ export class AuthService {
     notify('Utilisateur et/ou mot de passe inconnu', 'error');
   }
 
+  persist(data: Partial<Utilisateur>) {
+    return this.utilisateursService
+    .save({
+      utilisateur: {
+        nomUtilisateur: this.currentUser.nomUtilisateur,
+        ...data,
+      }
+    }).pipe(
+      tap( res => this.currentUser = { ...this.currentUser, ...res.data.saveUtilisateur }),
+    );
+  }
+
   async logOut() {
     this.loggedIn = false;
     window.localStorage.removeItem(this.CURRENT_USER_STORE_KEY);

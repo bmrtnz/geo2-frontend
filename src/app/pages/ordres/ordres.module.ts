@@ -41,6 +41,7 @@ import { OrdreService } from './ordre.service';
 import { OrdresRoutingModule } from './ordres-routing.module';
 import { LoadingTabComponent, RootComponent, TabContext } from './root/root.component';
 import OrdresSuiviComponent from './suivi/ordres-suivi.component';
+import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import OrdresSuiviComponent from './suivi/ordres-suivi.component';
     DatePipe,
     LocalizePipe,
     TabContext,
+    OrdresTabsPersistGuard,
   ],
 })
 export class OrdresModule { }
