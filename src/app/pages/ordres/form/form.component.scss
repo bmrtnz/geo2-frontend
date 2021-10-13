@@ -1,3 +1,5 @@
+// Var
+@import "~scss/variables.scss";
 
 ::ng-deep .form-ordres-page {
     margin-right: 20px;
@@ -35,14 +37,41 @@
     }
 }
 
-::ng-deep .order-number {
-    margin: 0 10px;
-    min-height: 36px;
+::ng-deep .top-panel-order {
+    margin-bottom: 6px;
+    .order-number {
+        margin: 0 10px;
+        min-height: 36px;
+        font-size: 30px;
+        float: left;
+    }
+    .linkedOrders-container {
+        max-width:400px;
+        // background-color: #FF4400;
+        float: left;
+        overflow: hidden;
+        .search-linkedOrders {
+            font-size:13px;
+            color:#00759C;
+        }
+        .small-button {
+            vertical-align: middle;
+            margin:2px 5px 2px 0 !important;
+            height:20px;
+            top: 50%;
+            .dx-button-text {
+                line-height:0 !important;
+                font-size:13px;
+                margin-top:0 !important;
+                text-transform: none;
+            }
+        }
+    }
+    .upperButtons-container {
+        float:right;
+    }
 }
-::ng-deep .order-status {
-    color: #FF325A !important;
-}
-::ng-deep .top-order-number {
+.top-order-number {
     display: block;
     font-size:14px;
     text-align: center;
@@ -52,26 +81,13 @@
     margin-bottom: 13px;
     min-height: 22px;
 }
-
-::ng-deep .order-id {
+.order-id {
     font-size:15px;
     color:#00759C;
     float:right;
 }
-
-::ng-deep .search-linkedOrders {
-    font-size:13px;
-    color:#00759C;
-}
-::ng-deep .small-button {
-    margin-right:10px;
-    height:20px;
-    margin-bottom:5px !important;
-    .dx-button-text {
-        line-height:0 !important;
-        font-size:13px;
-        margin-top:0 !important;
-    }
+.order-status {
+    color: #FF325A !important;
 }
 .red-font {
     color:#FF325A;
@@ -164,6 +180,19 @@ dx-button[type="normal"] { float:right; }
     width: 25px;
     height: 25px;
 }
+.linkedOrder-Compl {
+    background: $BW-purple-medium;
+    &:hover {
+        background: $BW-purple-dark;
+    }
+}
+.linkedOrder-Regul {
+    background: $BW-turquoise-medium;
+    &:hover {
+        background: $BW-turquoise-dark;
+    }
+}
+
 // .dx-tabpanel {
 //     border:1px solid #DDD;
 //     margin:auto 20px;

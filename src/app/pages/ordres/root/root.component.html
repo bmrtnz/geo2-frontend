@@ -1,35 +1,37 @@
-<dx-tab-panel
-    class="content-block"
-    [items]="items"
-    [repaintChangesOnly]="true"
-    [showNavButtons]= "true"
-    (onTitleClick)="onTabTitleClick($event)"
-    (onContentReady)="tabPanelReady.emit($event)"
-    (onTitleRendered)="onTabTitleRendered($event)"
-    >
+<div class="tabs-ordres-page">
+    <dx-tab-panel
+        class="content-block"
+        [items]="items"
+        [repaintChangesOnly]="true"
+        [showNavButtons]= "true"
+        (onTitleClick)="onTabTitleClick($event)"
+        (onContentReady)="tabPanelReady.emit($event)"
+        (onTitleRendered)="onTabTitleRendered($event)"
+        >
 
-    <div *dxTemplate="let tab of 'title'">
-        <div [hidden]="tab.hideTab" class="dx-item-content dx-tab-content" [attr.data-item-id]="tab.id">
-            <i class="dx-icon" [ngClass]="tab.icon"></i>
-            <span *ngIf="tab.title" class="tab-separator"></span>
-            <span *ngIf="tab.title" class="dx-tab-text">
-                <span>{{tab.title}}</span>
-                <ng-container *ngIf="tab.details">
-                    <small>{{tab.details}}</small>
-                </ng-container>
-            </span>
-            <i
-                class="dx-icon dx-icon-close"
-                *ngIf="!isStaticItem(tab)"
-                (click)="onTabCloseClick($event)"
-            ></i>
+        <div *dxTemplate="let tab of 'title'">
+            <div [hidden]="tab.hideTab" class="dx-item-content dx-tab-content" [attr.data-item-id]="tab.id">
+                <i class="dx-icon" [ngClass]="tab.icon"></i>
+                <span *ngIf="tab.title" class="tab-separator"></span>
+                <span *ngIf="tab.title" class="dx-tab-text">
+                    <span>{{tab.title}}</span>
+                    <ng-container *ngIf="tab.details">
+                        <small>{{tab.details}}</small>
+                    </ng-container>
+                </span>
+                <i
+                    class="dx-icon dx-icon-close"
+                    *ngIf="!isStaticItem(tab)"
+                    (click)="onTabCloseClick($event)"
+                ></i>
+            </div>
         </div>
-    </div>
 
-    <div *dxTemplate="let item of 'item'">
-        <ng-template
-            [ngComponentOutlet]="item.component"
-        ></ng-template>
-    </div>
+        <div *dxTemplate="let item of 'item'">
+            <ng-template
+                [ngComponentOutlet]="item.component"
+            ></ng-template>
+        </div>
 
-</dx-tab-panel>
+    </dx-tab-panel>
+</div>

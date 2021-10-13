@@ -41,6 +41,12 @@ enum Fragments {
   Log = 'log',
 }
 
+enum LinkedCriterias {
+  Client = 'Réf. Clt',
+  Compl = 'Compl.',
+  Regul = 'Régul.'
+}
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -257,28 +263,56 @@ export class FormComponent implements OnInit, AfterViewInit {
 
   addLinkedOrders() {
     // Accole au numéro d'ordre les ordres liés
-    // Pour le moment, uniquement basé sur la référence client
-
-    this.linkedOrdersSearch = false;
-    this.linkedOrders = [];
-    const refClt = this.ordre.referenceClient;
-    if (!refClt) return;
 
     this.linkedOrdersSearch = true;
-    const numero = this.ordre.numero;
-    const ordresSource = this.ordresService.getDataSource();
-    ordresSource.filter(['referenceClient', '=', refClt]);
-    ordresSource.load().then((res) => {
-      this.linkedOrders = [];
-      let i = 0;
-      res.forEach((value) => {
-        if (numero !== value.numero) {
-          this.linkedOrders.push({ ordre: value, criteria: 'ref. clt' });
-        }
-        i++;
+    this.linkedOrders = [];
+
+    const refClt = this.ordre.referenceClient;
+
+    if (refClt) {
+      this.linkedOrdersSearch = true;
+      const numero = this.ordre.numero;
+      const ordresSource = this.ordresService.getDataSource();
+      ordresSource.filter(['referenceClient', '=', refClt]);
+      ordresSource.load().then((res) => {
+        res.map(value => {
+          if (numero !== value.numero) {
+            this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client});
+          }
+        });
+        this.findComplRegulLinkedOrders(refClt);
+        this.linkedOrdersSearch = false;
       });
-      this.linkedOrdersSearch = false;
-    });
+    } else {
+      this.findComplRegulLinkedOrders(refClt);
+    }
+
+    // this.linkedOrders.push({ ordre: {id: '1', numero: '100001'}, criteria: 'ref. clt' });
+    // this.linkedOrders.push({ ordre: {id: '2', numero: '100002'}, criteria: 'ref. clt' });
+    // this.linkedOrders.push({ ordre: {id: '3', numero: '100003'}, criteria: 'ref. clt' });
+    // this.linkedOrders.push({ ordre: {id: '4', numero: '100004'}, criteria: 'ref. clt' });
+    // this.linkedOrders.push({ ordre: {id: '5', numero: '100005'}, criteria: 'compl.' });
+    // this.linkedOrders.push({ ordre: {id: '6', numero: '100006'}, criteria: 'régul.' });
+    // this.linkedOrders.push({ ordre: {id: '4', numero: '100004'}, criteria: 'ref. clt' });
+    // this.linkedOrders.push({ ordre: {id: '5', numero: '100005'}, criteria: 'compl.' });
+    // this.linkedOrders.push({ ordre: {id: '6', numero: '100006'}, criteria: 'régul.' });
+  }
+
+  findComplRegulLinkedOrders(refClt) {
+
+    const hasCompl = this.ordre.listeOrdresComplementaires;
+    const hasRegul = this.ordre.listeOrdresRegularisations;
+    if (hasCompl) {
+      hasCompl.split(',').map(res => {
+        this.linkedOrders.push({ ordre: {numero: res}, criteria: LinkedCriterias.Compl, class: 'Compl'  });
+      });
+    }
+    if (hasRegul) {
+      hasRegul.split(';').map(res => {
+        this.linkedOrders.push({ ordre: {numero: res}, criteria: LinkedCriterias.Regul, class: 'Regul'  });
+      });
+    }
+    if (!refClt) this.linkedOrdersSearch = false;
   }
 
   openLinkedOrder(numero: string) {
@@ -314,6 +348,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     .subscribe( ordre => {
       this.ordre = ordre;
       this.fetchFullOrderNumber();
+      this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
       this.canDuplicate = !!this?.ordre?.id;
       this.formGroup.reset(ordre);
       this.addLinkedOrders();

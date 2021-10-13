@@ -48,11 +48,11 @@ export class HeaderComponent implements OnInit {
       }
     }];
   }
-  
+
   ngOnInit() {
 
-    let filter = [];
-    let filter2 = [];
+    const filter = [];
+    const filter2 = [];
     this.societeSource = this.societeService.getDataSource();
     filter.push(['valide', '=', true]);
     this.societeSource.filter(filter)

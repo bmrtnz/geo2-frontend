@@ -65,6 +65,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
     if (orderScrollBtns) {
       const newPos = topValue > 100 ? (topValue - 68) : 32;
       orderScrollBtns.style.top = newPos + 'px';
+      console.log('ddd')
     }
 
   }
