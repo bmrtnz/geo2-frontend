@@ -45,8 +45,7 @@ export class AuthService {
               // this.currentCompanyService.setCompany(null);
             // }
 
-            this.currentUser = res.data.utilisateur;
-            window.localStorage.setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(res.data.utilisateur));
+            this.setCurrentUser(res.data.utilisateur);
             window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
 
             // Handle redirection
@@ -79,8 +78,15 @@ export class AuthService {
         ...data,
       }
     }).pipe(
-      tap( res => this.currentUser = { ...this.currentUser, ...res.data.saveUtilisateur }),
+      take(1),
+      tap( res => this.setCurrentUser(res.data.saveUtilisateur)),
     );
+  }
+
+  setCurrentUser(data: Partial<Utilisateur>) {
+    this.currentUser = { ...this.currentUser, ...data };
+    window.localStorage
+    .setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(this.currentUser));
   }
 
   async logOut() {

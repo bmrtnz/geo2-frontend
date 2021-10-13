@@ -8,6 +8,7 @@ import { DxTagBoxComponent } from 'devextreme-angular';
 import { from, Observable, Subscription } from 'rxjs';
 import { filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
 import { TabContext } from '../root/root.component';
+import Utilisateur from 'app/shared/models/utilisateur.model';
 
 @Component({
   selector: 'app-ordres-accueil',
@@ -18,7 +19,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   indicators: Indicator[];
   allIndicators: Indicator[];
-  loadedIndicators: any;
+  loadedIndicators: string[];
   tilesReady: boolean;
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
@@ -32,61 +33,52 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     public currentCompanyService: CurrentCompanyService,
     private datePipe: DatePipe,
     private tabContext: TabContext,
-  ) {
-    this.allIndicators = ordresIndicatorsService.getIndicators();
-
-    // console.log('start : ',authService.currentUser.configTuilesOrdres)
-
-    if (!authService.currentUser.configTuilesOrdres) {
-      authService.currentUser.configTuilesOrdres = this.allIndicators.map
-      (({id}) => id);
-    }
-
-    this.loadedIndicators = authService.currentUser.configTuilesOrdres;
-    this.indicators = this.loadedIndicators
-    .map( id => this.ordresIndicatorsService.getIndicatorByName(id));
-
-  }
+  ) {}
 
   ngOnInit() {
 
-      const selectIndicators = this.indicatorsChange
-        .pipe(startWith(this.ordresIndicatorsService.getIndicators().map(i => i.id)));
-      this.indicatorsSubscription = selectIndicators
-        .pipe(
-          tap(_ => this.indicators = []),
-          switchMap((ids) => from(ids)),
-          map( id => this.ordresIndicatorsService.getIndicatorByName(id)),
-          map(indicator => new Indicator({ ...indicator, loading: indicator.fetchCount})),
-          tap(indicator => this.indicators.push(indicator)),
-          filter(indicator => indicator.loading),
-          mergeMap(async (indicator: Indicator) => {
-            if (!indicator.fetchCount)
-              return [indicator.id, ''] as [string, string];
+    this.configureIndicator();
 
-            const dataSource = indicator.dataSource;
-            const flt = indicator.cloneFilter();
+    const selectIndicators = this.indicatorsChange
+      .pipe(startWith(this.loadedIndicators));
+    this.indicatorsSubscription = selectIndicators
+      .pipe(
+        tap(_ => this.indicators = []),
+        switchMap((ids) => from(ids)),
+        map( id => this.ordresIndicatorsService.getIndicatorByName(id)),
+        map(indicator => new Indicator({ ...indicator, loading: indicator.fetchCount})),
+        tap(indicator => this.indicators.push(indicator)),
+        filter(indicator => indicator.loading),
+        mergeMap(async (indicator: Indicator) => {
+          if (!indicator.fetchCount)
+            return [indicator.id, ''] as [string, string];
 
-            // Mapping
-            if (indicator.id === 'PlanningDepart')
-              flt.push(
-                'and',
-                [
-                  'logistiques.dateDepartPrevueFournisseur',
-                  '>=',
-                  this.datePipe.transform((new Date()).setDate((new Date()).getDate() - 1).valueOf(), 'yyyy-MM-dd'),
-                ],
-              );
-            dataSource.filter(flt);
-            await dataSource.load();
-            return [indicator.id, dataSource.totalCount().toString()] as [string, string];
-          }),
-        )
-        .subscribe(([id, value]) => {
-          const index = this.indicators.findIndex(indicator => id === indicator.id);
+          const dataSource = indicator.dataSource;
+          const flt = indicator.cloneFilter();
+
+          // Mapping
+          if (indicator.id === 'PlanningDepart')
+            flt.push(
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '>=',
+                this.datePipe.transform((new Date()).setDate((new Date()).getDate() - 1).valueOf(), 'yyyy-MM-dd'),
+              ],
+            );
+          dataSource.filter(flt);
+          await dataSource.load();
+          return [indicator.id, dataSource.totalCount().toString()] as [string, string];
+        }),
+      )
+      .subscribe(([id, value]) => {
+        const index = this.indicators
+        .findIndex(indicator => id === indicator.id);
+        if (index) {
           this.indicators[index].number = value;
           this.indicators[index].loading = false;
-        });
+        }
+      });
 
   }
 
@@ -104,8 +96,13 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   tileNumber(e) {
 
+    this.authService.persist({
+      configTuilesOrdres: {
+        selection: e.value,
+      },
+    }).toPromise();
+
     this.indicatorsChange.emit(e.value);
-    // console.log(this.indicators)
     if (e.value.length < 1) {
         e.component.option("value", this.allIndicators);
     }
@@ -115,6 +112,23 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   onTileClick(event) {
     const indicator: Indicator = event.itemData.buttonOptions;
     this.tabContext.openIndicator(indicator.id);
+  }
+
+  configureIndicator() {
+
+    const loadIndicators = (config: {selection: string[]}) => {
+      this.loadedIndicators = config.selection;
+      this.indicators = this.loadedIndicators
+      .map( id => this.ordresIndicatorsService.getIndicatorByName(id));
+    };
+
+    this.allIndicators = this.ordresIndicatorsService.getIndicators();
+
+    loadIndicators(
+      this.authService.currentUser?.configTuilesOrdres
+      ?? { selection: this.ordresIndicatorsService.getIndicators().map(({id}) => id) }
+    );
+
   }
 
 }

@@ -197,7 +197,8 @@ export class RootComponent implements OnInit {
       const indicator = this.ordresIndicatorsService
       .getIndicatorByName(data.id);
       data.component = (await indicator.component).default;
-      if (indicator.fetchCount) data.badge = indicator.number || '?';
+      // TODO Badge indicator count
+      // if (indicator.fetchCount) data.badge = indicator.number || '?';
       data.icon = indicator.indicatorIcon;
       data.title = indicator.parameter;
       data.details = indicator.subParameter;
