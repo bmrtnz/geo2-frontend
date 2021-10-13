@@ -34,6 +34,16 @@ export enum OrdreType {
   UKT = 'UKT',
 }
 
+export enum Statut {
+  NON_CONFIRME = 'NCF',
+  CONFIRME = 'CFM',
+  ANNULE = 'ANL',
+  A_FACTURER = 'AFC',
+  FACTURE = 'FCT',
+  EXPEDIE = 'EXP',
+  EN_PREPARATION = 'EPP',
+}
+
 @ModelName('Ordre')
 export class Ordre extends Model {
 
@@ -99,6 +109,8 @@ export class Ordre extends Model {
     allowHeaderFiltering: false,
     allowSearch: false,
   }) public sommeColisExpedies?: number;
+  @Field({allowHeaderFiltering: false, allowSearch: false})
+  public statut?: Statut;
 
 }
 
