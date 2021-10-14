@@ -73,10 +73,10 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   onCellPrepared(e) {
     // Adding code (prefix) before "variété" and "emballage"
-    if (e.rowType == 'data') {
-      if (this.localizeService.localize("articles-matierePremiere-variete") == e.column.caption) {
+    if (e.rowType === 'data') {
+      if (this.localizeService.localize('articles-matierePremiere-variete') === e.column.caption) {
         e.cellElement.innerText =  e.data.matierePremiere?.variete.id + ' ' + e.cellElement.innerText;
-      } else if (this.localizeService.localize("articles-emballage-emballage") == e.column.caption) {
+      } else if (this.localizeService.localize('articles-emballage-emballage') === e.column.caption) {
         e.cellElement.innerText =  e.data.emballage?.emballage.id + ' ' + e.cellElement.innerText;
       }
     }
@@ -97,24 +97,24 @@ export class ArticlesListComponent implements OnInit, NestedMain {
    */
    onFieldValueChange(event: string[], dataField: string) {
 
-    // No value cases  
+    // No value cases
     if (event !== null) {
       if (!event.length) {
         event = ['null'];
       }
     }
-    
+
     // Changing values for Oui/Non select-box
-    if (event.toString() == 'Oui') {event = ['true'];}
-    if (event.toString() == 'Non') {event = ['false'];}
-    if (event.toString() == 'Tous') {event = ['null'];}
+    if (event.toString() === 'Oui') {event = ['true'];}
+    if (event.toString() === 'Non') {event = ['false'];}
+    if (event.toString() === 'Tous') {event = ['null'];}
     this.tagFilters[dataField] = event;
 
     const filters = Object
       .entries(this.tagFilters)
       .filter(([, values]) => values.length)
       .map(([path, values]) => values
-        .map(value => [path, value == 'null' ? 'isnotnull' : '=', value])
+        .map(value => [path, value === 'null' ? 'isnotnull' : '=', value])
         .map(value => JSON.stringify(value))
         .join(`¤${JSON.stringify(['or'])}¤`)
         .split('¤')
@@ -125,8 +125,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       .split('¤')
       .map(v => JSON.parse(v));
 
-      this.dataGrid.instance.filter(filters);
-      // console.log(filters, this.dataGrid.instance.getCombinedFilter())
+    this.dataGrid.instance.filter(filters);
 
   }
 
