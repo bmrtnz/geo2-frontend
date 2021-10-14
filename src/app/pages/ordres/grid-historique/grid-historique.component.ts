@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
-import Ordre from 'app/shared/models/ordre.model';
+import {Ordre, Statut} from 'app/shared/models/ordre.model';
 import { AuthService } from 'app/shared/services';
 import { MruOrdresService } from 'app/shared/services/api/mru-ordres.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
@@ -20,7 +20,7 @@ import { TabContext } from '../root/root.component';
 export class GridHistoriqueComponent implements OnInit {
 
   @Input() public filter: [];
-  @ViewChild(DxDataGridComponent, {static :true}) dataGrid : DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, {static: true}) histoGrid: DxDataGridComponent;
 
   readonly INDICATOR_NAME = 'Historique';
 
@@ -29,7 +29,7 @@ export class GridHistoriqueComponent implements OnInit {
   public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
 
   /* tslint:disable-next-line max-line-length */
-  private gridFilter: RegExp = /^(?:ordre\.(numero|referenceClient|dateDepartPrevue|codeChargement|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateModification|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial))$/;
+  private gridFilter: RegExp = /^(?:ordre\.(numero|referenceClient|dateDepartPrevue|codeChargement|dateLivraisonPrevue|codeClient|statut|codeAlphaEntrepot|dateModification|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial))$/;
 
   constructor(
     private mruOrdresService: MruOrdresService,
@@ -39,13 +39,14 @@ export class GridHistoriqueComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext,
   ) {
-    this.dataSource = mruOrdresService.getDataSource(2, this.gridFilter, {forceFilter: true});
     this.detailedFields = this.mruOrdresService.model
     .getDetailedFields(3, this.gridFilter, {forceFilter: true});
   }
 
   ngOnInit() {
+    this.dataSource = this.mruOrdresService.getDataSource(2, this.gridFilter, {forceFilter: true});
     this.enableFilters();
+    this.histoGrid.dataSource = this.dataSource;
   }
 
   enableFilters() {
@@ -59,6 +60,13 @@ export class GridHistoriqueComponent implements OnInit {
 
   reload() {
     this.dataSource.reload();
+  }
+
+  onCellPrepared(e) {
+    // Best expression for order status display
+    if (e.rowType === 'data' && e.column.dataField === 'ordre.statut') {
+      if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+    }
   }
 
 }

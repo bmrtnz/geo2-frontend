@@ -35,7 +35,6 @@ export class MruOrdresService extends ApiService implements APIRead {
   }
 
   getDataSource(depth = 2, filter?: RegExp, option ?: {forceFilter?: boolean}) {
-    console.log(filter);
     return new DataSource({
       store: this.createCustomStore({
         key: ['utilisateur', 'ordre'],

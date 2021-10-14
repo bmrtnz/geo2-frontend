@@ -45,6 +45,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     // Filtrage selon société sélectionnée
     this.clients = this.clientsService.getDataSource();
     this.enableFilters();
+    this.dataGrid.dataSource = this.clients;
     this.detailedFields = this.clientsService.model.getDetailedFields()
     .pipe(
       // Filtrage headers possibles columnchooser
@@ -60,7 +61,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     this.clients.searchExpr('societe.id');
     this.clients.searchOperation('=');
     this.clients.searchValue(this.currentCompanyService.getCompany().id);
-    this.clients.reload();
+
   }
 
   onRowDblClick(event) {

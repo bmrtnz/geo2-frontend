@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
@@ -17,7 +17,7 @@ import { TabContext } from '../root/root.component';
   templateUrl: './grid-suivi.component.html',
   styleUrls: ['./grid-suivi.component.scss']
 })
-export class GridSuiviComponent implements OnInit {
+export class GridSuiviComponent implements OnInit, AfterViewInit {
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
   @Input() public filter: [];
@@ -45,9 +45,13 @@ export class GridSuiviComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterViewInit() {
     this.enableFilters();
+    this.datagrid.dataSource = this.dataSource;
   }
+
   enableFilters() {
     let filters = [
       ['valide', '=', true],
@@ -60,7 +64,6 @@ export class GridSuiviComponent implements OnInit {
     if (this.filter) filters = this.filter;
 
     this.dataSource.filter(filters);
-    this.dataSource.reload();
   }
 
   reload() {

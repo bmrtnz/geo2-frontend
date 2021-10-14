@@ -55,6 +55,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
 
     this.entrepots = this.entrepotsService.getDataSource();
     this.enableFilters();
+    this.dataGrid.dataSource = this.entrepots;
     this.detailedFields = this.entrepotsService.model.getDetailedFields()
     .pipe(
       // Filtrage headers possibles columnchooser
@@ -68,7 +69,6 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
   enableFilters() {
     if (!this.clientID) return;
     this.entrepots.filter(['client.id', '=', this.clientID]);
-    this.entrepots.reload();
   }
 
   onRowDblClick(e) {

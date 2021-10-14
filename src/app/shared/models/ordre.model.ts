@@ -34,6 +34,16 @@ export enum OrdreType {
   UKT = 'UKT',
 }
 
+export enum Statut {
+  ANNULE = 'Annulé',
+  A_FACTURER = 'À facturer',
+  CONFIRME = 'Confirmé',
+  EN_PREPARATION = 'En préparation',
+  EXPEDIE = 'Expédié',
+  FACTURE = 'Facturé',
+  NON_CONFIRME = 'Non confirmé'
+}
+
 @ModelName('Ordre')
 export class Ordre extends Model {
 
@@ -60,6 +70,7 @@ export class Ordre extends Model {
   @Field() public venteACommission?: boolean;
   @Field() public bonAFacturer?: boolean;
   @Field() public facture?: boolean;
+  @Field({allowHeaderFiltering: false, allowSearch: false}) public statut?: Statut;
   @Field() public factureEDI?: boolean;
   @Field() public livre?: boolean;
   @Field() public instructionsLogistiques?: string;

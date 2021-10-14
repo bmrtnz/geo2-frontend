@@ -76,6 +76,7 @@ export class ContactsComponent implements OnInit, NestedPart {
 
     this.contacts = this.contactsService.getDataSource();
     this.enableFilters();
+    this.dataGrid.dataSource = this.contacts;
     this.societeSource = this.societeService.getDataSource();
     this.fluxSource = this.fluxService.getDataSource();
     this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
@@ -96,8 +97,6 @@ export class ContactsComponent implements OnInit, NestedPart {
       'and',
       ['typeTiers', '=', this.typeTiers],
     ]);
-    this.contacts.reload();
-
   }
 
   onRowPrepared(e) {

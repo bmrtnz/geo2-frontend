@@ -103,12 +103,17 @@ export class OrdresSuiviComponent implements AfterViewInit {
       this.histoGrid.reload();
       if (this.suiviGrid) this.suiviGrid.reload();
     });
+    this.resetCriteria();
   }
 
   searchDisplayExpr(item) {
     return item
       ? self.localizeService.localize('rechOrdres-' + item.replaceAll('.', '-'))
       : null;
+  }
+
+  resetCriteria() {
+    this.searchCriteria.instance.option('value', this.searchItems[0]);
   }
 
   changeSearchCriteria() {
@@ -134,6 +139,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
       'and',
       [criteria, 'contains', value],
     ];
+
   }
 
    findOrder(e) {

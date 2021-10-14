@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Role, Societe, Type } from 'app/shared/models';
-import Ordre from 'app/shared/models/ordre.model';
+import { Ordre, Statut } from 'app/shared/models/ordre.model';
 import { ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
@@ -56,7 +56,7 @@ export class FormComponent implements OnInit, AfterViewInit {
 
   public fragments = Fragments;
   @Output() public ordre: Ordre;
-  public status = 'Facturé';
+  public status: string;
   public formGroup = this.formBuilder.group({
     id: [''],
     client: [''],
@@ -348,7 +348,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     .subscribe( ordre => {
       this.ordre = ordre;
       this.fetchFullOrderNumber();
-      this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
+      this.status = Statut[this.ordre.statut] + (this.ordre.factureEDI ? ' EDI' : '');
       this.canDuplicate = !!this?.ordre?.id;
       this.formGroup.reset(ordre);
       this.addLinkedOrders();
