@@ -9,9 +9,10 @@ import { GridRowStyleService } from 'app/shared/services/grid-row-style.service'
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable, pipe } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { LocalizationService, TransporteursService } from '../../../../shared/services';
+import { LocalizationService, TransporteursService } from 'app/shared/services';
+import { GridColumn } from 'basic';
+import { transporteur } from 'assets/configurations/grids.json';
+
 
 @Component({
   selector: 'app-transporteurs-list',
@@ -25,7 +26,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: GridColumn[];
   columnChooser = environment.columnChooser;
 
   constructor(
@@ -40,16 +41,8 @@ export class TransporteursListComponent implements OnInit, NestedMain {
   }
 
   ngOnInit() {
-    this.transporteurs = this.transporteursService.getDataSource();
-    this.detailedFields = this.transporteursService.model.getDetailedFields()
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('tiers-transporteurs-' + field.path.replace('.description', ''))).length);
-       }),
-    );
-
+    this.detailedFields = transporteur.columns;
+    this.transporteurs = this.transporteursService.getDataSource(this.detailedFields.map(property => property.dataField));
   }
 
   onCreate() {

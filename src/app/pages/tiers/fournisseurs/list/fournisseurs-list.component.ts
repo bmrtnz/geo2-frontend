@@ -9,9 +9,10 @@ import { GridRowStyleService } from 'app/shared/services/grid-row-style.service'
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
+import { FournisseursService } from 'app/shared/services/api/fournisseurs.service';
+import {GridColumn} from 'basic';
+import { fournisseur } from 'assets/configurations/grids.json';
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -25,7 +26,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   columnChooser = environment.columnChooser;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: GridColumn[];
 
   constructor(
     public fournisseursService: FournisseursService,
@@ -38,15 +39,8 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   }
 
   ngOnInit() {
-    this.fournisseurs = this.fournisseursService.getDataSource();
-    this.detailedFields = this.fournisseursService.model.getDetailedFields()
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('tiers-fournisseurs-' + field.path.replace('.description', ''))).length);
-       }),
-    );
+    this.detailedFields = fournisseur.columns;
+    this.fournisseurs = this.fournisseursService.getDataSource(this.detailedFields.map(property => property.dataField));
   }
 
   onRowDblClick(event) {

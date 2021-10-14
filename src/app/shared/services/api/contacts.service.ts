@@ -4,6 +4,7 @@ import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { Contact } from '../../models';
 import { APIRead, ApiService, RelayPage } from '../api.service';
+import {GridColumn} from '../../../../basic';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class ContactsService extends ApiService implements APIRead {
     super(apollo, Contact);
   }
 
-  getDataSource() {
+  getDataSource(columns?: Array<string>) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
@@ -27,7 +28,7 @@ export class ContactsService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(2);
+          const query = await this.buildGetAll_v2(columns);
           type Response = { allContact: RelayPage<Contact> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -40,7 +41,7 @@ export class ContactsService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne();
+          const query = await this.buildGetOne_v2(columns);
           type Response = { contact: Contact };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {

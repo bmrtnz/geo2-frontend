@@ -10,6 +10,8 @@ export class MRUOrdre extends Model {
   @Field({model: import('./utilisateur.model')}) public utilisateur: Utilisateur;
   @Field({model: import('./societe.model')}) public societe: Societe;
   @Field({ dataType: 'datetime' }) public dateModification: string;
+  @Field() public nomUtilisateur: string;
+  @Field() public socCode: string;
 }
 
 export default MRUOrdre;

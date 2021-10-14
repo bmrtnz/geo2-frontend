@@ -25,7 +25,7 @@ export class FournisseursService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables }, 2);
   }
 
-  getDataSource() {
+  getDataSource(columns?: Array<string>) {
 
     return new DataSource({
       sort: [
@@ -40,7 +40,7 @@ export class FournisseursService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(1);
+          const query = await this.buildGetAll_v2(columns);
           type Response = { allFournisseur: RelayPage<Fournisseur> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -50,7 +50,7 @@ export class FournisseursService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1);
+          const query = await this.buildGetOne_v2(columns);
           type Response = { fournisseur: Fournisseur };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {

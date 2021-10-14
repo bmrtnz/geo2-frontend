@@ -104,7 +104,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
     this.indicatorsChange.emit(e.value);
     if (e.value.length < 1) {
-        e.component.option("value", this.allIndicators);
+        e.component.option('value', this.allIndicators);
     }
 
   }
