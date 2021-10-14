@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { Contact } from 'app/shared/models';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { TypeTiers } from 'app/shared/models/tier.model';
 import { AuthService, LocalizationService } from 'app/shared/services';
 import { ContactsService } from 'app/shared/services/api/contacts.service';
@@ -14,8 +13,8 @@ import { GridRowStyleService } from 'app/shared/services/grid-row-style.service'
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { contact } from 'assets/configurations/grids.json';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-contacts',
@@ -31,7 +30,7 @@ export class ContactsComponent implements OnInit, NestedPart {
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: GridColumn[];
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
@@ -49,22 +48,7 @@ export class ContactsComponent implements OnInit, NestedPart {
     ) {}
 
   ngOnInit() {
-    this.detailedFields = this.contactsService.model.getDetailedFields(2)
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field => 
-          !!(this.localizeService.localize('tiers-contacts-' + field.path.replaceAll('.', '-'))).length);
-       }),
-    );
-
-    //     .pipe(
-    //   map(fields => {
-    //     return fields.filter( field => {
-    //       console.log(field, this.localizeService.localize('tiers-contacts-' + field.path.replaceAll('.', '-')))
-    //     })
-    //   }),
-    // );
+    this.detailedFields = contact.columns;
     this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
     this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
 
@@ -74,7 +58,7 @@ export class ContactsComponent implements OnInit, NestedPart {
       .map(value => value.toLowerCase())
       .shift();
 
-    this.contacts = this.contactsService.getDataSource();
+    this.contacts = this.contactsService.getDataSource(this.detailedFields.map(property => property.dataField));
     this.enableFilters();
     this.societeSource = this.societeService.getDataSource();
     this.fluxSource = this.fluxService.getDataSource();

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { Port } from '../../models';
+import { Port } from 'app/shared/models';
 import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({

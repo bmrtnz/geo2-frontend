@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import {from, iif, MonoTypeOperatorFunction, Observable, of, OperatorFunction} from 'rxjs';
-import {concatAll, concatMap, endWith, filter, map, mergeMap, reduce, startWith, takeWhile, toArray} from 'rxjs/operators';
+import { from, MonoTypeOperatorFunction, Observable, of, OperatorFunction } from 'rxjs';
+import { concatAll, concatMap, filter, map, mergeMap, reduce, takeWhile, toArray } from 'rxjs/operators';
 
 export type ModelFieldOptions<T = typeof Model> = {
   model?: Promise<{ default: T }>
@@ -124,6 +124,46 @@ export abstract class Model {
         }),
         reduce((acc, crt) => `${acc} ${crt}`),
       );
+  }
+
+  /**
+   * Retourne la représentation graphQL des chaines de caractère passé en paramètre.
+   * @param columns Une liste de chaine de caractère.
+   * @return string La représentation GraphQL.
+   * @example
+   * params: "societe.pays.ville", "societe.adresse1"
+   * retournera une chaine graphQL :
+   * societe {
+   *   adresse1
+   *   pays {
+   *     ville
+   *   }
+   * }
+   */
+  static getGQL(columns: Array<string> = []): Observable<string> {
+    const obj = new GraphQLObject();
+
+    columns
+      .sort()
+      .forEach(value => {
+        const strings = value.split('.');
+
+        if (strings.length === 1) {
+          obj.properties.add(strings[0]);
+        } else {
+          const val = strings.pop();
+          let tmp = obj;
+          strings.forEach(v => {
+            if (!tmp.children.has(v)) {
+              tmp.children.set(v, new GraphQLObject());
+            }
+            tmp = tmp.children.get(v);
+          });
+          tmp.properties.add(val);
+        }
+      });
+
+    return of(obj.toGraphQL());
   }
 
   /**
@@ -259,3 +299,23 @@ export const ModelName = (modelName: string) => {
     });
   };
 };
+
+class GraphQLObject {
+  properties: Set<string>;
+  children: Map<string, GraphQLObject>;
+
+  constructor() {
+    this.properties = new Set();
+    this.children = new Map<string, GraphQLObject>();
+  }
+
+  public toGraphQL() {
+    let retour = '';
+    this.properties
+      .forEach(value => retour += `\n${value}`);
+    this.children.forEach((child, key) => {
+      retour += `\n${key}{${child.toGraphQL()}\n}`;
+    });
+    return retour;
+  }
+}

@@ -31,7 +31,6 @@
       [showPageSizeSelector]="true"
       [showInfo]="true"
       [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.LieuPassageAQuai"
@@ -52,15 +51,16 @@
     </dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('tiers-lieuxpassageaquai-'+ field.path.replace('.description', '') | localize) || field.path"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('tiers-lieuxpassageaquai-'+ field.dataField.replace('.description', '') | localize) || field.dataField"
       [visible]="false"
       trueText="Oui"
       falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [showInColumnChooser]="field.showInColumnChooser"
     ></dxi-column>
 
   </dx-data-grid>

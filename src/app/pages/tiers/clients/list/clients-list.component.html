@@ -17,10 +17,6 @@
     }"
     [columnAutoWidth]="true"
     [allowColumnReordering]="true"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
-    }"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
@@ -57,15 +53,16 @@
     </dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('tiers-clients-' + field.path.replace('.description', '') | localize) || field.name"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('tiers-clients-' + field.dataField.replace('.description', '') | localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [showInColumnChooser]="field.showInColumnChooser"
     ></dxi-column>
 
   </dx-data-grid>

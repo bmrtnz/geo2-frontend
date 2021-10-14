@@ -27,7 +27,6 @@
     [showPageSizeSelector]="true"
     [showInfo]="true"
     [showNavigationButtons]="true"
-    [showPageSizeSelector]="true"
   ></dxo-pager>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.DepassementEncoursClient"
@@ -48,9 +47,9 @@
   >
   </dxo-column-chooser>
   <dxi-column
-    *ngFor="let field of detailedFields | async"
-    [dataField]="field.path"
-    [caption]="('tiers-clients-' + field.path.replaceAll('.','-') | localize) || field.name"
+    *ngFor="let field of detailedFields"
+    [dataField]="field.dataField"
+    [caption]="('tiers-clients-' + field.dataField.replaceAll('.','-') | localize) || field.name"
     [visible]="false"
     trueText="Oui"
     falseText="Non"

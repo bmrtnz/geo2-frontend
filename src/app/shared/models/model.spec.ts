@@ -1,5 +1,6 @@
-import {toArray} from 'rxjs/operators';
-import {Field, Model, ModelFieldOptions, ModelName} from '../models/model';
+import { toArray } from 'rxjs/operators';
+import { Field, Model, ModelFieldOptions, ModelName } from 'app/shared/models/model';
+import { GridColumn } from 'basic';
 
 @ModelName('Stamp')
 class Stamp extends Model {
@@ -204,4 +205,74 @@ describe('Model class', () => {
 
   });
 
+  describe('should handle getGraphQL', () => {
+
+    it('should return graphQL query with GridBaseConfig', (done) => {
+      const columns: GridColumn[] = [
+        {
+          visibleIndex: 0,
+          dataField: 'nom',
+          dataType: 'string',
+          visible: true
+        },
+        {
+          visibleIndex: 1,
+          dataField: 'prenom',
+          dataType: 'string',
+          visible: true
+        },
+        {
+          visibleIndex: 2,
+          dataField: 'moyenCommunication.description',
+          dataType: 'string',
+          width: 250,
+          visible: true
+        }
+      ];
+
+      Model
+        .getGQL(columns.map(property => property.dataField))
+        .subscribe(result => {
+          expect(result).toMatch(/nom\nprenom\nmoyenCommunication{\ndescription\n}/);
+          done();
+        });
+    });
+
+    it('should return graphQL query with gridBaseConfig in depth', (done) => {
+      Model
+        .getGQL(['adresse1', 'adresse2', 'societe.adresse3', 'societe.pays.ville', 'societe.pays.codePostal'])
+        .subscribe(result => {
+          expect(result).toMatch(/adresse1\nadresse2\nsociete{\nadresse3\npays{\ncodePostal\nville\n}\n}/);
+          done();
+        });
+    });
+
+    it('should return graphQL query with string params', (done) => {
+      Model
+        .getGQL(['nom', 'prenom', 'moyenCommunication.id', 'moyenCommunication.description'])
+        .subscribe(result => {
+          expect(result).toMatch(/nom\nprenom\nmoyenCommunication{\ndescription\nid\n}/);
+          done();
+        });
+    });
+
+    it('should return empty string with empty array', (done) => {
+      Model
+        .getGQL([])
+        .subscribe(result => {
+          expect(result).toEqual('');
+          done();
+        });
+    });
+
+    it('should return empty string with no param', (done) => {
+      Model
+        .getGQL()
+        .subscribe(result => {
+          expect(result).toEqual('');
+          done();
+        });
+    });
+
+  });
 });

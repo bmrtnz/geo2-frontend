@@ -25,7 +25,7 @@ export class TransporteursService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getDataSource() {
+  getDataSource(columns ?: Array<string>) {
     return new DataSource({
       sort: [
         { selector: 'raisonSocial' }
@@ -39,7 +39,7 @@ export class TransporteursService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll();
+          const query = await this.buildGetAll_v2(columns);
           type Response = { allTransporteur: RelayPage<Transporteur> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -49,7 +49,7 @@ export class TransporteursService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1);
+          const query = await this.buildGetOne_v2(columns);
           type Response = { transporteur: Transporteur };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {

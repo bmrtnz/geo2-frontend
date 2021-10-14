@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { LocalizationService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
@@ -10,9 +9,9 @@ import { GridRowStyleService } from 'app/shared/services/grid-row-style.service'
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { LieuxPassageAQuaiService } from '../../../../shared/services/api/lieux-passage-a-quai.service';
+import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
+import { GridColumn } from 'basic';
+import * as gridConfig from 'assets/configurations/grids.json';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-list',
@@ -25,7 +24,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: GridColumn[];
   columnChooser = environment.columnChooser;
 
   constructor(
@@ -40,15 +39,8 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   }
 
   ngOnInit() {
-    this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource();
-    this.detailedFields = this.lieuxPassageAQuaiService.model.getDetailedFields()
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('tiers-lieuxpassageaquai-' + field.path.replace('.description', ''))).length);
-       }),
-    );
+    this.detailedFields = gridConfig['lieu-passage-a-quai'].columns;
+    this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource(this.detailedFields.map(property => property.dataField));
   }
 
   onRowDblClick(event) {
@@ -62,5 +54,5 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   onRowPrepared(e) {
     this.gridRowStyleService.applyGridRowStyle(e);
   }
-  
+
 }

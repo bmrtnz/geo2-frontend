@@ -7,7 +7,7 @@ import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap, take, takeUntil } from 'rxjs/operators';
-import { Model } from '../models/model';
+import { Model } from 'app/shared/models/model';
 
 const DEFAULT_KEY = 'id';
 const DEFAULT_GQL_KEY_TYPE = 'String';
@@ -88,7 +88,7 @@ export type LocateVariables = {
 
 export interface APIRead {
   getAll?(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
-  getOne?(id: string):
+  getOne?(id: string, columns?: Array<string>):
     Observable<ApolloQueryResult<any>> |
     Promise<Observable<ApolloQueryResult<any>>>;
   getDataSource(): DataSource;
@@ -235,6 +235,7 @@ export abstract class ApiService implements OnDestroy {
    * @param regExpFilter Regexp field filter
    * @param operationName Name of the operation, default to `all{ModelName}`
    * @param option Object of configurations
+   * @deprecated use buildGetAll_v2
    */
   protected async buildGetAll(depth?: number, regExpFilter?: RegExp, operationName?: string, option?: {forceFilter?: boolean}) {
     const operation = operationName ?? `all${this.model.name}`;
@@ -259,10 +260,34 @@ export abstract class ApiService implements OnDestroy {
     `;
   }
 
+  protected async buildGetAll_v2(columns: Array<string>, operationName?: string) {
+    const operation = operationName ?? `all${this.model.name}`;
+    const alias = operation.ucFirst();
+    return `
+      query ${alias}($search: String, $pageable: PaginationInput!) {
+        ${operation}(search:$search, pageable:$pageable) {
+          edges {
+            node {
+              ${await this.model.getGQL(columns).toPromise()}
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+          }
+          totalCount
+        }
+      }
+    `;
+  }
+
   /**
    * Build getOne query
    * @param depth Sub model selection depth
    * @param regExpFilter Regexp field filter
+   * @deprecated use buildGetOne_v2
    */
   protected async buildGetOne(depth?: number, regExpFilter?: RegExp) {
     const operation = this.withLowerCaseFirst(this.model.name);
@@ -275,6 +300,22 @@ export abstract class ApiService implements OnDestroy {
       }
     `;
   }
+  /**
+   * Build getOne query
+   * @param columns Sub model selection depth
+   */
+  protected async buildGetOne_v2(columns: Array<string>) {
+    const operation = this.withLowerCaseFirst(this.model.name);
+    const alias = operation.ucFirst();
+    return `
+      query ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
+        ${operation}(${this.keyField}:$${this.keyField}) {
+          ${await this.model.getGQL(columns).toPromise()}
+        }
+      }
+    `;
+  }
+
 
   /**
    * Build save query

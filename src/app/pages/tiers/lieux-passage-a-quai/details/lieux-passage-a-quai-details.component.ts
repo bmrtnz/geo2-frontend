@@ -13,10 +13,9 @@ import { PaysService } from 'app/shared/services/api/pays.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { from } from 'rxjs';
-import { mergeAll, tap } from 'rxjs/operators';
-import { LieuPassageAQuai } from '../../../../shared/models';
-import { LieuxPassageAQuaiService } from '../../../../shared/services/api/lieux-passage-a-quai.service';
+import {  tap } from 'rxjs/operators';
+import { LieuPassageAQuai } from 'app/shared/models';
+import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',

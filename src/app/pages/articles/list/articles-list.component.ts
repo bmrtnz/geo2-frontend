@@ -1,17 +1,16 @@
 import { Component, OnInit, EventEmitter, ViewChild, ViewChildren } from '@angular/core';
-import { ArticlesService} from '../../../shared/services/api/articles.service';
+import { ArticlesService} from 'app/shared/services/api/articles.service';
 import { Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent, DxTagBoxComponent } from 'devextreme-angular';
-import { Observable } from 'rxjs';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import { map } from 'rxjs/operators';
 import { ClientsService, LocalizationService } from 'app/shared/services';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
+import { GridColumn } from 'basic';
+import { article } from 'assets/configurations/grids.json';
 
 @Component({
   selector: 'app-articles-list',
@@ -25,7 +24,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   @ViewChildren(DxTagBoxComponent) filterBoxes: any;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: GridColumn[];
   columnChooser = environment.columnChooser;
   tagFilters: { [path: string]: string[] } = {};
   especes: DataSource;
@@ -60,23 +59,16 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
 
   ngOnInit() {
-    this.articles = this.articlesService.getDataSource();
-    this.detailedFields = this.articlesService.model.getDetailedFields(3)
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('articles-' + field.path.replace('.description', '').replace('.', '-'))).length);
-       }),
-    );
+    this.detailedFields = article.columns;
+    this.articles = this.articlesService.getDataSource(this.detailedFields.map(property => property.dataField));
   }
 
   onCellPrepared(e) {
     // Adding code (prefix) before "variété" and "emballage"
     if (e.rowType == 'data') {
-      if (this.localizeService.localize("articles-matierePremiere-variete") == e.column.caption) {
+      if (this.localizeService.localize('articles-matierePremiere-variete') == e.column.caption) {
         e.cellElement.innerText =  e.data.matierePremiere?.variete.id + ' ' + e.cellElement.innerText;
-      } else if (this.localizeService.localize("articles-emballage-emballage") == e.column.caption) {
+      } else if (this.localizeService.localize('articles-emballage-emballage') == e.column.caption) {
         e.cellElement.innerText =  e.data.emballage?.emballage.id + ' ' + e.cellElement.innerText;
       }
     }
@@ -97,13 +89,13 @@ export class ArticlesListComponent implements OnInit, NestedMain {
    */
    onFieldValueChange(event: string[], dataField: string) {
 
-    // No value cases  
+    // No value cases
     if (event !== null) {
       if (!event.length) {
         event = ['null'];
       }
     }
-    
+
     // Changing values for Oui/Non select-box
     if (event.toString() == 'Oui') {event = ['true'];}
     if (event.toString() == 'Non') {event = ['false'];}
@@ -125,7 +117,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       .split('¤')
       .map(v => JSON.parse(v));
 
-      this.dataGrid.instance.filter(filters);
+    this.dataGrid.instance.filter(filters);
       // console.log(filters, this.dataGrid.instance.getCombinedFilter())
 
   }

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
+import { gql, MutationOptions, OperationVariables } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from } from 'rxjs';
 import { mergeMap, take, takeUntil } from 'rxjs/operators';
-import { Article } from '../../models';
-import { APIRead, ApiService, RelayPage } from '../api.service';
+import { Article } from 'app/shared/models';
+import { APIRead, ApiService, RelayPage } from 'app/shared/services/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +29,7 @@ export class ArticlesService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({variables}, 3);
   }
 
-  getDataSource() {
+  getDataSource(columns?: Array<string>) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -44,7 +44,7 @@ export class ArticlesService extends ApiService implements APIRead {
             });
 
           type Response = { allArticle: RelayPage<Article> };
-          const query = await this.buildGetAll(3);
+          const query = await this.buildGetAll_v2(columns);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
@@ -53,7 +53,7 @@ export class ArticlesService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1);
+          const query = await this.buildGetOne_v2(columns);
           type Response = { article: Article };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
