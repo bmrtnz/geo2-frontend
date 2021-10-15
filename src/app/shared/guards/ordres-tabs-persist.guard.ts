@@ -26,7 +26,7 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
     return iif(
       () => !!this.authService.currentUser.configTabsOrdres,
       of(this.router.parseUrl(this.authService.currentUser.configTabsOrdres)),
-      of(this.router.createUrlTree(['home'])),
+      of(this.router.createUrlTree(['/ordres/home'])),
     );
   }
 

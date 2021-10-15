@@ -66,7 +66,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
 
   findAssociatedCompanies(e) {
 
-    if (!this.form.get('nomUtilisateur').value.length || !this.form.get('password').value.length) return;
+    if (!this.form.get('nomUtilisateur')?.value?.length || !this.form.get('password')?.value?.length) return;
 
     // const textBoxComponent: DxTextBoxComponent = event.component;
     from(this.utilisateursService.getOne(this.form.get('nomUtilisateur').value, this.form.get('password').value))
@@ -123,7 +123,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   }
 
   onKeyUp(e) {
-    if (!this.form.get('nomUtilisateur').value.length || !this.form.get('password').value.length) return;
+    if (!this.form.get('nomUtilisateur')?.value?.length || !this.form.get('password')?.value?.length) return;
     if (e.event.key == 'Enter') {
       this.autoSubmit = true;
       this.societeSB.instance.focus();
