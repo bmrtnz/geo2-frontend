@@ -25,7 +25,7 @@ export class TransporteursService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getDataSource(columns ?: Array<string>) {
+  getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [
         { selector: 'raisonSocial' }

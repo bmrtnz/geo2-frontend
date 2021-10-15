@@ -32,7 +32,6 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   varietes: DataSource;
   emballages: DataSource;
   modesCulture: DataSource;
-  clients: DataSource;
   trueFalse: string[];
 
   constructor(
@@ -54,13 +53,12 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         .getFilterDatasource('emballage.emballage.description');
       this.modesCulture = this.articlesService
         .getFilterDatasource('matierePremiere.modeCulture.description');
-      this.clients = this.clientsService.getDataSource();
       this.trueFalse = ['Tous', 'Oui', 'Non'];
     }
 
   ngOnInit() {
     this.detailedFields = article.columns;
-    this.articles = this.articlesService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.articles = this.articlesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
   onCellPrepared(e) {

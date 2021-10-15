@@ -42,7 +42,7 @@ export class GridHistoriqueComponent implements OnInit {
     public tabContext: TabContext,
   ) {
     this.detailedFields = historique.columns as GridColumn[];
-    this.dataSource = mruOrdresService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.dataSource = mruOrdresService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
   ngOnInit() {

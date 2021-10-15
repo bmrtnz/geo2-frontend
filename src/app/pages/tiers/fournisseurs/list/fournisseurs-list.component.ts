@@ -40,7 +40,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.detailedFields = fournisseur.columns;
-    this.fournisseurs = this.fournisseursService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.fournisseurs = this.fournisseursService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
   onRowDblClick(event) {

@@ -147,7 +147,7 @@ export class FormComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initializeForm();
 
-    this.clientsDS = this.clientsService.getDataSource();
+    this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
     this.entrepotDS = this.entrepotsService.getDataSource();
     this.deviseDS = this.devisesService.getDataSource();
     this.incotermsDS = this.incotermsService.getDataSource();
@@ -181,7 +181,7 @@ export class FormComponent implements OnInit, AfterViewInit {
       ['type', '=', Type.PORT_D_ARRIVEE]
     ]);
 
-    this.transporteursDS = this.transporteursService.getDataSource();
+    this.transporteursDS = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
     this.litigesDS = this.litigesService.getDataSource();
   }
 

@@ -17,7 +17,7 @@ export class ContactsService extends ApiService implements APIRead {
     super(apollo, Contact);
   }
 
-  getDataSource(columns?: Array<string>) {
+  getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

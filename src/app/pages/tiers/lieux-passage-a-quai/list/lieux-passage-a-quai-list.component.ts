@@ -40,7 +40,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.detailedFields = gridConfig['lieu-passage-a-quai'].columns;
-    this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
   onRowDblClick(event) {

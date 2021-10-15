@@ -34,7 +34,7 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = this.clientsService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.dataSource = this.clientsService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
     this.enableFilters();
   }
 
