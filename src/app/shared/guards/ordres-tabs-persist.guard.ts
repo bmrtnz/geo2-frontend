@@ -54,7 +54,7 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
     | UrlTree {
 
       // Trigger save, but don't block navigation
-      if (!nextState.url.startsWith('/ordres')) {
+      if (!nextState.url.startsWith('/ordres') && this.currentCompanyID) {
         this.authService.persist({
           configTabsOrdres: {
             [this.currentCompanyID]: encodeURI(currentState.url),
