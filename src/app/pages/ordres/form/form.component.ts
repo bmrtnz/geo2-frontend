@@ -286,16 +286,6 @@ export class FormComponent implements OnInit, AfterViewInit {
     } else {
       this.findComplRegulLinkedOrders(refClt);
     }
-
-    // this.linkedOrders.push({ ordre: {id: '1', numero: '100001'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '2', numero: '100002'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '3', numero: '100003'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '4', numero: '100004'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '5', numero: '100005'}, criteria: 'compl.' });
-    // this.linkedOrders.push({ ordre: {id: '6', numero: '100006'}, criteria: 'régul.' });
-    // this.linkedOrders.push({ ordre: {id: '4', numero: '100004'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '5', numero: '100005'}, criteria: 'compl.' });
-    // this.linkedOrders.push({ ordre: {id: '6', numero: '100006'}, criteria: 'régul.' });
   }
 
   findComplRegulLinkedOrders(refClt) {
