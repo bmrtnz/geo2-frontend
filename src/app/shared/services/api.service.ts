@@ -91,7 +91,16 @@ export interface APIRead {
   getOne?(id: string, columns?: Array<string>):
     Observable<ApolloQueryResult<any>> |
     Promise<Observable<ApolloQueryResult<any>>>;
-  getDataSource(): DataSource;
+
+  /**
+   * @deprecated use getDataSource_v2
+   */
+  getDataSource?(): DataSource;
+
+  /**
+   * @param Columns The fields you want to retrieve.
+   */
+  getDataSource_v2?(Columns: Array<string>): DataSource;
 }
 
 export interface APIPersist {
@@ -260,6 +269,12 @@ export abstract class ApiService implements OnDestroy {
     `;
   }
 
+  /**
+   * Build paginated query
+   * @param columns The fields you want to retrieve.
+   * @param operationName Name of the operation, default to `all{ModelName}`.
+   * @protected
+   */
   protected async buildGetAll_v2(columns: Array<string>, operationName?: string) {
     const operation = operationName ?? `all${this.model.name}`;
     const alias = operation.ucFirst();
@@ -302,7 +317,7 @@ export abstract class ApiService implements OnDestroy {
   }
   /**
    * Build getOne query
-   * @param columns Sub model selection depth
+   * @param columns The fields you want to retrieve.
    */
   protected async buildGetOne_v2(columns: Array<string>) {
     const operation = this.withLowerCaseFirst(this.model.name);

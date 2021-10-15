@@ -42,7 +42,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.detailedFields = transporteur.columns;
-    this.transporteurs = this.transporteursService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.transporteurs = this.transporteursService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
   onCreate() {

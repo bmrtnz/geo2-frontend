@@ -29,7 +29,7 @@ export class ArticlesService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({variables}, 3);
   }
 
-  getDataSource(columns?: Array<string>) {
+  getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }

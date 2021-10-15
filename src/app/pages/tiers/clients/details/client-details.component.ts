@@ -128,7 +128,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild('couvertureTotale', { static: false }) couvertureTotale: DxNumberBoxComponent;
-  
+
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
   editing = false;
@@ -154,7 +154,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   typesVente: DataSource;
   groupesClient: DataSource;
   courtiers: DataSource;
-  clients: DataSource;
   regimesTva: DataSource;
   defaultVisible: boolean;
   conditionsVente: DataSource;
@@ -290,11 +289,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     this.typesVente = this.typesVenteService.getDataSource();
     this.groupesClient = this.groupesClientService.getDataSource();
     this.courtiers = this.courtiersService.getDataSource();
-    this.clients = this.clientsService.getDataSource();
     this.basesTarif = this.basesTarifService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
-    this.paloxRaisonSocial = this.clientsService.getDataSource();
+    this.paloxRaisonSocial = this.clientsService.getDataSource_v2(['id','raisonSocial']);
     this.paloxRaisonSocial.filter(['secteur.id', '=', 'PAL']);
 
   }
@@ -302,7 +300,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   checkCode(params) {
 
     const code = params.value;
-    const clientsSource = this.clientsService.getDataSource();
+    const clientsSource = this.clientsService.getDataSource_v2(['code']);
     clientsSource.searchExpr('code');
     clientsSource.searchOperation('=');
     clientsSource.searchValue(code);
@@ -313,7 +311,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   checkCompteComptable(e) {
     const compteComptable = e.value;
     if (!compteComptable) return;
-    const clientsSource = this.clientsService.getDataSource();
+    const clientsSource = this.clientsService.getDataSource_v2(['compteComptable']);
     clientsSource.filter(['compteComptable', '=', compteComptable]);
     clientsSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
   }
