@@ -25,7 +25,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     return this.watchGetOneQuery<Response>({ variables }, 2);
   }
 
-  getDataSource(depth = 1, filter = /.*/) {
+  getDataSource(columns?: Array<string>) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -39,7 +39,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll(depth, filter);
+          const query = await this.buildGetAll_v2(columns);
           type Response = { allClient: RelayPage<Client> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -49,7 +49,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(depth, filter);
+          const query = await this.buildGetOne_v2(columns);
           type Response = { client: Client };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {

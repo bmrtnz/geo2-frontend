@@ -1,14 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { LocalizePipe } from 'app/shared/pipes';
 import { ClientsService } from 'app/shared/services';
-import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { dxDataGridRowObject } from 'devextreme/ui/data_grid';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { GridColumn } from 'basic';
+import * as gridConfig from 'assets/configurations/grids.json';
 
 @Component({
   selector: 'app-grid-clients-dep-encours-detail',
@@ -20,13 +19,9 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<
-    ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
-  >;
+  public detailedFields: GridColumn[];
 
   public title: string;
-  private dataFilter = /* tslint:disable-next-line max-line-length */
-    /^raisonSocial|refusCoface|agrement|enCoursTemporaire|enCoursBlueWhale|autorise|depassement|enCoursActuel|enCoursNonEchu|enCours1a30|enCours31a60|enCours90Plus|alerteCoface|enCoursDouteux|ville|enCoursDateLimite|valide$/;
 
   constructor(
     private localizePipe: LocalizePipe,
@@ -34,16 +29,12 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
     private clientsService: ClientsService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
-    this.detailedFields = this.clientsService.model.getDetailedFields(
-      3,
-      this.dataFilter,
-      { forceFilter: true }
-    );
+    this.detailedFields = gridConfig['depassement-encours-client'].columns as GridColumn[];
     this.title = this.localizePipe.transform('grid-depassement-encours-client-title');
   }
 
   ngOnInit() {
-    this.dataSource = this.clientsService.getDataSource(1, this.dataFilter);
+    this.dataSource = this.clientsService.getDataSource(this.detailedFields.map(property => property.dataField));
     this.enableFilters();
   }
 

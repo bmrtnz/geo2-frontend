@@ -139,9 +139,8 @@
       [showPageSizeSelector]="true"
       [showInfo]="true"
       [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing 
+    <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.Article"
       [enabled]="true"
       type="custom"
@@ -163,9 +162,9 @@
     </dxo-search-editor-options>
 
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('articles-' + field.path.replace('.description', '').replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('articles-' + field.dataField.replace('.description', '').replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [headerFilter]="{'width': 500}"
       trueText="Oui"

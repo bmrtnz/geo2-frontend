@@ -15,7 +15,6 @@ export class CurrentCompanyService {
   }
   
   setCompany(societe) {
-    window.sessionStorage.removeItem('openOrders');
     window.sessionStorage.setItem('companyStorage', JSON.stringify(societe));
     this.showCompanyColorOnLogo(societe);
     return;

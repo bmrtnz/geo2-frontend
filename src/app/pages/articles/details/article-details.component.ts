@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -6,7 +6,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import {AuthService, LocalizationService} from 'app/shared/services';
+import { AuthService, LocalizationService } from 'app/shared/services';
 import { AlveolesService } from 'app/shared/services/api/alveoles.service';
 import { CalibresMarquageService } from 'app/shared/services/api/calibres-marquage.service';
 import { CalibresUnifiesService } from 'app/shared/services/api/calibres-unifies.service';
@@ -37,8 +37,7 @@ import { switchMap, tap } from 'rxjs/operators';
 import { Article } from 'app/shared/models';
 import { ArticlesService } from 'app/shared/services';
 import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
-import Document from '../../../shared/models/document.model';
-import { DxSelectBoxComponent, DxTextBoxComponent } from 'devextreme-angular';
+import Document from 'app/shared/models/document.model';
 
 @Component({
     selector: 'app-articles',
@@ -170,7 +169,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private fb: FormBuilder,
         public authService: AuthService,
         private localization: LocalizationService
-    ) { 
+    ) {
         this.onUParColisChange = this.onUParColisChange.bind(this);
     }
 
@@ -220,10 +219,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.formGroup.get('gtinUcBlueWhale').setValue('');
         this.formGroup.get('gtinColisBlueWhale').setValue('');
         Object.keys(this.formGroup.controls).forEach(key => {
-            console.log(key)
             this.formGroup.get(key).markAsDirty();
         });
-        this.showWarnings()
+        this.showWarnings();
     }
 
     showWarnings() {
@@ -361,17 +359,17 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         let imp = 0;
         let pai = 0;
         let check = 0;
-    
+
         for (let i = 0; i < code.length; i += 2) {
-          imp += parseInt(code.charAt(i))
+          imp += parseInt(code.charAt(i));
         }
         for (let i = 1; i < code.length; i += 2) {
-            pai += parseInt(code.charAt(i))
+            pai += parseInt(code.charAt(i));
         }
-        check = imp + (3*pai);
-        check = Math.ceil(check/10)*10 - check
-      
-        return code + check
+        check = imp + (3 * pai);
+        check = Math.ceil(check / 10) * 10 - check;
+
+        return code + check;
     }
 
 }

@@ -1,6 +1,6 @@
 <div class="content-block">
   <h2>
-    {{ 'tiers-contacts-title' | localize }} 
+    {{ 'tiers-contacts-title' | localize }}
     -
     {{ typeTiersLabel | localize }} {{ codeTiers }}
   </h2>
@@ -31,8 +31,8 @@
     ></dxo-pager>
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.Contact"
-      [enabled]="true" 
-      type="custom" 
+      [enabled]="true"
+      type="custom"
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
@@ -43,7 +43,7 @@
     >
     </dxo-editing>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser 
+    <dxo-column-chooser
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
@@ -54,14 +54,15 @@
     <dxo-selection mode="single"></dxo-selection>
 
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('tiers-contacts-' + field.path.replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('tiers-contacts-' + field.dataField.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       [allowEditing]="field.name !== 'valide' && field?.allowEditing !== false"
       [validationRules]="field.validationRules || {}"
       [editCellTemplate]="field.name == 'description' ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
+      [showInColumnChooser]="field.showInColumnChooser"
     ></dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
@@ -77,6 +78,6 @@
         (onValueChanged)="onValueChanged($event, cell)"
       ></dx-select-box>
     </div>
-    
+
   </dx-data-grid>
 </div>

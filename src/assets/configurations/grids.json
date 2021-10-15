@@ -12,6 +12,12 @@
   "client": {
     "columns": [
       {
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
         "visibleIndex": 0,
         "dataField": "code",
         "dataType": "string",
@@ -66,6 +72,11 @@
   },
   "fournisseur": {
     "columns": [
+      {
+        "dataField": "id",
+        "visible": false,
+        "showInColumnChooser": false
+      },
       {
         "visibleIndex": 0,
         "dataField": "code",
@@ -126,7 +137,8 @@
         "dataField": "id",
         "dataType": "string",
         "width": 150,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false
       },
       {
         "visibleIndex": 1,
@@ -176,7 +188,8 @@
         "dataField": "id",
         "dataType": "string",
         "width": 150,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false
       },
       {
         "visibleIndex": 1,
@@ -278,6 +291,11 @@
   "contact": {
     "columns": [
       {
+        "dataField": "id",
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
         "visibleIndex": 0,
         "dataField": "nom",
         "dataType": "string",
@@ -323,6 +341,21 @@
         "width": 50,
         "visible": true,
         "filterValue": true
+      },
+      {
+        "dataField": "fluxAccess2",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "codeTiers",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "typeTiers",
+        "dataType": "string",
+        "visible": false
       }
     ]
   },
@@ -341,10 +374,22 @@
         "visible": true
       },
       {
+        "dataField": "matierePremiere.variete.id",
+        "dataType": "string",
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
         "visibleIndex": 2,
         "dataField": "matierePremiere.variete.description",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "emballage.emballage.id",
+        "dataType": "string",
+        "visible": false,
+        "showInColumnChooser": false
       },
       {
         "visibleIndex": 3,
@@ -1809,6 +1854,26 @@
         "visibleIndex": 12,
         "dataField": "alerteCoface",
         "visible": true
+      },
+      {
+        "dataField": "refusCoface",
+        "visible": false
+      },
+      {
+        "dataField": "enCoursDouteux",
+        "visible": false
+      },
+      {
+        "dataField": "ville",
+        "visible": false
+      },
+      {
+        "dataField": "enCoursDateLimite",
+        "visible": false
+      },
+      {
+        "dataField": "valide",
+        "visible": false
       }
     ]
   },

@@ -1,17 +1,16 @@
 import { Component, OnInit, EventEmitter, ViewChild, ViewChildren } from '@angular/core';
-import { ArticlesService} from '../../../shared/services/api/articles.service';
+import { ArticlesService} from 'app/shared/services/api/articles.service';
 import { Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent, DxTagBoxComponent } from 'devextreme-angular';
-import { Observable } from 'rxjs';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import { map } from 'rxjs/operators';
 import { ClientsService, LocalizationService } from 'app/shared/services';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
+import { GridColumn } from 'basic';
+import { article } from 'assets/configurations/grids.json';
 
 @Component({
   selector: 'app-articles-list',
@@ -25,7 +24,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   @ViewChildren(DxTagBoxComponent) filterBoxes: any;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: GridColumn[];
   columnChooser = environment.columnChooser;
   tagFilters: { [path: string]: string[] } = {};
   especes: DataSource;
@@ -60,15 +59,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
 
   ngOnInit() {
-    this.articles = this.articlesService.getDataSource();
-    this.detailedFields = this.articlesService.model.getDetailedFields(3)
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('articles-' + field.path.replace('.description', '').replace('.', '-'))).length);
-       }),
-    );
+    this.detailedFields = article.columns;
+    this.articles = this.articlesService.getDataSource(this.detailedFields.map(property => property.dataField));
   }
 
   onCellPrepared(e) {

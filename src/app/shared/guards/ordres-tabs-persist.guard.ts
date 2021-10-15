@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { RootComponent } from 'app/pages/ordres/root/root.component';
-import { iif, Observable, of } from 'rxjs';
+import { defer, iif, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Societe } from '../models';
 import { AuthService } from '../services';
+import { CurrentCompanyService } from '../services/current-company.service';
 
 @Injectable()
 export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootComponent> {
 
+  private currentCompanyID: string;
+
   constructor(
     private router: Router,
     private authService: AuthService,
+    private currentCompanyService: CurrentCompanyService,
   ) {}
 
   /**
@@ -23,9 +29,12 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
+    const societe: Societe = this.currentCompanyService.getCompany();
+    this.currentCompanyID = societe.id;
     return iif(
-      () => !!this.authService.currentUser.configTabsOrdres,
-      of(this.router.parseUrl(this.authService.currentUser.configTabsOrdres)),
+      () => !!this.authService.currentUser?.configTabsOrdres?.[this.currentCompanyID],
+      defer(() => of(this.authService.currentUser.configTabsOrdres[this.currentCompanyID]))
+      .pipe(map( url => this.router.parseUrl(url))),
       of(this.router.createUrlTree(['/ordres/home'])),
     );
   }
@@ -44,11 +53,14 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
     | boolean
     | UrlTree {
 
-      // Don't block navigation during save
-      if (!nextState.url.startsWith('/ordres'))
+      // Trigger save, but don't block navigation
+      if (!nextState.url.startsWith('/ordres')) {
         this.authService.persist({
-          configTabsOrdres: encodeURI(currentState.url),
+          configTabsOrdres: {
+            [this.currentCompanyID]: encodeURI(currentState.url),
+          },
         }).toPromise();
+      }
 
       return true;
   }

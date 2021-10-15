@@ -1,14 +1,12 @@
-import {Apollo} from 'apollo-angular';
-import {WatchQueryOptions, OperationVariables, MutationOptions, defaultDataIdFromObject, ApolloQueryResult} from '@apollo/client/core';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { OperationVariables } from '@apollo/client/core';
+import { Injectable } from '@angular/core';
 import { LieuPassageAQuai } from '../../models';
-import { ApiService, APIRead, RelayPageVariables, RelayPage } from '../api.service';
+import { ApiService, APIRead, RelayPage } from '../api.service';
 
 
 import { LoadOptions } from 'devextreme/data/load_options';
-import { concatMap, filter, map, mergeAll, mergeMap, switchMap, take, takeLast, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import DataSource from 'devextreme/data/data_source';
-import { from, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +27,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({variables});
   }
 
-  getDataSource() {
+  getDataSource(columns?: Array<string>) {
     type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
     return new DataSource({
       store: this.createCustomStore({
@@ -41,7 +39,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll();
+          const query = await this.buildGetAll_v2(columns);
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, {variables}, res => {
