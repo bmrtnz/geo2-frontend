@@ -5,6 +5,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
+import { ModificationListComponent} from 'app/shared/components/modification-list/modification-list.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
@@ -191,7 +192,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
-    this.displayCertifNameDate = this.displayCertifNameDate.bind(this);
   }
 
   get readOnlyMode() {
@@ -238,15 +238,20 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           this.formGroup.patchValue(this.client);
           // Set current username if commercial
           this.tempData = this.personnesService.getDataSource();
-          this.tempData.filter([['valide', '=', true], 'and', ['role', '=', Role.COMMERCIAL], 'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]]);
+          this.tempData.filter([
+            ['valide', '=', true], 'and', ['role', '=', Role.COMMERCIAL],
+             'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
+            ]);
           this.tempData.load().then((res) => {
-            if (res.length) {this.formGroup.get('commercial').setValue(res[0].id);}
+            if (res.length) this.formGroup.get('commercial').setValue(res[0].id);
           });
           // Set current username if assistant(e)
           this.tempData = this.personnesService.getDataSource();
-          this.tempData.filter([['valide', '=', true], 'and', ['role', '=', Role.ASSISTANT], 'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]]);
+          this.tempData.filter([['valide', '=', true], 'and', ['role', '=', Role.ASSISTANT],
+           'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
+          ]);
           this.tempData.load().then((res) => {
-            if (res.length) {this.formGroup.get('assistante').setValue(res[0].id);}
+            if (res.length) this.formGroup.get('assistante').setValue(res[0].id);
           });
           // Set condit vente
           this.formGroup.get('conditionVente').setValue('COFREU');
@@ -292,7 +297,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     this.basesTarif = this.basesTarifService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
-    this.paloxRaisonSocial = this.clientsService.getDataSource_v2(['id','raisonSocial']);
+    this.paloxRaisonSocial = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
     this.paloxRaisonSocial.filter(['secteur.id', '=', 'PAL']);
 
   }
@@ -321,18 +326,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   displayIDBefore(data) {
-    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
-  }
-
-  displayCertifNameDate(data) {
-    // if (data && this.client) {
-    //   let dateCert = this.client?.certifications.find(res => res.certification.id == data.id)?.dateValidite;
-    //   if (dateCert) {
-    //     const mydate = new Date(dateCert);
-    //     dateCert = mydate.toLocaleDateString();
-    //   }
-    //   return data ? data.description + (dateCert ? ' (=> ' + dateCert + ')' : '') : null;
-    // }
+    return data ?
+    (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
+     : null;
   }
 
   onRefusCofaceChange(e) {
@@ -471,7 +467,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   freeUEVAT(sector, pays) {
     if (!sector || !pays) return;
-    // ID TVA CEE : doit être obligatoire pour tous les secteurs sauf MAR / AFA / GB et DIV (+ obligatoire si pays = Irlande) - Léa 10/09/2021
+    // ID TVA CEE : doit être obligatoire pour tous les secteurs sauf MAR / AFA / GB et DIV 
+    // (+ obligatoire si pays = Irlande) - Léa 10/09/2021
     const sectors = ['MAR', 'AFA', 'GB', 'DIV'];
     this.tvaCeeFree = (sectors.includes(sector.id) && pays.id != 'IE');
   }
