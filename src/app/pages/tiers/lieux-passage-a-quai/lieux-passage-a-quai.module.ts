@@ -16,7 +16,7 @@ import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
-
+import { ModificationListModule } from 'app/shared/components/modification-list/modification-list.component';
 
 @NgModule({
   imports: [
@@ -37,7 +37,8 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
     DxPopoverModule,
     DxValidatorModule,
     EditingAlertModule,
-    FileManagerModule
+    FileManagerModule,
+    ModificationListModule,
   ],
   declarations: [
     LieuxPassageAQuaiListComponent,

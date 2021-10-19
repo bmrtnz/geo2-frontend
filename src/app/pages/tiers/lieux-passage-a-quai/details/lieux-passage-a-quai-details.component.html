@@ -27,9 +27,7 @@
 
   <div class="content-block lieupassageaquai-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1"
-      [visible]="!createMode"
-      >
+      <dxi-item [ratio]="1" [visible]="!createMode">
         <h5 class="entity-id">{{ lieupassageaquai?.id }}</h5>
         <dx-button
           height="auto"
@@ -53,270 +51,275 @@
           text="{{ 'btn-docsjoints' | localize }}">
         </dx-button>
       </dxi-item>
-      <dxi-item [ratio]="0.3">
-      </dxi-item>
-      <dxi-item [ratio]="4">
-        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-          <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-infos' | localize }}</span>
-
-          <div class="dx-form-group-content">
-            <!-- Code -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-code' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box
-                formControlName="id"
-                [readOnly]="!createMode"
-                [inputAttr]="{'style': 'text-transform: uppercase'}"
-                (onValueChanged)="onCodeChange($event)"
-                >
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                    <dxi-validation-rule type="stringLength" max="13"></dxi-validation-rule>
-                    <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
-                    <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
-                </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- Lieu fonction EAN -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}">
-                    <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Langue -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-langue' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="langue"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="pays"
-                  [displayExpr]="displayIDBefore"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','description']"
-                >
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-langue' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-select-box>
-              </div>
-            </div>
-
-            <!-- tvaCee -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="tvaCee" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}">
-                    <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-          <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-adresses' | localize }}</span>
-
-          <div class="dx-form-group-content">
-            <!-- Raison sociale -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="raisonSocial" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                    <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
-                 </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Adresse 1 -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="adresse1" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Adresse 2 -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="adresse2" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}">
-                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Adresse 3 -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="adresse3" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}">
-                    <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Code postal -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="codePostal" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                    <dxi-validation-rule type="stringLength" max="9"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Ville -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-ville' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="ville" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-ville' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                    <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Pays -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-pays' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="pays"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="pays"
-                  [displayExpr]="displayIDBefore"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','description']"
-                >
-                <dx-validator name="{{ 'tiers-lieuxpassageaquai-pays' | localize }}">
-                  <dxi-validation-rule type="required"></dxi-validation-rule>
-                </dx-validator>
-              </dx-select-box>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.2">
-      </dxi-item>
-      <dxi-item [ratio]="4">
-
-        <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-          <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-paiement' | localize }}</span>
-
-          <div class="dx-form-group-content">
-            <!-- Nb Jour Echeance -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}">
-                    <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                    <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-text-box>
-              </div>
-            </div>
-
-            <!-- Regime Tva -->
-            <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-regimeTva' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-select-box
-                    formControlName="regimeTva"
-                    [readOnly]="readOnlyMode"
-                    [dataSource]="regimesTva"
-                    [displayExpr]="displayIDBefore"
-                    [searchEnabled]="true"
-                    [searchExpr]="['id','description']"
-                  ></dx-select-box>
+      <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
+      <dxi-item [ratio]="8.2">
+        <app-modification-list *ngIf="!createMode"></app-modification-list>
+        <dx-box direction="row">
+          <dxi-item [ratio]="4">
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-infos' | localize }}</span>
+    
+              <div class="dx-form-group-content">
+                <!-- Code -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-code' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box
+                    formControlName="id"
+                    [readOnly]="!createMode"
+                    [inputAttr]="{'style': 'text-transform: uppercase'}"
+                    (onValueChanged)="onCodeChange($event)"
+                    >
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="13"></dxi-validation-rule>
+                        <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
+                        <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
+                    </dx-validator>
+                    </dx-text-box>
+                  </div>
                 </div>
+                <!-- Lieu fonction EAN -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="lieuFonctionEan" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Langue -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-langue' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="langue"
+                      [readOnly]="readOnlyMode"
+                      [dataSource]="pays"
+                      [displayExpr]="displayIDBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                    >
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-langue' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
+                  </div>
+                </div>
+    
+                <!-- tvaCee -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="tvaCee" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+              </div>
+    
             </div>
-
-            <!-- Devise -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-devise' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="devise"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="devises"
-                  [displayExpr]="displayIDBefore"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','description']"
-                >
-                  <dx-validator name="{{ 'tiers-lieuxpassageaquai-devise' | localize }}">
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-select-box>
+    
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-adresses' | localize }}</span>
+    
+              <div class="dx-form-group-content">
+                <!-- Raison sociale -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="raisonSocial" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
+                     </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Adresse 1 -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="adresse1" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Adresse 2 -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="adresse2" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Adresse 3 -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="adresse3" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}">
+                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Code postal -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="codePostal" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="9"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Ville -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-ville' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="ville" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-ville' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Pays -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-pays' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="pays"
+                      [readOnly]="readOnlyMode"
+                      [dataSource]="pays"
+                      [displayExpr]="displayIDBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                    >
+                    <dx-validator name="{{ 'tiers-lieuxpassageaquai-pays' | localize }}">
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-select-box>
+                  </div>
+                </div>
+              </div>
+    
+            </div>
+          </dxi-item>
+          <dxi-item [ratio]="0.2">
+          </dxi-item>
+          <dxi-item [ratio]="4">
+    
+            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+              <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-paiement' | localize }}</span>
+    
+              <div class="dx-form-group-content">
+                <!-- Nb Jour Echeance -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}">
+                        <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                        <dxi-validation-rule type="stringLength" max="3"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
+    
+                <!-- Regime Tva -->
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-regimeTva' | localize }}</div>
+                    <div class="dx-field-value">
+                      <dx-select-box
+                        formControlName="regimeTva"
+                        [readOnly]="readOnlyMode"
+                        [dataSource]="regimesTva"
+                        [displayExpr]="displayIDBefore"
+                        [searchEnabled]="true"
+                        [searchExpr]="['id','description']"
+                      ></dx-select-box>
+                    </div>
+                </div>
+    
+                <!-- Devise -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-devise' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="devise"
+                      [readOnly]="readOnlyMode"
+                      [dataSource]="devises"
+                      [displayExpr]="displayIDBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                    >
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-devise' | localize }}">
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
+                  </div>
+                </div>
+    
+                <!-- Moyen Paiement -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-moyenPaiement' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="moyenPaiement"
+                      [readOnly]="readOnlyMode"
+                      [dataSource]="moyensPaiement"
+                      [displayExpr]="displayIDBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                    ></dx-select-box>
+                  </div>
+                </div>
+    
+                <!-- Base Paiement -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-basePaiement' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="basePaiement"
+                      [readOnly]="readOnlyMode"
+                      [dataSource]="basesPaiement"
+                      [displayExpr]="displayIDBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id','description']"
+                    ></dx-select-box>
+                  </div>
+                </div>
+    
               </div>
             </div>
-
-            <!-- Moyen Paiement -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-moyenPaiement' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="moyenPaiement"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="moyensPaiement"
-                  [displayExpr]="displayIDBefore"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','description']"
-                ></dx-select-box>
-              </div>
-            </div>
-
-            <!-- Base Paiement -->
-            <div class="dx-field">
-              <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-basePaiement' | localize }}</div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  formControlName="basePaiement"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="basesPaiement"
-                  [displayExpr]="displayIDBefore"
-                  [searchEnabled]="true"
-                  [searchExpr]="['id','description']"
-                ></dx-select-box>
-              </div>
-            </div>
-
-          </div>
-        </div>
+          </dxi-item>
+        </dx-box>
       </dxi-item>
     </dx-box>
   </div>
+
 </form>
 <app-editing-alert></app-editing-alert>
 <app-file-manager-popup key="lieux_passage_a_quai" [id]="lieupassageaquai?.id"></app-file-manager-popup>

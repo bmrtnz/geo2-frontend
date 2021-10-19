@@ -31,9 +31,7 @@
 
   <div class="content-block client-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1"
-        [visible]="!createMode"
-        >
+      <dxi-item [ratio]="1" [visible]="!createMode">
           <h4 class="entity-id">N°&nbsp;{{ client?.id }}</h4>
           <dx-button
             height="auto"
@@ -66,7 +64,7 @@
             text="{{ 'btn-docsjoints' | localize }}">
           </dx-button>
       </dxi-item>
-      <dxi-item [ratio]="0.3"></dxi-item>
+      <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
       <dxi-item [ratio]="8.2">
         <app-modification-list *ngIf="!createMode"></app-modification-list>
         <dx-box direction="row">

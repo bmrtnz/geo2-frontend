@@ -20,6 +20,8 @@ import { FournisseurDetailsComponent } from './details/fournisseur-details.compo
 import { FournisseursRoutingModule } from './fournisseurs-routing.module';
 import { InfoPopupModule } from 'app/shared/components/info-popup/info-popup.component';
 import { FournisseursListComponent } from './list/fournisseurs-list.component';
+import { ModificationListModule } from 'app/shared/components/modification-list/modification-list.component';
+
 
 @NgModule({
   imports: [
@@ -48,6 +50,7 @@ import { FournisseursListComponent } from './list/fournisseurs-list.component';
     InfoPopupModule,
     FileManagerModule,
     CertificationDatePopupModule,
+    ModificationListModule,
   ],
   declarations: [
     FournisseursListComponent,
