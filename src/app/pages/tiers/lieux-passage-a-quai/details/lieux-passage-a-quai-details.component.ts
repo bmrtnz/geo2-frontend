@@ -132,7 +132,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   checkCode(params) {
     const code = params.value.toUpperCase();
-    const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource();
+    const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource_v2(['id']);
     lieuxpassageaquaiSource.filter(['id', '=', code]);
     return lieuxpassageaquaiSource.load().then(res => !(res.length));
   }

@@ -25,7 +25,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
     return this.watchGetOneQuery<Response>({ variables }, 2);
   }
 
-  getDataSource(columns?: Array<string>) {
+  getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }

@@ -627,6 +627,10 @@
         "dataField": "ordre.dateModification",
         "sortOrder": "desc",
         "visible": false
+      },
+      {
+        "dataField": "ordre.statut",
+        "visible": true
       }
     ]
   },

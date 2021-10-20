@@ -16,8 +16,8 @@ import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { tap } from 'rxjs/operators';
-import { Transporteur } from '../../../../shared/models';
-import { TransporteursService } from '../../../../shared/services/api/transporteurs.service';
+import { Transporteur } from 'app/shared/models';
+import { TransporteursService } from 'app/shared/services/api/transporteurs.service';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -139,13 +139,13 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
-    this.clientsRaisonSocial = this.clientsService.getDataSource();
+    this.clientsRaisonSocial = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
 
   }
 
   checkCode(params) {
     const code = params.value.toUpperCase();
-    const transporteursSource = this.transporteursService.getDataSource();
+    const transporteursSource = this.transporteursService.getDataSource_v2(['id']);
     transporteursSource.filter(['id', '=', code]);
     return transporteursSource.load().then(res => !(res.length));
   }
@@ -153,7 +153,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   checkCompteComptable(e) {
     const compteComptable = e.value;
     if (!compteComptable) return;
-    const transporteursSource = this.transporteursService.getDataSource();
+    const transporteursSource = this.transporteursService.getDataSource_v2(['id', 'compteComptable']);
     transporteursSource.filter(['compteComptable', '=', compteComptable]);
     transporteursSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
   }
@@ -174,7 +174,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     const code = e.value.toUpperCase();
     this.formGroup.get('id').setValue(code);
     if (code.length && this.createMode) {
-      this.formGroup.get('compteComptable').markAsDirty()
+      this.formGroup.get('compteComptable').markAsDirty();
       this.formGroup.get('compteComptable').setValue(code);
     }
   }

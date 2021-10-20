@@ -58,8 +58,9 @@ export class ContactsComponent implements OnInit, NestedPart {
       .map(value => value.toLowerCase())
       .shift();
 
-    this.contacts = this.contactsService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.contacts = this.contactsService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
     this.enableFilters();
+    this.dataGrid.dataSource = this.contacts;
     this.societeSource = this.societeService.getDataSource();
     this.fluxSource = this.fluxService.getDataSource();
     this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
@@ -80,8 +81,6 @@ export class ContactsComponent implements OnInit, NestedPart {
       'and',
       ['typeTiers', '=', this.typeTiers],
     ]);
-    this.contacts.reload();
-
   }
 
   onRowPrepared(e) {

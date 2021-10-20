@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedMain, NestedPart } from 'app/pages/nested/nested.component';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { ClientsService, LocalizationService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
@@ -10,9 +9,9 @@ import { GridRowStyleService } from 'app/shared/services/grid-row-style.service'
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { EntrepotsService } from '../../../../shared/services/api/entrepots.service';
+import { EntrepotsService } from 'app/shared/services/api/entrepots.service';
+import { entrepot } from 'assets/configurations/grids.json';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-entrepots-list',
@@ -24,12 +23,12 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
   entrepots: DataSource;
   clientID: string;
   clientName: string;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: GridColumn[];
   columnChooser = environment.columnChooser;
   contentReadyEvent = new EventEmitter<any>();
-  @ViewChild(DxDataGridComponent, {static:true})
+  @ViewChild(DxDataGridComponent, {static: true})
   dataGrid: DxDataGridComponent;
-  apiService: ApiService; 
+  apiService: ApiService;
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -53,22 +52,15 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
       });
     }
 
-    this.entrepots = this.entrepotsService.getDataSource();
+    this.detailedFields = entrepot.columns;
+    this.entrepots = this.entrepotsService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
     this.enableFilters();
-    this.detailedFields = this.entrepotsService.model.getDetailedFields()
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('tiers-entrepots-' + field.path.replace('.description', ''))).length);
-       }),
-    );
+    this.dataGrid.dataSource = this.entrepots;
   }
 
   enableFilters() {
     if (!this.clientID) return;
     this.entrepots.filter(['client.id', '=', this.clientID]);
-    this.entrepots.reload();
   }
 
   onRowDblClick(e) {
@@ -80,5 +72,5 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
   onRowPrepared(e) {
     this.gridRowStyleService.applyGridRowStyle(e);
   }
-  
+
 }

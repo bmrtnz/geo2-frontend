@@ -99,9 +99,9 @@ export class StockListComponent implements OnInit {
       .getFilterDatasource('article.cahierDesCharge.categorie.description');
 
     this.secteurs = this.secteursService.getDataSource();
-    this.fournisseurs = this.fournisseursService.getDataSource();
+    this.fournisseurs = this.fournisseursService.getDataSource_v2(['id', 'raisonSocial']);
     this.fournisseurs.filter(['valide', '=', true]);
-    this.clients = this.clientsService.getDataSource();
+    this.clients = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
 
   }
 

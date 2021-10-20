@@ -15,7 +15,11 @@
                     searchExpr="article.matierePremiere.espece.description"
                     [displayExpr]="capitalize"
                     valueExpr="key"
-                ></dx-tag-box>
+                >
+                <dxo-drop-down-options
+                  [width]="400">
+                </dxo-drop-down-options>
+                </dx-tag-box>
             </div>
         </div>
         <!-- variété -->
@@ -29,7 +33,11 @@
               searchExpr="matierePremiere.variete.description"
               [displayExpr]="capitalize"
               valueExpr="key"
-          ></dx-tag-box>
+              >
+                <dxo-drop-down-options
+                  [width]="400">
+                </dxo-drop-down-options>
+            </dx-tag-box>
           </div>
         </div>
         <!-- Mode Culture -->
@@ -43,7 +51,11 @@
                 searchExpr="matierePremiere.modeCulture.description"
                 [displayExpr]="capitalize"
                 valueExpr="key"
-            ></dx-tag-box>
+                >
+                <dxo-drop-down-options
+                  [width]="400">
+                </dxo-drop-down-options>
+            </dx-tag-box>
           </div>
         </div>
         <!-- Emballage -->
@@ -57,8 +69,12 @@
                 searchExpr="emballage.emballage.description"
                 [displayExpr]="capitalize"
                 valueExpr="key"
-            ></dx-tag-box>
-            </div>
+                >
+                <dxo-drop-down-options
+                  [width]="400">
+                </dxo-drop-down-options>
+            </dx-tag-box>
+          </div>
         </div>
         <!-- Origine -->
         <div class="dx-field field-large">
@@ -71,7 +87,11 @@
                 searchExpr="matierePremiere.origine.description"
                 [displayExpr]="capitalize"
                 valueExpr="key"
-            ></dx-tag-box>
+                >
+                <dxo-drop-down-options
+                  [width]="400">
+                </dxo-drop-down-options>
+            </dx-tag-box>
           </div>
        </div>
        <!-- Valide ? -->
@@ -82,7 +102,11 @@
               [items]="trueFalse"
               (valueChange)="onFieldValueChange($event,'valide')"
               [value]="trueFalse[0]"
-          ></dx-select-box>
+              >
+              <dxo-drop-down-options
+                [width]="100">
+              </dxo-drop-down-options>
+          </dx-select-box>
         </div>
       </div>
      </div>
@@ -133,12 +157,16 @@
       title="{{ 'columnChooser' | localize }}"
       allowSearch="true">
     </dxo-column-chooser>
+    <dxo-search-editor-options
+      [width]="500">
+    </dxo-search-editor-options>
 
     <dxi-column
       *ngFor="let field of detailedFields"
       [dataField]="field.dataField"
       [caption]="('articles-' + field.dataField.replace('.description', '').replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
+      [headerFilter]="{'width': 500}"
       trueText="Oui"
       falseText="Non"
       [dataType]="field.dataType"

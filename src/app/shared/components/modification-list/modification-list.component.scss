@@ -1,0 +1,22 @@
+.validation-standby-container {
+    &> div {
+        background-color:#FFE1E6;
+    }
+    .modif-date-container {
+        padding: 2px;
+        overflow: hidden;
+        .dx-button {
+            margin-top: 10px;
+        }
+        .modif-items-container {
+            width: calc(100% - 180px);
+            list-style-type: none;
+            margin: 4px 0;
+        }
+    }
+}
+ 
+ .upperButton {
+    margin-left:10px;
+    float:right;
+}

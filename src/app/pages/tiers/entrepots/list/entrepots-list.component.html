@@ -7,7 +7,6 @@
 
   <dx-data-grid
     class="dx-card wide-card"
-    [dataSource]="entrepots"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -54,15 +53,16 @@
     </dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('tiers-entrepots-' + field.path.replace('.description', '') | localize) || field.path"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('tiers-entrepots-' + field.dataField.replace('.description', '') | localize) || field.dataField"
       [visible]="false"
       trueText="Oui"
       falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
       [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [showInColumnChooser]="field.showInColumnChooser"
     ></dxi-column>
 
   </dx-data-grid>

@@ -19,7 +19,7 @@ export enum OrdreDatasourceOperation {
 export class OrdresService extends ApiService implements APIRead, APIPersist {
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
+  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
 
   public persistantVariables = { onlyColisDiff: false };
 

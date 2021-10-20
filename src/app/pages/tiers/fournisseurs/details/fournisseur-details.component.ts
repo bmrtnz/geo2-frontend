@@ -134,7 +134,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   ifcoChecked = false;
   IDTracaexists = false;
   CCexists = false;
-  
+
 
   constructor(
     private fb: FormBuilder,
@@ -217,7 +217,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.basesPaiement = this.basesPaiementService.getDataSource();
     this.naturesStation = this.naturesStationService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
-    this.fournisseursDeRattachement = this.fournisseursService.getDataSource();
+    this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(['id','raisonSocial']);
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
 
@@ -229,7 +229,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   checkCode(params) {
     const code = params.value.toUpperCase();
-    const fournisseursSource = this.fournisseursService.getDataSource();
+    const fournisseursSource = this.fournisseursService.getDataSource_v2(['code']);
     fournisseursSource.searchExpr('code');
     fournisseursSource.searchOperation('=');
     fournisseursSource.searchValue(code);
@@ -239,7 +239,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   checkCompteComptable(e) {
     const compteComptable = e.value;
     if (!compteComptable) return;
-    const fournisseursSource = this.fournisseursService.getDataSource();
+    const fournisseursSource = this.fournisseursService.getDataSource_v2(['compteComptable']);
     fournisseursSource.filter(['compteComptable', '=', compteComptable]);
     fournisseursSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
   }
@@ -382,11 +382,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     if (!idTracabilite || !this.createMode) return;
     // Code station = idTracabilite
     if (idTracabilite) {
-      this.formGroup.get('codeStation').markAsDirty()
+      this.formGroup.get('codeStation').markAsDirty();
       this.formGroup.get('codeStation').setValue(idTracabilite);
     }
     // Check if already exists
-    const fournisseursSource = this.fournisseursService.getDataSource();
+    const fournisseursSource = this.fournisseursService.getDataSource_v2(['idTracabilite']);
     fournisseursSource.searchExpr('idTracabilite');
     fournisseursSource.searchOperation('=');
     fournisseursSource.searchValue(idTracabilite);
@@ -394,12 +394,12 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   toUppercase(e) {
-    console.log(e)
+    console.log(e);
     // e.value = e.value.toUpperCase();
-  } 
+  }
 
   onCancel() {
-    
+
     if (!this.createMode) {
       this.formGroup.reset(this.fournisseur);
       this.readOnlyMode = true;

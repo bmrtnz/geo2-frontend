@@ -32,7 +32,6 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   varietes: DataSource;
   emballages: DataSource;
   modesCulture: DataSource;
-  clients: DataSource;
   trueFalse: string[];
 
   constructor(
@@ -54,21 +53,20 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         .getFilterDatasource('emballage.emballage.description');
       this.modesCulture = this.articlesService
         .getFilterDatasource('matierePremiere.modeCulture.description');
-      this.clients = this.clientsService.getDataSource();
       this.trueFalse = ['Tous', 'Oui', 'Non'];
     }
 
   ngOnInit() {
     this.detailedFields = article.columns;
-    this.articles = this.articlesService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.articles = this.articlesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
   onCellPrepared(e) {
     // Adding code (prefix) before "variété" and "emballage"
-    if (e.rowType == 'data') {
-      if (this.localizeService.localize('articles-matierePremiere-variete') == e.column.caption) {
+    if (e.rowType === 'data') {
+      if (this.localizeService.localize('articles-matierePremiere-variete') === e.column.caption) {
         e.cellElement.innerText =  e.data.matierePremiere?.variete.id + ' ' + e.cellElement.innerText;
-      } else if (this.localizeService.localize('articles-emballage-emballage') == e.column.caption) {
+      } else if (this.localizeService.localize('articles-emballage-emballage') === e.column.caption) {
         e.cellElement.innerText =  e.data.emballage?.emballage.id + ' ' + e.cellElement.innerText;
       }
     }
@@ -97,16 +95,16 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
 
     // Changing values for Oui/Non select-box
-    if (event.toString() == 'Oui') {event = ['true'];}
-    if (event.toString() == 'Non') {event = ['false'];}
-    if (event.toString() == 'Tous') {event = ['null'];}
+    if (event.toString() === 'Oui') {event = ['true'];}
+    if (event.toString() === 'Non') {event = ['false'];}
+    if (event.toString() === 'Tous') {event = ['null'];}
     this.tagFilters[dataField] = event;
 
     const filters = Object
       .entries(this.tagFilters)
       .filter(([, values]) => values.length)
       .map(([path, values]) => values
-        .map(value => [path, value == 'null' ? 'isnotnull' : '=', value])
+        .map(value => [path, value === 'null' ? 'isnotnull' : '=', value])
         .map(value => JSON.stringify(value))
         .join(`¤${JSON.stringify(['or'])}¤`)
         .split('¤')
@@ -118,7 +116,6 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       .map(v => JSON.parse(v));
 
     this.dataGrid.instance.filter(filters);
-      // console.log(filters, this.dataGrid.instance.getCombinedFilter())
 
   }
 

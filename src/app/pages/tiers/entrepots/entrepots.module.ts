@@ -14,6 +14,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
+import { ModificationListModule } from 'app/shared/components/modification-list/modification-list.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-
       DxNumberBoxModule,
       DxValidatorModule,
       EditingAlertModule,
+      ModificationListModule,
   ],
   declarations: [
     EntrepotsListComponent,

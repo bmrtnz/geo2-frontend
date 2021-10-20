@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Role, Societe, Type } from 'app/shared/models';
-import Ordre from 'app/shared/models/ordre.model';
+import { Ordre, Statut } from 'app/shared/models/ordre.model';
 import { ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
@@ -56,7 +56,7 @@ export class FormComponent implements OnInit, AfterViewInit {
 
   public fragments = Fragments;
   @Output() public ordre: Ordre;
-  public status = 'Facturé';
+  public status: string;
   public formGroup = this.formBuilder.group({
     id: [''],
     client: [''],
@@ -147,8 +147,8 @@ export class FormComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initializeForm();
 
-    this.clientsDS = this.clientsService.getDataSource();
-    this.entrepotDS = this.entrepotsService.getDataSource();
+    this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
+    this.entrepotDS = this.entrepotsService.getDataSource_v2(['id','raisonSocial']);
     this.deviseDS = this.devisesService.getDataSource();
     this.incotermsDS = this.incotermsService.getDataSource();
     this.typeTransportDS = this.typesCamionService.getDataSource();
@@ -181,7 +181,7 @@ export class FormComponent implements OnInit, AfterViewInit {
       ['type', '=', Type.PORT_D_ARRIVEE]
     ]);
 
-    this.transporteursDS = this.transporteursService.getDataSource();
+    this.transporteursDS = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
     this.litigesDS = this.litigesService.getDataSource();
   }
 
@@ -286,16 +286,6 @@ export class FormComponent implements OnInit, AfterViewInit {
     } else {
       this.findComplRegulLinkedOrders(refClt);
     }
-
-    // this.linkedOrders.push({ ordre: {id: '1', numero: '100001'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '2', numero: '100002'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '3', numero: '100003'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '4', numero: '100004'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '5', numero: '100005'}, criteria: 'compl.' });
-    // this.linkedOrders.push({ ordre: {id: '6', numero: '100006'}, criteria: 'régul.' });
-    // this.linkedOrders.push({ ordre: {id: '4', numero: '100004'}, criteria: 'ref. clt' });
-    // this.linkedOrders.push({ ordre: {id: '5', numero: '100005'}, criteria: 'compl.' });
-    // this.linkedOrders.push({ ordre: {id: '6', numero: '100006'}, criteria: 'régul.' });
   }
 
   findComplRegulLinkedOrders(refClt) {
@@ -348,7 +338,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     .subscribe( ordre => {
       this.ordre = ordre;
       this.fetchFullOrderNumber();
-      this.status = this.ordre.factureEDI ? this.status + ' EDI' : this.status;
+      this.status = Statut[this.ordre.statut] + (this.ordre.factureEDI ? ' EDI' : '');
       this.canDuplicate = !!this?.ordre?.id;
       this.formGroup.reset(ordre);
       this.addLinkedOrders();

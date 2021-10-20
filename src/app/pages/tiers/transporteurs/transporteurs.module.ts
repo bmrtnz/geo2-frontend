@@ -16,6 +16,7 @@ import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { InfoPopupModule } from 'app/shared/components/info-popup/info-popup.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { ModificationListModule } from 'app/shared/components/modification-list/modification-list.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { FileManagerModule } from 'app/shared/components/file-manager/file-manag
     DxValidatorModule,
     EditingAlertModule,
     InfoPopupModule,
-    FileManagerModule
+    FileManagerModule,
+    ModificationListModule,
   ],
   declarations: [
     TransporteursListComponent,

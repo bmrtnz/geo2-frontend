@@ -34,7 +34,7 @@ export class MruOrdresService extends ApiService implements APIRead {
       });
   }
 
-  getDataSource(columns?: Array<string>) {
+  getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       store: this.createCustomStore({
         key: ['utilisateur', 'ordre'],

@@ -43,8 +43,9 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
 
     // Filtrage selon société sélectionnée
     this.detailedFields = client.columns;
-    this.clients = this.clientsService.getDataSource(this.detailedFields.map(property => property.dataField));
+    this.clients = this.clientsService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
     this.enableFilters();
+    this.dataGrid.dataSource = this.clients;
   }
 
   enableFilters() {

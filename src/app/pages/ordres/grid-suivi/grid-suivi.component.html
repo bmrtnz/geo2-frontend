@@ -1,5 +1,4 @@
 <dx-data-grid class="dx-card wide-card"
-    [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -12,7 +11,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onRowDblClick)="tabContext.openOrdre($event.data.ordre.numero)"
+    (onRowDblClick)="tabContext.openOrdre($event.data.numero)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Résultat(s) de recherche', $event, gridConfiguratorService.Grid.Ordre, enableFilters.bind(this))"
   >
 
