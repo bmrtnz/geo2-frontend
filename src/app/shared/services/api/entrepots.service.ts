@@ -25,7 +25,7 @@ export class EntrepotsService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getDataSource() {
+  getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -39,7 +39,7 @@ export class EntrepotsService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = await this.buildGetAll();
+          const query = await this.buildGetAll_v2(columns);
           type Response = { allEntrepot: RelayPage<Entrepot> };
           const variables = this.mapLoadOptionsToVariables(options);
 
@@ -49,7 +49,7 @@ export class EntrepotsService extends ApiService implements APIRead {
           });
         }),
         byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne(1);
+          const query = await this.buildGetOne_v2(columns);
           type Response = { entrepot: Entrepot };
           const variables = { id: key };
           this.listenQuery<Response>(query, { variables }, res => {
