@@ -61,7 +61,6 @@ export class RootComponent implements OnInit, OnDestroy {
       tap( selectID => this.selectTab(selectID)), // Initial selection
       switchMapTo(this.router.events), // Switch to NavigationEnd events to handle rendering from routing
       filter<NavigationEnd>( event => event instanceof NavigationEnd),
-      filter( event => event.url.startsWith('/ordres')),
       concatMapTo(this.handleRouting()),
       takeUntil(this.destroy),
     )
