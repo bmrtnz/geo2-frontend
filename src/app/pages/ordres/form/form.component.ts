@@ -148,7 +148,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     this.initializeForm();
 
     this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
-    this.entrepotDS = this.entrepotsService.getDataSource();
+    this.entrepotDS = this.entrepotsService.getDataSource_v2(['id','raisonSocial']);
     this.deviseDS = this.devisesService.getDataSource();
     this.incotermsDS = this.incotermsService.getDataSource();
     this.typeTransportDS = this.typesCamionService.getDataSource();

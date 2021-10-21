@@ -16,10 +16,9 @@ import { TypesCamionService } from 'app/shared/services/api/types-camion.service
 import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { from } from 'rxjs';
-import { mergeAll, tap } from 'rxjs/operators';
-import { Entrepot, Role } from '../../../../shared/models';
-import { ClientsService, EntrepotsService } from '../../../../shared/services';
+import { tap } from 'rxjs/operators';
+import { Entrepot, Role } from 'app/shared/models';
+import { ClientsService, EntrepotsService } from 'app/shared/services';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -154,7 +153,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                 result => {
                   // On reprend le code client (si pas existant) pour le code entrepôt
                   const code = result.data.client.code.toUpperCase();
-                  const entrepotsSource = this.entrepotsService.getDataSource();
+                  const entrepotsSource = this.entrepotsService.getDataSource_v2(['code']);
                   entrepotsSource.load().then(res => {
                     if (!res.length) {
                       this.entrepot.code = code;
@@ -194,7 +193,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   checkCode(params) {
     const code = params.value.toUpperCase();
-    const entrepotsSource = this.entrepotsService.getDataSource();
+    const entrepotsSource = this.entrepotsService.getDataSource_v2(['code']);
     entrepotsSource.filter(['code', '=', code]);
     return entrepotsSource.load().then(res => !(res.length));
   }

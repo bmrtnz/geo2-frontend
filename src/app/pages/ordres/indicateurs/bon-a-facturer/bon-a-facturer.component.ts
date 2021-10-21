@@ -87,7 +87,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     this.clients = clientsService.getDataSource_v2(['id', 'raisonSocial']);
     this.commercial = personnesService.getDataSource();
     this.assistante = personnesService.getDataSource();
-    this.entrepot = entrepotsService.getDataSource();
+    this.entrepot = entrepotsService.getDataSource_v2(['id', 'raisonSocial']);
     this.periodes = ['Hier', 'Aujourd\'hui', 'Demain', 'Semaine dernière', 'Semaine en cours', 'Semaine prochaine',
      '7 prochains jours', '30 prochains jours', 'Mois à cheval', 'Depuis 30 jours', 'Depuis 1 mois',
      'Depuis 2 mois', 'Depuis 3 mois', 'Depuis 12 mois', 'Mois dernier', 'Mois en cours', 'Trimestre dernier',
@@ -108,7 +108,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       this.secteurSB.value = {
         id : this.authService.currentUser.secteurCommercial.id,
         description : this.authService.currentUser.secteurCommercial.description
-      }
+      };
     }
 
   }
@@ -145,7 +145,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       'and',
       ['secteur.id', '=', this.secteurSB.value.id],
     ]);
-    this.entrepot = this.entrepotsService.getDataSource();
+    this.entrepot = this.entrepotsService.getDataSource_v2(['id', 'raisonSocial']);
     if (this.clientSB.value) this.entrepot.filter(['client.id', '=', this.clientSB.value.id]);
 
     // Retrieves the initial filter while removing date criteria
@@ -157,8 +157,8 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
       ['dateLivraisonPrevue', '>=', this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value)],
       'and',
       ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
-    )
-    if (this.assistanteSB.value) filters.push('and', ['assistante.id', '=', this.assistanteSB.value.id])
+    );
+    if (this.assistanteSB.value) filters.push('and', ['assistante.id', '=', this.assistanteSB.value.id]);
     if (this.commercialSB.value) filters.push('and', ['commercial.id', '=', this.commercialSB.value.id]);
     if (this.clientSB.value)     filters.push('and', ['client.id', '=', this.clientSB.value.id]);
     if (this.entrepotSB.value)   filters.push('and', ['entrepot.id', '=', this.entrepotSB.value.id]);
@@ -266,13 +266,13 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
         fin = temp.setDate(temp.getDate() + 6);
         deb = this.datePipe.transform(deb.valueOf(), 'yyyy-MM-dd');
         fin = this.datePipe.transform(fin.valueOf(), 'yyyy-MM-dd');
-        ;break;
+        break;
       }
       case 'Même mois année dernière':
       temp = (year - 1) + '-' + month; deb = temp + '-01'; fin = temp + '-' + this.daysInMonth(year-1, month); break;
     }
 
-    if (!fin) {fin = deb;}
+    if (!fin) {fin = deb; }
 
     this.dateStartSB.value = deb;
     this.dateEndSB.value = fin;
