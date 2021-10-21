@@ -1,6 +1,6 @@
 import {Field, Model, ModelName} from './model';
 import {Utilisateur} from './utilisateur.model';
-import {Modification} from './';
+import {Modification} from './modification.model';
 
 @ModelName('ModificationCorps')
 export class ModificationCorps extends Model {
