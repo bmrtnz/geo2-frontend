@@ -3,17 +3,17 @@ import Secteur from './secteur.model';
 
 @ModelName('Utilisateur')
 export class Utilisateur extends Model {
-  @Field({ asKey: true }) public nomUtilisateur: string;
-  @Field() public nomInterne: string;
-  @Field() public accessGeoTiers: boolean;
-  @Field() public accessGeoProduct: boolean;
-  @Field() public accessGeoOrdre: boolean;
-  @Field() public perimetre: string;
-  @Field() public limitationSecteur: boolean;
+  @Field({ asKey: true }) public nomUtilisateur?: string;
+  @Field() public nomInterne?: string;
+  @Field() public accessGeoTiers?: boolean;
+  @Field() public accessGeoProduct?: boolean;
+  @Field() public accessGeoOrdre?: boolean;
+  @Field() public perimetre?: string;
+  @Field() public limitationSecteur?: boolean;
   @Field({ model: import('./secteur.model') }) public secteurCommercial?: Secteur;
-  @Field() public configTuilesOrdres: any;
-  @Field() public configTabsOrdres: { [key: string]: string };
-  @Field() public adminClient: boolean;
+  @Field() public configTuilesOrdres?: any;
+  @Field() public configTabsOrdres?: { [key: string]: string };
+  @Field() public adminClient?: boolean;
 }
 
 export default Utilisateur;

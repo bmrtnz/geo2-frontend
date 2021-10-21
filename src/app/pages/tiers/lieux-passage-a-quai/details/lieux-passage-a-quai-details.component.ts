@@ -66,6 +66,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
+  modificationBox = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -128,6 +130,9 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
+
+     // Modification box
+     this.modificationBox = true;
   }
 
   checkCode(params) {

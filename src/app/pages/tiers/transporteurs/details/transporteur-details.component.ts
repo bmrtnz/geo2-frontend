@@ -74,6 +74,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   createMode = false;
   preSaisie: string;
   CCexists = false;
+  modificationBox = false;
 
   constructor(
     private fb: FormBuilder,
@@ -140,6 +141,9 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
     this.clientsRaisonSocial = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
+
+    // Modification box
+    this.modificationBox = true;
 
   }
 

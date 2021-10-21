@@ -134,6 +134,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   ifcoChecked = false;
   IDTracaexists = false;
   CCexists = false;
+  modificationBox = false;
+
 
 
   constructor(
@@ -220,6 +222,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(['id','raisonSocial']);
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
+
+    // Modification box
+    this.modificationBox = true;
 
   }
 

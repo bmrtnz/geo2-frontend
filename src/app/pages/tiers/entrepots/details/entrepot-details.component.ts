@@ -88,6 +88,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
+  modificationBox = false;
 
   constructor(
     private fb: FormBuilder,
@@ -166,6 +167,9 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           this.contentReadyEvent.emit();
         }
       });
+
+    // Modification box
+    this.modificationBox = true;
 
     this.commercial = this.personnesService.getDataSource();
     this.commercial.filter([

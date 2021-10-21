@@ -1,12 +1,14 @@
 import { Apollo } from 'apollo-angular';
 import { OperationVariables } from '@apollo/client/core';
 import { Injectable } from '@angular/core';
-import { Modification } from '../../models';
+import { Modification, ModificationCorps } from '../../models';
 import { ApiService, APIRead, RelayPage } from '../api.service';
 
 
 import { LoadOptions } from 'devextreme/data/load_options';
 import DataSource from 'devextreme/data/data_source';
+import { AuthService } from '../auth.service';
+import notify from 'devextreme/ui/notify';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +16,11 @@ import DataSource from 'devextreme/data/data_source';
 export class ModificationsService extends ApiService implements APIRead {
 
   fieldsFilter = /.*\.(?:id|entite|entiteID|dateModification|initiateur|corps|statut)$/i;
+  notSet = '(non renseigné)';
 
   constructor(
     apollo: Apollo,
+    authService: AuthService,
   ) {
     super(apollo, Modification);
   }
@@ -54,5 +58,42 @@ export class ModificationsService extends ApiService implements APIRead {
   save(variables: OperationVariables) {
     return this.watchSaveQuery({ variables });
   }
+
+  // saveModifications(modelName, entityObject, ctrls, traductionKey) {
+
+  //   const listeModifications: Partial<ModificationCorps>[] =
+  //     Object.entries(ctrls).filter( ([ , control]) => control.dirty ).map( ([key, control]) => {
+  //       return {
+  //         affichageActuel: this.getValue(entityObject[key]),
+  //         affichageDemande: this.getValue(control.value),
+  //         chemin: modelName + '.' + key,
+  //         traductionKey: traductionKey + key,
+  //         valeurActuelle: entityObject[key] ? entityObject[key] : this.notSet,
+  //         valeurDemandee: control.value
+  //       };
+  //     }
+  //   );
+
+  //   const modification: Partial<Modification> = {
+  //     entite: modelName,
+  //     entiteID: entityObject.id,
+  //     initiateur: {nomUtilisateur : this.authService.currentUser.nomUtilisateur},
+  //     corps: listeModifications as ModificationCorps[]
+  //   };
+
+  //   console.log('listeModifications :' , listeModifications);
+
+  //   this.save( {modification} )
+  //   .subscribe({
+  //     next: (e) => {
+  //       notify('Demande de modification enregistrée', 'success', 3000);
+  //       this.readOnlyMode = true;
+  //       this.editing = false;
+  //       this.router.navigate([`/tiers/clients/${client.id}`]);
+  //     },
+  //     error: () => notify('Erreur enregistrement demande de modification', 'error', 3000),
+  //   });
+
+  // }
 
 }

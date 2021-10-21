@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, Input } from '@angular/core';
 import { DxButtonModule, DxPopupModule, DxTemplateModule, DxTextBoxModule, DxBoxModule } from 'devextreme-angular';
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'app/shared/services';
@@ -11,6 +11,9 @@ import { SharedModule } from 'app/shared/shared.module';
   styleUrls: ['./modification-list.component.scss']
 })
 export class ModificationListComponent {
+
+  @Input() entite: string;
+  @Input() entiteID: string;
 
   constructor(public authService: AuthService) { }
 
