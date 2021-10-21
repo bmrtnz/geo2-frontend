@@ -88,7 +88,7 @@ export type LocateVariables = {
 
 export interface APIRead {
   getAll?(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
-  getOne?(id: string, columns?: Array<string>):
+  getOne?(id: string | number, columns?: Array<string>):
     Observable<ApolloQueryResult<any>> |
     Promise<Observable<ApolloQueryResult<any>>>;
 

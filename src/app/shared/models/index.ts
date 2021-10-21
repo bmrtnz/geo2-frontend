@@ -35,6 +35,8 @@ export * from './calibre-marquage.model';
 export * from './variete.model';
 export * from './mode-culture.model';
 export * from './groupe-emballage.model';
+export * from './modification.model';
+export * from './modification-corps.model';
 
 export * from './alveole.model';
 export * from './article-emballage.model';

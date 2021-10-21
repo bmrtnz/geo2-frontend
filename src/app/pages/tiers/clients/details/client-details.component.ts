@@ -31,8 +31,9 @@ import { environment } from 'environments/environment';
 import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { reduceEachTrailingCommentRange } from 'typescript';
-import { Certification, CertificationClient, Client, Role } from '../../../../shared/models';
+import { Certification, CertificationClient, Client, Role, Modification, ModificationCorps } from '../../../../shared/models';
 import { AuthService, ClientsService } from '../../../../shared/services';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 
 @Component({
   selector: 'app-client-details',
@@ -166,6 +167,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   CCexists = false;
   ifcoChecked = false;
   couvTemp = false;
+  initialFormState: any;
 
   constructor(
     private fb: FormBuilder,
@@ -174,6 +176,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     private devisesService: DevisesService,
     private incotermsService: IncotermsService,
     private paysService: PaysService,
+    private modificationsService: ModificationsService,
     private secteursService: SecteursService,
     private personnesService: PersonnesService,
     private regimesTvaService: RegimesTvaService,
@@ -225,8 +228,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             .subscribe(res => {
               this.client = res.data.client;
               this.freeUEVAT(this.client.secteur, this.client.pays);
+              this.formGroup.get('tvaCee').markAsUntouched(); // Changing 'required' property marks as touched
               const certifications = this.mapCertificationsForDisplay(this.client.certifications);
               this.formGroup.patchValue({ ...this.client, certifications });
+              this.initialFormState = this.formGroup.value; // Saving initial formGroup
               this.preSaisie = this.client.preSaisie === true ? 'preSaisie' : '';
             });
         } else {
@@ -393,42 +398,74 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         client.preSaisie = true;
       }
 
-      const certifications = this.mapCertificationsForSave(client.certifications);
+      // Non-admin user : do not save and record modifications
+      // if (!this.authService.currentUser.adminClient) {
+      if (this.authService.currentUser.adminClient) {
+        const listeModifications: Partial<ModificationCorps>[] =
+          Object.entries(this.formGroup.controls).filter( ([ , control]) => control.touched ).map( ([key, control]) => {
+            console.log(control)
+            return {
+              affichageActuel: '11',
+              affichageDemande: '24',
+              chemin: key,
+              traductionKey: 'tiers-clients-' + key,
+              valeurActuelle: this.client[key],
+              valeurDemandee: control.value
+            };
+          }
+        );
 
-      (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
-        this.validatePopup.present(
-          HistoryType.CLIENT,
-          { client: { id: client.id }, valide: client.valide },
-        ) : of(undefined))
-        .pipe(
-          switchMap(_ => this.clientsService.save({
-            client: {
-              ...client,
-              certifications,
-            }
-          })),
-        )
-        .subscribe({
-          next: (e) => {
-            notify('Sauvegardé', 'success', 3000);
-            this.refreshGrid.emit();
-            if (!this.createMode) {
-              this.client = {
-                ...this.client,
-                ...this.formGroup.getRawValue(),
-              };
-              this.readOnlyMode = true;
-            } else {
-              this.editing = false;
-              this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
-            }
-            this.client.historique = e.data.saveClient.historique;
-            this.client.typeTiers = e.data.saveClient.typeTiers;
-            this.client.certifications = e.data.saveClient.certifications;
-            this.formGroup.markAsPristine();
-          },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
+        console.log('listeModifications :' , listeModifications);
+        // this.modificationsService.save( {listeModifications} )
+        // .subscribe({
+        //   next: (e) => {
+        //     notify('Demande de modification enregistrée', 'success', 3000);
+        //     this.readOnlyMode = true;
+        //     this.editing = false;
+        //     this.router.navigate([`/tiers/clients/${client.id}`]);
+        //   },
+        //   error: () => notify('Erreur enregistrement demande de modification', 'error', 3000),
+        // });
+
+      } else {
+
+        const certifications = this.mapCertificationsForSave(client.certifications);
+
+        (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
+          this.validatePopup.present(
+            HistoryType.CLIENT,
+            { client: { id: client.id }, valide: client.valide },
+          ) : of(undefined))
+          .pipe(
+            switchMap(_ => this.clientsService.save({
+              client: {
+                ...client,
+                certifications,
+              }
+            })),
+          )
+          .subscribe({
+            next: (e) => {
+              notify('Sauvegardé', 'success', 3000);
+              this.refreshGrid.emit();
+              if (!this.createMode) {
+                this.client = {
+                  ...this.client,
+                  ...this.formGroup.getRawValue(),
+                };
+                this.readOnlyMode = true;
+              } else {
+                this.editing = false;
+                this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+              }
+              this.client.historique = e.data.saveClient.historique;
+              this.client.typeTiers = e.data.saveClient.typeTiers;
+              this.client.certifications = e.data.saveClient.certifications;
+              this.formGroup.markAsPristine();
+            },
+            error: () => notify('Echec de la sauvegarde', 'error', 3000),
+          });
+      }
     }
   }
 
@@ -470,7 +507,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     // ID TVA CEE : doit être obligatoire pour tous les secteurs sauf MAR / AFA / GB et DIV 
     // (+ obligatoire si pays = Irlande) - Léa 10/09/2021
     const sectors = ['MAR', 'AFA', 'GB', 'DIV'];
-    this.tvaCeeFree = (sectors.includes(sector.id) && pays.id != 'IE');
+    this.tvaCeeFree = (sectors.includes(sector.id) && pays.id !== 'IE');
   }
 
   onCourtierChange(e) {
@@ -484,7 +521,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   entrepotsBtnClick() {
-    console.log(this.client.id)
     this.router.navigateByUrl(`/nested/n/tiers/clients/${this.client.id}/entrepots/list`);
   }
 
