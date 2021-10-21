@@ -5,7 +5,7 @@ import { DxTabPanelComponent } from 'devextreme-angular';
 import { on } from 'devextreme/events';
 import { dxTabPanelItem } from 'devextreme/ui/tab_panel';
 import { concat, defer, EMPTY, iif, Observable, of, Subject } from 'rxjs';
-import { concatMapTo, filter, first, last, map, share, startWith, switchMap, switchMapTo, take, takeUntil, tap } from 'rxjs/operators';
+import { concatMapTo, debounceTime, distinctUntilChanged, filter, first, last, map, share, startWith, switchMap, switchMapTo, take, takeUntil, tap } from 'rxjs/operators';
 
 const TAB_HOME_ID = 'home';
 const TAB_LOAD_ID = 'loading';
@@ -62,6 +62,7 @@ export class RootComponent implements OnInit, OnDestroy {
       switchMapTo(this.router.events), // Switch to NavigationEnd events to handle rendering from routing
       filter<NavigationEnd>( event => event instanceof NavigationEnd),
       concatMapTo(this.handleRouting()),
+      debounceTime(10),
       takeUntil(this.destroy),
     )
     .subscribe((selectID: string) => {
@@ -124,6 +125,7 @@ export class RootComponent implements OnInit, OnDestroy {
       switchMapTo(this.route.queryParamMap.pipe(first())),
       switchMap( queries => defer(() => this.handleQueries(queries))),
       switchMapTo(this.route.paramMap.pipe(first())),
+      distinctUntilChanged(),
       switchMap( params => of(this.handleParams(params))),
     );
   }
