@@ -70,7 +70,7 @@ export class ModificationsService extends ApiService implements APIRead {
     }
   }
 
-  saveModifications(modelName, entityObject, ctrlOpts: AbstractControlOptions, traductionKey) {
+  saveModifications(modelName, entityObject, ctrlOpts: AbstractControlOptions, traductionKey, tiersPathName) {
 
     const listeModifications: Partial<ModificationCorps>[] =
       Object.entries(ctrlOpts).filter( ([ , control]) => control.dirty ).map( ([key, control]) => {
@@ -98,9 +98,7 @@ export class ModificationsService extends ApiService implements APIRead {
     .subscribe({
       next: (e) => {
         notify('Demande de modification enregistrée', 'success', 3000);
-        // this.readOnlyMode = true;
-        // this.editing = false;
-        this.router.navigate([`/tiers/clients/${entityObject.id}`]);
+        this.router.navigate([`/tiers/${tiersPathName}/${entityObject.id}`]);
       },
       error: () => notify('Erreur enregistrement demande de modification', 'error', 3000),
     });

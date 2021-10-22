@@ -172,7 +172,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         this.readOnlyMode = true;
         this.editing = false;
         this.modificationsService
-        .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup.controls, 'tiers-lieuxpassageaquai-');
+        .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup.controls, 'tiers-lieuxpassageaquai-', 'lieux-passage-a-quai');
       } else {
 
         this.lieupassageaquaiService.save({ lieuPassageAQuai })

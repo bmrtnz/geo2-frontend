@@ -413,7 +413,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         this.readOnlyMode = true;
         this.editing = false;
         this.modificationsService
-        .saveModifications(Client.name, this.client, this.formGroup.controls, 'tiers-clients-');
+        .saveModifications(Client.name, this.client, this.formGroup.controls, 'tiers-clients-', 'clients');
 
       } else {
 

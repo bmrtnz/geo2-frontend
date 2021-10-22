@@ -222,7 +222,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       this.readOnlyMode = true;
       this.editing = false;
       this.modificationsService
-      .saveModifications(Transporteur.name, this.transporteur, this.formGroup.controls, 'tiers-transporteurs-');
+      .saveModifications(Transporteur.name, this.transporteur, this.formGroup.controls, 'tiers-transporteurs-', 'transporteurs');
       return;
     }
 

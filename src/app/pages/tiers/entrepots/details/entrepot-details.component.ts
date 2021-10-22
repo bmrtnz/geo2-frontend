@@ -228,7 +228,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.readOnlyMode = true;
         this.editing = false;
         this.modificationsService
-        .saveModifications(Entrepot.name, this.entrepot, this.formGroup.controls, 'tiers-entrepots-');
+        .saveModifications(Entrepot.name, this.entrepot, this.formGroup.controls, 'tiers-entrepots-', 'entrepots');
       } else {
 
         this.entrepotsService.save({ entrepot })

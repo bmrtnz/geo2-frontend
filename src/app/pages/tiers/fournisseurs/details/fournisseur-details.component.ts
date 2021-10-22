@@ -317,7 +317,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       this.readOnlyMode = true;
       this.editing = false;
       this.modificationsService
-      .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup.controls, 'tiers-fournisseurs-');
+      .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup.controls, 'tiers-fournisseurs-', 'fournisseurs');
       return;
     }
 
