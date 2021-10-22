@@ -51,8 +51,8 @@ export class ModificationsService extends ApiService implements APIRead {
     });
   }
 
-  save(variables: OperationVariables) {
-    return this.watchSaveQuery({ variables });
+  save(variables: OperationVariables, depth = 2) {
+    return this.watchSaveQuery({ variables }, depth);
   }
 
 }
