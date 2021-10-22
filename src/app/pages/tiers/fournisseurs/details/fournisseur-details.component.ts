@@ -31,7 +31,7 @@ import { from, of } from 'rxjs';
 import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { Certification, CertificationFournisseur, Fournisseur } from '../../../../shared/models';
 import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
-import { ModifiedFieldsService } from 'app/shared/services/modified-fields.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -134,14 +134,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   ifcoChecked = false;
   IDTracaexists = false;
   CCexists = false;
-  modificationBox = false;
-
-
 
   constructor(
     private fb: FormBuilder,
     private fournisseursService: FournisseursService,
-    private modifiedFieldsService: ModifiedFieldsService,
     private bureauxAchatService: BureauxAchatService,
     private conditionsVenteService: ConditionsVenteService,
     private identifiantsFournisseurService: IdentifiantsFournisseurService,
@@ -152,6 +148,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     private naturesStationService: NaturesStationService,
     private basesPaiementService: BasesPaiementService,
     private certificationsService: CertificationsService,
+    private modificationsService: ModificationsService,
     private groupesFournisseurService: GroupesFournisseurService,
     private paysService: PaysService,
     private router: Router,
@@ -223,9 +220,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
 
-    // Modification box
-    this.modificationBox = true;
-
   }
 
   F(params) {
@@ -294,7 +288,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         this.infoComponent.visible = true;
         this.infoComponent.doNavigate.subscribe(res => {
           if (res) {
-            // fournisseur.id = this.formGroup.get('id').value.toUpperCase();
             fournisseur.code = this.formGroup.get('code').value.toUpperCase();
             // Ici on fait rien pour le moment l'id est deja dans l'object fournisseur
             // Avoir pour les valeur par defaut (qui sont not null dans la base)
@@ -319,19 +312,19 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   saveData(fournisseur) {
 
-    const userNotAdmin = !this.authService.currentUser.adminClient;
-    // Sauvegarde des champs modifiés si utilisateur non-admin
-    // En attente d'infos de Stéphane/Léa cf mail Alex 22-09-2021
-    if (userNotAdmin) {
-      this.modifiedFieldsService.saveModifiedFields(fournisseur, 'id');
-      fournisseur.preSaisie = true;
-      fournisseur.valide = false;
+    // Non-admin user : do not save, just record modifications
+    if (!this.authService.currentUser.adminClient && !this.createMode) {
+      this.readOnlyMode = true;
+      this.editing = false;
+      this.modificationsService
+      .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup.controls, 'tiers-fournisseurs-');
+      return;
     }
 
     /* tslint:disable-next-line max-line-length */
     const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
 
-    (userNotAdmin || (fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode) ?
+    ((fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode) ?
       this.validatePopup.present(
         HistoryType.FOURNISSEUR,
         { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },

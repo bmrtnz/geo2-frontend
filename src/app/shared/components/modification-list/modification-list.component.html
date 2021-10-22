@@ -1,39 +1,26 @@
-<dx-box direction="row">
+<dx-box direction="row" *ngIf="modifs?.length">
     <dxi-item [ratio]="1" class="validation-standby-container">
         <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-        <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-modifAValider' | localize }}</span>
-        <div class="modif-date-container">
-            <dx-text-box 
-            value="Modification de Léa le 19/10/2021"
-            readOnly="true"
-            ></dx-text-box>
-            <dx-button class="upperButton"
-                type="default"
-                [visible]="authService.currentUser.adminClient"
-                text="{{ 'btn-hide' | localize }}"
-                (onClick)="clearModifications()"
-            ></dx-button>
-            <ul class="modif-items-container">
-                <li class="modif-item">Langue : FRA (France) => AR (Argentine)</li>
-                <li class="modif-item">Adresse (1) : PETERBURI TEE 88A => PETERBURI TEE 88B</li>
-                <li class="modif-item">Adresse (2) : POHJA PST 17 => POHJA PST 170</li>
-            </ul>
-        </div>
-        <div class="modif-date-container">
-            <dx-text-box 
-            value="Modification de Marc le 17/10/2021"
-            readOnly="true"
-            ></dx-text-box>
-            <dx-button class="upperButton"
-                type="default"
-                [visible]="authService.currentUser.adminClient"
-                text="{{ 'btn-hide' | localize }}"
-                (onClick)="clearModifications()"
-            ></dx-button>
-            <ul class="modif-items-container">
-                <li class="modif-item">Groupe client : (Non renseigné) => ALDI (ALDI Groupe)</li>
-            </ul>
-        </div>
+            <span class="dx-form-group-caption">{{ 'tiers-clients-details-groupe-modifAValider' | localize }}</span>
+            <div *ngFor="let modif of modifs">
+                <div class="modif-date-container">
+                    <dx-text-box 
+                    value="Modification de {{ modif.initiateur.nomUtilisateur }} du {{ modif.dateModification }}"
+                    readOnly="true"
+                    ></dx-text-box>
+                    <dx-button class="upperButton"
+                        type="default"
+                        [visible]="authService.currentUser.adminClient"
+                        text="{{ 'btn-hide' | localize }}"
+                        (onClick)="clearModifications(modif.id)"
+                    ></dx-button>
+                    <ul class="modif-items-container">
+                        <li class="modif-item">Langue : FRA (France) => AR (Argentine)</li>
+                        <li class="modif-item">Adresse (1) : PETERBURI TEE 88A => PETERBURI TEE 88B</li>
+                        <li class="modif-item">Adresse (2) : POHJA PST 17 => POHJA PST 170</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </dxi-item>
 </dx-box>

@@ -160,6 +160,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   defaultVisible: boolean;
   conditionsVente: DataSource;
   certifications: DataSource;
+  modifications: DataSource;
   isReadOnlyMode = true;
   createMode = false;
   cofaceBlocked = false;
@@ -169,7 +170,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   couvTemp = false;
   initialFormState: any;
   notSet = '(Non renseigné)';
-  modificationBox = false;
 
   constructor(
     private fb: FormBuilder,
@@ -226,6 +226,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         this.createMode = url[url.length - 1].path === 'create';
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
+
           this.clientsService.getOne(params.id)
             .subscribe(res => {
               this.client = res.data.client;
@@ -265,9 +266,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         }
         this.contentReadyEvent.emit();
       });
-
-    // Modification box
-    this.modificationBox = true;
 
     // Load different fields
     this.secteurs = this.secteursService.getDataSource();
@@ -410,42 +408,12 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         client.preSaisie = true;
       }
 
-      // Non-admin user : do not save and record modifications
-      // if (!this.authService.currentUser.adminClient) {
-      if (this.authService.currentUser.adminClient) {
-        const listeModifications: Partial<ModificationCorps>[] =
-          Object.entries(this.formGroup.controls).filter( ([ , control]) => control.dirty ).map( ([key, control]) => {
-            return {
-              affichageActuel: this.getValue(this.client[key]),
-              affichageDemande: this.getValue(control.value),
-              chemin: Client.name + '.' + key,
-              traductionKey: 'tiers-clients-' + key,
-              // tslint:disable-next-line: max-line-length
-              valeurActuelle: typeof this.client[key] === 'object' ? this.client[key].id : this.client[key] ? this.client[key] : this.notSet,
-              valeurDemandee: typeof control.value === 'object' ? control.value.id : control.value
-            };
-          }
-        );
-
-        const modification: Partial<Modification> = {
-          entite: Client.name,
-          entiteID: this.client.id,
-          initiateur: {nomUtilisateur : this.authService.currentUser.nomUtilisateur},
-          corps: listeModifications as ModificationCorps[]
-        };
-
-        console.log('listeModifications :' , listeModifications);
-
-        this.modificationsService.save( {modification} )
-        .subscribe({
-          next: (e) => {
-            notify('Demande de modification enregistrée', 'success', 3000);
-            this.readOnlyMode = true;
-            this.editing = false;
-            this.router.navigate([`/tiers/clients/${client.id}`]);
-          },
-          error: () => notify('Erreur enregistrement demande de modification', 'error', 3000),
-        });
+      // Non-admin user : do not save, just record modifications
+      if (this.authService.currentUser.adminClient && !this.createMode) {
+        this.readOnlyMode = true;
+        this.editing = false;
+        this.modificationsService
+        .saveModifications(Client.name, this.client, this.formGroup.controls, 'tiers-clients-');
 
       } else {
 

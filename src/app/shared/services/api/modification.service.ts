@@ -9,6 +9,8 @@ import { LoadOptions } from 'devextreme/data/load_options';
 import DataSource from 'devextreme/data/data_source';
 import { AuthService } from '../auth.service';
 import notify from 'devextreme/ui/notify';
+import { Router } from '@angular/router';
+import { AbstractControl, AbstractControlDirective, AbstractControlOptions } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +22,9 @@ export class ModificationsService extends ApiService implements APIRead {
 
   constructor(
     apollo: Apollo,
-    authService: AuthService,
-  ) {
+    public authService: AuthService,
+    private router: Router,
+   ) {
     super(apollo, Modification);
   }
 
@@ -59,41 +62,49 @@ export class ModificationsService extends ApiService implements APIRead {
     return this.watchSaveQuery({ variables });
   }
 
-  // saveModifications(modelName, entityObject, ctrls, traductionKey) {
+  getValue(el) {
+    if (typeof el === 'object' && !Array.isArray(el) && el !== null) {
+      return (el.nomUtilisateur ? el.nomUtilisateur : (el.raisonSocial ? el.raisonSocial : el.description));
+    } else {
+      return el ? el : this.notSet;
+    }
+  }
 
-  //   const listeModifications: Partial<ModificationCorps>[] =
-  //     Object.entries(ctrls).filter( ([ , control]) => control.dirty ).map( ([key, control]) => {
-  //       return {
-  //         affichageActuel: this.getValue(entityObject[key]),
-  //         affichageDemande: this.getValue(control.value),
-  //         chemin: modelName + '.' + key,
-  //         traductionKey: traductionKey + key,
-  //         valeurActuelle: entityObject[key] ? entityObject[key] : this.notSet,
-  //         valeurDemandee: control.value
-  //       };
-  //     }
-  //   );
+  saveModifications(modelName, entityObject, ctrlOpts: AbstractControlOptions, traductionKey) {
 
-  //   const modification: Partial<Modification> = {
-  //     entite: modelName,
-  //     entiteID: entityObject.id,
-  //     initiateur: {nomUtilisateur : this.authService.currentUser.nomUtilisateur},
-  //     corps: listeModifications as ModificationCorps[]
-  //   };
+    const listeModifications: Partial<ModificationCorps>[] =
+      Object.entries(ctrlOpts).filter( ([ , control]) => control.dirty ).map( ([key, control]) => {
+        return {
+          affichageActuel: this.getValue(entityObject[key]),
+          affichageDemande: this.getValue(control.value),
+          chemin: modelName + '.' + key,
+          traductionKey: traductionKey + key,
+          valeurActuelle: entityObject[key] ? entityObject[key].id ? entityObject[key].id : entityObject[key] : this.notSet,
+          valeurDemandee: typeof control.value === 'object' ? control.value.id : control.value
+        };
+      }
+    );
 
-  //   console.log('listeModifications :' , listeModifications);
+    const modification: Partial<Modification> = {
+      entite: modelName,
+      entiteID: entityObject.id,
+      initiateur: {nomUtilisateur : this.authService.currentUser.nomUtilisateur},
+      corps: listeModifications as ModificationCorps[]
+    };
 
-  //   this.save( {modification} )
-  //   .subscribe({
-  //     next: (e) => {
-  //       notify('Demande de modification enregistrée', 'success', 3000);
-  //       this.readOnlyMode = true;
-  //       this.editing = false;
-  //       this.router.navigate([`/tiers/clients/${client.id}`]);
-  //     },
-  //     error: () => notify('Erreur enregistrement demande de modification', 'error', 3000),
-  //   });
+    console.log('listeModifications :' , listeModifications);
 
-  // }
+    this.save( {modification} )
+    .subscribe({
+      next: (e) => {
+        notify('Demande de modification enregistrée', 'success', 3000);
+        // this.readOnlyMode = true;
+        // this.editing = false;
+        this.router.navigate([`/tiers/clients/${entityObject.id}`]);
+      },
+      error: () => notify('Erreur enregistrement demande de modification', 'error', 3000),
+    });
+
+  }
 
 }

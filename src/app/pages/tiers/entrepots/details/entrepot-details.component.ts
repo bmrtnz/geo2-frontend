@@ -19,6 +19,7 @@ import notify from 'devextreme/ui/notify';
 import { tap } from 'rxjs/operators';
 import { Entrepot, Role } from 'app/shared/models';
 import { ClientsService, EntrepotsService } from 'app/shared/services';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -88,13 +89,13 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
-  modificationBox = false;
-
+ 
   constructor(
     private fb: FormBuilder,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
+    private modificationsService: ModificationsService,
     private modesLivraisonService: ModesLivraisonService,
     private paysService: PaysService,
     private typesPaletteService: TypesPaletteService,
@@ -168,9 +169,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         }
       });
 
-    // Modification box
-    this.modificationBox = true;
-
     this.commercial = this.personnesService.getDataSource();
     this.commercial.filter([
       ['valide', '=', true],
@@ -225,24 +223,33 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         entrepot.preSaisie = true;
       }
 
-      this.entrepotsService.save({ entrepot })
-        .subscribe({
-          next: (e) => {
-            notify('Sauvegardé', 'success', 3000);
-            if (!this.createMode) {
-              this.entrepot = {
-                ...this.entrepot,
-                ...this.formGroup.getRawValue(),
-              };
-              this.readOnlyMode = true;
-            } else {
-              this.editing = false;
-              this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
-            }
-            this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
-          },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
+      // Non-admin user : do not save, just record modifications
+      if (!this.authService.currentUser.adminClient && !this.createMode) {
+        this.readOnlyMode = true;
+        this.editing = false;
+        this.modificationsService
+        .saveModifications(Entrepot.name, this.entrepot, this.formGroup.controls, 'tiers-entrepots-');
+      } else {
+
+        this.entrepotsService.save({ entrepot })
+          .subscribe({
+            next: (e) => {
+              notify('Sauvegardé', 'success', 3000);
+              if (!this.createMode) {
+                this.entrepot = {
+                  ...this.entrepot,
+                  ...this.formGroup.getRawValue(),
+                };
+                this.readOnlyMode = true;
+              } else {
+                this.editing = false;
+                this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
+              }
+              this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
+            },
+            error: () => notify('Echec de la sauvegarde', 'error', 3000),
+          });
+        }
     }
 
   }

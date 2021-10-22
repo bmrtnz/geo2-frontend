@@ -18,6 +18,7 @@ import notify from 'devextreme/ui/notify';
 import { tap } from 'rxjs/operators';
 import { Transporteur } from 'app/shared/models';
 import { TransporteursService } from 'app/shared/services/api/transporteurs.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -74,13 +75,13 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   createMode = false;
   preSaisie: string;
   CCexists = false;
-  modificationBox = false;
 
   constructor(
     private fb: FormBuilder,
     private transporteursService: TransporteursService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
+    private modificationsService: ModificationsService,
     private moyensPaiementService: MoyensPaiementService,
     private basesPaiementService: BasesPaiementService,
     private paysService: PaysService,
@@ -141,9 +142,6 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
     this.clientsRaisonSocial = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
-
-    // Modification box
-    this.modificationBox = true;
 
   }
 
@@ -218,6 +216,15 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   saveData(transporteur) {
+
+    // Non-admin user : do not save, just record modifications
+    if (!this.authService.currentUser.adminClient && !this.createMode) {
+      this.readOnlyMode = true;
+      this.editing = false;
+      this.modificationsService
+      .saveModifications(Transporteur.name, this.transporteur, this.formGroup.controls, 'tiers-transporteurs-');
+      return;
+    }
 
     this.transporteursService.save({ transporteur })
     .subscribe({

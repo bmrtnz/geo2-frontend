@@ -16,6 +16,7 @@ import notify from 'devextreme/ui/notify';
 import {  tap } from 'rxjs/operators';
 import { LieuPassageAQuai } from 'app/shared/models';
 import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -66,14 +67,13 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   isReadOnlyMode = true;
   createMode = false;
   preSaisie: string;
-  modificationBox = false;
-
 
   constructor(
     private fb: FormBuilder,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
+    private modificationsService: ModificationsService,
     private moyensPaiementService: MoyensPaiementService,
     private basesPaiementService: BasesPaiementService,
     private paysService: PaysService,
@@ -130,9 +130,6 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     this.devises = this.devisesService.getDataSource();
     this.moyensPaiement = this.moyensPaiementService.getDataSource();
     this.basesPaiement = this.basesPaiementService.getDataSource();
-
-     // Modification box
-     this.modificationBox = true;
   }
 
   checkCode(params) {
@@ -170,26 +167,35 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         lieuPassageAQuai.id = this.lieupassageaquai.id;
       }
 
-      this.lieupassageaquaiService.save({ lieuPassageAQuai })
-        .subscribe({
-          next: (e) => {
-            notify('Sauvegardé', 'success', 3000);
-            this.refreshGrid.emit();
-            if (!this.createMode) {
-              this.lieupassageaquai = {
-                ...this.lieupassageaquai,
-                ...this.formGroup.getRawValue(),
-              };
-              this.readOnlyMode = true;
-            } else {
-              this.editing = false;
-              this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
-            }
-            this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
-            this.formGroup.markAsPristine();
-          },
-          error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        });
+      // Non-admin user : do not save, just record modifications
+      if (!this.authService.currentUser.adminClient && !this.createMode) {
+        this.readOnlyMode = true;
+        this.editing = false;
+        this.modificationsService
+        .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup.controls, 'tiers-lieuxpassageaquai-');
+      } else {
+
+        this.lieupassageaquaiService.save({ lieuPassageAQuai })
+          .subscribe({
+            next: (e) => {
+              notify('Sauvegardé', 'success', 3000);
+              this.refreshGrid.emit();
+              if (!this.createMode) {
+                this.lieupassageaquai = {
+                  ...this.lieupassageaquai,
+                  ...this.formGroup.getRawValue(),
+                };
+                this.readOnlyMode = true;
+              } else {
+                this.editing = false;
+                this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
+              }
+              this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
+              this.formGroup.markAsPristine();
+            },
+            error: () => notify('Echec de la sauvegarde', 'error', 3000),
+          });
+        }
     }
 
   }
