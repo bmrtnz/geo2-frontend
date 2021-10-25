@@ -130,6 +130,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   @ViewChild(DxCheckBoxComponent, { static: true }) validComponent: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild('couvertureTotale', { static: false }) couvertureTotale: DxNumberBoxComponent;
+  @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
 
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
@@ -169,7 +170,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   ifcoChecked = false;
   couvTemp = false;
   initialFormState: any;
-  notSet = '(Non renseigné)';
 
   constructor(
     private fb: FormBuilder,
@@ -312,6 +312,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   checkCode(params) {
 
+    this.client.id = this.client.id;
     const code = params.value;
     const clientsSource = this.clientsService.getDataSource_v2(['code']);
     clientsSource.searchExpr('code');
@@ -378,14 +379,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     });
   }
 
-  getValue(el) {
-    if (typeof el === 'object' && !Array.isArray(el) && el !== null) {
-      return (el.nomUtilisateur ? el.nomUtilisateur : (el.raisonSocial ? el.raisonSocial : el.description));
-    } else {
-      return el ? el : this.notSet;
-    }
-  }
-
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
@@ -409,11 +402,12 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       }
 
       // Non-admin user : do not save, just record modifications
-      if (this.authService.currentUser.adminClient && !this.createMode) {
+      if (!this.authService.currentUser.adminClient && !this.createMode) {
         this.readOnlyMode = true;
         this.editing = false;
         this.modificationsService
-        .saveModifications(Client.name, this.client, this.formGroup.controls, 'tiers-clients-', 'clients');
+        .saveModifications(Client.name, this.client, this.formGroup, 'tiers-clients-')
+        .subscribe(e => this.modifListe.refreshList());
 
       } else {
 

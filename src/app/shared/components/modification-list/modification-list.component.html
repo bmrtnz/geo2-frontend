@@ -5,7 +5,7 @@
             <div *ngFor="let modif of modifs">
                 <div class="modif-date-container">
                     <dx-text-box 
-                    value="Modification de {{ modif.initiateur.nomUtilisateur }} du {{ modif.dateModification }}"
+                    value="De {{ modif.initiateur.nomUtilisateur }} le {{ modif.dateModification }}"
                     readOnly="true"
                     ></dx-text-box>
                     <dx-button class="upperButton"
@@ -15,9 +15,9 @@
                         (onClick)="clearModifications(modif.id)"
                     ></dx-button>
                     <ul class="modif-items-container">
-                        <li class="modif-item">Langue : FRA (France) => AR (Argentine)</li>
-                        <li class="modif-item">Adresse (1) : PETERBURI TEE 88A => PETERBURI TEE 88B</li>
-                        <li class="modif-item">Adresse (2) : POHJA PST 17 => POHJA PST 170</li>
+                        <div *ngFor="let ligne of modif.corps">
+                            <li class="modif-item>"><strong>{{ ligne.traductionKey  | localize }}</strong> : {{ ligne.affichageActuel }} => {{ ligne.affichageDemande }}</li>
+                        </div>
                     </ul>
                 </div>
             </div>

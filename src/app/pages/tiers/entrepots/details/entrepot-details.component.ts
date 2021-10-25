@@ -20,6 +20,7 @@ import { tap } from 'rxjs/operators';
 import { Entrepot, Role } from 'app/shared/models';
 import { ClientsService, EntrepotsService } from 'app/shared/services';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -71,6 +72,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+  @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
   editing = false;
 
   entrepot: Entrepot;
@@ -228,7 +230,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.readOnlyMode = true;
         this.editing = false;
         this.modificationsService
-        .saveModifications(Entrepot.name, this.entrepot, this.formGroup.controls, 'tiers-entrepots-', 'entrepots');
+        .saveModifications(Entrepot.name, this.entrepot, this.formGroup, 'tiers-entrepots-')
+        .subscribe(e => this.modifListe.refreshList());
       } else {
 
         this.entrepotsService.save({ entrepot })

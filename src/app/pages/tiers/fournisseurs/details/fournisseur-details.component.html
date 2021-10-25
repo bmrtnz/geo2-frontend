@@ -61,7 +61,7 @@
       </dxi-item>
       <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
       <dxi-item [ratio]="8.2">
-        <app-modification-list *ngIf="!createMode && modificationBox"></app-modification-list>
+        <app-modification-list [entite]="'Fournisseur'" [entiteID]="fournisseur.id" *ngIf="!createMode && fournisseur"></app-modification-list>
         <dx-box direction="row">
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">

@@ -19,6 +19,7 @@ import { tap } from 'rxjs/operators';
 import { Transporteur } from 'app/shared/models';
 import { TransporteursService } from 'app/shared/services/api/transporteurs.service';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -57,6 +58,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
+  @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
   editing = false;
 
   transporteur: Transporteur;
@@ -222,7 +224,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       this.readOnlyMode = true;
       this.editing = false;
       this.modificationsService
-      .saveModifications(Transporteur.name, this.transporteur, this.formGroup.controls, 'tiers-transporteurs-', 'transporteurs');
+      .saveModifications(Transporteur.name, this.transporteur, this.formGroup, 'tiers-transporteurs-')
+      .subscribe(e => this.modifListe.refreshList());
       return;
     }
 

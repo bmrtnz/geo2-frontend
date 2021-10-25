@@ -32,6 +32,7 @@ import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
 import { Certification, CertificationFournisseur, Fournisseur } from '../../../../shared/models';
 import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -108,6 +109,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild(CertificationDatePopupComponent, { static: false })
   certDatePopup: CertificationDatePopupComponent;
+  @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -317,7 +319,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       this.readOnlyMode = true;
       this.editing = false;
       this.modificationsService
-      .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup.controls, 'tiers-fournisseurs-', 'fournisseurs');
+      .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup, 'tiers-fournisseurs-')
+      .subscribe(e => this.modifListe.refreshList());
       return;
     }
 

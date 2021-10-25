@@ -10,7 +10,9 @@ import DataSource from 'devextreme/data/data_source';
 import { AuthService } from '../auth.service';
 import notify from 'devextreme/ui/notify';
 import { Router } from '@angular/router';
-import { AbstractControl, AbstractControlDirective, AbstractControlOptions } from '@angular/forms';
+import { AbstractControl, AbstractControlDirective, AbstractControlOptions, FormGroup } from '@angular/forms';
+import { from, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +34,20 @@ export class ModificationsService extends ApiService implements APIRead {
     const variables: OperationVariables = { id };
     type Response = { modification: Modification };
     return this.watchGetOneQuery<Response>({variables});
+  }
+
+  getAll(columns: string[], filter: any[]) {
+    return from(
+      new Promise( async resolve => {
+        type Response = { listModification: Modification[] };
+        const search = this.mapDXFilterToRSQL(filter);
+        const query = await this.buildGetList(columns);
+        this.listenQuery<Response>(query, {variables : {search}, fetchPolicy: 'no-cache'}, res => {
+          if (res.data && res.data.listModification)
+            resolve(res.data.listModification);
+        });
+      })
+    );
   }
 
   getDataSource_v2(columns: Array<string>) {
@@ -66,14 +82,19 @@ export class ModificationsService extends ApiService implements APIRead {
     if (typeof el === 'object' && !Array.isArray(el) && el !== null) {
       return (el.nomUtilisateur ? el.nomUtilisateur : (el.raisonSocial ? el.raisonSocial : el.description));
     } else {
-      return el ? el : this.notSet;
+      return el !== null ? this.convertTrueFalse(el) : this.notSet;
     }
   }
 
-  saveModifications(modelName, entityObject, ctrlOpts: AbstractControlOptions, traductionKey, tiersPathName) {
+  convertTrueFalse(val) {
+    val = val === true ? 'Oui' : (val === false ? 'Non' : val);
+    return val;
+  }
+
+  saveModifications(modelName, entityObject, fGroup: FormGroup, traductionKey) {
 
     const listeModifications: Partial<ModificationCorps>[] =
-      Object.entries(ctrlOpts).filter( ([ , control]) => control.dirty ).map( ([key, control]) => {
+      Object.entries(fGroup.controls).filter( ([ , control]) => control.dirty && control.value !== null).map( ([key, control]) => {
         return {
           affichageActuel: this.getValue(entityObject[key]),
           affichageDemande: this.getValue(control.value),
@@ -92,16 +113,23 @@ export class ModificationsService extends ApiService implements APIRead {
       corps: listeModifications as ModificationCorps[]
     };
 
+     // Back to initial state
+    fGroup.patchValue(entityObject);
+    fGroup.markAsPristine();
+
     console.log('listeModifications :' , listeModifications);
 
-    this.save( {modification} )
-    .subscribe({
-      next: (e) => {
+    return this.save( {modification} )
+    .pipe(
+      catchError(() => {
+        notify('Erreur enregistrement demande de modification', 'error', 3000);
+        return of(new Error());
+      }),
+      tap((e) => {
+        if (e instanceof Error) return;
         notify('Demande de modification enregistrée', 'success', 3000);
-        this.router.navigate([`/tiers/${tiersPathName}/${entityObject.id}`]);
-      },
-      error: () => notify('Erreur enregistrement demande de modification', 'error', 3000),
-    });
+      })
+    );
 
   }
 

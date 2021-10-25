@@ -87,7 +87,7 @@ export type LocateVariables = {
 };
 
 export interface APIRead {
-  getAll?(variables?: RelayPageVariables): Observable<ApolloQueryResult<any>>;
+  getAll?(columns: string[], variables?: OperationVariables): Observable<any>;
   getOne?(id: string | number, columns?: Array<string>):
     Observable<ApolloQueryResult<any>> |
     Promise<Observable<ApolloQueryResult<any>>>;
@@ -268,6 +268,25 @@ export abstract class ApiService implements OnDestroy {
       }
     `;
   }
+
+  /**
+   * Build list query
+   * @param depth Sub model selection depth
+   * @param regExpFilter Regexp field filter
+   * @param operationName Name of the operation, default to `all{ModelName}`
+   * @param option Object of configurations
+   */
+   protected async buildGetList(columns: Array<string>, operationName?: string) {
+    const operation = operationName ?? `list${this.model.name}`;
+    const alias = operation.ucFirst();
+    return `
+      query ${alias}($search: String) {
+        ${operation}(search:$search) {
+          ${await this.model.getGQL(columns).toPromise()}
+        }
+      }
+    `;
+   }
 
   /**
    * Build paginated query

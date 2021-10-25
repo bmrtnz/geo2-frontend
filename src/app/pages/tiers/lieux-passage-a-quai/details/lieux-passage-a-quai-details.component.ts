@@ -17,6 +17,7 @@ import {  tap } from 'rxjs/operators';
 import { LieuPassageAQuai } from 'app/shared/models';
 import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -52,6 +53,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   refreshGrid = new EventEmitter();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
+  @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
   editing = false;
 
   lieupassageaquai: LieuPassageAQuai;
@@ -172,7 +174,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         this.readOnlyMode = true;
         this.editing = false;
         this.modificationsService
-        .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup.controls, 'tiers-lieuxpassageaquai-', 'lieux-passage-a-quai');
+        .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup, 'tiers-lieuxpassageaquai-')
+        .subscribe(e => this.modifListe.refreshList());
       } else {
 
         this.lieupassageaquaiService.save({ lieuPassageAQuai })

@@ -1,4 +1,4 @@
-import { Component, NgModule, Input, OnInit } from '@angular/core';
+import { Component, NgModule, Input, OnInit, OnChanges, Output } from '@angular/core';
 import { DxButtonModule, DxPopupModule, DxTemplateModule, DxTextBoxModule, DxBoxModule } from 'devextreme-angular';
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'app/shared/services';
@@ -14,47 +14,51 @@ import notify from 'devextreme/ui/notify';
   templateUrl: './modification-list.component.html',
   styleUrls: ['./modification-list.component.scss']
 })
-export class ModificationListComponent implements OnInit {
+export class ModificationListComponent implements OnInit, OnChanges {
 
   @Input() entite: string;
   @Input() entiteID: string;
+  @Output() modifs: any;
 
   modifications: DataSource;
-  modifs: any;
 
   constructor(
     public authService: AuthService,
     public modificationsService: ModificationsService
     ) { }
 
-  ngOnInit() {
-    this.showModificationList();
+  ngOnInit() {}
+
+  ngOnChanges() {
+    this.refreshList();
   }
 
   customDate(dateModif) {
     const mydate = new Date(dateModif);
-    return mydate.toLocaleDateString() + ' à ' + mydate.toLocaleTimeString();
+    const myTime = mydate.toLocaleTimeString().replace(':', 'h').replace(':', ' ') + 's';
+    return mydate.toLocaleDateString() + '  (' + myTime + ')';
   }
 
-  showModificationList() {
+  refreshList() {
 
-    this.modifications = this.modificationsService
-    .getDataSource_v2(['id', 'entite', 'entiteID', 'dateModification', 'initiateur.nomUtilisateur', 'statut', 'corps.id',
-    'corps.affichageActuel', 'corps.affichageDemande', 'corps.traductionKey']);
-    this.modifications.filter([
-      ['entite', '=', this.entite],
-      'and',
-      ['entiteID', '=', this.entiteID],
-      'and',
-      ['statut', '=', false]
-    ]);
+    const columns = ['id', 'entite', 'entiteID', 'dateModification', 'initiateur.nomUtilisateur', 'statut', 'corps.id',
+    'corps.affichageActuel', 'corps.affichageDemande', 'corps.traductionKey']
 
-    this.modifications.load().then((res) => {
-      if (res.length) {
-        this.modifs = res;
+    this.modificationsService.getAll(columns, [
+        ['entite', '=', this.entite],
+        'and',
+        ['entiteID', '=', this.entiteID],
+        'and',
+        ['statut', '=', false]
+    ]).subscribe(res => {
+      const liste = JSON.parse(JSON.stringify(res));
+      if (liste.length) {
+        this.modifs = liste;
         this.modifs.map(result => result.dateModification = this.customDate(result.dateModification));
+      } else {
+        this.modifs = [];
       }
-      console.log(res)
+      console.log('refreshList done!', liste);
     });
 
   }
