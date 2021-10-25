@@ -18,6 +18,9 @@ export class SocietesService extends ApiService implements APIRead {
 
   getDataSource() {
     return new DataSource({
+      sort: [
+        { selector: 'raisonSocial' }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
