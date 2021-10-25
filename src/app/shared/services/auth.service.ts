@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import notify from 'devextreme/ui/notify';
-import { environment } from 'environments/environment';
 import { from, throwError } from 'rxjs';
-import { catchError, mergeAll, take, tap } from 'rxjs/operators';
+import { catchError, mergeAll, switchMap, take, tap } from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
 import { CurrentCompanyService } from './current-company.service';
@@ -36,24 +35,15 @@ export class AuthService {
       .pipe(
         mergeAll(),
         take(1),
-        tap(res => {
+        switchMap(res => {
           if (res.data.utilisateur) {
-            this.loggedIn = true;
-
-            // We do not change the company in case the user has been time disconnected
-            // if (window.localStorage.getItem(this.LAST_USER_STORE_KEY) !== res.data.utilisateur.nomUtilisateur) {
-              // this.currentCompanyService.setCompany(null);
-            // }
-
             this.setCurrentUser(res.data.utilisateur);
             window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
+            this.loggedIn = true;
 
             // Handle redirection
             const redirectionURL = this.activatedRoute.snapshot.queryParams?.redirect;
-            this.router.navigateByUrl(redirectionURL ?? '/');
-            const name = res.data.utilisateur.nomUtilisateur;
-            const mess = 'Bienvenue ' + name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() + ' !';
-            notify({ message: mess, elementAttr: {class : 'welcome-message'} }, 'info');
+            return this.router.navigateByUrl(redirectionURL ?? '/');
           } else {
             this.loginError();
           }
@@ -62,8 +52,15 @@ export class AuthService {
           this.loginError();
 
           return throwError(e);
-        })
+        }),
+        tap( _ => this.showWelcome()),
       );
+  }
+
+  private showWelcome() {
+    const name = this.currentUser.nomUtilisateur;
+    const mess = 'Bienvenue ' + name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() + ' !';
+    notify({ message: mess, elementAttr: {class : 'welcome-message'} }, 'info');
   }
 
   private loginError() {

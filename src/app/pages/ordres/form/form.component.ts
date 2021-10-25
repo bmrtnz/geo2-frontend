@@ -18,8 +18,8 @@ import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
-import { concatMap, filter, first, map, mergeMap } from 'rxjs/operators';
-import { RouteParam, TAB_ORDRE_CREATE_ID, TabContext } from '../root/root.component';
+import { concatMap, filter, first, map, switchMap } from 'rxjs/operators';
+import { RouteParam, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 
 /**
  * Grid with loading toggled by parent
@@ -148,7 +148,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     this.initializeForm();
 
     this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
-    this.entrepotDS = this.entrepotsService.getDataSource_v2(['id','raisonSocial']);
+    this.entrepotDS = this.entrepotsService.getDataSource_v2(['id', 'raisonSocial']);
     this.deviseDS = this.devisesService.getDataSource();
     this.incotermsDS = this.incotermsService.getDataSource();
     this.typeTransportDS = this.typesCamionService.getDataSource();
@@ -329,7 +329,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     .pipe(
       first(),
       map( params => params.get(RouteParam.TabID)),
-      mergeMap( id => {
+      switchMap( id => {
         if (id === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
         return this.ordresService
         .getOneByNumeroAndSociete(id, currentCompany.id);

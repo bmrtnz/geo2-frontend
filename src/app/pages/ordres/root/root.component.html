@@ -6,6 +6,7 @@
         [showNavButtons]= "true"
         (onTitleClick)="onTabTitleClick($event)"
         (onContentReady)="tabPanelReady.emit($event)"
+        (onInitialized)="tabPanelInitialized.emit($event)"
         (onTitleRendered)="onTabTitleRendered($event)"
         >
 

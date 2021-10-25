@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Injectable, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Injectable, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, ParamMap, Router } from '@angular/router';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxTabPanelComponent } from 'devextreme-angular';
 import { on } from 'devextreme/events';
 import { dxTabPanelItem } from 'devextreme/ui/tab_panel';
-import { concat, ConnectableObservable, defer, EMPTY, iif, Observable, of } from 'rxjs';
-import { filter, first, last, map, publishLast, share, startWith, switchMap, switchMapTo, take, tap } from 'rxjs/operators';
+import { concat, defer, EMPTY, iif, Observable, of, Subject } from 'rxjs';
+import { concatMapTo, debounceTime, distinctUntilChanged, filter, first, last, map, share, startWith, switchMap, switchMapTo, take, takeUntil, tap } from 'rxjs/operators';
 
 const TAB_HOME_ID = 'home';
 const TAB_LOAD_ID = 'loading';
@@ -32,14 +32,15 @@ export type TabPanelItem = dxTabPanelItem & {
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss'],
 })
-export class RootComponent implements OnInit {
+export class RootComponent implements OnInit, OnDestroy {
 
+  private destroy = new Subject<boolean>();
+
+  public tabPanelInitialized = new EventEmitter<any>();
   public tabPanelReady = new EventEmitter<any>();
   public activeStateEnabled = false;
 
-  public items: TabPanelItem[];
-  private sharedFillInitialItems = this.fillInitialItems()
-  .pipe(publishLast()) as ConnectableObservable<TabPanelItem[]>;
+  public items: TabPanelItem[] = [];
   @ViewChild(DxTabPanelComponent, {static: true}) tabPanel: DxTabPanelComponent;
 
   constructor(
@@ -47,16 +48,32 @@ export class RootComponent implements OnInit {
     public router: Router,
     public ordresIndicatorsService: OrdresIndicatorsService,
     private tabContext: TabContext,
-  ) {
-    this.tabContext.registerComponent(this);
-    this.handleRouting();
-  }
+  ) {}
 
   ngOnInit() {
 
-    this.sharedFillInitialItems.connect();
-    this.sharedFillInitialItems.subscribe();
+    this.tabContext.registerComponent(this);
 
+    this.tabPanelInitialized
+    .pipe(
+      concatMapTo(this.fillInitialItems()),
+      concatMapTo(defer(() => this.handleRouting())), // Initial rendering
+      tap( selectID => this.selectTab(selectID)), // Initial selection
+      switchMapTo(this.router.events), // Switch to NavigationEnd events to handle rendering from routing
+      filter<NavigationEnd>( event => event instanceof NavigationEnd),
+      concatMapTo(this.handleRouting()),
+      debounceTime(10),
+      takeUntil(this.destroy),
+    )
+    .subscribe((selectID: string) => {
+      this.selectTab(selectID);
+    });
+
+  }
+
+  ngOnDestroy() {
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
   }
 
   onTabTitleClick(event: {itemData: Partial<TabPanelItem>}) {
@@ -101,20 +118,16 @@ export class RootComponent implements OnInit {
   }
 
   private handleRouting() {
-    this.router.events
+    return this.route.queryParamMap
     .pipe(
-      filter<NavigationEnd>( event => event instanceof NavigationEnd),
-      filter( event => event.url.startsWith('/ordres')),
-      switchMapTo(this.sharedFillInitialItems),
+      first(),
       tap( _ => this.selectTab(TAB_LOAD_ID)),
       switchMapTo(this.route.queryParamMap.pipe(first())),
       switchMap( queries => defer(() => this.handleQueries(queries))),
       switchMapTo(this.route.paramMap.pipe(first())),
+      distinctUntilChanged(),
       switchMap( params => of(this.handleParams(params))),
-    )
-    .subscribe( selectID => {
-      this.selectTab(selectID);
-    });
+    );
   }
 
   public isStaticItem(item: TabPanelItem) {
@@ -122,8 +135,8 @@ export class RootComponent implements OnInit {
   }
 
   private fillInitialItems() {
-    const items: () => Promise<TabPanelItem[]> = async () =>
-      this.items = [
+    const getItems: () => Promise<TabPanelItem[]> = async () =>
+      [
         {
           id: TAB_LOAD_ID,
           component: LoadingTabComponent,
@@ -144,7 +157,10 @@ export class RootComponent implements OnInit {
           position: Position.Back,
         },
       ];
-    return concat(defer(items), this.tabPanelReady.pipe(take(1))).pipe(last());
+    return concat(
+      defer(getItems).pipe(tap( items => this.items = items)),
+      this.tabPanelReady.pipe(first())
+    ).pipe(first());
   }
 
   private handleQueries(queries: ParamMap) {

@@ -2,12 +2,12 @@ import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
+import { Model } from 'app/shared/models/model';
 import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap, take, takeUntil } from 'rxjs/operators';
-import { Model } from 'app/shared/models/model';
 
 const DEFAULT_KEY = 'id';
 const DEFAULT_GQL_KEY_TYPE = 'String';
@@ -112,6 +112,10 @@ export interface APIPersist {
     Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
+export interface APICount<CountResponse> {
+  count(filter?: any[]): Observable<ApolloQueryResult<CountResponse>>;
+}
+
 @Injectable()
 export abstract class ApiService implements OnDestroy {
 
@@ -125,10 +129,10 @@ export abstract class ApiService implements OnDestroy {
 
   constructor(
     protected apollo: Apollo,
-    @Inject('model') model: typeof Model & (new () => Model),
+    @Inject('model') model?: typeof Model & (new () => Model),
   ) {
     this.model = model;
-    this.keyField = this.model.getKeyField() || DEFAULT_KEY;
+    this.keyField = this?.model?.getKeyField() || DEFAULT_KEY;
   }
 
   ngOnDestroy() {
@@ -346,6 +350,20 @@ export abstract class ApiService implements OnDestroy {
         ${operation}(${this.keyField}:$${this.keyField}) {
           ${await this.model.getGQL(columns).toPromise()}
         }
+      }
+    `;
+  }
+
+  /**
+   * Build count query
+   * @param columns The fields you want to retrieve.
+   */
+  protected async buildCount() {
+    const operation = `count${this.model.name}`;
+    const alias = operation.ucFirst();
+    return `
+      query ${alias}($search: String) {
+        ${operation}(search: $search)
       }
     `;
   }
@@ -666,6 +684,26 @@ export abstract class ApiService implements OnDestroy {
         fetchPolicy: 'cache-and-network',
         ...options,
       } as WatchQueryOptions)),
+      filter( res => !!Object.keys(res.data).length),
+    )
+    .subscribe(res => {
+      done.next(res);
+      if (!res.loading)
+        done.complete();
+    });
+    return done;
+  }
+
+  public watchCountQuery<R>(search?: string) {
+    const done = new Subject<ApolloQueryResult<R>>();
+    from(this.buildCount())
+    .pipe(
+      takeUntil(this.destroy),
+      takeUntil(done),
+      mergeMap( query => this.query<R>(query, {
+        fetchPolicy: 'cache-and-network',
+        variables: {search},
+      } as any)),
       filter( res => !!Object.keys(res.data).length),
     )
     .subscribe(res => {

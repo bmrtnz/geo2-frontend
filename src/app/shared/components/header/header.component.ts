@@ -43,8 +43,8 @@ export class HeaderComponent implements OnInit {
     }, {
       text: this.localizeService.localize('auth-logout'),
       icon: 'runner',
-      onClick: () => {
-        this.authService.logOut();
+      onClick: async () => {
+        await this.authService.logOut();
       }
     }];
   }

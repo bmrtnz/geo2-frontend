@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { RootComponent } from 'app/pages/ordres/root/root.component';
 import { defer, iif, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Societe } from '../models';
 import { AuthService } from '../services';
 import { CurrentCompanyService } from '../services/current-company.service';
@@ -55,11 +55,15 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
 
       // Trigger save, but don't block navigation
       if (!nextState.url.startsWith('/ordres')) {
-        this.authService.persist({
-          configTabsOrdres: {
-            [this.currentCompanyID]: encodeURI(currentState.url),
-          },
-        }).toPromise();
+        of(this.currentCompanyService.getCompany())
+        .pipe(
+          switchMap((company: Societe) => this.authService.persist({
+            configTabsOrdres: {
+              [company.id]: encodeURI(currentState.url),
+            },
+          })),
+        )
+        .toPromise();
       }
 
       return true;
