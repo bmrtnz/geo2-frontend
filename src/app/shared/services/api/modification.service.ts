@@ -76,7 +76,7 @@ export class ModificationsService extends ApiService implements APIRead {
           affichageDemande: this.getValue(control.value),
           chemin: modelName + '.' + key,
           traductionKey: traductionKey + key,
-          valeurActuelle: entityObject[key] ? entityObject[key].id ? entityObject[key].id : entityObject[key] : this.notSet,
+          valeurActuelle: entityObject[key] ? entityObject[key].id ? entityObject[key].id : entityObject[key] : entityObject[key],
           valeurDemandee: typeof control.value === 'object' ? control.value.id : control.value
         };
       }
@@ -90,7 +90,9 @@ export class ModificationsService extends ApiService implements APIRead {
     };
 
      // Back to initial state
-    fGroup.patchValue(entityObject);
+    listeModifications.map( modif => {
+      fGroup.get(modif.chemin.split('.')[1]).setValue(modif.valeurActuelle);
+    });
     fGroup.markAsPristine();
 
     console.log('listeModifications :' , listeModifications);

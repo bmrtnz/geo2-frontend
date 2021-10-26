@@ -59,7 +59,6 @@ export class ModificationListComponent implements OnInit, OnChanges {
       } else {
         this.modifs = [];
       }
-      console.log('refreshList done!', liste);
     });
 
   }
