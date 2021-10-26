@@ -50,30 +50,6 @@ export class ModificationsService extends ApiService implements APIRead {
     );
   }
 
-  getDataSource_v2(columns: Array<string>) {
-    type Response = { allModification: RelayPage<Modification> };
-    return new DataSource({
-      store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
-
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
-
-          const query = await this.buildGetAll_v2(columns);
-          const variables = this.mapLoadOptionsToVariables(options);
-
-          this.listenQuery<Response>(query, {variables}, res => {
-            if (res.data && res.data.allModification)
-              resolve(this.asInstancedListCount(res.data.allModification));
-          });
-        }),
-      }),
-    });
-  }
-
   save(variables: OperationVariables, depth = 2) {
     return this.watchSaveQuery({ variables }, depth);
   }
@@ -127,7 +103,7 @@ export class ModificationsService extends ApiService implements APIRead {
       }),
       tap((e) => {
         if (e instanceof Error) return;
-        notify('Demande de modification enregistrée', 'success', 3000);
+        notify('Demande de modification enregistrée', 'warning', 4000);
       })
     );
 

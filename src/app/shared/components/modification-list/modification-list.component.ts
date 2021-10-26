@@ -53,6 +53,7 @@ export class ModificationListComponent implements OnInit, OnChanges {
     ]).subscribe(res => {
       const liste = JSON.parse(JSON.stringify(res));
       if (liste.length) {
+        liste.sort((a, b) => new Date(b.dateModification).getTime() - new Date(a.dateModification).getTime());
         this.modifs = liste;
         this.modifs.map(result => result.dateModification = this.customDate(result.dateModification));
       } else {
