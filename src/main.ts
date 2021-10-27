@@ -5,10 +5,13 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 import './basic';
+import themes from 'devextreme/ui/themes';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+themes.initialized(() => {
+  platformBrowserDynamic().bootstrapModule(AppModule)
+    .catch(err => console.error(err));
+});
