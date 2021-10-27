@@ -18,6 +18,7 @@ import { LieuPassageAQuai } from 'app/shared/models';
 import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -78,6 +79,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     private modificationsService: ModificationsService,
     private moyensPaiementService: MoyensPaiementService,
     private basesPaiementService: BasesPaiementService,
+    public validationService: ValidationService,
     private paysService: PaysService,
     private router: Router,
     private route: ActivatedRoute,
@@ -175,7 +177,11 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         this.editing = false;
         this.modificationsService
         .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup, 'tiers-lieuxpassageaquai-')
-        .subscribe(e => this.modifListe.refreshList());
+        .subscribe(e => {
+          this.modifListe.refreshList();
+          // Show red badges (unvalidated forms)
+          this.validationService.showToValidateBadges();
+        });
       } else {
 
         this.lieupassageaquaiService.save({ lieuPassageAQuai })
@@ -183,6 +189,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
             next: (e) => {
               notify('Sauvegardé', 'success', 3000);
               this.refreshGrid.emit();
+              // Show red badges (unvalidated forms)
+              this.validationService.showToValidateBadges();
               if (!this.createMode) {
                 this.lieupassageaquai = {
                   ...this.lieupassageaquai,

@@ -34,6 +34,7 @@ import { reduceEachTrailingCommentRange } from 'typescript';
 import { Certification, CertificationClient, Client, Role, Modification, ModificationCorps } from '../../../../shared/models';
 import { AuthService, ClientsService } from '../../../../shared/services';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-client-details',
@@ -191,6 +192,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     private moyensPaiementService: MoyensPaiementService,
     private conditionsVenteService: ConditionsVenteService,
     private router: Router,
+    public validationService: ValidationService,
     private route: ActivatedRoute,
     private currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
@@ -407,7 +409,11 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
         this.editing = false;
         this.modificationsService
         .saveModifications(Client.name, this.client, this.formGroup, 'tiers-clients-')
-        .subscribe(e => this.modifListe.refreshList());
+        .subscribe(e => {
+          this.modifListe.refreshList();
+          // Show red badges (unvalidated forms)
+          this.validationService.showToValidateBadges();
+        });
 
       } else {
 
@@ -430,6 +436,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             next: (e) => {
               notify('Sauvegardé', 'success', 3000);
               this.refreshGrid.emit();
+              // Show red badges (unvalidated forms)
+              this.validationService.showToValidateBadges();
               if (!this.createMode) {
                 this.client = {
                   ...this.client,

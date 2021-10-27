@@ -36,18 +36,23 @@
 }
 
 ::ng-deep .side-navigation-menu {
+  .display-none {
+    display: none;
+  }
   .dx-treeview-item-content * {
     float: left;
   }
-  .presaisie-indicator {
-    display: none;
-    width: 13px;
-    height: 13px;
-    margin: 5px 0 0 7px ;
-    border-radius: 100%;
+  .toValidate-indicator {
+    min-width: 13px;
+    height: 15px;
+    margin: 4px 0 0 7px;
+    border-radius: 13px;
+    font-size: 10px;
+    font-weight: normal;
+    padding: 3px 4px 3px 3px;
+    line-height: 7px;
     background-color: #EE0000;
-    border: 1px solid #AAA;
+    border: 1px solid #666;
+    color: #fff !important;
   }
 }
-
-

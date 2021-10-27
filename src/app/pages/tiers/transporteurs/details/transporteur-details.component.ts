@@ -20,6 +20,7 @@ import { Transporteur } from 'app/shared/models';
 import { TransporteursService } from 'app/shared/services/api/transporteurs.service';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -87,6 +88,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     private moyensPaiementService: MoyensPaiementService,
     private basesPaiementService: BasesPaiementService,
     private paysService: PaysService,
+    public validationService: ValidationService,
     private clientsService: ClientsService,
     private router: Router,
     private route: ActivatedRoute,
@@ -225,7 +227,11 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       this.editing = false;
       this.modificationsService
       .saveModifications(Transporteur.name, this.transporteur, this.formGroup, 'tiers-transporteurs-')
-      .subscribe(e => this.modifListe.refreshList());
+      .subscribe(e => {
+        this.modifListe.refreshList();
+        // Show red badges (unvalidated forms)
+        this.validationService.showToValidateBadges();
+      });
       return;
     }
 
@@ -234,6 +240,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       next: (e) => {
         notify('Sauvegardé', 'success', 3000);
         this.refreshGrid.emit();
+        // Show red badges (unvalidated forms)
+        this.validationService.showToValidateBadges();
         if (!this.createMode) {
           this.transporteur = {
             ...this.transporteur,

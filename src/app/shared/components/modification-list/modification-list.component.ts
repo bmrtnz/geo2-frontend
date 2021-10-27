@@ -7,6 +7,7 @@ import DataSource from 'devextreme/data/data_source';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { Modification } from 'app/shared/models';
 import notify from 'devextreme/ui/notify';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 
 @Component({
@@ -24,12 +25,14 @@ export class ModificationListComponent implements OnInit, OnChanges {
 
   constructor(
     public authService: AuthService,
-    public modificationsService: ModificationsService
+    public modificationsService: ModificationsService,
+    public validationService: ValidationService
     ) { }
 
   ngOnInit() {}
 
   ngOnChanges() {
+    this.modifs = [];
     this.refreshList();
   }
 
@@ -56,8 +59,6 @@ export class ModificationListComponent implements OnInit, OnChanges {
         liste.sort((a, b) => new Date(b.dateModification).getTime() - new Date(a.dateModification).getTime());
         this.modifs = liste;
         this.modifs.map(result => result.dateModification = this.customDate(result.dateModification));
-      } else {
-        this.modifs = [];
       }
     });
 
@@ -72,6 +73,8 @@ export class ModificationListComponent implements OnInit, OnChanges {
     .subscribe({
       next: (e) => {
         this.modifs = this.modifs.filter(res => res.id !== modifID);
+        // Show red badges (unvalidated forms)
+        this.validationService.showToValidateBadges();
         notify('Suppression demande effectuée !', 'success', 3000);
       },
       error: () => notify('Erreur lors de la demande de suppression', 'error', 3000),

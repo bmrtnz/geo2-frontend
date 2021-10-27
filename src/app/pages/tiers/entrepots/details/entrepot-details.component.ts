@@ -21,6 +21,7 @@ import { Entrepot, Role } from 'app/shared/models';
 import { ClientsService, EntrepotsService } from 'app/shared/services';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -101,6 +102,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     private modesLivraisonService: ModesLivraisonService,
     private paysService: PaysService,
     private typesPaletteService: TypesPaletteService,
+    public validationService: ValidationService,
     private incotermsService: IncotermsService,
     private regimesTvaService: RegimesTvaService,
     private transporteursService: TransporteursService,
@@ -231,13 +233,19 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.editing = false;
         this.modificationsService
         .saveModifications(Entrepot.name, this.entrepot, this.formGroup, 'tiers-entrepots-')
-        .subscribe(e => this.modifListe.refreshList());
+        .subscribe(e => {
+          this.modifListe.refreshList();
+          // Show red badges (unvalidated forms)
+          this.validationService.showToValidateBadges();
+        });
       } else {
 
         this.entrepotsService.save({ entrepot })
           .subscribe({
             next: (e) => {
               notify('Sauvegardé', 'success', 3000);
+              // Show red badges (unvalidated forms)
+              this.validationService.showToValidateBadges();
               if (!this.createMode) {
                 this.entrepot = {
                   ...this.entrepot,

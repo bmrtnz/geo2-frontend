@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Apollo } from 'apollo-angular';
+import { AuthService } from '..';
+import { ModificationsService } from './modification.service';
 
 type GQLResponse = {
-  countClient: number, // modification
-  countFournisseur: number, // modification
-  countTransporteur: number, // modification
-  countLieuPassageAQuai: number, // modification
-  countEntrepot: number, // modification
+  countClient: number, // pre-saisie + modification
+  countFournisseur: number, // pre-saisie + modification
+  countTransporteur: number, // pre-saisie + modification
+  countLieuPassageAQuai: number, // pre-saisie + modification
+  countEntrepot: number, // pre-saisie + modification
   countArticle: number, // pre-saisie
 };
 
@@ -18,24 +20,28 @@ export class ValidationService extends ApiService {
 
   private countQuery = `
     query CountValidation(
-      $searchModifications: String,
-      $searchPresaisie: String
+      $searchPresaisie: String,
+      $searchPresaisieModif: String,
     ) {
-      countClient(search: $searchModifications)
+      countClient(search: $searchPresaisieModif)
+      countFournisseur(search: $searchPresaisieModif)
+      countTransporteur(search: $searchPresaisieModif)
+      countLieuPassageAQuai(search: $searchPresaisieModif)
+      countEntrepot(search: $searchPresaisieModif)
       countArticle(search: $searchPresaisie)
-      countFournisseur(search: $searchModifications)
-      countTransporteur(search: $searchModifications)
-      countLieuPassageAQuai(search: $searchModifications)
-      countEntrepot(search: $searchModifications)
     }
     `;
 
-  constructor( apollo: Apollo ) {
+  constructor(
+    private authService: AuthService,
+    private modificationsService: ModificationsService,
+    apollo: Apollo
+    ) {
     super(apollo);
-  }
+   }
 
   /**
-   * Fetch Tier/Article forms count with unvalidated status
+   * Fetch Tiers/Articles forms count with unvalidated status
    */
   public fetchUnvalidatedCount(): Promise<GQLResponse> {
     const commonFilter = [
@@ -50,17 +56,52 @@ export class ValidationService extends ApiService {
       ]);
 
       const searchPresaisie = this.mapDXFilterToRSQL([
-        ...commonFilter,
+        ['preSaisie', '=', true],
         'and',
+        ['valide', '<>', true],
+      ]);
+
+      const searchPresaisieModif = this.mapDXFilterToRSQL([
         ['preSaisie', '=', true],
       ]);
 
       this.listenQuery<GQLResponse>(
         this.countQuery,
-        { variables: { searchModifications, searchPresaisie }},
+        { variables: { searchPresaisie, searchPresaisieModif }, fetchPolicy: 'no-cache'},
         res => resolve(res.data),
       );
     });
+  }
+
+  public showToValidateBadges() {
+
+    const tiersListe = ['Client', 'Fournisseur', 'Transporteur', 'LieuPassageAQuai', 'Entrepot'];
+
+     // Only showed when admin user
+    if (!this.authService.currentUser.adminClient) return;
+
+    this.fetchUnvalidatedCount().then(res => {
+
+      const counters = {...res, countTiers: 0};
+
+      // Calculate unvalidated total tiers number
+      Object.keys(counters).map( counter => {
+        if (tiersListe.includes(counter.replace('count', ''))) counters.countTiers += counters[counter];
+      });
+
+      // Show categories with unvalidated forms (red badge)
+      Object.keys(counters).map( counter => {
+        const menuTitle = document.querySelector('.' + counter + '.toValidate-indicator');
+        if (counters[counter]) {
+          menuTitle?.classList.remove('display-none');
+          if (menuTitle) menuTitle.innerHTML = counters[counter];
+        } else {
+          menuTitle?.classList.add('display-none');
+        }
+      });
+
+    });
+
   }
 
 }

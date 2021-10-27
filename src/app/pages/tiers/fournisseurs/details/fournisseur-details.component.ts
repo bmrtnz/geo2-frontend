@@ -33,6 +33,7 @@ import { Certification, CertificationFournisseur, Fournisseur } from '../../../.
 import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
 import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -150,6 +151,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     private naturesStationService: NaturesStationService,
     private basesPaiementService: BasesPaiementService,
     private certificationsService: CertificationsService,
+    public validationService: ValidationService,
     private modificationsService: ModificationsService,
     private groupesFournisseurService: GroupesFournisseurService,
     private paysService: PaysService,
@@ -320,7 +322,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       this.editing = false;
       this.modificationsService
       .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup, 'tiers-fournisseurs-')
-      .subscribe(e => this.modifListe.refreshList());
+      .subscribe(e => {
+        this.modifListe.refreshList();
+        // Show red badges (unvalidated forms)
+        this.validationService.showToValidateBadges();
+      });
       return;
     }
 
@@ -345,6 +351,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         next: (e) => {
           notify('Sauvegardé', 'success', 3000);
           this.refreshGrid.emit();
+          // Show red badges (unvalidated forms)
+          this.validationService.showToValidateBadges();
           if (!this.createMode) {
             this.fournisseur = {
               ...this.fournisseur,

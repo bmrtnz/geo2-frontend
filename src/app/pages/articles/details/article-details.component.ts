@@ -38,6 +38,7 @@ import { Article } from 'app/shared/models';
 import { ArticlesService } from 'app/shared/services';
 import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
 import Document from 'app/shared/models/document.model';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
     selector: 'app-articles',
@@ -164,6 +165,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private etiquettesColisService: EtiquettesColisService,
         private etiquettesUcService: EtiquettesUcService,
         private etiquettesEvenementiellesService: EtiquettesEvenementiellesService,
+        private validationService: ValidationService,
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
@@ -267,6 +269,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     next: (event) => {
                         notify('Sauvegardé', 'success', 3000);
                         this.refreshGrid.emit();
+                        // Show red badges (unvalidated forms)
+                        this.validationService.showToValidateBadges();
                         this.article = {
                             ...this.article,
                             ...this.formGroup.getRawValue(),

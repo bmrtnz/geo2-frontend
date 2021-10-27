@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { navigation } from '../../app-navigation';
 import { Router, NavigationEnd } from '@angular/router';
 import { DxButtonModule } from 'devextreme-angular';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-side-nav-outer-toolbar',
@@ -31,7 +32,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
   minMenuSize = 0;
   shaderEnabled = false;
 
-  constructor(private screen: ScreenService, private router: Router) { }
+  constructor(
+    private screen: ScreenService,
+    private router: Router,
+    private validationService: ValidationService
+    ) { }
 
   ngOnInit() {
     this.filterMenuItems();
@@ -46,6 +51,10 @@ export class SideNavOuterToolbarComponent implements OnInit {
     this.screen.changed.subscribe(() => this.updateDrawer());
 
     this.updateDrawer();
+
+    // Show red badges (unvalidated forms)
+    this.validationService.showToValidateBadges();
+
   }
 
   onScroll(e) {
