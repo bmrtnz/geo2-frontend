@@ -299,7 +299,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             fournisseur.valide = false;
             this.saveData(fournisseur);
           }
-          return;
         });
 
       } else {
@@ -308,8 +307,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           this.preSaisie = '';
         }
         fournisseur.id = this.fournisseur.id;
+        this.saveData(fournisseur);
       }
-      this.saveData(fournisseur);
 
     }
   }
