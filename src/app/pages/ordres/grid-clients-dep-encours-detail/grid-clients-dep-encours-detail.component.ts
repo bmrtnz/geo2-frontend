@@ -39,7 +39,21 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
   }
 
   enableFilters() {
-    this.dataSource.filter([['pays.id', '=', this.masterRow.data.id]]);
+    this.dataSource.filter([
+      ['pays.id', '=', this.masterRow.data.id],
+      'and',
+      [
+        ['enCoursNonEchu', '<>', 0],
+        'or',
+        ['enCours1a30', '<>', 0],
+        'or',
+        ['enCours31a60', '<>', 0],
+        'or',
+        ['enCours61a90', '<>', 0],
+        'or',
+        ['enCours90Plus', '<>', 0],
+      ],
+    ]);
   }
 
   onCellPrepared(event) {
