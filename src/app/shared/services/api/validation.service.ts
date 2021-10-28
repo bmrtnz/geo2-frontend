@@ -1,16 +1,29 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '../api.service';
 import { Apollo } from 'apollo-angular';
 import { AuthService } from '..';
-import { ModificationsService } from './modification.service';
+import { ApiService } from '../api.service';
 
 type GQLResponse = {
-  countClient: number, // pre-saisie + modification
-  countFournisseur: number, // pre-saisie + modification
-  countTransporteur: number, // pre-saisie + modification
-  countLieuPassageAQuai: number, // pre-saisie + modification
-  countEntrepot: number, // pre-saisie + modification
-  countArticle: number, // pre-saisie
+  pClient: number, // pre-saisie
+  mClient: number, // modification
+  pFournisseur: number, // pre-saisie
+  mFournisseur: number, // modification
+  pTransporteur: number, // pre-saisie
+  mTransporteur: number, // modification
+  pLieuPassageAQuai: number, // pre-saisie
+  mLieuPassageAQuai: number, // modification
+  pEntrepot: number, // pre-saisie
+  mEntrepot: number, // modification
+  pArticle: number, // pre-saisie
+};
+
+type ConcatenatedResponse = {
+  countClient: number,
+  countFournisseur: number,
+  countTransporteur: number,
+  countLieuPassageAQuai: number,
+  countEntrepot: number,
+  countArticle: number,
 };
 
 @Injectable({
@@ -18,57 +31,58 @@ type GQLResponse = {
 })
 export class ValidationService extends ApiService {
 
+  private presaisieFilter = [
+    ['preSaisie', '=', true],
+    'and',
+    ['valide', '<>', true],
+  ];
+
+  private modificationFilter = [
+    ['modifications.statut', '=', false],
+  ];
+
   private countQuery = `
     query CountValidation(
       $searchPresaisie: String,
-      $searchPresaisieModif: String,
+      $searchModif: String,
     ) {
-      countClient(search: $searchPresaisieModif)
-      countFournisseur(search: $searchPresaisieModif)
-      countTransporteur(search: $searchPresaisieModif)
-      countLieuPassageAQuai(search: $searchPresaisieModif)
-      countEntrepot(search: $searchPresaisieModif)
-      countArticle(search: $searchPresaisie)
+      pClient: countClient(search: $searchPresaisie)
+      mClient: countClient(search: $searchModif)
+      pFournisseur: countFournisseur(search: $searchPresaisie)
+      mFournisseur: countFournisseur(search: $searchModif)
+      pTransporteur: countTransporteur(search: $searchPresaisie)
+      mTransporteur: countTransporteur(search: $searchModif)
+      pLieuPassageAQuai: countLieuPassageAQuai(search: $searchPresaisie)
+      mLieuPassageAQuai: countLieuPassageAQuai(search: $searchModif)
+      pEntrepot: countEntrepot(search: $searchPresaisie)
+      mEntrepot: countEntrepot(search: $searchModif)
+      pArticle: countArticle(search: $searchPresaisie)
     }
     `;
 
   constructor(
     private authService: AuthService,
-    private modificationsService: ModificationsService,
     apollo: Apollo
-    ) {
+  ) {
     super(apollo);
    }
 
   /**
    * Fetch Tiers/Articles forms count with unvalidated status
    */
-  public fetchUnvalidatedCount(): Promise<GQLResponse> {
-    const commonFilter = [
-      ['valide', '=', true],
-    ];
+  public fetchUnvalidatedCount(): Promise<ConcatenatedResponse> {
     return new Promise( resolve => {
 
-      const searchModifications = this.mapDXFilterToRSQL([
-        ...commonFilter,
-        'and',
-        ['modifications.statut', '=', false],
-      ]);
-
-      const searchPresaisie = this.mapDXFilterToRSQL([
-        ['preSaisie', '=', true],
-        'and',
-        ['valide', '<>', true],
-      ]);
-
-      const searchPresaisieModif = this.mapDXFilterToRSQL([
-        ['preSaisie', '=', true],
-      ]);
+      const searchPresaisie = this.mapDXFilterToRSQL(this.presaisieFilter);
+      const searchModif = this.mapDXFilterToRSQL(this.modificationFilter);
 
       this.listenQuery<GQLResponse>(
         this.countQuery,
-        { variables: { searchPresaisie, searchPresaisieModif }, fetchPolicy: 'no-cache'},
-        res => resolve(res.data),
+        {
+          variables: { searchPresaisie, searchModif },
+          fetchPolicy: 'no-cache',
+        },
+        res => resolve(this.concatResponse(res.data)),
       );
     });
   }
@@ -102,6 +116,17 @@ export class ValidationService extends ApiService {
 
     });
 
+  }
+
+  private concatResponse(data: GQLResponse) {
+    return {
+      countClient: data.mClient + data.pClient,
+      countFournisseur: data.mFournisseur + data.pFournisseur,
+      countTransporteur: data.mTransporteur + data.pTransporteur,
+      countLieuPassageAQuai: data.mLieuPassageAQuai + data.pLieuPassageAQuai,
+      countEntrepot: data.mEntrepot + data.pEntrepot,
+      countArticle: data.pArticle,
+    };
   }
 
 }
