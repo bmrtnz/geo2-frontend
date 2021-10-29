@@ -21,6 +21,7 @@ const errorLink = onError(({ networkError }) => {
 });
 
 export function createApollo(httpLink: HttpLink) {
+  const ENTITY_KEY = 'id';
   return {
     link: from([
       errorLink,
@@ -28,12 +29,12 @@ export function createApollo(httpLink: HttpLink) {
     ]),
     cache: new InMemoryCache({
       dataIdFromObject(responseObject: Readonly<StoreObject> | Readonly<Edge>) {
-        if (responseObject.node) {
-          if (responseObject.node.id)
-            return `${responseObject.node.__typename}:${responseObject.node.id}`;
-          if (responseObject.node.key)
-            return `${responseObject.node.__typename}:${responseObject.node.key}`;
-        }
+        if (responseObject?.node?.id)
+          return `${responseObject.node.__typename}:${responseObject.node.id}`;
+        if (responseObject?.node?.key)
+          return `${responseObject.node.__typename}:${responseObject.node.key}`;
+        if (responseObject?.__typename?.startsWith('Geo') && ENTITY_KEY in responseObject)
+          return `${responseObject.__typename}:${responseObject[ENTITY_KEY]}`;
         return defaultDataIdFromObject(responseObject);
       },
     }),
