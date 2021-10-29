@@ -167,11 +167,8 @@
                 <span class="dx-form-group-caption">{{
                   "ordres-suivi-groupe-infos" | localize
                 }}</span>
-                <span *ngIf="ordre" class="dx-form-group-caption order-status">&nbsp;- {{ status }}</span>
-                <span *ngIf="ordre" class="order-id"
-                  >&nbsp;&nbsp;{{ "ordres-ref" | localize }} :
-                  {{ ordre.id }}</span
-                >
+                <span *ngIf="ordre" class="dx-form-group-caption order-status">{{ status }}</span>
+                <span *ngIf="refOrdre" class="order-id">&nbsp;&nbsp;{{ "ordres-ref" | localize }} : {{ refOrdre }}</span>
                 <div class="dx-form-group-content no-padding-bottom">
                   <dx-box>
                       <dxi-item [ratio]="4">
