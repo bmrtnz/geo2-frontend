@@ -225,6 +225,8 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     if (!this.authService.currentUser.adminClient && !this.createMode) {
       this.readOnlyMode = true;
       this.editing = false;
+      transporteur.preSaisie = true;
+      this.preSaisie = 'preSaisie';
       this.modificationsService
       .saveModifications(Transporteur.name, this.transporteur, this.formGroup, 'tiers-transporteurs-')
       .subscribe(e => {

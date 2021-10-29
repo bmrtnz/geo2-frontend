@@ -11,9 +11,9 @@ export class GridRowStyleService {
     if (e.rowType === 'data') {
       if (!e.data.valide) {
         e.rowElement.classList.add('highlight-datagrid-row');
-        if (e.data.preSaisie) {
-          e.rowElement.classList.add('tovalidate-datagrid-row');
-        }
+      }
+      if (e.data.preSaisie) {
+        e.rowElement.classList.add('tovalidate-datagrid-row');
       }
     }
   }

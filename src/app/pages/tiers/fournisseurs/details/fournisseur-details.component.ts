@@ -319,6 +319,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     if (!this.authService.currentUser.adminClient && !this.createMode) {
       this.readOnlyMode = true;
       this.editing = false;
+      fournisseur.preSaisie = true;
+      this.preSaisie = 'preSaisie';
       this.modificationsService
       .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup, 'tiers-fournisseurs-')
       .subscribe(e => {

@@ -56,7 +56,7 @@ export class ModificationsService extends ApiService implements APIRead {
 
   getValue(el) {
     if (typeof el === 'object' && !Array.isArray(el) && el !== null) {
-      return (el.nomUtilisateur ? el.nomUtilisateur : (el.raisonSocial ? el.raisonSocial : el.description));
+      return (el.nomUtilisateur ? el.nomUtilisateur : el.libelle ? el.libelle : el.raisonSocial ? el.raisonSocial : el.description);
     } else {
       return el !== null ? this.convertTrueFalse(el) : this.notSet;
     }
@@ -64,7 +64,7 @@ export class ModificationsService extends ApiService implements APIRead {
 
   convertTrueFalse(val) {
     val = val === true ? 'Oui' : (val === false ? 'Non' : val);
-    return val;
+    return val ? val : this.notSet;
   }
 
   saveModifications(modelName, entityObject, fGroup: FormGroup, traductionKey) {

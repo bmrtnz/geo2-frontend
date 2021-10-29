@@ -227,40 +227,27 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         entrepot.preSaisie = true;
       }
 
-      // Non-admin user : do not save, just record modifications
-      if (!this.authService.currentUser.adminClient && !this.createMode) {
-        this.readOnlyMode = true;
-        this.editing = false;
-        this.modificationsService
-        .saveModifications(Entrepot.name, this.entrepot, this.formGroup, 'tiers-entrepots-')
-        .subscribe(e => {
-          this.modifListe.refreshList();
-          // Show red badges (unvalidated forms)
-          this.validationService.showToValidateBadges();
+      this.entrepotsService.save({ entrepot })
+        .subscribe({
+          next: (e) => {
+            notify('Sauvegardé', 'success', 3000);
+            // Show red badges (unvalidated forms)
+            // this.validationService.showToValidateBadges();
+            if (!this.createMode) {
+              this.entrepot = {
+                ...this.entrepot,
+                ...this.formGroup.getRawValue(),
+              };
+              this.readOnlyMode = true;
+            } else {
+              this.editing = false;
+              this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
+            }
+            this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
+          },
+          error: () => notify('Echec de la sauvegarde', 'error', 3000),
         });
-      } else {
 
-        this.entrepotsService.save({ entrepot })
-          .subscribe({
-            next: (e) => {
-              notify('Sauvegardé', 'success', 3000);
-              // Show red badges (unvalidated forms)
-              this.validationService.showToValidateBadges();
-              if (!this.createMode) {
-                this.entrepot = {
-                  ...this.entrepot,
-                  ...this.formGroup.getRawValue(),
-                };
-                this.readOnlyMode = true;
-              } else {
-                this.editing = false;
-                this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
-              }
-              this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
-            },
-            error: () => notify('Echec de la sauvegarde', 'error', 3000),
-          });
-        }
     }
 
   }

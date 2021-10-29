@@ -175,6 +175,8 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
       if (!this.authService.currentUser.adminClient && !this.createMode) {
         this.readOnlyMode = true;
         this.editing = false;
+        lieuPassageAQuai.preSaisie = true;
+        this.preSaisie = 'preSaisie';
         this.modificationsService
         .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup, 'tiers-lieuxpassageaquai-')
         .subscribe(e => {
