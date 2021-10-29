@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { gql, MutationOptions, OperationVariables } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
+import { Article } from 'app/shared/models';
+import { APIRead, ApiService, RelayPage } from 'app/shared/services/api.service';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from } from 'rxjs';
 import { mergeMap, take, takeUntil } from 'rxjs/operators';
-import { Article } from 'app/shared/models';
-import { APIRead, ApiService, RelayPage } from 'app/shared/services/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ import { APIRead, ApiService, RelayPage } from 'app/shared/services/api.service'
 export class ArticlesService extends ApiService implements APIRead {
 
   /* tslint:disable-next-line max-line-length */
-  fieldsFilter = /.\.*(?:id|description|espece|variete|blueWhaleStock|type|modeCulture|valide|commentaire|userModification|dateModification)$/i;
+  fieldsFilter = /.\.*(?:id|description|espece|variete|blueWhaleStock|type|modeCulture|valide|commentaire|userModification|dateModification|preSaisie)$/i;
 
   constructor(
     apollo: Apollo,
@@ -90,6 +90,9 @@ export class ArticlesService extends ApiService implements APIRead {
     return dt;
   }
 
+  /**
+   * @deprecated Use save_v2
+   */
   save(variables: OperationVariables & { clone: boolean }) {
     return from(this.buildSaveWithClone(2, this.fieldsFilter))
     .pipe(
@@ -102,11 +105,36 @@ export class ArticlesService extends ApiService implements APIRead {
     );
   }
 
+  save_v2(columns: Array<string>, variables: OperationVariables & { clone: boolean }) {
+    return from(this.buildSaveWithClone_v2(columns))
+    .pipe(
+      takeUntil(this.destroy),
+      mergeMap( query => this.apollo.mutate({
+        mutation: gql(query),
+        variables,
+      } as MutationOptions)),
+      take(1),
+    );
+  }
+
+  /**
+   * @deprecated Use buildSaveWithClone_v2
+   */
   protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
     return `
       mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {
         saveArticle(article: $article,clone: $clone) {
           ${await this.model.getGQLFields(depth, filter).toPromise()}
+        }
+      }
+    `;
+  }
+
+  protected async buildSaveWithClone_v2(columns: Array<string>) {
+    return `
+      mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {
+        saveArticle(article: $article,clone: $clone) {
+          ${await this.model.getGQL(columns).toPromise()}
         }
       }
     `;

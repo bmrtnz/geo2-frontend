@@ -104,7 +104,10 @@ export interface APIRead {
 }
 
 export interface APIPersist {
-  save(variables: OperationVariables):
+  save?(variables: OperationVariables):
+    Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
+    Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  save_v2?(columns: Array<string>, variables: OperationVariables):
     Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
     Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
   delete?(variables: OperationVariables):

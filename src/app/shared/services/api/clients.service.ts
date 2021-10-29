@@ -64,4 +64,8 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
   save(variables: OperationVariables) {
     return this.watchSaveQuery({ variables }, 2, this.fieldsFilter);
   }
+
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.watchSaveQuery_v2({ variables }, columns);
+  }
 }

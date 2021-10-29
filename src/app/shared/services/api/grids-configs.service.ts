@@ -58,4 +58,8 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
     return this.watchSaveQuery({ variables, fetchPolicy: 'no-cache' });
   }
 
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.watchSaveQuery_v2({ variables }, columns);
+  }
+
 }

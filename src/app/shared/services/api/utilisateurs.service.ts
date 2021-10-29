@@ -41,4 +41,7 @@ export class UtilisateursService extends ApiService {
     return this.watchSaveQuery({ variables });
   }
 
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.watchSaveQuery_v2({ variables }, columns);
+  }
 }
