@@ -4,7 +4,7 @@ import { GridNavigatorComponent } from 'app/shared/components/grid-navigator/gri
 import { ApiService } from 'app/shared/services/api.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { combineLatest, of, Subject } from 'rxjs';
-import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
 
 /**
  * Nested view main component
@@ -69,8 +69,13 @@ export class NestedComponent implements OnDestroy {
     // Rafraichissement datagrid list
     if (partComponent.refreshGrid) {
       partComponent.refreshGrid
-      .pipe(takeUntil(this.destroy))
-      .subscribe(() => this.dataGrid.instance.refresh());
+      .pipe(
+        takeUntil(this.destroy),
+        debounceTime(100),
+      )
+      .subscribe(() => {
+        this.dataGrid.instance.refresh();
+      });
     }
 
   }
