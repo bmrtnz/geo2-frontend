@@ -180,32 +180,6 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
-   * Filter dirty controls and map value
-   * @param controls Form controls
-   */
-  public extractDirty(controls: {
-    [key: string]: AbstractControl;
-  }) {
-    const clean = (value) => {
-      if (value && value.__typename)
-        for (const field of Object.keys(value))
-          if (field !== this.keyField)
-            delete value[field];
-      return value;
-    };
-    return Object.entries(controls)
-      .filter(([key, control]) => key === this.keyField || control.dirty)
-      .map(([key, control]) => {
-        const value = JSON.parse(JSON.stringify(control.value));
-        const cleanValue = typeof value === 'object' && value && value.length !== undefined ?
-          (value as []).map(v => clean(v)) :
-          clean(value);
-        return { [key]: cleanValue };
-      })
-      .reduce((acm, current) => ({ ...acm, ...current }));
-  }
-
-  /**
    * Locate page and index of entity in paginated list
    * @param inputVariables Page location variables
    */
@@ -373,6 +347,7 @@ export abstract class ApiService implements OnDestroy {
    * Build save query
    * @param depth Save response depth
    * @param regExpFilter Fields filter
+   * @deprecated Use buildSave_v2
    */
   protected async buildSave(depth?: number, regExpFilter?: RegExp) {
     const entity = this.withLowerCaseFirst(this.model.name);
@@ -383,6 +358,25 @@ export abstract class ApiService implements OnDestroy {
       mutation ${alias}($${entity}: ${type}!) {
         ${operation}(${entity}: $${entity}) {
           ${await this.model.getGQLFields(depth, regExpFilter).toPromise()}
+        }
+      }
+    `;
+  }
+
+  /**
+   * Build save query
+   * @param depth Save response depth
+   * @param regExpFilter Fields filter
+   */
+  protected async buildSave_v2(columns: Array<string>) {
+    const entity = this.withLowerCaseFirst(this.model.name);
+    const operation = `save${this.model.name}`;
+    const type = `Geo${this.model.name}Input`;
+    const alias = operation.ucFirst();
+    return `
+      mutation ${alias}($${entity}: ${type}!) {
+        ${operation}(${entity}: $${entity}) {
+          ${await this.model.getGQL(columns).toPromise()}
         }
       }
     `;
@@ -770,6 +764,7 @@ export abstract class ApiService implements OnDestroy {
    * @param options Apollo MutationOptions
    * @param depth Query fields depth
    * @param fieldsFilter Query fields filter
+   * @deprecated Use watchSaveQuery_v2
    */
   public watchSaveQuery(
     options: Partial<MutationOptions>,
@@ -777,6 +772,27 @@ export abstract class ApiService implements OnDestroy {
     fieldsFilter?: RegExp,
   ) {
     return from(this.buildSave(depth, fieldsFilter))
+    .pipe(
+      takeUntil(this.destroy),
+      mergeMap( query => this.apollo.mutate({
+        mutation: gql(query),
+        ...options,
+      } as MutationOptions)),
+      take(1),
+    );
+  }
+
+  /**
+   * Utility method to listen for `save()` query
+   * @param options Apollo MutationOptions
+   * @param depth Query fields depth
+   * @param fieldsFilter Query fields filter
+   */
+  public watchSaveQuery_v2(
+    options: Partial<MutationOptions>,
+    columns: Array<string>
+  ) {
+    return from(this.buildSave_v2(columns))
     .pipe(
       takeUntil(this.destroy),
       mergeMap( query => this.apollo.mutate({
