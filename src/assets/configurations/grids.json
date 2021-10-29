@@ -1874,6 +1874,10 @@
       {
         "dataField": "valide",
         "visible": false
+      },
+      {
+        "dataField": "id",
+        "visible": false
       }
     ]
   },
