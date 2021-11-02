@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
-import { ModificationListComponent} from 'app/shared/components/modification-list/modification-list.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
@@ -16,6 +16,7 @@ import { DevisesService } from 'app/shared/services/api/devises.service';
 import { GroupesClientService } from 'app/shared/services/api/groupes-vente.service';
 import { HistoryType } from 'app/shared/services/api/historique.service';
 import { IncotermsService } from 'app/shared/services/api/incoterms.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
 import { PaysService } from 'app/shared/services/api/pays.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
@@ -23,18 +24,17 @@ import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { TypesClientService } from 'app/shared/services/api/types-client.service';
 import { TypesVenteService } from 'app/shared/services/api/types-vente.service';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { DxAccordionComponent, DxCheckBoxComponent, DxNumberBoxComponent, DxTextBoxComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxCheckBoxComponent, DxNumberBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { environment } from 'environments/environment';
-import { from, of } from 'rxjs';
-import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
-import { reduceEachTrailingCommentRange } from 'typescript';
-import { Certification, CertificationClient, Client, Role, Modification, ModificationCorps } from '../../../../shared/models';
+import { of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { Certification, CertificationClient, Client, Role } from '../../../../shared/models';
 import { AuthService, ClientsService } from '../../../../shared/services';
-import { ModificationsService } from 'app/shared/services/api/modification.service';
-import { ValidationService } from 'app/shared/services/api/validation.service';
+import { client as clientsGridConfig } from 'assets/configurations/grids.json';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
 
 @Component({
   selector: 'app-client-details',
@@ -174,6 +174,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   constructor(
     private fb: FormBuilder,
+    private formUtils: FormUtilsService,
     private basesPaiementService: BasesPaiementService,
     private clientsService: ClientsService,
     private devisesService: DevisesService,
@@ -384,7 +385,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const client = this.clientsService.extractDirty(this.formGroup.controls);
+      const client = this.formUtils.extractDirty(this.formGroup.controls,Client.getKeyField());
 
       if (!this.createMode) {
         client.id = this.client.id;
@@ -425,7 +426,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             { client: { id: client.id }, valide: client.valide },
           ) : of(undefined))
           .pipe(
-            switchMap(_ => this.clientsService.save({
+            switchMap(_ => this.clientsService.save_v2(this.getDirtyFieldsPath(), {
               client: {
                 ...client,
                 certifications,
@@ -534,6 +535,19 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           certification: { id },
         };
       });
+  }
+
+  private getDirtyFieldsPath() {
+    const dirtyFields = this.formUtils
+    .extractDirty(this.formGroup.controls, Client.getKeyField());
+    const gridFields = clientsGridConfig.columns
+    .map(({dataField}) => dataField);
+
+    return [
+      ...this.formUtils.extractPaths(dirtyFields)
+      .filter( path => !path.startsWith('certifications')),
+      ...gridFields,
+    ];
   }
 
 }

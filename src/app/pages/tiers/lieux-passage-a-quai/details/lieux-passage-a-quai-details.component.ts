@@ -4,21 +4,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 import { Editable } from 'app/shared/guards/editing-guard';
+import { LieuPassageAQuai } from 'app/shared/models';
 import { AuthService } from 'app/shared/services';
 import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
+import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
 import { PaysService } from 'app/shared/services/api/pays.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
+import { ValidationService } from 'app/shared/services/api/validation.service';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
+import * as gridsConfig from 'assets/configurations/grids.json';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import {  tap } from 'rxjs/operators';
-import { LieuPassageAQuai } from 'app/shared/models';
-import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
-import { ModificationsService } from 'app/shared/services/api/modification.service';
-import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
-import { ValidationService } from 'app/shared/services/api/validation.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lieux-passage-a-quai-details',
@@ -73,6 +75,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   constructor(
     private fb: FormBuilder,
+    private formUtils: FormUtilsService,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
@@ -155,7 +158,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const lieuPassageAQuai = this.lieupassageaquaiService.extractDirty(this.formGroup.controls);
+      const lieuPassageAQuai = this.formUtils.extractDirty(this.formGroup.controls, LieuPassageAQuai.getKeyField());
 
       if (this.createMode) {
         lieuPassageAQuai.id = this.formGroup.get('id').value.toUpperCase();
@@ -184,7 +187,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         });
       } else {
 
-        this.lieupassageaquaiService.save({ lieuPassageAQuai })
+        this.lieupassageaquaiService.save_v2(this.getDirtyFieldsPath(), { lieuPassageAQuai })
           .subscribe({
             next: (e) => {
               notify('Sauvegardé', 'success', 3000);
@@ -230,6 +233,18 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${this.lieupassageaquai.id}/${this.lieupassageaquai.typeTiers}`]);
+  }
+
+  private getDirtyFieldsPath() {
+    const dirtyFields = this.formUtils
+    .extractDirty(this.formGroup.controls, LieuPassageAQuai.getKeyField());
+    const gridFields = gridsConfig['lieu-passage-a-quai'].columns
+    .map(({dataField}) => dataField);
+
+    return [
+      ...this.formUtils.extractPaths(dirtyFields),
+      ...gridFields,
+    ];
   }
 
 }

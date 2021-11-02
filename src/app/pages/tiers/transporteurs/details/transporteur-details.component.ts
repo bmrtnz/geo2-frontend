@@ -2,25 +2,27 @@ import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
-import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 import { Editable } from 'app/shared/guards/editing-guard';
+import { Transporteur } from 'app/shared/models';
 import { AuthService, ClientsService } from 'app/shared/services';
 import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
 import { PaysService } from 'app/shared/services/api/pays.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
+import { TransporteursService } from 'app/shared/services/api/transporteurs.service';
+import { ValidationService } from 'app/shared/services/api/validation.service';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
+import { transporteur as transporteursGridConfig } from 'assets/configurations/grids.json';
 import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { tap } from 'rxjs/operators';
-import { Transporteur } from 'app/shared/models';
-import { TransporteursService } from 'app/shared/services/api/transporteurs.service';
-import { ModificationsService } from 'app/shared/services/api/modification.service';
-import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
-import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-transporteur-details',
@@ -81,6 +83,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   constructor(
     private fb: FormBuilder,
+    private formUtils: FormUtilsService,
     private transporteursService: TransporteursService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
@@ -192,7 +195,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const transporteur = this.transporteursService.extractDirty(this.formGroup.controls);
+      const transporteur = this.formUtils.extractDirty(this.formGroup.controls, Transporteur.getKeyField());
 
       if (this.createMode) {
 
@@ -235,7 +238,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       return;
     }
 
-    this.transporteursService.save({ transporteur })
+    this.transporteursService.save_v2(this.getDirtyFieldsPath(), { transporteur })
     .subscribe({
       next: (e) => {
         notify('Sauvegardé', 'success', 3000);
@@ -280,6 +283,18 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${this.transporteur.id}/${this.transporteur.typeTiers}`]);
+  }
+
+  private getDirtyFieldsPath() {
+    const dirtyFields = this.formUtils
+    .extractDirty(this.formGroup.controls, Transporteur.getKeyField());
+    const gridFields = transporteursGridConfig.columns
+    .map(({dataField}) => dataField);
+
+    return [
+      ...this.formUtils.extractPaths(dirtyFields),
+      ...gridFields,
+    ];
   }
 
 }

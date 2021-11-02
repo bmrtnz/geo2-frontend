@@ -5,11 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { CertificationDatePopupComponent } from 'app/shared/components/certification-date-popup/certification-date-popup.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
-import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import IdentifiantFournisseur from 'app/shared/models/identifiant.fournisseur.model';
 import { AuthService } from 'app/shared/services';
 import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
 import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
@@ -19,21 +19,22 @@ import { DevisesService } from 'app/shared/services/api/devises.service';
 import { GroupesFournisseurService } from 'app/shared/services/api/groupes-fournisseur.service';
 import { HistoryType } from 'app/shared/services/api/historique.service';
 import { IdentifiantsFournisseurService } from 'app/shared/services/api/identifiants-fournisseur.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { MoyensPaiementService } from 'app/shared/services/api/moyens-paiement.service';
 import { NaturesStationService } from 'app/shared/services/api/natures-station.service';
 import { PaysService } from 'app/shared/services/api/pays.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import { TypesFournisseurService } from 'app/shared/services/api/types-fournisseur.service';
+import { ValidationService } from 'app/shared/services/api/validation.service';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
+import { fournisseur as fournisseursGridConfig } from 'assets/configurations/grids.json';
 import { DxAccordionComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { from, of } from 'rxjs';
-import { concatAll, mergeAll, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { Certification, CertificationFournisseur, Fournisseur } from '../../../../shared/models';
 import { FournisseursService } from '../../../../shared/services/api/fournisseurs.service';
-import { ModificationsService } from 'app/shared/services/api/modification.service';
-import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
-import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-fournisseur-details',
@@ -140,6 +141,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   constructor(
     private fb: FormBuilder,
+    private formUtils: FormUtilsService,
     private fournisseursService: FournisseursService,
     private bureauxAchatService: BureauxAchatService,
     private conditionsVenteService: ConditionsVenteService,
@@ -284,7 +286,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const fournisseur = this.fournisseursService.extractDirty(this.formGroup.controls);
+      const fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
 
       if (this.createMode) {
 
@@ -340,7 +342,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       ) : of(undefined))
       .pipe(
         switchMap(_ => certifications ? this.certDatePopup.present(certifications) : of(undefined)),
-        switchMap(certs => this.fournisseursService.save({
+        switchMap(certs => this.fournisseursService.save_v2(this.getDirtyFieldsPath(), {
           fournisseur: {
             ...fournisseur,
             certifications: certs,
@@ -455,6 +457,19 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             null,
         };
       });
+  }
+
+  private getDirtyFieldsPath() {
+    const dirtyFields = this.formUtils
+    .extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
+    const gridFields = fournisseursGridConfig.columns
+    .map(({dataField}) => dataField);
+
+    return [
+      ...this.formUtils.extractPaths(dirtyFields)
+      .filter( path => !path.startsWith('certifications')),
+      ...gridFields,
+    ];
   }
 
 }

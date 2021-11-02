@@ -20,6 +20,7 @@ import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
 import { concatMap, filter, first, map, switchMap } from 'rxjs/operators';
 import { RouteParam, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
 
 /**
  * Grid with loading toggled by parent
@@ -129,6 +130,7 @@ export class FormComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private formUtils: FormUtilsService,
     private ordresService: OrdresService,
     private currentCompanyService: CurrentCompanyService,
     private clientsService: ClientsService,
@@ -191,7 +193,7 @@ export class FormComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const ordre = this.ordresService.extractDirty(this.formGroup.controls);
+      const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
       this.ordresService.save({ ordre }).subscribe({
@@ -239,7 +241,7 @@ export class FormComponent implements OnInit, AfterViewInit {
 
   duplicate() {
     if (this.formGroup.pristine && this.formGroup.valid) {
-      const ordre = this.ordresService.extractDirty(this.formGroup.controls);
+      const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
 
       this.ordresService.clone({ ordre }).subscribe({
         next: (e) => {
@@ -251,7 +253,7 @@ export class FormComponent implements OnInit, AfterViewInit {
   }
 
   deleteOrder() {
-    const ordre = this.ordresService.extractDirty(this.formGroup.controls);
+    const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
     if (!ordre.id) return;
     this.ordresService.delete({ ordre }).subscribe({
       next: (_) => {

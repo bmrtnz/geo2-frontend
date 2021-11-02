@@ -5,8 +5,11 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
+import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { AuthService, LocalizationService } from 'app/shared/services';
+import { Article } from 'app/shared/models';
+import Document from 'app/shared/models/document.model';
+import { ArticlesService, AuthService, LocalizationService } from 'app/shared/services';
 import { AlveolesService } from 'app/shared/services/api/alveoles.service';
 import { CalibresMarquageService } from 'app/shared/services/api/calibres-marquage.service';
 import { CalibresUnifiesService } from 'app/shared/services/api/calibres-unifies.service';
@@ -29,16 +32,14 @@ import { StickeursService } from 'app/shared/services/api/stickeurs.service';
 import { SucresService } from 'app/shared/services/api/sucres.service';
 import { TypesVenteService } from 'app/shared/services/api/types-vente.service';
 import { TypesService } from 'app/shared/services/api/types.service';
+import { ValidationService } from 'app/shared/services/api/validation.service';
 import { VarietesService } from 'app/shared/services/api/varietes.service';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
+import { article as articlesGridConfig } from 'assets/configurations/grids.json';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { Article } from 'app/shared/models';
-import { ArticlesService } from 'app/shared/services';
-import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
-import Document from 'app/shared/models/document.model';
-import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
     selector: 'app-articles',
@@ -169,6 +170,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
+        private formUtils: FormUtilsService,
         public authService: AuthService,
         private localization: LocalizationService
     ) {
@@ -242,7 +244,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     onSubmit() {
 
         if (!this.formGroup.pristine && this.formGroup.valid && !this.warningMode) {
-            const article = this.articlesService.extractDirty(this.formGroup.controls);
+            const article = this.formUtils.extractDirty(this.formGroup.controls, Article.getKeyField());
 
             if (this.cloneMode) {
                 article.preSaisie = true;
@@ -260,7 +262,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     { article: { id: article.id }, valide: article.valide },
                 ) : of(undefined))
                 .pipe(
-                    switchMap(_ => this.articlesService.save({
+                    switchMap(_ => this.articlesService.save_v2(this.getDirtyFieldsPath(), {
                         article,
                         clone: this.cloneMode,
                     })),
@@ -375,5 +377,17 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
         return code + check;
     }
+
+    private getDirtyFieldsPath() {
+        const dirtyFields = this.formUtils
+        .extractDirty(this.formGroup.controls, Article.getKeyField());
+        const gridFields = articlesGridConfig.columns
+        .map(({dataField}) => dataField);
+
+        return [
+          ...this.formUtils.extractPaths(dirtyFields),
+          ...gridFields,
+        ];
+      }
 
 }

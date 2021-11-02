@@ -3,25 +3,26 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
+import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { AuthService, TransporteursService } from 'app/shared/services';
+import { Entrepot, Role } from 'app/shared/models';
+import { AuthService, ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { IncotermsService } from 'app/shared/services/api/incoterms.service';
 import { ModesLivraisonService } from 'app/shared/services/api/modes-livraison.service';
+import { ModificationsService } from 'app/shared/services/api/modification.service';
 import { PaysService } from 'app/shared/services/api/pays.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { RegimesTvaService } from 'app/shared/services/api/regimes-tva.service';
 import { TransitairesService } from 'app/shared/services/api/transitaires.service';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
+import { ValidationService } from 'app/shared/services/api/validation.service';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
+import { entrepot as entrepotsGridConfig } from 'assets/configurations/grids.json';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { tap } from 'rxjs/operators';
-import { Entrepot, Role } from 'app/shared/models';
-import { ClientsService, EntrepotsService } from 'app/shared/services';
-import { ModificationsService } from 'app/shared/services/api/modification.service';
-import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
-import { ValidationService } from 'app/shared/services/api/validation.service';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -95,6 +96,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
  
   constructor(
     private fb: FormBuilder,
+    private formUtils: FormUtilsService,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
@@ -212,7 +214,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const entrepot = this.entrepotsService.extractDirty(this.formGroup.controls);
+      const entrepot = this.formUtils.extractDirty(this.formGroup.controls, Entrepot.getKeyField());
 
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
@@ -240,7 +242,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         });
       } else {
 
-        this.entrepotsService.save({ entrepot })
+        this.entrepotsService.save_v2(this.getDirtyFieldsPath(), { entrepot })
           .subscribe({
             next: (e) => {
               notify('Sauvegardé', 'success', 3000);
@@ -284,6 +286,18 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   contactsBtnClick() {
     this.router.navigate([`/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`]);
+  }
+
+  private getDirtyFieldsPath() {
+    const dirtyFields = this.formUtils
+    .extractDirty(this.formGroup.controls, Entrepot.getKeyField());
+    const gridFields = entrepotsGridConfig['lieu-passage-a-quai'].columns
+    .map(({dataField}) => dataField);
+
+    return [
+      ...this.formUtils.extractPaths(dirtyFields),
+      ...gridFields,
+    ];
   }
 
 }
