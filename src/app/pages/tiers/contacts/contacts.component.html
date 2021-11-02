@@ -58,6 +58,8 @@
       [dataField]="field.dataField"
       [caption]="('tiers-contacts-' + field.dataField.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
+      trueText="Oui"
+      falseText="Non"
       [allowEditing]="field.name !== 'valide' && field?.allowEditing !== false"
       [validationRules]="field.validationRules || {}"
       [editCellTemplate]="field.name == 'description' ? 'selectBoxEditTemplate' : false"

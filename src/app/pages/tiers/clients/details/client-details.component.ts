@@ -408,6 +408,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       if (!this.authService.currentUser.adminClient && !this.createMode) {
         this.readOnlyMode = true;
         this.editing = false;
+        client.preSaisie = true;
+        this.preSaisie = 'preSaisie';
         this.modificationsService
         .saveModifications(Client.name, this.client, this.formGroup, 'tiers-clients-')
         .subscribe(e => {

@@ -301,7 +301,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             fournisseur.valide = false;
             this.saveData(fournisseur);
           }
-          return;
         });
 
       } else {
@@ -310,8 +309,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           this.preSaisie = '';
         }
         fournisseur.id = this.fournisseur.id;
+        this.saveData(fournisseur);
       }
-      this.saveData(fournisseur);
 
     }
   }
@@ -322,6 +321,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     if (!this.authService.currentUser.adminClient && !this.createMode) {
       this.readOnlyMode = true;
       this.editing = false;
+      fournisseur.preSaisie = true;
+      this.preSaisie = 'preSaisie';
       this.modificationsService
       .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup, 'tiers-fournisseurs-')
       .subscribe(e => {

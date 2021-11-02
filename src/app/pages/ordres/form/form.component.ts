@@ -58,6 +58,7 @@ export class FormComponent implements OnInit, AfterViewInit {
   public fragments = Fragments;
   @Output() public ordre: Ordre;
   public status: string;
+  public refOrdre: string;
   public formGroup = this.formBuilder.group({
     id: [''],
     client: [''],
@@ -340,7 +341,8 @@ export class FormComponent implements OnInit, AfterViewInit {
     .subscribe( ordre => {
       this.ordre = ordre;
       this.fetchFullOrderNumber();
-      this.status = Statut[this.ordre.statut] + (this.ordre.factureEDI ? ' EDI' : '');
+      if (this.ordre.numero) this.status = ' - ' + Statut[this.ordre.statut] + (this.ordre.factureEDI ? ' EDI' : '');
+      this.refOrdre = this.ordre?.id ? ordre.id : '-';
       this.canDuplicate = !!this?.ordre?.id;
       this.formGroup.reset(ordre);
       this.addLinkedOrders();
