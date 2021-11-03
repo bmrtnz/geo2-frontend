@@ -17,7 +17,8 @@ export class CurrentCompanyService {
   setCompany(societe) {
     window.sessionStorage.setItem('companyStorage', JSON.stringify(societe));
     this.showCompanyColorOnLogo(societe);
-    return;
+    // Force destroy views, so data will be valid
+    return window.location.reload();
   }
 
   showCompanyColorOnLogo(societe) {
