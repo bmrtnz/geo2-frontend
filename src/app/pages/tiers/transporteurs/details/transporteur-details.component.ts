@@ -195,7 +195,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const transporteur = this.formUtils.extractDirty(this.formGroup.controls, Transporteur.getKeyField());
+      let transporteur = this.formUtils.extractDirty(this.formGroup.controls, Transporteur.getKeyField());
 
       if (this.createMode) {
 
@@ -216,7 +216,24 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
           this.preSaisie = '';
         }
         transporteur.id = this.transporteur.id;
-        this.saveData(transporteur);
+        // Non-admin user : do not save, just record modifications
+        if (!this.authService.currentUser.adminClient) {
+          this.readOnlyMode = true;
+          this.editing = false;
+          transporteur.preSaisie = true;
+          this.preSaisie = 'preSaisie';
+          this.modificationsService
+          .saveModifications(Transporteur.name, this.transporteur, this.formGroup, 'tiers-transporteurs-')
+          .subscribe(e => {
+            this.modifListe.refreshList();
+            // Show red badges (unvalidated forms)
+            this.validationService.showToValidateBadges();
+            transporteur = {id : transporteur.id, preSaisie: true};
+            this.saveData(transporteur);
+          });
+        } else {
+          this.saveData(transporteur);
+        }
       }
 
     }
@@ -224,26 +241,10 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   saveData(transporteur) {
 
-    // Non-admin user : do not save, just record modifications
-    if (!this.authService.currentUser.adminClient && !this.createMode) {
-      this.readOnlyMode = true;
-      this.editing = false;
-      transporteur.preSaisie = true;
-      this.preSaisie = 'preSaisie';
-      this.modificationsService
-      .saveModifications(Transporteur.name, this.transporteur, this.formGroup, 'tiers-transporteurs-')
-      .subscribe(e => {
-        this.modifListe.refreshList();
-        // Show red badges (unvalidated forms)
-        this.validationService.showToValidateBadges();
-      });
-      return;
-    }
-
     this.transporteursService.save_v2(this.getDirtyFieldsPath(), { transporteur })
     .subscribe({
       next: (e) => {
-        notify('Sauvegardé', 'success', 3000);
+        if (this.createMode || this.authService.currentUser.adminClient) notify('Sauvegardé', 'success', 3000);
         this.refreshGrid.emit();
         // Show red badges (unvalidated forms)
         this.validationService.showToValidateBadges();
@@ -263,6 +264,26 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       error: () => notify('Echec de la sauvegarde', 'error', 3000),
     });
 
+  }
+
+  checkEmptyModificationList(listLength) {
+    if (listLength === 0 && this.authService.currentUser.adminClient) {
+      const transporteur = {id : this.transporteur.id, preSaisie: false};
+      this.transporteursService.save_v2(['id', 'preSaisie'], {
+        transporteur,
+      })
+      .subscribe({
+        next: () => {
+          this.refreshGrid.emit();
+          this.formGroup.markAsPristine();
+          this.preSaisie = '';
+        },
+        error: (err) => {
+          console.log(err);
+          notify('Echec de la sauvegarde', 'error', 3000);
+        }
+      });
+    }
   }
 
   onCancel() {

@@ -158,7 +158,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const lieuPassageAQuai = this.formUtils.extractDirty(this.formGroup.controls, LieuPassageAQuai.getKeyField());
+      let lieuPassageAQuai = this.formUtils.extractDirty(this.formGroup.controls, LieuPassageAQuai.getKeyField());
 
       if (this.createMode) {
         lieuPassageAQuai.id = this.formGroup.get('id').value.toUpperCase();
@@ -172,48 +172,75 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
           this.preSaisie = '';
         }
         lieuPassageAQuai.id = this.lieupassageaquai.id;
+
+        // Non-admin user : do not save, just record modifications
+        if (!this.authService.currentUser.adminClient) {
+          this.readOnlyMode = true;
+          this.editing = false;
+          this.preSaisie = 'preSaisie';
+          this.modificationsService
+          .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup, 'tiers-lieuxpassageaquai-')
+          .subscribe(e => {
+            this.modifListe.refreshList();
+            // Show red badges (unvalidated forms)
+            this.validationService.showToValidateBadges();
+            lieuPassageAQuai = {id : lieuPassageAQuai.id, preSaisie: true};
+            this.saveData(lieuPassageAQuai);
+          });
+        } else {
+          this.saveData(lieuPassageAQuai);
+        }
+
       }
 
-      // Non-admin user : do not save, just record modifications
-      if (!this.authService.currentUser.adminClient && !this.createMode) {
-        this.readOnlyMode = true;
-        this.editing = false;
-        lieuPassageAQuai.preSaisie = true;
-        this.preSaisie = 'preSaisie';
-        this.modificationsService
-        .saveModifications(LieuPassageAQuai.name, this.lieupassageaquai, this.formGroup, 'tiers-lieuxpassageaquai-')
-        .subscribe(e => {
-          this.modifListe.refreshList();
-          // Show red badges (unvalidated forms)
-          this.validationService.showToValidateBadges();
-        });
-      } else {
-
-        this.lieupassageaquaiService.save_v2(this.getDirtyFieldsPath(), { lieuPassageAQuai })
-          .subscribe({
-            next: (e) => {
-              notify('Sauvegardé', 'success', 3000);
-              this.refreshGrid.emit();
-              // Show red badges (unvalidated forms)
-              this.validationService.showToValidateBadges();
-              if (!this.createMode) {
-                this.lieupassageaquai = {
-                  ...this.lieupassageaquai,
-                  ...this.formGroup.getRawValue(),
-                };
-                this.readOnlyMode = true;
-              } else {
-                this.editing = false;
-                this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
-              }
-              this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
-              this.formGroup.markAsPristine();
-            },
-            error: () => notify('Echec de la sauvegarde', 'error', 3000),
-          });
-        }
     }
 
+  }
+
+  saveData(lieuPassageAQuai) {
+
+    this.lieupassageaquaiService.save_v2(this.getDirtyFieldsPath(), { lieuPassageAQuai })
+    .subscribe({
+      next: (e) => {
+        if (this.createMode || this.authService.currentUser.adminClient) notify('Sauvegardé', 'success', 3000);
+        this.refreshGrid.emit();
+        // Show red badges (unvalidated forms)
+        this.validationService.showToValidateBadges();
+        if (!this.createMode) {
+          this.lieupassageaquai = {
+            ...this.lieupassageaquai,
+            ...this.formGroup.getRawValue(),
+          };
+          this.readOnlyMode = true;
+        } else {
+          this.editing = false;
+          this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
+        }
+        this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
+        this.formGroup.markAsPristine();
+      },
+      error: () => notify('Echec de la sauvegarde', 'error', 3000),
+    });
+  }
+
+  checkEmptyModificationList(listLength) {
+    if (listLength === 0 && this.authService.currentUser.adminClient) {
+      const lieuPassageAQuai = {id : this.lieupassageaquai.id, preSaisie: false};
+      this.lieupassageaquaiService.save_v2(['id', 'preSaisie'], {
+        lieuPassageAQuai,
+      })
+      .subscribe({
+        next: () => {
+          this.refreshGrid.emit();
+          this.formGroup.markAsPristine();
+          this.preSaisie = '';
+        },
+        error: (err) => {
+          console.log(err);
+          notify('Echec de la sauvegarde', 'error', 3000);
+        }
+      });
+    }
   }
 
   onCancel() {

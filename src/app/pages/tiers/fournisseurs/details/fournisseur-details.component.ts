@@ -186,6 +186,26 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     }
   }
 
+  checkEmptyModificationList(listLength) {
+    if (listLength === 0 && this.authService.currentUser.adminClient) {
+      const fournisseur = {id : this.fournisseur.id, preSaisie: false};
+      this.fournisseursService.save_v2(['id', 'preSaisie'], {
+        fournisseur,
+      })
+      .subscribe({
+        next: () => {
+          this.refreshGrid.emit();
+          this.formGroup.markAsPristine();
+          this.preSaisie = '';
+        },
+        error: (err) => {
+          console.log(err);
+          notify('Echec de la sauvegarde', 'error', 3000);
+        }
+      });
+    }
+  }
+
   ngOnInit() {
 
     this.route.params
@@ -286,7 +306,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
+      let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
 
       if (this.createMode) {
 
@@ -309,29 +329,43 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           this.preSaisie = '';
         }
         fournisseur.id = this.fournisseur.id;
-        this.saveData(fournisseur);
+
+        // Non-admin user : do not save, just record modifications
+        if (!this.authService.currentUser.adminClient && !this.createMode) {
+          this.readOnlyMode = true;
+          this.editing = false;
+          fournisseur.preSaisie = true;
+          this.preSaisie = 'preSaisie';
+          this.modificationsService
+          .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup, 'tiers-fournisseurs-')
+          .subscribe(e => {
+            this.modifListe.refreshList();
+            // Show red badges (unvalidated forms)
+            this.validationService.showToValidateBadges();
+            fournisseur = {id : fournisseur.id, preSaisie: true};
+            this.fournisseursService.save_v2(['id', 'preSaisie'], {
+              fournisseur,
+            })
+            .subscribe({
+              next: () => {
+                this.refreshGrid.emit();
+                this.formGroup.markAsPristine();
+              },
+              error: (err) => {
+                console.log(err);
+                notify('Echec de la sauvegarde', 'error', 3000);
+              }
+            });
+          });
+        } else {
+          this.saveData(fournisseur);
+        }
       }
 
     }
   }
 
   saveData(fournisseur) {
-
-    // Non-admin user : do not save, just record modifications
-    if (!this.authService.currentUser.adminClient && !this.createMode) {
-      this.readOnlyMode = true;
-      this.editing = false;
-      fournisseur.preSaisie = true;
-      this.preSaisie = 'preSaisie';
-      this.modificationsService
-      .saveModifications(Fournisseur.name, this.fournisseur, this.formGroup, 'tiers-fournisseurs-')
-      .subscribe(e => {
-        this.modifListe.refreshList();
-        // Show red badges (unvalidated forms)
-        this.validationService.showToValidateBadges();
-      });
-      return;
-    }
 
     /* tslint:disable-next-line max-line-length */
     const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
@@ -352,7 +386,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       )
       .subscribe({
         next: (e) => {
-          notify('Sauvegardé', 'success', 3000);
+          if (this.createMode || this.authService.currentUser.adminClient) notify('Sauvegardé', 'success', 3000);
           this.refreshGrid.emit();
           // Show red badges (unvalidated forms)
           this.validationService.showToValidateBadges();

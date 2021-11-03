@@ -71,6 +71,20 @@ export class ModificationsService extends ApiService implements APIRead {
 
     const listeModifications: Partial<ModificationCorps>[] =
       Object.entries(fGroup.controls).filter( ([ , control]) => control.dirty && control.value !== null).map( ([key, control]) => {
+        if (key === 'certifications') {
+          const certBefore = [];
+          const certAfter = [];
+          entityObject[key].map( (cert) => certBefore.push(cert.certification.description));
+          control.value.map( (cert) => certAfter.push(cert.description));
+          return {
+            affichageActuel: certBefore.length ? certBefore.join('/') : this.notSet,
+            affichageDemande: certAfter.length ? certAfter.join('/') : this.notSet,
+            chemin: modelName + '.' + key,
+            traductionKey: traductionKey + key,
+            valeurActuelle: certBefore.length ? certBefore.join('/') : this.notSet,
+            valeurDemandee: certAfter.length ? certAfter.join('/') : this.notSet
+          };
+        }
         return {
           affichageActuel: this.getValue(entityObject[key]),
           affichageDemande: this.getValue(control.value),
@@ -91,7 +105,7 @@ export class ModificationsService extends ApiService implements APIRead {
 
      // Back to initial state
     listeModifications.map( modif => {
-      fGroup.get(modif.chemin.split('.')[1]).setValue(modif.valeurActuelle);
+      if (modif.chemin.split('.')[1] !== 'certifications') fGroup.get(modif.chemin.split('.')[1]).setValue(modif.valeurActuelle);
     });
     fGroup.markAsPristine();
 
