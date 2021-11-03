@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { AuthService } from '..';
 import { ApiService } from '../api.service';
@@ -31,10 +31,12 @@ type ConcatenatedResponse = {
 })
 export class ValidationService extends ApiService {
 
+  public prod = !isDevMode();
+
   private presaisieFilter = [
     ['preSaisie', '=', true],
-    'and',
-    ['valide', '<>', true],
+    // 'and',
+    // ['valide', '<>', true],
   ];
 
   private modificationFilter = [
@@ -91,11 +93,10 @@ export class ValidationService extends ApiService {
 
     const tiersListe = ['Client', 'Fournisseur', 'Transporteur', 'LieuPassageAQuai', 'Entrepot'];
 
-     // Only showed when admin user
-    if (!this.authService.currentUser.adminClient) return;
+     // Only showed when admin user (always shown when dev)
+    if (!this.authService.currentUser.adminClient && this.prod) return;
 
     this.fetchUnvalidatedCount().then(res => {
-
       const counters = {...res, countTiers: 0};
 
       // Calculate unvalidated total tiers number

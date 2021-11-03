@@ -382,10 +382,30 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     });
   }
 
+  checkEmptyModificationList(listLength) {
+    if (listLength === 0 && this.authService.currentUser.adminClient) {
+      const client = {id : this.client.id, preSaisie: false};
+      this.clientsService.save_v2(['id', 'preSaisie'], {
+        client,
+      })
+      .subscribe({
+        next: () => {
+          this.refreshGrid.emit();
+          this.formGroup.markAsPristine();
+          this.preSaisie = '';
+        },
+        error: (err) => {
+          console.log(err);
+          notify('Echec de la sauvegarde', 'error', 3000);
+        }
+      });
+    }
+  }
+
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      const client = this.formUtils.extractDirty(this.formGroup.controls,Client.getKeyField());
+      let client = this.formUtils.extractDirty(this.formGroup.controls,Client.getKeyField());
 
       if (!this.createMode) {
         client.id = this.client.id;
@@ -416,50 +436,68 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           this.modifListe.refreshList();
           // Show red badges (unvalidated forms)
           this.validationService.showToValidateBadges();
-        });
-
-      } else {
-
-        const certifications = this.mapCertificationsForSave(client.certifications);
-
-        (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
-          this.validatePopup.present(
-            HistoryType.CLIENT,
-            { client: { id: client.id }, valide: client.valide },
-          ) : of(undefined))
-          .pipe(
-            switchMap(_ => this.clientsService.save_v2(this.getDirtyFieldsPath(), {
-              client: {
-                ...client,
-                certifications,
-              }
-            })),
-          )
+          client = {id : client.id, preSaisie: true};
+          this.clientsService.save_v2(['id', 'preSaisie'], {
+            client,
+          })
           .subscribe({
-            next: (e) => {
-              notify('Sauvegardé', 'success', 3000);
+            next: () => {
               this.refreshGrid.emit();
-              // Show red badges (unvalidated forms)
-              this.validationService.showToValidateBadges();
-              if (!this.createMode) {
-                this.client = {
-                  ...this.client,
-                  ...this.formGroup.getRawValue(),
-                };
-                this.readOnlyMode = true;
-              } else {
-                this.editing = false;
-                this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
-              }
-              this.client.historique = e.data.saveClient.historique;
-              this.client.typeTiers = e.data.saveClient.typeTiers;
-              this.client.certifications = e.data.saveClient.certifications;
               this.formGroup.markAsPristine();
             },
-            error: () => notify('Echec de la sauvegarde', 'error', 3000),
+            error: (err) => {
+              console.log(err);
+              notify('Echec de la sauvegarde', 'error', 3000);
+            }
           });
+        });
+      } else {
+        this.saveData(client);
       }
     }
+  }
+
+  saveData(client) {
+
+    const certifications = this.mapCertificationsForSave(client.certifications);
+
+    (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
+      this.validatePopup.present(
+        HistoryType.CLIENT,
+        { client: { id: client.id }, valide: client.valide },
+      ) : of(undefined))
+      .pipe(
+        switchMap(_ => this.clientsService.save_v2(this.getDirtyFieldsPath(), {
+          client: {
+            ...client,
+            certifications,
+          }
+        })),
+      )
+      .subscribe({
+        next: (e) => {
+          notify('Sauvegardé', 'success', 3000);
+          this.refreshGrid.emit();
+          // Show red badges (unvalidated forms)
+          this.validationService.showToValidateBadges();
+          if (!this.createMode) {
+            this.client = {
+              ...this.client,
+              ...this.formGroup.getRawValue(),
+            };
+            this.readOnlyMode = true;
+          } else {
+            this.editing = false;
+            this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+          }
+          this.client.historique = e.data.saveClient.historique;
+          this.client.typeTiers = e.data.saveClient.typeTiers;
+          this.client.certifications = e.data.saveClient.certifications;
+          this.formGroup.markAsPristine();
+        },
+        error: () => notify('Echec de la sauvegarde', 'error', 3000),
+      });
+
   }
 
   onCancel() {

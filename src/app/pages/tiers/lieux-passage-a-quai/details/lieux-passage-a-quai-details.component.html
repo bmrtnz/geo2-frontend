@@ -53,7 +53,7 @@
       </dxi-item>
       <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
       <dxi-item [ratio]="8.2">
-        <app-modification-list [entite]="'LieuPassageAQuai'" [entiteID]="lieupassageaquai.id" *ngIf="!createMode && lieupassageaquai"></app-modification-list>
+        <app-modification-list (listChange)="checkEmptyModificationList($event)" [entite]="'LieuPassageAQuai'" [entiteID]="lieupassageaquai.id" *ngIf="!createMode && lieupassageaquai"></app-modification-list>
         <dx-box direction="row">
           <dxi-item [ratio]="4">
             <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">

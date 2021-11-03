@@ -1,4 +1,4 @@
-import { Component, NgModule, Input, OnInit, OnChanges, Output } from '@angular/core';
+import { Component, NgModule, Input, OnInit, OnChanges, Output, EventEmitter } from '@angular/core';
 import { DxButtonModule, DxPopupModule, DxTemplateModule, DxTextBoxModule, DxBoxModule } from 'devextreme-angular';
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'app/shared/services';
@@ -20,6 +20,8 @@ export class ModificationListComponent implements OnInit, OnChanges {
   @Input() entite: string;
   @Input() entiteID: string;
   @Output() modifs: any;
+
+  @Output() listChange = new EventEmitter();
 
   modifications: DataSource;
 
@@ -75,6 +77,7 @@ export class ModificationListComponent implements OnInit, OnChanges {
         this.modifs = this.modifs.filter(res => res.id !== modifID);
         // Show red badges (unvalidated forms)
         this.validationService.showToValidateBadges();
+        this.listChange.emit(this.modifs.length);
         notify('Suppression demande effectuée !', 'success', 3000);
       },
       error: () => notify('Erreur lors de la demande de suppression', 'error', 3000),
