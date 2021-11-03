@@ -77,12 +77,12 @@ export class ModificationsService extends ApiService implements APIRead {
           entityObject[key].map( (cert) => certBefore.push(cert.certification.description));
           control.value.map( (cert) => certAfter.push(cert.description));
           return {
-            affichageActuel: certBefore ? certBefore.join('/') : this.notSet,
-            affichageDemande: certAfter ? certAfter.join('/') : this.notSet,
+            affichageActuel: certBefore.length ? certBefore.join('/') : this.notSet,
+            affichageDemande: certAfter.length ? certAfter.join('/') : this.notSet,
             chemin: modelName + '.' + key,
             traductionKey: traductionKey + key,
-            valeurActuelle: certBefore ? certBefore.join('/') : this.notSet,
-            valeurDemandee: certAfter ? certAfter.join('/') : this.notSet
+            valeurActuelle: certBefore.length ? certBefore.join('/') : this.notSet,
+            valeurDemandee: certAfter.length ? certAfter.join('/') : this.notSet
           };
         }
         return {
