@@ -46,14 +46,13 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
         tap(_ => this.indicators = []),
         switchMap((ids) => from(ids)),
         map( id => this.ordresIndicatorsService.getIndicatorByName(id)),
-        map(indicator => new Indicator({ ...indicator, loading: indicator.fetchCount})),
+        map(indicator => new Indicator({ ...indicator, loading: indicator.withCount})),
         tap(indicator => this.indicators.push(indicator)),
         filter(indicator => indicator.loading),
         mergeMap(async (indicator: Indicator) => {
-          if (!indicator.fetchCount)
+          if (!indicator.withCount)
             return [indicator.id, ''] as [string, string];
 
-          const dataSource = indicator.dataSource;
           const flt = indicator.cloneFilter();
 
           // Mapping
@@ -66,9 +65,12 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
                 this.datePipe.transform((new Date()).setDate((new Date()).getDate() - 1).valueOf(), 'yyyy-MM-dd'),
               ],
             );
-          dataSource.filter(flt);
-          await dataSource.load();
-          return [indicator.id, dataSource.totalCount().toString()] as [string, string];
+
+          const countResponse = await indicator
+          .fetchCount(flt)
+          .pipe(map( res => Object.values(res.data)[0].toString()))
+          .toPromise();
+          return [indicator.id, countResponse] as [string, string];
         }),
       )
       .subscribe(([id, value]) => {

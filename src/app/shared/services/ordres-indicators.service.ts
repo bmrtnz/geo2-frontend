@@ -1,19 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { OrdresSuiviComponent } from 'app/pages/ordres/suivi/ordres-suivi.component';
-import { BonAFacturerComponent } from 'app/pages/ordres/indicateurs/bon-a-facturer/bon-a-facturer.component';
-import { ClientsDepEncoursComponent } from 'app/pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component';
-import { LitigesComponent } from 'app/pages/ordres/indicateurs/litiges/litiges.component';
-import { OrdresNonCloturesComponent } from 'app/pages/ordres/indicateurs/ordres-non-clotures/ordres-non-clotures.component';
-import { OrdresNonConfirmesComponent } from 'app/pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component';
-import { PlanningDepartComponent } from 'app/pages/ordres/indicateurs/planning-depart/planning-depart.component';
-import { SupervisionLivraisonComponent } from 'app/pages/ordres/indicateurs/supervision-livraison/supervision-livraison.component';
+import { ApolloQueryResult } from '@apollo/client/core';
 import DataSource from 'devextreme/data/data_source';
 import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
-import { OrdreDatasourceOperation, OrdresService } from './api/ordres.service';
-import { Operation as PaysOperation, PaysService } from './api/pays.service';
+import { CountResponse as CountResponseOrdre, OrdreDatasourceOperation, OrdresService } from './api/ordres.service';
+import { CountResponse as CountResponsePays, Operation as PaysOperation, PaysService } from './api/pays.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
 
@@ -42,7 +35,8 @@ export class Indicator {
   indicatorIcon: string;
   warningIcon: string;
   loading: boolean;
-  fetchCount?: boolean;
+  withCount?: boolean;
+  fetchCount?: (dxFilter?: any[]) => Observable<ApolloQueryResult<any>>;
   dataSource?: DataSource;
   select?: RegExp;
   component?: Promise<any>;
@@ -64,7 +58,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'SupervisionLivraison',
   enabled: false,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Supervision',
   subParameter: 'livraison',
   goTo: '/ordres/indicateurs/supervisionLivraison',
@@ -75,7 +69,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'BonsAFacturer',
   enabled: false,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Bons',
   subParameter: 'à facturer',
   goTo: '/ordres/indicateurs/bonAFacturer',
@@ -86,7 +80,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'ClientsDepEncours',
   enabled: true,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
   goTo: '/ordres/indicateurs/clientsDepEncours',
@@ -99,7 +93,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'OrdresNonClotures',
   enabled: true,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
   goTo: '/ordres/indicateurs/ordresNonClotures',
@@ -112,7 +106,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'OrdresNonConfirmes',
   enabled: true,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Ordres',
   subParameter: 'non confirmés',
   goTo: '/ordres/indicateurs/ordresNonConfirmes',
@@ -125,7 +119,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'Litiges',
   enabled: false,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Litiges',
   subParameter: 'en cours',
   goTo: '/ordres/indicateurs/litiges',
@@ -145,7 +139,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'PlanningDepart',
   enabled: true,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Planning',
   subParameter: 'départ',
   goTo: '/ordres/indicateurs/planningDepart',
@@ -157,7 +151,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'CommandesTransit',
   enabled: false,
-  fetchCount: true,
+  withCount: true,
   parameter: 'Commandes',
   subParameter: 'en transit',
   goTo: '/ordres/indicateurs/commandesTransit',
@@ -217,7 +211,9 @@ export class OrdresIndicatorsService {
       if (instance.id === 'ClientsDepEncours') {
         instance.detailedFields = this.paysService.model
         .getDetailedFields(1, instance.select, {forceFilter: true});
-        instance.dataSource = paysService.getDataSource(1, instance.select, PaysOperation.AllDistinct);
+        instance.dataSource = paysService
+        .getDataSource(1, instance.select, PaysOperation.AllDistinct);
+        instance.fetchCount = paysService.count.bind(paysService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponsePays>>;
         instance.filter = [
           ['valide', '=', true],
           'and',
@@ -242,6 +238,7 @@ export class OrdresIndicatorsService {
         instance.detailedFields = this.ordresService.model
         .getDetailedFields(3, instance.select, {forceFilter: true});
         instance.dataSource = ordresService.getDataSource(null, 2, instance.select);
+        instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
         instance.filter = [
           ...instance.filter,
           'and',
@@ -262,6 +259,7 @@ export class OrdresIndicatorsService {
         instance.detailedFields = this.ordresService.model
         .getDetailedFields(3, instance.select, {forceFilter: true});
         instance.dataSource = this.ordresService.getDataSource(null, 2, instance.select);
+        instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
         instance.filter = [
           ...instance.filter,
           'and',
@@ -291,6 +289,7 @@ export class OrdresIndicatorsService {
         .getDetailedFields(2, instance.select, {forceFilter: true});
         instance.dataSource = this.ordresService
         .getDataSource(OrdreDatasourceOperation.SuiviDeparts, 1, instance.select);
+        instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
         instance.filter = [
           ...instance.filter,
           'and',

@@ -47,7 +47,7 @@
             <div class="indicator-container">
                 <dx-button *ngIf="indicator.indicatorIcon" type="danger" icon="{{indicator.indicatorIcon}}" class="tile-button indicator-button"></dx-button>
                 <div class="number-container">
-                    <div *ngIf="indicator.fetchCount" class="indicator">
+                    <div *ngIf="indicator.withCount" class="indicator">
                         <dx-load-indicator [visible]="indicator.loading" height="40" width="40"></dx-load-indicator>
                         <span *ngIf="!indicator.loading && indicator.number !=='0'">{{indicator.number}}</span>
                     </div>

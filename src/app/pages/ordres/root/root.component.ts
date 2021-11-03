@@ -214,7 +214,7 @@ export class RootComponent implements OnInit, OnDestroy {
       .getIndicatorByName(data.id);
       data.component = (await indicator.component).default;
       // TODO Badge indicator count
-      // if (indicator.fetchCount) data.badge = indicator.number || '?';
+      // if (indicator.withCount) data.badge = indicator.number || '?';
       data.icon = indicator.indicatorIcon;
       data.title = indicator.parameter;
       data.details = indicator.subParameter;

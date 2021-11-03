@@ -3,17 +3,20 @@ import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { Pays } from '../../models';
-import { APIRead, ApiService, RelayPage } from '../api.service';
+import { APIRead, ApiService, RelayPage, APICount } from '../api.service';
+import { first } from 'rxjs/operators';
 
 export enum Operation {
   All = 'allPays',
   AllDistinct = 'allDistinctPays',
 }
 
+export type CountResponse = { countPays: number };
+
 @Injectable({
   providedIn: 'root'
 })
-export class PaysService extends ApiService implements APIRead {
+export class PaysService extends ApiService implements APIRead, APICount<CountResponse> {
 
   fieldsFilter = /.*\.(?:id|description)$/i;
 
@@ -58,6 +61,11 @@ export class PaysService extends ApiService implements APIRead {
         }),
       }),
     });
+  }
+
+  count(dxFilter?: any[]) {
+    const search = this.mapDXFilterToRSQL(dxFilter);
+    return this.watchCountQuery<CountResponse>(search).pipe(first());
   }
 
 }
