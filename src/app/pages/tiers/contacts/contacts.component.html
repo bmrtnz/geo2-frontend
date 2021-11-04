@@ -63,7 +63,7 @@
       falseText="Non"
       [allowEditing]="field.name !== 'valide' && field?.allowEditing !== false"
       [validationRules]="field.validationRules || {}"
-      [editCellTemplate]="field.dataField == 'flux.description' || field.dataField == 'moyenCommunication.description' ? 'selectBoxEditTemplate' : false"
+      [editCellTemplate]="field.dataField == 'flux' || field.dataField == 'moyenCommunication' ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
       [showInColumnChooser]="field.showInColumnChooser"
     ></dxi-column>
@@ -71,14 +71,14 @@
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
         [readOnly]="cell.data.flux.id === 'FACTUR' && !authService.currentUser.adminClient"
-        [dataSource]="this[removeDesc(cell.column.dataField) + 'Source']"
-        [displayExpr]="this[removeDesc(cell.column.dataField) + 'Service'].model.getLabelField()"
+        [dataSource]="this[cell.column.dataField + 'Source']"
+        [displayExpr]="this[cell.column.dataField + 'Service'].model.getLabelField()"
         [searchExpr]="[
-          this[removeDesc(cell.column.dataField) + 'Service'].model.getKeyField(),
-          this[removeDesc(cell.column.dataField) + 'Service'].model.getLabelField()
+          this[cell.column.dataField + 'Service'].model.getKeyField(),
+          this[cell.column.dataField + 'Service'].model.getLabelField()
         ]"
         [searchEnabled]="true"
-        [value]="cell.data[removeDesc(cell.column.dataField)]"
+        [value]="cell.data[cell.column.dataField]"
         (onValueChanged)="onValueChanged($event, cell)"
       ></dx-select-box>
     </div>

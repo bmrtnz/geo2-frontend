@@ -10,11 +10,11 @@ import { MoyenCommunicationService } from 'app/shared/services/api/moyens-commun
 import { SocietesService } from 'app/shared/services/api/societes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
+import { contact } from 'assets/configurations/grids.json';
+import { GridColumn } from 'basic';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { contact } from 'assets/configurations/grids.json';
-import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-contacts',
@@ -58,7 +58,15 @@ export class ContactsComponent implements OnInit, NestedPart {
       .map(value => value.toLowerCase())
       .shift();
 
-    this.contacts = this.contactsService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
+    this.contacts = this.contactsService
+    .getDataSource_v2(this.detailedFields.map(property => {
+      let field = property.dataField;
+      if (field === 'moyenCommunication')
+        field += `.${this.moyenCommunicationService.model.getKeyField()}`;
+      if (field === 'flux')
+        field += `.${this.fluxService.model.getKeyField()}`;
+      return field;
+    }));
     this.enableFilters();
     this.dataGrid.dataSource = this.contacts;
     this.societeSource = this.societeService.getDataSource();
@@ -111,15 +119,8 @@ export class ContactsComponent implements OnInit, NestedPart {
   }
 
   onValueChanged(event, cell) {
-    const key = this[this.removeDesc(cell.column.dataField) + 'Service'].keyField;
-    if (cell.setValue) {
-      cell.setValue({ [key]: event.value[key] });
-      console.log({ [key]: event.value[key] })
-    }
-  }
-
-  removeDesc(field) {
-    return field.replace('.description', '');
+    if (cell.setValue)
+      cell.setValue(event.value);
   }
 
 }

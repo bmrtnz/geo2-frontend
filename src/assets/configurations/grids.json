@@ -309,14 +309,14 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "moyenCommunication.description",
+        "dataField": "moyenCommunication",
         "dataType": "string",
         "width": 250,
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "flux.description",
+        "dataField": "flux",
         "dataType": "string",
         "width": 250,
         "visible": true
@@ -355,18 +355,6 @@
       {
         "dataField": "typeTiers",
         "dataType": "string",
-        "visible": false
-      },
-      {
-        "dataField": "flux.id",
-        "dataType": "string",
-        "width": 250,
-        "visible": false
-      },
-      {
-        "dataField": "moyenCommunication.id",
-        "dataType": "string",
-        "width": 250,
         "visible": false
       }
     ]
