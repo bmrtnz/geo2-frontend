@@ -356,6 +356,18 @@
         "dataField": "typeTiers",
         "dataType": "string",
         "visible": false
+      },
+      {
+        "dataField": "flux.id",
+        "dataType": "string",
+        "width": 250,
+        "visible": false
+      },
+      {
+        "dataField": "moyenCommunication.id",
+        "dataType": "string",
+        "width": 250,
+        "visible": false
       }
     ]
   },

@@ -15,6 +15,7 @@
       useNative:false,
       showScrollBar:'always'
     }"
+    (onEditingStart)="onEditingStart($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
@@ -62,13 +63,14 @@
       falseText="Non"
       [allowEditing]="field.name !== 'valide' && field?.allowEditing !== false"
       [validationRules]="field.validationRules || {}"
-      [editCellTemplate]="field.name == 'description' ? 'selectBoxEditTemplate' : false"
+      [editCellTemplate]="field.dataField == 'flux.description' || field.dataField == 'moyenCommunication.description' ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
       [showInColumnChooser]="field.showInColumnChooser"
     ></dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
+        [readOnly]="cell.data.flux.id === 'FACTUR' && !authService.currentUser.adminClient"
         [dataSource]="this[removeDesc(cell.column.dataField) + 'Source']"
         [displayExpr]="this[removeDesc(cell.column.dataField) + 'Service'].model.getLabelField()"
         [searchExpr]="[
@@ -76,10 +78,11 @@
           this[removeDesc(cell.column.dataField) + 'Service'].model.getLabelField()
         ]"
         [searchEnabled]="true"
-        [value]="cell.data[cell.column.dataField.replace('.description', '')]"
+        [value]="cell.data[removeDesc(cell.column.dataField)]"
         (onValueChanged)="onValueChanged($event, cell)"
       ></dx-select-box>
     </div>
 
   </dx-data-grid>
 </div>
+

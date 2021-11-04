@@ -41,4 +41,6 @@
 ::ng-deep #events ul li:last-child {
     border-bottom: none;
 }
-
+::ng-deep .disabled-cells input {
+    background:#FF325A !important;
+}

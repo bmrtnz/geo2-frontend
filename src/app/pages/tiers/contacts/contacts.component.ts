@@ -91,24 +91,31 @@ export class ContactsComponent implements OnInit, NestedPart {
     }
   }
 
+  onEditingStart(e) {
+    // Léa 10/2021
+    // Si un flux est "facture", la ligne ne peut être modifiée par un utilisateur de base (uniquement par les admin)
+    if (!this.authService.currentUser.adminClient) {
+      e.component.getSelectedRowsData().map( (row) => {
+        if (row.flux.id === 'FACTUR') e.cancel = true;
+      });
+    }
+  }
+
   onRowInserting(event) {
     (event.data as Contact).codeTiers = this.codeTiers;
     (event.data as Contact).typeTiers = this.typeTiers;
   }
-
-  // onSaved(event) {
-  //   this.contacts.reload();
-  //   this.dataGrid.instance.refresh();
-  // }
 
   onRowClick({ rowIndex }) {
     this.dataGrid.instance.editRow(rowIndex);
   }
 
   onValueChanged(event, cell) {
-    const key = this[cell.column.dataField + 'Service'].keyField;
-    if (cell.setValue)
+    const key = this[this.removeDesc(cell.column.dataField) + 'Service'].keyField;
+    if (cell.setValue) {
       cell.setValue({ [key]: event.value[key] });
+      console.log({ [key]: event.value[key] })
+    }
   }
 
   removeDesc(field) {
