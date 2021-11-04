@@ -692,23 +692,19 @@ export abstract class ApiService implements OnDestroy {
   }
 
   public watchCountQuery<R>(search?: string) {
-    const done = new Subject<ApolloQueryResult<R>>();
-    from(this.buildCount())
+    return from(this.buildCount())
     .pipe(
       takeUntil(this.destroy),
-      takeUntil(done),
-      mergeMap( query => this.query<R>(query, {
-        fetchPolicy: 'cache-and-network',
-        variables: {search},
-      } as any)),
+      mergeMap( query => this.apollo
+        .watchQuery<R>({
+          query: gql(query),
+          fetchPolicy: 'network-only',
+          returnPartialData: true,
+          variables: { search },
+        })
+        .valueChanges),
       filter( res => !!Object.keys(res.data).length),
-    )
-    .subscribe(res => {
-      done.next(res);
-      if (!res.loading)
-        done.complete();
-    });
-    return done;
+    );
   }
 
   /**

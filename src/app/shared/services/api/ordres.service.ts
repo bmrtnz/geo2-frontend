@@ -4,19 +4,21 @@ import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from, pipe, Subject, of } from 'rxjs';
-import { mergeMap, take, takeUntil, map, filter } from 'rxjs/operators';
+import { mergeMap, take, takeUntil, map, filter, first } from 'rxjs/operators';
 import { Ordre } from '../../models/ordre.model';
-import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
+import { APIPersist, APIRead, ApiService, RelayPage, APICount } from '../api.service';
 
 export enum OrdreDatasourceOperation {
   BAF = 'allOrdreBAF',
   SuiviDeparts = 'allOrdreSuiviDeparts',
 }
 
+export type CountResponse = { countOrdre: number };
+
 @Injectable({
   providedIn: 'root'
 })
-export class OrdresService extends ApiService implements APIRead, APIPersist {
+export class OrdresService extends ApiService implements APIRead, APIPersist, APICount<CountResponse> {
 
   /* tslint:disable-next-line */
   queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
@@ -170,6 +172,11 @@ export class OrdresService extends ApiService implements APIRead, APIPersist {
         }
       }
     `;
+  }
+
+  count(dxFilter?: any[]) {
+    const search = this.mapDXFilterToRSQL(dxFilter);
+    return this.watchCountQuery<CountResponse>(search).pipe(first());
   }
 
   saveAll(variables: OperationVariables & {allOrdre: Ordre[]}) {
