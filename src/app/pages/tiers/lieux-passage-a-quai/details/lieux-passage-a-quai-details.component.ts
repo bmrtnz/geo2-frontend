@@ -166,6 +166,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         // Avoir pour les valeur par defaut (qui sont not null dans la base)
         lieuPassageAQuai.valide = false;
         lieuPassageAQuai.preSaisie = true;
+        this.saveData(lieuPassageAQuai);
       } else {
         if (lieuPassageAQuai.valide === true) {
           lieuPassageAQuai.preSaisie = false;
