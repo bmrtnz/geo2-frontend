@@ -277,7 +277,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   private getDirtyFieldsPath() {
     const dirtyFields = this.formUtils
     .extractDirty(this.formGroup.controls, Entrepot.getKeyField());
-    const gridFields = entrepotsGridConfig['lieu-passage-a-quai'].columns
+    const gridFields = entrepotsGridConfig.columns
     .map(({dataField}) => dataField);
 
     return [

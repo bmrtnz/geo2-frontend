@@ -268,13 +268,14 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
-      const transporteur = {id : this.transporteur.id, preSaisie: false};
-      this.transporteursService.save_v2(['id', 'preSaisie'], {
+      const transporteur = {id : this.transporteur.id, preSaisie: false, valide: true};
+      this.transporteursService.save_v2(['id', 'preSaisie', 'valide'], {
         transporteur,
       })
       .subscribe({
         next: () => {
           this.refreshGrid.emit();
+          this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
         },

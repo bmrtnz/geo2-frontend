@@ -254,7 +254,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
              'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
             ]);
           this.tempData.load().then((res) => {
-            if (res.length) this.formGroup.get('commercial').setValue(res[0].id);
+            if (res.length) {
+              this.formGroup.get('commercial').setValue({id : res[0].id});
+              this.formGroup.get('commercial').markAsDirty();
+            }
           });
           // Set current username if assistant(e)
           this.tempData = this.personnesService.getDataSource();
@@ -262,10 +265,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
            'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
           ]);
           this.tempData.load().then((res) => {
-            if (res.length) this.formGroup.get('assistante').setValue(res[0].id);
+            if (res.length) {
+              this.formGroup.get('assistante').setValue({id : res[0].id});
+              this.formGroup.get('assistante').markAsDirty();
+            }
           });
           // Set condit vente
-          this.formGroup.get('conditionVente').setValue('COFREU');
+          this.formGroup.get('conditionVente').setValue({id: 'COFREU'});
+          this.formGroup.get('conditionVente').markAsDirty();
         }
         this.contentReadyEvent.emit();
       });
@@ -348,7 +355,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     this.cofaceBlocked = cofaceBlocked;
     if (cofaceBlocked) {
       this.formGroup.get('agrement').setValue(0);
+      this.formGroup.get('agrement').markAsDirty();
       this.formGroup.get('enCoursTemporaire').setValue(0);
+      this.formGroup.get('enCoursTemporaire').markAsDirty();
+      
     }
   }
 
@@ -384,13 +394,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
-      const client = {id : this.client.id, preSaisie: false};
-      this.clientsService.save_v2(['id', 'preSaisie'], {
+      const client = {id : this.client.id, preSaisie: false, valide: true};
+      this.clientsService.save_v2(['id', 'preSaisie', 'valide'], {
         client,
       })
       .subscribe({
         next: () => {
           this.refreshGrid.emit();
+          this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
         },
@@ -519,11 +530,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   onSecteurChange(e) {
     // France => Echéance 30 J (et non modifiable voir html)
-    if (this.editing) {
+    if (this.editing && e.value) {
+      this.formGroup.get('nbJourEcheance').markAsDirty();
       if (e.value.id === 'F') {
         this.formGroup.get('nbJourEcheance').setValue(30);
-      } else {
-        this.formGroup.get('nbJourEcheance').reset();
       }
     }
     this.freeUEVAT(e.value, this.formGroup.get('pays').value);

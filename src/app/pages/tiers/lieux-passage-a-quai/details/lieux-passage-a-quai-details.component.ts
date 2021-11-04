@@ -226,13 +226,14 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
-      const lieuPassageAQuai = {id : this.lieupassageaquai.id, preSaisie: false};
-      this.lieupassageaquaiService.save_v2(['id', 'preSaisie'], {
+      const lieuPassageAQuai = {id : this.lieupassageaquai.id, preSaisie: false, valide: true};
+      this.lieupassageaquaiService.save_v2(['id', 'preSaisie', 'valide'], {
         lieuPassageAQuai,
       })
       .subscribe({
         next: () => {
           this.refreshGrid.emit();
+          this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
         },

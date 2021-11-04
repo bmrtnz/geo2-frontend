@@ -177,8 +177,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   ngAfterViewInit(): void {
     // Ouverture ou fermeture accordéons (création)
-    this.openCloseAccordions(this.createMode);
-    this.formGroup.reset(this.fournisseur);
+    // this.openCloseAccordions(this.createMode);
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
       const Element = document.querySelector('.submit') as HTMLElement;
@@ -188,13 +187,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
-      const fournisseur = {id : this.fournisseur.id, preSaisie: false};
-      this.fournisseursService.save_v2(['id', 'preSaisie'], {
+      const fournisseur = {id : this.fournisseur.id, preSaisie: false, valide: true};
+      this.fournisseursService.save_v2(['id', 'preSaisie', 'valide'], {
         fournisseur,
       })
       .subscribe({
         next: () => {
           this.refreshGrid.emit();
+          this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
         },
@@ -226,7 +226,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         } else {
           this.fournisseur = new Fournisseur({});
           // Set condit vente
-          this.formGroup.get('conditionVente').setValue('ACHATS');
+          this.formGroup.get('conditionVente').setValue({id: 'ACHATS'});
+          this.formGroup.get('conditionVente').markAsDirty();
         }
         this.contentReadyEvent.emit();
       });
@@ -307,7 +308,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
       let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
-
       if (this.createMode) {
 
 
@@ -418,7 +418,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     const code = e.value.toUpperCase();
     this.formGroup.get('code').setValue(code);
     if (code.length && this.createMode) {
-      this.formGroup.get('compteComptable').markAsDirty()
+      this.formGroup.get('compteComptable').markAsDirty();
       this.formGroup.get('compteComptable').setValue(code);
     }
   }
