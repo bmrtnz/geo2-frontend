@@ -57,8 +57,8 @@ export class CompanyChooserComponent implements OnInit {
     // Session storage
     this.currentCompanyService.setCompany(societe);
     this.societe = societe.raisonSocial;
-    // Back home
-    this.router.navigate([`/**`]);
+    // Force destroy views, so data will be valid
+    return window.location.reload();
   }
 
 }
