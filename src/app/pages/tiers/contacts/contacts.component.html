@@ -70,7 +70,7 @@
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
-        [readOnly]="cell.data.flux.id === 'FACTUR' && !authService.currentUser.adminClient"
+        [readOnly]="cell?.data?.flux?.id === 'FACTUR' && !authService.currentUser.adminClient"
         [dataSource]="this[cell.column.dataField + 'Source']"
         [displayExpr]="this[cell.column.dataField + 'Service'].model.getLabelField()"
         [searchExpr]="[

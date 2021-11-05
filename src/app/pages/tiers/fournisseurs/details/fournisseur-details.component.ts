@@ -289,7 +289,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   displayCertifNameDate(data) {
     if (data && this.fournisseur) {
-      let dateCert = this.fournisseur?.certifications.find(res => res.certification.id == data.id)?.dateValidite;
+      let dateCert = this.fournisseur?.certifications &&
+        this.fournisseur.certifications
+        .find(res => res.certification.id === data.id)?.dateValidite;
       if (dateCert) {
         const mydate = new Date(dateCert);
         dateCert = mydate.toLocaleDateString();
