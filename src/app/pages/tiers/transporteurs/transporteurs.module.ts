@@ -8,7 +8,7 @@ import {
   DxButtonModule, DxCheckBoxModule,
   DxDataGridModule,
   DxFormModule, DxListModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
-  DxTextBoxModule, DxValidatorModule
+  DxTextBoxModule, DxNumberBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
@@ -28,6 +28,7 @@ import { ModificationListModule } from 'app/shared/components/modification-list/
     DxFormModule,
     DxDataGridModule,
     DxButtonModule,
+    DxNumberBoxModule,
     DxAccordionModule,
     DxListModule,
     DxSelectBoxModule,

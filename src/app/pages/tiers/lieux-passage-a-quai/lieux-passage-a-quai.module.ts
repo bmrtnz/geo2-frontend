@@ -6,7 +6,7 @@ import {
   DxAccordionModule, DxBoxModule,
   DxButtonModule, DxCheckBoxModule,
   DxDataGridModule,
-  DxFormModule, DxListModule, DxPopoverModule, DxSelectBoxModule, DxTextAreaModule,
+  DxFormModule, DxListModule, DxPopoverModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule,
   DxTextBoxModule, DxValidatorModule
 } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,6 +33,7 @@ import { ModificationListModule } from 'app/shared/components/modification-list/
     DxTextBoxModule,
     DxBoxModule,
     DxCheckBoxModule,
+    DxNumberBoxModule,
     DxTextAreaModule,
     DxPopoverModule,
     DxValidatorModule,

@@ -251,7 +251,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           this.tempData = this.personnesService.getDataSource();
           this.tempData.filter([
             ['valide', '=', true], 'and', ['role', '=', Role.COMMERCIAL],
-             'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
+             'and', ['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
             ]);
           this.tempData.load().then((res) => {
             if (res.length) {
@@ -262,7 +262,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           // Set current username if assistant(e)
           this.tempData = this.personnesService.getDataSource();
           this.tempData.filter([['valide', '=', true], 'and', ['role', '=', Role.ASSISTANT],
-           'and',['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
+           'and', ['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
           ]);
           this.tempData.load().then((res) => {
             if (res.length) {
@@ -302,7 +302,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       ['valide', '=', true],
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
-    ])
+    ]);
     this.typesClient = this.typesClientService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -333,7 +333,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   checkCompteComptable(e) {
-    const compteComptable = e.value;
+    const compteComptable = this.valueToUpperCase(e);
     if (!compteComptable) return;
     const clientsSource = this.clientsService.getDataSource_v2(['compteComptable']);
     clientsSource.filter(['compteComptable', '=', compteComptable]);
@@ -358,13 +358,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       this.formGroup.get('agrement').markAsDirty();
       this.formGroup.get('enCoursTemporaire').setValue(0);
       this.formGroup.get('enCoursTemporaire').markAsDirty();
-      
     }
   }
 
   onCofaceChange(params, el?) {
     // Sum of couverture Coface & couverture BW. & couverture temporaire Updated on any change
-    this.couvertureTotale.value = parseInt(this.formGroup.get('agrement').value || 0) + parseInt(this.formGroup.get('enCoursBlueWhale').value || 0) + parseInt(this.formGroup.get('enCoursTemporaire').value || 0);
+    this.couvertureTotale.value = parseInt(this.formGroup.get('agrement').value || 0, 10) +
+    + parseInt(this.formGroup.get('enCoursBlueWhale').value || 0, 10)
+    + parseInt(this.formGroup.get('enCoursTemporaire').value || 0, 10);
     // If couverture temporaire, date limite is required
     if (el) {
       this.couvTemp = params.value;
@@ -376,7 +377,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     const code = e.value.toUpperCase();
     this.formGroup.get('code').setValue(code);
     if (code.length && this.createMode) {
-      this.formGroup.get('compteComptable').markAsDirty()
+      this.formGroup.get('compteComptable').markAsDirty();
       this.formGroup.get('compteComptable').setValue(code);
     }
   }
@@ -416,7 +417,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
-      let client = this.formUtils.extractDirty(this.formGroup.controls,Client.getKeyField());
+      let client = this.formUtils.extractDirty(this.formGroup.controls, Client.getKeyField());
 
       if (!this.createMode) {
         client.id = this.client.id;
@@ -520,6 +521,11 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     }
   }
 
+  valueToUpperCase(e) {
+    e.component.option('value', e.component.option('value').toUpperCase());
+    return e.component.option('value');
+  }
+
   fileManagerClick() {
     this.fileManagerComponent.visible = true;
   }
@@ -545,7 +551,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   freeUEVAT(sector, pays) {
     if (!sector || !pays) return;
-    // ID TVA CEE : doit être obligatoire pour tous les secteurs sauf MAR / AFA / GB et DIV 
+    // ID TVA CEE : doit être obligatoire pour tous les secteurs sauf MAR / AFA / GB et DIV
     // (+ obligatoire si pays = Irlande) - Léa 10/09/2021
     const sectors = ['MAR', 'AFA', 'GB', 'DIV'];
     this.tvaCeeFree = (sectors.includes(sector.id) && pays.id !== 'IE');

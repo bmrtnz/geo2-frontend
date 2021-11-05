@@ -151,6 +151,11 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     this.formGroup.get('id').setValue(e.value.toUpperCase());
   }
 
+  valueToUpperCase(e) {
+    e.component.option('value', e.component.option('value').toUpperCase());
+    return e.component.option('value');
+  }
+
   displayIDBefore(data) {
     return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }

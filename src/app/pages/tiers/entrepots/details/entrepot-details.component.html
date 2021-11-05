@@ -59,14 +59,15 @@
                   <div class="dx-field-label">{{ 'tiers-entrepots-code' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-text-box
-                    formControlName="code"
-                    [readOnly]="!createMode"
-                    [inputAttr]="{'style':  'text-transform: uppercase'}"
-                    (onValueChanged)="onCodeChange($event)"
+                     formControlName="code"
+                     [readOnly]="!createMode"
+                     [inputAttr]="{'style':  'text-transform: uppercase'}"
+                     (onValueChanged)="onCodeChange($event)"
+                     valueChangeEvent="keyup change"
                     >
                       <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule type="stringLength" max="18"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="18"></dxi-validation-rule>
                         <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
                         <dxi-validation-rule *ngIf="createMode" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                       </dx-validator>
@@ -120,10 +121,16 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-raisonSocial' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="raisonSocial" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="raisonSocial"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-raisonSocial' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="50"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -133,10 +140,16 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-adresse1' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse1" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="adresse1"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-adresse1' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -146,9 +159,15 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-adresse2' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse2" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="adresse2"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-adresse2' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -158,9 +177,15 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-adresse3' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="adresse3" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="adresse3"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-adresse3' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -170,10 +195,16 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-codePostal' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="codePostal" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="codePostal"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-codePostal' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule type="stringLength" max="9"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="9"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -183,10 +214,16 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-ville' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="ville" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="ville"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-ville' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -225,9 +262,15 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEanDepot' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEanDepot" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="lieuFonctionEanDepot"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-lieuFonctionEanDepot' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -237,9 +280,15 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label">{{ 'tiers-entrepots-lieuFonctionEanAcheteur' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="lieuFonctionEanAcheteur" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="lieuFonctionEanAcheteur"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                      >
                       <dx-validator name="{{ 'tiers-entrepots-lieuFonctionEanAcheteur' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -268,9 +317,15 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-tvaCee' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="tvaCee" [readOnly]="readOnlyMode">
+                    <dx-text-box 
+                     formControlName="tvaCee"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-tvaCee' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="20"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="20"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -341,9 +396,15 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-entrepots-gestionnaireChep' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="gestionnaireChep" [readOnly]="readOnlyMode">
+                  <dx-text-box 
+                   formControlName="gestionnaireChep"
+                   [readOnly]="readOnlyMode"
+                   [inputAttr]="{'style': 'text-transform: uppercase'}"
+                   (onValueChanged)="valueToUpperCase($event)"
+                   valueChangeEvent="keyup"
+                   >
                     <dx-validator name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}">
-                      <dxi-validation-rule type="stringLength" max="6"></dxi-validation-rule>
+                      <dxi-validation-rule [trim]="false" type="stringLength" max="6"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
                 </div>
@@ -352,9 +413,15 @@
               <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-entrepots-referenceChep' | localize }}</div>
                 <div class="dx-field-value">
-                  <dx-text-box formControlName="referenceChep" [readOnly]="readOnlyMode">
+                  <dx-text-box 
+                   formControlName="referenceChep"
+                   [readOnly]="readOnlyMode"
+                   [inputAttr]="{'style': 'text-transform: uppercase'}"
+                   (onValueChanged)="valueToUpperCase($event)"
+                   valueChangeEvent="keyup"
+                   >
                     <dx-validator name="{{ 'tiers-entrepots-referenceChep' | localize }}">
-                      <dxi-validation-rule type="stringLength" max="35"></dxi-validation-rule>
+                      <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
                 </div>
@@ -371,9 +438,15 @@
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-entrepots-mentionClientSurFacture' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-text-area formControlName="mentionClientSurFacture" [readOnly]="readOnlyMode">
+                      <dx-text-area 
+                       formControlName="mentionClientSurFacture"
+                       [readOnly]="readOnlyMode"
+                       [inputAttr]="{'style': 'text-transform: uppercase'}"
+                       (onValueChanged)="valueToUpperCase($event)"
+                       valueChangeEvent="keyup"
+                       >
                         <dx-validator name="{{ 'tiers-entrepots-mentionClientSurFacture' | localize }}">
-                          <dxi-validation-rule type="stringLength" max="128"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" max="128"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-area>
                     </div>
@@ -437,7 +510,13 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-prixUnitaireTarifTransport' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="prixUnitaireTarifTransport" [readOnly]="readOnlyMode">
+                    <dx-text-box
+                     formControlName="prixUnitaireTarifTransport"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-prixUnitaireTarifTransport' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
                       </dx-validator>
@@ -494,7 +573,13 @@
                 <div class="dx-field">
                   <div class="dx-field-label">{{ 'tiers-entrepots-PUTarifTransit' | localize }}</div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="prixUnitaireTarifTransit" [readOnly]="readOnlyMode"></dx-text-box>
+                    <dx-text-box 
+                     formControlName="prixUnitaireTarifTransit"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     ></dx-text-box>
                   </div>
                 </div>
     
@@ -534,9 +619,15 @@
                   <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-entrepots-controlReferenceClient' | localize }}</div>
                     <div class="dx-field-value">
-                      <dx-text-box formControlName="controlReferenceClient" [readOnly]="readOnlyMode">
+                      <dx-text-box 
+                       formControlName="controlReferenceClient"
+                       [readOnly]="readOnlyMode"
+                       [inputAttr]="{'style': 'text-transform: uppercase'}"
+                       (onValueChanged)="valueToUpperCase($event)"
+                       valueChangeEvent="keyup"
+                       >
                         <dx-validator name="{{ 'tiers-entrepots-controlReferenceClient' | localize }}">
-                          <dxi-validation-rule type="stringLength" max="50"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" max="50"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -556,9 +647,15 @@
                 <!-- Instructions secr comm -->
                 <div class="dx-field">
                   <div class="dx-field-value">
-                    <dx-text-area formControlName="instructionSecretaireCommercial" [readOnly]="readOnlyMode">
+                    <dx-text-area 
+                     formControlName="instructionSecretaireCommercial"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-instructionSecretaireCommercial' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="140"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="140"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-area>
                   </div>
@@ -577,7 +674,7 @@
                   <div class="dx-field-value">
                     <dx-text-area formControlName="instructionLogistique" [readOnly]="readOnlyMode">
                       <dx-validator name="{{ 'tiers-entrepots-instructionLogistique' | localize }}">
-                        <dxi-validation-rule type="stringLength" max="280"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" max="280"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-area>
                   </div>

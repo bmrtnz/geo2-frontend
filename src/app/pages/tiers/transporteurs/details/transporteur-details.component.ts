@@ -160,7 +160,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   checkCompteComptable(e) {
-    const compteComptable = e.value;
+    const compteComptable = this.valueToUpperCase(e);
     if (!compteComptable) return;
     const transporteursSource = this.transporteursService.getDataSource_v2(['id', 'compteComptable']);
     transporteursSource.filter(['compteComptable', '=', compteComptable]);
@@ -188,12 +188,16 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     }
   }
 
+  valueToUpperCase(e) {
+    e.component.option('value', e.component.option('value').toUpperCase());
+    return e.component.option('value');
+  }
+
   displayIDBefore(data) {
     return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   onSubmit() {
-
     if (!this.formGroup.pristine && this.formGroup.valid) {
       let transporteur = this.formUtils.extractDirty(this.formGroup.controls, Transporteur.getKeyField());
 

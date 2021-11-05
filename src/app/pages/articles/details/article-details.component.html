@@ -223,11 +223,18 @@
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-matierePremiere-codePlu' | localize }}</div>
                             <div class="dx-field-value" formGroupName="matierePremiere">
-                                <dx-text-box formControlName="codePlu" [readOnly]="readOnlyMode">
+                                <dx-text-box 
+                                 formControlName="codePlu" 
+                                 [readOnly]="readOnlyMode"
+                                 [inputAttr]="{'style': 'text-transform: uppercase'}"
+                                 (onValueChanged)="valueToUpperCase($event)"
+                                 valueChangeEvent="keyup"
+                                 >
                                     <dx-validator name="{{ 'articles-matierePremiere-codePlu' | localize }}">
                                         <dxi-validation-rule
                                             type="stringLength"
                                             max="4"
+                                            [trim]="false"
                                         ></dxi-validation-rule>
                                     </dx-validator>
                                 </dx-text-box>
@@ -351,7 +358,13 @@
                       <!-- Instructions au fournisseur -->
                       <div class="dx-field">
                         <div class="dx-field-value" formGroupName="cahierDesCharge">
-                            <dx-text-area formControlName="instructionStation" [readOnly]="readOnlyMode">
+                            <dx-text-area 
+                             formControlName="instructionStation"
+                             [readOnly]="readOnlyMode"
+                             [inputAttr]="{'style': 'text-transform: uppercase'}"
+                             (onValueChanged)="valueToUpperCase($event)"
+                             valueChangeEvent="keyup"
+                             >
                             </dx-text-area>
                         </div>
                       </div>
@@ -410,9 +423,10 @@
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-emballage-uniteParColis' | localize }}</div>
                             <div class="dx-field-value" formGroupName="emballage">
-                                <dx-text-box formControlName="uniteParColis" 
-                                    [readOnly]="readOnlyMode"
-                                    (onValueChanged)="onUParColisChange($event)">
+                                <dx-text-box
+                                formControlName="uniteParColis" 
+                                [readOnly]="readOnlyMode"
+                                (onValueChanged)="onUParColisChange($event)">
                                 </dx-text-box>
                             </div>
                         </div>
@@ -420,7 +434,13 @@
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-emballage-poidsNetColis' | localize }}</div>
                             <div class="dx-field-value" formGroupName="emballage">
-                                <dx-text-box formControlName="poidsNetColis" [readOnly]="readOnlyMode">
+                                <dx-text-box 
+                                 formControlName="poidsNetColis"
+                                 [readOnly]="readOnlyMode"
+                                 [inputAttr]="{'style': 'text-transform: uppercase'}"
+                                 (onValueChanged)="valueToUpperCase($event)"
+                                 valueChangeEvent="keyup"
+                                 >
                                     <dx-validator name="{{ 'articles-emballage-poidsNetColis' | localize }}">
                                         <dxi-validation-rule type="numeric" ></dxi-validation-rule>
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -619,7 +639,13 @@
                         <div class="dx-field">
                             <div class="dx-field-label">{{ 'articles-normalisation-articleClient' | localize }}</div>
                             <div class="dx-field-value" formGroupName="normalisation">
-                                <dx-text-box formControlName="articleClient" [readOnly]="readOnlyMode">
+                                <dx-text-box 
+                                 formControlName="articleClient"
+                                 [readOnly]="readOnlyMode"
+                                 [inputAttr]="{'style': 'text-transform: uppercase'}"
+                                 (onValueChanged)="valueToUpperCase($event)"
+                                 valueChangeEvent="keyup"
+                                >
                                 </dx-text-box>
                             </div>
                         </div>

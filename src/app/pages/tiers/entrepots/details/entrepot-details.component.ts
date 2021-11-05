@@ -211,6 +211,11 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     this.formGroup.get('code').setValue(e.value.toUpperCase());
   }
 
+  valueToUpperCase(e) {
+    e.component.option('value', e.component.option('value').toUpperCase());
+    return e.component.option('value');
+  }
+
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {

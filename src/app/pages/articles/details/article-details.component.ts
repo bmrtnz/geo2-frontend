@@ -242,6 +242,11 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
     }
 
+    valueToUpperCase(e) {
+        e.component.option('value', e.component.option('value').toUpperCase());
+        return e.component.option('value');
+      }
+
     onSubmit() {
 
         if (!this.formGroup.pristine && this.formGroup.valid && !this.warningMode) {
@@ -294,7 +299,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     onUParColisChange(event) {
         // if (this.editing && !this.cloneMode) {
-            this.UC = parseInt(event.value) > 0;
+            this.UC = parseInt(event.value, 10) > 0;
             let code = this.CNUFCode + this.formGroup.get('id').value;
             code = this.calcGTINcheck(code);
             this.formGroup.get(this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(code);
@@ -368,10 +373,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         let check = 0;
 
         for (let i = 0; i < code.length; i += 2) {
-          imp += parseInt(code.charAt(i));
+          imp += parseInt(code.charAt(i), 10);
         }
         for (let i = 1; i < code.length; i += 2) {
-            pai += parseInt(code.charAt(i));
+            pai += parseInt(code.charAt(i), 10);
         }
         check = imp + (3 * pai);
         check = Math.ceil(check / 10) * 10 - check;

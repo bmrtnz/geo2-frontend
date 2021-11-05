@@ -253,6 +253,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     params.value = params.value.toUpperCase();
   }
 
+  valueToUpperCase(e) {
+    e.component.option('value', e.component.option('value').toUpperCase());
+    return e.component.option('value');
+  }
+
   checkCode(params) {
     const code = params.value.toUpperCase();
     const fournisseursSource = this.fournisseursService.getDataSource_v2(['code']);
@@ -263,7 +268,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   checkCompteComptable(e) {
-    const compteComptable = e.value;
+    const compteComptable = this.valueToUpperCase(e);
     if (!compteComptable) return;
     const fournisseursSource = this.fournisseursService.getDataSource_v2(['compteComptable']);
     fournisseursSource.filter(['compteComptable', '=', compteComptable]);
@@ -424,7 +429,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   onIDTracaChange(e) {
-    const idTracabilite = e.value;
+    const idTracabilite = this.valueToUpperCase(e);
     if (!idTracabilite || !this.createMode) return;
     // Code station = idTracabilite
     if (idTracabilite) {
