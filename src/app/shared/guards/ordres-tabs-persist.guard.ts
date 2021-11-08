@@ -62,6 +62,7 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
               [company.id]: encodeURI(currentState.url),
             },
           })),
+          switchMap(() => this.authService.logOut()),
         )
         .toPromise();
       }
