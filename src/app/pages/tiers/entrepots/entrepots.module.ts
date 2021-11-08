@@ -25,6 +25,7 @@ import { ModificationListModule } from 'app/shared/components/modification-list/
       ReactiveFormsModule,
       DxFormModule,
       DxDataGridModule,
+      DxAccordionModule,
       DxButtonModule,
       DxAccordionModule,
       DxListModule,

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -23,6 +23,7 @@ import { entrepot as entrepotsGridConfig } from 'assets/configurations/grids.jso
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { tap } from 'rxjs/operators';
+import { DxAccordionComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-entrepot-details',
@@ -75,6 +76,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   contentReadyEvent = new EventEmitter<any>();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
   @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
+  @ViewChildren(DxAccordionComponent) accordion: any;
   editing = false;
 
   entrepot: Entrepot;
@@ -125,15 +127,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   set readOnlyMode(value: boolean) {
     this.editing = !value;
     this.isReadOnlyMode = value;
-  }
-
-  ngAfterViewInit(): void {
-    this.formGroup.reset();
-    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
-    if (this.createMode) {
-      const Element = document.querySelector('.submit') as HTMLElement;
-      Element.click();
-    }
   }
 
   ngOnInit() {
@@ -197,6 +190,27 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     this.basesTarif = this.basesTarifService.getDataSource();
     this.typesCamion = this.typesCamionService.getDataSource();
     this.transitaires = this.transitairesService.getDataSource();
+  }
+
+  ngAfterViewInit(): void {
+    // Ouverture ou fermeture accordéons (création)
+    this.openCloseAccordions(this.createMode);
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
+  }
+
+  openCloseAccordions(action) {
+    if (!this.accordion) return;
+    this.accordion.toArray().forEach(element => {
+      if (action) {
+        element.instance.expandItem(0);
+      } else {
+        element.instance.collapseItem(0);
+      }
+    });
   }
 
   checkCode(params) {

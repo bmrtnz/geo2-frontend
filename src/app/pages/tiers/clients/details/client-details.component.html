@@ -901,6 +901,7 @@
                     <dx-text-box formControlName="tauxRemiseParFacture" [readOnly]="readOnlyMode">
                       <dx-validator name="{{ 'tiers-clients-tauxRemiseParFacture' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                        <dxi-validation-rule type="range" max="99.99"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -912,6 +913,7 @@
                     <dx-text-box formControlName="tauxRemiseHorsFacture" [readOnly]="readOnlyMode">
                       <dx-validator name="{{ 'tiers-clients-tauxRemiseHorsFacture' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                        <dxi-validation-rule type="range" max="99.99"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -1011,7 +1013,7 @@
                     <dx-text-box formControlName="fraisMarketing" 
                       [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                       <dx-validator name="{{ 'tiers-clients-fraisMarketing' | localize }}">
-                        <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
                         <dxi-validation-rule type="range" max="99.99"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>

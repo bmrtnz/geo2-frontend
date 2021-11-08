@@ -672,7 +672,14 @@
                 <!-- Instructions logistique -->
                 <div class="dx-field">
                   <div class="dx-field-value">
-                    <dx-text-area formControlName="instructionLogistique" [readOnly]="readOnlyMode">
+                    <dx-text-area 
+                     formControlName="instructionLogistique"
+                     [readOnly]="readOnlyMode"
+                     [inputAttr]="{'style': 'text-transform: uppercase'}"
+                     (onValueChanged)="valueToUpperCase($event)"
+                     valueChangeEvent="keyup"
+                     >
+                     >
                       <dx-validator name="{{ 'tiers-entrepots-instructionLogistique' | localize }}">
                         <dxi-validation-rule [trim]="false" type="stringLength" max="280"></dxi-validation-rule>
                       </dx-validator>
