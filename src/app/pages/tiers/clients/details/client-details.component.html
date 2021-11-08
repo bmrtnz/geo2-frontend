@@ -79,7 +79,7 @@
                   <div class="dx-field-value">
                     <dx-text-box
                       formControlName="code"
-                      [readOnly]="readOnlyMode"
+                      [readOnly]="!createMode"
                       [inputAttr]="{'style': 'text-transform: uppercase'}"
                       (onValueChanged)="onCodeChange($event)"
                       valueChangeEvent="keyup change"
