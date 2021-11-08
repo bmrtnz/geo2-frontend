@@ -513,9 +513,6 @@
                     <dx-text-box
                      formControlName="prixUnitaireTarifTransport"
                      [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-prixUnitaireTarifTransport' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
@@ -579,7 +576,11 @@
                      [inputAttr]="{'style': 'text-transform: uppercase'}"
                      (onValueChanged)="valueToUpperCase($event)"
                      valueChangeEvent="keyup"
-                     ></dx-text-box>
+                     >
+                     <dx-validator name="{{ 'tiers-entrepots-PUTarifTransit' | localize }}">
+                      <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                     </dx-validator>
+                    </dx-text-box>
                   </div>
                 </div>
     

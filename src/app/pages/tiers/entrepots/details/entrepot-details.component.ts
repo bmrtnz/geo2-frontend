@@ -79,6 +79,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   @ViewChildren(DxAccordionComponent) accordion: any;
   editing = false;
 
+  tempData: DataSource;
   entrepot: Entrepot;
   commercial: DataSource;
   assistante: DataSource;
@@ -164,6 +165,29 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                 }
               );
           }
+          // Set current username if commercial
+          this.tempData = this.personnesService.getDataSource();
+          this.tempData.filter([
+            ['valide', '=', true], 'and', ['role', '=', Role.COMMERCIAL],
+              'and', ['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
+            ]);
+          this.tempData.load().then((res) => {
+            if (res.length) {
+              this.formGroup.get('commercial').setValue({id : res[0].id});
+              this.formGroup.get('commercial').markAsDirty();
+            }
+          });
+          // Set current username if assistant(e)
+          this.tempData = this.personnesService.getDataSource();
+          this.tempData.filter([['valide', '=', true], 'and', ['role', '=', Role.ASSISTANT],
+            'and', ['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]
+          ]);
+          this.tempData.load().then((res) => {
+            if (res.length) {
+              this.formGroup.get('assistante').setValue({id : res[0].id});
+              this.formGroup.get('assistante').markAsDirty();
+            }
+          });
           this.contentReadyEvent.emit();
         }
       });
@@ -180,6 +204,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       'and',
       ['role', '=', Role.ASSISTANT],
     ]);
+
     this.modesLivraison = this.modesLivraisonService.getDataSource();
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
