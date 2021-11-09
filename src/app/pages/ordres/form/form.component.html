@@ -157,7 +157,7 @@
             <div class="order-tabs">
               <div
                 #anchor
-                id="{{fragments.Head}}"
+                [attr.data-fragment-id]="fragments.Head"
                 class="
                   dx-form-group
                   dx-form-group-with-caption dx-card
@@ -565,7 +565,7 @@
 
               <div
                 #anchor
-                id="{{fragments.Articles}}"
+                [attr.data-fragment-id]="fragments.Articles"
                 class="
                   articles-field
                   dx-form-group dx-form-group-with-caption dx-card
@@ -631,7 +631,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Logistique}}"
+                  [attr.data-fragment-id]="fragments.Logistique"
                   data-name="logistique"
                   [collapsible]="true"
                   [multiple]="false"
@@ -694,7 +694,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Litiges}}"
+                  [attr.data-fragment-id]="fragments.Litiges"
                   data-name="litiges"
                   [collapsible]="true"
                   [multiple]="false"
@@ -727,7 +727,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Synthese}}"
+                  [attr.data-fragment-id]="fragments.Synthese"
                   data-name="synthese"
                   [collapsible]="true"
                   [multiple]="false"
@@ -773,7 +773,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Flux}}"
+                  [attr.data-fragment-id]="fragments.Flux"
                   data-name="fluxdocs"
                   [collapsible]="true"
                   [multiple]="false"
@@ -803,7 +803,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.CQ}}"
+                  [attr.data-fragment-id]="fragments.CQ"
                   data-name="CQ"
                   [collapsible]="true"
                   [multiple]="false"
@@ -833,7 +833,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Commentaires}}"
+                  [attr.data-fragment-id]="fragments.Commentaires"
                   data-name="commentaires"
                   [collapsible]="true"
                   [multiple]="false"
@@ -865,7 +865,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Log}}"
+                  [attr.data-fragment-id]="fragments.Log"
                   data-name="log"
                   [collapsible]="true"
                   [multiple]="false"

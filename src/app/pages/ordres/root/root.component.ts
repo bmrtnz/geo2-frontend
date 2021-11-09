@@ -1,11 +1,29 @@
 import { Component, EventEmitter, Injectable, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, NavigationEnd, ParamMap, Router } from '@angular/router';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxTabPanelComponent } from 'devextreme-angular';
 import { on } from 'devextreme/events';
 import { dxTabPanelItem } from 'devextreme/ui/tab_panel';
-import { concat, defer, EMPTY, iif, Observable, of, Subject } from 'rxjs';
-import { concatMapTo, debounceTime, distinctUntilChanged, filter, first, last, map, share, startWith, switchMap, switchMapTo, take, takeUntil, tap } from 'rxjs/operators';
+import { concat, ConnectableObservable, defer, EMPTY, iif, Observable, of, Subject } from 'rxjs';
+import {
+  concatMapTo,
+  debounceTime,
+  filter,
+  first,
+  last,
+  map,
+  pairwise,
+  publish,
+  refCount,
+  share,
+  startWith,
+  switchMap,
+  switchMapTo,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { FormComponent } from '../form/form.component';
 
 const TAB_HOME_ID = 'home';
 const TAB_LOAD_ID = 'loading';
@@ -24,8 +42,10 @@ export type TabPanelItem = dxTabPanelItem & {
   icon?: string,
   details?: string,
   position: number,
-  component?,
+  component?: FormComponent | any,
 };
+
+export type TabChangeData = {status: 'in' | 'out', item: TabPanelItem};
 
 @Component({
   selector: 'app-root',
@@ -36,6 +56,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
   private destroy = new Subject<boolean>();
 
+  public tabChangeEvent = new EventEmitter<TabChangeData>();
   public tabPanelInitialized = new EventEmitter<any>();
   public tabPanelReady = new EventEmitter<any>();
   public activeStateEnabled = false;
@@ -56,12 +77,23 @@ export class RootComponent implements OnInit, OnDestroy {
 
     this.tabPanelInitialized
     .pipe(
+      // Initial render
       concatMapTo(this.fillInitialItems()),
-      concatMapTo(defer(() => this.handleRouting())), // Initial rendering
-      tap( selectID => this.selectTab(selectID)), // Initial selection
-      switchMapTo(this.router.events), // Switch to NavigationEnd events to handle rendering from routing
-      filter<NavigationEnd>( event => event instanceof NavigationEnd),
+      // Initial selection
       concatMapTo(this.handleRouting()),
+      tap( (selectID: string) => this.selectTab(selectID)),
+      // Listen navigation
+      switchMapTo(this.router.events),
+      filter<NavigationEnd>( event => event instanceof NavigationEnd),
+      // Handle fragments
+      switchMapTo(this.route.paramMap),
+      map((p: ParamMap) => p.get(RouteParam.TabID)),
+      startWith(convertToParamMap({ [RouteParam.TabID]: TAB_LOAD_ID })),
+      pairwise(),
+      filter(([previousID, currentID]) => previousID !== currentID),
+      map(([, currentID]) => currentID),
+      // Selection render
+      switchMapTo(this.handleRouting()),
       debounceTime(10),
       takeUntil(this.destroy),
     )
@@ -124,9 +156,20 @@ export class RootComponent implements OnInit, OnDestroy {
       tap( _ => this.selectTab(TAB_LOAD_ID)),
       switchMapTo(this.route.queryParamMap.pipe(first())),
       switchMap( queries => defer(() => this.handleQueries(queries))),
-      switchMapTo(this.route.paramMap.pipe(first())),
-      distinctUntilChanged(),
-      switchMap( params => of(this.handleParams(params))),
+      switchMapTo(this.route.paramMap),
+      map((p: ParamMap) => p),
+      startWith(convertToParamMap({ [RouteParam.TabID]: TAB_LOAD_ID })),
+      pairwise(),
+      tap( _ => console.log('YO')),
+      first(),
+      switchMap(([previousParams, currentParams]) => {
+        const previousItem = this.getTabItem(previousParams.get(RouteParam.TabID));
+        const currentItem = this.getTabItem(currentParams.get(RouteParam.TabID));
+        this.tabChangeEvent.emit({ status: 'out', item: previousItem });
+        const res = this.handleParams(currentParams);
+        this.tabChangeEvent.emit({ status: 'in', item: currentItem });
+        return of(res);
+      }),
     );
   }
 
@@ -237,6 +280,10 @@ export class RootComponent implements OnInit, OnDestroy {
     return this.items.findIndex( item => item.id === id);
   }
 
+  private getTabItem(id: string) {
+    return this.items.find( item => item.id === id);
+  }
+
   private selectTab(id: string) {
     this.tabPanel.selectedIndex = this.getTabIndex(id);
   }
@@ -261,6 +308,7 @@ export class LoadingTabComponent {}
 export class TabContext {
 
   private componentRef: RootComponent;
+  public onTabChange: ConnectableObservable<TabChangeData>;
 
   constructor(
     private route: ActivatedRoute,
@@ -269,6 +317,11 @@ export class TabContext {
 
   public registerComponent(instance: RootComponent) {
     this.componentRef = instance;
+    this.onTabChange = this.componentRef.tabChangeEvent
+    .pipe(
+      publish(),
+      refCount(),
+    ) as ConnectableObservable<TabChangeData>;
   }
 
   /**

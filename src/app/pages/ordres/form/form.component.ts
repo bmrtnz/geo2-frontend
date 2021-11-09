@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -14,13 +14,14 @@ import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { PortsService } from 'app/shared/services/api/ports.service';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import { FormUtilsService } from 'app/shared/services/form-utils.service';
 import { DxAccordionComponent } from 'devextreme-angular';
+import { dxElement } from 'devextreme/core/element';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { of } from 'rxjs';
-import { concatMap, filter, first, map, switchMap } from 'rxjs/operators';
-import { RouteParam, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
-import { FormUtilsService } from 'app/shared/services/form-utils.service';
+import { of, Subject } from 'rxjs';
+import { concatMap, filter, first, map, switchMap, takeUntil } from 'rxjs/operators';
+import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 
 /**
  * Grid with loading toggled by parent
@@ -53,10 +54,13 @@ enum LinkedCriterias {
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit, AfterViewInit {
+export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  @Output() public ordre: Ordre;
+
+  private destroy = new Subject<boolean>();
 
   public fragments = Fragments;
-  @Output() public ordre: Ordre;
   public status: string;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
@@ -148,6 +152,7 @@ export class FormComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    this.initializeAnchors();
     this.initializeForm();
 
     this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
@@ -189,7 +194,13 @@ export class FormComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.handleAnchors();
+    this.enableAnchors();
+    this.handleAnchorsNavigation();
+  }
+
+  ngOnDestroy() {
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
   }
 
   onSubmit() {
@@ -350,7 +361,44 @@ export class FormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private handleAnchors() {
+  private initializeAnchors() {
+    const handler: (event: Partial<TabChangeData>) => void = ({ item, status }) => {
+      if (status === 'in') this.enableAnchors();
+      if (status === 'out') this.disableAnchors();
+    };
+
+    this.route.paramMap.pipe(
+      first(),
+      switchMap(params => this.tabContext.onTabChange.pipe(map(data => [data, params.get(RouteParam.TabID)] as [TabChangeData, string]))),
+      filter(([{item}, id]) => item.id === id),
+      map(([item]) => item),
+      takeUntil(this.destroy),
+    )
+    .subscribe(handler);
+  }
+
+  private getAnchorElement(anchor: DxAccordionComponent | ElementRef<any>)
+  : dxElement |HTMLElement {
+    return anchor instanceof DxAccordionComponent
+      ? anchor.instance.element()
+      : anchor.nativeElement;
+  }
+
+  private enableAnchors() {
+    this.anchors.forEach( anchor => {
+      const element = this.getAnchorElement(anchor);
+      element.setAttribute('id', element.dataset.fragmentId);
+    });
+  }
+
+  private disableAnchors() {
+    this.anchors.forEach( anchor => {
+      const element = this.getAnchorElement(anchor);
+      element.removeAttribute('id');
+    });
+  }
+
+  private handleAnchorsNavigation() {
     const scrollTo = (elm: HTMLElement) =>
       elm.scrollIntoView({behavior: 'smooth'});
 
@@ -359,12 +407,9 @@ export class FormComponent implements OnInit, AfterViewInit {
       filter( event => event instanceof NavigationEnd ),
       concatMap(_ => this.route.fragment),
       filter(fragment => !!fragment),
-      concatMap( fragment => of(this.anchors.find(item => {
-        if (item instanceof DxAccordionComponent)
-          return item.instance.element().id === fragment;
-        return item.nativeElement.id === fragment;
-      }))
+      concatMap( fragment => of(this.anchors.find(item => this.getAnchorElement(item).id === fragment))
       ),
+      filter( item => !!item),
     )
     .subscribe( item => {
       if (item instanceof DxAccordionComponent) {
