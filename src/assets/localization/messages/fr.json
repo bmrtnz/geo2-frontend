@@ -632,7 +632,7 @@
     "ordreLigneLogistique-fournisseur-raisonSocial": " ",
     "ordreLigneLogistique-nombrePalettesAuSol": "Pal Sol",
     "ordreLigneLogistique-nombrePalettes100x120": "100x120",
-    "ordreLigneLogistique-nombrePalettes60X80": "60x80",
+    "ordreLigneLogistique-nombrePalettes60x80": "60x80",
     "ordreLigneLogistique-nombrePalettes80x120": "80x120",
     "ordreLigneLogistique-expedieStation": " ",
     "ordreLigneLogistique-dateDepartReelleFournisseur": "Clôturé",
@@ -728,7 +728,7 @@
     "ordreLignesTotauxDetail-nombrePalettesAuSol": "Pal. sol",
     "ordreLignesTotauxDetail-nombrePalettes100x120": "100x120",
     "ordreLignesTotauxDetail-nombrePalettes80x120": "80x120",
-    "ordreLignesTotauxDetail-nombrePalettes60X80": "60x80",
+    "ordreLignesTotauxDetail-nombrePalettes60x80": "60x80",
 
     "ordreDetailPalettes-arboCode": "Arbo",
     "ordreDetailPalettes-nombreColis": "Colis",
