@@ -44,7 +44,7 @@
     <dxi-column
       *ngFor="let field of detailedFields"
       [dataField]="field.dataField"
-      [caption]="('ordres-' + field.dataField?.replaceAll('.', '-').replace('description', '') | localize) || field.name + ' $$'"
+      [caption]="('ordres-' + field.dataField?.replaceAll('.', '-').replace('description', '') | localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

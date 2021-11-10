@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { Statut} from 'app/shared/models/ordre.model';
 import { AuthService } from 'app/shared/services';
 import { MruOrdresService } from 'app/shared/services/api/mru-ordres.service';
@@ -11,7 +10,6 @@ import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { historique } from 'assets/configurations/grids.json';
 import { GridColumn } from 'basic';
-import { Observable } from 'rxjs';
 import { TabContext } from '../root/root.component';
 
 @Component({
@@ -28,9 +26,6 @@ export class GridHistoriqueComponent implements OnInit {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-
-  /* tslint:disable-next-line max-line-length */
-  private gridFilter: RegExp = /^(?:ordre\.(numero|referenceClient|dateDepartPrevue|codeChargement|dateLivraisonPrevue|codeClient|statut|codeAlphaEntrepot|dateModification|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial))$/;
   public detailedFields: GridColumn[];
 
   constructor(

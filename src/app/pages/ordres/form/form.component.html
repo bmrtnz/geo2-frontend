@@ -157,7 +157,7 @@
             <div class="order-tabs">
               <div
                 #anchor
-                [attr.data-fragment-id]="fragments.Head"
+                id="{{fragments.Head}}"
                 class="
                   dx-form-group
                   dx-form-group-with-caption dx-card
@@ -507,7 +507,7 @@
                               <dx-select-box
                                   formControlName="commercial"
                                   [dataSource]="commercialDS"
-                                  displayExpr="nomUtilisateur"
+                                  [displayExpr]="displayIDBefore"
                                   [searchEnabled]="true"
                                   [searchExpr]="['id','nomUtilisateur']"
                               >
@@ -524,7 +524,7 @@
                               <dx-select-box
                                   formControlName="assistante"
                                   [dataSource]="assistanteDS"
-                                  displayExpr="nomUtilisateur"
+                                  [displayExpr]="displayIDBefore"
                                   [searchEnabled]="true"
                                   [searchExpr]="['id','nomUtilisateur']"
                               >
@@ -565,7 +565,7 @@
 
               <div
                 #anchor
-                [attr.data-fragment-id]="fragments.Articles"
+                id="{{fragments.Articles}}"
                 class="
                   articles-field
                   dx-form-group dx-form-group-with-caption dx-card
@@ -631,7 +631,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  [attr.data-fragment-id]="fragments.Logistique"
+                  id="{{fragments.Logistique}}"
                   data-name="logistique"
                   [collapsible]="true"
                   [multiple]="false"
@@ -694,7 +694,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  [attr.data-fragment-id]="fragments.Litiges"
+                  id="{{fragments.Litiges}}"
                   data-name="litiges"
                   [collapsible]="true"
                   [multiple]="false"
@@ -727,7 +727,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  [attr.data-fragment-id]="fragments.Synthese"
+                  id="{{fragments.Synthese}}"
                   data-name="synthese"
                   [collapsible]="true"
                   [multiple]="false"
@@ -773,7 +773,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  [attr.data-fragment-id]="fragments.Flux"
+                  id="{{fragments.Flux}}"
                   data-name="fluxdocs"
                   [collapsible]="true"
                   [multiple]="false"
@@ -803,7 +803,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  [attr.data-fragment-id]="fragments.CQ"
+                  id="{{fragments.CQ}}"
                   data-name="CQ"
                   [collapsible]="true"
                   [multiple]="false"
@@ -833,7 +833,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  [attr.data-fragment-id]="fragments.Commentaires"
+                  id="{{fragments.Commentaires}}"
                   data-name="commentaires"
                   [collapsible]="true"
                   [multiple]="false"
@@ -865,7 +865,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  [attr.data-fragment-id]="fragments.Log"
+                  id="{{fragments.Log}}"
                   data-name="log"
                   [collapsible]="true"
                   [multiple]="false"

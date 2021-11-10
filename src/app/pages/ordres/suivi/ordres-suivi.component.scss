@@ -7,6 +7,13 @@
 }
 
 ::ng-deep .main-search-container {
-    width:800px;
+    width:900px;
     margin-bottom:20px;
+}
+::ng-deep .campagne-label {
+    width: 58%;
+    text-transform: capitalize;
+}
+::ng-deep .width0pct {
+    width: 0% !important;
 }

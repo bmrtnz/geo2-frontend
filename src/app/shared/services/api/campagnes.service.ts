@@ -15,9 +15,15 @@ export class CampagnesService extends ApiService implements APIRead {
   ) {
     super(apollo, Campagne);
   }
-
+  
+  /**
+   * @deprecated Use getDataSource_v2
+   */
   getDataSource() {
     return new DataSource({
+      sort: [
+        { selector: this.model.getKeyField() }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
@@ -45,6 +51,47 @@ export class CampagnesService extends ApiService implements APIRead {
               resolve(new Campagne(res.data.campagne));
           });
         }),
+      }),
+    });
+  }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { campagne: Campagne };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.campagne)
+            resolve(new Campagne(res.data.campagne));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [
+        { selector: this.model.getKeyField() }
+      ],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allCampagne: RelayPage<Campagne> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = this.mapLoadOptionsToVariables(options);
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allCampagne) {
+              resolve(this.asInstancedListCount(res.data.allCampagne));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
       }),
     });
   }

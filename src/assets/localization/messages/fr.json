@@ -790,8 +790,10 @@
     "rechOrdres-numeroFacture": "Numéro de facture",
     "rechOrdres-dateLivraisonPrevue": "Livraison",
     "rechOrdres-critere": "Critère",
-    "rechOrdres-secteurCommercial": "Secteur",
+    "rechOrdres-secteurCommercial-description": "Secteur",
     "rechOrdres-portTypeA": "Port arrivée",
+    "rechOrdres-campagne": "Campagne en cours",
+    "rechOrdres-campagne-id": "ID Campagne",
 
     "pays-description": "Pays",
     "pays-clientsSommeAgrement": "Permanent",

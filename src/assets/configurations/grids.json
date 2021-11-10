@@ -568,6 +568,12 @@
         "dataField": "secteurCommercial.description",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "id"
+      },
+      {
+        "dataField": "campagne.id"
       }
     ]
   },

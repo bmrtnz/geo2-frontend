@@ -7,15 +7,15 @@
         <div class="dx-field-value">
           <dx-autocomplete
             placeholder="..."
-            (onEnterKey)="findOrder($event)"
-            (onKeyDown)="hideSearchResults()"
+            (onEnterKey)="findOrder()"
+            (onKeyDown)="this.showGridResults=false"
           >
           </dx-autocomplete>
         </div>
       </div>
     </dxi-item>
     <dxi-item [ratio]="1"></dxi-item>
-    <dxi-item [ratio]="8">
+    <dxi-item [ratio]="10">
       <div class="dx-field">
         <div class="dx-field-label">{{ "rechOrdres-critere" | localize }}</div>
         <div class="dx-field-value">
@@ -24,7 +24,23 @@
             [displayExpr]="searchDisplayExpr"
             (valueChange)="changeSearchCriteria()"
           >
+          <dxo-drop-down-options>
+            [width]="250">
+          </dxo-drop-down-options>
           </dx-select-box>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="1"></dxi-item>
+    <dxi-item [ratio]="11">
+      <div class="dx-field field-large">
+        <div class="dx-field-label campagne-label">{{ campagneEnCours?.description }}</div>
+        <div class="dx-field-value width0pct">
+          <dx-check-box #currCampaign
+            value="true"
+            (valueChange)="changeCampaign()"
+          >
+          </dx-check-box>
         </div>
       </div>
     </dxi-item>

@@ -1,21 +1,15 @@
 import { AfterViewInit, Component, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
-import { EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
-import { ClientsService } from 'app/shared/services/api/clients.service';
-import { DevisesService } from 'app/shared/services/api/devises.service';
-import { LitigesService } from 'app/shared/services/api/litiges.service';
-import { OrdresService } from 'app/shared/services/api/ordres.service';
-import { PersonnesService } from 'app/shared/services/api/personnes.service';
+import { LocalizationService } from 'app/shared/services';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { Content, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxAutocompleteComponent, DxPopupComponent, DxSelectBoxComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GridHistoriqueComponent } from '../grid-historique/grid-historique.component';
 import { GridSuiviComponent } from '../grid-suivi/grid-suivi.component';
 import { RouteParam, TabContext } from '../root/root.component';
+import { CampagnesService } from 'app/shared/services/api/campagnes.service';
 
 let self;
 
@@ -30,70 +24,41 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   searchItems: any;
   filter: any;
-  isIndexTab = true;
-  allContents: Content[];
-  contents: Content[];
-  clients: DataSource;
-  litiges: DataSource;
-  devise: DataSource;
-  entrepot: DataSource;
-  commercial: DataSource;
-  assistante: DataSource;
-  transporteurs: DataSource;
-  commentaireInterne: DataSource;
-  linkedOrders: any;
-  orders: any;
-  numero: string;
-  linkedOrdersSearch: boolean;
-  canDuplicate = false;
-  validationPopupVisible = false;
-  ordreASupp: string;
-  public ordres: DataSource;
+  campagnes: DataSource;
+  campagneEnCours: any;
   showGridResults = false;
   @ViewChild(DxAutocompleteComponent, { static: false })
   autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
   ordresLignesViewExp: boolean;
 
-  private formValuesChange: Subscription;
   refreshGrid = new EventEmitter();
 
   @ViewChild(GridSuiviComponent, { static: false })
   suiviGrid: GridSuiviComponent;
   @ViewChild(GridHistoriqueComponent, { static: false })
   histoGrid: GridHistoriqueComponent;
-  @ViewChild(DxValidationGroupComponent, { static: false })
-  validationGroup: DxValidationGroupComponent;
-  @ViewChild(DxPopupComponent, { static: false })
-  validationPopup: DxPopupComponent;
   @ViewChild('searchCriteria', { static: false }) searchCriteria: DxSelectBoxComponent;
+  @ViewChild('currCampaign', { static: false }) currCampaign: DxSelectBoxComponent;
 
 
   constructor(
-    ordresIndicatorsService: OrdresIndicatorsService,
     public localizeService: LocalizationService,
-    private ordresService: OrdresService,
     public currentCompanyService: CurrentCompanyService,
-    public clientsService: ClientsService,
-    public devisesService: DevisesService,
-    public litigesService: LitigesService,
-    public entrepotsService: EntrepotsService,
-    public personnesService: PersonnesService,
-    public transporteursService: TransporteursService,
+    public campagnesService: CampagnesService,
     public tabContext: TabContext,
-    public route: ActivatedRoute,
+    private route: ActivatedRoute,
   ) {
     self = this;
-    this.ordres = ordresService.getDataSource();
-    this.litiges = litigesService.getDataSource();
-    this.allContents = ordresIndicatorsService.getContents();
-    this.contents = ordresIndicatorsService.getContents().slice(0, 1);
     this.searchItems = [
       'numero',
       'numeroFacture',
       'referenceClient',
       'client.raisonSocial',
     ];
+    this.campagnesService.getDataSource_v2(['id', 'description'])
+      .load()
+      .then(camp => this.campagneEnCours = camp.slice(-1)[0]);
   }
 
   ngAfterViewInit() {
@@ -123,12 +88,22 @@ export class OrdresSuiviComponent implements AfterViewInit {
       setTimeout(() => {
         this.enableFilters(toSearch);
         this.showGridResults = true;
-      }, 1);
+      }, 100);
+    }
+  }
+
+  changeCampaign() {
+    const toSearch = this.autocomplete.value;
+    if (toSearch?.length) {
+      this.showGridResults = false;
+      this.findOrder();
     }
   }
 
   enableFilters(value) {
+    if (!value?.length) return;
     const criteria = this.searchCriteria.instance.option('value');
+    const operator = ['numero', 'numeroFacture'].includes(value) ? '=' : 'contains';
 
     this.filter = [
       ['valide', '=', true],
@@ -137,24 +112,24 @@ export class OrdresSuiviComponent implements AfterViewInit {
       // 'and',
       // ['facture', '=', false],
       'and',
-      [criteria, 'contains', value],
+      [criteria, operator, value]
     ];
+
+    // Current campaing filtering
+    if (this.currCampaign.instance.option('value')) {
+      this.filter.push('and', ['campagne.id', '=', this.campagneEnCours.id]);
+    }
 
   }
 
-   findOrder(e) {
-    this.hideSearchResults();
+   findOrder() {
     setTimeout(() => {
-      const criteria = e.component._changedValue;
-      if (criteria.length) {
-        this.enableFilters(criteria);
+      const toSearch = this.autocomplete.value;
+      if (toSearch?.length) {
+        this.enableFilters(toSearch);
         this.showGridResults = true;
       }
     }, 1);
-  }
-
-  hideSearchResults() {
-    this.showGridResults = false;
   }
 
 }

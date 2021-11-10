@@ -110,6 +110,47 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     });
   }
 
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { ordre: Ordre };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.ordre)
+            resolve(new Ordre(res.data.ordre));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allOrdre: RelayPage<Ordre> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = {
+            ...this.persistantVariables,
+            ...this.mapLoadOptionsToVariables(options)
+          };
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allOrdre) {
+              resolve(this.asInstancedListCount(res.data.allOrdre));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
+      }),
+    });
+  }
+
   save(variables: OperationVariables & {ordre: Ordre}) {
     return this.watchSaveQuery({ variables }, 1, this.queryFilter);
   }
