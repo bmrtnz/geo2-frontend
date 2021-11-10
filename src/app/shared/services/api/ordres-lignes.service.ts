@@ -41,6 +41,44 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
+  private byKey_v2(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { ordreLigne: OrdreLigne };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.ordreLigne)
+            resolve(new OrdreLigne(res.data.ordreLigne));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = this.mapLoadOptionsToVariables(options);
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allOrdreLigne) {
+              resolve(this.asInstancedListCount(res.data.allOrdreLigne));
+            }
+          });
+        }),
+        byKey: this.byKey_v2(columns),
+      }),
+    });
+  }
+
   getSummarisedDatasource(depth = 1, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({

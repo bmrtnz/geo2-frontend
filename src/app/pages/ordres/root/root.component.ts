@@ -160,7 +160,7 @@ export class RootComponent implements OnInit, OnDestroy {
       map((p: ParamMap) => p),
       startWith(convertToParamMap({ [RouteParam.TabID]: TAB_LOAD_ID })),
       pairwise(),
-      tap( _ => console.log('YO')),
+      // tap( _ => console.log('YO')),
       first(),
       switchMap(([previousParams, currentParams]) => {
         const previousItem = this.getTabItem(previousParams.get(RouteParam.TabID));

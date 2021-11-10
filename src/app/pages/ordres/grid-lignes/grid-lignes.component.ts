@@ -6,9 +6,11 @@ import { environment } from 'environments/environment';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
 import { Observable } from 'rxjs';
 import Ordre from 'app/shared/models/ordre.model';
+import * as gridConfig from 'assets/configurations/grids.json';
 import { map } from 'rxjs/operators';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -19,7 +21,7 @@ export class GridLignesComponent implements OnChanges {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  public detailedFields: GridColumn[];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
@@ -28,25 +30,8 @@ export class GridLignesComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.dataSource = ordreLignesService.getDataSource();
-    this.detailedFields = this.ordreLignesService.model.getDetailedFields()
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field => 
-          !!(this.localizeService.localize('ordreLignes-' + field.path.replaceAll('.', '-'))).length);
-      }),
-    );
-
-    // .pipe(
-    //   map(fields => {
-    //     return fields.filter( field => {
-    //       console.log('ordreLignes-' + field.path.replaceAll('.', '-'))
-    //     })
-    //   }),
-    // );
-
-
+    this.detailedFields = gridConfig['ordre-ligne'].columns;
+    this.dataSource = ordreLignesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
   ngOnChanges() {

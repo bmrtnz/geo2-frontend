@@ -740,7 +740,7 @@
       },
       {
         "visibleIndex": 17,
-        "dataField": "paletteInter.description",
+        "dataField": "paletteInter.id",
         "dataType": "string",
         "visible": true
       },
