@@ -94,7 +94,8 @@ interface GridColumn {
   /**
    * Specifies the sort order of column values.
    */
-  sortOrder?: 'asc' | 'desc' | undefined;
+  // sortOrder?: 'asc' | 'desc' | undefined;
+  sortOrder?: string;
 
   /**
    * Specifies validation rules to be checked when cell values are updated.

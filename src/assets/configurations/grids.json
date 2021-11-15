@@ -643,6 +643,13 @@
   "ordre-ligne": {
     "columns": [
       {
+        "visibleIndex": 0,
+        "dataField": "numero",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
         "visibleIndex": 1,
         "dataField": "ordre.id",
         "dataType": "string",
@@ -735,7 +742,6 @@
       {
         "visibleIndex": 16,
         "dataField": "typePalette.description",
-        "dataType": "string",
         "visible": true
       },
       {
@@ -969,6 +975,9 @@
         "dataField": "billOfLanding",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
 
     ]
@@ -1556,7 +1565,7 @@
         "dataField": "dateModification",
         "visible": true,
         "selectedFilterOperation": "<",
-        "sortOrder": "desc"
+        "sortOrder": "asc"
       },
       {
         "visibleIndex": 1,
@@ -1670,7 +1679,7 @@
       },
       {
         "visibleIndex": 8,
-        "dataField": "nombrePalettes60X80",
+        "dataField": "nombrePalettes60x80",
         "visible": true
       }
     ]

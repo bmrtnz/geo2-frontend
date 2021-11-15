@@ -611,11 +611,12 @@
                   ></app-grid-ordre-ligne-logistique>
                   <div class="grid-separator"></div>
                   <app-grid-lignes [ordre]="ordre"></app-grid-lignes>
-                  <div *ngIf="ordresLignesViewExp" class="grid-separator"></div>
-                  <app-grid-lignes-details
-                    *ngIf="ordresLignesViewExp"
-                    [ordre]="ordre"
-                  ></app-grid-lignes-details>
+                  <div *ngIf="ordresLignesViewExp">
+                    <div class="grid-separator"></div>
+                    <app-grid-lignes-details
+                      [ordre]="ordre"
+                    ></app-grid-lignes-details>
+                  </div>
                 </div>
               </div>
 

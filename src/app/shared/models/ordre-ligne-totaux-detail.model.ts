@@ -12,7 +12,7 @@ export class OrdreLigneTotauxDetail extends Model {
   @Field() public nombrePalettesAuSol?: number;
   @Field() public nombrePalettes100x120?: number;
   @Field() public nombrePalettes80x120?: number;
-  @Field() public nombrePalettes60X80?: number;
+  @Field() public nombrePalettes60x80?: number;
 
 }
 

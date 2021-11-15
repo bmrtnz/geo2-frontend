@@ -1,16 +1,14 @@
 import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
-import { Observable } from 'rxjs';
 import Ordre from 'app/shared/models/ordre.model';
-import * as gridConfig from 'assets/configurations/grids.json';
-import { map } from 'rxjs/operators';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { DxDataGridComponent } from 'devextreme-angular';
+import * as gridConfig from 'assets/configurations/grids.json';
 import { GridColumn } from 'basic';
+import { SummaryType } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -22,11 +20,12 @@ export class GridLignesComponent implements OnChanges {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public detailedFields: GridColumn[];
+  public totalItems: {column: string, summaryType: SummaryType}[] = [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   constructor(
-    private ordreLignesService: OrdreLignesService,
+    public ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {

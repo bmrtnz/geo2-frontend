@@ -1,12 +1,11 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { Component, Input, OnChanges, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
-import { Observable } from 'rxjs';
 import Ordre from 'app/shared/models/ordre.model';
-import { map } from 'rxjs/operators';
+import * as gridConfig from 'assets/configurations/grids.json';
+import { GridColumn } from 'basic';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 
@@ -15,45 +14,33 @@ import { DxDataGridComponent } from 'devextreme-angular';
   templateUrl: './grid-lignes-details.component.html',
   styleUrls: ['./grid-lignes-details.component.scss']
 })
-export class GridLignesDetailsComponent implements OnChanges {
+export class GridLignesDetailsComponent implements AfterViewInit {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  public detailedFields: GridColumn[];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   constructor(
-    private ordreLignesService: OrdreLignesService,
+    public ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.dataSource = ordreLignesService.getDataSource();
-    this.detailedFields = this.ordreLignesService.model.getDetailedFields()
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field => 
-          !!(this.localizeService.localize('ordreLignes-' + field.path.replaceAll('.', '-'))).length);
-      }),
-    );
-
-    // .pipe(
-    //   map(fields => {
-    //     return fields.filter( field => {
-    //       console.log('ordreLignes-' + field.path.replaceAll('.', '-'))
-    //     })
-    //   }),
-    // );
-
-
+    this.detailedFields = gridConfig['ordre-ligne'].columns;
+    this.dataSource = ordreLignesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
-  ngOnChanges() {
+  // ngOnChanges() {
+  //   this.enableFilters();
+  // }
+
+  ngAfterViewInit() {
     this.enableFilters();
   }
 
   enableFilters() {
+    if (!this.datagrid) return;
     if (this?.ordre?.id) {
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
