@@ -1,0 +1,16 @@
+<h2 class="content-block">{{ 'ordres-nouvel-ordre-title' | localize }}
+
+    <div class="dx-field">
+        <div class="dx-field-value">
+            <dx-radio-group
+                [items]="typeEntrepots"
+                [value]="typeEntrepots[0]"
+                layout="horizontal"
+                (onValueChanged)="onTypeChange($event)"
+            >
+            </dx-radio-group>
+        </div>
+    </div>
+
+<app-grid-historique-entrepots [hidden]="!favorites"></app-grid-historique-entrepots>
+<app-grid-entrepots [hidden]="favorites"></app-grid-entrepots>

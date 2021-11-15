@@ -196,7 +196,7 @@ export class RootComponent implements OnInit, OnDestroy {
           title: 'nouvel',
           details: 'ordre',
           icon: 'material-icons note_add',
-          component: (await import('../form/form.component')).FormComponent,
+          component: (await import('../nouvel-ordre/nouvel-ordre.component')).NouvelOrdreComponent,
           position: Position.Back,
         },
       ];
@@ -345,6 +345,13 @@ export class TabContext {
   public openOrdre(numero: string) {
     return this.with(TabType.Ordre, numero);
   }
+
+    /**
+     * @param id Entrepot id
+     */
+     public selectEntrepotForNewOrder(id: string) {
+      console.log(id);
+    }
 
   /**
    * Push and select indicator in tab panel by routing

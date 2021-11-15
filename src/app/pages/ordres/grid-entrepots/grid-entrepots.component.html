@@ -1,0 +1,60 @@
+<dx-data-grid class="dx-card wide-card"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    (onRowDblClick)="tabContext.selectEntrepotForNewOrder($event.data.id)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Liste des entrepôts', $event, gridConfiguratorService.Grid.OrdreEntrepot,enableFilters.bind(this))"
+    scrolling="{
+      useNative:false,
+      showScrollBar:'always'
+    }"
+  >
+
+    <!-- Grid configuration -->
+    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+      [storageKey]="gridConfiguratorService.Grid.OrdreEntrepot"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      allowSearch="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <!-- <dxo-summary>
+      <dxi-total-item column="nombrePalettesCommandees" summaryType="sum" ></dxi-total-item>
+      <dxi-total-item column="nombreColisCommandes" summaryType="sum"></dxi-total-item>
+    </dxo-summary> -->
+    <dxi-column
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('tiers-ordre-entrepots-' + field.dataField?.replaceAll('.', '-') | localize) || field.name"
+      [visible]="false"
+      trueText="Oui"
+      falseText="Non"
+      [dataType]="field.dataType"
+      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
+      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    ></dxi-column>
+
+  </dx-data-grid>

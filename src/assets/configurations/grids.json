@@ -640,6 +640,132 @@
       }
     ]
   },
+  "ordre-historique-entrepot": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "entrepot.client.secteur.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "entrepot.client.code",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "entrepot.client.raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "codeEntrepot",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "entrepot.raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "entrepot.client.commercial.nomUtilisateur",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "entrepot.client.assistante.nomUtilisateur",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "entrepot.commercial.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "entrepot.assistante.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "entrepot.id",
+        "dataType": "string"
+      }
+    ]
+  },
+  "ordre-entrepot": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "client.secteur.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "client.code",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "client.raisonSocial",
+        "dataType": "string",
+         "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "client.commercial.nomUtilisateur",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "client.assistante.nomUtilisateur",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "commercial.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "assistante.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "id",
+        "dataType": "string"
+      }
+    ]
+  },
   "ordre-ligne": {
     "columns": [
       {
