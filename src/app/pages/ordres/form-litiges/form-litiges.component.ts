@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { resetFakeAsyncZone } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import LitigeLigneTotaux from 'app/shared/models/litige-ligne-totaux.model';
 import Litige from 'app/shared/models/litige.model';
 import Ordre from 'app/shared/models/ordre.model';
@@ -10,22 +9,29 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import DataSource from 'devextreme/data/data_source';
 import { from } from 'rxjs';
 import { mergeAll } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+import { DxNumberBoxComponent } from 'devextreme-angular';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 
 @Component({
   selector: 'app-form-litiges',
   templateUrl: './form-litiges.component.html',
   styleUrls: ['./form-litiges.component.scss']
 })
-export class FormLitigesComponent implements OnChanges, OnInit {
+export class FormLitigesComponent implements OnInit {
 
   @Output() public ordreSelected = new EventEmitter<Litige>();
   @Input() public ordre: Ordre;
-  
+
   formGroup = this.fb.group({
     id: [''],
     ordreAvoirFournisseurReference: [''],
     dateCreation: [''],
+    avoirClient: [''],
+    avoirClientTaux: [''],
     dateAvoirClient: [''],
+    avoirFournisseurTaux: [''],
+    avoirFournisseur: [''],
     dateAvoirFournisseur: [''],
     referenceClient: [''],
     clientCloture: [''],
@@ -33,17 +39,12 @@ export class FormLitigesComponent implements OnChanges, OnInit {
     clientValideAdmin: [''],
     fournisseurValideAdmin: [''],
     commentairesInternes: [''],
-    ordreAvoirClient: [''],
+    totalMontantRistourneTaux: [''],
+    ordreAvoirClient: this.fb.group({
+      id: [''],
+    }),
     fraisAnnexes: [''],
-    avoirClient: [''],
-    avoirFournisseur: [''],
-    totalMontantRistourne: [''],
-    ristourneTaux: [''],
-    avoirClientTaux: [''],
-    avoirFournisseurTaux: [''],
-    devise: [''],
-    resultat: ['']
-    
+    totalMontantRistourne: ['']
   });
 
   contentReadyEvent = new EventEmitter<any>();
@@ -52,43 +53,69 @@ export class FormLitigesComponent implements OnChanges, OnInit {
   litiges: DataSource;
   ordres: DataSource;
   noLitiges: boolean;
-  devise: string = 'EUR';
+  devise = 'EUR';
   ddeAvoirFournisseur: any;
   totalMontantRistourne: any;
+  columns: any;
+
+  @ViewChild('resultat', { static: false }) resultat: DxNumberBoxComponent;
 
   constructor(
     private fb: FormBuilder,
     public litigesService: LitigesService,
     public ordresService: OrdresService,
+    public currentCompanyService: CurrentCompanyService,
     public litigesLignesService: LitigesLignesService,
-
   ) {
 
   }
 
   ngOnInit() {
 
-    this.ordres = this.ordresService.getDataSource();
+    this.ordres = this.ordresService.getDataSource_v2(['id']);
+    this.ordres.filter([
+      ['valide', '=', true],
+      'and',
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
+    ]);
+    this.columns = [
+      'id',
+      'ordreAvoirFournisseurReference',
+      'dateCreation',
+      'dateAvoirClient',
+      'dateAvoirFournisseur',
+      'referenceClient',
+      'clientCloture',
+      'fournisseurCloture',
+      'clientValideAdmin',
+      'fournisseurValideAdmin',
+      'commentairesInternes',
+      'ordreAvoirClient.id',
+      'fraisAnnexes',
+      'totalMontantRistourne'
+    ];
 
   }
 
-  ngOnChanges() {
+  showForm() {
 
-    this.noLitiges = false;
-    const ds = this.litigesService.getDataSource();
     if (this.ordre?.id) {
+      const ds = this.litigesService.getDataSource_v2(this.columns);
       ds.filter(['ordreOrigine.id', '=', this.ordre.id]);
       ds.load().then(
         res => {
           if (res.length) {
+            this.noLitiges = false;
             this.formGroup.patchValue(res[0]);
-            // console.log(this.litigesLignesService.getTotaux(res[0].id).then(res => console.log(res)))
             from(this.litigesLignesService.getTotaux(res[0].id))
             .pipe(mergeAll())
-            .subscribe(res => {
-              const totaux: LitigeLigneTotaux & {resultat?: number} = res.data.litigeLigneTotaux; 
+            .subscribe(result => {
+              const totaux: LitigeLigneTotaux & {resultat?: number} = result.data.litigeLigneTotaux;
+              console.log(totaux)
               totaux.resultat = totaux.avoirFournisseur - totaux.avoirClient - totaux.fraisAnnexes;
               this.devise = totaux.devise.id;
+              this.resultat.value = totaux.resultat;
+              if (totaux.totalMontantRistourne) this.totalMontantRistourne = true;
               this.formGroup.patchValue(totaux);
             })
           } else {
@@ -100,8 +127,10 @@ export class FormLitigesComponent implements OnChanges, OnInit {
 
   }
 
-  onSubmit() {
+  onSubmit() {}
 
+  onToggling(toggled: boolean) {
+    if (toggled) this.showForm();
   }
 
 }

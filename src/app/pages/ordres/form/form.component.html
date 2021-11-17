@@ -700,12 +700,13 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="
-                    onAccordionToggled($event, [gridLitigesLignes])
-                  "
+                  (onItemTitleClick)="onAccordionToggled($event, [gridLitigesLignes, formLitiges])"
                 >
                   <dxi-item>
-                    <app-form-litiges [ordre]="ordre"></app-form-litiges>
+                    <app-form-litiges 
+                      [ordre]="ordre"
+                      #formLitiges
+                    ></app-form-litiges>
                     <app-grid-litiges-lignes
                       [hidden]="!dotLitiges"
                       #gridLitigesLignes

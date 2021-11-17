@@ -986,134 +986,137 @@
   "ordre-logistique": {
     "columns": [
       {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "visible": false
-      },
-      {
         "visibleIndex": 1,
-        "dataField": "expedieStation",
+        "dataField": "fournisseur.code",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "ordre.typeTransport.id",
+        "dataField": "expedieStation",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "fournisseurReferenceDOC",
+        "dataField": "ordre.typeTransport.id",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "ordre.prixUnitaireTarifTransport",
+        "dataField": "fournisseurReferenceDOC",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "ordre.transporteurDEVCode",
+        "dataField": "ordre.prixUnitaireTarifTransport",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "ordre.baseTarifTransport",
+        "dataField": "ordre.transporteurDEVCode",
         "visible": true
       },
       {
         "visibleIndex": 7,
-        "dataField": "ordre.codeChargement",
+        "dataField": "ordre.baseTarifTransport.description",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "ordre.ETDDate",
+        "dataField": "ordre.codeChargement",
         "visible": true
       },
       {
         "visibleIndex": 9,
-        "dataField": "ordre.ETADate",
+        "dataField": "ordre.ETDDate",
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "ordre.ETDLocation",
+        "dataField": "ordre.ETADate",
         "visible": true
       },
       {
         "visibleIndex": 11,
-        "dataField": "ordre.ETALocation",
+        "dataField": "ordre.ETDLocation",
         "visible": true
       },
       {
         "visibleIndex": 12,
-        "dataField": "ordre.incoterm.id",
+        "dataField": "ordre.ETALocation",
         "visible": true
       },
       {
         "visibleIndex": 13,
-        "dataField": "ordre.incotermLieu",
+        "dataField": "ordre.incoterm.id",
         "visible": true
       },
       {
         "visibleIndex": 14,
+        "dataField": "ordre.incotermLieu",
+        "visible": true
+      },
+      {
+        "visibleIndex": 15,
         "dataField": "referenceLogistique",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 15,
+        "visibleIndex": 16,
         "dataField": "referenceDocument",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 17,
         "dataField": "numeroImmatriculation",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 17,
+        "visibleIndex": 18,
         "dataField": "numeroContainer",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 19,
         "dataField": "locusTrace",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 19,
+        "visibleIndex": 20,
         "dataField": "numeroPlomb",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 21,
         "dataField": "detecteurTemperature",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 21,
+        "visibleIndex": 22,
         "dataField": "certificatControle",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 22,
+        "visibleIndex": 23,
         "dataField": "certificatPhytosanitaire",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 23,
+        "visibleIndex": 24,
         "dataField": "billOfLanding",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
     ]
   },
@@ -1262,6 +1265,7 @@
         "visibleIndex": 0,
         "dataField": "numeroGroupementLitige",
         "dataType": "string",
+        "sortOrder": "asc",
         "visible": true
       },
       {
@@ -1353,6 +1357,45 @@
         "dataField": "id",
         "dataType": "string",
         "visible": false
+      },
+      {
+        "dataField": "clientNombrePalettes"
+      },
+      {
+        "dataField": "clientNombreColisReclamation"
+      },
+      {
+        "dataField": "clientPoidsNet"
+      },
+      {
+        "dataField": "clientPrixUnitaire"
+      },
+      {
+        "dataField": "deviseCode"
+      },
+      {
+        "dataField": "clientQuantite"
+      },
+      {
+        "dataField": "clientUniteFactureCode"
+      },
+      {
+        "dataField": "responsableNombrePalettes"
+      },
+      {
+        "dataField": "responsableNombreColis"
+      },
+      {
+        "dataField": "responsablePoidsNet"
+      },
+      {
+        "dataField": "responsablePrixUnitaire"
+      },
+      {
+        "dataField": "responsableQuantite"
+      },
+      {
+        "dataField": "responsableUniteFactureCode"
       }
     ]
   },

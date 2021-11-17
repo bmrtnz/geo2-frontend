@@ -1,5 +1,4 @@
 <dx-data-grid class="dx-card wide-card"
-    [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
     [columnAutoWidth]="true"
@@ -39,9 +38,9 @@
       [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('ordreLogistique-' + field.path.replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('ordreLogistique-' + field.dataField?.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

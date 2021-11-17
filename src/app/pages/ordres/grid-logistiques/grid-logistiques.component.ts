@@ -1,15 +1,14 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { LocalizationService } from 'app/shared/services';
 import { OrdresLogistiquesService } from 'app/shared/services/api/ordres-logistiques.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ToggledGrid } from '../form/form.component';
+import * as gridConfig from 'assets/configurations/grids.json';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-grid-logistiques',
@@ -20,7 +19,7 @@ export class GridLogistiquesComponent implements ToggledGrid {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  public detailedFields: GridColumn[];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
@@ -29,23 +28,18 @@ export class GridLogistiquesComponent implements ToggledGrid {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
   ) {
-    this.detailedFields = this.ordresLogistiquesService.model.getDetailedFields(6)
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field => 
-          !!(this.localizeService.localize('ordreLogistique-' + field.path.replaceAll('.', '-'))).length);
-      }),
-    );
+    this.detailedFields = gridConfig['ordre-logistique'].columns;
   }
 
   enableFilters() {
     if (this?.ordre?.id) {
-      this.dataSource = this.ordresLogistiquesService.getDataSource(10, null);
+      this.dataSource = this.ordresLogistiquesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
       ]);
-    }
+      this.datagrid.dataSource = this.dataSource;
+    } else if (this.datagrid)
+      this.datagrid.dataSource = null;
   }
 
   onToggling(toggled: boolean) {
