@@ -26,7 +26,7 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
-  public totalItems: {column: string, summaryType: SummaryType}[] = [];
+  public totalItems: {column: string, summaryType: SummaryType, displayFormat?: string}[] = [];
 
   constructor(
     private ordreLignesTotauxDetailService: OrdreLignesTotauxDetailService,
@@ -55,7 +55,10 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
     const fields = await this.detailedFields.toPromise();
     this.totalItems = fields
     .filter( f => f.type === 'Number')
-    .map(({path: column}) => ({column, summaryType: SummaryType.SUM}));
+    .map(({path: column}, index) => {
+      const displaytext = !index ? 'Total :' : '';
+      return {column, summaryType: SummaryType.SUM, displayFormat: displaytext + ' {0}'};
+    });
     toggled ? this.enableFilters() : this.dataSource = null;
   }
 }

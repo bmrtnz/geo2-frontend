@@ -1766,6 +1766,9 @@
         "visibleIndex": 5,
         "dataField": "ordreLigne.article.description",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
     ]
   },

@@ -111,7 +111,6 @@ export class FormLitigesComponent implements OnInit {
             .pipe(mergeAll())
             .subscribe(result => {
               const totaux: LitigeLigneTotaux & {resultat?: number} = result.data.litigeLigneTotaux;
-              console.log(totaux)
               totaux.resultat = totaux.avoirFournisseur - totaux.avoirClient - totaux.fraisAnnexes;
               this.devise = totaux.devise.id;
               this.resultat.value = totaux.resultat;

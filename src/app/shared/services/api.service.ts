@@ -64,6 +64,7 @@ export enum SummaryType {
 export type Summary = {
   selector: string
   summaryType: SummaryType
+  displayFormat?: string
 };
 
 export type Pageable = {

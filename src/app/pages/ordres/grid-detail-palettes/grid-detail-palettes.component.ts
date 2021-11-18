@@ -1,6 +1,4 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import type { Model } from 'app/shared/models/model';
-import { ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { LocalizationService } from 'app/shared/services';
 import { TracabiliteLignesService } from 'app/shared/services/api/tracabilite-lignes.service';
@@ -8,9 +6,10 @@ import { GridConfiguratorService } from 'app/shared/services/grid-configurator.s
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ToggledGrid } from '../form/form.component';
+import * as gridConfig from 'assets/configurations/grids.json';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-grid-detail-palettes',
@@ -22,36 +21,23 @@ export class GridDetailPalettesComponent implements ToggledGrid {
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
 
-  /* tslint:disable-next-line max-line-length */
-  gridFilter: RegExp = /^(?:arboCode|nombreColis|ordreLigne\.(?:nombrePalettesExpediees|numero|nombreColisExpedies|libelleDLV|fournisseur\.code|ordre\.(?:id|numero|client\.raisonSocial|referenceClient)|logistique\.(?:nombrePalettesAuSol|totalPalettesExpediees|dateDepartReelleFournisseur)|article\.(?:id|description|matierePremiere\.(?:variete\.description|espece\.description)|normalisation\.calibreMarquage\.description|emballage\.emballage\.description))|tracabiliteDetailPalette\.(?:SSCC|poidsNet|poidsBrut|paletteAuSol|typePalette\.description))$/;
-
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<
-    ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
-  >;
+  public detailedFields: GridColumn[];
 
   constructor(
     private tracabiliteLignesService: TracabiliteLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.detailedFields = this.tracabiliteLignesService.model
-    .getDetailedFields(5, this.gridFilter, {forceFilter: true})
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field => 
-          !!(this.localizeService.localize('ordreDetailPalettes-' + field.path.replaceAll('.', '-'))).length);
-      }),
-    );
+    this.detailedFields = gridConfig['ordre-detail-palettes'].columns;
   }
 
   enableFilters() {
     if (this?.ordre?.id) {
-      this.dataSource = this.tracabiliteLignesService
-      .getDataSource(4, this.gridFilter);
+      this.dataSource = this.tracabiliteLignesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
       this.dataSource.filter([['tracabiliteDetailPalette.ordre.id', '=', this.ordre.id]]);
+      this.dataGrid.dataSource = this.dataSource;
     }
   }
 
