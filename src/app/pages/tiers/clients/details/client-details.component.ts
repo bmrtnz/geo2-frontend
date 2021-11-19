@@ -522,6 +522,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   valueToUpperCase(e) {
+    if (!e.component.option('value')) return;
     e.component.option('value', e.component.option('value').toUpperCase());
     return e.component.option('value');
   }

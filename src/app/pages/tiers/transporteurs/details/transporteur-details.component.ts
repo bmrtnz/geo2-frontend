@@ -189,6 +189,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   valueToUpperCase(e) {
+    if (!e.component.option('value')) return;
     e.component.option('value', e.component.option('value').toUpperCase());
     return e.component.option('value');
   }

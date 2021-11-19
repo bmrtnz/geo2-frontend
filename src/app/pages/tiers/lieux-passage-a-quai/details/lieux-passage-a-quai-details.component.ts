@@ -152,6 +152,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   }
 
   valueToUpperCase(e) {
+    if (!e.component.option('value')) return;
     e.component.option('value', e.component.option('value').toUpperCase());
     return e.component.option('value');
   }
