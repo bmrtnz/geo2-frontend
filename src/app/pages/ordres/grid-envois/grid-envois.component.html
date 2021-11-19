@@ -1,5 +1,4 @@
 <dx-data-grid class="dx-card wide-card"
-    [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -11,7 +10,6 @@
       useNative:false,
       showScrollBar:'always'
     }"
-    (onContentReady)="sortGrid()"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Envois', $event, gridConfiguratorService.Grid.Envois, enableFilters.bind(this))"
   >
@@ -44,9 +42,9 @@
       [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('ordreEnvois-' + field.path.replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('ordreEnvois-' + field.dataField?.replaceAll('.', '-') | localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

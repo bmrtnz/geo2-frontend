@@ -69,7 +69,8 @@ interface GridColumn {
   /**
    * Specifies the widget's edge to which the column is fixed. Applies only if columns[].fixed is true.
    */
-  fixedPosition?: 'left' | 'right';
+  fixedPosition?: string;
+  // fixedPosition?: 'left' | 'right';
 
   /**
    * Formats a value before it is displayed in a column cell.

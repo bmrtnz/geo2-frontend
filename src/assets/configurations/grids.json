@@ -1464,6 +1464,7 @@
       {
         "visibleIndex": 10,
         "dataField": "dateDemande",
+        "sortOrder": "desc",
         "dataType": "string",
         "visible": true
       },
@@ -1490,6 +1491,15 @@
         "dataField": "commentairesAvancement",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "document.isPresent"
+      },
+      {
+        "dataField": "document.type"
+      },
+      {
+        "dataField": "document.uri"
       }
     ]
   },
@@ -1614,6 +1624,9 @@
         "visibleIndex": 1,
         "dataField": "utilisateur",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
     ]
   },
@@ -1635,6 +1648,9 @@
         "visibleIndex": 2,
         "dataField": "commentaires",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
     ]
   },
@@ -2075,6 +2091,9 @@
         "visible": true,
         "fixed": true,
         "fixedPosition": "right"
+      },
+      {
+        "dataField": "id"
       }
     ]
   }

@@ -1,7 +1,7 @@
 <!-- LITIGES -->
 
 <div *ngIf="noLitiges" class="nolitiges">{{ 'ordres-litiges-noLitiges' | localize }}</div>
-<form *ngIf="!noLitiges" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+<form *ngIf="noLitiges !== null && noLitiges !== true" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <div class="content-block form-litiges">
       <dx-box direction="row">
         <dxi-item [ratio]="4">

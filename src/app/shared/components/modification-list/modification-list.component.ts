@@ -8,6 +8,7 @@ import { ModificationsService } from 'app/shared/services/api/modification.servi
 import { Modification } from 'app/shared/models';
 import notify from 'devextreme/ui/notify';
 import { ValidationService } from 'app/shared/services/api/validation.service';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class ModificationListComponent implements OnInit, OnChanges {
 
   constructor(
     public authService: AuthService,
+    private dateManagementService: DateManagementService,
     public modificationsService: ModificationsService,
     public validationService: ValidationService
     ) { }
@@ -38,16 +40,10 @@ export class ModificationListComponent implements OnInit, OnChanges {
     this.refreshList();
   }
 
-  customDate(dateModif) {
-    const mydate = new Date(dateModif);
-    const myTime = mydate.toLocaleTimeString().replace(':', 'h').replace(':', ' ') + 's';
-    return mydate.toLocaleDateString() + '  (' + myTime + ')';
-  }
-
   refreshList() {
 
     const columns = ['id', 'entite', 'entiteID', 'dateModification', 'initiateur.nomUtilisateur', 'statut', 'corps.id',
-    'corps.affichageActuel', 'corps.affichageDemande', 'corps.traductionKey']
+    'corps.affichageActuel', 'corps.affichageDemande', 'corps.traductionKey'];
 
     this.modificationsService.getAll(columns, [
         ['entite', '=', this.entite],
@@ -60,7 +56,7 @@ export class ModificationListComponent implements OnInit, OnChanges {
       if (liste.length) {
         liste.sort((a, b) => new Date(b.dateModification).getTime() - new Date(a.dateModification).getTime());
         this.modifs = liste;
-        this.modifs.map(result => result.dateModification = this.customDate(result.dateModification));
+        this.modifs.map(result => result.dateModification = this.dateManagementService.friendlyDate(result.dateModification));
       }
     });
 

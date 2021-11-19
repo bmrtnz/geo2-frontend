@@ -16,6 +16,10 @@ export class CQLignesService extends ApiService implements APIRead {
     super(apollo, CQLigne);
   }
 
+
+  /**
+   * @deprecated Use getDataSource_v2
+   */
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
@@ -45,6 +49,47 @@ export class CQLignesService extends ApiService implements APIRead {
               resolve(new CQLigne(res.data.CQLigne));
           });
         }),
+      }),
+    });
+  }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { CQLigne: CQLigne };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.CQLigne)
+            resolve(new CQLigne(res.data.CQLigne));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [
+        { selector: this.model.getKeyField() }
+      ],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allCQLigne: RelayPage<CQLigne> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = this.mapLoadOptionsToVariables(options);
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allCQLigne) {
+              resolve(this.asInstancedListCount(res.data.allCQLigne));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
       }),
     });
   }

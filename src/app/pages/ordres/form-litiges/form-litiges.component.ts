@@ -52,7 +52,7 @@ export class FormLitigesComponent implements OnInit {
 
   litiges: DataSource;
   ordres: DataSource;
-  noLitiges: boolean;
+  noLitiges = null;
   devise = 'EUR';
   ddeAvoirFournisseur: any;
   totalMontantRistourne: any;
