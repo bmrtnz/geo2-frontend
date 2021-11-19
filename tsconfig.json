@@ -33,7 +33,8 @@
     "strictInjectionParameters": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowJs": true
+    "allowJs": true,
+    "strictTemplates": true,
   },
   "exclude": [
     "dist"
