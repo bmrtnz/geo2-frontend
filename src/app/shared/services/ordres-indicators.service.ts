@@ -1,11 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
+import grids from 'assets/configurations/grids.json';
+import { GridColumn } from 'basic';
 import DataSource from 'devextreme/data/data_source';
 import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
-import { CountResponse as CountResponseOrdre, OrdreDatasourceOperation, OrdresService } from './api/ordres.service';
+import { CountResponse as CountResponseOrdre, Operation, OrdresService } from './api/ordres.service';
 import { CountResponse as CountResponsePays, Operation as PaysOperation, PaysService } from './api/pays.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
@@ -29,7 +31,6 @@ export class Indicator {
   number?: string;
   parameter: string;
   subParameter: string;
-  goTo: string;
   filter?: any[];
   tileBkg: string;
   indicatorIcon: string;
@@ -40,7 +41,7 @@ export class Indicator {
   dataSource?: DataSource;
   select?: RegExp;
   component?: Promise<any>;
-  detailedFields?: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields?: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]> | GridColumn[];
   constructor(args) { Object.assign(this, args); }
   cloneFilter?(): any[] { return JSON.parse(JSON.stringify(this.filter)); }
 }
@@ -50,7 +51,6 @@ const indicators: Indicator[] = [{
   enabled: true,
   parameter: 'Suivi',
   subParameter: 'des ordres',
-  goTo: '/ordres/suivi',
   tileBkg: '#01AA9B',
   indicatorIcon: 'material-icons euro_symbol',
   warningIcon: '',
@@ -61,7 +61,6 @@ const indicators: Indicator[] = [{
   withCount: true,
   parameter: 'Supervision',
   subParameter: 'livraison',
-  goTo: '/ordres/indicateurs/supervisionLivraison',
   tileBkg: '#9199B4',
   indicatorIcon: 'material-icons directions',
   warningIcon: '',
@@ -72,7 +71,6 @@ const indicators: Indicator[] = [{
   withCount: true,
   parameter: 'Bons',
   subParameter: 'à facturer',
-  goTo: '/ordres/indicateurs/bonAFacturer',
   tileBkg: '#01779B',
   indicatorIcon: 'material-icons list_alt',
   warningIcon: 'material-icons warning',
@@ -83,7 +81,6 @@ const indicators: Indicator[] = [{
   withCount: true,
   parameter: 'Clients',
   subParameter: 'en dépassement encours',
-  goTo: '/ordres/indicateurs/clientsDepEncours',
   tileBkg: '#4199B4',
   indicatorIcon: 'material-icons people',
   warningIcon: 'material-icons warning',
@@ -96,7 +93,6 @@ const indicators: Indicator[] = [{
   withCount: true,
   parameter: 'Ordres',
   subParameter: 'non clôturés',
-  goTo: '/ordres/indicateurs/ordresNonClotures',
   tileBkg: '#F26C5A',
   indicatorIcon: 'material-icons lock_open',
   warningIcon: '',
@@ -109,7 +105,6 @@ const indicators: Indicator[] = [{
   withCount: true,
   parameter: 'Ordres',
   subParameter: 'non confirmés',
-  goTo: '/ordres/indicateurs/ordresNonConfirmes',
   tileBkg: '#5A6382',
   indicatorIcon: 'material-icons remove_done',
   warningIcon: '',
@@ -117,12 +112,21 @@ const indicators: Indicator[] = [{
   /* tslint:disable-next-line max-line-length */
   select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateCreation|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial)$/,
 }, {
+  id: 'PlanningTransporteurs',
+  enabled: true,
+  withCount: true,
+  parameter: 'Planning',
+  subParameter: 'transporteurs',
+  tileBkg: '#1B715C',
+  indicatorIcon: 'material-icons departure_board',
+  warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/planning-transporteurs/planning-transporteurs.component'),
+}, {
   id: 'Litiges',
   enabled: false,
   withCount: true,
   parameter: 'Litiges',
   subParameter: 'en cours',
-  goTo: '/ordres/indicateurs/litiges',
   tileBkg: '#1B715C',
   indicatorIcon: 'material-icons offline_bolt',
   warningIcon: 'material-icons warning',
@@ -132,7 +136,6 @@ const indicators: Indicator[] = [{
   enabled: false,
   parameter: 'Stock',
   subParameter: 'dispo',
-  goTo: '/stock',
   tileBkg: '#60895E',
   indicatorIcon: 'box',
   warningIcon: '',
@@ -142,7 +145,6 @@ const indicators: Indicator[] = [{
   withCount: true,
   parameter: 'Planning',
   subParameter: 'départ',
-  goTo: '/ordres/indicateurs/planningDepart',
   tileBkg: '#71BF45',
   indicatorIcon: 'material-icons calendar_today',
   warningIcon: '',
@@ -154,7 +156,6 @@ const indicators: Indicator[] = [{
   withCount: true,
   parameter: 'Commandes',
   subParameter: 'en transit',
-  goTo: '/ordres/indicateurs/commandesTransit',
   tileBkg: '#8E4A21',
   indicatorIcon: 'material-icons local_shipping',
   warningIcon: ''
@@ -288,7 +289,7 @@ export class OrdresIndicatorsService {
         instance.detailedFields = this.ordresService.model
         .getDetailedFields(2, instance.select, {forceFilter: true});
         instance.dataSource = this.ordresService
-        .getDataSource(OrdreDatasourceOperation.SuiviDeparts, 1, instance.select);
+        .getDataSource(Operation.SuiviDeparts, 1, instance.select);
         instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
         instance.filter = [
           ...instance.filter,
@@ -296,8 +297,18 @@ export class OrdresIndicatorsService {
           [
             'logistiques.dateDepartPrevueFournisseur',
             '<=',
-            this.datePipe.transform((new Date()).setDate((new Date()).getDate()).valueOf(), 'yyyy-MM-dd'),
+            new Date().toISOString(),
           ],
+        ];
+      }
+
+      // Planning departs
+      if (instance.id === 'PlanningTransporteurs') {
+        instance.detailedFields = grids['planning-transporteurs'].columns;
+        instance.dataSource = this.ordresService.getDataSource_v2(instance.detailedFields.map( field => field.dataField ));
+        instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+        instance.filter = [
+          ...instance.filter,
         ];
       }
 
