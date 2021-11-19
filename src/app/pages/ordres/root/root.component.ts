@@ -141,7 +141,7 @@ export class RootComponent implements OnInit, OnDestroy {
     const selectedID = this.route.snapshot.paramMap
     .get(RouteParam.TabID);
     const navID = pullID === selectedID
-      ? history.state[PREVIOUS_STATE] ?? TAB_HOME_ID
+    ? history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID
       : selectedID;
 
     this.router.navigate(['ordres', navID], {
