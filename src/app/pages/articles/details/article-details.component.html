@@ -437,9 +437,6 @@
                                 <dx-text-box 
                                  formControlName="poidsNetColis"
                                  [readOnly]="readOnlyMode"
-                                 [inputAttr]="{'style': 'text-transform: uppercase'}"
-                                 (onValueChanged)="valueToUpperCase($event)"
-                                 valueChangeEvent="keyup"
                                  >
                                     <dx-validator name="{{ 'articles-emballage-poidsNetColis' | localize }}">
                                         <dxi-validation-rule type="numeric" ></dxi-validation-rule>

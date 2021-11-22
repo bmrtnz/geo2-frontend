@@ -243,6 +243,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     valueToUpperCase(e) {
+        if (!e.component.option('value')) return;
         e.component.option('value', e.component.option('value').toUpperCase());
         return e.component.option('value');
       }
