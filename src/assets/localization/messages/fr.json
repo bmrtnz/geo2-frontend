@@ -526,6 +526,7 @@
     "ordres-incotermLieu": "Lieu Incoterm",
     "ordres-transporteurDEVCode": "",
     "ordres-transporteurDEVPrixUnitaire": "P.U.",
+    "ordres-prixUnitaireTarifTransport": "P.U",
     "ordres-transporteurDEVTaux": "",
     "ordres-typeTransport": "Type",
     "ordres-commercial": "Commercial",

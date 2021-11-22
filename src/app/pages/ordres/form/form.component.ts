@@ -70,7 +70,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     referenceClient: [''],
     transporteur: [''],
     transporteurDEVCode: [''],
-    transporteurDEVPrixUnitaire: [''],
+    prixUnitaireTarifTransport: [''],
     transporteurDEVTaux: [''],
     baseTarifTransport: [''],
     typeTransport: [''],
