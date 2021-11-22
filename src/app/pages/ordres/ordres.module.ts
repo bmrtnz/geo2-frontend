@@ -7,7 +7,31 @@ import { ViewDocumentPopupModule } from 'app/shared/components/view-document-pop
 import { LocalizePipe } from 'app/shared/pipes';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { SharedModule } from 'app/shared/shared.module';
-import { DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxLoadPanelModule, DxNumberBoxModule, DxPopoverModule, DxPopupModule, DxSelectBoxModule, DxSortableModule, DxTabPanelModule, DxTagBoxModule, DxTextAreaModule, DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule } from 'devextreme-angular';
+import {
+  DxAccordionModule,
+  DxAutocompleteModule,
+  DxBoxModule,
+  DxButtonModule,
+  DxCheckBoxModule,
+  DxDataGridModule,
+  DxDateBoxModule,
+  DxFormModule,
+  DxListModule,
+  DxLoadIndicatorModule,
+  DxLoadPanelModule,
+  DxNumberBoxModule,
+  DxPopoverModule,
+  DxPopupModule,
+  DxSelectBoxModule,
+  DxSortableModule,
+  DxTabPanelModule,
+  DxTagBoxModule,
+  DxTextAreaModule,
+  DxTextBoxModule,
+  DxTileViewModule,
+  DxValidationGroupModule,
+  DxValidatorModule,
+} from 'devextreme-angular';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { FormLitigesComponent } from './form-litiges/form-litiges.component';
 import { FormLogistiqueComponent } from './form-logistique/form-logistique.component';
@@ -42,6 +66,7 @@ import { OrdresRoutingModule } from './ordres-routing.module';
 import { LoadingTabComponent, RootComponent, TabContext } from './root/root.component';
 import OrdresSuiviComponent from './suivi/ordres-suivi.component';
 import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
+import PlanningTransporteursComponent from './indicateurs/planning-transporteurs/planning-transporteurs.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +102,7 @@ import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.gu
     RootComponent,
     LoadingTabComponent,
     FormComponent,
+    PlanningTransporteursComponent,
   ],
   imports: [
     OrdresRoutingModule,

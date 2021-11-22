@@ -1,0 +1,96 @@
+<form class="dx-fieldset" [formGroup]="formGroup">
+
+  <!-- Transporteurs -->
+  <div class="dx-field">
+    <div class="dx-field-label">{{ 'tiers-transporteurs-title' | localize }}</div>
+    <div class="dx-field-value">
+      <dx-select-box
+        formControlName="transporteur"
+        [dataSource]="transporteursDataSource"
+        valueExpr="id"
+        displayExpr="raisonSocial"
+        [searchEnabled]="true"
+        [searchExpr]="['id', 'raisonSocial']"
+      ></dx-select-box>
+    </div>
+  </div>
+
+  <!-- Du -->
+  <div class="dx-field">
+    <div class="dx-field-label">{{ 'du' | localize }}</div>
+    <div class="dx-field-value">
+      <dx-date-box
+        formControlName="from"
+        type="datetime"
+      ></dx-date-box>
+    </div>
+  </div>
+  
+  <!-- Au -->
+  <div class="dx-field">
+    <div class="dx-field-label">{{ 'au' | localize }}</div>
+    <div class="dx-field-value">
+      <dx-date-box
+        formControlName="to"
+        type="datetime"
+      ></dx-date-box>
+    </div>
+  </div>
+
+</form>
+
+<dx-data-grid
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [focusedRowEnabled]="true"
+  [focusedRowIndex]="0"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [scrolling]="{
+    useNative:false,
+    showScrollbar:'always'
+  }"
+  (onRowDblClick)="onRowDblClick($event)"
+  (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningTransporteurs, enableFilters.bind(this))"
+>
+
+  <!-- Grid configuration -->
+  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-state-storing 
+    [storageKey]="gridConfiguratorService.Grid.PlanningTransporteurs"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height">
+  </dxo-column-chooser>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+  ></dxi-column>
+
+</dx-data-grid>
+  

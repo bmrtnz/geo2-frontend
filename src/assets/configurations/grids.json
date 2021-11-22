@@ -1611,6 +1611,32 @@
       }
     ]
   },
+  "planning-transporteurs": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "entrepot.codePostal",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "entrepot.ville",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "entrepot.pays.id",
+        "visible": true
+      },
+      { "dataField": "id", "visible": false },
+      { "dataField": "entrepot.id", "visible": false }
+    ]
+  },
   "ordre-save-log": {
     "columns": [
       {

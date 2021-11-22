@@ -6,7 +6,7 @@ import Ordre from 'app/shared/models/ordre.model';
 import { Role } from 'app/shared/models/personne.model';
 import { AuthService, ClientsService, EntrepotsService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
-import { OrdreDatasourceOperation, OrdresService } from 'app/shared/services/api/ordres.service';
+import { OrdresService, Operation } from 'app/shared/services/api/ordres.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
@@ -76,7 +76,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
   ) {
-    this.dataSource = this.ordresService.getDataSource(OrdreDatasourceOperation.BAF);
+    this.dataSource = this.ordresService.getDataSource(Operation.BAF);
     this.detailedFields = this.ordresService.model.getDetailedFields();
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
