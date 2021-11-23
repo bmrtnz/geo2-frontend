@@ -212,7 +212,7 @@
                               <div class="dx-field-value">
                                   <dx-text-box formControlName="referenceClient">
                                   <dx-validator name="{{ 'ordres-referenceClient' | localize }}">
-                                      <dxi-validation-rule type="stringLength" max="70" trim="true"></dxi-validation-rule>
+                                      <dxi-validation-rule type="stringLength" [max]="70" [trim]="false"></dxi-validation-rule>
                                   </dx-validator>
                                   </dx-text-box>
                               </div>
@@ -371,7 +371,7 @@
                           <div class="dx-field-value">
                           <dx-text-box formControlName="instructionsLogistiques">
                               <dx-validator name="{{ 'ordres-instructionsLogistiques' | localize }}">
-                              <dxi-validation-rule type="stringLength" max="255"></dxi-validation-rule>
+                              <dxi-validation-rule type="stringLength" [max]="255"></dxi-validation-rule>
                               </dx-validator>
                           </dx-text-box>
                           </div>
@@ -382,7 +382,7 @@
                           <div class="dx-field-value small-font">
                             <dx-text-box formControlName="commentaireUsageInterne">
                             <dx-validator name="{{ 'ordres-commentaireUsageInterne' | localize }}">
-                                <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                                <dxi-validation-rule type="stringLength" [max]="70"></dxi-validation-rule>
                             </dx-validator>
                             </dx-text-box>
                           </div>

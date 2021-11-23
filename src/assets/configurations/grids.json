@@ -674,14 +674,14 @@
         "visible": true
       },
       {
-        "visibleIndex": 5,
-        "dataField": "nombrePalettesIntermediaires",
+        "visibleIndex": 6,
+        "dataField": "nombrePalettesCommandees",
         "dataType": "number",
         "visible": true
       },
       {
-        "visibleIndex": 6,
-        "dataField": "nombrePalettesCommandees",
+        "visibleIndex": 5,
+        "dataField": "nombrePalettesIntermediaires",
         "dataType": "number",
         "visible": true
       },
@@ -871,7 +871,7 @@
       },
       {
         "visibleIndex": 12,
-        "dataField": "paletteInter.description",
+        "dataField": "paletteInter.id",
         "dataType": "string",
         "visible": true
       },
@@ -880,6 +880,9 @@
         "dataField": "referenceControleQualite",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
     ]
   },
@@ -901,6 +904,7 @@
       {
         "visibleIndex": 2,
         "dataField": "dateDepartReelleFournisseur",
+        "sortOrder": "desc",
         "dataType": "string",
         "visible": true
         },
@@ -1724,8 +1728,7 @@
       {
         "visibleIndex": 0,
         "dataField": "fournisseur.raisonSocial",
-        "visible": true,
-        "sortOrder": "asc"
+        "visible": true
       },
       {
         "visibleIndex": 1,

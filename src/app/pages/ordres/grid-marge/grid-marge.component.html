@@ -5,9 +5,9 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  scrolling="{
+  [scrolling]="{
     useNative:false,
-    showScrollBar:'always'
+    showScrollbar:'always'
   }"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Marge', $event, gridConfiguratorService.Grid.OrdreMarge, enableFilters.bind(this))"
 >
@@ -34,7 +34,7 @@
     [enabled]="true"
     mode="select"
     title="{{ 'columnChooser' | localize }}"
-    allowSearch="true"
+    [allowSearch]="true"
     [width]="columnChooser.width"
     [height]="columnChooser.height">
   </dxo-column-chooser>
@@ -42,7 +42,7 @@
   <dxi-column
     *ngFor="let field of detailedFields | async"
     [dataField]="field.path"
-    [caption]="('ordreMarge-' + field.path.replaceAll('.', '-') | localize) || field.name"
+    [caption]="('ordreMarge-' + field.path.split('.').join('-') | localize) || field.name"
     [visible]="false"
     trueText="Oui"
     falseText="Non"

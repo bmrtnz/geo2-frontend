@@ -20,11 +20,14 @@ import { DxSelectBoxComponent } from 'devextreme-angular';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
 import { TabType, TabContext } from '../../root/root.component';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { GridColumn } from 'basic';
 
 @Component({
-  selector: 'ordres-non-clotures',
+  selector: 'app-ordres-non-clotures',
   templateUrl: './ordres-non-clotures.component.html',
   styleUrls: ['./ordres-non-clotures.component.scss'],
 })
@@ -45,6 +48,8 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
 
   public dataSource: DataSource;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     private router: Router,
@@ -68,7 +73,8 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
       this.INDICATOR_NAME
     );
-    this.detailedFields = this.indicator.detailedFields;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdresNonClotures);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.dataSource = this.indicator.dataSource;
   }
 

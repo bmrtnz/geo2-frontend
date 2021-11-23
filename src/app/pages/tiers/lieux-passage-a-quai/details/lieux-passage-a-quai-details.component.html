@@ -73,7 +73,7 @@
                     >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="13"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="13"></dxi-validation-rule>
                         <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
                         <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                     </dx-validator>
@@ -92,7 +92,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -129,7 +129,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="20"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="20"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -155,7 +155,7 @@
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="50"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="50"></dxi-validation-rule>
                      </dx-validator>
                     </dx-text-box>
                   </div>
@@ -174,7 +174,7 @@
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -192,7 +192,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -210,7 +210,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -229,7 +229,7 @@
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="9"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="9"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -248,7 +248,7 @@
                      >
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-ville' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -291,7 +291,7 @@
                     <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
                       <dx-validator name="{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="3"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="3"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>

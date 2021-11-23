@@ -39,21 +39,30 @@
                     <div class="dx-field">
                       <div class="dx-field-label">&nbsp;</div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="dateCreation"></dx-text-box>
+                          <dx-date-box 
+                           formControlName="dateCreation"
+                           [readOnly]="true"
+                           ></dx-date-box>
                         </div>
                     </div>
                     <!-- Date avoir client-->
                     <div class="dx-field">
                       <div class="dx-field-label">&nbsp;</div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="dateAvoirClient"></dx-text-box>
+                          <dx-date-box 
+                          formControlName="dateAvoirClient"
+                          [readOnly]="true"
+                          ></dx-date-box>
                         </div>
                     </div>
                     <!-- Date avoir fournisseur-->
                     <div class="dx-field">
                       <div class="dx-field-label">&nbsp;</div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="dateAvoirFournisseur"></dx-text-box>
+                          <dx-date-box 
+                          formControlName="dateAvoirFournisseur"
+                          [readOnly]="true"
+                          ></dx-date-box>
                         </div>
                     </div>
                 </dxi-item>
@@ -133,10 +142,10 @@
             <div class="dx-form-group-content">
                 <!-- Avoir au client -->
               <div class="dx-field field-large">
-                <div class="dx-field-label">{{ 'ordres-litiges-ordreAvoirClient' | localize }}</div>
+                <div class="dx-field-label">{{ 'ordres-litiges-avoirClient' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-number-box formControlName="avoirClient"
-                     [format]="{ style: 'currency', currency: devise }">
+                     [format]="{ type: 'currency', currency: devise, precision: 2 }">
                   </dx-number-box>
                 </div>
               </div>
@@ -145,7 +154,7 @@
                 <div class="dx-field-label">{{ 'ordres-litiges-totalMontantRistourne' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-number-box formControlName="totalMontantRistourne"
-                    [format]="{ style: 'currency', currency: devise }">
+                    [format]="{ type: 'currency', currency: devise, precision: 2 }">
                   </dx-number-box>
                 </div>
               </div>
@@ -154,7 +163,7 @@
                 <div class="dx-field-label">{{ 'ordres-litiges-ddeAvoirFournisseur' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-number-box formControlName="avoirFournisseur"
-                  [format]="{ style: 'currency', currency: devise }">
+                  [format]="{ type: 'currency', currency: devise, precision: 2 }">
                   </dx-number-box>
                 </div>
               </div>
@@ -163,7 +172,7 @@
                 <div class="dx-field-label">{{ 'ordres-litiges-fraisAnnexes' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-number-box formControlName="fraisAnnexes"
-                  [format]="{ style: 'currency', currency: devise }">
+                  [format]="{ type: 'currency', currency: devise, precision: 2 }">
                   </dx-number-box>
                 </div>
               </div>
@@ -173,7 +182,7 @@
                 <div class="dx-field-label">{{ 'ordres-litiges-resultat' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-number-box #resultat
-                  [format]="{ style: 'currency', currency: devise }">
+                  [format]="{ type: 'currency', currency: devise, precision: 2 }">
                   </dx-number-box>
                 </div>
               </div>
@@ -188,21 +197,27 @@
               <div class="dx-field field-small">
                 <div class="dx-field-label"></div>
                 <div class="dx-field-value">
-                  <dx-number-box formControlName="avoirClientTaux"></dx-number-box>
+                  <dx-number-box formControlName="avoirClientTaux"
+                    [format]="{ type: 'fixedPoint', precision: 2 }">
+                  </dx-number-box>
                 </div>
               </div>
               <!-- Remise sur facture Taux-->
               <div *ngIf="totalMontantRistourne" class="dx-field field-small">
                 <div class="dx-field-label"></div>
                 <div class="dx-field-value">
-                  <dx-number-box formControlName="totalMontantRistourneTaux"></dx-number-box>
+                  <dx-number-box formControlName="totalMontantRistourneTaux"
+                   [format]="{ type: 'fixedPoint', precision: 2 }">
+                  </dx-number-box>
                 </div>
               </div>
               <!-- Dde avoir fourni Taux -->
               <div class="dx-field field-small">
                 <div class="dx-field-label"></div>
                 <div class="dx-field-value">
-                  <dx-number-box formControlName="avoirFournisseurTaux"></dx-number-box>
+                  <dx-number-box formControlName="avoirFournisseurTaux"
+                   [format]="{ type: 'fixedPoint', precision: 2 }">
+                  </dx-number-box>
                 </div>
               </div>
             </div>

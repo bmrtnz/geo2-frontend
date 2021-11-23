@@ -243,7 +243,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.basesPaiement = this.basesPaiementService.getDataSource();
     this.naturesStation = this.naturesStationService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
-    this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(['id','raisonSocial']);
+    this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(['id', 'raisonSocial']);
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
 

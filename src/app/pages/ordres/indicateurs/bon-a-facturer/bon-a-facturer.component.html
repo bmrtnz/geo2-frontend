@@ -146,9 +146,9 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [selection]="{ mode: 'multiple' }"
-    scrolling="{
+    [scrolling]="{
         useNative:false,
-        showScrollBar:'always'
+        showScrollbar:'always'
       }"
       (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.OrdreBonAFacturer, enableFilters.bind(this))"
@@ -176,7 +176,7 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>

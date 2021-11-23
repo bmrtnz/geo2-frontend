@@ -7,9 +7,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onRowDblClick)="tabContext.openOrdre($event.data.ordre.numero)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Derniers ordres ouverts', $event, gridConfiguratorService.Grid.Historique, enableFilters.bind(this))"
@@ -37,14 +36,14 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
       *ngFor="let field of detailedFields"
       [dataField]="field.dataField"
-      [caption]="('ordres-' + field.dataField?.replaceAll('.', '-').replace('description', '') | localize) || field.name"
+      [caption]="('ordres-' + field.dataField?.split('.').join('-').replace('description', '') | localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

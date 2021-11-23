@@ -67,7 +67,7 @@
                     >
                       <dx-validator name="{{ 'tiers-entrepots-code' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="18"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="18"></dxi-validation-rule>
                         <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
                         <dxi-validation-rule *ngIf="createMode" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                       </dx-validator>
@@ -130,7 +130,7 @@
                      >
                       <dx-validator name="{{ 'tiers-entrepots-raisonSocial' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="50"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="50"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -149,7 +149,7 @@
                      >
                       <dx-validator name="{{ 'tiers-entrepots-adresse1' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -167,7 +167,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-adresse2' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -185,7 +185,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-adresse3' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -204,7 +204,7 @@
                      >
                       <dx-validator name="{{ 'tiers-entrepots-codePostal' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="9"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="9"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -223,7 +223,7 @@
                      >
                       <dx-validator name="{{ 'tiers-entrepots-ville' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -270,7 +270,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-lieuFonctionEanDepot' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -288,7 +288,7 @@
                      valueChangeEvent="keyup"
                       >
                       <dx-validator name="{{ 'tiers-entrepots-lieuFonctionEanAcheteur' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -325,7 +325,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-tvaCee' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="20"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="20"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -404,7 +404,7 @@
                    valueChangeEvent="keyup"
                    >
                     <dx-validator name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}">
-                      <dxi-validation-rule [trim]="false" type="stringLength" max="6"></dxi-validation-rule>
+                      <dxi-validation-rule [trim]="false" type="stringLength" [max]="6"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
                 </div>
@@ -421,7 +421,7 @@
                    valueChangeEvent="keyup"
                    >
                     <dx-validator name="{{ 'tiers-entrepots-referenceChep' | localize }}">
-                      <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                      <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
                 </div>
@@ -446,7 +446,7 @@
                        valueChangeEvent="keyup"
                        >
                         <dx-validator name="{{ 'tiers-entrepots-mentionClientSurFacture' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="128"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="128"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-area>
                     </div>
@@ -573,9 +573,6 @@
                     <dx-text-box 
                      formControlName="prixUnitaireTarifTransit"
                      [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
                      >
                      <dx-validator name="{{ 'tiers-entrepots-PUTarifTransit' | localize }}">
                       <dxi-validation-rule type="numeric"></dxi-validation-rule>
@@ -628,7 +625,7 @@
                        valueChangeEvent="keyup"
                        >
                         <dx-validator name="{{ 'tiers-entrepots-controlReferenceClient' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="50"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="50"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -656,7 +653,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-instructionSecretaireCommercial' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="140"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="140"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-area>
                   </div>
@@ -682,7 +679,7 @@
                      >
                      >
                       <dx-validator name="{{ 'tiers-entrepots-instructionLogistique' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="280"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="280"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-area>
                   </div>

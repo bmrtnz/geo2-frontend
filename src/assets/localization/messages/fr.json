@@ -591,6 +591,7 @@
     "ordreLignes-achatPrixUnitaire": "PU Achat",
     "ordreLignes-achatDevise": "Devise",
     "ordreLignes-typePalette-description": "Type Pal. Sol",
+    "ordreLignes-paletteInter-id": "Type Pal. Inter",
     "ordreLignes-paletteInter-description": "Type Pal. Inter",
     "ordreLignes-fraisPrixUnitaire": "Frais fab div",
     "ordreLignes-tauxRemiseSurFacture": "Rem. sur fact",
@@ -679,6 +680,7 @@
 
     "ordres-litiges-id": "Litige n°",
     "ordres-litiges-ordreAvoirClient": "Avoir client",
+    "ordres-litiges-avoirClient": "Avoir au client",
     "ordres-litiges-ordreAvoirFournisseurReference": "Avoir fournisseur",
     "ordres-litiges-ddeAvoirFournisseur": "Dde avoir fournisseur",
     "ordres-litiges-totalMontantRistourne": "Remise sur fact.",

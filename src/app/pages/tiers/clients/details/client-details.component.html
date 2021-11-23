@@ -86,7 +86,7 @@
                     >
                       <dx-validator name="{{ 'tiers-clients-code' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="13"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="13"></dxi-validation-rule>
                         <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
                         <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                       </dx-validator>
@@ -236,7 +236,7 @@
                       >
                       <dx-validator name="{{ 'tiers-clients-raisonSocial' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="50"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="50"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -255,7 +255,7 @@
                       >
                       <dx-validator name="{{ 'tiers-clients-adresse1' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -273,7 +273,7 @@
                      valueChangeEvent="keyup"
                      >
                       <dx-validator name="{{ 'tiers-clients-adresse2' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -291,7 +291,7 @@
                       valueChangeEvent="keyup"
                       >
                       <dx-validator name="{{ 'tiers-clients-adresse3' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -310,7 +310,7 @@
                       >
                       <dx-validator name="{{ 'tiers-clients-codePostal' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="9"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="9"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -329,7 +329,7 @@
                       >
                       <dx-validator name="{{ 'tiers-clients-ville' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -374,7 +374,7 @@
                         valueChangeEvent="keyup"
                         >
                         <dx-validator name="{{ 'tiers-entrepots-facturationRaisonSocial' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="50"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="50"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -392,7 +392,7 @@
                         valueChangeEvent="keyup"
                         >
                         <dx-validator name="{{ 'tiers-entrepots-facturationAdresse1' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -410,7 +410,7 @@
                         valueChangeEvent="keyup"
                         >
                         <dx-validator name="{{ 'tiers-entrepots-facturationAdresse2' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -428,7 +428,7 @@
                         valueChangeEvent="keyup"
                         >
                         <dx-validator name="{{ 'tiers-entrepots-facturationAdresse3' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -445,7 +445,7 @@
                         valueChangeEvent="keyup"
                         >
                         <dx-validator name="{{ 'tiers-entrepots-facturationCodePostal' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="9"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="9"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -463,7 +463,7 @@
                         valueChangeEvent="keyup"
                         >
                         <dx-validator name="{{ 'tiers-entrepots-facturationVille' | localize }}">
-                          <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                          <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                         </dx-validator>
                       </dx-text-box>
                     </div>
@@ -502,7 +502,7 @@
                       <dx-validator name="{{ 'tiers-clients-nbJourEcheance' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="3"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="3"></dxi-validation-rule>
                       </dx-validator>
                     </dx-number-box>
                   </div>
@@ -637,9 +637,9 @@
                       valueChangeEvent="keyup change"
                     >
                       <dx-validator name="{{ 'tiers-clients-compteComptable' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                         <!-- Workaround. Apparemment bug de Devextreme qui apparait lorsqu'il y a 2 async validation rules sur la page, et crée une référence circulaire. -->
-                        <dxi-validation-rule *ngIf="createMode === true && CCexists" type="stringLength" max="0" message="Ce code est déjà utilisé"></dxi-validation-rule>
+                        <dxi-validation-rule *ngIf="createMode === true && CCexists" type="stringLength" [max]="0" message="Ce code est déjà utilisé"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -735,7 +735,7 @@
                       valueChangeEvent="keyup"
                       >
                       <dx-validator name="{{ 'tiers-clients-tvaCee' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="20"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="20"></dxi-validation-rule>
                         <dxi-validation-rule type="async" *ngIf="!tvaCeeFree" type="required" ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -754,7 +754,7 @@
                       >
                       <dx-validator name="{{ 'tiers-clients-siret' | localize }}">
                         <dxi-validation-rule *ngIf="(formGroup.get('secteur').value ? formGroup.get('secteur').value.id === 'MAR' : false)" type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -771,7 +771,7 @@
                       valueChangeEvent="keyup"
                       >
                       <dx-validator name="{{ 'tiers-clients-referenceCoface' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -901,7 +901,7 @@
                     <dx-text-box formControlName="tauxRemiseParFacture" [readOnly]="readOnlyMode">
                       <dx-validator name="{{ 'tiers-clients-tauxRemiseParFacture' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule type="range" max="99.99"></dxi-validation-rule>
+                        <dxi-validation-rule type="range" [max]="99.99"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -913,7 +913,7 @@
                     <dx-text-box formControlName="tauxRemiseHorsFacture" [readOnly]="readOnlyMode">
                       <dx-validator name="{{ 'tiers-clients-tauxRemiseHorsFacture' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule type="range" max="99.99"></dxi-validation-rule>
+                        <dxi-validation-rule type="range" [max]="99.99"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -1014,7 +1014,7 @@
                       [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                       <dx-validator name="{{ 'tiers-clients-fraisMarketing' | localize }}">
                        <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule type="range" max="99.99"></dxi-validation-rule>
+                        <dxi-validation-rule type="range" [max]="99.99"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -1056,7 +1056,7 @@
                     <dx-text-box formControlName="fraisPlateforme" [readOnly]="readOnlyMode || !authService.currentUser.adminClient">
                       <dx-validator name="{{ 'tiers-clients-fraisPlateforme' | localize }}">
                         <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule type="range" max="99.99"></dxi-validation-rule>
+                        <dxi-validation-rule type="range" [max]="99.99"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
@@ -1162,7 +1162,7 @@
                     valueChangeEvent="keyup"
                   >
                     <dx-validator name="{{ 'tiers-clients-ifco' | localize }}">
-                      <dxi-validation-rule [trim]="false" type="stringLength" max="10"></dxi-validation-rule>
+                      <dxi-validation-rule [trim]="false" type="stringLength" [max]="10"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
                 </div>
@@ -1195,7 +1195,7 @@
                   valueChangeEvent="keyup"
                   >
                     <dx-validator name="{{ 'tiers-clients-lieuFonctionEan' | localize }}">
-                      <dxi-validation-rule [trim]="false" type="stringLength" max="35"></dxi-validation-rule>
+                      <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
                 </div>
@@ -1250,7 +1250,7 @@
                      valueChangeEvent="keyup"
                     >
                       <dx-validator name="{{ 'tiers-clients-commentaireHautFacture' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="70"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-area>
                   </div>
@@ -1268,7 +1268,7 @@
                      valueChangeEvent="keyup"
                     >
                       <dx-validator name="{{ 'tiers-clients-commentaireBasFacture' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="490"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="490"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-area>
                   </div>
@@ -1296,7 +1296,7 @@
                       valueChangeEvent="keyup"
                       >
                       <dx-validator name="{{ 'tiers-clients-instructionCommercial' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" max="140"></dxi-validation-rule>
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="140"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-area>
                   </div>
@@ -1321,7 +1321,7 @@
                      valueChangeEvent="keyup"
                      >
                      <dx-validator name="{{ 'tiers-clients-instructionCommercial' | localize }}">
-                      <dxi-validation-rule [trim]="false" type="stringLength" max="140"></dxi-validation-rule>
+                      <dxi-validation-rule [trim]="false" type="stringLength" [max]="140"></dxi-validation-rule>
                      </dx-validator>
                     </dx-text-area>
                   </div>

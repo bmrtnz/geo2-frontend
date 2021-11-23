@@ -13,14 +13,17 @@ import { DxSelectBoxComponent } from 'devextreme-angular';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'supervision-livraison',
   templateUrl: './supervision-livraison.component.html',
   styleUrls: ['./supervision-livraison.component.scss']
 })
-export class SupervisionLivraisonComponent implements OnInit {
+export class SupervisionLivraisonComponent implements OnInit, AfterViewInit {
 
   readonly INDICATOR_NAME = 'SupervisionLivraison';
   options: {};
@@ -41,6 +44,8 @@ export class SupervisionLivraisonComponent implements OnInit {
 
   
   public dataSource: DataSource;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     private router: Router,
@@ -63,13 +68,14 @@ export class SupervisionLivraisonComponent implements OnInit {
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ])
     this.days = this.localizeService.localize('ordres-day');
-    this.detailedFields = this.ordresService.model.getDetailedFields();
-    this.dataSource = ordresService.getDataSource();
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreSupervisionLivraison);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
    }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.enableFilters();
-    
+    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
+    this.dataSource = this.ordresService.getDataSource_v2(await fields.toPromise());
   }
 
   ngAfterViewInit() {
@@ -80,7 +86,7 @@ export class SupervisionLivraisonComponent implements OnInit {
         description : this.authService.currentUser.secteurCommercial.description
       }
     }
-  
+
     this.updateFilters();
 
   }

@@ -228,7 +228,7 @@
                         [height]="columnChooser.height"
                         mode="select"
                         title="{{ 'columnChooser' | localize }}"
-                        allowSearch="true">
+                        [allowSearch]="true">
                     </dxo-column-chooser>
                     <dxo-state-storing 
                         [storageKey]="gridConfiguratorService.Grid.Stock"

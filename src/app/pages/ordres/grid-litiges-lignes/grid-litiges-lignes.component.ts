@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -9,8 +9,9 @@ import Ordre from 'app/shared/models/ordre.model';
 import { LitigesLignesService } from 'app/shared/services/api/litiges-lignes.service';
 import LitigeLigne from 'app/shared/models/litige-ligne.model';
 import { ToggledGrid } from '../form/form.component';
-import * as gridConfig from 'assets/configurations/grids.json';
 import { GridColumn } from 'basic';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-litiges-lignes',
@@ -25,8 +26,9 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
   @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
 
   public dataSource: DataSource;
-  public detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
   public columnChooser = environment.columnChooser;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     private litigesLignesService: LitigesLignesService,
@@ -34,20 +36,21 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.detailedFields = gridConfig['litige-ligne'].columns;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.LitigeLigne);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
-  ngOnInit() {
-    // this.enableFilters();
-  }
+  ngOnInit() {}
 
   sortGrid() {
     // this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
   }
 
-  enableFilters() {
+  async enableFilters() {
     if (this.ordre?.id) {
-      this.dataSource = this.litigesLignesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
+      const fields = this.columns
+      .pipe(map( columns => columns.map( column => column.dataField )));
+      this.dataSource = this.litigesLignesService.getDataSource_v2(await fields.toPromise());
       this.dataSource.filter([
         ['ordreLigne.ordre.id', '=', this.ordre.id],
       ]);
