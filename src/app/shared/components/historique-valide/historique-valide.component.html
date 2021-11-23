@@ -19,9 +19,8 @@
   <div *dxTemplate="let d of 'content'">
     <dx-data-grid 
       [columnAutoWidth]="true"
-      scrolling="{
-        useNative:false,
-        showScrollBar:'always'
+      [scrolling]="{
+        useNative:true
       }"
       [dataSource]="this.historique">
       <dxi-column

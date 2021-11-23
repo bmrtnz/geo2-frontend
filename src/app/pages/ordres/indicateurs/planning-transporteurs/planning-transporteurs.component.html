@@ -48,8 +48,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{
-    useNative:false,
-    showScrollbar:'always'
+    useNative:true
   }"
   (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningTransporteurs, enableFilters.bind(this))"

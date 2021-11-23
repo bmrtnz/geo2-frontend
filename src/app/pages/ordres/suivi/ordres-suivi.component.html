@@ -37,7 +37,7 @@
         <div class="dx-field-label campagne-label">{{ campagneEnCours?.description }}</div>
         <div class="dx-field-value width0pct">
           <dx-check-box #currCampaign
-            value="true"
+            [value]="true"
             (valueChange)="changeCampaign()"
           >
           </dx-check-box>

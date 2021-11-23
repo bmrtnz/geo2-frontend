@@ -6,8 +6,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{
-    useNative:false,
-    showScrollbar:'always'
+    useNative:true
   }"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Marge', $event, gridConfiguratorService.Grid.OrdreMarge, enableFilters.bind(this))"
 >
@@ -52,4 +51,4 @@
     [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
   ></dxi-column>
 
-</dx-data-grid>
+</dx-data-grid> 

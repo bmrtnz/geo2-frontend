@@ -7,8 +7,7 @@
 [columnHidingEnabled]="false"
 [allowColumnReordering]="true"
 [scrolling]="{
-  useNative:false,
-  showScrollbar:'always'
+  useNative:true
 }"
 (onRowDblClick)="tabContext.openOrdre($event.data.numero)"
 (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Résultat(s) de recherche', $event, gridConfiguratorService.Grid.Ordre, enableFilters.bind(this))"

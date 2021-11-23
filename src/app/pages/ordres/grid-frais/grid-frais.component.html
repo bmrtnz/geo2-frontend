@@ -5,8 +5,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{
-    useNative:false,
-    showScrollbar:'always'
+    useNative:true
   }"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Frais', $event, gridConfiguratorService.Grid.OrdreFrais, enableFilters.bind(this))"
 >
