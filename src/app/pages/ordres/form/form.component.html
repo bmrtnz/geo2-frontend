@@ -157,7 +157,7 @@
             <div class="order-tabs">
               <div
                 #anchor
-                id="{{fragments.Head}}"
+                [attr.data-fragment-id]="fragments.Head"
                 class="
                   dx-form-group
                   dx-form-group-with-caption dx-card
@@ -212,7 +212,7 @@
                               <div class="dx-field-value">
                                   <dx-text-box formControlName="referenceClient">
                                   <dx-validator name="{{ 'ordres-referenceClient' | localize }}">
-                                      <dxi-validation-rule type="stringLength" max="70" trim="true"></dxi-validation-rule>
+                                      <dxi-validation-rule type="stringLength" [max]="70" [trim]="true"></dxi-validation-rule>
                                   </dx-validator>
                                   </dx-text-box>
                               </div>
@@ -371,7 +371,7 @@
                           <div class="dx-field-value">
                           <dx-text-box formControlName="instructionsLogistiques">
                               <dx-validator name="{{ 'ordres-instructionsLogistiques' | localize }}">
-                              <dxi-validation-rule type="stringLength" max="255"></dxi-validation-rule>
+                              <dxi-validation-rule type="stringLength" [max]="255"></dxi-validation-rule>
                               </dx-validator>
                           </dx-text-box>
                           </div>
@@ -382,7 +382,7 @@
                           <div class="dx-field-value small-font">
                             <dx-text-box formControlName="commentaireUsageInterne">
                             <dx-validator name="{{ 'ordres-commentaireUsageInterne' | localize }}">
-                                <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                                <dxi-validation-rule type="stringLength" [max]="70"></dxi-validation-rule>
                             </dx-validator>
                             </dx-text-box>
                           </div>
@@ -565,7 +565,7 @@
 
               <div
                 #anchor
-                id="{{fragments.Articles}}"
+                [attr.data-fragment-id]="fragments.Articles"
                 class="
                   articles-field
                   dx-form-group dx-form-group-with-caption dx-card
@@ -632,7 +632,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Logistique}}"
+                  [attr.data-fragment-id]="fragments.Logistique"
                   data-name="logistique"
                   [collapsible]="true"
                   [multiple]="false"
@@ -695,7 +695,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Litiges}}"
+                  [attr.data-fragment-id]="fragments.Litiges"
                   data-name="litiges"
                   [collapsible]="true"
                   [multiple]="false"
@@ -729,7 +729,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Synthese}}"
+                  [attr.data-fragment-id]="fragments.Synthese"
                   data-name="synthese"
                   [collapsible]="true"
                   [multiple]="false"
@@ -775,7 +775,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Flux}}"
+                  [attr.data-fragment-id]="fragments.Flux"
                   data-name="fluxdocs"
                   [collapsible]="true"
                   [multiple]="false"
@@ -805,7 +805,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.CQ}}"
+                  [attr.data-fragment-id]="fragments.CQ"
                   data-name="CQ"
                   [collapsible]="true"
                   [multiple]="false"
@@ -835,7 +835,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Commentaires}}"
+                  [attr.data-fragment-id]="fragments.Commentaires"
                   data-name="commentaires"
                   [collapsible]="true"
                   [multiple]="false"
@@ -867,7 +867,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Log}}"
+                  [attr.data-fragment-id]="fragments.Log"
                   data-name="log"
                   [collapsible]="true"
                   [multiple]="false"
