@@ -5,7 +5,24 @@ import { DxTabPanelComponent } from 'devextreme-angular';
 import { on } from 'devextreme/events';
 import { dxTabPanelItem } from 'devextreme/ui/tab_panel';
 import { concat, ConnectableObservable, defer, EMPTY, iif, Observable, of, Subject } from 'rxjs';
-import { concatMapTo, debounceTime, filter, first, last, map, pairwise, publish, refCount, share, startWith, switchMap, switchMapTo, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  concatMapTo,
+  debounceTime,
+  filter,
+  first,
+  last,
+  map,
+  pairwise,
+  publish,
+  refCount,
+  share,
+  startWith,
+  switchMap,
+  switchMapTo,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { FormComponent } from '../form/form.component';
 
 const TAB_HOME_ID = 'home';
@@ -60,23 +77,12 @@ export class RootComponent implements OnInit, OnDestroy {
 
     this.tabPanelInitialized
     .pipe(
-      // Initial render
       concatMapTo(this.fillInitialItems()),
-      // Initial selection
       concatMapTo(this.handleRouting()),
-      // Listen navigation
-      switchMapTo(this.router.events),
+      concatMapTo(this.router.events),
       filter<NavigationStart>( event => event instanceof NavigationStart),
-      // Handle fragments
-      switchMapTo(this.route.paramMap),
-      map((p: ParamMap) => p.get(RouteParam.TabID)),
-      startWith(TAB_LOAD_ID),
-      pairwise(),
-      filter(([previousID, currentID]) => ![currentID, TAB_LOAD_ID].includes(previousID)),
-      map(([, currentID]) => currentID),
-      // Render selection
-      switchMapTo(this.handleRouting()),
       debounceTime(10),
+      switchMapTo(this.handleRouting()),
       takeUntil(this.destroy),
     )
     .subscribe();
@@ -130,21 +136,24 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   private handleRouting() {
-    return this.route.queryParamMap
+    return of(this.selectTab(TAB_LOAD_ID))
     .pipe(
-      first(),
-      tap( _ => this.selectTab(TAB_LOAD_ID)),
       switchMapTo(this.route.queryParamMap.pipe(first())),
       switchMap( queries => defer(() => this.handleQueries(queries))),
       switchMapTo(this.route.paramMap),
       map((p: ParamMap) => p),
       first(),
-      tap((currentParams) => {
+      filter( currentParams => {
+        const previousID = this.getTabItem(this.getPreviousParamMap().get(RouteParam.TabID));
+        const currentID = this.getTabItem(currentParams.get(RouteParam.TabID));
+        return ![currentID, TAB_LOAD_ID].includes(previousID);
+      }),
+      tap( currentParams => {
         this.selectTab(this.handleParams(currentParams));
         const item = this.getTabItem(this.getPreviousParamMap().get(RouteParam.TabID));
         this.tabChangeEvent.emit({ status: 'out', item });
       }),
-      switchMap((currentParams) => {
+      switchMap( currentParams => {
         const item = this.getTabItem(currentParams.get(RouteParam.TabID));
         this.tabChangeEvent.emit({ status: 'in', item });
         return of('done');
