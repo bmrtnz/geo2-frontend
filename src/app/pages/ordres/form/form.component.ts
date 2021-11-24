@@ -127,7 +127,6 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
   public transporteursDS: DataSource;
   public typeTransportDS: DataSource;
   public baseTarifTransportDS: DataSource;
-  public litigesDS: DataSource;
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
@@ -157,8 +156,8 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.initializeAnchors();
     this.initializeForm();
+    this.initializeAnchors();
 
     this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
     this.entrepotDS = this.entrepotsService.getDataSource_v2(['id', 'raisonSocial']);
@@ -195,7 +194,6 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     ]);
 
     this.transporteursDS = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
-    this.litigesDS = this.litigesService.getDataSource();
   }
 
   ngAfterViewInit() {
@@ -333,7 +331,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deviseDisplayExpr(item) {
-    return item ? item.description + ' (' + self.ordre.tauxDevise + ')' : null;
+    return item ? item.description + ' (' + self.ordre?.tauxDevise + ')' : null;
     }
 
   displayIDBefore(data) {

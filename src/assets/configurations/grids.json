@@ -758,7 +758,7 @@
       },
       {
         "visibleIndex": 20,
-        "dataField": "fraisUnite.description",
+        "dataField": "fraisUnite.id",
         "dataType": "string",
         "visible": true
       },
@@ -1021,7 +1021,7 @@
       },
       {
         "visibleIndex": 7,
-        "dataField": "ordre.baseTarifTransport.description",
+        "dataField": "ordre.baseTarifTransport.id",
         "visible": true
       },
       {
