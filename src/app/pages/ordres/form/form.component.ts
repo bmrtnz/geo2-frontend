@@ -49,6 +49,8 @@ enum LinkedCriterias {
   Regul = 'Régul.'
 }
 
+let self;
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -88,6 +90,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     incotermLieu: [''],
     venteACommission: [''],
     devise: [''],
+    tauxDevise: [''],
     litigeNumero: [''],
     bonAFacturer: [''],
     commentaireUsageInterne: [''],
@@ -149,7 +152,9 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
     private tabContext: TabContext,
-  ) { }
+  ) {
+    self = this;
+  }
 
   ngOnInit() {
     this.initializeAnchors();
@@ -328,8 +333,8 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deviseDisplayExpr(item) {
-    return item ? item.description + ' (' + item.taux + ')' : null;
-  }
+    return item ? item.description + ' (' + self.ordre.tauxDevise + ')' : null;
+    }
 
   displayIDBefore(data) {
     return data ?
