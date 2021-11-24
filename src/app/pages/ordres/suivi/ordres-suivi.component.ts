@@ -74,7 +74,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   searchDisplayExpr(item) {
     return item
-      ? self.localizeService.localize('rechOrdres-' + item.replaceAll('.', '-'))
+      ? self.localizeService.localize('rechOrdres-' + item.split('.').join('-'))
       : null;
   }
 

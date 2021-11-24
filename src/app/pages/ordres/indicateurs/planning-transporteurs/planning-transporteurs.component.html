@@ -48,8 +48,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{
-    useNative:false,
-    showScrollbar:'always'
+    useNative:true
   }"
   (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningTransporteurs, enableFilters.bind(this))"
@@ -90,6 +89,7 @@
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
 
 </dx-data-grid>

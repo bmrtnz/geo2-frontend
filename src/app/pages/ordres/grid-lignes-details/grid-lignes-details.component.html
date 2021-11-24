@@ -7,9 +7,8 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Détail expéditions', $event, gridConfiguratorService.Grid.OrdreLigneDetails,enableFilters.bind(this))"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
   >
 
@@ -36,20 +35,23 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
+    <dxo-summary [totalItems]="totalItems"></dxo-summary>
+
     <dxi-column
-      *ngFor="let field of detailedFields"
-      [dataField]="field.dataField"
-      [caption]="('ordreLignes-' + field.dataField?.replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
       [visible]="false"
+      [caption]="('ordreLignes-' + column.dataField?.split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
-      [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [dataType]="column?.dataType"
+      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+      [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
 
   </dx-data-grid>

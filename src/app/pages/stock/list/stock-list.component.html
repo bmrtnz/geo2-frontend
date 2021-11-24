@@ -204,11 +204,10 @@
                     [columnAutoWidth]="true"
                     [rowAlternationEnabled]="true"
                     [allowColumnReordering]="true"
-                    scrolling="{
-                        useNative:false,
-                        showScrollBar:'always'
-                      }"
-                                      (onCellPrepared)="onCellPrepared($event)"
+                    [scrolling]="{
+                      useNative:true
+                    }"
+                    (onCellPrepared)="onCellPrepared($event)"
                     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Stock)"
                 >
                     <dxo-search-panel [visible]="true" [width]="160" placeholder="Mot clé…"></dxo-search-panel>
@@ -228,7 +227,7 @@
                         [height]="columnChooser.height"
                         mode="select"
                         title="{{ 'columnChooser' | localize }}"
-                        allowSearch="true">
+                        [allowSearch]="true">
                     </dxo-column-chooser>
                     <dxo-state-storing 
                         [storageKey]="gridConfiguratorService.Grid.Stock"

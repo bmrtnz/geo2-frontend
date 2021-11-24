@@ -25,7 +25,10 @@ import {
 } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-clients-dep-encours',
@@ -38,9 +41,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   secteurs: DataSource;
   indicator: Indicator;
   columnChooser = environment.columnChooser;
-  detailedFields: Observable<
-    ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
-  >;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
 
@@ -68,7 +70,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
       this.INDICATOR_NAME
     );
-    this.detailedFields = this.indicator.detailedFields;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.DepassementEncoursPays);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.title = this.localizePipe.transform('grid-depassement-encours-pays-title');
   }
 

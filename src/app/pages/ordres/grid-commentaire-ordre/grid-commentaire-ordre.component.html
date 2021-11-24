@@ -5,9 +5,8 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onCellPrepared)="onCellPrepared($event)"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Commentaires', $event, gridConfiguratorService.Grid.CommentaireOrdre, enableFilters.bind(this))"
   >
@@ -34,14 +33,14 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
       *ngFor="let field of detailedFields"
       [dataField]="field.dataField"
-      [caption]="('ordreCommentaire-' + field.dataField?.replaceAll('.', '-') | localize) || field.name"
+      [caption]="('ordreCommentaire-' + field.dataField?.split('.').join('-') | localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

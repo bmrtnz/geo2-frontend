@@ -4,7 +4,6 @@ import Envois from 'app/shared/models/envois.model';
 import Ordre from 'app/shared/models/ordre.model';
 import { EnvoisService } from 'app/shared/services/api/envois.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -13,6 +12,10 @@ import { environment } from 'environments/environment';
 import { envois } from 'assets/configurations/grids.json';
 import { ToggledGrid } from '../form/form.component';
 import { GridColumn } from 'basic';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+
 
 @Component({
   selector: 'app-grid-envois',
@@ -28,7 +31,8 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   public documentVisible = false;
   public currentDocument: ViewDocument;
@@ -39,14 +43,17 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.detailedFields = envois.columns;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Envois);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
   ngOnInit() {}
 
-  enableFilters() {
+  async enableFilters() {
     if (this?.ordre?.id) {
-      this.dataSource = this.envoisService.getDataSource();
+      const fields = this.columns
+      .pipe(map( columns => columns.map( column => column.dataField )));
+      this.dataSource = this.envoisService.getDataSource_v2(await fields.toPromise());
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
       ]);

@@ -13,8 +13,11 @@ import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-i
 import { DxCheckBoxComponent, DxDataGridComponent, DxNumberBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 import { TabContext } from '../../root/root.component';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'planning-depart',
@@ -44,6 +47,8 @@ export class PlanningDepartComponent implements AfterViewInit {
   public title: string;
   private dxGridElement: HTMLElement;
   readonly DAYSNB_DEFAULT = 1;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     public transporteursService: TransporteursService,
@@ -68,8 +73,8 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
       this.INDICATOR_NAME
     );
-    this.detailedFields = this.indicator.detailedFields;
-    this.dataSource = this.indicator.dataSource;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.LitigeLigne);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
   ngAfterViewInit() {
@@ -78,6 +83,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
+    this.dataSource = this.indicator.dataSource;
   }
 
   enableFilters() {

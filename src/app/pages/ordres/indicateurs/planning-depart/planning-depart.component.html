@@ -62,9 +62,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
@@ -102,31 +101,33 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
+
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('ordres-' + field.path | localize) || field.name"
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
       [visible]="false"
+      [caption]="('ordres-' + column.dataField?.split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
-      [dataType]="field.dataType"
-      [allowSorting]="field.allowSorting"
+      [dataType]="column?.dataType"
       [allowSearch]="
-        field.allowSearch !== undefined
-          ? field.allowSearch
-          : ['string'].includes(field.dataType)
+      column.allowSearch !== undefined
+        ? column.allowSearch
+        : ['string'].includes(column.dataType)
       "
       [allowHeaderFiltering]="
-        field.allowHeaderFiltering !== undefined
-          ? field.allowHeaderFiltering
-          : ['string'].includes(field.dataType)
+        column.allowHeaderFiltering !== undefined
+          ? column.allowHeaderFiltering
+          : ['string'].includes(column.dataType)
       "
+      [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
+
     <dxo-master-detail [enabled]="true" template="details"></dxo-master-detail>
     <div *dxTemplate="let masterRow of 'details'">
         <app-grid-detail-planning-departs [masterRow]="masterRow"></app-grid-detail-planning-departs>

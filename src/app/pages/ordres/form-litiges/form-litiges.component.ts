@@ -116,7 +116,7 @@ export class FormLitigesComponent implements OnInit {
               this.resultat.value = totaux.resultat;
               if (totaux.totalMontantRistourne) this.totalMontantRistourne = true;
               this.formGroup.patchValue(totaux);
-            })
+            });
           } else {
             this.noLitiges = true;
           }

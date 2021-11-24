@@ -48,6 +48,7 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
       this.dataSource = this.ordreLignesTotauxDetailService
       .getTotauxDetailDataSource(this.ordre.id);
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
+      this.dataGrid.dataSource = this.dataSource;
     }
   }
 

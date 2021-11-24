@@ -4,7 +4,6 @@ import { NestedMain } from 'app/pages/nested/nested.component';
 import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -12,6 +11,9 @@ import { environment } from 'environments/environment';
 import { LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridColumn } from 'basic';
 import { transporteur } from 'assets/configurations/grids.json';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 
 
 @Component({
@@ -26,7 +28,8 @@ export class TransporteursListComponent implements OnInit, NestedMain {
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
 
   constructor(
@@ -38,11 +41,13 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = transporteursService;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Transporteur);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
-  ngOnInit() {
-    this.detailedFields = transporteur.columns;
-    this.transporteurs = this.transporteursService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
+  async ngOnInit() {
+    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
+    this.transporteurs = this.transporteursService.getDataSource_v2(await fields.toPromise());
   }
 
   onCreate() {

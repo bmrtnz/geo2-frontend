@@ -22,9 +22,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.LitigeLigne, enableFilters.bind(this))"
@@ -52,7 +51,7 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>

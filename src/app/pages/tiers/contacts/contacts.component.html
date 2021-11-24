@@ -11,9 +11,8 @@
     [allowColumnReordering]="true"
     [showBorders]="true"
     dateSerializationFormat="yyyy-MM-dd"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onEditingStart)="onEditingStart($event)"
     (onRowPrepared)="onRowPrepared($event)"
@@ -48,24 +47,27 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxo-selection mode="single"></dxo-selection>
 
     <dxi-column
-      *ngFor="let field of detailedFields"
-      [dataField]="field.dataField"
-      [caption]="('tiers-contacts-' + field.dataField.replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
       [visible]="false"
+      [caption]="('tiers-contacts-' + column.dataField?.split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
-      [allowEditing]="field.name !== 'valide' && field?.allowEditing !== false"
-      [validationRules]="field.validationRules || {}"
-      [editCellTemplate]="field.dataField == 'flux' || field.dataField == 'moyenCommunication' ? 'selectBoxEditTemplate' : false"
+      [dataType]="column?.dataType"
+      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+      [allowEditing]="column.name !== 'valide' && column?.allowEditing !== false"
+      [validationRules]="column.validationRules || {}"
+      [editCellTemplate]="column.dataField == 'flux' || column.dataField == 'moyenCommunication' ? 'selectBoxEditTemplate' : false"
       [showEditorAlways]="true"
-      [showInColumnChooser]="field.showInColumnChooser"
+      [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">

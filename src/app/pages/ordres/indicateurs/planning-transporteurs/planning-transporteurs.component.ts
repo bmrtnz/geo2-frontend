@@ -56,10 +56,8 @@ export class PlanningTransporteursComponent implements OnInit {
     private tabContext: TabContext,
     private formUtils: FormUtilsService,
   ) {
-    this.gridConfig = this.gridConfiguratorService
-    .fetchDefaultConfig(Grid.PlanningTransporteurs);
-    this.columns = from(this.gridConfig)
-    .pipe(map( config => config.columns ));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningTransporteurs);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.transporteursDataSource = this.transporteursService
     .getDataSource_v2(['id', 'raisonSocial']);
   }
