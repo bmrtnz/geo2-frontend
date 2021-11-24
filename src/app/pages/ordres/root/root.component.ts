@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Injectable, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, convertToParamMap, NavigationEnd, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, NavigationStart, ParamMap, Router } from '@angular/router';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxTabPanelComponent } from 'devextreme-angular';
 import { on } from 'devextreme/events';
@@ -63,10 +63,10 @@ export class RootComponent implements OnInit, OnDestroy {
       // Initial render
       concatMapTo(this.fillInitialItems()),
       // Initial selection
-      switchMapTo(this.handleRouting()),
+      concatMapTo(this.handleRouting()),
       // Listen navigation
       switchMapTo(this.router.events),
-      filter<NavigationEnd>( event => event instanceof NavigationEnd),
+      filter<NavigationStart>( event => event instanceof NavigationStart),
       // Handle fragments
       switchMapTo(this.route.paramMap),
       map((p: ParamMap) => p.get(RouteParam.TabID)),
