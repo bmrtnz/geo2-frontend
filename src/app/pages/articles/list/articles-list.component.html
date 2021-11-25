@@ -10,9 +10,9 @@
             <div class="dx-field-value">
                 <dx-tag-box
                     [dataSource]="especes"
-                    (valueChange)="onFieldValueChange($event,'matierePremiere.espece.description')"
+                    (valueChange)="onFieldValueChange($event,'matierePremiere.espece.id')"
                     [searchEnabled]="true"
-                    searchExpr="article.matierePremiere.espece.description"
+                    searchExpr="article.matierePremiere.espece.id"
                     [displayExpr]="capitalize"
                     valueExpr="key"
                 >
