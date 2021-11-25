@@ -23,6 +23,7 @@ export const navigation = [
     ]
   },
   {
+    dev: true,
     text: 'Ordres de commande',
     icon: 'material-icons euro_symbol',
     path: '/ordres'
