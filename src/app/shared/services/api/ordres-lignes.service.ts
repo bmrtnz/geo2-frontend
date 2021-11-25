@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { OrdreLigne } from '../../models/ordre-ligne.model';
-import { APIRead, ApiService, RelayPage, SummarisedRelayPage } from '../api.service';
+import { APIRead, ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -96,9 +96,10 @@ export class OrdreLignesService extends ApiService implements APIRead {
           if (!options.totalSummary)
             return resolve({});
 
+          const queryName = 'allOrdreLigneSummarised';
           const query = `
             query AllOrdreLigneSummarised($search: String!, $pageable: PaginationInput!, $summary: [SummaryInput]) {
-              allOrdreLigneSummarised(search:$search, pageable:$pageable, summary:$summary) {
+              ${ queryName }(search:$search, pageable:$pageable) {
                 edges {
                   node {
                     ${await OrdreLigne.getGQLFields(depth, filter, null, {noList: true}).toPromise()}
@@ -111,11 +112,11 @@ export class OrdreLignesService extends ApiService implements APIRead {
                   hasNextPage
                 }
                 totalCount
-                summary
+                summary(summaries:$summary, of:"${ queryName }")
               }
             }
           `;
-          type Response = { allOrdreLigneSummarised: SummarisedRelayPage<OrdreLigne> };
+          type Response = { allOrdreLigneSummarised: RelayPage<OrdreLigne> };
           const variables = this.mapLoadOptionsToVariables(options);
 
           this.listenQuery<Response>(query, { variables }, res => {
