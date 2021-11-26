@@ -9,6 +9,8 @@ import {AuthService, ScreenService} from './shared/services';
 import {SharedModule} from './shared/shared.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
+import { OrdresIndicatorsService } from './shared/services/ordres-indicators.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   exports: [],
-  providers: [AuthService, ScreenService],
+  providers: [AuthService, ScreenService, DatePipe, OrdresIndicatorsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

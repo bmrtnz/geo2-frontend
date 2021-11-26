@@ -122,6 +122,16 @@ const indicators: Indicator[] = [{
   warningIcon: '',
   component: import('../../pages/ordres/indicateurs/planning-transporteurs/planning-transporteurs.component'),
 }, {
+  id: 'PlanningFournisseurs',
+  enabled: true,
+  withCount: true,
+  parameter: 'Planning',
+  subParameter: 'fournisseurs',
+  tileBkg: '#1B715C',
+  indicatorIcon: 'material-icons event_note',
+  warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/planning-fournisseurs/planning-fournisseurs.component'),
+}, {
   id: 'Litiges',
   enabled: false,
   withCount: true,

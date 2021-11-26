@@ -13,6 +13,7 @@ export enum Operation {
   BAF = 'allOrdreBAF',
   SuiviDeparts = 'allOrdreSuiviDeparts',
   PlanningTransporteurs = 'allOrdrePlanningTransporteurs',
+  PlanningFournisseurs = 'allOrdrePlanningFournisseurs',
 }
 
 export type CountResponse = { countOrdre: number };

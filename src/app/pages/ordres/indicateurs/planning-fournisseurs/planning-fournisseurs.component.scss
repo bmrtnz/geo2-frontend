@@ -1,0 +1,42 @@
+@import "src/themes/generated/variables.base.scss";
+
+.dx-fieldset { display: flex; }
+.dx-field { margin-right: 20px; }
+
+.filterArea {
+    width: 1024px;
+}
+
+::ng-deep .tabPanel-planningFournisseurs {
+    padding: 12px;
+    margin: 12px;
+    background: #F9F9F9;
+    .dx-tab:first-child {
+        display: table-cell;
+    }
+    .dx-tab:hover {
+        color: $base-accent;
+    }
+    .tabpanel-item {
+        position: relative;
+        margin-top: 12px;
+    }
+    .dx-tabs-wrapper {
+        background:#F9F9F9;
+    }
+    .dx-tab-selected, .dx-tabs-wrapper .dx-tab:hover {
+        background:#F9F9F9;
+    }
+    .dx-tabs-wrapper .dx-tab-selected:after {
+        display:block;
+    }
+}
+
+::ng-deep .showPrices-box {
+    width: 300px;
+    .dx-field-value {
+        width: 10% !important;
+        margin-right: 15px;
+        margin-left: 10px;
+    }
+}

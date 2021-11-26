@@ -82,6 +82,22 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
               ],
             );
 
+          if (indicator.id === 'PlanningFournisseurs')
+            flt.push(
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '>=',
+                new Date(Date.now() - ONE_DAY).toISOString(),
+              ],
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '<=',
+                new Date().toISOString(),
+              ],
+            );
+
           const countResponse = await indicator
           .fetchCount(flt)
           .pipe(map( res => Object.values(res.data)[0].toString()))

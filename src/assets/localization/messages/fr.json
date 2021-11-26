@@ -563,7 +563,7 @@
     "ordres-clientsDepEncours": "Clients en dépassement encours",
     "ordres-differenceQuantites": "Différence sur expédition et/ou sans détail client",
     "ordres-entrepôt": "Entrepôt",
-    "ordres-periode": "période",
+    "ordres-periode": "Période",
     "ordres-du": "du",
     "ordres-au": "au",
     "ordres-litiges": "Litiges en cours",
@@ -825,7 +825,9 @@
     "grid-situation-depart-title-today": "Situation des départs d'aujourd'hui",
     "grid-situation-depart-detail-title": "Détail des lignes",
     "grid-depassement-encours-pays-title": "Somme par pays",
-    "grid-depassement-encours-client-title": "Détail des clients"
+    "grid-depassement-encours-client-title": "Détail des clients",
+
+    "ordres-planningFournisseurs-afficherPrix": "Afficher les prix"
 
   }
 }

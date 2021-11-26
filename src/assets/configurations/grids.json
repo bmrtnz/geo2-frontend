@@ -1641,6 +1641,15 @@
       { "dataField": "entrepot.id", "visible": false }
     ]
   },
+  "planning-fournisseurs": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "ordre.numero",
+        "visible": true
+      }
+    ]
+  },
   "ordre-save-log": {
     "columns": [
       {

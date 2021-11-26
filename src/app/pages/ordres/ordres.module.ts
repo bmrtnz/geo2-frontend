@@ -67,6 +67,7 @@ import { LoadingTabComponent, RootComponent, TabContext } from './root/root.comp
 import OrdresSuiviComponent from './suivi/ordres-suivi.component';
 import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
 import PlanningTransporteursComponent from './indicateurs/planning-transporteurs/planning-transporteurs.component';
+import { PlanningFournisseursComponent } from './indicateurs/planning-fournisseurs/planning-fournisseurs.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import PlanningTransporteursComponent from './indicateurs/planning-transporteurs
     LoadingTabComponent,
     FormComponent,
     PlanningTransporteursComponent,
+    PlanningFournisseursComponent,
   ],
   imports: [
     OrdresRoutingModule,

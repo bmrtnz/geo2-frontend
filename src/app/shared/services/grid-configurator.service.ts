@@ -50,6 +50,7 @@ export enum Grid {
   DepassementEncoursPays = 'depassement-encours-pays',
   DepassementEncoursClient = 'depassement-encours-client',
   PlanningTransporteurs = 'planning-transporteurs',
+  PlanningFournisseurs = 'planning-fournisseurs',
 }
 
 @Injectable({
