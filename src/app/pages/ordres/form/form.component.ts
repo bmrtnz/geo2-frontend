@@ -363,7 +363,7 @@ export class FormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private initializeAnchors(event: TabChangeData) {
+  private initializeAnchors(event?: TabChangeData) {
     if (event.status === 'in')
       this.enableAnchors();
     if (event.status === 'out')

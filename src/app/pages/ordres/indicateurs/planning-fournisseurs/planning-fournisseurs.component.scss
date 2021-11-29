@@ -3,8 +3,11 @@
 .dx-fieldset { display: flex; }
 .dx-field { margin-right: 20px; }
 
-.filterArea {
+::ng-deep .orderTileFilterArea {
     width: 1024px;
+    .dx-datebox .dx-texteditor-input {
+        padding-right: 0 !important;
+    }
 }
 
 ::ng-deep .tabPanel-planningFournisseurs {
