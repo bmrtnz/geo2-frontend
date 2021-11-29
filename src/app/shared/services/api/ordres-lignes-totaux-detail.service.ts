@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import OrdreLigneTotauxDetail from 'app/shared/models/ordre-ligne-totaux-detail.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { ApiService, SummarisedRelayPage } from '../api.service';
+import { ApiService, RelayPage } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +25,11 @@ export class OrdreLignesTotauxDetailService extends ApiService {
           if (!options.totalSummary)
           return resolve({});
 
-          type Response = { allOrdreLigneTotauxDetail: SummarisedRelayPage<OrdreLigneTotauxDetail> };
+          type Response = { allOrdreLigneTotauxDetail: RelayPage<OrdreLigneTotauxDetail> };
+          const queryName = 'allOrdreLigneTotauxDetail';
           const query = `
             query AllOrdreLigneTotauxDetail($ordre: String!, $pageable: PaginationInput!, $summary: [SummaryInput]) {
-              allOrdreLigneTotauxDetail(ordre:$ordre, pageable:$pageable, summary:$summary) {
+              ${ queryName }(ordre:$ordre, pageable:$pageable) {
                 edges {
                   node {
                     ${await OrdreLigneTotauxDetail.getGQLFields(1, undefined, null, {noList: true}).toPromise()}
@@ -41,7 +42,7 @@ export class OrdreLignesTotauxDetailService extends ApiService {
                   hasNextPage
                 }
                 totalCount
-                summary
+                summary(summaries:$summary, of:"${ queryName }")
               }
             }
           `;

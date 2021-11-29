@@ -1,5 +1,4 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import { Model } from 'app/shared/models/model';
@@ -31,10 +30,7 @@ export type RelayPage<T> = {
   edges: Edge<T>[]
   pageInfo: PageInfo
   totalCount: number
-};
-
-export type SummarisedRelayPage<T> = RelayPage<T> & {
-  summary: number[]
+  summary?: number[]
 };
 
 export type Edge<T = any> = {
@@ -160,19 +156,19 @@ export abstract class ApiService implements OnDestroy {
    * @param relayPage Input RelayPage
    */
   public asInstancedListCount<T = any>(
-    relayPage: RelayPage<T> | SummarisedRelayPage<T>,
+    relayPage: RelayPage<T>,
     mapper = (v: Record<string, any>) => new this.model(v) as T
   ) {
     return {
       data: this.asList<T>(relayPage).map(mapper),
       totalCount: relayPage.totalCount,
       ...this.isSummarisedRelayPage(relayPage) ?
-        {summary: (relayPage as SummarisedRelayPage<T>).summary} : {},
+        {summary: (relayPage ).summary} : {},
     };
   }
 
-  public isSummarisedRelayPage<T = any>(relayPage: RelayPage<T> | SummarisedRelayPage<T>): relayPage is RelayPage<T> {
-    return (relayPage as SummarisedRelayPage<T>).summary !== undefined;
+  public isSummarisedRelayPage<T = any>(relayPage: RelayPage<T>): relayPage is RelayPage<T> {
+    return relayPage?.summary !== undefined;
   }
 
   /**

@@ -48,7 +48,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     ) {
       this.apiService = this.articlesService;
       this.especes = this.articlesService
-        .getFilterDatasource('matierePremiere.espece.description');
+        .getFilterDatasource('matierePremiere.espece.id');
       this.origines = this.articlesService
         .getFilterDatasource('matierePremiere.origine.description');
       this.varietes = this.articlesService

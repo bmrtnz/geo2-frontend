@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -56,7 +56,7 @@ let self;
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FormComponent implements OnInit, OnDestroy {
 
   @Output() public ordre: Ordre;
 
@@ -152,6 +152,10 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     private litigesService: LitigesService,
     private tabContext: TabContext,
   ) {
+    this.handleTabChange()
+    .subscribe(event => {
+      this.initializeAnchors(event);
+    });
     self = this;
   }
 
@@ -194,11 +198,6 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     ]);
 
     this.transporteursDS = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
-  }
-
-  ngAfterViewInit() {
-    this.enableAnchors();
-    this.handleAnchorsNavigation();
   }
 
   ngOnDestroy() {
@@ -364,20 +363,22 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private initializeAnchors() {
-    const handler: (event: Partial<TabChangeData>) => void = ({ item, status }) => {
-      if (status === 'in') this.enableAnchors();
-      if (status === 'out') this.disableAnchors();
-    };
+  private initializeAnchors(event: TabChangeData) {
+    if (event.status === 'in')
+      this.enableAnchors();
+    if (event.status === 'out')
+      this.disableAnchors();
+    this.handleAnchorsNavigation();
+  }
 
-    this.route.paramMap.pipe(
+  private handleTabChange() {
+    return this.route.paramMap.pipe(
       first(),
       switchMap(params => this.tabContext.onTabChange.pipe(map(data => [data, params.get(RouteParam.TabID)] as [TabChangeData, string]))),
       filter(([{item}, id]) => item.id === id),
       map(([item]) => item),
       takeUntil(this.destroy),
-    )
-    .subscribe(handler);
+    );
   }
 
   private getAnchorElement(anchor: DxAccordionComponent | ElementRef<any>)
