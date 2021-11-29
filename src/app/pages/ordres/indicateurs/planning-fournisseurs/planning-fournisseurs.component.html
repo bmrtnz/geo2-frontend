@@ -111,7 +111,7 @@
                     useNative:true
                     }"
                     (onRowDblClick)="onRowDblClick($event)"
-                    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningTransporteurs, enableFilters.bind(this))"
+                    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningFournisseurs, enableFilters.bind(this))"
                 >
                 
                     <!-- Grid configuration -->
@@ -124,7 +124,7 @@
                     [showPageSizeSelector]="true"
                     ></dxo-pager>
                     <dxo-state-storing 
-                    [storageKey]="gridConfiguratorService.Grid.PlanningTransporteurs"
+                    [storageKey]="gridConfiguratorService.Grid.PlanningFournisseurs"
                     [enabled]="true"
                     type="custom"
                     [customLoad]="gridConfiguratorService.load"
