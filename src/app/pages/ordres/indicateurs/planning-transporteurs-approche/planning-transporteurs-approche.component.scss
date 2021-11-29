@@ -1,0 +1,11 @@
+@import "src/themes/generated/variables.base.scss";
+
+.dx-fieldset { display: flex; }
+.dx-field { margin-right: 20px; }
+
+::ng-deep .orderTileFilterArea {
+    width: 1024px;
+    .dx-datebox .dx-texteditor-input {
+        padding-right: 0 !important;
+    }
+}

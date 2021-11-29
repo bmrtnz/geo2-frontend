@@ -68,6 +68,7 @@ import OrdresSuiviComponent from './suivi/ordres-suivi.component';
 import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
 import PlanningTransporteursComponent from './indicateurs/planning-transporteurs/planning-transporteurs.component';
 import { PlanningFournisseursComponent } from './indicateurs/planning-fournisseurs/planning-fournisseurs.component';
+import { PlanningTransporteursApprocheComponent } from './indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { PlanningFournisseursComponent } from './indicateurs/planning-fournisseu
     FormComponent,
     PlanningTransporteursComponent,
     PlanningFournisseursComponent,
+    PlanningTransporteursApprocheComponent,
   ],
   imports: [
     OrdresRoutingModule,

@@ -13,6 +13,7 @@ export enum Operation {
   BAF = 'allOrdreBAF',
   SuiviDeparts = 'allOrdreSuiviDeparts',
   PlanningTransporteurs = 'allOrdrePlanningTransporteurs',
+  PlanningTransporteursApproche = 'allOrdrePlanningTransporteursApproche',
   PlanningFournisseurs = 'allOrdrePlanningFournisseurs',
 }
 
