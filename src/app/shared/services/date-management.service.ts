@@ -23,6 +23,16 @@ export class DateManagementService {
     return mydate.toLocaleDateString() + '  (' + myTime + ')';
   }
 
+  startOfDay(myDate = new Date()) {
+    myDate.setHours(0, 0, 0);
+    return myDate;
+  }
+
+  endOfDay(myDate = new Date()) {
+    myDate.setHours(23, 59, 59, 999);
+    return myDate;
+  }
+
   periods() {
     const periodChoice =
     ['Hier', 'Aujourd\'hui', 'Demain', 'Semaine dernière', 'Semaine en cours', 'Semaine prochaine',
@@ -117,11 +127,11 @@ export class DateManagementService {
         break;
       case 'Trimestre en cours':
         deb = year + '-' + quarterStart + '-01';
-        fin = year + '-' + (quarterStart + 3) + '-' + this.daysInMonth(year, quarterStart + 3);
+        fin = year + '-' + (quarterStart + 2) + '-' + this.daysInMonth(year, quarterStart + 3);
         break;
       case 'Année civile en cours':
         deb = year + '-01-01';
-        fin = year + ' - 12-31';
+        fin = year + '-12-31';
         break;
       case 'Campagne en cours':
         deb = ((month <= 6) ? year - 1 : year) + '-07-01';
@@ -144,6 +154,11 @@ export class DateManagementService {
 
     if (!fin) {fin = deb; }
 
+    deb = new Date(deb);
+    fin = new Date(fin);
+    deb = this.startOfDay(deb);
+    fin = this.endOfDay(fin);
+ 
     return {dateDebut: deb, dateFin: fin};
 
   }

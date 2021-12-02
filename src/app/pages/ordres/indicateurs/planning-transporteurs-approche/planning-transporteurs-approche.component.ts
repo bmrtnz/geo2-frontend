@@ -1,26 +1,33 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import Ordre from 'app/shared/models/ordre.model';
 import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { Operation, OrdresService } from 'app/shared/services/api/ordres.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
 import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
-import { GridColumn, ONE_DAY } from 'basic';
-import { DxDataGridComponent, DxSelectBoxComponent, DxCheckBoxComponent } from 'devextreme-angular';
+import { GridColumn } from 'basic';
+import { DxDataGridComponent, DxSelectBoxComponent, DxFormComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TabContext } from '../../root/root.component';
-import { SecteursService } from 'app/shared/services/api/secteurs.service';
-import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { DateManagementService } from 'app/shared/services/date-management.service';
+import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
+import notify from 'devextreme/ui/notify';
 
 enum InputField {
+  bureauAchat = 'logistiques.fournisseur.bureauAchat',
   transporteur = 'transporteur.id',
   from = 'logistiques.dateDepartPrevueFournisseur',
   to = 'logistiques.dateDepartPrevueFournisseur',
+}
+
+enum validField {
+  client = 'client.valide',
+  entrepot = 'entrepot.valide',
+  fournisseur = 'logistiques.fournisseur.valide',
 }
 
 type Inputs<T = any> = {[key in keyof typeof InputField]: T};
@@ -30,64 +37,50 @@ type Inputs<T = any> = {[key in keyof typeof InputField]: T};
   templateUrl: './planning-transporteurs-approche.component.html',
   styleUrls: ['./planning-transporteurs-approche.component.scss']
 })
-export class PlanningTransporteursApprocheComponent implements OnInit, AfterViewInit {
+export class PlanningTransporteursApprocheComponent implements OnInit {
   readonly INDICATOR_NAME = 'PlanningTransporteursApproche';
 
   private indicator = this.ordresIndicatorsService
   .getIndicatorByName(this.INDICATOR_NAME);
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
-  public dateStart: any;
-  public dateEnd: any;
-
-  public planningFournisseursTypes = [{
-      id: 1,
-      name: 'Résumé'
-  }];
+  public validRequiredEntity: {};
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild('transporteurValue', { static: false }) transporteurSB: DxSelectBoxComponent;
-  @ViewChild('dateStartValue', { static: false }) dateStartSB: DxSelectBoxComponent;
-  @ViewChild('dateEndValue', { static: false }) dateEndSB: DxSelectBoxComponent;
-  @ViewChild('periodeValue', { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild('periodeSB', { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild('filterForm') filterForm: NgForm;
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
-  public secteurs: DataSource;
   public transporteursDataSource: DataSource;
+  public bureauxAchat: DataSource;
   public formGroup = new FormGroup({
+    bureauAchat: new FormControl(),
     transporteur: new FormControl(),
-    from: new FormControl(new Date(Date.now() - ONE_DAY).toISOString()),
-    to: new FormControl(new Date().toISOString()),
+    from: new FormControl(this.dateManagementService.startOfDay()),
+    to: new FormControl(this.dateManagementService.endOfDay()),
   } as Inputs<FormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public ordresService: OrdresService,
     public transporteursService: TransporteursService,
-    public secteursService: SecteursService,
+    public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
-    public dateManagementService: DateManagementService,
     public localizeService: LocalizationService,
+    public dateManagementService: DateManagementService,
     private ordresIndicatorsService: OrdresIndicatorsService,
-    public currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
     private formUtils: FormUtilsService,
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningFournisseurs);
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningTransporteurs);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.transporteursDataSource = this.transporteursService
     .getDataSource_v2(['id', 'raisonSocial']);
-    this.secteurs = secteursService.getDataSource();
-    this.secteurs.filter([
-      ['valide', '=', true],
-      'and',
-      ['societes', 'contains', this.currentCompanyService.getCompany().id]
-    ]);
     this.periodes = this.dateManagementService.periods();
-    this.dateStart = this.dateManagementService.formatDate(Date.now());
-    this.dateEnd = this.dateStart;
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2(['id', 'raisonSocial']);
+    this.validRequiredEntity = {client: true, entrepot: true, fournisseur: true};
   }
 
   async ngOnInit() {
@@ -95,44 +88,84 @@ export class PlanningTransporteursApprocheComponent implements OnInit, AfterView
     .pipe(map( columns => columns.map( column => column.dataField )));
 
     this.ordresDataSource = this.ordresService
-    .getDataSource_v2(await fields.toPromise(), Operation.PlanningTransporteursApproche);
+    // .getDataSource_v2(await fields.toPromise(), Operation.PlanningTransporteursApproche);
+    .getDataSource_v2(await fields.toPromise());
+    // Only way found to validate and show Warning icon
+    this.formGroup.get('transporteur').setValue('');
+    this.formGroup.get('transporteur').reset();
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
-    this.formGroup.updateValueAndValidity();
-  }
-
-  ngAfterViewInit() {
-
-    // this.transporteurSB.value = {
-    //   id : this.authService.currentUser.secteurCommercial.id,
-    //   description : this.authService.currentUser.secteurCommercial.description
-    // };
-
   }
 
   enableFilters() {
-    const values: Inputs = this.formGroup.value;
-    const extraFilters = this.buildFormFilter(values);
-    this.ordresDataSource.filter([
-      ...this.indicator.cloneFilter(),
-      ...extraFilters.filter(v => v != null).length
-        ? ['and', ...extraFilters]
-        : [],
-    ]);
-    this.datagrid.dataSource = this.ordresDataSource;
+    // if (!this.formGroup.get('transporteur').value) {
+    //   notify('Veuillez spécifier un transporteur', 'error');
+    // } else {
+      const values: Inputs = this.formGroup.value;
+      const extraFilters = this.buildFormFilter(values);
+      this.ordresDataSource.filter([
+        ...this.indicator.cloneFilter(),
+        ...extraFilters.filter(v => v != null).length
+          ? ['and', ...extraFilters]
+          : [],
+      ]);
+      this.datagrid.dataSource = this.ordresDataSource;
+    // }
   }
-
-  onSecteurChange() {
-    this.updateFilters();
-  }
-
-  updateFilters() {}
 
   onRowDblClick({data}: {data: Ordre}) {
     this.tabContext.openOrdre(data.numero);
   }
 
+  validOrAll(e) {
+    this.validRequiredEntity[e.element.dataset.entity] = !this.validRequiredEntity[e.element.dataset.entity];
+    const Element = e.element as HTMLElement;
+    Element.classList.toggle('lowOpacity');
+    this.enableFilters();
+  }
+
+  manualDate(e) {
+
+    // We check that this change is coming from the user, not following a period change
+    if (!e.event) return;
+
+    // Checking that date period is consistent otherwise, we set the other date to the new date
+    const deb = new Date(this.formGroup.get('from').value);
+    const fin = new Date(this.formGroup.get('to').value);
+    const deltaDate = fin < deb;
+
+    if (deltaDate) {
+      if (e.element.classList.contains('dateStart')) {
+        this.formGroup.get('to').patchValue(this.dateManagementService.endOfDay(deb));
+      } else {
+        this.formGroup.get('from').patchValue(this.dateManagementService.startOfDay(fin));
+      }
+    }
+    this.periodeSB.value = null;
+
+  }
+
+  setDates(e) {
+
+    // We check that this change is coming from the user, not following a prog change
+    if (!e.event) return;
+    const datePeriod = this.dateManagementService.getDates(e);
+
+    this.formGroup.patchValue({
+      from: datePeriod.dateDebut,
+      to: datePeriod.dateFin
+    });
+
+  }
+
   private buildFormFilter(values: Inputs): any[] {
     const filter = [];
+
+    // Valid entities
+    Object.keys(validField).map(entity => {
+      if (this.validRequiredEntity[entity]) {
+        filter.push([validField[entity], '=', 'true']);
+      }
+    });
 
     if (values.transporteur)
       filter.push([InputField.transporteur, '=', values.transporteur]);
@@ -143,47 +176,14 @@ export class PlanningTransporteursApprocheComponent implements OnInit, AfterView
     if (values.to)
       filter.push([InputField.to, '<=', values.to]);
 
+    if (values.to)
+    filter.push([InputField.to, '<=', values.to]);
+
     return filter.length
        ? filter.reduce((crt, acm) => [crt, 'and', acm])
        : null;
-  }
-
-  manualDate(e) {
-
-    // We check that this change is coming from the user, not following a period change
-    if (!e.event) return;
-
-    // Checking that date period is consistent otherwise, we set the other date to the new date
-    const deb = new Date(this.dateStartSB.value);
-    const fin = new Date(this.dateEndSB.value);
-    const diffJours = fin.getDate() - deb.getDate();
-
-    if (diffJours < 0) {
-      if (e.element.classList.contains('dateStart')) {
-        this.dateEndSB.value = this.dateStartSB.value;
-      } else {
-        this.dateStartSB.value = this.dateEndSB.value;
-      }
-    }
-
-    this.periodeSB.value = null;
-    this.updateFilters();
 
   }
-
-  setDates(e) {
-
-    // We check that this change is coming from the user, not following a prog change
-    if (!e.event) return;
-    const datePeriod = this.dateManagementService.getDates(e);
-
-    this.dateStartSB.value = datePeriod.dateDebut;
-    this.dateEndSB.value = datePeriod.dateFin;
-
-    this.updateFilters();
-
-  }
-
 }
 
 export default PlanningTransporteursApprocheComponent;

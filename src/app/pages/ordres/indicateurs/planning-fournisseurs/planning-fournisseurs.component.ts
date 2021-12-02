@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import Ordre from 'app/shared/models/ordre.model';
-import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
+import { AuthService, LocalizationService, FournisseursService } from 'app/shared/services';
 import { Operation, OrdresService } from 'app/shared/services/api/ordres.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
 import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
@@ -16,11 +16,20 @@ import { TabContext } from '../../root/root.component';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { DateManagementService } from 'app/shared/services/date-management.service';
+import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
 
 enum InputField {
-  transporteur = 'transporteur.id',
+  bureauAchat = 'logistiques.fournisseur.bureauAchat',
+  secteurCommercial = 'secteurCommercial',
+  fournisseur = 'logistiques.fournisseur',
   from = 'logistiques.dateDepartPrevueFournisseur',
   to = 'logistiques.dateDepartPrevueFournisseur',
+}
+
+enum validField {
+  client = 'client.valide',
+  entrepot = 'entrepot.valide',
+  fournisseur = 'logistiques.fournisseur.valide',
 }
 
 type Inputs<T = any> = {[key in keyof typeof InputField]: T};
@@ -37,37 +46,34 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   .getIndicatorByName(this.INDICATOR_NAME);
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
-  public dateStart: any;
-  public dateEnd: any;
-
-  public planningFournisseursTypes = [{
-      id: 1,
-      name: 'Résumé'
-  }];
+  private priceColumns = ['lignes.ventePrixUnitaire', 'lignes.achatPrixUnitaire'];
+  public validRequiredEntity: {};
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
-  @ViewChild('dateStartValue', { static: false }) dateStartSB: DxSelectBoxComponent;
-  @ViewChild('dateEndValue', { static: false }) dateEndSB: DxSelectBoxComponent;
-  @ViewChild('periodeValue', { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild('periodeSB', { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild('prices', { static: false }) prices: DxCheckBoxComponent;
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
   public secteurs: DataSource;
-  public transporteursDataSource: DataSource;
+  public fournisseurs: DataSource;
+  public bureauxAchat: DataSource;
+
   public formGroup = new FormGroup({
-    transporteur: new FormControl(),
-    from: new FormControl(new Date(Date.now() - ONE_DAY).toISOString()),
-    to: new FormControl(new Date().toISOString()),
+    bureauAchat: new FormControl(),
+    secteurCommercial: new FormControl(),
+    fournisseur: new FormControl(),
+    from: new FormControl(this.dateManagementService.startOfDay()),
+    to: new FormControl(this.dateManagementService.endOfDay()),
   } as Inputs<FormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public ordresService: OrdresService,
-    public transporteursService: TransporteursService,
     public secteursService: SecteursService,
+    public fournisseursService: FournisseursService,
+    public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
     public dateManagementService: DateManagementService,
     public localizeService: LocalizationService,
@@ -78,17 +84,17 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningFournisseurs);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
-    this.transporteursDataSource = this.transporteursService
-    .getDataSource_v2(['id', 'raisonSocial']);
     this.secteurs = secteursService.getDataSource();
+    this.fournisseurs = fournisseursService.getDataSource_v2(['id', 'raisonSocial']);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2(['id', 'raisonSocial']);
+    this.validRequiredEntity = {client: true, entrepot: true, fournisseur: true};
+
     this.secteurs.filter([
       ['valide', '=', true],
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ]);
     this.periodes = this.dateManagementService.periods();
-    this.dateStart = this.dateManagementService.formatDate(Date.now());
-    this.dateEnd = this.dateStart;
   }
 
   async ngOnInit() {
@@ -96,18 +102,17 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     .pipe(map( columns => columns.map( column => column.dataField )));
 
     this.ordresDataSource = this.ordresService
-    .getDataSource_v2(await fields.toPromise(), Operation.PlanningFournisseurs);
+    // .getDataSource_v2(await fields.toPromise(), Operation.PlanningFournisseurs);
+    .getDataSource_v2(await fields.toPromise());
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
     this.formGroup.updateValueAndValidity();
   }
 
   ngAfterViewInit() {
-
-    this.secteurSB.value = {
+    this.formGroup.get('secteurCommercial').patchValue({
       id : this.authService.currentUser.secteurCommercial.id,
       description : this.authService.currentUser.secteurCommercial.description
-    };
-
+    });
   }
 
   enableFilters() {
@@ -122,14 +127,16 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.datagrid.dataSource = this.ordresDataSource;
   }
 
-  onSecteurChange() {
-    this.updateFilters();
+  validOrAll(e) {
+    this.validRequiredEntity[e.element.dataset.entity] = !this.validRequiredEntity[e.element.dataset.entity];
+    const Element = e.element as HTMLElement;
+    Element.classList.toggle('lowOpacity');
+    this.enableFilters();
   }
 
-  updateFilters() {}
-
-  showPrices() {
-    console.log(this.prices.instance.option('value'));
+  showHidePrices() {
+    const prices = this.prices.instance.option('value');
+    this.priceColumns.map( field => this.datagrid.instance.columnOption(field, 'visible', prices));
   }
 
   onRowDblClick({data}: {data: Ordre}) {
@@ -139,8 +146,21 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   private buildFormFilter(values: Inputs): any[] {
     const filter = [];
 
-    if (values.transporteur)
-      filter.push([InputField.transporteur, '=', values.transporteur]);
+    // Valid entities
+    Object.keys(validField).map(entity => {
+      if (this.validRequiredEntity[entity]) {
+        filter.push([validField[entity], '=', 'true']);
+      }
+    });
+
+    if (values.bureauAchat)
+      filter.push([InputField.bureauAchat, '=', values.bureauAchat]);
+
+    if (values.secteurCommercial)
+      filter.push([InputField.secteurCommercial, '=', values.secteurCommercial]);
+
+    if (values.fournisseur)
+      filter.push([InputField.fournisseur, '=', values.fournisseur]);
 
     if (values.from)
       filter.push([InputField.from, '>=', values.from]);
@@ -159,20 +179,18 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     if (!e.event) return;
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
-    const deb = new Date(this.dateStartSB.value);
-    const fin = new Date(this.dateEndSB.value);
-    const diffJours = fin.getDate() - deb.getDate();
+    const deb = new Date(this.formGroup.get('from').value);
+    const fin = new Date(this.formGroup.get('to').value);
+    const deltaDate = fin < deb;
 
-    if (diffJours < 0) {
+    if (deltaDate) {
       if (e.element.classList.contains('dateStart')) {
-        this.dateEndSB.value = this.dateStartSB.value;
+        this.formGroup.get('to').patchValue(this.dateManagementService.endOfDay(deb));
       } else {
-        this.dateStartSB.value = this.dateEndSB.value;
+        this.formGroup.get('from').patchValue(this.dateManagementService.startOfDay(fin));
       }
     }
-
     this.periodeSB.value = null;
-    this.updateFilters();
 
   }
 
@@ -182,10 +200,10 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     if (!e.event) return;
     const datePeriod = this.dateManagementService.getDates(e);
 
-    this.dateStartSB.value = datePeriod.dateDebut;
-    this.dateEndSB.value = datePeriod.dateFin;
-
-    this.updateFilters();
+    this.formGroup.patchValue({
+      from: datePeriod.dateDebut,
+      to: datePeriod.dateFin
+    });
 
   }
 

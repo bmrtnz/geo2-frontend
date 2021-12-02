@@ -1624,30 +1624,149 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "entrepot.codePostal",
+        "dataField": "numero",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "entrepot.ville",
+        "dataField": "version",
         "visible": true
       },
       {
         "visibleIndex": 3,
+        "dataField": "logistiques.fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entrepot.codePostal",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "entrepot.ville",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
         "dataField": "entrepot.pays.id",
         "visible": true
       },
-      { "dataField": "id", "visible": false },
-      { "dataField": "entrepot.id", "visible": false }
+      {
+        "visibleIndex": 7,
+        "dataField": "societe.id",
+        "visible": true
+      },
+      { "dataField": "transporteur.id" },
+      { "dataField": "id" },
+      { "dataField": "entrepot.id" }
+    ]
+  },
+  "planning-transporteurs-approche": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "version",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "logistiques.fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entrepot.codePostal",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "entrepot.ville",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "entrepot.pays.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "societe.id",
+        "visible": true
+      },
+      { "dataField": "transporteur.id" },
+      { "dataField": "id" },
+      { "dataField": "entrepot.id" }
     ]
   },
   "planning-fournisseurs": {
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "ordre.numero",
+        "dataField": "logistiques.dateDepartPrevueFournisseur",
         "visible": true
-      }
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "logistiques.fournisseur.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "logistiques.transporteurGroupage.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "totalPalette",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "logistiques.dateLivraisonLieuGroupage",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "client.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "entrepot.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "referenceClient",
+        "visible": true
+      },
+      {
+        "visibleIndex": 98,
+        "dataField": "lignes.ventePrixUnitaire",
+        "visible": false
+      },
+      {
+        "visibleIndex": 99,
+        "dataField": "lignes.achatPrixUnitaire",
+        "visible": false
+      },
+      { "dataField": "id", "visible": false }
     ]
   },
   "ordre-save-log": {

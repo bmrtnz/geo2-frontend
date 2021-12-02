@@ -23,6 +23,17 @@ $base-fonts-path:'./scss/fonts/';
   float: right;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
+.noEllipsis {
+  text-overflow: clip;
+}
+.lowOpacity {
+  opacity: 0.5;
+}
+
 /* Toasts */
 
 .dx-toast-content {

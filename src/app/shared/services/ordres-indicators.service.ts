@@ -124,7 +124,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'PlanningTransporteursApproche',
   enabled: true,
-  withCount: true,
+  withCount: false,
   parameter: 'Planning',
   subParameter: 'transporteurs d\'approche',
   tileBkg: '#D9920A',
@@ -134,7 +134,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'PlanningFournisseurs',
   enabled: true,
-  withCount: true,
+  withCount: false,
   parameter: 'Planning',
   subParameter: 'fournisseurs',
   tileBkg: '#004173',
@@ -322,14 +322,15 @@ export class OrdresIndicatorsService {
         ];
       }
 
-      // Planning departs
+      // Planning transporteurs
       if (instance.id === 'PlanningTransporteurs') {
+        // Need to see all companies (Léa/Stéphane 01-12-2021)
+        instance.filter = [
+          ['valide', '=', true],
+        ];
         instance.detailedFields = grids['planning-transporteurs'].columns;
         instance.dataSource = this.ordresService.getDataSource_v2(instance.detailedFields.map( field => field.dataField ));
         instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
-        instance.filter = [
-          ...instance.filter,
-        ];
       }
 
       // Commandes en transit

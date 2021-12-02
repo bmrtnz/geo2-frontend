@@ -8,38 +8,37 @@
     .dx-datebox .dx-texteditor-input {
         padding-right: 0 !important;
     }
-}
-
-::ng-deep .tabPanel-planningFournisseurs {
-    padding: 12px;
-    margin: 12px;
-    background: #F9F9F9;
-    .dx-tab:first-child {
-        display: table-cell;
+    .orderTileleftFilters .dx-field {
+        margin-bottom: 0;
     }
-    .dx-tab:hover {
-        color: $base-accent;
+    .orderRightRightFilters {
+        margin-top: 4px;
     }
-    .tabpanel-item {
-        position: relative;
-        margin-top: 12px;
-    }
-    .dx-tabs-wrapper {
-        background:#F9F9F9;
-    }
-    .dx-tab-selected, .dx-tabs-wrapper .dx-tab:hover {
-        background:#F9F9F9;
-    }
-    .dx-tabs-wrapper .dx-tab-selected:after {
-        display:block;
+    .validOnlyButtons {
+        display: block;
+        min-width: 0 !important;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        float: left;
+        .dx-button-content {
+            padding: 0;
+        }
     }
 }
 
-::ng-deep .showPrices-box {
-    width: 300px;
-    .dx-field-value {
-        width: 10% !important;
-        margin-right: 15px;
-        margin-left: 10px;
+::ng-deep  .gridPF-container {
+    position: relative;
+    .showPrices-box {
+        width: 300px;
+        position: absolute;
+        top: -3px;
+        z-index: 1;
+        .dx-field-value {
+            width: 10% !important;
+            margin-right: 15px;
+            margin-left: 10px;
+        }
     }
 }
+
