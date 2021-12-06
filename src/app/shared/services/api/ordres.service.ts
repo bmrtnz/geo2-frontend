@@ -15,6 +15,7 @@ export enum Operation {
   PlanningTransporteurs = 'allOrdrePlanningTransporteurs',
   PlanningTransporteursApproche = 'allOrdrePlanningTransporteursApproche',
   PlanningFournisseurs = 'allOrdrePlanningFournisseurs',
+  SupervisionComptesPalox = 'allOrdreSupervisionComptesPalox'
 }
 
 export type CountResponse = { countOrdre: number };

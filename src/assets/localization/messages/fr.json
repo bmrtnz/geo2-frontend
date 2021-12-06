@@ -79,6 +79,7 @@
     "auth-societe": "Société",
 
     "tiers-clients-title": "Clients",
+    "tiers-client": "Client",
     "tiers-clients-id": "ID",
     "tiers-clients-valide": "Valide",
     "tiers-clients-preSaisie": "Pré-saisie",
@@ -187,6 +188,7 @@
     "tiers-clients-instructionLogistique": "Instructions logistique",
 
     "tiers-fournisseurs-title": "Fournisseurs",
+    "tiers-fournisseur": "Fournisseur",
     "tiers-fournisseurs-details-groupe-infos": "Infos générales",
     "tiers-fournisseurs-id": "ID",
     "tiers-fournisseurs-identifiant": "Identifiant fournisseur",
@@ -580,6 +582,7 @@
     "ordres-day": "jour",
     "ordres-days": "jours",
     "ordre-planning-depart-diff-expe": "Différence sur expédition et/ou sans détail client",
+    "ordres-dateMaxMouvements": "Mvts jusqu'au",
 
     "ordres-logistiques-dateDepartPrevueFournisseur": "Chargement",
     "ordres-logistiques-fournisseur-id": "Fournisseur",
@@ -591,6 +594,9 @@
     "ordres-client-code": "Client",
     "ordres-entrepot-code": "Entrepôt",
     "ordres-version": "Vers. Ordre",
+
+    "ordres-palox-mouvements": "Mouvements",
+    "ordres-palox-recapitulatif": "Récap. soldes non nuls",
 
     "ordreLignes-id": "Réf. ligne",
     "ordreLignes-ordre-id": "Réf. ordre",
