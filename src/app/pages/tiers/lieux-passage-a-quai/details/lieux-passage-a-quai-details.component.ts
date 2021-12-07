@@ -47,6 +47,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     devise: [''],
     moyenPaiement: [''],
     basePaiement: [''],
+    compteComptable: [''],
     contacts: [''],
     valide: [false],
     preSaisie: ['']
@@ -71,6 +72,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   defaultVisible: boolean;
   isReadOnlyMode = true;
   createMode = false;
+  CCexists = false;
   preSaisie: string;
 
   constructor(
@@ -146,9 +148,22 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     return lieuxpassageaquaiSource.load().then(res => !(res.length));
   }
 
+  checkCompteComptable(e) {
+    const compteComptable = this.valueToUpperCase(e);
+    if (!compteComptable) return;
+    const lieuxpassageaquaiSource = this.lieupassageaquaiService.getDataSource_v2(['compteComptable']);
+    lieuxpassageaquaiSource.filter(['compteComptable', '=', compteComptable]);
+    lieuxpassageaquaiSource.load().then(res => this.CCexists = res.length);
+  }
+
   onCodeChange(e) {
     if (!e.value) return;
-    this.formGroup.get('id').setValue(e.value.toUpperCase());
+    const code = e.value.toUpperCase();
+    this.formGroup.get('id').setValue(code);
+    if (code.length && this.createMode) {
+      this.formGroup.get('compteComptable').markAsDirty();
+      this.formGroup.get('compteComptable').setValue(code);
+    }
   }
 
   valueToUpperCase(e) {
