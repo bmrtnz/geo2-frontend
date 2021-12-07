@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import Ordre from 'app/shared/models/ordre.model';
 import { AuthService, LocalizationService, TransporteursService, ClientsService, FournisseursService } from 'app/shared/services';
@@ -14,8 +14,6 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TabContext } from '../../root/root.component';
 import { DateManagementService } from 'app/shared/services/date-management.service';
-import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
-import notify from 'devextreme/ui/notify';
 import { Role } from 'app/shared/models';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
 
@@ -23,7 +21,7 @@ enum InputField {
   client = 'client',
   fournisseur = 'logistiques.fournisseur',
   commercial = 'client.commercial',
-  limitDate = 'logistiques.dateDepartPrevueFournisseur',
+  dateMaxMouvements = 'logistiques.dateDepartPrevueFournisseur',
 }
 
 enum validField {
@@ -47,9 +45,13 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   private gridConfig: Promise<GridConfig>;
   public validRequiredEntity: {};
 
-  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChildren(DxDataGridComponent) paloxGrids: QueryList<DxDataGridComponent>;
+
+  @ViewChild('switchType', { static: false }) switchType: DxSwitchComponent;
+  @ViewChild('switchEntity', { static: false }) switchEntity: DxSwitchComponent;
 
   public columnChooser = environment.columnChooser;
+  public switchOptions = [];
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
   public commercial: DataSource;
@@ -59,7 +61,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     client: new FormControl(),
     fournisseur: new FormControl(),
     commercial: new FormControl(),
-    limitDate: new FormControl(this.dateManagementService.startOfDay()),
+    dateMaxMouvements: new FormControl(this.dateManagementService.startOfDay()),
   } as Inputs<FormControl>);
 
   constructor(
@@ -88,6 +90,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       'and',
       ['nomUtilisateur', '<>', 'null']
     ]);
+    this.switchOptions = ['mouv', 'recap', 'Clients', 'Fournisseurs'];
   }
 
   async ngOnInit() {
@@ -109,7 +112,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
           ? ['and', ...extraFilters]
           : [],
       ]);
-      this.datagrid.dataSource = this.ordresDataSource;
+  }
+
+  afterViewInit() {
+    this.paloxGrids.forEach((element) => {
+      element.dataSource = this.ordresDataSource;
+    });
   }
 
   onRowDblClick({data}: {data: Ordre}) {
@@ -124,28 +132,26 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   }
 
   switchChange(e) {
-    const switchName = e.element.dataset.name;
-    const switchValue = e.value;
-    switch(switchName) {
-      case 'recapitulatif': {
-        console.log(switchValue);
-        break;
-      }
-      case 'fournisseurs': {
-        console.log(switchValue);
-        break;
-      }
-    }
+    const grid = (this.switchType.value ? 1 : 0) + 2 * (this.switchEntity.value ? 1 : 0);
+    this.paloxGrids.forEach((element, index) => {
+      element.visible = (index === grid);
+    });
   }
 
   private buildFormFilter(values: Inputs): any[] {
     const filter = [];
 
+    if (values.client)
+      filter.push([InputField.client, '=', values.client]);
+
+    if (values.fournisseur)
+      filter.push([InputField.fournisseur, '=', values.fournisseur]);
+
     if (values.commercial)
       filter.push([InputField.commercial, '=', values.commercial]);
 
-    if (values.limitDate)
-      filter.push([InputField.limitDate, '<=', values.limitDate]);
+    if (values.dateMaxMouvements)
+      filter.push([InputField.dateMaxMouvements, '<=', values.dateMaxMouvements]);
 
     return filter.length
        ? filter.reduce((crt, acm) => [crt, 'and', acm])

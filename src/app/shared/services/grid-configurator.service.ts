@@ -52,7 +52,10 @@ export enum Grid {
   PlanningTransporteurs = 'planning-transporteurs',
   PlanningTransporteursApproche = 'planning-transporteurs-approche',
   PlanningFournisseurs = 'planning-fournisseurs',
-  SupervisionComptesPalox= 'supervision-comptes-palox'
+  MouvFournisseursComptesPalox= 'mouv-fournisseurs-comptes-palox',
+  MouvClientsComptesPalox= 'mouv-clients-comptes-palox',
+  RecapFournisseursComptesPalox= 'recap-fournisseurs-comptes-palox',
+  RecapClientsComptesPalox= 'recap-clients-comptes-palox',
 }
 
 @Injectable({

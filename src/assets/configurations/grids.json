@@ -1769,7 +1769,34 @@
       { "dataField": "id", "visible": false }
     ]
   },
-  "supervision-comptes-palox": {
+  "mouv-fournisseurs-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": true
+      }
+    ]
+  },
+  "recap-fournisseurs-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": true
+      }
+    ]
+  },
+  "mouv-clients-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": true
+      }
+    ]
+  },
+  "recap-clients-comptes-palox": {
     "columns": [
       {
         "visibleIndex": 0,
