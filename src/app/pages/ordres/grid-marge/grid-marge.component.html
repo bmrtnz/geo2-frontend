@@ -39,16 +39,17 @@
   </dxo-column-chooser>
   <dxo-summary [totalItems]="totalItems"></dxo-summary>
   <dxi-column
-    *ngFor="let field of detailedFields | async"
-    [dataField]="field.path"
-    [caption]="('ordreMarge-' + field.path.split('.').join('-') | localize) || field.name"
+    *ngFor="let column of this.columns | async"
+    [caption]="('ordreMarge-' + column.dataField.split('.').join('-') | localize) || column.name"
+    [format]="column?.format"
+    [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
-    [dataType]="field.dataType"
-    [format]="field.format"
-    [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-    [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column?.showInColumnChooser"
   ></dxi-column>
 
 </dx-data-grid> 

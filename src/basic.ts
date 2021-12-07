@@ -8,6 +8,7 @@ import {
   RequiredRule,
   StringLengthRule
 } from 'devextreme/ui/validation_engine';
+import { SummaryType } from 'app/shared/services/api.service';
 
 declare global {
   interface String {
@@ -119,6 +120,64 @@ interface GridColumn {
    */
   width?: number | string;
 }
+
+/**
+ * Specify item of the total summary.
+ * @link [Devexpress Doc.](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/summary/totalItems/)
+ */
+export type TotalItem = {
+
+  /**
+   * Specifies the alignment of a summary item.
+   */
+  alignment?: 'right'|'center'|'left',
+
+  /**
+   * Specifies the column that provides data for a summary item.
+   */
+  column?: string,
+
+  /**
+   * Specifies a CSS class to be applied to a summary item.
+   */
+  cssClass?: string,
+
+  /**
+   * Customizes the text to be displayed in the summary item.
+   */
+  customizeText?: (itemInfo: { value: string|number|Date, valueText: string }) => string,
+
+  /**
+   * Specifies the summary item's text.
+   */
+  displayFormat?: string,
+
+  /**
+   * Specifies the total summary item's identifier.
+   */
+  name?: string,
+
+  /**
+   * Specifies the column that must hold the summary item.
+   */
+  showInColumn?: string,
+
+  /**
+   * Specifies whether to skip empty strings, null, and undefined values when calculating a summary.
+   * Does not apply when you use a remote data source.
+   */
+  skipEmptyValues?: boolean,
+
+  /**
+   * Specifies how to aggregate data for the total summary item.
+   */
+  summaryType: SummaryType|string,
+
+  /**
+   * Specifies a summary item value's display format.
+   */
+  valueFormat?: format
+};
 
 /**
  * Formats values.

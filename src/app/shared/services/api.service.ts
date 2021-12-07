@@ -50,17 +50,23 @@ export type OrderedField = {
 };
 
 export enum SummaryType {
-  SUM = 'sum' as any,
-  AVG = 'avg' as any,
-  MIN = 'min' as any,
-  MAX = 'max' as any,
-  COUNT = 'count' as any,
+  SUM = 'sum',
+  AVG = 'avg',
+  MIN = 'min',
+  MAX = 'max',
+  COUNT = 'count',
 }
 
-export type Summary = {
-  selector: string
-  summaryType: SummaryType
-  displayFormat?: string
+export type SummaryInput = {
+  /**
+   * Specifies the column that provides data for a summary item.
+   */
+  selector: string,
+
+  /**
+   * Specifies how to aggregate data for the summary item.
+   */
+  summaryType: SummaryType|string,
 };
 
 export type Pageable = {
@@ -74,7 +80,7 @@ export type Pageable = {
 export type RelayPageVariables = OperationVariables & {
   search?: string
   pageable: Pageable
-  summary?: Summary[]
+  summary?: SummaryInput[]
 };
 
 export type LocateVariables = {
