@@ -247,6 +247,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             delaiBonFacturer: 8 // Donné par Léa 7-09-2020
           });
           this.formGroup.patchValue(this.client);
+          this.formGroup.get('delaiBonFacturer').markAsDirty();
           // Set current username if commercial
           this.tempData = this.personnesService.getDataSource();
           this.tempData.filter([
