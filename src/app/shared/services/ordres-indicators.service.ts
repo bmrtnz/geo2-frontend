@@ -44,6 +44,9 @@ export class Indicator {
   detailedFields?: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]> | GridColumn[];
   constructor(args) { Object.assign(this, args); }
   cloneFilter?(): any[] { return JSON.parse(JSON.stringify(this.filter)); }
+  cloneFilterLignes?(): any[] {
+     return JSON.parse(JSON.stringify(this.filter).replace('valide', 'ordre.valide').replace('societe', 'ordre.societe'));
+  }
 }
 
 const indicators: Indicator[] = [{

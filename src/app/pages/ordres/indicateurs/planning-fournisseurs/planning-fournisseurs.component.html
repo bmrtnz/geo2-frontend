@@ -11,9 +11,10 @@
                             <dx-select-box
                                 formControlName="bureauAchat"
                                 [dataSource]="bureauxAchat"
-                                displayExpr="raisonSocial"
+                                [displayExpr]="displayCodeBefore"
                                 [searchEnabled]="true"
-                                searchExpr="raisonSocial"
+                                [searchExpr]="['id', 'raisonSocial']"
+                                [showClearButton]="true"
                             >
                             <dxo-drop-down-options
                                 [width]="300">
@@ -42,9 +43,10 @@
                             <dx-select-box
                                 formControlName="fournisseur"
                                 [dataSource]="fournisseurs"
-                                displayExpr="raisonSocial"
+                                [displayExpr]="displayCodeBefore"
                                 [searchEnabled]="true"
-                                searchExpr="raisonSocial"
+                                [searchExpr]="['code', 'raisonSocial']"
+                                [showClearButton]="true"
                             >
                             <dxo-drop-down-options
                                 [width]="300">
@@ -167,6 +169,7 @@
         [columnHidingEnabled]="false"
         [allowColumnReordering]="true"
         (onContentReady)="showHidePrices()"
+        (onCellPrepared)="onCellPrepared($event)"
         [scrolling]="{
         useNative:true
         }"
@@ -204,7 +207,7 @@
         *ngFor="let column of this.columns | async"
         [dataField]="column.dataField"
         [visible]="false"
-        [caption]="('ordres-' + column.dataField?.split('.').join('-') | localize) || column.name"
+        [caption]="('ordreLignesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
         trueText="Oui"
         falseText="Non"
         [dataType]="column?.dataType"

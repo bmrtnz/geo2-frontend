@@ -17,19 +17,20 @@ import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { DateManagementService } from 'app/shared/services/date-management.service';
 import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
+import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
 
 enum InputField {
-  bureauAchat = 'logistiques.fournisseur.bureauAchat',
-  secteurCommercial = 'secteurCommercial',
-  fournisseur = 'logistiques.fournisseur',
-  from = 'logistiques.dateDepartPrevueFournisseur',
-  to = 'logistiques.dateDepartPrevueFournisseur',
+  bureauAchat = 'logistique.fournisseur.bureauAchat',
+  secteurCommercial = 'ordre.secteurCommercial',
+  fournisseur = 'logistique.fournisseur',
+  from = 'logistique.dateDepartPrevueFournisseur',
+  to = 'logistique.dateDepartPrevueFournisseur',
 }
 
 enum validField {
-  client = 'client.valide',
-  entrepot = 'entrepot.valide',
-  fournisseur = 'logistiques.fournisseur.valide',
+  client = 'ordre.client.valide',
+  entrepot = 'ordre.entrepot.valide',
+  fournisseur = 'logistique.fournisseur.valide',
 }
 
 type Inputs<T = any> = {[key in keyof typeof InputField]: T};
@@ -46,7 +47,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   .getIndicatorByName(this.INDICATOR_NAME);
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
-  private priceColumns = ['lignes.ventePrixUnitaire', 'lignes.achatPrixUnitaire'];
+  private priceColumns = ['ventePrixUnitaire', 'achatPrixUnitaire'];
   public validRequiredEntity: {};
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -55,7 +56,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
-  public ordresDataSource: DataSource;
+  public ordresLignesDataSource: DataSource;
   public secteurs: DataSource;
   public fournisseurs: DataSource;
   public bureauxAchat: DataSource;
@@ -70,7 +71,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
-    public ordresService: OrdresService,
+    public ordresLignesService: OrdreLignesService,
     public secteursService: SecteursService,
     public fournisseursService: FournisseursService,
     public bureauxAchatService: BureauxAchatService,
@@ -85,7 +86,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningFournisseurs);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.secteurs = secteursService.getDataSource();
-    this.fournisseurs = fournisseursService.getDataSource_v2(['id', 'raisonSocial']);
+    this.fournisseurs = fournisseursService.getDataSource_v2(['id', 'code', 'raisonSocial']);
     this.bureauxAchat = bureauxAchatService.getDataSource_v2(['id', 'raisonSocial']);
     this.validRequiredEntity = {client: true, entrepot: true, fournisseur: true};
 
@@ -101,7 +102,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     const fields = this.columns
     .pipe(map( columns => columns.map( column => column.dataField )));
 
-    this.ordresDataSource = this.ordresService
+    this.ordresLignesDataSource = this.ordresLignesService
     // .getDataSource_v2(await fields.toPromise(), Operation.PlanningFournisseurs);
     .getDataSource_v2(await fields.toPromise());
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
@@ -118,13 +119,13 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   enableFilters() {
     const values: Inputs = this.formGroup.value;
     const extraFilters = this.buildFormFilter(values);
-    this.ordresDataSource.filter([
-      ...this.indicator.cloneFilter(),
+    this.ordresLignesDataSource.filter([
+      ...this.indicator.cloneFilterLignes(),
       ...extraFilters.filter(v => v != null).length
         ? ['and', ...extraFilters]
         : [],
     ]);
-    this.datagrid.dataSource = this.ordresDataSource;
+    this.datagrid.dataSource = this.ordresLignesDataSource;
   }
 
   validOrAll(e) {
@@ -134,9 +135,33 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.enableFilters();
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Best expression for date/time
+      if (e.column.dataField === 'logistique.dateDepartPrevueFournisseur' || e.column.dataField === 'ordre.dateLivraisonPrevue') {
+        if (e.value) e.cellElement.innerText = this.dateManagementService.friendlyDate(e.value, true);
+      }
+      // Colis
+      if (e.column.dataField === 'nombreColisExpedies') {
+        e.cellElement.innerText =  e.cellElement.innerText + '/' + e.data.nombreColisCommandes;
+      }
+      // Descript. article
+      if (e.column.dataField === 'article.description') {
+        e.cellElement.innerText =  e.data.article.matierePremiere.variete.description + ' ' + e.cellElement.innerText;
+      }
+    }
+  }
+
   showHidePrices() {
     const prices = this.prices.instance.option('value');
     this.priceColumns.map( field => this.datagrid.instance.columnOption(field, 'visible', prices));
+  }
+
+  displayCodeBefore(data) {
+    return data ?
+    ((data.code ? data.code : data.id) + ' ' + (data.nomUtilisateur ? data.nomUtilisateur :
+     (data.raisonSocial ? data.raisonSocial : data.description)))
+     : null;
   }
 
   onRowDblClick({data}: {data: Ordre}) {

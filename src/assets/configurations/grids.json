@@ -1713,60 +1713,88 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "logistiques.dateDepartPrevueFournisseur",
+        "dataField": "logistique.dateDepartPrevueFournisseur",
         "visible": true
       },
       {
         "visibleIndex": 1,
-        "dataField": "numero",
+        "dataField": "ordre.numero",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "logistiques.fournisseur.id",
+        "dataField": "logistique.fournisseur.code",
+        "sortIndex": 2,
+        "sortOrder": "asc",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "logistiques.transporteurGroupage.id",
+        "dataField": "ordre.transporteur.id",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "totalPalette",
+        "dataField": "nombrePalettesExpediees",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "nombreColisExpedies",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "article.description",
         "visible": true
       },
       {
         "visibleIndex": 7,
-        "dataField": "logistiques.dateLivraisonLieuGroupage",
+        "dataField": "ordre.dateLivraisonPrevue",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "client.code",
+        "dataField": "ordre.client.code",
         "visible": true
       },
       {
         "visibleIndex": 9,
-        "dataField": "entrepot.code",
+        "dataField": "ordre.entrepot.code",
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "referenceClient",
+        "dataField": "ordre.referenceClient",
         "visible": true
       },
       {
-        "visibleIndex": 98,
-        "dataField": "lignes.ventePrixUnitaire",
+        "visibleIndex": 15,
+        "dataField": "ventePrixUnitaire",
         "visible": false
       },
       {
-        "visibleIndex": 99,
-        "dataField": "lignes.achatPrixUnitaire",
+        "visibleIndex": 16,
+        "dataField": "achatPrixUnitaire",
         "visible": false
       },
-      { "dataField": "id", "visible": false }
+      {
+        "dataField": "ordre.pays.id",
+        "sortIndex": 0,
+        "sortOrder": "asc"
+      },
+      {
+        "dataField": "numero",
+        "sortIndex": 3,
+        "sortOrder": "asc"
+      },
+      { "dataField": "id", "visible": false },
+      { "dataField": "logistique.fournisseur.id" },
+      { "dataField": "nombreColisCommandes" },
+      { "dataField": "article.id" },
+      { "dataField": "article.matierePremiere.variete.description" }
     ]
   },
   "mouv-fournisseurs-comptes-palox": {
