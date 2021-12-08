@@ -16,10 +16,11 @@ export class DateManagementService {
     return this.datePipe.transform(myDate.valueOf(), myFormat ? myFormat : 'yyyy-MM-dd');
   }
 
-  friendlyDate(theDate) {
+  friendlyDate(theDate, nosecs?) {
     // e.g. 17/09/2020 (11h37 44s)
     const mydate = new Date(theDate);
-    const myTime = mydate.toLocaleTimeString().replace(':', 'h').replace(':', ' ') + 's';
+    let myTime = mydate.toLocaleTimeString().replace(':', 'h').replace(':', ' ') + 's';
+    if (nosecs) myTime = myTime.slice(0, -4);
     return mydate.toLocaleDateString() + '  (' + myTime + ')';
   }
 
@@ -90,9 +91,12 @@ export class DateManagementService {
         fin = this.findDate(30);
         break;
       case 'Mois à cheval':
+        deb = (month === 1 ? year - 1 : year) + '-' + (month === 1 ? 12 : month - 1) + '-' + date;
+        fin = (month === 12 ? year + 1 : year) + '-' + (month === 12 ? 1 : month) + '-' + date ;
+        break;
       case 'Depuis 1 mois':
         deb = (month === 1 ? year - 1 : year) + '-' + (month === 1 ? 12 : month - 1) + '-' + date;
-        fin = (month === 12 ? year + 1 : year) + '-' + month + '-' + date ;
+        fin = now;
         break;
       case 'Depuis 30 jours':
         deb = this.findDate(-30);
