@@ -237,29 +237,29 @@
   pointer-events: none;
 }
 .dx-rtl .dx-icon-spinnext::before {
-  content: "";
+  content: "\f04f";
 }
 .dx-rtl .dx-icon-spinprev::before {
-  content: "";
+  content: "\f04e";
 }
 .dx-rtl .dx-icon-chevronnext::before {
-  content: "";
+  content: "\f012";
 }
 .dx-rtl .dx-icon-back::before,
 .dx-rtl .dx-icon-chevronprev::before {
-  content: "";
+  content: "\f010";
 }
 .dx-rtl .dx-icon-undo::before {
-  content: "";
+  content: "\f093";
 }
 .dx-rtl .dx-icon-redo::before {
-  content: "";
+  content: "\f04c";
 }
 .dx-rtl .dx-icon-hidepanel::before {
-  content: "";
+  content: "\f11d";
 }
 .dx-rtl .dx-icon-showpanel::before {
-  content: "";
+  content: "\f11c";
 }
 @font-face {
   font-family: DXIcons;
@@ -271,1231 +271,1231 @@
   font: 14px/1 DXIcons;
 }
 .dx-icon-add::before {
-  content: "";
+  content: "\f00b";
 }
 .dx-icon-airplane {
   font: 14px/1 DXIcons;
 }
 .dx-icon-airplane::before {
-  content: "";
+  content: "\f000";
 }
 .dx-icon-bookmark {
   font: 14px/1 DXIcons;
 }
 .dx-icon-bookmark::before {
-  content: "";
+  content: "\f017";
 }
 .dx-icon-box {
   font: 14px/1 DXIcons;
 }
 .dx-icon-box::before {
-  content: "";
+  content: "\f018";
 }
 .dx-icon-car {
   font: 14px/1 DXIcons;
 }
 .dx-icon-car::before {
-  content: "";
+  content: "\f01b";
 }
 .dx-icon-card {
   font: 14px/1 DXIcons;
 }
 .dx-icon-card::before {
-  content: "";
+  content: "\f019";
 }
 .dx-icon-cart {
   font: 14px/1 DXIcons;
 }
 .dx-icon-cart::before {
-  content: "";
+  content: "\f01a";
 }
 .dx-icon-chart {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chart::before {
-  content: "";
+  content: "\f01c";
 }
 .dx-icon-check {
   font: 14px/1 DXIcons;
 }
 .dx-icon-check::before {
-  content: "";
+  content: "\f005";
 }
 .dx-icon-clear {
   font: 14px/1 DXIcons;
 }
 .dx-icon-clear::before {
-  content: "";
+  content: "\f008";
 }
 .dx-icon-clock {
   font: 14px/1 DXIcons;
 }
 .dx-icon-clock::before {
-  content: "";
+  content: "\f01d";
 }
 .dx-icon-close {
   font: 14px/1 DXIcons;
 }
 .dx-icon-close::before {
-  content: "";
+  content: "\f00a";
 }
 .dx-icon-coffee {
   font: 14px/1 DXIcons;
 }
 .dx-icon-coffee::before {
-  content: "";
+  content: "\f02a";
 }
 .dx-icon-comment {
   font: 14px/1 DXIcons;
 }
 .dx-icon-comment::before {
-  content: "";
+  content: "\f01e";
 }
 .dx-icon-doc {
   font: 14px/1 DXIcons;
 }
 .dx-icon-doc::before {
-  content: "";
+  content: "\f021";
 }
 .dx-icon-file {
   font: 14px/1 DXIcons;
 }
 .dx-icon-file::before {
-  content: "";
+  content: "\f021";
 }
 .dx-icon-download {
   font: 14px/1 DXIcons;
 }
 .dx-icon-download::before {
-  content: "";
+  content: "\f022";
 }
 .dx-icon-dragvertical {
   font: 14px/1 DXIcons;
 }
 .dx-icon-dragvertical::before {
-  content: "";
+  content: "\f038";
 }
 .dx-icon-edit {
   font: 14px/1 DXIcons;
 }
 .dx-icon-edit::before {
-  content: "";
+  content: "\f023";
 }
 .dx-icon-email {
   font: 14px/1 DXIcons;
 }
 .dx-icon-email::before {
-  content: "";
+  content: "\f024";
 }
 .dx-icon-event {
   font: 14px/1 DXIcons;
 }
 .dx-icon-event::before {
-  content: "";
+  content: "\f026";
 }
 .dx-icon-favorites {
   font: 14px/1 DXIcons;
 }
 .dx-icon-favorites::before {
-  content: "";
+  content: "\f025";
 }
 .dx-icon-find {
   font: 14px/1 DXIcons;
 }
 .dx-icon-find::before {
-  content: "";
+  content: "\f027";
 }
 .dx-icon-filter {
   font: 14px/1 DXIcons;
 }
 .dx-icon-filter::before {
-  content: "";
+  content: "\f050";
 }
 .dx-icon-folder {
   font: 14px/1 DXIcons;
 }
 .dx-icon-folder::before {
-  content: "";
+  content: "\f028";
 }
 .dx-icon-activefolder {
   font: 14px/1 DXIcons;
 }
 .dx-icon-activefolder::before {
-  content: "";
+  content: "\f028";
 }
 .dx-icon-food {
   font: 14px/1 DXIcons;
 }
 .dx-icon-food::before {
-  content: "";
+  content: "\f029";
 }
 .dx-icon-gift {
   font: 14px/1 DXIcons;
 }
 .dx-icon-gift::before {
-  content: "";
+  content: "\f02b";
 }
 .dx-icon-globe {
   font: 14px/1 DXIcons;
 }
 .dx-icon-globe::before {
-  content: "";
+  content: "\f02c";
 }
 .dx-icon-group {
   font: 14px/1 DXIcons;
 }
 .dx-icon-group::before {
-  content: "";
+  content: "\f02e";
 }
 .dx-icon-help {
   font: 14px/1 DXIcons;
 }
 .dx-icon-help::before {
-  content: "";
+  content: "\f02f";
 }
 .dx-icon-home {
   font: 14px/1 DXIcons;
 }
 .dx-icon-home::before {
-  content: "";
+  content: "\f030";
 }
 .dx-icon-image {
   font: 14px/1 DXIcons;
 }
 .dx-icon-image::before {
-  content: "";
+  content: "\f031";
 }
 .dx-icon-info {
   font: 14px/1 DXIcons;
 }
 .dx-icon-info::before {
-  content: "";
+  content: "\f032";
 }
 .dx-icon-key {
   font: 14px/1 DXIcons;
 }
 .dx-icon-key::before {
-  content: "";
+  content: "\f033";
 }
 .dx-icon-like {
   font: 14px/1 DXIcons;
 }
 .dx-icon-like::before {
-  content: "";
+  content: "\f034";
 }
 .dx-icon-map {
   font: 14px/1 DXIcons;
 }
 .dx-icon-map::before {
-  content: "";
+  content: "\f035";
 }
 .dx-icon-menu {
   font: 14px/1 DXIcons;
 }
 .dx-icon-menu::before {
-  content: "";
+  content: "\f00c";
 }
 .dx-icon-message {
   font: 14px/1 DXIcons;
 }
 .dx-icon-message::before {
-  content: "";
+  content: "\f024";
 }
 .dx-icon-money {
   font: 14px/1 DXIcons;
 }
 .dx-icon-money::before {
-  content: "";
+  content: "\f036";
 }
 .dx-icon-music {
   font: 14px/1 DXIcons;
 }
 .dx-icon-music::before {
-  content: "";
+  content: "\f037";
 }
 .dx-icon-overflow {
   font: 14px/1 DXIcons;
 }
 .dx-icon-overflow::before {
-  content: "";
+  content: "\f00d";
 }
 .dx-icon-percent {
   font: 14px/1 DXIcons;
 }
 .dx-icon-percent::before {
-  content: "";
+  content: "\f039";
 }
 .dx-icon-photo {
   font: 14px/1 DXIcons;
 }
 .dx-icon-photo::before {
-  content: "";
+  content: "\f03a";
 }
 .dx-icon-plus {
   font: 14px/1 DXIcons;
 }
 .dx-icon-plus::before {
-  content: "";
+  content: "\f00b";
 }
 .dx-icon-minus {
   font: 14px/1 DXIcons;
 }
 .dx-icon-minus::before {
-  content: "";
+  content: "\f074";
 }
 .dx-icon-preferences {
   font: 14px/1 DXIcons;
 }
 .dx-icon-preferences::before {
-  content: "";
+  content: "\f03b";
 }
 .dx-icon-product {
   font: 14px/1 DXIcons;
 }
 .dx-icon-product::before {
-  content: "";
+  content: "\f03c";
 }
 .dx-icon-pulldown {
   font: 14px/1 DXIcons;
 }
 .dx-icon-pulldown::before {
-  content: "";
+  content: "\f062";
 }
 .dx-icon-refresh {
   font: 14px/1 DXIcons;
 }
 .dx-icon-refresh::before {
-  content: "";
+  content: "\f03d";
 }
 .dx-icon-remove {
   font: 14px/1 DXIcons;
 }
 .dx-icon-remove::before {
-  content: "";
+  content: "\f00a";
 }
 .dx-icon-revert {
   font: 14px/1 DXIcons;
 }
 .dx-icon-revert::before {
-  content: "";
+  content: "\f04c";
 }
 .dx-icon-runner {
   font: 14px/1 DXIcons;
 }
 .dx-icon-runner::before {
-  content: "";
+  content: "\f040";
 }
 .dx-icon-save {
   font: 14px/1 DXIcons;
 }
 .dx-icon-save::before {
-  content: "";
+  content: "\f041";
 }
 .dx-icon-search {
   font: 14px/1 DXIcons;
 }
 .dx-icon-search::before {
-  content: "";
+  content: "\f027";
 }
 .dx-icon-tags {
   font: 14px/1 DXIcons;
 }
 .dx-icon-tags::before {
-  content: "";
+  content: "\f009";
 }
 .dx-icon-tel {
   font: 14px/1 DXIcons;
 }
 .dx-icon-tel::before {
-  content: "";
+  content: "\f003";
 }
 .dx-icon-tips {
   font: 14px/1 DXIcons;
 }
 .dx-icon-tips::before {
-  content: "";
+  content: "\f004";
 }
 .dx-icon-todo {
   font: 14px/1 DXIcons;
 }
 .dx-icon-todo::before {
-  content: "";
+  content: "\f005";
 }
 .dx-icon-toolbox {
   font: 14px/1 DXIcons;
 }
 .dx-icon-toolbox::before {
-  content: "";
+  content: "\f007";
 }
 .dx-icon-trash {
   font: 14px/1 DXIcons;
 }
 .dx-icon-trash::before {
-  content: "";
+  content: "\f03e";
 }
 .dx-icon-user {
   font: 14px/1 DXIcons;
 }
 .dx-icon-user::before {
-  content: "";
+  content: "\f02d";
 }
 .dx-icon-upload {
   font: 14px/1 DXIcons;
 }
 .dx-icon-upload::before {
-  content: "";
+  content: "\f006";
 }
 .dx-icon-floppy {
   font: 14px/1 DXIcons;
 }
 .dx-icon-floppy::before {
-  content: "";
+  content: "\f073";
 }
 .dx-icon-arrowleft {
   font: 14px/1 DXIcons;
 }
 .dx-icon-arrowleft::before {
-  content: "";
+  content: "\f011";
 }
 .dx-icon-arrowdown {
   font: 14px/1 DXIcons;
 }
 .dx-icon-arrowdown::before {
-  content: "";
+  content: "\f015";
 }
 .dx-icon-arrowright {
   font: 14px/1 DXIcons;
 }
 .dx-icon-arrowright::before {
-  content: "";
+  content: "\f00e";
 }
 .dx-icon-arrowup {
   font: 14px/1 DXIcons;
 }
 .dx-icon-arrowup::before {
-  content: "";
+  content: "\f013";
 }
 .dx-icon-spinleft {
   font: 14px/1 DXIcons;
 }
 .dx-icon-spinleft::before {
-  content: "";
+  content: "\f04f";
 }
 .dx-icon-spinprev {
   font: 14px/1 DXIcons;
 }
 .dx-icon-spinprev::before {
-  content: "";
+  content: "\f04f";
 }
 .dx-icon-spinright {
   font: 14px/1 DXIcons;
 }
 .dx-icon-spinright::before {
-  content: "";
+  content: "\f04e";
 }
 .dx-icon-spinnext {
   font: 14px/1 DXIcons;
 }
 .dx-icon-spinnext::before {
-  content: "";
+  content: "\f04e";
 }
 .dx-icon-spindown {
   font: 14px/1 DXIcons;
 }
 .dx-icon-spindown::before {
-  content: "";
+  content: "\f001";
 }
 .dx-icon-spinup {
   font: 14px/1 DXIcons;
 }
 .dx-icon-spinup::before {
-  content: "";
+  content: "\f002";
 }
 .dx-icon-chevronleft {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevronleft::before {
-  content: "";
+  content: "\f012";
 }
 .dx-icon-chevronprev {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevronprev::before {
-  content: "";
+  content: "\f012";
 }
 .dx-icon-back {
   font: 14px/1 DXIcons;
 }
 .dx-icon-back::before {
-  content: "";
+  content: "\f012";
 }
 .dx-icon-chevronright {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevronright::before {
-  content: "";
+  content: "\f010";
 }
 .dx-icon-chevronnext {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevronnext::before {
-  content: "";
+  content: "\f010";
 }
 .dx-icon-chevrondown {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevrondown::before {
-  content: "";
+  content: "\f016";
 }
 .dx-icon-chevronup {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevronup::before {
-  content: "";
+  content: "\f014";
 }
 .dx-icon-chevrondoubleleft {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevrondoubleleft::before {
-  content: "";
+  content: "\f042";
 }
 .dx-icon-chevrondoubleright {
   font: 14px/1 DXIcons;
 }
 .dx-icon-chevrondoubleright::before {
-  content: "";
+  content: "\f03f";
 }
 .dx-icon-equal {
   font: 14px/1 DXIcons;
 }
 .dx-icon-equal::before {
-  content: "";
+  content: "\f044";
 }
 .dx-icon-notequal {
   font: 14px/1 DXIcons;
 }
 .dx-icon-notequal::before {
-  content: "";
+  content: "\f045";
 }
 .dx-icon-less {
   font: 14px/1 DXIcons;
 }
 .dx-icon-less::before {
-  content: "";
+  content: "\f046";
 }
 .dx-icon-greater {
   font: 14px/1 DXIcons;
 }
 .dx-icon-greater::before {
-  content: "";
+  content: "\f047";
 }
 .dx-icon-lessorequal {
   font: 14px/1 DXIcons;
 }
 .dx-icon-lessorequal::before {
-  content: "";
+  content: "\f048";
 }
 .dx-icon-greaterorequal {
   font: 14px/1 DXIcons;
 }
 .dx-icon-greaterorequal::before {
-  content: "";
+  content: "\f049";
 }
 .dx-icon-isblank {
   font: 14px/1 DXIcons;
 }
 .dx-icon-isblank::before {
-  content: "";
+  content: "\f075";
 }
 .dx-icon-isnotblank {
   font: 14px/1 DXIcons;
 }
 .dx-icon-isnotblank::before {
-  content: "";
+  content: "\f076";
 }
 .dx-icon-sortup {
   font: 14px/1 DXIcons;
 }
 .dx-icon-sortup::before {
-  content: "";
+  content: "\f051";
 }
 .dx-icon-sortdown {
   font: 14px/1 DXIcons;
 }
 .dx-icon-sortdown::before {
-  content: "";
+  content: "\f052";
 }
 .dx-icon-sortuptext {
   font: 14px/1 DXIcons;
 }
 .dx-icon-sortuptext::before {
-  content: "";
+  content: "\f053";
 }
 .dx-icon-sortdowntext {
   font: 14px/1 DXIcons;
 }
 .dx-icon-sortdowntext::before {
-  content: "";
+  content: "\f054";
 }
 .dx-icon-sorted {
   font: 14px/1 DXIcons;
 }
 .dx-icon-sorted::before {
-  content: "";
+  content: "\f055";
 }
 .dx-icon-expand {
   font: 14px/1 DXIcons;
 }
 .dx-icon-expand::before {
-  content: "";
+  content: "\f04a";
 }
 .dx-icon-collapse {
   font: 14px/1 DXIcons;
 }
 .dx-icon-collapse::before {
-  content: "";
+  content: "\f04b";
 }
 .dx-icon-columnfield {
   font: 14px/1 DXIcons;
 }
 .dx-icon-columnfield::before {
-  content: "";
+  content: "\f057";
 }
 .dx-icon-rowfield {
   font: 14px/1 DXIcons;
 }
 .dx-icon-rowfield::before {
-  content: "";
+  content: "\f058";
 }
 .dx-icon-datafield {
   font: 14px/1 DXIcons;
 }
 .dx-icon-datafield::before {
-  content: "";
+  content: "\f101";
 }
 .dx-icon-fields {
   font: 14px/1 DXIcons;
 }
 .dx-icon-fields::before {
-  content: "";
+  content: "\f059";
 }
 .dx-icon-fieldchooser {
   font: 14px/1 DXIcons;
 }
 .dx-icon-fieldchooser::before {
-  content: "";
+  content: "\f05a";
 }
 .dx-icon-columnchooser {
   font: 14px/1 DXIcons;
 }
 .dx-icon-columnchooser::before {
-  content: "";
+  content: "\f04d";
 }
 .dx-icon-pin {
   font: 14px/1 DXIcons;
 }
 .dx-icon-pin::before {
-  content: "";
+  content: "\f05b";
 }
 .dx-icon-unpin {
   font: 14px/1 DXIcons;
 }
 .dx-icon-unpin::before {
-  content: "";
+  content: "\f05c";
 }
 .dx-icon-pinleft {
   font: 14px/1 DXIcons;
 }
 .dx-icon-pinleft::before {
-  content: "";
+  content: "\f05d";
 }
 .dx-icon-pinright {
   font: 14px/1 DXIcons;
 }
 .dx-icon-pinright::before {
-  content: "";
+  content: "\f05e";
 }
 .dx-icon-contains {
   font: 14px/1 DXIcons;
 }
 .dx-icon-contains::before {
-  content: "";
+  content: "\f063";
 }
 .dx-icon-startswith {
   font: 14px/1 DXIcons;
 }
 .dx-icon-startswith::before {
-  content: "";
+  content: "\f064";
 }
 .dx-icon-endswith {
   font: 14px/1 DXIcons;
 }
 .dx-icon-endswith::before {
-  content: "";
+  content: "\f065";
 }
 .dx-icon-doesnotcontain {
   font: 14px/1 DXIcons;
 }
 .dx-icon-doesnotcontain::before {
-  content: "";
+  content: "\f066";
 }
 .dx-icon-range {
   font: 14px/1 DXIcons;
 }
 .dx-icon-range::before {
-  content: "";
+  content: "\f06a";
 }
 .dx-icon-export {
   font: 14px/1 DXIcons;
 }
 .dx-icon-export::before {
-  content: "";
+  content: "\f05f";
 }
 .dx-icon-exportxlsx {
   font: 14px/1 DXIcons;
 }
 .dx-icon-exportxlsx::before {
-  content: "";
+  content: "\f060";
 }
 .dx-icon-exportpdf {
   font: 14px/1 DXIcons;
 }
 .dx-icon-exportpdf::before {
-  content: "";
+  content: "\f061";
 }
 .dx-icon-exportselected {
   font: 14px/1 DXIcons;
 }
 .dx-icon-exportselected::before {
-  content: "";
+  content: "\f06d";
 }
 .dx-icon-warning {
   font: 14px/1 DXIcons;
 }
 .dx-icon-warning::before {
-  content: "";
+  content: "\f06b";
 }
 .dx-icon-more {
   font: 14px/1 DXIcons;
 }
 .dx-icon-more::before {
-  content: "";
+  content: "\f06c";
 }
 .dx-icon-square {
   font: 14px/1 DXIcons;
 }
 .dx-icon-square::before {
-  content: "";
+  content: "\f067";
 }
 .dx-icon-clearsquare {
   font: 14px/1 DXIcons;
 }
 .dx-icon-clearsquare::before {
-  content: "";
+  content: "\f068";
 }
 .dx-icon-repeat {
   font: 14px/1 DXIcons;
 }
 .dx-icon-repeat::before {
-  content: "";
+  content: "\f069";
 }
 .dx-icon-selectall {
   font: 14px/1 DXIcons;
 }
 .dx-icon-selectall::before {
-  content: "";
+  content: "\f070";
 }
 .dx-icon-unselectall {
   font: 14px/1 DXIcons;
 }
 .dx-icon-unselectall::before {
-  content: "";
+  content: "\f071";
 }
 .dx-icon-print {
   font: 14px/1 DXIcons;
 }
 .dx-icon-print::before {
-  content: "";
+  content: "\f072";
 }
 .dx-icon-bold {
   font: 14px/1 DXIcons;
 }
 .dx-icon-bold::before {
-  content: "";
+  content: "\f077";
 }
 .dx-icon-italic {
   font: 14px/1 DXIcons;
 }
 .dx-icon-italic::before {
-  content: "";
+  content: "\f078";
 }
 .dx-icon-underline {
   font: 14px/1 DXIcons;
 }
 .dx-icon-underline::before {
-  content: "";
+  content: "\f079";
 }
 .dx-icon-strike {
   font: 14px/1 DXIcons;
 }
 .dx-icon-strike::before {
-  content: "";
+  content: "\f07a";
 }
 .dx-icon-indent {
   font: 14px/1 DXIcons;
 }
 .dx-icon-indent::before {
-  content: "";
+  content: "\f07b";
 }
 .dx-icon-increaselinespacing {
   font: 14px/1 DXIcons;
 }
 .dx-icon-increaselinespacing::before {
-  content: "";
+  content: "\f07b";
 }
 .dx-icon-font {
   font: 14px/1 DXIcons;
 }
 .dx-icon-font::before {
-  content: "";
+  content: "\f11b";
 }
 .dx-icon-fontsize {
   font: 14px/1 DXIcons;
 }
 .dx-icon-fontsize::before {
-  content: "";
+  content: "\f07c";
 }
 .dx-icon-shrinkfont {
   font: 14px/1 DXIcons;
 }
 .dx-icon-shrinkfont::before {
-  content: "";
+  content: "\f07d";
 }
 .dx-icon-growfont {
   font: 14px/1 DXIcons;
 }
 .dx-icon-growfont::before {
-  content: "";
+  content: "\f07e";
 }
 .dx-icon-color {
   font: 14px/1 DXIcons;
 }
 .dx-icon-color::before {
-  content: "";
+  content: "\f07f";
 }
 .dx-icon-background {
   font: 14px/1 DXIcons;
 }
 .dx-icon-background::before {
-  content: "";
+  content: "\f080";
 }
 .dx-icon-fill {
   font: 14px/1 DXIcons;
 }
 .dx-icon-fill::before {
-  content: "";
+  content: "\f10d";
 }
 .dx-icon-palette {
   font: 14px/1 DXIcons;
 }
 .dx-icon-palette::before {
-  content: "";
+  content: "\f120";
 }
 .dx-icon-superscript {
   font: 14px/1 DXIcons;
 }
 .dx-icon-superscript::before {
-  content: "";
+  content: "\f081";
 }
 .dx-icon-subscript {
   font: 14px/1 DXIcons;
 }
 .dx-icon-subscript::before {
-  content: "";
+  content: "\f082";
 }
 .dx-icon-header {
   font: 14px/1 DXIcons;
 }
 .dx-icon-header::before {
-  content: "";
+  content: "\f083";
 }
 .dx-icon-blockquote {
   font: 14px/1 DXIcons;
 }
 .dx-icon-blockquote::before {
-  content: "";
+  content: "\f084";
 }
 .dx-icon-formula {
   font: 14px/1 DXIcons;
 }
 .dx-icon-formula::before {
-  content: "";
+  content: "\f056";
 }
 .dx-icon-codeblock {
   font: 14px/1 DXIcons;
 }
 .dx-icon-codeblock::before {
-  content: "";
+  content: "\f085";
 }
 .dx-icon-orderedlist {
   font: 14px/1 DXIcons;
 }
 .dx-icon-orderedlist::before {
-  content: "";
+  content: "\f086";
 }
 .dx-icon-bulletlist {
   font: 14px/1 DXIcons;
 }
 .dx-icon-bulletlist::before {
-  content: "";
+  content: "\f087";
 }
 .dx-icon-increaseindent {
   font: 14px/1 DXIcons;
 }
 .dx-icon-increaseindent::before {
-  content: "";
+  content: "\f088";
 }
 .dx-icon-decreaseindent {
   font: 14px/1 DXIcons;
 }
 .dx-icon-decreaseindent::before {
-  content: "";
+  content: "\f089";
 }
 .dx-icon-decreaselinespacing {
   font: 14px/1 DXIcons;
 }
 .dx-icon-decreaselinespacing::before {
-  content: "";
+  content: "\f106";
 }
 .dx-icon-alignleft {
   font: 14px/1 DXIcons;
 }
 .dx-icon-alignleft::before {
-  content: "";
+  content: "\f08a";
 }
 .dx-icon-alignright {
   font: 14px/1 DXIcons;
 }
 .dx-icon-alignright::before {
-  content: "";
+  content: "\f08b";
 }
 .dx-icon-aligncenter {
   font: 14px/1 DXIcons;
 }
 .dx-icon-aligncenter::before {
-  content: "";
+  content: "\f08c";
 }
 .dx-icon-alignjustify {
   font: 14px/1 DXIcons;
 }
 .dx-icon-alignjustify::before {
-  content: "";
+  content: "\f08d";
 }
 .dx-icon-link {
   font: 14px/1 DXIcons;
 }
 .dx-icon-link::before {
-  content: "";
+  content: "\f08e";
 }
 .dx-icon-video {
   font: 14px/1 DXIcons;
 }
 .dx-icon-video::before {
-  content: "";
+  content: "\f08f";
 }
 .dx-icon-mention {
   font: 14px/1 DXIcons;
 }
 .dx-icon-mention::before {
-  content: "";
+  content: "\f090";
 }
 .dx-icon-variable {
   font: 14px/1 DXIcons;
 }
 .dx-icon-variable::before {
-  content: "";
+  content: "\f091";
 }
 .dx-icon-clearformat {
   font: 14px/1 DXIcons;
 }
 .dx-icon-clearformat::before {
-  content: "";
+  content: "\f092";
 }
 .dx-icon-fullscreen {
   font: 14px/1 DXIcons;
 }
 .dx-icon-fullscreen::before {
-  content: "";
+  content: "\f11a";
 }
 .dx-icon-hierarchy {
   font: 14px/1 DXIcons;
 }
 .dx-icon-hierarchy::before {
-  content: "";
+  content: "\f124";
 }
 .dx-icon-docfile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-docfile::before {
-  content: "";
+  content: "\f111";
 }
 .dx-icon-docxfile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-docxfile::before {
-  content: "";
+  content: "\f110";
 }
 .dx-icon-pdffile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-pdffile::before {
-  content: "";
+  content: "\f118";
 }
 .dx-icon-pptfile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-pptfile::before {
-  content: "";
+  content: "\f114";
 }
 .dx-icon-pptxfile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-pptxfile::before {
-  content: "";
+  content: "\f115";
 }
 .dx-icon-rtffile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-rtffile::before {
-  content: "";
+  content: "\f112";
 }
 .dx-icon-txtfile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-txtfile::before {
-  content: "";
+  content: "\f113";
 }
 .dx-icon-xlsfile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-xlsfile::before {
-  content: "";
+  content: "\f116";
 }
 .dx-icon-xlsxfile {
   font: 14px/1 DXIcons;
 }
 .dx-icon-xlsxfile::before {
-  content: "";
+  content: "\f117";
 }
 .dx-icon-copy {
   font: 14px/1 DXIcons;
 }
 .dx-icon-copy::before {
-  content: "";
+  content: "\f107";
 }
 .dx-icon-cut {
   font: 14px/1 DXIcons;
 }
 .dx-icon-cut::before {
-  content: "";
+  content: "\f10a";
 }
 .dx-icon-paste {
   font: 14px/1 DXIcons;
 }
 .dx-icon-paste::before {
-  content: "";
+  content: "\f108";
 }
 .dx-icon-share {
   font: 14px/1 DXIcons;
 }
 .dx-icon-share::before {
-  content: "";
+  content: "\f11f";
 }
 .dx-icon-inactivefolder {
   font: 14px/1 DXIcons;
 }
 .dx-icon-inactivefolder::before {
-  content: "";
+  content: "\f105";
 }
 .dx-icon-newfolder {
   font: 14px/1 DXIcons;
 }
 .dx-icon-newfolder::before {
-  content: "";
+  content: "\f123";
 }
 .dx-icon-movetofolder {
   font: 14px/1 DXIcons;
 }
 .dx-icon-movetofolder::before {
-  content: "";
+  content: "\f121";
 }
 .dx-icon-parentfolder {
   font: 14px/1 DXIcons;
 }
 .dx-icon-parentfolder::before {
-  content: "";
+  content: "\f122";
 }
 .dx-icon-rename {
   font: 14px/1 DXIcons;
 }
 .dx-icon-rename::before {
-  content: "";
+  content: "\f109";
 }
 .dx-icon-detailslayout {
   font: 14px/1 DXIcons;
 }
 .dx-icon-detailslayout::before {
-  content: "";
+  content: "\f10b";
 }
 .dx-icon-contentlayout {
   font: 14px/1 DXIcons;
 }
 .dx-icon-contentlayout::before {
-  content: "";
+  content: "\f11e";
 }
 .dx-icon-smalliconslayout {
   font: 14px/1 DXIcons;
 }
 .dx-icon-smalliconslayout::before {
-  content: "";
+  content: "\f119";
 }
 .dx-icon-mediumiconslayout {
   font: 14px/1 DXIcons;
 }
 .dx-icon-mediumiconslayout::before {
-  content: "";
+  content: "\f10c";
 }
 .dx-icon-undo {
   font: 14px/1 DXIcons;
 }
 .dx-icon-undo::before {
-  content: "";
+  content: "\f04c";
 }
 .dx-icon-redo {
   font: 14px/1 DXIcons;
 }
 .dx-icon-redo::before {
-  content: "";
+  content: "\f093";
 }
 .dx-icon-hidepanel {
   font: 14px/1 DXIcons;
 }
 .dx-icon-hidepanel::before {
-  content: "";
+  content: "\f11c";
 }
 .dx-icon-showpanel {
   font: 14px/1 DXIcons;
 }
 .dx-icon-showpanel::before {
-  content: "";
+  content: "\f11d";
 }
 .dx-icon-checklist {
   font: 14px/1 DXIcons;
 }
 .dx-icon-checklist::before {
-  content: "";
+  content: "\f141";
 }
 .dx-icon-verticalaligntop {
   font: 14px/1 DXIcons;
 }
 .dx-icon-verticalaligntop::before {
-  content: "";
+  content: "\f14f";
 }
 .dx-icon-verticalaligncenter {
   font: 14px/1 DXIcons;
 }
 .dx-icon-verticalaligncenter::before {
-  content: "";
+  content: "\f14e";
 }
 .dx-icon-verticalalignbottom {
   font: 14px/1 DXIcons;
 }
 .dx-icon-verticalalignbottom::before {
-  content: "";
+  content: "\f14d";
 }
 .dx-icon-rowproperties {
   font: 14px/1 DXIcons;
 }
 .dx-icon-rowproperties::before {
-  content: "";
+  content: "\f14c";
 }
 .dx-icon-columnproperties {
   font: 14px/1 DXIcons;
 }
 .dx-icon-columnproperties::before {
-  content: "";
+  content: "\f14b";
 }
 .dx-icon-cellproperties {
   font: 14px/1 DXIcons;
 }
 .dx-icon-cellproperties::before {
-  content: "";
+  content: "\f14a";
 }
 .dx-icon-tableproperties {
   font: 14px/1 DXIcons;
 }
 .dx-icon-tableproperties::before {
-  content: "";
+  content: "\f140";
 }
 .dx-icon-splitcells {
   font: 14px/1 DXIcons;
 }
 .dx-icon-splitcells::before {
-  content: "";
+  content: "\f139";
 }
 .dx-icon-mergecells {
   font: 14px/1 DXIcons;
 }
 .dx-icon-mergecells::before {
-  content: "";
+  content: "\f138";
 }
 .dx-icon-deleterow {
   font: 14px/1 DXIcons;
 }
 .dx-icon-deleterow::before {
-  content: "";
+  content: "\f137";
 }
 .dx-icon-deletecolumn {
   font: 14px/1 DXIcons;
 }
 .dx-icon-deletecolumn::before {
-  content: "";
+  content: "\f136";
 }
 .dx-icon-insertrowabove {
   font: 14px/1 DXIcons;
 }
 .dx-icon-insertrowabove::before {
-  content: "";
+  content: "\f135";
 }
 .dx-icon-insertrowbelow {
   font: 14px/1 DXIcons;
 }
 .dx-icon-insertrowbelow::before {
-  content: "";
+  content: "\f134";
 }
 .dx-icon-insertcolumnleft {
   font: 14px/1 DXIcons;
 }
 .dx-icon-insertcolumnleft::before {
-  content: "";
+  content: "\f133";
 }
 .dx-icon-insertcolumnright {
   font: 14px/1 DXIcons;
 }
 .dx-icon-insertcolumnright::before {
-  content: "";
+  content: "\f132";
 }
 .dx-icon-inserttable {
   font: 14px/1 DXIcons;
 }
 .dx-icon-inserttable::before {
-  content: "";
+  content: "\f130";
 }
 .dx-icon-deletetable {
   font: 14px/1 DXIcons;
 }
 .dx-icon-deletetable::before {
-  content: "";
+  content: "\f131";
 }
 .dx-icon {
   font-size: 24px;
@@ -3253,7 +3253,7 @@
   text-align: center;
 }
 .dx-checkbox-checked .dx-checkbox-icon::before {
-  content: "";
+  content: "\f005";
   position: absolute;
   display: block;
   width: 16px;
@@ -3270,7 +3270,7 @@
   text-align: center;
 }
 .dx-checkbox-indeterminate .dx-checkbox-icon::before {
-  content: "";
+  content: "\f074";
   position: absolute;
   display: block;
   width: 20px;
@@ -4409,7 +4409,7 @@
   font-weight: 700;
   font-family: DXIcons,sans-serif;
   color: #8fc459;
-  content: "";
+  content: "\f005";
   opacity: 0;
   -webkit-transform: scale(0);
   transform: scale(0);
@@ -4443,7 +4443,7 @@
   color: rgba(148,148,148,.87);
 }
 .dx-searchbox .dx-icon-search::before {
-  content: "";
+  content: "\f027";
   position: static;
   text-indent: 0;
   color: rgba(0,0,0,.54);
@@ -4602,7 +4602,7 @@
   opacity: 1;
 }
 .dx-dropdowneditor-icon::before {
-  content: "";
+  content: "\f001";
   position: absolute;
   display: block;
   width: 24px;
@@ -4664,7 +4664,7 @@
 }
 .dx-dropdowneditor-button.dx-state-active .dx-dropdowneditor-icon::before,
 .dx-dropdowneditor.dx-dropdowneditor-active .dx-dropdowneditor-icon::before {
-  content: "";
+  content: "\f002";
   position: absolute;
   display: block;
   width: 24px;
@@ -4978,7 +4978,7 @@
   transform: rotate(0);
 }
 .dx-list-item-chevron::before {
-  content: "";
+  content: "\f010";
 }
 .dx-list-item-icon-container {
   width: 40px;
@@ -5066,7 +5066,7 @@
   font: 24px/1 DXIcons;
 }
 .dx-list-collapsible-groups .dx-list-group.dx-list-group-collapsed .dx-list-group-header-indicator::before {
-  content: "";
+  content: "\f016";
 }
 .dx-list-group.dx-list-group-collapsed .dx-list-group-header {
   color: rgba(0,0,0,.87);
@@ -5094,7 +5094,7 @@
   margin-top: -2px;
 }
 .dx-list-collapsible-groups .dx-list-group-header .dx-list-group-header-indicator::before {
-  content: "";
+  content: "\f014";
 }
 .dx-list-group-header .dx-inkripple {
   height: auto;
@@ -5273,7 +5273,7 @@
   text-align: center;
 }
 .dx-list-item-after-bag .dx-list-reorder-handle::before {
-  content: "";
+  content: "\f038";
 }
 .dx-list-slide-menu-button-delete {
   font: 24px/1 DXIcons;
@@ -5289,7 +5289,7 @@
   box-shadow: inset 3px 0 5px -3px rgba(0,0,0,.24),inset 0 3px 5px -3px rgba(0,0,0,.24),inset 0 -3px 5px -3px rgba(0,0,0,.24);
 }
 .dx-list-slide-menu-button-delete::before {
-  content: "";
+  content: "\f03e";
 }
 .dx-list-slide-menu-button-menu {
   border: 1px solid transparent;
@@ -5446,7 +5446,7 @@
   font: 24px/1 DXIcons;
 }
 .dx-list-collapsible-groups .dx-device-mobile .dx-list-group.dx-list-group-collapsed .dx-list-group-header-indicator::before {
-  content: "";
+  content: "\f016";
 }
 .dx-device-mobile .dx-list-group.dx-list-group-collapsed .dx-list-group-header {
   color: rgba(0,0,0,.87);
@@ -5474,7 +5474,7 @@
   margin-top: -2px;
 }
 .dx-list-collapsible-groups .dx-device-mobile .dx-list-group-header .dx-list-group-header-indicator::before {
-  content: "";
+  content: "\f014";
 }
 .dx-device-mobile .dx-list-group-header .dx-inkripple {
   height: auto;
@@ -5652,7 +5652,7 @@
   text-align: center;
 }
 .dx-device-mobile .dx-list-item-after-bag .dx-list-reorder-handle::before {
-  content: "";
+  content: "\f038";
 }
 .dx-device-mobile .dx-list-slide-menu-button {
   bottom: 1px;
@@ -5671,7 +5671,7 @@
   box-shadow: inset 3px 0 5px -3px rgba(0,0,0,.24),inset 0 3px 5px -3px rgba(0,0,0,.24),inset 0 -3px 5px -3px rgba(0,0,0,.24);
 }
 .dx-device-mobile .dx-list-slide-menu-button-delete::before {
-  content: "";
+  content: "\f03e";
 }
 .dx-device-mobile .dx-list-slide-menu-button-menu {
   border: 1px solid transparent;
@@ -5807,14 +5807,14 @@
   color: rgba(0,0,0,.54);
 }
 .dx-numberbox-spin-up-icon::before {
-  content: "";
+  content: "\f002";
 }
 .dx-numberbox-spin-down-icon {
   font: 14px/1 DXIcons;
   color: rgba(0,0,0,.54);
 }
 .dx-numberbox-spin-down-icon::before {
-  content: "";
+  content: "\f001";
 }
 .dx-numberbox-spin-down-icon,
 .dx-numberbox-spin-up-icon {
@@ -6475,7 +6475,7 @@
   text-align: center;
 }
 .dx-datebox-calendar .dx-dropdowneditor-icon::before {
-  content: "";
+  content: "\f001";
   position: absolute;
   display: block;
   width: 24px;
@@ -6539,7 +6539,7 @@
   text-align: center;
 }
 .dx-datebox-list .dx-dropdowneditor-icon::before {
-  content: "";
+  content: "\f001";
   position: absolute;
   display: block;
   width: 24px;
@@ -7035,7 +7035,7 @@
   left: 0;
 }
 .dx-treeview-toggle-item-visibility::before {
-  content: "";
+  content: "\f010";
   position: absolute;
   display: block;
   width: 24px;
@@ -7049,7 +7049,7 @@
   text-align: center;
 }
 .dx-treeview-toggle-item-visibility.dx-treeview-toggle-item-visibility-opened::before {
-  content: "";
+  content: "\f016";
   position: absolute;
   display: block;
   width: 24px;
@@ -8172,7 +8172,7 @@
 }
 .dx-toast-content {
   color: rgba(255,255,255,.87);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   padding: 0 16px;
   border-radius: 0;
@@ -8192,17 +8192,10 @@
   display: none;
 }
 .dx-toast-message {
-  position: absolute;
-  display: inline-block;
   padding: 0;
-  left: 50%;
-  top: 50%;
-  text-align: center;
-  transform: translate(-50%,-50%);
 }
 .dx-toast-info {
-  /* background-color: rgba(0,0,0,.87); */
-  background-color: #00759c;
+  background-color: rgba(0,0,0,.87);
 }
 .dx-toast-warning {
   background-color: #ffc107;
@@ -8723,7 +8716,7 @@
   left: 8px;
 }
 .dx-gallery .dx-gallery-nav-button-prev::before {
-  content: "";
+  content: "\f012";
   left: 7px;
   right: auto;
   margin-left: 0;
@@ -8735,7 +8728,7 @@
   right: 8px;
 }
 .dx-gallery .dx-gallery-nav-button-next::before {
-  content: "";
+  content: "\f010";
   right: 7px;
   left: auto;
 }
@@ -8854,7 +8847,7 @@
   font-weight: 700;
   font-family: DXIcons,sans-serif;
   color: #8fc459;
-  content: "";
+  content: "\f005";
   opacity: 0;
   -webkit-transform: scale(0);
   transform: scale(0);
@@ -8907,7 +8900,7 @@
   text-align: center;
 }
 .dx-lookup-arrow::before {
-  content: "";
+  content: "\f001";
   position: absolute;
   display: block;
   width: 24px;
@@ -9091,7 +9084,7 @@
   padding-right: 0;
 }
 .dx-tag-remove-button::before {
-  content: "";
+  content: "\f008";
   display: block;
   position: absolute;
   top: 51%;
@@ -9315,7 +9308,7 @@
   top: 24px;
 }
 .dx-accordion-item-opened > .dx-accordion-item-title::before {
-  content: "";
+  content: "\f014";
   top: 18px;
 }
 .dx-accordion-item-opened + .dx-accordion-item-closed {
@@ -9349,7 +9342,7 @@
   right: 24px;
   font-weight: 400;
   color: rgba(0,0,0,.38);
-  content: "";
+  content: "\f016";
   font-family: DXIcons;
   font-size: 24px;
   height: 24px;
@@ -9866,13 +9859,13 @@
   font: 14px/1 DXIcons;
 }
 .dx-pager .dx-pages .dx-prev-button::before {
-  content: "";
+  content: "\f012";
 }
 .dx-pager .dx-pages .dx-next-button {
   font: 14px/1 DXIcons;
 }
 .dx-pager .dx-pages .dx-next-button::before {
-  content: "";
+  content: "\f010";
 }
 .dx-pager .dx-pages .dx-next-button,
 .dx-pager .dx-pages .dx-prev-button {
@@ -10810,13 +10803,13 @@
   font: 14px/1 DXIcons;
 }
 .dx-datagrid .dx-sort-up::before {
-  content: "";
+  content: "\f051";
 }
 .dx-datagrid .dx-sort-down {
   font: 14px/1 DXIcons;
 }
 .dx-datagrid .dx-sort-down::before {
-  content: "";
+  content: "\f052";
 }
 .dx-datagrid .dx-sort-down,
 .dx-datagrid .dx-sort-up {
@@ -10856,7 +10849,7 @@
   font: 14px/1 DXIcons;
 }
 .dx-datagrid .dx-header-filter::before {
-  content: "";
+  content: "\f050";
 }
 .dx-datagrid .dx-header-filter-empty {
   color: rgba(0,0,0,.38);
@@ -10928,7 +10921,7 @@
   font: 14px/1 DXIcons;
 }
 .dx-datagrid .dx-command-drag .dx-datagrid-drag-icon::before {
-  content: "";
+  content: "\f038";
 }
 .dx-datagrid-filter-panel {
   color: rgba(0,0,0,.87);
@@ -10957,7 +10950,7 @@
   font: 21px/21px DXIcons;
 }
 .dx-datagrid-adaptive-more::before {
-  content: "";
+  content: "\f06c";
 }
 .dx-datagrid-edit-popup .dx-error-message {
   background-color: #ff849c;
@@ -11099,7 +11092,7 @@
 }
 .dx-datagrid-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-asc::before,
 .dx-datagrid.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-asc::before {
-  content: "";
+  content: "\f053";
 }
 .dx-datagrid-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc,
 .dx-datagrid.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc {
@@ -11113,7 +11106,7 @@
 }
 .dx-datagrid-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc::before,
 .dx-datagrid.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc::before {
-  content: "";
+  content: "\f054";
 }
 .dx-datagrid-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-none,
 .dx-datagrid.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-none {
@@ -11151,7 +11144,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-equals::before,
 .dx-datagrid-container .dx-icon-filter-operation-equals::before {
-  content: "";
+  content: "\f044";
 }
 .dx-datagrid .dx-icon-filter-operation-default,
 .dx-datagrid-container .dx-icon-filter-operation-default {
@@ -11159,7 +11152,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-default::before,
 .dx-datagrid-container .dx-icon-filter-operation-default::before {
-  content: "";
+  content: "\f027";
 }
 .dx-datagrid .dx-icon-filter-operation-not-equals,
 .dx-datagrid-container .dx-icon-filter-operation-not-equals {
@@ -11167,7 +11160,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-not-equals::before,
 .dx-datagrid-container .dx-icon-filter-operation-not-equals::before {
-  content: "";
+  content: "\f045";
 }
 .dx-datagrid .dx-icon-filter-operation-less,
 .dx-datagrid-container .dx-icon-filter-operation-less {
@@ -11175,7 +11168,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-less::before,
 .dx-datagrid-container .dx-icon-filter-operation-less::before {
-  content: "";
+  content: "\f046";
 }
 .dx-datagrid .dx-icon-filter-operation-less-equal,
 .dx-datagrid-container .dx-icon-filter-operation-less-equal {
@@ -11183,7 +11176,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-less-equal::before,
 .dx-datagrid-container .dx-icon-filter-operation-less-equal::before {
-  content: "";
+  content: "\f048";
 }
 .dx-datagrid .dx-icon-filter-operation-greater,
 .dx-datagrid-container .dx-icon-filter-operation-greater {
@@ -11191,7 +11184,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-greater::before,
 .dx-datagrid-container .dx-icon-filter-operation-greater::before {
-  content: "";
+  content: "\f047";
 }
 .dx-datagrid .dx-icon-filter-operation-greater-equal,
 .dx-datagrid-container .dx-icon-filter-operation-greater-equal {
@@ -11199,7 +11192,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-greater-equal::before,
 .dx-datagrid-container .dx-icon-filter-operation-greater-equal::before {
-  content: "";
+  content: "\f049";
 }
 .dx-datagrid .dx-icon-filter-operation-contains,
 .dx-datagrid-container .dx-icon-filter-operation-contains {
@@ -11207,7 +11200,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-contains::before,
 .dx-datagrid-container .dx-icon-filter-operation-contains::before {
-  content: "";
+  content: "\f063";
 }
 .dx-datagrid .dx-icon-filter-operation-not-contains,
 .dx-datagrid-container .dx-icon-filter-operation-not-contains {
@@ -11215,7 +11208,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-not-contains::before,
 .dx-datagrid-container .dx-icon-filter-operation-not-contains::before {
-  content: "";
+  content: "\f066";
 }
 .dx-datagrid .dx-icon-filter-operation-starts-with,
 .dx-datagrid-container .dx-icon-filter-operation-starts-with {
@@ -11223,7 +11216,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-starts-with::before,
 .dx-datagrid-container .dx-icon-filter-operation-starts-with::before {
-  content: "";
+  content: "\f064";
 }
 .dx-datagrid .dx-icon-filter-operation-ends-with,
 .dx-datagrid-container .dx-icon-filter-operation-ends-with {
@@ -11231,7 +11224,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-ends-with::before,
 .dx-datagrid-container .dx-icon-filter-operation-ends-with::before {
-  content: "";
+  content: "\f065";
 }
 .dx-datagrid .dx-icon-filter-operation-between,
 .dx-datagrid-container .dx-icon-filter-operation-between {
@@ -11239,7 +11232,7 @@
 }
 .dx-datagrid .dx-icon-filter-operation-between::before,
 .dx-datagrid-container .dx-icon-filter-operation-between::before {
-  content: "";
+  content: "\f06a";
 }
 .dx-datagrid .dx-column-indicators,
 .dx-datagrid-container .dx-column-indicators {
@@ -11305,7 +11298,7 @@
   text-align: center;
 }
 .dx-datagrid .dx-error-row .dx-closebutton::before {
-  content: "";
+  content: "\f00a";
 }
 .dx-datagrid .dx-error-row .dx-error-message {
   background-color: #ff849c;
@@ -11725,7 +11718,7 @@
   text-align: center;
 }
 .dx-datagrid-addrow-button .dx-icon-edit-button-addrow::before {
-  content: "";
+  content: "\f00b";
 }
 .dx-datagrid-cancel-button .dx-icon-edit-button-cancel {
   font: 24px/24px DXIcons;
@@ -11737,7 +11730,7 @@
   text-align: center;
 }
 .dx-datagrid-cancel-button .dx-icon-edit-button-cancel::before {
-  content: "";
+  content: "\f04c";
 }
 .dx-datagrid-save-button .dx-icon-edit-button-save {
   font: 24px/24px DXIcons;
@@ -11749,7 +11742,7 @@
   text-align: center;
 }
 .dx-datagrid-save-button .dx-icon-edit-button-save::before {
-  content: "";
+  content: "\f041";
 }
 .dx-datagrid-export-button .dx-icon-export-to {
   font: 24px/24px DXIcons;
@@ -11761,7 +11754,7 @@
   text-align: center;
 }
 .dx-datagrid-export-button .dx-icon-export-to::before {
-  content: "";
+  content: "\f05f";
 }
 .dx-datagrid-export-button .dx-icon-export-excel-button {
   font: 24px/24px DXIcons;
@@ -11773,7 +11766,7 @@
   text-align: center;
 }
 .dx-datagrid-export-button .dx-icon-export-excel-button::before {
-  content: "";
+  content: "\f117";
 }
 .dx-datagrid-adaptive-more {
   vertical-align: middle;
@@ -12246,7 +12239,7 @@
   color: rgba(98,98,98,.54);
 }
 .dx-datagrid-group-opened::before {
-  content: "";
+  content: "\f016";
 }
 .dx-datagrid-group-closed {
   font: 24px/24px DXIcons;
@@ -12259,7 +12252,7 @@
   color: rgba(98,98,98,.54);
 }
 .dx-datagrid-group-closed::before {
-  content: "";
+  content: "\f010";
 }
 .dx-row.dx-datagrid-group-footer.dx-column-lines {
   border-bottom: 1px solid #e0e0e0;
@@ -13183,19 +13176,19 @@ input.dx-hidden {
   font: 14px/1 DXIcons;
 }
 .dx-treelist .dx-command-drag .dx-treelist-drag-icon::before {
-  content: "";
+  content: "\f038";
 }
 .dx-treelist-container .dx-sort-up {
   font: 14px/1 DXIcons;
 }
 .dx-treelist-container .dx-sort-up::before {
-  content: "";
+  content: "\f051";
 }
 .dx-treelist-container .dx-sort-down {
   font: 14px/1 DXIcons;
 }
 .dx-treelist-container .dx-sort-down::before {
-  content: "";
+  content: "\f052";
 }
 .dx-treelist-container .dx-sort-down,
 .dx-treelist-container .dx-sort-up {
@@ -13225,7 +13218,7 @@ input.dx-hidden {
   font: 14px/1 DXIcons;
 }
 .dx-treelist-container .dx-header-filter::before {
-  content: "";
+  content: "\f050";
 }
 .dx-treelist-container .dx-header-filter-empty {
   color: rgba(0,0,0,.38);
@@ -13328,7 +13321,7 @@ input.dx-hidden {
   font: 21px/21px DXIcons;
 }
 .dx-treelist-adaptive-more::before {
-  content: "";
+  content: "\f06c";
 }
 .dx-treelist-edit-popup .dx-error-message {
   background-color: #ff849c;
@@ -13470,7 +13463,7 @@ input.dx-hidden {
 }
 .dx-treelist-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-asc::before,
 .dx-treelist.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-asc::before {
-  content: "";
+  content: "\f053";
 }
 .dx-treelist-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc,
 .dx-treelist.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc {
@@ -13484,7 +13477,7 @@ input.dx-hidden {
 }
 .dx-treelist-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc::before,
 .dx-treelist.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-desc::before {
-  content: "";
+  content: "\f054";
 }
 .dx-treelist-container.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-none,
 .dx-treelist.dx-context-menu .dx-menu-items-container .dx-icon-context-menu-sort-none {
@@ -13522,7 +13515,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-equals::before,
 .dx-treelist-container .dx-icon-filter-operation-equals::before {
-  content: "";
+  content: "\f044";
 }
 .dx-treelist .dx-icon-filter-operation-default,
 .dx-treelist-container .dx-icon-filter-operation-default {
@@ -13530,7 +13523,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-default::before,
 .dx-treelist-container .dx-icon-filter-operation-default::before {
-  content: "";
+  content: "\f027";
 }
 .dx-treelist .dx-icon-filter-operation-not-equals,
 .dx-treelist-container .dx-icon-filter-operation-not-equals {
@@ -13538,7 +13531,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-not-equals::before,
 .dx-treelist-container .dx-icon-filter-operation-not-equals::before {
-  content: "";
+  content: "\f045";
 }
 .dx-treelist .dx-icon-filter-operation-less,
 .dx-treelist-container .dx-icon-filter-operation-less {
@@ -13546,7 +13539,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-less::before,
 .dx-treelist-container .dx-icon-filter-operation-less::before {
-  content: "";
+  content: "\f046";
 }
 .dx-treelist .dx-icon-filter-operation-less-equal,
 .dx-treelist-container .dx-icon-filter-operation-less-equal {
@@ -13554,7 +13547,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-less-equal::before,
 .dx-treelist-container .dx-icon-filter-operation-less-equal::before {
-  content: "";
+  content: "\f048";
 }
 .dx-treelist .dx-icon-filter-operation-greater,
 .dx-treelist-container .dx-icon-filter-operation-greater {
@@ -13562,7 +13555,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-greater::before,
 .dx-treelist-container .dx-icon-filter-operation-greater::before {
-  content: "";
+  content: "\f047";
 }
 .dx-treelist .dx-icon-filter-operation-greater-equal,
 .dx-treelist-container .dx-icon-filter-operation-greater-equal {
@@ -13570,7 +13563,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-greater-equal::before,
 .dx-treelist-container .dx-icon-filter-operation-greater-equal::before {
-  content: "";
+  content: "\f049";
 }
 .dx-treelist .dx-icon-filter-operation-contains,
 .dx-treelist-container .dx-icon-filter-operation-contains {
@@ -13578,7 +13571,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-contains::before,
 .dx-treelist-container .dx-icon-filter-operation-contains::before {
-  content: "";
+  content: "\f063";
 }
 .dx-treelist .dx-icon-filter-operation-not-contains,
 .dx-treelist-container .dx-icon-filter-operation-not-contains {
@@ -13586,7 +13579,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-not-contains::before,
 .dx-treelist-container .dx-icon-filter-operation-not-contains::before {
-  content: "";
+  content: "\f066";
 }
 .dx-treelist .dx-icon-filter-operation-starts-with,
 .dx-treelist-container .dx-icon-filter-operation-starts-with {
@@ -13594,7 +13587,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-starts-with::before,
 .dx-treelist-container .dx-icon-filter-operation-starts-with::before {
-  content: "";
+  content: "\f064";
 }
 .dx-treelist .dx-icon-filter-operation-ends-with,
 .dx-treelist-container .dx-icon-filter-operation-ends-with {
@@ -13602,7 +13595,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-ends-with::before,
 .dx-treelist-container .dx-icon-filter-operation-ends-with::before {
-  content: "";
+  content: "\f065";
 }
 .dx-treelist .dx-icon-filter-operation-between,
 .dx-treelist-container .dx-icon-filter-operation-between {
@@ -13610,7 +13603,7 @@ input.dx-hidden {
 }
 .dx-treelist .dx-icon-filter-operation-between::before,
 .dx-treelist-container .dx-icon-filter-operation-between::before {
-  content: "";
+  content: "\f06a";
 }
 .dx-treelist .dx-column-indicators,
 .dx-treelist-container .dx-column-indicators {
@@ -13672,7 +13665,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-treelist .dx-error-row .dx-closebutton::before {
-  content: "";
+  content: "\f00a";
 }
 .dx-treelist .dx-error-row .dx-error-message {
   padding: 14px 35px 14px 14px;
@@ -14157,7 +14150,7 @@ input.dx-hidden {
   font: 14px/1 DXIcons;
 }
 .dx-icon-column-chooser::before {
-  content: "";
+  content: "\f04d";
 }
 .dx-treelist-addrow-button .dx-icon-edit-button-addrow {
   font: 24px/24px DXIcons;
@@ -14169,7 +14162,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-treelist-addrow-button .dx-icon-edit-button-addrow::before {
-  content: "";
+  content: "\f00b";
 }
 .dx-treelist-cancel-button .dx-icon-edit-button-cancel {
   font: 24px/24px DXIcons;
@@ -14181,7 +14174,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-treelist-cancel-button .dx-icon-edit-button-cancel::before {
-  content: "";
+  content: "\f04c";
 }
 .dx-treelist-save-button .dx-icon-edit-button-save {
   font: 24px/24px DXIcons;
@@ -14193,7 +14186,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-treelist-save-button .dx-icon-edit-button-save::before {
-  content: "";
+  content: "\f041";
 }
 .dx-apply-button .dx-icon-apply-filter {
   font: 24px/24px DXIcons;
@@ -14205,7 +14198,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-apply-button .dx-icon-apply-filter::before {
-  content: "";
+  content: "\f050";
 }
 .dx-treelist-export-button .dx-icon-export-to {
   font: 24px/24px DXIcons;
@@ -14217,7 +14210,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-treelist-export-button .dx-icon-export-to::before {
-  content: "";
+  content: "\f05f";
 }
 .dx-treelist-export-button .dx-icon-export-excel-button {
   font: 24px/24px DXIcons;
@@ -14229,7 +14222,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-treelist-export-button .dx-icon-export-excel-button::before {
-  content: "";
+  content: "\f117";
 }
 .dx-datagrid-export-menu .dx-menu-item .dx-icon-exportselected,
 .dx-datagrid-export-menu .dx-menu-item .dx-icon-xlsxfile {
@@ -14671,7 +14664,7 @@ input.dx-hidden {
   width: 24px;
 }
 .dx-treelist-rowsview .dx-treelist-empty-space::before {
-  content: "";
+  content: "\f014";
   visibility: hidden;
 }
 .dx-treelist-rowsview tr:not(.dx-row-focused) .dx-treelist-empty-space {
@@ -14683,7 +14676,7 @@ input.dx-hidden {
   cursor: pointer;
 }
 .dx-treelist-rowsview .dx-treelist-expanded span::before {
-  content: "";
+  content: "\f016";
   position: absolute;
   display: block;
   width: 24px;
@@ -14698,7 +14691,7 @@ input.dx-hidden {
   cursor: pointer;
 }
 .dx-treelist-rowsview .dx-treelist-collapsed span::before {
-  content: "";
+  content: "\f010";
   position: absolute;
   display: block;
   width: 24px;
@@ -15035,13 +15028,13 @@ input.dx-hidden {
   font: 14px/1 DXIcons;
 }
 .dx-pivotgrid-fields-container .dx-sort-up::before {
-  content: "";
+  content: "\f051";
 }
 .dx-pivotgrid-fields-container .dx-sort-down {
   font: 14px/1 DXIcons;
 }
 .dx-pivotgrid-fields-container .dx-sort-down::before {
-  content: "";
+  content: "\f052";
 }
 .dx-pivotgrid-fields-container .dx-header-filter {
   color: rgba(0,0,0,.54);
@@ -15049,7 +15042,7 @@ input.dx-hidden {
   width: 14px;
 }
 .dx-pivotgrid-fields-container .dx-header-filter::before {
-  content: "";
+  content: "\f050";
 }
 .dx-pivotgrid-fields-container .dx-header-filter-empty {
   color: rgba(0,0,0,.38);
@@ -15678,7 +15671,7 @@ input.dx-hidden {
   font: 12px/1 DXIcons;
 }
 .dx-pivotgrid .dx-expand-icon-container::before {
-  content: "";
+  content: "\f010";
   visibility: hidden;
 }
 .dx-pivotgrid .dx-pivotgrid-collapsed .dx-expand {
@@ -15687,7 +15680,7 @@ input.dx-hidden {
   color: rgba(0,0,0,.54);
 }
 .dx-pivotgrid .dx-pivotgrid-collapsed .dx-expand::before {
-  content: "";
+  content: "\f010";
   position: absolute;
   display: block;
   width: 20px;
@@ -15702,7 +15695,7 @@ input.dx-hidden {
   color: rgba(0,0,0,.54);
 }
 .dx-pivotgrid .dx-pivotgrid-expanded .dx-expand::before {
-  content: "";
+  content: "\f016";
   position: absolute;
   display: block;
   width: 20px;
@@ -15730,7 +15723,7 @@ input.dx-hidden {
   height: 14px;
 }
 .dx-pivotgridfieldchooser .dx-area .dx-area-icon-filter::before {
-  content: "";
+  content: "\f050";
 }
 .dx-pivotgridfieldchooser .dx-area .dx-area-caption {
   text-transform: uppercase;
@@ -15795,7 +15788,7 @@ input.dx-hidden {
   text-align: center;
 }
 .dx-context-menu .dx-menu-item .dx-menu-item-content .dx-menu-item-popout-container .dx-menu-item-popout::before {
-  content: "";
+  content: "\f04e";
   position: absolute;
   display: block;
   width: 24px;
@@ -16502,7 +16495,7 @@ input.dx-hidden {
 .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator::before,
 .dx-scheduler-work-space-week .dx-scheduler-date-time-indicator::before,
 .dx-scheduler-work-space-work-week .dx-scheduler-date-time-indicator::before {
-  content: "";
+  content: "\f04e";
 }
 .dx-scheduler-small .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator,
 .dx-scheduler-small .dx-scheduler-work-space-week .dx-scheduler-date-time-indicator,
@@ -16588,7 +16581,7 @@ input.dx-hidden {
 .dx-scheduler-work-space-day.dx-rtl .dx-scheduler-date-time-indicator::before,
 .dx-scheduler-work-space-week.dx-rtl .dx-scheduler-date-time-indicator::before,
 .dx-scheduler-work-space-work-week.dx-rtl .dx-scheduler-date-time-indicator::before {
-  content: "";
+  content: "\f04f";
   margin-right: -12px;
 }
 .dx-scheduler-work-space-day.dx-rtl .dx-scheduler-date-time-shader-bottom::before,
@@ -16702,7 +16695,7 @@ input.dx-hidden {
   font: 14px/1 DXIcons;
 }
 .dx-scheduler-timeline .dx-scheduler-date-time-indicator::before {
-  content: "";
+  content: "\f001";
   margin-left: -14px;
   margin-top: -12px;
 }
@@ -17910,7 +17903,7 @@ input.dx-hidden {
   font: 14px/1 DXIcons;
 }
 .dx-scheduler-appointment .dx-scheduler-appointment-reduced-icon::before {
-  content: "";
+  content: "\f00e";
 }
 .dx-rtl .dx-scheduler-appointment .dx-scheduler-appointment-reduced-icon {
   right: auto;
@@ -17918,7 +17911,7 @@ input.dx-hidden {
   font: 14px/1 DXIcons;
 }
 .dx-rtl .dx-scheduler-appointment .dx-scheduler-appointment-reduced-icon::before {
-  content: "";
+  content: "\f011";
 }
 .dx-scheduler-appointment.dx-scheduler-appointment-empty .dx-scheduler-appointment-reduced-icon,
 .dx-scheduler-appointment.dx-scheduler-appointment-tail .dx-scheduler-appointment-reduced-icon {
