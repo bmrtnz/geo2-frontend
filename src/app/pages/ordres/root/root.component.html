@@ -8,6 +8,7 @@
         (onContentReady)="tabPanelReady.emit($event)"
         (onInitialized)="tabPanelInitialized.emit($event)"
         (onTitleRendered)="onTabTitleRendered($event)"
+        noDataText="Chargement en cours…"
         >
 
         <div *dxTemplate="let tab of 'title'">

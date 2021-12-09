@@ -74,7 +74,7 @@
       <dx-select-box
         [readOnly]="cell?.data?.flux?.id === 'FACTUR' && !authService.currentUser.adminClient"
         [dataSource]="this[cell.column.dataField + 'Source']"
-        [displayExpr]="this[cell.column.dataField + 'Service'].model.getLabelField()"
+        [displayExpr]="cell.column.dataField === 'flux' ? displayIDBefore : this[cell.column.dataField + 'Service'].model.getLabelField()"
         [searchExpr]="[
           this[cell.column.dataField + 'Service'].model.getKeyField(),
           this[cell.column.dataField + 'Service'].model.getLabelField()
