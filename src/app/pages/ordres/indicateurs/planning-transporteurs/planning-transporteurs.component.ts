@@ -123,6 +123,13 @@ export class PlanningTransporteursComponent implements OnInit {
     this.enableFilters();
   }
 
+  displayCodeBefore(data) {
+    return data ?
+    ((data.code ? data.code : data.id) + ' ' + (data.nomUtilisateur ? data.nomUtilisateur :
+     (data.raisonSocial ? data.raisonSocial : data.description)))
+     : null;
+  }
+
   manualDate(e) {
 
     // We check that this change is coming from the user, not following a period change

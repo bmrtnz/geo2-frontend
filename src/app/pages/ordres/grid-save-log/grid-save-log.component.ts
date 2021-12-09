@@ -43,7 +43,7 @@ export class GridSaveLogComponent implements ToggledGrid {
   onCellPrepared(e) {
     // Best expression for date/time
     if (e.rowType === 'data' && e.column.dataField === 'dateModification') {
-      e.cellElement.innerText = this.dateManagementService.friendlyDate(e.value);
+      if (e.value) e.cellElement.innerText = this.dateManagementService.friendlyDate(e.value);
     }
   }
 

@@ -77,7 +77,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     private tabContext: TabContext,
     private formUtils: FormUtilsService,
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningTransporteurs);
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.MouvClientsComptesPalox);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.validRequiredEntity = {client: true, entrepot: true, fournisseur: true};
     this.client = this.clientsService.getDataSource_v2(['id', 'code', 'raisonSocial']);

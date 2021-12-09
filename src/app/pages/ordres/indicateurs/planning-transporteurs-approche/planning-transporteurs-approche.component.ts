@@ -116,6 +116,13 @@ export class PlanningTransporteursApprocheComponent implements OnInit {
     this.tabContext.openOrdre(data.numero);
   }
 
+  displayCodeBefore(data) {
+    return data ?
+    ((data.code ? data.code : data.id) + ' ' + (data.nomUtilisateur ? data.nomUtilisateur :
+     (data.raisonSocial ? data.raisonSocial : data.description)))
+     : null;
+  }
+
   validOrAll(e) {
     this.validRequiredEntity[e.element.dataset.entity] = !this.validRequiredEntity[e.element.dataset.entity];
     const Element = e.element as HTMLElement;
