@@ -1,0 +1,189 @@
+<form class="dx-fieldset" [formGroup]="formGroup">
+
+    <div class="orderTileFilterArea">
+        <dx-box>
+            <dxi-item [ratio]="3">
+              <div class="orderTileleftFilters">
+                <!-- Transporteurs -->
+                <div class="dx-field field-large">
+                  <div class="dx-field-label">{{ 'tiers-transporteur-title' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="transporteur"
+                      [dataSource]="transporteursDataSource"
+                      valueExpr="id"
+                      displayExpr="raisonSocial"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id', 'raisonSocial']"
+                    >
+                      <dx-validator>
+                        <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                      </dx-validator>
+                      <dxo-drop-down-options
+                        [width]="350">
+                      </dxo-drop-down-options>
+                    </dx-select-box>
+                  </div>
+                </div>
+                <!-- Bureau achat -->
+                <div class="dx-field field-large">
+                  <div class="dx-field-label noEllipsis">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                        formControlName="bureauAchat"
+                        [dataSource]="bureauxAchat"
+                        displayExpr="raisonSocial"
+                        [searchEnabled]="true"
+                        searchExpr="raisonSocial"
+                    >
+                    <dxo-drop-down-options
+                        [width]="300">
+                    </dxo-drop-down-options>
+                    </dx-select-box>
+                  </div>
+                </div>
+              </div>
+            </dxi-item>
+            <dxi-item [ratio]="7">
+              <dx-box>
+                <dxi-item [ratio]="3">
+                    <!-- Période -->
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{ 'ordres-periode' | localize }}</div>
+                        <div class="dx-field-value">
+                            <dx-select-box #periodeSB
+                                [items]="periodes"
+                                [value]="periodes[1]"
+                                (onValueChanged)="setDates($event)"
+                            >
+                            </dx-select-box>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [ratio]="2">
+                    <!-- Date de début -->
+                    <div class="dx-field field-small">
+                        <div class="dx-field-label">{{ 'ordres-Du' | localize }}</div>
+                        <div class="dx-field-value">
+                            <dx-date-box
+                                formControlName="from"
+                                class="dateStart"
+                                type="datetime"
+                                [displayFormat]="'dd-MM-yyyy  HH:mm'"
+                                (onValueChanged)="manualDate($event)"
+                            ></dx-date-box>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [ratio]="2">
+                    <!-- Date de fin -->
+                    <div class="dx-field field-small">
+                        <div class="dx-field-label">{{ 'ordres-au' | localize }}</div>
+                        <div class="dx-field-value">
+                            <dx-date-box
+                                formControlName="to"
+                                class="dateEnd"
+                                type="datetime"
+                                [displayFormat]="'dd-MM-yyyy  HH:mm'"
+                                (onValueChanged)="manualDate($event)"
+                            ></dx-date-box>
+                        </div>
+                    </div>
+                </dxi-item>
+              </dx-box>
+              <dxi-item [ratio]="7">
+                <div class="orderRightRightFilters">
+                <dx-box>
+                  <dxi-item [ratio]="1">
+                    <!-- Only valid buttons -->
+                    <dx-button class="validOnlyButtons"
+                      type="default"
+                      data-entity="client"
+                      hint="{{ 'hint-bascule-clients-valide' | localize }}"
+                      text="{{ 'button-bascule-clients-valide' | localize }}"
+                      (onClick)="validOrAll($event)"
+                    ></dx-button>
+                  </dxi-item>  
+                  <dxi-item [ratio]="1">
+                    <dx-button class="validOnlyButtons"
+                      type="default"
+                      data-entity="entrepot"
+                      hint="{{ 'hint-bascule-entrepots-valide' | localize }}"
+                      text="{{ 'button-bascule-entrepots-valide' | localize }}"
+                      (onClick)="validOrAll($event)"
+                    ></dx-button>
+                  </dxi-item>
+                  <dxi-item [ratio]="1">
+                    <dx-button class="validOnlyButtons"
+                      type="default"
+                      data-entity="fournisseur"
+                      hint="{{ 'hint-bascule-fournisseurs-valide' | localize }}"
+                      text="{{ 'button-bascule-fournisseurs-valide' | localize }}"
+                      (onClick)="validOrAll($event)"
+                    ></dx-button>
+                  </dxi-item>
+                  <dxi-item [ratio]="10"></dxi-item>
+                </dx-box>
+              </div>
+              </dxi-item>
+            </dxi-item>
+        </dx-box>
+    </div>
+    <br>
+  
+  </form>
+
+<dx-data-grid
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [scrolling]="{
+    useNative:true
+    }"
+    (onRowDblClick)="onRowDblClick($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningTransporteursApproche, enableFilters.bind(this))"
+>
+
+    <!-- Grid configuration -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+    [storageKey]="gridConfiguratorService.Grid.PlanningTransporteursApproche"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+
+</dx-data-grid>

@@ -1,0 +1,329 @@
+<form class="dx-fieldset" [formGroup]="formGroup">
+
+    <div class="paloxAccountsFilterArea">
+        <dx-box>
+        <dxi-item [ratio]="7">
+            <div class="dx-field palox-switch">
+                <div class="dx-field-label dx-field-label-left">{{ 'ordres-palox-mouvements' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-switch #switchType
+                    data-name="recapitulatif"
+                    [switchedOnText]=""
+                    [switchedOffText]=""
+                    (onValueChanged)="switchChange($event)"
+                    ></dx-switch>
+                </div>
+                <div class="dx-field-label dx-field-label-right">{{ 'ordres-palox-recapitulatif' | localize }}</div>
+            </div>
+
+            <div class="dx-field palox-switch">
+                <div class="dx-field-label dx-field-label-left">{{ 'tiers-clients-title' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-switch #switchEntity
+                    data-name="fournisseurs"
+                    [switchedOnText]=""
+                    [switchedOffText]=""
+                    (onValueChanged)="switchChange($event)"
+                    ></dx-switch>
+                </div>
+                <div class="dx-field-label dx-field-label-right">{{ 'tiers-fournisseurs-title' | localize }}</div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="7">
+            <!-- Commercial -->
+            <div class="dx-field">
+                <div class="dx-field-label noEllipsis">{{ 'tiers-clients-commercial' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        formControlName="commercial"
+                        [dataSource]="commercial"
+                        [displayExpr]="displayCodeBefore"
+                        [showClearButton]="true"
+                        [searchEnabled]="true"
+                        [searchExpr]="['id','nomUtilisateur']"
+                    >
+                    </dx-select-box>
+                </div>
+            </div>
+            <!-- Client -->
+            <div class="dx-field">
+                <div class="dx-field-label noEllipsis">{{ 'tiers-client' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        formControlName="client"
+                        [dataSource]="client"
+                        [displayExpr]="displayCodeBefore"
+                        [showClearButton]="true"
+                        [searchEnabled]="true"
+                        [searchExpr]="['code','raisonSocial']"
+                    >
+                    <dxo-drop-down-options
+                        [width]="350">
+                    </dxo-drop-down-options>
+                    </dx-select-box>
+                </div>
+            </div>
+            <!-- Fournisseur -->
+            <div class="dx-field">
+                <div class="dx-field-label noEllipsis">{{ 'tiers-fournisseur' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-select-box
+                        formControlName="commercial"
+                        [dataSource]="fournisseur"
+                        [displayExpr]="displayCodeBefore"
+                        [showClearButton]="true"
+                        [searchEnabled]="true"
+                        [searchExpr]="['code','raisonSocial']"
+                    >
+                    <dxo-drop-down-options
+                        [width]="350">
+                    </dxo-drop-down-options>
+                    </dx-select-box>
+                </div>
+            </div>
+        </dxi-item>
+        <dxi-item [ratio]="5">
+            <!-- Date max Mouvements -->
+            <div class="dx-field field-large">
+                <div class="dx-field-label">{{ 'ordres-dateMaxMouvements' | localize }}</div>
+                <div class="dx-field-value">
+                    <dx-date-box
+                        formControlName="dateMaxMouvements"
+                        type="date"
+                        [displayFormat]="'dd-MM-yyyy'"
+                    ></dx-date-box>
+                </div>
+            </div>
+        </dxi-item>
+        </dx-box>
+    </div>
+    <br>
+  
+  </form>
+
+<dx-data-grid #MouvClientsComptesPalox
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [scrolling]="{
+    useNative:true
+    }"
+    (onRowDblClick)="onRowDblClick($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Mouvements Palox par client', $event, gridConfiguratorService.Grid.MouvClientsComptesPalox, enableFilters.bind(this))"
+>
+
+    <!-- Grid configuration -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+    [storageKey]="gridConfiguratorService.Grid.MouvClientsComptesPalox"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+
+</dx-data-grid>
+
+<dx-data-grid #RecapClientsComptesPalox
+    [visible]="false"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [scrolling]="{
+    useNative:true
+    }"
+    (onRowDblClick)="onRowDblClick($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Récapitulatif Palox par client', $event, gridConfiguratorService.Grid.RecapClientsComptesPalox, enableFilters.bind(this))"
+>
+
+    <!-- Grid configuration -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+    [storageKey]="gridConfiguratorService.Grid.RecapClientsComptesPalox"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+
+</dx-data-grid>
+
+<dx-data-grid #MouvFournisseursComptesPalox
+    [visible]="false"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [scrolling]="{
+    useNative:true
+    }"
+    (onRowDblClick)="onRowDblClick($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Mouvements Palox par fournisseur', $event, gridConfiguratorService.Grid.MouvFournisseursComptesPalox, enableFilters.bind(this))"
+>
+
+    <!-- Grid configuration -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+    [storageKey]="gridConfiguratorService.Grid.MouvFournisseursComptesPalox"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+
+</dx-data-grid>
+
+<dx-data-grid #RecapFournisseursComptesPalox
+    [visible]="false"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [scrolling]="{
+    useNative:true
+    }"
+    (onRowDblClick)="onRowDblClick($event)"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Récapitulatif Palox par fournisseur', $event, gridConfiguratorService.Grid.RecapFournisseursComptesPalox, enableFilters.bind(this))"
+>
+
+    <!-- Grid configuration -->
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing 
+    [storageKey]="gridConfiguratorService.Grid.RecapFournisseursComptesPalox"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height">
+    </dxo-column-chooser>
+    <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+
+</dx-data-grid>

@@ -44,6 +44,9 @@ export class Indicator {
   detailedFields?: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]> | GridColumn[];
   constructor(args) { Object.assign(this, args); }
   cloneFilter?(): any[] { return JSON.parse(JSON.stringify(this.filter)); }
+  cloneFilterLignes?(): any[] {
+     return JSON.parse(JSON.stringify(this.filter).replace('valide', 'ordre.valide').replace('societe', 'ordre.societe'));
+  }
 }
 
 const indicators: Indicator[] = [{
@@ -116,11 +119,41 @@ const indicators: Indicator[] = [{
   enabled: true,
   withCount: true,
   parameter: 'Planning',
-  subParameter: 'transporteurs',
+  subParameter: 'Transporteurs',
   tileBkg: '#1B715C',
   indicatorIcon: 'material-icons departure_board',
   warningIcon: '',
   component: import('../../pages/ordres/indicateurs/planning-transporteurs/planning-transporteurs.component'),
+}, {
+  id: 'PlanningTransporteursApproche',
+  enabled: true,
+  withCount: false,
+  parameter: 'Planning',
+  subParameter: 'Transporteurs d\'approche',
+  tileBkg: '#D9920A',
+  indicatorIcon: 'material-icons departure_board',
+  warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component'),
+}, {
+  id: 'PlanningFournisseurs',
+  enabled: true,
+  withCount: false,
+  parameter: 'Planning',
+  subParameter: 'Fournisseurs',
+  tileBkg: '#004173',
+  indicatorIcon: 'material-icons event_note',
+  warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/planning-fournisseurs/planning-fournisseurs.component'),
+}, {
+  id: 'SupervisionComptesPalox',
+  enabled: true,
+  withCount: false,
+  parameter: 'Supervision',
+  subParameter: 'Comptes palox',
+  tileBkg: '#E12057',
+  indicatorIcon: 'material-icons view_in_ar',
+  warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/supervision-comptes-palox/supervision-comptes-palox.component'),
 }, {
   id: 'Litiges',
   enabled: false,
@@ -302,14 +335,15 @@ export class OrdresIndicatorsService {
         ];
       }
 
-      // Planning departs
+      // Planning transporteurs
       if (instance.id === 'PlanningTransporteurs') {
+        // Need to see all companies (Léa/Stéphane 01-12-2021)
+        instance.filter = [
+          ['valide', '=', true],
+        ];
         instance.detailedFields = grids['planning-transporteurs'].columns;
         instance.dataSource = this.ordresService.getDataSource_v2(instance.detailedFields.map( field => field.dataField ));
         instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
-        instance.filter = [
-          ...instance.filter,
-        ];
       }
 
       // Commandes en transit

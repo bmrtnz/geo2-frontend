@@ -26,3 +26,19 @@
         }
     }
 }
+
+::ng-deep  .gridPF-container {
+    position: relative;
+    .showPrices-box {
+        width: 300px;
+        position: absolute;
+        top: -3px;
+        z-index: 1;
+        .dx-field-value {
+            width: 10% !important;
+            margin-right: 15px;
+            margin-left: 10px;
+        }
+    }
+}
+

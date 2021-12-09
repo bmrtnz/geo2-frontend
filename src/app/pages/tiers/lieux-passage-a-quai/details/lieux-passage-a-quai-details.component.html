@@ -360,6 +360,25 @@
                     ></dx-select-box>
                   </div>
                 </div>
+
+                <!-- Compte comptable -->
+                <div class="dx-field">
+                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-compteComptable' | localize }}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box formControlName="compteComptable" 
+                      [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
+                      [inputAttr]="{'style': 'text-transform: uppercase'}"
+                      (onValueChanged)="checkCompteComptable($event)"
+                      valueChangeEvent="keyup change"
+                    >
+                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-compteComptable' | localize }}">
+                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
+                        <!-- Workaround. Apparemment bug de Devextreme qui apparait lorsqu'il y a 2 async validation rules sur la page, et crée une référence circulaire. -->
+                        <dxi-validation-rule *ngIf="createMode === true && CCexists" type="stringLength" [max]="0" message="Ce code est déjà utilisé"></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-box>
+                  </div>
+                </div>
     
               </div>
             </div>

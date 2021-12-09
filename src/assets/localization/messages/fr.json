@@ -59,6 +59,14 @@
     "clone": "Clone",
     "preSaisie": "(Pré-saisie)",
 
+    "button-bascule-clients-valide": "CV",
+    "button-bascule-entrepots-valide": "EV",
+    "button-bascule-fournisseurs-valide": "FV",
+
+    "hint-bascule-clients-valide": "Bascule entre clients valides uniquement ou tous clients",
+    "hint-bascule-entrepots-valide": "Bascule entre entrepôts valides uniquement ou tous entrepôts",
+    "hint-bascule-fournisseurs-valide": "Bascule entre fournisseurs valides uniquement ou tous fournisseurs",
+
     "datagridTitle-SyntheseExpeditions": "Synthèse expéditions",
 
     "auth-logout": "Déconnexion",
@@ -71,6 +79,7 @@
     "auth-societe": "Société",
 
     "tiers-clients-title": "Clients",
+    "tiers-client": "Client",
     "tiers-clients-id": "ID",
     "tiers-clients-valide": "Valide",
     "tiers-clients-preSaisie": "Pré-saisie",
@@ -179,6 +188,7 @@
     "tiers-clients-instructionLogistique": "Instructions logistique",
 
     "tiers-fournisseurs-title": "Fournisseurs",
+    "tiers-fournisseur": "Fournisseur",
     "tiers-fournisseurs-details-groupe-infos": "Infos générales",
     "tiers-fournisseurs-id": "ID",
     "tiers-fournisseurs-identifiant": "Identifiant fournisseur",
@@ -258,6 +268,7 @@
     "tiers-fournisseurs-conditionVente": "Contrat Achat",
 
     "tiers-transporteurs-details-title": "Fiche transporteur",
+    "tiers-transporteur-title": "Transporteur",
     "tiers-transporteurs-title": "Transporteurs",
     "tiers-transporteurs-id": "ID",
     "tiers-transporteurs-valide": "Valide",
@@ -320,6 +331,7 @@
     "tiers-lieuxpassageaquai-devise": "Devise",
     "tiers-lieuxpassageaquai-moyenPaiement": "Moyen de paiement",
     "tiers-lieuxpassageaquai-basePaiement": "Base de paiement",
+    "tiers-lieuxpassageaquai-compteComptable" : "Compte comptable",
     "tiers-lieuxpassageaquai-contacts": "Contacts",
     "tiers-lieuxpassageaquai-typeTiers": "Type tiers",
 
@@ -506,6 +518,7 @@
     "ordres-sommeColisExpedies": "Colis expédiés",
     "ordres-ref": "Réf. ordre",
     "ordres-devise": "Devise",
+    "ordres-deviseAvecTaux": "Devise (taux)",
     "ordres-commentaireUsageInterne": "Commentaire interne",
     "ordres-numeroFacture": "Numéro de facture",
     "ordres-referenceClient": "Référence client",
@@ -562,14 +575,38 @@
     "ordres-clientsDepEncours": "Clients en dépassement encours",
     "ordres-differenceQuantites": "Différence sur expédition et/ou sans détail client",
     "ordres-entrepôt": "Entrepôt",
-    "ordres-periode": "période",
-    "ordres-du": "du",
+    "ordres-periode": "Période",
+    "ordres-Du": "Du",
     "ordres-au": "au",
     "ordres-litiges": "Litiges en cours",
     "ordres-litiges-attente": "En attente",
     "ordres-day": "jour",
     "ordres-days": "jours",
     "ordre-planning-depart-diff-expe": "Différence sur expédition et/ou sans détail client",
+    "ordres-dateMaxMouvements": "Mvts jusqu'au",
+
+    "ordreLignesPalox-logistique-dateDepartPrevueFournisseur": "Chargement",
+    "ordreLignesPalox-logistique-fournisseur-code": "Fournisseur",
+    "ordreLignesPalox-logistique-fournisseur-id": "Id Fournisseur",
+    "ordreLignesPalox-transporteurGroupage-id": "Transporteur",
+    "ordreLignesPalox-ordre-transporteur-id": "Transporteur",
+    "ordreLignesPalox-nombrePalettesExpediees": "Pal",
+    "ordreLignesPalox-logistique-dateLivraisonLieuGroupage": "Livraison",
+    "ordreLignesPalox-ordre-dateLivraisonPrevue": "Livraison",
+    "ordreLignesPalox-ordre-client-code": "Client",
+    "ordreLignesPalox-ordre-referenceClient": "Réf. Client",
+    "ordreLignesPalox-ordre-entrepot-code": "Entrepôt",
+    "ordreLignesPalox-ordre-version": "Vers. Ordre",
+    "ordreLignesPalox-ordre-numero": "Numéro d'ordre",
+    "ordreLignesPalox-ordre-pays-id": "Pays",
+    "ordreLignesPalox-ventePrixUnitaire": "Prix de vente",
+    "ordreLignesPalox-achatPrixUnitaire": "Prix d'achat",
+    "ordreLignesPalox-nombreColisExpedies": "Colis",
+    "ordreLignesPalox-article-description": "Description article résumée",
+
+
+    "ordres-palox-mouvements": "Mouvements",
+    "ordres-palox-recapitulatif": "Récap. soldes non nuls",
 
     "ordreLignes-id": "Réf. ligne",
     "ordreLignes-ordre-id": "Réf. ordre",
@@ -584,6 +621,7 @@
     "ordreLignes-poidsBrutExpedie": "Poids brut",
     "ordreLignes-poidsNetExpedie": "Poids net",
     "ordreLignes-fournisseur-raisonSocial": "Expéditeur march.",
+    "ordreLignes-fraisUnite-id": "Frais Unité",
     "ordreLignes-fraisUnite-description": "Frais Unité",
     "ordreLignes-proprietaireMarchandise": "Prop. March.",
     "ordreLignes-ventePrixUnitaire": "PU Vente",
@@ -658,6 +696,7 @@
     "ordreLogistique-ordre-typeTransport-id": "Type container",
     "ordreLogistique-ordre-prixUnitaireTarifTransport": "PU",
     "ordreLogistique-ordre-transporteurDEVCode": "Devise",
+    "ordreLogistique-ordre-baseTarifTransport-id": "Unité",
     "ordreLogistique-ordre-baseTarifTransport-description": "Unité",
     "ordreLogistique-ordre-codeChargement": "Code Chargement",
     "ordreLogistique-ordre-ETDDate": "ETD Date",
@@ -822,7 +861,9 @@
     "grid-situation-depart-title-today": "Situation des départs d'aujourd'hui",
     "grid-situation-depart-detail-title": "Détail des lignes",
     "grid-depassement-encours-pays-title": "Somme par pays",
-    "grid-depassement-encours-client-title": "Détail des clients"
+    "grid-depassement-encours-client-title": "Détail des clients",
+
+    "ordres-planningFournisseurs-afficherPrix": "Afficher les prix"
 
   }
 }

@@ -31,6 +31,7 @@ import {
   DxTileViewModule,
   DxValidationGroupModule,
   DxValidatorModule,
+  DxSwitchModule,
 } from 'devextreme-angular';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { FormLitigesComponent } from './form-litiges/form-litiges.component';
@@ -67,6 +68,9 @@ import { LoadingTabComponent, RootComponent, TabContext } from './root/root.comp
 import OrdresSuiviComponent from './suivi/ordres-suivi.component';
 import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
 import PlanningTransporteursComponent from './indicateurs/planning-transporteurs/planning-transporteurs.component';
+import { PlanningFournisseursComponent } from './indicateurs/planning-fournisseurs/planning-fournisseurs.component';
+import { PlanningTransporteursApprocheComponent } from './indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component';
+import { SupervisionComptesPaloxComponent } from './indicateurs/supervision-comptes-palox/supervision-comptes-palox.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +107,9 @@ import PlanningTransporteursComponent from './indicateurs/planning-transporteurs
     LoadingTabComponent,
     FormComponent,
     PlanningTransporteursComponent,
+    PlanningFournisseursComponent,
+    PlanningTransporteursApprocheComponent,
+    SupervisionComptesPaloxComponent,
   ],
   imports: [
     OrdresRoutingModule,
@@ -118,6 +125,7 @@ import PlanningTransporteursComponent from './indicateurs/planning-transporteurs
     DxAccordionModule,
     DxAutocompleteModule,
     DxTileViewModule,
+    DxSwitchModule,
     DxListModule,
     DxSelectBoxModule,
     DxSortableModule,

@@ -9,7 +9,7 @@
     </div>
 
     <!-- username field -->
-    <div class="dx-field">
+    <div class="dx-field field-username">
       <dx-text-box
         formControlName="nomUtilisateur"
         placeholder="{{ 'auth-login' | localize }}"
@@ -23,7 +23,7 @@
     </div>
 
     <!-- password field -->
-    <div class="dx-field">
+    <div class="dx-field field-password">
       <dx-text-box
         mode="password"
         formControlName="password"
@@ -41,7 +41,7 @@
     <div class="dx-field">
         <dx-select-box #societeSB
             placeholder="{{ 'auth-societe' | localize }}"
-            readOnly="true"
+            [readOnly]="true"
             [dataSource]="societe"
             displayExpr="raisonSocial"
             (onFocusIn)="findAssociatedCompanies($event)"
@@ -61,7 +61,7 @@
     <div class="dx-field">
       <dx-button #submitButton
         type="default"
-        disabled="true" 
+        [disabled]="true" 
         text="{{ 'auth-login-btn' | localize }}" 
         [useSubmitBehavior]="true"
         width="100%"

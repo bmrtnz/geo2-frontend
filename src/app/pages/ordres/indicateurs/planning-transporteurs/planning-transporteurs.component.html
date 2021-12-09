@@ -1,41 +1,135 @@
 <form class="dx-fieldset" [formGroup]="formGroup">
 
-  <!-- Transporteurs -->
-  <div class="dx-field">
-    <div class="dx-field-label">{{ 'tiers-transporteurs-title' | localize }}</div>
-    <div class="dx-field-value">
-      <dx-select-box
-        formControlName="transporteur"
-        [dataSource]="transporteursDataSource"
-        valueExpr="id"
-        displayExpr="raisonSocial"
-        [searchEnabled]="true"
-        [searchExpr]="['id', 'raisonSocial']"
-      ></dx-select-box>
-    </div>
+  <div class="orderTileFilterArea">
+      <dx-box>
+          <dxi-item [ratio]="3">
+            <div class="orderTileleftFilters">
+              <!-- Transporteurs -->
+              <div class="dx-field field-large">
+                <div class="dx-field-label">{{ 'tiers-transporteur-title' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    formControlName="transporteur"
+                    [dataSource]="transporteursDataSource"
+                    valueExpr="id"
+                    displayExpr="raisonSocial"
+                    [searchEnabled]="true"
+                    [searchExpr]="['id', 'raisonSocial']"
+                  >
+                    <dx-validator>
+                      <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                    </dx-validator>
+                    <dxo-drop-down-options
+                      [width]="350">
+                    </dxo-drop-down-options>
+                  </dx-select-box>
+                </div>
+              </div>
+              <!-- Bureau achat -->
+              <div class="dx-field field-large">
+                <div class="dx-field-label noEllipsis">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                      formControlName="bureauAchat"
+                      [dataSource]="bureauxAchat"
+                      displayExpr="raisonSocial"
+                      [searchEnabled]="true"
+                      searchExpr="raisonSocial"
+                  >
+                  <dxo-drop-down-options
+                      [width]="300">
+                  </dxo-drop-down-options>
+                  </dx-select-box>
+                </div>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item [ratio]="7">
+            <dx-box>
+              <dxi-item [ratio]="3">
+                  <!-- Période -->
+                  <div class="dx-field">
+                      <div class="dx-field-label">{{ 'ordres-periode' | localize }}</div>
+                      <div class="dx-field-value">
+                          <dx-select-box #periodeSB
+                              [items]="periodes"
+                              [value]="periodes[1]"
+                              (onValueChanged)="setDates($event)"
+                          >
+                          </dx-select-box>
+                      </div>
+                  </div>
+              </dxi-item>
+              <dxi-item [ratio]="2">
+                  <!-- Date de début -->
+                  <div class="dx-field field-small">
+                      <div class="dx-field-label">{{ 'ordres-Du' | localize }}</div>
+                      <div class="dx-field-value">
+                          <dx-date-box
+                              formControlName="from"
+                              class="dateStart"
+                              type="datetime"
+                              [displayFormat]="'dd-MM-yyyy  HH:mm'"
+                              (onValueChanged)="manualDate($event)"
+                          ></dx-date-box>
+                      </div>
+                  </div>
+              </dxi-item>
+              <dxi-item [ratio]="2">
+                  <!-- Date de fin -->
+                  <div class="dx-field field-small">
+                      <div class="dx-field-label">{{ 'ordres-au' | localize }}</div>
+                      <div class="dx-field-value">
+                          <dx-date-box
+                              formControlName="to"
+                              class="dateEnd"
+                              type="datetime"
+                              [displayFormat]="'dd-MM-yyyy  HH:mm'"
+                              (onValueChanged)="manualDate($event)"
+                          ></dx-date-box>
+                      </div>
+                  </div>
+              </dxi-item>
+            </dx-box>
+            <dxi-item [ratio]="7">
+              <div class="orderRightRightFilters">
+              <dx-box>
+                <dxi-item [ratio]="1">
+                  <!-- Only valid buttons -->
+                  <dx-button class="validOnlyButtons"
+                    type="default"
+                    data-entity="client"
+                    hint="{{ 'hint-bascule-clients-valide' | localize }}"
+                    text="{{ 'button-bascule-clients-valide' | localize }}"
+                    (onClick)="validOrAll($event)"
+                  ></dx-button>
+                </dxi-item>  
+                <dxi-item [ratio]="1">
+                  <dx-button class="validOnlyButtons"
+                    type="default"
+                    data-entity="entrepot"
+                    hint="{{ 'hint-bascule-entrepots-valide' | localize }}"
+                    text="{{ 'button-bascule-entrepots-valide' | localize }}"
+                    (onClick)="validOrAll($event)"
+                  ></dx-button>
+                </dxi-item>
+                <dxi-item [ratio]="1">
+                  <dx-button class="validOnlyButtons"
+                    type="default"
+                    data-entity="fournisseur"
+                    hint="{{ 'hint-bascule-fournisseurs-valide' | localize }}"
+                    text="{{ 'button-bascule-fournisseurs-valide' | localize }}"
+                    (onClick)="validOrAll($event)"
+                  ></dx-button>
+                </dxi-item>
+                <dxi-item [ratio]="10"></dxi-item>
+              </dx-box>
+            </div>
+            </dxi-item>
+          </dxi-item>
+      </dx-box>
   </div>
-
-  <!-- Du -->
-  <div class="dx-field">
-    <div class="dx-field-label">{{ 'du' | localize }}</div>
-    <div class="dx-field-value">
-      <dx-date-box
-        formControlName="from"
-        type="datetime"
-      ></dx-date-box>
-    </div>
-  </div>
-  
-  <!-- Au -->
-  <div class="dx-field">
-    <div class="dx-field-label">{{ 'au' | localize }}</div>
-    <div class="dx-field-value">
-      <dx-date-box
-        formControlName="to"
-        type="datetime"
-      ></dx-date-box>
-    </div>
-  </div>
+  <br>
 
 </form>
 
@@ -83,6 +177,7 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
+    [caption]="('ordres-' + column.dataField?.split('.').join('-') | localize) || column.name"
     [visible]="false"
     trueText="Oui"
     falseText="Non"

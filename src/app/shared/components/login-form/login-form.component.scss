@@ -16,6 +16,13 @@
     color: $base-text-color;
     font-size: 16px;
   }
+
+}
+
+::ng-deep .field-username, ::ng-deep .field-password {
+  .dx-texteditor-input {
+    background: white;
+  }
 }
 
 .companyLoader {

@@ -50,6 +50,12 @@ export enum Grid {
   DepassementEncoursPays = 'depassement-encours-pays',
   DepassementEncoursClient = 'depassement-encours-client',
   PlanningTransporteurs = 'planning-transporteurs',
+  PlanningTransporteursApproche = 'planning-transporteurs-approche',
+  PlanningFournisseurs = 'planning-fournisseurs',
+  MouvFournisseursComptesPalox= 'mouv-fournisseurs-comptes-palox',
+  MouvClientsComptesPalox= 'mouv-clients-comptes-palox',
+  RecapFournisseursComptesPalox= 'recap-fournisseurs-comptes-palox',
+  RecapClientsComptesPalox= 'recap-clients-comptes-palox',
 }
 
 @Injectable({

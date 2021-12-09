@@ -57,6 +57,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   enableFilters() {
+    if (!this.dataSource) return;
     if (this?.ordre?.id) {
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],

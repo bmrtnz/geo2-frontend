@@ -127,7 +127,6 @@ export class FormComponent implements OnInit, OnDestroy {
   public transporteursDS: DataSource;
   public typeTransportDS: DataSource;
   public baseTarifTransportDS: DataSource;
-  public litigesDS: DataSource;
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
@@ -162,6 +161,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initializeForm();
+    this.initializeAnchors();
 
     this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
     this.entrepotDS = this.entrepotsService.getDataSource_v2(['id', 'raisonSocial']);
@@ -198,7 +198,6 @@ export class FormComponent implements OnInit, OnDestroy {
     ]);
 
     this.transporteursDS = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
-    this.litigesDS = this.litigesService.getDataSource();
   }
 
   ngOnDestroy() {
@@ -331,7 +330,7 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   deviseDisplayExpr(item) {
-    return item ? item.description + ' (' + self.ordre.tauxDevise + ')' : null;
+    return item ? item.description + ' (' + self.ordre?.tauxDevise + ')' : null;
     }
 
   displayIDBefore(data) {
@@ -364,11 +363,13 @@ export class FormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private initializeAnchors(event: TabChangeData) {
-    if (event.status === 'in')
-      this.enableAnchors();
-    if (event.status === 'out')
-      this.disableAnchors();
+  private initializeAnchors(event?: TabChangeData) {
+    if (event) {
+      if (event.status === 'in')
+        this.enableAnchors();
+      if (event.status === 'out')
+        this.disableAnchors();
+    }
     this.handleAnchorsNavigation();
   }
 
