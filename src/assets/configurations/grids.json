@@ -1969,6 +1969,10 @@
       {
         "dataField": "id",
         "visible": false
+      },
+      {
+        "dataField": "logistique.id",
+        "visible": false
       }
     ]
   },
