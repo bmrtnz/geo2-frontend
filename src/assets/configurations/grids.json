@@ -1928,43 +1928,51 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "totalNombrePalettesExpediees",
+        "dataField": "nombrePalettesExpediees",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "totalNombreColisExpedies",
+        "dataField": "nombreColisExpedies",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "totalPoidsBrutExpedie",
+        "dataField": "poidsBrutExpedie",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "totalPoidsNetExpedie",
+        "dataField": "poidsNetExpedie",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "nombrePalettesAuSol",
+        "dataField": "logistique.nombrePalettesAuSol",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "nombrePalettes100x120",
+        "dataField": "logistique.nombrePalettes100x120",
         "visible": true
       },
       {
         "visibleIndex": 7,
-        "dataField": "nombrePalettes80x120",
+        "dataField": "logistique.nombrePalettes80x120",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "nombrePalettes60x80",
+        "dataField": "logistique.nombrePalettes60x80",
         "visible": true
+      },
+      {
+        "dataField": "ordre.id",
+        "visible": false
+      },
+      {
+        "dataField": "id",
+        "visible": false
       }
     ]
   },
@@ -2224,57 +2232,157 @@
       {
         "visibleIndex": 7,
         "dataField": "totalVenteBrut",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 8,
         "dataField": "totalRemise",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 9,
         "dataField": "totalFraisMarketing",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 10,
         "dataField": "totalAchat",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 11,
         "dataField": "totalTransport",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 12,
         "dataField": "totalTransit",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 13,
         "dataField": "totalCourtage",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 14,
         "dataField": "totalFraisAdditionnels",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 15,
         "dataField": "margeBrute",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 16,
         "dataField": "pourcentageMargeBrute",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "percent",
+          "precision": 2
+        }
       },
       {
         "visibleIndex": 17,
         "dataField": "pourcentageMargeNette",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "percent",
+          "precision": 2
+        }
+      },
+      {
+        "dataField": "referenceProdet",
+        "visible": false
+      },
+      {
+        "dataField": "nombreColisExpedies",
+        "visible": false
+      },
+      {
+        "dataField": "totalFraisPlateforme",
+        "visible": false,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
+      },
+      {
+        "dataField": "ordre.numero",
+        "visible": false
+      },
+      {
+        "dataField": "logistique.expedieStation",
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.type.description",
+        "visible": false
+      },
+      {
+        "dataField": "totalObjectifMarge",
+        "visible": false,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
+      },
+      {
+        "dataField": "totalRestitue",
+        "visible": false,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       }
     ]
   },

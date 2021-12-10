@@ -3,7 +3,12 @@ import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { OrdreLigne } from '../../models/ordre-ligne.model';
-import { APIRead, ApiService, RelayPage } from '../api.service';
+import { APIRead, ApiService, RelayPage, SummaryInput } from '../api.service';
+
+export enum SummaryOperation {
+  Marge = 'allOrdreLigneMarge',
+  TotauxDetail = 'allOrdreLigneTotauxDetail',
+}
 
 @Injectable({
   providedIn: 'root'
@@ -82,7 +87,11 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
-  getSummarisedDatasource(depth = 1, filter?: RegExp) {
+  getSummarisedDatasource(
+    operation: SummaryOperation,
+    columns: Array<string>,
+    summary: SummaryInput[]
+  ) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
@@ -93,16 +102,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          if (!options.totalSummary)
-            return resolve({});
-
-          const queryName = 'allOrdreLigneSummarised';
           const query = `
-            query AllOrdreLigneSummarised($search: String!, $pageable: PaginationInput!, $summary: [SummaryInput]) {
-              ${ queryName }(search:$search, pageable:$pageable) {
+            query ${ operation.ucFirst() }($search: String!, $pageable: PaginationInput!, $summary: [SummaryInput]) {
+              ${ operation }(search:$search, pageable:$pageable) {
                 edges {
                   node {
-                    ${await OrdreLigne.getGQLFields(depth, filter, null, {noList: true}).toPromise()}
+                    ${await this.model.getGQL(columns).toPromise()}
                   }
                 }
                 pageInfo {
@@ -112,19 +117,22 @@ export class OrdreLignesService extends ApiService implements APIRead {
                   hasNextPage
                 }
                 totalCount
-                summary(summaries:$summary, of:"${ queryName }")
+                summary(summaries:$summary, of:"${ operation }")
               }
             }
           `;
-          type Response = { allOrdreLigneSummarised: RelayPage<OrdreLigne> };
-          const variables = this.mapLoadOptionsToVariables(options);
+          type Response = { [operation: string]: RelayPage<OrdreLigne> };
+          const variables = {
+            ...this.mapLoadOptionsToVariables(options),
+            summary,
+          };
 
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allOrdreLigneSummarised)
-              resolve(this.asInstancedListCount(res.data.allOrdreLigneSummarised));
+            if (res.data && res.data[operation])
+              resolve(this.asInstancedListCount(res.data[operation]));
           });
         }),
-        byKey: this.byKey(depth, filter),
+        byKey: this.byKey_v2(columns),
       }),
     });
   }

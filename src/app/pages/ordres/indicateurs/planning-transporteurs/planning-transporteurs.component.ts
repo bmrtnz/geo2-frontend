@@ -3,7 +3,6 @@ import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import Ordre from 'app/shared/models/ordre.model';
 import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { Operation, OrdresService } from 'app/shared/services/api/ordres.service';
-import { FormUtilsService } from 'app/shared/services/form-utils.service';
 import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { GridColumn } from 'basic';
@@ -72,7 +71,6 @@ export class PlanningTransporteursComponent implements OnInit {
     public dateManagementService: DateManagementService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     private tabContext: TabContext,
-    private formUtils: FormUtilsService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningTransporteurs);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));

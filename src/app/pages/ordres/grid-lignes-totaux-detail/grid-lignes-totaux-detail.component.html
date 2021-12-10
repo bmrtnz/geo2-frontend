@@ -1,49 +1,53 @@
 <dx-data-grid class="dx-card wide-card"
-    [remoteOperations]="true"
-    [showBorders]="false"
-    [columnAutoWidth]="true"
-    [columnHidingEnabled]="false"
-    [allowColumnReordering]="true"
-    [scrolling]="{
-      useNative:true
-    }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Totaux détail', $event, gridConfiguratorService.Grid.OrdreLignesTotauxDetail, enableFilters.bind(this))"
-  >
+  [dataSource]="dataSource"
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [scrolling]="{
+    useNative:true
+  }"
+  (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Totaux détail', $event, gridConfiguratorService.Grid.OrdreLignesTotauxDetail, enableFilters.bind(this))"
+>
 
-    <!-- Grid configuration -->
-    <dxo-paging></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-pager>
-    <dxo-state-storing 
-      [enabled]="true" 
-      type="custom" 
-      [storageKey]="gridConfiguratorService.Grid.OrdreLignesTotauxDetail"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser
-      [enabled]="true"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height">
-    </dxo-column-chooser>
-    <dxo-summary [totalItems]="totalItems"></dxo-summary>
-    <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('ordreLignesTotauxDetail-' + field.path.split('.').join('-') | localize) || field.name"
-      [visible]="false"
-      trueText="Oui"
-      falseText="Non"
-      [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-    ></dxi-column>
+  <!-- Grid configuration -->
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-state-storing 
+    [enabled]="true" 
+    type="custom" 
+    [storageKey]="gridConfiguratorService.Grid.OrdreLignesTotauxDetail"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height">
+  </dxo-column-chooser>
+  <dxo-summary [totalItems]="totalItems"></dxo-summary>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [caption]="('ordreLignesTotauxDetail-' + column.dataField.split('.').join('-') | localize) || column.name"
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [dataType]="column?.dataType"
+    [format]="column?.format"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column?.showInColumnChooser"
+  ></dxi-column>
 
-  </dx-data-grid>
+</dx-data-grid>
