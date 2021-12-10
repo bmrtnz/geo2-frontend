@@ -356,7 +356,8 @@
         "dataField": "typeTiers",
         "dataType": "string",
         "visible": false
-      }
+      },
+      { "dataField": "societe.id" }
     ]
   },
   "article": {
@@ -705,7 +706,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "dataType": "string",
         "visible": true
       },
@@ -793,7 +794,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "dataType": "string",
         "visible": true
       },
@@ -881,9 +882,8 @@
         "dataType": "string",
         "visible": true
       },
-      {
-        "dataField": "id"
-      }
+      { "dataField": "id" },
+      { "dataField": "numero", "sortOrder": "asc"}
     ]
   },
 
@@ -1468,7 +1468,7 @@
       {
         "visibleIndex": 10,
         "dataField": "dateDemande",
-        "sortOrder": "desc",
+        "sortOrder": "asc",
         "dataType": "string",
         "visible": true
       },

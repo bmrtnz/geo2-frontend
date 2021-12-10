@@ -109,6 +109,11 @@ export class ContactsComponent implements OnInit, NestedPart {
     }
   }
 
+  onEditorPreparing(e) {
+    // Company is only there for DB save reasons -> cell editing is disabled
+    if (e.dataField === 'societe.id') e.editorOptions.disabled = true;
+  }
+
   onEditingStart(e) {
     // Léa 10/2021
     // Si un flux est "facture", la ligne ne peut être modifiée par un utilisateur de base (uniquement par les admin)
