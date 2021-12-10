@@ -591,6 +591,7 @@
     "ordreLignesPalox-transporteurGroupage-id": "Transporteur",
     "ordreLignesPalox-ordre-transporteur-id": "Transporteur",
     "ordreLignesPalox-nombrePalettesExpediees": "Pal",
+    "ordreLignesPalox-nombrePalettesCommandees": "Pal",
     "ordreLignesPalox-logistique-dateLivraisonLieuGroupage": "Livraison",
     "ordreLignesPalox-ordre-dateLivraisonPrevue": "Livraison",
     "ordreLignesPalox-ordre-client-code": "Client",
