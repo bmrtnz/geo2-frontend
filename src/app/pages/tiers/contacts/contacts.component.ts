@@ -17,6 +17,7 @@ import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class ContactsComponent implements OnInit, NestedPart {
     public societeService: SocietesService,
     public fluxService: FluxService,
     public moyenCommunicationService: MoyenCommunicationService,
+    public currentCompanyService: CurrentCompanyService,
     private route: ActivatedRoute,
     public localizeService: LocalizationService,
     public authService: AuthService,
@@ -97,6 +99,10 @@ export class ContactsComponent implements OnInit, NestedPart {
     ]);
   }
 
+  displayIDBefore(data) {
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+  }
+
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {
@@ -118,6 +124,7 @@ export class ContactsComponent implements OnInit, NestedPart {
   onRowInserting(event) {
     (event.data as Contact).codeTiers = this.codeTiers;
     (event.data as Contact).typeTiers = this.typeTiers;
+    (event.data as Contact).societe = this.currentCompanyService.getCompany();
   }
 
   onRowClick({ rowIndex }) {

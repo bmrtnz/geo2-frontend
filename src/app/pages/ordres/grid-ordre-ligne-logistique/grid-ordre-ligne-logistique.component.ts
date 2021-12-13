@@ -10,6 +10,7 @@ import { GridColumn } from 'basic';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
   constructor(
     public ordresLogistiquesService: OrdresLogistiquesService,
     public gridConfiguratorService: GridConfiguratorService,
+    public dateManagementService: DateManagementService,
     public localizeService: LocalizationService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigneLogistique);
@@ -56,6 +58,15 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     if (e.rowType === 'data') {
       if (e.data.expedieStation) {
         e.rowElement.classList.add('sent-highlight-datagrid-row');
+      }
+    }
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Best expression for date/time
+      if (e.column.dataField === 'dateDepartReelleFournisseur') {
+        if (e.value) e.cellElement.innerText = this.dateManagementService.friendlyDate(e.value, true);
       }
     }
   }

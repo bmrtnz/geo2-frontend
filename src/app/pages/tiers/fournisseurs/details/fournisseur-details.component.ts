@@ -176,7 +176,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   ngAfterViewInit(): void {
-    // Ouverture ou fermeture accordéons (création)
+    // Ouverture ou fermeture accordéons (création) - old car plus d'accordéons
     // this.openCloseAccordions(this.createMode);
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {

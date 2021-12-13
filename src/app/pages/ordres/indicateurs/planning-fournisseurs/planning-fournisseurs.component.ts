@@ -149,6 +149,21 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       if (e.column.dataField === 'article.description') {
         e.cellElement.innerText =  e.data.article.matierePremiere.variete.description + ' ' + e.cellElement.innerText;
       }
+      // Prix
+      if (e.column.dataField === 'ventePrixUnitaire') {
+        if (!e.data.ventePrixUnitaire || !e.data.venteUnite.description) {
+          e.cellElement.innerText = '';
+        } else {
+          e.cellElement.innerText =  e.cellElement.innerText + ' ' + e.data.ordre.devise.id + ' / ' + e.data.venteUnite.description;
+        }
+      }
+      if (e.column.dataField === 'achatPrixUnitaire') {
+        if (!e.data.achatPrixUnitaire || !e.data.achatUnite.description) {
+          e.cellElement.innerText = '';
+        } else {
+          e.cellElement.innerText =  e.cellElement.innerText + ' ' + e.data.ordre.devise.id + ' / ' + e.data.achatUnite.description;
+        }
+      }
     }
   }
 

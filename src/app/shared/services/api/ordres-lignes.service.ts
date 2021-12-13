@@ -8,6 +8,7 @@ import { APIRead, ApiService, RelayPage, SummaryInput } from '../api.service';
 export enum SummaryOperation {
   Marge = 'allOrdreLigneMarge',
   TotauxDetail = 'allOrdreLigneTotauxDetail',
+  Totaux = 'allOrdreLigneTotaux'
 }
 
 @Injectable({

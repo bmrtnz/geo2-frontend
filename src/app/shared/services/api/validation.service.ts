@@ -94,7 +94,7 @@ export class ValidationService extends ApiService {
     const tiersListe = ['Client', 'Fournisseur', 'Transporteur', 'LieuPassageAQuai', 'Entrepot'];
 
      // Only showed when admin user (always shown when dev)
-    if (!this.authService.currentUser.adminClient && this.prod) return;
+    // if (!this.authService.currentUser.adminClient && this.prod) return;
 
     this.fetchUnvalidatedCount().then(res => {
       const counters = {...res, countTiers: 0};
@@ -121,11 +121,11 @@ export class ValidationService extends ApiService {
 
   private concatResponse(data: GQLResponse) {
     return {
-      countClient: data.mClient + data.pClient,
-      countFournisseur: data.mFournisseur + data.pFournisseur,
-      countTransporteur: data.mTransporteur + data.pTransporteur,
-      countLieuPassageAQuai: data.mLieuPassageAQuai + data.pLieuPassageAQuai,
-      countEntrepot: data.mEntrepot + data.pEntrepot,
+      countClient: data.pClient,
+      countFournisseur: data.pFournisseur,
+      countTransporteur: data.pTransporteur,
+      countLieuPassageAQuai: data.pLieuPassageAQuai,
+      countEntrepot: data.pEntrepot,
       countArticle: data.pArticle,
     };
   }

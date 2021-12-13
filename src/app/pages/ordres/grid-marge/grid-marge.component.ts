@@ -66,6 +66,7 @@ export class GridMargeComponent implements ToggledGrid {
     .map(({selector: column, summaryType}) => ({
       column,
       summaryType,
+      displayFormat: !column.toLowerCase().includes('pourcentage') ? 'Total : {0}' : '{0}',
       valueFormat: columns
       ?.find(({ dataField }) => dataField === column)
       ?.format,

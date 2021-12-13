@@ -12,9 +12,9 @@
                       formControlName="transporteur"
                       [dataSource]="transporteursDataSource"
                       valueExpr="id"
-                      displayExpr="raisonSocial"
+                      displayExpr="code"
                       [searchEnabled]="true"
-                      [searchExpr]="['id', 'raisonSocial']"
+                      [searchExpr]="['id', 'code']"
                     >
                       <dx-validator>
                         <dxi-validation-rule type="required" message=""></dxi-validation-rule>
@@ -30,11 +30,12 @@
                   <div class="dx-field-label noEllipsis">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
                   <div class="dx-field-value">
                     <dx-select-box
-                        formControlName="bureauAchat"
-                        [dataSource]="bureauxAchat"
-                        displayExpr="raisonSocial"
-                        [searchEnabled]="true"
-                        searchExpr="raisonSocial"
+                      formControlName="bureauAchat"
+                      [dataSource]="bureauxAchat"
+                      [displayExpr]="displayCodeBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id', 'raisonSocial']"
+                      [showClearButton]="true"
                     >
                     <dxo-drop-down-options
                         [width]="300">

@@ -12,9 +12,9 @@
                     formControlName="transporteur"
                     [dataSource]="transporteursDataSource"
                     valueExpr="id"
-                    displayExpr="raisonSocial"
+                    displayExpr="code"
                     [searchEnabled]="true"
-                    [searchExpr]="['id', 'raisonSocial']"
+                    [searchExpr]="['id', 'code']"
                   >
                     <dx-validator>
                       <dxi-validation-rule type="required" message=""></dxi-validation-rule>

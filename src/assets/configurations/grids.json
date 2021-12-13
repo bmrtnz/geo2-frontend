@@ -705,7 +705,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "dataType": "string",
         "visible": true
       },
@@ -793,7 +793,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "dataType": "string",
         "visible": true
       },
@@ -881,9 +881,8 @@
         "dataType": "string",
         "visible": true
       },
-      {
-        "dataField": "id"
-      }
+      { "dataField": "id" },
+      { "dataField": "numero", "sortOrder": "asc"}
     ]
   },
 
@@ -1468,7 +1467,7 @@
       {
         "visibleIndex": 10,
         "dataField": "dateDemande",
-        "sortOrder": "desc",
+        "sortOrder": "asc",
         "dataType": "string",
         "visible": true
       },
@@ -1727,19 +1726,21 @@
       {
         "visibleIndex": 0,
         "dataField": "logistique.dateDepartPrevueFournisseur",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "visible": true
       },
       {
         "visibleIndex": 1,
         "dataField": "ordre.numero",
-        "sortIndex": 1,
+        "sortIndex": 3,
         "sortOrder": "asc",
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "logistique.fournisseur.code",
-        "sortIndex": 2,
+        "sortIndex": 4,
         "sortOrder": "asc",
         "visible": true
       },
@@ -1750,7 +1751,7 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "nombrePalettesExpediees",
+        "dataField": "nombrePalettesCommandees",
         "visible": true
       },
       {
@@ -1795,19 +1796,21 @@
       },
       {
         "dataField": "ordre.pays.id",
-        "sortIndex": 0,
+        "sortIndex": 1,
         "sortOrder": "asc"
       },
       {
         "dataField": "numero",
-        "sortIndex": 3,
+        "sortIndex": 4,
         "sortOrder": "asc"
       },
       { "dataField": "id", "visible": false },
       { "dataField": "logistique.fournisseur.id" },
       { "dataField": "nombreColisCommandes" },
       { "dataField": "article.id" },
-      { "dataField": "article.matierePremiere.variete.description" }
+      { "dataField": "article.matierePremiere.variete.description" },
+      { "dataField": "ordre.devise.id" },
+      { "dataField": "achatUnite.description"}
     ]
   },
   "mouv-fournisseurs-comptes-palox": {
