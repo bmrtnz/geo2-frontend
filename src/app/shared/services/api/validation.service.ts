@@ -93,7 +93,7 @@ export class ValidationService extends ApiService {
 
     const tiersListe = ['Client', 'Fournisseur', 'Transporteur', 'LieuPassageAQuai', 'Entrepot'];
 
-     // Only showed when admin user (always shown when dev)
+     // Only showed when admin user (always shown when dev) - removed 12-20214
     // if (!this.authService.currentUser.adminClient && this.prod) return;
 
     this.fetchUnvalidatedCount().then(res => {
