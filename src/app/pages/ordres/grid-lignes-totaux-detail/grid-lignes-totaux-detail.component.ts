@@ -39,6 +39,7 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
   }
 
   async enableFilters() {
+
     const summaryInputs: SummaryInput[] = [
       { selector: 'nombrePalettesExpediees', summaryType: SummaryType.SUM },
       { selector: 'nombreColisExpedies', summaryType: SummaryType.SUM },
@@ -50,9 +51,10 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
     const fields = columns.map( column => column.dataField );
 
     this.totalItems = summaryInputs
-    .map(({selector: column, summaryType}) => ({
+    .map(({selector: column, summaryType}, index) => ({
       column,
       summaryType,
+      displayFormat: !index ? 'Total : {0}' : '{0}',
       valueFormat: columns
       ?.find(({ dataField }) => dataField === column)
       ?.format,

@@ -6,7 +6,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    (onRowPrepared)="applySentGridRowStyle($event)"
+    (onRowPrepared)="applySentGridRowStyle($event)" 
+    (onCellPrepared)="onCellPrepared($event)"
     [scrolling]="{
       useNative:true
     }"
