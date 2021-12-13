@@ -117,7 +117,7 @@ const indicators: Indicator[] = [{
 }, {
   id: 'PlanningTransporteurs',
   enabled: true,
-  withCount: true,
+  withCount: false,
   parameter: 'Planning',
   subParameter: 'Transporteurs',
   tileBkg: '#1B715C',

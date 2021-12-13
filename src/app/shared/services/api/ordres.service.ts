@@ -12,10 +12,13 @@ export enum Operation {
   All = 'allOrdre',
   BAF = 'allOrdreBAF',
   SuiviDeparts = 'allOrdreSuiviDeparts',
-  PlanningTransporteurs = 'allOrdrePlanningTransporteurs',
   PlanningTransporteursApproche = 'allOrdrePlanningTransporteursApproche',
   PlanningFournisseurs = 'allOrdrePlanningFournisseurs',
   SupervisionComptesPalox = 'allOrdreSupervisionComptesPalox'
+}
+
+export enum NativeOperation {
+  PlanningTransporteurs = 'planningTransporteurs',
 }
 
 export type CountResponse = { countOrdre: number };
@@ -28,12 +31,16 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   /* tslint:disable-next-line */
   queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
 
-  public persistantVariables = { onlyColisDiff: false };
+  public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, Ordre);
+  }
+
+  setPersisantVariables(params = this.persistantVariables) {
+    this.persistantVariables = params;
   }
 
   getOne(id: string) {
@@ -157,6 +164,38 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     });
   }
 
+  getNativeDataSource(columns: Array<string>, operation: NativeOperation) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          let query;
+          if (operation === NativeOperation.PlanningTransporteurs)
+            query = await this.buildGetAllPlanningTransporteur(operation, columns);
+
+          type Response = { [operation: string]: RelayPage<Ordre> };
+
+          const variables = {
+            ...this.persistantVariables,
+            ...this.mapLoadOptionsToVariables(options),
+          };
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data[operation]) {
+              resolve(this.asInstancedListCount(res.data[operation]));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
+      }),
+    });
+  }
+
   save(variables: OperationVariables & {ordre: Ordre}) {
     return this.watchSaveQuery({ variables }, 1, this.queryFilter);
   }
@@ -207,6 +246,43 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
           edges {
             node {
               ${await this.model.getGQLFields(depth, regExpFilter, null, {noList: true}).toPromise()}
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+          }
+          totalCount
+        }
+      }
+    `;
+  }
+
+  protected async buildGetAllPlanningTransporteur(operationName: string, columns: Array<string>) {
+    const operation = operationName;
+    const alias = operation.ucFirst();
+    return `
+      query ${alias}(
+        $search: String,
+        $pageable: PaginationInput!,
+        $dateMin: LocalDateTime!,
+        $dateMax: LocalDateTime!,
+        $societeCode: String!,
+        $transporteurCode: String!
+      ) {
+        ${operation}(
+          search:$search,
+          pageable:$pageable,
+          dateMin: $dateMin,
+          dateMax: $dateMax,
+          societeCode: $societeCode,
+          transporteurCode: $transporteurCode
+        ) {
+          edges {
+            node {
+              ${await this.model.getGQL(columns).toPromise()}
             }
           }
           pageInfo {
