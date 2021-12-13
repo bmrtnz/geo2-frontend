@@ -2,22 +2,21 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import Ordre from 'app/shared/models/ordre.model';
 import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
-import { Operation, OrdresService } from 'app/shared/services/api/ordres.service';
+import { NativeOperation, OrdresService } from 'app/shared/services/api/ordres.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { GridColumn } from 'basic';
-import { DxDataGridComponent, DxSelectBoxComponent, DxFormComponent } from 'devextreme-angular';
+import { DxButtonComponent, DxDataGridComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TabContext } from '../../root/root.component';
-import { DateManagementService } from 'app/shared/services/date-management.service';
-import { BureauxAchatService } from 'app/shared/services/api/bureaux-achat.service';
-import notify from 'devextreme/ui/notify';
 
 enum InputField {
-  bureauAchat = 'logistiques.fournisseur.bureauAchat',
   transporteur = 'transporteur.id',
   from = 'logistiques.dateDepartPrevueFournisseur',
   to = 'logistiques.dateDepartPrevueFournisseur',
@@ -30,6 +29,13 @@ enum validField {
 }
 
 type Inputs<T = any> = {[key in keyof typeof InputField]: T};
+
+type PlanningTransporteursVariables = {
+  dateMin: string,
+  dateMax: string,
+  societeCode: string,
+  transporteurCode: string,
+};
 
 @Component({
   selector: 'app-planning-transporteurs',
@@ -48,14 +54,15 @@ export class PlanningTransporteursComponent implements OnInit {
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild('periodeSB', { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild('filterForm') filterForm: NgForm;
+  @ViewChild('validClient') validClient: DxButtonComponent;
+  @ViewChild('validEntrepot') validEntrepot: DxButtonComponent;
+  @ViewChild('validFournisseur') validFournisseur: DxButtonComponent;
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
   public transporteursDataSource: DataSource;
-  public bureauxAchat: DataSource;
   public formGroup = new FormGroup({
-    bureauAchat: new FormControl(),
     transporteur: new FormControl(),
     from: new FormControl(this.dateManagementService.startOfDay()),
     to: new FormControl(this.dateManagementService.endOfDay()),
@@ -65,19 +72,18 @@ export class PlanningTransporteursComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public ordresService: OrdresService,
     public transporteursService: TransporteursService,
-    public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     private tabContext: TabContext,
+    private currentCompanyService: CurrentCompanyService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningTransporteurs);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.transporteursDataSource = this.transporteursService
     .getDataSource_v2(['id', 'raisonSocial']);
     this.periodes = this.dateManagementService.periods();
-    this.bureauxAchat = bureauxAchatService.getDataSource_v2(['id', 'raisonSocial']);
     this.validRequiredEntity = {client: true, entrepot: true, fournisseur: true};
   }
 
@@ -86,8 +92,8 @@ export class PlanningTransporteursComponent implements OnInit {
     .pipe(map( columns => columns.map( column => column.dataField )));
 
     this.ordresDataSource = this.ordresService
-    // .getDataSource_v2(await fields.toPromise(), Operation.PlanningTransporteurs);
-    .getDataSource_v2(await fields.toPromise());
+    .getNativeDataSource(await fields.toPromise(), NativeOperation.PlanningTransporteurs);
+
     // Only way found to validate and show Warning icon
     this.formGroup.get('transporteur').setValue('');
     this.formGroup.get('transporteur').reset();
@@ -95,19 +101,27 @@ export class PlanningTransporteursComponent implements OnInit {
   }
 
   enableFilters() {
-    // if (!this.formGroup.get('transporteur').value) {
-    //   notify('Veuillez spécifier un transporteur', 'error');
-    // } else {
+    if (!this.formGroup.get('transporteur').value) {
+      notify('Veuillez spécifier un transporteur', 'error');
+    } else {
       const values: Inputs = this.formGroup.value;
-      const extraFilters = this.buildFormFilter(values);
-      this.ordresDataSource.filter([
-        ...this.indicator.cloneFilter(),
-        ...extraFilters.filter(v => v != null).length
-          ? ['and', ...extraFilters]
-          : [],
-      ]);
+
+      this.ordresService.setPersisantVariables({
+        dateMin: values.from,
+        dateMax: values.to,
+        societeCode: this.currentCompanyService.getCompany().id,
+        transporteurCode: values.transporteur,
+      } as PlanningTransporteursVariables);
+
+      const filters = [];
+      if (!this.validClient.instance.element().classList.contains('lowOpacity'))
+        filters.push('and', ['client.valide', '=', true]);
+      if (!this.validEntrepot.instance.element().classList.contains('lowOpacity'))
+        filters.push('and', ['entrepot.valide', '=', true]);
+      this.ordresDataSource.filter(filters.length ? filters.slice(1) : null);
+
       this.datagrid.dataSource = this.ordresDataSource;
-    // }
+    }
   }
 
   onRowDblClick({data}: {data: Ordre}) {

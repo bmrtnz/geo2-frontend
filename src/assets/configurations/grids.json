@@ -1657,9 +1657,22 @@
         "dataField": "societe.id",
         "visible": true
       },
-      { "dataField": "transporteur.id" },
-      { "dataField": "id" },
-      { "dataField": "entrepot.id" }
+      { "dataField": "transporteur.id", "visible": false },
+      { "dataField": "id", "visible": false },
+      { "dataField": "referenceClient", "visible": false },
+      { "dataField": "dateLivraisonPrevue", "visible": false },
+      { "dataField": "nombrePaletteReel", "visible": false },
+      { "dataField": "nombreColis", "visible": false },
+      { "dataField": "entrepot.id", "visible": false },
+      { "dataField": "logistiques.dateDepartPrevueFournisseur", "visible": false },
+      { "dataField": "logistiques.dateDepartPrevueGroupage", "visible": false },
+      { "dataField": "logistiques.groupage.id", "visible": false },
+      { "dataField": "codeChargement", "visible": false },
+      { "dataField": "logistiques.fournisseur.pays.id", "visible": false },
+      { "dataField": "logistiques.fournisseur.codePostal", "visible": false },
+      { "dataField": "lignes.article.matierePremiere.espece.id", "visible": false },
+      { "dataField": "lignes.article.emballage.emballage.id", "visible": false },
+      { "dataField": "lignes.typePalette.id", "visible": false }
     ]
   },
   "planning-transporteurs-approche": {

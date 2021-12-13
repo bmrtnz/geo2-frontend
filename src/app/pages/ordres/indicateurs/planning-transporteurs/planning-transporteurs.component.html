@@ -25,23 +25,6 @@
                   </dx-select-box>
                 </div>
               </div>
-              <!-- Bureau achat -->
-              <div class="dx-field field-large">
-                <div class="dx-field-label noEllipsis">{{ 'tiers-fournisseurs-bureauAchat' | localize }}</div>
-                <div class="dx-field-value">
-                  <dx-select-box
-                      formControlName="bureauAchat"
-                      [dataSource]="bureauxAchat"
-                      displayExpr="raisonSocial"
-                      [searchEnabled]="true"
-                      searchExpr="raisonSocial"
-                  >
-                  <dxo-drop-down-options
-                      [width]="300">
-                  </dxo-drop-down-options>
-                  </dx-select-box>
-                </div>
-              </div>
             </div>
           </dxi-item>
           <dxi-item [ratio]="7">
@@ -97,6 +80,7 @@
                 <dxi-item [ratio]="1">
                   <!-- Only valid buttons -->
                   <dx-button class="validOnlyButtons"
+                    #validClient
                     type="default"
                     data-entity="client"
                     hint="{{ 'hint-bascule-clients-valide' | localize }}"
@@ -106,6 +90,7 @@
                 </dxi-item>  
                 <dxi-item [ratio]="1">
                   <dx-button class="validOnlyButtons"
+                    #validEntrepot
                     type="default"
                     data-entity="entrepot"
                     hint="{{ 'hint-bascule-entrepots-valide' | localize }}"
@@ -115,6 +100,8 @@
                 </dxi-item>
                 <dxi-item [ratio]="1">
                   <dx-button class="validOnlyButtons"
+                    #validFournisseur
+                    [disabled]="true"
                     type="default"
                     data-entity="fournisseur"
                     hint="{{ 'hint-bascule-fournisseurs-valide' | localize }}"
