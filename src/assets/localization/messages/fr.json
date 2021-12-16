@@ -10,6 +10,8 @@
     "valide-comment": "Commentaire",
     "valide-comment-title": "Commentaire de validation",
     "valide-date-title": "Date de validité des certifications",
+    "valide-date-certification": "Type certification",
+    "valide-date-validite": "Valide jusqu'au",
     "invalide": "Non Validé",
     "user-modification": "Modifié par",
     "date-modification": "Date de modification",
@@ -19,6 +21,10 @@
     "jours": "jours",
     "du": "du",
     "au": "au",
+
+    "fileManager-name": "Nom",
+    "fileManager-dateModified": "Modifié le",
+    "fileManager-size": "Taille",
 
     "client": "client",
     "entrepot": "entrepôt",
