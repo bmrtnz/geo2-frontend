@@ -21,6 +21,7 @@ export class LieuPassageAQuai extends Model {
   @Field() public adresse3: string;
   @Field({model: import('./regime-tva.model')}) public regimeTva: RegimeTva;
   @Field() public nbJourEcheance: number;
+  @Field() public compteComptable: string;
   @Field() public echeanceLe: number;
   @Field({model: import('./moyen-paiement.model')}) public moyenPaiement: MoyenPaiement;
   @Field() public tvaCee: string;

@@ -283,6 +283,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
           this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
+          this.validationService.showToValidateBadges();
         },
         error: (err) => {
           console.log(err);

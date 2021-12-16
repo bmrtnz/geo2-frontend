@@ -26,10 +26,12 @@
 
         <dxi-column
           dataField="certification.description"
+          caption="{{ 'valide-date-certification' | localize }}"
           [allowEditing]="false"
         ></dxi-column>
         <dxi-column
           dataField="dateValidite"
+          caption="{{ 'valide-date-validite' | localize }}"
           [allowEditing]="true"
           [showEditorAlways]="true"
           [validationRules]="this.dateValidationRules"

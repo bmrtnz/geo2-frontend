@@ -60,6 +60,7 @@
       [caption]="('tiers-contacts-' + column.dataField?.split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
+      [width]="column.dataField === 'fluxAccess1' ? '300' : '100%'"
       [dataType]="column?.dataType"
       [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
       [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"

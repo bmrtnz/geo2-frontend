@@ -67,5 +67,13 @@ export class GridLignesDetailsComponent implements AfterViewInit {
       this.datagrid.dataSource = null;
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Descript. article
+      if (e.column.dataField === 'article.description') {
+        e.cellElement.innerText =  e.data.article.matierePremiere.variete.description + ' ' + e.cellElement.innerText;
+      }
+    }
+  }
 
 }

@@ -22,10 +22,14 @@ export class FileManagerComponent implements OnChanges {
 
   visible = false;
   fileProvider: CustomFileSystemProvider;
+  items: any;
 
   constructor(
     public fileManagerService: FileManagerService
-  ) { }
+  ) {
+    this.items =
+    [ 'showNavPane', 'create', { name: 'upload', text: 'after' }, 'switchView', { name: 'separator', location: 'after' }, 'refresh' ];
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const key = changes.key ? changes.key.currentValue : this.key;

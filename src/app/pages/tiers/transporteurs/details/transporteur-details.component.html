@@ -404,6 +404,6 @@
   </div>
 
 </form>
-<app-editing-alert></app-editing-alert>
-<app-info-popup customText="N’oubliez pas de joindre la lettre d’engagement pour validation du tiers par l’administrateur"></app-info-popup>
+<app-editing-alert></app-editing-alert> 
+<app-info-popup [customText]="'text-transporteurs-popup-documents' | localize"></app-info-popup>
 <app-file-manager-popup key="transporteurs" [id]="transporteur?.id"></app-file-manager-popup>

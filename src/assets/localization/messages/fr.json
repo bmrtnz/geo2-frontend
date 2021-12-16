@@ -10,6 +10,8 @@
     "valide-comment": "Commentaire",
     "valide-comment-title": "Commentaire de validation",
     "valide-date-title": "Date de validité des certifications",
+    "valide-date-certification": "Type certification",
+    "valide-date-validite": "Valide jusqu'au",
     "invalide": "Non Validé",
     "user-modification": "Modifié par",
     "date-modification": "Date de modification",
@@ -19,6 +21,10 @@
     "jours": "jours",
     "du": "du",
     "au": "au",
+
+    "fileManager-name": "Nom",
+    "fileManager-dateModified": "Modifié le",
+    "fileManager-size": "Taille",
 
     "client": "client",
     "entrepot": "entrepôt",
@@ -66,6 +72,11 @@
     "hint-bascule-clients-valide": "Bascule entre clients valides uniquement ou tous clients",
     "hint-bascule-entrepots-valide": "Bascule entre entrepôts valides uniquement ou tous entrepôts",
     "hint-bascule-fournisseurs-valide": "Bascule entre fournisseurs valides uniquement ou tous fournisseurs",
+    "hint-ordres-lies": "Cliquez pour accéder à l'ordre",
+
+    "text-clients-popup-documents": "N'oubliez pas de joindre les documents obligatoires !",
+    "text-fournisseurs-popup-documents": "N'oubliez pas de joindre CGA signées (OBLIGATOIRE) et certifications si nécessaire",
+    "text-transporteurs-popup-documents": "N’oubliez pas de joindre la lettre d’engagement pour validation du tiers par l’administrateur",
 
     "datagridTitle-SyntheseExpeditions": "Synthèse expéditions",
 
@@ -586,6 +597,23 @@
     "ordre-planning-depart-diff-expe": "Différence sur expédition et/ou sans détail client",
     "ordres-dateMaxMouvements": "Mvts jusqu'au",
 
+    "ordresTransporteur-entrepot-raisonSocial": "Lieu de livraison",
+    "ordresTransporteur-numero": "Ordre",
+    "ordresTransporteur-version": "Version",
+    "ordresTransporteur-logistiques-fournisseur-code": "Code fournisseur",
+    "ordresTransporteur-referenceClient": "Réf. Client",
+    "ordresTransporteur-dateLivraisonPrevue": "Départ",
+    "ordresTransporteur-nombrePaletteReel": "Livraison",
+    "ordresTransporteur-nombreColis": "Nb Colis",
+    "ordresTransporteur-logistiques-dateDepartPrevueFournisseur": "",
+    "ordresTransporteur-logistiques-dateDepartPrevueGroupage": "",
+    "ordresTransporteur-lignes-article-matierePremiere-espece-id": "Produit",
+    "ordresTransporteur-lignes-article-emballage-emballage-id": "Emballage",
+    "ordresTransporteur-lignes-typePalette-id": "Palette",
+    "ordresTransporteur-entrepot-codePostal": "CP",
+    "ordresTransporteur-entrepot-ville": "Ville",
+    "ordresTransporteur-entrepot-pays-id": "Pays",
+
     "ordreLignesPalox-logistique-dateDepartPrevueFournisseur": "Chargement",
     "ordreLignesPalox-logistique-fournisseur-code": "Fournisseur",
     "ordreLignesPalox-logistique-fournisseur-id": "Id Fournisseur",
@@ -612,6 +640,7 @@
 
     "ordreLignes-id": "Réf. ligne",
     "ordreLignes-ordre-id": "Réf. ordre",
+    "ordreLignes-numero": "Numéro",
     "ordreLignes-article-id": "Code article",
     "ordreLignes-article-description": "Description",
     "ordreLignes-nombrePalettesCommandees": "Nb Pal. sol",
@@ -672,6 +701,7 @@
     "ordreEnvois-document-isPresent": "Disponible",
     "ordreEnvois-document-type": "Type doc",
     "ordreEnvois-document-uri": "URI doc",
+    "ordreEnvois-commentairesAvancement": "Statut",
 
     "ordreLigneLogistique-fournisseur-raisonSocial": " ",
     "ordreLigneLogistique-nombrePalettesAuSol": "Pal Sol",

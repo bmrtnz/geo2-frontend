@@ -74,7 +74,7 @@ export class PushHistoryPopupComponent {
   onShowing() {
     this.commentValidationRules = [
       { type: 'required' },
-      { type: 'stringLength', min: 5 },
+      // { type: 'stringLength', min: 5 }, // Léa 11-2021: mettent souvent 'Ok'
     ];
   }
 

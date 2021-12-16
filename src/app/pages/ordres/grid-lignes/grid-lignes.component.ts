@@ -80,4 +80,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Descript. article
+      if (e.column.dataField === 'article.description') {
+        e.cellElement.innerText =  e.data.article.matierePremiere.variete.description + ' ' + e.cellElement.innerText;
+      }
+    }
+  }
+
 }

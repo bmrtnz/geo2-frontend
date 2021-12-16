@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -15,7 +15,7 @@ import { PortsService } from 'app/shared/services/api/ports.service';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
-import { DxAccordionComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxTextBoxComponent } from 'devextreme-angular';
 import { dxElement } from 'devextreme/core/element';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
@@ -56,7 +56,7 @@ let self;
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit, OnDestroy {
+export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Output() public ordre: Ordre;
 
@@ -131,6 +131,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
+  @ViewChild('comLog', { static: false }) comLog: DxTextBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
   @ViewChildren('anchor') anchors: QueryList<ElementRef|DxAccordionComponent>;
 
@@ -199,11 +200,16 @@ export class FormComponent implements OnInit, OnDestroy {
     ]);
 
     this.transporteursDS = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
+
   }
 
   ngOnDestroy() {
     this.destroy.next(true);
     this.destroy.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    this.comLog.instance.option('hint', this.comLog.value);
   }
 
   onSubmit() {
@@ -354,6 +360,7 @@ export class FormComponent implements OnInit, OnDestroy {
     )
     .subscribe( ordre => {
       this.ordre = ordre;
+      if (this.comLog) this.comLog.instance.option('hint', this.ordre.instructionsLogistiques);
       this.fetchFullOrderNumber();
       if (this.ordre.numero) this.status = ' - ' + Statut[this.ordre.statut] + (this.ordre.factureEDI ? ' EDI' : '');
       this.refOrdre = this.ordre?.id ? ordre.id : '-';

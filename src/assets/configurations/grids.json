@@ -785,7 +785,8 @@
         "dataField": "gtinColisKit",
         "dataType": "string",
         "visible": true
-      }
+      },
+      { "dataField": "article.matierePremiere.variete.description" }
     ]
   },
 
@@ -882,7 +883,8 @@
         "visible": true
       },
       { "dataField": "id" },
-      { "dataField": "numero", "sortOrder": "asc"}
+      { "dataField": "numero", "sortOrder": "asc"},
+      { "dataField": "article.matierePremiere.variete.description" }
     ]
   },
 
@@ -1623,12 +1625,12 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "numero",
+        "dataField": "entrepot.codePostal",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "version",
+        "dataField": "entrepot.ville",
         "visible": true
       },
       {
@@ -1801,7 +1803,7 @@
         "sortIndex": 4,
         "sortOrder": "asc"
       },
-      { "dataField": "id", "visible": false },
+      { "dataField": "id" },
       { "dataField": "logistique.fournisseur.id" },
       { "dataField": "nombreColisCommandes" },
       { "dataField": "article.id" },
