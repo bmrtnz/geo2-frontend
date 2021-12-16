@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -28,7 +28,7 @@ import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../r
  * Don't forget to cancel datasource loading in your component
  */
 export interface ToggledGrid {
-  onToggling(toggled: boolean);
+  onToggling(active: boolean);
 }
 
 enum Fragments {
@@ -61,6 +61,7 @@ export class FormComponent implements OnInit, OnDestroy {
   @Output() public ordre: Ordre;
 
   private destroy = new Subject<boolean>();
+  private anchorsInitialized = false;
 
   public fragments = Fragments;
   public status: string;
@@ -366,11 +367,14 @@ export class FormComponent implements OnInit, OnDestroy {
   private initializeAnchors(event?: TabChangeData) {
     if (event) {
       if (event.status === 'in')
-        this.enableAnchors();
+      this.enableAnchors();
       if (event.status === 'out')
-        this.disableAnchors();
+      this.disableAnchors();
     }
-    this.handleAnchorsNavigation();
+    if (!this.anchorsInitialized) {
+      this.handleAnchorsNavigation();
+      this.anchorsInitialized = true;
+    }
   }
 
   private handleTabChange() {
@@ -411,7 +415,7 @@ export class FormComponent implements OnInit, OnDestroy {
     this.router.events
     .pipe(
       filter( event => event instanceof NavigationEnd ),
-      concatMap(_ => this.route.fragment),
+      switchMap(_ => this.route.fragment),
       filter(fragment => !!fragment),
       concatMap( fragment => of(this.anchors.find(item => this.getAnchorElement(item).id === fragment))
       ),
@@ -420,6 +424,12 @@ export class FormComponent implements OnInit, OnDestroy {
     .subscribe( item => {
       if (item instanceof DxAccordionComponent) {
         item.instance.expandItem(0);
+        // @ts-ignore
+        (item.onItemTitleClick as EventEmitter<>)
+        .emit({
+          overrideTogglingTo: true,
+          itemElement: item.instance.element().querySelector('[role="tab"]'),
+        }, [item]);
         scrollTo(item.instance.element());
       } else scrollTo(item.nativeElement);
     });
