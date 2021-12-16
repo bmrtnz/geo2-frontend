@@ -175,3 +175,9 @@ body {
   font-size: 14px;
   padding: 3px 8px 4px 0px;
 }
+
+// Grid titles
+.grid-title input {
+  font-size: 16px;
+  pointer-events: none;
+}

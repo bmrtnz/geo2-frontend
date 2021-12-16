@@ -785,7 +785,8 @@
         "dataField": "gtinColisKit",
         "dataType": "string",
         "visible": true
-      }
+      },
+      { "dataField": "article.matierePremiere.variete.description" }
     ]
   },
 
@@ -882,7 +883,8 @@
         "visible": true
       },
       { "dataField": "id" },
-      { "dataField": "numero", "sortOrder": "asc"}
+      { "dataField": "numero", "sortOrder": "asc"},
+      { "dataField": "article.matierePremiere.variete.description" }
     ]
   },
 
@@ -1623,55 +1625,51 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "numero",
-        "visible": true
-      },
-      {
-        "visibleIndex": 2,
-        "dataField": "version",
-        "visible": true
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "logistiques.fournisseur.code",
-        "visible": true
-      },
-      {
-        "visibleIndex": 4,
         "dataField": "entrepot.codePostal",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 2,
         "dataField": "entrepot.ville",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 3,
         "dataField": "entrepot.pays.id",
         "visible": true
       },
       {
-        "visibleIndex": 7,
-        "dataField": "societe.id",
+        "visibleIndex": 4,
+        "dataField": "numero",
         "visible": true
       },
-      { "dataField": "transporteur.id", "visible": false },
-      { "dataField": "id", "visible": false },
-      { "dataField": "referenceClient", "visible": false },
-      { "dataField": "dateLivraisonPrevue", "visible": false },
-      { "dataField": "nombrePaletteReel", "visible": false },
-      { "dataField": "nombreColis", "visible": false },
-      { "dataField": "entrepot.id", "visible": false },
-      { "dataField": "logistiques.dateDepartPrevueFournisseur", "visible": false },
-      { "dataField": "logistiques.dateDepartPrevueGroupage", "visible": false },
-      { "dataField": "logistiques.groupage.id", "visible": false },
-      { "dataField": "codeChargement", "visible": false },
-      { "dataField": "logistiques.fournisseur.pays.id", "visible": false },
-      { "dataField": "logistiques.fournisseur.codePostal", "visible": false },
-      { "dataField": "lignes.article.matierePremiere.espece.id", "visible": false },
-      { "dataField": "lignes.article.emballage.emballage.id", "visible": false },
-      { "dataField": "lignes.typePalette.id", "visible": false }
+      {
+        "visibleIndex": 5,
+        "dataField": "version",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "logistiques.fournisseur.code",
+        "visible": true
+      },
+      { "dataField": "transporteur.id" },
+      { "dataField": "referenceClient" },
+      { "dataField": "dateLivraisonPrevue" },
+      { "dataField": "nombrePaletteReel" },
+      { "dataField": "nombreColis" },
+      { "dataField": "entrepot.id" },
+      { "dataField": "logistiques.dateDepartPrevueFournisseur" },
+      { "dataField": "logistiques.dateDepartPrevueGroupage" },
+      { "dataField": "logistiques.groupage.id" },
+      { "dataField": "codeChargement" },
+      { "dataField": "logistiques.fournisseur.pays.id" },
+      { "dataField": "logistiques.fournisseur.codePostal" },
+      { "dataField": "lignes.article.matierePremiere.espece.id" },
+      { "dataField": "lignes.article.emballage.emballage.id" },
+      { "dataField": "lignes.typePalette.id" },
+      { "dataField": "societe.id" },
+      { "dataField": "id" }
     ]
   },
   "planning-transporteurs-approche": {
@@ -1804,7 +1802,7 @@
         "sortIndex": 4,
         "sortOrder": "asc"
       },
-      { "dataField": "id", "visible": false },
+      { "dataField": "id" },
       { "dataField": "logistique.fournisseur.id" },
       { "dataField": "nombreColisCommandes" },
       { "dataField": "article.id" },

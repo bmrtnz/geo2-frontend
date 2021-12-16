@@ -97,7 +97,17 @@ export class PlanningTransporteursComponent implements OnInit {
     // Only way found to validate and show Warning icon
     this.formGroup.get('transporteur').setValue('');
     this.formGroup.get('transporteur').reset();
+    // A VIRER !!!
+    const date = new Date('2020/08/03');
+    const date2 = new Date('2020/08/04');
+    this.formGroup.get('from').setValue(this.dateManagementService.startOfDay(date));
+    this.formGroup.get('to').setValue(this.dateManagementService.endOfDay(date2));
+
+
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
+    // A VIRER !!!
+    this.formGroup.get('transporteur').setValue({id: 'VERAY'});
+
   }
 
   enableFilters() {

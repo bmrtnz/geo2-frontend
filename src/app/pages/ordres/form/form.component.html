@@ -112,15 +112,14 @@
                 <span *ngIf="linkedOrdersSearch" class="search-linkedOrders"
                   >Recherche ordres liés...</span
                 >
-                <dx-button
-                  *ngFor="let linkedOrder of linkedOrders"
+                <dx-button *ngFor="let linkedOrder of linkedOrders"
                   class="small-button linkedOrder-{{ linkedOrder.class }}"
                   type="default"
+                  hint="{{ 'hint-ordres-lies' | localize }}"
                   text="{{ linkedOrder.ordre.numero }} ({{
                     linkedOrder.criteria
                   }})"
-                  (onClick)="
-                    openLinkedOrder(linkedOrder.ordre.numero)"
+                  (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
                 >
                 </dx-button>
               </div>
@@ -369,7 +368,7 @@
                         <div class="dx-field">
                           <div class="dx-field-label">{{ 'ordres-instructionsLogistiques' | localize }}</div>
                           <div class="dx-field-value">
-                          <dx-text-box formControlName="instructionsLogistiques">
+                          <dx-text-box #comLog formControlName="instructionsLogistiques">
                               <dx-validator name="{{ 'ordres-instructionsLogistiques' | localize }}">
                               <dxi-validation-rule type="stringLength" [max]="255"></dxi-validation-rule>
                               </dx-validator>
