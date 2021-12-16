@@ -9,12 +9,12 @@
                 <div class="dx-field-label">{{ 'tiers-transporteur-title' | localize }}</div>
                 <div class="dx-field-value">
                   <dx-select-box
-                    formControlName="transporteur"
+                    formControlName="transporteurCode"
                     [dataSource]="transporteursDataSource"
                     valueExpr="id"
-                    displayExpr="code"
+                    displayExpr="raisonSocial"
                     [searchEnabled]="true"
-                    [searchExpr]="['id', 'code']"
+                    [searchExpr]="['id', 'raisonSocial']"
                   >
                     <dx-validator>
                       <dxi-validation-rule type="required" message=""></dxi-validation-rule>
@@ -49,7 +49,7 @@
                       <div class="dx-field-label">{{ 'ordres-Du' | localize }}</div>
                       <div class="dx-field-value">
                           <dx-date-box
-                              formControlName="from"
+                              formControlName="dateMin"
                               class="dateStart"
                               type="datetime"
                               [displayFormat]="'dd-MM-yyyy  HH:mm'"
@@ -64,7 +64,7 @@
                       <div class="dx-field-label">{{ 'ordres-au' | localize }}</div>
                       <div class="dx-field-value">
                           <dx-date-box
-                              formControlName="to"
+                              formControlName="dateMax"
                               class="dateEnd"
                               type="datetime"
                               [displayFormat]="'dd-MM-yyyy  HH:mm'"
@@ -74,11 +74,10 @@
                   </div>
               </dxi-item>
             </dx-box>
-            <dxi-item [ratio]="7">
+            <!-- <dxi-item [ratio]="7">
               <div class="orderRightRightFilters">
               <dx-box>
                 <dxi-item [ratio]="1">
-                  <!-- Only valid buttons -->
                   <dx-button class="validOnlyButtons"
                     #validClient
                     type="default"
@@ -101,7 +100,6 @@
                 <dxi-item [ratio]="1">
                   <dx-button class="validOnlyButtons"
                     #validFournisseur
-                    [disabled]="true"
                     type="default"
                     data-entity="fournisseur"
                     hint="{{ 'hint-bascule-fournisseurs-valide' | localize }}"
@@ -112,8 +110,8 @@
                 <dxi-item [ratio]="10"></dxi-item>
               </dx-box>
             </div>
-            </dxi-item>
-          </dxi-item>
+          </dxi-item> -->
+        </dxi-item>
       </dx-box>
   </div>
   <br>
