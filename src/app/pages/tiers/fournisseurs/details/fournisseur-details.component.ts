@@ -197,6 +197,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
+          this.validationService.showToValidateBadges();
         },
         error: (err) => {
           console.log(err);
@@ -318,7 +319,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
       if (this.createMode) {
 
-
         this.infoComponent.visible = true;
         this.infoComponent.doNavigate.subscribe(res => {
           if (res) {
@@ -339,7 +339,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
 
         // Non-admin user : do not save, just record modifications
-        if (!this.authService.currentUser.adminClient && !this.createMode) {
+        if (!this.authService.currentUser.adminClient) {
           this.readOnlyMode = true;
           this.editing = false;
           fournisseur.preSaisie = true;

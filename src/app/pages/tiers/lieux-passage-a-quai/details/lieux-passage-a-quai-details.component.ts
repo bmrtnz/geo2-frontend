@@ -257,6 +257,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
           this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
+          this.validationService.showToValidateBadges();
         },
         error: (err) => {
           console.log(err);
