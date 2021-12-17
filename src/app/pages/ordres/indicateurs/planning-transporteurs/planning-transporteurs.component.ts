@@ -85,8 +85,6 @@ export class PlanningTransporteursComponent implements OnInit {
     this.formGroup.get('transporteurCode').setValue('');
     this.formGroup.get('transporteurCode').reset();
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
-    // A VIRER !!!
-    this.formGroup.get('transporteur').setValue({id: 'VERAY'});
 
   }
 
