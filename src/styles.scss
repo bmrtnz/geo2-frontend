@@ -181,3 +181,18 @@ body {
   font-size: 16px;
   pointer-events: none;
 }
+
+// Column chooser: lower spacing between items
+.dx-datagrid-column-chooser {
+  .dx-treeview-node-container {
+    margin-top: 5px;
+    .dx-checkbox {
+      top: 7px
+    }
+    .dx-item {
+      padding: 5px 8px 4px 40px;
+      min-height: 31px;
+      line-height: 17px;
+    }
+  }
+}
