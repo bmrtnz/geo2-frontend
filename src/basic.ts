@@ -7,7 +7,7 @@ import {
   RangeRule,
   RequiredRule,
   StringLengthRule
-} from 'devextreme/ui/validation_engine';
+} from 'devextreme/ui/validation_rules';
 import { SummaryType } from 'app/shared/services/api.service';
 
 declare global {
