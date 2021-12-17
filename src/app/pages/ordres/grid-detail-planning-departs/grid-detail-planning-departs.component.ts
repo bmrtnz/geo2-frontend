@@ -18,9 +18,7 @@ export class GridDetailPlanningDepartsComponent implements OnInit {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<
-    ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
-  >;
+  public detailedFields: Observable<ModelFieldOptions[]>;
 
   public title: string;
   private dataFilter = /* tslint:disable-next-line max-line-length */

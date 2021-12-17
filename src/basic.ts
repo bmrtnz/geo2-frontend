@@ -103,7 +103,7 @@ interface GridColumn {
    * Specifies validation rules to be checked when cell values are updated.
    */
   validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule
-    | CompareRule | PatternRule | EmailRule | AsyncRule> | {};
+    | CompareRule | PatternRule | EmailRule | AsyncRule>;
 
   /**
    * Specifies whether the column is visible, that is, occupies space in the table.
