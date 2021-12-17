@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { GridColumn } from 'basic';
 import { DxoStateStoringComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
@@ -7,7 +8,6 @@ import { map } from 'rxjs/operators';
 import { GridConfig as GridConfigModel } from '../models';
 import { GridsConfigsService } from './api/grids-configs.service';
 import { AuthService } from './auth.service';
-import { GridColumn } from 'basic';
 
 let self: GridConfiguratorService;
 
@@ -78,6 +78,27 @@ export class GridConfiguratorService {
   // Make enum available in templates
   get Grid() {
     return Grid;
+  }
+
+  /**
+   * Grid configuration observable mapper to get columns from config
+   */
+  static getColumns() {
+    return map((config: GridConfig) => config.columns);
+  }
+
+  /**
+   * Grid configuration observable mapper to get visible columns from columns
+   */
+  static getVisible() {
+    return map((columns: GridColumn[]) => columns.filter( column => column.visible || column.dataField === 'id' ));
+  }
+
+  /**
+   * Grid configuration observable mapper to get fields name from columns
+   */
+  static getFields() {
+    return map((columns: GridColumn[]) => columns.map( column => column.dataField ));
   }
 
   /**
