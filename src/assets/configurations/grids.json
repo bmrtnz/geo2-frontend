@@ -1770,7 +1770,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "entrepot.raisonSocial",
+        "dataField": "entrepotRaisonSocial",
         "visible": true
       },
       {
@@ -1785,17 +1785,17 @@
       },
       {
         "visibleIndex": 3,
-        "dataField": "entrepot.pays.id",
+        "dataField": "fournisseur",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "numero",
+        "dataField": "entrepotCodePostal",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "version",
+        "dataField": "entrepotVille",
         "visible": true
       },
       {
@@ -1819,7 +1819,26 @@
       { "dataField": "lignes.article.emballage.emballage.id", "visible": false },
       { "dataField": "lignes.typePalette.id", "visible": false },
       { "dataField": "societe.id", "visible": false },
-      { "dataField": "id", "visible": false }
+      { "dataField": "id", "visible": false },
+      { "dataField": "entrepotPays", "visible": true },
+      { "dataField": "id", "visible": false },
+      { "dataField": "referenceClient", "visible": false },
+      { "dataField": "dateLivraisonPrevue", "visible": false },
+      { "dataField": "codeChargement", "visible": false },
+      { "dataField": "sommeColisCommandes", "visible": false },
+      { "dataField": "sommeColisPalette", "visible": false },
+      { "dataField": "sommeColisPaletteBis", "visible": false },
+      { "dataField": "entrepot", "visible": false },
+      { "dataField": "transporteur", "visible": false },
+      { "dataField": "dateDepartPrevueFournisseur", "visible": false },
+      { "dataField": "dateDepartPrevueGroupage", "visible": false },
+      { "dataField": "groupage", "visible": false },
+      { "dataField": "fournisseurCodePostal", "visible": false },
+      { "dataField": "fournisseurPays", "visible": false },
+      { "dataField": "espece", "visible": false },
+      { "dataField": "palette", "visible": false },
+      { "dataField": "colis", "visible": false },
+      { "dataField": "flagEntrepot", "visible": false }
     ]
   },
   "planning-transporteurs-approche": {

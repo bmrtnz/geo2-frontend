@@ -72,7 +72,10 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { enableTracing: environment.debugRouting }),
+    RouterModule.forRoot(routes, {
+      enableTracing: environment.debugRouting,
+      onSameUrlNavigation: 'reload',
+    }),
     DxDataGridModule,
     DxFormModule,
     DxDrawerModule, DxListModule,
