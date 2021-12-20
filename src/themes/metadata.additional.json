@@ -28,7 +28,8 @@
     "baseTheme": "material.blue.dark",
     "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
     "outputColorScheme": "additional",
+    "outputFormat": "scss",
     "makeSwatch": true,
-    "base": true,
+    "base": false,
     "widgets": ["treeview", "navbar", "toolbar"]
 }

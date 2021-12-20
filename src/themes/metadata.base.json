@@ -24,5 +24,6 @@
     "baseTheme": "material.blue.light",
     "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
     "outputColorScheme": "base",
-    "base": true
+    "outputFormat": "scss",
+    "base": false
 }

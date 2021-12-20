@@ -7,7 +7,7 @@ import {
   RangeRule,
   RequiredRule,
   StringLengthRule
-} from 'devextreme/ui/validation_engine';
+} from 'devextreme/ui/validation_rules';
 import { SummaryType } from 'app/shared/services/api.service';
 
 declare global {
@@ -103,7 +103,7 @@ interface GridColumn {
    * Specifies validation rules to be checked when cell values are updated.
    */
   validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule
-    | CompareRule | PatternRule | EmailRule | AsyncRule> | {};
+    | CompareRule | PatternRule | EmailRule | AsyncRule>;
 
   /**
    * Specifies whether the column is visible, that is, occupies space in the table.

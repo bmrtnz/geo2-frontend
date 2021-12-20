@@ -12,7 +12,7 @@ import {
   DxValidatorComponent,
   DxValidatorModule
 } from 'devextreme-angular';
-import { RangeRule, RequiredRule } from 'devextreme/ui/validation_engine';
+import { RangeRule, RequiredRule } from 'devextreme/ui/validation_rules';
 import { Observable } from 'rxjs';
 import { mergeAll, take } from 'rxjs/operators';
 import { SharedModule } from '../../shared.module';

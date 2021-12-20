@@ -42,7 +42,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   days: string;
   basicFilter: any;
   columnChooser = environment.columnChooser;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: Observable<ModelFieldOptions[]>;
   rowSelected: boolean;
 
   @Output() public ordreSelected = new EventEmitter<Ordre>();
