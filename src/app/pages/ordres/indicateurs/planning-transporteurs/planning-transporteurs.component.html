@@ -12,7 +12,7 @@
                     formControlName="transporteurCode"
                     [dataSource]="transporteursDataSource"
                     valueExpr="id"
-                    displayExpr="raisonSocial"
+                    [displayExpr]="displayIDBefore"
                     [searchEnabled]="true"
                     [searchExpr]="['id', 'raisonSocial']"
                   >

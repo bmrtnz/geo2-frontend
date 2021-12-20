@@ -135,11 +135,13 @@ export class PlanningTransporteursComponent implements OnInit {
   onCellPrepared(e) {
     if (e.rowType === 'data') {
       // Ajout CP, ville et pays au lieu de livraison
-      if (e.column.dataField === 'entrepotRaisonSocial') {
-        e.cellElement.innerText +=
-        ' - ' + e.data.entrepotCodePostal
-        + ' ' + e.data.entrepotVille
-        + ' (' + e.data.entrepotPays + ')';
+      if (e.column.dataField === 'entrepotRaisonSocial' && e.data.items) {
+        if (e.data.items[0].entrepotCodePostal) {
+          e.cellElement.innerText +=
+          ' - ' + e.data.entrepotCodePostal
+          + ' ' + e.data.entrepotVille
+          + ' (' + e.data.entrepotPays + ')';
+        }
       }
       // Ajout version ordre
       if (e.column.dataField === 'numero') {
@@ -161,7 +163,7 @@ export class PlanningTransporteursComponent implements OnInit {
     }
     // Ajout CP, ville et pays au lieu de livraison nom groupe
     if (e.rowType === 'group') {
-        if (e.data.items && e.column.dataField === 'entrepotRaisonSocial') {
+        if (e.data.items && e.column.dataField === 'entrepotRaisonSocial' && e.data.items[0].entrepotCodePostal) {
           e.cellElement.innerText +=
           ' - ' + e.data.items[0].entrepotCodePostal
           + ' ' + e.data.items[0].entrepotVille
@@ -189,6 +191,10 @@ export class PlanningTransporteursComponent implements OnInit {
     }
     this.periodeSB.value = null;
 
+  }
+
+  displayIDBefore(data) {
+    return data ? data.id + ' ' + data.raisonSocial : null;
   }
 
   setDates(e) {
