@@ -13,11 +13,16 @@ import { SummaryType } from 'app/shared/services/api.service';
 declare global {
   interface String {
     ucFirst(): string;
+    lcFirst(): string;
   }
 }
 
 String.prototype.ucFirst = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+String.prototype.lcFirst = function() {
+  return this.charAt(0).toLowerCase() + this.slice(1);
 };
 
 /**

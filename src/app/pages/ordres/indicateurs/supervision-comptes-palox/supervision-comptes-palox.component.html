@@ -17,7 +17,7 @@
             </div>
 
             <div class="dx-field palox-switch">
-                <div class="dx-field-label dx-field-label-left">{{ 'tiers-clients-title' | localize }}</div>
+                <div class="dx-field-label dx-field-label-left">{{ 'tiers-entrepots-title' | localize }}</div>
                 <div class="dx-field-value">
                     <dx-switch #switchEntity
                     data-name="fournisseurs"
@@ -47,29 +47,11 @@
             </div>
             <!-- Client -->
             <div class="dx-field">
-                <div class="dx-field-label noEllipsis">{{ 'tiers-client' | localize }}</div>
+                <div class="dx-field-label noEllipsis">{{ 'tiers-entrepot' | localize }}</div>
                 <div class="dx-field-value">
                     <dx-select-box
-                        formControlName="client"
-                        [dataSource]="client"
-                        [displayExpr]="displayCodeBefore"
-                        [showClearButton]="true"
-                        [searchEnabled]="true"
-                        [searchExpr]="['code','raisonSocial']"
-                    >
-                    <dxo-drop-down-options
-                        [width]="350">
-                    </dxo-drop-down-options>
-                    </dx-select-box>
-                </div>
-            </div>
-            <!-- Fournisseur -->
-            <div class="dx-field">
-                <div class="dx-field-label noEllipsis">{{ 'tiers-fournisseur' | localize }}</div>
-                <div class="dx-field-value">
-                    <dx-select-box
-                        formControlName="commercial"
-                        [dataSource]="fournisseur"
+                        formControlName="entrepot"
+                        [dataSource]="entrepot"
                         [displayExpr]="displayCodeBefore"
                         [showClearButton]="true"
                         [searchEnabled]="true"
@@ -102,9 +84,9 @@
   </form>
 
 <dx-data-grid #MouvClientsComptesPalox
-    [remoteOperations]="true"
+    [remoteOperations]="{paging: true}"
     [showBorders]="false"
-    [focusedRowEnabled]="true"
+    [focusedRowEnabled]="false"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
@@ -113,7 +95,7 @@
     useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Mouvements Palox par client', $event, gridConfiguratorService.Grid.MouvClientsComptesPalox, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Mouvements Palox par entrepôts', $event, gridConfiguratorService.Grid.MouvClientsComptesPalox, enableFilters.bind(this))"
 >
 
     <!-- Grid configuration -->
@@ -143,7 +125,7 @@
     [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-    *ngFor="let column of this.columns | async"
+    *ngFor="let column of this.columns[0] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
@@ -159,9 +141,9 @@
 
 <dx-data-grid #RecapClientsComptesPalox
     [visible]="false"
-    [remoteOperations]="true"
+    [remoteOperations]="{paging: true}"
     [showBorders]="false"
-    [focusedRowEnabled]="true"
+    [focusedRowEnabled]="false"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
@@ -170,7 +152,7 @@
     useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Récapitulatif Palox par client', $event, gridConfiguratorService.Grid.RecapClientsComptesPalox, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Récapitulatif Palox par entrepôts', $event, gridConfiguratorService.Grid.RecapClientsComptesPalox, enableFilters.bind(this))"
 >
 
     <!-- Grid configuration -->
@@ -200,7 +182,7 @@
     [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-    *ngFor="let column of this.columns | async"
+    *ngFor="let column of this.columns[1] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
@@ -216,9 +198,9 @@
 
 <dx-data-grid #MouvFournisseursComptesPalox
     [visible]="false"
-    [remoteOperations]="true"
+    [remoteOperations]="{paging: true}"
     [showBorders]="false"
-    [focusedRowEnabled]="true"
+    [focusedRowEnabled]="false"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
@@ -257,7 +239,7 @@
     [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-    *ngFor="let column of this.columns | async"
+    *ngFor="let column of this.columns[2] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
@@ -273,9 +255,9 @@
 
 <dx-data-grid #RecapFournisseursComptesPalox
     [visible]="false"
-    [remoteOperations]="true"
+    [remoteOperations]="{paging: true}"
     [showBorders]="false"
-    [focusedRowEnabled]="true"
+    [focusedRowEnabled]="false"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
@@ -314,7 +296,7 @@
     [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-    *ngFor="let column of this.columns | async"
+    *ngFor="let column of this.columns[3] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"

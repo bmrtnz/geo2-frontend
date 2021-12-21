@@ -1,33 +1,32 @@
-import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { FormControl, FormGroup, NgForm } from '@angular/forms';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Role } from 'app/shared/models';
+import MouvementEntrepot from 'app/shared/models/mouvement-entrepot.model';
+import MouvementFournisseur from 'app/shared/models/mouvement-fournisseur.model';
 import Ordre from 'app/shared/models/ordre.model';
-import { AuthService, LocalizationService, TransporteursService, ClientsService, FournisseursService } from 'app/shared/services';
-import { Operation, OrdresService } from 'app/shared/services/api/ordres.service';
+import RecapitulatifEntrepot from 'app/shared/models/recapitulatif-entrepot.model';
+import RecapitulatifFournisseur from 'app/shared/models/recapitulatif-fournisseur.model';
+import { AuthService, EntrepotsService, FournisseursService, LocalizationService } from 'app/shared/services';
+import { OrdresService } from 'app/shared/services/api/ordres.service';
+import { PersonnesService } from 'app/shared/services/api/personnes.service';
+import { SupervisionPaloxsService } from 'app/shared/services/api/supervision-paloxs.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
 import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { GridColumn } from 'basic';
-import { DxDataGridComponent, DxSelectBoxComponent, DxFormComponent, DxSwitchComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxSwitchComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TabContext } from '../../root/root.component';
-import { DateManagementService } from 'app/shared/services/date-management.service';
-import { Role } from 'app/shared/models';
-import { PersonnesService } from 'app/shared/services/api/personnes.service';
 
 enum InputField {
-  client = 'client',
-  fournisseur = 'logistiques.fournisseur',
-  commercial = 'client.commercial',
-  dateMaxMouvements = 'logistiques.dateDepartPrevueFournisseur',
-}
-
-enum validField {
-  client = 'client.valide',
-  entrepot = 'entrepot.valide',
-  fournisseur = 'logistiques.fournisseur.valide',
+  entrepot = 'entrepot',
+  commercial = 'commercial',
+  dateMaxMouvements = 'dateMaxMouvements',
 }
 
 type Inputs<T = any> = {[key in keyof typeof InputField]: T};
@@ -42,7 +41,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   private indicator = this.ordresIndicatorsService
   .getIndicatorByName(this.INDICATOR_NAME);
-  private gridConfig: Promise<GridConfig>;
+  private gridConfig: Promise<GridConfig>[];
   public validRequiredEntity: {};
 
   @ViewChildren(DxDataGridComponent) paloxGrids: QueryList<DxDataGridComponent>;
@@ -52,22 +51,24 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   public columnChooser = environment.columnChooser;
   public switchOptions = [];
-  public columns: Observable<GridColumn[]>;
+  public columns: Observable<GridColumn[]>[];
   public ordresDataSource: DataSource;
   public commercial: DataSource;
-  public client: DataSource;
+  public entrepot: DataSource;
   public fournisseur: DataSource;
   public formGroup = new FormGroup({
-    client: new FormControl(),
-    fournisseur: new FormControl(),
+    entrepot: new FormControl(),
     commercial: new FormControl(),
     dateMaxMouvements: new FormControl(this.dateManagementService.startOfDay()),
   } as Inputs<FormControl>);
 
+  private datasources: Promise<DataSource>[] = [];
+
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public ordresService: OrdresService,
-    public clientsService: ClientsService,
+    public supervisionPaloxsService: SupervisionPaloxsService,
+    public entrepotsService: EntrepotsService,
     public fournisseursService : FournisseursService,
     public personnesService: PersonnesService,
     public authService: AuthService,
@@ -76,12 +77,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     private ordresIndicatorsService: OrdresIndicatorsService,
     private tabContext: TabContext,
     private formUtils: FormUtilsService,
+    private currentCompanyService: CurrentCompanyService,
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.MouvClientsComptesPalox);
-    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.validRequiredEntity = {client: true, entrepot: true, fournisseur: true};
-    this.client = this.clientsService.getDataSource_v2(['id', 'code', 'raisonSocial']);
-    this.fournisseur = this.fournisseursService.getDataSource_v2(['id', 'code', 'raisonSocial']);
+    this.entrepot = this.entrepotsService.getDataSource_v2(['id', 'code', 'raisonSocial']);
     this.commercial = this.personnesService.getDataSource_v2(['id', 'nomUtilisateur']);
     this.commercial.filter([
       ['valide', '=', true],
@@ -93,31 +92,46 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     this.switchOptions = ['mouv', 'recap', 'Clients', 'Fournisseurs'];
   }
 
-  async ngOnInit() {
-    const fields = this.columns
-    .pipe(map( columns => columns.map( column => column.dataField )));
+  ngOnInit() {
+    this.gridConfig = [
+      Grid.MouvClientsComptesPalox,
+      Grid.RecapClientsComptesPalox,
+      Grid.MouvFournisseursComptesPalox,
+      Grid.RecapFournisseursComptesPalox,
+    ].map( c => this.gridConfiguratorService.fetchDefaultConfig(c));
 
-    this.ordresDataSource = this.ordresService
-    // .getDataSource_v2(await fields.toPromise(), Operation.PlanningTransporteurs);
-    .getDataSource_v2(await fields.toPromise());
+    this.columns = this.gridConfig.map( g =>
+      from(g).pipe(map( config => config.columns ))
+    );
+
+    const fields = this.columns.map( c =>
+      c.pipe(map( columns => columns.map( column => column.dataField )))
+    );
+
+    this.datasources = [
+      MouvementEntrepot,
+      RecapitulatifEntrepot,
+      MouvementFournisseur,
+      RecapitulatifFournisseur,
+    ].map( async (m, i) =>
+      await this.supervisionPaloxsService.getListDataSource(await fields[i].toPromise(), m)
+    );
+
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
   }
 
   enableFilters() {
-      const values: Inputs = this.formGroup.value;
-      const extraFilters = this.buildFormFilter(values);
-      this.ordresDataSource.filter([
-        ...this.indicator.cloneFilter(),
-        ...extraFilters.filter(v => v != null).length
-          ? ['and', ...extraFilters]
-          : [],
-      ]);
-  }
-
-  afterViewInit() {
-    this.paloxGrids.forEach((element) => {
-      element.dataSource = this.ordresDataSource;
+    const values: Inputs = this.formGroup.value;
+    this.supervisionPaloxsService.setPersisantVariables({
+      codeSociete: this.currentCompanyService.getCompany().id,
+      codeCommercial: values.commercial?.id,
+      codeEntrepot: values.entrepot?.id,
+      dateMaxMouvements: values.dateMaxMouvements,
     });
+    (this.paloxGrids
+    .find((_, i) => i === this.getActiveGridIndex())
+    ?.dataSource as DataSource)
+    ?.reload();
   }
 
   onRowDblClick({data}: {data: Ordre}) {
@@ -132,32 +146,20 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   }
 
   switchChange(e) {
-    const grid = (this.switchType.value ? 1 : 0) + 2 * (this.switchEntity.value ? 1 : 0);
-    this.paloxGrids.forEach((element, index) => {
-      element.visible = (index === grid);
+    this.paloxGrids.forEach(async (component, index) => {
+      const isCurrent = this.getActiveGridIndex();
+      component.visible = (index === isCurrent);
+      component.dataSource = isCurrent
+      ? await (this.datasources[index])
+      : null;
     });
+    this.enableFilters();
   }
 
-  private buildFormFilter(values: Inputs): any[] {
-    const filter = [];
-
-    if (values.client)
-      filter.push([InputField.client, '=', values.client]);
-
-    if (values.fournisseur)
-      filter.push([InputField.fournisseur, '=', values.fournisseur]);
-
-    if (values.commercial)
-      filter.push([InputField.commercial, '=', values.commercial]);
-
-    if (values.dateMaxMouvements)
-      filter.push([InputField.dateMaxMouvements, '<=', values.dateMaxMouvements]);
-
-    return filter.length
-       ? filter.reduce((crt, acm) => [crt, 'and', acm])
-       : null;
-
+  private getActiveGridIndex() {
+    return (this.switchType.value ? 1 : 0) + 2 * (this.switchEntity.value ? 1 : 0);
   }
+
 }
 
 export default SupervisionComptesPaloxComponent;
