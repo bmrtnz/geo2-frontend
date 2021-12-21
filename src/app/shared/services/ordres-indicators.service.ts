@@ -128,7 +128,7 @@ const indicators: Indicator[] = [{
   component: import('../../pages/ordres/indicateurs/planning-transporteurs/planning-transporteurs.component'),
 }, {
   id: 'PlanningTransporteursApproche',
-  enabled: true,
+  enabled: false,
   withCount: false,
   parameter: 'Planning',
   subParameter: 'Transporteurs d\'approche',
