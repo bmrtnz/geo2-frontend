@@ -12,7 +12,7 @@
                     formControlName="transporteurCode"
                     [dataSource]="transporteursDataSource"
                     valueExpr="id"
-                    displayExpr="raisonSocial"
+                    [displayExpr]="displayIDBefore"
                     [searchEnabled]="true"
                     [searchExpr]="['id', 'raisonSocial']"
                   >
@@ -29,7 +29,7 @@
           </dxi-item>
           <dxi-item [ratio]="7">
             <dx-box>
-              <dxi-item [ratio]="3">
+              <dxi-item [ratio]="2">
                   <!-- Période -->
                   <div class="dx-field">
                       <div class="dx-field-label">{{ 'ordres-periode' | localize }}</div>
@@ -46,7 +46,7 @@
                       </div>
                   </div>
               </dxi-item>
-              <dxi-item [ratio]="2">
+              <dxi-item [ratio]="2.5">
                   <!-- Date de début -->
                   <div class="dx-field field-small">
                       <div class="dx-field-label">{{ 'ordres-Du' | localize }}</div>
@@ -61,7 +61,7 @@
                       </div>
                   </div>
               </dxi-item>
-              <dxi-item [ratio]="2">
+              <dxi-item [ratio]="2.5">
                   <!-- Date de fin -->
                   <div class="dx-field field-small">
                       <div class="dx-field-label">{{ 'ordres-au' | localize }}</div>
@@ -122,7 +122,7 @@
 </form>
 
 <dx-data-grid
-  [remoteOperations]="true"
+  [remoteOperations]="{paging: true}"
   [showBorders]="false"
   [focusedRowEnabled]="true"
   [focusedRowIndex]="0"
@@ -132,12 +132,13 @@
   [scrolling]="{
     useNative:true
   }"
+  (onCellPrepared)="onCellPrepared($event)"
   (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningTransporteurs, enableFilters.bind(this))"
 >
 
   <!-- Grid configuration -->
-  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <!-- <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter> -->
   <dxo-paging></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -152,7 +153,7 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <!-- <dxo-filter-row [visible]="true"></dxo-filter-row> -->
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
@@ -162,6 +163,12 @@
     [width]="columnChooser.width"
     [height]="columnChooser.height">
   </dxo-column-chooser>
+  <dxo-grouping 
+  [contextMenuEnabled]="true"> 
+  </dxo-grouping>
+  <dxo-group-panel 
+    [visible]="true">
+  </dxo-group-panel>
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
@@ -174,6 +181,16 @@
     [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+  <dxo-summary>
+    <dxi-group-item
+      column="sommeColisPaletteBis"
+      summaryType="sum"
+      displayFormat="Total pal. réel : {0}"
+    >
+    </dxi-group-item>
+  </dxo-summary>
+
+  
 
 </dx-data-grid>
   

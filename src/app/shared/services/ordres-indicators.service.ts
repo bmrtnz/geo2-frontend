@@ -11,6 +11,7 @@ import { CountResponse as CountResponseOrdre, Operation, OrdresService } from '.
 import { CountResponse as CountResponsePays, Operation as PaysOperation, PaysService } from './api/pays.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
+import { dxButtonOptions } from 'devextreme/ui/button';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -25,7 +26,8 @@ const contents: Content[] = [{
   tabTitle: 'Suivi des ordres'
 }];
 
-export class Indicator {
+// @ts-ignore
+export class Indicator implements dxButtonOptions {
   id: string;
   enabled?: boolean;
   number?: string;

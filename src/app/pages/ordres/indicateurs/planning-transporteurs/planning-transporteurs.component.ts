@@ -132,6 +132,46 @@ export class PlanningTransporteursComponent implements OnInit {
      : null;
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Ajout CP, ville et pays au lieu de livraison
+      if (e.column.dataField === 'entrepotRaisonSocial' && e.data.items) {
+        if (e.data.items[0].entrepotCodePostal) {
+          e.cellElement.innerText +=
+          ' - ' + e.data.entrepotCodePostal
+          + ' ' + e.data.entrepotVille
+          + ' (' + e.data.entrepotPays + ')';
+        }
+      }
+      // Ajout version ordre
+      if (e.column.dataField === 'numero') {
+        e.cellElement.innerText +=  ' - ' + e.data.version;
+        e.cellElement.classList += ' bold';
+      }
+      // Ajout type colis
+      if (e.column.dataField === 'sommeColisCommandes') {
+        e.cellElement.innerText +=  ' / ' + e.data.colis;
+      }
+      // Ajout type palette
+      if (e.column.dataField === 'espece') {
+        e.cellElement.innerText +=  ' / ' + e.data.palette;
+      }
+      // Best expression for date
+      if (e.column.dataField === 'dateLivraisonPrevue' || e.column.dataField === 'dateDepartPrevueFournisseur') {
+        if (e.value) e.cellElement.innerText = this.dateManagementService.formatDate(e.value, 'dd-MM-yyyy');
+      }
+    }
+    // Ajout CP, ville et pays au lieu de livraison nom groupe
+    if (e.rowType === 'group') {
+        if (e.data.items && e.column.dataField === 'entrepotRaisonSocial' && e.data.items[0].entrepotCodePostal) {
+          e.cellElement.innerText +=
+          ' - ' + e.data.items[0].entrepotCodePostal
+          + ' ' + e.data.items[0].entrepotVille
+          + ' (' + e.data.items[0].entrepotPays + ')';
+        }
+    }
+  }
+
   manualDate(e) {
 
     // We check that this change is coming from the user, not following a period change
@@ -153,6 +193,10 @@ export class PlanningTransporteursComponent implements OnInit {
 
   }
 
+  displayIDBefore(data) {
+    return data ? data.id + ' ' + data.raisonSocial : null;
+  }
+
   setDates(e) {
 
     // We check that this change is coming from the user, not following a prog change
@@ -160,8 +204,8 @@ export class PlanningTransporteursComponent implements OnInit {
     const datePeriod = this.dateManagementService.getDates(e);
 
     this.formGroup.patchValue({
-      from: datePeriod.dateDebut,
-      to: datePeriod.dateFin
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin
     });
 
   }
