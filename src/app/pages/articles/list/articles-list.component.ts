@@ -37,6 +37,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   emballages: DataSource;
   modesCulture: DataSource;
   trueFalse: string[];
+  initialSpecy: any;
 
   constructor(
     public articlesService: ArticlesService,
@@ -65,7 +66,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
     this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
-    this.dataGrid.dataSource = this.articles;
+    // this.dataGrid.dataSource = this.articles;
+    this.router.navigate([`/articles/004016`]);
   }
 
   onCellPrepared(e) {

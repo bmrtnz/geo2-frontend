@@ -13,12 +13,12 @@
         <dx-button class="upperButton"
             type="default"
             text="{{ 'btn-editer' | localize }}"
-            [visible]="readOnlyMode && !cloneMode"
+            [visible]="readOnlyMode && authService.currentUser.accessGeoProduct && !cloneMode"
             (onClick)="onEdit()"
         ></dx-button>
         <dx-button class="upperButton"
             type="default"
-            [visible]="readOnlyMode"
+            [visible]="readOnlyMode && authService.currentUser.accessGeoProduct"
             text="{{ 'btn-cloner' | localize }}"
             (onClick)="onClone()">
         </dx-button>
@@ -98,6 +98,14 @@
                                 </dx-select-box>
                             </div>
                         </div>
+                        <!-- Article associé -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'articles-articleAssocie' | localize }}</div>
+                            <div class="dx-field-value">
+                            <dx-text-box formControlName="articleAssocie" [readOnly]="readOnlyMode">
+                            </dx-text-box>
+                            </div>
+                        </div>
 
                         <dx-box>
                             <dxi-item [ratio]="4">
@@ -106,6 +114,16 @@
                                     <div class="dx-field-label checkbox-label">{{ 'articles-blueWhaleStock' | localize }}</div>
                                     <div class="dx-field-value">
                                         <dx-check-box formControlName="blueWhaleStock" [readOnly]="readOnlyMode"></dx-check-box>
+                                    </div>
+                                </div>
+                            </dxi-item>
+                            <dxi-item [ratio]="1"></dxi-item>
+                            <dxi-item [ratio]="4">
+                                <!-- Produit MDD -->
+                                <div class="dx-field" formGroupName="normalisation">
+                                    <div class="dx-field-label checkbox-label">{{ 'articles-normalisation-produitMdd' | localize }}</div>
+                                    <div class="dx-field-value">
+                                        <dx-check-box formControlName="produitMdd" [readOnly]="readOnlyMode"></dx-check-box>
                                     </div>
                                 </div>
                             </dxi-item>
@@ -456,7 +474,31 @@
                                 </dx-text-box>
                             </div>
                         </div>
-
+                        <!-- Poids net client -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'articles-emballage-poidsNetClient' | localize }}</div>
+                            <div class="dx-field-value" formGroupName="emballage">
+                                <dx-text-box formControlName="poidsNetClient" [readOnly]="readOnlyMode">
+                                    <dx-validator name="{{ 'articles-emballage-poidsNetClient' | localize }}">
+                                        <dxi-validation-rule type="numeric" ></dxi-validation-rule>
+                                    </dx-validator>
+                                </dx-text-box>
+                            </div>
+                        </div>
+                        <!-- Identification Symbolique -->
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{ 'articles-normalisation-identificationSymbolique' | localize }}</div>
+                            <div class="dx-field-value" formGroupName="normalisation">
+                                <dx-select-box
+                                    formControlName="identificationSymbolique"
+                                    [readOnly]="readOnlyMode"
+                                    [dataSource]="identificationsSymboliques"
+                                    displayExpr="description"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['id','description']">
+                                </dx-select-box>
+                            </div>
+                        </div>
                         <dx-box>
                             <dxi-item [ratio]="4">
                                 <!-- Pré-pesé -->

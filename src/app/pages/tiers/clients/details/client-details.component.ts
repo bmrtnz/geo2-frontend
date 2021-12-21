@@ -588,10 +588,12 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   entrepotsBtnClick() {
+    if (!this.client) return;
     this.router.navigateByUrl(`/nested/n/tiers/clients/${this.client.id}/entrepots/list`);
   }
 
   contactsBtnClick() {
+    if (!this.client) return;
     this.router.navigate([`/tiers/contacts/${this.client.code}/${this.client.typeTiers}`]);
   }
 

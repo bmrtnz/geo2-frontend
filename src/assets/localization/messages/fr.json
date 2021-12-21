@@ -424,6 +424,7 @@
     "articles-id": "Code",
     "articles-gtinColisBlueWhale": "GTIN Colis BW",
     "articles-gtinUcBlueWhale": "GTIN UC BW",
+    "articles-articleAssocie": "Article associé",
 
     "articles-groupe-CDC": "CDC",
     "articles-groupe-matierePremiere": "Matière première",
@@ -450,6 +451,7 @@
     "articles-emballage-emballage": "Emballage",
     "articles-emballage-poidsNetColis": "Poids net colis",
     "articles-emballage-poidsNetTheo": "Poids net théorique",
+    "articles-emballage-poidsNetClient": "Poids net client",
     "articles-emballage-prepese": "Pré-pesé",
     "articles-emballage-condSpecial": "Conditionnement spécial",
     "articles-emballage-uniteParColis": "Nbre unités/emballage",
@@ -470,9 +472,11 @@
     "articles-normalisation-etiquetteUc": "Etiquette UC",
     "articles-normalisation-etiquetteEvenementielle": "Etiquette événementielle",
     "articles-normalisation-gtinColis": "GTIN Colis",
+    "articles-normalisation-identificationSymbolique": "Emballeur/Expéditeur",
     "articles-normalisation-gtinUc": "GTIN UC",
     "articles-normalisation-articleClient": "Code article client",
     "articles-normalisation-calibreMarquage": "Calibre marquage",
+    "articles-normalisation-produitMdd": "Marque distributeur",
 
     "articles-descrSpecialeCalClt": "Description spéciale calibre client",
     "articles-etiquetteColis": "Etiquette Colis",
