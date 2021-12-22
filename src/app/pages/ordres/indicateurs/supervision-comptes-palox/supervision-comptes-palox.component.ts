@@ -12,9 +12,7 @@ import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { SupervisionPaloxsService } from 'app/shared/services/api/supervision-paloxs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { DateManagementService } from 'app/shared/services/date-management.service';
-import { FormUtilsService } from 'app/shared/services/form-utils.service';
-import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridColumn } from 'basic';
 import { DxDataGridComponent, DxSwitchComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -22,6 +20,13 @@ import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TabContext } from '../../root/root.component';
+
+enum GridModel {
+  MouvementsClients,
+  RecapitulatifClients,
+  MouvementsFournisseurs,
+  RecapitulatifFournisseurs,
+}
 
 enum InputField {
   entrepot = 'entrepot',
@@ -39,9 +44,6 @@ type Inputs<T = any> = {[key in keyof typeof InputField]: T};
 export class SupervisionComptesPaloxComponent implements OnInit {
   readonly INDICATOR_NAME = 'SupervisionComptesPalox';
 
-  private indicator = this.ordresIndicatorsService
-  .getIndicatorByName(this.INDICATOR_NAME);
-  private gridConfig: Promise<GridConfig>[];
   public validRequiredEntity: {};
 
   @ViewChildren(DxDataGridComponent) paloxGrids: QueryList<DxDataGridComponent>;
@@ -62,21 +64,19 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     dateMaxMouvements: new FormControl(this.dateManagementService.startOfDay()),
   } as Inputs<FormControl>);
 
-  private datasources: Promise<DataSource>[] = [];
+  private datasources: DataSource[] = [];
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public ordresService: OrdresService,
     public supervisionPaloxsService: SupervisionPaloxsService,
     public entrepotsService: EntrepotsService,
-    public fournisseursService : FournisseursService,
+    public fournisseursService: FournisseursService,
     public personnesService: PersonnesService,
     public authService: AuthService,
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
-    private ordresIndicatorsService: OrdresIndicatorsService,
     private tabContext: TabContext,
-    private formUtils: FormUtilsService,
     private currentCompanyService: CurrentCompanyService,
   ) {
     this.validRequiredEntity = {client: true, entrepot: true, fournisseur: true};
@@ -92,30 +92,29 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     this.switchOptions = ['mouv', 'recap', 'Clients', 'Fournisseurs'];
   }
 
-  ngOnInit() {
-    this.gridConfig = [
+  async ngOnInit() {
+    this.columns = [
       Grid.MouvClientsComptesPalox,
       Grid.RecapClientsComptesPalox,
       Grid.MouvFournisseursComptesPalox,
       Grid.RecapFournisseursComptesPalox,
-    ].map( c => this.gridConfiguratorService.fetchDefaultConfig(c));
-
-    this.columns = this.gridConfig.map( g =>
-      from(g).pipe(map( config => config.columns ))
-    );
+    ]
+    .map( c => this.gridConfiguratorService.fetchDefaultConfig(c))
+    .map( g => from(g).pipe(map( config => config.columns )));
 
     const fields = this.columns.map( c =>
       c.pipe(map( columns => columns.map( column => column.dataField )))
     );
 
-    this.datasources = [
+    this.datasources = await Promise.all([
       MouvementEntrepot,
       RecapitulatifEntrepot,
       MouvementFournisseur,
       RecapitulatifFournisseur,
     ].map( async (m, i) =>
-      await this.supervisionPaloxsService.getListDataSource(await fields[i].toPromise(), m)
-    );
+      this.supervisionPaloxsService
+      .getListDataSource(await fields[i].toPromise(), m)
+    ));
 
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
   }
@@ -128,10 +127,9 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       codeEntrepot: values.entrepot?.id,
       dateMaxMouvements: values.dateMaxMouvements,
     });
-    (this.paloxGrids
-    .find((_, i) => i === this.getActiveGridIndex())
-    ?.dataSource as DataSource)
-    ?.reload();
+    const index = this.getActiveGridIndex();
+    this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
+    this.paloxGrids.toArray()[index].visible = true;
   }
 
   onRowDblClick({data}: {data: Ordre}) {
@@ -146,18 +144,18 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   }
 
   switchChange(e) {
-    this.paloxGrids.forEach(async (component, index) => {
-      const isCurrent = this.getActiveGridIndex();
-      component.visible = (index === isCurrent);
-      component.dataSource = isCurrent
-      ? await (this.datasources[index])
-      : null;
+    this.paloxGrids.map(component => {
+      component.dataSource = null;
+      component.visible = false;
+      return component;
     });
     this.enableFilters();
   }
 
   private getActiveGridIndex() {
-    return (this.switchType.value ? 1 : 0) + 2 * (this.switchEntity.value ? 1 : 0);
+    const type = this.switchType.value ? 'Recapitulatif' : 'Mouvements';
+    const entity = this.switchEntity.value ? 'Fournisseurs' : 'Clients';
+    return GridModel[type + entity];
   }
 
 }
