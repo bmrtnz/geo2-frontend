@@ -163,7 +163,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   onCellPrepared(e) {
     if (e.rowType === 'data') {
       // Best expression for date
-      if (e.column.dataField === 'dateInventaire') {
+      if (e.column.dataField === 'dateInventaire' || e.column.dataField === 'dateDepartOrdre' ) {
         if (e.value) e.cellElement.innerText = this.dateManagementService.formatDate(e.value, 'dd-MM-yyyy');
       }
     }
