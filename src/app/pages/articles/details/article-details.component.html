@@ -536,7 +536,7 @@
                                     </dx-validator>
                                 </dx-select-box>
                                 <dx-button
-                                  *ngIf="article?.normalisation?.stickeur?.document.isPresent"
+                                  *ngIf="article?.normalisation?.stickeur?.document?.isPresent"
                                   (onClick)="viewEtiquette('articles-normalisation-stickeur', article.normalisation.stickeur.document)"
                                   class="icon-btn"
                                   icon="material-icons sm visibility"

@@ -67,7 +67,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
     this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
     // this.dataGrid.dataSource = this.articles;
-    this.router.navigate([`/articles/004016`]);
+    this.router.navigate([`/articles/004014`]);
   }
 
   onCellPrepared(e) {

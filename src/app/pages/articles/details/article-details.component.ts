@@ -239,7 +239,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.warningMode = true;
         const Element = document.querySelector('.submit') as HTMLElement;
         Element.click();
-        this.warningMode = false;
     }
 
     displayIDBefore(data) {
@@ -300,6 +299,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                     error: () => notify('Echec de la sauvegarde', 'error', 3000),
                 });
         }
+        this.warningMode = false;
 
     }
 
@@ -408,13 +408,13 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         const paths = [];
 
         Object.keys(dirtyFields).forEach(key => {
-            if (typeof (this.formGroup.get(key).value) === 'object') {
+            if (typeof (this.formGroup.get(key).value) === 'object' && this.formGroup.get(key).value !== null) {
                 Object.keys(this.formGroup.get(key).value).forEach(key2 => {
                     const nestedVal = this.formGroup.get(`${key}.${key2}`).value;
                     let controlKey;
                     if (nestedVal !== null) {
                         controlKey = `${key}.${key2}`;
-                        if (typeof nestedVal === 'object') controlKey += '.' + Object.keys(nestedVal)[0];
+                        if (typeof nestedVal === 'object' && nestedVal !== null) controlKey += '.' + Object.keys(nestedVal)[0];
                     }
                     if (controlKey) paths.push(controlKey);
                 });
