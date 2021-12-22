@@ -16,6 +16,8 @@ export class SupervisionPalox extends Model {
   @Field() codeEspece: string;
   @Field() referenceEntrepot: string;
   @Field() sommeQuantiteInventaire: number;
+  @Field() entree: number;
+  @Field() sortie: number;
 }
 
 export default SupervisionPalox;
