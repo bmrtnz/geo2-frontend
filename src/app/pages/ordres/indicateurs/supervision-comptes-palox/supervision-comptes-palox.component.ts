@@ -158,6 +158,15 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     return GridModel[type + entity];
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Best expression for date
+      if (e.column.dataField === 'dateInventaire' || e.column.dataField === 'dateDepartOrdre' ) {
+        if (e.value) e.cellElement.innerText = this.dateManagementService.formatDate(e.value, 'dd-MM-yyyy');
+      }
+    }
+  }
+
 }
 
 export default SupervisionComptesPaloxComponent;

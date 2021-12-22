@@ -95,6 +95,7 @@
     useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Mouvements Palox par entrepôts', $event, gridConfiguratorService.Grid.MouvClientsComptesPalox, enableFilters.bind(this))"
 >
 
@@ -124,13 +125,16 @@
     [width]="columnChooser.width"
     [height]="columnChooser.height">
     </dxo-column-chooser>
+    <dxo-group-panel 
+        [visible]="true">
+    </dxo-group-panel>
     <dxi-column
     *ngFor="let column of this.columns[0] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
-    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [caption]="('comptesPalox-entrepots-' + column.dataField?.split('.').join('-') | localize) || column.name"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
@@ -152,6 +156,7 @@
     useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Récapitulatif Palox par entrepôts', $event, gridConfiguratorService.Grid.RecapClientsComptesPalox, enableFilters.bind(this))"
 >
 
@@ -181,13 +186,16 @@
     [width]="columnChooser.width"
     [height]="columnChooser.height">
     </dxo-column-chooser>
+    <dxo-group-panel 
+        [visible]="true">
+    </dxo-group-panel>
     <dxi-column
     *ngFor="let column of this.columns[1] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
-    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [caption]="('comptesPalox-entrepots-' + column.dataField?.split('.').join('-') | localize) || column.name"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
@@ -209,6 +217,7 @@
     useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Mouvements Palox par fournisseur', $event, gridConfiguratorService.Grid.MouvFournisseursComptesPalox, enableFilters.bind(this))"
 >
 
@@ -238,13 +247,16 @@
     [width]="columnChooser.width"
     [height]="columnChooser.height">
     </dxo-column-chooser>
+    <dxo-group-panel 
+        [visible]="true">
+    </dxo-group-panel>
     <dxi-column
     *ngFor="let column of this.columns[2] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
-    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [caption]="('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-') | localize) || column.name"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
@@ -266,6 +278,7 @@
     useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Récapitulatif Palox par fournisseur', $event, gridConfiguratorService.Grid.RecapFournisseursComptesPalox, enableFilters.bind(this))"
 >
 
@@ -295,13 +308,16 @@
     [width]="columnChooser.width"
     [height]="columnChooser.height">
     </dxo-column-chooser>
+    <dxo-group-panel 
+        [visible]="true">
+    </dxo-group-panel>
     <dxi-column
     *ngFor="let column of this.columns[3] | async"
     [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
-    [caption]="('comptesPalox-' + column.dataField?.split('.').join('-') | localize) || column.name"
+    [caption]="('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-') | localize) || column.name"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
