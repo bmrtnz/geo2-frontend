@@ -4,8 +4,6 @@ import { Field } from './model';
 export class MouvementFournisseur extends SupervisionPalox {
   @Field() numeroOrdre: string;
   @Field({ dataType: 'datetime' }) dateDepartOrdre: string;
-  @Field() entree: number;
-  @Field() sortie: number;
   @Field() bonRetour: string;
   @Field() cmr: string;
   @Field() referenceClient: string;
