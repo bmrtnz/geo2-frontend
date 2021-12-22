@@ -163,11 +163,13 @@ export class PlanningTransporteursComponent implements OnInit {
     }
     // Ajout CP, ville et pays au lieu de livraison nom groupe
     if (e.rowType === 'group') {
-        if (e.data.items && e.column.dataField === 'entrepotRaisonSocial' && e.data.items[0].entrepotCodePostal) {
-          e.cellElement.innerText +=
-          ' - ' + e.data.items[0].entrepotCodePostal
-          + ' ' + e.data.items[0].entrepotVille
-          + ' (' + e.data.items[0].entrepotPays + ')';
+        if (e.data.items && e.column.dataField === 'entrepotRaisonSocial') {
+          if (e.data.items[0]?.entrepotCodePostal) {
+            e.cellElement.innerText +=
+            ' - ' + e.data.items[0].entrepotCodePostal
+            + ' ' + e.data.items[0].entrepotVille
+            + ' (' + e.data.items[0].entrepotPays + ')';
+          }
         }
     }
   }
