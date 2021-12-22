@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import PlanningTransporteur from 'app/shared/models/planning-transporteur.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { APIRead, ApiService, RelayPage } from '../api.service';
+import { APIRead, ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,22 +29,16 @@ export class PlanningTransporteursService extends ApiService implements APIRead 
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
+          const query = await this.buildList(columns, this.operation);
+          type Response = { [operation: string]: PlanningTransporteur[] };
 
-          const query = await this.buildGetAllPlanningTransporteur(columns);
-          type Response = { [operation: string]: RelayPage<PlanningTransporteur> };
-
-          const variables = {
-            ...this.persistantVariables,
-            ...this.mapLoadOptionsToVariables(options)
-          };
+          const variables = this.persistantVariables;
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data[this.operation]) {
-              resolve(this.asInstancedListCount(res.data[this.operation]));
+              resolve({
+                data: res.data[this.operation],
+                totalCount: res.data[this.operation].length,
+              });
             }
           });
         }),
@@ -66,6 +60,9 @@ export class PlanningTransporteursService extends ApiService implements APIRead 
       });
   }
 
+  /**
+   * @deprecated
+   */
   protected async buildGetAllPlanningTransporteur(columns: Array<string>) {
     const alias = this.operation.ucFirst();
     return `
@@ -101,5 +98,25 @@ export class PlanningTransporteursService extends ApiService implements APIRead 
       }
     `;
   }
+
+  protected async buildList(columns: Array<string>, operationName?: string) {
+    return `
+      query ${operationName.ucFirst()}(
+        $dateMin: LocalDateTime!,
+        $dateMax: LocalDateTime!,
+        $societeCode: String!,
+        $transporteurCode: String!
+      ) {
+        ${operationName}(
+          dateMin: $dateMin,
+          dateMax: $dateMax,
+          societeCode: $societeCode,
+          transporteurCode: $transporteurCode
+        ) {
+          ${await this.model.getGQL(columns).toPromise()}
+        }
+      }
+    `;
+   }
 
 }
