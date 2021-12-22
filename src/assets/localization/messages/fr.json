@@ -910,7 +910,41 @@
     "grid-depassement-encours-pays-title": "Somme par pays",
     "grid-depassement-encours-client-title": "Détail des clients",
 
-    "ordres-planningFournisseurs-afficherPrix": "Afficher les prix"
+    "ordres-planningFournisseurs-afficherPrix": "Afficher les prix",
+
+    "comptesPalox-entrepots-codeClient": "Client",
+    "comptesPalox-entrepots-codeFournisseur": "Station",
+    "comptesPalox-entrepots-codeEntrepot": "Entrepôt",
+    "comptesPalox-entrepots-codeEmballage": "Palox",
+    "comptesPalox-entrepots-entree": "Entrée",
+    "comptesPalox-entrepots-sortie": "Sortie",
+    "comptesPalox-entrepots-dateDepartOrdre": "Date",
+    "comptesPalox-entrepots-dateInventaire": "Dernier décompte",
+    "comptesPalox-entrepots-quantiteInventaire": "Décompte",
+    "comptesPalox-entrepots-sommeQuantiteInventaire": "Solde",
+    "comptesPalox-entrepots-raisonSocialeEntrepot": "Raison sociale Entrepôt",
+    "comptesPalox-entrepots-codePostalEntrepot": "CP Entrepôt",
+    "comptesPalox-entrepots-raisonSocialeFournisseur": "Raison sociale Fournisseur",
+    "comptesPalox-entrepots-bonRetour": "Bon retour",
+    "comptesPalox-entrepots-cmr": "CMR",
+    "comptesPalox-entrepots-numeroOrdre": "n° Ordre",
+
+    "comptesPalox-fournisseurs-codeClient": "Client",
+    "comptesPalox-fournisseurs-codeFournisseur": "Fournisseur",
+    "comptesPalox-fournisseurs-codeEntrepot": "Entrepôt",
+    "comptesPalox-fournisseurs-codeEmballage": "Palox",
+    "comptesPalox-fournisseurs-entree": "Entrée",
+    "comptesPalox-fournisseurs-sortie": "Sortie",
+    "comptesPalox-fournisseurs-dateDepartOrdre": "Date",
+    "comptesPalox-fournisseurs-dateInventaire": "Dernier décompte",
+    "comptesPalox-fournisseurs-quantiteInventaire": "Décompte",
+    "comptesPalox-fournisseurs-sommeQuantiteInventaire": "Solde",
+    "comptesPalox-fournisseurs-raisonSocialeEntrepot": "Raison sociale Entrepôt",
+    "comptesPalox-fournisseurs-codePostalEntrepot": "CP Entrepôt",
+    "comptesPalox-fournisseurs-raisonSocialeFournisseur": "Raison sociale Fournisseur",
+    "comptesPalox-fournisseurs-bonRetour": "Bon retour",
+    "comptesPalox-fournisseurs-cmr": "CMR",
+    "comptesPalox-fournisseurs-numeroOrdre": "n° Ordre"
 
   }
 }

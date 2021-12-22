@@ -160,6 +160,15 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     return (this.switchType.value ? 1 : 0) + 2 * (this.switchEntity.value ? 1 : 0);
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Best expression for date
+      if (e.column.dataField === 'dateInventaire') {
+        if (e.value) e.cellElement.innerText = this.dateManagementService.formatDate(e.value, 'dd-MM-yyyy');
+      }
+    }
+  }
+
 }
 
 export default SupervisionComptesPaloxComponent;

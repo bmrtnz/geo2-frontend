@@ -1976,57 +1976,8 @@
   "mouv-fournisseurs-comptes-palox": {
     "columns": [
       {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "visible": true
-      },
-      {"dataField": "codeEntrepot" },
-      {"dataField": "codeClient" },
-      {"dataField": "raisonSocialeEntrepot" },
-      {"dataField": "codePostalEntrepot" },
-      {"dataField": "villeEntrepot" },
-      {"dataField": "codePaysEntrepot" },
-      {"dataField": "codeEmballage" },
-      {"dataField": "raisonSocialeFournisseur" },
-      {"dataField": "dateInventaire" },
-      {"dataField": "quantiteInventaire" },
-      {"dataField": "codeEspece" },
-      {"dataField": "referenceEntrepot" },
-      {"dataField": "sommeQuantiteInventaire" }
-    ]
-  },
-  "recap-fournisseurs-comptes-palox": {
-    "columns": [
-      {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "visible": true
-      },
-      {"dataField": "codeEntrepot" },
-      {"dataField": "codeClient" },
-      {"dataField": "raisonSocialeEntrepot" },
-      {"dataField": "codePostalEntrepot" },
-      {"dataField": "villeEntrepot" },
-      {"dataField": "codePaysEntrepot" },
-      {"dataField": "codeEmballage" },
-      {"dataField": "raisonSocialeFournisseur" },
-      {"dataField": "dateInventaire" },
-      {"dataField": "quantiteInventaire" },
-      {"dataField": "codeEspece" },
-      {"dataField": "referenceEntrepot" },
-      {"dataField": "sommeQuantiteInventaire" }
-    ]
-  },
-  "mouv-clients-comptes-palox": {
-    "columns": [
-      {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "visible": true
-      },
-      {
         "visibleIndex": 1,
-        "dataField": "codeClient",
+        "dataField": "codeFournisseur",
         "groupIndex": 1,
         "visible": true
       },
@@ -2037,12 +1988,12 @@
       },
       {
         "visibleIndex": 3,
-        "dataField": "codeFournisseur",
+        "dataField": "codeEntrepot",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "dateInventaire",
+        "dataField": "dateDepartOrdre",
         "visible": true
       },
       {
@@ -2062,10 +2013,128 @@
       },
       {
         "visibleIndex": 8,
+        "dataField": "bonRetour",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
         "dataField": "cmr",
         "visible": true
       },
-
+      {"dataField": "raisonSocialeEntrepot" },
+      {"dataField": "codePostalEntrepot" },
+      {"dataField": "villeEntrepot" },
+      {"dataField": "codePaysEntrepot" },
+      {"dataField": "raisonSocialeFournisseur" },
+      {"dataField": "quantiteInventaire" },
+      {"dataField": "codeEspece" },
+      {"dataField": "referenceEntrepot" },
+      {"dataField": "sommeQuantiteInventaire" },
+      {"dataField": "dateInventaire" },
+      {"dataField": "id" }
+    ]
+  },
+  "recap-fournisseurs-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "codeFournisseur",
+        "groupIndex": 1,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeEmballage",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "codeEntrepot",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entree",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "sortie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "quantiteInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "sommeQuantiteInventaire",
+        "visible": true
+      },
+      {"dataField": "codeClient" },
+      {"dataField": "raisonSocialeEntrepot" },
+      {"dataField": "codePostalEntrepot" },
+      {"dataField": "codePaysEntrepot" },
+      {"dataField": "raisonSocialeFournisseur" },
+      {"dataField": "codeEspece" },
+      {"dataField": "referenceEntrepot" },
+      {"dataField": "id" }
+    ]
+  },
+  "mouv-clients-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "codeClient",
+        "groupIndex": 1,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeEmballage",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "codeFournisseur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "dateDepartOrdre",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "numeroOrdre",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "entree",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "sortie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "bonRetour",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "cmr",
+        "visible": true
+      },
       {"dataField": "codeEntrepot" },
       {"dataField": "raisonSocialeEntrepot" },
       {"dataField": "codePostalEntrepot" },
@@ -2075,29 +2144,63 @@
       {"dataField": "quantiteInventaire" },
       {"dataField": "codeEspece" },
       {"dataField": "referenceEntrepot" },
-      {"dataField": "sommeQuantiteInventaire" }
+      {"dataField": "sommeQuantiteInventaire" },
+      {"dataField": "dateInventaire" },
+      {"dataField": "id" }
     ]
   },
   "recap-clients-comptes-palox": {
     "columns": [
       {
-        "visibleIndex": 0,
-        "dataField": "id",
+        "visibleIndex": 1,
+        "dataField": "codeClient",
+        "groupIndex": 1,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeFournisseur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "codeEmballage",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entree",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "sortie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "quantiteInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "sommeQuantiteInventaire",
         "visible": true
       },
       {"dataField": "codeEntrepot" },
-      {"dataField": "codeClient" },
       {"dataField": "raisonSocialeEntrepot" },
       {"dataField": "codePostalEntrepot" },
       {"dataField": "villeEntrepot" },
       {"dataField": "codePaysEntrepot" },
-      {"dataField": "codeEmballage" },
       {"dataField": "raisonSocialeFournisseur" },
-      {"dataField": "dateInventaire" },
-      {"dataField": "quantiteInventaire" },
       {"dataField": "codeEspece" },
       {"dataField": "referenceEntrepot" },
-      {"dataField": "sommeQuantiteInventaire" }
+      {"dataField": "id" }
     ]
   },
   "ordre-save-log": {
