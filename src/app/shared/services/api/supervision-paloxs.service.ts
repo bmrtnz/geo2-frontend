@@ -62,8 +62,8 @@ export class SupervisionPaloxsService extends ApiService {
       query ${operationName.ucFirst()}(
         $dateMaxMouvements: LocalDateTime!,
         $codeSociete: String!,
-        $codeEntrepot: String!,
-        $codeCommercial: String!
+        $codeEntrepot: String,
+        $codeCommercial: String
       ) {
         ${operationName}(
           dateMaxMouvements: $dateMaxMouvements
