@@ -195,7 +195,7 @@ export class GridConfiguratorService {
       widget: 'dxTextBox',
       cssClass: 'grid-title',
       options: {
-        width: title.length ? 400 : 0,
+        width: title?.length ? 400 : 0,
         readOnly: true,
         text: title
       }

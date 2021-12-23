@@ -8,16 +8,15 @@ import { GridsConfigsService } from 'app/shared/services/api/grids-configs.servi
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { GridColumn } from 'basic';
 import { DxCheckBoxComponent, DxDataGridComponent, DxNumberBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 import { TabContext } from '../../root/root.component';
-import { GridColumn } from 'basic';
 
 @Component({
   selector: 'planning-depart',
@@ -96,7 +95,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       this.getDaysNB(),
     ]);
 
-    this.dataSource.filter(filters);
+    this.indicator?.dataSource?.filter(filters);
 
     this.title = this.localizePipe.transform('grid-situation-depart-title-today');
   }
@@ -166,14 +165,9 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   getDaysNB() {
-    return this.datePipe.transform(
-      new Date()
-        .setDate(
-          new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT
-        )
-        .valueOf(),
-      'yyyy-MM-dd'
-    );
+    const d = new Date();
+    d.setDate(new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT)
+    return d.toISOString();
   }
 }
 
