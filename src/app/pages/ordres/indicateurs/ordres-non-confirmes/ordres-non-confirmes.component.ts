@@ -69,15 +69,14 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
-  ngOnInit() {
-    this.enableFilters();
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
     this.dataSource = this.indicator.dataSource;
+    this.enableFilters();
   }
 
   enableFilters() {
