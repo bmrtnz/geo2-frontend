@@ -17,7 +17,7 @@ import { TabContext } from '../root/root.component';
 })
 export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
-  indicators: Indicator[];
+  indicators: (Indicator & any)[];
   allIndicators: Indicator[];
   loadedIndicators: string[];
   tilesReady: boolean;
