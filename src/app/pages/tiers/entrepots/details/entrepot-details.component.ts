@@ -72,6 +72,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     valide: [false],
     preSaisie: ['']
   });
+  refreshGrid = new EventEmitter();
   helpBtnOptions = { icon: 'help', elementAttr: { id: 'help-1' }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
   @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
@@ -251,6 +252,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   valueToUpperCase(e) {
+    if (!e.component.option('value')) return;
     e.component.option('value', e.component.option('value').toUpperCase());
     return e.component.option('value');
   }
@@ -258,27 +260,30 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {
+      // 11-2021: Lea/Stéphane wants to avoid pre-saisie/modifications step
+      if (this.formGroup.get('valide').value !== false || !this.formGroup.get('valide').dirty) {
+        this.formGroup.get('valide').setValue(true);
+        this.formGroup.get('valide').markAsDirty();
+      }
+      this.formGroup.get('preSaisie').setValue(false);
+      this.formGroup.get('preSaisie').markAsDirty();
+      this.preSaisie = '';
+
       const entrepot = this.formUtils.extractDirty(this.formGroup.controls, Entrepot.getKeyField());
 
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
-        if (entrepot.valide === true) {
-          entrepot.preSaisie = false;
-          this.preSaisie = '';
-        }
       } else {
-        entrepot.code = this.formGroup.get('code').value.toUpperCase();
         entrepot.client = { id: this.route.snapshot.params.client };
-        entrepot.valide = false;
-        entrepot.preSaisie = true;
       }
 
       this.entrepotsService.save_v2(this.getDirtyFieldsPath(), { entrepot })
         .subscribe({
           next: (e) => {
+            this.refreshGrid.emit();
             notify('Sauvegardé', 'success', 3000);
             // Show red badges (unvalidated forms)
-            // this.validationService.showToValidateBadges();
+            this.validationService.showToValidateBadges();
             if (!this.createMode) {
               this.entrepot = {
                 ...this.entrepot,

@@ -1,20 +1,21 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ViewDocument } from 'app/shared/components/view-document-popup/view-document-popup.component';
 import Envois from 'app/shared/models/envois.model';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import Ordre from 'app/shared/models/ordre.model';
 import { EnvoisService } from 'app/shared/services/api/envois.service';
-import { AuthService } from 'app/shared/services/auth.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { envois } from 'assets/configurations/grids.json';
 import { ToggledGrid } from '../form/form.component';
+import { GridColumn } from 'basic';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+
 
 @Component({
   selector: 'app-grid-envois',
@@ -26,11 +27,12 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
   @Output() public ordreSelected = new EventEmitter<Envois>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
-  @ViewChild(DxDataGridComponent, {static :true}) dataGrid : DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, {static: true}) dataGrid: DxDataGridComponent;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   public documentVisible = false;
   public currentDocument: ViewDocument;
@@ -38,43 +40,24 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
   constructor(
     private envoisService: EnvoisService,
     public currentCompanyService: CurrentCompanyService,
-    private authService: AuthService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
   ) {
-    this.detailedFields = this.envoisService.model.getDetailedFields(2)
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field =>
-          !!(this.localizeService.localize('ordreEnvois-' + field.path.replaceAll('.', '-'))).length);
-      }),
-    );
-
-        // .pipe(
-    //   map(fields => {
-    //     return fields.filter( field => {
-    //       console.log('ordreLignes-' + field.path.replaceAll('.', '-'))
-    //     })
-    //   }),
-    // );
-
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Envois);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
-  ngOnInit() {
-    // this.enableFilters();
-  }
+  ngOnInit() {}
 
-  sortGrid() {
-    // this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
-  }
-
-  enableFilters() {
+  async enableFilters() {
     if (this?.ordre?.id) {
-      this.dataSource = this.envoisService.getDataSource();
+      const fields = this.columns
+      .pipe(map( columns => columns.map( column => column.dataField )));
+      this.dataSource = this.envoisService.getDataSource_v2(await fields.toPromise());
       this.dataSource.filter([
         ['ordre.id', '=', this.ordre.id],
       ]);
+      this.dataGrid.dataSource = this.dataSource;
     }
   }
 
@@ -83,16 +66,18 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
   }
 
   onRowDblClick(event) {
-    const envois: Envois = event.data;
+    const envoi: Envois = event.data;
 
-    if (envois.document && !envois.document.isPresent) {
-      notify('Document non trouvé', 'error');
+    // console.log(envoi)
+
+    if (!envoi.document || (envoi.document && !envoi.document.isPresent)) {
+      notify('Désolé, document non accessible', 'error');
       return;
     }
 
     this.currentDocument = {
-      title: `${envois.flux.description.ucFirst()} ${envois.typeTiers.description}`,
-      document: envois.document
+      title: `${envoi.flux.description.ucFirst()} ${envoi.typeTiers.description}`,
+      document: envoi.document
     };
     this.documentVisible = true;
 

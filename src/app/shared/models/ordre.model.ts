@@ -80,6 +80,7 @@ export class Ordre extends Model {
   @Field({allowHeaderFiltering: false, allowSearch: false}) public factureAvoir?: FactureAvoir;
   @Field() public codeChargement?: string;
   @Field() public pourcentageMargeBrut?: number;
+  @Field() public tauxDevise?: number;
   @Field({ model: import('./type-camion.model') }) public typeTransport?: TypeCamion;
   @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
   public prixUnitaireTarifTransport?: number;

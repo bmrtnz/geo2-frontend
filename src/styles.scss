@@ -23,6 +23,17 @@ $base-fonts-path:'./scss/fonts/';
   float: right;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
+.noEllipsis {
+  text-overflow: clip;
+}
+.lowOpacity {
+  opacity: 0.5;
+}
+
 /* Toasts */
 
 .dx-toast-content {
@@ -163,4 +174,25 @@ body {
   background-color: rgba(255,255,255,1);
   font-size: 14px;
   padding: 3px 8px 4px 0px;
+}
+
+// Grid titles
+.grid-title input {
+  font-size: 16px;
+  pointer-events: none;
+}
+
+// Column chooser: lower spacing between items
+.dx-datagrid-column-chooser {
+  .dx-treeview-node-container {
+    margin-top: 5px;
+    .dx-checkbox {
+      top: 7px
+    }
+    .dx-item {
+      padding: 5px 8px 4px 40px;
+      min-height: 31px;
+      line-height: 17px;
+    }
+  }
 }

@@ -12,7 +12,7 @@ import {
   DxValidatorComponent,
   DxValidatorModule
 } from 'devextreme-angular';
-import { RangeRule, RequiredRule } from 'devextreme/ui/validation_engine';
+import { RangeRule, RequiredRule } from 'devextreme/ui/validation_rules';
 import { Observable } from 'rxjs';
 import { mergeAll, take } from 'rxjs/operators';
 import { SharedModule } from '../../shared.module';
@@ -74,7 +74,7 @@ export class PushHistoryPopupComponent {
   onShowing() {
     this.commentValidationRules = [
       { type: 'required' },
-      { type: 'stringLength', min: 5 },
+      // { type: 'stringLength', min: 5 }, // Léa 11-2021: mettent souvent 'Ok'
     ];
   }
 

@@ -12,6 +12,10 @@ import { environment } from 'environments/environment';
 import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
 import { GridColumn } from 'basic';
 import * as gridConfig from 'assets/configurations/grids.json';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+
 
 @Component({
   selector: 'app-lieux-passage-a-quai-list',
@@ -24,7 +28,8 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
 
   constructor(
@@ -38,9 +43,12 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
     this.apiService = this.lieuxPassageAQuaiService;
   }
 
-  ngOnInit() {
-    this.detailedFields = gridConfig['lieu-passage-a-quai'].columns;
-    this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
+  async ngOnInit() {
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.LieuPassageAQuai);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
+    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
+    this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource_v2(await fields.toPromise());
+    this.dataGrid.dataSource = this.lieuxPassageAQuais;
   }
 
   onRowDblClick(event) {

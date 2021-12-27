@@ -56,7 +56,7 @@ export class StockListComponent implements OnInit {
 
   stockCategories: StockCategory[];
   columnChooser = environment.columnChooser;
-  detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
+  detailedFields: Observable<ModelFieldOptions[]>;
   tagFilters: { [path: string]: string[] } = {};
 
   constructor(

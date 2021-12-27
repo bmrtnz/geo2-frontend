@@ -7,16 +7,22 @@ import {
   RangeRule,
   RequiredRule,
   StringLengthRule
-} from 'devextreme/ui/validation_engine';
+} from 'devextreme/ui/validation_rules';
+import { SummaryType } from 'app/shared/services/api.service';
 
 declare global {
   interface String {
     ucFirst(): string;
+    lcFirst(): string;
   }
 }
 
 String.prototype.ucFirst = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+String.prototype.lcFirst = function() {
+  return this.charAt(0).toLowerCase() + this.slice(1);
 };
 
 /**
@@ -54,7 +60,7 @@ interface GridColumn {
   /**
    * Casts column values to a specific data type.
    */
-  dataType?: string | number | 'date' | boolean | object | 'datetime';
+  dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime' ;
 
   /**
    * Specifies the column's filter value displayed in the filter row.
@@ -69,7 +75,8 @@ interface GridColumn {
   /**
    * Specifies the widget's edge to which the column is fixed. Applies only if columns[].fixed is true.
    */
-  fixedPosition?: 'left' | 'right';
+  fixedPosition?: string;
+  // fixedPosition?: 'left' | 'right';
 
   /**
    * Formats a value before it is displayed in a column cell.
@@ -120,9 +127,73 @@ interface GridColumn {
 }
 
 /**
+ * Specify item of the total summary.
+ * @link [Devexpress Doc.](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/summary/totalItems/)
+ */
+export type TotalItem = {
+
+  /**
+   * Specifies the alignment of a summary item.
+   */
+  alignment?: 'right'|'center'|'left',
+
+  /**
+   * Specifies the column that provides data for a summary item.
+   */
+  column?: string,
+
+  /**
+   * Specifies a CSS class to be applied to a summary item.
+   */
+  cssClass?: string,
+
+  /**
+   * Customizes the text to be displayed in the summary item.
+   */
+  customizeText?: (itemInfo: { value: string|number|Date, valueText: string }) => string,
+
+  /**
+   * Specifies the summary item's text.
+   */
+  displayFormat?: string,
+
+  /**
+   * Specifies the total summary item's identifier.
+   */
+  name?: string,
+
+  /**
+   * Specifies the column that must hold the summary item.
+   */
+  showInColumn?: string,
+
+  /**
+   * Specifies whether to skip empty strings, null, and undefined values when calculating a summary.
+   * Does not apply when you use a remote data source.
+   */
+  skipEmptyValues?: boolean,
+
+  /**
+   * Specifies how to aggregate data for the total summary item.
+   */
+  summaryType: SummaryType|string,
+
+  /**
+   * Specifies a summary item value's display format.
+   */
+  valueFormat?: format
+};
+
+/**
  * Formats values.
  */
 // tslint:disable-next-line:max-line-length
 type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date), precision?: number, type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' };
+
+export const ONE_SECOND = 1000;
+export const ONE_MINUTE = ONE_SECOND * 60;
+export const ONE_HOUR = ONE_MINUTE * 60;
+export const ONE_DAY = ONE_HOUR * 24;
+export const ONE_WEEK = ONE_DAY * 7;
 
 export {GridColumn};

@@ -5,11 +5,10 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  scrolling="{
-    useNative:false,
-    showScrollBar:'always'
+  [scrolling]="{
+    useNative:true
   }"
-  (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Marge', $event, gridConfiguratorService.Grid.OrdreMarge, enableFilters.bind(this))"
+  (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Marges', $event, gridConfiguratorService.Grid.OrdreMarge, enableFilters.bind(this))"
 >
 
   <!-- Grid configuration -->
@@ -34,22 +33,23 @@
     [enabled]="true"
     mode="select"
     title="{{ 'columnChooser' | localize }}"
-    allowSearch="true"
+    [allowSearch]="true"
     [width]="columnChooser.width"
     [height]="columnChooser.height">
   </dxo-column-chooser>
   <dxo-summary [totalItems]="totalItems"></dxo-summary>
   <dxi-column
-    *ngFor="let field of detailedFields | async"
-    [dataField]="field.path"
-    [caption]="('ordreMarge-' + field.path.replaceAll('.', '-') | localize) || field.name"
+    *ngFor="let column of this.columns | async"
+    [caption]="('ordreMarge-' + column.dataField.split('.').join('-') | localize) || column.name"
+    [format]="column?.format"
+    [dataField]="column.dataField"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
-    [dataType]="field.dataType"
-    [format]="field.format"
-    [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-    [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [showInColumnChooser]="column?.showInColumnChooser"
   ></dxi-column>
 
-</dx-data-grid>
+</dx-data-grid> 

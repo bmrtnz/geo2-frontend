@@ -29,7 +29,7 @@ export class LocalizationService {
    */
   localize(value: any, ...args: any[]): string {
     if (typeof value === 'string') {
-      return formatMessage(value, args);
+      return formatMessage(value, ...args);
     }
     if (value instanceof Date) {
       return formatDate(value, args[0] || 'shortDate');

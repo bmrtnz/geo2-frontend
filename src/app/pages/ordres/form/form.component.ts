@@ -15,7 +15,7 @@ import { PortsService } from 'app/shared/services/api/ports.service';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
-import { DxAccordionComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxTextBoxComponent } from 'devextreme-angular';
 import { dxElement } from 'devextreme/core/element';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
@@ -28,7 +28,7 @@ import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../r
  * Don't forget to cancel datasource loading in your component
  */
 export interface ToggledGrid {
-  onToggling(toggled: boolean);
+  onToggling(active: boolean);
 }
 
 enum Fragments {
@@ -49,16 +49,19 @@ enum LinkedCriterias {
   Regul = 'Régul.'
 }
 
+let self;
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Output() public ordre: Ordre;
 
   private destroy = new Subject<boolean>();
+  private anchorsInitialized = false;
 
   public fragments = Fragments;
   public status: string;
@@ -70,7 +73,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     referenceClient: [''],
     transporteur: [''],
     transporteurDEVCode: [''],
-    transporteurDEVPrixUnitaire: [''],
+    prixUnitaireTarifTransport: [''],
     transporteurDEVTaux: [''],
     baseTarifTransport: [''],
     typeTransport: [''],
@@ -88,6 +91,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     incotermLieu: [''],
     venteACommission: [''],
     devise: [''],
+    tauxDevise: [''],
     litigeNumero: [''],
     bonAFacturer: [''],
     commentaireUsageInterne: [''],
@@ -124,10 +128,10 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
   public transporteursDS: DataSource;
   public typeTransportDS: DataSource;
   public baseTarifTransportDS: DataSource;
-  public litigesDS: DataSource;
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
+  @ViewChild('comLog', { static: false }) comLog: DxTextBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
   @ViewChildren('anchor') anchors: QueryList<ElementRef|DxAccordionComponent>;
 
@@ -149,11 +153,17 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
     private tabContext: TabContext,
-  ) { }
+  ) {
+    this.handleTabChange()
+    .subscribe(event => {
+      this.initializeAnchors(event);
+    });
+    self = this;
+  }
 
   ngOnInit() {
-    this.initializeAnchors();
     this.initializeForm();
+    this.initializeAnchors();
 
     this.clientsDS = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
     this.entrepotDS = this.entrepotsService.getDataSource_v2(['id', 'raisonSocial']);
@@ -190,17 +200,16 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     ]);
 
     this.transporteursDS = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
-    this.litigesDS = this.litigesService.getDataSource();
-  }
 
-  ngAfterViewInit() {
-    this.enableAnchors();
-    this.handleAnchorsNavigation();
   }
 
   ngOnDestroy() {
     this.destroy.next(true);
     this.destroy.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    this.comLog.instance.option('hint', this.comLog.value);
   }
 
   onSubmit() {
@@ -328,8 +337,8 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deviseDisplayExpr(item) {
-    return item ? item.description + ' (' + item.taux + ')' : null;
-  }
+    return item ? item.description + ' (' + self.ordre?.tauxDevise + ')' : null;
+    }
 
   displayIDBefore(data) {
     return data ?
@@ -351,6 +360,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     )
     .subscribe( ordre => {
       this.ordre = ordre;
+      if (this.comLog) this.comLog.instance.option('hint', this.ordre.instructionsLogistiques);
       this.fetchFullOrderNumber();
       if (this.ordre.numero) this.status = ' - ' + Statut[this.ordre.statut] + (this.ordre.factureEDI ? ' EDI' : '');
       this.refOrdre = this.ordre?.id ? ordre.id : '-';
@@ -361,20 +371,27 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private initializeAnchors() {
-    const handler: (event: Partial<TabChangeData>) => void = ({ item, status }) => {
-      if (status === 'in') this.enableAnchors();
-      if (status === 'out') this.disableAnchors();
-    };
+  private initializeAnchors(event?: TabChangeData) {
+    if (event) {
+      if (event.status === 'in')
+      this.enableAnchors();
+      if (event.status === 'out')
+      this.disableAnchors();
+    }
+    if (!this.anchorsInitialized) {
+      this.handleAnchorsNavigation();
+      this.anchorsInitialized = true;
+    }
+  }
 
-    this.route.paramMap.pipe(
+  private handleTabChange() {
+    return this.route.paramMap.pipe(
       first(),
       switchMap(params => this.tabContext.onTabChange.pipe(map(data => [data, params.get(RouteParam.TabID)] as [TabChangeData, string]))),
       filter(([{item}, id]) => item.id === id),
       map(([item]) => item),
       takeUntil(this.destroy),
-    )
-    .subscribe(handler);
+    );
   }
 
   private getAnchorElement(anchor: DxAccordionComponent | ElementRef<any>)
@@ -405,7 +422,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.events
     .pipe(
       filter( event => event instanceof NavigationEnd ),
-      concatMap(_ => this.route.fragment),
+      switchMap(_ => this.route.fragment),
       filter(fragment => !!fragment),
       concatMap( fragment => of(this.anchors.find(item => this.getAnchorElement(item).id === fragment))
       ),
@@ -414,6 +431,12 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     .subscribe( item => {
       if (item instanceof DxAccordionComponent) {
         item.instance.expandItem(0);
+        // @ts-ignore
+        (item.onItemTitleClick as EventEmitter<>)
+        .emit({
+          overrideTogglingTo: true,
+          itemElement: item.instance.element().querySelector('[role="tab"]'),
+        }, [item]);
         scrollTo(item.instance.element());
       } else scrollTo(item.nativeElement);
     });

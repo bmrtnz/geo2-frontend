@@ -16,6 +16,9 @@ export class OrdresFraisService extends ApiService implements APIRead {
     super(apollo, OrdreFrais);
   }
 
+  /**
+   * @deprecated Use getDataSource_v2
+   */
   getDataSource(depth = 1, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({
@@ -48,5 +51,47 @@ export class OrdresFraisService extends ApiService implements APIRead {
       }),
     });
   }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { ordreFrais: OrdreFrais };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.ordreFrais)
+            resolve(new OrdreFrais(res.data.ordreFrais));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [
+        { selector: this.model.getKeyField() }
+      ],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allOrdreFrais: RelayPage<OrdreFrais> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = this.mapLoadOptionsToVariables(options);
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allOrdreFrais) {
+              resolve(this.asInstancedListCount(res.data.allOrdreFrais));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
+      }),
+    });
+  }
+
 
 }

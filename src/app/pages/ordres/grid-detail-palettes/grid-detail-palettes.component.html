@@ -1,13 +1,11 @@
 <dx-data-grid class="dx-card wide-card"
-    [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Détail palettes', $event, gridConfiguratorService.Grid.OrdreDetailPalettes, enableFilters.bind(this))"
   >
@@ -34,14 +32,14 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
-      [caption]="('ordreDetailPalettes-' + field.path.replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let field of detailedFields"
+      [dataField]="field.dataField"
+      [caption]="('ordreDetailPalettes-' + field.dataField?.split('.').join('-') | localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

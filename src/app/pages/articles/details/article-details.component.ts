@@ -40,6 +40,7 @@ import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
+import { IdentificationsSymboliquesService } from 'app/shared/services/api/identifications-symboliques.service';
 
 @Component({
     selector: 'app-articles',
@@ -56,6 +57,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         preSaisie: [''],
         gtinColisBlueWhale: [''],
         gtinUcBlueWhale: [''],
+        articleAssocie: [''],
         matierePremiere: this.fb.group({
             espece: [''],
             variete: [''],
@@ -83,8 +85,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             etiquetteEvenementielle: [''],
             gtinColis: [''],
             gtinUc: [''],
+            produitMdd: [''],
             articleClient: [''],
-            calibreMarquage: ['']
+            calibreMarquage: [''],
+            identificationSymbolique: ['']
         }),
         emballage: this.fb.group({
             emballage: [''],
@@ -93,6 +97,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             uniteParColis: [''],
             prepese: [''],
             poidsNetColis: [''],
+            poidsNetClient: [''],
             poidsNetGaranti: [''],
         }),
         // poidsNetUC: [''],
@@ -129,6 +134,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     etiquettesColis: DataSource;
     etiquettesUc: DataSource;
     etiquettesEvenementielle: DataSource;
+    identificationsSymboliques: DataSource;
     validateCommentPromptVisible = false;
     readOnlyMode = true;
     cloneMode = false;
@@ -167,6 +173,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private etiquettesUcService: EtiquettesUcService,
         private etiquettesEvenementiellesService: EtiquettesEvenementiellesService,
         private validationService: ValidationService,
+        private identificationsSymboliquesService: IdentificationsSymboliquesService,
         private router: Router,
         private route: ActivatedRoute,
         private fb: FormBuilder,
@@ -197,7 +204,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 this.contentReadyEvent.emit();
                 this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
             });
-
     }
 
     onCancel() {
@@ -229,12 +235,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     showWarnings() {
-
         // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
         this.warningMode = true;
         const Element = document.querySelector('.submit') as HTMLElement;
         Element.click();
-
     }
 
     displayIDBefore(data) {
@@ -243,6 +247,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     valueToUpperCase(e) {
+        if (!e.component.option('value')) return;
         e.component.option('value', e.component.option('value').toUpperCase());
         return e.component.option('value');
       }
@@ -295,6 +300,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 });
         }
         this.warningMode = false;
+
     }
 
     onUParColisChange(event) {
@@ -352,6 +358,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.etiquettesUc.filter(filter);
         this.etiquettesEvenementielle = this.etiquettesEvenementiellesService.getDataSource();
         this.etiquettesEvenementielle.filter(filter);
+        this.identificationsSymboliques = this.identificationsSymboliquesService.getDataSource();
+        this.identificationsSymboliques.filter(filter);
     }
 
     fileManagerClick() {
@@ -385,15 +393,43 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     private getDirtyFieldsPath() {
+
         const dirtyFields = this.formUtils
         .extractDirty(this.formGroup.controls, Article.getKeyField());
+
         const gridFields = articlesGridConfig.columns
         .map(({dataField}) => dataField);
 
+        //     return [
+        //       ...this.formUtils.extractPaths(dirtyFields),
+        //       ...gridFields,
+        //     ];
+
+        const paths = [];
+
+        Object.keys(dirtyFields).forEach(key => {
+            if (typeof (this.formGroup.get(key).value) === 'object' && this.formGroup.get(key).value !== null) {
+                Object.keys(this.formGroup.get(key).value).forEach(key2 => {
+                    const nestedVal = this.formGroup.get(`${key}.${key2}`).value;
+                    let controlKey;
+                    if (nestedVal !== null) {
+                        controlKey = `${key}.${key2}`;
+                        if (typeof nestedVal === 'object' && nestedVal !== null) controlKey += '.' + Object.keys(nestedVal)[0];
+                    }
+                    if (controlKey) paths.push(controlKey);
+                });
+            } else {
+                paths.push(key);
+            }
+        });
+
+        console.log(paths);
+
         return [
-          ...this.formUtils.extractPaths(dirtyFields),
-          ...gridFields,
+            ...paths,
+            ...gridFields,
         ];
-      }
+
+    }
 
 }

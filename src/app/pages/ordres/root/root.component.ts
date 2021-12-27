@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Injectable, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, convertToParamMap, NavigationEnd, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, NavigationStart, ParamMap, Router } from '@angular/router';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { DxTabPanelComponent } from 'devextreme-angular';
 import { on } from 'devextreme/events';
@@ -45,7 +45,7 @@ export type TabPanelItem = dxTabPanelItem & {
   component?: FormComponent | any,
 };
 
-export type TabChangeData = {status: 'in' | 'out', item: TabPanelItem};
+export type TabChangeData = {status: 'in' | 'out', item: Partial<TabPanelItem>};
 
 @Component({
   selector: 'app-root',
@@ -77,29 +77,15 @@ export class RootComponent implements OnInit, OnDestroy {
 
     this.tabPanelInitialized
     .pipe(
-      // Initial render
       concatMapTo(this.fillInitialItems()),
-      // Initial selection
       concatMapTo(this.handleRouting()),
-      tap( (selectID: string) => this.selectTab(selectID)),
-      // Listen navigation
-      switchMapTo(this.router.events),
-      filter<NavigationEnd>( event => event instanceof NavigationEnd),
-      // Handle fragments
-      switchMapTo(this.route.paramMap),
-      map((p: ParamMap) => p.get(RouteParam.TabID)),
-      startWith(convertToParamMap({ [RouteParam.TabID]: TAB_LOAD_ID })),
-      pairwise(),
-      filter(([previousID, currentID]) => previousID !== currentID),
-      map(([, currentID]) => currentID),
-      // Selection render
-      switchMapTo(this.handleRouting()),
+      concatMapTo(this.router.events),
+      filter<NavigationStart>( event => event instanceof NavigationStart),
       debounceTime(10),
+      switchMapTo(this.handleRouting()),
       takeUntil(this.destroy),
     )
-    .subscribe((selectID: string) => {
-      this.selectTab(selectID);
-    });
+    .subscribe();
 
   }
 
@@ -141,7 +127,7 @@ export class RootComponent implements OnInit, OnDestroy {
     const selectedID = this.route.snapshot.paramMap
     .get(RouteParam.TabID);
     const navID = pullID === selectedID
-      ? history.state[PREVIOUS_STATE] ?? TAB_HOME_ID
+    ? history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID
       : selectedID;
 
     this.router.navigate(['ordres', navID], {
@@ -150,25 +136,27 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   private handleRouting() {
-    return this.route.queryParamMap
+    return of(this.selectTab(TAB_LOAD_ID))
     .pipe(
-      first(),
-      tap( _ => this.selectTab(TAB_LOAD_ID)),
       switchMapTo(this.route.queryParamMap.pipe(first())),
       switchMap( queries => defer(() => this.handleQueries(queries))),
       switchMapTo(this.route.paramMap),
       map((p: ParamMap) => p),
-      startWith(convertToParamMap({ [RouteParam.TabID]: TAB_LOAD_ID })),
-      pairwise(),
-      // tap( _ => console.log('YO')),
       first(),
-      switchMap(([previousParams, currentParams]) => {
-        const previousItem = this.getTabItem(previousParams.get(RouteParam.TabID));
-        const currentItem = this.getTabItem(currentParams.get(RouteParam.TabID));
-        this.tabChangeEvent.emit({ status: 'out', item: previousItem });
-        const res = this.handleParams(currentParams);
-        this.tabChangeEvent.emit({ status: 'in', item: currentItem });
-        return of(res);
+      filter( currentParams => {
+        const previousID = this.getTabItem(this.getPreviousParamMap().get(RouteParam.TabID));
+        const currentID = this.getTabItem(currentParams.get(RouteParam.TabID));
+        return ![currentID, TAB_LOAD_ID].includes(previousID);
+      }),
+      tap( currentParams => {
+        this.selectTab(this.handleParams(currentParams));
+        const item = this.getTabItem(this.getPreviousParamMap().get(RouteParam.TabID));
+        this.tabChangeEvent.emit({ status: 'out', item });
+      }),
+      switchMap( currentParams => {
+        const item = this.getTabItem(currentParams.get(RouteParam.TabID));
+        this.tabChangeEvent.emit({ status: 'in', item });
+        return of('done');
       }),
     );
   }
@@ -286,6 +274,12 @@ export class RootComponent implements OnInit, OnDestroy {
 
   private selectTab(id: string) {
     this.tabPanel.selectedIndex = this.getTabIndex(id);
+  }
+
+  private getPreviousParamMap() {
+    return convertToParamMap({
+      [RouteParam.TabID]: history?.state[PREVIOUS_STATE] ?? TAB_LOAD_ID,
+    });
   }
 
 }

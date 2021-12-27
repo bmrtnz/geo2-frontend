@@ -16,6 +16,9 @@ export class TracabiliteLignesService extends ApiService implements APIRead {
     super(apollo, TracabiliteLigne);
   }
 
+  /**
+   * @deprecated Use getDataSource_v2
+   */
   getDataSource(depth = 1, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({
@@ -45,6 +48,47 @@ export class TracabiliteLignesService extends ApiService implements APIRead {
               resolve(new TracabiliteLigne(res.data.tracabiliteLigne));
           });
         }),
+      }),
+    });
+  }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { tracabiliteLigne: TracabiliteLigne };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.tracabiliteLigne)
+            resolve(new TracabiliteLigne(res.data.tracabiliteLigne));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [
+        { selector: this.model.getKeyField() }
+      ],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allTracabiliteLigne: RelayPage<TracabiliteLigne> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = this.mapLoadOptionsToVariables(options);
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allTracabiliteLigne) {
+              resolve(this.asInstancedListCount(res.data.allTracabiliteLigne));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
       }),
     });
   }

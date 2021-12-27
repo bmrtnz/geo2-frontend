@@ -10,9 +10,9 @@
             <div class="dx-field-value">
                 <dx-tag-box
                     [dataSource]="especes"
-                    (valueChange)="onFieldValueChange($event,'matierePremiere.espece.description')"
+                    (valueChange)="onFieldValueChange($event,'matierePremiere.espece.id')"
                     [searchEnabled]="true"
-                    searchExpr="article.matierePremiere.espece.description"
+                    searchExpr="article.matierePremiere.espece.id"
                     [displayExpr]="capitalize"
                     valueExpr="key"
                 >
@@ -113,7 +113,6 @@
   </div>
   <div style="clear:both"></div>
   <dx-data-grid class="dx-card wide-card"
-    [dataSource]="articles"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -121,9 +120,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
@@ -155,24 +153,23 @@
       [height]="columnChooser.height"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true">
+      [allowSearch]="true">
     </dxo-column-chooser>
     <dxo-search-editor-options
       [width]="500">
     </dxo-search-editor-options>
 
     <dxi-column
-      *ngFor="let field of detailedFields"
-      [dataField]="field.dataField"
-      [caption]="('articles-' + field.dataField.replace('.description', '').replaceAll('.', '-') | localize) || field.name"
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
       [visible]="false"
-      [headerFilter]="{'width': 500}"
+      [caption]="('articles-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
-      [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [dataType]="column?.dataType"
+      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+      [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
-
   </dx-data-grid>
 </div>

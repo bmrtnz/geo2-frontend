@@ -7,7 +7,9 @@ import DataSource from 'devextreme/data/data_source';
 import { dxDataGridRowObject } from 'devextreme/ui/data_grid';
 import { environment } from 'environments/environment';
 import { GridColumn } from 'basic';
-import * as gridConfig from 'assets/configurations/grids.json';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 
 @Component({
   selector: 'app-grid-clients-dep-encours-detail',
@@ -19,7 +21,8 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   public title: string;
 
@@ -29,12 +32,14 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
     private clientsService: ClientsService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
-    this.detailedFields = gridConfig['depassement-encours-client'].columns as GridColumn[];
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.DepassementEncoursClient);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.title = this.localizePipe.transform('grid-depassement-encours-client-title');
   }
 
-  ngOnInit() {
-    this.dataSource = this.clientsService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
+  async ngOnInit() {
+    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
+    this.dataSource = this.clientsService.getDataSource_v2(await fields.toPromise());
     this.enableFilters();
   }
 

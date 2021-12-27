@@ -67,7 +67,73 @@
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      }
+      },
+      { "dataField" : "societe.raisonSocial", "visible": false },
+      { "dataField" : "adresse1", "visible": false },
+      { "dataField" : "adresse2", "visible": false },
+      { "dataField" : "adresse3", "visible": false },
+      { "dataField" : "codePostal", "visible": false },
+      { "dataField" : "facturationRaisonSocial", "visible": false },
+      { "dataField" : "facturationAdresse1", "visible": false },
+      { "dataField" : "facturationAdresse2", "visible": false },
+      { "dataField" : "facturationAdresse3", "visible": false },
+      { "dataField" : "facturationCodePostal", "visible": false },
+      { "dataField" : "facturationVille", "visible": false },
+      { "dataField" : "facturationPays.description", "visible": false },
+      { "dataField" : "regimeTva.description", "visible": false },
+      { "dataField" : "incoterm.description", "visible": false },
+      { "dataField" : "nbJourEcheance", "visible": false },
+      { "dataField" : "echeanceLe", "visible": false },
+      { "dataField" : "moyenPaiement.description", "visible": false },
+      { "dataField" : "tvaCee", "visible": false },
+      { "dataField" : "controlReferenceClient", "visible": false },
+      { "dataField" : "commentaireHautFacture", "visible": false },
+      { "dataField" : "commentaireBasFacture", "visible": false },
+      { "dataField" : "instructionCommercial", "visible": false },
+      { "dataField" : "siret", "visible": false },
+      { "dataField" : "blocageAvoirEdi", "visible": false },
+      { "dataField" : "ifco", "visible": false },
+      { "dataField" : "instructionLogistique", "visible": false },
+      { "dataField" : "basePaiement.description", "visible": false },
+      { "dataField" : "compteComptable", "visible": false },
+      { "dataField" : "langue.description", "visible": false },
+      { "dataField" : "devise.description", "visible": false },
+      { "dataField" : "enCoursTemporaire", "visible": false },
+      { "dataField" : "enCoursBlueWhale", "visible": false },
+      { "dataField" : "fraisMarketing", "visible": false },
+      { "dataField" : "fraisPlateforme", "visible": false },
+      { "dataField" : "fraisExcluArticlePasOrigineFrance", "visible": false },
+      { "dataField" : "tauxRemiseParFacture", "visible": false },
+      { "dataField" : "tauxRemiseHorsFacture", "visible": false },
+      { "dataField" : "commercial.nomUtilisateur", "visible": false },
+      { "dataField" : "assistante.nomUtilisateur", "visible": false },
+      { "dataField" : "referenceCoface", "visible": false },
+      { "dataField" : "agrement", "visible": false },
+      { "dataField" : "courtageModeCalcul.description", "visible": false },
+      { "dataField" : "courtageValeur", "visible": false },
+      { "dataField" : "conditionVente.description", "visible": false },
+      { "dataField" : "typeVente.description", "visible": false },
+      { "dataField" : "groupeClient.description", "visible": false },
+      { "dataField" : "paloxRaisonSocial.raisonSocial", "visible": false },
+      { "dataField" : "paloxGratuit", "visible": false },
+      { "dataField" : "consignePalox", "visible": false },
+      { "dataField" : "releveFactures", "visible": false },
+      { "dataField" : "identifiantFiscal", "visible": false },
+      { "dataField" : "courtier.raisonSocial", "visible": false },
+      { "dataField" : "soumisCtifl", "visible": false },
+      { "dataField" : "lieuFonctionEan", "visible": false },
+      { "dataField" : "delaiBonFacturer", "visible": false },
+      { "dataField" : "debloquerEnvoieJour", "visible": false },
+      { "dataField" : "clotureAutomatique", "visible": false },
+      { "dataField" : "fraisRamasse", "visible": false },
+      { "dataField" : "refusCoface", "visible": false },
+      { "dataField" : "enCoursDateLimite", "visible": false },
+      { "dataField" : "fraisMarketingModeCalcul.description", "visible": false },
+      { "dataField" : "formatDluo", "visible": false },
+      { "dataField" : "dateDebutIfco", "visible": false },
+      { "dataField" : "nbJourLimiteLitige", "visible": false },
+      { "dataField" : "detailAutomatique", "visible": false },
+      { "dataField" : "venteACommission", "visible": false }
     ]
   },
   "fournisseur": {
@@ -127,7 +193,51 @@
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      }
+      },
+
+      { "dataField": "identifiant.libelle", "visible": false },
+      { "dataField": "stockActif", "visible": false },
+      { "dataField": "stockPrecalibre", "visible": false },
+      { "dataField": "adresse1", "visible": false },
+      { "dataField": "adresse2", "visible": false },
+      { "dataField": "adresse3", "visible": false },
+      { "dataField": "codePostal", "visible": false },
+      { "dataField": "latitude", "visible": false },
+      { "dataField": "longitude", "visible": false },
+      { "dataField": "regimeTva.description", "visible": false },
+      { "dataField": "nbJourEcheance", "visible": false },
+      { "dataField": "echeanceLe", "visible": false },
+      { "dataField": "moyenPaiement.description", "visible": false },
+      { "dataField": "tvaCee", "visible": false },
+      { "dataField": "basePaiement.description", "visible": false },
+      { "dataField": "compteComptable", "visible": false },
+      { "dataField": "langue.description", "visible": false },
+      { "dataField": "devise.description", "visible": false },
+      { "dataField": "agrementBW", "visible": false },
+      { "dataField": "codeStation", "visible": false },
+      { "dataField": "idTracabilite", "visible": false },
+      { "dataField": "type.description", "visible": false },
+      { "dataField": "lieuFonctionEan", "visible": false },
+      { "dataField": "formeJuridique", "visible": false },
+      { "dataField": "siretAPE", "visible": false },
+      { "dataField": "tvaId", "visible": false },
+      { "dataField": "rcs", "visible": false },
+      { "dataField": "autoFacturation", "visible": false },
+      { "dataField": "referenceIfco", "visible": false },
+      { "dataField": "dateDebutIfco", "visible": false },
+      { "dataField": "margeObjectifEuroKilo", "visible": false },
+      { "dataField": "margeObjectifPourcentCa", "visible": false },
+      { "dataField": "listeSocietes", "visible": false },
+      { "dataField": "declarantCHEP", "visible": false },
+      { "dataField": "suiviDestockage", "visible": false },
+      { "dataField": "consignePaloxUdc", "visible": false },
+      { "dataField": "consignePaloxSa", "visible": false },
+      { "dataField": "dateConditionGeneraleAchatSignee", "visible": false },
+      { "dataField": "declarantBacsCHEP", "visible": false },
+      { "dataField": "indicateurModificationDetail", "visible": false },
+      { "dataField": "fournisseurDeRattachement.raisonSocial", "visible": false },
+      { "dataField": "groupeFournisseur.description", "visible": false },
+      { "dataField": "conditionVente.description", "visible": false }
     ]
   },
   "transporteur": {
@@ -178,7 +288,21 @@
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      }
+      },
+      { "dataField": "adresse1", "visible": false },
+      { "dataField": "adresse2", "visible": false },
+      { "dataField": "adresse3", "visible": false },
+      { "dataField": "regimeTva.description", "visible": false },
+      { "dataField": "nbJourEcheance", "visible": false },
+      { "dataField": "echeanceLe", "visible": false },
+      { "dataField": "moyenPaiement.description", "visible": false },
+      { "dataField": "tvaCee", "visible": false },
+      { "dataField": "clientRaisonSocial.raisonSocial", "visible": false },
+      { "dataField": "basePaiement.description", "visible": false },
+      { "dataField": "compteComptable", "visible": false },
+      { "dataField": "langue.description", "visible": false },
+      { "dataField": "devise.description", "visible": false },
+      { "dataField": "lieuFonctionEan", "visible": false }
     ]
   },
   "lieu-passage-a-quai": {
@@ -229,8 +353,20 @@
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      }
-    ]
+      },
+      { "dataField": "adresse1", "visible": false },
+      { "dataField": "adresse2", "visible": false },
+      { "dataField": "adresse3", "visible": false },
+      { "dataField": "lieuFonctionEan", "visible": false },
+      { "dataField": "langue.description", "visible": false },
+      { "dataField": "tvaCee", "visible": false },
+      { "dataField": "nbJourEcheance", "visible": false },
+      { "dataField": "echeanceLe", "visible": false },
+      { "dataField": "regimeTva.description", "visible": false },
+      { "dataField": "devise.description", "visible": false },
+      { "dataField": "moyenPaiement.description", "visible": false },
+      { "dataField": "basePaiement.description", "visible": false },
+      { "dataField": "compteComptable", "visible": false }    ]
   },
   "entrepot": {
     "columns": [
@@ -285,7 +421,36 @@
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      }
+      },
+       { "dataField": "adresse2", "visible": false },
+       { "dataField": "adresse3", "visible": false },
+       { "dataField": "codePostal", "visible": false },
+       { "dataField": "incoterm.description", "visible": false },
+       { "dataField": "regimeTva.description", "visible": false },
+       { "dataField": "tvaCee", "visible": false },
+       { "dataField": "instructionSecretaireCommercial", "visible": false },
+       { "dataField": "instructionLogistique", "visible": false },
+       { "dataField": "typePalette.description", "visible": false },
+       { "dataField": "mentionClientSurFacture", "visible": false },
+       { "dataField": "transporteur.raisonSocial", "visible": false },
+       { "dataField": "baseTarifTransport.description", "visible": false },
+       { "dataField": "prixUnitaireTarifTransport", "visible": false },
+       { "dataField": "typeCamion.description", "visible": false },
+       { "dataField": "transitaire.raisonSocial", "visible": false },
+       { "dataField": "baseTarifTransit.description", "visible": false },
+       { "dataField": "prixUnitaireTarifTransit", "visible": false },
+       { "dataField": "modeLivraison", "visible": false },
+       { "dataField": "langue.description", "visible": false },
+       { "dataField": "commercial.nomUtilisateur", "visible": false },
+       { "dataField": "assistante.nomUtilisateur", "visible": false },
+       { "dataField": "declarationTransit", "visible": false },
+       { "dataField": "controlReferenceClient", "visible": false },
+       { "dataField": "declarationEur1", "visible": false },
+       { "dataField": "envoieAutomatiqueDetail", "visible": false },
+       { "dataField": "gestionnaireChep", "visible": false },
+       { "dataField": "referenceChep", "visible": false },
+       { "dataField": "lieuFonctionEanDepot", "visible": false },
+       { "dataField": "lieuFonctionEanAcheteur", "visible": false }
     ]
   },
   "contact": {
@@ -569,12 +734,8 @@
         "dataType": "string",
         "visible": true
       },
-      {
-        "dataField": "id"
-      },
-      {
-        "dataField": "campagne.id"
-      }
+      { "dataField": "id", "visible": false },
+      { "dataField": "campagne.id", "visible": false }
     ]
   },
   "historique": {
@@ -800,14 +961,14 @@
         "visible": true
       },
       {
-        "visibleIndex": 5,
-        "dataField": "nombrePalettesIntermediaires",
+        "visibleIndex": 6,
+        "dataField": "nombrePalettesCommandees",
         "dataType": "number",
         "visible": true
       },
       {
-        "visibleIndex": 6,
-        "dataField": "nombrePalettesCommandees",
+        "visibleIndex": 5,
+        "dataField": "nombrePalettesIntermediaires",
         "dataType": "number",
         "visible": true
       },
@@ -831,7 +992,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "dataType": "string",
         "visible": true
       },
@@ -884,7 +1045,7 @@
       },
       {
         "visibleIndex": 20,
-        "dataField": "fraisUnite.description",
+        "dataField": "fraisUnite.id",
         "dataType": "string",
         "visible": true
       },
@@ -911,7 +1072,8 @@
         "dataField": "gtinColisKit",
         "dataType": "string",
         "visible": true
-      }
+      },
+      { "dataField": "article.matierePremiere.variete.description", "visible": false }
     ]
   },
 
@@ -919,7 +1081,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "dataType": "string",
         "visible": true
       },
@@ -997,7 +1159,7 @@
       },
       {
         "visibleIndex": 12,
-        "dataField": "paletteInter.description",
+        "dataField": "paletteInter.id",
         "dataType": "string",
         "visible": true
       },
@@ -1006,7 +1168,10 @@
         "dataField": "referenceControleQualite",
         "dataType": "string",
         "visible": true
-      }
+      },
+      { "dataField": "id", "visible": false },
+      { "dataField": "numero", "sortOrder": "asc", "visible": false },
+      { "dataField": "article.matierePremiere.variete.description", "visible": false }
     ]
   },
 
@@ -1027,6 +1192,7 @@
       {
         "visibleIndex": 2,
         "dataField": "dateDepartReelleFournisseur",
+        "sortOrder": "desc",
         "dataType": "string",
         "visible": true
         },
@@ -1102,145 +1268,143 @@
         "dataType": "string",
         "visible": true
       },
-      {
-        "dataField": "id"
-      }
-
+      { "dataField": "id", "visible": false }
     ]
   },
 
   "ordre-logistique": {
     "columns": [
       {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "visible": false
-      },
-      {
         "visibleIndex": 1,
-        "dataField": "expedieStation",
+        "dataField": "fournisseur.code",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "ordre.typeTransport.id",
+        "dataField": "expedieStation",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "fournisseurReferenceDOC",
+        "dataField": "ordre.typeTransport.id",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "ordre.prixUnitaireTarifTransport",
+        "dataField": "fournisseurReferenceDOC",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "ordre.transporteurDEVCode",
+        "dataField": "ordre.prixUnitaireTarifTransport",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "ordre.baseTarifTransport",
+        "dataField": "ordre.transporteurDEVCode",
         "visible": true
       },
       {
         "visibleIndex": 7,
-        "dataField": "ordre.codeChargement",
+        "dataField": "ordre.baseTarifTransport.id",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "ordre.ETDDate",
+        "dataField": "ordre.codeChargement",
         "visible": true
       },
       {
         "visibleIndex": 9,
-        "dataField": "ordre.ETADate",
+        "dataField": "ordre.ETDDate",
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "ordre.ETDLocation",
+        "dataField": "ordre.ETADate",
         "visible": true
       },
       {
         "visibleIndex": 11,
-        "dataField": "ordre.ETALocation",
+        "dataField": "ordre.ETDLocation",
         "visible": true
       },
       {
         "visibleIndex": 12,
-        "dataField": "ordre.incoterm.id",
+        "dataField": "ordre.ETALocation",
         "visible": true
       },
       {
         "visibleIndex": 13,
-        "dataField": "ordre.incotermLieu",
+        "dataField": "ordre.incoterm.id",
         "visible": true
       },
       {
         "visibleIndex": 14,
+        "dataField": "ordre.incotermLieu",
+        "visible": true
+      },
+      {
+        "visibleIndex": 15,
         "dataField": "referenceLogistique",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 15,
+        "visibleIndex": 16,
         "dataField": "referenceDocument",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 17,
         "dataField": "numeroImmatriculation",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 17,
+        "visibleIndex": 18,
         "dataField": "numeroContainer",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 19,
         "dataField": "locusTrace",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 19,
+        "visibleIndex": 20,
         "dataField": "numeroPlomb",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 21,
         "dataField": "detecteurTemperature",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 21,
+        "visibleIndex": 22,
         "dataField": "certificatControle",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 22,
+        "visibleIndex": 23,
         "dataField": "certificatPhytosanitaire",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 23,
+        "visibleIndex": 24,
         "dataField": "billOfLanding",
         "dataType": "string",
         "visible": true
-      }
+      },
+      { "dataField": "id", "visible": false }
     ]
   },
   "ordre-bon-a-facturer": {
@@ -1318,7 +1482,7 @@
         "dataField": "secteurCommercial.id",
         "visible": false
       },
-      {
+      { 
         "dataField": "type",
         "visible": false
       }
@@ -1388,6 +1552,7 @@
         "visibleIndex": 0,
         "dataField": "numeroGroupementLitige",
         "dataType": "string",
+        "sortOrder": "asc",
         "visible": true
       },
       {
@@ -1479,6 +1644,45 @@
         "dataField": "id",
         "dataType": "string",
         "visible": false
+      },
+      {
+        "dataField": "clientNombrePalettes", "visible": false
+      },
+      {
+        "dataField": "clientNombreColisReclamation", "visible": false
+      },
+      {
+        "dataField": "clientPoidsNet", "visible": false
+      },
+      {
+        "dataField": "clientPrixUnitaire", "visible": false
+      },
+      {
+        "dataField": "deviseCode", "visible": false
+      },
+      {
+        "dataField": "clientQuantite", "visible": false
+      },
+      {
+        "dataField": "clientUniteFactureCode", "visible": false
+      },
+      {
+        "dataField": "responsableNombrePalettes", "visible": false
+      },
+      {
+        "dataField": "responsableNombreColis", "visible": false
+      },
+      {
+        "dataField": "responsablePoidsNet", "visible": false
+      },
+      {
+        "dataField": "responsablePrixUnitaire", "visible": false
+      },
+      {
+        "dataField": "responsableQuantite", "visible": false
+      },
+      {
+        "dataField": "responsableUniteFactureCode", "visible": false
       }
     ]
   },
@@ -1547,6 +1751,7 @@
       {
         "visibleIndex": 10,
         "dataField": "dateDemande",
+        "sortOrder": "asc",
         "dataType": "string",
         "visible": true
       },
@@ -1573,7 +1778,10 @@
         "dataField": "commentairesAvancement",
         "dataType": "string",
         "visible": true
-      }
+      },
+      { "dataField": "document.isPresent", "visible": false },
+      { "dataField": "document.type", "visible": false },
+      { "dataField": "document.uri", "visible": false }
     ]
   },
   "commandes-transit": {
@@ -1684,6 +1892,478 @@
       }
     ]
   },
+  "planning-transporteurs": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "entrepotRaisonSocial",
+        "groupIndex": 0,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "numero",
+        "groupIndex": 1,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "fournisseur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "sommeColisPaletteBis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "sommeColisCommandes",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "espece",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateDepartPrevueFournisseur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "referenceClient",
+        "visible": true
+      },
+      { "dataField": "version" },
+      { "dataField": "colis" },
+      { "dataField": "palette" },
+      { "dataField": "entrepotCodePostal" },
+      { "dataField": "entrepotVille" },
+      { "dataField": "entrepotPays" },
+      { "dataField": "id", "visible": false },
+      { "dataField": "codeChargement", "visible": false },
+      { "dataField": "sommeColisPalette", "visible": false },
+      { "dataField": "entrepot", "visible": false },
+      { "dataField": "transporteur", "visible": false },
+      { "dataField": "dateDepartPrevueGroupage", "visible": false },
+      { "dataField": "groupage", "visible": false },
+      { "dataField": "fournisseurCodePostal", "visible": false },
+      { "dataField": "fournisseurPays", "visible": false },
+      { "dataField": "flagEntrepot", "visible": false }
+    ]
+  },
+
+  "planning-transporteurs-approche": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "version",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "logistiques.fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entrepot.codePostal",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "entrepot.ville",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "entrepot.pays.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "societe.id",
+        "visible": true
+      },
+      { "dataField": "transporteur.id" },
+      { "dataField": "id" },
+      { "dataField": "entrepot.id" }
+    ]
+  },
+  "planning-fournisseurs": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "logistique.dateDepartPrevueFournisseur",
+        "sortIndex": 1,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ordre.numero",
+        "sortIndex": 3,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "logistique.fournisseur.code",
+        "sortIndex": 4,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ordre.transporteur.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "nombrePalettesCommandees",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "nombreColisExpedies",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "article.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "ordre.dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "ordre.client.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "ordre.entrepot.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ordre.referenceClient",
+        "visible": true
+      },
+      {
+        "visibleIndex": 15,
+        "dataField": "ventePrixUnitaire",
+        "visible": false
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "achatPrixUnitaire",
+        "visible": false
+      },
+      {
+        "dataField": "ordre.pays.id",
+        "sortIndex": 1,
+        "sortOrder": "asc"
+      },
+      {
+        "dataField": "numero",
+        "sortIndex": 4,
+        "sortOrder": "asc"
+      },
+      { "dataField": "id", "visible": false },
+      { "dataField": "logistique.fournisseur.id", "visible": false },
+      { "dataField": "nombreColisCommandes", "visible": false },
+      { "dataField": "article.id", "visible": false },
+      { "dataField": "article.matierePremiere.variete.description", "visible": false },
+      { "dataField": "ordre.devise.id", "visible": false },
+      { "dataField": "achatUnite.description", "visible": false }
+    ]
+  },
+  "mouv-clients-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "codeClient",
+        "groupIndex": 1,
+        "sortIndex": 1,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeEmballage",
+        "sortIndex": 3,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "codeFournisseur",
+        "sortIndex": 4,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "dateDepartOrdre",
+        "sortIndex": 5,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "numeroOrdre",
+        "sortIndex": 6,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "entree",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "sortie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "bonRetour",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "cmr",
+        "visible": true
+      },
+      {"dataField": "codeEntrepot", "sortIndex": 2, "sortOrder": "asc" },
+      {"dataField": "raisonSocialeEntrepot" },
+      {"dataField": "codePostalEntrepot" },
+      {"dataField": "villeEntrepot" },
+      {"dataField": "codePaysEntrepot" },
+      {"dataField": "raisonSocialeFournisseur" },
+      {"dataField": "quantiteInventaire" },
+      {"dataField": "codeEspece" },
+      {"dataField": "referenceEntrepot" },
+      {"dataField": "sommeQuantiteInventaire" },
+      {"dataField": "dateInventaire" },
+      {"dataField": "id" }
+    ]
+  },
+  "mouv-fournisseurs-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "codeFournisseur",
+        "groupIndex": 1,
+        "sortIndex": 4,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeEmballage",
+        "sortIndex": 3,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "codeEntrepot",
+        "sortIndex": 2,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "dateDepartOrdre",
+        "sortIndex": 5,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "numeroOrdre",
+        "sortIndex": 6,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "entree",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "sortie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "bonRetour",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "cmr",
+        "visible": true
+      },
+      {"dataField": "codeClient", "sortIndex": 2, "sortOrder": "asc" },
+      {"dataField": "raisonSocialeEntrepot" },
+      {"dataField": "codePostalEntrepot" },
+      {"dataField": "villeEntrepot" },
+      {"dataField": "codePaysEntrepot" },
+      {"dataField": "raisonSocialeFournisseur" },
+      {"dataField": "quantiteInventaire" },
+      {"dataField": "codeEspece" },
+      {"dataField": "referenceEntrepot" },
+      {"dataField": "sommeQuantiteInventaire" },
+      {"dataField": "dateInventaire" },
+      {"dataField": "id" }
+    ]
+  },
+  "recap-clients-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "codeClient",
+        "groupIndex": 1,
+        "sortIndex": 1,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeFournisseur",
+        "sortIndex": 3,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "codeEmballage",
+        "sortIndex": 4,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entree",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "sortie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "quantiteInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "sommeQuantiteInventaire",
+        "visible": true
+      },
+      {"dataField": "codeEntrepot", "sortIndex": 2, "sortOrder": "asc" },
+      {"dataField": "raisonSocialeEntrepot" },
+      {"dataField": "codePostalEntrepot" },
+      {"dataField": "villeEntrepot" },
+      {"dataField": "codePaysEntrepot" },
+      {"dataField": "raisonSocialeFournisseur" },
+      {"dataField": "codeEspece" },
+      {"dataField": "referenceEntrepot" },
+      {"dataField": "id" }
+    ]
+  },
+  "recap-fournisseurs-comptes-palox": {
+    "columns": [
+      {
+        "visibleIndex": 1,
+        "dataField": "codeFournisseur",
+        "groupIndex": 1,
+        "sortIndex": 1,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeEmballage",
+        "sortIndex": 2,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "codeEntrepot",
+        "sortIndex": 4,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entree",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "sortie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "quantiteInventaire",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "sommeQuantiteInventaire",
+        "visible": true
+      },
+      {"dataField": "codeClient", "sortIndex": 3, "sortOrder": "asc" },
+      {"dataField": "dateDepartOrdre", "sortIndex": 5, "sortOrder": "asc" },
+      {"dataField": "numeroOrdre", "sortIndex": 5, "sortOrder": "asc" },
+      {"dataField": "raisonSocialeEntrepot" },
+      {"dataField": "codePostalEntrepot" },
+      {"dataField": "codePaysEntrepot" },
+      {"dataField": "raisonSocialeFournisseur" },
+      {"dataField": "codeEspece" },
+      {"dataField": "referenceEntrepot" },
+      {"dataField": "id" }
+    ]
+  },
   "ordre-save-log": {
     "columns": [
       {
@@ -1697,6 +2377,9 @@
         "visibleIndex": 1,
         "dataField": "utilisateur",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
     ]
   },
@@ -1718,6 +2401,9 @@
         "visibleIndex": 2,
         "dataField": "commentaires",
         "visible": true
+      },
+      {
+        "dataField": "id"
       }
     ]
   },
@@ -1765,48 +2451,59 @@
       {
         "visibleIndex": 0,
         "dataField": "fournisseur.raisonSocial",
-        "visible": true,
-        "sortOrder": "asc"
+        "visible": true
       },
       {
         "visibleIndex": 1,
-        "dataField": "totalNombrePalettesExpediees",
+        "dataField": "nombrePalettesExpediees",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "totalNombreColisExpedies",
+        "dataField": "nombreColisExpedies",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "totalPoidsBrutExpedie",
+        "dataField": "poidsBrutExpedie",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "totalPoidsNetExpedie",
+        "dataField": "poidsNetExpedie",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "nombrePalettesAuSol",
+        "dataField": "logistique.nombrePalettesAuSol",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "nombrePalettes100x120",
+        "dataField": "logistique.nombrePalettes100x120",
         "visible": true
       },
       {
         "visibleIndex": 7,
-        "dataField": "nombrePalettes80x120",
+        "dataField": "logistique.nombrePalettes80x120",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "nombrePalettes60x80",
+        "dataField": "logistique.nombrePalettes60x80",
         "visible": true
+      },
+      {
+        "dataField": "ordre.id",
+        "visible": false
+      },
+      {
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "dataField": "logistique.id",
+        "visible": false
       }
     ]
   },
@@ -1849,7 +2546,8 @@
         "visibleIndex": 5,
         "dataField": "ordreLigne.article.description",
         "visible": true
-      }
+      },
+      { "dataField": "id", "visible": false }
     ]
   },
   "depassement-encours-pays": {
@@ -2063,57 +2761,157 @@
       {
         "visibleIndex": 7,
         "dataField": "totalVenteBrut",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 8,
         "dataField": "totalRemise",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 9,
         "dataField": "totalFraisMarketing",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 10,
         "dataField": "totalAchat",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 11,
         "dataField": "totalTransport",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 12,
         "dataField": "totalTransit",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 13,
         "dataField": "totalCourtage",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 14,
         "dataField": "totalFraisAdditionnels",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 15,
         "dataField": "margeBrute",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       },
       {
         "visibleIndex": 16,
         "dataField": "pourcentageMargeBrute",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "percent",
+          "precision": 2
+        }
       },
       {
         "visibleIndex": 17,
         "dataField": "pourcentageMargeNette",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "percent",
+          "precision": 2
+        }
+      },
+      {
+        "dataField": "referenceProdet",
+        "visible": false
+      },
+      {
+        "dataField": "nombreColisExpedies",
+        "visible": false
+      },
+      {
+        "dataField": "totalFraisPlateforme",
+        "visible": false,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
+      },
+      {
+        "dataField": "ordre.numero",
+        "visible": false
+      },
+      {
+        "dataField": "logistique.expedieStation",
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.type.description",
+        "visible": false
+      },
+      {
+        "dataField": "totalObjectifMarge",
+        "visible": false,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
+      },
+      {
+        "dataField": "totalRestitue",
+        "visible": false,
+        "format": {
+          "type": "currency",
+          "precision": 2
+        },
+        "currency": "EUR"
       }
     ]
   },
@@ -2155,7 +2953,8 @@
         "visible": true,
         "fixed": true,
         "fixedPosition": "right"
-      }
+      },
+      { "dataField": "id", "visible": false }
     ]
   }
 }

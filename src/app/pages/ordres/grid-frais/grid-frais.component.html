@@ -1,13 +1,11 @@
 <dx-data-grid class="dx-card wide-card"
-  [dataSource]="dataSource"
   [remoteOperations]="true"
   [showBorders]="false"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  scrolling="{
-    useNative:false,
-    showScrollBar:'always'
+  [scrolling]="{
+    useNative:true
   }"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Frais', $event, gridConfiguratorService.Grid.OrdreFrais, enableFilters.bind(this))"
 >
@@ -34,20 +32,19 @@
     [enabled]="true"
     mode="select"
     title="{{ 'columnChooser' | localize }}"
-    allowSearch="true"
+    [allowSearch]="true"
     [width]="columnChooser.width"
     [height]="columnChooser.height">
   </dxo-column-chooser>
   <dxi-column
-    *ngFor="let field of detailedFields | async"
-    [dataField]="field.path"
-    [caption]="('ordreFrais-' + field.path.replaceAll('.', '-') | localize) || field.name"
+    *ngFor="let field of detailedFields"
+    [dataField]="field.dataField"
+    [caption]="('ordreFrais-' + field.dataField?.split('.').join('-') | localize) || field.name"
     [visible]="false"
     trueText="Oui"
     falseText="Non"
     [dataType]="field.dataType"
     [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-    [format]="field.format"
     [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
   ></dxi-column>
 

@@ -6,11 +6,14 @@ import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 import { NestedMain } from 'app/pages/nested/nested.component';
 import { DxDataGridComponent, DxTagBoxComponent } from 'devextreme-angular';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { ClientsService, LocalizationService } from 'app/shared/services';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { GridColumn } from 'basic';
 import { article } from 'assets/configurations/grids.json';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+
 
 @Component({
   selector: 'app-articles-list',
@@ -24,7 +27,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   @ViewChildren(DxTagBoxComponent) filterBoxes: any;
-  detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
   tagFilters: { [path: string]: string[] } = {};
   especes: DataSource;
@@ -33,6 +37,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   emballages: DataSource;
   modesCulture: DataSource;
   trueFalse: string[];
+  initialSpecy: any;
 
   constructor(
     public articlesService: ArticlesService,
@@ -44,7 +49,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     ) {
       this.apiService = this.articlesService;
       this.especes = this.articlesService
-        .getFilterDatasource('matierePremiere.espece.description');
+        .getFilterDatasource('matierePremiere.espece.id');
       this.origines = this.articlesService
         .getFilterDatasource('matierePremiere.origine.description');
       this.varietes = this.articlesService
@@ -56,17 +61,20 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       this.trueFalse = ['Tous', 'Oui', 'Non'];
     }
 
-  ngOnInit() {
-    this.detailedFields = article.columns;
-    this.articles = this.articlesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
+  async ngOnInit() {
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Article);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
+    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
+    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
+    this.dataGrid.dataSource = this.articles;
   }
 
   onCellPrepared(e) {
     // Adding code (prefix) before "variété" and "emballage"
     if (e.rowType === 'data') {
-      if (this.localizeService.localize('articles-matierePremiere-variete') === e.column.caption) {
+      if (e.column.dataField === 'matierePremiere.variete.description') {
         e.cellElement.innerText =  e.data.matierePremiere?.variete.id + ' ' + e.cellElement.innerText;
-      } else if (this.localizeService.localize('articles-emballage-emballage') === e.column.caption) {
+      } else if (e.column.dataField === 'emballage.emballage.description') {
         e.cellElement.innerText =  e.data.emballage?.emballage.id + ' ' + e.cellElement.innerText;
       }
     }

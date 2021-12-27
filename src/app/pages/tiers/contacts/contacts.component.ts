@@ -8,13 +8,17 @@ import { ContactsService } from 'app/shared/services/api/contacts.service';
 import { FluxService } from 'app/shared/services/api/flux.service';
 import { MoyenCommunicationService } from 'app/shared/services/api/moyens-communication.service';
 import { SocietesService } from 'app/shared/services/api/societes.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { contact } from 'assets/configurations/grids.json';
 import { GridColumn } from 'basic';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+
 
 @Component({
   selector: 'app-contacts',
@@ -30,7 +34,8 @@ export class ContactsComponent implements OnInit, NestedPart {
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
-  detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
@@ -40,6 +45,7 @@ export class ContactsComponent implements OnInit, NestedPart {
     public societeService: SocietesService,
     public fluxService: FluxService,
     public moyenCommunicationService: MoyenCommunicationService,
+    public currentCompanyService: CurrentCompanyService,
     private route: ActivatedRoute,
     public localizeService: LocalizationService,
     public authService: AuthService,
@@ -47,8 +53,9 @@ export class ContactsComponent implements OnInit, NestedPart {
     public gridRowStyleService: GridRowStyleService,
     ) {}
 
-  ngOnInit() {
-    this.detailedFields = contact.columns;
+  async ngOnInit() {
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Contact);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.codeTiers = this.route.snapshot.paramMap.get('codeTiers');
     this.typeTiers = this.route.snapshot.paramMap.get('typeTiers');
 
@@ -58,15 +65,16 @@ export class ContactsComponent implements OnInit, NestedPart {
       .map(value => value.toLowerCase())
       .shift();
 
-    this.contacts = this.contactsService
-    .getDataSource_v2(this.detailedFields.map(property => {
-      let field = property.dataField;
+    const fields = this.columns.pipe(map( columns => columns.map( column => {
+      let field = column.dataField;
       if (field === 'moyenCommunication')
         field += `.${this.moyenCommunicationService.model.getKeyField()}`;
       if (field === 'flux')
         field += `.${this.fluxService.model.getKeyField()}`;
       return field;
-    }));
+    })));
+    this.contacts = this.contactsService.getDataSource_v2(await fields.toPromise());
+
     this.enableFilters();
     this.dataGrid.dataSource = this.contacts;
     this.societeSource = this.societeService.getDataSource();
@@ -91,6 +99,10 @@ export class ContactsComponent implements OnInit, NestedPart {
     ]);
   }
 
+  displayIDBefore(data) {
+    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+  }
+
   onRowPrepared(e) {
     if (e.rowType === 'data') {
       if (!e.data.valide) {
@@ -112,6 +124,7 @@ export class ContactsComponent implements OnInit, NestedPart {
   onRowInserting(event) {
     (event.data as Contact).codeTiers = this.codeTiers;
     (event.data as Contact).typeTiers = this.typeTiers;
+    (event.data as Contact).societe = this.currentCompanyService.getCompany();
   }
 
   onRowClick({ rowIndex }) {

@@ -1,0 +1,31 @@
+@import "src/themes/generated/variables.base.scss";
+
+.dx-fieldset { display: flex; }
+.dx-field { margin-right: 20px; }
+
+::ng-deep .orderTileFilterArea {
+    width: 1024px;
+    .dx-datebox .dx-texteditor-input {
+        padding-right: 0 !important;
+    }
+    .orderTileleftFilters .dx-field {
+        margin-bottom: 0;
+    }
+    .orderRightRightFilters {
+        margin-top: 4px;
+    }
+    .validOnlyButtons {
+        display: block;
+        min-width: 0 !important;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        float: left;
+        .dx-button-content {
+            padding: 0;
+        }
+    }
+    .dx-invalid-message-content {
+        padding: 0;
+    }
+}

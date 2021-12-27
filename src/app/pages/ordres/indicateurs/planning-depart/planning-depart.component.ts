@@ -8,12 +8,14 @@ import { GridsConfigsService } from 'app/shared/services/api/grids-configs.servi
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { GridColumn } from 'basic';
 import { DxCheckBoxComponent, DxDataGridComponent, DxNumberBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TabContext } from '../../root/root.component';
 
 @Component({
@@ -44,6 +46,8 @@ export class PlanningDepartComponent implements AfterViewInit {
   public title: string;
   private dxGridElement: HTMLElement;
   readonly DAYSNB_DEFAULT = 1;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     public transporteursService: TransporteursService,
@@ -68,8 +72,8 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
       this.INDICATOR_NAME
     );
-    this.detailedFields = this.indicator.detailedFields;
-    this.dataSource = this.indicator.dataSource;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.LitigeLigne);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
   ngAfterViewInit() {
@@ -78,6 +82,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
+    this.dataSource = this.indicator.dataSource;
   }
 
   enableFilters() {
@@ -90,7 +95,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       this.getDaysNB(),
     ]);
 
-    this.dataSource.filter(filters);
+    this.indicator?.dataSource?.filter(filters);
 
     this.title = this.localizePipe.transform('grid-situation-depart-title-today');
   }
@@ -160,14 +165,9 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   getDaysNB() {
-    return this.datePipe.transform(
-      new Date()
-        .setDate(
-          new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT
-        )
-        .valueOf(),
-      'yyyy-MM-dd'
-    );
+    const d = new Date();
+    d.setDate(new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT)
+    return d.toISOString();
   }
 }
 

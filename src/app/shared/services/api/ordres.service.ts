@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
-import { gql, MutationOptions, OperationVariables, ApolloQueryResult, WatchQueryOptions } from '@apollo/client/core';
+import { ApolloQueryResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
-import { from, pipe, Subject, of } from 'rxjs';
-import { mergeMap, take, takeUntil, map, filter, first } from 'rxjs/operators';
+import { from, Subject } from 'rxjs';
+import { filter, first, map, mergeMap, take, takeUntil } from 'rxjs/operators';
 import { Ordre } from '../../models/ordre.model';
-import { APIPersist, APIRead, ApiService, RelayPage, APICount } from '../api.service';
+import { APICount, APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
 
-export enum OrdreDatasourceOperation {
+export enum Operation {
+  All = 'allOrdre',
   BAF = 'allOrdreBAF',
   SuiviDeparts = 'allOrdreSuiviDeparts',
+  PlanningTransporteursApproche = 'allOrdrePlanningTransporteursApproche',
+  PlanningFournisseurs = 'allOrdrePlanningFournisseurs',
+  SupervisionComptesPalox = 'allOrdreSupervisionComptesPalox'
 }
 
 export type CountResponse = { countOrdre: number };
@@ -23,12 +27,16 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   /* tslint:disable-next-line */
   queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
 
-  public persistantVariables = { onlyColisDiff: false };
+  public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, Ordre);
+  }
+
+  setPersisantVariables(params = this.persistantVariables) {
+    this.persistantVariables = params;
   }
 
   getOne(id: string) {
@@ -65,7 +73,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     return done.pipe(map( res => res.data.ordreByNumeroAndSociete));
   }
 
-  getDataSource(indicator?: OrdreDatasourceOperation, depth = 2, qFilter = this.queryFilter) {
+  getDataSource(indicator?: Operation, depth = 2, qFilter = this.queryFilter) {
     return new DataSource({
       sort: [
         { selector: this.model.getLabelField() }
@@ -80,7 +88,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
             });
 
           let query: string;
-          if (indicator === OrdreDatasourceOperation.SuiviDeparts)
+          if (indicator === Operation.SuiviDeparts)
             query = await this.buildGetAllSuiviDeparts(depth, qFilter, indicator);
           else
             query = await this.buildGetAll(depth, qFilter, indicator);
@@ -123,7 +131,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       });
   }
 
-  getDataSource_v2(columns: Array<string>) {
+  getDataSource_v2(columns: Array<string>, indicator = Operation.All) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
@@ -134,15 +142,16 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          type Response = { allOrdre: RelayPage<Ordre> };
-          const query = await this.buildGetAll_v2(columns);
+          const query = await this.buildGetAll_v2(columns, indicator);
+          type Response = { [indicator: string]: RelayPage<Ordre> };
+
           const variables = {
             ...this.persistantVariables,
             ...this.mapLoadOptionsToVariables(options)
           };
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allOrdre) {
-              resolve(this.asInstancedListCount(res.data.allOrdre));
+            if (res.data && res.data[indicator]) {
+              resolve(this.asInstancedListCount(res.data[indicator]));
             }
           });
         }),

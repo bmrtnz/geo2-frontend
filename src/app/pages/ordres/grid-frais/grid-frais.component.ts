@@ -11,6 +11,8 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ToggledGrid } from '../form/form.component';
+import * as gridConfig from 'assets/configurations/grids.json';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-grid-frais',
@@ -24,33 +26,21 @@ export class GridFraisComponent implements ToggledGrid {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: Observable<
-    ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
-  >;
-
-  private gridFilter: RegExp = /^(?:frais\.description|montant|devise\.id|deviseTaux|codePlus|description|montantTotal)$/;
+  public detailedFields: GridColumn[];
 
   constructor(
     private ordresFraisService: OrdresFraisService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.detailedFields = this.ordresFraisService.model
-    .getDetailedFields(3, this.gridFilter, {forceFilter: true})
-    .pipe(
-      // Filtrage headers possibles columnchooser
-      map(fields => {
-        return fields.filter( field => 
-          !!(this.localizeService.localize('ordreFrais-' + field.path.replaceAll('.', '-'))).length);
-      }),
-    )
+    this.detailedFields = gridConfig['ordre-frais'].columns;
   }
 
   enableFilters() {
     if (this?.ordre?.id) {
-      this.dataSource = this.ordresFraisService
-      .getDataSource(2, this.gridFilter);
+      this.dataSource = this.ordresFraisService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
       this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
+      this.dataGrid.dataSource = this.dataSource;
     }
   }
 

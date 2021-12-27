@@ -6,10 +6,9 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  scrolling="{
-      useNative:false,
-      showScrollBar:'always'
-    }"
+  [scrolling]="{
+    useNative:true
+  }"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       title,
@@ -42,7 +41,7 @@
     [enabled]="true"
     mode="select"
     title="{{ 'columnChooser' | localize }}"
-    allowSearch="true"
+    [allowSearch]="true"
     [width]="columnChooser.width"
     [height]="columnChooser.height"
   >

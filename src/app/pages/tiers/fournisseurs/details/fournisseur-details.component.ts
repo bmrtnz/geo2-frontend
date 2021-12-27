@@ -49,7 +49,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     raisonSocial: [''],
     stockActif: [''],
     stockPrecalibre: [''],
-    societe: [''],
     adresse1: [''],
     adresse2: [''],
     adresse3: [''],
@@ -64,7 +63,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     moyenPaiement: [''],
     tvaCee: [''],
     bureauAchat: [''],
-    typeBureau: [''],
     basePaiement: [''],
     compteComptable: [''],
     langue: [''],
@@ -80,7 +78,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     rcs: [''],
     valide: [false],
     preSaisie: [''],
-    paramAvances: [''],
     certifications: [''],
     autoFacturation: [''],
     referenceIfco: [''],
@@ -176,7 +173,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   ngAfterViewInit(): void {
-    // Ouverture ou fermeture accordéons (création)
+    // Ouverture ou fermeture accordéons (création) - old car plus d'accordéons
     // this.openCloseAccordions(this.createMode);
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     if (this.createMode) {
@@ -197,6 +194,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
           this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
+          this.validationService.showToValidateBadges();
         },
         error: (err) => {
           console.log(err);
@@ -243,7 +241,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.basesPaiement = this.basesPaiementService.getDataSource();
     this.naturesStation = this.naturesStationService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
-    this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(['id','raisonSocial']);
+    this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(['id', 'raisonSocial']);
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
 
@@ -254,6 +252,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   valueToUpperCase(e) {
+    if (!e.component.option('value')) return;
     e.component.option('value', e.component.option('value').toUpperCase());
     return e.component.option('value');
   }
@@ -317,7 +316,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
       if (this.createMode) {
 
-
         this.infoComponent.visible = true;
         this.infoComponent.doNavigate.subscribe(res => {
           if (res) {
@@ -338,7 +336,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         fournisseur.id = this.fournisseur.id;
 
         // Non-admin user : do not save, just record modifications
-        if (!this.authService.currentUser.adminClient && !this.createMode) {
+        if (!this.authService.currentUser.adminClient) {
           this.readOnlyMode = true;
           this.editing = false;
           fournisseur.preSaisie = true;

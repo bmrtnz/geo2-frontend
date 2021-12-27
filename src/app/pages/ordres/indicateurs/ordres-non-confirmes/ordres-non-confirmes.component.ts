@@ -12,8 +12,11 @@ import { DxSelectBoxComponent } from 'devextreme-angular';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
 import { TabContext } from '../../root/root.component';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { GridColumn } from 'basic';
 
 @Component({
   selector: 'ordres-non-confirmes',
@@ -38,6 +41,8 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
 
   public dataSource: DataSource;
   initialFilterLengh: number;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     public transporteursService: TransporteursService,
@@ -60,24 +65,23 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
       this.INDICATOR_NAME
     );
-    this.detailedFields = this.indicator.detailedFields;
-    this.dataSource = this.indicator.dataSource;
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdresNonConfirmes);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
-  ngOnInit() {
-    this.enableFilters();
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
     }
+    this.dataSource = this.indicator.dataSource;
+    this.enableFilters();
   }
 
   enableFilters() {
     const filters = this.indicator.cloneFilter();
     this.initialFilterLengh = filters.length;
-
     this.dataSource.filter(filters);
   }
 

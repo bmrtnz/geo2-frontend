@@ -2,7 +2,7 @@ import { Component, EventEmitter, NgModule, ViewChild } from '@angular/core';
 import { CertificationFournisseur } from 'app/shared/models';
 import { SharedModule } from 'app/shared/shared.module';
 import { DxButtonModule, DxDataGridComponent, DxDataGridModule, DxPopupComponent, DxPopupModule } from 'devextreme-angular';
-import { RequiredRule } from 'devextreme/ui/validation_engine';
+import { RequiredRule } from 'devextreme/ui/validation_rules';
 import { take } from 'rxjs/operators';
 
 @Component({

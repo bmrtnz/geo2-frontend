@@ -17,6 +17,7 @@ import { UtilisateursService } from 'app/shared/services/api/utilisateurs.servic
 import { from, throwError } from 'rxjs';
 import { catchError, mergeAll, take } from 'rxjs/operators';
 import notify from 'devextreme/ui/notify';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -32,12 +33,13 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   @ViewChild('societeSB', { static: false }) societeSB: DxSelectBoxComponent;
 
   autoSubmit = false;
-  
+
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
     public currentCompanyService: CurrentCompanyService,
     private societesService: SocietesService,
+    private router: Router,
     private utilisateursService: UtilisateursService,
   ) { }
 
@@ -56,12 +58,19 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit()  {
-    if (this.form.invalid || this.submitButton.instance.option('disabled') == true) return;
-    
+    if (this.form.invalid || this.submitButton.instance.option('disabled') === true) return;
+
+    const lastUserName = this.authService.lastUsername;
+    const userName = this.form.get('nomUtilisateur').value;
+
     this.authService.logIn(
-      this.form.get('nomUtilisateur').value,
+      userName,
       this.form.get('password').value,
-    ).subscribe(() => this.form.patchValue({password: ''}));
+    ).subscribe(() => {
+      this.form.patchValue({password: ''});
+      // Different user? Back home to avoid non consistent data
+      if (userName !== lastUserName) this.router.navigate([`/**`]);
+    });
   }
 
   findAssociatedCompanies(e) {
@@ -124,7 +133,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
 
   onKeyUp(e) {
     if (!this.form.get('nomUtilisateur')?.value?.length || !this.form.get('password')?.value?.length) return;
-    if (e.event.key == 'Enter') {
+    if (e.event.key === 'Enter') {
       this.autoSubmit = true;
       this.societeSB.instance.focus();
     }

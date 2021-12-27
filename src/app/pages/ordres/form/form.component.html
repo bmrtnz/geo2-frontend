@@ -112,15 +112,14 @@
                 <span *ngIf="linkedOrdersSearch" class="search-linkedOrders"
                   >Recherche ordres liés...</span
                 >
-                <dx-button
-                  *ngFor="let linkedOrder of linkedOrders"
+                <dx-button *ngFor="let linkedOrder of linkedOrders"
                   class="small-button linkedOrder-{{ linkedOrder.class }}"
                   type="default"
+                  hint="{{ 'hint-ordres-lies' | localize }}"
                   text="{{ linkedOrder.ordre.numero }} ({{
                     linkedOrder.criteria
                   }})"
-                  (onClick)="
-                    openLinkedOrder(linkedOrder.ordre.numero)"
+                  (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
                 >
                 </dx-button>
               </div>
@@ -157,7 +156,7 @@
             <div class="order-tabs">
               <div
                 #anchor
-                id="{{fragments.Head}}"
+                [attr.data-fragment-id]="fragments.Head"
                 class="
                   dx-form-group
                   dx-form-group-with-caption dx-card
@@ -212,7 +211,7 @@
                               <div class="dx-field-value">
                                   <dx-text-box formControlName="referenceClient">
                                   <dx-validator name="{{ 'ordres-referenceClient' | localize }}">
-                                      <dxi-validation-rule type="stringLength" max="70" trim="true"></dxi-validation-rule>
+                                      <dxi-validation-rule type="stringLength" [max]="70" [trim]="false"></dxi-validation-rule>
                                   </dx-validator>
                                   </dx-text-box>
                               </div>
@@ -311,10 +310,10 @@
                           <dxi-item [ratio]="3">
                             <!-- PU -->
                             <div class="dx-field">
-                              <div class="dx-field-label">{{ 'ordres-transporteurDEVPrixUnitaire' | localize }}</div>
+                              <div class="dx-field-label">{{ 'ordres-prixUnitaireTarifTransport' | localize }}</div>
                               <div class="dx-field-value">
-                                <dx-number-box formControlName="transporteurDEVPrixUnitaire">
-                                    <!-- <dx-validator name="{{ 'ordres-transporteurDEVPrixUnitaire' | localize }}">
+                                <dx-number-box class="alignright" formControlName="prixUnitaireTarifTransport">
+                                    <!-- <dx-validator name="{{ 'ordres-prixUnitaireTarifTransport' | localize }}">
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
                                     </dx-validator> -->
                                 </dx-number-box>
@@ -334,9 +333,9 @@
                                   [searchEnabled]="true"
                                   [searchExpr]="['id','description']"
                                   >
-                                      <dxo-drop-down-options
-                                          [width]="400">
-                                      </dxo-drop-down-options>
+                                  <dxo-drop-down-options
+                                      [width]="400">
+                                  </dxo-drop-down-options>
                                   <!-- <dx-validator name="{{ 'ordres-transporteurDEVCode' | localize }}">
                                       <dxi-validation-rule type="required"></dxi-validation-rule>
                                   </dx-validator> -->
@@ -369,9 +368,9 @@
                         <div class="dx-field">
                           <div class="dx-field-label">{{ 'ordres-instructionsLogistiques' | localize }}</div>
                           <div class="dx-field-value">
-                          <dx-text-box formControlName="instructionsLogistiques">
+                          <dx-text-box #comLog formControlName="instructionsLogistiques">
                               <dx-validator name="{{ 'ordres-instructionsLogistiques' | localize }}">
-                              <dxi-validation-rule type="stringLength" max="255"></dxi-validation-rule>
+                              <dxi-validation-rule type="stringLength" [max]="255"></dxi-validation-rule>
                               </dx-validator>
                           </dx-text-box>
                           </div>
@@ -382,7 +381,7 @@
                           <div class="dx-field-value small-font">
                             <dx-text-box formControlName="commentaireUsageInterne">
                             <dx-validator name="{{ 'ordres-commentaireUsageInterne' | localize }}">
-                                <dxi-validation-rule type="stringLength" max="70"></dxi-validation-rule>
+                                <dxi-validation-rule type="stringLength" [max]="70"></dxi-validation-rule>
                             </dx-validator>
                             </dx-text-box>
                           </div>
@@ -484,7 +483,7 @@
                           </div>
                           <!-- Devise -->
                           <div class="dx-field">
-                            <div class="dx-field-label">{{ 'ordres-devise' | localize }}</div>
+                            <div class="dx-field-label">{{ 'ordres-deviseAvecTaux' | localize }}</div>
                             <div class="dx-field-value">
                               <dx-select-box
                                 formControlName="devise"
@@ -565,7 +564,7 @@
 
               <div
                 #anchor
-                id="{{fragments.Articles}}"
+                [attr.data-fragment-id]="fragments.Articles"
                 class="
                   articles-field
                   dx-form-group dx-form-group-with-caption dx-card
@@ -632,7 +631,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Logistique}}"
+                  [attr.data-fragment-id]="fragments.Logistique"
                   data-name="logistique"
                   [collapsible]="true"
                   [multiple]="false"
@@ -695,17 +694,18 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Litiges}}"
+                  [attr.data-fragment-id]="fragments.Litiges"
                   data-name="litiges"
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="
-                    onAccordionToggled($event, [gridLitigesLignes])
-                  "
+                  (onItemTitleClick)="onAccordionToggled($event, [gridLitigesLignes, formLitiges])"
                 >
                   <dxi-item>
-                    <app-form-litiges [ordre]="ordre"></app-form-litiges>
+                    <app-form-litiges 
+                      [ordre]="ordre"
+                      #formLitiges
+                    ></app-form-litiges>
                     <app-grid-litiges-lignes
                       [hidden]="!dotLitiges"
                       #gridLitigesLignes
@@ -728,7 +728,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Synthese}}"
+                  [attr.data-fragment-id]="fragments.Synthese"
                   data-name="synthese"
                   [collapsible]="true"
                   [multiple]="false"
@@ -774,7 +774,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Flux}}"
+                  [attr.data-fragment-id]="fragments.Flux"
                   data-name="fluxdocs"
                   [collapsible]="true"
                   [multiple]="false"
@@ -804,7 +804,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.CQ}}"
+                  [attr.data-fragment-id]="fragments.CQ"
                   data-name="CQ"
                   [collapsible]="true"
                   [multiple]="false"
@@ -834,7 +834,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Commentaires}}"
+                  [attr.data-fragment-id]="fragments.Commentaires"
                   data-name="commentaires"
                   [collapsible]="true"
                   [multiple]="false"
@@ -866,7 +866,7 @@
                 }}</span>
                 <dx-accordion
                   #anchor
-                  id="{{fragments.Log}}"
+                  [attr.data-fragment-id]="fragments.Log"
                   data-name="log"
                   [collapsible]="true"
                   [multiple]="false"

@@ -6,6 +6,7 @@ import { EditingAlertComponent } from 'app/shared/components/editing-alert/editi
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 import { PushHistoryPopupComponent } from 'app/shared/components/push-history-popup/push-history-popup.component';
+import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
 import { Editable } from 'app/shared/guards/editing-guard';
 import { BasesPaiementService } from 'app/shared/services/api/bases-paiement.service';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
@@ -132,6 +133,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild('couvertureTotale', { static: false }) couvertureTotale: DxNumberBoxComponent;
   @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
+  @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
 
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
@@ -247,6 +249,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             delaiBonFacturer: 8 // Donné par Léa 7-09-2020
           });
           this.formGroup.patchValue(this.client);
+          this.formGroup.get('delaiBonFacturer').markAsDirty();
           // Set current username if commercial
           this.tempData = this.personnesService.getDataSource();
           this.tempData.filter([
@@ -405,6 +408,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
           this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
+          this.validationService.showToValidateBadges();
         },
         error: (err) => {
           console.log(err);
@@ -419,53 +423,68 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     if (!this.formGroup.pristine && this.formGroup.valid) {
       let client = this.formUtils.extractDirty(this.formGroup.controls, Client.getKeyField());
 
-      if (!this.createMode) {
-        client.id = this.client.id;
-        if (client.valide === true) {
-          client.preSaisie = false;
-          this.preSaisie = '';
-        }
-      } else {
+      if (this.createMode) {
         for (const f of this.requiredFields) {
           client[f] = this.formGroup.controls[f].value;
         }
         // On spécifie l'ID de la société pour passer l'étape de création
         client.societe = { id: this.currentCompanyService.getCompany().id };
-        client.code = this.formGroup.get('code').value.toUpperCase();
         client.valide = false;
         client.preSaisie = true;
-      }
 
-      // Non-admin user : do not save, just record modifications
-      if (!this.authService.currentUser.adminClient && !this.createMode) {
-        this.readOnlyMode = true;
-        this.editing = false;
-        client.preSaisie = true;
-        this.preSaisie = 'preSaisie';
-        this.modificationsService
-        .saveModifications(Client.name, this.client, this.formGroup, 'tiers-clients-')
-        .subscribe(e => {
-          this.modifListe.refreshList();
-          // Show red badges (unvalidated forms)
-          this.validationService.showToValidateBadges();
-          client = {id : client.id, preSaisie: true};
-          this.clientsService.save_v2(['id', 'preSaisie'], {
-            client,
-          })
-          .subscribe({
-            next: () => {
-              this.refreshGrid.emit();
-              this.formGroup.markAsPristine();
-            },
-            error: (err) => {
-              console.log(err);
-              notify('Echec de la sauvegarde', 'error', 3000);
+        if (!this.authService.currentUser.adminClient) {
+          this.infoComponent.visible = true;
+          this.infoComponent.doNavigate.subscribe(res => {
+            if (res) {
+              // On spécifie l'ID de la société pour passer l'étape de création
+              client.societe = { id: this.currentCompanyService.getCompany().id };
+              client.valide = false;
+              client.preSaisie = true;
+              this.saveData(client);
             }
           });
-        });
+        } else {
+          this.saveData(client);
+        }
+
       } else {
-        this.saveData(client);
+        client.id = this.client.id;
+        if (client.valide === true) {
+          client.preSaisie = false;
+          this.preSaisie = '';
+        }
+        // Non-admin user : do not save, just record modifications
+        if (!this.authService.currentUser.adminClient) {
+          this.readOnlyMode = true;
+          this.editing = false;
+          client.preSaisie = true;
+          this.preSaisie = 'preSaisie';
+          this.modificationsService
+          .saveModifications(Client.name, this.client, this.formGroup, 'tiers-clients-')
+          .subscribe(e => {
+            this.modifListe.refreshList();
+            // Show red badges (unvalidated forms)
+            this.validationService.showToValidateBadges();
+            client = {id : client.id, preSaisie: true};
+            this.clientsService.save_v2(['id', 'preSaisie'], {
+              client,
+            })
+            .subscribe({
+              next: () => {
+                this.refreshGrid.emit();
+                this.formGroup.markAsPristine();
+              },
+              error: (err) => {
+                console.log(err);
+                notify('Echec de la sauvegarde', 'error', 3000);
+              }
+            });
+          });
+        } else {
+          this.saveData(client);
+        }
       }
+
     }
   }
 
@@ -522,6 +541,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   valueToUpperCase(e) {
+    if (!e.component.option('value')) return;
     e.component.option('value', e.component.option('value').toUpperCase());
     return e.component.option('value');
   }
@@ -568,10 +588,12 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   entrepotsBtnClick() {
+    if (!this.client) return;
     this.router.navigateByUrl(`/nested/n/tiers/clients/${this.client.id}/entrepots/list`);
   }
 
   contactsBtnClick() {
+    if (!this.client) return;
     this.router.navigate([`/tiers/contacts/${this.client.code}/${this.client.typeTiers}`]);
   }
 

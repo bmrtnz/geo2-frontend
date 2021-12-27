@@ -10,9 +10,8 @@
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="0"
-    scrolling="{
-      useNative: false,
-      showScrollBar: 'always'
+    [scrolling]="{
+      useNative:true
     }"
     [columnAutoWidth]="true"
     [allowColumnReordering]="true"
@@ -48,20 +47,20 @@
       [height]="columnChooser.height"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true">
+      [allowSearch]="true">
     </dxo-column-chooser>
 
     <dxi-column
-      *ngFor="let field of detailedFields"
-      [dataField]="field.dataField"
-      [caption]="('tiers-clients-' + field.dataField.replace('.description', '') | localize) || field.name"
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
       [visible]="false"
+      [caption]="('tiers-clients-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
-      [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
-      [showInColumnChooser]="field.showInColumnChooser"
+      [dataType]="column?.dataType"
+      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+      [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
 
   </dx-data-grid>

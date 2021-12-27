@@ -4,11 +4,11 @@ import { AuthService } from 'app/shared/services';
 import { UtilisateursService } from 'app/shared/services/api/utilisateurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { ONE_DAY } from 'basic';
 import { DxTagBoxComponent } from 'devextreme-angular';
 import { from, Observable, Subscription } from 'rxjs';
 import { filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
 import { TabContext } from '../root/root.component';
-import Utilisateur from 'app/shared/models/utilisateur.model';
 
 @Component({
   selector: 'app-ordres-accueil',
@@ -17,7 +17,7 @@ import Utilisateur from 'app/shared/models/utilisateur.model';
 })
 export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
-  indicators: Indicator[];
+  indicators: (Indicator & any)[];
   allIndicators: Indicator[];
   loadedIndicators: string[];
   tilesReady: boolean;
@@ -62,7 +62,39 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
               [
                 'logistiques.dateDepartPrevueFournisseur',
                 '>=',
-                this.datePipe.transform((new Date()).setDate((new Date()).getDate() - 1).valueOf(), 'yyyy-MM-dd'),
+                new Date(Date.now() - ONE_DAY).toISOString(),
+              ],
+            );
+
+          if (indicator.id === 'PlanningTransporteurs')
+            flt.push(
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '>=',
+                new Date(Date.now() - ONE_DAY).toISOString(),
+              ],
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '<=',
+                new Date().toISOString(),
+              ],
+            );
+
+          if (indicator.id === 'PlanningFournisseurs')
+            flt.push(
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '>=',
+                new Date(Date.now() - ONE_DAY).toISOString(),
+              ],
+              'and',
+              [
+                'logistiques.dateDepartPrevueFournisseur',
+                '<=',
+                new Date().toISOString(),
               ],
             );
 

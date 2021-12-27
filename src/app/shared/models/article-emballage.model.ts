@@ -14,6 +14,7 @@ export class ArticleEmballage extends Model {
   @Field({model: import('./alveole.model')}) public alveole: Alveole;
   @Field() public uniteParColis: number;
   @Field() public poidsNetColis: number;
+  @Field() public poidsNetClient: number;
   @Field() public poidsNetGaranti: number;
   @Field() public prepese: boolean;
 }

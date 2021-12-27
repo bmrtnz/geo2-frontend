@@ -26,10 +26,11 @@ export class GridHistoriqueComponent implements OnInit {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
+
   public detailedFields: GridColumn[];
 
   constructor(
-    private mruOrdresService: MruOrdresService,
+    public mruOrdresService: MruOrdresService,
     public currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
     public localizeService: LocalizationService,
@@ -40,22 +41,18 @@ export class GridHistoriqueComponent implements OnInit {
     this.dataSource = mruOrdresService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
   }
 
-  ngOnInit() {
-    this.enableFilters();
-    this.histoGrid.dataSource = this.dataSource;
-  }
+  ngOnInit() {}
 
-  enableFilters() {
+  enableFilters() {}
+
+  reload() {
     const filters = [
       ['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
       'and',
       ['socCode', '=', this.currentCompanyService.getCompany().id],
     ];
     this.dataSource.filter(filters);
-  }
-
-  reload() {
-    this.dataSource.reload();
+    this.histoGrid.dataSource = this.dataSource;
   }
 
   onCellPrepared(e) {

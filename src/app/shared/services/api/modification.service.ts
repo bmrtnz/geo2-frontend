@@ -109,8 +109,6 @@ export class ModificationsService extends ApiService implements APIRead {
     });
     fGroup.markAsPristine();
 
-    console.log('listeModifications :' , listeModifications);
-
     return this.save( {modification} )
     .pipe(
       catchError(() => {

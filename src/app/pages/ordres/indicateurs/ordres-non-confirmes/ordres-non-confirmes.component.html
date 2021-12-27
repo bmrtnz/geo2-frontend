@@ -1,5 +1,5 @@
 <br>
-<dx-button class="upperButton" type="default" text="{{ 'btn-confirm' | localize }}"></dx-button>
+<dx-button class="upperButton" type="default" [disabled]="true" text="{{ 'btn-confirm' | localize }}"></dx-button>
 <div>
 
     <dx-box>
@@ -33,9 +33,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.OrdresNonConfirmes, enableFilters.bind(this))"
@@ -63,19 +62,22 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
+
     <dxi-column
-      *ngFor="let field of detailedFields | async"
-      [dataField]="field.path"
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [caption]="('ordres-' + column.dataField?.split('.').join('-') | localize) || column.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"
-      [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [dataType]="column?.dataType"
+      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+      [allowHeaderFiltering]="column.allowHeaderFiltering !== undefined ? column.allowHeaderFiltering : ['string'].includes(column.dataType)"
+      [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
 
   </dx-data-grid>

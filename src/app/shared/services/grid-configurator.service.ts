@@ -1,14 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { GridColumn } from 'basic';
 import { DxoStateStoringComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
 import { map } from 'rxjs/operators';
-import { GridConfig } from '../models';
+import { GridConfig as GridConfigModel } from '../models';
 import { GridsConfigsService } from './api/grids-configs.service';
 import { AuthService } from './auth.service';
 
 let self: GridConfiguratorService;
+
+export type GridConfig = {
+  columns: GridColumn[],
+};
 
 export enum Grid {
   Client = 'client',
@@ -46,6 +51,13 @@ export enum Grid {
   ControleQualite = 'controle-qualite',
   DepassementEncoursPays = 'depassement-encours-pays',
   DepassementEncoursClient = 'depassement-encours-client',
+  PlanningTransporteurs = 'planning-transporteurs',
+  PlanningTransporteursApproche = 'planning-transporteurs-approche',
+  PlanningFournisseurs = 'planning-fournisseurs',
+  MouvFournisseursComptesPalox= 'mouv-fournisseurs-comptes-palox',
+  MouvClientsComptesPalox= 'mouv-clients-comptes-palox',
+  RecapFournisseursComptesPalox= 'recap-fournisseurs-comptes-palox',
+  RecapClientsComptesPalox= 'recap-clients-comptes-palox',
 }
 
 @Injectable({
@@ -71,6 +83,27 @@ export class GridConfiguratorService {
   }
 
   /**
+   * Grid configuration observable mapper to get columns from config
+   */
+  static getColumns() {
+    return map((config: GridConfig) => config.columns);
+  }
+
+  /**
+   * Grid configuration observable mapper to get visible columns from columns
+   */
+  static getVisible() {
+    return map((columns: GridColumn[]) => columns.filter( column => column.visible || column.dataField === 'id' ));
+  }
+
+  /**
+   * Grid configuration observable mapper to get fields name from columns
+   */
+  static getFields() {
+    return map((columns: GridColumn[]) => columns.map( column => column.dataField ));
+  }
+
+  /**
    * Configure datasource filter with current grid and user
    */
   private filterGrid(grid: Grid) {
@@ -87,7 +120,7 @@ export class GridConfiguratorService {
   async load() {
     const context = this as unknown as DxoStateStoringComponent;
     self.filterGrid(context.storageKey as Grid);
-    const res: GridConfig[] = await self.dataSource.load();
+    const res: GridConfigModel[] = await self.dataSource.load();
     if (!res.length) return self.fetchDefaultConfig(context.storageKey as Grid);
     // Clear search text and pagination
     const config = {...res[0].config}; // clone config (original is sealed)
@@ -123,7 +156,7 @@ export class GridConfiguratorService {
    * Fetch default grid configuration, merging common config with specified grid config
    * @param gridName Grid name
    */
-  fetchDefaultConfig(grid: Grid) {
+  fetchDefaultConfig(grid: Grid): Promise<GridConfig> {
     if (!grid)
       throw Error('Grid name required, use GridConfiguratorService.with(gridName)');
     const keys = ['common', grid];
@@ -164,7 +197,7 @@ export class GridConfiguratorService {
       widget: 'dxTextBox',
       cssClass: 'grid-title',
       options: {
-        width: 400,
+        width: title?.length ? 400 : 0,
         readOnly: true,
         text: title
       }

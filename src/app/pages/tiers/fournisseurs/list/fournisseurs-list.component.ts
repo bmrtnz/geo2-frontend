@@ -12,7 +12,9 @@ import { environment } from 'environments/environment';
 import { map } from 'rxjs/operators';
 import { FournisseursService } from 'app/shared/services/api/fournisseurs.service';
 import {GridColumn} from 'basic';
-import { fournisseur } from 'assets/configurations/grids.json';
+import { from, Observable } from 'rxjs';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -26,7 +28,8 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   columnChooser = environment.columnChooser;
-  detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     public fournisseursService: FournisseursService,
@@ -38,9 +41,12 @@ export class FournisseursListComponent implements OnInit, NestedMain {
     this.apiService = this.fournisseursService;
   }
 
-  ngOnInit() {
-    this.detailedFields = fournisseur.columns;
-    this.fournisseurs = this.fournisseursService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
+  async ngOnInit() {
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Fournisseur);
+    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
+    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
+    this.fournisseurs = this.fournisseursService.getDataSource_v2(await fields.toPromise());
+    this.dataGrid.dataSource = this.fournisseurs;
   }
 
   onRowDblClick(event) {

@@ -55,6 +55,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
       'numeroFacture',
       'referenceClient',
       'client.raisonSocial',
+      'id',
     ];
     this.campagnesService.getDataSource_v2(['id', 'description'])
       .load()
@@ -73,7 +74,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   searchDisplayExpr(item) {
     return item
-      ? self.localizeService.localize('rechOrdres-' + item.replaceAll('.', '-'))
+      ? self.localizeService.localize('rechOrdres-' + item.split('.').join('-'))
       : null;
   }
 
@@ -103,7 +104,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   enableFilters(value) {
     if (!value?.length) return;
     const criteria = this.searchCriteria.instance.option('value');
-    const operator = ['numero', 'numeroFacture'].includes(value) ? '=' : 'contains';
+    const operator = ['numero', 'numeroFacture', 'id'].includes(value) ? '=' : 'contains';
 
     this.filter = [
       ['valide', '=', true],

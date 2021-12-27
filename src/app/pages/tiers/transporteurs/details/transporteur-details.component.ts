@@ -189,6 +189,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   valueToUpperCase(e) {
+    if (!e.component.option('value')) return;
     e.component.option('value', e.component.option('value').toUpperCase());
     return e.component.option('value');
   }
@@ -282,6 +283,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
           this.formGroup.get('valide').setValue(true);
           this.formGroup.markAsPristine();
           this.preSaisie = '';
+          this.validationService.showToValidateBadges();
         },
         error: (err) => {
           console.log(err);

@@ -13,14 +13,17 @@ import { DxSelectBoxComponent } from 'devextreme-angular';
 import { DxoGridComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { GridColumn } from 'basic';
 
 @Component({
-  selector: 'commandes-transit',
+  selector: 'app-commandes-transit',
   templateUrl: './commandes-transit.component.html',
   styleUrls: ['./commandes-transit.component.scss']
 })
-export class CommandesTransitComponent implements OnInit {
+export class CommandesTransitComponent implements OnInit, AfterViewInit {
 
   readonly INDICATOR_NAME = 'CommandesTransit';
   options: {};
@@ -30,12 +33,14 @@ export class CommandesTransitComponent implements OnInit {
   columnChooser = environment.columnChooser;
   detailedFields: Observable<ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]>;
   rowSelected: boolean;
-  
+
   @ViewChild('gridCOMMANDESTRANSIT', { static: false }) gridCOMMANDESTRANSITComponent: DxoGridComponent;
   @ViewChild('secteurValue', { static: false }) secteurSB: DxSelectBoxComponent;
-  
+
   public dataSource: DataSource;
   initialFilterLengh: number;
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   constructor(
     private router: Router,
@@ -56,14 +61,13 @@ export class CommandesTransitComponent implements OnInit {
       ['valide', '=', true],
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
-    ])
-    this.detailedFields = this.ordresService.model.getDetailedFields();
-    this.dataSource = ordresService.getDataSource();
+    ]);
    }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.enableFilters();
-    
+    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
+    this.dataSource = this.ordresService.getDataSource_v2(await fields.toPromise());
   }
 
   ngAfterViewInit() {
@@ -77,7 +81,6 @@ export class CommandesTransitComponent implements OnInit {
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(this.INDICATOR_NAME).filter;
     this.initialFilterLengh = filters.length;
-    
     this.dataSource.filter(filters);
     this.dataSource.reload();
 
@@ -95,7 +98,7 @@ export class CommandesTransitComponent implements OnInit {
     //   'and',
     //   ['dateLivraisonPrevue', '<=', this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value)],
     // )
-    
+
     this.dataSource.filter(filters);
     this.dataSource.reload();
 

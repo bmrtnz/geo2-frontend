@@ -193,36 +193,6 @@ dx-button[type="normal"] { float:right; }
     }
 }
 
-// .dx-tabpanel {
-//     border:1px solid #DDD;
-//     margin:auto 20px;
-//     padding-bottom:20px;
-// }
-
-// ::ng-deep .dx-tabs-wrapper .dx-item.dx-tab {
-//     width:auto;
-//     padding-left:20px;
-// }
-// ::ng-deep .dx-tab-content .dx-icon.dx-icon-close {
-//     display:inline-block;
-//     opacity:0.6;
-//     margin-right:0;
-//     margin-left:7px;
-//     font-size:18px;
-// }
-// ::ng-deep .dx-sortable-dragging .dx-tab {
-//     box-sizing:border-box;
-//     text-align:center;
-// }
-// ::ng-deep .dx-theme-generic .dx-tabs-wrapper .dx-item.dx-tab {
-//     padding-left:14px;
-//     padding-right:9px;
-//     line-height:1.618;
-// }
-// ::ng-deep .dx-theme-generic .dx-icon.dx-icon-close {
-//     font-size:15px;
-// }
-// ::ng-deep .dx-theme-material .dx-tab-content span {
-//     vertical-align:middle;
-//     line-height:initial;
-// }
+::ng-deep .alignright input {
+    text-align: right;
+  }

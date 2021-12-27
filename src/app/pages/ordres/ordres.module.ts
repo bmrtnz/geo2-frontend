@@ -7,10 +7,33 @@ import { ViewDocumentPopupModule } from 'app/shared/components/view-document-pop
 import { LocalizePipe } from 'app/shared/pipes';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
 import { SharedModule } from 'app/shared/shared.module';
-import { DxAccordionModule, DxAutocompleteModule, DxBoxModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule,
-         DxDateBoxModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxLoadPanelModule, DxNumberBoxModule,
-         DxPopoverModule, DxPopupModule, DxSelectBoxModule, DxSortableModule, DxTabPanelModule, DxTagBoxModule, DxTextAreaModule,
-         DxTextBoxModule, DxTileViewModule, DxValidationGroupModule, DxValidatorModule, DxRadioGroupModule } from 'devextreme-angular';
+import {
+  DxAccordionModule,
+  DxAutocompleteModule,
+  DxBoxModule,
+  DxButtonModule,
+  DxCheckBoxModule,
+  DxDataGridModule,
+  DxDateBoxModule,
+  DxFormModule,
+  DxListModule,
+  DxLoadIndicatorModule,
+  DxLoadPanelModule,
+  DxNumberBoxModule,
+  DxPopoverModule,
+  DxPopupModule,
+  DxSelectBoxModule,
+  DxSortableModule,
+  DxTabPanelModule,
+  DxTagBoxModule,
+  DxTextAreaModule,
+  DxTextBoxModule,
+  DxTileViewModule,
+  DxValidationGroupModule,
+  DxValidatorModule,
+  DxSwitchModule,
+  DxRadioGroupModule,
+} from 'devextreme-angular';
 import { OrdresAccueilComponent } from './accueil/ordres-accueil.component';
 import { FormLitigesComponent } from './form-litiges/form-litiges.component';
 import { FormLogistiqueComponent } from './form-logistique/form-logistique.component';
@@ -45,9 +68,10 @@ import { OrdresRoutingModule } from './ordres-routing.module';
 import { LoadingTabComponent, RootComponent, TabContext } from './root/root.component';
 import OrdresSuiviComponent from './suivi/ordres-suivi.component';
 import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
-import { NouvelOrdreComponent } from './nouvel-ordre/nouvel-ordre.component';
-import { GridHistoriqueEntrepotsComponent } from './grid-historique-entrepots/grid-historique-entrepots.component';
-import { GridEntrepotsComponent } from './grid-entrepots/grid-entrepots.component';
+import PlanningTransporteursComponent from './indicateurs/planning-transporteurs/planning-transporteurs.component';
+import { PlanningFournisseursComponent } from './indicateurs/planning-fournisseurs/planning-fournisseurs.component';
+import { PlanningTransporteursApprocheComponent } from './indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component';
+import { SupervisionComptesPaloxComponent } from './indicateurs/supervision-comptes-palox/supervision-comptes-palox.component';
 
 @NgModule({
   declarations: [
@@ -83,9 +107,10 @@ import { GridEntrepotsComponent } from './grid-entrepots/grid-entrepots.componen
     RootComponent,
     LoadingTabComponent,
     FormComponent,
-    NouvelOrdreComponent,
-    GridHistoriqueEntrepotsComponent,
-    GridEntrepotsComponent,
+    PlanningTransporteursComponent,
+    PlanningFournisseursComponent,
+    PlanningTransporteursApprocheComponent,
+    SupervisionComptesPaloxComponent,
   ],
   imports: [
     OrdresRoutingModule,
@@ -101,6 +126,7 @@ import { GridEntrepotsComponent } from './grid-entrepots/grid-entrepots.componen
     DxAccordionModule,
     DxAutocompleteModule,
     DxTileViewModule,
+    DxSwitchModule,
     DxListModule,
     DxSelectBoxModule,
     DxSortableModule,

@@ -6,7 +6,7 @@
                 <div class="modif-date-container">
                     <dx-text-box 
                     value="De {{ modif.initiateur.nomUtilisateur }} le {{ modif.dateModification }}"
-                    readOnly="true"
+                    [readOnly]="true"
                     ></dx-text-box>
                     <dx-button class="upperButton"
                         type="default"
