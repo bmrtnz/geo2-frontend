@@ -8,9 +8,8 @@
     [allowColumnReordering]="true"
     (onRowDblClick)="tabContext.selectEntrepotForNewOrder($event.data.id)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Liste des entrepôts', $event, gridConfiguratorService.Grid.OrdreEntrepot,enableFilters.bind(this))"
-    scrolling="{
-      useNative:false,
-      showScrollBar:'always'
+    [scrolling]="{
+      useNative:true
     }"
   >
 
@@ -37,7 +36,7 @@
       [enabled]="true"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      allowSearch="true"
+      [allowSearch]="true"
       [width]="columnChooser.width"
       [height]="columnChooser.height">
     </dxo-column-chooser>
@@ -46,9 +45,9 @@
       <dxi-total-item column="nombreColisCommandes" summaryType="sum"></dxi-total-item>
     </dxo-summary> -->
     <dxi-column
-      *ngFor="let field of detailedFields"
+      *ngFor="let field of this.columns | async"
       [dataField]="field.dataField"
-      [caption]="('tiers-ordre-entrepots-' + field.dataField?.replaceAll('.', '-') | localize) || field.name"
+      [caption]="('tiers-ordre-entrepots-' + field.dataField| localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

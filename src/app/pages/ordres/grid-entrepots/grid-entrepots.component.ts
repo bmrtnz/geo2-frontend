@@ -1,13 +1,13 @@
-import { Component, Input, OnChanges, AfterViewInit, OnInit, ViewChild } from '@angular/core';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthService, EntrepotsService } from 'app/shared/services';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { LocalizationService } from 'app/shared/services/localization.service';
+import { GridColumn } from 'basic';
+import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { LocalizationService } from 'app/shared/services/localization.service';
-import { DxDataGridComponent } from 'devextreme-angular';
-import * as gridConfig from 'assets/configurations/grids.json';
-import { GridColumn } from 'basic';
-import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { AuthService, EntrepotsService } from 'app/shared/services';
+import { from, Observable } from 'rxjs';
 import { TabContext } from '../root/root.component';
 
 @Component({
@@ -15,11 +15,12 @@ import { TabContext } from '../root/root.component';
   templateUrl: './grid-entrepots.component.html',
   styleUrls: ['./grid-entrepots.component.scss']
 })
-export class GridEntrepotsComponent implements AfterViewInit {
+export class GridEntrepotsComponent implements OnInit {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
-  public detailedFields: GridColumn[];
+  public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
 
   @ViewChild(DxDataGridComponent) private entrepotGrid: DxDataGridComponent;
 
@@ -30,14 +31,21 @@ export class GridEntrepotsComponent implements AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public tabContext: TabContext,
-  ) {
-    this.detailedFields = gridConfig['ordre-entrepot'].columns;
-    this.dataSource = entrepotsService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
-  }
-
-  ngAfterViewInit() {
-    this.enableFilters();
+  ) {}
+  
+  async ngOnInit() {
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreEntrepot);
+    this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
+    const visibleFields = from(this.gridConfig)
+    .pipe(
+      GridConfiguratorService.getColumns(),
+      GridConfiguratorService.getVisible(),
+      GridConfiguratorService.getFields(),
+    );
+    this.dataSource = this.entrepotsService
+    .getDataSource_v2(await visibleFields.toPromise());
     this.entrepotGrid.dataSource = this.dataSource;
+    this.enableFilters();
   }
 
   enableFilters() {

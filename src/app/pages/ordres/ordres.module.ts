@@ -73,6 +73,8 @@ import { PlanningFournisseursComponent } from './indicateurs/planning-fournisseu
 import { PlanningTransporteursApprocheComponent } from './indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component';
 import { SupervisionComptesPaloxComponent } from './indicateurs/supervision-comptes-palox/supervision-comptes-palox.component';
 import { NouvelOrdreComponent } from './nouvel-ordre/nouvel-ordre.component';
+import { GridEntrepotsComponent } from './grid-entrepots/grid-entrepots.component';
+import { GridHistoriqueEntrepotsComponent } from './grid-historique-entrepots/grid-historique-entrepots.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +115,8 @@ import { NouvelOrdreComponent } from './nouvel-ordre/nouvel-ordre.component';
     PlanningTransporteursApprocheComponent,
     SupervisionComptesPaloxComponent,
     NouvelOrdreComponent,
+    GridEntrepotsComponent,
+    GridHistoriqueEntrepotsComponent,
   ],
   imports: [
     OrdresRoutingModule,
