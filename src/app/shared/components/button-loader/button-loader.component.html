@@ -1,0 +1,10 @@
+<dx-button
+  [type]="type"
+  [stylingMode]="stylingMode"
+  (onClick)="onClick()"
+>
+  <div *dxTemplate="let data of 'content'">
+    <span class="dx-button-text">{{ (text | localize) || '[text]' }}</span>
+    <dx-load-indicator [visible]="loading" class="button-indicator"></dx-load-indicator>
+  </div>
+</dx-button>

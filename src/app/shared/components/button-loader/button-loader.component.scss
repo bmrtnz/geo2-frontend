@@ -1,0 +1,9 @@
+$loader-size: 20px;
+
+::ng-deep .button-indicator {
+  height: $loader-size;
+  width: $loader-size;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
