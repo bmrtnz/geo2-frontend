@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
+import { Component, EventEmitter, Input, NgModule, OnChanges, Output } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
 import { DxButtonModule, DxLoadIndicatorModule, DxTemplateModule } from 'devextreme-angular';
 
@@ -8,26 +8,36 @@ import { DxButtonModule, DxLoadIndicatorModule, DxTemplateModule } from 'devextr
   templateUrl: './button-loader.component.html',
   styleUrls: ['./button-loader.component.scss']
 })
-export class ButtonLoaderComponent<T> {
+export class ButtonLoaderComponent<T> implements OnChanges {
 
   @Input() text: string;
   @Input() type: 'back' | 'danger' | 'default' | 'normal' | 'success';
   @Input() stylingMode: 'text' | 'outlined' | 'contained';
   @Input() resolver: Promise<T>;
-  @Output() resolve = new EventEmitter<T>();
-  @Output() reject = new EventEmitter<Error>();
+  @Output() resolved = new EventEmitter<T>();
+  @Output() rejected = new EventEmitter<Error>();
+  @Output() deferedOnClick = new EventEmitter();
 
   public loading = false;
 
   constructor() { }
 
-  async onClick() {
-    if (!this.resolver) return Error('Component doesn\'t have a resolver');
-    this.loading = true;
+  ngOnChanges(properties) {
+    if (properties.currentValue) this.resolve();
+  }
+
+  onClick(event) {
+    this.deferedOnClick.emit(event);
+  }
+
+  async resolve() {
+    if (!this.resolver)
+      return this.rejected.emit( Error('Component doesn\'t have a resolver'));
     try {
-      this.resolve.emit(await this.resolver);
+      this.loading = true;
+      this.resolved.emit(await this.resolver);
     } catch (e) {
-      this.reject.emit(e);
+      this.rejected.emit(e);
     } finally {
       this.loading = false;
     }

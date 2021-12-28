@@ -1,7 +1,8 @@
 <dx-button
   [type]="type"
   [stylingMode]="stylingMode"
-  (onClick)="onClick()"
+  [disabled]="loading"
+  (onClick)="onClick($event)"
 >
   <div *dxTemplate="let data of 'content'">
     <span class="dx-button-text">{{ (text | localize) || '[text]' }}</span>
