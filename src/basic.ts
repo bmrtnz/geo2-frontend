@@ -9,6 +9,7 @@ import {
   StringLengthRule
 } from 'devextreme/ui/validation_rules';
 import { SummaryType } from 'app/shared/services/api.service';
+import { EventEmitter } from '@angular/core';
 
 declare global {
   interface String {
@@ -197,3 +198,11 @@ export const ONE_DAY = ONE_HOUR * 24;
 export const ONE_WEEK = ONE_DAY * 7;
 
 export {GridColumn};
+
+/**
+ * Interface defining single item selection from a list
+ */
+export interface SingleSelection<I> {
+  getSelectedItem: () => I;
+  selectionChanged?: EventEmitter<I>;
+}
