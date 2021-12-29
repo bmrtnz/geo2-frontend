@@ -5,7 +5,7 @@
   (onClick)="onClick($event)"
 >
   <div *dxTemplate="let data of 'content'">
-    <span class="dx-button-text">{{ (text | localize) || '[text]' }}</span>
+    <span class="dx-button-text">{{ text || '['+type+']' }}</span>
     <dx-load-indicator [visible]="loading" class="button-indicator"></dx-load-indicator>
   </div>
 </dx-button>
