@@ -12,5 +12,13 @@
         </div>
     </div>
 
-<app-grid-historique-entrepots [hidden]="!favorites"></app-grid-historique-entrepots>
-<app-grid-entrepots [hidden]="favorites"></app-grid-entrepots>
+<app-grid-historique-entrepots #grid *ngIf="favorites"></app-grid-historique-entrepots>
+<app-grid-entrepots #grid *ngIf="!favorites"></app-grid-entrepots>
+<br>
+<app-button-loader
+    [text]="('create' | localize) + (getSelectedItem() ? ' '+('depuis' | localize)+' \''+getSelectedItem().raisonSocial+'\'' : '')"
+    [type]="'default'"
+    [disabled]="!getSelectedItem()"
+    [resolver]="resolver"
+    (deferedOnClick)="onButtonLoaderClick()"
+></app-button-loader>

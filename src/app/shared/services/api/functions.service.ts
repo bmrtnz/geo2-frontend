@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 
-type Response = { res: number, msg?: string };
+export type Response = { res: number, msg?: string };
 
 @Injectable({
   providedIn: 'root'

@@ -6,7 +6,6 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    (onRowDblClick)="tabContext.selectEntrepotForNewOrder($event.data.entrepot.id)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Liste des entrepôts favoris', $event, gridConfiguratorService.Grid.OrdreHistoriqueEntrepot,enableFilters.bind(this))"
     [scrolling]="{
       useNative:true

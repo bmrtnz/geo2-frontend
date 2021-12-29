@@ -340,13 +340,6 @@ export class TabContext {
     return this.with(TabType.Ordre, numero);
   }
 
-    /**
-     * @param id Entrepot id
-     */
-     public selectEntrepotForNewOrder(id: string) {
-      console.log(id);
-    }
-
   /**
    * Push and select indicator in tab panel by routing
    * @param id Indicator id

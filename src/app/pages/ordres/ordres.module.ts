@@ -75,6 +75,7 @@ import { SupervisionComptesPaloxComponent } from './indicateurs/supervision-comp
 import { NouvelOrdreComponent } from './nouvel-ordre/nouvel-ordre.component';
 import { GridEntrepotsComponent } from './grid-entrepots/grid-entrepots.component';
 import { GridHistoriqueEntrepotsComponent } from './grid-historique-entrepots/grid-historique-entrepots.component';
+import { ButtonLoaderModule } from 'app/shared/components/button-loader/button-loader.component';
 
 @NgModule({
   declarations: [
@@ -151,6 +152,7 @@ import { GridHistoriqueEntrepotsComponent } from './grid-historique-entrepots/gr
     DxLoadIndicatorModule,
     ViewDocumentPopupModule,
     DxLoadPanelModule,
+    ButtonLoaderModule,
   ],
   providers: [
     OrdresIndicatorsService,

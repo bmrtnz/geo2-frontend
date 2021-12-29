@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Entrepot } from 'app/shared/models';
 import { AuthService } from 'app/shared/services';
 import { MruEntrepotsService } from 'app/shared/services/api/mru-entrepots.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
-import { GridColumn } from 'basic';
+import { GridColumn, SingleSelection } from 'basic';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
@@ -16,14 +17,14 @@ import { TabContext } from '../root/root.component';
   templateUrl: './grid-historique-entrepots.component.html',
   styleUrls: ['./grid-historique-entrepots.component.scss']
 })
-export class GridHistoriqueEntrepotsComponent implements OnInit {
+export class GridHistoriqueEntrepotsComponent implements OnInit, SingleSelection<Entrepot> {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
 
-  @ViewChild(DxDataGridComponent) private entrepotGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, {static: false}) private entrepotGrid: DxDataGridComponent;
   @Input() public filter: [];
 
   constructor(
@@ -66,6 +67,12 @@ export class GridHistoriqueEntrepotsComponent implements OnInit {
 
   reload() {
     this.dataSource.reload();
+  }
+
+  getSelectedItem() {
+    return this.entrepotGrid.instance.getVisibleRows()
+    .filter( row => row.key === this.entrepotGrid.focusedRowKey)
+    .map( row => row.data)[0];
   }
 
 }
