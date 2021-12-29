@@ -1,7 +1,7 @@
 <dx-button
   [type]="type"
   [stylingMode]="stylingMode"
-  [disabled]="loading"
+  [disabled]="loading || disabled"
   (onClick)="onClick($event)"
 >
   <div *dxTemplate="let data of 'content'">
