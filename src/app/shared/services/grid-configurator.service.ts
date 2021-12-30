@@ -124,7 +124,7 @@ export class GridConfiguratorService {
     const res: GridConfigModel[] = await self.dataSource.load();
     if (!res.length) return self.fetchDefaultConfig(context.storageKey as Grid);
     // Clear search text and pagination
-    const config = {...res[0].config}; // clone config (original is sealed)
+    const config = JSON.parse(JSON.stringify(res[0].config)); // clone config (original is sealed)
     delete config.searchText;
     delete config.focusedRowKey;
     delete config.selectedRowKeys;

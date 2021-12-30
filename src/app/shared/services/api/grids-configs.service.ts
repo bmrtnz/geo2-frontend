@@ -36,7 +36,7 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
           type Response = { allGridConfig: RelayPage<GridConfig> };
           const variables = this.mapLoadOptionsToVariables(options);
 
-          this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
+          this.listenQuery<Response>(query, { variables, fetchPolicy: 'cache-and-network' }, res => {
             if (res.data && res.data.allGridConfig)
               resolve(this.asInstancedListCount(res.data.allGridConfig));
           });
@@ -45,7 +45,7 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
           const query = await this.buildGetOne();
           type Response = { gridConfig: GridConfig };
           const variables = { id: key };
-          this.listenQuery<Response>(query, { variables, fetchPolicy: 'no-cache' }, res => {
+          this.listenQuery<Response>(query, { variables, fetchPolicy: 'cache-and-network' }, res => {
             if (res.data && res.data.gridConfig)
               resolve(new GridConfig(res.data.gridConfig));
           });
