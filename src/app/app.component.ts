@@ -1,14 +1,13 @@
-import {Component, ElementRef, HostBinding, OnInit, OnChanges} from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
-import {AuthService, ScreenService, LocalizationService} from './shared/services';
-import { ValidationService } from './shared/services/api/validation.service';
+import { Component, HostBinding, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService, ScreenService } from './shared/services';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   @HostBinding('class') get getClass() {
     return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
@@ -17,7 +16,7 @@ export class AppComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private screen: ScreenService,
-    private validationService: ValidationService
+    private router: Router,
   ) {
     const year = new Date().getFullYear();
 
@@ -43,8 +42,6 @@ export class AppComponent implements OnInit {
   public version = require( '../../package.json').version;
   public copyrightYear = '';
 
-  ngOnInit() {}
-
   closest(elem, selector) {
     for (; elem && elem !== document; elem = elem.parentNode) {
       if (elem.matches(selector)) return elem;
@@ -53,6 +50,6 @@ export class AppComponent implements OnInit {
   }
 
   isAutorized() {
-    return this.authService.isLoggedIn;
+    return !this.router.isActive('/login', false) ?? this.authService.isLoggedIn;
   }
 }
