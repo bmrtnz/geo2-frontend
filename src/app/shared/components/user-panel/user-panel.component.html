@@ -1,5 +1,5 @@
 <div class="user-panel">
-    <div class="user-name">{{ authService.currentUser.nomInterne }}</div>
+    <div class="user-name">{{ authService.currentUser?.nomInterne }}</div>
     <dx-context-menu
         *ngIf="menuMode === 'context'"
         [items]="menuItems"

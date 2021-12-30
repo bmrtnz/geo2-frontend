@@ -7,6 +7,8 @@ import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
 import { CurrentCompanyService } from './current-company.service';
 
+const SKIP_LOCATION_CHANGE = true;
+
 @Injectable()
 export class AuthService {
 
@@ -53,11 +55,10 @@ export class AuthService {
 
           return throwError(e);
         }),
-        tap( _ => this.showWelcome()),
       );
   }
 
-  private showWelcome() {
+  showWelcome() {
     const name = this.currentUser.nomUtilisateur;
     const mess = 'Bienvenue ' + name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() + ' !';
     notify({ message: mess, elementAttr: {class : 'welcome-message'} }, 'info');
@@ -88,15 +89,14 @@ export class AuthService {
   }
 
   async logOut() {
+    if (this.router.isActive('/login', false)) return;
     this.loggedIn = false;
     window.localStorage.removeItem(this.CURRENT_USER_STORE_KEY);
-    await this.router.navigate(['/login'], {
-      skipLocationChange: true,
+    return this.router.navigate(['/login'], {
+      skipLocationChange: SKIP_LOCATION_CHANGE,
       queryParamsHandling: 'merge',
       queryParams: { redirect: this.router.url },
     });
-    // TODO Extends BaseRouteReuseStrategy(v10) to not reload route from cache on redirect, fixing with location.reload() for now
-    window.location.reload();
   }
 
   get isLoggedIn() {
@@ -122,7 +122,7 @@ export class AuthGuardService implements CanActivate {
 
     if (!isLoggedIn && !isLoginRoute)
       return this.router.createUrlTree(['/login'], {
-        skipLocationChange: true,
+        skipLocationChange: SKIP_LOCATION_CHANGE,
         queryParamsHandling: 'merge',
         queryParams: { redirect: state.url },
       });
