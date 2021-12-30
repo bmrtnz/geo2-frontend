@@ -70,12 +70,15 @@ import OrdresSuiviComponent from './suivi/ordres-suivi.component';
 import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
 import PlanningTransporteursComponent from './indicateurs/planning-transporteurs/planning-transporteurs.component';
 import { PlanningFournisseursComponent } from './indicateurs/planning-fournisseurs/planning-fournisseurs.component';
-import { PlanningTransporteursApprocheComponent } from './indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component';
+import {
+  PlanningTransporteursApprocheComponent
+} from './indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component';
 import { SupervisionComptesPaloxComponent } from './indicateurs/supervision-comptes-palox/supervision-comptes-palox.component';
 import { NouvelOrdreComponent } from './nouvel-ordre/nouvel-ordre.component';
 import { GridEntrepotsComponent } from './grid-entrepots/grid-entrepots.component';
 import { GridHistoriqueEntrepotsComponent } from './grid-historique-entrepots/grid-historique-entrepots.component';
 import { ButtonLoaderModule } from 'app/shared/components/button-loader/button-loader.component';
+import { SupervisionAFacturerComponent } from './indicateurs/supervision-a-facturer/supervision-a-facturer.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +121,7 @@ import { ButtonLoaderModule } from 'app/shared/components/button-loader/button-l
     NouvelOrdreComponent,
     GridEntrepotsComponent,
     GridHistoriqueEntrepotsComponent,
+    SupervisionAFacturerComponent,
   ],
   imports: [
     OrdresRoutingModule,

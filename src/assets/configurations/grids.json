@@ -1407,31 +1407,11 @@
       { "dataField": "id", "visible": false }
     ]
   },
-  "ordre-bon-a-facturer": {
+  "ordre-a-facturer": {
     "columns": [
       {
+        "visibleIndex": 0,
         "dataField": "id",
-        "fixed": true,
-        "visible": true
-      },
-      {
-        "dataField": "dateLivraisonPrevue",
-        "visible": true
-      },
-      {
-        "dataField": "client.raisonSocial",
-        "visible": true
-      },
-      {
-        "dataField": "entrepot.raisonSocial",
-        "visible": true
-      },
-      {
-        "dataField": "referenceClient",
-        "visible": true
-      },
-      {
-        "dataField": "pourcentageMargeBrut",
         "visible": true
       }
     ]

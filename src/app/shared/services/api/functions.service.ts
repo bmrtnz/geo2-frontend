@@ -29,4 +29,11 @@ export class FunctionsService {
       fetchPolicy: 'network-only',
     })
 
+  public visualiserOrdreBAF =
+    () => this.apollo.watchQuery<Response>({
+      query: gql`???`,
+      variables: {},
+      fetchPolicy: 'cache-and-network',
+    })
+
 }

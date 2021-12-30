@@ -157,6 +157,16 @@ const indicators: Indicator[] = [{
   warningIcon: '',
   component: import('../../pages/ordres/indicateurs/supervision-comptes-palox/supervision-comptes-palox.component'),
 }, {
+  id: 'SupervisionAFacturer',
+  enabled: true,
+  withCount: false,
+  parameter: 'Supervision',
+  subParameter: 'ordres à facturer',
+  tileBkg: '#725828',
+  indicatorIcon: 'material-icons list_alt',
+  warningIcon: '',
+  component: import('../../pages/ordres/indicateurs/supervision-a-facturer/supervision-a-facturer.component'),
+}, {
   id: 'Litiges',
   enabled: false,
   withCount: true,
