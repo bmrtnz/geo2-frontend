@@ -125,6 +125,24 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
     this.dataGrid.instance.filter(filters);
 
+    // Filtering variete, emballage & origine selectBox list depending on specy
+    const filter = [];
+
+    if (dataField === 'matierePremiere.espece.id' && event.length) {
+      event.forEach(element => {
+        filter.push(['matierePremiere.espece.id', '=', element]);
+        filter.push('or');
+      });
+      filter.pop(); // Remove last 'or'
+
+      this.varietes = this.articlesService.getFilterDatasource('matierePremiere.variete.description');
+      if (event[0] !== 'null') this.varietes.filter(filter);
+      this.emballages = this.articlesService.getFilterDatasource('emballage.emballage.description');
+      if (event[0] !== 'null') this.emballages.filter(filter);
+      this.origines = this.articlesService.getFilterDatasource('matierePremiere.origine.description');
+      if (event[0] !== 'null') this.origines.filter(filter);
+    }
+
   }
 
   capitalize(data) {
