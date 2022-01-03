@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
     public societeService: SocietesService,
     public currentCompanyService: CurrentCompanyService
   ) {
-    this.perimetre = this.authService.currentUser.perimetre;
+    this.perimetre = this.authService.currentUser?.perimetre;
     this.userMenuItems = [{
       text: 'Profil',
       icon: 'user'
@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit {
     this.societeSource.filter(filter)
 
     // Authorized companies -> '*' all
-    if (this.perimetre !== '*') {
+    if (this.perimetre && this.perimetre !== '*') {
       this.perimetre.split(',').forEach(element => {
         filter2.push(['id', '=', element]);
         filter2.push('or');

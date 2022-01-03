@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { RootComponent } from 'app/pages/ordres/root/root.component';
 import { defer, iif, Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { Societe } from '../models';
 import { AuthService } from '../services';
 import { CurrentCompanyService } from '../services/current-company.service';
@@ -10,7 +10,7 @@ import { CurrentCompanyService } from '../services/current-company.service';
 @Injectable()
 export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootComponent> {
 
-  private currentCompanyID: string;
+  private currentCompany: Societe;
 
   constructor(
     private router: Router,
@@ -29,11 +29,11 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    const societe: Societe = this.currentCompanyService.getCompany();
-    this.currentCompanyID = societe.id;
+    const societe: Societe = this.currentCompanyService?.getCompany();
+    this.currentCompany = societe;
     return iif(
-      () => !!this.authService.currentUser?.configTabsOrdres?.[this.currentCompanyID],
-      defer(() => of(this.authService.currentUser.configTabsOrdres[this.currentCompanyID]))
+      () => !!this.authService.currentUser?.configTabsOrdres?.[this?.currentCompany?.id],
+      defer(() => of(this.authService.currentUser.configTabsOrdres[this.currentCompany.id]))
       .pipe(map( url => this.router.parseUrl(url))),
       of(this.router.createUrlTree(['/ordres/home'])),
     );
@@ -55,14 +55,14 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
 
       // Trigger save, but don't block navigation
       if (!nextState.url.startsWith('/ordres')) {
-        of(this.currentCompanyService.getCompany())
+        of(this?.currentCompany?.id ?? this?.currentCompanyService?.getCompany()?.id)
         .pipe(
-          switchMap((company: Societe) => this.authService.persist({
+          switchMap(companyID => this.authService.persist({
             configTabsOrdres: {
-              [company.id]: encodeURI(currentState.url),
+              ...this.authService.currentUser?.configTabsOrdres,
+              [companyID]: encodeURI(currentState.url),
             },
           })),
-          switchMap(() => this.authService.logOut()),
         )
         .toPromise();
       }

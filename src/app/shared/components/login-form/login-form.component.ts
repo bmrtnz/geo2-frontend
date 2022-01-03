@@ -68,6 +68,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
       this.form.get('password').value,
     ).subscribe(() => {
       this.form.patchValue({password: ''});
+      this.authService.showWelcome();
       // Different user? Back home to avoid non consistent data
       if (userName !== lastUserName) this.router.navigate([`/**`]);
     });
