@@ -57,6 +57,8 @@ export class Entrepot extends Model {
   @Field({allowHeaderFiltering: false, allowSearch: false}) public typeTiers: TypeTiers;
   @Field() public prixUnitaireTarifTransport: number;
   @Field() public prixUnitaireTarifTransit: number;
+  @Field() public referenceIfco: string;
+  @Field({ dataType: 'date' }) public dateDebutIfco: string;
   @Field({model: import('./client.model')}) public client: Client;
 
 }

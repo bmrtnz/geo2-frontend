@@ -391,6 +391,8 @@
     "tiers-entrepots-details-groupe-autres": "Autres infos",
     "tiers-entrepots-gestionnaireChep": "Gestionnaire CHEP",
     "tiers-entrepots-referenceChep": "Référence (n° CHEP)",
+    "tiers-entrepots-dateDebutIfco": "Date début IFCO",
+    "tiers-entrepots-referenceIfco": "Référence IFCO",
     "tiers-entrepots-declarationEur1": "Déclaration EUR1",
     "tiers-entrepots-envoieAutomatiqueDetail": "Envoi automatique détail",
     "tiers-entrepots-controlReferenceClient": "Contrôle référence client",
