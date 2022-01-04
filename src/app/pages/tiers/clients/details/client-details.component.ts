@@ -398,23 +398,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
-      const client = {id : this.client.id, preSaisie: false, valide: true};
-      this.clientsService.save_v2(['id', 'preSaisie', 'valide'], {
-        client,
-      })
-      .subscribe({
-        next: () => {
-          this.refreshGrid.emit();
-          this.formGroup.get('valide').setValue(true);
-          this.formGroup.markAsPristine();
-          this.preSaisie = '';
-          this.validationService.showToValidateBadges();
-        },
-        error: (err) => {
-          console.log(err);
-          notify('Echec de la sauvegarde', 'error', 3000);
-        }
-      });
+      if (this.formGroup.valid) {
+        const client = {id : this.client.id, preSaisie: false, valide: true};
+        this.formGroup.get('valide').setValue(true);
+        this.formGroup.get('valide').markAsDirty();
+        this.preSaisie = '';
+        const validModif = true;
+        this.saveData(client, validModif);
+      }
     }
   }
 
@@ -488,11 +479,11 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     }
   }
 
-  saveData(client) {
+  saveData(client, validModif?) {
 
     const certifications = this.mapCertificationsForSave(client.certifications);
 
-    (client.valide !== undefined && this.client.valide !== client.valide && !this.createMode ?
+    (client.valide !== undefined && ((this.client.valide !== client.valide) || validModif) && !this.createMode ?
       this.validatePopup.present(
         HistoryType.CLIENT,
         { client: { id: client.id }, valide: client.valide },
@@ -521,9 +512,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             this.editing = false;
             this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
           }
-          this.client.historique = e.data.saveClient.historique;
-          this.client.typeTiers = e.data.saveClient.typeTiers;
-          this.client.certifications = e.data.saveClient.certifications;
+          // this.client.historique = e.data.saveClient.historique;
+          // this.client.typeTiers = e.data.saveClient.typeTiers;
+          // this.client.certifications = e.data.saveClient.certifications;
           this.formGroup.markAsPristine();
         },
         error: () => notify('Echec de la sauvegarde', 'error', 3000),

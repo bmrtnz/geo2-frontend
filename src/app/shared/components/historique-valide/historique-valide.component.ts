@@ -26,7 +26,7 @@ export class HistoriqueValideComponent implements OnChanges {
   }
 
   sortGrid() {
-    this.dataGrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
+    this.dataGrid.instance.columnOption('dateModification', {​​​​​​​​ sortOrder: 'desc'}​​​​​​​​);
   }
 
 }

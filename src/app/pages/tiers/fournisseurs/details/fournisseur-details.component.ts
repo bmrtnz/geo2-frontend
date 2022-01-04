@@ -184,23 +184,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
-      const fournisseur = {id : this.fournisseur.id, preSaisie: false, valide: true};
-      this.fournisseursService.save_v2(['id', 'preSaisie', 'valide'], {
-        fournisseur,
-      })
-      .subscribe({
-        next: () => {
-          this.refreshGrid.emit();
-          this.formGroup.get('valide').setValue(true);
-          this.formGroup.markAsPristine();
-          this.preSaisie = '';
-          this.validationService.showToValidateBadges();
-        },
-        error: (err) => {
-          console.log(err);
-          notify('Echec de la sauvegarde', 'error', 3000);
-        }
-      });
+      if (this.formGroup.valid) {
+        const fournisseur = {id : this.fournisseur.id, preSaisie: false, valide: true};
+        this.formGroup.get('valide').setValue(true);
+        this.formGroup.get('valide').markAsDirty();
+        this.preSaisie = '';
+        const validModif = true;
+        this.saveData(fournisseur, validModif);
+      }
     }
   }
 
@@ -232,7 +223,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
     this.pays = this.paysService.getDataSource();
     this.pays.filter(['valide', '=', 'true']);
-    this.bureauxAchat = this.bureauxAchatService.getDataSource();
+    this.bureauxAchat = this.bureauxAchatService.getDataSource_v2(['id', 'raisonSocial']);
     this.identifiant = this.identifiantsFournisseurService.getDataSource();
     this.typesFournisseur = this.typesFournisseurService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -370,12 +361,12 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     }
   }
 
-  saveData(fournisseur) {
+  saveData(fournisseur, validModif?) {
 
     /* tslint:disable-next-line max-line-length */
     const certifications = this.formGroup.get('certifications').dirty && this.mapCertificationsForSave(this.formGroup.get('certifications').value);
 
-    ((fournisseur.valide !== undefined && this.fournisseur.valide !== fournisseur.valide && !this.createMode) ?
+    ((fournisseur.valide !== undefined && ((this.fournisseur.valide !== fournisseur.valide) || validModif) && !this.createMode) ?
       this.validatePopup.present(
         HistoryType.FOURNISSEUR,
         { fournisseur: { id: fournisseur.id }, valide: fournisseur.valide },
@@ -405,9 +396,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             this.editing = false;
             this.router.navigate([`/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
           }
-          this.fournisseur.historique = e.data.saveFournisseur.historique;
-          this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
-          this.fournisseur.certifications = e.data.saveFournisseur.certifications;
+          // this.fournisseur.historique = e.data.saveFournisseur.historique;
+          // this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
+          // this.fournisseur.certifications = e.data.saveFournisseur.certifications;
           this.formGroup.markAsPristine();
         },
         error: (err) => {
