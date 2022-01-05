@@ -396,9 +396,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             this.editing = false;
             this.router.navigate([`/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
           }
-          // this.fournisseur.historique = e.data.saveFournisseur.historique;
-          // this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
-          // this.fournisseur.certifications = e.data.saveFournisseur.certifications;
+          this.fournisseur.historique = e.data.saveFournisseur.historique;
+          this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
+          this.fournisseur.certifications = e.data.saveFournisseur.certifications;
           this.formGroup.markAsPristine();
         },
         error: (err) => {
@@ -496,11 +496,19 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     const gridFields = fournisseursGridConfig.columns
     .map(({dataField}) => dataField);
 
-    return [
+    return [...new Set([
       ...this.formUtils.extractPaths(dirtyFields)
       .filter( path => !path.startsWith('certifications')),
       ...gridFields,
-    ];
+      'typeTiers',
+      'historique.id',
+      'historique.commentaire',
+      'historique.valide',
+      'historique.userModification',
+      'historique.dateModification',
+      'certifications.id',
+      'certifications.certification.id',
+    ])];
   }
 
 }

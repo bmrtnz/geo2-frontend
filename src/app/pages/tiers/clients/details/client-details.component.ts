@@ -512,9 +512,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             this.editing = false;
             this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
           }
-          // this.client.historique = e.data.saveClient.historique;
-          // this.client.typeTiers = e.data.saveClient.typeTiers;
-          // this.client.certifications = e.data.saveClient.certifications;
+          this.client.historique = e.data.saveClient.historique;
+          this.client.typeTiers = e.data.saveClient.typeTiers;
+          this.client.certifications = e.data.saveClient.certifications;
           this.formGroup.markAsPristine();
         },
         error: () => notify('Echec de la sauvegarde', 'error', 3000),
@@ -612,11 +612,19 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     const gridFields = clientsGridConfig.columns
     .map(({dataField}) => dataField);
 
-    return [
+    return [...new Set([
       ...this.formUtils.extractPaths(dirtyFields)
       .filter( path => !path.startsWith('certifications')),
       ...gridFields,
-    ];
+      'typeTiers',
+      'historique.id',
+      'historique.commentaire',
+      'historique.valide',
+      'historique.userModification',
+      'historique.dateModification',
+      'certifications.id',
+      'certifications.certification.id',
+    ])];
   }
 
 }
