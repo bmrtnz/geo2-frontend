@@ -423,8 +423,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             }
         });
 
-        console.log(paths);
-
         return [
             ...paths,
             ...gridFields,

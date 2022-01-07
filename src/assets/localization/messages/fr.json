@@ -56,6 +56,7 @@
     "btn-envoiBL": "Envoi automatique des BL",
     "btn-clotAdmin": "Clôture administratif",
     "btn-blAutoSend": "Envoi automatique des BL",
+    "btn-refresh": "Rafraîchir",
 
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
@@ -153,8 +154,8 @@
     "tiers-clients-tauxRemiseParFacture": "Tx ristourne/facture",
     "tiers-clients-tauxRemiseHorsFacture": "Tx ristourne hors fact.",
     "tiers-clients-fraisExcluArticlePasOrigineFrance": "Exclu frais article pas orig France",
-    "tiers-clients-fraisMarketing": "Frais marketing - P.U.",
-    "tiers-clients-fraisPlateforme": "Frais plateforme (€/kg)",
+    "tiers-clients-fraisMarketing": "Frais client (devise)",
+    "tiers-clients-fraisPlateforme": "Frais plateforme devise/kg",
     "tiers-clients-groupeClient": "Groupe client",
     "tiers-clients-courtier": "Courtier",
     "tiers-clients-courtier.raisonSocial": "Courtier",
@@ -449,7 +450,7 @@
     "articles-matierePremiere-origine": "Origine",
     "articles-matierePremiere-type": "Type variétal",
     "articles-matierePremiere-typeVente": "Type vente",
-    "articles-matierePremiere-modeCulture": "Mode culture",
+    "articles-matierePremiere-modeCulture": "Mode de culture",
     "articles-matierePremiere-espece": "Espèce",
     "articles-matierePremiere-codePlu": "Code PLU",
 
