@@ -6,14 +6,11 @@ import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { DxDataGridComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
 import { EntrepotsService } from 'app/shared/services/api/entrepots.service';
-import { entrepot } from 'assets/configurations/grids.json';
 import { GridColumn } from 'basic';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { Entrepot } from 'app/shared/models';
 
 
 @Component({
@@ -23,16 +20,19 @@ import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/g
 })
 export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
 
-  entrepots: DataSource;
+  readonly gridID = Grid.Entrepot;
   clientID: string;
   clientName: string;
   public columns: Observable<GridColumn[]>;
-  private gridConfig: Promise<GridConfig>;
-  columnChooser = environment.columnChooser;
   contentReadyEvent = new EventEmitter<any>();
   @ViewChild(DxDataGridComponent, {static: true})
   dataGrid: DxDataGridComponent;
   apiService: ApiService;
+  public gridConfigHandler = event => this.gridConfiguratorService
+  .init(this.gridID, {
+    ...event,
+    onColumnsChange: this.onColumnsChange.bind(this),
+  })
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -41,32 +41,32 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     public localizeService: LocalizationService,
     private router: Router,
     private route: ActivatedRoute,
-    public gridConfiguratorService: GridConfiguratorService,
+    private gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = this.entrepotsService;
   }
 
-  async ngOnInit() {
-    // Affichage nom client à côté Entrepôts
-    this.clientID = this.route.snapshot.paramMap.get('client');
-    if (this.clientID) {
-      this.clientsService.getOne(this.clientID).subscribe(res => {
-        this.clientName = res.data.client.raisonSocial;
-      });
-    }
-
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Entrepot);
-    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
-    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
-    this.entrepots = this.entrepotsService.getDataSource_v2(await fields.toPromise());
-    this.enableFilters();
-    this.dataGrid.dataSource = this.entrepots;
+  ngOnInit() {
+    this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
   }
 
-  enableFilters() {
-    if (!this.clientID) return;
-    this.entrepots.filter(['client.id', '=', this.clientID]);
+  private updateData(columns: GridColumn[]) {
+
+    of(columns)
+    .pipe(
+      GridConfiguratorService.getVisible(),
+      GridConfiguratorService.getFields(),
+    )
+    .subscribe(fields => {
+      this.dataGrid.dataSource = this
+      .entrepotsService
+      .getDataSource_v2([Entrepot.getKeyField() as string, ...fields]);
+    });
+  }
+
+  onColumnsChange({current}: {current: GridColumn[]}) {
+    this.updateData(current);
   }
 
   onRowDblClick(e) {
