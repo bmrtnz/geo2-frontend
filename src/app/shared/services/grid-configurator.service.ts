@@ -288,7 +288,10 @@ export class GridConfiguratorService {
       GridConfiguratorService.getVisible(),
       startWith([] as GridColumn[]),
       pairwise(),
-      filter(([previous, current]) => previous.length !== current.length),
+      filter(([previous, current]) =>
+        (previous.length !== current.length) ||
+        !current.every((v, i) => previous?.[i].dataField === v.dataField)
+      ),
     )
     .subscribe(([previous, current]) => {
       const fresh = current.filter(x => !previous.includes(x));
