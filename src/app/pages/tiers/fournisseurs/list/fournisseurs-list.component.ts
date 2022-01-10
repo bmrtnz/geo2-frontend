@@ -1,20 +1,15 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { Fournisseur } from 'app/shared/models';
 import { LocalizationService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
-import { DxDataGridComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
-import { map } from 'rxjs/operators';
 import { FournisseursService } from 'app/shared/services/api/fournisseurs.service';
-import {GridColumn} from 'basic';
-import { from, Observable } from 'rxjs';
-import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
-
+import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
+import { GridColumn } from 'basic';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-fournisseurs-list',
@@ -23,30 +18,49 @@ import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service'
 })
 export class FournisseursListComponent implements OnInit, NestedMain {
 
-  fournisseurs: DataSource;
+  readonly gridID = Grid.Fournisseur;
+
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
-  private gridConfig: Promise<GridConfig>;
+
+  public gridConfigHandler = event => this.gridConfiguratorService
+  .init(this.gridID, {
+    ...event,
+    onColumnsChange: this.onColumnsChange.bind(this),
+  })
 
   constructor(
     public fournisseursService: FournisseursService,
     public localizeService: LocalizationService,
-    public gridConfiguratorService: GridConfiguratorService,
+    private gridConfiguratorService: GridConfiguratorService,
     private router: Router,
     public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = this.fournisseursService;
   }
 
-  async ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Fournisseur);
-    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
-    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
-    this.fournisseurs = this.fournisseursService.getDataSource_v2(await fields.toPromise());
-    this.dataGrid.dataSource = this.fournisseurs;
+  ngOnInit() {
+    this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
+  }
+
+  private updateData(columns: GridColumn[]) {
+
+    of(columns)
+    .pipe(
+      GridConfiguratorService.getVisible(),
+      GridConfiguratorService.getFields(),
+    )
+    .subscribe(fields => {
+      this.dataGrid.dataSource = this
+      .fournisseursService
+      .getDataSource_v2([Fournisseur.getKeyField() as string, ...fields]);
+    });
+  }
+
+  onColumnsChange({current}: {current: GridColumn[]}) {
+    this.updateData(current);
   }
 
   onRowDblClick(event) {

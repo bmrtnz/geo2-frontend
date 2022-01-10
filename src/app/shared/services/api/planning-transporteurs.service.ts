@@ -84,7 +84,7 @@ export class PlanningTransporteursService extends ApiService implements APIRead 
         ) {
           edges {
             node {
-              ${await this.model.getGQL(columns).toPromise()}
+              ${await this.model.getGQLObservable(columns).toPromise()}
             }
           }
           pageInfo {
@@ -113,7 +113,7 @@ export class PlanningTransporteursService extends ApiService implements APIRead 
           societeCode: $societeCode,
           transporteurCode: $transporteurCode
         ) {
-          ${await this.model.getGQL(columns).toPromise()}
+          ${await this.model.getGQLObservable(columns).toPromise()}
         }
       }
     `;

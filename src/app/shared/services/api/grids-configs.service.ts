@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OperationVariables } from '@apollo/client/core';
+import { gql, OperationVariables } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
@@ -17,7 +17,11 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
     apollo: Apollo,
   ) {
     super(apollo, GridConfig);
-    this.gqlKeyType = 'GeoGridConfigKeyInput';
+    this.gqlKeyType = 'GeoGridConfigInput';
+  }
+
+  static getCacheID(data: Partial<GridConfig>) {
+    return `GeoGridConfig:${data.grid}-${data.utilisateur.nomUtilisateur}`;
   }
 
   getDataSource() {
@@ -36,7 +40,7 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
           type Response = { allGridConfig: RelayPage<GridConfig> };
           const variables = this.mapLoadOptionsToVariables(options);
 
-          this.listenQuery<Response>(query, { variables, fetchPolicy: 'cache-and-network' }, res => {
+          this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.allGridConfig)
               resolve(this.asInstancedListCount(res.data.allGridConfig));
           });
@@ -54,12 +58,24 @@ export class GridsConfigsService extends ApiService implements APIRead, APIPersi
     });
   }
 
+  /** @deprecated Use `save_v2` instead */
   save(variables: OperationVariables) {
     return this.watchSaveQuery({ variables, fetchPolicy: 'no-cache' });
   }
 
   save_v2(columns: Array<string>, variables: OperationVariables) {
-    return this.watchSaveQuery_v2({ variables }, columns);
+    return this.apollo.mutate<{ saveGridConfig: GridConfig }>({
+        mutation: gql(this.buildSaveGraph(columns)),
+        variables,
+        update: cache => {
+          cache.modify({
+            id: GridsConfigsService.getCacheID(variables.gridConfig),
+            fields: {
+              config: config => config, // ¯\_(ツ)_/¯
+            },
+          });
+        },
+      });
   }
 
 }

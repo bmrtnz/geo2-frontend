@@ -134,7 +134,7 @@ export class ArticlesService extends ApiService implements APIRead {
     return `
       mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {
         saveArticle(article: $article,clone: $clone) {
-          ${await this.model.getGQL(columns).toPromise()}
+          ${await this.model.getGQLObservable(columns).toPromise()}
         }
       }
     `;

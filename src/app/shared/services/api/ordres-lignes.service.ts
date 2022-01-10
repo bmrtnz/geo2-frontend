@@ -108,7 +108,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
               ${ operation }(search:$search, pageable:$pageable) {
                 edges {
                   node {
-                    ${await this.model.getGQL(columns).toPromise()}
+                    ${await this.model.getGQLObservable(columns).toPromise()}
                   }
                 }
                 pageInfo {

@@ -6,7 +6,7 @@ import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from, Observable, Subject } from 'rxjs';
-import { filter, map, mergeMap, take, takeUntil } from 'rxjs/operators';
+import { filter, map, mergeMap, take, takeUntil, tap } from 'rxjs/operators';
 
 const DEFAULT_KEY = 'id';
 const DEFAULT_GQL_KEY_TYPE = 'String';
@@ -216,7 +216,6 @@ export abstract class ApiService implements OnDestroy {
       .watchQuery<T>({
         query: gql(gqlQuery),
         fetchPolicy: 'cache-and-network',
-        returnPartialData: true,
         ...options,
       })
       .valueChanges;
@@ -266,7 +265,7 @@ export abstract class ApiService implements OnDestroy {
     return `
       query ${alias}($search: String) {
         ${operation}(search:$search) {
-          ${await this.model.getGQL(columns).toPromise()}
+          ${await this.model.getGQLObservable(columns).toPromise()}
         }
       }
     `;
@@ -286,7 +285,7 @@ export abstract class ApiService implements OnDestroy {
         ${operation}(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${await this.model.getGQL(columns).toPromise()}
+              ${await this.model.getGQLObservable(columns).toPromise()}
             }
           }
           pageInfo {
@@ -328,7 +327,7 @@ export abstract class ApiService implements OnDestroy {
     return `
       query ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
         ${operation}(${this.keyField}:$${this.keyField}) {
-          ${await this.model.getGQL(columns).toPromise()}
+          ${await this.model.getGQLObservable(columns).toPromise()}
         }
       }
     `;
@@ -382,7 +381,7 @@ export abstract class ApiService implements OnDestroy {
     return `
       mutation ${alias}($${entity}: ${type}!) {
         ${operation}(${entity}: $${entity}) {
-          ${await this.model.getGQL(columns).toPromise()}
+          ${await this.model.getGQLObservable(columns).toPromise()}
         }
       }
     `;
@@ -843,6 +842,54 @@ export abstract class ApiService implements OnDestroy {
     .pipe(
       takeUntil(this.destroy),
       take(1),
+    );
+  }
+
+  protected buildGraph(
+    type: 'query' | 'mutation',
+    paths: Array<string>,
+    operations: { name: string, params: { name: string, value: any, isVariable: boolean }[] }[],
+    variables: { name: string, type: string, isOptionnal: boolean }[] = [],
+    alias = operations?.[0].name.ucFirst(),
+  ) {
+    const mapVariables = vars => vars
+      .map(v => `$${v.name}: ${v.type}${v.isOptionnal ? '' : '!'}`);
+
+    const mapParams = prms => prms
+      .map(p => `${p.name}: ${p.isVariable ? '$' : ''}${p.value}`);
+
+    const mapPaths = pths => Model.getGQL(pths).toGraphQL();
+
+    const mapOperations = ops => ops
+      .map(o => `${o.name}(${mapParams(o.params)}) {${mapPaths(paths)}}`);
+
+    return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
+  }
+
+  protected buildGetOneGraph(paths: Array<string>) {
+    return this.buildGraph(
+      'query',
+      paths,
+      [
+        {
+          name: this.model.name.lcFirst(),
+          params: [{ name: this.model.name.lcFirst(), value: this.model.name.lcFirst(), isVariable: true }],
+        }],
+      [{ name: this.model.name.lcFirst(), type: this.gqlKeyType, isOptionnal: false }],
+    );
+  }
+
+  protected buildSaveGraph(paths: Array<string>) {
+
+    return this.buildGraph(
+      'mutation',
+      paths,
+      [
+        {
+          name: `save${this.model.name}`,
+          params: [{ name: this.model.name.lcFirst(), value: this.model.name.lcFirst(), isVariable: true }],
+        }],
+      [{ name: this.model.name.lcFirst(), type: this.gqlKeyType, isOptionnal: false }],
     );
   }
 

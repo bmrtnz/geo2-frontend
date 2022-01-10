@@ -231,7 +231,7 @@ describe('Model class', () => {
       ];
 
       Model
-        .getGQL(columns.map(property => property.dataField))
+        .getGQLObservable(columns.map(property => property.dataField))
         .subscribe(result => {
           expect(result).toMatch(/nom\nprenom\nmoyenCommunication{\ndescription\n}/);
           done();
@@ -240,7 +240,7 @@ describe('Model class', () => {
 
     it('should return graphQL query with gridBaseConfig in depth', (done) => {
       Model
-        .getGQL(['adresse1', 'adresse2', 'societe.adresse3', 'societe.pays.ville', 'societe.pays.codePostal'])
+        .getGQLObservable(['adresse1', 'adresse2', 'societe.adresse3', 'societe.pays.ville', 'societe.pays.codePostal'])
         .subscribe(result => {
           expect(result).toMatch(/adresse1\nadresse2\nsociete{\nadresse3\npays{\ncodePostal\nville\n}\n}/);
           done();
@@ -249,7 +249,7 @@ describe('Model class', () => {
 
     it('should return graphQL query with string params', (done) => {
       Model
-        .getGQL(['nom', 'prenom', 'moyenCommunication.id', 'moyenCommunication.description'])
+        .getGQLObservable(['nom', 'prenom', 'moyenCommunication.id', 'moyenCommunication.description'])
         .subscribe(result => {
           expect(result).toMatch(/nom\nprenom\nmoyenCommunication{\ndescription\nid\n}/);
           done();
@@ -258,7 +258,7 @@ describe('Model class', () => {
 
     it('should return empty string with empty array', (done) => {
       Model
-        .getGQL([])
+        .getGQLObservable([])
         .subscribe(result => {
           expect(result).toEqual('');
           done();
@@ -267,7 +267,7 @@ describe('Model class', () => {
 
     it('should return empty string with no param', (done) => {
       Model
-        .getGQL()
+        .getGQLObservable()
         .subscribe(result => {
           expect(result).toEqual('');
           done();

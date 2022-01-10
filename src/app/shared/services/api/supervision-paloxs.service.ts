@@ -71,7 +71,7 @@ export class SupervisionPaloxsService extends ApiService {
           codeEntrepot: $codeEntrepot
           codeCommercial: $codeCommercial
         ) {
-          ${await this.model.getGQL(columns).toPromise()}
+          ${await this.model.getGQLObservable(columns).toPromise()}
         }
       }
     `;
