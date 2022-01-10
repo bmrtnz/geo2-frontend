@@ -305,7 +305,7 @@ export class GridConfiguratorService {
           const defaultState = await this.fetchDefaultConfig(grid);
           component.state(defaultState);
           if (onConfigReload) onConfigReload(defaultState);
-          onColumnsChange({current: defaultState.columns});
+          if (onColumnsChange) onColumnsChange({current: defaultState.columns});
         }
       }
     },
