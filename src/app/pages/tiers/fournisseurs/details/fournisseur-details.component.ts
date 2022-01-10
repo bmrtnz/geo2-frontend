@@ -459,7 +459,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${this.fournisseur.id}/${this.fournisseur.typeTiers}`]);
+    this.router.navigate([`/tiers/contacts/${this.fournisseur.code}/${this.fournisseur.typeTiers}`]);
   }
 
   private mapCertificationsForDisplay(certifications: CertificationFournisseur[]): Certification[] {
