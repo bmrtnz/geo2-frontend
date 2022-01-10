@@ -67,6 +67,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     envoieAutomatiqueDetail: [''],
     gestionnaireChep: [''],
     referenceChep: [''],
+    referenceIfco: [''],
+    dateDebutIfco: [''],
     lieuFonctionEanDepot: [''],
     lieuFonctionEanAcheteur: [''],
     valide: [false],
@@ -96,6 +98,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   defaultVisible: boolean;
   isReadOnlyMode = true;
   createMode = false;
+  ifcoChecked = false;
   preSaisie: string;
  
   constructor(
@@ -249,6 +252,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   onCodeChange(e) {
     if (!e.value) return;
     this.formGroup.get('code').setValue(e.value.toUpperCase());
+  }
+
+  onIfcoChange(params) {
+    this.ifcoChecked = params.value;
   }
 
   valueToUpperCase(e) {

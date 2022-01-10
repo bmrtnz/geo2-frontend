@@ -121,6 +121,10 @@ export class ContactsComponent implements OnInit, NestedPart {
     }
   }
 
+  onInitNewRow(e) {
+    e.data.valide = true;
+  }
+
   onRowInserting(event) {
     (event.data as Contact).codeTiers = this.codeTiers;
     (event.data as Contact).typeTiers = this.typeTiers;

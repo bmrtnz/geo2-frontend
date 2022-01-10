@@ -304,13 +304,15 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     }
 
     onUParColisChange(event) {
-        // if (this.editing && !this.cloneMode) {
+        if (this.formGroup.get('id').value) {
             this.UC = parseInt(event.value, 10) > 0;
             let code = this.CNUFCode + this.formGroup.get('id').value;
+
             code = this.calcGTINcheck(code);
+
             this.formGroup.get(this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(code);
             this.formGroup.get(!this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(null);
-        // }
+        }
     }
 
     onEspeceChange(event) {
@@ -422,8 +424,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 paths.push(key);
             }
         });
-
-        console.log(paths);
 
         return [
             ...paths,
