@@ -82,7 +82,7 @@
                       <dx-validator name="{{ 'tiers-fournisseurs-code' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
                         <dxi-validation-rule *ngIf="createMode" [trim]="false" type="stringLength" [max]="13"></dxi-validation-rule>
-                        <dxi-validation-rule type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
+                        <dxi-validation-rule *ngIf="createMode" type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
                         <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
