@@ -2,7 +2,17 @@
 
 <div class="content-block articles-page">
   <div class="search-criteria-container">
-    <h6 class="content-block">{{ 'articles-preFilter-title' | localize }}</h6>
+    <div class="title-container">
+      <h6>{{ 'articles-preFilter-title' | localize }}</h6>
+      <dx-button
+        class="refresh"
+        [class]="toRefresh ? '' : 'inactive'"
+        type="default"
+        text="{{ 'btn-refresh' | localize }}"
+        (onClick)="refreshArticlesGrid()"
+      ></dx-button>
+    </div>
+    <div style="clear:both"></div>
     <div class="search-criteria-subcontainer" style="width:auto">
         <!-- espèce -->
         <div class="dx-field">
@@ -12,7 +22,7 @@
                     [dataSource]="especes"
                     (valueChange)="onFieldValueChange($event,'matierePremiere.espece.id')"
                     [searchEnabled]="true"
-                    searchExpr="article.matierePremiere.espece.id"
+                    searchExpr="matierePremiere.espece.id"
                     [displayExpr]="capitalize"
                     valueExpr="key"
                 >
@@ -42,7 +52,7 @@
         </div>
         <!-- Mode Culture -->
         <div class="dx-field field-large">
-          <div class="dx-field-label">{{ 'articles-matierePremiere-modeCulture' | localize }}</div>
+          <div class="dx-field-label noPadding">{{ 'articles-matierePremiere-modeCulture' | localize }}</div>
           <div class="dx-field-value">
             <dx-tag-box
                 [dataSource]="modesCulture"
@@ -95,21 +105,21 @@
           </div>
        </div>
        <!-- Valide ? -->
-       <div class="dx-field field-large valid-field">
-        <div class="dx-field-label">{{ 'articles-valide' | localize }}</div>
-        <div class="dx-field-value small-field">
-          <dx-select-box
-              [items]="trueFalse"
-              (valueChange)="onFieldValueChange($event,'valide')"
-              [value]="trueFalse[0]"
-              >
-              <dxo-drop-down-options
-                [width]="100">
-              </dxo-drop-down-options>
-          </dx-select-box>
+       <div class="dx-field valid-field">
+          <div class="dx-field-label">{{ 'articles-valide' | localize }}</div>
+          <div class="dx-field-value small-field">
+            <dx-select-box
+                [items]="trueFalse"
+                (valueChange)="onFieldValueChange($event,'valide')"
+                [value]="trueFalse[0]"
+                >
+                <dxo-drop-down-options
+                  [width]="100">
+                </dxo-drop-down-options>
+            </dx-select-box>
+          </div>
         </div>
-      </div>
-     </div>
+    </div>
   </div>
   <div style="clear:both"></div>
   <dx-data-grid class="dx-card wide-card"

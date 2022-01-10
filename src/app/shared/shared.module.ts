@@ -4,13 +4,15 @@ import {RouterModule} from '@angular/router';
 import {LocalizePipe} from './pipes';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import DataGrid from 'devextreme/ui/data_grid';
+import { GridConfiguratorModule } from './services/grid-configurator.service';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GridConfiguratorModule,
   ],
   declarations: [LocalizePipe],
   exports: [CommonModule, LocalizePipe],

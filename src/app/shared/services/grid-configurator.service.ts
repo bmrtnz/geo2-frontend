@@ -1,18 +1,38 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, NgModule } from '@angular/core';
+import { Apollo } from 'apollo-angular';
 import { GridColumn } from 'basic';
-import { DxoStateStoringComponent } from 'devextreme-angular/ui/nested';
+import { DxoColumnChooserComponent, DxoStateStoringComponent } from 'devextreme-angular/ui/nested';
 import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
-import { map } from 'rxjs/operators';
+import { dxToolbarOptions } from 'devextreme/ui/toolbar';
+import { environment } from 'environments/environment';
+import { defer, from, interval, Observable } from 'rxjs';
+import { concatMapTo, debounce, filter, map, pairwise, share, startWith, tap } from 'rxjs/operators';
 import { GridConfig as GridConfigModel } from '../models';
 import { GridsConfigsService } from './api/grids-configs.service';
 import { AuthService } from './auth.service';
+import { LocalizationService } from './localization.service';
 
 let self: GridConfiguratorService;
 
 export type GridConfig = {
-  columns: GridColumn[],
+  columns?: GridColumn[],
+  filterValue?: any,
+  focusedRowKey?: any,
+  selectedRowKeys?: any[],
+  selectionFilter?: any[],
+  filterPanel?: {
+    filterEnabled?: boolean,
+  },
+  paging?: {
+    pageSize?: number,
+    pageIndex?: number,
+  },
+  searchPanel?: {
+    text?: string,
+  },
+
 };
 
 export enum Grid {
@@ -61,18 +81,19 @@ export enum Grid {
   RecapClientsComptesPalox= 'recap-clients-comptes-palox',
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class GridConfiguratorService {
 
   private readonly GRID_CONFIG_FILE = '/assets/configurations/grids.json';
   private dataSource: DataSource;
+  private columnChooser = environment.columnChooser;
 
   constructor(
     private gridsConfigsService: GridsConfigsService,
     private authService: AuthService,
     private httpClient: HttpClient,
+    private apollo: Apollo,
+    private localizationService: LocalizationService,
   ) {
     self = this;
     this.dataSource = this.gridsConfigsService.getDataSource();
@@ -94,6 +115,13 @@ export class GridConfiguratorService {
    * Grid configuration observable mapper to get visible columns from columns
    */
   static getVisible() {
+    return map((columns: GridColumn[]) => columns.filter( column => column.visible ));
+  }
+
+  /**
+   * Grid configuration observable mapper to get visible columns from columns
+   */
+  static getVisibleAndID() {
     return map((columns: GridColumn[]) => columns.filter( column => column.visible || column.dataField === 'id' ));
   }
 
@@ -118,17 +146,9 @@ export class GridConfiguratorService {
   /**
    * DX DataGrid CustomLoad callback, read and load configuration, load default configuration as fallback
    */
-  async load() {
+  load() {
     const context = this as unknown as DxoStateStoringComponent;
-    self.filterGrid(context.storageKey as Grid);
-    const res: GridConfigModel[] = await self.dataSource.load();
-    if (!res.length) return self.fetchDefaultConfig(context.storageKey as Grid);
-    // Clear search text and pagination
-    const config = JSON.parse(JSON.stringify(res[0].config)); // clone config (original is sealed)
-    delete config.searchText;
-    delete config.focusedRowKey;
-    delete config.selectedRowKeys;
-    return config;
+    return self.fetchConfig(context.storageKey as Grid);
   }
 
   /**
@@ -148,9 +168,25 @@ export class GridConfiguratorService {
   save(config: {}) {
     const context = this as unknown as DxoStateStoringComponent;
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
-    self.gridsConfigsService.save({
-      gridConfig: { ...gridConfig, config }
-    }).toPromise();
+    self.gridsConfigsService
+    .save_v2(
+      ['grid', 'utilisateur.nomUtilisateur', 'config'],
+      {gridConfig: { ...gridConfig, config }},
+    )
+    .subscribe();
+  }
+
+  /**
+   * Register columns config in Apollo cache before save response
+   * @param grid Targeted grid ID
+   * @param columns Grid state configuration
+   */
+  private precacheColumns(grid: Grid, alterationsCallback: (columns: GridColumn[]) => GridColumn[]) {
+    const alter = (columns: GridColumn[]) => alterationsCallback(JSON.parse(JSON.stringify(columns))); // unsealed
+    this.apollo.client.cache.modify({
+      id: GridsConfigsService.getCacheID({grid, utilisateur: this.authService.currentUser}),
+      fields: { config: current => ({...current, columns: alter(current.columns)}) },
+    });
   }
 
   /**
@@ -164,10 +200,17 @@ export class GridConfiguratorService {
     return this.httpClient
       .get(this.GRID_CONFIG_FILE)
       .pipe(
-        map(res => Object
+        map((res: {[key: string]: GridConfig}) => Object
           .entries(res)
           .filter(([key]) => keys.includes(key))
           .map(([, config]) => config)
+          .map( config => ({
+            ...config,
+            columns: config?.columns?.map( column => ({
+              ...column,
+              visible: column?.visible ?? false,
+            })),
+          }))
           .reduce((previous, config) => ({ ...previous, ...config }))
         ),
       )
@@ -175,11 +218,89 @@ export class GridConfiguratorService {
   }
 
   /**
-   * Add reset button to binded datagrid
-   * @param event Event object
-   * @param cbk Callback to apply after restoring default state
+   * Fetch user grid configuration or default config as fallback
+   * @param gridName Grid name
    */
-  onToolbarPreparing(title, {component, toolbarOptions}: {component: dxDataGrid, toolbarOptions: any}, grid: Grid, cbk?: () => void) {
+  async fetchConfig(grid: Grid): Promise<GridConfig> {
+    if (!grid)
+      throw Error('Grid name required, use GridConfiguratorService.with(gridName)');
+    this.filterGrid(grid);
+    const res: GridConfigModel[] = await this.dataSource.load();
+    if (!res.length) return this.fetchDefaultConfig(grid);
+    const config: GridConfig = JSON.parse(JSON.stringify(res[0].config)); // clone config (original is sealed)
+    delete config.focusedRowKey;
+    delete config.selectedRowKeys;
+    return config;
+  }
+
+  /**
+   * Fetch grid columns configuration
+   * @param gridName Grid name
+   * @returns Shared observable of columns
+   */
+  fetchColumns(grid: Grid): Observable<GridColumn[]> {
+    return from(this.fetchConfig(grid))
+    .pipe(
+      share(),
+      GridConfiguratorService.getColumns(),
+    );
+  }
+
+  /**
+   * Configure grid (reset button, state, events)
+   * @param grid Grid configuration
+   * @param options Extends `dxDataGrid.onToolbarPreparing` event parameter
+   */
+  public init(
+    grid: Grid,
+    {
+      component,
+      toolbarOptions,
+      title,
+      autoStateStoring = true,
+      autoColumnChooser = true,
+      onConfigReload,
+      onColumnsChange,
+    }: {
+      component: dxDataGrid,
+      toolbarOptions: dxToolbarOptions,
+      title?: string,
+      autoStateStoring: boolean,
+      autoColumnChooser: boolean,
+      onConfigReload?: (state: GridConfig) => void,
+      onColumnsChange?: (selection: {fresh?: GridColumn[], current: GridColumn[], previous?: GridColumn[]}) => void,
+    },
+  ) {
+
+    if (autoStateStoring)
+      this.autoConfigureStateStoring(component.option('stateStoring'), grid);
+    if (autoColumnChooser)
+      this.autoConfigureColumnChooser(component.option('columnChooser'));
+
+    const columnsChangeEmitter = new EventEmitter();
+    component.option().onOptionChanged = event => columnsChangeEmitter.emit(event);
+    columnsChangeEmitter.pipe(
+      filter(({name}) => name === 'columns' && !!onColumnsChange),
+      tap(({fullName, value}: Partial<{fullName: string, value: any}>) => {
+        const res = fullName.match(/^columns\[(\d+)\]\.visible$/);
+        if (res?.[1])
+          this.precacheColumns(grid, columns => ((columns[res[1]].visible = value), columns));
+      }),
+      debounce(({fullName}) => interval(fullName === 'columns' ? 10 : 1000)),
+      concatMapTo(defer(() => this.fetchColumns(grid))),
+      GridConfiguratorService.getVisible(),
+      startWith([] as GridColumn[]),
+      pairwise(),
+      filter(([previous, current]) =>
+        (previous.length !== current.length) ||
+        !current.every((v, i) => previous?.[i].dataField === v.dataField)
+      ),
+    )
+    .subscribe(([previous, current]) => {
+      const fresh = current.filter(x => !previous.includes(x));
+      onColumnsChange({fresh, current, previous});
+    });
+
     toolbarOptions.items.unshift({
       location: 'after',
       widget: 'dxButton',
@@ -189,10 +310,12 @@ export class GridConfiguratorService {
         onClick: async () => {
           const defaultState = await this.fetchDefaultConfig(grid);
           component.state(defaultState);
-          if (cbk) cbk();
+          if (onConfigReload) onConfigReload(defaultState);
+          if (onColumnsChange) onColumnsChange({current: defaultState.columns});
         }
       }
-    }, {
+    },
+    {
       // Datagrid title
       location: 'left',
       widget: 'dxTextBox',
@@ -203,6 +326,60 @@ export class GridConfiguratorService {
         text: title
       }
     });
+
+    if (component.option('columnChooser').enabled)
+      if (!toolbarOptions.items.find( i => i.name === 'columnChooserButton'))
+        toolbarOptions.items.unshift({
+          widget: 'dxButton',
+          options: {
+            icon: 'column-chooser',
+            hint: 'Sélection des colonnes affichées',
+            onClick: () => component.showColumnChooser(),
+          },
+          showText: 'inMenu',
+          location: 'after',
+          name: 'columnChooserButton',
+        });
+  }
+
+  /** @deprecated Use `init()` instead */
+  public onToolbarPreparing(title, options, grid: Grid, cbk?: () => void) {
+    this.init(grid, {
+      ...options,
+      title,
+      onConfigReload: cbk,
+    });
+  }
+
+  /**
+   * Auto configure distant DX StateStoring
+   * @param state DX StateStoring component
+   * @param grid Targeted grid config id
+   */
+  private autoConfigureStateStoring(state: DxoStateStoringComponent, grid: Grid) {
+    state.enabled = true;
+    state.type = 'custom';
+    state.customLoad = this.load;
+    state.customSave = this.save;
+    state.storageKey = grid;
+  }
+
+  /**
+   * Auto configure distant DX ColumnChooser
+   * @param chooser DX ColumnChooser component
+   * @param grid Targeted grid config id
+   */
+  private autoConfigureColumnChooser(chooser: DxoColumnChooserComponent) {
+    chooser.enabled = true;
+    chooser.mode = 'select';
+    chooser.title = this.localizationService.localize('columnChooser');
+    chooser.allowSearch = true;
+    chooser.width = this.columnChooser.width;
+    chooser.height = this.columnChooser.height;
   }
 
 }
+
+@NgModule({
+  providers: [GridConfiguratorService],
+}) export class GridConfiguratorModule {}

@@ -13,7 +13,7 @@ import notify from 'devextreme/ui/notify';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import Utils from 'Utils';
+import Utils from 'utils/Filter';
 import { TabContext } from '../../root/root.component';
 
 enum FormInput {
@@ -66,7 +66,7 @@ export class PlanningTransporteursComponent implements OnInit {
     private tabContext: TabContext,
     private currentCompanyService: CurrentCompanyService,
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningTransporteurs);
+    this.gridConfig = this.gridConfiguratorService.fetchConfig(Grid.PlanningTransporteurs);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.transporteursDataSource = this.transporteursService
     .getDataSource_v2(['id', 'raisonSocial']);

@@ -3,9 +3,12 @@ import { defaultDataIdFromObject, from, InMemoryCache, StoreObject } from '@apol
 import { onError } from '@apollo/client/link/error';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
-import { AuthService } from './shared/services';
 import { environment } from '../environments/environment';
+import { AuthService } from './shared/services';
 import { Edge } from './shared/services/api.service';
+import { GridsConfigsService } from './shared/services/api/grids-configs.service';
+import { GridConfig } from './shared/models';
+import { Model } from './shared/models/model';
 
 const uri = environment.apiEndpoint + '/graphql';
 
@@ -28,13 +31,14 @@ export function createApollo(httpLink: HttpLink) {
       httpLink.create({ uri, withCredentials: true })
     ]),
     cache: new InMemoryCache({
-      dataIdFromObject(responseObject: Readonly<StoreObject> | Readonly<Edge>) {
-        if (responseObject?.node?.id)
-          return `${responseObject.node.__typename}:${responseObject.node.id}`;
-        if (responseObject?.node?.key)
-          return `${responseObject.node.__typename}:${responseObject.node.key}`;
+      dataIdFromObject(responseObject: Readonly<StoreObject>) {
+
+        if (responseObject?.__typename === 'GeoGridConfig')
+          return GridsConfigsService.getCacheID(responseObject as unknown as GridConfig);
+
         if (responseObject?.__typename?.startsWith('Geo') && ENTITY_KEY in responseObject)
           return `${responseObject.__typename}:${responseObject[ENTITY_KEY]}`;
+
         return defaultDataIdFromObject(responseObject);
       },
     }),

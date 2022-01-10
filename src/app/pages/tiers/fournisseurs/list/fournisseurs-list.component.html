@@ -12,17 +12,14 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{
-      useNative:true
-    }"
+    [scrolling]="{ useNative:true }"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Fournisseur)"
+    (onToolbarPreparing)="gridConfigHandler($event)"
   >
 
     <!-- Grid configuration -->
-<!--    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>-->
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Fournisseurs" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging></dxo-paging>
@@ -31,28 +28,12 @@
       [showInfo]="true"
       [showNavigationButtons]="true"
     ></dxo-pager>
-    <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.Fournisseur"
-      [enabled]="true"
-      type="custom"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser
-      [enabled]="true"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height">
-    </dxo-column-chooser>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
-      [visible]="false"
       [caption]="('tiers-fournisseurs-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"

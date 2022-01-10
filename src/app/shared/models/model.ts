@@ -140,7 +140,10 @@ export abstract class Model {
    *   }
    * }
    */
-  static getGQL(columns: Array<string> = []): Observable<string> {
+  static getGQLObservable(columns: Array<string> = []): Observable<string> {
+    return of(Model.getGQL(columns).toGraphQL());
+  }
+  static getGQL(columns: Array<string> = []) {
     const obj = new GraphQLObject();
 
     columns
@@ -163,7 +166,7 @@ export abstract class Model {
         }
       });
 
-    return of(obj.toGraphQL());
+    return obj;
   }
 
   /**

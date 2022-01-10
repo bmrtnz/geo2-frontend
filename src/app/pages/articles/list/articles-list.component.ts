@@ -9,7 +9,6 @@ import { DxDataGridComponent, DxTagBoxComponent } from 'devextreme-angular';
 import { ClientsService, LocalizationService } from 'app/shared/services';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { GridColumn } from 'basic';
-import { article } from 'assets/configurations/grids.json';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
@@ -26,7 +25,6 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  @ViewChildren(DxTagBoxComponent) filterBoxes: any;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -38,6 +36,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   modesCulture: DataSource;
   trueFalse: string[];
   initialSpecy: any;
+  allGridFilters: any;
+  toRefresh: boolean;
 
   constructor(
     public articlesService: ArticlesService,
@@ -66,7 +66,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
     this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
-    this.dataGrid.dataSource = this.articles;
+    this.toRefresh = true;
   }
 
   onCellPrepared(e) {
@@ -78,6 +78,12 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         e.cellElement.innerText =  e.data.emballage?.emballage.id + ' ' + e.cellElement.innerText;
       }
     }
+  }
+
+  refreshArticlesGrid() {
+    if (this.dataGrid.dataSource === null) this.dataGrid.dataSource = this.articles;
+    this.dataGrid.instance.filter(this.allGridFilters);
+    this.toRefresh = false;
   }
 
   onRowDblClick(e) {
@@ -95,6 +101,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
    */
    onFieldValueChange(event: string[], dataField: string) {
 
+    this.toRefresh = true;
+
     // No value cases
     if (event !== null) {
       if (!event.length) {
@@ -108,7 +116,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     if (event.toString() === 'Tous') {event = ['null'];}
     this.tagFilters[dataField] = event;
 
-    const filters = Object
+    this.allGridFilters = Object
       .entries(this.tagFilters)
       .filter(([, values]) => values.length)
       .map(([path, values]) => values
@@ -123,7 +131,27 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       .split('¤')
       .map(v => JSON.parse(v));
 
-    this.dataGrid.instance.filter(filters);
+    // Filtering variete, emballage & origine selectBox list depending on specy
+    const filter = [];
+
+    if (dataField === 'matierePremiere.espece.id') {
+      // Clear all dependent fields
+
+      if (event.length) {
+        event.forEach(element => {
+          filter.push(['matierePremiere.espece.id', '=', element]);
+          filter.push('or');
+        });
+        filter.pop(); // Remove last 'or'
+
+        this.varietes = this.articlesService.getFilterDatasource('matierePremiere.variete.description');
+        if (event[0] !== 'null') this.varietes.filter(filter);
+        this.emballages = this.articlesService.getFilterDatasource('emballage.emballage.description');
+        if (event[0] !== 'null') this.emballages.filter(filter);
+        this.origines = this.articlesService.getFilterDatasource('matierePremiere.origine.description');
+        if (event[0] !== 'null') this.origines.filter(filter);
+      }
+    }
 
   }
 

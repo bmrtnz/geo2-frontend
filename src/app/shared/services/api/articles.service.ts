@@ -76,8 +76,10 @@ export class ArticlesService extends ApiService implements APIRead {
               if (res.data && res.data.distinct)
                 resolve(this.asListCount(res.data.distinct));
             });
-          const [value] = options.filter.slice(-1);
-          options.filter = [selector, '=', value];
+          if (options.filter) {
+            const [value] = options.filter.slice(-1);
+            options.filter = [selector, '=', value];
+          }
           return this
             .loadDistinctQuery({ ...options, group: { selector } }, res => {
               if (res.data && res.data.distinct)
@@ -134,7 +136,7 @@ export class ArticlesService extends ApiService implements APIRead {
     return `
       mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {
         saveArticle(article: $article,clone: $clone) {
-          ${await this.model.getGQL(columns).toPromise()}
+          ${await this.model.getGQLObservable(columns).toPromise()}
         }
       }
     `;

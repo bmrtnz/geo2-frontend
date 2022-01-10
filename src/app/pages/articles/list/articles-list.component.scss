@@ -2,9 +2,6 @@
 ::ng-deep .articles-page .dx-datagrid-search-panel {
     display: none;
 }
-// ::ng-deep .dx-overlay-content {
-//     width: 500px !important;
-// }
 ::ng-deep .articles-page .search-criteria-subcontainer {
     overflow: hidden;
     .dx-field {
@@ -21,6 +18,9 @@
             margin-right: 10px;
             overflow: visible;
             align-self: baseline;
+            &.noPadding {
+                padding: 0 !important;
+            }
         }
         .dx-texteditor {
             font-size: 12px;
@@ -37,19 +37,17 @@
         .dx-field-label {
             width :30%;
         }
-        // &.valid-field {
-        //     .dx-field-value {
-        //         width :70%;
-        //     }
-        //     .dx-field-label {
-        //         width :30%;
-        //     }
-        // }
+        &.valid-field {
+        width: 100px;
+        }
     }
     
     .dx-tagbox {
         .dx-tag ~ .dx-texteditor-input {
             display: none;
+        }
+        .dx-tag-content {
+            line-height: 1;
         }
         .dx-texteditor-buttons-container {
             width: 34px
@@ -58,5 +56,17 @@
 }
 
 h6 {
-    margin: 0;    
+    margin: 0;
+    float: left;
 }
+.refresh {
+    top: -8px;
+    float: right;
+}
+.title-container {
+    height: 36px;
+}
+.inactive {
+    opacity: 0.2;
+    pointer-events: none;
+  }

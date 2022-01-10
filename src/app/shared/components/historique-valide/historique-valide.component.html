@@ -12,13 +12,13 @@
   [visible]="this.visible"
   [showTitle]="true"
   [dragEnabled]="false"
-  (onShown)="sortGrid()"
   title="{{ 'btn-historique' | localize }}"
   [(visible)]="this.visible"
   [closeOnOutsideClick]="true">
   <div *dxTemplate="let d of 'content'">
     <dx-data-grid 
       [columnAutoWidth]="true"
+      (onContentReady)="sortGrid()"
       [scrolling]="{
         useNative:true
       }"
