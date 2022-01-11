@@ -203,6 +203,6 @@ export {GridColumn};
  * Interface defining single item selection from a list
  */
 export interface SingleSelection<I> {
-  getSelectedItem: () => I;
-  selectionChanged?: EventEmitter<I>;
+  getSelectedItem: () => Partial<I>;
+  selectionChanged?: EventEmitter<Partial<I>>;
 }

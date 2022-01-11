@@ -8,8 +8,9 @@ import { GridColumn, SingleSelection } from 'basic';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { TabContext } from '../root/root.component';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-entrepots',
@@ -18,12 +19,17 @@ import { TabContext } from '../root/root.component';
 })
 export class GridEntrepotsComponent implements OnInit, SingleSelection<Entrepot> {
 
-  public dataSource: DataSource;
-  public columnChooser = environment.columnChooser;
-  public columns: Observable<GridColumn[]>;
-  private gridConfig: Promise<GridConfig>;
+  readonly gridID = Grid.OrdreEntrepot;
 
-  @ViewChild(DxDataGridComponent, {static: false}) private entrepotGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, {static: false}) private grid: DxDataGridComponent;
+
+  public columns: Observable<GridColumn[]>;
+  public gridConfigHandler = event => this.gridConfiguratorService
+  .init(this.gridID, {
+    ...event,
+    title: 'Liste des entrepôts',
+    onColumnsChange: this.onColumnsChange.bind(this),
+  })
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -34,41 +40,66 @@ export class GridEntrepotsComponent implements OnInit, SingleSelection<Entrepot>
     public tabContext: TabContext,
   ) {}
 
-  async ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreEntrepot);
-    this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
-    const visibleFields = from(this.gridConfig)
-    .pipe(
-      GridConfiguratorService.getColumns(),
-      GridConfiguratorService.getVisible(),
-      GridConfiguratorService.getFields(),
-    );
-    this.dataSource = this.entrepotsService
-    .getDataSource_v2(await visibleFields.toPromise());
-    this.entrepotGrid.dataSource = this.dataSource;
-    this.enableFilters();
+  ngOnInit() {
+    this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
+    // this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreEntrepot);
+    // this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
+    // const visibleFields = from(this.gridConfig)
+    // .pipe(
+    //   GridConfiguratorService.getColumns(),
+    //   GridConfiguratorService.getVisible(),
+    //   GridConfiguratorService.getFields(),
+    // );
+    // this.dataSource = this.entrepotsService
+    // .getDataSource_v2(await visibleFields.toPromise());
+    // this.entrepotGrid.dataSource = this.dataSource;
+    // this.enableFilters();
   }
 
-  enableFilters() {
-    const filters = [
-      ['client.societe.id', '=', this.currentCompanyService.getCompany().id],
-      'and',
-      ['valide', '=', true],
-      'and',
-      ['client.valide', '=', true]
-    ];
+  // enableFilters() {
+  //   const filters = [
+  //     ['client.societe.id', '=', this.currentCompanyService.getCompany().id],
+  //     'and',
+  //     ['valide', '=', true],
+  //     'and',
+  //     ['client.valide', '=', true]
+  //   ];
 
-    this.dataSource.filter(filters);
-   }
+  //   this.dataSource.filter(filters);
+  // }
 
-  reload() {
-    this.dataSource.reload();
+  private updateData(columns: GridColumn[]) {
+
+    of(columns)
+    .pipe(
+      GridConfiguratorService.getVisible(),
+      GridConfiguratorService.getFields(),
+      map( fields => this.entrepotsService.getDataSource_v2([
+        Entrepot.getKeyField() as string,
+        Entrepot.getLabelField() as string,
+        ...fields,
+    ])),
+    )
+    .subscribe(datasource => {
+      datasource.filter([
+        ['client.societe.id', '=', this.currentCompanyService.getCompany().id],
+        'and',
+        ['valide', '=', true],
+        'and',
+        ['client.valide', '=', true]
+      ]);
+      this.grid.dataSource = datasource;
+    });
+  }
+
+  onColumnsChange({current}: {current: GridColumn[]}) {
+    this.updateData(current);
   }
 
   getSelectedItem() {
-    return this.entrepotGrid.instance.getVisibleRows()
-    .filter( row => row.key === this.entrepotGrid.focusedRowKey)
-    .map( row => row.data)[0];
+    return this.grid.instance.getVisibleRows()
+    .filter( row => row.key === this.grid.focusedRowKey)
+    .map( row => row.data)[0] as Partial<Entrepot>;
   }
 
 }

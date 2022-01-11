@@ -16,9 +16,9 @@
 <app-grid-entrepots #grid *ngIf="!favorites"></app-grid-entrepots>
 <br>
 <app-button-loader
-    [text]="('create' | localize) + (getSelectedItem() ? ' '+('depuis' | localize)+' \''+getSelectedItem().raisonSocial+'\'' : '')"
+    [text]="('create' | localize) + (getSelectedEntrepot() ? ' '+('depuis' | localize)+' \''+getSelectedEntrepot()?.raisonSocial+'\'' : '')"
     [type]="'default'"
-    [disabled]="!getSelectedItem()"
+    [disabled]="!getSelectedEntrepot()"
     [resolver]="resolver"
     (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>

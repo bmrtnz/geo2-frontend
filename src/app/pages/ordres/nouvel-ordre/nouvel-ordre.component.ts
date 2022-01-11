@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { GridEntrepotsComponent } from '../grid-entrepots/grid-entrepots.component';
 import { GridHistoriqueEntrepotsComponent } from '../grid-historique-entrepots/grid-historique-entrepots.component';
+import MRUEntrepot from 'app/shared/models/mru-entrepot.model';
 
 @Component({
   selector: 'app-nouvel-ordre',
@@ -24,7 +25,7 @@ export class NouvelOrdreComponent {
   EntrepotGrid: GridEntrepotsComponent;
   @ViewChild(GridHistoriqueEntrepotsComponent, { static: false })
   historiqueEntrepotGrid: GridHistoriqueEntrepotsComponent;
-  @ViewChild('grid') private grid: SingleSelection<Entrepot>;
+  @ViewChild('grid') private grid: SingleSelection<Entrepot|MRUEntrepot>;
 
   constructor(
     private functionsService: FunctionsService,
@@ -33,7 +34,7 @@ export class NouvelOrdreComponent {
   onButtonLoaderClick() {
 
     this.resolver = this.functionsService
-    .ofValideEntrepotForOrdre(this.getSelectedItem().id)
+    .ofValideEntrepotForOrdre(this.getSelectedEntrepot().id)
     .valueChanges
     .pipe(
       takeWhile( res => res.loading ),
@@ -46,8 +47,10 @@ export class NouvelOrdreComponent {
 
   }
 
-  getSelectedItem() {
-    return this?.grid?.getSelectedItem();
+  getSelectedEntrepot() {
+    const item = this?.grid?.getSelectedItem();
+    if (item instanceof MRUEntrepot) return item.entrepot;
+    if (item instanceof Entrepot) return item;
   }
 
   onTypeChange(e) {
