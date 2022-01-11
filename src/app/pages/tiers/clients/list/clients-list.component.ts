@@ -5,13 +5,12 @@ import { ClientsService, LocalizationService } from 'app/shared/services';
 import { ApiService } from 'app/shared/services/api.service';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { GridColumn } from 'basic';
 import { DxDataGridComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
-import { from, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { Client } from 'app/shared/models';
 
 
 @Component({
@@ -21,13 +20,17 @@ import { from, Observable } from 'rxjs';
 })
 export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
 
-  clients: DataSource;
+  readonly gridID = Grid.Client;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   public columns: Observable<GridColumn[]>;
-  private gridConfig: Promise<GridConfig>;
-  columnChooser = environment.columnChooser;
+
+  public gridConfigHandler = event => this.gridConfiguratorService
+  .init(this.gridID, {
+    ...event,
+    onColumnsChange: this.onColumnsChange.bind(this),
+  })
 
   constructor(
     public clientsService: ClientsService,
@@ -35,33 +38,32 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
     private router: Router,
-    public gridConfiguratorService: GridConfiguratorService,
+    private gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = this.clientsService;
   }
 
-  async ngOnInit() {
-
-    // Filtrage selon société sélectionnée
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Client);
-    this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
-    const visibleFields = from(this.gridConfig)
-    .pipe(
-      GridConfiguratorService.getColumns(),
-      GridConfiguratorService.getVisible(),
-      GridConfiguratorService.getFields(),
-    );
-    this.clients = this.clientsService
-    .getDataSource_v2(await visibleFields.toPromise());
-    this.enableFilters();
-    this.dataGrid.dataSource = this.clients;
+  ngOnInit() {
+    this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
   }
 
-  enableFilters() {
-    this.clients.searchExpr('societe.id');
-    this.clients.searchOperation('=');
-    this.clients.searchValue(this.currentCompanyService.getCompany().id);
+  private updateData(columns: GridColumn[]) {
+
+    of(columns)
+    .pipe(
+      GridConfiguratorService.getVisible(),
+      GridConfiguratorService.getFields(),
+    )
+    .subscribe(fields => {
+      this.dataGrid.dataSource = this
+      .clientsService
+      .getDataSource_v2([Client.getKeyField() as string, ...fields]);
+    });
+  }
+
+  onColumnsChange({current}: {current: GridColumn[]}) {
+    this.updateData(current);
   }
 
   onRowDblClick(event) {

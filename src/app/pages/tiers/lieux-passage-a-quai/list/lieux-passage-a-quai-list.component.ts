@@ -7,14 +7,11 @@ import { GridsConfigsService } from 'app/shared/services/api/grids-configs.servi
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { DxDataGridComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
 import { LieuxPassageAQuaiService } from 'app/shared/services/api/lieux-passage-a-quai.service';
 import { GridColumn } from 'basic';
-import * as gridConfig from 'assets/configurations/grids.json';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { Observable, of } from 'rxjs';
+import { Grid } from 'app/shared/services/grid-configurator.service';
+import { LieuPassageAQuai } from 'app/shared/models';
 
 
 @Component({
@@ -24,31 +21,48 @@ import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service'
 })
 export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
 
-  lieuxPassageAQuais: DataSource;
+  readonly gridID = Grid.LieuPassageAQuai;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   public columns: Observable<GridColumn[]>;
-  private gridConfig: Promise<GridConfig>;
-  columnChooser = environment.columnChooser;
+  public gridConfigHandler = event => this.gridConfiguratorService
+  .init(this.gridID, {
+    ...event,
+    onColumnsChange: this.onColumnsChange.bind(this),
+  })
 
   constructor(
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
     public gridService: GridsConfigsService,
     public localizeService: LocalizationService,
-    public gridConfiguratorService: GridConfiguratorService,
+    private gridConfiguratorService: GridConfiguratorService,
     private router: Router,
     public gridRowStyleService: GridRowStyleService,
   ) {
     this.apiService = this.lieuxPassageAQuaiService;
   }
 
-  async ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.LieuPassageAQuai);
-    this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
-    const fields = this.columns.pipe(map( columns => columns.map( column => column.dataField )));
-    this.lieuxPassageAQuais = this.lieuxPassageAQuaiService.getDataSource_v2(await fields.toPromise());
-    this.dataGrid.dataSource = this.lieuxPassageAQuais;
+  ngOnInit() {
+    this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
+  }
+
+  private updateData(columns: GridColumn[]) {
+
+    of(columns)
+    .pipe(
+      GridConfiguratorService.getVisible(),
+      GridConfiguratorService.getFields(),
+    )
+    .subscribe(fields => {
+      this.dataGrid.dataSource = this
+      .lieuxPassageAQuaiService
+      .getDataSource_v2([LieuPassageAQuai.getKeyField() as string, ...fields]);
+    });
+  }
+
+  onColumnsChange({current}: {current: GridColumn[]}) {
+    this.updateData(current);
   }
 
   onRowDblClick(event) {
