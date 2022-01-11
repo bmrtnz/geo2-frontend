@@ -10,30 +10,20 @@
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="0"
-    [scrolling]="{
-      useNative:true
-    }"
+    [scrolling]="{ useNative:true }"
     [columnAutoWidth]="true"
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Client, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfigHandler($event)"
   >
 
     <dxo-selection mode="single"></dxo-selection>
     <!-- Grid configuration -->
-<!--    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>-->
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
     <dxo-paging></dxo-paging>
-    <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.Client"
-      [enabled]="true"
-      type="custom"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
@@ -41,19 +31,10 @@
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser
-      [enabled]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true">
-    </dxo-column-chooser>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
-      [visible]="false"
       [caption]="('tiers-clients-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"

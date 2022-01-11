@@ -443,8 +443,7 @@
                             <div class="dx-field-value" formGroupName="emballage">
                                 <dx-text-box
                                 formControlName="uniteParColis" 
-                                [readOnly]="readOnlyMode"
-                                (onValueChanged)="onUParColisChange($event)">
+                                [readOnly]="readOnlyMode">
                                 </dx-text-box>
                             </div>
                         </div>
@@ -647,7 +646,7 @@
                             </div>
                         </div>
                         <!-- GTIN UC BW -->
-                        <div *ngIf="UC && !cloneMode" class="dx-field">
+                        <div *ngIf="ucBW && !cloneMode" class="dx-field">
                             <div class="dx-field-label">{{ 'articles-gtinUcBlueWhale' | localize }}</div>
                             <div class="dx-field-value">
                                 <dx-text-box formControlName="gtinUcBlueWhale"
@@ -665,7 +664,7 @@
                             </div>
                         </div>
                         <!-- GTIN Colis BW-->
-                        <div *ngIf="!UC && !cloneMode" class="dx-field">
+                        <div *ngIf="!ucBW && !cloneMode" class="dx-field">
                             <div class="dx-field-label">{{ 'articles-gtinColisBlueWhale' | localize }}</div>
                             <div class="dx-field-value">
                                 <dx-text-box formControlName="gtinColisBlueWhale"
