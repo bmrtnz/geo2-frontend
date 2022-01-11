@@ -199,7 +199,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 this.article = new Article(res.data.article);
                 this.formGroup.patchValue(this.article);
                 this.contentReadyEvent.emit();
-                this.ucBW = this.article.emballage.poidsNetGaranti > 0;
+                this.ucBW = this.article.emballage.uniteParColis > 0;
                 this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
             });
     }
@@ -227,6 +227,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             this.formGroup.get(key).markAsDirty();
         });
         this.showWarnings();
+    }
+
+    onUParColisChange(event) {
+        this.ucBW = event.value > 0;
     }
 
     showWarnings() {
@@ -289,6 +293,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                         this.readOnlyMode = true;
                         this.editing = false;
                         this.article.historique = event.data.saveArticle.historique;
+                        this.formGroup.get('gtinColisBlueWhale').patchValue(event.data.saveArticle.gtinColisBlueWhale);
+                        this.formGroup.get('gtinUcBlueWhale').patchValue(event.data.saveArticle.gtinUcBlueWhale);
                         this.formGroup.markAsPristine();
                     },
                     error: () => notify('Echec de la sauvegarde', 'error', 3000),
@@ -394,6 +400,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         return [
             ...paths,
             ...gridFields,
+            'gtinColisBlueWhale',
+            'gtinUcBlueWhale'
         ];
 
     }

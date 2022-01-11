@@ -443,6 +443,7 @@
                             <div class="dx-field-value" formGroupName="emballage">
                                 <dx-text-box
                                 formControlName="uniteParColis" 
+                                (onValueChanged)="onUParColisChange($event)"
                                 [readOnly]="readOnlyMode">
                                 </dx-text-box>
                             </div>

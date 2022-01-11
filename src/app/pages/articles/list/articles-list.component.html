@@ -130,9 +130,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{
-      useNative:true
-    }"
+    [scrolling]="{ useNative:true }"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
