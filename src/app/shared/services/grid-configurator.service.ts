@@ -62,7 +62,7 @@ export enum Grid {
 
   OrdreSupervisionLivraison = 'ordre-supervision-livraison',
   OrdreBonAFacturer = 'ordre-bon-a-facturer',
-  OrdreAFacturer = 'ordre-a-facturer',
+  OrdresAFacturer = 'ordres-a-facturer',
   OrdresNonClotures = 'ordres-non-clotures',
   OrdresNonConfirmes = 'ordres-non-confirmes',
   CommandesTransit = 'commandes-transit',

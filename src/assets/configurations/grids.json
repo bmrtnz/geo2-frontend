@@ -1407,7 +1407,7 @@
       { "dataField": "id", "visible": false }
     ]
   },
-  "ordre-a-facturer": {
+  "ordres-a-facturer": {
     "columns": [
       {
         "visibleIndex": 0,
