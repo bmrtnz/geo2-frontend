@@ -71,7 +71,7 @@ export class SupervisionAFacturerComponent implements OnInit {
     private currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreAFacturer);
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdresAFacturer);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
 
     this.secteurs = this.secteursService.getDataSource();
