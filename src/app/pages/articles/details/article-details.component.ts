@@ -109,6 +109,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     @ViewChild(FileManagerComponent, { static: false }) fileManagerComponent: FileManagerComponent;
     @ViewChild(PushHistoryPopupComponent, { static: false }) validatePopup: PushHistoryPopupComponent;
     editing = false;
+    public ucBW: boolean;
 
     article: Article;
 
@@ -180,13 +181,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private formUtils: FormUtilsService,
         public authService: AuthService,
         private localization: LocalizationService
-    ) {
-        this.onUParColisChange = this.onUParColisChange.bind(this);
-    }
+    ) {}
 
     ngOnInit() {
-
-        this.CNUFCode = '343006';
 
         this.route.params
             .pipe(
@@ -202,6 +199,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                 this.article = new Article(res.data.article);
                 this.formGroup.patchValue(this.article);
                 this.contentReadyEvent.emit();
+                this.ucBW = this.article.emballage.poidsNetGaranti > 0;
                 this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
             });
     }
@@ -225,9 +223,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         this.readOnlyMode = false;
         this.cloneMode = true;
         this.editing = true;
-        // We clear GTINs BW as they depend on article's ID (unknown)
-        this.formGroup.get('gtinUcBlueWhale').setValue('');
-        this.formGroup.get('gtinColisBlueWhale').setValue('');
         Object.keys(this.formGroup.controls).forEach(key => {
             this.formGroup.get(key).markAsDirty();
         });
@@ -303,18 +298,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     }
 
-    onUParColisChange(event) {
-        if (this.formGroup.get('id').value) {
-            this.UC = parseInt(event.value, 10) > 0;
-            let code = this.CNUFCode + this.formGroup.get('id').value;
-
-            code = this.calcGTINcheck(code);
-
-            this.formGroup.get(this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(code);
-            this.formGroup.get(!this.UC ? 'gtinUcBlueWhale' : 'gtinColisBlueWhale').setValue(null);
-        }
-    }
-
     onEspeceChange(event) {
 
         const filter = event.value ? ['espece.id', '=', event.value.id] : [];
@@ -375,23 +358,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         };
 
         this.etiquetteVisible = true;
-    }
-
-    calcGTINcheck(code) {
-        let imp = 0;
-        let pai = 0;
-        let check = 0;
-
-        for (let i = 0; i < code.length; i += 2) {
-          imp += parseInt(code.charAt(i), 10);
-        }
-        for (let i = 1; i < code.length; i += 2) {
-            pai += parseInt(code.charAt(i), 10);
-        }
-        check = imp + (3 * pai);
-        check = Math.ceil(check / 10) * 10 - check;
-
-        return code + check;
     }
 
     private getDirtyFieldsPath() {
