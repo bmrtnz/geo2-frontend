@@ -19,6 +19,11 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
     super(apollo, OrdreBaf);
   }
 
+  public persistantVariables: Record<string, any> = {};
+
+  setPersisantVariables(params = this.persistantVariables) {
+    this.persistantVariables = params;
+  }
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       store: this.createCustomStore({

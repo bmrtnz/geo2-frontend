@@ -366,4 +366,8 @@ export class TabContext {
     ).subscribe();
   }
 
+  public selectEntrepotForNewOrder(id) {
+
+  }
+
 }
