@@ -27,18 +27,18 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) => new Promise( resolve => {
 
-          const query = await this.buildQuery(columns);
-          type Response = { allOrdreBaf: RelayPage<OrdreBaf> };
+          const query = this.buildQuery(columns);
+          type Response = { fAfficheBaf: RelayPage<OrdreBaf> };
 
           const variables = {
-            // ...this.persistantVariables,
+            ...this.persistantVariables,
             ...this.mapLoadOptionsToVariables(options)
           };
           this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allOrdreBaf) {
-              resolve(this.asInstancedListCount(res.data.allOrdreBaf));
+            if (res.data && res.data.fAfficheBaf) {
+              resolve(this.asInstancedListCount(res.data.fAfficheBaf));
             }
           });
         }),
