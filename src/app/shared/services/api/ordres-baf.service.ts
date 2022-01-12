@@ -66,7 +66,7 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
   }
 
   private buildQuery(columns: Array<string>) {
-    return this.buildGraph(
+    return ApiService.buildGraph(
       'query',
       columns,
       [

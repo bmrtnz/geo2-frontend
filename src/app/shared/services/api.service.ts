@@ -141,6 +141,27 @@ export abstract class ApiService implements OnDestroy {
     this.keyField = this?.model?.getKeyField() || DEFAULT_KEY;
   }
 
+  static buildGraph(
+    type: 'query' | 'mutation',
+    paths: Array<string>,
+    operations: { name: string, params: { name: string, value: any, isVariable: boolean }[] }[],
+    variables: { name: string, type: string, isOptionnal: boolean }[] = [],
+    alias = operations?.[0].name.ucFirst(),
+  ) {
+    const mapVariables = vars => vars
+      .map(v => `$${v.name}: ${v.type}${v.isOptionnal ? '' : '!'}`);
+
+    const mapParams = prms => prms
+      .map(p => `${p.name}: ${p.isVariable ? '$' : ''}${p.value}`);
+
+    const mapPaths = pths => Model.getGQL(pths).toGraphQL();
+
+    const mapOperations = ops => ops
+      .map(o => `${o.name}(${mapParams(o.params)}) {${mapPaths(paths)}}`);
+
+    return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
+  }
+
   ngOnDestroy() {
     this.destroy.next(true);
     this.destroy.unsubscribe();
@@ -845,29 +866,8 @@ export abstract class ApiService implements OnDestroy {
     );
   }
 
-  protected buildGraph(
-    type: 'query' | 'mutation',
-    paths: Array<string>,
-    operations: { name: string, params: { name: string, value: any, isVariable: boolean }[] }[],
-    variables: { name: string, type: string, isOptionnal: boolean }[] = [],
-    alias = operations?.[0].name.ucFirst(),
-  ) {
-    const mapVariables = vars => vars
-      .map(v => `$${v.name}: ${v.type}${v.isOptionnal ? '' : '!'}`);
-
-    const mapParams = prms => prms
-      .map(p => `${p.name}: ${p.isVariable ? '$' : ''}${p.value}`);
-
-    const mapPaths = pths => Model.getGQL(pths).toGraphQL();
-
-    const mapOperations = ops => ops
-      .map(o => `${o.name}(${mapParams(o.params)}) {${mapPaths(paths)}}`);
-
-    return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
-  }
-
   protected buildGetOneGraph(paths: Array<string>) {
-    return this.buildGraph(
+    return ApiService.buildGraph(
       'query',
       paths,
       [
@@ -881,7 +881,7 @@ export abstract class ApiService implements OnDestroy {
 
   protected buildSaveGraph(paths: Array<string>) {
 
-    return this.buildGraph(
+    return ApiService.buildGraph(
       'mutation',
       paths,
       [
