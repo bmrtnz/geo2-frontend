@@ -143,8 +143,7 @@ export abstract class ApiService implements OnDestroy {
 
   static buildGraph(
     type: 'query' | 'mutation',
-    paths: Array<string>,
-    operations: { name: string, params: { name: string, value: any, isVariable: boolean }[] }[],
+    operations: { name: string, body?: Array<string>, params: { name: string, value: any, isVariable: boolean }[] }[],
     variables: { name: string, type: string, isOptionnal: boolean }[] = [],
     alias = operations?.[0].name.ucFirst(),
   ) {
@@ -157,7 +156,7 @@ export abstract class ApiService implements OnDestroy {
     const mapPaths = pths => Model.getGQL(pths).toGraphQL();
 
     const mapOperations = ops => ops
-      .map(o => `${o.name}(${mapParams(o.params)}) {${mapPaths(paths)}}`);
+      .map(o => `${o.name}(${mapParams(o.params)}) {${mapPaths(o?.body ?? [])}}`);
 
     return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
   }
@@ -866,27 +865,27 @@ export abstract class ApiService implements OnDestroy {
     );
   }
 
-  protected buildGetOneGraph(paths: Array<string>) {
+  protected buildGetOneGraph(body: Array<string>) {
     return ApiService.buildGraph(
       'query',
-      paths,
       [
         {
           name: this.model.name.lcFirst(),
+          body,
           params: [{ name: this.model.name.lcFirst(), value: this.model.name.lcFirst(), isVariable: true }],
         }],
       [{ name: this.model.name.lcFirst(), type: this.gqlKeyType, isOptionnal: false }],
     );
   }
 
-  protected buildSaveGraph(paths: Array<string>) {
+  protected buildSaveGraph(body: Array<string>) {
 
     return ApiService.buildGraph(
       'mutation',
-      paths,
       [
         {
           name: `save${this.model.name}`,
+          body,
           params: [{ name: this.model.name.lcFirst(), value: this.model.name.lcFirst(), isVariable: true }],
         }],
       [{ name: this.model.name.lcFirst(), type: this.gqlKeyType, isOptionnal: false }],

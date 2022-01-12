@@ -65,12 +65,11 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
     return this.watchCountQuery<CountResponse>(search).pipe(first());
   }
 
-  private buildQuery(columns: Array<string>) {
+  private buildQuery(body: Array<string>) {
     return ApiService.buildGraph(
       'query',
-      columns,
       [
-        {name: 'fAfficheBaf', params: [
+        {name: 'fAfficheBaf', body, params: [
           { name: 'societeCode', value: 'societeCode', isVariable: true },
           { name: 'secteurCode', value: 'secteurCode', isVariable: true },
           { name: 'clientCode', value: 'clientCode', isVariable: true },
