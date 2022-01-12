@@ -24,13 +24,7 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
-
-          const query = await this.buildGetAll_v2(columns);
+          const query = await this.buildQuery(columns);
           type Response = { allOrdreBaf: RelayPage<OrdreBaf> };
 
           const variables = {
@@ -64,6 +58,35 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
   count(dxFilter?: any[]) {
     const search = this.mapDXFilterToRSQL(dxFilter);
     return this.watchCountQuery<CountResponse>(search).pipe(first());
+  }
+
+  private buildQuery(columns: Array<string>) {
+    return this.buildGraph(
+      'query',
+      columns,
+      [
+        {name: 'fAfficheBaf', params: [
+          { name: 'societeCode', value: 'societeCode', isVariable: true },
+          { name: 'secteurCode', value: 'secteurCode', isVariable: true },
+          { name: 'clientCode', value: 'clientCode', isVariable: true },
+          { name: 'entrepotCode', value: 'entrepotCode', isVariable: true },
+          { name: 'dateMin', value: 'dateMin', isVariable: true },
+          { name: 'dateMax', value: 'dateMax', isVariable: true },
+          { name: 'codeAssistante', value: 'codeAssistante', isVariable: true },
+          { name: 'codeCommercial', value: 'codeCommercial', isVariable: true },
+        ]},
+      ],
+      [
+        { name: 'societeCode', type: 'String', isOptionnal: false },
+        { name: 'secteurCode', type: 'String', isOptionnal: false },
+        { name: 'clientCode', type: 'String', isOptionnal: false },
+        { name: 'entrepotCode', type: 'String', isOptionnal: false },
+        { name: 'dateMin', type: 'LocalDate', isOptionnal: false },
+        { name: 'dateMax', type: 'LocalDate', isOptionnal: false },
+        { name: 'codeAssistante', type: 'String', isOptionnal: false },
+        { name: 'codeCommercial', type: 'String', isOptionnal: false },
+      ],
+    );
   }
 
 }
