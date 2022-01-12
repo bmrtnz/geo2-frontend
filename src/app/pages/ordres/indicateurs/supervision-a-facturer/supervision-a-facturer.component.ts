@@ -6,24 +6,25 @@ import { PersonnesService } from 'app/shared/services/api/personnes.service';
 import { EntrepotsService, ClientsService } from 'app/shared/services';
 import DataSource from 'devextreme/data/data_source';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { DxSelectBoxComponent } from 'devextreme-angular';
+import { DxSelectBoxComponent, DxDataGridComponent } from 'devextreme-angular';
 import Ordre from 'app/shared/models/ordre.model';
 import { TabContext } from '../../root/root.component';
 import { Grid, GridConfiguratorService, GridConfig } from 'app/shared/services/grid-configurator.service';
-import { FunctionsService } from 'app/shared/services/api/functions.service';
 import { environment } from 'environments/environment';
 import { GridColumn } from 'basic';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { OrdresBafService } from 'app/shared/services/api/ordres-baf.service';
 
 enum InputField {
-  secteur = 'secteur',
-  client = 'client',
-  entrepot = 'entrepot',
-  commercial = 'commercial',
-  assistante = 'assistante',
-  from = 'dateDebut',
-  to = 'dateFin',
+  secteurCode = 'secteur',
+  clientCode = 'client',
+  entrepotCode = 'entrepot',
+  codeCommercial = 'commercial',
+  codeAssistante = 'assistante',
+  dateMin = 'dateDebut',
+  dateMax = 'dateFin',
+  societeCode = 'societe'
 }
 
 type Inputs<T = any> = {[key in keyof typeof InputField]: T};
@@ -37,6 +38,7 @@ export class SupervisionAFacturerComponent implements OnInit {
 
   readonly INDICATOR_NAME = 'SupervisionAFacturer';
 
+  public ordresDataSource: DataSource;
   public secteurs: DataSource;
   public clients: DataSource;
   public entrepots: DataSource;
@@ -47,28 +49,30 @@ export class SupervisionAFacturerComponent implements OnInit {
   public columnChooser = environment.columnChooser;
   private gridConfig: Promise<GridConfig>;
   public columns: Observable<GridColumn[]>;
+  toRefresh: boolean;
 
+  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild('periodeSB', { static: false }) periodeSB: DxSelectBoxComponent;
 
   public formGroup = new FormGroup({
-    client: new FormControl(),
-    secteur: new FormControl(),
-    entrepot: new FormControl(),
-    commercial: new FormControl(),
-    assistante: new FormControl(),
-    from: new FormControl(this.dateManagementService.startOfDay()),
-    to: new FormControl(this.dateManagementService.endOfDay()),
+    secteurCode: new FormControl(),
+    clientCode: new FormControl(),
+    entrepotCode: new FormControl(),
+    codeCommercial: new FormControl(),
+    codeAssistante: new FormControl(),
+    dateMin: new FormControl(this.dateManagementService.startOfDay()),
+    dateMax: new FormControl(this.dateManagementService.endOfDay()),
   } as Inputs<FormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
-    private functionsService: FunctionsService,
     private secteursService: SecteursService,
     private personnesService: PersonnesService,
     private entrepotsService: EntrepotsService,
     private clientsService: ClientsService,
     private dateManagementService: DateManagementService,
     private currentCompanyService: CurrentCompanyService,
+    public ordresBafService: OrdresBafService,
     private tabContext: TabContext,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdresAFacturer);
@@ -87,18 +91,45 @@ export class SupervisionAFacturerComponent implements OnInit {
     this.periodes = this.dateManagementService.periods();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.toRefresh = true;
+    const fields = this.columns
+    .pipe(map( columns => columns.map( column => column.dataField )));
+
+    this.ordresDataSource = this.ordresBafService
+    .getDataSource_v2(await fields.toPromise());
   }
 
   enableFilters() {
-    const values: Inputs = this.formGroup.value;
-    this.functionsService.visualiserOrdreBAF();
+    // this.toRefresh = false;
+
+    const values: Inputs = {
+      ...this.formGroup.value,
+    };
+
+    this.ordresBafService.setPersisantVariables({
+      dateMin: values.dateMin,
+      dateMax: values.dateMax,
+      societeCode: this.currentCompanyService.getCompany().id,
+      entrepotCode: values.entrepotCode,
+      codeCommercial: values.codeCommercial,
+      codeAssistante: values.codeAssistante
+    } as Inputs);
+
+    this.datagrid.dataSource = this.ordresDataSource;
+
+  }
+
+  onFieldValueChange(e?) {
+    this.toRefresh = true;
   }
 
   manualDate(e) {
 
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
+
+    this.onFieldValueChange();
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
     const deb = new Date(this.formGroup.get('from').value);
@@ -120,6 +151,9 @@ export class SupervisionAFacturerComponent implements OnInit {
 
     // We check that this change is coming from the user, not following a prog change
     if (!e.event) return;
+
+    this.onFieldValueChange();
+
     const datePeriod = this.dateManagementService.getDates(e);
 
     this.formGroup.patchValue({

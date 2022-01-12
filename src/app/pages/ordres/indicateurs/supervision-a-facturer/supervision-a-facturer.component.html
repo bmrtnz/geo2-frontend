@@ -1,4 +1,15 @@
 <form class="dx-fieldset" [formGroup]="formGroup">
+    <div class="title-container">
+        <h6>{{ 'preFilter-title' | localize }}</h6>
+        <dx-button
+          class="refresh"
+          [class]="toRefresh ? '' : 'inactive'"
+          type="default"
+          text="{{ 'btn-refresh' | localize }}"
+          (onClick)="enableFilters()"
+        ></dx-button>
+    </div>
+    <div style="clear:both"></div>
     <div class="orderTileFilterArea">
         <dx-box>
             <dxi-item [ratio]="3">
@@ -7,8 +18,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="secteur" [dataSource]="secteurs" displayExpr="description"
-                            [searchEnabled]="true" searchExpr="description">
+                        <dx-select-box formControlName="secteurCode" [dataSource]="secteurs" displayExpr="description"
+                            [searchEnabled]="true" searchExpr="description" (valueChange)="onFieldValueChange($event)">
                         </dx-select-box>
                     </div>
                 </div>
@@ -20,8 +31,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="client" [dataSource]="clients" displayExpr="raisonSocial" [searchEnabled]="true"
-                            searchExpr="raisonSocial"></dx-select-box>
+                        <dx-select-box formControlName="clientCode" [dataSource]="clients" displayExpr="raisonSocial" [searchEnabled]="true"
+                            searchExpr="raisonSocial" (valueChange)="onFieldValueChange($event)"></dx-select-box>
                     </div>
                 </div>
             </dxi-item>
@@ -31,8 +42,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'ordres-entrepôt' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="entrepot" [dataSource]="entrepots" displayExpr="raisonSocial"
-                            [searchEnabled]="true" searchExpr="raisonSocial">
+                        <dx-select-box formControlName="entrepotCode" [dataSource]="entrepots" displayExpr="raisonSocial"
+                            [searchEnabled]="true" searchExpr="raisonSocial" (valueChange)="onFieldValueChange($event)">
                         </dx-select-box>
                     </div>
                 </div>
@@ -43,8 +54,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="commercial" [dataSource]="commerciaux" displayExpr="nomUtilisateur"
-                            [searchEnabled]="true" searchExpr="nomUtilisateur">
+                        <dx-select-box formControlName="codeCommercial" [dataSource]="commerciaux" displayExpr="nomUtilisateur"
+                            [searchEnabled]="true" searchExpr="nomUtilisateur" (valueChange)="onFieldValueChange($event)">
                         </dx-select-box>
                     </div>
                 </div>
@@ -56,16 +67,16 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'ordres-assistante' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="assistante" [dataSource]="assistantes" displayExpr="nomUtilisateur"
-                            [searchEnabled]="true" searchExpr="nomUtilisateur">
+                        <dx-select-box formControlName="codeAssistante" [dataSource]="assistantes" displayExpr="nomUtilisateur"
+                            [searchEnabled]="true" searchExpr="nomUtilisateur" (valueChange)="onFieldValueChange($event)">
                         </dx-select-box>
                     </div>
                 </div>
             </dxi-item>
             <dxi-item [ratio]="0.5"></dxi-item>
-            <dxi-item [ratio]="4.3">
+            <dxi-item [ratio]="3">
                 <!-- Période -->
-                <div class="dx-field field-small">
+                <div class="dx-field">
                     <div class="dx-field-label noEllipsis">{{ 'ordres-periode' | localize }}</div>
                     <div class="dx-field-value">
                         <dx-select-box #periodeSB
@@ -80,13 +91,14 @@
                     </div>
                 </div>
             </dxi-item>
-            <dxi-item [ratio]="3.2">
+            <dxi-item [ratio]="0.5"></dxi-item>
+            <dxi-item [ratio]="3">
                 <!-- Date de début -->
-                <div class="dx-field field-small">
+                <div class="dx-field field">
                     <div class="dx-field-label">{{ 'ordres-Du' | localize }}</div>
                     <div class="dx-field-value">
                         <dx-date-box
-                            formControlName="from"
+                            formControlName="dateMin"
                             class="dateStart"
                             type="datetime"
                             [displayFormat]="'dd-MM-yyyy  HH:mm'"
@@ -95,13 +107,14 @@
                     </div>
                 </div>
             </dxi-item>
-            <dxi-item [ratio]="3.2">
+            <dxi-item [ratio]="0.5"></dxi-item>
+            <dxi-item [ratio]="3">
                 <!-- Date de fin -->
-                <div class="dx-field field-small">
+                <div class="dx-field field">
                     <div class="dx-field-label">{{ 'ordres-au' | localize }}</div>
                     <div class="dx-field-value">
                         <dx-date-box
-                            formControlName="to"
+                            formControlName="dateMax"
                             class="dateEnd"
                             type="datetime"
                             [displayFormat]="'dd-MM-yyyy  HH:mm'"
@@ -126,7 +139,7 @@
     [scrolling]="{ useNative:true }"
     [selection]="{ mode: 'multiple' }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Supervision ordres à facturer', $event, gridConfiguratorService.Grid.OrdreAFacturer, enableFilters.bind(this))"
+    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Supervision ordres à facturer', $event, gridConfiguratorService.Grid.OrdresAFacturer, enableFilters.bind(this))"
 >
 
     <!-- Grid configuration -->
@@ -139,7 +152,7 @@
         [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing 
-        [storageKey]="gridConfiguratorService.Grid.OrdreAFacturer"
+        [storageKey]="gridConfiguratorService.Grid.OrdresAFacturer"
         [enabled]="true"
         type="custom"
         [customLoad]="gridConfiguratorService.load"
