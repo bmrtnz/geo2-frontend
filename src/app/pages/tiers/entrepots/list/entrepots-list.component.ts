@@ -11,6 +11,7 @@ import { GridColumn } from 'basic';
 import { Observable, of } from 'rxjs';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 import { Entrepot } from 'app/shared/models';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -48,6 +49,13 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
   }
 
   ngOnInit() {
+    // Affichage nom client à côté Entrepôts
+    this.clientID = this.route.snapshot.paramMap.get('client');
+    if (this.clientID) {
+      this.clientsService.getOne(this.clientID).subscribe(res => {
+        this.clientName = res.data.client.raisonSocial;
+      });
+    }
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
   }
 
@@ -57,11 +65,11 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     .pipe(
       GridConfiguratorService.getVisible(),
       GridConfiguratorService.getFields(),
+      map( fields => this.entrepotsService.getDataSource_v2([Entrepot.getKeyField() as string, ...fields])),
     )
-    .subscribe(fields => {
-      this.dataGrid.dataSource = this
-      .entrepotsService
-      .getDataSource_v2([Entrepot.getKeyField() as string, ...fields]);
+    .subscribe(datasource => {
+      if (this.clientID) datasource.filter(['client.id', '=', this.clientID]);
+      this.dataGrid.dataSource = datasource;
     });
   }
 
