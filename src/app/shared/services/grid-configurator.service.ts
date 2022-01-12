@@ -187,6 +187,16 @@ export class GridConfiguratorService {
   }
 
   /**
+   * Evict config in Apollo cache
+   * @param grid Targeted grid ID
+   */
+  private evictCache(grid: Grid) {
+    this.apollo.client.cache.evict({
+      id: GridsConfigsService.getCacheID({grid, utilisateur: this.authService.currentUser}),
+    });
+  }
+
+  /**
    * Fetch default grid configuration, merging common config with specified grid config
    * @param gridName Grid name
    */
@@ -194,6 +204,7 @@ export class GridConfiguratorService {
     if (!grid)
       throw Error('Grid name required, use GridConfiguratorService.with(gridName)');
     const keys = ['common', grid];
+    this.evictCache(grid);
     return this.httpClient
       .get(this.GRID_CONFIG_FILE)
       .pipe(
