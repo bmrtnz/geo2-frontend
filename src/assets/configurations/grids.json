@@ -1411,7 +1411,67 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id",
+        "dataField": "numeroOrdre",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "indicateurBaf",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordre.dateLivraisonPrevue",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "client",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "entrepot",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "clientReference",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "pourcentageMargeBrut",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "indicateurTransporteur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "indicateurDate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "indicateurPrix",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "indicateurStation",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "indicateurQte",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "indicateurAutre",
         "visible": true
       }
     ]
