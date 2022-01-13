@@ -233,4 +233,11 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     return this.watchSaveAllQuery({ variables }, 1, this.queryFilter);
   }
 
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.apollo.mutate<{ saveOrdre: Ordre }>({
+        mutation: gql(this.buildSaveGraph(columns)),
+        variables,
+      });
+  }
+
 }
