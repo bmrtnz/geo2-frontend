@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, NgModule, OnChanges, Output } from '@an
 import { SharedModule } from 'app/shared/shared.module';
 import { DxButtonModule, DxLoadIndicatorModule, DxTemplateModule } from 'devextreme-angular';
 import { Observable } from 'rxjs';
-import { publish, refCount } from 'rxjs/operators';
+import { share } from 'rxjs/operators';
 
 @Component({
   selector: 'app-button-loader',
@@ -34,11 +34,9 @@ export class ButtonLoaderComponent<T> implements OnChanges {
   resolve() {
     this.loading = true;
     this.resolver
-    .pipe(
-      publish(),
-      refCount(),
-    )
+    .pipe(share())
     .subscribe({
+      error: () => this.loading = false,
       complete: () => this.loading = false,
     });
   }
