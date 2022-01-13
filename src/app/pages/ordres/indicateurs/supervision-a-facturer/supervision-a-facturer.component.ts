@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DateManagementService } from 'app/shared/services/date-management.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { PersonnesService } from 'app/shared/services/api/personnes.service';
-import { EntrepotsService, ClientsService } from 'app/shared/services';
+import { EntrepotsService, ClientsService, AuthService } from 'app/shared/services';
 import DataSource from 'devextreme/data/data_source';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { DxSelectBoxComponent, DxDataGridComponent } from 'devextreme-angular';
@@ -22,8 +22,8 @@ enum InputField {
   entrepotCode = 'entrepot',
   codeCommercial = 'commercial',
   codeAssistante = 'assistante',
-  dateMin = 'dateDebut',
-  dateMax = 'dateFin',
+  dateMin = 'dateMin',
+  dateMax = 'dateMax',
   societeCode = 'societe'
 }
 
@@ -34,7 +34,7 @@ type Inputs<T = any> = {[key in keyof typeof InputField]: T};
   templateUrl: './supervision-a-facturer.component.html',
   styleUrls: ['./supervision-a-facturer.component.scss']
 })
-export class SupervisionAFacturerComponent implements OnInit {
+export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   readonly INDICATOR_NAME = 'SupervisionAFacturer';
 
@@ -73,6 +73,7 @@ export class SupervisionAFacturerComponent implements OnInit {
     private dateManagementService: DateManagementService,
     private currentCompanyService: CurrentCompanyService,
     public ordresBafService: OrdresBafService,
+    public authService: AuthService,
     private tabContext: TabContext,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdresAFacturer);
@@ -98,26 +99,42 @@ export class SupervisionAFacturerComponent implements OnInit {
 
     this.ordresDataSource = this.ordresBafService
     .getDataSource_v2(await fields.toPromise());
+
+  }
+
+  ngAfterViewInit() {
+    this.formGroup.get('secteurCode').patchValue({
+      id : this.authService.currentUser.secteurCommercial.id,
+      description : this.authService.currentUser.secteurCommercial.description
+    });
   }
 
   enableFilters() {
-    // this.toRefresh = false;
+    this.toRefresh = false;
 
     const values: Inputs = {
       ...this.formGroup.value,
     };
 
     this.ordresBafService.setPersisantVariables({
-      dateMin: values.dateMin,
-      dateMax: values.dateMax,
+      secteurCode: values.secteurCode.id,
+      dateMin: this.dateManagementService.formatDate(values.dateMin),
+      dateMax: this.dateManagementService.formatDate(values.dateMax),
+      clientCode: values.clientCode?.id,
       societeCode: this.currentCompanyService.getCompany().id,
-      entrepotCode: values.entrepotCode,
-      codeCommercial: values.codeCommercial,
-      codeAssistante: values.codeAssistante
+      entrepotCode: values.entrepotCode?.id,
+      codeCommercial: values.codeCommercial?.id,
+      codeAssistante: values.codeAssistante?.id
     } as Inputs);
 
     this.datagrid.dataSource = this.ordresDataSource;
 
+  }
+
+  displayIDBefore(data) {
+    return data ?
+    (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
+     : null;
   }
 
   onFieldValueChange(e?) {
@@ -132,15 +149,15 @@ export class SupervisionAFacturerComponent implements OnInit {
     this.onFieldValueChange();
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
-    const deb = new Date(this.formGroup.get('from').value);
-    const fin = new Date(this.formGroup.get('to').value);
+    const deb = new Date(this.formGroup.get('dateMin').value);
+    const fin = new Date(this.formGroup.get('dateMax').value);
     const deltaDate = fin < deb;
 
     if (deltaDate) {
       if (e.element.classList.contains('dateStart')) {
-        this.formGroup.get('to').patchValue(this.dateManagementService.endOfDay(deb));
+        this.formGroup.get('dateMax').patchValue(this.dateManagementService.endOfDay(deb));
       } else {
-        this.formGroup.get('from').patchValue(this.dateManagementService.startOfDay(fin));
+        this.formGroup.get('dateMin').patchValue(this.dateManagementService.startOfDay(fin));
       }
     }
     this.periodeSB.value = null;
@@ -157,14 +174,18 @@ export class SupervisionAFacturerComponent implements OnInit {
     const datePeriod = this.dateManagementService.getDates(e);
 
     this.formGroup.patchValue({
-      from: datePeriod.dateDebut,
-      to: datePeriod.dateFin
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin
     });
 
   }
 
   onRowDblClick({data}: {data: Ordre}) {
     this.tabContext.openOrdre(data.numero);
+  }
+
+  launch(e) {
+
   }
 
 }

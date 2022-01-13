@@ -30,15 +30,15 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
         load: (options: LoadOptions) => new Promise( resolve => {
 
           const query = this.buildQuery(columns);
-          type Response = { fAfficheBaf: RelayPage<OrdreBaf> };
+          type Response = { fAfficheBaf: Array<OrdreBaf> };
 
           const variables = {
             ...this.persistantVariables,
-            ...this.mapLoadOptionsToVariables(options)
+            // ...this.mapLoadOptionsToVariables(options)
           };
           this.listenQuery<Response>(query, { variables }, res => {
             if (res.data && res.data.fAfficheBaf) {
-              resolve(this.asInstancedListCount(res.data.fAfficheBaf));
+              resolve(res.data.fAfficheBaf);
             }
           });
         }),
@@ -84,12 +84,12 @@ export class OrdresBafService extends ApiService implements APIRead, APICount<Co
       [
         { name: 'societeCode', type: 'String', isOptionnal: false },
         { name: 'secteurCode', type: 'String', isOptionnal: false },
-        { name: 'clientCode', type: 'String', isOptionnal: false },
-        { name: 'entrepotCode', type: 'String', isOptionnal: false },
+        { name: 'clientCode', type: 'String', isOptionnal: true },
+        { name: 'entrepotCode', type: 'String', isOptionnal: true },
         { name: 'dateMin', type: 'LocalDate', isOptionnal: false },
         { name: 'dateMax', type: 'LocalDate', isOptionnal: false },
-        { name: 'codeAssistante', type: 'String', isOptionnal: false },
-        { name: 'codeCommercial', type: 'String', isOptionnal: false },
+        { name: 'codeAssistante', type: 'String', isOptionnal: true },
+        { name: 'codeCommercial', type: 'String', isOptionnal: true },
       ],
     );
   }

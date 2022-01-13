@@ -6,6 +6,12 @@ h6 {
     top: -8px;
     float: right;
 }
+.launch {
+    position: absolute;
+    right: 136px;
+    margin-top: 7px;
+    z-index: 1;
+}
 .inactive {
     opacity: 0.2;
     pointer-events: none;

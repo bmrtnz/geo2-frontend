@@ -59,6 +59,7 @@
     "btn-clotAdmin": "Clôture administratif",
     "btn-blAutoSend": "Envoi automatique des BL",
     "btn-refresh": "Rafraîchir",
+    "btn-launch": "lancer",
 
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
@@ -900,6 +901,20 @@
     "ordreFrais-codePlus": "Fournisseur / Objet",
     "ordreFrais-description": "Description",
     "ordreFrais-montantTotal": "Montant",
+
+    "ordresBAF-numeroOrdre": "Ordre",
+    "ordresBAF-indicateurBaf": "BAF ?",
+    "ordresBAF-ordre-dateLivraisonPrevue": "Date livraison",
+    "ordresBAF-client": "Client",
+    "ordresBAF-entrepot": "Entrepôt",
+    "ordresBAF-clientReference": "Réf. client",
+    "ordresBAF-pourcentageMargeBrut": "% marge brute",
+    "ordresBAF-indicateurTransporteur": "TRP ?",
+    "ordresBAF-indicateurDate": "DATE ?",
+    "ordresBAF-indicateurPrix": "PRIX ?",
+    "ordresBAF-indicateurStation": "STATION ?",
+    "ordresBAF-indicateurQte": "Qté ?",
+    "ordresBAF-indicateurAutre": "Autre",
 
     "ControleQualite-id": "CQ",
     "ControleQualite-isExp": "Exp",
