@@ -15,6 +15,7 @@
 <app-grid-historique-entrepots #grid *ngIf="favorites"></app-grid-historique-entrepots>
 <app-grid-entrepots #grid *ngIf="!favorites"></app-grid-entrepots>
 <br>
+
 <app-button-loader
     [text]="('create' | localize) + (getSelectedEntrepot() ? ' '+('depuis' | localize)+' \''+getSelectedEntrepot()?.raisonSocial+'\'' : '')"
     [type]="'default'"
@@ -22,3 +23,12 @@
     [resolver]="resolver"
     (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>
+
+<dx-popup
+    [showTitle]="true"
+    [dragEnabled]="false"
+    [closeOnOutsideClick]="true"
+    title="Héritage client / entrepot"
+>
+    <p>ONDOING</p>
+</dx-popup>

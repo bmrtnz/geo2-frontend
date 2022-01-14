@@ -56,7 +56,6 @@ export class GridHistoriqueEntrepotsComponent implements OnInit, SingleSelection
     .pipe(
       GridConfiguratorService.getVisible(),
       GridConfiguratorService.getFields(),
-      tap(f => console.log(f)),
       map( fields => this.mruEntrepotsService.getDataSource_v2([
         `entrepot.${Entrepot.getKeyField()}`,
         `entrepot.${Entrepot.getLabelField()}`,

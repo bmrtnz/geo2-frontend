@@ -59,6 +59,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
       this.dataGrid.dataSource = this
       .clientsService
       .getDataSource_v2([Client.getKeyField() as string, ...fields]);
+      this.dataGrid.dataSource.filter(['societe.id', '=', this.currentCompanyService.getCompany().id]);
     });
   }
 
