@@ -1417,11 +1417,12 @@
       {
         "visibleIndex": 1,
         "dataField": "indicateurBaf",
+        "sortOrder": "asc",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "ordre.dateLivraisonPrevue",
+        "dataField": "dateFr",
         "visible": true
       },
       {
@@ -1473,7 +1474,9 @@
         "visibleIndex": 12,
         "dataField": "indicateurAutre",
         "visible": true
-      }
+      },
+      { "dataField": "ordreRef", "visible": false },
+      { "dataField": "description", "visible": false }
     ]
   },
   "ordres-non-clotures": {

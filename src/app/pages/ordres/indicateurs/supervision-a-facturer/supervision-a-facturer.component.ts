@@ -27,6 +27,12 @@ enum InputField {
   societeCode = 'societe'
 }
 
+enum status {
+  OK = '0',
+  ALERTE = '1',
+  BLOQUÉ = '2'
+}
+
 type Inputs<T = any> = {[key in keyof typeof InputField]: T};
 
 @Component({
@@ -50,6 +56,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   private gridConfig: Promise<GridConfig>;
   public columns: Observable<GridColumn[]>;
   toRefresh: boolean;
+  gridHasData: boolean;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild('periodeSB', { static: false }) periodeSB: DxSelectBoxComponent;
@@ -90,6 +97,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.commerciaux = this.personnesService.getDataSource_v2(['id', 'nomUtilisateur']);
     this.assistantes = this.personnesService.getDataSource_v2(['id', 'nomUtilisateur']);
     this.periodes = this.dateManagementService.periods();
+    this.gridHasData = false;
   }
 
   async ngOnInit() {
@@ -99,7 +107,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
     this.ordresDataSource = this.ordresBafService
     .getDataSource_v2(await fields.toPromise());
-
   }
 
   ngAfterViewInit() {
@@ -139,6 +146,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   onFieldValueChange(e?) {
     this.toRefresh = true;
+  }
+
+  onGridContentReady(e) {
+    this.gridHasData = (this.datagrid.instance.getVisibleRows().length > 0);
   }
 
   manualDate(e) {
@@ -186,6 +197,43 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   launch(e) {
 
+  }
+
+  onCellPrepared(event) {
+
+    const field = event.column.dataField;
+
+    if (field?.includes('indicateur')) {
+
+      event.cellElement.style.textAlign = 'center';
+      if (event.rowType === 'filter') {
+        event.cellElement.style.opacity = 0;
+        event.cellElement.style.pointerEvents = 'none';
+      }
+
+      if (event.rowType === 'data') {
+        if (field !== 'indicateurBAF' && event.value === '0') {
+          event.cellElement.innerText = '';
+          return;
+        }
+        event.cellElement.classList.add('BAFstatus-cell');
+        event.cellElement.classList.add(this.colorizeCell(event.value));
+        event.cellElement.innerText = Object.keys(status)[(Object.values(status) as string[]).indexOf(event.value)];
+        if (event.data.description) {
+          event.cellElement.setAttribute('title', event.data.description);
+        }
+      }
+
+    }
+  }
+
+  colorizeCell(theValue) {
+    let cellClassColor;
+    switch (theValue) {
+      case status.BLOQUÉ : cellClassColor = 'blocked'; break;
+      case status.ALERTE : cellClassColor = 'alert'; break;
+    }
+    return (cellClassColor ?  cellClassColor : 'OK') + '-color';
   }
 
 }

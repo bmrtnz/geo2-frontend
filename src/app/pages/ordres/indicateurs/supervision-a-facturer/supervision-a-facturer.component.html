@@ -132,6 +132,8 @@
 <dx-button
 class="launch"
 type="default"
+[visible]="gridHasData"
+[disabled]="true"
 text="{{ 'btn-launch' | localize }}"
 (onClick)="launch($event)"
 ></dx-button>
@@ -145,7 +147,9 @@ text="{{ 'btn-launch' | localize }}"
     [allowColumnReordering]="true"
     [scrolling]="{ useNative:true }"
     [selection]="{ mode: 'multiple' }"
+    (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
+    (onContentReady)="onGridContentReady($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Supervision ordres à facturer', $event, gridConfiguratorService.Grid.OrdresAFacturer, enableFilters.bind(this))"
 >
 
@@ -158,6 +162,7 @@ text="{{ 'btn-launch' | localize }}"
         [showNavigationButtons]="true"
         [showPageSizeSelector]="true"
     ></dxo-pager>
+    <dxo-export [enabled]="true" fileName="Vérification BAF" [allowExportSelectedData]="false"></dxo-export>
     <dxo-state-storing 
         [storageKey]="gridConfiguratorService.Grid.OrdresAFacturer"
         [enabled]="true"
