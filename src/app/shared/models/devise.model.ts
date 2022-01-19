@@ -1,4 +1,4 @@
-import {Field, Model, ModelName} from './model';
+import { Field, Model, ModelName } from './model';
 
 @ModelName('Devise')
 export class Devise extends Model {

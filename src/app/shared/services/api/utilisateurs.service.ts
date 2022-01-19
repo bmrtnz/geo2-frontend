@@ -22,7 +22,7 @@ export class UtilisateursService extends ApiService {
     const query = `
       query Utilisateur($nomUtilisateur: String!,$motDePasse: String!) {
         utilisateur(nomUtilisateur:$nomUtilisateur,motDePasse:$motDePasse) {
-          ${ await this.model.getGQLFields().toPromise() }
+          ${ await this.model.getGQLFields(2).toPromise() }
         }
       }
     `;

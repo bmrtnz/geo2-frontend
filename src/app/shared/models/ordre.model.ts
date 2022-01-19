@@ -13,6 +13,13 @@ import Transporteur from './transporteur.model';
 import TypeCamion from './type-camion.model';
 import BaseTarif from './base-tarif.model';
 import Incoterm from './incoterm.model';
+import Pays from './pays.model';
+import RegimeTva from './regime-tva.model';
+import Transitaire from './transitaire.model';
+import MoyenPaiement from './moyen-paiement.model';
+import BasePaiement from './base.paiement.model';
+import TypeVente from './type-vente.model';
+import Courtier from './courtier.model';
 
 export enum FactureAvoir {
   FACTURE = 'F',
@@ -79,25 +86,46 @@ export class Ordre extends Model {
   @Field() public versionDetail?: string;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public factureAvoir?: FactureAvoir;
   @Field() public codeChargement?: string;
+  @Field() public echeanceNombreDeJours?: string;
+  @Field() public echeanceLe: string;
   @Field() public pourcentageMargeBrut?: number;
   @Field() public tauxDevise?: number;
   @Field({ model: import('./type-camion.model') }) public typeTransport?: TypeCamion;
   @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
   public prixUnitaireTarifTransport?: number;
+  @Field({format: {type: 'currency', precision: 2}, currency: 'EUR'})
+  public prixUnitaireTarifCourtage?: number;
+  @Field() public tauxRemiseFacture: number;
+  @Field() public tauxRemiseHorsFacture: number;
+  @Field() public remiseSurFactureMDDTaux: number;
   @Field() public transporteurDEVCode?: string;
+  @Field() public transporteurDEVTaux?: number;
   @Field({ model: import('./base-tarif.model') }) public baseTarifTransport?: BaseTarif;
+  @Field({ model: import('./base-tarif.model') }) public baseTarifTransit?: BaseTarif;
+  @Field({ model: import('./type-vente.model') }) public typeVente?: TypeVente;
   @Field({ dataType: 'localdate' }) public ETDDate?: string;
   @Field({ dataType: 'localdate' }) public ETADate?: string;
   // @Field() public ETDLocation?: string;
   // @Field() public ETALocation?: string;
   @Field({ model: import('./incoterm.model') }) public incoterm?: Incoterm;
+  @Field({ model: import('./pays.model') }) public pays?: Pays;
+  @Field({ model: import('./regime-tva.model') }) public regimeTva?: RegimeTva;
+  @Field({ model: import('./moyen-paiement.model') }) public moyenPaiement?: MoyenPaiement;
+  @Field({ model: import('./base.paiement.model') }) public basePaiement?: BasePaiement;
+  @Field({ model: import('./courtier.model') }) public courtier?: Courtier;
+  @Field({ model: import('./base-tarif.model') }) public baseTarifCourtage?: BaseTarif;
+  @Field({ model: import('./base-tarif.model') }) public fraisUnite: BaseTarif;
+  @Field() public fraisPrixUnitaire: number;
+  @Field() public fraisPlateforme: number;
   @Field() public incotermLieu?: string;
   @Field() public listeOrdresComplementaires?: string;
   @Field() public listeOrdresRegularisations?: string;
   @Field() public cqLignesCount?: number;
   @Field() public commentairesOrdreCount?: number;
   @Field() public hasLitige?: boolean;
+  @Field() public exclusionFraisPU?: boolean;
   @Field() public codeAlphaEntrepot?: string;
+  @Field() public bassinTransporteur?: string;
   @Field({ dataType: 'datetime' }) public dateModification?: string;
   @Field({ dataType: 'datetime' }) public dateCreation?: string;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public type?: OrdreType;
@@ -111,6 +139,7 @@ export class Ordre extends Model {
     allowHeaderFiltering: false,
     allowSearch: false,
   }) public sommeColisExpedies?: number;
+  @Field({model: import('./transitaire.model')}) public transitaire?: Transitaire;
 
 }
 

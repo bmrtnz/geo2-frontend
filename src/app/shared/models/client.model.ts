@@ -44,8 +44,8 @@ export class Client extends Model {
   @Field({ model: import('./pays.model') }) public facturationPays: Pays;
   @Field({ model: import('./regime-tva.model') }) public regimeTva: RegimeTva;
   @Field({ model: import('./incoterm.model') }) public incoterm: Incoterm;
-  @Field() public nbJourEcheance: number;
-  @Field() public echeanceLe: number;
+  @Field() public nbJourEcheance: string;
+  @Field() public echeanceLe: string;
   @Field({ model: import('./moyen-paiement.model') }) public moyenPaiement: MoyenPaiement;
   @Field() public tvaCee: string;
   @Field() public controlReferenceClient: string;
@@ -61,6 +61,8 @@ export class Client extends Model {
   @Field() public compteComptable: string;
   @Field({ model: import('./pays.model') }) public langue: Pays;
   @Field({ model: import('./devise.model') }) public devise: Devise;
+  @Field() public deviseTauxFix: number;
+  @Field({ dataType: 'date' }) public dateDeviseTauxFix: string;
   @Field({ model: import('./personne.model') }) public commercial: Personne;
   @Field({ model: import('./personne.model') }) public assistante: Personne;
   @Field() public referenceCoface: string;
@@ -128,6 +130,7 @@ export class Client extends Model {
   @Field({ dataType: 'datetime' }) public enCoursDateLimite: string;
   @Field() public tauxRemiseParFacture: number;
   @Field() public tauxRemiseHorsFacture: number;
+  @Field() public remiseSurFactureMDDTaux: number;
   @Field() public fraisExcluArticlePasOrigineFrance: boolean;
   @Field() public fraisMarketing: number;
   @Field({ model: import('./base-tarif.model') }) public fraisMarketingModeCalcul: BaseTarif;

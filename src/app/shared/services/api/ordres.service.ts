@@ -235,9 +235,9 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
 
   save_v2(columns: Array<string>, variables: OperationVariables) {
     return this.apollo.mutate<{ saveOrdre: Ordre }>({
-        mutation: gql(this.buildSaveGraph(columns)),
-        variables,
-      });
+      mutation: gql(this.buildSaveGraph(columns)),
+      variables,
+    });
   }
 
 }

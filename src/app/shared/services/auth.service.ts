@@ -28,7 +28,7 @@ export class AuthService {
     if (stored) {
       const parsed = JSON.parse(stored);
       this.loggedIn = true;
-      this.currentUser = parsed;
+      this.setCurrentUser(parsed);
     }
   }
 
@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   setCurrentUser(data: Partial<Utilisateur>) {
-    this.currentUser = { ...this.currentUser, ...data };
+    this.currentUser = new Utilisateur({ ...this.currentUser, ...data });
     window.localStorage
     .setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(this.currentUser));
   }

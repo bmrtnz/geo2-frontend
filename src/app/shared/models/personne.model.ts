@@ -14,6 +14,7 @@ export class Personne extends Model {
   @Field() public service: string;
   @Field() public imprimante: string;
   @Field() public email: string;
+  @Field() public indicateurPresentationSUP: string;
   @Field() public valide: boolean;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public role?: Role;
 
