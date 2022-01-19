@@ -110,10 +110,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.formGroup.get('secteurCode').patchValue({
-      id : this.authService.currentUser.secteurCommercial.id,
-      description : this.authService.currentUser.secteurCommercial.description
-    });
+    if (this.authService.currentUser.secteurCommercial) {
+      this.formGroup.get('secteurCode').patchValue({
+        id : this.authService.currentUser.secteurCommercial.id,
+        description : this.authService.currentUser.secteurCommercial.description
+      });
+    }
   }
 
   enableFilters() {
