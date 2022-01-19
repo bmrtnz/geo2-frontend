@@ -184,6 +184,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
+      console.log('rrr',this.formGroup.valid)
       if (this.formGroup.valid) {
         const fournisseur = {id : this.fournisseur.id, preSaisie: false, valide: true};
         this.formGroup.get('valide').setValue(true);

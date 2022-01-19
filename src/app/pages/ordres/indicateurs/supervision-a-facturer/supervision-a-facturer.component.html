@@ -10,7 +10,7 @@
         ></dx-button>
     </div>
     <div style="clear:both"></div>
-    <div class="orderTileFilterArea">
+    <div class="BAFFilterArea">
         <dx-box>
             <dxi-item [ratio]="3">
 
@@ -19,7 +19,10 @@
                     <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
                     <div class="dx-field-value">
                         <dx-select-box formControlName="secteurCode" [dataSource]="secteurs" displayExpr="description"
-                            [searchEnabled]="true" searchExpr="description" (valueChange)="onFieldValueChange($event)">
+                            [searchEnabled]="true" searchExpr="description" (onValueChanged)="onSecteurChange($event)">
+                            <dx-validator>
+                                <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                            </dx-validator>
                         </dx-select-box>
                     </div>
                 </div>
@@ -32,7 +35,11 @@
                     <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
                     <div class="dx-field-value">
                         <dx-select-box formControlName="clientCode" [dataSource]="clients" displayExpr="raisonSocial" [searchEnabled]="true"
-                            searchExpr="raisonSocial" (valueChange)="onFieldValueChange($event)"></dx-select-box>
+                            [searchExpr]="['code', 'raisonSocial']" (onValueChanged)="onClientChange($event)" [displayExpr]="displayIDBefore">
+                            <dxo-drop-down-options
+                                [width]="350">
+                            </dxo-drop-down-options>
+                        </dx-select-box>
                     </div>
                 </div>
             </dxi-item>
@@ -42,8 +49,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'ordres-entrepôt' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="entrepotCode" [dataSource]="entrepots" displayExpr="raisonSocial"
-                            [searchEnabled]="true" searchExpr="raisonSocial" (valueChange)="onFieldValueChange($event)">
+                        <dx-select-box formControlName="entrepotCode" [dataSource]="entrepots" displayExpr="raisonSocial" [searchEnabled]="true"
+                        [searchExpr]="['code', 'raisonSocial']" (onValueChanged)="onFieldValueChange($event)" [displayExpr]="displayIDBefore">">
                         </dx-select-box>
                     </div>
                 </div>

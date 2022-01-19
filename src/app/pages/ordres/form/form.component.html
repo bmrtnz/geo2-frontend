@@ -605,11 +605,11 @@
                 ></dx-button>
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
+                  <app-grid-lignes [ordre]="ordre"></app-grid-lignes>
+                  <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     [ordre]="ordre"
                   ></app-grid-ordre-ligne-logistique>
-                  <div class="grid-separator"></div>
-                  <app-grid-lignes [ordre]="ordre"></app-grid-lignes>
                   <div *ngIf="ordresLignesViewExp">
                     <div class="grid-separator"></div>
                     <app-grid-lignes-details
@@ -641,39 +641,34 @@
                   "
                 >
                   <dxi-item>
-                    <dx-box>
-                      <dxi-item [ratio]="4">
-                        <div class="dx-form-group-content">
-                          <div class="dx-form-group-content">
-                            <!-- transporteur -->
-                            <div class="dx-field">
-                              <div class="dx-field-label">
-                                {{ "ordres-transporteur" | localize }}
-                              </div>
-                              <div class="dx-field-value">
-                                <dx-select-box
-                                  formControlName="transporteur"
-                                  [dataSource]="transporteursDS"
-                                  displayExpr="raisonSocial"
-                                  [searchEnabled]="true"
-                                  [searchExpr]="['id', 'raisonSocial']"
-                                >
-                                  <dx-validator
-                                    name="{{ 'ordres-transporteur' | localize }}"
-                                  >
-                                    <dxi-validation-rule
-                                      type="required"
-                                    ></dxi-validation-rule>
-                                  </dx-validator>
-                                </dx-select-box>
-                              </div>
-                            </div>
-                            <br />
+                    <div class="dx-form-group-content log-transp">
+                      <div class="dx-form-group-content">
+                        <!-- transporteur -->
+                        <div class="dx-field">
+                          <div class="dx-field-label">
+                            {{ "ordres-transporteur" | localize }}
+                          </div>
+                          <div class="dx-field-value">
+                            <dx-select-box
+                              formControlName="transporteur"
+                              [dataSource]="transporteursDS"
+                              displayExpr="raisonSocial"
+                              [searchEnabled]="true"
+                              [searchExpr]="['id', 'raisonSocial']"
+                            >
+                              <dx-validator
+                                name="{{ 'ordres-transporteur' | localize }}"
+                              >
+                                <dxi-validation-rule
+                                  type="required"
+                                ></dxi-validation-rule>
+                              </dx-validator>
+                            </dx-select-box>
                           </div>
                         </div>
-                      </dxi-item>
-                      <dxi-item [ratio]="4"></dxi-item>
-                    </dx-box>
+                        <br />
+                      </div>
+                    </div>
                     <app-grid-logistiques
                       #gridLogistiques
                       [ordre]="ordre"

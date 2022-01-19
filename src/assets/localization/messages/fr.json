@@ -770,8 +770,8 @@
 
     "ordreLogistique-id": "id",
     "ordreLogistique-fournisseur-code": "Lieu de chargement",
+    "ordreLogistique-codeFournisseur": "Lieu de chargement",
     "ordreLogistique-expedieStation": "Detail cloturé",
-    "ordreLogistique-transporteurGroupage-id": "Transporteur",
     "ordreLogistique-transporteur-id": "Transporteur",
     "ordreLogistique-ordre-typeTransport-id": "Type container",
     "ordreLogistique-ordre-prixUnitaireTarifTransport": "PU",
@@ -796,6 +796,11 @@
     "ordreLogistique-numeroImmatriculation": "Immatriculation",
     "ordreLogistique-numeroContainer": "N° container",
     "ordreLogistique-fournisseurReferenceDOC": "N° bon expéd.",
+    "ordreLogistique-dateDepartPrevueFournisseur": "Départ Station",
+    "ordreLogistique-transporteurGroupage-id": "Transp. Approche",
+    "ordreLogistique-groupage-id": "Lieu Group.",
+    "ordreLogistique-dateLivraisonLieuGroupage": "Date arrivée lieu group.",
+    "ordreLogistique-dateDepartPrevueGroupage": "Date depart lieu group.",
 
     "ordres-litiges-id": "Litige n°",
     "ordres-litiges-ordreAvoirClient": "Avoir client",

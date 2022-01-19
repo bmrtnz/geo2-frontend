@@ -25,6 +25,7 @@ export class OrdreLogistique extends Model {
   @Field() public detecteurTemperature?: string;
   @Field() public certificatPhytosanitaire?: string;
   @Field() public billOfLanding?: string;
+  @Field() public codeFournisseur?: string;
   @Field({ dataType: 'localdate' }) public dateDepartPrevueFournisseur?: string;
   @Field({ dataType: 'localdate' }) public dateDepartReelleFournisseur?: string;
   @Field({ dataType: 'localdate' }) public dateDepartPrevueGroupage?: string;

@@ -4,9 +4,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{
-      useNative:true
-    }"
+    [scrolling]="{ useNative:true }"
+    (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Logistique', $event, gridConfiguratorService.Grid.OrdreLogistique,enableFilters.bind(this))"
   >
 

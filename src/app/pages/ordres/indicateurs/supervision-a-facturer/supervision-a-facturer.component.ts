@@ -15,6 +15,7 @@ import { GridColumn } from 'basic';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { OrdresBafService } from 'app/shared/services/api/ordres-baf.service';
+import notify from 'devextreme/ui/notify';
 
 enum InputField {
   secteurCode = 'secteur',
@@ -92,8 +93,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       'and',
       ['societes', 'contains', this.currentCompanyService.getCompany().id]
     ]);
-    this.clients = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
-    this.entrepots = this.entrepotsService.getDataSource_v2(['id', 'raisonSocial']);
+    this.clients = this.clientsService.getDataSource_v2(['id', 'code', 'raisonSocial', 'secteur.id']);
+    this.entrepots = this.entrepotsService.getDataSource_v2(['id', 'code', 'raisonSocial']);
     this.commerciaux = this.personnesService.getDataSource_v2(['id', 'nomUtilisateur']);
     this.assistantes = this.personnesService.getDataSource_v2(['id', 'nomUtilisateur']);
     this.periodes = this.dateManagementService.periods();
@@ -110,6 +111,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
+    // Only way found to validate and show Warning icon
+    this.formGroup.get('secteurCode').setValue('');
+    this.formGroup.get('secteurCode').reset();
+
     if (this.authService.currentUser.secteurCommercial) {
       this.formGroup.get('secteurCode').patchValue({
         id : this.authService.currentUser.secteurCommercial.id,
@@ -119,35 +125,50 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   enableFilters() {
-    this.toRefresh = false;
 
-    const values: Inputs = {
-      ...this.formGroup.value,
-    };
+    if (!this.formGroup.get('secteurCode').value) {
+      notify('Veuillez spécifier un secteur', 'error');
+    } else {
+      this.toRefresh = false;
 
-    this.ordresBafService.setPersisantVariables({
-      secteurCode: values.secteurCode.id,
-      dateMin: this.dateManagementService.formatDate(values.dateMin),
-      dateMax: this.dateManagementService.formatDate(values.dateMax),
-      clientCode: values.clientCode?.id,
-      societeCode: this.currentCompanyService.getCompany().id,
-      entrepotCode: values.entrepotCode?.id,
-      codeCommercial: values.codeCommercial?.id,
-      codeAssistante: values.codeAssistante?.id
-    } as Inputs);
+      const values: Inputs = {
+        ...this.formGroup.value,
+      };
 
-    this.datagrid.dataSource = this.ordresDataSource;
+      this.ordresBafService.setPersisantVariables({
+        secteurCode: values.secteurCode.id,
+        dateMin: this.dateManagementService.formatDate(values.dateMin),
+        dateMax: this.dateManagementService.formatDate(values.dateMax),
+        clientCode: values.clientCode?.id,
+        societeCode: this.currentCompanyService.getCompany().id,
+        entrepotCode: values.entrepotCode?.id,
+        codeCommercial: values.codeCommercial?.id,
+        codeAssistante: values.codeAssistante?.id
+      } as Inputs);
+
+      this.datagrid.dataSource = this.ordresDataSource;
+    }
 
   }
 
   displayIDBefore(data) {
-    return data ?
-    (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
-     : null;
+    return data ? data.code + ' ' + data.raisonSocial : null;
   }
 
   onFieldValueChange(e?) {
     this.toRefresh = true;
+  }
+
+  onSecteurChange(e) {
+    this.onFieldValueChange();
+    this.clients = this.clientsService.getDataSource_v2(['id', 'code', 'raisonSocial', 'secteur.id']);
+    if (e.value) this.clients.filter(['secteur.id', '=', e.value.id]);
+  }
+
+  onClientChange(e) {
+    this.onFieldValueChange();
+    this.entrepots = this.entrepotsService.getDataSource_v2(['id', 'code', 'raisonSocial', 'client.id']);
+    if (e.value) this.entrepots.filter(['client.id', '=', e.value.id]);
   }
 
   onGridContentReady(e) {

@@ -110,10 +110,12 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.formGroup.get('secteurCommercial').patchValue({
-      id : this.authService.currentUser.secteurCommercial.id,
-      description : this.authService.currentUser.secteurCommercial.description
-    });
+    if (this.authService.currentUser.secteurCommercial) {
+      this.formGroup.get('secteurCommercial').patchValue({
+        id : this.authService.currentUser.secteurCommercial.id,
+        description : this.authService.currentUser.secteurCommercial.description
+      });
+    }
   }
 
   enableFilters() {

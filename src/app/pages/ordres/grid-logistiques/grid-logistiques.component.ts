@@ -11,6 +11,7 @@ import { GridColumn } from 'basic';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class GridLogistiquesComponent implements ToggledGrid {
   constructor(
     private ordresLogistiquesService: OrdresLogistiquesService,
     public gridConfiguratorService: GridConfiguratorService,
+    public dateManagementService: DateManagementService,
     public localizeService: LocalizationService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLogistique);
@@ -50,6 +52,22 @@ export class GridLogistiquesComponent implements ToggledGrid {
 
   onToggling(toggled: boolean) {
     toggled ? this.enableFilters() : this.dataSource = null;
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Best expression for date
+      if (e.column.dataField === 'dateLivraisonPrevue'
+        || e.column.dataField === 'dateDepartPrevueFournisseur'
+        || e.column.dataField === 'dateLivraisonLieuGroupage'
+        || e.column.dataField === 'dateDepartPrevueGroupage'
+        || e.column.dataField === 'ordre.ETDDate'
+        || e.column.dataField === 'ordre.ETADate'
+        ) {
+        if (e.value) e.cellElement.innerText =
+          this.dateManagementService.friendlyDate(e.value, true);
+      }
+    }
   }
 
 }
