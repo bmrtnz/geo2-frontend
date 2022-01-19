@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Apollo, gql } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { Societe } from '../../models';
 import { APIRead, ApiService, RelayPage } from '../api.service';
+import { takeWhile } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,13 @@ export class SocietesService extends ApiService implements APIRead {
     apollo: Apollo,
   ) {
     super(apollo, Societe);
+  }
+
+  getOne(id: string, columns: Array<string>) {
+    return this.apollo.query<{societe: Societe}>({
+      query: gql(this.buildGetOneGraph(columns)),
+      variables: { id },
+    }).pipe(takeWhile(res => res.loading === false));
   }
 
   getDataSource() {

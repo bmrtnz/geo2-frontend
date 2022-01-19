@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { OperationVariables } from '@apollo/client/core';
+import { OperationVariables, gql } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { Entrepot } from '../../models';
 import { APIRead, ApiService, RelayPage } from '../api.service';
+import { takeWhile } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,13 @@ export class EntrepotsService extends ApiService implements APIRead {
     type Response = { entrepot: Entrepot };
     const variables: OperationVariables = { id };
     return this.watchGetOneQuery<Response>({ variables });
+  }
+
+  getOne_v2(id: string, columns: Array<string>) {
+    return this.apollo.query<{entrepot: Entrepot}>({
+      query: gql(this.buildGetOneGraph(columns)),
+      variables: { id },
+    }).pipe(takeWhile(res => res.loading === false));
   }
 
   getDataSource_v2(columns: Array<string>) {
