@@ -160,7 +160,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     });
   }
 
-  save(variables: OperationVariables & {ordre: Ordre}) {
+  save(variables: OperationVariables & {ordre: Partial<Ordre>}) {
     return this.watchSaveQuery({ variables }, 1, this.queryFilter);
   }
 
