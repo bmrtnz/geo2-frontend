@@ -1,4 +1,5 @@
 import {Field, Model, ModelName} from './model';
+import Utilisateur from './utilisateur.model';
 
 export enum Role {
   ASSISTANT = 'A',
@@ -17,6 +18,7 @@ export class Personne extends Model {
   @Field() public indicateurPresentationSUP: string;
   @Field() public valide: boolean;
   @Field({allowHeaderFiltering: false, allowSearch: false}) public role?: Role;
+  @Field({ model: import('./utilisateur.model') }) public utilisateur?: Utilisateur;
 
   public nomPrenom() {
     return `${this.nom} ${this.prenom}`;
