@@ -1,1 +1,20 @@
-app-button-loader { float: right; }
+app-button-loader { 
+    float: right; 
+    span {
+        padding: 0 10px;
+    }
+}
+::ng-deep .button-create-order .dx-button-content {
+    padding: 6px 16px;
+}
+
+h2.nouvelOrdre-title {
+    margin: 20px 0 10px 19px;
+}
+
+.nouvelOrdre-switch {
+    width: 400px;
+    margin-left: 20px;
+    margin-bottom: 0;
+    float: left;
+}

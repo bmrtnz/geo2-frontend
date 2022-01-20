@@ -1,25 +1,27 @@
-<h2 class="content-block">{{ 'ordres-nouvel-ordre-title' | localize }}
+<h2 class="nouvelOrdre-title">{{ 'ordres-nouvel-ordre-title' | localize }}</h2>
 
-    <div class="dx-field">
-        <div class="dx-field-value">
-            <dx-radio-group
-                [items]="typeEntrepots"
-                [value]="typeEntrepots[0]"
-                layout="horizontal"
-                (onValueChanged)="onTypeChange($event)"
-            >
-            </dx-radio-group>
-        </div>
+<div class="dx-field nouvelOrdre-switch">
+    <div class="dx-field-value">
+        <dx-radio-group
+            [items]="typeEntrepots"
+            [value]="typeEntrepots[0]"
+            layout="horizontal"
+            (onValueChanged)="onTypeChange($event)"
+        >
+        </dx-radio-group>
     </div>
-
-<app-grid-historique-entrepots #grid *ngIf="favorites"></app-grid-historique-entrepots>
-<app-grid-entrepots #grid *ngIf="!favorites"></app-grid-entrepots>
-<br>
+</div>
 
 <app-button-loader
-    [text]="('create' | localize) + (getSelectedEntrepot() ? ' '+('depuis' | localize)+' \''+getSelectedEntrepot()?.raisonSocial+'\'' : '')"
+    [text]="'+ ' + ('create' | localize) + (getSelectedEntrepot() ? ' '+('depuis' | localize)+' \''+getSelectedEntrepot()?.raisonSocial+'\'' : '')"
     [type]="'default'"
+    class="button-create-order"
     [disabled]="!getSelectedEntrepot()"
     [resolver]="resolver"
     (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>
+<div style="clear:both"></div>
+<app-grid-historique-entrepots #grid *ngIf="favorites"></app-grid-historique-entrepots>
+<app-grid-entrepots #grid *ngIf="!favorites"></app-grid-entrepots>
+<app-info-popup [customText]="errorText"></app-info-popup>
+

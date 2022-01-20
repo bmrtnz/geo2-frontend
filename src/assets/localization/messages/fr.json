@@ -999,7 +999,29 @@
     "comptesPalox-fournisseurs-raisonSocialeFournisseur": "Raison sociale Fournisseur",
     "comptesPalox-fournisseurs-bonRetour": "Bon retour",
     "comptesPalox-fournisseurs-cmr": "CMR",
-    "comptesPalox-fournisseurs-numeroOrdre": "n° Ordre"
+    "comptesPalox-fournisseurs-numeroOrdre": "n° Ordre",
 
+    "choixEntrepot-id": "id",
+    "choixEntrepot-assistante-id": "Assistante entrep.",
+    "choixEntrepot-commercial-id": "Commercial entrep.",
+    "choixEntrepot-client-assistante-nomUtilisateur": "Assistante client",
+    "choixEntrepot-client-commercial-nomUtilisateur": "Commercial client",
+    "choixEntrepot-raisonSocial": "Raison sociale",
+    "choixEntrepot-code": "Code",
+    "choixEntrepot-client-raisonSocial": "Raison sociale client",
+    "choixEntrepot-client-code": "Code client",
+    "choixEntrepot-client-secteur-id": "Secteur",
+
+    "choixEntrepot-entrepot-id": "id",
+    "choixEntrepot-entrepot-assistante-id": "Assistante entrep.",
+    "choixEntrepot-entrepot-commercial-id": "Commercial entrep.",
+    "choixEntrepot-entrepot-client-assistante-nomUtilisateur": "Assistante client",
+    "choixEntrepot-entrepot-client-commercial-nomUtilisateur": "Commercial client",
+    "choixEntrepot-entrepot-raisonSocial": "Raison sociale",
+    "choixEntrepot-codeEntrepot": "Code",
+    "choixEntrepot-entrepot-client-raisonSocial": "Raison sociale client",
+    "choixEntrepot-entrepot-client-code": "Code client",
+    "choixEntrepot-entrepot-client-secteur-id": "Secteur"
+   
   }
 }

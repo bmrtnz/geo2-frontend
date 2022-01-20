@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Devise, Entrepot, Societe } from 'app/shared/models';
 import MRUEntrepot from 'app/shared/models/mru-entrepot.model';
 import Ordre from 'app/shared/models/ordre.model';
+import { InfoPopupComponent } from 'app/shared/components/info-popup/info-popup.component';
 import { AuthService, EntrepotsService } from 'app/shared/services';
 import { DevisesRefsService } from 'app/shared/services/api/devises-refs.service';
 import { FunctionsService } from 'app/shared/services/api/functions.service';
@@ -15,6 +16,7 @@ import { catchError, debounceTime, first, map, mapTo, switchMap, tap } from 'rxj
 import { GridEntrepotsComponent } from '../grid-entrepots/grid-entrepots.component';
 import { GridHistoriqueEntrepotsComponent } from '../grid-historique-entrepots/grid-historique-entrepots.component';
 import { TabContext } from '../root/root.component';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 @Component({
   selector: 'app-nouvel-ordre',
@@ -61,6 +63,7 @@ export class NouvelOrdreComponent implements OnInit {
   public typeEntrepots = ['Favoris', 'Tous'];
   public favorites = true;
   public resolver: Observable<Ordre>;
+  public errorText: string;
 
   private societe: Societe;
   private ofValideEntrepotForOrdreRef = defer(() => this.functionsService
@@ -73,10 +76,12 @@ export class NouvelOrdreComponent implements OnInit {
   @ViewChild(GridHistoriqueEntrepotsComponent, { static: false })
   historiqueEntrepotGrid: GridHistoriqueEntrepotsComponent;
   @ViewChild('grid') private grid: SingleSelection<Entrepot|MRUEntrepot>;
+  @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
 
   constructor(
     private functionsService: FunctionsService,
     private ordresService: OrdresService,
+    public dateManagementService: DateManagementService,
     private currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
     private entrepotsService: EntrepotsService,
@@ -105,12 +110,18 @@ export class NouvelOrdreComponent implements OnInit {
         this.entrepotsService.getOne_v2(entrepot.id, ['id', ...this.inheritedFields]),
       )),
       switchMap(([o, e]) => this.buildOrdre(o.data.fNouvelOrdre.data.ls_nordre, e.data.entrepot)),
-      catchError((err: Error) => (notify(`${err.name}: ${err.message}`, 'warning', 5000), EMPTY)),
+      catchError((err: Error) => (this.showError(`${err.name}: ${err.message}`), EMPTY)),
       tap(({numero}) => this.tabContext.openOrdre(numero)),
       debounceTime(2000),
       first(),
     );
 
+  }
+
+  showError(errorInfo) {
+    this.infoComponent.visible = true;
+    this.errorText = errorInfo.split('\\r\\n').join(' ');
+    console.log(this.errorText);
   }
 
   getSelectedEntrepot() {
@@ -124,6 +135,7 @@ export class NouvelOrdreComponent implements OnInit {
   }
 
   private buildOrdre(numero: string, entrepot: Entrepot) {
+    console.log(this.dateManagementService.findDate(0))
     return this.fetchDeviseRef(entrepot.client.devise)
     .pipe(
       switchMap(({ taux: tauxDevise }) => this.ordresService.save_v2([
@@ -133,6 +145,8 @@ export class NouvelOrdreComponent implements OnInit {
         ordre: {
           // from `heriteEntrepot.pbl`
           numero,
+          dateDepartPrevue: this.dateManagementService.findDate(0),
+          dateLivraisonPrevue: this.dateManagementService.findDate(1),
           societe: { id: this.societe.id },
           entrepot: { id: entrepot.id },
           pays: entrepot.pays ? { id: entrepot.pays.id } : null,

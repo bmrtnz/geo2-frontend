@@ -25,7 +25,7 @@
     <dxi-column
       *ngFor="let field of this.columns | async"
       [dataField]="field.dataField"
-      [caption]="('tiers-ordre-entrepots-' + field.dataField| localize) || field.name"
+      [caption]="('choixEntrepot-' + field.dataField?.split('.').join('-')| localize) || field.name"
       [visible]="false"
       trueText="Oui"
       falseText="Non"

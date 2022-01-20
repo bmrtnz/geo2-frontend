@@ -1,17 +1,15 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Entrepot } from 'app/shared/models';
 import { AuthService } from 'app/shared/services';
 import { MruEntrepotsService } from 'app/shared/services/api/mru-entrepots.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { Grid, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { LocalizationService } from 'app/shared/services/localization.service';
 import { GridColumn, SingleSelection } from 'basic';
 import { DxDataGridComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
-import { from, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TabContext } from '../root/root.component';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import MRUEntrepot from 'app/shared/models/mru-entrepot.model';
 
 @Component({

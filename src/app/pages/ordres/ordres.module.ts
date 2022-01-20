@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditingAlertModule } from 'app/shared/components/editing-alert/editing-alert.component';
 import { FileManagerModule } from 'app/shared/components/file-manager/file-manager-popup.component';
+import { InfoPopupModule } from 'app/shared/components/info-popup/info-popup.component';
 import { ViewDocumentPopupModule } from 'app/shared/components/view-document-popup/view-document-popup.component';
 import { LocalizePipe } from 'app/shared/pipes';
 import { OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
@@ -149,6 +150,7 @@ import { SupervisionAFacturerComponent } from './indicateurs/supervision-a-factu
     DxTextAreaModule,
     DxPopoverModule,
     DxValidatorModule,
+    InfoPopupModule,
     EditingAlertModule,
     FileManagerModule,
     DxDateBoxModule,
