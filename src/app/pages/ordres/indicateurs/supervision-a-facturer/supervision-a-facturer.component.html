@@ -34,7 +34,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="clientCode" [dataSource]="clients" displayExpr="raisonSocial" [searchEnabled]="true"
+                        <dx-select-box formControlName="clientCode" [dataSource]="clients"
+                            [showClearButton]="true" displayExpr="raisonSocial" [searchEnabled]="true"
                             [searchExpr]="['code', 'raisonSocial']" (onValueChanged)="onClientChange($event)" [displayExpr]="displayIDBefore">
                             <dxo-drop-down-options
                                 [width]="350">
@@ -49,7 +50,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'ordres-entrepôt' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="entrepotCode" [dataSource]="entrepots" displayExpr="raisonSocial" [searchEnabled]="true"
+                        <dx-select-box formControlName="entrepotCode" [dataSource]="entrepots"
+                        [showClearButton]="true" displayExpr="raisonSocial" [searchEnabled]="true"
                         [searchExpr]="['code', 'raisonSocial']" (onValueChanged)="onFieldValueChange($event)" [displayExpr]="displayIDBefore">">
                         </dx-select-box>
                     </div>
@@ -61,7 +63,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="codeCommercial" [dataSource]="commerciaux" displayExpr="nomUtilisateur"
+                        <dx-select-box formControlName="codeCommercial" [dataSource]="commerciaux"
+                            [showClearButton]="true" displayExpr="nomUtilisateur"
                             [searchEnabled]="true" searchExpr="nomUtilisateur" (valueChange)="onFieldValueChange($event)">
                         </dx-select-box>
                     </div>
@@ -74,7 +77,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'ordres-assistante' | localize }}</div>
                     <div class="dx-field-value">
-                        <dx-select-box formControlName="codeAssistante" [dataSource]="assistantes" displayExpr="nomUtilisateur"
+                        <dx-select-box formControlName="codeAssistante" [dataSource]="assistantes"
+                            [showClearButton]="true" displayExpr="nomUtilisateur"
                             [searchEnabled]="true" searchExpr="nomUtilisateur" (valueChange)="onFieldValueChange($event)">
                         </dx-select-box>
                     </div>

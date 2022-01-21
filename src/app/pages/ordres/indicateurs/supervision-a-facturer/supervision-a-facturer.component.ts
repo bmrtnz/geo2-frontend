@@ -130,6 +130,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       notify('Veuillez spécifier un secteur', 'error');
     } else {
       this.toRefresh = false;
+      this.datagrid.dataSource = null;
 
       const values: Inputs = {
         ...this.formGroup.value,
@@ -235,7 +236,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       }
 
       if (event.rowType === 'data') {
-        if (field !== 'indicateurBAF' && event.value === '0') {
+        if (field !== 'indicateurBaf' && event.value === '0') {
           event.cellElement.innerText = '';
           return;
         }
