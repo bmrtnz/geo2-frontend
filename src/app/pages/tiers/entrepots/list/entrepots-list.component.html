@@ -40,8 +40,6 @@
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
-      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
   </dx-data-grid>

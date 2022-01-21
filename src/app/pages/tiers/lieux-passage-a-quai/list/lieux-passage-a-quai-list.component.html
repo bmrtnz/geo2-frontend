@@ -20,6 +20,7 @@
   >
 
     <!-- Grid configuration -->
+    <dxo-export [enabled]="true" fileName="Lieux de passage à quai" [allowExportSelectedData]="false"></dxo-export>
     <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-paging></dxo-paging>
     <dxo-pager
@@ -38,8 +39,6 @@
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
-      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
 
