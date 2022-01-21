@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import notify from 'devextreme/ui/notify';
-import { from, throwError } from 'rxjs';
-import { catchError, mergeAll, switchMap, take, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
 import { CurrentCompanyService } from './current-company.service';
@@ -17,6 +17,31 @@ export class AuthService {
 
   readonly LAST_USER_STORE_KEY = 'GEO2:LAST-USER';
   readonly CURRENT_USER_STORE_KEY = 'GEO2:CURRENT-USER';
+  readonly USER_FIELDS = [
+
+    // Identité
+    'nomUtilisateur',
+    'nomInterne',
+    'perimetre',
+    'limitationSecteur',
+    'secteurCommercial.id',
+    'secteurCommercial.description',
+    'commercial.id',
+    'assistante.id',
+    'personnes.id',
+
+    // Sécurité / Droits
+    'accessGeoTiers',
+    'accessGeoProduct',
+    'accessGeoOrdre',
+    'adminClient',
+    'profileClient',
+
+    // Configurations
+    'configTuilesOrdres',
+    'configTabsOrdres',
+
+  ];
 
   constructor(
     private router: Router,
@@ -33,10 +58,8 @@ export class AuthService {
   }
 
   logIn(id: string, password: string) {
-    return from(this.utilisateursService.getOne(id, password))
+    return this.utilisateursService.getOne(id, password, this.USER_FIELDS)
       .pipe(
-        mergeAll(),
-        take(1),
         switchMap(res => {
           if (res.data.utilisateur) {
             this.setCurrentUser(res.data.utilisateur);

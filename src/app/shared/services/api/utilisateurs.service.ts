@@ -1,11 +1,9 @@
-import {Apollo} from 'apollo-angular';
-import {OperationVariables, WatchQueryOptions} from '@apollo/client/core';
 import { Injectable } from '@angular/core';
-import { ApiService } from '../api.service';
+import { gql, OperationVariables } from '@apollo/client/core';
+import { Apollo } from 'apollo-angular';
+import { takeWhile } from 'rxjs/operators';
 import { Utilisateur } from '../../models/utilisateur.model';
-
-
-import { take } from 'rxjs/operators';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,23 +16,28 @@ export class UtilisateursService extends ApiService {
     super(apollo, Utilisateur);
   }
 
-  async getOne(nomUtilisateur: string, motDePasse: string) {
-    const query = `
-      query Utilisateur($nomUtilisateur: String!,$motDePasse: String!) {
-        utilisateur(nomUtilisateur:$nomUtilisateur,motDePasse:$motDePasse) {
-          ${ await this.model.getGQLFields(2).toPromise() }
-        }
-      }
-    `;
-    type Response = { utilisateur: Utilisateur };
-    const variables: OperationVariables = { nomUtilisateur, motDePasse };
-    return this
-    .query<Response>(query, {
-      variables,
-      fetchPolicy: 'no-cache',
-      returnPartialData: false,
-    } as WatchQueryOptions)
-    .pipe(take(1));
+  getOne(nomUtilisateur: string, motDePasse: string, columns: Array<string>) {
+    return this.apollo.query<{ utilisateur: Utilisateur }>({
+      query: gql(ApiService.buildGraph(
+        'query',
+        [
+          {
+            name: this.model.name.lcFirst(),
+            body: columns,
+            params: [
+              { name: 'nomUtilisateur', value: 'nomUtilisateur', isVariable: true },
+              { name: 'motDePasse', value: 'motDePasse', isVariable: true },
+            ],
+          },
+        ],
+        [
+          { name: 'nomUtilisateur', type: 'String', isOptionnal: false },
+          { name: 'motDePasse', type: 'String', isOptionnal: false },
+        ],
+      )),
+      variables: { nomUtilisateur, motDePasse },
+    })
+    .pipe(takeWhile(res => res.loading === false));
   }
 
   save(variables: OperationVariables) {
