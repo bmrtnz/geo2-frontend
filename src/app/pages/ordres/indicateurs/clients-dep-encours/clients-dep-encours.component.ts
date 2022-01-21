@@ -1,34 +1,18 @@
-import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
 import { LocalizePipe } from 'app/shared/pipes';
-import {
-  AuthService,
-  LocalizationService,
-  TransporteursService,
-} from 'app/shared/services';
+import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
 import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SecteursService } from 'app/shared/services/api/secteurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import {
-  Indicator,
-  OrdresIndicatorsService,
-} from 'app/shared/services/ordres-indicators.service';
-import {
-  DxCheckBoxComponent,
-  DxDataGridComponent,
-  DxNumberBoxComponent,
-  DxSelectBoxComponent,
-} from 'devextreme-angular';
+import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { Indicator, OrdresIndicatorsService } from 'app/shared/services/ordres-indicators.service';
+import { GridColumn } from 'basic';
+import { DxSelectBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
-import { GridColumn } from 'basic';
 
 @Component({
   selector: 'app-clients-dep-encours',
@@ -76,9 +60,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.authService.currentUser.limitationSecteur) {
-      this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
-    }
+    this.secteurSB.value = this.authService.currentUser.secteurCommercial?.id;
     this.enableFilters();
   }
 
@@ -96,8 +78,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         '=',
         this.secteurSB.value.id,
       ]);
-    this.dataSource.filter(filters);
-    this.dataSource.reload();
+    this.dataSource?.filter(filters);
+    this.dataSource?.reload();
   }
 }
 

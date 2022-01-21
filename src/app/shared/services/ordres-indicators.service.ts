@@ -276,6 +276,8 @@ export class OrdresIndicatorsService {
             'or',
             ['clients.enCours90Plus', '<>', 0],
           ],
+          ...this.authService.currentUser.secteurCommercial
+          ? ['and', ['secteur.id', '=', this.authService.currentUser.secteurCommercial?.id]] : [],
         ];
       }
 
