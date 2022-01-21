@@ -11,6 +11,7 @@ import { environment } from 'environments/environment';
 import { historique } from 'assets/configurations/grids.json';
 import { GridColumn } from 'basic';
 import { TabContext } from '../root/root.component';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 @Component({
   selector: 'app-grid-historique',
@@ -31,6 +32,7 @@ export class GridHistoriqueComponent implements OnInit {
 
   constructor(
     public mruOrdresService: MruOrdresService,
+    private dateManagementService: DateManagementService,
     public currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
     public localizeService: LocalizationService,
@@ -50,6 +52,8 @@ export class GridHistoriqueComponent implements OnInit {
       ['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
       'and',
       ['socCode', '=', this.currentCompanyService.getCompany().id],
+      'and',
+      ['dateModification', '>=', new Date(this.dateManagementService.findDate(-60))],
     ];
     this.dataSource.filter(filters);
     this.histoGrid.dataSource = this.dataSource;
