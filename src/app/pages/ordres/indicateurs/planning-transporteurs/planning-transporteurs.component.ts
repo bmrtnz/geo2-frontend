@@ -110,7 +110,7 @@ export class PlanningTransporteursComponent implements OnInit {
       } as Inputs);
 
       this.datagrid.dataSource = this.ordresDataSource;
-      // this.ordresDataSource.filter(this.buildFilter(values));
+      this.ordresDataSource.filter(['sommeColisPaletteBis', '<>', 0]);
     }
   }
 
@@ -160,6 +160,7 @@ export class PlanningTransporteursComponent implements OnInit {
       if (e.column.dataField === 'dateLivraisonPrevue' || e.column.dataField === 'dateDepartPrevueFournisseur') {
         if (e.value) e.cellElement.innerText = this.dateManagementService.formatDate(e.value, 'dd-MM-yyyy');
       }
+
     }
     // Ajout CP, ville et pays au lieu de livraison nom groupe
     if (e.rowType === 'group') {
