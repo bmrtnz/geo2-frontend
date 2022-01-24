@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { LocalizePipe } from 'app/shared/pipes';
 import { AuthService, LocalizationService, TransporteursService } from 'app/shared/services';
 import { GridsConfigsService } from 'app/shared/services/api/grids-configs.service';
@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './clients-dep-encours.component.html',
   styleUrls: ['./clients-dep-encours.component.scss']
 })
-export class ClientsDepEncoursComponent implements AfterViewInit {
+export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
   readonly INDICATOR_NAME = 'ClientsDepEncours';
 
   secteurs: DataSource;
@@ -59,28 +59,22 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     this.title = this.localizePipe.transform('grid-depassement-encours-pays-title');
   }
 
+  ngOnInit() {
+    this.dataSource = this.indicator.dataSource;
+  }
+
   ngAfterViewInit() {
-    this.secteurSB.value = this.authService.currentUser.secteurCommercial?.id;
-    this.enableFilters();
+    this.secteurSB.value = this.authService.currentUser.secteurCommercial;
   }
 
   enableFilters() {
     const filters = this.indicator.cloneFilter();
-    this.dataSource = this.indicator.dataSource;
+    if (this.secteurSB.value?.id)
+      filters.push('and', ['secteur.id', '=', this.secteurSB.value.id]);
     this.dataSource.filter(filters);
+    this.dataSource.reload();
   }
 
-  updateFilters() {
-    const filters = this.indicator.cloneFilter();
-    if (this.secteurSB.value)
-      filters.push('and', [
-        'clients.secteur.id',
-        '=',
-        this.secteurSB.value.id,
-      ]);
-    this.dataSource?.filter(filters);
-    this.dataSource?.reload();
-  }
 }
 
 export default ClientsDepEncoursComponent;

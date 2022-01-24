@@ -4,6 +4,7 @@ import { ApolloQueryResult } from '@apollo/client/core';
 import grids from 'assets/configurations/grids.json';
 import { GridColumn } from 'basic';
 import DataSource from 'devextreme/data/data_source';
+import { dxButtonOptions } from 'devextreme/ui/button';
 import { Observable } from 'rxjs';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
@@ -11,7 +12,6 @@ import { CountResponse as CountResponseOrdre, Operation, OrdresService } from '.
 import { CountResponse as CountResponsePays, Operation as PaysOperation, PaysService } from './api/pays.service';
 import { AuthService } from './auth.service';
 import { CurrentCompanyService } from './current-company.service';
-import { dxButtonOptions } from 'devextreme/ui/button';
 
 export const INDEX_TAB = 'INDEX';
 export class Content {
@@ -259,7 +259,6 @@ export class OrdresIndicatorsService {
         .getDetailedFields(1, instance.select, {forceFilter: true});
         instance.dataSource = paysService
         .getDataSource(1, instance.select, PaysOperation.AllDistinct);
-        instance.fetchCount = paysService.count.bind(paysService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponsePays>>;
         instance.filter = [
           ['valide', '=', true],
           'and',
@@ -276,9 +275,14 @@ export class OrdresIndicatorsService {
             'or',
             ['clients.enCours90Plus', '<>', 0],
           ],
-          ...this.authService.currentUser.secteurCommercial
-          ? ['and', ['secteur.id', '=', this.authService.currentUser.secteurCommercial?.id]] : [],
         ];
+        instance.fetchCount = paysService.count.bind(paysService, [
+          ...instance.filter,
+          'and',
+          this.authService.currentUser.secteurCommercial
+          ? ['clients.secteur.id', '=', this.authService.currentUser.secteurCommercial?.id]
+          : [],
+        ]) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponsePays>>;
       }
 
       // Ordres non cloturés
