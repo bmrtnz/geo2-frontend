@@ -2,14 +2,14 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { LocalizePipe } from 'app/shared/pipes';
 import { ClientsService } from 'app/shared/services';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
+import { GridColumn } from 'basic';
 import DataSource from 'devextreme/data/data_source';
 import { dxDataGridRowObject } from 'devextreme/ui/data_grid';
 import { environment } from 'environments/environment';
-import { GridColumn } from 'basic';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 
 @Component({
   selector: 'app-grid-clients-dep-encours-detail',
@@ -30,7 +30,8 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
     private localizePipe: LocalizePipe,
     private datePipe: DatePipe,
     private clientsService: ClientsService,
-    public gridConfiguratorService: GridConfiguratorService
+    public gridConfiguratorService: GridConfiguratorService,
+    public currentCompanyService: CurrentCompanyService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.DepassementEncoursClient);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
@@ -47,6 +48,8 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
     this.dataSource.filter([
       ['pays.id', '=', this.masterRow.data.id],
       'and',
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
+      'and',
       [
         ['enCoursNonEchu', '<>', 0],
         'or',
@@ -58,6 +61,9 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
         'or',
         ['enCours90Plus', '<>', 0],
       ],
+      ...this.masterRow.data.secteur
+        ? ['and', ['secteur.id', '=', this.masterRow.data.secteur?.id]]
+        : [],
     ]);
   }
 

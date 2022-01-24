@@ -1,4 +1,4 @@
-import {Field, Model, ModelName} from './model';
+import { Field, Model, ModelName } from './model';
 
 export enum Role {
   ASSISTANT = 'A',

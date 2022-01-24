@@ -1,23 +1,23 @@
-import {AfterViewInit, Component, NgModule, OnInit, ViewChild} from '@angular/core';
-
-import {AuthService} from '../../services';
-import {DxButtonComponent, DxButtonModule} from 'devextreme-angular/ui/button';
-import {DxCheckBoxModule} from 'devextreme-angular/ui/check-box';
-import {DxLoadIndicatorModule} from 'devextreme-angular';
-import {DxTextBoxComponent, DxTextBoxModule} from 'devextreme-angular/ui/text-box';
-import {DxValidatorModule} from 'devextreme-angular/ui/validator';
-import {DxValidationGroupModule} from 'devextreme-angular/ui/validation-group';
-import { DxSelectBoxComponent, DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
-import {SharedModule} from '../../shared.module';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import DataSource from 'devextreme/data/data_source';
+import { AfterViewInit, Component, NgModule, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { SocietesService } from 'app/shared/services/api/societes.service';
 import { UtilisateursService } from 'app/shared/services/api/utilisateurs.service';
-import { from, throwError } from 'rxjs';
-import { catchError, mergeAll, take } from 'rxjs/operators';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import { DxLoadIndicatorModule } from 'devextreme-angular';
+import { DxButtonComponent, DxButtonModule } from 'devextreme-angular/ui/button';
+import { DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
+import { DxSelectBoxComponent, DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
+import { DxValidationGroupModule } from 'devextreme-angular/ui/validation-group';
+import { DxValidatorModule } from 'devextreme-angular/ui/validator';
+import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthService } from '../../services';
+import { SharedModule } from '../../shared.module';
+
 
 
 @Component({
@@ -79,10 +79,12 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
     if (!this.form.get('nomUtilisateur')?.value?.length || !this.form.get('password')?.value?.length) return;
 
     // const textBoxComponent: DxTextBoxComponent = event.component;
-    from(this.utilisateursService.getOne(this.form.get('nomUtilisateur').value, this.form.get('password').value))
+    this.utilisateursService.getOne(
+      this.form.get('nomUtilisateur').value,
+      this.form.get('password').value,
+      ['perimetre'],
+    )
     .pipe(
-      mergeAll(),
-      take(1),
       catchError((e: any) => {
          notify('Utilisateur/Mot de passe non reconnus', 'error', 3000);
          return throwError(e);

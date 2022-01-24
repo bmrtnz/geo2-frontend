@@ -1,4 +1,5 @@
 import {Field, Model, ModelName} from './model';
+import Secteur from './secteur.model';
 
 @ModelName('Pays')
 export class Pays extends Model {
@@ -7,6 +8,7 @@ export class Pays extends Model {
   @Field({asLabel: true}) public description: string;
   @Field() public numeroIso: string;
   @Field() public valide: boolean;
+  @Field({ model: import('./secteur.model') }) public secteur: Secteur;
   @Field({
     allowSorting: false,
     allowHeaderFiltering: false,

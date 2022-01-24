@@ -873,7 +873,8 @@ export abstract class ApiService implements OnDestroy {
           name: this.model.name.lcFirst(),
           body,
           params: [{ name: this.model.getKeyField().toString(), value: this.model.getKeyField().toString(), isVariable: true }],
-        }],
+        },
+      ],
       [{ name: this.model.getKeyField().toString(), type: this.gqlKeyType, isOptionnal: false }],
     );
   }
@@ -885,13 +886,10 @@ export abstract class ApiService implements OnDestroy {
         {
           name: `all${this.model.name}List`,
           body,
-          params: [
-            { name: 'search', value: 'search', isVariable: true },
-          ],
-        }],
-      [
-        { name: 'search', type: 'String', isOptionnal: true },
+          params: [{ name: 'search', value: 'search', isVariable: true }],
+        },
       ],
+      [{ name: 'search', type: 'String', isOptionnal: true }],
     );
   }
 
@@ -904,7 +902,8 @@ export abstract class ApiService implements OnDestroy {
           name: `save${this.model.name}`,
           body,
           params: [{ name: this.model.name.lcFirst(), value: this.model.name.lcFirst(), isVariable: true }],
-        }],
+        },
+      ],
       [{ name: this.model.name.lcFirst(), type: `Geo${this.model.name}Input`, isOptionnal: false }],
     );
   }
