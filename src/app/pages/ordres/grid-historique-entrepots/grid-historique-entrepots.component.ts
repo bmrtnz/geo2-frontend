@@ -66,11 +66,10 @@ export class GridHistoriqueEntrepotsComponent implements OnInit, SingleSelection
         'and',
         ['entrepot.valide', '=', true],
         'and',
-        ['entrepot.client.valide', '=', true]
+        ['entrepot.client.valide', '=', true],
+        'and',
+        ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
       ];
-      if (!this.authService.currentUser.adminClient) {
-        filters.push('and', ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]);
-      }
       datasource.filter(filters);
       this.grid.dataSource = datasource;
     });
