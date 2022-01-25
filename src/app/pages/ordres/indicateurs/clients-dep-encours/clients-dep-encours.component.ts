@@ -64,7 +64,8 @@ export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.secteurSB.value = this.authService.currentUser.secteurCommercial;
+    if (!this.authService.isAdmin)
+      this.secteurSB.value = this.authService.currentUser.secteurCommercial;
   }
 
   enableFilters() {
