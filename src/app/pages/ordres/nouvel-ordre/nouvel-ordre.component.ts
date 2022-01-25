@@ -10,13 +10,13 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SocietesService } from 'app/shared/services/api/societes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { SingleSelection } from 'basic';
-import notify from 'devextreme/ui/notify';
 import { defer, EMPTY, Observable, zip } from 'rxjs';
 import { catchError, debounceTime, first, map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { GridEntrepotsComponent } from '../grid-entrepots/grid-entrepots.component';
 import { GridHistoriqueEntrepotsComponent } from '../grid-historique-entrepots/grid-historique-entrepots.component';
 import { TabContext } from '../root/root.component';
 import { DateManagementService } from 'app/shared/services/date-management.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-nouvel-ordre',
@@ -66,6 +66,7 @@ export class NouvelOrdreComponent implements OnInit {
   public favorites = true;
   public resolver: Observable<Ordre>;
   public errorText: string;
+  public env = environment;
 
   private societe: Societe;
   private ofValideEntrepotForOrdreRef = defer(() => this.functionsService
