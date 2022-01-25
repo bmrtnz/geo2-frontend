@@ -13,10 +13,10 @@
 </div>
 
 <app-button-loader
-    [text]="'+ ' + ('create' | localize) + (getSelectedEntrepot() ? ' '+('depuis' | localize)+' \''+getSelectedEntrepot()?.raisonSocial+'\'' : '')"
-    [type]="'default'"
+    [text]="'+ ' + ('create' | localize) + (getSelectedEntrepot() ? ' '+('depuis' | localize)+'   \''+getSelectedEntrepot()?.raisonSocial+'\'' : '')"
+    [type]="'success'"
     class="button-create-order"
-    [disabled]="!getSelectedEntrepot()"
+    [hidden]="!getSelectedEntrepot()"
     [resolver]="resolver"
     (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>

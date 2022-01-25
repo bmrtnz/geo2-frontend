@@ -11,6 +11,7 @@ import { Observable, of } from 'rxjs';
 import { TabContext } from '../root/root.component';
 import { map } from 'rxjs/operators';
 import MRUEntrepot from 'app/shared/models/mru-entrepot.model';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 @Component({
   selector: 'app-grid-historique-entrepots',
@@ -34,6 +35,7 @@ export class GridHistoriqueEntrepotsComponent implements OnInit, SingleSelection
   constructor(
     public mruEntrepotsService: MruEntrepotsService,
     public authService: AuthService,
+    private dateManagementService: DateManagementService,
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
@@ -66,7 +68,10 @@ export class GridHistoriqueEntrepotsComponent implements OnInit, SingleSelection
         'and',
         ['entrepot.valide', '=', true],
         'and',
-        ['entrepot.client.valide', '=', true]
+        ['entrepot.client.valide', '=', true],
+        'and',
+        // We show only the year history
+        ['dateModification', '>=', new Date(this.dateManagementService.findDate(-365))],
       ];
       if (!this.authService.currentUser.adminClient) {
         filters.push('and', ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]);

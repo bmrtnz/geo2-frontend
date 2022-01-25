@@ -121,9 +121,10 @@ export class NouvelOrdreComponent implements OnInit {
   }
 
   showError(errorInfo) {
+    console.log(errorInfo);
     this.infoComponent.visible = true;
-    this.errorText = errorInfo.split('\\r\\n').join(' ');
-    console.log(this.errorText);
+    errorInfo = errorInfo.split('\\r\\n').join(' ');
+    this.errorText = errorInfo.includes('Error:') ? errorInfo.split(':')[2] : errorInfo;
   }
 
   getSelectedEntrepot() {
@@ -236,7 +237,7 @@ export class NouvelOrdreComponent implements OnInit {
                 } : {
                   tauxDevise: entrepot.client.dateDeviseTauxFix,
                 }
-              } : {},
+              } : { tauxDevise },
             },
         } as Partial<Ordre>,
       })),

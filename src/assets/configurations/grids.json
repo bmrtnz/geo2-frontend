@@ -812,6 +812,7 @@
       {
         "visibleIndex": 2,
         "dataField": "codeEntrepot",
+        "sortOrder": "asc",
         "dataType": "string",
         "visible": true
       },
@@ -825,7 +826,6 @@
         "visibleIndex": 4,
         "dataField": "entrepot.client.code",
         "dataType": "string",
-        "sortOrder": "asc",
         "visible": true
       },
       {
@@ -875,6 +875,7 @@
       {
         "visibleIndex": 2,
         "dataField": "code",
+        "sortOrder": "asc",
         "dataType": "string",
         "visible": true
       },
@@ -888,7 +889,6 @@
         "visibleIndex": 4,
         "dataField": "client.code",
         "dataType": "string",
-        "sortOrder": "asc",
         "visible": true
       },
       {
@@ -1437,12 +1437,15 @@
       {
         "visibleIndex": 0,
         "dataField": "numeroOrdre",
+        "sortOrder": "asc",
+        "sortIndex": 2,
         "visible": true
       },
       {
         "visibleIndex": 1,
         "dataField": "indicateurBaf",
         "sortOrder": "asc",
+        "sortIndex": 1,
         "visible": true
       },
       {
