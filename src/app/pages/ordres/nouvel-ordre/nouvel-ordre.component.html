@@ -16,7 +16,7 @@
     [text]="'+ ' + ('create' | localize) + (getSelectedEntrepot() ? ' '+('depuis' | localize)+'   \''+getSelectedEntrepot()?.raisonSocial+'\'' : '')"
     [type]="'success'"
     class="button-create-order"
-    [hidden]="!getSelectedEntrepot()"
+    [hidden]="!getSelectedEntrepot() || env.production"
     [resolver]="resolver"
     (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>

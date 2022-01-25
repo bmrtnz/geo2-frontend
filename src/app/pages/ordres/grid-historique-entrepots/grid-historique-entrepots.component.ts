@@ -72,10 +72,9 @@ export class GridHistoriqueEntrepotsComponent implements OnInit, SingleSelection
         'and',
         // We show only the year history
         ['dateModification', '>=', new Date(this.dateManagementService.findDate(-365))],
+        'and',
+        ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
       ];
-      if (!this.authService.currentUser.adminClient) {
-        filters.push('and', ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur]);
-      }
       datasource.filter(filters);
       this.grid.dataSource = datasource;
     });

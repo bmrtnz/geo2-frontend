@@ -278,9 +278,8 @@ export class OrdresIndicatorsService {
         ];
         instance.fetchCount = paysService.count.bind(paysService, [
           ...instance.filter,
-          'and',
-          this.authService.currentUser.secteurCommercial
-          ? ['clients.secteur.id', '=', this.authService.currentUser.secteurCommercial?.id]
+          ...this.authService.currentUser.secteurCommercial && !this.authService.isAdmin
+          ? ['and', ['clients.secteur.id', '=', this.authService.currentUser.secteurCommercial?.id]]
           : [],
         ]) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponsePays>>;
       }

@@ -129,6 +129,10 @@ export class AuthService {
   get lastUsername() {
     return window.localStorage.getItem(this.LAST_USER_STORE_KEY) || '';
   }
+
+  get isAdmin() {
+    return this.currentUser.profileClient === 'ADMIN';
+  }
 }
 
 @Injectable()
