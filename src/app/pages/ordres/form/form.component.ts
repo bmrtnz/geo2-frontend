@@ -213,17 +213,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSubmit() {
-    if (!this.formGroup.pristine && this.formGroup.valid) {
-      const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-      ordre.societe = { id: this.currentCompanyService.getCompany().id };
+    // if (!this.formGroup.pristine && this.formGroup.valid) {
+    //   const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+    //   ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
-      this.ordresService.save({ ordre }).subscribe({
-        next: () => {
-          notify('Sauvegardé', 'success', 3000);
-        },
-        error: () => notify('Echec de la sauvegarde', 'error', 3000),
-      });
-    }
+    //   this.ordresService.save({ ordre }).subscribe({
+    //     next: () => {
+    //       notify('Sauvegardé', 'success', 3000);
+    //     },
+    //     error: () => notify('Echec de la sauvegarde', 'error', 3000),
+    //   });
+    // }
   }
 
   onAccordionToggled(
@@ -360,6 +360,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     )
     .subscribe( ordre => {
       this.ordre = ordre;
+      if (this.ordre === null) return;
       if (this.comLog) this.comLog.instance.option('hint', this.ordre.instructionsLogistiques);
       this.fetchFullOrderNumber();
       if (this.ordre.numero) this.status = ' - ' + Statut[this.ordre.statut] + (this.ordre.factureEDI ? ' EDI' : '');
@@ -443,13 +444,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private fetchFullOrderNumber() {
+
     this.fullOrderNumber = this?.ordre?.numero && this?.ordre?.campagne
       ? `Ordre N° ${
           (this.ordre.campagne
             ? (this.ordre.campagne.id ? this.ordre.campagne.id : this.ordre.campagne) + '-'
             : '') + this.ordre.numero
         }`
-      : 'Nouvel ordre';
+      : this.ordre ? 'Nouvel ordre N° ' + this.ordre.numero : '';
   }
 
   private refreshBadges() {

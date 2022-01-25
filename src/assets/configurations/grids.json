@@ -811,26 +811,26 @@
       },
       {
         "visibleIndex": 2,
+        "dataField": "codeEntrepot",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "entrepot.raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
         "dataField": "entrepot.client.code",
         "dataType": "string",
         "sortOrder": "asc",
         "visible": true
       },
       {
-        "visibleIndex": 3,
-        "dataField": "entrepot.client.raisonSocial",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 4,
-        "dataField": "codeEntrepot",
-        "dataType": "string",
-        "visible": true
-      },
-      {
         "visibleIndex": 5,
-        "dataField": "entrepot.raisonSocial",
+        "dataField": "entrepot.client.raisonSocial",
         "dataType": "string",
         "visible": true
       },
@@ -874,28 +874,28 @@
       },
       {
         "visibleIndex": 2,
+        "dataField": "code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
         "dataField": "client.code",
         "dataType": "string",
         "sortOrder": "asc",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 5,
         "dataField": "client.raisonSocial",
         "dataType": "string",
          "visible": true
-      },
-      {
-        "visibleIndex": 4,
-        "dataField": "code",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "raisonSocial",
-        "dataType": "string",
-        "visible": true
       },
       {
         "visibleIndex": 6,

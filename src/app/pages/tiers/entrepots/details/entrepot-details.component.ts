@@ -215,7 +215,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     this.typesPalette = this.typesPaletteService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();
     this.regimesTva = this.regimesTvaService.getDataSource();
-    this.transporteurs = this.transporteursService.getDataSource_v2(['id', 'raisonSocial']);
+    this.transporteurs = this.transporteursService.getDataSource_v2(['id', 'raisonSocial', 'ville']);
     this.basesTarif = this.basesTarifService.getDataSource();
     this.typesCamion = this.typesCamionService.getDataSource();
     this.transitaires = this.transitairesService.getDataSource();
@@ -320,6 +320,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   displayIDBefore(data) {
     return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+  }
+
+  displayEntrepot(data) {
+    return data ? data.id + ' - ' + data.raisonSocial + ' (' + data.ville + ')' : null;
   }
 
   toggleVisible() {

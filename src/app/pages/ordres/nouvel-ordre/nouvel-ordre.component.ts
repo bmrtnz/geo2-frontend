@@ -39,6 +39,8 @@ export class NouvelOrdreComponent implements OnInit {
     'assistante.id',
     'client.id',
     'client.code',
+    'client.assistante.id',
+    'client.commercial.id',
     'client.secteur.id',
     'client.devise.id',
     'client.moyenPaiement.id',
@@ -135,7 +137,12 @@ export class NouvelOrdreComponent implements OnInit {
   }
 
   private buildOrdre(numero: string, entrepot: Entrepot) {
-    console.log(this.dateManagementService.findDate(0))
+
+    const assistante = entrepot.assistante ? { id: entrepot.assistante.id } :
+    entrepot.client.assistante ? { id: entrepot.client.assistante.id } : null;
+    const commercial = entrepot.commercial ? { id: entrepot.commercial.id } :
+    entrepot.client.commercial ? { id: entrepot.client.commercial.id } : null;
+
     return this.fetchDeviseRef(entrepot.client.devise)
     .pipe(
       switchMap(({ taux: tauxDevise }) => this.ordresService.save_v2([
@@ -168,18 +175,18 @@ export class NouvelOrdreComponent implements OnInit {
           baseTarifTransit: entrepot.baseTarifTransit ? { id: entrepot.baseTarifTransit.id } : null,
           transporteurDEVTaux: 1,
           prixUnitaireTarifTransport: entrepot.prixUnitaireTarifTransport,
-          assistante: entrepot.commercial ? { id: entrepot.commercial.id } : null, // Non, ce n'est pas une erreur
-          commercial: entrepot.assistante ? { id: entrepot.assistante.id } : null, // Ca non plus 🙃
+          assistante,
+          commercial,
           typeTransport: entrepot.typeCamion ? { id: entrepot.typeCamion.id } : null,
           ...this.societe.id === 'SA'
             && this.authService.currentUser.getSUP()
             ? {
-              assistante: this.authService.currentUser?.commercial // Toujours pas
-                ? { id: this.authService.currentUser?.commercial?.id }
-                : null,
-              commercial: this.authService.currentUser?.assistante // Pareil
+              assistante: this.authService.currentUser?.assistante // Toujours pas
                 ? { id: this.authService.currentUser?.assistante?.id }
-                : null,
+                : assistante,
+              commercial: this.authService.currentUser?.commercial // Pareil
+                ? { id: this.authService.currentUser?.commercial?.id }
+                : commercial,
             } : {},
           // from `heriteClient.pbl`
           codeClient: entrepot?.client.code,

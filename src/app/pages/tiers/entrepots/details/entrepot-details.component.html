@@ -518,7 +518,7 @@
                       formControlName="transporteur"
                       [readOnly]="readOnlyMode"
                       [dataSource]="transporteurs"
-                      displayExpr="raisonSocial"
+                      [displayExpr]="displayEntrepot"
                       [searchEnabled]="true"
                       [searchExpr]="['id','raisonSocial']"
                     ></dx-select-box>
