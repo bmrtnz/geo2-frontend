@@ -32,7 +32,7 @@ export class AppComponent {
       if (!context2) {
         document.querySelectorAll('.dx-datagrid-column-chooser .dx-closebutton').forEach((btn) => {
           const closeBtn = btn as HTMLElement;
-          closeBtn.click();
+          if (this.isVisible(closeBtn.closest('.dx-datagrid-column-chooser'))) closeBtn.click();
         });
       }
      });
@@ -52,4 +52,9 @@ export class AppComponent {
   isAutorized() {
     return !this.router.isActive('/login', false) ?? this.authService.isLoggedIn;
   }
+
+  isVisible(el) {
+    const style = window.getComputedStyle(el);
+    return ((style.display !== 'none') && (style.visibility !== 'hidden'));
+}
 }
