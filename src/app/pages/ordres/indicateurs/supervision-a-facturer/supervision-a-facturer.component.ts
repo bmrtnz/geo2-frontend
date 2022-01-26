@@ -11,6 +11,7 @@ import Ordre from 'app/shared/models/ordre.model';
 import { TabContext } from '../../root/root.component';
 import { Grid, GridConfiguratorService, GridConfig } from 'app/shared/services/grid-configurator.service';
 import { environment } from 'environments/environment';
+import { Role } from 'app/shared/models/personne.model';
 import { GridColumn } from 'basic';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -96,7 +97,21 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.clients = this.clientsService.getDataSource_v2(['id', 'code', 'raisonSocial', 'secteur.id']);
     this.entrepots = this.entrepotsService.getDataSource_v2(['id', 'code', 'raisonSocial']);
     this.commerciaux = this.personnesService.getDataSource_v2(['id', 'nomUtilisateur']);
+    this.commerciaux.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.COMMERCIAL],
+      'and',
+      ['nomUtilisateur', '<>', 'null']
+    ]);
     this.assistantes = this.personnesService.getDataSource_v2(['id', 'nomUtilisateur']);
+    this.assistantes.filter([
+      ['valide', '=', true],
+      'and',
+      ['role', '=', Role.ASSISTANT],
+      'and',
+      ['nomUtilisateur', '<>', 'null']
+    ]);
     this.periodes = this.dateManagementService.periods();
     this.gridHasData = false;
   }

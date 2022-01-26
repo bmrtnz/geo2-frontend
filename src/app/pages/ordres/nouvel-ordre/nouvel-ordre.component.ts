@@ -125,7 +125,7 @@ export class NouvelOrdreComponent implements OnInit {
     console.log(errorInfo);
     this.infoComponent.visible = true;
     errorInfo = errorInfo.split('\\r\\n').join(' ');
-    this.errorText = errorInfo.includes('Error:') ? errorInfo.split(':')[2] : errorInfo;
+    this.errorText = errorInfo.includes('Error:') ? errorInfo.split(':')[2] ? errorInfo.split(':')[2] : errorInfo : errorInfo;
   }
 
   getSelectedEntrepot() {
