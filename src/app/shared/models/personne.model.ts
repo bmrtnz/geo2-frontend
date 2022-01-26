@@ -1,8 +1,8 @@
 import { Field, Model, ModelName } from './model';
 
 export enum Role {
-  ASSISTANT = 'A',
-  COMMERCIAL = 'C',
+  ASSISTANT = 'A' as any,
+  COMMERCIAL = 'C' as any,
 }
 @ModelName('Personne')
 export class Personne extends Model {

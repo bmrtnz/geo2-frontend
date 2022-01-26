@@ -14,7 +14,7 @@ export class Utilisateur extends Model {
   @Field({ model: import('./secteur.model') }) public secteurCommercial?: Secteur;
   @Field({ model: import('./personne.model') }) public commercial?: Personne;
   @Field({ model: import('./personne.model') }) public assistante?: Personne;
-  @Field({ model: import('./personne.model') }) public personnes?: Personne[];
+  @Field({ model: import('./personne.model') }) public personne?: Personne;
   @Field() public configTuilesOrdres?: any;
   @Field() public configTabsOrdres?: { [key: string]: string };
   @Field() public adminClient?: boolean;

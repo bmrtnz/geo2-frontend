@@ -28,7 +28,8 @@ export class AuthService {
     'secteurCommercial.description',
     'commercial.id',
     'assistante.id',
-    'personnes.id',
+    'personne.id',
+    'personne.role',
 
     // Sécurité / Droits
     'accessGeoTiers',
