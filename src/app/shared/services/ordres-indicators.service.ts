@@ -310,9 +310,9 @@ export class OrdresIndicatorsService {
           : [],
           ...this.authService.isAdmin ? []
           : [
-            ...this.authService.currentUser.personne?.role === Role.COMMERCIAL
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.COMMERCIAL]
             ? ['and', ['commercial.id', '=', this.authService.currentUser.commercial.id]] : [],
-            ...this.authService.currentUser.personne?.role === Role.ASSISTANT
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.ASSISTANT]
             ? ['and', ['assistante.id', '=', this.authService.currentUser.assistante.id]] : [],
           ],
         ]) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
@@ -339,9 +339,9 @@ export class OrdresIndicatorsService {
           : [],
           ...this.authService.isAdmin ? []
           : [
-            ...this.authService.currentUser.personne?.role === Role.COMMERCIAL
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.COMMERCIAL]
             ? ['and', ['commercial.id', '=', this.authService.currentUser.commercial.id]] : [],
-            ...this.authService.currentUser.personne?.role === Role.ASSISTANT
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.ASSISTANT]
             ? ['and', ['assistante.id', '=', this.authService.currentUser.assistante.id]] : [],
           ],
         ]) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
