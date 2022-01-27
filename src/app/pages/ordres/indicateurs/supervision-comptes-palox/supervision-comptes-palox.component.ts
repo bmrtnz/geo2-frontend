@@ -117,6 +117,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     ));
 
     this.formGroup.valueChanges.subscribe(_ => this.enableFilters());
+    if (!this.authService.isAdmin && this.authService.currentUser?.commercial)
+      this.formGroup.get('commercial').setValue(this.authService.currentUser.commercial);
   }
 
   enableFilters() {
