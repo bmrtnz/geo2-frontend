@@ -95,7 +95,7 @@ export class AuthService {
 
   persist(data: Partial<Utilisateur>) {
     return this.utilisateursService
-    .save({
+    .save_v2(this.USER_FIELDS, {
       utilisateur: {
         nomUtilisateur: this.currentUser.nomUtilisateur,
         ...data,

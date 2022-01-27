@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { RootComponent } from 'app/pages/ordres/root/root.component';
 import { defer, iif, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Societe } from '../models';
 import { AuthService } from '../services';
 import { CurrentCompanyService } from '../services/current-company.service';
@@ -33,9 +33,9 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
     this.currentCompany = societe;
     return iif(
       () => !!this.authService.currentUser?.configTabsOrdres?.[this?.currentCompany?.id],
-      defer(() => of(this.authService.currentUser.configTabsOrdres[this.currentCompany.id]))
-      .pipe(map( url => this.router.parseUrl(url))),
-      of(this.router.createUrlTree(['/ordres/home'])),
+        defer(() => of(this.authService.currentUser.configTabsOrdres[this.currentCompany.id]))
+        .pipe(map( url => this.router.parseUrl(url))),
+        of(this.router.createUrlTree(['/ordres/home'])),
     );
   }
 
@@ -54,18 +54,16 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
     | UrlTree {
 
       // Trigger save, but don't block navigation
-      if (!nextState.url.startsWith('/ordres')) {
-        of(this?.currentCompany?.id ?? this?.currentCompanyService?.getCompany()?.id)
-        .pipe(
-          switchMap(companyID => this.authService.persist({
-            configTabsOrdres: {
-              ...this.authService.currentUser?.configTabsOrdres,
-              [companyID]: encodeURI(currentState.url),
-            },
-          })),
-        )
-        .toPromise();
-      }
+      of(this?.currentCompany?.id ?? this?.currentCompanyService?.getCompany()?.id)
+      .pipe(
+        switchMap(companyID => this.authService.persist({
+          configTabsOrdres: {
+            ...this.authService.currentUser?.configTabsOrdres,
+            [companyID]: encodeURI(nextState.url.match(/^\/ordres.*/) ? nextState.url : currentState.url),
+          },
+        })),
+      )
+      .toPromise();
 
       return true;
   }
