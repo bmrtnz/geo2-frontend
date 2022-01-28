@@ -137,6 +137,14 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         description : this.authService.currentUser.secteurCommercial.description
       });
     }
+
+    // Fill commercial/assistante input from user role
+    if (!this.authService.isAdmin && this.authService.currentUser.personne?.role) {
+      if (this.authService.currentUser.personne?.role?.toString() === Role[Role.COMMERCIAL])
+        this.formGroup.get('codeCommercial').setValue(this.authService.currentUser.commercial);
+      if (this.authService.currentUser.personne?.role?.toString() === Role[Role.ASSISTANT])
+        this.formGroup.get('codeAssistante').setValue(this.authService.currentUser.assistante);
+    }
   }
 
   enableFilters() {

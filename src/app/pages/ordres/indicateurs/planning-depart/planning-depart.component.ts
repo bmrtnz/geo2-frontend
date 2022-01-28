@@ -79,10 +79,9 @@ export class PlanningDepartComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dxGridElement =
       this.gridPLANNINGDEPARTComponent.instance.$element()[0];
-    if (this.authService.currentUser.limitationSecteur) {
-      this.secteurSB.value = this.authService.currentUser.secteurCommercial.id;
-    }
     this.dataSource = this.indicator.dataSource;
+    if (!this.authService.isAdmin)
+      this.secteurSB.value = this.authService.currentUser.secteurCommercial;
   }
 
   enableFilters() {

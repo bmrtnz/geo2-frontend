@@ -6,6 +6,7 @@ import { GridColumn } from 'basic';
 import DataSource from 'devextreme/data/data_source';
 import { dxButtonOptions } from 'devextreme/ui/button';
 import { Observable } from 'rxjs';
+import { Role } from '../models';
 import { Model, ModelFieldOptions } from '../models/model';
 import Ordre from '../models/ordre.model';
 import { CountResponse as CountResponseOrdre, Operation, OrdresService } from './api/ordres.service';
@@ -289,7 +290,6 @@ export class OrdresIndicatorsService {
         instance.detailedFields = this.ordresService.model
         .getDetailedFields(3, instance.select, {forceFilter: true});
         instance.dataSource = ordresService.getDataSource(null, 2, instance.select);
-        instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
         instance.filter = [
           ...instance.filter,
           'and',
@@ -303,6 +303,19 @@ export class OrdresIndicatorsService {
           'and',
           ['bonAFacturer', '=', false],
         ];
+        instance.fetchCount = ordresService.count.bind(ordresService, [
+          ...instance.filter,
+          ...this.authService.currentUser.secteurCommercial && !this.authService.isAdmin
+          ? ['and', ['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial?.id]]
+          : [],
+          ...this.authService.isAdmin ? []
+          : [
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.COMMERCIAL]
+            ? ['and', ['commercial.id', '=', this.authService.currentUser.commercial.id]] : [],
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.ASSISTANT]
+            ? ['and', ['assistante.id', '=', this.authService.currentUser.assistante.id]] : [],
+          ],
+        ]) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
       }
 
       // Ordres non confirmés
@@ -310,7 +323,6 @@ export class OrdresIndicatorsService {
         instance.detailedFields = this.ordresService.model
         .getDetailedFields(3, instance.select, {forceFilter: true});
         instance.dataSource = this.ordresService.getDataSource(null, 2, instance.select);
-        instance.fetchCount = ordresService.count.bind(ordresService) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
         instance.filter = [
           ...instance.filter,
           'and',
@@ -320,6 +332,19 @@ export class OrdresIndicatorsService {
           'and',
           ['dateCreation', '>=', this.datePipe.transform(Date.now(), 'yyyy-MM-dd')],
         ];
+        instance.fetchCount = ordresService.count.bind(ordresService, [
+          ...instance.filter,
+          ...this.authService.currentUser.secteurCommercial && !this.authService.isAdmin
+          ? ['and', ['secteurCommercial.id', '=', this.authService.currentUser.secteurCommercial?.id]]
+          : [],
+          ...this.authService.isAdmin ? []
+          : [
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.COMMERCIAL]
+            ? ['and', ['commercial.id', '=', this.authService.currentUser.commercial.id]] : [],
+            ...this.authService.currentUser.personne?.role.toString() === Role[Role.ASSISTANT]
+            ? ['and', ['assistante.id', '=', this.authService.currentUser.assistante.id]] : [],
+          ],
+        ]) as (dxFilter?: any[]) => Observable<ApolloQueryResult<CountResponseOrdre>>;
       }
 
       // Litiges

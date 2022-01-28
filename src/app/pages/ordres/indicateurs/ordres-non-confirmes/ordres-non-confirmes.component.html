@@ -6,16 +6,20 @@
         <dxi-item [ratio]="4">
             <!-- Secteurs -->
             <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
-                <div class="dx-field-value">
-                    <dx-select-box #secteurValue
-                        [dataSource]="secteurs"
-                        displayExpr="description"
-                        [searchEnabled]="true"
-                        searchExpr="description"
-                        (valueChange)="updateFilters()"
-                    ></dx-select-box>
-                </div>
+              <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
+              <div class="dx-field-value">
+                <dx-check-box #withSector
+                    (valueChange)="enableFilters()"
+                ></dx-check-box>
+                <dx-select-box #secteurValue
+                    [dataSource]="secteurs"
+                    [disabled]="!withSector.value"
+                    displayExpr="description"
+                    [searchEnabled]="true"
+                    searchExpr="description"
+                    (valueChange)="enableFilters()"
+                ></dx-select-box>
+              </div>
             </div>
 
         </dxi-item>
@@ -24,8 +28,7 @@
 
     <br>
 
-    <dx-data-grid class="dx-card wide-card" #gridORDRESNONCONFIRMES
-    [dataSource]="dataSource"
+    <dx-data-grid class="dx-card wide-card"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"

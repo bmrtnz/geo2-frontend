@@ -10,8 +10,8 @@ import { OrdresService } from 'app/shared/services/api/ordres.service';
 import { SocietesService } from 'app/shared/services/api/societes.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { SingleSelection } from 'basic';
-import { defer, EMPTY, Observable, zip } from 'rxjs';
-import { catchError, debounceTime, first, map, mapTo, switchMap, tap } from 'rxjs/operators';
+import { defer, EMPTY, Observable, zip, throwError, iif } from 'rxjs';
+import { catchError, debounceTime, first, map, mapTo, switchMap, tap, throwIfEmpty } from 'rxjs/operators';
 import { GridEntrepotsComponent } from '../grid-entrepots/grid-entrepots.component';
 import { GridHistoriqueEntrepotsComponent } from '../grid-historique-entrepots/grid-historique-entrepots.component';
 import { TabContext } from '../root/root.component';
@@ -146,9 +146,9 @@ export class NouvelOrdreComponent implements OnInit {
     const commercial = entrepot.commercial ? { id: entrepot.commercial.id } :
     entrepot.client.commercial ? { id: entrepot.client.commercial.id } : null;
 
-    return this.fetchDeviseRef(entrepot.client.devise)
+    return this.fetchDeviseRef(entrepot.client?.devise)
     .pipe(
-      switchMap(({ taux: tauxDevise }) => this.ordresService.save_v2([
+      switchMap( deviseRef => this.ordresService.save_v2([
         'id',
         'numero',
       ], {
@@ -236,11 +236,11 @@ export class NouvelOrdreComponent implements OnInit {
                 && (entrepot.client.dateDeviseTauxFix = null, {}),
                 ...entrepot?.client?.dateDeviseTauxFix
                 ? {
-                  tauxDevise,
+                  tauxDevise: deviseRef?.taux,
                 } : {
                   tauxDevise: entrepot.client.dateDeviseTauxFix,
                 }
-              } : { tauxDevise },
+              } : {tauxDevise: deviseRef?.taux },
             },
         } as Partial<Ordre>,
       })),

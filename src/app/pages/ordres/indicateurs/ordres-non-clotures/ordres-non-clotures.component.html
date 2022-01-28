@@ -7,13 +7,17 @@
             <div class="dx-field">
                 <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
                 <div class="dx-field-value">
-                    <dx-select-box #secteurValue
-                        [dataSource]="secteurs"
-                        displayExpr="description"
-                        [searchEnabled]="true"
-                        searchExpr="description"
-                        (valueChange)="updateFilters()"
-                    ></dx-select-box>
+                <dx-check-box #withSector
+                    (valueChange)="enableFilters()"
+                ></dx-check-box>
+                <dx-select-box #secteurValue
+                    [dataSource]="secteurs"
+                    displayExpr="description"
+                    [disabled]="!withSector.value"
+                    [searchEnabled]="true"
+                    searchExpr="description"
+                    (valueChange)="enableFilters()"
+                ></dx-select-box>
                 </div>
             </div>
 
@@ -23,8 +27,7 @@
 
     <br>
 
-    <dx-data-grid class="dx-card wide-card" #gridORDRESNONCLOTURES
-    [dataSource]="dataSource"
+    <dx-data-grid class="dx-card wide-card"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
