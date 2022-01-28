@@ -173,7 +173,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   }
 
   displayIDBefore(data) {
-    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+    return data ? (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   onSubmit() {

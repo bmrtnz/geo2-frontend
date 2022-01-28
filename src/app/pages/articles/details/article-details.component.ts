@@ -242,7 +242,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     displayIDBefore(data) {
         return data ?
-        (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+        (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
     }
 
     valueToUpperCase(e) {

@@ -9,6 +9,7 @@
 [scrolling]="{
   useNative:true
 }"
+(onCellPrepared)="onCellPrepared($event)"
 (onRowDblClick)="tabContext.openOrdre($event.data.numero)"
 (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Résultat(s) de recherche', $event, gridConfiguratorService.Grid.Ordre, enableFilters.bind(this))"
 >

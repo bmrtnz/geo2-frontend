@@ -30,3 +30,20 @@
         padding: 0;
     }
 }
+
+// Highlight orders
+::ng-deep .dx-row.dx-data-row {
+    & {
+        &.highlight-order-row > td {
+            color:#FFF;
+            background:#386E59;
+        }
+    }
+
+    &.dx-row-focused {
+        &.highlight-order-row > td {
+            color:#FFF;
+            background:#789E89;
+        }
+    }
+}

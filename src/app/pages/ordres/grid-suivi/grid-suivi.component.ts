@@ -10,6 +10,7 @@ import { environment } from 'environments/environment';
 import { ordre } from 'assets/configurations/grids.json';
 import { TabContext } from '../root/root.component';
 import { GridColumn } from 'basic';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 @Component({
   selector: 'app-grid-suivi',
@@ -30,6 +31,7 @@ export class GridSuiviComponent implements OnInit, AfterViewInit {
     public ordresService: OrdresService,
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
+    private dateManagementService: DateManagementService,
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext,
   ) {
@@ -60,6 +62,15 @@ export class GridSuiviComponent implements OnInit, AfterViewInit {
 
   reload() {
     this.dataSource.reload();
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === 'data') {
+      // Best expression for date/time
+      if (e.column.dataField === 'dateDepartPrevue' || e.column.dataField === 'dateLivraisonPrevue') {
+        if (e.value) e.cellElement.innerText = this.dateManagementService.formatDate(e.value, 'dd-MM-yyyy');
+      }
+    }
   }
 
 }

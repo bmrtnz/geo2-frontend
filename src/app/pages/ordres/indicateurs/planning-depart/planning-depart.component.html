@@ -41,8 +41,9 @@
           #daysOfService
           [value]="1"
           [width]="50"
-          (valueChange)="updateFilters()"
+          (valueChange)="changeDays()"
           (onContentReady)="onDaysOfServiceInputReady()"
+          [inputAttr]="{'style': 'text-align: center'}"
         ></dx-number-box>
         <div class="dx-field-label">{{ "jours" | localize }}</div>
       </div>

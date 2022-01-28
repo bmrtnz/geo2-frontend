@@ -342,7 +342,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   displayIDBefore(data) {
     return data ?
-    (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
+    (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
      : null;
   }
 

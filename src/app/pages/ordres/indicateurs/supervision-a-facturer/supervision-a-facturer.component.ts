@@ -176,7 +176,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   displayIDBefore(data) {
-    return data ? data.code + ' ' + data.raisonSocial : null;
+    return data ? data.code + ' - ' + data.raisonSocial : null;
   }
 
   onFieldValueChange(e?) {

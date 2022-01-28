@@ -275,7 +275,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   displayIDBefore(data) {
-    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+    return data ? (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   displayCertifNameDate(data) {

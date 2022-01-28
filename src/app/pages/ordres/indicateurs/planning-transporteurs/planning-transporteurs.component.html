@@ -133,6 +133,7 @@
     useNative:true
   }"
   (onCellPrepared)="onCellPrepared($event)"
+  (onRowPrepared)="onRowPrepared($event)"
   (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.PlanningTransporteurs, enableFilters.bind(this))"
 >

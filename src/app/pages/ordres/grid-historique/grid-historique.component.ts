@@ -64,6 +64,17 @@ export class GridHistoriqueComponent implements OnInit {
     if (e.rowType === 'data' && e.column.dataField === 'ordre.statut') {
       if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
     }
+    // Palettes & Colis
+    if (e.column.dataField === 'ordre.totalNombrePalettesCommandees') {
+      if (e.data?.ordre.totalNombrePalettesCommandees > 0) {
+        e.cellElement.innerText =  e.cellElement.innerText + '/' + e.data.ordre.totalNombrePalettesExpediees;
+      }
+    }
+    if (e.column.dataField === 'ordre.sommeColisCommandes') {
+      if (e.data?.ordre.sommeColisCommandes > 0) {
+        e.cellElement.innerText =  e.cellElement.innerText + '/' + e.data.ordre.sommeColisExpedies;
+      }
+    }
   }
 
 }

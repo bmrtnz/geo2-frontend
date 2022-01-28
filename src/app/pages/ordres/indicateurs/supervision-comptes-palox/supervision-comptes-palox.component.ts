@@ -140,7 +140,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   displayCodeBefore(data) {
     return data ?
-    ((data.code ? data.code : data.id) + ' ' + (data.nomUtilisateur ? data.nomUtilisateur :
+    ((data.code ? data.code : data.id) + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur :
      (data.raisonSocial ? data.raisonSocial : data.description)))
      : null;
   }

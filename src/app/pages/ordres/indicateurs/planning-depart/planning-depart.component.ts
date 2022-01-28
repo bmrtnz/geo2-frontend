@@ -17,6 +17,7 @@ import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TabContext } from '../../root/root.component';
+import { DateManagementService } from 'app/shared/services/date-management.service';
 
 @Component({
   selector: 'planning-depart',
@@ -48,11 +49,13 @@ export class PlanningDepartComponent implements AfterViewInit {
   readonly DAYSNB_DEFAULT = 1;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public theTitle: any;
 
   constructor(
     public transporteursService: TransporteursService,
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
+    public dateManagementService: DateManagementService,
     public secteursService: SecteursService,
     public currentCompanyService: CurrentCompanyService,
     public ordresService: OrdresService,
@@ -82,6 +85,9 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.dataSource = this.indicator.dataSource;
     if (!this.authService.isAdmin)
       this.secteurSB.value = this.authService.currentUser.secteurCommercial;
+    this.theTitle = this.dxGridElement.querySelector('.dx-toolbar .dx-texteditor-input') as HTMLInputElement;
+    const inputContainer = this.dxGridElement.querySelector('.dx-toolbar .dx-texteditor-container') as HTMLElement;
+    inputContainer.style.width = '750px';
   }
 
   enableFilters() {
@@ -97,6 +103,10 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.indicator?.dataSource?.filter(filters);
 
     this.title = this.localizePipe.transform('grid-situation-depart-title-today');
+  }
+
+  changeDays() {
+    if (this.diffCB.value) this.updateFilters();
   }
 
   updateFilters() {
@@ -123,21 +133,19 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.dataSource.filter(filters);
     this.dataSource.reload();
 
-    const from = this.datePipe.transform(
+    const fromDate = this.datePipe.transform(
       new Date()
         .setDate(
           new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT
         )
         .valueOf());
     /* tslint:disable-next-line max-line-length */
-    this.title = `${this.localizePipe.transform('grid-situation-depart-title')} ${this.localizePipe.transform('du')} ${from} ${this.localizePipe.transform('au')} ${this.datePipe.transform(
-      Date.now()
-    )}`;
-    (
-      this.dxGridElement.querySelector(
-        '.dx-toolbar .dx-texteditor-input'
-      ) as HTMLInputElement
-    ).value = this.title;
+    this.title = `${this.localizePipe.transform('grid-situation-depart-title')}
+     ${this.localizePipe.transform('du')}
+      ${this.dateManagementService.formatDate(fromDate, 'dd-MM-yyyy')}
+      ${this.localizePipe.transform('au')}
+      ${this.dateManagementService.formatDate(new Date(), 'dd-MM-yyyy')}`;
+    this.theTitle.value = this.title;
   }
 
   onRowClick(event) {
@@ -165,7 +173,7 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   getDaysNB() {
     const d = new Date();
-    d.setDate(new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT)
+    d.setDate(new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT);
     return d.toISOString();
   }
 }

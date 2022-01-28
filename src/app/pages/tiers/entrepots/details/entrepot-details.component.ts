@@ -319,7 +319,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   displayIDBefore(data) {
-    return data ? (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+    return data ? (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   displayEntrepot(data) {

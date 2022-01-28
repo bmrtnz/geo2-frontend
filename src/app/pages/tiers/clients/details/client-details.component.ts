@@ -349,7 +349,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   displayIDBefore(data) {
     return data ?
-    (data.id + ' ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
+    (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
      : null;
   }
 
