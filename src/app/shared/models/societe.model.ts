@@ -1,6 +1,7 @@
 import {Pays} from './pays.model';
 import {Field, Model, ModelName} from './model';
 import Devise from './devise.model';
+import Campagne from './campagne.model';
 
 @ModelName('Societe')
 export class Societe extends Model {
@@ -13,6 +14,7 @@ export class Societe extends Model {
   @Field() public codePostal: string;
   @Field() public ville: string;
   @Field({model: import('./pays.model')}) public pays: Pays;
+  @Field({model: import('./campagne.model')}) public campagne: Campagne;
   @Field({ model: import('./devise.model') }) public devise?: Devise;
 
 }

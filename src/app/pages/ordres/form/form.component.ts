@@ -445,13 +445,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private fetchFullOrderNumber() {
 
-    this.fullOrderNumber = this?.ordre?.numero && this?.ordre?.campagne
-      ? `Ordre N° ${
-          (this.ordre.campagne
-            ? (this.ordre.campagne.id ? this.ordre.campagne.id : this.ordre.campagne) + '-'
-            : '') + this.ordre.numero
-        }`
-      : this.ordre ? 'Nouvel ordre N° ' + this.ordre.numero : '';
+    const nouveau = this?.ordre?.statut;
+
+    this.fullOrderNumber = nouveau.includes('NON_CONFIRME') ? 'Nouvel ' : '';
+
+    this.fullOrderNumber += `Ordre N° ${
+      (this.ordre.campagne
+        ? (this.ordre.campagne.id ? this.ordre.campagne.id : this.ordre.campagne) + '-'
+        : '') + this.ordre.numero
+    }`;
+
   }
 
   private refreshBadges() {

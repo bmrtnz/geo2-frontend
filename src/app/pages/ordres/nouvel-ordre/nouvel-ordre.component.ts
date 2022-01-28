@@ -98,6 +98,7 @@ export class NouvelOrdreComponent implements OnInit {
     this.societesService.getOne(id, [
       'id',
       'devise.id',
+      'campagne.id'
     ]).subscribe( res => {
       this.societe = res.data.societe;
     });
@@ -154,6 +155,7 @@ export class NouvelOrdreComponent implements OnInit {
         ordre: {
           // from `heriteEntrepot.pbl`
           numero,
+          campagne: { id: this.societe.campagne.id},
           dateDepartPrevue: this.dateManagementService.findDate(0),
           dateLivraisonPrevue: this.dateManagementService.findDate(1),
           societe: { id: this.societe.id },

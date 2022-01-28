@@ -747,38 +747,60 @@
         "visible": true
       },
       {
-        "visibleIndex": 0,
+        "visibleIndex": 1,
         "dataField": "ordre.codeClient",
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "ordre.codeAlphaEntrepot",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 3,
         "dataField": "ordre.referenceClient",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 4,
         "dataField": "ordre.dateDepartPrevue",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 5,
         "dataField": "ordre.dateLivraisonPrevue",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 6,
+        "dataField": "ordre.transporteur.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
         "dataField": "ordre.codeChargement",
         "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "ordre.totalNombrePalettesCommandees",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "ordre.sommeColisCommandes",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "ordre.statut",
         "visible": true
       },
       {
@@ -795,10 +817,8 @@
         "sortOrder": "desc",
         "visible": false
       },
-      {
-        "dataField": "ordre.statut",
-        "visible": true
-      }
+      { "dataField": "ordre.totalNombrePalettesExpediees", "visible": false },
+      { "dataField": "ordre.sommeColisExpedies", "visible": false }
     ]
   },
   "ordre-historique-entrepot": {
