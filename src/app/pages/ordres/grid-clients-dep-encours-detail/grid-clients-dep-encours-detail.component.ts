@@ -69,6 +69,13 @@ export class GridClientsDepEncoursDetailComponent implements OnInit {
 
   onCellPrepared(event) {
     if (event.rowType !== 'data') return;
+
+    // Formating figures: 1000000 becomes 1 000 000 €
+    if (event.column.dataType === 'number' && !event.cellElement.innerText.includes('€') ) {
+      event.cellElement.innerText =
+       event.cellElement.innerText.split('').reverse().join('').replace(/([0-9]{3})/g, '$1 ').split('').reverse().join('') + ' €';
+    }
+
     if (event.column.dataField === 'raisonSocial') {
       const originalText = (event.cellElement as HTMLElement).innerText;
       if (event.data.enCoursDouteux > 0) {

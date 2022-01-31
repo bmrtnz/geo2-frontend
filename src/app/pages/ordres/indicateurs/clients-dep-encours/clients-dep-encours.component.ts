@@ -61,6 +61,7 @@ export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.dataSource = this.indicator.dataSource;
+    console.log('2516000'.replace(/(\d{3})/g, '$1 ')+'klkl')
   }
 
   ngAfterViewInit() {
@@ -74,6 +75,16 @@ export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
       filters.push('and', ['secteur.id', '=', this.secteurSB.value.id]);
     this.dataSource.filter(filters);
     this.dataSource.reload();
+  }
+
+  onCellPrepared(e) {
+    // Formating figures: 1000000 becomes 1 000 000 €
+    if (e.rowType === 'data') {
+      if (e.column.dataType === 'number' && !e.cellElement.innerText.includes('€') ) {
+        e.cellElement.innerText =
+        e.cellElement.innerText.split('').reverse().join('').replace(/([0-9]{3})/g, '$1 ').split('').reverse().join('') + ' €';
+      }
+    }
   }
 
 }
