@@ -321,6 +321,9 @@ export class GridConfiguratorService {
         onClick: async () => {
           const defaultState = await this.fetchDefaultConfig(grid);
           component.state(defaultState);
+          // component.refresh();
+          component.option('columns', defaultState.columns);
+          // component.option('stateStoring').customLoad.call();
           if (onConfigReload) onConfigReload(defaultState);
           if (onColumnsChange) onColumnsChange({current: defaultState.columns});
         }
