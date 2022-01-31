@@ -2034,9 +2034,14 @@
       },
       {
         "visibleIndex": 9,
-        "dataField": "statut",
+        "dataField": "ordre.statut",
         "visible": true
       },
+      {
+        "visibleIndex": 10,
+        "dataField": "codeChargement",
+        "visible": true
+      },     
       { "dataField": "version" },
       { "dataField": "colis" },
       { "dataField": "palette" },
@@ -2053,54 +2058,6 @@
       { "dataField": "fournisseurCodePostal", "visible": false },
       { "dataField": "fournisseurPays", "visible": false },
       { "dataField": "flagEntrepot", "visible": false }
-    ]
-  },
-
-  "planning-transporteurs-approche": {
-    "columns": [
-      {
-        "visibleIndex": 0,
-        "dataField": "entrepot.raisonSocial",
-        "visible": true
-      },
-      {
-        "visibleIndex": 1,
-        "dataField": "numero",
-        "visible": true
-      },
-      {
-        "visibleIndex": 2,
-        "dataField": "version",
-        "visible": true
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "logistiques.fournisseur.code",
-        "visible": true
-      },
-      {
-        "visibleIndex": 4,
-        "dataField": "entrepot.codePostal",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "entrepot.ville",
-        "visible": true
-      },
-      {
-        "visibleIndex": 6,
-        "dataField": "entrepot.pays.id",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "societe.id",
-        "visible": true
-      },
-      { "dataField": "transporteur.id" },
-      { "dataField": "id" },
-      { "dataField": "entrepot.id" }
     ]
   },
   "planning-fournisseurs": {

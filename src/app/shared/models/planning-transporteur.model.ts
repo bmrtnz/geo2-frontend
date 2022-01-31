@@ -1,7 +1,9 @@
 import { Field, Model } from './model';
+import Ordre from './ordre.model';
 
 export class PlanningTransporteur extends Model {
   @Field({ asKey: true }) id: number;
+  @Field({model: import('./ordre.model')}) public ordre?: Ordre;
   @Field() codeChargement: string;
   @Field() numero: string;
   @Field({ dataType: 'localdate' }) dateLivraisonPrevue: string;
