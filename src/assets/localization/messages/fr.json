@@ -666,6 +666,7 @@
     "ordresTransporteur-palette": "Palette",
     "ordresTransporteur-colis": "Type colis",
     "ordresTransporteur-flagEntrepot": "Flag entrepôt",
+    "ordresTransporteur-statut": "Statut",
 
     "ordreLignesPalox-logistique-dateDepartPrevueFournisseur": "Chargement",
     "ordreLignesPalox-logistique-fournisseur-code": "Fournisseur",

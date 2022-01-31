@@ -132,10 +132,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.formGroup.get('secteurCode').reset();
 
     if (this.authService.currentUser.secteurCommercial) {
-      this.formGroup.get('secteurCode').patchValue({
-        id : this.authService.currentUser.secteurCommercial.id,
-        description : this.authService.currentUser.secteurCommercial.description
-      });
+      this.formGroup.get('secteurCode').patchValue(this.authService.currentUser.secteurCommercial);
     }
 
     // Fill commercial/assistante input from user role

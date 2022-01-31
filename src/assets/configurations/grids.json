@@ -2037,11 +2037,6 @@
         "dataField": "statut",
         "visible": true
       },
-      {
-        "visibleIndex": 10,
-        "dataField": "codeChargement",
-        "visible": true
-      },   
       { "dataField": "version" },
       { "dataField": "colis" },
       { "dataField": "palette" },
@@ -2671,7 +2666,10 @@
       {
         "visibleIndex": 2,
         "dataField": "clientsSommeEnCoursTemporaire",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "largeNumber"
+        }
       },
       {
         "visibleIndex": 3,
