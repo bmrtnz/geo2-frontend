@@ -2623,7 +2623,10 @@
       {
         "visibleIndex": 2,
         "dataField": "clientsSommeEnCoursTemporaire",
-        "visible": true
+        "visible": true,
+        "format": {
+          "type": "largeNumber"
+        }
       },
       {
         "visibleIndex": 3,

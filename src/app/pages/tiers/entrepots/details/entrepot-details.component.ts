@@ -100,7 +100,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   createMode = false;
   ifcoChecked = false;
   preSaisie: string;
- 
+
   constructor(
     private fb: FormBuilder,
     private formUtils: FormUtilsService,
@@ -319,7 +319,9 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   displayIDBefore(data) {
-    return data ? (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+    return data ? (data.id + ' - ' +
+    (data.nomUtilisateur ? data.nomUtilisateur :
+      (data.raisonSocial ? data.raisonSocial : data.description))) : null;
   }
 
   displayEntrepot(data) {
