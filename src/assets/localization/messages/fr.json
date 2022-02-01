@@ -193,6 +193,7 @@
     "tiers-clients-enCours61a90": "61 à 90 j",
     "tiers-clients-enCours90Plus": "+ de 90 j",
     "tiers-clients-alerteCoface": "COFACE !!",
+    "tiers-clients-enCoursDouteux": "Encours douteux",
 
     "tiers-clients-details-title": "Fiche client",
     "tiers-clients-details-groupe-infos": "Infos générales",
@@ -968,7 +969,7 @@
     "grid-situation-depart-title": "Situation des départs",
     "grid-situation-depart-title-today": "Situation des départs d'aujourd'hui",
     "grid-situation-depart-detail-title": "Détail des lignes",
-    "grid-depassement-encours-pays-title": "Somme par pays",
+    "grid-depassement-encours-pays-title": "Total par pays",
     "grid-depassement-encours-client-title": "Détail des clients",
 
     "ordres-planningFournisseurs-afficherPrix": "Afficher les prix",
