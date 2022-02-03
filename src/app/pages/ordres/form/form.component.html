@@ -576,28 +576,28 @@
                 }}</span>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="false"
+                  [disabled]="!fullOrderNumber"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{ 'hint-source-stock' | localize }}"
                   text="{{ 'btn-stock' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="false"
+                  [disabled]="!fullOrderNumber"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{ 'hint-source-refClt' | localize }}"
                   text="{{ 'btn-referenceClt' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="false"
+                  [disabled]="!fullOrderNumber"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{ 'hint-source-historique' | localize }}"
                   text="{{ 'btn-historique' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="false"
+                  [disabled]="!fullOrderNumber"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{ 'hint-source-manuel' | localize }}"
                   (onClick)="onArticleManClick()"
@@ -605,6 +605,7 @@
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton shiftedRight"
+                  [disabled]="!fullOrderNumber"
                   type="default"
                   height="auto"
                   icon="material-icons info"

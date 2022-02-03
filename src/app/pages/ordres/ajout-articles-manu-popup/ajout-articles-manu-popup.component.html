@@ -4,7 +4,7 @@
   [closeOnOutsideClick]="true"
   [title]="title"
   [(visible)]="visible"
-  (onShowing)="onShowing()"
+  [elementAttr]="{ class: 'ajout-manu-articles' }"
 >
     <!-- code article -->
     <div class="dx-field quickCode-area">
@@ -24,9 +24,10 @@
     <dx-button class="cancel-button"
         type="normal"
         text="{{ 'btn-annuler' | localize }}"
-        (onClick)="onCancel()"
+        (onClick)="clearAndHidePopup()"
     ></dx-button>
-    <dx-button
+    <dx-button #validButton
+        [ngClass]="{'pulse': pulseBtnOn}"
         class="articles-valid-button"
         type="success"
         [disabled]="articlesKO"
@@ -36,5 +37,6 @@
     ></dx-button>
     <br>
     <div style="clear:both"></div>
-    <app-articles-list (selectChange)="selectFromGrid($event)"></app-articles-list>
+    <app-articles-list [ordre]="ordre" (selectChange)="selectFromGrid($event)"></app-articles-list>
+    <br>
 </dx-popup>

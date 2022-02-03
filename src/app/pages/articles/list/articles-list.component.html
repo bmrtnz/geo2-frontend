@@ -3,8 +3,9 @@
 <div class="content-block articles-page">
   <div class="search-criteria-container">
     <div class="title-container">
-      <h6>{{ 'articles-preFilter-title' | localize }}</h6>
-      <dx-button
+      <h6 *ngIf="!ordre">{{ 'articles-preFilter-title' | localize }}</h6>
+      <h6 *ngIf="ordre">{{ 'articles-catalogue-preFilter-title' | localize }}</h6>
+      <dx-button *ngIf="!ordre"
         class="refresh"
         [class]="toRefresh ? '' : 'inactive'"
         type="default"
@@ -18,7 +19,7 @@
         <div class="dx-field">
             <div class="dx-field-label">{{ 'articles-matierePremiere-espece' | localize }}</div>
             <div class="dx-field-value">
-                <dx-tag-box
+                <dx-tag-box #especeSB
                     [dataSource]="especes"
                     (valueChange)="onFieldValueChange($event,'matierePremiere.espece.id')"
                     [searchEnabled]="true"
@@ -36,7 +37,7 @@
         <div class="dx-field field-large">
           <div class="dx-field-label">{{ 'articles-matierePremiere-variete' | localize }}</div>
           <div class="dx-field-value">
-              <dx-tag-box
+              <dx-tag-box #varieteSB
               [dataSource]="varietes"
               (valueChange)="onFieldValueChange($event,'matierePremiere.variete.description')"
               [searchEnabled]="true"
@@ -54,7 +55,7 @@
         <div class="dx-field field-large">
           <div class="dx-field-label noPadding">{{ 'articles-matierePremiere-modeCulture' | localize }}</div>
           <div class="dx-field-value">
-            <dx-tag-box
+            <dx-tag-box #modesCultureSB
                 [dataSource]="modesCulture"
                 (valueChange)="onFieldValueChange($event,'matierePremiere.modeCulture.description')"
                 [searchEnabled]="true"
@@ -72,7 +73,7 @@
         <div class="dx-field field-large">
           <div class="dx-field-label">{{ 'articles-emballage-emballage' | localize }}</div>
           <div class="dx-field-value">
-            <dx-tag-box
+            <dx-tag-box #emballageSB
                 [dataSource]="emballages"
                 (valueChange)="onFieldValueChange($event,'emballage.emballage.description')"
                 [searchEnabled]="true"
@@ -90,7 +91,7 @@
         <div class="dx-field field-large">
           <div class="dx-field-label">{{ 'articles-matierePremiere-origine' | localize }}</div>
           <div class="dx-field-value">
-            <dx-tag-box
+            <dx-tag-box #origineSB
                 [dataSource]="origines"
                 (valueChange)="onFieldValueChange($event,'matierePremiere.origine.description')"
                 [searchEnabled]="true"
@@ -108,7 +109,7 @@
        <div class="dx-field valid-field">
           <div class="dx-field-label">{{ 'articles-valide' | localize }}</div>
           <div class="dx-field-value small-field">
-            <dx-select-box #validSB
+            <dx-select-box #valideSB
                 [items]="trueFalse"
                 (valueChange)="onFieldValueChange($event,'valide')"
                 [value]="trueFalse[0]"
@@ -119,6 +120,13 @@
             </dx-select-box>
           </div>
         </div>
+        <dx-button *ngIf="ordre"
+          class="refresh"
+          [class]="toRefresh ? '' : 'inactive'"
+          type="default"
+          text="{{ 'btn-refresh' | localize }}"
+          (onClick)="refreshArticlesGrid()"
+        ></dx-button>
     </div>
   </div>
   <div style="clear:both"></div>

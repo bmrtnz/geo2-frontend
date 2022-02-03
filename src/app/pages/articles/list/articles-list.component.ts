@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, ViewChild, ViewChildren, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild, ViewChildren, Output, Input } from '@angular/core';
 import { ArticlesService} from 'app/shared/services/api/articles.service';
 import { Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
@@ -12,6 +12,7 @@ import { GridColumn } from 'basic';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
+import Ordre from 'app/shared/models/ordre.model';
 
 
 @Component({
@@ -22,12 +23,18 @@ import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/g
 export class ArticlesListComponent implements OnInit, NestedMain {
 
   @Output() selectChange = new EventEmitter<any>();
+  @Input() public ordre: Ordre;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
-  @ViewChild('validSB', { static: false }) validSB: DxSelectBoxComponent;
+  @ViewChild('especeSB', { static: false }) especeSB: DxSelectBoxComponent;
+  @ViewChild('varieteSB', { static: false }) varieteSB: DxSelectBoxComponent;
+  @ViewChild('modesCultureSB', { static: false }) modesCultureSB: DxSelectBoxComponent;
+  @ViewChild('emballageSB', { static: false }) emballageSB: DxSelectBoxComponent;
+  @ViewChild('origineSB', { static: false }) origineSB: DxSelectBoxComponent;
+  @ViewChild('valideSB', { static: false }) valideSB: DxSelectBoxComponent;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -89,13 +96,15 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   refreshArticlesGrid() {
     if (this.dataGrid.dataSource === null) this.dataGrid.dataSource = this.articles;
+    this.dataGrid.instance.repaint();
+    this.dataGrid.instance.refresh();
     this.dataGrid.instance.filter(this.allGridFilters);
     this.toRefresh = false;
   }
 
   onRowDblClick(e) {
-    if (this.dataGrid.instance.option().selection?.mode === 'none')
-      this.router.navigate([`/articles/${e.data.id}`]);
+    // If ordre is there, we're accessing from an order : no article file opening is possible
+    if (!this.ordre) this.router.navigate([`/articles/${e.data.id}`]);
   }
 
   onRowPrepared(e) {

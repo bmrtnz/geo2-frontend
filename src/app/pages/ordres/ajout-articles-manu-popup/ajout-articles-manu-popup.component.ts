@@ -1,8 +1,8 @@
-import {Component, Input, OnInit, ViewChild, AfterViewInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, ViewChild, AfterViewInit, OnChanges} from '@angular/core';
 import { ArticlesService, LocalizationService } from 'app/shared/services';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { DxDataGridComponent, DxTagBoxComponent, DxSelectBoxComponent, DxPopupComponent } from 'devextreme-angular';
+import { DxTagBoxComponent,  DxPopupComponent } from 'devextreme-angular';
 import { ArticlesListComponent } from 'app/pages/articles/list/articles-list.component';
 import Ordre from 'app/shared/models/ordre.model';
 
@@ -12,7 +12,7 @@ import Ordre from 'app/shared/models/ordre.model';
   styleUrls: ['./ajout-articles-manu-popup.component.scss']
 })
 
-export class AjoutArticlesManuPopupComponent implements OnInit, AfterViewInit {
+export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges {
 
   @Input() public ordre: Ordre;
 
@@ -22,9 +22,11 @@ export class AjoutArticlesManuPopupComponent implements OnInit, AfterViewInit {
   articlesKO = true;
   validBtnText: string;
   nbARticles: number;
+  nbArticlesOld: number;
   chosenArticles: [];
   ordreInfo = '';
   title: string;
+  pulseBtnOn: boolean;
 
   @ViewChild(ArticlesListComponent, {static: false}) catalogue: ArticlesListComponent;
   @ViewChild(DxTagBoxComponent, {static: false}) saisieCode: DxTagBoxComponent;
@@ -35,16 +37,20 @@ export class AjoutArticlesManuPopupComponent implements OnInit, AfterViewInit {
     private localizeService: LocalizationService
   ) { }
 
-  ngOnInit() {}
-
   ngAfterViewInit() {
-    this.catalogue.dataGrid.selection = {mode : 'multiple'};
-    this.catalogue.validSB.value = this.catalogue.trueFalse[1];
+    this.catalogue.dataGrid.selection = { mode : 'multiple', allowSelectAll: false };
+    this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
   }
 
-  onShowing() {
-    this.ordreInfo = this.ordre.campagne.id + '-' + this.ordre.numero + ' (' + this.ordre.client.code + ')';
-    this.title = this.localizeService.localize('ajout-articles') + this.ordreInfo;
+  ngOnChanges() {
+    this.setTitle();
+  }
+
+  setTitle() {
+    this.title = this.localizeService.localize('ajout-articles');
+    if (!this.ordre) return;
+    this.ordreInfo = 'N° ' + this.ordre.campagne.id + '-' + this.ordre.numero + ' (' + this.ordre.client.raisonSocial + ')';
+    this.title += this.ordreInfo;
   }
 
   updateChosenArticles() {
@@ -54,6 +60,11 @@ export class AjoutArticlesManuPopupComponent implements OnInit, AfterViewInit {
     this.articlesKO = !this.nbARticles;
     this.validBtnText = this.localizeService.localize('btn-valider-article' + (this.nbARticles > 1 ? 's' : ''))
     .replace('&&', this.nbARticles.toString());
+    if (this.nbARticles !== this.nbArticlesOld) {
+      this.pulseBtnOn = false;
+      setTimeout(() => this.pulseBtnOn = true, 1);
+    }
+    this.nbArticlesOld = this.nbARticles;
   }
 
   getGridSelectedArticles() {
@@ -76,14 +87,13 @@ export class AjoutArticlesManuPopupComponent implements OnInit, AfterViewInit {
   }
 
   onValueChanged(e) {
-    // We check that this change is coming from the user, not following a period change
-    if (this.codeChangeProcess) return;
+    if (this.codeChangeProcess) return; // To avoid infinite loop
     this.codeChangeProcess = true;
     const tagArray = e.component.option('value');
     if (tagArray?.length) {
       let myValue = tagArray.pop();
       if (myValue.length > 6) {
-        notify(myValue + ': longueur code incorrecte', 'error', 3000);
+        notify(myValue + ': format/type incorrects', 'error', 3000);
       } else {
         myValue = ('000000' + myValue).slice(-6);
         if (!tagArray.includes(myValue) && !this.getGridSelectedArticles().includes(myValue)) {
@@ -114,22 +124,31 @@ export class AjoutArticlesManuPopupComponent implements OnInit, AfterViewInit {
     this.updateChosenArticles();
   }
 
-  clearArticles() {
+  clearAll() {
     this.codeChangeProcess = true;
     this.saisieCode.value = null;
-    this.catalogue.dataGrid.instance.clearSelection();
+    this.catalogue.dataGrid.dataSource = null;
+    this.catalogue.dataGrid.instance.refresh();
     this.updateChosenArticles();
+    this.catalogue.especeSB.value = [];
+    this.catalogue.varieteSB.value = [];
+    this.catalogue.modesCultureSB.value = [];
+    this.catalogue.emballageSB.value = [];
+    this.catalogue.origineSB.value = [];
     this.codeChangeProcess = false;
   }
 
   insertArticles() {
     // Utiliser l'array this.chosenArticles qui contient les id de la saisie directe
     // ET des articles sélectionnés dans la grid du catalogue
+    // + this.ordre pour avoir les infos correspondantes
+
+    this.clearAndHidePopup();
   }
 
-  onCancel() {
+  clearAndHidePopup() {
     this.popup.visible = false;
-    this.clearArticles();
+    this.clearAll();
   }
 
 }

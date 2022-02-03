@@ -170,6 +170,10 @@ body {
   transform: translateX(-50%) !important;
 }
 
+.dx-toast-warning {
+  background-color: #ff7f07;
+}
+
 .dx-invalid-message > .dx-overlay-content {
   background-color: rgba(255,255,255,1);
   font-size: 14px;
@@ -195,4 +199,19 @@ body {
       line-height: 17px;
     }
   }
+}
+
+// For big popup contents
+.dx-popup-normal {
+  overflow-y: auto;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1.2);
+	}
+
+	50% {
+		transform: scale(1);
+	}
 }

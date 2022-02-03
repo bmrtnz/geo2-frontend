@@ -72,7 +72,7 @@
     "create": "Création",
     "clone": "Clone",
     "preSaisie": "(Pré-saisie)",
-    "ajout-articles": "Ajouter des articles - Ordre ",
+    "ajout-articles": "Ajout d'articles sur l'ordre ",
     "ajout-code": "Code...",
 
     "button-bascule-clients-valide": "CV",
@@ -460,7 +460,8 @@
     "articles-title" : "Articles",
     "articles-saisieCode": "Saisie directe code(s) :",
     "articles-saisieCode-erreur": "Code article",
-    "articles-preFilter-title" : "Pré-filtrage",
+    "articles-preFilter-title": "Pré-filtrage",
+    "articles-catalogue-preFilter-title": "Ou/et sélection via le catalogue",
     "articles-detailTitle": "Détail",
     "articles-of": "de",
     "articles-id": "Code",

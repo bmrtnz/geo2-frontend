@@ -3,7 +3,7 @@
     display: none;
 }
 ::ng-deep .articles-page .search-criteria-subcontainer {
-    overflow: hidden;
+    // overflow: hidden;
     .dx-field {
         float: left;
         margin-right: 15px;
@@ -53,6 +53,11 @@
             width: 34px
         }
     }
+    .refresh {
+        top: 0;
+        margin-left: 10px;
+        float: left;
+    }
 }
 
 h6 {
@@ -69,4 +74,4 @@ h6 {
 .inactive {
     opacity: 0.2;
     pointer-events: none;
-  }
+}
