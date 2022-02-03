@@ -133,7 +133,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
         }
       });
 
-    this.pays = this.paysService.getDataSource();
+    this.pays = this.paysService.getDataSource_v2(['id', 'description']);
     this.pays.filter(['valide', '=', 'true']);
     this.regimesTva = this.regimesTvaService.getDataSource();
     this.devises = this.devisesService.getDataSource();

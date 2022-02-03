@@ -299,7 +299,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       ['nomUtilisateur', '<>', 'null']
     ]);
 
-    this.pays = this.paysService.getDataSource();
+    this.pays = this.paysService.getDataSource_v2(['id', 'description']);
     this.pays.filter(['valide', '=', 'true']);
     this.secteurs.filter([
       ['valide', '=', true],

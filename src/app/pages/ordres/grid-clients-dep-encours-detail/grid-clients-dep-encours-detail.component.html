@@ -9,6 +9,7 @@
   [scrolling]="{
     useNative:true
   }"
+  (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       title,
