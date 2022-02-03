@@ -222,7 +222,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         this.contentReadyEvent.emit();
       });
 
-    this.pays = this.paysService.getDataSource();
+    this.pays = this.paysService.getDataSource_v2(['id', 'description']);
     this.pays.filter(['valide', '=', 'true']);
     this.bureauxAchat = this.bureauxAchatService.getDataSource_v2(['id', 'raisonSocial']);
     this.identifiant = this.identifiantsFournisseurService.getDataSource();

@@ -210,7 +210,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     ]);
 
     this.modesLivraison = this.modesLivraisonService.getDataSource();
-    this.pays = this.paysService.getDataSource();
+    this.pays = this.paysService.getDataSource_v2(['id', 'description']);
     this.pays.filter(['valide', '=', 'true']);
     this.typesPalette = this.typesPaletteService.getDataSource();
     this.incoterms = this.incotermsService.getDataSource();

@@ -76,6 +76,25 @@ export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
     this.dataSource.reload();
   }
 
+  capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+  onCellPrepared(e) {
+    // Formating figures: 1000000 becomes 1 000 000 €
+    if (e.rowType === 'data') {
+      if (e.column.dataType === 'number' && !e.cellElement.innerText.includes('€') ) {
+        e.cellElement.innerText =
+        e.cellElement.innerText.split('').reverse().join('').replace(/([0-9]{3})/g, '$1 ').split('').reverse().join('') + ' €';
+      } else {
+        if (e.column.dataField === 'description') {
+          e.cellElement.innerText = this.capitalize(e.cellElement.innerText);
+        }
+      }
+    }
+
+  }
+
 }
 
 export default ClientsDepEncoursComponent;

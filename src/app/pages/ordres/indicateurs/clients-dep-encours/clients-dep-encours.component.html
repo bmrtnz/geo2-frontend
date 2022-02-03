@@ -12,6 +12,7 @@
             [dataSource]="secteurs"
             displayExpr="description"
             [searchEnabled]="true"
+            [showClearButton]="true"
             searchExpr="description"
             (valueChange)="enableFilters()"
           ></dx-select-box>
@@ -33,6 +34,7 @@
     [scrolling]="{
       useNative:true
     }"
+    (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         title,

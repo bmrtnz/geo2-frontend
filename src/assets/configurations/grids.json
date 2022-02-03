@@ -2038,7 +2038,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 12,
         "dataField": "codeChargement",
         "visible": true
       },     
@@ -2047,9 +2047,9 @@
       { "dataField": "palette" },
       { "dataField": "entrepotCodePostal" },
       { "dataField": "entrepotVille" },
+      { "dataField": "ordre.id" },
       { "dataField": "entrepotPays" },
       { "dataField": "id", "visible": false },
-      { "dataField": "codeChargement", "visible": false },
       { "dataField": "sommeColisPalette", "visible": false },
       { "dataField": "entrepot", "visible": false },
       { "dataField": "transporteur", "visible": false },
