@@ -122,6 +122,11 @@ export class AjoutArticlesManuPopupComponent implements OnInit, AfterViewInit {
     this.codeChangeProcess = false;
   }
 
+  insertArticles() {
+    // Utiliser l'array this.chosenArticles qui contient les id de la saisie directe
+    // ET des articles sélectionnés dans la grid du catalogue
+  }
+
   onCancel() {
     this.popup.visible = false;
     this.clearArticles();
