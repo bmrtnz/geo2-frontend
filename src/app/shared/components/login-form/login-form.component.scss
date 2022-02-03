@@ -1,8 +1,14 @@
 @import "../../../../themes/generated/variables.base.scss";
 
+@import "../../../../themes/generated/variables.base.scss";
+
 .login-header {
   text-align: center;
   margin-bottom: 40px;
+
+  .login-logo {
+    line-height: 0;
+  }
 
   .title, .subtitle {
     color: $base-accent;
@@ -15,6 +21,12 @@
   .subtitle {
     color: $base-text-color;
     font-size: 16px;
+  }
+
+  .version {
+    color: $base-accent;
+    margin-bottom: 11px;
+    line-height: 10px;
   }
 
 }
