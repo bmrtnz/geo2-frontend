@@ -26,6 +26,9 @@ export class PaysService extends ApiService implements APIRead, APICount<CountRe
     super(apollo, Pays);
   }
 
+  /**
+   * @deprecated Use getDataSource_v2
+   */
   getDataSource(depth = 1, filter = this.fieldsFilter, operation = Operation.All) {
     return new DataSource({
       sort: [
@@ -59,6 +62,47 @@ export class PaysService extends ApiService implements APIRead, APICount<CountRe
               resolve(new Pays(res.data.pays));
           });
         }),
+      }),
+    });
+  }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { pays: Pays };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.pays)
+            resolve(new Pays(res.data.pays));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [
+        { selector: this.model.getKeyField() }
+      ],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allPays: RelayPage<Pays> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = this.mapLoadOptionsToVariables(options);
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allPays) {
+              resolve(this.asInstancedListCount(res.data.allPays));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
       }),
     });
   }
