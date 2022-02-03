@@ -80,6 +80,8 @@ import { GridEntrepotsComponent } from './grid-entrepots/grid-entrepots.componen
 import { GridHistoriqueEntrepotsComponent } from './grid-historique-entrepots/grid-historique-entrepots.component';
 import { ButtonLoaderModule } from 'app/shared/components/button-loader/button-loader.component';
 import { SupervisionAFacturerComponent } from './indicateurs/supervision-a-facturer/supervision-a-facturer.component';
+import { AjoutArticlesManuPopupComponent } from './ajout-articles-manu-popup/ajout-articles-manu-popup.component';
+import { ArticlesModule } from '../articles/articles.module';
 
 @NgModule({
   declarations: [
@@ -123,12 +125,14 @@ import { SupervisionAFacturerComponent } from './indicateurs/supervision-a-factu
     GridEntrepotsComponent,
     GridHistoriqueEntrepotsComponent,
     SupervisionAFacturerComponent,
+    AjoutArticlesManuPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    ArticlesModule,
     DxNumberBoxModule,
     DxFormModule,
     DxTagBoxModule,

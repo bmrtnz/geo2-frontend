@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -15,13 +15,14 @@ import { PortsService } from 'app/shared/services/api/ports.service';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
-import { DxAccordionComponent, DxTextBoxComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxTextBoxComponent, DxPopupComponent } from 'devextreme-angular';
 import { dxElement } from 'devextreme/core/element';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { of, Subject } from 'rxjs';
 import { concatMap, filter, first, map, switchMap, takeUntil } from 'rxjs/operators';
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
+import { AjoutArticlesManuPopupComponent } from '../ajout-articles-manu-popup/ajout-articles-manu-popup.component';
 
 /**
  * Grid with loading toggled by parent
@@ -59,6 +60,7 @@ let self;
 export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Output() public ordre: Ordre;
+  @Output() openArticleManuPopup = new EventEmitter<any>();
 
   private destroy = new Subject<boolean>();
   private anchorsInitialized = false;
@@ -134,6 +136,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('comLog', { static: false }) comLog: DxTextBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
   @ViewChildren('anchor') anchors: QueryList<ElementRef|DxAccordionComponent>;
+  @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
 
   constructor(
     private router: Router,
@@ -254,6 +257,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   fileManagerClick() {
     this.fileManagerComponent.visible = true;
+  }
+
+  onArticleManClick() {
+    this.ajoutArtManu.visible = true;
   }
 
   detailExp() {

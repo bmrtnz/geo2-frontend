@@ -1,11 +1,11 @@
-import { Component, OnInit, EventEmitter, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild, ViewChildren, Output } from '@angular/core';
 import { ArticlesService} from 'app/shared/services/api/articles.service';
 import { Router} from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { ApiService } from 'app/shared/services/api.service';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { DxDataGridComponent, DxTagBoxComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxTagBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
 import { ClientsService, LocalizationService } from 'app/shared/services';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { GridColumn } from 'basic';
@@ -21,10 +21,13 @@ import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/g
 })
 export class ArticlesListComponent implements OnInit, NestedMain {
 
+  @Output() selectChange = new EventEmitter<any>();
+
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  @ViewChild('validSB', { static: false }) validSB: DxSelectBoxComponent;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -34,7 +37,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   varietes: DataSource;
   emballages: DataSource;
   modesCulture: DataSource;
-  trueFalse: string[];
+  trueFalse: any;
   initialSpecy: any;
   allGridFilters: any;
   toRefresh: boolean;
@@ -80,6 +83,10 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
   }
 
+  onSelectionChanged(e) {
+    this.selectChange.emit(e);
+  }
+
   refreshArticlesGrid() {
     if (this.dataGrid.dataSource === null) this.dataGrid.dataSource = this.articles;
     this.dataGrid.instance.filter(this.allGridFilters);
@@ -87,7 +94,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   }
 
   onRowDblClick(e) {
-    this.router.navigate([`/articles/${e.data.id}`]);
+    if (this.dataGrid.instance.option().selection?.mode === 'none')
+      this.router.navigate([`/articles/${e.data.id}`]);
   }
 
   onRowPrepared(e) {

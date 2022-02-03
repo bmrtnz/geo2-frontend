@@ -1,4 +1,4 @@
-<h2 class="content-block">{{ 'articles-title' | localize }}</h2>
+<h2 class="content-block articles-title">{{ 'articles-title' | localize }}</h2>
 
 <div class="content-block articles-page">
   <div class="search-criteria-container">
@@ -108,7 +108,7 @@
        <div class="dx-field valid-field">
           <div class="dx-field-label">{{ 'articles-valide' | localize }}</div>
           <div class="dx-field-value small-field">
-            <dx-select-box
+            <dx-select-box #validSB
                 [items]="trueFalse"
                 (valueChange)="onFieldValueChange($event,'valide')"
                 [value]="trueFalse[0]"
@@ -135,6 +135,7 @@
     (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event);"
     (onContentReady)="contentReadyEvent.emit($event)"
+    (onSelectionChanged)="onSelectionChanged($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Article)"
   >
     <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>

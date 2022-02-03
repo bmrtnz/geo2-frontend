@@ -40,5 +40,6 @@ import { ViewDocumentPopupModule } from 'app/shared/components/view-document-pop
     ],
   declarations: [ArticleDetailsComponent, ArticlesListComponent],
   providers: [NestedGuard, EditingGuard],
+  exports: [ArticlesListComponent]
 })
 export class ArticlesModule { }
