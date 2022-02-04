@@ -89,4 +89,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
   }
 
+  onRowClick({ rowIndex }) {
+    this.datagrid.instance.editRow(rowIndex);
+  }
+
+  onEditingStart(e) {
+  }
 }

@@ -7,6 +7,8 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onCellPrepared)="onCellPrepared($event)"
+    (onRowClick)="onRowClick($event)"
+    (onEditingStart)="onEditingStart($event)"
     (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Lignes de commande', $event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
     [scrolling]="{
       useNative:true
@@ -32,6 +34,10 @@
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-editing
+      [allowUpdating]="true"
+    >
+    </dxo-editing>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"
@@ -48,6 +54,7 @@
       [caption]="('ordreLignes-' + column.dataField?.split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
+      [allowEditing]="column.allowEditing"
       [dataType]="column?.dataType"
       [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
       [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"

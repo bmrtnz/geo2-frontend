@@ -954,24 +954,28 @@
         "dataField": "numero",
         "dataType": "string",
         "sortOrder": "asc",
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 1,
         "dataField": "ordre.id",
         "dataType": "string",
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "id",
         "dataType": "string",
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "article.id",
         "dataType": "string",
+        "allowEditing": false,
         "visible": true
       },
       {
@@ -981,13 +985,14 @@
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 5,
         "dataField": "nombrePalettesCommandees",
         "dataType": "number",
+        "allowEditing": false,
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 6,
         "dataField": "nombrePalettesIntermediaires",
         "dataType": "number",
         "visible": true
