@@ -985,9 +985,9 @@
                       formControlName="paloxRaisonSocial"
                       [readOnly]="readOnlyMode"
                       [dataSource]="paloxRaisonSocial"
-                      displayExpr="raisonSocial"
+                      [displayExpr]="displayCodeBefore"
                       [searchEnabled]="true"
-                      [searchExpr]="['id','raisonSocial']"
+                      [searchExpr]="['code','raisonSocial']"
                     >
                     </dx-select-box>
                   </div>

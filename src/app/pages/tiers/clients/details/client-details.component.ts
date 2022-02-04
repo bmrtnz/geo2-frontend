@@ -318,8 +318,11 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     this.basesTarif = this.basesTarifService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
-    this.paloxRaisonSocial = this.clientsService.getDataSource_v2(['id', 'raisonSocial']);
-    this.paloxRaisonSocial.filter(['secteur.id', '=', 'PAL']);
+    this.paloxRaisonSocial = this.clientsService.getDataSource_v2(['id', 'code', 'raisonSocial']);
+    this.paloxRaisonSocial.filter([['secteur.id', '=', 'PAL'],
+      'and', ['societe.id', '=', this.currentCompanyService.getCompany().id],
+      'and', ['valide', '=', true],
+    ]);
 
   }
 
@@ -351,6 +354,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
     return data ?
     (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
      : null;
+  }
+
+  displayCodeBefore(data) {
+    return data ? data.code + ' - ' + data.raisonSocial : null;
   }
 
   onRefusCofaceChange(e) {
