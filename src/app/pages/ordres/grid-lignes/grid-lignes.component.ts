@@ -25,6 +25,11 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   private gridConfig: Promise<GridConfig>;
+  public currentfocusedRow: number;
+  public gridRowsTotal: number;
+  public lastRowFocused: boolean;
+  public currNumero: string;
+  public switchNumero: string;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -33,7 +38,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigne);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
-
+    this.moveRowUpDown = this.moveRowUpDown.bind(this);
   }
 
   async ngOnInit() {
@@ -95,4 +100,20 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   onEditingStart(e) {
   }
+
+  onFocusedRowChanged(e) {
+    this.gridRowsTotal = this.datagrid.instance.getVisibleRows().length;
+    this.currentfocusedRow = e.row.rowIndex;
+    this.lastRowFocused = (this.currentfocusedRow === (this.gridRowsTotal - 1));
+  }
+
+  moveRowUpDown(e) {
+    const moveDirection = e.element.classList.contains('up-move-button') ? -1 : 1;
+    this.currNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow].data.numero;
+    this.switchNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
+    this.datagrid.instance.cellValue(this.currentfocusedRow + moveDirection, 'numero', this.currNumero);
+    this.datagrid.instance.cellValue(this.currentfocusedRow, 'numero', this.switchNumero);
+    this.datagrid.instance.saveEditData();
+  }
+
 }

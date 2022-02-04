@@ -50,6 +50,18 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
+  private byKey(depth: number, filter: RegExp) {
+    return key => new Promise(async (resolve) => {
+      const query = await this.buildGetOne(depth, filter);
+      type Response = { ordreLigne: OrdreLigne };
+      const variables = { id: key };
+      this.listenQuery<Response>(query, { variables }, res => {
+        if (res.data && res.data.ordreLigne)
+          resolve(new OrdreLigne(res.data.ordreLigne));
+      });
+    });
+  }
+
   private byKey_v2(columns: Array<string>) {
     return (key) =>
       new Promise(async (resolve) => {
@@ -63,6 +75,31 @@ export class OrdreLignesService extends ApiService implements APIRead {
       });
   }
 
+  // getDataSource_v2(columns: Array<string>) {
+  //   return new DataSource({
+  //     store: this.createCustomStore({
+  //       load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+  //         if (options.group)
+  //           return this.loadDistinctQuery(options, res => {
+  //             if (res.data && res.data.distinct)
+  //               resolve(this.asListCount(res.data.distinct));
+  //           });
+
+  //         type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
+  //         const query = await this.buildGetAll_v2(columns);
+  //         const variables = this.mapLoadOptionsToVariables(options);
+  //         this.listenQuery<Response>(query, { variables }, res => {
+  //           if (res.data && res.data.allOrdreLigne) {
+  //             resolve(this.asInstancedListCount(res.data.allOrdreLigne));
+  //           }
+  //         });
+  //       }),
+  //       byKey: this.byKey_v2(columns),
+  //     }),
+  //   });
+  // }
+
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       store: this.createCustomStore({
@@ -74,19 +111,31 @@ export class OrdreLignesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
           const query = await this.buildGetAll_v2(columns);
+          type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
           const variables = this.mapLoadOptionsToVariables(options);
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allOrdreLigne) {
+
+          this.listenQuery<Response>(query, {
+            variables,
+            fetchPolicy: 'network-only', // to work with editable dx-grid
+          }, res => {
+            if (res.data && res.data.allOrdreLigne)
               resolve(this.asInstancedListCount(res.data.allOrdreLigne));
-            }
           });
         }),
-        byKey: this.byKey_v2(columns),
+        byKey: (key) => new Promise(async (resolve) => {
+          const query = await this.buildGetOne_v2(columns);
+          type Response = { ordreLigne: OrdreLigne };
+          const variables = { id: key };
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.ordreLigne)
+              resolve(new OrdreLigne(res.data.ordreLigne));
+          });
+        }),
       }),
     });
   }
+
 
   getSummarisedDatasource(
     operation: SummaryOperation,
@@ -134,19 +183,20 @@ export class OrdreLignesService extends ApiService implements APIRead {
           });
         }),
         byKey: this.byKey_v2(columns),
+        insert: (values) => {
+          const variables = { ordreLigne: values };
+          return this.watchSaveQuery({ variables }).toPromise();
+        },
+        update: (key, values) => {
+          const variables = { ordreLigne: { id: key, ...values } };
+          return this.watchSaveQuery({ variables }).toPromise();
+        },
+        remove: (key) => {
+          const variables = { id: key };
+          return this.watchDeleteQuery({ variables }).toPromise();
+        },
       }),
     });
   }
 
-  private byKey(depth: number, filter: RegExp) {
-    return key => new Promise(async (resolve) => {
-      const query = await this.buildGetOne(depth, filter);
-      type Response = { ordreLigne: OrdreLigne };
-      const variables = { id: key };
-      this.listenQuery<Response>(query, { variables }, res => {
-        if (res.data && res.data.ordreLigne)
-          resolve(new OrdreLigne(res.data.ordreLigne));
-      });
-    });
-  }
 }

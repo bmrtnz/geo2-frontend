@@ -1,0 +1,9 @@
+.down-move-button, .up-move-button {
+    position: absolute;
+    z-index: 2;
+    margin-top: 6px;
+    right: 220px;
+    &.down-move-button {
+        right: 149px;
+    }
+}

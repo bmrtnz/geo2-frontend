@@ -88,6 +88,8 @@
     "hint-source-stock": "du stock",
     "hint-source-historique": "de l'historique client",
     "hint-source-refClt": "des références client",
+    "hint-deplacer-ligne-haut": "Déplacer la ligne vers le haut",
+    "hint-deplacer-ligne-bas": "Déplacer la ligne vers le bas",
 
     "text-clients-popup-documents": "N'oubliez pas de joindre les documents obligatoires !",
     "text-fournisseurs-popup-documents": "N'oubliez pas de joindre CGA signées (OBLIGATOIRE) et certifications si nécessaire",
@@ -733,6 +735,7 @@
     "ordreLignes-paletteInter-description": "Type Pal. Inter",
     "ordreLignes-fraisPrixUnitaire": "Frais fab div",
     "ordreLignes-tauxRemiseSurFacture": "Rem. sur fact",
+    "ordreLignes-fraisCommentaires": "Commentaires frais",
     "ordreLignes-tauxRemiseHorsFacture": "Rem. hors fact",
     "ordreLignes-articleKit": "Kit",
     "ordreLignes-gtinColisKit": "GTIN Kit",
