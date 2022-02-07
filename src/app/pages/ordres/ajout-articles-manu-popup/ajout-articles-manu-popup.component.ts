@@ -25,7 +25,8 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   nbArticlesOld: number;
   chosenArticles: [];
   ordreInfo = '';
-  title: string;
+  titleStart: string;
+  titleEnd: string;
   pulseBtnOn: boolean;
 
   @ViewChild(ArticlesListComponent, {static: false}) catalogue: ArticlesListComponent;
@@ -47,10 +48,9 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   }
 
   setTitle() {
-    this.title = this.localizeService.localize('ajout-articles');
+    this.titleStart = this.localizeService.localize('ajout-articles');
     if (!this.ordre) return;
-    this.ordreInfo = 'N° ' + this.ordre.campagne.id + '-' + this.ordre.numero + ' (' + this.ordre.client.raisonSocial + ')';
-    this.title += this.ordreInfo;
+    this.titleEnd = 'n° ' + this.ordre.campagne.id + '-' + this.ordre.numero + ' - ' + this.ordre.client.raisonSocial;
   }
 
   updateChosenArticles() {
@@ -138,17 +138,21 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
     this.codeChangeProcess = false;
   }
 
+  hidePopup() {
+    this.popup.visible = false;
+  }
+
+  clearAndHidePopup() {
+    this.hidePopup();
+    this.clearAll();
+  }
+
   insertArticles() {
     // Utiliser l'array this.chosenArticles qui contient les id de la saisie directe
     // ET des articles sélectionnés dans la grid du catalogue
     // + this.ordre pour avoir les infos correspondantes
 
     this.clearAndHidePopup();
-  }
-
-  clearAndHidePopup() {
-    this.popup.visible = false;
-    this.clearAll();
   }
 
 }

@@ -1,3 +1,5 @@
+// Var
+@import "~themes/generated/variables.base";
 
 ::ng-deep .dx-popup-content .articles-title {
     display: none;
@@ -35,4 +37,23 @@
 	0% {transform: scale(1);}
 	50% {transform: scale(1.1);}
     100% {transform: scale(1);}
+}
+
+.dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+    .title-start, .title-end {
+        font-size: 20px;
+        font-weight: 500;
+        float: left;
+        margin: 10px 0;
+        line-height: 29px;
+    }
+    .title-end {
+        font-size: 22px;
+        color: $base-accent;
+    }
+    .close-article-popup {
+        top: 5px;
+        float: right;
+    }
 }
