@@ -58,4 +58,33 @@ export class FunctionsService {
       fetchPolicy: 'network-only',
     })
 
+  /**
+   * Génère une nouvelle ligne d'ordre avec l'article sélectionné.
+   */
+  public ofInitArticle =
+    (ordreRef: string, articleRef: string, societeCode: string) => this.apollo
+    .watchQuery<{ofInitArticle: FunctionResponse}>({
+      query: gql(ApiService.buildGraph(
+        'query',
+        [
+          {
+            name: 'ofInitArticle',
+            body,
+            params: [
+              { name: 'ordreRef', value: 'ordreRef', isVariable: true },
+              { name: 'ordreRef', value: 'ordreRef', isVariable: true },
+              { name: 'societeCode', value: 'societeCode', isVariable: true },
+            ]
+          }
+        ],
+        [
+          { name: 'ordreRef', type: 'String', isOptionnal: false },
+          { name: 'articleRef', type: 'String', isOptionnal: false },
+          { name: 'societeCode', type: 'String', isOptionnal: false },
+        ],
+      )),
+      variables: { ordreRef, articleRef, societeCode },
+      fetchPolicy: 'network-only',
+    })
+
 }

@@ -31,6 +31,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   companiesLoading = false;
   @ViewChild('submitButton', { static: false }) submitButton: DxButtonComponent;
   @ViewChild('societeSB', { static: false }) societeSB: DxSelectBoxComponent;
+  public version = require('../../../../../package.json').version;
 
   autoSubmit = false;
 
