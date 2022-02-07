@@ -72,7 +72,7 @@ export class FunctionsService {
             body,
             params: [
               { name: 'ordreRef', value: 'ordreRef', isVariable: true },
-              { name: 'ordreRef', value: 'ordreRef', isVariable: true },
+              { name: 'articleRef', value: 'articleRef', isVariable: true },
               { name: 'societeCode', value: 'societeCode', isVariable: true },
             ]
           }
