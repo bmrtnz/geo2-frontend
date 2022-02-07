@@ -56,7 +56,7 @@
       <dxo-filter-row [visible]="true"></dxo-filter-row>
       <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
       <dxo-editing
-        [allowUpdating]="true"
+        [allowUpdating]="!env.production"
       >
       </dxo-editing>
       <!-- <dxo-row-dragging

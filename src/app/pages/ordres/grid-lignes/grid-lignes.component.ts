@@ -30,6 +30,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public lastRowFocused: boolean;
   public currNumero: string;
   public switchNumero: string;
+  public env = environment;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
