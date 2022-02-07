@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Apollo, gql } from 'apollo-angular';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
+import { takeWhile } from 'rxjs/operators';
 import { OrdreLigne } from '../../models/ordre-ligne.model';
 import { APIRead, ApiService, RelayPage, SummaryInput } from '../api.service';
 
@@ -152,35 +153,25 @@ export class OrdreLignesService extends ApiService implements APIRead {
                 resolve(this.asListCount(res.data.distinct));
             });
 
-          const query = `
-            query ${ operation.ucFirst() }($search: String!, $pageable: PaginationInput!, $summary: [SummaryInput]) {
-              ${ operation }(search:$search, pageable:$pageable) {
-                edges {
-                  node {
-                    ${await this.model.getGQLObservable(columns).toPromise()}
-                  }
-                }
-                pageInfo {
-                  startCursor
-                  endCursor
-                  hasPreviousPage
-                  hasNextPage
-                }
-                totalCount
-                summary(summaries:$summary, of:"${ operation }")
-              }
-            }
-          `;
+          const queryGraph = this.buildGetSummaryGraph(
+            operation,
+            columns.map( c => `edges.node.${ c }`),
+            summary,
+          );
           type Response = { [operation: string]: RelayPage<OrdreLigne> };
           const variables = {
             ...this.mapLoadOptionsToVariables(options),
             summary,
           };
 
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data[operation])
-              resolve(this.asInstancedListCount(res.data[operation]));
-          });
+          this.apollo.query<Response>({
+            query: gql(queryGraph),
+            variables,
+            fetchPolicy: 'no-cache',
+          })
+          .pipe(takeWhile(res => res.loading === false))
+          .subscribe(({data}) => resolve(this.asInstancedListCount(data[operation])));
+
         }),
         byKey: this.byKey_v2(columns),
         insert: (values) => {

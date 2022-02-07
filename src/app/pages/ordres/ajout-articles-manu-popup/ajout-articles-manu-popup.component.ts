@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { ArticlesListComponent } from 'app/pages/articles/list/articles-list.component';
 import Ordre from 'app/shared/models/ordre.model';
 import { ArticlesService, LocalizationService } from 'app/shared/services';
@@ -19,6 +19,7 @@ import { mergeMap, takeWhile } from 'rxjs/operators';
 export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges {
 
   @Input() public ordre: Ordre;
+  @Output() public lignesChanged = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -151,6 +152,7 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   clearAndHidePopup() {
     this.hidePopup();
     this.clearAll();
+    this.lignesChanged.emit();
   }
 
   insertArticles() {

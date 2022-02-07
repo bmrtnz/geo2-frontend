@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
@@ -15,15 +15,16 @@ import { PortsService } from 'app/shared/services/api/ports.service';
 import { TypesCamionService } from 'app/shared/services/api/types-camion.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
-import { DxAccordionComponent, DxTextBoxComponent, DxPopupComponent } from 'devextreme-angular';
+import { DxAccordionComponent, DxTextBoxComponent } from 'devextreme-angular';
 import { dxElement } from 'devextreme/core/element';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
+import { environment } from 'environments/environment';
 import { of, Subject } from 'rxjs';
 import { concatMap, filter, first, map, switchMap, takeUntil } from 'rxjs/operators';
-import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 import { AjoutArticlesManuPopupComponent } from '../ajout-articles-manu-popup/ajout-articles-manu-popup.component';
-import { environment } from 'environments/environment';
+import { GridLignesComponent } from '../grid-lignes/grid-lignes.component';
+import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 
 /**
  * Grid with loading toggled by parent
@@ -139,6 +140,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
   @ViewChildren('anchor') anchors: QueryList<ElementRef|DxAccordionComponent>;
   @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
+  @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
 
   constructor(
     private router: Router,
@@ -353,6 +355,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     return data ?
     (data.id + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
      : null;
+  }
+
+  public onLignesChanged() {
+    this.gridLignes.enableFilters();
   }
 
   private initializeForm() {

@@ -899,7 +899,7 @@
 
   <app-editing-alert></app-editing-alert>
   <app-file-manager-popup></app-file-manager-popup>
-  <app-ajout-articles-manu-popup [ordre]="ordre"></app-ajout-articles-manu-popup>
+  <app-ajout-articles-manu-popup [ordre]="ordre" (lignesChanged)="onLignesChanged()"></app-ajout-articles-manu-popup>
   <dx-popup
     [width]="400"
     [height]="165"
