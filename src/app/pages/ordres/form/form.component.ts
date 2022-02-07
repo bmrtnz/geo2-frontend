@@ -23,6 +23,7 @@ import { of, Subject } from 'rxjs';
 import { concatMap, filter, first, map, switchMap, takeUntil } from 'rxjs/operators';
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
 import { AjoutArticlesManuPopupComponent } from '../ajout-articles-manu-popup/ajout-articles-manu-popup.component';
+import { environment } from 'environments/environment';
 
 /**
  * Grid with loading toggled by parent
@@ -118,6 +119,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public dotCQ: number;
   public orderNumber: string;
   public fullOrderNumber: string;
+  public env = environment;
 
   public clientsDS: DataSource;
   public entrepotDS: DataSource;
