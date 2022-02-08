@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { gql, OperationVariables } from '@apollo/client/core';
+import { gql, OperationVariables, QueryOptions } from '@apollo/client/core';
 import { Apollo } from 'apollo-angular';
 import { takeWhile } from 'rxjs/operators';
 import { Utilisateur } from '../../models/utilisateur.model';
@@ -16,7 +16,12 @@ export class UtilisateursService extends ApiService {
     super(apollo, Utilisateur);
   }
 
-  getOne(nomUtilisateur: string, motDePasse: string, columns: Array<string>) {
+  getOne(
+    nomUtilisateur: string,
+    motDePasse: string,
+    columns: Array<string>,
+    options?: Partial<QueryOptions>,
+  ) {
     return this.apollo.query<{ utilisateur: Utilisateur }>({
       query: gql(ApiService.buildGraph(
         'query',
@@ -36,6 +41,7 @@ export class UtilisateursService extends ApiService {
         ],
       )),
       variables: { nomUtilisateur, motDePasse },
+      ...options,
     })
     .pipe(takeWhile(res => res.loading === false));
   }

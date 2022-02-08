@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import notify from 'devextreme/ui/notify';
-import { throwError } from 'rxjs';
-import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { concatMap, take, tap } from 'rxjs/operators';
 import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
 import { CurrentCompanyService } from './current-company.service';
@@ -59,27 +58,19 @@ export class AuthService {
   }
 
   logIn(id: string, password: string) {
-    return this.utilisateursService.getOne(id, password, this.USER_FIELDS)
-      .pipe(
-        switchMap(res => {
-          if (res.data.utilisateur) {
-            this.setCurrentUser(res.data.utilisateur);
-            window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
-            this.loggedIn = true;
+    return this.utilisateursService
+    .getOne(id, password, this.USER_FIELDS, { fetchPolicy: 'network-only' })
+    .pipe(
+      concatMap(res => {
+        this.setCurrentUser(res.data.utilisateur);
+        window.localStorage.setItem(this.LAST_USER_STORE_KEY, res.data.utilisateur.nomUtilisateur);
+        this.loggedIn = true;
 
-            // Handle redirection
-            const redirectionURL = this.activatedRoute.snapshot.queryParams?.redirect;
-            return this.router.navigateByUrl(redirectionURL ?? '/');
-          } else {
-            this.loginError();
-          }
-        }),
-        catchError((e: any) => {
-          this.loginError();
-
-          return throwError(e);
-        }),
-      );
+        // Handle redirection
+        const redirectionURL = this.activatedRoute.snapshot.queryParams?.redirect;
+        return this.router.navigateByUrl(redirectionURL ?? '/');
+      }),
+    );
   }
 
   showWelcome() {
@@ -88,7 +79,7 @@ export class AuthService {
     notify({ message: mess, elementAttr: {class : 'welcome-message'} }, 'info');
   }
 
-  private loginError() {
+  loginError() {
     this.loggedIn = false;
     notify('Utilisateur et/ou mot de passe inconnu', 'error');
   }
