@@ -694,48 +694,53 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "numero",
+        "dataField": "campagne.id",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 1,
-        "dataField": "numeroFacture",
+        "dataField": "numero",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "client.raisonSocial",
+        "dataField": "numeroFacture",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "referenceClient",
+        "dataField": "client.raisonSocial",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "dateDepartPrevue",
+        "dataField": "referenceClient",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "dateLivraisonPrevue",
+        "dataField": "dateDepartPrevue",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
+        "dataField": "dateLivraisonPrevue",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
         "dataField": "secteurCommercial.description",
         "dataType": "string",
         "visible": true
       },
-      { "dataField": "id", "visible": false },
-      { "dataField": "campagne.id", "visible": false }
+      { "dataField": "id", "visible": false }
     ]
   },
   "historique": {
@@ -955,7 +960,7 @@
         "dataType": "string",
         "sortOrder": "asc",
         "allowEditing": false,
-        "visible": false
+        "visible": true
       },
       {
         "visibleIndex": 1,
@@ -969,7 +974,7 @@
         "dataField": "id",
         "dataType": "string",
         "allowEditing": false,
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 3,
@@ -1022,7 +1027,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "fournisseur.code",
+        "dataField": "fournisseur",
         "dataType": "string",
         "allowEditing": true,
         "visible": true
@@ -1050,7 +1055,7 @@
       },
       {
         "visibleIndex": 14,
-        "dataField": "achatUnite.description",
+        "dataField": "achatUnite",
         "dataType": "string",
         "allowEditing": true,
         "visible": true
@@ -1064,13 +1069,13 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "typePalette.description",
+        "dataField": "typePalette",
         "allowEditing": true,
         "visible": true
       },
       {
         "visibleIndex": 17,
-        "dataField": "paletteInter.id",
+        "dataField": "paletteInter",
         "allowEditing": true,
         "dataType": "string",
         "visible": true

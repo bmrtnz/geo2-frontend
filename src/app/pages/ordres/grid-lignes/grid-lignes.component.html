@@ -21,6 +21,7 @@
   <dx-data-grid class="dx-card wide-card"
       [remoteOperations]="true"
       [showBorders]="false"
+      [elementAttr]="{ class: 'grid-ordre-ligne' }"
       [focusedRowEnabled]="true"
       [focusedRowIndex]="0"
       [columnAutoWidth]="true"
@@ -28,8 +29,9 @@
       [allowColumnReordering]="true"
       (onCellPrepared)="onCellPrepared($event)"
       (onRowClick)="onRowClick($event)"
-      (onEditingStart)="onEditingStart($event)"
+      (onEditorPreparing)="onEditorPreparing($event)"
       (onFocusedRowChanged)="onFocusedRowChanged($event)"
+      (onCellClick)="onCellClick($event)"
       (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Lignes de commande', $event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
       [scrolling]="{
         useNative:true
@@ -57,13 +59,9 @@
       <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
       <dxo-editing
         [allowUpdating]="true"
+        [selectTextOnEditStart]="true"
       >
       </dxo-editing>
-      <!-- <dxo-row-dragging
-        [allowReordering]="true"
-        [onReorder]="onReorder"
-        [showDragIcons]="true"
-      ></dxo-row-dragging> -->
       <dxo-column-chooser
         [enabled]="true"
         mode="select"
@@ -82,10 +80,30 @@
         falseText="Non"
         [allowEditing]="column.allowEditing"
         [dataType]="column?.dataType"
+        [editCellTemplate]="itemsWithSelectBox.includes(column.dataField) ? 'selectBoxEditTemplate' : false"
         [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
         [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
         [showInColumnChooser]="column.showInColumnChooser"
+        [showEditorAlways]="true"
     ></dxi-column>
+
+    <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
+      <dx-select-box
+      [dataSource]="this[cell.column.dataField + 'Source']"
+      [displayExpr]="itemsWithSelectBox.includes(cell.column.dataField) ? displayCodeBefore : this[cell.column.dataField + 'Service'].model.getLabelField()"
+      [searchExpr]="[
+        this[cell.column.dataField + 'Service'].model.getKeyField(),
+        this[cell.column.dataField + 'Service'].model.getLabelField()
+      ]"
+      [searchEnabled]="true"
+      [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)"
+      >
+        <dxo-drop-down-options
+          [width]="400">
+        </dxo-drop-down-options>
+      </dx-select-box>
+    </div>
 
   </dx-data-grid>
 

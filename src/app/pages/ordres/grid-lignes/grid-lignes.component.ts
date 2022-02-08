@@ -10,6 +10,9 @@ import { GridColumn, TotalItem } from 'basic';
 import { SummaryType, SummaryInput } from 'app/shared/services/api.service';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { FournisseursService } from 'app/shared/services';
+import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
+import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -19,6 +22,11 @@ import { map } from 'rxjs/operators';
 export class GridLignesComponent implements OnChanges, OnInit {
 
   public dataSource: DataSource;
+  public proprietaireMarchandiseSource: DataSource;
+  public fournisseurSource: DataSource;
+  public achatUniteSource: DataSource;
+  public typePaletteSource: DataSource;
+  public paletteInterSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public totalItems: TotalItem[] = [];
@@ -30,22 +38,43 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public lastRowFocused: boolean;
   public currNumero: string;
   public switchNumero: string;
+  public itemsWithSelectBox: string[];
 
   constructor(
     public ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
-    public localizeService: LocalizationService
+    public proprietaireMarchandiseService: FournisseursService,
+    public fournisseurService: FournisseursService,
+    public achatUniteService: BasesTarifService,
+    public typePaletteService: TypesPaletteService,
+    public paletteInterService: TypesPaletteService,
+    public localizeService: LocalizationService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigne);
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
     this.moveRowUpDown = this.moveRowUpDown.bind(this);
+    this.itemsWithSelectBox = [
+      'fournisseur',
+      'achatUnite',
+      'typePalette',
+      'paletteInter',
+      'proprietaireMarchandise'
+    ];
   }
 
   async ngOnInit() {
-    const fields = this.columns
-    .pipe(map( columns => columns.map( column => column.dataField )));
+    const fields = this.columns.pipe(map( columns => columns.map( column => {
+      return (this.addKeyToField(column.dataField));
+    })));
     const gridFields = await fields.toPromise();
     this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
+    this.fournisseurSource = this.fournisseurService.getDataSource_v2(['id', 'code', 'raisonSocial']);
+    this.fournisseurSource.filter(['valide', '=', true]);
+    this.proprietaireMarchandiseSource = this.fournisseurSource;
+    this.achatUniteSource = this.achatUniteService.getDataSource_v2(['id', 'description']);
+    this.typePaletteSource = this.typePaletteService.getDataSource_v2(['id', 'description']);
+    this.paletteInterSource = this.typePaletteSource;
+    this.datagrid.instance.option('focusedRowIndex', -1);
   }
 
   ngOnChanges() {
@@ -62,7 +91,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
     ];
 
     const columns = await this.columns.toPromise();
-    const fields = columns.map( column => column.dataField );
+    const fields = columns.map( column => column.dataField ).map( field => {
+      return this.addKeyToField(field);
+    });
 
     this.totalItems = summaryInputs
     .map(({selector: column, summaryType}, index) => ({
@@ -85,6 +116,14 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   }
 
+  addKeyToField(field) {
+    if (field === 'fournisseur') field += `.${this.fournisseurService.model.getKeyField()}`;
+    if (field === 'achatUnite') field += `.${this.achatUniteService.model.getKeyField()}`;
+    if (field === 'typePalette') field += `.${this.typePaletteService.model.getKeyField()}`;
+    if (field === 'paletteInter') field += `.${this.paletteInterService.model.getKeyField()}`;
+    return field;
+  }
+
   onCellPrepared(e) {
     if (e.rowType === 'data') {
       // Descript. article
@@ -98,7 +137,14 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.datagrid.instance.editRow(rowIndex);
   }
 
-  onEditingStart(e) {
+  displayCodeBefore(data) {
+    return data ?
+    ((data.code ? data.code : data.id) + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur :
+     (data.raisonSocial ? data.raisonSocial : data.description)))
+     : null;
+  }
+
+  onEditorPreparing(e) {
   }
 
   onFocusedRowChanged(e) {
@@ -113,7 +159,18 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.switchNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
     this.datagrid.instance.cellValue(this.currentfocusedRow + moveDirection, 'numero', this.currNumero);
     this.datagrid.instance.cellValue(this.currentfocusedRow, 'numero', this.switchNumero);
-    this.datagrid.instance.saveEditData();
+    this.datagrid.instance.saveEditData().then(res => console.log('loaded'));
   }
+
+  onValueChanged(event, cell) {
+    if (cell.setValue) {
+      // cell.setValue(cell.column.dataField === 'proprietaireMarchandise' ? event.value.code : event.value);
+      cell.setValue(event.value);
+    }
+  }
+
+  onCellClick(e) {
+  }
+
 
 }

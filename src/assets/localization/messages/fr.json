@@ -52,7 +52,7 @@
     "btn-stock": "Stock",
     "btn-manuel": "Manuel",
     "btn-referenceClt": "Réf. Client",
-    "btn-detailExp": "+ Détail expéditions",
+    "btn-detailExp": "+ Détail expéd.",
     "btn-ordreLignes": "- Détail expéd.",
     "btn-confirm": "Confirmer",
     "btn-close": "Clôturer",
@@ -72,7 +72,7 @@
     "create": "Création",
     "clone": "Clone",
     "preSaisie": "(Pré-saisie)",
-    "ajout-articles": "Ajout d'articles sur l'ordre ",
+    "ajout-articles": "Ajout d'articles sur l'ordre",
     "ajout-code": "Code...",
 
     "button-bascule-clients-valide": "CV",

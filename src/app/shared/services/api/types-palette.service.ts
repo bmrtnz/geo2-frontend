@@ -18,6 +18,9 @@ export class TypesPaletteService extends ApiService implements APIRead {
     super(apollo, TypePalette);
   }
 
+  /**
+   * @deprecated Use getDataSource_v2
+   */
   getDataSource() {
     return new DataSource({
       sort: [
@@ -50,6 +53,47 @@ export class TypesPaletteService extends ApiService implements APIRead {
               resolve(new TypePalette(res.data.typePalette));
           });
         }),
+      }),
+    });
+  }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { typePalette: TypePalette };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, res => {
+          if (res.data && res.data.typePalette)
+            resolve(new TypePalette(res.data.typePalette));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [
+        { selector: this.model.getKeyField() }
+      ],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) => new Promise(async (resolve) => {
+
+          if (options.group)
+            return this.loadDistinctQuery(options, res => {
+              if (res.data && res.data.distinct)
+                resolve(this.asListCount(res.data.distinct));
+            });
+
+          type Response = { allTypePalette: RelayPage<TypePalette> };
+          const query = await this.buildGetAll_v2(columns);
+          const variables = this.mapLoadOptionsToVariables(options);
+          this.listenQuery<Response>(query, { variables }, res => {
+            if (res.data && res.data.allTypePalette) {
+              resolve(this.asInstancedListCount(res.data.allTypePalette));
+            }
+          });
+        }),
+        byKey: this.byKey(columns),
       }),
     });
   }
