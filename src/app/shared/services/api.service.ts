@@ -6,7 +6,7 @@ import CustomStore, { CustomStoreOptions } from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from, Observable, Subject } from 'rxjs';
-import { filter, map, mergeMap, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, mergeMap, take, takeUntil } from 'rxjs/operators';
 
 const DEFAULT_KEY = 'id';
 const DEFAULT_GQL_KEY_TYPE = 'String';
@@ -890,6 +890,35 @@ export abstract class ApiService implements OnDestroy {
         },
       ],
       [{ name: 'search', type: 'String', isOptionnal: true }],
+    );
+  }
+
+  protected buildGetSummaryGraph(operationName: string, body: string[], summary: SummaryInput[]) {
+    return ApiService.buildGraph(
+      'query',
+      [
+        {
+          name: operationName,
+          body: [
+            'pageInfo.startCursor',
+            'pageInfo.endCursor',
+            'pageInfo.hasPreviousPage',
+            'pageInfo.hasNextPage',
+            'totalCount',
+            `summary(summaries:$summary, of:"${ operationName }")`,
+            ...body,
+          ],
+          params: [
+            { name: 'search', value: 'search', isVariable: true },
+            { name: 'pageable', value: 'pageable', isVariable: true },
+          ],
+        },
+      ],
+      [
+        { name: 'search', type: 'String', isOptionnal: true },
+        { name: 'pageable', type: 'PaginationInput', isOptionnal: false },
+        { name: 'summary', type: '[SummaryInput]', isOptionnal: false },
+      ],
     );
   }
 

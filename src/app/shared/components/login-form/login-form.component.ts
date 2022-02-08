@@ -31,6 +31,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   companiesLoading = false;
   @ViewChild('submitButton', { static: false }) submitButton: DxButtonComponent;
   @ViewChild('societeSB', { static: false }) societeSB: DxSelectBoxComponent;
+  public version = require('../../../../../package.json').version;
 
   autoSubmit = false;
 
@@ -66,11 +67,14 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
     this.authService.logIn(
       userName,
       this.form.get('password').value,
-    ).subscribe(() => {
-      this.form.patchValue({password: ''});
-      this.authService.showWelcome();
-      // Different user? Back home to avoid non consistent data
-      if (userName !== lastUserName) this.router.navigate([`/**`]);
+    ).subscribe({
+      next: res => {
+        this.form.patchValue({password: ''});
+        this.authService.showWelcome();
+        // Different user? Back home to avoid non consistent data
+        if (userName !== lastUserName) this.router.navigate([`/**`]);
+      },
+      error: err => this.authService.loginError(),
     });
   }
 

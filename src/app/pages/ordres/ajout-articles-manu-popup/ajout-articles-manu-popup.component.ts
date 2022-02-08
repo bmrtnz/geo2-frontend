@@ -1,10 +1,14 @@
-import {Component, Input, ViewChild, AfterViewInit, OnChanges} from '@angular/core';
-import { ArticlesService, LocalizationService } from 'app/shared/services';
-import DataSource from 'devextreme/data/data_source';
-import notify from 'devextreme/ui/notify';
-import { DxTagBoxComponent,  DxPopupComponent } from 'devextreme-angular';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { ArticlesListComponent } from 'app/pages/articles/list/articles-list.component';
 import Ordre from 'app/shared/models/ordre.model';
+import { ArticlesService, LocalizationService } from 'app/shared/services';
+import { FunctionsService } from 'app/shared/services/api/functions.service';
+import { CurrentCompanyService } from 'app/shared/services/current-company.service';
+import { DxPopupComponent, DxTagBoxComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import notify from 'devextreme/ui/notify';
+import { from } from 'rxjs';
+import { mergeMap, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ajout-articles-manu-popup',
@@ -15,6 +19,7 @@ import Ordre from 'app/shared/models/ordre.model';
 export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges {
 
   @Input() public ordre: Ordre;
+  @Output() public lignesChanged = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -35,6 +40,8 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
 
   constructor(
     private articlesService: ArticlesService,
+    private functionsService: FunctionsService,
+    private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
   ) { }
 
@@ -145,14 +152,22 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   clearAndHidePopup() {
     this.hidePopup();
     this.clearAll();
+    this.lignesChanged.emit();
   }
 
   insertArticles() {
-    // Utiliser l'array this.chosenArticles qui contient les id de la saisie directe
-    // ET des articles sélectionnés dans la grid du catalogue
-    // + this.ordre pour avoir les infos correspondantes
+    from(this.chosenArticles)
+    .pipe(
+      mergeMap( articleID => this.functionsService
+        .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
+        .valueChanges),
+      takeWhile( res => res.loading === true),
+    )
+    .subscribe({
+      error: ({message}: Error) => notify(message),
+      complete: () => this.clearAndHidePopup(),
+    });
 
-    this.clearAndHidePopup();
   }
 
 }

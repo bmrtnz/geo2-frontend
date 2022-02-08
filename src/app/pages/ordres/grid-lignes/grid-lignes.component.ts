@@ -39,6 +39,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public currNumero: string;
   public switchNumero: string;
   public itemsWithSelectBox: string[];
+  public env = environment;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
