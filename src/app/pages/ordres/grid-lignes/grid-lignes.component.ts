@@ -118,6 +118,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   addKeyToField(field) {
+    if (field === 'proprietaireMarchandise') field += `.${this.fournisseurService.model.getKeyField()}`;
     if (field === 'fournisseur') field += `.${this.fournisseurService.model.getKeyField()}`;
     if (field === 'achatUnite') field += `.${this.achatUniteService.model.getKeyField()}`;
     if (field === 'typePalette') field += `.${this.typePaletteService.model.getKeyField()}`;
@@ -160,7 +161,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.switchNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
     this.datagrid.instance.cellValue(this.currentfocusedRow + moveDirection, 'numero', this.currNumero);
     this.datagrid.instance.cellValue(this.currentfocusedRow, 'numero', this.switchNumero);
-    this.datagrid.instance.saveEditData().then(res => console.log('loaded'));
+    this.datagrid.instance.saveEditData().then(res => console.log(res));
   }
 
   onValueChanged(event, cell) {

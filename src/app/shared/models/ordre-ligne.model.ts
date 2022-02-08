@@ -28,7 +28,8 @@ export class OrdreLigne extends Model {
   @Field() public nombreColisPalette?: number;
   @Field() public nombreColisCommandes?: number;
   @Field() public libelleDLV?: string;
-  @Field() public proprietaireMarchandise?: string;
+  // @Field() public proprietaireMarchandise?: string;
+  @Field({model: import('./fournisseur.model')}) public proprietaireMarchandise?: Fournisseur;
   @Field() public ventePrixUnitaire?: number;
   @Field() public gratuit?: boolean;
   @Field() public achatPrixUnitaire?: number;
