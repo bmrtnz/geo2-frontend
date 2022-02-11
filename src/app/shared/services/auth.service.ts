@@ -49,7 +49,7 @@ export class AuthService {
     private utilisateursService: UtilisateursService,
     public currentCompanyService: CurrentCompanyService
   ) {
-    const stored = window.localStorage.getItem(this.CURRENT_USER_STORE_KEY);
+    const stored = window.sessionStorage.getItem(this.CURRENT_USER_STORE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       this.loggedIn = true;
@@ -99,14 +99,14 @@ export class AuthService {
 
   setCurrentUser(data: Partial<Utilisateur>) {
     this.currentUser = new Utilisateur({ ...this.currentUser, ...data });
-    window.localStorage
+    window.sessionStorage
     .setItem(this.CURRENT_USER_STORE_KEY, JSON.stringify(this.currentUser));
   }
 
   async logOut() {
     if (this.router.isActive('/login', false)) return;
     this.loggedIn = false;
-    window.localStorage.removeItem(this.CURRENT_USER_STORE_KEY);
+    window.sessionStorage.removeItem(this.CURRENT_USER_STORE_KEY);
     return this.router.navigate(['/login'], {
       skipLocationChange: SKIP_LOCATION_CHANGE,
       queryParamsHandling: 'merge',

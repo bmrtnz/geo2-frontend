@@ -1015,7 +1015,7 @@
       },
       {
         "visibleIndex": 9,
-        "dataField": "proprietaireMarchandise",
+        "dataField": "proprietaireMarchandise.code",
         "dataType": "string",
         "allowEditing": true,
         "visible": true
@@ -1682,7 +1682,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "ordreLigne.proprietaireMarchandise",
+        "dataField": "ordreLigne.proprietaireMarchandise.code",
         "dataType": "string",
         "visible": true
       },

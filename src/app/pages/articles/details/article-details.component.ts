@@ -41,6 +41,7 @@ import notify from 'devextreme/ui/notify';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { IdentificationsSymboliquesService } from 'app/shared/services/api/identifications-symboliques.service';
+import { environment } from 'environments/environment';
 
 @Component({
     selector: 'app-articles',
@@ -110,6 +111,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     @ViewChild(PushHistoryPopupComponent, { static: false }) validatePopup: PushHistoryPopupComponent;
     editing = false;
     public ucBW: boolean;
+    public env = environment;
 
     article: Article;
 
