@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
 
-    <div class="content-block" *ngIf="!articleLigneId">
+    <div class="content-block" *ngIf="!articleLigneId" [hidden]="env.production">
         <h2><span *ngIf="cloneMode">{{ 'create' | localize }}</span>
         {{ 'articles-details-title' | localize }}<span *ngIf="!cloneMode" class="red-font"> {{ preSaisie | localize }} </span><!-- {{ article.id }} -->
         <span *ngIf="cloneMode"> ({{ 'clone' | localize }})</span>

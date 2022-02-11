@@ -1022,7 +1022,7 @@
       },
       {
         "visibleIndex": 9,
-        "dataField": "proprietaireMarchandise",
+        "dataField": "proprietaireMarchandise.code",
         "dataType": "string",
         "width": "200",
         "allowEditing": true,
@@ -1725,7 +1725,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "ordreLigne.proprietaireMarchandise",
+        "dataField": "ordreLigne.proprietaireMarchandise.code",
         "dataType": "string",
         "visible": true
       },
