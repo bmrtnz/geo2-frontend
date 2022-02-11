@@ -6,7 +6,7 @@
     text="down"
     icon="arrowdown"
     hint="{{ 'hint-deplacer-ligne-bas' | localize }}"
-    [disabled]="lastRowFocused || !gridRowsTotal"
+    [disabled]="lastRowFocused || !gridRowsTotal || env.production"
     (onClick)="moveRowUpDown($event)"
   ></dx-button>
   <dx-button
@@ -16,7 +16,7 @@
     text="up"
     icon="arrowup"
     hint="{{ 'hint-deplacer-ligne-haut' | localize }}"
-    [disabled]="!currentfocusedRow"
+    [disabled]="!currentfocusedRow || env.production"
     (onClick)="moveRowUpDown($event)"
   ></dx-button>
 
@@ -63,7 +63,7 @@
       <dxo-editing
         [selectTextOnEditStart]="true"
         [allowUpdating]="!env.production"
-        [allowDeleting]="true"
+        [allowDeleting]="!env.production"
         [mode]="'cell'"
       >
       </dxo-editing>
