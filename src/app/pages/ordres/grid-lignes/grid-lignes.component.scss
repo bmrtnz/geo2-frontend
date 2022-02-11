@@ -1,3 +1,6 @@
+// Var
+@import "~themes/generated/variables.base";
+
 .down-move-button, .up-move-button {
     position: absolute;
     z-index: 2;
@@ -5,5 +8,31 @@
     right: 220px;
     &.down-move-button {
         right: 149px;
+    }
+}
+
+::ng-deep .grid-ordre-ligne .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+    input, div {
+        color: #FFF;
+    }
+}
+::ng-deep .grid-ordre-ligne {
+    .bio-article {
+        color: #39970e !important;
+        cursor: pointer;
+    }
+    .dx-editor-cell.dx-focused:not(.dx-datagrid-readonly) {
+        background: rgba(51,145,176,0.06);
+    }
+
+    .dx-row-focused.dx-data-row > td:not(.dx-focused):not(:first-of-type) {
+        color: #000;
+        background-color: transparent !important;
+    }
+    .td:first-of-type input {
+        text-align: center !important;
+    }
+    .dx-row-focused.dx-data-row > td {
+        border-bottom-color: #e0e0e0 !important;
     }
 }

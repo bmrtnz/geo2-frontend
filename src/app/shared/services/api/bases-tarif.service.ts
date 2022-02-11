@@ -24,7 +24,7 @@ export class BasesTarifService extends ApiService implements APIRead {
   getDataSource() {
     return new DataSource({
       sort: [
-        { selector: this.model.getLabelField() }
+        { selector: this.model.getKeyField() }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

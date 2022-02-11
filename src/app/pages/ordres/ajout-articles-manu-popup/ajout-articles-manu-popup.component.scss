@@ -59,3 +59,9 @@
         float: right;
     }
 }
+
+::ng-deep .ajout-articles-manu-popup {
+    .dx-popup-content {
+        overflow-y: auto;
+    }
+}

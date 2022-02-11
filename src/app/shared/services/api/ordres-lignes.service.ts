@@ -165,4 +165,126 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
+  lock(cell) {
+    cell.cancel = true;
+  }
+
+  lockFields(e) {
+
+      // Locking step
+      const data = e.data;
+
+      switch (e.column.dataField) {
+
+        case 'nombrePalettesCommandees': {
+          if ((data.expedieStation === true
+             || data.ordre.secteurCommercial.id === 'F'
+             ) // Manque || ra_ind_blocage === '1'
+            && data.ordre.type !== 'RPR'
+            && data.ordre.type !== 'RPO'
+            && data.ordre.societe.id !== 'BWS'
+            && data.venteUnite.id !== 'UNITE'
+            && data.achatUnite.id !== 'UNITE') this.lock(e);
+          break;
+        }
+        case 'nombrePalettesIntermediaires': {
+          if (data.expedieStation === true ||
+             data.indicateurPalette === 1
+             ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'nombreColisPalette': {
+          if (data.expedieStation === true
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'proprietaireMarchandise': {
+          if (data.expedieStation === true
+             || data.ordre.type === 'RDF'
+             || data.ordre.type === 'REP'
+             || (data.ordre.type === 'RPR'
+                && data.ordre.commentaireUsageInterne.substring(0, 3) === 'B02'
+                && data.ordre.entrepot.modeLivraison.id !== 'S')
+                ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'fournisseur': {
+          if (data.expedieStation === true
+             || data.ordre.type === 'RDF'
+             || data.ordre.type === 'REP'
+             || (data.ordre.type === 'RPR'
+                && data.ordre.commentaireUsageInterne.substring(0, 3) === 'B02'
+                && data.ordre.entrepot.modeLivraison !== 'S')
+                ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'ventePrixUnitaire': {
+          if (data.venteACommission === true
+            || data.ordre.type === 'REP'
+            || data.ordre.type === 'RPF'
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'venteUnite': {
+          if (data.venteACommission === true
+            || data.ordre.type === 'REP'
+            || data.ordre.type === 'RPF'
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'gratuit': {
+          if (data.venteACommission === true
+            || data.expedieStation === true
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'achatPrixUnitaire': {
+          if (data.venteACommission === true
+            || data.ordre.type === 'REP'
+            || data.ordre.type === 'RPF'
+            || data.expedieStation === true
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'achatUnite': {
+          if (data.venteACommission === true
+            || data.ordre.type === 'REP'
+            || data.ordre.type === 'RPF'
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'typePalette': {
+          if (data.expedieStation === true
+            || data.ordre.type === 'REP'
+            || data.ordre.type === 'RPF'
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'paletteInter': {
+          if (data.expedieStation === true
+            || data.ordre.type === 'REP'
+            || data.ordre.type === 'RPF'
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'libelleDLV': {
+          if (data.expedieStation === true
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'fraisPrixUnitaire': {
+          if (data.ordre.societe.id === 'IMP'
+            ) this.lock(e);
+          break;
+        }
+        case 'fraisUnite': {
+          if (data.expedieStation === true
+            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+
+      }
+
+    }
+
 }

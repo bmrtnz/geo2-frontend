@@ -960,6 +960,7 @@
         "dataType": "string",
         "sortOrder": "asc",
         "allowEditing": false,
+        "showInColumnChooser": false,
         "visible": true
       },
       {
@@ -967,7 +968,7 @@
         "dataField": "ordre.id",
         "dataType": "string",
         "allowEditing": false,
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 2,
@@ -981,6 +982,7 @@
         "dataField": "article.id",
         "dataType": "string",
         "allowEditing": false,
+        "width": "250",
         "visible": true
       },
       {
@@ -988,7 +990,7 @@
         "dataField": "article.description",
         "dataType": "string",
         "allowEditing": false,
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 5,
@@ -1022,6 +1024,7 @@
         "visibleIndex": 9,
         "dataField": "proprietaireMarchandise",
         "dataType": "string",
+        "width": "200",
         "allowEditing": true,
         "visible": true
       },
@@ -1029,6 +1032,7 @@
         "visibleIndex": 10,
         "dataField": "fournisseur",
         "dataType": "string",
+        "width": "200",
         "allowEditing": true,
         "visible": true
       },
@@ -1041,92 +1045,126 @@
       },
       {
         "visibleIndex": 12,
+        "dataField": "venteUnite",
+        "dataType": "number",
+        "width": "150",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 13,
         "dataField": "gratuit",
         "dataType": "boolean",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 13,
+        "visibleIndex": 14,
         "dataField": "achatPrixUnitaire",
         "dataType": "number",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 15,
         "dataField": "achatUnite",
         "dataType": "string",
+        "width": "150",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 15,
+        "visibleIndex": 16,
         "dataField": "achatDevise",
         "allowEditing": false,
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 17,
         "dataField": "typePalette",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 17,
+        "visibleIndex": 18,
         "dataField": "paletteInter",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 19,
+        "dataField": "libelleDLV",
         "allowEditing": true,
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 19,
+        "visibleIndex": 20,
         "dataField": "fraisPrixUnitaire",
+        "allowEditing": true,
         "dataType": "number",
         "visible": true
       },
       {
-        "visibleIndex": 20,
-        "dataField": "fraisUnite.id",
-        "dataType": "string",
-        "visible": true
-      },
-      {
         "visibleIndex": 21,
-        "dataField": "fraisCommentaires",
+        "dataField": "fraisUnite",
+        "allowEditing": true,
+        "width": "150",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 22,
-        "dataField": "tauxRemiseSurFacture",
-        "dataType": "number",
+        "dataField": "fraisCommentaires",
         "allowEditing": true,
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 23,
-        "dataField": "tauxRemiseHorsFacture",
-        "dataType": "number",
+        "dataField": "tauxRemiseSurFacture",
         "allowEditing": true,
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 24,
-        "dataField": "articleKit",
-        "dataType": "string",
-        "allowEditing": false,
+        "dataField": "tauxRemiseHorsFacture",
+        "allowEditing": true,
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 25,
-        "dataField": "gtinColisKit",
+        "dataField": "articleKit",
         "dataType": "string",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true
       },
-      { "dataField": "article.matierePremiere.variete.description", "visible": false }
+      {
+        "visibleIndex": 26,
+        "dataField": "gtinColisKit",
+        "dataType": "string",
+        "allowEditing": true,
+        "visible": true
+      },
+      { "dataField": "article.matierePremiere.variete.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.cahierDesCharge.categorie.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.normalisation.calibreMarquage.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.emballage.poidsNetClient", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.emballage.prepese", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.modeCulture.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.modeCulture.description", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.origine.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.origine.description", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.logistiques.expedieStation", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.secteurCommercial.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.type", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.societe.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "indicateurPalette", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.entrepot.modeLivraison", "showInColumnChooser": false, "visible": false },
+      { "dataField": "valide", "visible": false }
     ]
   },
 

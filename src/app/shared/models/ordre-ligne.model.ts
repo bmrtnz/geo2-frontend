@@ -74,7 +74,7 @@ export class OrdreLigne extends Model {
   public pourcentageMargeBrute?: number;
   @Field({format: { type: 'percent', precision: 2 }})
   public pourcentageMargeNette?: number;
-
+  @Field() public valide?: boolean;
 }
 
 export default OrdreLigne;

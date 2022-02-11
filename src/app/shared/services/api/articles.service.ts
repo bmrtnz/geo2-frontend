@@ -142,4 +142,28 @@ export class ArticlesService extends ApiService implements APIRead {
     `;
   }
 
+  concatArtDescript(article) {
+    let desc = '  ' + article.id + ' ' + article.matierePremiere.variete.id;
+    desc += ' cat ' + article.cahierDesCharge.categorie.id;
+    if (article.normalisation.calibreMarquage.id) {
+      desc += ' cal ' + article.normalisation.calibreMarquage.id;
+    }
+    if (article.emballage.emballage) {
+      desc += ' ' + article.emballage.emballage.id;
+    }
+    if (article.emballage.poidsNetClient > 0) {
+      desc += ' ' + article.emballage.poidsNetClient + 'kg';
+    }
+    if (!article.emballage.prepese) desc += ' NT';
+    if (article.matierePremiere.modeCulture.id !== 0) {
+      desc += ' ' +  article.matierePremiere.modeCulture.description;
+    }
+    if (!['F', '-'].includes(article.matierePremiere.origine.id)) {
+      desc += ' ' + article.matierePremiere.origine.description;
+    }
+    const isBio = article.matierePremiere?.modeCulture?.description?.toLowerCase().includes('bio');
+    if (!article.id) desc = 'Erreur article (id)';
+    return {concatDesc: desc, bio: isBio};
+}
+
 }

@@ -1,18 +1,20 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ViewChild, Output } from '@angular/core';
 import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 import DataSource from 'devextreme/data/data_source';
 import { environment } from 'environments/environment';
 import { OrdreLignesService, SummaryOperation } from 'app/shared/services/api/ordres-lignes.service';
 import Ordre from 'app/shared/models/ordre.model';
 import { LocalizationService } from 'app/shared/services/localization.service';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { DxDataGridComponent, DxPopupComponent } from 'devextreme-angular';
 import { GridColumn, TotalItem } from 'basic';
 import { SummaryType, SummaryInput } from 'app/shared/services/api.service';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FournisseursService } from 'app/shared/services';
+import { Fournisseur } from 'app/shared/models/fournisseur.model';
+import { FournisseursService, ArticlesService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
+import { ZoomArticlePopupComponent } from '../zoom-article-popup/zoom-article-popup.component';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -21,17 +23,22 @@ import { TypesPaletteService } from 'app/shared/services/api/types-palette.servi
 })
 export class GridLignesComponent implements OnChanges, OnInit {
 
+  @Input() public ordre: Ordre;
+  @Output() public articleLigneId: string;
+
   public dataSource: DataSource;
   public proprietaireMarchandiseSource: DataSource;
   public fournisseurSource: DataSource;
   public achatUniteSource: DataSource;
+  public fraisUniteSource: DataSource;
+  public venteUniteSource: DataSource;
   public typePaletteSource: DataSource;
   public paletteInterSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public totalItems: TotalItem[] = [];
-  @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(ZoomArticlePopupComponent, {static: false}) zoomArticlePopup: ZoomArticlePopupComponent;
   private gridConfig: Promise<GridConfig>;
   public currentfocusedRow: number;
   public gridRowsTotal: number;
@@ -43,10 +50,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   constructor(
     public ordreLignesService: OrdreLignesService,
+    public articlesService: ArticlesService,
     public gridConfiguratorService: GridConfiguratorService,
     public proprietaireMarchandiseService: FournisseursService,
     public fournisseurService: FournisseursService,
     public achatUniteService: BasesTarifService,
+    public venteUniteService: BasesTarifService,
+    public fraisUniteService: BasesTarifService,
     public typePaletteService: TypesPaletteService,
     public paletteInterService: TypesPaletteService,
     public localizeService: LocalizationService,
@@ -57,6 +67,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.itemsWithSelectBox = [
       'fournisseur',
       'achatUnite',
+      'venteUnite',
+      'fraisUnite',
       'typePalette',
       'paletteInter',
       'proprietaireMarchandise'
@@ -70,12 +82,28 @@ export class GridLignesComponent implements OnChanges, OnInit {
     const gridFields = await fields.toPromise();
     this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
     this.fournisseurSource = this.fournisseurService.getDataSource_v2(['id', 'code', 'raisonSocial']);
-    this.fournisseurSource.filter(['valide', '=', true]);
-    this.proprietaireMarchandiseSource = this.fournisseurSource;
+    this.fournisseurSource.filter([
+      ['valide', '=', true],
+    ]);
+    this.proprietaireMarchandiseSource = this.fournisseurService.getDataSource_v2(['id', 'code', 'raisonSocial']);
+    this.proprietaireMarchandiseSource.filter([
+      ['valide', '=', true],
+      'and',
+      ['natureStation', '<>', 'F']
+    ]);
     this.achatUniteSource = this.achatUniteService.getDataSource_v2(['id', 'description']);
+    this.achatUniteSource.filter([
+      ['valide', '=', true],
+      'and',
+      ['valideLig', '=', true]
+    ]);
+    this.fraisUniteSource = this.achatUniteSource;
+    this.venteUniteSource = this.achatUniteSource;
     this.typePaletteSource = this.typePaletteService.getDataSource_v2(['id', 'description']);
+    this.typePaletteSource.filter([
+      ['valide', '=', true],
+    ]);
     this.paletteInterSource = this.typePaletteSource;
-    this.datagrid.instance.option('focusedRowIndex', -1);
   }
 
   ngOnChanges() {
@@ -100,7 +128,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     .map(({selector: column, summaryType}, index) => ({
       column,
       summaryType,
-      displayFormat: !index ? 'Total : {0}' : '{0}',
+      displayFormat: !index ? 'Totaux : {0}' : '{0}',
       valueFormat: columns
       ?.find(({ dataField }) => dataField === column)
       ?.format,
@@ -109,7 +137,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (this?.ordre?.id) {
       this.dataSource = this.ordreLignesService
       .getSummarisedDatasource(SummaryOperation.Totaux, fields, summaryInputs);
-      this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
+      this.dataSource.filter([
+        ['ordre.id', '=', this.ordre.id],
+        'and',
+        ['valide', '=', true],
+        'and',
+        ['article.id', 'isnotnull', 'null']
+      ]);
       this.datagrid.dataSource = this.dataSource;
     } else {
       this.datagrid.dataSource = null;
@@ -123,15 +157,30 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (field === 'achatUnite') field += `.${this.achatUniteService.model.getKeyField()}`;
     if (field === 'typePalette') field += `.${this.typePaletteService.model.getKeyField()}`;
     if (field === 'paletteInter') field += `.${this.paletteInterService.model.getKeyField()}`;
+    if (field === 'fraisUnite') field += `.${this.fraisUniteService.model.getKeyField()}`;
+    if (field === 'venteUnite') field += `.${this.venteUniteService.model.getKeyField()}`;
     return field;
   }
 
   onCellPrepared(e) {
     if (e.rowType === 'data') {
-      // Descript. article
-      if (e.column.dataField === 'article.description') {
-        e.cellElement.innerText =  e.data.article.matierePremiere.variete.description + ' ' + e.cellElement.innerText;
+      if (e.column.dataField === 'article.id') {
+        // Descript. article
+        const infoArt = this.articlesService.concatArtDescript(e.data.article);
+        e.cellElement.innerText =  infoArt.concatDesc;
+        e.cellElement.title = infoArt.concatDesc;
+        // Bio en vert
+        if (infoArt.bio) e.cellElement.classList.add('bio-article');
       }
+    }
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === 'data') {
+      // console.log(e)
+      // if (e.column.dataField === 'nombrePalettesCommandees') {
+      //   console.log(e.column.data)
+      // }
     }
   }
 
@@ -146,9 +195,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
      : null;
   }
 
-  onEditorPreparing(e) {
-  }
-
   onFocusedRowChanged(e) {
     this.gridRowsTotal = this.datagrid.instance.getVisibleRows().length;
     this.currentfocusedRow = e.row.rowIndex;
@@ -159,20 +205,35 @@ export class GridLignesComponent implements OnChanges, OnInit {
     const moveDirection = e.element.classList.contains('up-move-button') ? -1 : 1;
     this.currNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow].data.numero;
     this.switchNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
+    if (!this.switchNumero) this.switchNumero = this.createNumero(parseInt(this.currNumero, 10));
     this.datagrid.instance.cellValue(this.currentfocusedRow + moveDirection, 'numero', this.currNumero);
     this.datagrid.instance.cellValue(this.currentfocusedRow, 'numero', this.switchNumero);
-    this.datagrid.instance.saveEditData().then(res => console.log(res));
+    this.datagrid.instance.saveEditData();
+  }
+
+  createNumero(num) {
+    return ('0' + (num++).toString()).slice(-2);
   }
 
   onValueChanged(event, cell) {
-    if (cell.setValue) {
-      // cell.setValue(cell.column.dataField === 'proprietaireMarchandise' ? event.value.code : event.value);
-      cell.setValue(event.value);
-    }
+    if (cell.setValue) cell.setValue(event.value);
   }
 
   onCellClick(e) {
   }
 
+  zoomArticle(e) {
+    if (e.column?.dataField !== 'article.id') return;
+    this.articleLigneId = e.data.article.id;
+    this.zoomArticlePopup.visible = true;
+  }
+
+  onEditingStart(e) {
+
+    if (!e.column) return;
+
+    this.ordreLignesService.lockFields(e);
+
+  }
 
 }

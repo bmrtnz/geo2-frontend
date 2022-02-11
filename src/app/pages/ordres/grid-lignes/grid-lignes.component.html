@@ -1,5 +1,6 @@
 <div class="grid-lignes-container">
   <dx-button
+    [focusStateEnabled]="false"
     class="down-move-button"
     type="normal"
     text="down"
@@ -9,6 +10,7 @@
     (onClick)="moveRowUpDown($event)"
   ></dx-button>
   <dx-button
+    [focusStateEnabled]="false"
     class="up-move-button"
     type="normal"
     text="up"
@@ -19,19 +21,21 @@
   ></dx-button>
 
   <dx-data-grid class="dx-card wide-card"
+      [focusedRowEnabled]="true"
       [remoteOperations]="true"
       [showBorders]="false"
       [elementAttr]="{ class: 'grid-ordre-ligne' }"
-      [focusedRowEnabled]="true"
       [focusedRowIndex]="0"
       [columnAutoWidth]="true"
       [columnHidingEnabled]="false"
       [allowColumnReordering]="true"
       (onCellPrepared)="onCellPrepared($event)"
       (onRowClick)="onRowClick($event)"
-      (onEditorPreparing)="onEditorPreparing($event)"
+      (onRowPrepared)="onRowPrepared($event)"
       (onFocusedRowChanged)="onFocusedRowChanged($event)"
-      (onCellClick)="onCellClick($event)"
+      (onCellDblClick)="zoomArticle($event)"
+      (onEditingStart)="onEditingStart($event)"
+
       (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Lignes de commande', $event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
       [scrolling]="{
         useNative:true
@@ -41,7 +45,6 @@
       <!-- Grid configuration -->
       <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
       <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-      <dxo-paging [pageSize]="100"> </dxo-paging>
       <dxo-pager
         [showPageSizeSelector]="true"
         [showInfo]="true"
@@ -60,6 +63,8 @@
       <dxo-editing
         [selectTextOnEditStart]="true"
         [allowUpdating]="!env.production"
+        [allowDeleting]="true"
+        [mode]="'cell'"
       >
       </dxo-editing>
       <dxo-column-chooser
@@ -75,6 +80,7 @@
         *ngFor="let column of this.columns | async"
         [dataField]="column.dataField"
         [visible]="false"
+        [width]="column.width"
         [caption]="('ordreLignes-' + column.dataField?.split('.').join('-') | localize) || column.name"
         trueText="Oui"
         falseText="Non"
@@ -108,3 +114,4 @@
   </dx-data-grid>
 
 </div>
+<app-zoom-article-popup [articleLigneId]="articleLigneId"></app-zoom-article-popup>

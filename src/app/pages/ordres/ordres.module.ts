@@ -11,6 +11,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import {
   DxAccordionModule,
   DxAutocompleteModule,
+  DxScrollViewModule,
   DxBoxModule,
   DxButtonModule,
   DxCheckBoxModule,
@@ -82,6 +83,7 @@ import { ButtonLoaderModule } from 'app/shared/components/button-loader/button-l
 import { SupervisionAFacturerComponent } from './indicateurs/supervision-a-facturer/supervision-a-facturer.component';
 import { AjoutArticlesManuPopupComponent } from './ajout-articles-manu-popup/ajout-articles-manu-popup.component';
 import { ArticlesModule } from '../articles/articles.module';
+import { ZoomArticlePopupComponent } from './zoom-article-popup/zoom-article-popup.component';
 
 @NgModule({
   declarations: [
@@ -126,6 +128,7 @@ import { ArticlesModule } from '../articles/articles.module';
     GridHistoriqueEntrepotsComponent,
     SupervisionAFacturerComponent,
     AjoutArticlesManuPopupComponent,
+    ZoomArticlePopupComponent,
   ],
   imports: [
     OrdresRoutingModule,
@@ -135,6 +138,7 @@ import { ArticlesModule } from '../articles/articles.module';
     ArticlesModule,
     DxNumberBoxModule,
     DxFormModule,
+    DxScrollViewModule,
     DxTagBoxModule,
     DxDataGridModule,
     DxButtonModule,
