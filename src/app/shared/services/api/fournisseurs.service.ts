@@ -29,7 +29,7 @@ export class FournisseursService extends ApiService implements APIRead {
 
     return new DataSource({
       sort: [
-        { selector: this.model.getLabelField() }
+        { selector: 'code' }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

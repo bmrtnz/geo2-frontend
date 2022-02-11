@@ -28,6 +28,7 @@ export class OrdreLigne extends Model {
   @Field() public nombreColisPalette?: number;
   @Field() public nombreColisCommandes?: number;
   @Field() public libelleDLV?: string;
+  // @Field() public proprietaireMarchandise?: string;
   @Field({model: import('./fournisseur.model')}) public proprietaireMarchandise?: Fournisseur;
   @Field() public ventePrixUnitaire?: number;
   @Field() public gratuit?: boolean;
@@ -73,7 +74,7 @@ export class OrdreLigne extends Model {
   public pourcentageMargeBrute?: number;
   @Field({format: { type: 'percent', precision: 2 }})
   public pourcentageMargeNette?: number;
-
+  @Field() public valide?: boolean;
 }
 
 export default OrdreLigne;

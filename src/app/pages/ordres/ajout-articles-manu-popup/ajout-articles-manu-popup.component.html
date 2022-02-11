@@ -3,7 +3,7 @@
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
   [(visible)]="visible"
-  wrapper="{ class: 'ajout-manu-articles' }"
+  (onShowing)="onShowing($event)"
 >
     <div *dxTemplate="let data of 'title'">  
         <div class="title-start">{{ titleStart }}&nbsp;</div>
@@ -15,6 +15,7 @@
         >
         </dx-button>
     </div>  
+    
     <!-- code article -->
     <div class="dx-field quickCode-area">
         <div class="dx-field-label">{{ 'articles-saisieCode' | localize }}</div>

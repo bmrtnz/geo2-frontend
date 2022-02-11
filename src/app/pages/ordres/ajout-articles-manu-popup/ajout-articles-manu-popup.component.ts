@@ -89,6 +89,10 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
     this.updateChosenArticles();
   }
 
+  onShowing(e) {
+    e.component.content().parentNode.classList.add('ajout-articles-manu-popup');
+  }
+
   alreadySelected() {
     notify('Cet article est déjà sélectionné', 'warning', 3000);
   }
@@ -134,7 +138,7 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   clearAll() {
     this.codeChangeProcess = true;
     this.saisieCode.value = null;
-    this.catalogue.dataGrid.dataSource = null;
+    this.catalogue.dataGrid.dataSource = [];
     this.catalogue.dataGrid.instance.refresh();
     this.updateChosenArticles();
     this.catalogue.especeSB.value = [];
@@ -156,6 +160,8 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   }
 
   insertArticles() {
+    const info = this.localizeService.localize('ajout-article' + (this.nbARticles > 1 ? 's' : '')) + '...';
+    notify(info, 'info', 3000);
     from(this.chosenArticles)
     .pipe(
       mergeMap( articleID => this.functionsService

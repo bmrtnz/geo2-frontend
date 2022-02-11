@@ -1,5 +1,6 @@
 <div class="grid-lignes-container">
   <dx-button
+    [focusStateEnabled]="false"
     class="down-move-button"
     type="normal"
     text="down"
@@ -9,6 +10,7 @@
     (onClick)="moveRowUpDown($event)"
   ></dx-button>
   <dx-button
+    [focusStateEnabled]="false"
     class="up-move-button"
     type="normal"
     text="up"
@@ -19,17 +21,21 @@
   ></dx-button>
 
   <dx-data-grid class="dx-card wide-card"
+      [focusedRowEnabled]="true"
       [remoteOperations]="true"
       [showBorders]="false"
-      [focusedRowEnabled]="true"
+      [elementAttr]="{ class: 'grid-ordre-ligne' }"
       [focusedRowIndex]="0"
       [columnAutoWidth]="true"
       [columnHidingEnabled]="false"
       [allowColumnReordering]="true"
       (onCellPrepared)="onCellPrepared($event)"
       (onRowClick)="onRowClick($event)"
-      (onEditingStart)="onEditingStart($event)"
+      (onRowPrepared)="onRowPrepared($event)"
       (onFocusedRowChanged)="onFocusedRowChanged($event)"
+      (onCellDblClick)="zoomArticle($event)"
+      (onEditingStart)="onEditingStart($event)"
+
       (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Lignes de commande', $event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
       [scrolling]="{
         useNative:true
@@ -39,7 +45,6 @@
       <!-- Grid configuration -->
       <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
       <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-      <dxo-paging [pageSize]="100"> </dxo-paging>
       <dxo-pager
         [showPageSizeSelector]="true"
         [showInfo]="true"
@@ -56,14 +61,12 @@
       <dxo-filter-row [visible]="true"></dxo-filter-row>
       <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
       <dxo-editing
+        [selectTextOnEditStart]="true"
         [allowUpdating]="!env.production"
+        [allowDeleting]="true"
+        [mode]="'cell'"
       >
       </dxo-editing>
-      <!-- <dxo-row-dragging
-        [allowReordering]="true"
-        [onReorder]="onReorder"
-        [showDragIcons]="true"
-      ></dxo-row-dragging> -->
       <dxo-column-chooser
         [enabled]="true"
         mode="select"
@@ -77,16 +80,38 @@
         *ngFor="let column of this.columns | async"
         [dataField]="column.dataField"
         [visible]="false"
+        [width]="column.width"
         [caption]="('ordreLignes-' + column.dataField?.split('.').join('-') | localize) || column.name"
         trueText="Oui"
         falseText="Non"
         [allowEditing]="column.allowEditing"
         [dataType]="column?.dataType"
+        [editCellTemplate]="itemsWithSelectBox.includes(column.dataField) ? 'selectBoxEditTemplate' : false"
         [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
         [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
         [showInColumnChooser]="column.showInColumnChooser"
+        [showEditorAlways]="true"
     ></dxi-column>
+
+    <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
+      <dx-select-box
+      [dataSource]="this[cell.column.dataField + 'Source']"
+      [displayExpr]="itemsWithSelectBox.includes(cell.column.dataField) ? displayCodeBefore : this[cell.column.dataField + 'Service'].model.getLabelField()"
+      [searchExpr]="[
+        this[cell.column.dataField + 'Service'].model.getKeyField(),
+        this[cell.column.dataField + 'Service'].model.getLabelField()
+      ]"
+      [searchEnabled]="true"
+      [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)"
+      >
+        <dxo-drop-down-options
+          [width]="400">
+        </dxo-drop-down-options>
+      </dx-select-box>
+    </div>
 
   </dx-data-grid>
 
 </div>
+<app-zoom-article-popup [articleLigneId]="articleLigneId"></app-zoom-article-popup>

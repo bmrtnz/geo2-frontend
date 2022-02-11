@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -48,7 +48,9 @@ import { environment } from 'environments/environment';
     templateUrl: './article-details.component.html',
     styleUrls: ['./article-details.component.scss']
 })
-export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
+export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges {
+
+    @Input() public articleLigneId: string;
 
     formGroup = this.fb.group({
         id: [''],
@@ -187,23 +189,39 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
 
     ngOnInit() {
 
+        this.formGroup.reset();
+        this.readOnlyMode = true;
+        this.editing = false;
+        this.cloneMode = false;
+
+        if (this.route.snapshot.url[0]?.path !== 'articles') return;
+
         this.route.params
             .pipe(
-                tap(_ => {
-                    this.formGroup.reset();
-                    this.readOnlyMode = true;
-                    this.editing = false;
-                    this.cloneMode = false;
-                }),
                 switchMap(params => this.articlesService.getOne(params.id)),
             )
-            .subscribe(res => {
-                this.article = new Article(res.data.article);
-                this.formGroup.patchValue(this.article);
-                this.contentReadyEvent.emit();
-                this.ucBW = this.article.emballage.uniteParColis > 0;
-                this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
-            });
+            .subscribe(res => this.afterLoadInitForm(res));
+    }
+
+    ngOnChanges() {
+
+        // Zoom article mode when clicking on an order article
+        if (this.articleLigneId) {
+            this.formGroup.reset();
+            this.preSaisie = '';
+            this.articlesService
+            .getOne(this.articleLigneId)
+            .subscribe(res => this.afterLoadInitForm(res));
+        }
+
+    }
+
+    afterLoadInitForm(res) {
+        this.article = new Article(res.data.article);
+        this.formGroup.patchValue(this.article);
+        this.contentReadyEvent.emit();
+        this.ucBW = this.article.emballage.uniteParColis > 0;
+        this.preSaisie = this.article.preSaisie === true ? 'preSaisie' : '';
     }
 
     onCancel() {

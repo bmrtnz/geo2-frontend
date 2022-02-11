@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
 
-    <div class="content-block" [hidden]="env.production" >
+    <div class="content-block" *ngIf="!articleLigneId" [hidden]="env.production">
         <h2><span *ngIf="cloneMode">{{ 'create' | localize }}</span>
         {{ 'articles-details-title' | localize }}<span *ngIf="!cloneMode" class="red-font"> {{ preSaisie | localize }} </span><!-- {{ article.id }} -->
         <span *ngIf="cloneMode"> ({{ 'clone' | localize }})</span>
@@ -36,7 +36,7 @@
             [visible]="!cloneMode"
             [height]=800
             >
-                <h4 class="entity-id">N°&nbsp;{{ article?.id }}</h4>
+                <h4 *ngIf="!articleLigneId" class="entity-id">N°&nbsp;{{ article?.id }}</h4>
 
                 <dx-check-box
                     #valideCheckBox
