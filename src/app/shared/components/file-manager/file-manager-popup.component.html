@@ -3,7 +3,7 @@
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
   width="1000"
-  title="{{ 'documents' | localize }}"
+  [title]="('documents' | localize) + (subTitle ? ' - ' + subTitle : '')"
   [(visible)]="visible"
 >
     <dx-file-manager

@@ -698,7 +698,7 @@
 
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup key="articles" [id]="article?.id"></app-file-manager-popup>
+<app-file-manager-popup key="articles" [subTitle]="article.id" [id]="article.id" *ngIf="article"></app-file-manager-popup>
 <app-push-history-popup
     title="{{ 'valide-comment-title' | localize }}"
     [placeholder]="'valide-comment' | localize"

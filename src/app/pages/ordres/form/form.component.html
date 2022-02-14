@@ -886,7 +886,7 @@
   </form>
 
   <app-editing-alert></app-editing-alert>
-  <app-file-manager-popup></app-file-manager-popup>
+  <app-file-manager-popup key="ordres" [subTitle]="ordre.numero" [id]="ordre.id" *ngIf="ordre"></app-file-manager-popup>
   <dx-popup
     [width]="400"
     [height]="165"

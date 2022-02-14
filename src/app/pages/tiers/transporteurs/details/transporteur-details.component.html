@@ -406,4 +406,4 @@
 </form>
 <app-editing-alert></app-editing-alert> 
 <app-info-popup [customText]="'text-transporteurs-popup-documents' | localize"></app-info-popup>
-<app-file-manager-popup key="transporteurs" [id]="transporteur?.id"></app-file-manager-popup>
+<app-file-manager-popup key="transporteurs" [subTitle]="transporteur.id" [id]="transporteur.id" *ngIf="transporteur"></app-file-manager-popup>

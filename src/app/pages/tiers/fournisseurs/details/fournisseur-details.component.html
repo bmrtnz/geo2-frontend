@@ -911,7 +911,7 @@
 
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup key="fournisseurs" [id]="fournisseur?.id"></app-file-manager-popup>
+<app-file-manager-popup key="fournisseurs" [subTitle]="fournisseur.code" [id]="fournisseur.id" *ngIf="fournisseur"></app-file-manager-popup>
 <app-push-history-popup
   title="{{ 'valide-comment-title' | localize }}"
   [placeholder]="'valide-comment' | localize"
