@@ -308,6 +308,8 @@
                         [displayExpr]="displayIDBefore"
                         [searchEnabled]="true"
                         [searchExpr]="['id','description']"
+                        [showClearButton]="true"
+                        (onValueChanged)="onNonRequiredSBChange($event)"
                       ></dx-select-box>
                     </div>
                 </div>
@@ -342,6 +344,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -357,6 +361,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>

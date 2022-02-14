@@ -135,6 +135,8 @@
                       displayExpr="description"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -146,6 +148,8 @@
                       formControlName="natureStation"
                       [readOnly]="readOnlyMode"
                       [dataSource]="naturesStation"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -671,6 +675,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                       <dx-validator name="{{ 'tiers-fournisseurs-moyenPaiement' | localize }}">
                         <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
@@ -690,6 +696,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                       <dx-validator name="{{ 'tiers-fournisseurs-basePaiement' | localize }}">
                         <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
@@ -847,6 +855,8 @@
                       displayExpr="raisonSocial"
                       [searchEnabled]="true"
                       [searchExpr]="['id','raisonSocial']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                   </dx-select-box>
                   </div>
@@ -862,6 +872,8 @@
                       displayExpr="description"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                   </dx-select-box>
                   </div>

@@ -45,12 +45,17 @@ export class FormUtilsService {
     return Object
     .entries(entity)
     .flatMap(([key, value]) => {
-      if (typeof value === 'object') {
-        if (length in value)
-          return this.extractPaths(value[0], key);
-        return this.extractPaths(value, key);
+      if (typeof value === 'object' && value !== null) {
+          if (length in value)
+            return this.extractPaths(value[0], key);
+          return this.extractPaths(value, key);
       }
       return `${prefix ? `${prefix}.` : ''}${key}`;
     });
   }
+
+  public setIdToNull(formGroup, field) {
+    formGroup.get(field).patchValue({id: null});
+  }
+
 }

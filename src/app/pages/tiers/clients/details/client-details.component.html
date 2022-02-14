@@ -193,6 +193,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
@@ -480,6 +482,8 @@
                         displayExpr="description"
                         [searchEnabled]="true"
                         [searchExpr]="['id','description']"
+                        [showClearButton]="true"
+                        (onValueChanged)="onNonRequiredSBChange($event)"
                       ></dx-select-box>
                     </div>
                   </div>
@@ -928,6 +932,7 @@
                       [dataSource]="courtiers"
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
+                      [showClearButton]="true"
                       (onValueChanged)="onCourtierChange($event)"
                       [searchExpr]="['id','raisonSocial']"
                     >
@@ -945,6 +950,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
@@ -988,6 +995,8 @@
                       [displayExpr]="displayCodeBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['code','raisonSocial']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
@@ -1030,6 +1039,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
