@@ -105,6 +105,8 @@
                       displayExpr="raisonSocial"
                       [searchEnabled]="true"
                       [searchExpr]="['id','raisonSocial']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                       <dx-validator name="{{ 'tiers-transporteurs-clientRaisonSocial-raisonSocial' | localize }}">
                         <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
@@ -376,6 +378,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -391,6 +395,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
