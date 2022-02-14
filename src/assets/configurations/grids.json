@@ -961,6 +961,7 @@
         "sortOrder": "asc",
         "allowEditing": false,
         "showInColumnChooser": false,
+        "fixed": true,
         "visible": true
       },
       {
@@ -1022,7 +1023,7 @@
       },
       {
         "visibleIndex": 9,
-        "dataField": "proprietaireMarchandise.code",
+        "dataField": "proprietaireMarchandise",
         "dataType": "string",
         "width": "200",
         "allowEditing": true,

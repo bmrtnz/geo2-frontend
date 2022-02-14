@@ -17,6 +17,9 @@
     }
 }
 ::ng-deep .grid-ordre-ligne {
+    td:first-of-type input {
+        text-align: center !important;
+    }
     .bio-article {
         color: #39970e !important;
         cursor: pointer;

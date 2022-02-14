@@ -84,6 +84,7 @@ import { SupervisionAFacturerComponent } from './indicateurs/supervision-a-factu
 import { AjoutArticlesManuPopupComponent } from './ajout-articles-manu-popup/ajout-articles-manu-popup.component';
 import { ArticlesModule } from '../articles/articles.module';
 import { ZoomArticlePopupComponent } from './zoom-article-popup/zoom-article-popup.component';
+import { ZoomFournisseurPopupComponent } from './zoom-fournisseur-popup/zoom-fournisseur-popup.component';
 
 @NgModule({
   declarations: [
@@ -129,6 +130,7 @@ import { ZoomArticlePopupComponent } from './zoom-article-popup/zoom-article-pop
     SupervisionAFacturerComponent,
     AjoutArticlesManuPopupComponent,
     ZoomArticlePopupComponent,
+    ZoomFournisseurPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,

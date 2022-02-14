@@ -167,8 +167,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
       if (e.column.dataField === 'article.id') {
         // Descript. article
         const infoArt = this.articlesService.concatArtDescript(e.data.article);
-        e.cellElement.innerText =  infoArt.concatDesc;
-        e.cellElement.title = infoArt.concatDesc;
+        e.cellElement.innerHTML =  infoArt.concatDesc;
+        e.cellElement.title = infoArt.concatDesc.substring(2);
         // Bio en vert
         if (infoArt.bio) e.cellElement.classList.add('bio-article');
       }

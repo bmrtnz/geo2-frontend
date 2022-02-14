@@ -84,6 +84,7 @@
         [caption]="('ordreLignes-' + column.dataField?.split('.').join('-') | localize) || column.name"
         trueText="Oui"
         falseText="Non"
+        [fixed]=column.fixed
         [allowEditing]="column.allowEditing"
         [dataType]="column?.dataType"
         [editCellTemplate]="itemsWithSelectBox.includes(column.dataField) ? 'selectBoxEditTemplate' : false"
