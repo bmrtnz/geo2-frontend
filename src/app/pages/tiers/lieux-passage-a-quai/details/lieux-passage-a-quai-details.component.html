@@ -47,6 +47,7 @@
           class="black"
           height="auto"
           icon="material-icons folder"
+          [disabled]="!lieupassageaquai"
           (onClick)="fileManagerClick()"
           text="{{ 'btn-docsjoints' | localize }}">
         </dx-button>
@@ -396,4 +397,4 @@
 
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup key="lieux_passage_a_quai" [id]="lieupassageaquai?.id"></app-file-manager-popup>
+<app-file-manager-popup key="lieux_passage_a_quai" [subTitle]="lieupassageaquai.id" [id]="lieupassageaquai.id" *ngIf="lieupassageaquai"></app-file-manager-popup>

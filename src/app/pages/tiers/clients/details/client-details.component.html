@@ -60,6 +60,7 @@
             class="black"
             height="auto"
             icon="material-icons folder"
+            [disabled]="!client"
             (onClick)="fileManagerClick()"
             text="{{ 'btn-docsjoints' | localize }}">
           </dx-button>
@@ -1346,7 +1347,7 @@
   </div>
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup key="clients" [id]="client?.id"></app-file-manager-popup>
+<app-file-manager-popup key="clients" [subTitle]="client?.code" [id]="client?.id" *ngIf="client"></app-file-manager-popup>
 <app-info-popup [customText]="'text-clients-popup-documents' | localize"></app-info-popup>
 <app-push-history-popup
   [title]="'valide-comment-title' | localize"
