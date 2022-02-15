@@ -260,7 +260,7 @@ export class GridConfiguratorService {
         const defaultColumn = defaultConfig.columns
         .find(({ dataField, }) => dataField === c.dataField );
         return {
-          showInColumnChooser: (defaultColumn.showInColumnChooser ?? true),
+          showInColumnChooser: (defaultColumn?.showInColumnChooser ?? true),
         };
       })(),
     }));
