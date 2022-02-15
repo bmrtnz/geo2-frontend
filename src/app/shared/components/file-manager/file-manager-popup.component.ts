@@ -20,6 +20,8 @@ export class FileManagerComponent implements OnChanges {
 
   @Input() id: any;
 
+  @Input() subTitle: string;
+
   visible = false;
   fileProvider: CustomFileSystemProvider;
   items: any;

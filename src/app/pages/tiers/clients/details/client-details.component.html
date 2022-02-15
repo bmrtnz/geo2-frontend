@@ -60,6 +60,7 @@
             class="black"
             height="auto"
             icon="material-icons folder"
+            [disabled]="!client"
             (onClick)="fileManagerClick()"
             text="{{ 'btn-docsjoints' | localize }}">
           </dx-button>
@@ -193,6 +194,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
@@ -480,6 +483,8 @@
                         displayExpr="description"
                         [searchEnabled]="true"
                         [searchExpr]="['id','description']"
+                        [showClearButton]="true"
+                        (onValueChanged)="onNonRequiredSBChange($event)"
                       ></dx-select-box>
                     </div>
                   </div>
@@ -928,6 +933,7 @@
                       [dataSource]="courtiers"
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
+                      [showClearButton]="true"
                       (onValueChanged)="onCourtierChange($event)"
                       [searchExpr]="['id','raisonSocial']"
                     >
@@ -945,6 +951,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
@@ -988,6 +996,8 @@
                       [displayExpr]="displayCodeBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['code','raisonSocial']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
@@ -1030,6 +1040,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                     </dx-select-box>
                   </div>
@@ -1335,7 +1347,7 @@
   </div>
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup key="clients" [id]="client?.id"></app-file-manager-popup>
+<app-file-manager-popup key="clients" [subTitle]="client?.code" [id]="client?.id" *ngIf="client"></app-file-manager-popup>
 <app-info-popup [customText]="'text-clients-popup-documents' | localize"></app-info-popup>
 <app-push-history-popup
   [title]="'valide-comment-title' | localize"

@@ -167,6 +167,12 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
     transporteursSource.load().then(res => res.length ? this.CCexists = true : this.CCexists = false);
   }
 
+  onNonRequiredSBChange(e) {
+    if (this.editing && e.value === null) {
+      this.formUtils.setIdToNull(this.formGroup, e.element.attributes.formcontrolname.nodeValue);
+    }
+  }
+
   openCloseAccordions(action) {
     if (!this.accordion) return;
     this.accordion.toArray().forEach(element => {

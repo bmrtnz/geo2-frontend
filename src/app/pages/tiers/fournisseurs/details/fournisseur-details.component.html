@@ -55,6 +55,7 @@
           class="black"
           height="auto"
           icon="material-icons folder"
+          [disabled]="!fournisseur"
           (onClick)="fileManagerClick()"
           text="{{ 'btn-docsjoints' | localize }}">
         </dx-button>
@@ -135,6 +136,8 @@
                       displayExpr="description"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -146,6 +149,8 @@
                       formControlName="natureStation"
                       [readOnly]="readOnlyMode"
                       [dataSource]="naturesStation"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -671,6 +676,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                       <dx-validator name="{{ 'tiers-fournisseurs-moyenPaiement' | localize }}">
                         <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
@@ -690,6 +697,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                       <dx-validator name="{{ 'tiers-fournisseurs-basePaiement' | localize }}">
                         <dxi-validation-rule *ngIf="autoFacturationChecked" type="required"></dxi-validation-rule>
@@ -847,6 +856,8 @@
                       displayExpr="raisonSocial"
                       [searchEnabled]="true"
                       [searchExpr]="['id','raisonSocial']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                   </dx-select-box>
                   </div>
@@ -862,6 +873,8 @@
                       displayExpr="description"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                   </dx-select-box>
                   </div>
@@ -911,7 +924,7 @@
 
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup key="fournisseurs" [id]="fournisseur?.id"></app-file-manager-popup>
+<app-file-manager-popup key="fournisseurs" [subTitle]="fournisseur.code" [id]="fournisseur.id" *ngIf="fournisseur"></app-file-manager-popup>
 <app-push-history-popup
   title="{{ 'valide-comment-title' | localize }}"
   [placeholder]="'valide-comment' | localize"

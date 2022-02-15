@@ -249,6 +249,12 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     return e.component.option('value');
   }
 
+  onNonRequiredSBChange(e) {
+    if (this.editing && e.value === null) {
+      this.formUtils.setIdToNull(this.formGroup, e.element.attributes.formcontrolname.nodeValue);
+    }
+  }
+
   checkCode(params) {
     const code = params.value.toUpperCase();
     const fournisseursSource = this.fournisseursService.getDataSource_v2(['code']);
