@@ -577,11 +577,18 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   onCourtierChange(e) {
     // Si pas de courtier, on supprime les infos connexes de courtage
-    if (this.editing) {
-      if (e.value === null) {
-        this.formGroup.get('courtageModeCalcul').reset();
-        this.formGroup.get('courtageValeur').reset();
-      }
+    if (this.editing && e.value === null) {
+      this.formGroup.get('courtageModeCalcul').patchValue({id: null});
+      this.formGroup.get('courtageModeCalcul').markAsDirty();
+      this.formGroup.get('courtageValeur').reset();
+      this.formGroup.get('courtageValeur').markAsDirty();
+      this.onNonRequiredSBChange(e);
+    }
+  }
+
+  onNonRequiredSBChange(e) {
+    if (this.editing && e.value === null) {
+      this.formUtils.setIdToNull(this.formGroup, e.element.attributes.formcontrolname.nodeValue);
     }
   }
 
@@ -614,8 +621,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
   }
 
   private getDirtyFieldsPath() {
+
     const dirtyFields = this.formUtils
     .extractDirty(this.formGroup.controls, Client.getKeyField());
+
     const gridFields = clientsGridConfig.columns
     .map(({dataField}) => dataField);
 

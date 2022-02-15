@@ -47,6 +47,7 @@
           class="black"
           height="auto"
           icon="material-icons folder"
+          [disabled]="!transporteur"
           (onClick)="fileManagerClick()"
           text="{{ 'btn-docsjoints' | localize }}">
         </dx-button>
@@ -105,6 +106,8 @@
                       displayExpr="raisonSocial"
                       [searchEnabled]="true"
                       [searchExpr]="['id','raisonSocial']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     >
                       <dx-validator name="{{ 'tiers-transporteurs-clientRaisonSocial-raisonSocial' | localize }}">
                         <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
@@ -376,6 +379,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -391,6 +396,8 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -406,4 +413,4 @@
 </form>
 <app-editing-alert></app-editing-alert> 
 <app-info-popup [customText]="'text-transporteurs-popup-documents' | localize"></app-info-popup>
-<app-file-manager-popup key="transporteurs" [id]="transporteur?.id"></app-file-manager-popup>
+<app-file-manager-popup key="transporteurs" [subTitle]="transporteur.id" [id]="transporteur.id" *ngIf="transporteur"></app-file-manager-popup>

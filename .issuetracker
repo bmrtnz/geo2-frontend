@@ -3,5 +3,5 @@
 # (note that '\' need to be escaped).
 
 [issuetracker "Redmine"]
-  regex = "(#\\d+)"
+  regex = "#(\\d+)"
   url = "https://redmine.microtec.fr/issues/$1"
