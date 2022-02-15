@@ -94,6 +94,7 @@
         class="black"
         height="auto"
         icon="material-icons folder"
+        [disabled]="!ordre"
         (onClick)="fileManagerClick()"
         text="{{ 'ordres-suivi-documents' | localize }}">
     </dx-button>

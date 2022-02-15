@@ -47,6 +47,7 @@
           class="black"
           height="auto"
           icon="material-icons folder"
+          [disabled]="!transporteur"
           (onClick)="fileManagerClick()"
           text="{{ 'btn-docsjoints' | localize }}">
         </dx-button>
