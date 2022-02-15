@@ -14,7 +14,7 @@ import {Client} from './client.model';
 export enum ModeLivraison {
   DIRECT = 'D',
   CROSS_DOCK = 'X',
-  SORTIE_STOCK = 'ST',
+  SORTIE_STOCK = 'S', // Erreur 'ST' vu avec Stéphane 15-02-22, inexistant => 'S'
 }
 
 @ModelName('Entrepot')
