@@ -131,7 +131,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     .map(({selector: column, summaryType}, index) => ({
       column,
       summaryType,
-      displayFormat: !index ? 'Totaux : {0}' : '{0}',
+      displayFormat: !index ? this.localizeService.localize('totaux') + ' : {0}' : '{0}',
       valueFormat: columns
       ?.find(({ dataField }) => dataField === column)
       ?.format,

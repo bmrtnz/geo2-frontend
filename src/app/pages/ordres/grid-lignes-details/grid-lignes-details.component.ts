@@ -37,21 +37,8 @@ export class GridLignesDetailsComponent implements AfterViewInit {
     this.columns = from(this.gridConfig).pipe(map( config => config.columns ));
   }
 
-  // ngOnChanges() {
-  //   this.enableFilters();
-  // }
-
   ngAfterViewInit() {
     this.enableFilters();
-
-    // console.log(this.detailedFields)
-    // this.totalItems = this.detailedFields
-    // .filter( f => f.dataType === 'number')
-    // .map(({dataField: column}, index) => {
-    //   const displaytext = !index ? 'Total :' : '';
-    //   return {column, summaryType: SummaryType.SUM, displayFormat: displaytext + ' {0}'};
-    // });
-
   }
 
   async enableFilters() {

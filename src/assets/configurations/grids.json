@@ -2217,12 +2217,21 @@
       },
       { "dataField": "id", "visible": false },
       { "dataField": "logistique.fournisseur.id", "visible": false },
-      { "dataField": "nombreColisCommandes", "visible": false },
-      { "dataField": "article.id", "visible": false },
-      { "dataField": "article.matierePremiere.variete.description", "visible": false },
-      { "dataField": "ordre.devise.id", "visible": false },
-      { "dataField": "achatUnite.description", "visible": false },
-      { "dataField": "venteUnite.description", "visible": false }
+      { "dataField": "nombreColisCommandes", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.variete.description", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.variete.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.cahierDesCharge.categorie.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.normalisation.calibreMarquage.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.emballage.poidsNetClient", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.emballage.prepese", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.modeCulture.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.modeCulture.description", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.origine.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "article.matierePremiere.origine.description", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.devise.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "achatUnite.description", "showInColumnChooser": false, "visible": false },
+      { "dataField": "venteUnite.description", "showInColumnChooser": false, "visible": false }
     ]
   },
   "mouv-clients-comptes-palox": {

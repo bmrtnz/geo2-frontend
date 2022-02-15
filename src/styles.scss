@@ -215,3 +215,23 @@ body {
 		transform: scale(1);
 	}
 }
+
+// Dark grey header background
+.dx-datagrid .dx-row.dx-header-row {
+  td {
+    background-color: #666 !important;
+    color: #FFF !important;
+    .dx-sort-indicator {
+      font-weight: bold;
+      color: #FFF !important;
+    }
+    &:hover {
+      div {
+        color: #FFF !important;
+      }
+    }
+  }
+  .dx-column-indicators span {
+    color: #FFF !important;
+  }
+}

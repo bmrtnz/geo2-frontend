@@ -54,7 +54,7 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
     .map(({selector: column, summaryType}, index) => ({
       column,
       summaryType,
-      displayFormat: !index ? 'Total : {0}' : '{0}',
+      displayFormat: !index ? this.localizeService.localize('totaux') + ' : {0}' : '{0}',
       valueFormat: columns
       ?.find(({ dataField }) => dataField === column)
       ?.format,

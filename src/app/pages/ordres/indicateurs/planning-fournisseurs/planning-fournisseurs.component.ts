@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import Ordre from 'app/shared/models/ordre.model';
-import { AuthService, LocalizationService, FournisseursService } from 'app/shared/services';
+import { AuthService, LocalizationService, FournisseursService, ArticlesService } from 'app/shared/services';
 import { Operation, OrdresService } from 'app/shared/services/api/ordres.service';
 import { FormUtilsService } from 'app/shared/services/form-utils.service';
 import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
@@ -78,6 +78,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     public authService: AuthService,
     public dateManagementService: DateManagementService,
     public localizeService: LocalizationService,
+    public articlesService: ArticlesService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     public currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
@@ -149,7 +150,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       }
       // Descript. article
       if (e.column.dataField === 'article.description') {
-        e.cellElement.innerText =  e.data.article.matierePremiere.variete.description + ' ' + e.cellElement.innerText;
+        e.cellElement.innerHTML =  this.articlesService.concatArtDescript(e.data.article).concatDesc;
       }
       // Prix
       if (e.column.dataField === 'ventePrixUnitaire') {
