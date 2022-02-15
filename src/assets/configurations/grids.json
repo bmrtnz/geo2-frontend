@@ -539,22 +539,10 @@
         "visible": true
       },
       {
-        "dataField": "matierePremiere.variete.id",
-        "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": false
-      },
-      {
         "visibleIndex": 2,
         "dataField": "matierePremiere.variete.description",
         "dataType": "string",
         "visible": true
-      },
-      {
-        "dataField": "emballage.emballage.id",
-        "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": false
       },
       {
         "visibleIndex": 3,
@@ -611,6 +599,18 @@
         "dataType": "boolean",
         "width": 50,
         "visible": true
+      },
+      {
+        "dataField": "matierePremiere.variete.id",
+        "dataType": "string",
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "emballage.emballage.id",
+        "dataType": "string",
+        "visible": false,
+        "showInColumnChooser": false
       }
     ]
   },

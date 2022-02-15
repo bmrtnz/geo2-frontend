@@ -264,6 +264,12 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     return e.component.option('value');
   }
 
+  onNonRequiredSBChange(e) {
+    if (this.editing && e.value === null) {
+      this.formUtils.setIdToNull(this.formGroup, e.element.attributes.formcontrolname.nodeValue);
+    }
+  }
+
   onSubmit() {
 
     if (!this.formGroup.pristine && this.formGroup.valid) {

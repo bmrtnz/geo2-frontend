@@ -156,6 +156,12 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
     lieuxpassageaquaiSource.load().then(res => this.CCexists = res.length);
   }
 
+  onNonRequiredSBChange(e) {
+    if (this.editing && e.value === null) {
+      this.formUtils.setIdToNull(this.formGroup, e.element.attributes.formcontrolname.nodeValue);
+    }
+  }
+
   onCodeChange(e) {
     if (!e.value) return;
     const code = e.value.toUpperCase();
