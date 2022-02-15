@@ -57,6 +57,7 @@ import { ModificationListModule } from 'app/shared/components/modification-list/
     FournisseurDetailsComponent
   ],
   providers: [NestedGuard, EditingGuard],
+  exports: [FournisseurDetailsComponent]
 })
 export class FournisseursModule { }
 

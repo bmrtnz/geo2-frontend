@@ -78,6 +78,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
+      sort: [
+        { selector: 'numero',  }
+      ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 

@@ -46,7 +46,7 @@
                     [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
                 ></dx-check-box>
                 <app-historique-valide width="900" [historique]="article?.historique"></app-historique-valide>
-                <dx-button
+                <dx-button *ngIf="!articleLigneId"
                 class="black"
                 height="auto"
                 icon="material-icons folder"

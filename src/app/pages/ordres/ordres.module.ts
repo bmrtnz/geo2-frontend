@@ -83,6 +83,7 @@ import { ButtonLoaderModule } from 'app/shared/components/button-loader/button-l
 import { SupervisionAFacturerComponent } from './indicateurs/supervision-a-facturer/supervision-a-facturer.component';
 import { AjoutArticlesManuPopupComponent } from './ajout-articles-manu-popup/ajout-articles-manu-popup.component';
 import { ArticlesModule } from '../articles/articles.module';
+import { FournisseursModule } from '../tiers/fournisseurs/fournisseurs.module';
 import { ZoomArticlePopupComponent } from './zoom-article-popup/zoom-article-popup.component';
 import { ZoomFournisseurPopupComponent } from './zoom-fournisseur-popup/zoom-fournisseur-popup.component';
 
@@ -169,6 +170,7 @@ import { ZoomFournisseurPopupComponent } from './zoom-fournisseur-popup/zoom-fou
     ViewDocumentPopupModule,
     DxLoadPanelModule,
     ButtonLoaderModule,
+    FournisseursModule
   ],
   providers: [
     OrdresIndicatorsService,

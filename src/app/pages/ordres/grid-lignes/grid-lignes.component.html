@@ -33,7 +33,7 @@
       (onRowClick)="onRowClick($event)"
       (onRowPrepared)="onRowPrepared($event)"
       (onFocusedRowChanged)="onFocusedRowChanged($event)"
-      (onCellDblClick)="zoomArticle($event)"
+      (onCellDblClick)="openFilePopup($event)"
       (onEditingStart)="onEditingStart($event)"
 
       (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Lignes de commande', $event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
@@ -58,7 +58,7 @@
         [customLoad]="gridConfiguratorService.load"
         [customSave]="gridConfiguratorService.save"
       ></dxo-state-storing>
-      <dxo-filter-row [visible]="true"></dxo-filter-row>
+      <dxo-filter-row [visible]="false"></dxo-filter-row>
       <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
       <dxo-editing
         [selectTextOnEditStart]="true"
@@ -116,3 +116,4 @@
 
 </div>
 <app-zoom-article-popup [articleLigneId]="articleLigneId"></app-zoom-article-popup>
+<app-zoom-fournisseur-popup [fournisseurLigneId]="fournisseurLigneId"></app-zoom-fournisseur-popup>

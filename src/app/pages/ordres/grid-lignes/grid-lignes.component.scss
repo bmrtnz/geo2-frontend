@@ -38,4 +38,8 @@
     .dx-row-focused.dx-data-row > td {
         border-bottom-color: #e0e0e0 !important;
     }
+    .dx-link-delete {
+        color: $base-accent !important;
+        background-color: transparent !important;
+    }
 }

@@ -10,11 +10,11 @@ import { GridColumn, TotalItem } from 'basic';
 import { SummaryType, SummaryInput } from 'app/shared/services/api.service';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Fournisseur } from 'app/shared/models/fournisseur.model';
 import { FournisseursService, ArticlesService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
 import { ZoomArticlePopupComponent } from '../zoom-article-popup/zoom-article-popup.component';
+import { ZoomFournisseurPopupComponent } from '../zoom-fournisseur-popup/zoom-fournisseur-popup.component';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -24,7 +24,9 @@ import { ZoomArticlePopupComponent } from '../zoom-article-popup/zoom-article-po
 export class GridLignesComponent implements OnChanges, OnInit {
 
   @Input() public ordre: Ordre;
+  @Input() public fournisseurLigneCode: string;
   @Output() public articleLigneId: string;
+  @Output() public fournisseurLigneId: string;
 
   public dataSource: DataSource;
   public proprietaireMarchandiseSource: DataSource;
@@ -39,6 +41,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public totalItems: TotalItem[] = [];
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, {static: false}) zoomArticlePopup: ZoomArticlePopupComponent;
+  @ViewChild(ZoomFournisseurPopupComponent, {static: false}) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
   private gridConfig: Promise<GridConfig>;
   public currentfocusedRow: number;
   public gridRowsTotal: number;
@@ -222,10 +225,23 @@ export class GridLignesComponent implements OnChanges, OnInit {
   onCellClick(e) {
   }
 
-  zoomArticle(e) {
-    if (e.column?.dataField !== 'article.id') return;
-    this.articleLigneId = e.data.article.id;
-    this.zoomArticlePopup.visible = true;
+  openFilePopup(e) {
+    if (e.column?.dataField === 'article.id') {
+      this.articleLigneId = e.data.article.id;
+      this.zoomArticlePopup.visible = true;
+    }
+    if (e.column?.dataField === 'fournisseur') {
+      const idFour = e.data.fournisseur.id;
+      if (!idFour) return;
+      this.fournisseurLigneId = idFour;
+      this.zoomFournisseurPopup.visible = true;
+    }
+    if (e.column?.dataField === 'proprietaireMarchandise') {
+      const idFour = e.data.proprietaireMarchandise.id;
+      if (!idFour) return;
+      this.fournisseurLigneId = idFour;
+      this.zoomFournisseurPopup.visible = true;
+    }
   }
 
   onEditingStart(e) {

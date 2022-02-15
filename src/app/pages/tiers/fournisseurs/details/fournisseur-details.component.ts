@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren, Input, OnChanges, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NestedPart } from 'app/pages/nested/nested.component';
@@ -41,7 +41,10 @@ import { FournisseursService } from '../../../../shared/services/api/fournisseur
   templateUrl: './fournisseur-details.component.html',
   styleUrls: ['./fournisseur-details.component.scss']
 })
-export class FournisseurDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
+export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
+
+  @Input() public fournisseurLigneId: string;
+  @Output() fournisseurLigneCode = new EventEmitter<string>();
 
   formGroup = this.fb.group({
     code: [''],
@@ -172,16 +175,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.isReadOnlyMode = value;
   }
 
-  ngAfterViewInit(): void {
-    // Ouverture ou fermeture accordéons (création) - old car plus d'accordéons
-    // this.openCloseAccordions(this.createMode);
-    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
-    if (this.createMode) {
-      const Element = document.querySelector('.submit') as HTMLElement;
-      Element.click();
-    }
-  }
-
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
       console.log('rrr',this.formGroup.valid)
@@ -198,30 +191,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
 
   ngOnInit() {
 
-    this.route.params
-      .pipe(tap(_ => this.formGroup.reset()))
-      .subscribe(params => {
-        const url = this.route.snapshot.url;
-        this.createMode = url[url.length - 1].path === 'create';
-        this.readOnlyMode = !this.createMode;
-        if (!this.createMode) {
-          this.fournisseursService.getOne(params.id)
-            .subscribe(res => {
-              this.fournisseur = res.data.fournisseur;
-              const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
-              this.formGroup.patchValue({ ...this.fournisseur, certifications });
-              this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
-              this.certifications.reload();
-            });
-        } else {
-          this.fournisseur = new Fournisseur({});
-          // Set condit vente
-          this.formGroup.get('conditionVente').setValue({id: 'ACHATS'});
-          this.formGroup.get('conditionVente').markAsDirty();
-        }
-        this.contentReadyEvent.emit();
-      });
-
     this.pays = this.paysService.getDataSource_v2(['id', 'description']);
     this.pays.filter(['valide', '=', 'true']);
     this.bureauxAchat = this.bureauxAchatService.getDataSource_v2(['id', 'raisonSocial']);
@@ -237,10 +206,60 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
 
+    if (this.route.snapshot.url[1]?.path !== 'fournisseurs') return;
+
+    this.route.params
+      .pipe(tap(_ => this.formGroup.reset()))
+      .subscribe(params => {
+        const url = this.route.snapshot.url;
+        this.createMode = url[url.length - 1].path === 'create';
+        this.readOnlyMode = !this.createMode;
+        if (!this.createMode) {
+          this.fournisseursService.getOne(params.id)
+            .subscribe(res => {
+              this.afterLoadInitForm(res);
+              this.certifications.reload();
+            });
+        } else {
+          this.fournisseur = new Fournisseur({});
+          // Set condit vente
+          this.formGroup.get('conditionVente').setValue({id: 'ACHATS'});
+          this.formGroup.get('conditionVente').markAsDirty();
+        }
+        this.contentReadyEvent.emit();
+      });
+
   }
 
-  F(params) {
-    params.value = params.value.toUpperCase();
+  ngAfterViewInit(): void {
+    // Ouverture ou fermeture accordéons (création) - old car plus d'accordéons
+    // this.openCloseAccordions(this.createMode);
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    if (this.createMode) {
+      const Element = document.querySelector('.submit') as HTMLElement;
+      Element.click();
+    }
+  }
+
+  ngOnChanges() {
+
+      // Zoom fournisseur mode when clicking on an order article
+      if (this.fournisseurLigneId) {
+          this.formGroup.reset();
+          this.preSaisie = '';
+          this.fournisseursService
+          .getOne(this.fournisseurLigneId)
+          .subscribe(res => this.afterLoadInitForm(res));
+      }
+
+  }
+
+  afterLoadInitForm(res) {
+    this.fournisseur = res.data.fournisseur;
+    const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
+    this.formGroup.patchValue({ ...this.fournisseur, certifications });
+    this.preSaisie = this.fournisseur.preSaisie === true ? 'preSaisie' : '';
+    this.fournisseurLigneCode.emit(this.fournisseur.code);
   }
 
   valueToUpperCase(e) {
