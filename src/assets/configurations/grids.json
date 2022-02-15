@@ -1110,7 +1110,7 @@
       {
         "visibleIndex": 21,
         "dataField": "fraisUnite",
-        "allowEditing": true,
+        "allowEditing": false,
         "width": "150",
         "dataType": "string",
         "visible": true
@@ -1165,6 +1165,8 @@
       { "dataField": "ordre.societe.id", "showInColumnChooser": false, "visible": false },
       { "dataField": "indicateurPalette", "showInColumnChooser": false, "visible": false },
       { "dataField": "ordre.entrepot.modeLivraison", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.bonAFacturer", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.ordreEDI.id", "showInColumnChooser": false, "visible": false },
       { "dataField": "valide", "visible": false }
     ]
   },

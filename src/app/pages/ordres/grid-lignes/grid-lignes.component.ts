@@ -226,18 +226,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   openFilePopup(e) {
+
     if (e.column?.dataField === 'article.id') {
       this.articleLigneId = e.data.article.id;
       this.zoomArticlePopup.visible = true;
     }
-    if (e.column?.dataField === 'fournisseur') {
-      const idFour = e.data.fournisseur.id;
-      if (!idFour) return;
-      this.fournisseurLigneId = idFour;
-      this.zoomFournisseurPopup.visible = true;
-    }
-    if (e.column?.dataField === 'proprietaireMarchandise') {
-      const idFour = e.data.proprietaireMarchandise.id;
+    if (['fournisseur', 'proprietaireMarchandise'].includes(e.column?.dataField)) {
+      const idFour = e.data[e.column.dataField].id;
       if (!idFour) return;
       this.fournisseurLigneId = idFour;
       this.zoomFournisseurPopup.visible = true;
