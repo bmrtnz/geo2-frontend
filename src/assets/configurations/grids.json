@@ -953,6 +953,7 @@
     ]
   },
   "ordre-ligne": {
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 0,
@@ -1147,6 +1148,7 @@
         "visibleIndex": 26,
         "dataField": "gtinColisKit",
         "dataType": "string",
+        "width": "150",
         "allowEditing": true,
         "visible": true
       },
