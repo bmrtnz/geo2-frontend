@@ -49,9 +49,9 @@ export class GridHistoriqueComponent implements OnInit {
 
   reload() {
     const filters = [
-      ['nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
+      ['utilisateur.nomUtilisateur', '=', this.authService.currentUser.nomUtilisateur],
       'and',
-      ['socCode', '=', this.currentCompanyService.getCompany().id],
+      ['societe.id', '=', this.currentCompanyService.getCompany().id],
       'and',
       ['dateModification', '>=', new Date(this.dateManagementService.findDate(-60))],
     ];
