@@ -818,7 +818,8 @@
         "visible": false
       },
       { "dataField": "ordre.totalNombrePalettesExpediees", "visible": false },
-      { "dataField": "ordre.sommeColisExpedies", "visible": false }
+      { "dataField": "ordre.sommeColisExpedies", "visible": false },
+      { "dataField": "ordre.id", "visible": true }
     ]
   },
   "ordre-historique-entrepot": {
