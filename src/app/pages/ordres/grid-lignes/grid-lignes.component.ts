@@ -15,6 +15,7 @@ import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
 import { ZoomArticlePopupComponent } from '../zoom-article-popup/zoom-article-popup.component';
 import { ZoomFournisseurPopupComponent } from '../zoom-fournisseur-popup/zoom-fournisseur-popup.component';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -28,6 +29,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Output() public articleLigneId: string;
   @Output() public fournisseurLigneId: string;
 
+  public testSource: DataSource;
   public dataSource: DataSource;
   public proprietaireMarchandiseSource: DataSource;
   public fournisseurSource: DataSource;
@@ -50,6 +52,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public switchNumero: string;
   public itemsWithSelectBox: string[];
   public env = environment;
+  public nbInsertedArticles: number;
+  public newArticles: number;
+  public newNumero: number;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -76,9 +81,12 @@ export class GridLignesComponent implements OnChanges, OnInit {
       'paletteInter',
       'proprietaireMarchandise'
     ];
+    this.newArticles = 0;
+    this.newNumero = 0;
   }
 
   async ngOnInit() {
+
     const fields = this.columns.pipe(map( columns => columns.map( column => {
       return (this.addKeyToField(column.dataField));
     })));
@@ -148,8 +156,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
         ['article.id', 'isnotnull', 'null']
       ]);
       this.datagrid.dataSource = this.dataSource;
-    } else {
-      this.datagrid.dataSource = null;
+      } else {
+        this.datagrid.dataSource = null;
     }
 
   }
@@ -178,15 +186,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
   }
 
-  onRowPrepared(e) {
-    if (e.rowType === 'data') {
-      // console.log(e)
-      // if (e.column.dataField === 'nombrePalettesCommandees') {
-      //   console.log(e.column.data)
-      // }
-    }
-  }
-
   onRowClick({ rowIndex }) {
     this.datagrid.instance.editRow(rowIndex);
   }
@@ -208,36 +207,23 @@ export class GridLignesComponent implements OnChanges, OnInit {
     const moveDirection = e.element.classList.contains('up-move-button') ? -1 : 1;
     this.currNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow].data.numero;
     this.switchNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
-    if (!this.switchNumero) this.switchNumero = this.createNumero(parseInt(this.currNumero, 10));
     this.datagrid.instance.cellValue(this.currentfocusedRow + moveDirection, 'numero', this.currNumero);
     this.datagrid.instance.cellValue(this.currentfocusedRow, 'numero', this.switchNumero);
     this.datagrid.instance.saveEditData();
-  }
-
-  createNumero(num) {
-    return ('0' + (num++).toString()).slice(-2);
   }
 
   onValueChanged(event, cell) {
     if (cell.setValue) cell.setValue(event.value);
   }
 
-  onCellClick(e) {
-  }
-
   openFilePopup(e) {
+
     if (e.column?.dataField === 'article.id') {
       this.articleLigneId = e.data.article.id;
       this.zoomArticlePopup.visible = true;
     }
-    if (e.column?.dataField === 'fournisseur') {
-      const idFour = e.data.fournisseur.id;
-      if (!idFour) return;
-      this.fournisseurLigneId = idFour;
-      this.zoomFournisseurPopup.visible = true;
-    }
-    if (e.column?.dataField === 'proprietaireMarchandise') {
-      const idFour = e.data.proprietaireMarchandise.id;
+    if (['fournisseur', 'proprietaireMarchandise'].includes(e.column?.dataField)) {
+      const idFour = e.data[e.column.dataField].id;
       if (!idFour) return;
       this.fournisseurLigneId = idFour;
       this.zoomFournisseurPopup.visible = true;
@@ -245,11 +231,40 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   onEditingStart(e) {
-
     if (!e.column) return;
-
     this.ordreLignesService.lockFields(e);
+  }
 
+  createStringNumero(num) {
+    return ('0' + num.toString()).slice(-2);
+  }
+
+  onEditorPrepared(e) {
+    // Define new order rows numbers
+    if (e.dataField === 'numero' && this.newArticles < this.nbInsertedArticles) {
+      if (e.value === null) {
+        this.newNumero++;
+        const newNumero = this.createStringNumero(this.newNumero);
+        e.component.cellValue(e.row.rowIndex, 'numero', newNumero);
+        this.newArticles++;
+      } else {
+        this.newNumero = parseInt(e.value, 10);
+      }
+    }
+  }
+
+  onContentReady() {
+    // Grid is loaded with new articles: save order rows numbers
+    if (this.newArticles === this.nbInsertedArticles) {
+      let info = this.nbInsertedArticles + ' ';
+      info += ' ' + this.localizeService.localize('article-ajoutes');
+      info = info.split('&&').join(this.nbInsertedArticles > 1 ? 's' : '');
+      notify(info, 'success', 3000);
+      this.newArticles = 0;
+      this.newNumero = 0;
+      this.nbInsertedArticles = null;
+      this.datagrid.instance.saveEditData();
+    }
   }
 
 }

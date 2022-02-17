@@ -954,6 +954,7 @@
     ]
   },
   "ordre-ligne": {
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 0,
@@ -1111,7 +1112,7 @@
       {
         "visibleIndex": 21,
         "dataField": "fraisUnite",
-        "allowEditing": true,
+        "allowEditing": false,
         "width": "150",
         "dataType": "string",
         "visible": true
@@ -1148,6 +1149,7 @@
         "visibleIndex": 26,
         "dataField": "gtinColisKit",
         "dataType": "string",
+        "width": "150",
         "allowEditing": true,
         "visible": true
       },
@@ -1166,6 +1168,8 @@
       { "dataField": "ordre.societe.id", "showInColumnChooser": false, "visible": false },
       { "dataField": "indicateurPalette", "showInColumnChooser": false, "visible": false },
       { "dataField": "ordre.entrepot.modeLivraison", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.bonAFacturer", "showInColumnChooser": false, "visible": false },
+      { "dataField": "ordre.ordreEDI.id", "showInColumnChooser": false, "visible": false },
       { "dataField": "valide", "visible": false }
     ]
   },

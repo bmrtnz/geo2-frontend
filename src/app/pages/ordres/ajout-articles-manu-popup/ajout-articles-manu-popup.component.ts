@@ -155,8 +155,8 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
 
   clearAndHidePopup() {
     this.hidePopup();
+    this.lignesChanged.emit(this.nbARticles);
     this.clearAll();
-    this.lignesChanged.emit();
   }
 
   insertArticles() {

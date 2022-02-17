@@ -211,7 +211,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
                 ) this.lock(e);  // Manque || ra_ind_blocage === '1'
           break;
         }
-        case 'fournisseur': {
+        case 'fournisseur': { // Emballeur/Expéditeur
           if (data.expedieStation === true
              || data.ordre.type === 'RDF'
              || data.ordre.type === 'REP'
@@ -222,17 +222,17 @@ export class OrdreLignesService extends ApiService implements APIRead {
           break;
         }
         case 'ventePrixUnitaire': {
-          if (data.venteACommission === true
-            || data.ordre.type === 'REP'
-            || data.ordre.type === 'RPF'
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          if ((data.venteACommission !== true
+            && data.ordre.type !== 'REP'
+            && data.ordre.type !== 'RPF')
+            ) this.lock(e);  // Manque && ra_ind_blocage === '1'
           break;
         }
         case 'venteUnite': {
-          if (data.venteACommission === true
-            || data.ordre.type === 'REP'
-            || data.ordre.type === 'RPF'
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          if ((data.venteACommission !== true
+            && data.ordre.type !== 'REP'
+            && data.ordre.type !== 'RPF')
+            ) this.lock(e);  // Manque && ra_ind_blocage === '1'
           break;
         }
         case 'gratuit': {
@@ -270,19 +270,25 @@ export class OrdreLignesService extends ApiService implements APIRead {
             ) this.lock(e);  // Manque || ra_ind_blocage === '1'
           break;
         }
-        case 'libelleDLV': {
+        case 'libelleDLV': { // DLUO
           if (data.expedieStation === true
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
-          break;
-        }
-        case 'fraisPrixUnitaire': {
-          if (data.ordre.societe.id === 'IMP'
             ) this.lock(e);
           break;
         }
-        case 'fraisUnite': {
-          if (data.expedieStation === true
+        case 'fraisPrixUnitaire': {
+          if (data.ordre.societe.id !== 'IMP'
+            ) this.lock(e);
+          break;
+        }
+        case 'articleKit': {
+          if (data.ordre.bonAFacturer === true
             ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          break;
+        }
+        case 'gtinColisKit': {
+          if (data.ordre.bonAFacturer === true
+            || data.ordre.ordreEDI?.id !== null
+            ) this.lock(e);
           break;
         }
 

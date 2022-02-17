@@ -30,12 +30,13 @@
       [columnHidingEnabled]="false"
       [allowColumnReordering]="true"
       (onCellPrepared)="onCellPrepared($event)"
+      (onEditingStart)="onEditingStart($event)"
+      (onEditorPrepared)="onEditorPrepared($event)"
       (onRowClick)="onRowClick($event)"
-      (onRowPrepared)="onRowPrepared($event)"
       (onFocusedRowChanged)="onFocusedRowChanged($event)"
       (onCellDblClick)="openFilePopup($event)"
       (onEditingStart)="onEditingStart($event)"
-
+      (onContentReady)="onContentReady()"
       (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Lignes de commande', $event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
       [scrolling]="{
         useNative:true
@@ -45,11 +46,14 @@
       <!-- Grid configuration -->
       <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
       <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+      <dxo-paging
+        [pageSize]="100"
+        [pageIndex]="0"
+      ></dxo-paging>
       <dxo-pager
         [showPageSizeSelector]="true"
         [showInfo]="true"
         [showNavigationButtons]="true"
-        [showPageSizeSelector]="true"
       ></dxo-pager>
       <dxo-state-storing 
         [storageKey]="gridConfiguratorService.Grid.OrdreLigne"
