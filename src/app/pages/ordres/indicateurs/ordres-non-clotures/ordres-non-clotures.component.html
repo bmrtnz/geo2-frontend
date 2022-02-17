@@ -74,6 +74,7 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
+      [caption]="('ordres-' + column.dataField?.split('.').join('-') | localize) || column.name"
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"

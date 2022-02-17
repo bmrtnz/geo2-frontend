@@ -823,7 +823,8 @@
         "visible": false
       },
       { "dataField": "ordre.totalNombrePalettesExpediees", "visible": false },
-      { "dataField": "ordre.sommeColisExpedies", "visible": false }
+      { "dataField": "ordre.sommeColisExpedies", "visible": false },
+      { "dataField": "ordre.id", "visible": true }
     ]
   },
   "ordre-historique-entrepot": {
@@ -1605,101 +1606,104 @@
   },
   "ordres-non-clotures": {
     "columns": [
-      {
+      { 
         "visibleIndex": 0,
+        "dataField": "secteurCommercial.description",
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
         "dataField": "numero",
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "codeClient",
         "visible": false
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 3,
         "dataField": "client.raisonSocial",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 4,
         "dataField": "codeAlphaEntrepot",
         "visible": false
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 5,
         "dataField": "entrepot.raisonSocial",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 6,
         "dataField": "referenceClient",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 7,
         "dataField": "dateDepartPrevue",
         "visible": true
       },
       {
-        "visibleIndex": 7,
+        "visibleIndex": 8,
         "dataField": "dateLivraisonPrevue",
         "visible": true
-      },
-      {
-        "dataField": "secteurCommercial.id",
-        "visible": false
       },
       { 
         "dataField": "type",
         "visible": false
-      }
+      },
+      { "dataField": "secteurCommercial.id", "visible": false }
     ]
   },
   "ordres-non-confirmes": {
     "columns": [
-      {
+      { 
         "visibleIndex": 0,
+        "dataField": "secteurCommercial.description",
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
         "dataField": "numero",
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "codeClient",
         "visible": false
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 3,
         "dataField": "client.raisonSocial",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 4,
         "dataField": "codeAlphaEntrepot",
         "visible": false
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 5,
         "dataField": "entrepot.raisonSocial",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 6,
         "dataField": "referenceClient",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 7,
         "dataField": "dateDepartPrevue",
         "visible": true
       },
       {
-        "visibleIndex": 7,
+        "visibleIndex": 8,
         "dataField": "dateLivraisonPrevue",
         "visible": true
-      },
-      {
-        "dataField": "secteurCommercial.id",
-        "visible": false
       },
       {
         "dataField": "type",
@@ -1710,7 +1714,8 @@
         "sortOrder": "asc",
         "selectedFilterOperation": ">=",
         "visible": false
-      }
+      },
+      { "dataField": "secteurCommercial.id", "visible": false }
     ]
   },
   "litige-ligne": {

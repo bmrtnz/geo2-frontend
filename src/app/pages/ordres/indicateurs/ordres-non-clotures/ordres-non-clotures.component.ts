@@ -75,8 +75,13 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (!this.authService.isAdmin)
+    if (this.authService.currentUser.secteurCommercial) {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial;
+    } else if (!this.authService.isAdmin) {
+      this.withSector.value = true;
+    } else {
+      this.enableFilters();
+    }
   }
 
   enableFilters() {
