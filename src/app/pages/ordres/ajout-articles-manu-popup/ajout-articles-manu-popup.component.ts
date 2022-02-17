@@ -137,15 +137,16 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
 
   clearAll() {
     this.codeChangeProcess = true;
-    this.saisieCode.value = null;
+    this.saisieCode.instance.reset();
     this.catalogue.dataGrid.dataSource = [];
-    this.catalogue.dataGrid.instance.refresh();
+    this.catalogue.dataGrid.instance.repaint();
+    this.catalogue.dataGrid.dataSource = null;
     this.updateChosenArticles();
-    this.catalogue.especeSB.value = [];
-    this.catalogue.varieteSB.value = [];
-    this.catalogue.modesCultureSB.value = [];
-    this.catalogue.emballageSB.value = [];
-    this.catalogue.origineSB.value = [];
+    this.catalogue.especeSB.instance.reset();
+    this.catalogue.varieteSB.instance.reset();
+    this.catalogue.modesCultureSB.instance.reset();
+    this.catalogue.emballageSB.instance.reset();
+    this.catalogue.origineSB.instance.reset();
     this.codeChangeProcess = false;
   }
 
