@@ -16,6 +16,7 @@ import { TypesPaletteService } from 'app/shared/services/api/types-palette.servi
 import { ZoomArticlePopupComponent } from '../zoom-article-popup/zoom-article-popup.component';
 import { ZoomFournisseurPopupComponent } from '../zoom-fournisseur-popup/zoom-fournisseur-popup.component';
 import notify from 'devextreme/ui/notify';
+import { ArticleOriginePopupComponent } from '../article-origine-popup/article-origine-popup.component';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -27,6 +28,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Input() public ordre: Ordre;
   @Input() public fournisseurLigneCode: string;
   @Output() public articleLigneId: string;
+  @Output() public ordreLigneId: string;
   @Output() public fournisseurLigneId: string;
 
   public testSource: DataSource;
@@ -43,6 +45,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public totalItems: TotalItem[] = [];
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, {static: false}) zoomArticlePopup: ZoomArticlePopupComponent;
+  @ViewChild(ArticleOriginePopupComponent, {static: false}) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomFournisseurPopupComponent, {static: false}) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
   private gridConfig: Promise<GridConfig>;
   public currentfocusedRow: number;
@@ -55,6 +58,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public nbInsertedArticles: number;
   public newArticles: number;
   public newNumero: number;
+  public hintDblClick: string;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -83,6 +87,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     ];
     this.newArticles = 0;
     this.newNumero = 0;
+    this.hintDblClick = this.localizeService.localize('hint-DblClick-file');;
   }
 
   async ngOnInit() {
@@ -163,13 +168,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   addKeyToField(field) {
-    if (field === 'proprietaireMarchandise') field += `.${this.fournisseurService.model.getKeyField()}`;
-    if (field === 'fournisseur') field += `.${this.fournisseurService.model.getKeyField()}`;
-    if (field === 'achatUnite') field += `.${this.achatUniteService.model.getKeyField()}`;
-    if (field === 'typePalette') field += `.${this.typePaletteService.model.getKeyField()}`;
-    if (field === 'paletteInter') field += `.${this.paletteInterService.model.getKeyField()}`;
-    if (field === 'fraisUnite') field += `.${this.fraisUniteService.model.getKeyField()}`;
-    if (field === 'venteUnite') field += `.${this.venteUniteService.model.getKeyField()}`;
+    if (this.itemsWithSelectBox.includes(field)) {
+      field += `.${this[field + 'Service'].model.getKeyField()}`;
+    }
     return field;
   }
 
@@ -178,8 +179,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
       if (e.column.dataField === 'article.id') {
         // Descript. article
         const infoArt = this.articlesService.concatArtDescript(e.data.article);
-        e.cellElement.innerHTML =  infoArt.concatDesc;
-        e.cellElement.title = infoArt.concatDesc.substring(2);
+        e.cellElement.innerText =  infoArt.concatDesc;
+        e.cellElement.title = infoArt.concatDesc.substring(2) + '\r\n'
+        + this.hintDblClick;
+        e.cellElement.classList.add('cursor-pointer');
         // Bio en vert
         if (infoArt.bio) e.cellElement.classList.add('bio-article');
       }
@@ -195,6 +198,29 @@ export class GridLignesComponent implements OnChanges, OnInit {
     ((data.code ? data.code : data.id) + ' - ' + (data.nomUtilisateur ? data.nomUtilisateur :
      (data.raisonSocial ? data.raisonSocial : data.description)))
      : null;
+  }
+
+  defineTemplate(field) {
+
+    let templ;
+    if (this.itemsWithSelectBox.includes(field)) templ = 'selectBoxEditTemplate';
+    if (field === 'article.matierePremiere.origine.id') templ = 'origineTemplate';
+    return templ ? templ : false;
+  }
+
+  showOriginButton(cell) {
+    return cell.value === 'F';
+  }
+
+  showOriginCheck(data) {
+    let originText = this.localizeService.localize('btn-origine');
+    if (data.origineCertification) originText += ' ✓';
+    return originText;
+  }
+
+  hintFournisseur(field) {
+    const hint = ['fournisseur', 'proprietaireMarchandise'].includes(field) ? this.hintDblClick : '';
+    return hint;
   }
 
   onFocusedRowChanged(e) {
@@ -228,6 +254,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
       this.fournisseurLigneId = idFour;
       this.zoomFournisseurPopup.visible = true;
     }
+  }
+
+  openOriginePopup(e) {
+    this.articleOriginePopup.visible = true;
   }
 
   onEditingStart(e) {

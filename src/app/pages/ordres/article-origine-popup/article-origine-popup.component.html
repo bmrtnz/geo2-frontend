@@ -1,0 +1,17 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  width="500"
+  height="500"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  title="Choix de l'origine"
+  [focusStateEnabled]="false"
+  (onShowing)="onShowing($event)"
+>
+    <dx-button 
+    type="default"
+    text="Enregistrer"
+    ></dx-button> 
+
+</dx-popup>

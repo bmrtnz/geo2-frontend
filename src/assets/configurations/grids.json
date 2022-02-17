@@ -990,10 +990,11 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "article.description",
+        "dataField": "article.matierePremiere.origine.id",
+        "showInColumnChooser": false,
         "dataType": "string",
         "allowEditing": false,
-        "visible": false
+        "visible": true
       },
       {
         "visibleIndex": 5,
@@ -1160,7 +1161,6 @@
       { "dataField": "article.emballage.prepese", "showInColumnChooser": false, "visible": false },
       { "dataField": "article.matierePremiere.modeCulture.id", "showInColumnChooser": false, "visible": false },
       { "dataField": "article.matierePremiere.modeCulture.description", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.origine.id", "showInColumnChooser": false, "visible": false },
       { "dataField": "article.matierePremiere.origine.description", "showInColumnChooser": false, "visible": false },
       { "dataField": "ordre.logistiques.expedieStation", "showInColumnChooser": false, "visible": false },
       { "dataField": "ordre.secteurCommercial.id", "showInColumnChooser": false, "visible": false },
@@ -1170,6 +1170,7 @@
       { "dataField": "ordre.entrepot.modeLivraison", "showInColumnChooser": false, "visible": false },
       { "dataField": "ordre.bonAFacturer", "showInColumnChooser": false, "visible": false },
       { "dataField": "ordre.ordreEDI.id", "showInColumnChooser": false, "visible": false },
+      { "dataField": "origineCertification", "showInColumnChooser": false, "visible": false },
       { "dataField": "valide", "visible": false }
     ]
   },
