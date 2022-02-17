@@ -83,11 +83,11 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.dxGridElement =
       this.gridPLANNINGDEPARTComponent.instance.$element()[0];
     this.dataSource = this.indicator.dataSource;
-    if (!this.authService.isAdmin)
-      this.secteurSB.value = this.authService.currentUser.secteurCommercial;
     this.theTitle = this.dxGridElement.querySelector('.dx-toolbar .dx-texteditor-input') as HTMLInputElement;
     const inputContainer = this.dxGridElement.querySelector('.dx-toolbar .dx-texteditor-container') as HTMLElement;
     inputContainer.style.width = '750px';
+    if (!this.authService.isAdmin)
+      this.secteurSB.value = this.authService.currentUser.secteurCommercial;
   }
 
   enableFilters() {
