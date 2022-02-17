@@ -430,8 +430,8 @@ export abstract class ApiService implements OnDestroy {
    * Build delete query
    */
   protected buildDelete() {
-    const entity = this.withLowerCaseFirst(this.model.name);
-    const type = `Geo${this.model.name}Input`;
+    const entity = 'id';
+    const type = 'String';
     const operation = `delete${this.model.name}`;
     const alias = operation.ucFirst();
     return `

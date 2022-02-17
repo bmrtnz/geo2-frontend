@@ -287,7 +287,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   deleteOrder() {
     const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
     if (!ordre.id) return;
-    this.ordresService.delete({ ordre }).subscribe({
+    this.ordresService.delete({ id: ordre.id }).subscribe({
       next: (_) => {
         notify('Ordre supprimé', 'success', 3000);
       },
