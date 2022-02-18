@@ -86,6 +86,7 @@ import { ArticlesModule } from '../articles/articles.module';
 import { FournisseursModule } from '../tiers/fournisseurs/fournisseurs.module';
 import { ZoomArticlePopupComponent } from './zoom-article-popup/zoom-article-popup.component';
 import { ZoomFournisseurPopupComponent } from './zoom-fournisseur-popup/zoom-fournisseur-popup.component';
+import { ArticleOriginePopupComponent } from './article-origine-popup/article-origine-popup.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +133,7 @@ import { ZoomFournisseurPopupComponent } from './zoom-fournisseur-popup/zoom-fou
     AjoutArticlesManuPopupComponent,
     ZoomArticlePopupComponent,
     ZoomFournisseurPopupComponent,
+    ArticleOriginePopupComponent,
   ],
   imports: [
     OrdresRoutingModule,

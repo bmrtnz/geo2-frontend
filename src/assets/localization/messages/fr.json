@@ -64,6 +64,7 @@
     "btn-launch": "lancer",
     "btn-valider-article": "Ajouter && article",
     "btn-valider-articles": "Ajouter && articles",
+    "btn-origine": "Origine",
 
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
@@ -97,6 +98,7 @@
     "hint-source-refClt": "des références client",
     "hint-deplacer-ligne-haut": "Déplacer la ligne vers le haut",
     "hint-deplacer-ligne-bas": "Déplacer la ligne vers le bas",
+    "hint-DblClick-file": "Double-cliquez pour voir la fiche",
 
     "text-clients-popup-documents": "N'oubliez pas de joindre les documents obligatoires !",
     "text-fournisseurs-popup-documents": "N'oubliez pas de joindre CGA signées (OBLIGATOIRE) et certifications si nécessaire",
@@ -770,7 +772,7 @@
     "ordreLignes-article-emballage-prepese": "Prépesé",
     "ordreLignes-article-matierePremiere-modeCulture-id": "Id Mode Culture",
     "ordreLignes-article-matierePremiere-modeCulture-description": "Mode Culture",
-    "ordreLignes-article-matierePremiere-origine-id": "Id Origine",
+    "ordreLignes-article-matierePremiere-origine-id": " ",
     "ordreLignes-article-matierePremiere-origine-description": "Origine",
 
     "ordreEnvois-id": "n°",

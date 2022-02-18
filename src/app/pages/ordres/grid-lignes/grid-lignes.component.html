@@ -91,7 +91,7 @@
         [fixed]=column.fixed
         [allowEditing]="column.allowEditing"
         [dataType]="column?.dataType"
-        [editCellTemplate]="itemsWithSelectBox.includes(column.dataField) ? 'selectBoxEditTemplate' : false"
+        [editCellTemplate]="defineTemplate(column.dataField)"
         [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
         [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
         [showInColumnChooser]="column.showInColumnChooser"
@@ -108,6 +108,7 @@
       ]"
       [searchEnabled]="true"
       [value]="cell.data[cell.column.dataField]"
+      [hint]="hintFournisseur(cell.column.dataField)"
       (onValueChanged)="onValueChanged($event, cell)"
       >
         <dxo-drop-down-options
@@ -115,9 +116,20 @@
         </dxo-drop-down-options>
       </dx-select-box>
     </div>
+    <div *dxTemplate="let cell of 'origineTemplate'">
+      <dx-button 
+        class="small-article-button"
+        type="default"
+        [focusStateEnabled]="false"
+        [visible]="showOriginButton(cell)"
+        [text]="showOriginCheck(cell.data)"
+        (onClick)="openOriginePopup($event)"
+      ></dx-button>
+    </div>
 
   </dx-data-grid>
 
 </div>
 <app-zoom-article-popup [articleLigneId]="articleLigneId"></app-zoom-article-popup>
+<app-article-origine-popup [ordreLigneId]="ordreLigneId"></app-article-origine-popup>
 <app-zoom-fournisseur-popup [fournisseurLigneId]="fournisseurLigneId"></app-zoom-fournisseur-popup>
