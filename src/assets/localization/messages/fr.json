@@ -24,6 +24,7 @@
     "depuis": "depuis",
     "avec": "avec",
     "preFilter-title" : "Pré-filtrage",
+    "undefined": "Non défini(e)",
 
     "fileManager-name": "Nom",
     "fileManager-dateModified": "Modifié le",
@@ -541,6 +542,13 @@
 
     "articles-ordre-numero": "Numéro d'ordre",
     "articles-article-description": "Description",
+
+    "articles-liste-origine-departement": "Département",
+    "articles-liste-origine-region": "Région",
+    "articles-liste-origine-zone": "Zone",
+    "articles-save-origin": "Origine sauvegardée",
+    "articles-curr-origin": "Origine actuelle",
+    "articles-new-origin": "Origine sélectionnée",
 
     "stocks-title": "Stocks",
     "stocks-fournisseurs-title": "Fourniss.",
