@@ -56,6 +56,7 @@
     class="save-button"
     type="default"
     text="Enregistrer"
+    [disabled]="newOrigine === origine"
     (onClick)="saveOrigine()"
     ></dx-button> 
 
