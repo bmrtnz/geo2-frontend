@@ -87,4 +87,31 @@ export class FunctionsService {
       fetchPolicy: 'network-only',
     })
 
+  /**
+   * Indicateur du blocage de l'ordre dont le départ est aujourd'hui
+   */
+  public fInitBlocageOrdre =
+    (ordreRef: string, userName: string) => this.apollo
+    .watchQuery<{fInitBlocageOrdre: FunctionResponse}>({
+      query: gql(ApiService.buildGraph(
+        'query',
+        [
+          {
+            name: 'fInitBlocageOrdre',
+            body,
+            params: [
+              { name: 'ordreRef', value: 'ordreRef', isVariable: true },
+              { name: 'userName', value: 'userName', isVariable: true },
+            ]
+          }
+        ],
+        [
+          { name: 'ordreRef', type: 'String', isOptionnal: false },
+          { name: 'userName', type: 'String', isOptionnal: false },
+        ],
+      )),
+      variables: { ordreRef, userName },
+      fetchPolicy: 'network-only',
+    })
+
 }
