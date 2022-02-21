@@ -358,7 +358,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onLignesChanged(e) {
-    this.gridLignes.nbInsertedArticles = e; 
+    this.gridLignes.nbInsertedArticles = e;
     this.gridLignes.enableFilters();
   }
 

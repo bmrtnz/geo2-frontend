@@ -17,6 +17,7 @@ import { ZoomArticlePopupComponent } from '../zoom-article-popup/zoom-article-po
 import { ZoomFournisseurPopupComponent } from '../zoom-fournisseur-popup/zoom-fournisseur-popup.component';
 import notify from 'devextreme/ui/notify';
 import { ArticleOriginePopupComponent } from '../article-origine-popup/article-origine-popup.component';
+import OrdreLigne from 'app/shared/models/ordre-ligne.model';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -28,7 +29,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Input() public ordre: Ordre;
   @Input() public fournisseurLigneCode: string;
   @Output() public articleLigneId: string;
-  @Output() public ordreLigneId: string;
+  @Output() public ordreLigne: OrdreLigne;
   @Output() public fournisseurLigneId: string;
 
   public testSource: DataSource;
@@ -124,6 +125,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   ngOnChanges() {
     this.enableFilters();
+  }
+
+  refreshGrid() {
+    this.datagrid.instance.refresh();
   }
 
   async enableFilters() {
@@ -256,7 +261,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
   }
 
-  openOriginePopup(e) {
+  openOriginePopup(ligne) {
+    this.ordreLigne = ligne;
     this.articleOriginePopup.visible = true;
   }
 

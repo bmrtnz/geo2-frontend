@@ -5,6 +5,7 @@ import { LoadOptions } from 'devextreme/data/load_options';
 import { takeWhile } from 'rxjs/operators';
 import { OrdreLigne } from '../../models/ordre-ligne.model';
 import { APIRead, ApiService, RelayPage, SummaryInput } from '../api.service';
+import { OperationVariables } from '@apollo/client/core';
 
 export enum SummaryOperation {
   Marge = 'allOrdreLigneMarge',
@@ -16,6 +17,8 @@ export enum SummaryOperation {
   providedIn: 'root'
 })
 export class OrdreLignesService extends ApiService implements APIRead {
+
+  queryFilter = /.*(?:id)$/i;
 
   constructor(
     apollo: Apollo,
@@ -168,6 +171,13 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.apollo.mutate<{ saveOrdreLigne: OrdreLigne }>({
+      mutation: gql(this.buildSaveGraph(columns)),
+      variables,
+    });
+  }
+
   lock(cell) {
     cell.cancel = true;
   }
@@ -176,13 +186,14 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
       // Locking step
       const data = e.data;
+      const ra_ind_blocage = !true;
 
       switch (e.column.dataField) {
 
         case 'nombrePalettesCommandees': {
           if ((data.expedieStation === true
              || data.ordre.secteurCommercial.id === 'F'
-             ) // Manque || ra_ind_blocage === '1'
+             || ra_ind_blocage === true)
             && data.ordre.type !== 'RPR'
             && data.ordre.type !== 'RPO'
             && data.ordre.societe.id !== 'BWS'
@@ -193,85 +204,91 @@ export class OrdreLignesService extends ApiService implements APIRead {
         case 'nombrePalettesIntermediaires': {
           if (data.expedieStation === true ||
              data.indicateurPalette === 1
-             ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+             || ra_ind_blocage === true
+             ) this.lock(e);
           break;
         }
         case 'nombreColisPalette': {
           if (data.expedieStation === true
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+            || ra_ind_blocage === true
+            ) this.lock(e);
           break;
         }
         case 'proprietaireMarchandise': {
           if (data.expedieStation === true
+             || ra_ind_blocage === true
              || data.ordre.type === 'RDF'
              || data.ordre.type === 'REP'
              || (data.ordre.type === 'RPR'
                 && data.ordre.commentaireUsageInterne.substring(0, 3) === 'B02'
                 && data.ordre.entrepot.modeLivraison.id !== 'S')
-                ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+                ) this.lock(e);
           break;
         }
         case 'fournisseur': { // Emballeur/Expéditeur
           if (data.expedieStation === true
+             || ra_ind_blocage === true
              || data.ordre.type === 'RDF'
              || data.ordre.type === 'REP'
              || (data.ordre.type === 'RPR'
                 && data.ordre.commentaireUsageInterne.substring(0, 3) === 'B02'
                 && data.ordre.entrepot.modeLivraison !== 'S')
-                ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+                ) this.lock(e);
           break;
         }
         case 'ventePrixUnitaire': {
           if ((data.venteACommission !== true
             && data.ordre.type !== 'REP'
             && data.ordre.type !== 'RPF')
-            ) this.lock(e);  // Manque && ra_ind_blocage === '1'
+            && ra_ind_blocage === true
+            ) this.lock(e);
           break;
         }
         case 'venteUnite': {
           if ((data.venteACommission !== true
             && data.ordre.type !== 'REP'
             && data.ordre.type !== 'RPF')
-            ) this.lock(e);  // Manque && ra_ind_blocage === '1'
+            && ra_ind_blocage === true
+            ) this.lock(e);
           break;
         }
         case 'gratuit': {
-          if (data.venteACommission === true
-            || data.expedieStation === true
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          if (data.venteACommission !== true
+            && (data.expedieStation === true
+              || ra_ind_blocage === true)
+            ) this.lock(e);
           break;
         }
         case 'achatPrixUnitaire': {
-          if (data.venteACommission === true
-            || data.ordre.type === 'REP'
-            || data.ordre.type === 'RPF'
-            || data.expedieStation === true
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          if ((data.venteACommission !== true
+            && data.ordre.type !== 'REP'
+            && data.ordre.type !== 'RPF')
+            && (data.expedieStation === true
+              || ra_ind_blocage === true)
+            ) this.lock(e);
           break;
         }
         case 'achatUnite': {
-          if (data.venteACommission === true
-            || data.ordre.type === 'REP'
-            || data.ordre.type === 'RPF'
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+          if ((data.venteACommission !== true
+            && data.ordre.type !== 'REP'
+            && data.ordre.type !== 'RPF')
+            && ra_ind_blocage === true
+            ) this.lock(e);
           break;
         }
         case 'typePalette': {
           if (data.expedieStation === true
             || data.ordre.type === 'REP'
             || data.ordre.type === 'RPF'
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+            || ra_ind_blocage === true
+            ) this.lock(e);
           break;
         }
         case 'paletteInter': {
           if (data.expedieStation === true
             || data.ordre.type === 'REP'
             || data.ordre.type === 'RPF'
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
-          break;
-        }
-        case 'libelleDLV': { // DLUO
-          if (data.expedieStation === true
+            || ra_ind_blocage === true
             ) this.lock(e);
           break;
         }
@@ -282,7 +299,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
         }
         case 'articleKit': {
           if (data.ordre.bonAFacturer === true
-            ) this.lock(e);  // Manque || ra_ind_blocage === '1'
+            || ra_ind_blocage === true
+            ) this.lock(e);
           break;
         }
         case 'gtinColisKit': {
