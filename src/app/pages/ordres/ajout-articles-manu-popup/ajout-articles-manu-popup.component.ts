@@ -46,8 +46,6 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   ) { }
 
   ngAfterViewInit() {
-    this.catalogue.dataGrid.selection = { mode : 'multiple', allowSelectAll: false };
-    this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
   }
 
   ngOnChanges() {
@@ -72,6 +70,7 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
       setTimeout(() => this.pulseBtnOn = true, 1);
     }
     this.nbArticlesOld = this.nbARticles;
+    this.catalogue.dataGrid.instance.repaint();
   }
 
   getGridSelectedArticles() {
@@ -91,6 +90,11 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
 
   onShowing(e) {
     e.component.content().parentNode.classList.add('ajout-articles-manu-popup');
+  }
+
+  onShown(e) {
+    this.catalogue.dataGrid.selection = { mode : 'multiple', allowSelectAll: false };
+    this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
   }
 
   alreadySelected() {

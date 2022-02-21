@@ -4,6 +4,7 @@
   [closeOnOutsideClick]="true"
   [(visible)]="visible"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
 >
     <div *dxTemplate="let data of 'title'">  
         <div class="title-start">{{ titleStart }}&nbsp;</div>
