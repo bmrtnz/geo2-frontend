@@ -7,6 +7,7 @@ import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { from, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap, take, takeUntil, tap } from 'rxjs/operators';
+import { FormUtilsService } from './form-utils.service';
 
 const DEFAULT_KEY = 'id';
 const DEFAULT_GQL_KEY_TYPE = 'String';
@@ -159,6 +160,23 @@ export abstract class ApiService implements OnDestroy {
       .map(o => `${o.name}(${mapParams(o.params)}) {${mapPaths(o?.body ?? [])}}`);
 
     return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
+  }
+
+  static mapForSave(variables: {[key: string]: any}) {
+    return Object.entries(variables)
+    .flatMap(([key, value]) => {
+      if (value === null)
+        return {[key]: null};
+      if (typeof value.id !== 'undefined' && value.id === null)
+        return {[key]: null};
+      if (typeof value === 'object' && value !== null) {
+        if (typeof value.length !== 'undefined')
+          return {[key]: value.map(v => this.mapForSave(v))};
+        return {[key]: this.mapForSave(value)};
+      }
+      return {[key]: value};
+    })
+    .reduce((acm, crt) => ({...acm, ...crt}));
   }
 
   ngOnDestroy() {
@@ -798,6 +816,7 @@ export abstract class ApiService implements OnDestroy {
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
         ...options,
+        variables: ApiService.mapForSave(options.variables),
       } as MutationOptions)),
       take(1),
     );
@@ -819,6 +838,7 @@ export abstract class ApiService implements OnDestroy {
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
         ...options,
+        variables: ApiService.mapForSave(options.variables),
       } as MutationOptions)),
       take(1),
     );
