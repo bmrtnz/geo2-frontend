@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, ScreenService } from './shared/services';
 
@@ -23,6 +23,9 @@ export class AppComponent {
     if (year !== AppComponent.START_DEV_YEAR) {
       this.copyrightYear = '-' + year;
     }
+
+    // Clear blocage ligne ordre periodic survey
+    window.sessionStorage.removeItem('surveyRunning');
 
     // Close columnchooser on outside click (non standard)
     document.addEventListener('mousedown', e => {

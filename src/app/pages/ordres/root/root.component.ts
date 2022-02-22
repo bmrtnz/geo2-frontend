@@ -24,6 +24,8 @@ import {
   tap,
 } from 'rxjs/operators';
 import { FormComponent } from '../form/form.component';
+import { FunctionsService } from 'app/shared/services/api/functions.service';
+import { AuthService } from 'app/shared/services/auth.service';
 
 const TAB_HOME_ID = 'home';
 const TAB_LOAD_ID = 'loading';
@@ -68,6 +70,8 @@ export class RootComponent implements OnInit, OnDestroy {
     public route: ActivatedRoute,
     public router: Router,
     public ordresIndicatorsService: OrdresIndicatorsService,
+    private functionsService: FunctionsService,
+    private authService: AuthService,
     private tabContext: TabContext,
   ) {}
 
@@ -86,6 +90,8 @@ export class RootComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy),
     )
     .subscribe();
+    this.surveyBlockage();
+    window.sessionStorage.removeItem('idOrdre');
 
   }
 
@@ -94,8 +100,31 @@ export class RootComponent implements OnInit, OnDestroy {
     this.destroy.unsubscribe();
   }
 
+  surveyBlockage() {
+    if (window.sessionStorage.getItem('surveyRunning')) return;
+    window.sessionStorage.setItem('surveyRunning', 'true');
+    setInterval(() => {
+      const id = window.sessionStorage.getItem('idOrdre');
+      if (id) {
+        this.functionsService.fInitBlocageOrdre(id, this.authService.currentUser.nomUtilisateur)
+        .valueChanges
+        .subscribe(res => {
+          window.sessionStorage.setItem('blockage', res.data.fInitBlocageOrdre.data.bloquer ? 'true' : 'false');
+        });
+      }
+    }, 2000);
+
+  }
+
   onTabTitleClick(event: {itemData: Partial<TabPanelItem>}) {
     const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
+    const numeroOrdre = isNaN(parseInt(event.itemData.id, 10)) ? null : event.itemData.id;
+    const idOrdre = window.sessionStorage.getItem('numeroOrdre' + numeroOrdre);
+    if (numeroOrdre && idOrdre) {
+      window.sessionStorage.setItem('idOrdre', idOrdre);
+    } else {
+      window.sessionStorage.removeItem('idOrdre');
+    }
     this.router.navigate(['ordres', event.itemData.id], {
       queryParamsHandling: 'merge',
       state: { [PREVIOUS_STATE]: previous },

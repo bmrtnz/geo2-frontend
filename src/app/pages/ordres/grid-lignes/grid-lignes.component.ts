@@ -10,7 +10,7 @@ import { GridColumn, TotalItem } from 'basic';
 import { SummaryType, SummaryInput } from 'app/shared/services/api.service';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FournisseursService, ArticlesService } from 'app/shared/services';
+import { FournisseursService, ArticlesService, AuthService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
 import { ZoomArticlePopupComponent } from '../zoom-article-popup/zoom-article-popup.component';
@@ -18,6 +18,7 @@ import { ZoomFournisseurPopupComponent } from '../zoom-fournisseur-popup/zoom-fo
 import notify from 'devextreme/ui/notify';
 import { ArticleOriginePopupComponent } from '../article-origine-popup/article-origine-popup.component';
 import OrdreLigne from 'app/shared/models/ordre-ligne.model';
+import { FunctionsService } from 'app/shared/services/api/functions.service';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -72,6 +73,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
     public fraisUniteService: BasesTarifService,
     public typePaletteService: TypesPaletteService,
     public paletteInterService: TypesPaletteService,
+    public authService: AuthService,
+    public functionsService: FunctionsService,
     public localizeService: LocalizationService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigne);
@@ -121,6 +124,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       ['valide', '=', true],
     ]);
     this.paletteInterSource = this.typePaletteSource;
+
   }
 
   ngOnChanges() {
@@ -181,6 +185,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === 'data') {
+      // e.cellElement.find(".dx-select-checkbox").dxCheckBox("instance").option("disabled", true);  
       if (e.column.dataField === 'article.id') {
         // Descript. article
         const infoArt = this.articlesService.concatArtDescript(e.data.article);
@@ -192,10 +197,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
         if (infoArt.bio) e.cellElement.classList.add('bio-article');
       }
     }
-  }
-
-  onRowClick({ rowIndex }) {
-    this.datagrid.instance.editRow(rowIndex);
   }
 
   displayCodeBefore(data) {
@@ -267,7 +268,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   onEditingStart(e) {
-    if (!e.column) return;
+    if (!e.column || !e.data.numero ) return;
     this.ordreLignesService.lockFields(e);
   }
 

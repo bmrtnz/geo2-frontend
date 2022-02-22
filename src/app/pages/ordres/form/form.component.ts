@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit,
+   Output, QueryList, ViewChild, ViewChildren, Input, OnChanges, AfterContentChecked, AfterViewChecked } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Role, Societe, Type } from 'app/shared/models';
 import { Ordre, Statut } from 'app/shared/models/ordre.model';
-import { ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
+import { ClientsService, EntrepotsService, TransporteursService, AuthService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
 import { IncotermsService } from 'app/shared/services/api/incoterms.service';
@@ -160,6 +161,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
     private tabContext: TabContext,
+    private authService: AuthService
   ) {
     this.handleTabChange()
     .subscribe(event => {
@@ -385,6 +387,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.formGroup.reset(ordre);
       this.addLinkedOrders();
       this.refreshBadges();
+      window.sessionStorage.setItem('idOrdre', this.ordre.id);
+      window.sessionStorage.setItem('numeroOrdre' + this.ordre.numero, this.ordre.id);
     });
   }
 

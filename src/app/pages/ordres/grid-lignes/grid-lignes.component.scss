@@ -25,7 +25,7 @@
         cursor: pointer;
     }
     .dx-editor-cell.dx-focused:not(.dx-datagrid-readonly) {
-        background: rgba(51,145,176,0.06);
+        background: rgba(51,145,176,0.26);
     }
 
     .dx-row-focused.dx-data-row > td:not(.dx-focused):not(:first-of-type) {
@@ -41,6 +41,9 @@
     .dx-link-delete {
         color: $base-accent !important;
         background-color: transparent !important;
+    }
+    .dx-datagrid-focus-overlay:after {  
+        background-color: transparent; 
     }
 }
 ::ng-deep .small-article-button {
