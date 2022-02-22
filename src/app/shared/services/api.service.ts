@@ -161,6 +161,23 @@ export abstract class ApiService implements OnDestroy {
     return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
   }
 
+  static mapForSave(variables: {[key: string]: any}) {
+    return Object.entries(variables)
+    .flatMap(([key, value]) => {
+      if (value === null)
+        return {[key]: null};
+      if (typeof value.id !== 'undefined' && value.id === null)
+        return {[key]: null};
+      if (typeof value === 'object' && value !== null) {
+        if (typeof value.length !== 'undefined')
+          return {[key]: value.map(v => this.mapForSave(v))};
+        return {[key]: this.mapForSave(value)};
+      }
+      return {[key]: value};
+    })
+    .reduce((acm, crt) => ({...acm, ...crt}));
+  }
+
   ngOnDestroy() {
     this.destroy.next(true);
     this.destroy.unsubscribe();
@@ -798,6 +815,7 @@ export abstract class ApiService implements OnDestroy {
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
         ...options,
+        variables: ApiService.mapForSave(options.variables),
       } as MutationOptions)),
       take(1),
     );
@@ -819,6 +837,7 @@ export abstract class ApiService implements OnDestroy {
       mergeMap( query => this.apollo.mutate({
         mutation: gql(query),
         ...options,
+        variables: ApiService.mapForSave(options.variables),
       } as MutationOptions)),
       take(1),
     );
