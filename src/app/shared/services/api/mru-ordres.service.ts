@@ -4,6 +4,7 @@ import { MRUOrdre } from 'app/shared/models/mru-ordre.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { APIRead, ApiService, RelayPage } from '../api.service';
+import { OperationVariables, gql } from '@apollo/client/core';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,13 @@ export class MruOrdresService extends ApiService implements APIRead {
         }),
         byKey: this.byKey(columns),
       }),
+    });
+  }
+
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.apollo.mutate<{ saveMRUOrdre: MRUOrdre }>({
+      mutation: gql(this.buildSaveGraph(columns)),
+      variables,
     });
   }
 
