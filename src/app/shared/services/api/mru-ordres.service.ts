@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { OperationVariables } from '@apollo/client/core';
+import { Apollo, gql } from 'apollo-angular';
 import { MRUOrdre } from 'app/shared/models/mru-ordre.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
@@ -102,5 +103,26 @@ export class MruOrdresService extends ApiService implements APIRead {
   //     }),
   //   });
   // }
+
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.apollo.mutate<{ saveMRUOrdre: MRUOrdre }>({
+      mutation: gql(this.getSaveGraph(columns)),
+      variables,
+    });
+  }
+
+  getSaveGraph(body: Array<string>) {
+    return ApiService.buildGraph(
+      'mutation',
+      [
+        {
+          name: 'saveMRUOrdre',
+          body,
+          params: [{ name: 'mruOrdre', value: 'mruOrdre', isVariable: true }],
+        },
+      ],
+      [{ name: 'mruOrdre', type: `GeoMRUOrdreInput`, isOptionnal: false }],
+    );
+  }
 
 }
