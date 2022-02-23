@@ -391,23 +391,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.refreshBadges();
       window.sessionStorage.setItem('idOrdre', this.ordre.id);
       window.sessionStorage.setItem('numeroOrdre' + this.ordre.numero, this.ordre.id);
-      // this.saveMRUOrdre();
-    });
-  }
-
-  saveMRUOrdre() {
-    const mruOrdre = { ordre : {id: this.ordre.id, numero: this.ordre.numero} };
-    this.mruOrdresService.save_v2(['ordre.id', 'ordre.numero'], {
-      mruOrdre,
-    })
-    .subscribe({
-      next: () => {
-        notify('OK !', 'success', 3000);
-      },
-      error: (err) => {
-        console.log(err);
-        notify('Echec de la sauvegarde', 'error', 3000);
-      }
+      this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
     });
   }
 
