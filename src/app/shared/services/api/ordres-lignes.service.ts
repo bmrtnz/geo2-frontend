@@ -218,6 +218,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
           ) this.lock(e);
         break;
       }
+      case 'nombreColisCommandes': {
+        if (data.expedieStation === true
+          || bloquer === true
+          ) this.lock(e);
+        break;
+      }
       case 'proprietaireMarchandise': {
         if (data.expedieStation === true
             || bloquer === true
