@@ -112,7 +112,7 @@ export class RootComponent implements OnInit, OnDestroy {
           window.sessionStorage.setItem('blockage', res.data.fInitBlocageOrdre.data.bloquer ? 'true' : 'false');
         });
       }
-    }, 2000);
+    }, 10000);
 
   }
 

@@ -1,7 +1,6 @@
 export * from './pays.model';
 export * from './secteur.model';
 export * from './societe.model';
-export * from './regime-tva.model';
 export * from './type.client.model';
 export * from './groupe-client.model';
 export * from './groupe-fournisseur.model';
@@ -66,3 +65,6 @@ export * from './certification-client.model';
 export * from './certification-fournisseur.model';
 export * from './identification-symbolique.model';
 
+export * from './departement.model';
+export * from './region.model';
+export * from './zone-geographique.model';

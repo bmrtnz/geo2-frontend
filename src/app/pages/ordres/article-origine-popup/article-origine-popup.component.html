@@ -8,7 +8,6 @@
   title="Choix de l'origine"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
-  (onHiding)="onHiding()"
 >
   <dxi-item [ratio]="1">
       <dx-box direction="row">
@@ -41,7 +40,7 @@
             #list
             [dataSource]="departementDataSource"
             [height]="300"
-            displayExpr="description"
+            [displayExpr]="displayNumeroBefore"
             selectionMode="multiple"
             selectAllMode="false"
             [showSelectionControls]="true"

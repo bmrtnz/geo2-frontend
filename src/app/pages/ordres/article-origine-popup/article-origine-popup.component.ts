@@ -1,27 +1,27 @@
-import { AfterViewInit, Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
 import { LocalizationService } from 'app/shared/services';
-import { DxPopupComponent, DxTagBoxComponent, DxListComponent } from 'devextreme-angular';
+import { DxPopupComponent, DxListComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
-import { CampagnesService } from 'app/shared/services/api/campagnes.service';
-import { PaysService } from 'app/shared/services/api/pays.service';
-import { TypesPaletteService } from 'app/shared/services/api/types-palette.service';
 import OrdreLigne from 'app/shared/models/ordre-ligne.model';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
+import { DepartementsService } from 'app/shared/services/api/departements.service';
+import { ZonesGeographiquesService } from 'app/shared/services/api/zones-geographiques.service';
+import { RegionsService } from 'app/shared/services/api/regions.service';
 
 @Component({
   selector: 'app-article-origine-popup',
   templateUrl: './article-origine-popup.component.html',
   styleUrls: ['./article-origine-popup.component.scss']
 })
-export class ArticleOriginePopupComponent implements OnInit, OnChanges, AfterViewInit {
+export class ArticleOriginePopupComponent implements OnInit, OnChanges {
 
   @Input() public ordreLigne: OrdreLigne;
   @Output() public changeLigne = new EventEmitter();
 
   departementDataSource: DataSource;
   regionDataSource: DataSource;
-  ZoneDataSource: DataSource;
+  zoneGeographiqueDataSource: DataSource;
   visible: boolean;
   localSegment: string[];
   segment: any;
@@ -33,10 +33,10 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges, AfterVie
 
   constructor(
     private localizeService: LocalizationService,
-    public campagnesService: CampagnesService,
-    public regionService: PaysService,
+    public departementsService: DepartementsService,
+    public regionsService: RegionsService,
     public OrdreLigneService: OrdreLignesService,
-    public zoneService: TypesPaletteService
+    public zonesGeographiquesService: ZonesGeographiquesService
 
   ) {
     this.localSegment = [
@@ -48,24 +48,20 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges, AfterVie
    }
 
   ngOnInit() {
-    this.departementDataSource = this.campagnesService.getDataSource_v2(['id', 'description']);
-    this.regionDataSource = this.regionService.getDataSource_v2(['id', 'description']);
-    this.ZoneDataSource = this.zoneService.getDataSource_v2(['id', 'description']);
-
-    // getDataSource_v2(columns: Array<string>) {
-    //   return new DataSource({
-    //     sort: [
-    //       { selector: this.model.getKeyField() }
-    //     ],
-    //     pageSize : 10000,
-
-  }
-
-  ngAfterViewInit() {
+    this.departementDataSource = this.departementsService.getDataSource_v2(['id', 'numero', 'libelle']);
+    this.regionDataSource = this.regionsService.getDataSource_v2(['id', 'libelle']);
+    this.zoneGeographiqueDataSource = this.zonesGeographiquesService.getDataSource_v2(['id', 'libelle']);
   }
 
   ngOnChanges() {
     this.origine = this.ordreLigne?.origineCertification;
+  }
+
+  displayNumeroBefore(data) {
+    return data ?
+    (data.numero ? (data.numero.length === 1 ? '0' + data.numero : data.numero)
+     + ' - ' + data.libelle : data.libelle)
+     : null;
   }
 
   changeSegment(e) {
@@ -79,7 +75,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges, AfterVie
         break;
       }
       case 'zone': {
-        this.geolist.dataSource = this.ZoneDataSource;
+        this.geolist.dataSource = this.zoneGeographiqueDataSource;
         break;
       }
     }
@@ -95,16 +91,13 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges, AfterVie
   }
 
   onSelectionChanged(e) {
-    // Only one item can be selected
+    // Only one item can be selected at once
     if (this.geolist.selectedItems.length) this.geolist.selectedItemKeys.shift();
-    this.newOrigine = e.addedItems[0]?.description;
+    this.newOrigine = e.addedItems[0]?.libelle;
   }
 
   hidePopup() {
     this.popup.visible = false;
-  }
-
-  onHiding() {
   }
 
   saveOrigine() {
