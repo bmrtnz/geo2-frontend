@@ -22,6 +22,7 @@ import notify from 'devextreme/ui/notify';
 import { of, Subject } from 'rxjs';
 import { concatMap, filter, first, map, switchMap, takeUntil } from 'rxjs/operators';
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
+import { MruOrdresService } from 'app/shared/services/api/mru-ordres.service';
 
 /**
  * Grid with loading toggled by parent
@@ -152,6 +153,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
+    private mruOrdresService: MruOrdresService,
     private tabContext: TabContext,
   ) {
     this.handleTabChange()
@@ -369,6 +371,23 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.formGroup.reset(ordre);
       this.addLinkedOrders();
       this.refreshBadges();
+      // this.saveMRUOrdre();
+    });
+  }
+
+  saveMRUOrdre() {
+    const mruOrdre = { ordre : {id: this.ordre.id, numero: this.ordre.numero} };
+    this.mruOrdresService.save_v2(['ordre.id', 'ordre.numero'], {
+      mruOrdre,
+    })
+    .subscribe({
+      next: () => {
+        notify('OK !', 'success', 3000);
+      },
+      error: (err) => {
+        console.log(err);
+        notify('Echec de la sauvegarde', 'error', 3000);
+      }
     });
   }
 

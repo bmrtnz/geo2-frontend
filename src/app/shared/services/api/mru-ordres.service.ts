@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { OperationVariables } from '@apollo/client/core';
 import { Apollo, gql } from 'apollo-angular';
 import { MRUOrdre } from 'app/shared/models/mru-ordre.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { APIRead, ApiService, RelayPage } from '../api.service';
-import { OperationVariables } from '@apollo/client/core';
 
 @Injectable({
   providedIn: 'root'
