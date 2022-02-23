@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FileManagerComponent } from 'app/shared/components/file-manager/file-manager-popup.component';
 import { Role, Societe, Type } from 'app/shared/models';
 import { Ordre, Statut } from 'app/shared/models/ordre.model';
-import { ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
+import { ClientsService, EntrepotsService, TransporteursService, AuthService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { DevisesService } from 'app/shared/services/api/devises.service';
 import { IncotermsService } from 'app/shared/services/api/incoterms.service';
@@ -371,23 +371,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.formGroup.reset(ordre);
       this.addLinkedOrders();
       this.refreshBadges();
-      // this.saveMRUOrdre();
-    });
-  }
-
-  saveMRUOrdre() {
-    const mruOrdre = { ordre : {id: this.ordre.id, numero: this.ordre.numero} };
-    this.mruOrdresService.save_v2(['ordre.id', 'ordre.numero'], {
-      mruOrdre,
-    })
-    .subscribe({
-      next: () => {
-        notify('OK !', 'success', 3000);
-      },
-      error: (err) => {
-        console.log(err);
-        notify('Echec de la sauvegarde', 'error', 3000);
-      }
+      this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
     });
   }
 

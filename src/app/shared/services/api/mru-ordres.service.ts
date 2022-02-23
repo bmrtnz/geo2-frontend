@@ -5,6 +5,9 @@ import { MRUOrdre } from 'app/shared/models/mru-ordre.model';
 import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { APIRead, ApiService, RelayPage } from '../api.service';
+import { CurrentCompanyService } from '../current-company.service';
+import { AuthService } from '..';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +16,8 @@ export class MruOrdresService extends ApiService implements APIRead {
 
   constructor(
     apollo: Apollo,
+    private currentCompanyService: CurrentCompanyService,
+    private authService: AuthService,
   ) {
     super(apollo, MRUOrdre);
     this.gqlKeyType = 'GeoMRUOrdreKeyInput';
@@ -51,13 +56,66 @@ export class MruOrdresService extends ApiService implements APIRead {
           const query = await this.buildGetAll_v2(columns);
           const variables = this.mapLoadOptionsToVariables(options);
 
-          this.listenQuery<Response>(query, { variables }, res => {
+          this.listenQuery<Response>(query, { variables, fetchPolicy: 'network-only' }, res => {
             if (res.data && res.data.allMRUOrdre)
               resolve(this.asInstancedListCount(res.data.allMRUOrdre));
           });
         }),
         byKey: this.byKey(columns),
       }),
+    });
+  }
+
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.apollo.mutate<{ saveMRUOrdre: MRUOrdre }>({
+      mutation: gql(this.getSaveGraph(columns)),
+      variables,
+    });
+  }
+
+  getSaveGraph(body: Array<string>) {
+    return ApiService.buildGraph(
+      'mutation',
+      [
+        {
+          name: 'saveMRUOrdre',
+          body,
+          params: [{ name: 'mruOrdre', value: 'mruOrdre', isVariable: true }],
+        },
+      ],
+      [{ name: 'mruOrdre', type: `GeoMRUOrdreInput`, isOptionnal: false }],
+    );
+  }
+
+  saveMRUOrdre(ordre) {
+    const mruOrdre = {
+      utilisateur: { nomUtilisateur : this.authService.currentUser.nomUtilisateur },
+      ordre : { id: ordre.id },
+      entrepot: {id: ordre.entrepot.id, code: ordre.entrepot.code},
+      societe: { id: this.currentCompanyService.getCompany().id },
+      numero : ordre.numero
+    };
+
+    this.save_v2([
+      'utilisateur.nomUtilisateur',
+      'ordre.id',
+      'ordre.numero',
+      'ordre.codeClient',
+      'ordre.codeAlphaEntrepot',
+      'ordre.referenceClient',
+      'ordre.dateDepartPrevue',
+      'ordre.dateLivraisonPrevue',
+      'ordre.transporteur.id',
+      'ordre.codeChargement',
+      'ordre.statut',
+      'ordre.secteurCommercial.id',
+      'ordre.entrepot.id',
+      'societe.id'
+    ], {
+      mruOrdre,
+    })
+    .subscribe({
+      error: (err) => console.log('Echec de la sauvegarde MRU', err)
     });
   }
 
@@ -103,26 +161,5 @@ export class MruOrdresService extends ApiService implements APIRead {
   //     }),
   //   });
   // }
-
-  save_v2(columns: Array<string>, variables: OperationVariables) {
-    return this.apollo.mutate<{ saveMRUOrdre: MRUOrdre }>({
-      mutation: gql(this.getSaveGraph(columns)),
-      variables,
-    });
-  }
-
-  getSaveGraph(body: Array<string>) {
-    return ApiService.buildGraph(
-      'mutation',
-      [
-        {
-          name: 'saveMRUOrdre',
-          body,
-          params: [{ name: 'mruOrdre', value: 'mruOrdre', isVariable: true }],
-        },
-      ],
-      [{ name: 'mruOrdre', type: `GeoMRUOrdreInput`, isOptionnal: false }],
-    );
-  }
 
 }
