@@ -26,6 +26,7 @@ import { concatMap, filter, first, map, switchMap, takeUntil } from 'rxjs/operat
 import { AjoutArticlesManuPopupComponent } from '../ajout-articles-manu-popup/ajout-articles-manu-popup.component';
 import { GridLignesComponent } from '../grid-lignes/grid-lignes.component';
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from '../root/root.component';
+import { MruOrdresService } from 'app/shared/services/api/mru-ordres.service';
 
 /**
  * Grid with loading toggled by parent
@@ -160,6 +161,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private litigesService: LitigesService,
+    private mruOrdresService: MruOrdresService,
     private tabContext: TabContext,
     private authService: AuthService
   ) {
@@ -389,6 +391,23 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.refreshBadges();
       window.sessionStorage.setItem('idOrdre', this.ordre.id);
       window.sessionStorage.setItem('numeroOrdre' + this.ordre.numero, this.ordre.id);
+      // this.saveMRUOrdre();
+    });
+  }
+
+  saveMRUOrdre() {
+    const mruOrdre = { ordre : {id: this.ordre.id, numero: this.ordre.numero} };
+    this.mruOrdresService.save_v2(['ordre.id', 'ordre.numero'], {
+      mruOrdre,
+    })
+    .subscribe({
+      next: () => {
+        notify('OK !', 'success', 3000);
+      },
+      error: (err) => {
+        console.log(err);
+        notify('Echec de la sauvegarde', 'error', 3000);
+      }
     });
   }
 
