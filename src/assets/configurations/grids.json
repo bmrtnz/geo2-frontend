@@ -813,7 +813,7 @@
         "visible": false
       },
       {
-        "dataField": "ordre.dateModification",
+        "dataField": "dateModification",
         "sortOrder": "desc",
         "visible": false
       },
