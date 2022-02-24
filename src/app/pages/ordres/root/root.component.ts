@@ -96,7 +96,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
   onTabTitleClick(event: {itemData: Partial<TabPanelItem>}) {
     const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
-    this.router.navigate(['ordres', event.itemData.id], {
+    this.router.navigate(['pages/ordres', event.itemData.id], {
       queryParamsHandling: 'merge',
       state: { [PREVIOUS_STATE]: previous },
     });
@@ -130,7 +130,7 @@ export class RootComponent implements OnInit, OnDestroy {
     ? history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID
       : selectedID;
 
-    this.router.navigate(['ordres', navID], {
+    this.router.navigate(['pages/ordres', navID], {
       queryParams: {indicateur, ordre},
     });
   }
@@ -354,7 +354,7 @@ export class TabContext {
     .pipe(
       first(),
       switchMap( params => this.router
-        .navigate(['ordres', id],
+        .navigate(['pages/ordres', id],
         {
           queryParams: {
             [tabType]: [...new Set([...params.getAll(tabType), id])],

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Client} from '../../../shared/models';
+import { Router } from '@angular/router';
 import clients from '../../../shared/data/clients';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-test-grid-form',

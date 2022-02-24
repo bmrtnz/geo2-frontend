@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from '../../../shared/services';
 import {TransporteursListComponent} from './list/transporteurs-list.component';
 import {TransporteurDetailsComponent} from './details/transporteur-details.component';
 import { NestedGuard } from 'app/shared/guards/nested-guard';
@@ -14,16 +13,15 @@ const routes: Routes = [
   }, {
     path: 'list',
     component: TransporteursListComponent,
-    canActivate: [AuthGuardService]
   }, {
     path: 'create',
     component: TransporteurDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard],
+    canActivate: [NestedGuard],
     canDeactivate: [EditingGuard],
   }, {
     path: ':id',
     component: TransporteurDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard],
+    canActivate: [NestedGuard],
     canDeactivate: [EditingGuard]
   },
 ];

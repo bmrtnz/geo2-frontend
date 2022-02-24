@@ -1,17 +1,17 @@
-import { Component, OnInit, EventEmitter, ViewChild, ViewChildren } from '@angular/core';
-import { ArticlesService} from 'app/shared/services/api/articles.service';
-import { Router} from '@angular/router';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
-import { ApiService } from 'app/shared/services/api.service';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { DxDataGridComponent, DxTagBoxComponent } from 'devextreme-angular';
 import { ClientsService, LocalizationService } from 'app/shared/services';
+import { ApiService } from 'app/shared/services/api.service';
+import { ArticlesService } from 'app/shared/services/api/articles.service';
+import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { GridColumn } from 'basic';
+import { DxDataGridComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
 
 
 @Component({
@@ -87,7 +87,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   }
 
   onRowDblClick(e) {
-    this.router.navigate([`/articles/${e.data.id}`]);
+    this.router.navigate([`/pages/articles/${e.data.id}`]);
   }
 
   onRowPrepared(e) {

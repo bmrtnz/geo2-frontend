@@ -64,7 +64,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   }
 
   onRowDblClick(event) {
-    this.router.navigate([`/tiers/fournisseurs/${event.data.id}`]);
+    this.router.navigate([`/pages/tiers/fournisseurs/${event.data.id}`]);
   }
 
   onRowPrepared(e) {
@@ -72,7 +72,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
   }
 
   onCreate() {
-    this.router.navigate([`/tiers/fournisseurs/create`]);
+    this.router.navigate([`/pages/tiers/fournisseurs/create`]);
   }
 
 }

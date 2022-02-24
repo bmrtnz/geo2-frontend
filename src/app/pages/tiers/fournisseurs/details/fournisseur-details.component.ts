@@ -401,7 +401,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
             this.readOnlyMode = true;
           } else {
             this.editing = false;
-            this.router.navigate([`/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
+            this.router.navigate([`/pages/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
           }
           this.fournisseur.historique = e.data.saveFournisseur.historique;
           this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
@@ -453,7 +453,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
       this.formGroup.reset(this.fournisseur);
       this.readOnlyMode = true;
     } else {
-      this.router.navigate([`/tiers/fournisseurs`]);
+      this.router.navigate([`/pages/tiers/fournisseurs`]);
     }
   }
 
@@ -466,7 +466,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${this.fournisseur.code}/${this.fournisseur.typeTiers}`]);
+    this.router.navigate([`/pages/tiers/contacts/${this.fournisseur.code}/${this.fournisseur.typeTiers}`]);
   }
 
   private mapCertificationsForDisplay(certifications: CertificationFournisseur[]): Certification[] {

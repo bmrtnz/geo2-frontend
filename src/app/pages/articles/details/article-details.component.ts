@@ -290,7 +290,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
                             ...this.formGroup.getRawValue(),
                         };
                         if (this.cloneMode) {
-                            this.router.navigate([`/articles/${event.data.saveArticle.id}`]);
+                            this.router.navigate([`/pages/articles/${event.data.saveArticle.id}`]);
                         }
                         this.readOnlyMode = true;
                         this.editing = false;

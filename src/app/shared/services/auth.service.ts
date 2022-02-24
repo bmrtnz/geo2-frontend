@@ -6,8 +6,6 @@ import { Utilisateur } from '../models/utilisateur.model';
 import { UtilisateursService } from './api/utilisateurs.service';
 import { CurrentCompanyService } from './current-company.service';
 
-const SKIP_LOCATION_CHANGE = true;
-
 @Injectable()
 export class AuthService {
 
@@ -104,11 +102,11 @@ export class AuthService {
   }
 
   async logOut() {
-    if (this.router.isActive('/login', false)) return;
+    if (this.router.isActive('/profile', false)) return;
     this.loggedIn = false;
     window.sessionStorage.removeItem(this.CURRENT_USER_STORE_KEY);
-    return this.router.navigate(['/login'], {
-      skipLocationChange: SKIP_LOCATION_CHANGE,
+    return this.router.navigate(['/profile'], {
+      skipLocationChange: true,
       queryParamsHandling: 'merge',
       queryParams: { redirect: this.router.url },
     });
@@ -124,28 +122,5 @@ export class AuthService {
 
   get isAdmin() {
     return this.currentUser.profileClient === 'ADMIN';
-  }
-}
-
-@Injectable()
-export class AuthGuardService implements CanActivate {
-
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) { }
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
-    const isLoggedIn = this.authService.isLoggedIn;
-    const isLoginRoute = route.routeConfig.path === 'login';
-
-    if (!isLoggedIn && !isLoginRoute)
-      return this.router.createUrlTree(['/login'], {
-        skipLocationChange: SKIP_LOCATION_CHANGE,
-        queryParamsHandling: 'merge',
-        queryParams: { redirect: state.url },
-      });
-
-    return isLoggedIn || isLoginRoute;
   }
 }
