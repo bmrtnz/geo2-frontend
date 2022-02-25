@@ -48,7 +48,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   getOneByNumeroAndSociete(
     numero: string,
     societe: string,
-    depth = 2,
+    depth = 3,
     fieldsFilter?: RegExp
   ) {
     type Response = { ordreByNumeroAndSociete: Ordre };

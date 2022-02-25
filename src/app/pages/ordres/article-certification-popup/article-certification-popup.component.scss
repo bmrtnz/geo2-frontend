@@ -1,0 +1,35 @@
+
+::ng-deep .article-certification-popup {
+    .valid-button {
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+    }
+    .dx-radiobutton {
+        padding-bottom: 26px;
+    }
+    .list-certification {
+        position: relative;
+        height: 85%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0 0 20px 0;
+        margin-bottom: 20px;
+        width: 80%;
+        .dx-list-item {
+            margin: 3px 0;
+            .dx-list-select-radiobutton-container {
+                width: 45px;
+                .dx-list-select-radiobutton {
+                    padding-bottom: 3px;
+                }
+            }
+            .dx-list-item-content {
+                padding: 3px;
+            }
+            &.dx-state-disabled {
+                opacity: 1 !important;
+            }
+        }
+    }
+}

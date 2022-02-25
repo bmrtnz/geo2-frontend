@@ -66,6 +66,7 @@
     "btn-valider-article": "Ajouter && article",
     "btn-valider-articles": "Ajouter && articles",
     "btn-origine": "Origine",
+    "btn-certification": "Certif",
 
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
@@ -547,6 +548,9 @@
     "articles-liste-origine-region": "Région",
     "articles-liste-origine-zone": "Zone",
     "articles-save-origin": "Origine sauvegardée",
+    "articles-save-origin-error": "Echec de la sauvegarde de l'origine",
+    "articles-save-certification": "Certification sauvegardée",
+    "articles-save-certification-error": "Echec sauvegarde certification",
     "articles-curr-origin": "Origine actuelle",
     "articles-new-origin": "Origine sélectionnée",
 
@@ -782,6 +786,7 @@
     "ordreLignes-article-matierePremiere-modeCulture-description": "Mode Culture",
     "ordreLignes-article-matierePremiere-origine-id": " ",
     "ordreLignes-article-matierePremiere-origine-description": "Origine",
+    "ordreLignes-ordre-client-id": " ",
 
     "ordreEnvois-id": "n°",
     "ordreEnvois-imprimanteID": "Imprimante",

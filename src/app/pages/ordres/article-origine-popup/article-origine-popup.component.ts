@@ -19,6 +19,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   @Input() public ordreLigne: OrdreLigne;
   @Output() public changeLigne = new EventEmitter();
 
+  dataSource: DataSource;
   departementDataSource: DataSource;
   regionDataSource: DataSource;
   zoneGeographiqueDataSource: DataSource;
@@ -80,6 +81,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   onShowing(e) {
     e.component.content().parentNode.classList.add('article-origine-popup');
     this.geolist.selectedItemKeys = null;
+    this.dataSource = this.departementDataSource;
   }
 
   onSelectionChanged(e) {
@@ -104,7 +106,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
       },
       error: (err) => {
         console.log(err);
-        notify('Echec de la sauvegarde', 'error', 3000);
+        notify(this.localizeService.localize('articles-save-origin-error'), 'error', 3000);
       }
     });
     this.hidePopup();

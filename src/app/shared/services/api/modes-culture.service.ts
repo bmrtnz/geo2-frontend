@@ -4,6 +4,7 @@ import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from 'devextreme/data/load_options';
 import { ModeCulture } from '../../models';
 import { APIRead, ApiService, RelayPage } from '../api.service';
+import { OperationVariables } from '@apollo/client/core';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,12 @@ export class ModesCultureService extends ApiService implements APIRead {
   ) {
     super(apollo, ModeCulture);
     this.gqlKeyType = 'Int';
+  }
+
+  getOne(id: number) {
+    type Response = { modeCulture: ModeCulture };
+    const variables: OperationVariables = { id };
+    return this.watchGetOneQuery<Response>({ variables }, 2);
   }
 
   getDataSource() {

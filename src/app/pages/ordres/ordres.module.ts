@@ -87,6 +87,7 @@ import { FournisseursModule } from '../tiers/fournisseurs/fournisseurs.module';
 import { ZoomArticlePopupComponent } from './zoom-article-popup/zoom-article-popup.component';
 import { ZoomFournisseurPopupComponent } from './zoom-fournisseur-popup/zoom-fournisseur-popup.component';
 import { ArticleOriginePopupComponent } from './article-origine-popup/article-origine-popup.component';
+import { ArticleCertificationPopupComponent } from './article-certification-popup/article-certification-popup.component';
 
 @NgModule({
   declarations: [
@@ -134,6 +135,7 @@ import { ArticleOriginePopupComponent } from './article-origine-popup/article-or
     ZoomArticlePopupComponent,
     ZoomFournisseurPopupComponent,
     ArticleOriginePopupComponent,
+    ArticleCertificationPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,

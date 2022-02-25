@@ -117,12 +117,21 @@
     </div>
     <div *dxTemplate="let cell of 'origineTemplate'">
       <dx-button 
-        class="small-article-button"
+        class="small-article-button origin"
         type="default"
         [focusStateEnabled]="false"
         [visible]="showOriginButton(cell)"
         [text]="showOriginCheck(cell.data)"
         (onClick)="openOriginePopup(cell.data)"
+      ></dx-button>
+    </div>
+    <div *dxTemplate="let cell of 'certificationTemplate'">
+      <dx-button 
+        class="small-article-button certification"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="showCertificationCheck(cell.data)"
+        (onClick)="openCertificationPopup(cell.data)"
       ></dx-button>
     </div>
 
@@ -131,4 +140,8 @@
 </div>
 <app-zoom-article-popup [articleLigneId]="articleLigneId"></app-zoom-article-popup>
 <app-article-origine-popup [ordreLigne]="ordreLigne" (changeLigne)="refreshGrid()"></app-article-origine-popup>
+<app-article-certification-popup [ordre]="ordre" [ordreLigne]="ordreLigne" (changeLigne)="refreshGrid()"></app-article-certification-popup>
 <app-zoom-fournisseur-popup [fournisseurLigneId]="fournisseurLigneId"></app-zoom-fournisseur-popup>
+
+<!-- [visible]="showOriginButton(cell)"
+[text]="showOriginCheck(cell.data)" -->

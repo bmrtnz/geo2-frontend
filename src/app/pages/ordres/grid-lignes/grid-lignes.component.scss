@@ -1,5 +1,6 @@
 // Var
 @import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
 
 .down-move-button, .up-move-button {
     position: absolute;
@@ -57,11 +58,13 @@
             line-height: 19px; 
         }
     }
+    &.certification {
+        background-color: $BW-purple-medium !important;
+        &:hover {
+            background-color: $BW-purple-light !important;
+        }
+    }
 }
 ::ng-deep .cursor-pointer {
     cursor: pointer !important;
-}
-
-.locked-cell {
-    background: red !important;
 }

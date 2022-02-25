@@ -19,6 +19,9 @@ import notify from 'devextreme/ui/notify';
 import { ArticleOriginePopupComponent } from '../article-origine-popup/article-origine-popup.component';
 import OrdreLigne from 'app/shared/models/ordre-ligne.model';
 import { FunctionsService } from 'app/shared/services/api/functions.service';
+import { ArticleCertificationPopupComponent } from '../article-certification-popup/article-certification-popup.component';
+import { CertificationsModesCultureService } from 'app/shared/services/api/certifications-modes-culture.service';
+import { CertificationClient, Certification } from 'app/shared/models';
 
 @Component({
   selector: 'app-grid-lignes',
@@ -33,7 +36,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Output() public ordreLigne: OrdreLigne;
   @Output() public fournisseurLigneId: string;
 
-  public testSource: DataSource;
+  public certifMDDS: DataSource;
   public dataSource: DataSource;
   public proprietaireMarchandiseSource: DataSource;
   public fournisseurSource: DataSource;
@@ -48,6 +51,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, {static: false}) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ArticleOriginePopupComponent, {static: false}) articleOriginePopup: ArticleOriginePopupComponent;
+  @ViewChild(ArticleCertificationPopupComponent, {static: false}) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ZoomFournisseurPopupComponent, {static: false}) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
   private gridConfig: Promise<GridConfig>;
   public currentfocusedRow: number;
@@ -61,6 +65,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public newArticles: number;
   public newNumero: number;
   public hintDblClick: string;
+  public certifsMD: any;
+  public certificationText: string;
+  public originText: string;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -73,6 +80,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     public fraisUniteService: BasesTarifService,
     public typePaletteService: TypesPaletteService,
     public paletteInterService: TypesPaletteService,
+    public certificationsModesCultureService: CertificationsModesCultureService,
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
@@ -91,7 +99,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
     ];
     this.newArticles = 0;
     this.newNumero = 0;
-    this.hintDblClick = this.localizeService.localize('hint-DblClick-file');;
+    this.hintDblClick = this.localizeService.localize('hint-DblClick-file');
+    this.certificationText = this.localizeService.localize('btn-certification');
+    this.originText = this.localizeService.localize('btn-origine')
   }
 
   async ngOnInit() {
@@ -100,7 +110,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
       return (this.addKeyToField(column.dataField));
     })));
     const gridFields = await fields.toPromise();
-    this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
     this.fournisseurSource = this.fournisseurService.getDataSource_v2(['id', 'code', 'raisonSocial']);
     this.fournisseurSource.filter([
       ['valide', '=', true],
@@ -125,6 +134,12 @@ export class GridLignesComponent implements OnChanges, OnInit {
     ]);
     this.paletteInterSource = this.typePaletteSource;
 
+    this.certifMDDS = this.certificationsModesCultureService.getDataSource_v2(['id', 'description', 'type'], 100);
+    this.certifMDDS.filter(['type', '=', 'CERTIF']);
+    this.certifMDDS.load().then(res => {
+      this.certifsMD = res; // Store certifications Mode culture
+      this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
+    });
   }
 
   ngOnChanges() {
@@ -211,6 +226,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     let templ;
     if (this.itemsWithSelectBox.includes(field)) templ = 'selectBoxEditTemplate';
     if (field === 'article.matierePremiere.origine.id') templ = 'origineTemplate';
+    if (field === 'ordre.client.id') templ = 'certificationTemplate';
     return templ ? templ : false;
   }
 
@@ -219,9 +235,19 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   showOriginCheck(data) {
-    let originText = this.localizeService.localize('btn-origine');
-    if (data.origineCertification) originText += ' ✓';
-    return originText;
+    return this.originText + (data.origineCertification ? ' ✓' : '');
+  }
+
+  showCertificationCheck(data) {
+    let isCert = false;
+    if (data.listeCertifications) { // Already recorded
+      this.certifsMD.map(certType => {
+        if (data.listeCertifications?.split(',').includes(certType.id.toString())) isCert = true;
+      });
+    } else { // Default certifications from customer file
+      isCert = this.ordre.client.certifications?.length > 0;
+    }
+    return this.certificationText + (isCert ? ' ✓' : '');
   }
 
   hintFournisseur(field) {
@@ -265,6 +291,11 @@ export class GridLignesComponent implements OnChanges, OnInit {
   openOriginePopup(ligne) {
     this.ordreLigne = ligne;
     this.articleOriginePopup.visible = true;
+  }
+
+  openCertificationPopup(ligne) {
+    this.ordreLigne = ligne;
+    this.articleCertificationPopup.visible = true;
   }
 
   onEditingStart(e) {

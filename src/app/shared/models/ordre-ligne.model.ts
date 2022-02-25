@@ -36,6 +36,7 @@ export class OrdreLigne extends Model {
   @Field() public achatDevise?: string;
   @Field() public fraisCommentaires?: string;
   @Field() public origineCertification?: string;
+  @Field() public listeCertifications?: string;
   @Field({model: import('./base-tarif.model')}) public achatUnite?: BaseTarif;
   @Field({model: import('./type-palette.model')}) public typePalette?: Palette;
   @Field({model: import('./type-palette.model')}) public paletteInter?: Palette;

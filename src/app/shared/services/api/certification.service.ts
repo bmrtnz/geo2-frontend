@@ -19,10 +19,10 @@ export class CertificationsService extends ApiService implements APIRead {
     this.gqlKeyType = 'Int';
   }
 
-  getDataSource() {
+  getDataSource(sortSelector?) {
     return new DataSource({
       sort: [
-        { selector: this.model.getLabelField() }
+        { selector: sortSelector ? sortSelector : this.model.getLabelField() }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
