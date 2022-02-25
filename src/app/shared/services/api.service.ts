@@ -167,7 +167,7 @@ export abstract class ApiService implements OnDestroy {
     .flatMap(([key, value]) => {
       if (value === null)
         return {[key]: null};
-      if (typeof value.id !== 'undefined' && value.id === null)
+      if (typeof value?.id !== 'undefined' && value?.id === null)
         return {[key]: null};
       if (typeof value === 'object' && value !== null) {
         if (typeof value.length !== 'undefined')
