@@ -12,7 +12,6 @@ import {
   first,
   last,
   map,
-  pairwise,
   publish,
   refCount,
   share,
@@ -125,7 +124,7 @@ export class RootComponent implements OnInit, OnDestroy {
     } else {
       window.sessionStorage.removeItem('idOrdre');
     }
-    this.router.navigate(['ordres', event.itemData.id], {
+    this.router.navigate(['pages/ordres', event.itemData.id], {
       queryParamsHandling: 'merge',
       state: { [PREVIOUS_STATE]: previous },
     });
@@ -159,7 +158,7 @@ export class RootComponent implements OnInit, OnDestroy {
     ? history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID
       : selectedID;
 
-    this.router.navigate(['ordres', navID], {
+    this.router.navigate(['pages/ordres', navID], {
       queryParams: {indicateur, ordre},
     });
   }
@@ -383,7 +382,7 @@ export class TabContext {
     .pipe(
       first(),
       switchMap( params => this.router
-        .navigate(['ordres', id],
+        .navigate(['pages/ordres', id],
         {
           queryParams: {
             [tabType]: [...new Set([...params.getAll(tabType), id])],

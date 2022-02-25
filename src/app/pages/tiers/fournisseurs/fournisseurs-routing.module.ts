@@ -1,10 +1,9 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from '../../../shared/services';
-import {FournisseursListComponent} from './list/fournisseurs-list.component';
-import {FournisseurDetailsComponent} from './details/fournisseur-details.component';
-import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { FournisseurDetailsComponent } from './details/fournisseur-details.component';
+import { FournisseursListComponent } from './list/fournisseurs-list.component';
 
 const routes: Routes = [
   {
@@ -14,16 +13,15 @@ const routes: Routes = [
   }, {
     path: 'list',
     component: FournisseursListComponent,
-    canActivate: [AuthGuardService]
   }, {
     path: ':id',
     component: FournisseurDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard],
+    canActivate: [NestedGuard],
     canDeactivate: [EditingGuard],
   }, {
     path: 'create',
     component: FournisseurDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard],
+    canActivate: [NestedGuard],
     canDeactivate: [EditingGuard],
   }
 ];

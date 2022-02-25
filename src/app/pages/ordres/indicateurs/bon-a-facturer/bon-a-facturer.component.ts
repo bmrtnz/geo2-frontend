@@ -179,7 +179,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit  {
   }
 
   onRowDblClick(event) {
-    this.router.navigate(['ordres', 'details'], {
+    this.router.navigate(['pages/ordres', 'details'], {
       queryParams: {pushordres: (event.data as Ordre).id},
     });
   }

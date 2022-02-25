@@ -68,11 +68,11 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
   }
 
   onRowDblClick(event) {
-    this.router.navigate([`/tiers/clients/${event.data.id}`]);
+    this.router.navigate([`/pages/tiers/clients/${event.data.id}`]);
   }
 
   onCreate() {
-    this.router.navigate([`/tiers/clients/create`]);
+    this.router.navigate([`/pages/tiers/clients/create`]);
   }
 
   onRowPrepared(e) {

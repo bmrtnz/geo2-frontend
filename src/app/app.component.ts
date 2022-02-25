@@ -1,6 +1,5 @@
-import { Component, HostBinding, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService, ScreenService } from './shared/services';
+import { Component, HostBinding } from '@angular/core';
+import { ScreenService } from './shared/services';
 
 @Component({
   selector: 'app-root',
@@ -14,15 +13,8 @@ export class AppComponent {
   }
 
   constructor(
-    private authService: AuthService,
     private screen: ScreenService,
-    private router: Router,
   ) {
-    const year = new Date().getFullYear();
-
-    if (year !== AppComponent.START_DEV_YEAR) {
-      this.copyrightYear = '-' + year;
-    }
 
     // Clear blocage ligne ordre periodic survey
     window.sessionStorage.removeItem('surveyRunning');
@@ -41,19 +33,12 @@ export class AppComponent {
      });
 
   }
-  public static readonly START_DEV_YEAR: number = 2020;
-  public version = require( '../../package.json').version;
-  public copyrightYear = '';
 
   closest(elem, selector) {
     for (; elem && elem !== document; elem = elem.parentNode) {
       if (elem.matches(selector)) return elem;
     }
     return null;
-  }
-
-  isAutorized() {
-    return !this.router.isActive('/login', false) ?? this.authService.isLoggedIn;
   }
 
   isVisible(el) {

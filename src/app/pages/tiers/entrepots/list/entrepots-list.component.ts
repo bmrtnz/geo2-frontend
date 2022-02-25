@@ -78,10 +78,10 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
   }
 
   onRowDblClick(e) {
-    this.router.navigate([`/tiers/entrepots/${e.data.id}`]);
+    this.router.navigate([`/pages/tiers/entrepots/${e.data.id}`]);
   }
   onCreate() {
-    this.router.navigate([`/tiers/entrepots/create/${this.clientID}`]);
+    this.router.navigate([`/pages/tiers/entrepots/create/${this.clientID}`]);
   }
   onRowPrepared(e) {
     this.gridRowStyleService.applyGridRowStyle(e);

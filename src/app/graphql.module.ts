@@ -4,11 +4,9 @@ import { onError } from '@apollo/client/link/error';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from '../environments/environment';
-import { AuthService } from './shared/services';
-import { Edge } from './shared/services/api.service';
-import { GridsConfigsService } from './shared/services/api/grids-configs.service';
 import { GridConfig } from './shared/models';
-import { Model } from './shared/models/model';
+import { AuthService } from './shared/services';
+import { GridsConfigsService } from './shared/services/api/grids-configs.service';
 
 const uri = environment.apiEndpoint + '/graphql';
 

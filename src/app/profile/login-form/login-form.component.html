@@ -1,0 +1,79 @@
+<app-single-card>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <dx-validation-group>
+  
+      <!-- header -->
+      <div class="login-header">
+        <img class="login-logo" src="/assets/images/BW-couleur-bleu-128.png" alt="bluewhale-logo">
+        <div class="title">{{ 'title' | localize }}</div>
+        <div class="version">{{ 'version' | localize }} {{ version }}</div>
+        <div class="subtitle">{{ 'auth-subtitle' | localize }}</div>
+      </div>
+  
+      <!-- username field -->
+      <div class="dx-field field-username">
+        <dx-text-box
+          formControlName="nomUtilisateur"
+          placeholder="{{ 'auth-login' | localize }}"
+          (onKeyUp)="onKeyUp($event)"
+          (valueChange)="showHideSubmitSociete(false)"
+          width="100%">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="{{ 'auth-validation-login' | localize }}"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </div>
+  
+      <!-- password field -->
+      <div class="dx-field field-password">
+        <dx-text-box
+          mode="password"
+          formControlName="password"
+          placeholder="{{ 'auth-password' | localize }}"
+          (onKeyUp)="onKeyUp($event)"
+          (valueChange)="showHideSubmitSociete(false)"
+          width="100%">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="{{ 'auth-validation-password' | localize }}"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </div>
+  
+      <!-- sélection société -->
+      <div class="dx-field">
+          <dx-select-box #societeSB
+              placeholder="{{ 'auth-societe' | localize }}"
+              [readOnly]="true"
+              [dataSource]="societe"
+              displayExpr="raisonSocial"
+              (onFocusIn)="findAssociatedCompanies($event)"
+              (onSelectionChanged)="societeOnChange($event)"
+              [value]="['']"
+              width="100%">
+          </dx-select-box>
+          <dx-load-indicator [visible]="companiesLoading" class="companyLoader"></dx-load-indicator>
+        </div>
+      <br>
+  
+      <!--<div class="dx-field">
+        <dx-check-box [value]="false" text="Remember me"></dx-check-box>
+      </div>-->
+  
+      <!-- submit button -->
+      <div class="dx-field">
+        <dx-button #submitButton
+          type="default"
+          [disabled]="true" 
+          text="{{ 'auth-login-btn' | localize }}" 
+          [useSubmitBehavior]="true"
+          width="100%"
+          >
+        </dx-button>
+      </div>
+  
+      <!--<div class="dx-field">
+        <a routerLink="/recovery">Forgot password ?</a>
+      </div>-->
+    </dx-validation-group>
+  </form>
+</app-single-card>

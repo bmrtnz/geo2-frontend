@@ -66,11 +66,11 @@ export class TransporteursListComponent implements OnInit, NestedMain {
   }
 
   onCreate() {
-    this.router.navigate([`/tiers/transporteurs/create`]);
+    this.router.navigate([`/pages/tiers/transporteurs/create`]);
   }
 
   onRowDblClick(event) {
-    this.router.navigate([`/tiers/transporteurs/${event.data.id}`]);
+    this.router.navigate([`/pages/tiers/transporteurs/${event.data.id}`]);
   }
 
   onRowPrepared(e) {

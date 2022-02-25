@@ -110,7 +110,7 @@ export class CommandesTransitComponent implements OnInit, AfterViewInit {
 
   onRowDblClick(e) {
     window.sessionStorage.setItem('orderNumber', JSON.stringify(e));
-    this.router.navigate([`/ordres/suivi`]);
+    this.router.navigate([`/pages/ordres/suivi`]);
   }
 
   onConfirm() {

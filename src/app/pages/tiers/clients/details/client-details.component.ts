@@ -517,7 +517,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
             this.readOnlyMode = true;
           } else {
             this.editing = false;
-            this.router.navigate([`/tiers/clients/${e.data.saveClient.id}`]);
+            this.router.navigate([`/pages/tiers/clients/${e.data.saveClient.id}`]);
           }
           this.client.historique = e.data.saveClient.historique;
           this.client.typeTiers = e.data.saveClient.typeTiers;
@@ -534,7 +534,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
       this.formGroup.reset(this.client);
       this.readOnlyMode = true;
     } else {
-      this.router.navigate([`/tiers/clients`]);
+      this.router.navigate([`/pages/tiers/clients`]);
     }
   }
 
@@ -594,12 +594,12 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit, NestedPart
 
   entrepotsBtnClick() {
     if (!this.client) return;
-    this.router.navigateByUrl(`/nested/n/tiers/clients/${this.client.id}/entrepots/list`);
+    this.router.navigateByUrl(`/pages/nested/n/tiers/clients/${this.client.id}/entrepots/list`);
   }
 
   contactsBtnClick() {
     if (!this.client) return;
-    this.router.navigate([`/tiers/contacts/${this.client.code}/${this.client.typeTiers}`]);
+    this.router.navigate([`/pages/tiers/contacts/${this.client.code}/${this.client.typeTiers}`]);
   }
 
   private mapCertificationsForDisplay(certifications: CertificationClient[]): Certification[] {

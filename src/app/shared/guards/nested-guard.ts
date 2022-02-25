@@ -1,8 +1,12 @@
 import { CanActivate, ActivatedRouteSnapshot, Router, ActivatedRoute, UrlTree, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NestedGuard implements CanActivate {
+
+  private readonly PREFIX = '/pages/';
 
   constructor(
     private router: Router,
@@ -10,10 +14,10 @@ export class NestedGuard implements CanActivate {
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean|UrlTree {
-    if (this.router.url.startsWith('/nested')) {
+    if (this.router.url.startsWith(`${this.PREFIX}nested`)) {
       return this.router.createUrlTree([
-        { outlets: { details: decodeURI(state.url.substring(1)) }}
-      ], { relativeTo: this.activatedRoute.firstChild.firstChild, });
+        { outlets: { details: decodeURI(state.url.substring(this.PREFIX.length)) }}
+      ], { relativeTo: this.activatedRoute.firstChild.firstChild.firstChild.firstChild, });
     }
     return true;
   }

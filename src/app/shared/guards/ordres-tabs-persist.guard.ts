@@ -35,7 +35,7 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
       () => !!this.authService.currentUser?.configTabsOrdres?.[this?.currentCompany?.id],
         defer(() => of(this.authService.currentUser.configTabsOrdres[this.currentCompany.id]))
         .pipe(map( url => this.router.parseUrl(url))),
-        of(this.router.createUrlTree(['/ordres/home'])),
+        of(this.router.createUrlTree(['/pages/ordres/home'])),
     );
   }
 
@@ -59,7 +59,7 @@ export class OrdresTabsPersistGuard implements CanActivate, CanDeactivate<RootCo
         switchMap(companyID => this.authService.persist({
           configTabsOrdres: {
             ...this.authService.currentUser?.configTabsOrdres,
-            [companyID]: encodeURI(nextState.url.match(/^\/ordres.*/) ? nextState.url : currentState.url),
+            [companyID]: encodeURI(nextState.url.match(/^\/pages\/ordres.*/) ? nextState.url : currentState.url),
           },
         })),
       )

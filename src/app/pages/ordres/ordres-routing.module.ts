@@ -1,20 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from '../../shared/services';
-import { RootComponent } from './root/root.component';
 import { OrdresTabsPersistGuard } from 'app/shared/guards/ordres-tabs-persist.guard';
+import { RootComponent } from './root/root.component';
 
 const routes: Routes = [
   {
     path: ':tabid',
     component: RootComponent,
-    canActivate: [AuthGuardService],
     canDeactivate: [OrdresTabsPersistGuard],
   },
   {
     path: '',
     component: RootComponent,
-    canActivate: [AuthGuardService, OrdresTabsPersistGuard],
+    canActivate: [OrdresTabsPersistGuard],
   },
 ];
 
