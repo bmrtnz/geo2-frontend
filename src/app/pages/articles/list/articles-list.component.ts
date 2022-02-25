@@ -1,18 +1,18 @@
-import { Component, OnInit, EventEmitter, ViewChild, ViewChildren, Output, Input } from '@angular/core';
-import { ArticlesService} from 'app/shared/services/api/articles.service';
-import { Router} from '@angular/router';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
-import { ApiService } from 'app/shared/services/api.service';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NestedMain } from 'app/pages/nested/nested.component';
-import { DxDataGridComponent, DxTagBoxComponent, DxSelectBoxComponent } from 'devextreme-angular';
+import Ordre from 'app/shared/models/ordre.model';
 import { ClientsService, LocalizationService } from 'app/shared/services';
+import { ApiService } from 'app/shared/services/api.service';
+import { ArticlesService } from 'app/shared/services/api/articles.service';
+import { Grid, GridConfig, GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
 import { GridRowStyleService } from 'app/shared/services/grid-row-style.service';
 import { GridColumn } from 'basic';
+import { DxDataGridComponent, DxSelectBoxComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
+import { environment } from 'environments/environment';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { GridConfiguratorService, Grid, GridConfig } from 'app/shared/services/grid-configurator.service';
-import Ordre from 'app/shared/models/ordre.model';
 
 
 @Component({
@@ -104,7 +104,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   onRowDblClick(e) {
     // If ordre is there, we're accessing from an order : no article file opening is possible
-    if (!this.ordre) this.router.navigate([`/articles/${e.data.id}`]);
+    if (!this.ordre) this.router.navigate([`/pages/articles/${e.data.id}`]);
   }
 
   onRowPrepared(e) {

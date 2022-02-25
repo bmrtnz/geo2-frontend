@@ -242,7 +242,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
           this.readOnlyMode = true;
         } else {
           this.editing = false;
-          this.router.navigate([`/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
+          this.router.navigate([`/pages/tiers/lieux-passage-a-quai/${e.data.saveLieuPassageAQuai.id}`]);
         }
         this.lieupassageaquai.typeTiers = e.data.saveLieuPassageAQuai.typeTiers;
         this.formGroup.markAsPristine();
@@ -278,7 +278,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
       this.formGroup.reset(this.lieupassageaquai);
       this.readOnlyMode = true;
     } else {
-      this.router.navigate([`/tiers/lieux-passage-a-quai`]);
+      this.router.navigate([`/pages/tiers/lieux-passage-a-quai`]);
     }
   }
 
@@ -291,7 +291,7 @@ export class LieuxPassageAQuaiDetailsComponent implements OnInit, AfterViewInit,
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${this.lieupassageaquai.id}/${this.lieupassageaquai.typeTiers}`]);
+    this.router.navigate([`/pages/tiers/contacts/${this.lieupassageaquai.id}/${this.lieupassageaquai.typeTiers}`]);
   }
 
   private getDirtyFieldsPath() {

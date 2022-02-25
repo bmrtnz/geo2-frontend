@@ -52,7 +52,7 @@ export class LitigesComponent implements OnInit {
   }
 
   onRowDblClick({data: litigeLigne}: {data: LitigeLigne}) {
-    this.router.navigate(['ordres', 'details'], {
+    this.router.navigate(['pages/ordres', 'details'], {
       queryParams: {pushordres: litigeLigne.litige.ordreOrigine.id},
     });
   }

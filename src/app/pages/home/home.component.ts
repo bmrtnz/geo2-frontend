@@ -30,19 +30,19 @@ export class HomeComponent implements OnInit {
 
   onClickItem(e) {
     const target = e.element.id.replace('-button', '');
-    this.router.navigate([`/stock`]);
+    this.router.navigate([`/pages/stock`]);
   }
 
   navigate(view, nested?) {
     if (nested) {
-      this.router.navigateByUrl('/nested/n/(' + view  + ')');
+      this.router.navigateByUrl('/pages/nested/n/(' + view  + ')');
     } else {
       this.router.navigateByUrl(view);
     }
   }
 
   navigateItemList(e) {
-    this.router.navigateByUrl('/nested/n/(' + e.itemData.path + '/list)');
+    this.router.navigateByUrl('/pages/nested/n/(' + e.itemData.path + '/list)');
   }
 
 }

@@ -1,22 +1,16 @@
-import { AfterViewInit, Component, NgModule, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SocietesService } from 'app/shared/services/api/societes.service';
 import { UtilisateursService } from 'app/shared/services/api/utilisateurs.service';
 import { CurrentCompanyService } from 'app/shared/services/current-company.service';
-import { DxLoadIndicatorModule } from 'devextreme-angular';
-import { DxButtonComponent, DxButtonModule } from 'devextreme-angular/ui/button';
-import { DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
-import { DxSelectBoxComponent, DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
-import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
-import { DxValidationGroupModule } from 'devextreme-angular/ui/validation-group';
-import { DxValidatorModule } from 'devextreme-angular/ui/validator';
+import { DxButtonComponent } from 'devextreme-angular/ui/button';
+import { DxSelectBoxComponent } from 'devextreme-angular/ui/select-box';
 import DataSource from 'devextreme/data/data_source';
 import notify from 'devextreme/ui/notify';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../../services';
-import { SharedModule } from '../../shared.module';
+import { AuthService } from 'app/shared/services';
 
 
 
@@ -31,7 +25,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   companiesLoading = false;
   @ViewChild('submitButton', { static: false }) submitButton: DxButtonComponent;
   @ViewChild('societeSB', { static: false }) societeSB: DxSelectBoxComponent;
-  public version = require('../../../../../package.json').version;
+  public version = require('../../../../package.json').version;
 
   autoSubmit = false;
 
@@ -147,20 +141,3 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   }
 
 }
-@NgModule({
-  imports: [
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DxButtonModule,
-    DxCheckBoxModule,
-    DxTextBoxModule,
-    DxLoadIndicatorModule,
-    DxValidatorModule,
-    DxValidationGroupModule,
-    DxSelectBoxModule
-  ],
-  declarations: [ LoginFormComponent ],
-  exports: [ LoginFormComponent ]
-})
-export class LoginFormModule { }

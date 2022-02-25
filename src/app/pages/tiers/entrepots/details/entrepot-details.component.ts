@@ -305,7 +305,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
               this.readOnlyMode = true;
             } else {
               this.editing = false;
-              this.router.navigate([`/tiers/entrepots/${e.data.saveEntrepot.id}`]);
+              this.router.navigate([`/pages/tiers/entrepots/${e.data.saveEntrepot.id}`]);
             }
             this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
           },
@@ -320,7 +320,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       this.formGroup.reset(this.entrepot);
       this.readOnlyMode = true;
     } else {
-      this.router.navigate([`/tiers/entrepots`]);
+      this.router.navigate([`/pages/tiers/entrepots`]);
     }
   }
 
@@ -339,7 +339,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`]);
+    this.router.navigate([`/pages/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`]);
   }
 
   private getDirtyFieldsPath() {

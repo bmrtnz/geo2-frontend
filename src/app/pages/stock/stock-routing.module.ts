@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AuthGuardService } from '../../shared/services';
+import { RouterModule, Routes } from '@angular/router';
 import { StockListComponent } from './list/stock-list.component';
 
 const routes: Routes = [
   {
     path: '',
     component: StockListComponent,
-    canActivate: [AuthGuardService]
   }
 ];
 

@@ -1,16 +1,14 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {SideNavOuterToolbarModule, SingleCardModule} from './layouts';
-import {FooterModule, LoginFormModule} from './shared/components';
-import {AuthService, ScreenService} from './shared/services';
-import {SharedModule} from './shared/shared.module';
-import { GraphQLModule } from './graphql.module';
-import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { GraphQLModule } from './graphql.module';
+import { AuthService, ScreenService } from './shared/services';
 import { OrdresIndicatorsService } from './shared/services/ordres-indicators.service';
+import { SharedModule } from './shared/shared.module';
+
 
 @NgModule({
   declarations: [
@@ -20,10 +18,6 @@ import { OrdresIndicatorsService } from './shared/services/ordres-indicators.ser
     BrowserModule,
     SharedModule,
     AppRoutingModule,
-    SideNavOuterToolbarModule,
-    SingleCardModule,
-    FooterModule,
-    LoginFormModule,
     GraphQLModule,
     HttpClientModule
   ],

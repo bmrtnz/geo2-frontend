@@ -164,7 +164,7 @@ export class StockListComponent implements OnInit {
     const self = this;
     return (e) => {
       e.event.preventDefault();
-      self.router.navigate([`/articles/${e.row.data.article.id}`]);
+      self.router.navigate([`/pages/articles/${e.row.data.article.id}`]);
     };
   }
 

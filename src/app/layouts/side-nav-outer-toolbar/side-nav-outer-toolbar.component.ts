@@ -5,7 +5,7 @@ import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
 import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
 import { CommonModule } from '@angular/common';
 
-import { navigation } from '../../app-navigation';
+import { navigation } from '../../pages/pages-navigation';
 import { Router, NavigationEnd } from '@angular/router';
 import { DxButtonModule } from 'devextreme-angular';
 import { ValidationService } from 'app/shared/services/api/validation.service';

@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { EntrepotsListComponent } from './list/entrepots-list.component';
-import { EntrepotDetailsComponent } from './details/entrepot-details.component';
-import { AuthGuardService } from '../../../shared/services';
-import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { RouterModule, Routes } from '@angular/router';
 import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { NestedGuard } from 'app/shared/guards/nested-guard';
+import { EntrepotDetailsComponent } from './details/entrepot-details.component';
+import { EntrepotsListComponent } from './list/entrepots-list.component';
 
 const routes: Routes = [
   {
@@ -14,16 +13,15 @@ const routes: Routes = [
   }, {
     path: 'list',
     component: EntrepotsListComponent,
-    canActivate: [AuthGuardService]
   }, {
     path: ':id',
     component: EntrepotDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard],
+    canActivate: [NestedGuard],
     canDeactivate: [EditingGuard],
   }, {
     path: 'create/:client',
     component: EntrepotDetailsComponent,
-    canActivate: [AuthGuardService, NestedGuard],
+    canActivate: [NestedGuard],
     canDeactivate: [EditingGuard],
   }
 ];

@@ -66,11 +66,11 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
   }
 
   onRowDblClick(event) {
-    this.router.navigate([`/tiers/lieux-passage-a-quai/${event.data.id}`]);
+    this.router.navigate([`/pages/tiers/lieux-passage-a-quai/${event.data.id}`]);
   }
 
   onCreate() {
-    this.router.navigate([`/tiers/lieux-passage-a-quai/create`]);
+    this.router.navigate([`/pages/tiers/lieux-passage-a-quai/create`]);
   }
 
   onRowPrepared(e) {

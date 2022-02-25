@@ -267,7 +267,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
           this.readOnlyMode = true;
         } else {
           this.editing = false;
-          this.router.navigate([`/tiers/transporteurs/${e.data.saveTransporteur.id}`]);
+          this.router.navigate([`/pages/tiers/transporteurs/${e.data.saveTransporteur.id}`]);
         }
         this.transporteur.typeTiers = e.data.saveTransporteur.typeTiers;
         this.formGroup.markAsPristine();
@@ -305,7 +305,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
       this.formGroup.reset(this.transporteur);
       this.readOnlyMode = true;
     } else {
-      this.router.navigate([`/tiers/transporteurs`]);
+      this.router.navigate([`/pages/tiers/transporteurs`]);
     }
   }
 
@@ -318,7 +318,7 @@ export class TransporteurDetailsComponent implements OnInit, AfterViewInit, Nest
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/tiers/contacts/${this.transporteur.id}/${this.transporteur.typeTiers}`]);
+    this.router.navigate([`/pages/tiers/contacts/${this.transporteur.id}/${this.transporteur.typeTiers}`]);
   }
 
   private getDirtyFieldsPath() {

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Model, ModelFieldOptions } from 'app/shared/models/model';
+import { ModelFieldOptions } from 'app/shared/models/model';
 import { LocalizePipe } from 'app/shared/pipes';
 import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
 import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';

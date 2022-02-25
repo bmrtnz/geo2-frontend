@@ -1,22 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NestedComponent } from './nested.component';
-import { AuthGuardService } from 'app/shared/services';
+import { EditingGuard } from 'app/shared/guards/editing-guard';
 import { ArticleDetailsComponent } from '../articles/details/article-details.component';
 import { ArticlesListComponent } from '../articles/list/articles-list.component';
-import { NestedGuard } from 'app/shared/guards/nested-guard';
-import { ClientsListComponent } from '../tiers/clients/list/clients-list.component';
 import { ClientDetailsComponent } from '../tiers/clients/details/client-details.component';
-import { EntrepotsListComponent } from '../tiers/entrepots/list/entrepots-list.component';
+import { ClientsListComponent } from '../tiers/clients/list/clients-list.component';
 import { ContactsComponent } from '../tiers/contacts/contacts.component';
-import { FournisseursListComponent } from '../tiers/fournisseurs/list/fournisseurs-list.component';
+import { EntrepotDetailsComponent } from '../tiers/entrepots/details/entrepot-details.component';
+import { EntrepotsListComponent } from '../tiers/entrepots/list/entrepots-list.component';
 import { FournisseurDetailsComponent } from '../tiers/fournisseurs/details/fournisseur-details.component';
+import { FournisseursListComponent } from '../tiers/fournisseurs/list/fournisseurs-list.component';
+import { LieuxPassageAQuaiDetailsComponent } from '../tiers/lieux-passage-a-quai/details/lieux-passage-a-quai-details.component';
+import { LieuxPassageAQuaiListComponent } from '../tiers/lieux-passage-a-quai/list/lieux-passage-a-quai-list.component';
 import { TransporteurDetailsComponent } from '../tiers/transporteurs/details/transporteur-details.component';
 import { TransporteursListComponent } from '../tiers/transporteurs/list/transporteurs-list.component';
-import { LieuxPassageAQuaiListComponent } from '../tiers/lieux-passage-a-quai/list/lieux-passage-a-quai-list.component';
-import { LieuxPassageAQuaiDetailsComponent } from '../tiers/lieux-passage-a-quai/details/lieux-passage-a-quai-details.component';
-import { EntrepotDetailsComponent } from '../tiers/entrepots/details/entrepot-details.component';
-import { EditingGuard } from 'app/shared/guards/editing-guard';
+import { NestedComponent } from './nested.component';
 
 // Outlets issues :
 // https://github.com/angular/angular/issues/18271
