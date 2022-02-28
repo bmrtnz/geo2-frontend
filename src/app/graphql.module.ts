@@ -17,11 +17,7 @@ const uri = environment.apiEndpoint + "/graphql";
 
 const errorLink = onError(({ networkError }) => {
     // @ts-ignore
-    if (
-        networkError &&
-        "status" in networkError &&
-        networkError.status === 403
-    ) {
+    if (networkError?.status === 403) {
         // @ts-ignore
         console.log(networkError.status);
 
