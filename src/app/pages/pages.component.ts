@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { version } from '../../../package.json';
 
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
   styleUrls: ['./pages.component.scss']
 })
-export class PagesComponent implements OnInit {
+export class PagesComponent {
 
   public static readonly START_DEV_YEAR: number = 2020;
-  public version = require( '../../../package.json').version;
+  public readonly version = version;
   public copyrightYear = '';
 
   constructor() {
@@ -16,9 +17,6 @@ export class PagesComponent implements OnInit {
     if (year !== PagesComponent.START_DEV_YEAR) {
       this.copyrightYear = '-' + year;
     }
-  }
-
-  ngOnInit() {
   }
 
 }

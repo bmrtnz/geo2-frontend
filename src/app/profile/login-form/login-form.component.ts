@@ -11,8 +11,7 @@ import notify from 'devextreme/ui/notify';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'app/shared/services';
-
-
+import { version } from '../../../../package.json';
 
 @Component({
   selector: 'app-login-form',
@@ -25,7 +24,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   companiesLoading = false;
   @ViewChild('submitButton', { static: false }) submitButton: DxButtonComponent;
   @ViewChild('societeSB', { static: false }) societeSB: DxSelectBoxComponent;
-  public version = require('../../../../package.json').version;
+  public readonly version = version;
 
   autoSubmit = false;
 
