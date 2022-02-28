@@ -19,20 +19,20 @@
 }
 
 .backtotop {
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  transition:all 0.21s ease-in;
-  z-index:10000;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transition: all 0.21s ease-in;
+  z-index: 10000;
   .dx-button {
     /* To overcome native color change on click */
-    background-color:#00759C;
+    background-color: #00759c;
   }
 }
 
 .hiddenBacktotop {
-  opacity:0;
-  right:-35px;
+  opacity: 0;
+  right: -35px;
 }
 
 ::ng-deep .side-navigation-menu {
@@ -51,7 +51,7 @@
     font-weight: normal;
     padding: 3px 4px 3px 3px;
     line-height: 7px;
-    background-color: #EE0000;
+    background-color: #ee0000;
     border: 1px solid #666;
     color: #fff !important;
   }

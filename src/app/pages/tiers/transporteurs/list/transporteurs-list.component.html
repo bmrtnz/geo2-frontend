@@ -1,10 +1,16 @@
-<h2 class="content-block">{{ 'tiers-transporteurs-title' | localize }}
-  <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
+<h2 class="content-block">
+  {{ "tiers-transporteurs-title" | localize }}
+  <dx-button
+    class="upperButton"
+    type="default"
+    text="{{ 'btn-nouveau' | localize }}"
+    (onClick)="onCreate()"
+  ></dx-button>
 </h2>
 
 <div class="content-block">
-
-  <dx-data-grid class="dx-card wide-card"
+  <dx-data-grid
+    class="dx-card wide-card"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -12,17 +18,23 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{ useNative:true }"
+    [scrolling]="{ useNative: true }"
     (onRowPrepared)="onRowPrepared($event)"
-    (onRowDblClick)="onRowDblClick($event);"
+    (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
-    [scrolling]="{ useNative:true }"
+    [scrolling]="{ useNative: true }"
     (onToolbarPreparing)="gridConfigHandler($event)"
   >
-
     <!-- Grid configuration -->
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-export [enabled]="true" fileName="Transporteurs" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-export
+      [enabled]="true"
+      fileName="Transporteurs"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -35,12 +47,15 @@
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
-      [caption]="('tiers-transporteurs-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
+      [caption]="
+        ('tiers-transporteurs-' +
+          column.dataField?.replace('.description', '').split('.').join('-')
+          | localize) || column.name
+      "
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
-
   </dx-data-grid>
 </div>

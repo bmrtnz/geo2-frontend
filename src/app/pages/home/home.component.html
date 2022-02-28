@@ -1,92 +1,107 @@
-<h2 class="content-block">{{ 'home' | localize }}</h2>
+<h2 class="content-block">{{ "home" | localize }}</h2>
 <div class="content-block homepage">
-    <div class="dx-card responsive-paddings">
-        <div class="main-buttons-container">
-            <div class="buttons-container">
-                <div class="home-button-container-horiz">
-                    <dx-button class="BW-khaki-dark"
-                      type="default"
-                      icon="material-icons group"
-                      (onClick)="onClickMultipleMenu($event)"
-                      text="Tiers"
-                    >
-                    </dx-button>
-                    <dx-drawer
-                        openedStateMode='overlap'
-                        position="top"
-                        revealMode="expand"
-                        template="template"
-                        [opened]="false"
-                        [height]="400"
-                        [closeOnOutsideClick]="true">
-                        <div *dxTemplate="let data of 'template'">
-                            <dx-list class="panel-list dx-theme-accent-as-background-color"
-                                [hoverStateEnabled]="true"
-                                [activeStateEnabled]="false"
-                                [focusStateEnabled]="false"
-                                (onItemClick)="navigateItemList($event)"
-                                [dataSource]="navigation">
-                            </dx-list>
-                        </div>
-                    </dx-drawer>
-                    <dx-button class="BW-purple-dark"
-                      type="default"
-                      icon="material-icons list"
-                      text="Articles"
-                      (onClick)="navigate('pages/articles/list', 'nested')"
-                    >
-                    </dx-button>
-                </div>
-                <div class="home-button-container-vert">
-                    <dx-button class="BW-turquoise-medium"
-                      type="default"
-                      icon="material-icons pageview"
-                      text="Traçabilité & Qualité"
-                      [disabled]="prod"
-                    >
-                    </dx-button>
-                    <dx-button class="BW-purple-medium"
-                      type="default"
-                      icon="material-icons trending_up"
-                      text="Analyses & Statistiques"
-                      [disabled]="prod"
-                    >
-                    </dx-button>
-                </div>
-                <img class="home-big-logo" src="/assets/images/BW-couleur-bleu.png" alt="bluewhale-logo">
-                <div class="home-button-container-vert">
-                    <dx-button class="BW-green-medium"
-                      type="default"
-                      icon="material-icons assignment_turned_in"
-                      text="Ordres de commande"
-                      routerLink="/ordres"
-                    >
-                    </dx-button>
-                    <dx-button class="BW-green-dark"
-                      type="default"
-                      icon="material-icons view_module"
-                      text="Stock"
-                      [disabled]="prod"
-                      routerLink="/stock"
-                    >
-                    </dx-button>
-                    <dx-button class="BW-orange-dark"
-                      type="default"
-                      icon="material-icons local_shipping"
-                      text="Logistique"
-                      [disabled]="prod"
-                    >
-                    </dx-button>
-                    <dx-button class="BW-orange-medium"
-                      type="default"
-                      icon="material-icons flash_on"
-                      text="Litiges"
-                      (onClick)="navigate('pages/ordres/indicateurs/litiges')"
-                      [disabled]="prod"
-                    >
-                    </dx-button>
-                </div>
+  <div class="dx-card responsive-paddings">
+    <div class="main-buttons-container">
+      <div class="buttons-container">
+        <div class="home-button-container-horiz">
+          <dx-button
+            class="BW-khaki-dark"
+            type="default"
+            icon="material-icons group"
+            (onClick)="onClickMultipleMenu($event)"
+            text="Tiers"
+          >
+          </dx-button>
+          <dx-drawer
+            openedStateMode="overlap"
+            position="top"
+            revealMode="expand"
+            template="template"
+            [opened]="false"
+            [height]="400"
+            [closeOnOutsideClick]="true"
+          >
+            <div *dxTemplate="let data of 'template'">
+              <dx-list
+                class="panel-list dx-theme-accent-as-background-color"
+                [hoverStateEnabled]="true"
+                [activeStateEnabled]="false"
+                [focusStateEnabled]="false"
+                (onItemClick)="navigateItemList($event)"
+                [dataSource]="navigation"
+              >
+              </dx-list>
             </div>
+          </dx-drawer>
+          <dx-button
+            class="BW-purple-dark"
+            type="default"
+            icon="material-icons list"
+            text="Articles"
+            (onClick)="navigate('pages/articles/list', 'nested')"
+          >
+          </dx-button>
         </div>
+        <div class="home-button-container-vert">
+          <dx-button
+            class="BW-turquoise-medium"
+            type="default"
+            icon="material-icons pageview"
+            text="Traçabilité & Qualité"
+            [disabled]="prod"
+          >
+          </dx-button>
+          <dx-button
+            class="BW-purple-medium"
+            type="default"
+            icon="material-icons trending_up"
+            text="Analyses & Statistiques"
+            [disabled]="prod"
+          >
+          </dx-button>
+        </div>
+        <img
+          class="home-big-logo"
+          src="/assets/images/BW-couleur-bleu.png"
+          alt="bluewhale-logo"
+        />
+        <div class="home-button-container-vert">
+          <dx-button
+            class="BW-green-medium"
+            type="default"
+            icon="material-icons assignment_turned_in"
+            text="Ordres de commande"
+            routerLink="/ordres"
+          >
+          </dx-button>
+          <dx-button
+            class="BW-green-dark"
+            type="default"
+            icon="material-icons view_module"
+            text="Stock"
+            [disabled]="prod"
+            routerLink="/stock"
+          >
+          </dx-button>
+          <dx-button
+            class="BW-orange-dark"
+            type="default"
+            icon="material-icons local_shipping"
+            text="Logistique"
+            [disabled]="prod"
+          >
+          </dx-button>
+          <dx-button
+            class="BW-orange-medium"
+            type="default"
+            icon="material-icons flash_on"
+            text="Litiges"
+            (onClick)="navigate('pages/ordres/indicateurs/litiges')"
+            [disabled]="prod"
+          >
+          </dx-button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

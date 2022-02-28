@@ -1,63 +1,74 @@
-<h2 class="content-block">{{ 'ordres-supervisionLivraison' | localize }}</h2>
+<h2 class="content-block">{{ "ordres-supervisionLivraison" | localize }}</h2>
 
 <div class="content-block">
+  <dx-box>
+    <dxi-item [ratio]="2">
+      <!-- Secteurs -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-clients-secteur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #secteurValue
+            [dataSource]="secteurs"
+            displayExpr="description"
+            [searchEnabled]="true"
+            searchExpr="description"
+            (valueChange)="updateFilters()"
+          ></dx-select-box>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="0.5"></dxi-item>
+    <dxi-item [ratio]="1.5">
+      <!-- Différence date -->
+      <div class="dx-field daysDiffCheckbox">
+        <div class="dx-field-value" style="width: 20px">
+          <dx-check-box
+            #diffDateCheckboxValue
+            alignment="right"
+            [value]="true"
+            (valueChange)="updateFilters()"
+          ></dx-check-box>
+        </div>
+        <div class="dx-field-label diffQty">
+          {{ "ordres-differenceQuantites" | localize }}
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="4">
+      <div class="dx-field">
+        <div class="dx-field-label days">Sur</div>
+        <div class="dx-field-value daysNumber">
+          <dx-number-box
+            #diffDateValue
+            alignment="center"
+            [value]="1"
+            [min]="1"
+            [max]="9"
+            [showSpinButtons]="true"
+            (valueChange)="changeDays($event)"
+          ></dx-number-box>
+        </div>
+        <div class="dx-field-label days">{{ days }}</div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="2">
+      <dx-button
+        class="upperButton"
+        type="default"
+        text="{{ 'btn-envoiBL' | localize }}"
+        (onClick)="autoSendDeliveryNotes()"
+      ></dx-button>
+    </dxi-item>
+  </dx-box>
 
-    <dx-box>
-        <dxi-item [ratio]="2">
+  <br />
 
-            <!-- Secteurs -->
-            <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
-                <div class="dx-field-value">
-                    <dx-select-box #secteurValue
-                        [dataSource]="secteurs"
-                        displayExpr="description"
-                        [searchEnabled]="true"
-                        searchExpr="description"
-                        (valueChange)="updateFilters()"
-                    ></dx-select-box>
-                </div>
-            </div>
-
-        </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
-        <dxi-item [ratio]="1.5">
-            <!-- Différence date -->
-            <div  class="dx-field daysDiffCheckbox">
-                <div class="dx-field-value" style="width:20px">
-                  <dx-check-box #diffDateCheckboxValue
-                    alignment = "right"
-                    [value]="true"
-                    (valueChange)="updateFilters()"
-                  ></dx-check-box>
-                </div>
-                <div class="dx-field-label diffQty">{{ 'ordres-differenceQuantites' | localize }}</div>
-            </div>
-        </dxi-item>
-        <dxi-item [ratio]="4">
-            <div class="dx-field">
-                <div class="dx-field-label days">Sur</div>
-                <div class="dx-field-value daysNumber">
-                    <dx-number-box #diffDateValue
-                        alignment = "center"
-                        [value]="1"
-                        [min]="1"
-                        [max]="9"
-                        [showSpinButtons]="true"
-                        (valueChange)="changeDays($event)"
-                    ></dx-number-box>
-                </div>
-                <div class="dx-field-label days">{{ days }}</div>
-            </div>
-        </dxi-item>
-        <dxi-item [ratio]="2">
-            <dx-button class="upperButton" type="default" text="{{ 'btn-envoiBL' | localize }}" (onClick)="autoSendDeliveryNotes()"></dx-button>
-        </dxi-item>
-    </dx-box>   
-
-    <br>
-
-    <dx-data-grid class="dx-card wide-card" #gridSUPERVISION
+  <dx-data-grid
+    class="dx-card wide-card"
+    #gridSUPERVISION
     [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
@@ -67,15 +78,28 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [scrolling]="{
-      useNative:true
+      useNative: true
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.OrdreSupervisionLivraison, enableFilters.bind(this))"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.OrdreSupervisionLivraison,
+        enableFilters.bind(this)
+      )
+    "
   >
-
     <!-- Grid configuration -->
-    <dxo-export [enabled]="true" fileName="Supervision livraison" [allowExportSelectedData]="false"></dxo-export>
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-export
+      [enabled]="true"
+      fileName="Supervision livraison"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -83,7 +107,7 @@
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing 
+    <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.OrdreSupervisionLivraison"
       [enabled]="true"
       type="custom"
@@ -98,22 +122,32 @@
       title="{{ 'columnChooser' | localize }}"
       [allowSearch]="true"
       [width]="columnChooser.width"
-      [height]="columnChooser.height">
+      [height]="columnChooser.height"
+    >
     </dxo-column-chooser>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
-      [caption]="('ordreLitigesLignes-' + column.dataField?.split('.').join('-') | localize) || column.name"
+      [caption]="
+        ('ordreLitigesLignes-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
+      "
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
-      [allowSearch]="column.allowSearch !== undefined ? column.allowSearch : ['string'].includes(column.dataType)"
-      [allowHeaderFiltering]="column.allowHeaderFiltering !== undefined ? column.allowHeaderFiltering : ['string'].includes(column.dataType)"
+      [allowSearch]="
+        column.allowSearch !== undefined
+          ? column.allowSearch
+          : ['string'].includes(column.dataType)
+      "
+      [allowHeaderFiltering]="
+        column.allowHeaderFiltering !== undefined
+          ? column.allowHeaderFiltering
+          : ['string'].includes(column.dataType)
+      "
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
-
   </dx-data-grid>
 </div>
-  

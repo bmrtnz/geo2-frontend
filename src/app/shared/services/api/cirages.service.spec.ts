@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { CiragesService } from './cirages.service';
+import { CiragesService } from "./cirages.service";
 
-describe('CiragesService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("CiragesService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: CiragesService = TestBed.inject(CiragesService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: CiragesService = TestBed.inject(CiragesService);
+        expect(service).toBeTruthy();
+    });
 });

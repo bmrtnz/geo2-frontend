@@ -116,7 +116,7 @@
     width: 28px;
     height: 28px;
     font-size: 28px;
-    color:#FFF;
+    color: #fff;
   }
   .dx-button-content {
     padding: 10px 0 0 0;
@@ -125,10 +125,10 @@
     display: block;
     position: absolute;
     top: 10px;
-    font-size:10px;
+    font-size: 10px;
     line-height: 12px;
     white-space: normal;
-    color:#FFF;
+    color: #fff;
     width: 100%;
     font-weight: bold;
   }
@@ -151,7 +151,6 @@
 }
 
 ::ng-deep .main-buttons-container {
-
   .dx-drawer {
     position: fixed;
     left: 50%;
@@ -161,7 +160,7 @@
     z-index: 1000;
   }
   .dx-list-item {
-    margin:0;
+    margin: 0;
   }
 
   .dx-list-item-icon-container {
@@ -169,18 +168,18 @@
     padding-right: 0px !important;
     text-align: center;
   }
-  
+
   .dx-list-item-content {
     padding-left: 10px !important;
     font-size: 13px;
   }
-  
+
   .dx-drawer-shrink #content {
     overflow: hidden;
     transition: all 0.4s ease-out;
     column-width: 200px;
   }
-  
+
   .dx-drawer-shrink.dx-drawer-opened #content {
     column-width: 100%;
     margin-right: -10px;
@@ -189,11 +188,10 @@
   .panel-list {
     height: auto;
   }
-  
+
   .panel-list .dx-list-item {
     color: #fff;
     text-align: center;
     border-top: 1px solid rgba(221, 221, 221, 0.2);
   }
-
 }

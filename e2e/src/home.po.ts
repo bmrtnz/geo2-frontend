@@ -1,8 +1,8 @@
-import { $, browser } from 'protractor';
+import { $, browser } from "protractor";
 
 export class HomePage {
   navigateTo() {
-    return browser.get('/home');
+    return browser.get("/home");
   }
 
   getTileByText(text: string) {

@@ -2,7 +2,7 @@
 
 // Var
 @import "~themes/generated/variables.base";
-$base-fonts-path:'./scss/fonts/';
+$base-fonts-path: "./scss/fonts/";
 
 // App style
 @import "~scss/font";
@@ -37,13 +37,13 @@ $base-fonts-path:'./scss/fonts/';
 /* Toasts */
 
 .dx-toast-content {
-  color: rgba(255,255,255,.87);
+  color: rgba(255, 255, 255, 0.87);
   font-size: 16px;
   font-weight: 400;
   padding: 0 16px;
   border-radius: 0;
-  -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.25);
-  box-shadow: 0 2px 3px rgba(0,0,0,.25);
+  -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   min-height: 48px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -64,7 +64,7 @@ $base-fonts-path:'./scss/fonts/';
   left: 50%;
   top: 50%;
   text-align: center;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 .dx-toast-info {
@@ -73,14 +73,21 @@ $base-fonts-path:'./scss/fonts/';
 
 // No text overline
 body {
-	-webkit-user-select: none;
-     -moz-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
-
-.fournisseur-page, .article-page, .client-page, .transporteur-page, .entrepot-page,
-.lieupassageaquai-page, .entrepot-page, .form-ordres-page, .form-scrollTo-buttons-container, .accueil-ordres-page {
-
+.fournisseur-page,
+.article-page,
+.client-page,
+.transporteur-page,
+.entrepot-page,
+.lieupassageaquai-page,
+.entrepot-page,
+.form-ordres-page,
+.form-scrollTo-buttons-container,
+.accueil-ordres-page {
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
   .dx-field-label {
     font-size: 16px;
@@ -108,7 +115,7 @@ body {
       margin-top: 5px;
       line-height: 18px;
       white-space: normal;
-      color: #FFF;
+      color: #fff;
       width: 100%;
     }
   }
@@ -119,7 +126,7 @@ body {
 }
 
 .black .dx-button-text {
-  color: #1E1E1E !important;
+  color: #1e1e1e !important;
 }
 
 // Button placed in hx
@@ -138,13 +145,16 @@ body {
 }
 
 // Datagrid title customization
-.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
-.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
-    border: 0;
+.dx-datagrid-header-panel
+  .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
+.dx-datagrid-header-panel
+  .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
+  border: 0;
 }
 
 // Reducing space between form fields
-.dx-form-group-content, .dx-accordion-item {
+.dx-form-group-content,
+.dx-accordion-item {
   .dx-field {
     margin-bottom: 0 !important;
   }
@@ -171,7 +181,7 @@ body {
 }
 
 .dx-invalid-message > .dx-overlay-content {
-  background-color: rgba(255,255,255,1);
+  background-color: rgba(255, 255, 255, 1);
   font-size: 14px;
   padding: 3px 8px 4px 0px;
 }
@@ -187,7 +197,7 @@ body {
   .dx-treeview-node-container {
     margin-top: 5px;
     .dx-checkbox {
-      top: 7px
+      top: 7px;
     }
     .dx-item {
       padding: 5px 8px 4px 40px;
@@ -201,18 +211,18 @@ body {
 .dx-datagrid .dx-row.dx-header-row {
   td {
     background-color: #666 !important;
-    color: #FFF !important;
+    color: #fff !important;
     .dx-sort-indicator {
       font-weight: bold;
-      color: #FFF !important;
+      color: #fff !important;
     }
     &:hover {
       div {
-        color: #FFF !important;
+        color: #fff !important;
       }
     }
   }
   .dx-column-indicators span {
-    color: #FFF !important;
+    color: #fff !important;
   }
 }

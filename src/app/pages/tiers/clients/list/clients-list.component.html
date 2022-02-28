@@ -1,16 +1,21 @@
-<h2 class="content-block">{{ 'tiers-clients-title' | localize }}
-  <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
+<h2 class="content-block">
+  {{ "tiers-clients-title" | localize }}
+  <dx-button
+    class="upperButton"
+    type="default"
+    text="{{ 'btn-nouveau' | localize }}"
+    (onClick)="onCreate()"
+  ></dx-button>
 </h2>
 
 <div class="content-block">
-
   <dx-data-grid
     class="dx-card wide-card"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="0"
-    [scrolling]="{ useNative:true }"
+    [scrolling]="{ useNative: true }"
     [columnAutoWidth]="true"
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
@@ -18,11 +23,17 @@
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="gridConfigHandler($event)"
   >
-
     <dxo-selection mode="single"></dxo-selection>
     <!-- Grid configuration -->
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-export
+      [enabled]="true"
+      fileName="Clients"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -35,13 +46,15 @@
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
-      [caption]="('tiers-clients-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
+      [caption]="
+        ('tiers-clients-' +
+          column.dataField?.replace('.description', '').split('.').join('-')
+          | localize) || column.name
+      "
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
-
   </dx-data-grid>
-
 </div>

@@ -1,29 +1,29 @@
 {
-    "items": [
-        {
-            "key": "@base-accent",
-            "value": "rgba(0, 117, 156, 1)"
-        },
-        {
-            "key": "@base-success",
-            "value": "rgba(143, 196, 89, 1)"
-        },
-        {
-            "key": "@base-danger",
-            "value": "rgba(255, 50, 90, 1)"
-        },
-        {
-            "key": "@base-border-radius",
-            "value": "0px"
-        },
-        {
-          "key": "@base-font-family",
-          "value": "\"Barlow\", \"BarlowFallback\", sans-serif"
-        }
-    ],
-    "baseTheme": "material.blue.light",
-    "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
-    "outputColorScheme": "base",
-    "outputFormat": "scss",
-    "base": false
+  "items": [
+    {
+      "key": "@base-accent",
+      "value": "rgba(0, 117, 156, 1)"
+    },
+    {
+      "key": "@base-success",
+      "value": "rgba(143, 196, 89, 1)"
+    },
+    {
+      "key": "@base-danger",
+      "value": "rgba(255, 50, 90, 1)"
+    },
+    {
+      "key": "@base-border-radius",
+      "value": "0px"
+    },
+    {
+      "key": "@base-font-family",
+      "value": "\"Barlow\", \"BarlowFallback\", sans-serif"
+    }
+  ],
+  "baseTheme": "material.blue.light",
+  "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
+  "outputColorScheme": "base",
+  "outputFormat": "scss",
+  "base": false
 }

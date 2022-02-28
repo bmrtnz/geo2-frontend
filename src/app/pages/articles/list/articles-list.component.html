@@ -1,9 +1,9 @@
-<h2 class="content-block">{{ 'articles-title' | localize }}</h2>
+<h2 class="content-block">{{ "articles-title" | localize }}</h2>
 
 <div class="content-block articles-page">
   <div class="search-criteria-container">
     <div class="title-container">
-      <h6>{{ 'articles-preFilter-title' | localize }}</h6>
+      <h6>{{ "articles-preFilter-title" | localize }}</h6>
       <dx-button
         class="refresh"
         [class]="toRefresh ? '' : 'inactive'"
@@ -12,117 +12,131 @@
         (onClick)="refreshArticlesGrid()"
       ></dx-button>
     </div>
-    <div style="clear:both"></div>
-    <div class="search-criteria-subcontainer" style="width:auto">
-        <!-- espèce -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'articles-matierePremiere-espece' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-tag-box
-                    [dataSource]="especes"
-                    (valueChange)="onFieldValueChange($event,'matierePremiere.espece.id')"
-                    [searchEnabled]="true"
-                    searchExpr="matierePremiere.espece.id"
-                    [displayExpr]="capitalize"
-                    valueExpr="key"
-                >
-                <dxo-drop-down-options
-                  [width]="400">
-                </dxo-drop-down-options>
-                </dx-tag-box>
-            </div>
+    <div style="clear: both"></div>
+    <div class="search-criteria-subcontainer" style="width: auto">
+      <!-- espèce -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "articles-matierePremiere-espece" | localize }}
         </div>
-        <!-- variété -->
-        <div class="dx-field field-large">
-          <div class="dx-field-label">{{ 'articles-matierePremiere-variete' | localize }}</div>
-          <div class="dx-field-value">
-              <dx-tag-box
-              [dataSource]="varietes"
-              (valueChange)="onFieldValueChange($event,'matierePremiere.variete.description')"
-              [searchEnabled]="true"
-              searchExpr="matierePremiere.variete.description"
-              [displayExpr]="capitalize"
-              valueExpr="key"
-              >
-                <dxo-drop-down-options
-                  [width]="400">
-                </dxo-drop-down-options>
-            </dx-tag-box>
-          </div>
+        <div class="dx-field-value">
+          <dx-tag-box
+            [dataSource]="especes"
+            (valueChange)="
+              onFieldValueChange($event, 'matierePremiere.espece.id')
+            "
+            [searchEnabled]="true"
+            searchExpr="matierePremiere.espece.id"
+            [displayExpr]="capitalize"
+            valueExpr="key"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-tag-box>
         </div>
-        <!-- Mode Culture -->
-        <div class="dx-field field-large">
-          <div class="dx-field-label noPadding">{{ 'articles-matierePremiere-modeCulture' | localize }}</div>
-          <div class="dx-field-value">
-            <dx-tag-box
-                [dataSource]="modesCulture"
-                (valueChange)="onFieldValueChange($event,'matierePremiere.modeCulture.description')"
-                [searchEnabled]="true"
-                searchExpr="matierePremiere.modeCulture.description"
-                [displayExpr]="capitalize"
-                valueExpr="key"
-                >
-                <dxo-drop-down-options
-                  [width]="400">
-                </dxo-drop-down-options>
-            </dx-tag-box>
-          </div>
+      </div>
+      <!-- variété -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "articles-matierePremiere-variete" | localize }}
         </div>
-        <!-- Emballage -->
-        <div class="dx-field field-large">
-          <div class="dx-field-label">{{ 'articles-emballage-emballage' | localize }}</div>
-          <div class="dx-field-value">
-            <dx-tag-box
-                [dataSource]="emballages"
-                (valueChange)="onFieldValueChange($event,'emballage.emballage.description')"
-                [searchEnabled]="true"
-                searchExpr="emballage.emballage.description"
-                [displayExpr]="capitalize"
-                valueExpr="key"
-                >
-                <dxo-drop-down-options
-                  [width]="400">
-                </dxo-drop-down-options>
-            </dx-tag-box>
-          </div>
+        <div class="dx-field-value">
+          <dx-tag-box
+            [dataSource]="varietes"
+            (valueChange)="
+              onFieldValueChange($event, 'matierePremiere.variete.description')
+            "
+            [searchEnabled]="true"
+            searchExpr="matierePremiere.variete.description"
+            [displayExpr]="capitalize"
+            valueExpr="key"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-tag-box>
         </div>
-        <!-- Origine -->
-        <div class="dx-field field-large">
-          <div class="dx-field-label">{{ 'articles-matierePremiere-origine' | localize }}</div>
-          <div class="dx-field-value">
-            <dx-tag-box
-                [dataSource]="origines"
-                (valueChange)="onFieldValueChange($event,'matierePremiere.origine.description')"
-                [searchEnabled]="true"
-                searchExpr="matierePremiere.origine.description"
-                [displayExpr]="capitalize"
-                valueExpr="key"
-                >
-                <dxo-drop-down-options
-                  [width]="400">
-                </dxo-drop-down-options>
-            </dx-tag-box>
-          </div>
-       </div>
-       <!-- Valide ? -->
-       <div class="dx-field valid-field">
-          <div class="dx-field-label">{{ 'articles-valide' | localize }}</div>
-          <div class="dx-field-value small-field">
-            <dx-select-box
-                [items]="trueFalse"
-                (valueChange)="onFieldValueChange($event,'valide')"
-                [value]="trueFalse[0]"
-                >
-                <dxo-drop-down-options
-                  [width]="100">
-                </dxo-drop-down-options>
-            </dx-select-box>
-          </div>
+      </div>
+      <!-- Mode Culture -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label noPadding">
+          {{ "articles-matierePremiere-modeCulture" | localize }}
         </div>
+        <div class="dx-field-value">
+          <dx-tag-box
+            [dataSource]="modesCulture"
+            (valueChange)="
+              onFieldValueChange(
+                $event,
+                'matierePremiere.modeCulture.description'
+              )
+            "
+            [searchEnabled]="true"
+            searchExpr="matierePremiere.modeCulture.description"
+            [displayExpr]="capitalize"
+            valueExpr="key"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-tag-box>
+        </div>
+      </div>
+      <!-- Emballage -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "articles-emballage-emballage" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-tag-box
+            [dataSource]="emballages"
+            (valueChange)="
+              onFieldValueChange($event, 'emballage.emballage.description')
+            "
+            [searchEnabled]="true"
+            searchExpr="emballage.emballage.description"
+            [displayExpr]="capitalize"
+            valueExpr="key"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-tag-box>
+        </div>
+      </div>
+      <!-- Origine -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "articles-matierePremiere-origine" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-tag-box
+            [dataSource]="origines"
+            (valueChange)="
+              onFieldValueChange($event, 'matierePremiere.origine.description')
+            "
+            [searchEnabled]="true"
+            searchExpr="matierePremiere.origine.description"
+            [displayExpr]="capitalize"
+            valueExpr="key"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-tag-box>
+        </div>
+      </div>
+      <!-- Valide ? -->
+      <div class="dx-field valid-field">
+        <div class="dx-field-label">
+          {{ "articles-valide" | localize }}
+        </div>
+        <div class="dx-field-value small-field">
+          <dx-select-box
+            [items]="trueFalse"
+            (valueChange)="onFieldValueChange($event, 'valide')"
+            [value]="trueFalse[0]"
+          >
+            <dxo-drop-down-options [width]="100"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </div>
   </div>
-  <div style="clear:both"></div>
-  <dx-data-grid class="dx-card wide-card"
+  <div style="clear: both"></div>
+  <dx-data-grid
+    class="dx-card wide-card"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -130,16 +144,33 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{ useNative:true }"
+    [scrolling]="{ useNative: true }"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
-    (onRowDblClick)="onRowDblClick($event);"
+    (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.Article)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.Article
+      )
+    "
   >
-    <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel>
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-export [enabled]="true" fileName="Articles" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-search-panel
+      [visible]="true"
+      [width]="240"
+      placeholder="{{ 'search' | localize }}"
+    ></dxo-search-panel>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-export
+      [enabled]="true"
+      fileName="Articles"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
@@ -160,22 +191,29 @@
       [height]="columnChooser.height"
       mode="select"
       title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true">
+      [allowSearch]="true"
+    >
     </dxo-column-chooser>
-    <dxo-search-editor-options
-      [width]="500">
-    </dxo-search-editor-options>
+    <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
-      [caption]="('articles-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
+      [caption]="
+        ('articles-' +
+          column.dataField?.replace('.description', '').split('.').join('-')
+          | localize) || column.name
+      "
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
-      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
   </dx-data-grid>

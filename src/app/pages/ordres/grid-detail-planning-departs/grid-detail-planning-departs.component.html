@@ -7,7 +7,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{
-    useNative:true
+    useNative: true
   }"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -49,7 +49,10 @@
   <dxi-column
     *ngFor="let field of detailedFields | async"
     [dataField]="field.path"
-    [caption]="('ordreLignes-' + field.path.replaceAll('.','-') | localize) || field.name"
+    [caption]="
+      ('ordreLignes-' + field.path.replaceAll('.', '-') | localize) ||
+      field.name
+    "
     [visible]="false"
     trueText="Oui"
     falseText="Non"

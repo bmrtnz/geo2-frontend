@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { LitigesLignesService } from './litiges-lignes.service';
+import { LitigesLignesService } from "./litiges-lignes.service";
 
-describe('LitigesLignesService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("LitigesLignesService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: LitigesLignesService = TestBed.get(LitigesLignesService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: LitigesLignesService = TestBed.inject(LitigesLignesService);
+        expect(service).toBeTruthy();
+    });
 });

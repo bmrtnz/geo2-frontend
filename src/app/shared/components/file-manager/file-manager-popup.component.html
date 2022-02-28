@@ -6,38 +6,48 @@
   [title]="('documents' | localize) + (subTitle ? ' - ' + subTitle : '')"
   [(visible)]="visible"
 >
-    <dx-file-manager
-        id="fileManager"
-        [fileSystemProvider]="fileProvider"
-        *ngIf="this.fileProvider">
-        <dxo-toolbar
-            [items]="[ 
-            'showNavPane',
-            'create',
-            { name: 'upload', text: 'Joindre un fichier' },
-            'switchView',
-            { name: 'separator', location: 'after' },
-            'refresh'
-            ]"
-        >
-        </dxo-toolbar>
-        <dxo-item-view>
-            <dxo-details>
-                <dxi-column dataField="thumbnail"></dxi-column>
-                <dxi-column dataField="name" caption="{{ 'fileManager-name' | localize }}"></dxi-column>
-                <dxi-column dataField="dateModified" caption="{{ 'fileManager-dateModified' | localize }}"></dxi-column>
-                <dxi-column dataField="size" caption="{{ 'fileManager-size' | localize }}"></dxi-column>
-            </dxo-details>
-        </dxo-item-view>
-        <dxo-permissions
-            [create]="true"
-            [copy]="true"
-            [move]="true"
-            [delete]="true"
-            [rename]="true"
-            [upload]="true"
-            [download]="true">
-        </dxo-permissions>
-    </dx-file-manager>
-
+  <dx-file-manager
+    id="fileManager"
+    [fileSystemProvider]="fileProvider"
+    *ngIf="this.fileProvider"
+  >
+    <dxo-toolbar
+      [items]="[
+        'showNavPane',
+        'create',
+        { name: 'upload', text: 'Joindre un fichier' },
+        'switchView',
+        { name: 'separator', location: 'after' },
+        'refresh'
+      ]"
+    >
+    </dxo-toolbar>
+    <dxo-item-view>
+      <dxo-details>
+        <dxi-column dataField="thumbnail"></dxi-column>
+        <dxi-column
+          dataField="name"
+          caption="{{ 'fileManager-name' | localize }}"
+        ></dxi-column>
+        <dxi-column
+          dataField="dateModified"
+          caption="{{ 'fileManager-dateModified' | localize }}"
+        ></dxi-column>
+        <dxi-column
+          dataField="size"
+          caption="{{ 'fileManager-size' | localize }}"
+        ></dxi-column>
+      </dxo-details>
+    </dxo-item-view>
+    <dxo-permissions
+      [create]="true"
+      [copy]="true"
+      [move]="true"
+      [delete]="true"
+      [rename]="true"
+      [upload]="true"
+      [download]="true"
+    >
+    </dxo-permissions>
+  </dx-file-manager>
 </dx-popup>

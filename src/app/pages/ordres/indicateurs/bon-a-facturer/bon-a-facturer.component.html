@@ -1,142 +1,167 @@
-<h2 class="content-block">{{ 'ordres-bonsAFacturer' | localize }}
-  <dx-button class="upperButton" type="default" text="{{ 'btn-invoice' | localize }}" (onClick)="updateAsBonAFacturer()"></dx-button>
+<h2 class="content-block">
+  {{ "ordres-bonsAFacturer" | localize }}
+  <dx-button
+    class="upperButton"
+    type="default"
+    text="{{ 'btn-invoice' | localize }}"
+    (onClick)="updateAsBonAFacturer()"
+  ></dx-button>
 </h2>
 
 <div class="content-block">
-
   <dx-box>
     <dxi-item [ratio]="3">
-
-        <!-- Secteurs -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-select-box #secteurValue
-                    [dataSource]="secteurs"
-                    displayExpr="description"
-                    [searchEnabled]="true"
-                    searchExpr="description"
-                    (valueChange)="onSecteurChange()"
-                ></dx-select-box>
-            </div>
+      <!-- Secteurs -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-clients-secteur" | localize }}
         </div>
-
+        <div class="dx-field-value">
+          <dx-select-box
+            #secteurValue
+            [dataSource]="secteurs"
+            displayExpr="description"
+            [searchEnabled]="true"
+            searchExpr="description"
+            (valueChange)="onSecteurChange()"
+          ></dx-select-box>
+        </div>
+      </div>
     </dxi-item>
     <dxi-item [ratio]="0.5"></dxi-item>
     <dxi-item [ratio]="3">
-        <!-- Client -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'tiers-contacts-clients' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-select-box #clientValue
-                    [dataSource]="clients"
-                    displayExpr="raisonSocial"
-                    [searchEnabled]="true"
-                    searchExpr="raisonSocial"
-                    (valueChange)="updateFilters()"
-                ></dx-select-box>
-            </div>
+      <!-- Client -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-contacts-clients" | localize }}
         </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #clientValue
+            [dataSource]="clients"
+            displayExpr="raisonSocial"
+            [searchEnabled]="true"
+            searchExpr="raisonSocial"
+            (valueChange)="updateFilters()"
+          ></dx-select-box>
+        </div>
+      </div>
     </dxi-item>
     <dxi-item [ratio]="0.5"></dxi-item>
     <dxi-item [ratio]="3">
-        <!-- Entrepôt -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'ordres-entrepôt' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-select-box #entrepotValue
-                    [dataSource]="entrepot"
-                    displayExpr="raisonSocial"
-                    [searchEnabled]="true"
-                    searchExpr="raisonSocial"
-                    (valueChange)="updateFilters()"
-                ></dx-select-box>
-            </div>
+      <!-- Entrepôt -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "ordres-entrepôt" | localize }}
         </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #entrepotValue
+            [dataSource]="entrepot"
+            displayExpr="raisonSocial"
+            [searchEnabled]="true"
+            searchExpr="raisonSocial"
+            (valueChange)="updateFilters()"
+          ></dx-select-box>
+        </div>
+      </div>
     </dxi-item>
     <dxi-item [ratio]="0.5"></dxi-item>
     <dxi-item [ratio]="3">
-        <!-- Commercial -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'ordres-commercial' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-select-box #commercialValue
-                    [dataSource]="commercial"
-                    displayExpr="nomUtilisateur"
-                    [searchEnabled]="true"
-                    searchExpr="nomUtilisateur"
-                    (valueChange)="updateFilters()"
-                ></dx-select-box>
-            </div>
+      <!-- Commercial -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "ordres-commercial" | localize }}
         </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #commercialValue
+            [dataSource]="commercial"
+            displayExpr="nomUtilisateur"
+            [searchEnabled]="true"
+            searchExpr="nomUtilisateur"
+            (valueChange)="updateFilters()"
+          ></dx-select-box>
+        </div>
+      </div>
     </dxi-item>
   </dx-box>
   <dx-box>
     <dxi-item [ratio]="3">
-        <!-- Assistante -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'ordres-assistante' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-select-box #assistanteValue
-                    [dataSource]="assistante"
-                    displayExpr="nomUtilisateur"
-                    [searchEnabled]="true"
-                    searchExpr="nomUtilisateur"
-                    (valueChange)="updateFilters()"
-                ></dx-select-box>
-            </div>
+      <!-- Assistante -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "ordres-assistante" | localize }}
         </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #assistanteValue
+            [dataSource]="assistante"
+            displayExpr="nomUtilisateur"
+            [searchEnabled]="true"
+            searchExpr="nomUtilisateur"
+            (valueChange)="updateFilters()"
+          ></dx-select-box>
+        </div>
+      </div>
     </dxi-item>
     <dxi-item [ratio]="0.5"></dxi-item>
     <dxi-item [ratio]="3">
-        <!-- Période -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'ordres-periode' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-select-box #periodeValue
-                    [items]="periodes"
-                    [value]="periodes[1]"
-                    (onValueChanged)="setDates($event)"
-                ></dx-select-box>
-            </div>
+      <!-- Période -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "ordres-periode" | localize }}
         </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #periodeValue
+            [items]="periodes"
+            [value]="periodes[1]"
+            (onValueChanged)="setDates($event)"
+          ></dx-select-box>
+        </div>
+      </div>
     </dxi-item>
     <dxi-item [ratio]="0.5"></dxi-item>
     <dxi-item [ratio]="3">
-        <!-- Date de début -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'ordres-du' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-date-box #dateStartValue
-                    class="dateStart"
-                    [value]="dateStart"
-                    type="date"
-                    dateSerializationFormat="yyyy-MM-dd"
-                    (onValueChanged)="manualDate($event)"
-                ></dx-date-box>
-            </div>
+      <!-- Date de début -->
+      <div class="dx-field">
+        <div class="dx-field-label">{{ "ordres-du" | localize }}</div>
+        <div class="dx-field-value">
+          <dx-date-box
+            #dateStartValue
+            class="dateStart"
+            [value]="dateStart"
+            type="date"
+            dateSerializationFormat="yyyy-MM-dd"
+            (onValueChanged)="manualDate($event)"
+          ></dx-date-box>
         </div>
+      </div>
     </dxi-item>
     <dxi-item [ratio]="0.5"></dxi-item>
     <dxi-item [ratio]="3">
-        <!-- Date de fin -->
-        <div class="dx-field">
-            <div class="dx-field-label">{{ 'ordres-au' | localize }}</div>
-            <div class="dx-field-value">
-                <dx-date-box #dateEndValue
-                    class="dateEnd"
-                    [value]="dateEnd"
-                    type="date"
-                    dateSerializationFormat="yyyy-MM-dd"
-                    (onValueChanged)="manualDate($event)"
-                ></dx-date-box>
-            </div>
+      <!-- Date de fin -->
+      <div class="dx-field">
+        <div class="dx-field-label">{{ "ordres-au" | localize }}</div>
+        <div class="dx-field-value">
+          <dx-date-box
+            #dateEndValue
+            class="dateEnd"
+            [value]="dateEnd"
+            type="date"
+            dateSerializationFormat="yyyy-MM-dd"
+            (onValueChanged)="manualDate($event)"
+          ></dx-date-box>
         </div>
+      </div>
     </dxi-item>
-  </dx-box> 
-  <br>
+  </dx-box>
+  <br />
 
-  <dx-data-grid class="dx-card wide-card" #gridBAF
+  <dx-data-grid
+    class="dx-card wide-card"
+    #gridBAF
     [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
@@ -147,14 +172,23 @@
     [allowColumnReordering]="true"
     [selection]="{ mode: 'multiple' }"
     [scrolling]="{
-      useNative:true
+      useNative: true
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.OrdreBonAFacturer, enableFilters.bind(this))"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.OrdreBonAFacturer,
+        enableFilters.bind(this)
+      )
+    "
   >
-
     <!-- Grid configuration -->
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -162,7 +196,7 @@
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing 
+    <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.OrdreBonAFacturer"
       [enabled]="true"
       type="custom"
@@ -177,7 +211,8 @@
       title="{{ 'columnChooser' | localize }}"
       [allowSearch]="true"
       [width]="columnChooser.width"
-      [height]="columnChooser.height">
+      [height]="columnChooser.height"
+    >
     </dxo-column-chooser>
     <dxi-column
       *ngFor="let field of detailedFields | async"
@@ -186,9 +221,16 @@
       trueText="Oui"
       falseText="Non"
       [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [allowSearch]="
+        field.allowSearch !== undefined
+          ? field.allowSearch
+          : ['string'].includes(field.dataType)
+      "
+      [allowHeaderFiltering]="
+        field.allowHeaderFiltering !== undefined
+          ? field.allowHeaderFiltering
+          : ['string'].includes(field.dataType)
+      "
     ></dxi-column>
-
   </dx-data-grid>
 </div>

@@ -12,7 +12,7 @@
     font-size: 14px;
     margin: 0 9px;
     font-weight: bold;
-    padding:4px 0;
+    padding: 4px 0;
   }
 }
 
@@ -30,12 +30,16 @@
     margin-right: 16px;
   }
   .dx-menu-item .dx-menu-item-content {
-      padding: 3px 15px 4px;
-      color: $base-text-color;
+    padding: 3px 15px 4px;
+    color: $base-text-color;
   }
 }
 
-::ng-deep .dx-theme-generic .company-chooser-menu .dx-menu-item-content .dx-menu-item-text {
+::ng-deep
+  .dx-theme-generic
+  .company-chooser-menu
+  .dx-menu-item-content
+  .dx-menu-item-text {
   padding-left: 4px;
   padding-right: 4px;
 }

@@ -1,81 +1,102 @@
-import { Injectable } from '@angular/core';
-import { gql, OperationVariables } from '@apollo/client/core';
-import { Apollo } from 'apollo-angular';
-import DataSource from 'devextreme/data/data_source';
-import { LoadOptions } from 'devextreme/data/load_options';
-import { GridConfig } from '../../models';
-import { APIPersist, APIRead, ApiService, RelayPage } from '../api.service';
+import { Injectable } from "@angular/core";
+import { gql, OperationVariables } from "@apollo/client/core";
+import { Apollo } from "apollo-angular";
+import DataSource from "devextreme/data/data_source";
+import { LoadOptions } from "devextreme/data/load_options";
+import { GridConfig } from "../../models";
+import { APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root",
 })
-export class GridsConfigsService extends ApiService implements APIRead, APIPersist {
+export class GridsConfigsService
+    extends ApiService
+    implements APIRead, APIPersist {
+    fieldsFilter = /.*/i;
 
-  fieldsFilter = /.*/i;
+    constructor(apollo: Apollo) {
+        super(apollo, GridConfig);
+        this.gqlKeyType = "GeoGridConfigInput";
+    }
 
-  constructor(
-    apollo: Apollo,
-  ) {
-    super(apollo, GridConfig);
-    this.gqlKeyType = 'GeoGridConfigInput';
-  }
+    static getCacheID(data: Partial<GridConfig>) {
+        return `GeoGridConfig:${data.grid}-${data.utilisateur.nomUtilisateur}`;
+    }
 
-  static getCacheID(data: Partial<GridConfig>) {
-    return `GeoGridConfig:${data.grid}-${data.utilisateur.nomUtilisateur}`;
-  }
+    getDataSource() {
+        return new DataSource({
+            store: this.createCustomStore({
+                key: ["utilisateur", "grid"],
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
 
-  getDataSource() {
-    return new DataSource({
-      store: this.createCustomStore({
-        key: ['utilisateur', 'grid'],
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+                        const query = await this.buildGetAll(
+                            1,
+                            this.fieldsFilter,
+                        );
+                        type Response = {
+                            allGridConfig: RelayPage<GridConfig>;
+                        };
+                        const variables =
+                            this.mapLoadOptionsToVariables(options);
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.allGridConfig)
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allGridConfig,
+                                        ),
+                                    );
+                            },
+                        );
+                    }),
+                byKey: (key) =>
+                    new Promise(async (resolve) => {
+                        const query = await this.buildGetOne();
+                        type Response = { gridConfig: GridConfig };
+                        const variables = { id: key };
+                        this.listenQuery<Response>(
+                            query,
+                            { variables, fetchPolicy: "cache-and-network" },
+                            (res) => {
+                                if (res.data && res.data.gridConfig)
+                                    resolve(
+                                        new GridConfig(res.data.gridConfig),
+                                    );
+                            },
+                        );
+                    }),
+            }),
+        });
+    }
 
-          const query = await this.buildGetAll(1, this.fieldsFilter);
-          type Response = { allGridConfig: RelayPage<GridConfig> };
-          const variables = this.mapLoadOptionsToVariables(options);
+    /** @deprecated Use `save_v2` instead */
+    save(variables: OperationVariables) {
+        return this.watchSaveQuery({ variables, fetchPolicy: "no-cache" });
+    }
 
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allGridConfig)
-              resolve(this.asInstancedListCount(res.data.allGridConfig));
-          });
-        }),
-        byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne();
-          type Response = { gridConfig: GridConfig };
-          const variables = { id: key };
-          this.listenQuery<Response>(query, { variables, fetchPolicy: 'cache-and-network' }, res => {
-            if (res.data && res.data.gridConfig)
-              resolve(new GridConfig(res.data.gridConfig));
-          });
-        }),
-      }),
-    });
-  }
-
-  /** @deprecated Use `save_v2` instead */
-  save(variables: OperationVariables) {
-    return this.watchSaveQuery({ variables, fetchPolicy: 'no-cache' });
-  }
-
-  save_v2(columns: Array<string>, variables: OperationVariables) {
-    return this.apollo.mutate<{ saveGridConfig: GridConfig }>({
-        mutation: gql(this.buildSaveGraph(columns)),
-        variables,
-        update: cache => {
-          cache.modify({
-            id: GridsConfigsService.getCacheID(variables.gridConfig),
-            fields: {
-              config: config => config, // ¯\_(ツ)_/¯
+    save_v2(columns: Array<string>, variables: OperationVariables) {
+        return this.apollo.mutate<{ saveGridConfig: GridConfig }>({
+            mutation: gql(this.buildSaveGraph(columns)),
+            variables,
+            update: (cache) => {
+                cache.modify({
+                    id: GridsConfigsService.getCacheID(variables.gridConfig),
+                    fields: {
+                        config: (config) => config, // ¯\_(ツ)_/¯
+                    },
+                });
             },
-          });
-        },
-      });
-  }
-
+        });
+    }
 }

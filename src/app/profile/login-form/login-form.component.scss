@@ -1,7 +1,7 @@
 @import "~themes/generated/variables.base.scss";
 
 ::ng-deep dx-scroll-view {
-  background-color: darken($base-bg, 5.00);
+  background-color: darken($base-bg, 5);
 }
 
 .login-header {
@@ -12,7 +12,8 @@
     line-height: 0;
   }
 
-  .title, .subtitle {
+  .title,
+  .subtitle {
     color: $base-accent;
     font-weight: bold;
     font-size: 30px;
@@ -30,10 +31,10 @@
     margin-bottom: 11px;
     line-height: 10px;
   }
-
 }
 
-::ng-deep .field-username, ::ng-deep .field-password {
+::ng-deep .field-username,
+::ng-deep .field-password {
   .dx-texteditor-input {
     background: white;
   }

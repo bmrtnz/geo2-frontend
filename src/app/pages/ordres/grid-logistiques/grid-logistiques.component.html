@@ -1,52 +1,64 @@
-<dx-data-grid class="dx-card wide-card"
-    [remoteOperations]="true"
-    [showBorders]="false"
-    [columnAutoWidth]="true"
-    [columnHidingEnabled]="false"
-    [allowColumnReordering]="true"
-    [scrolling]="{ useNative:true }"
-    (onCellPrepared)="onCellPrepared($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Logistique', $event, gridConfiguratorService.Grid.OrdreLogistique,enableFilters.bind(this))"
+<dx-data-grid
+  class="dx-card wide-card"
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [scrolling]="{ useNative: true }"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      'Logistique',
+      $event,
+      gridConfiguratorService.Grid.OrdreLogistique,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.OrdreLogistique"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
   >
+  </dxo-column-chooser>
 
-    <!-- Grid configuration -->
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-paging></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-pager>
-    <dxo-state-storing 
-      [storageKey]="gridConfiguratorService.Grid.OrdreLogistique"
-      [enabled]="true"
-      type="custom"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser
-      [enabled]="true"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height">
-    </dxo-column-chooser>
-
-    <dxi-column
-      *ngFor="let column of this.columns | async"
-      [dataField]="column.dataField"
-      [visible]="false"
-      [caption]="('ordreLogistique-' + column.dataField?.split('.').join('-') | localize) || column.name"
-      trueText="Oui"
-      falseText="Non"
-      [dataType]="column?.dataType"
-      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
-      [showInColumnChooser]="column.showInColumnChooser"
-    ></dxi-column>
-
-  </dx-data-grid>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    [caption]="
+      ('ordreLogistique-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
+    "
+    trueText="Oui"
+    falseText="Non"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  ></dxi-column>
+</dx-data-grid>

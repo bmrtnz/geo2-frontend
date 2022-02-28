@@ -1,19 +1,28 @@
 <div class="content-block">
-  <h2>{{ 'ordres-litiges' | localize }}</h2>
+  <h2>{{ "ordres-litiges" | localize }}</h2>
   <!-- Type litiges -->
-  <div class="dx-field" style="width: 400px;float:left">
-    <div class="dx-field-label">{{ 'ordres-litiges-attente' | localize }}</div>
+  <div class="dx-field" style="width: 400px; float: left">
+    <div class="dx-field-label">
+      {{ "ordres-litiges-attente" | localize }}
+    </div>
     <div class="dx-field-value">
-        <dx-select-box
-            [items]="typeLitiges"
-            [value]="typeLitiges[0]"
-            (valueChange)="onTypeLitigeChange($event)"
-        ></dx-select-box>
+      <dx-select-box
+        [items]="typeLitiges"
+        [value]="typeLitiges[0]"
+        (valueChange)="onTypeLitigeChange($event)"
+      ></dx-select-box>
     </div>
   </div>
-  <dx-button *ngIf="clotAdmin" class="upperButton" type="default" text="{{ 'btn-clotAdmin' | localize }}" (onClick)="onClotAdmin()"></dx-button>
-  <div style="clear:both"></div>
-  <dx-data-grid class="dx-card wide-card"
+  <dx-button
+    *ngIf="clotAdmin"
+    class="upperButton"
+    type="default"
+    text="{{ 'btn-clotAdmin' | localize }}"
+    (onClick)="onClotAdmin()"
+  ></dx-button>
+  <div style="clear: both"></div>
+  <dx-data-grid
+    class="dx-card wide-card"
     [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
@@ -23,15 +32,28 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [scrolling]="{
-      useNative:true
+      useNative: true
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.LitigeLigne, enableFilters.bind(this))"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.LitigeLigne,
+        enableFilters.bind(this)
+      )
+    "
   >
-
     <!-- Grid configuration -->
-    <dxo-export [enabled]="true" fileName="Litiges" [allowExportSelectedData]="false"></dxo-export>
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-export
+      [enabled]="true"
+      fileName="Litiges"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -39,7 +61,7 @@
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing 
+    <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.LitigeLigne"
       [enabled]="true"
       type="custom"
@@ -54,7 +76,8 @@
       title="{{ 'columnChooser' | localize }}"
       [allowSearch]="true"
       [width]="columnChooser.width"
-      [height]="columnChooser.height">
+      [height]="columnChooser.height"
+    >
     </dxo-column-chooser>
     <dxi-column
       *ngFor="let field of detailedFields | async"
@@ -63,9 +86,16 @@
       trueText="Oui"
       falseText="Non"
       [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+      [allowSearch]="
+        field.allowSearch !== undefined
+          ? field.allowSearch
+          : ['string'].includes(field.dataType)
+      "
+      [allowHeaderFiltering]="
+        field.allowHeaderFiltering !== undefined
+          ? field.allowHeaderFiltering
+          : ['string'].includes(field.dataType)
+      "
     ></dxi-column>
-
   </dx-data-grid>
 </div>

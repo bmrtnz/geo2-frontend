@@ -12,17 +12,13 @@
         [dataSource]="certifications"
         [columnAutoWidth]="true"
         [scrolling]="{
-          useNative:true
+          useNative: true
         }"
         (onCellPrepared)="onCellPrepared($event)"
         (onToolbarPreparing)="onToolbarPreparing($event)"
         dateSerializationFormat="yyyy-MM-dd"
       >
-
-        <dxo-editing
-          [allowUpdating]="true"
-          [mode]="'batch'"
-        ></dxo-editing>
+        <dxo-editing [allowUpdating]="true" [mode]="'batch'"></dxo-editing>
 
         <dxi-column
           dataField="certification.description"
@@ -37,10 +33,9 @@
           [validationRules]="this.dateValidationRules"
           dataType="date"
         ></dxi-column>
-
       </dx-data-grid>
 
-      <br>
+      <br />
 
       <div class="prompt-action">
         <dx-button

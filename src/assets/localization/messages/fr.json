@@ -23,7 +23,7 @@
     "au": "au",
     "depuis": "depuis",
     "avec": "avec",
-    "preFilter-title" : "Pré-filtrage",
+    "preFilter-title": "Pré-filtrage",
 
     "fileManager-name": "Nom",
     "fileManager-dateModified": "Modifié le",
@@ -267,7 +267,7 @@
     "tiers-fournisseurs-fournisseurDeRattachement": "Affecté au fournisseur",
     "tiers-fournisseurs-fournisseurDeRattachement-raisonSocial": "Affecté au fournisseur",
     "tiers-fournisseurs-groupeFournisseur": "Groupé dans",
-    
+
     "tiers-fournisseurs-details-groupe-certifications": "Certifications",
     "tiers-fournisseurs-details-groupe-paramavances": "Paramètres avancés",
     "tiers-fournisseurs-details-title": "Fiche fournisseur",
@@ -348,7 +348,7 @@
     "tiers-lieuxpassageaquai-devise": "Devise",
     "tiers-lieuxpassageaquai-moyenPaiement": "Moyen de paiement",
     "tiers-lieuxpassageaquai-basePaiement": "Base de paiement",
-    "tiers-lieuxpassageaquai-compteComptable" : "Compte comptable",
+    "tiers-lieuxpassageaquai-compteComptable": "Compte comptable",
     "tiers-lieuxpassageaquai-contacts": "Contacts",
     "tiers-lieuxpassageaquai-typeTiers": "Type tiers",
 
@@ -448,8 +448,8 @@
     "tiers-contacts-societe": "Société",
     "tiers-contacts-societe-id": "Société",
 
-    "articles-title" : "Articles",
-    "articles-preFilter-title" : "Pré-filtrage",
+    "articles-title": "Articles",
+    "articles-preFilter-title": "Pré-filtrage",
     "articles-detailTitle": "Détail",
     "articles-of": "de",
     "articles-id": "Code",
@@ -511,7 +511,7 @@
 
     "articles-descrSpecialeCalClt": "Description spéciale calibre client",
     "articles-etiquetteColis": "Etiquette Colis",
-    "articles-valide" : "Valide",
+    "articles-valide": "Valide",
     "articles-preSaisie": "Pré-saisie",
     "articles-commentaire": "Commentaire",
 
@@ -690,7 +690,6 @@
     "ordreLignesPalox-achatPrixUnitaire": "Prix d'achat",
     "ordreLignesPalox-nombreColisExpedies": "Colis",
     "ordreLignesPalox-article-description": "Description article résumée",
-
 
     "ordres-palox-mouvements": "Mouvements",
     "ordres-palox-recapitulatif": "Récap. soldes non nuls",
@@ -1030,6 +1029,5 @@
     "choixEntrepot-entrepot-client-raisonSocial": "Raison sociale client",
     "choixEntrepot-entrepot-client-code": "Code client",
     "choixEntrepot-entrepot-client-secteur-id": "Secteur"
-   
   }
 }

@@ -1,10 +1,15 @@
-<h2 class="content-block">{{ 'tiers-entrepots-title' | localize }} {{ clientName }}
-  <dx-button class="upperButton" type="default" text="{{ 'btn-nouveau' | localize }}" (onClick)="onCreate()"></dx-button>
-  <div style="clear:both"></div>
+<h2 class="content-block">
+  {{ "tiers-entrepots-title" | localize }} {{ clientName }}
+  <dx-button
+    class="upperButton"
+    type="default"
+    text="{{ 'btn-nouveau' | localize }}"
+    (onClick)="onCreate()"
+  ></dx-button>
+  <div style="clear: both"></div>
 </h2>
 
 <div class="content-block">
-
   <dx-data-grid
     class="dx-card wide-card"
     [remoteOperations]="true"
@@ -14,16 +19,22 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{ useNative:true }"
+    [scrolling]="{ useNative: true }"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="gridConfigHandler($event)"
   >
-
     <!-- Grid configuration -->
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-export [enabled]="true" fileName="Entrepôts" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-export
+      [enabled]="true"
+      fileName="Entrepôts"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -36,7 +47,11 @@
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
-      [caption]="('tiers-entrepots-' + column.dataField?.replace('.description', '').split('.').join('-') | localize) || column.name"
+      [caption]="
+        ('tiers-entrepots-' +
+          column.dataField?.replace('.description', '').split('.').join('-')
+          | localize) || column.name
+      "
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
