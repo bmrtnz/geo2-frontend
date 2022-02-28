@@ -24,7 +24,7 @@
   },
   "private": true,
   "pre-commit": [
-    "build"
+    "lint"
   ],
   "dependencies": {
     "@angular/animations": "~10.2.5",
