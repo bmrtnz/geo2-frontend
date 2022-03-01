@@ -55,10 +55,10 @@ export class ModificationsService extends ApiService implements APIRead {
   }
 
   getValue(el) {
-    if (typeof el === 'object' && !Array.isArray(el) && el !== null) {
+    if (typeof el === 'object' && !Array.isArray(el) && el !== null && el.id !== null) {
       return (el.nomUtilisateur ? el.nomUtilisateur : el.libelle ? el.libelle : el.raisonSocial ? el.raisonSocial : el.description);
     } else {
-      return el !== null ? this.convertTrueFalse(el) : this.notSet;
+      return el !== null && el.id !== null ? this.convertTrueFalse(el) : this.notSet;
     }
   }
 
