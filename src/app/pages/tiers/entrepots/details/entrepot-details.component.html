@@ -514,7 +514,7 @@
                       formControlName="modeLivraison"
                       [readOnly]="readOnlyMode"
                       [dataSource]="modesLivraison"
-                      (onValueChanged)="onNonRequiredSBChange($event)"
+                      [showClearButton]="true"
                     ></dx-select-box>
                   </div>
                 </div>
