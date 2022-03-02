@@ -244,6 +244,7 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id','description']"
+                      (onValueChanged)="onPaysChange($event)"
                     >
                       <dx-validator name="{{ 'tiers-entrepots-pays' | localize }}">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -327,9 +328,12 @@
                      [inputAttr]="{'style': 'text-transform: uppercase'}"
                      (onValueChanged)="valueToUpperCase($event)"
                      valueChangeEvent="keyup"
+                     [readOnly]="paysClientIdentique"
+                     (onValueChanged)="onTvaCeeChange($event)"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-tvaCee' | localize }}">
                         <dxi-validation-rule [trim]="false" type="stringLength" [max]="20"></dxi-validation-rule>
+                        <dxi-validation-rule type="required"></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>

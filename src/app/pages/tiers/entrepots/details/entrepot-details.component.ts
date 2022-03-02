@@ -5,7 +5,7 @@ import { NestedPart } from 'app/pages/nested/nested.component';
 import { EditingAlertComponent } from 'app/shared/components/editing-alert/editing-alert.component';
 import { ModificationListComponent } from 'app/shared/components/modification-list/modification-list.component';
 import { Editable } from 'app/shared/guards/editing-guard';
-import { Entrepot, Role } from 'app/shared/models';
+import { Entrepot, Role, Client } from 'app/shared/models';
 import { AuthService, ClientsService, EntrepotsService, TransporteursService } from 'app/shared/services';
 import { BasesTarifService } from 'app/shared/services/api/bases-tarif.service';
 import { IncotermsService } from 'app/shared/services/api/incoterms.service';
@@ -100,6 +100,8 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   createMode = false;
   ifcoChecked = false;
   preSaisie: string;
+  client: Client;
+  paysClientIdentique: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -157,15 +159,16 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
             this.clientsService.getOne(this.route.snapshot.params.client)
               .subscribe(
                 result => {
-                  // On reprend le code client (si pas existant) pour le code entrepôt
-                  const code = result.data.client.code.toUpperCase();
-                  const entrepotsSource = this.entrepotsService.getDataSource_v2(['code']);
-                  entrepotsSource.load().then(res => {
-                    if (!res.length) {
-                      this.entrepot.code = code;
-                      this.formGroup.patchValue(this.entrepot);
-                    }
-                  });
+                  // // On reprend le code client (si pas existant) pour le code entrepôt
+                  // const code = result.data.client.code.toUpperCase();
+                  // const entrepotsSource = this.entrepotsService.getDataSource_v2(['code']);
+                  // entrepotsSource.load().then(res => {
+                  //   if (!res.length) {
+                  //     this.entrepot.code = code;
+                  //     this.formGroup.patchValue(this.entrepot);
+                  //   }
+                  // });
+                  this.client = result.data.client;
                 }
               );
           }
@@ -256,6 +259,25 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
   onIfcoChange(params) {
     this.ifcoChecked = params.value;
+  }
+
+  onPaysChange(e) {
+    this.paysClientIdentique = ((e.value?.id === this.client.pays?.id) && e.value?.id !== null);
+    if (this.paysClientIdentique) {
+      this.formGroup.get('tvaCee').patchValue(this.client.tvaCee ? this.client.tvaCee : '');
+    } else {
+      this.onTvaCeeChange({value: this.formGroup.get('tvaCee').value});
+    }
+    this.formGroup.get('tvaCee').markAsDirty();
+  }
+
+  onTvaCeeChange(e) {
+    // Checking that if different country idtva is also different
+    const tvaClient = this.client.tvaCee;
+    if (this.formGroup.get('pays').value && !this.paysClientIdentique && e.value && e.value === tvaClient) {
+      this.formGroup.get('tvaCee').reset();
+      if (e.element) notify('Id TVA - ' + e.value + ' - incorrect', 'warning', 5000);
+    }
   }
 
   valueToUpperCase(e) {
