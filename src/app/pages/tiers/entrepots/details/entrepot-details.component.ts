@@ -148,29 +148,17 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
           this.entrepotsService.getOne(params.id)
             .subscribe(res => {
               this.entrepot = res.data.entrepot;
+              this.client = this.entrepot.client;
               this.formGroup.patchValue(this.entrepot);
               this.contentReadyEvent.emit();
               this.preSaisie = this.entrepot.preSaisie === true ? 'preSaisie' : '';
+              this.clientsService.getOne(this.entrepot.client.id)
+                .subscribe(result => this.client = result.data.client);
             });
         } else {
-          this.entrepot = new Entrepot({});
-          // In case we create from the full entrepots list (no associated client)
           if (this.route.snapshot.params.client !== 'null') {
             this.clientsService.getOne(this.route.snapshot.params.client)
-              .subscribe(
-                result => {
-                  // // On reprend le code client (si pas existant) pour le code entrepôt
-                  // const code = result.data.client.code.toUpperCase();
-                  // const entrepotsSource = this.entrepotsService.getDataSource_v2(['code']);
-                  // entrepotsSource.load().then(res => {
-                  //   if (!res.length) {
-                  //     this.entrepot.code = code;
-                  //     this.formGroup.patchValue(this.entrepot);
-                  //   }
-                  // });
-                  this.client = result.data.client;
-                }
-              );
+              .subscribe(res => this.client = res.data.client);
           }
           // Set current username if commercial
           this.tempData = this.personnesService.getDataSource();
@@ -262,6 +250,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   onPaysChange(e) {
+    if (!this.editing || !this.client) return;
     this.paysClientIdentique = ((e.value?.id === this.client.pays?.id) && e.value?.id !== null);
     if (this.paysClientIdentique) {
       this.formGroup.get('tvaCee').patchValue(this.client.tvaCee ? this.client.tvaCee : '');
@@ -272,6 +261,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
   }
 
   onTvaCeeChange(e) {
+    if (!this.editing || !this.client) return;
     // Checking that if different country idtva is also different
     const tvaClient = this.client.tvaCee;
     if (this.formGroup.get('pays').value && !this.paysClientIdentique && e.value && e.value === tvaClient) {

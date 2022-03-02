@@ -324,11 +324,10 @@
                   <div class="dx-field-value">
                     <dx-text-box 
                      formControlName="tvaCee"
-                     [readOnly]="readOnlyMode"
+                     [readOnly]="readOnlyMode || paysClientIdentique"
                      [inputAttr]="{'style': 'text-transform: uppercase'}"
                      (onValueChanged)="valueToUpperCase($event)"
                      valueChangeEvent="keyup"
-                     [readOnly]="paysClientIdentique"
                      (onValueChanged)="onTvaCeeChange($event)"
                      >
                       <dx-validator name="{{ 'tiers-entrepots-tvaCee' | localize }}">
