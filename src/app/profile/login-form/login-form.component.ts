@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "app/shared/services";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { UtilisateursService } from "app/shared/services/api/utilisateurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -9,8 +10,7 @@ import { DxSelectBoxComponent } from "devextreme-angular/ui/select-box";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
-import { AuthService } from "app/shared/services";
+import { catchError, concatMap } from "rxjs/operators";
 import { version } from "../../../../package.json";
 
 @Component({
@@ -35,8 +35,9 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
         public currentCompanyService: CurrentCompanyService,
         private societesService: SocietesService,
         private router: Router,
+        private route: ActivatedRoute,
         private utilisateursService: UtilisateursService,
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
@@ -62,18 +63,19 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
         const lastUserName = this.authService.lastUsername;
         const userName = this.form.get("nomUtilisateur").value;
 
-        this.authService
-            .logIn(userName, this.form.get("password").value)
-            .subscribe({
-                next: (res) => {
-                    this.form.patchValue({ password: "" });
-                    this.authService.showWelcome();
-                    // Different user? Back home to avoid non consistent data
-                    if (userName !== lastUserName)
-                        this.router.navigate([`/**`]);
-                },
-                error: (err) => this.authService.loginError(),
-            });
+        this.route.queryParams.pipe(
+            concatMap(params => this.authService
+                .logIn(userName, this.form.get("password").value, params.redirect)),
+        ).subscribe({
+            next: () => {
+                this.form.patchValue({ password: "" });
+                this.authService.showWelcome();
+                // Different user? Back home to avoid non consistent data
+                if (userName !== lastUserName)
+                    this.router.navigate([`/**`]);
+            },
+            error: () => this.authService.loginError(),
+        });
     }
 
     findAssociatedCompanies() {

@@ -4,7 +4,7 @@ import { Apollo } from "apollo-angular";
 import { GridColumn } from "basic";
 import {
     DxoColumnChooserComponent,
-    DxoStateStoringComponent,
+    DxoStateStoringComponent
 } from "devextreme-angular/ui/nested";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
@@ -19,9 +19,8 @@ import {
     pairwise,
     share,
     startWith,
-    tap,
+    tap
 } from "rxjs/operators";
-import { GridConfig as GridConfigModel } from "../models";
 import { GridsConfigsService } from "./api/grids-configs.service";
 import { AuthService } from "./auth.service";
 import { LocalizationService } from "./localization.service";
@@ -165,21 +164,6 @@ export class GridConfiguratorService {
     }
 
     /**
-     * Configure datasource filter with current grid and user
-     */
-    private filterGrid(grid: Grid) {
-        this.dataSource.filter([
-            [
-                "utilisateur.nomUtilisateur",
-                "=",
-                this.authService.currentUser.nomUtilisateur,
-            ],
-            "and",
-            ["grid", "=", grid],
-        ]);
-    }
-
-    /**
      * DX DataGrid CustomLoad callback, read and load configuration, load default configuration as fallback
      */
     load() {
@@ -294,19 +278,22 @@ export class GridConfiguratorService {
             throw Error(
                 "Grid name required, use GridConfiguratorService.with(gridName)",
             );
-        this.filterGrid(grid);
-        const res: GridConfigModel[] = await this.dataSource.load();
-        const defaultConfig = await this.fetchDefaultConfig(grid);
-        if (!res.length) return defaultConfig;
+
+        const res = await this.gridsConfigsService
+            .fetchUserGrid(this.authService.currentUser, grid)
+            .toPromise();
+        const defaultConfig = this.fetchDefaultConfig(grid);
+        if (res.error || !res.data.gridConfig)
+            return await defaultConfig;
 
         // clone config (original is sealed)
-        const config: GridConfig = JSON.parse(JSON.stringify(res[0].config));
+        const config: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfig.config));
 
         // merge extra fields ( not handled by DX state storing )
         config.columns = config.columns.map((c) => ({
             ...c,
-            ...(() => {
-                const defaultColumn = defaultConfig.columns.find(
+            ...(async () => {
+                const defaultColumn = (await defaultConfig).columns.find(
                     ({ dataField }) => dataField === c.dataField,
                 );
                 return {
@@ -512,4 +499,4 @@ export class GridConfiguratorService {
 @NgModule({
     providers: [GridConfiguratorService],
 })
-export class GridConfiguratorModule {}
+export class GridConfiguratorModule { }

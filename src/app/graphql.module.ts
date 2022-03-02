@@ -1,9 +1,9 @@
 import { Injector, NgModule } from "@angular/core";
 import {
     defaultDataIdFromObject,
-    from,
+
     InMemoryCache,
-    StoreObject,
+    StoreObject
 } from "@apollo/client/core";
 import { onError } from "@apollo/client/link/error";
 import { APOLLO_OPTIONS } from "apollo-angular";
@@ -18,9 +18,6 @@ const uri = environment.apiEndpoint + "/graphql";
 const errorLink = onError(({ networkError }) => {
     // @ts-ignore
     if (networkError?.status === 403) {
-        // @ts-ignore
-        console.log(networkError.status);
-
         // Logout user
         GraphQLModule.injector.get(AuthService).logOut();
     }
@@ -29,10 +26,7 @@ const errorLink = onError(({ networkError }) => {
 export function createApollo(httpLink: HttpLink) {
     const ENTITY_KEY = "id";
     return {
-        link: from([
-            errorLink,
-            httpLink.create({ uri, withCredentials: true }),
-        ]),
+        link: errorLink.concat(httpLink.create({ uri, withCredentials: true })),
         cache: new InMemoryCache({
             dataIdFromObject(responseObject: Readonly<StoreObject>) {
                 if (responseObject?.__typename === "GeoGridConfig")

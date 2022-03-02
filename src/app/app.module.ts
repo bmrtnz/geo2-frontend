@@ -19,7 +19,12 @@ import { SharedModule } from "./shared/shared.module";
         HttpClientModule,
     ],
     exports: [],
-    providers: [AuthService, ScreenService, DatePipe, OrdresIndicatorsService],
+    providers: [
+        AuthService,
+        ScreenService,
+        DatePipe,
+        OrdresIndicatorsService,
+    ],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,19 +1,19 @@
 import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { NestedMain, NestedPart } from "app/pages/nested/nested.component";
+import { Client } from "app/shared/models";
 import { ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
     Grid,
-    GridConfiguratorService,
+    GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import { Observable, of } from "rxjs";
-import { Client } from "app/shared/models";
 
 @Component({
     selector: "app-clients-list",

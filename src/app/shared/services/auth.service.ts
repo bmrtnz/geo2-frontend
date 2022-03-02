@@ -1,11 +1,9 @@
 import { Injectable } from "@angular/core";
 import {
     ActivatedRoute,
-    ActivatedRouteSnapshot,
-    CanActivate,
-    Router,
-    RouterStateSnapshot,
-    UrlTree,
+
+
+    Router
 } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { concatMap, take, tap } from "rxjs/operators";
@@ -61,26 +59,26 @@ export class AuthService {
         }
     }
 
-    logIn(id: string, password: string) {
+    logIn(id: string, password: string, redirection = "/") {
         return this.utilisateursService
             .getOne(id, password, this.USER_FIELDS, {
                 fetchPolicy: "network-only",
             })
             .pipe(
                 concatMap((res) => {
-                    this.setCurrentUser(res.data.utilisateur);
-                    window.localStorage.setItem(
-                        this.LAST_USER_STORE_KEY,
-                        res.data.utilisateur.nomUtilisateur,
-                    );
-                    this.loggedIn = true;
-
-                    // Handle redirection
-                    const redirectionURL =
-                        this.activatedRoute.snapshot.queryParams?.redirect;
-                    return this.router.navigateByUrl(redirectionURL ?? "/");
+                    this.logUser(res.data.utilisateur);
+                    return this.router.navigateByUrl(redirection);
                 }),
             );
+    }
+
+    public logUser(user: Utilisateur) {
+        this.setCurrentUser(user);
+        window.localStorage.setItem(
+            this.LAST_USER_STORE_KEY,
+            user.nomUtilisateur,
+        );
+        this.loggedIn = true;
     }
 
     showWelcome() {
@@ -123,14 +121,18 @@ export class AuthService {
         );
     }
 
-    async logOut() {
-        if (this.router.isActive("/profile", false)) return;
+    logOut() {
         this.loggedIn = false;
         window.sessionStorage.removeItem(this.CURRENT_USER_STORE_KEY);
-        return this.router.navigate(["/profile"], {
+        if (!this.router.isActive("/profile/login", false))
+            return this.router.navigateByUrl(this.createLoginRedirectURLTree(this.router.url));
+    }
+
+    public createLoginRedirectURLTree(redirect: string) {
+        return this.router.createUrlTree(["/profile/login"], {
             skipLocationChange: true,
             queryParamsHandling: "merge",
-            queryParams: { redirect: this.router.url },
+            queryParams: { redirect },
         });
     }
 

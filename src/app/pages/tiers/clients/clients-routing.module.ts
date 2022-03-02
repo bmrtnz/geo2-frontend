@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { ClientDetailsComponent } from "./details/client-details.component";
-import { ClientsListComponent } from "./list/clients-list.component";
+import { EditingGuard } from "app/shared/guards/editing-guard";
 import { NestedGuard } from "app/shared/guards/nested-guard";
 import { EntrepotsListComponent } from "../entrepots/list/entrepots-list.component";
-import { EditingGuard } from "app/shared/guards/editing-guard";
+import { ClientDetailsComponent } from "./details/client-details.component";
+import { ClientsListComponent } from "./list/clients-list.component";
 
 const routes: Routes = [
     {
@@ -39,4 +39,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class ClientsRoutingModule {}
+export class ClientsRoutingModule { }

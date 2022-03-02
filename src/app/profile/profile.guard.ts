@@ -2,10 +2,12 @@ import { Injectable } from "@angular/core";
 import {
     ActivatedRouteSnapshot,
     CanActivate,
-    Router,
+
+
+
+    CanActivateChild, Router,
     RouterStateSnapshot,
-    UrlTree,
-    CanActivateChild,
+    UrlTree
 } from "@angular/router";
 import { AuthService } from "app/shared/services";
 
@@ -13,7 +15,7 @@ import { AuthService } from "app/shared/services";
     providedIn: "root",
 })
 export class ProfileGuard implements CanActivate, CanActivateChild {
-    constructor(private router: Router, private authService: AuthService) {}
+    constructor(private router: Router, private authService: AuthService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return this.checkAuth(state);
@@ -30,11 +32,7 @@ export class ProfileGuard implements CanActivate, CanActivateChild {
         const isLoggedIn = this.authService.isLoggedIn;
 
         if (!isLoggedIn)
-            return this.router.createUrlTree(["/profile"], {
-                skipLocationChange: true,
-                queryParamsHandling: "merge",
-                queryParams: { redirect: state.url },
-            });
+            return this.authService.createLoginRedirectURLTree(state.url);
 
         return isLoggedIn;
     }

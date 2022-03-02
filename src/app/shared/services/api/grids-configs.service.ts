@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core";
 import { gql, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
+import Utilisateur from "app/shared/models/utilisateur.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { takeWhile } from "rxjs/operators";
 import { GridConfig } from "../../models";
 import { APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
+import { Grid } from "../grid-configurator.service";
 
 @Injectable({
     providedIn: "root",
@@ -21,6 +24,51 @@ export class GridsConfigsService
 
     static getCacheID(data: Partial<GridConfig>) {
         return `GeoGridConfig:${data.grid}-${data.utilisateur.nomUtilisateur}`;
+    }
+
+    private getOneGraph(body: Array<string>) {
+        return ApiService.buildGraph(
+            "query",
+            [
+                {
+                    name: this.model.name.lcFirst(),
+                    body,
+                    params: [
+                        {
+                            name: "id",
+                            value: "id",
+                            isVariable: true,
+                        }
+                    ],
+                },
+            ],
+            [
+                {
+                    name: "id",
+                    type: "GeoGridConfigKeyInput",
+                    isOptionnal: false,
+                },
+            ],
+        );
+    }
+
+    fetchUserGrid(user: Utilisateur, grid: Grid) {
+        return this.apollo
+            .query<{ gridConfig: GridConfig }>({
+                query: gql(this.getOneGraph([
+                    "grid",
+                    "config",
+                    "utilisateur.nomUtilisateur"
+                ])),
+                fetchPolicy: "cache-first",
+                variables: {
+                    id: {
+                        utilisateur: user.nomUtilisateur,
+                        grid,
+                    },
+                },
+            })
+            .pipe(takeWhile((res) => res.loading === false));
     }
 
     getDataSource() {

@@ -1,9 +1,8 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { environment } from "../environments/environment";
-import { SharedModule } from "./shared/shared.module";
 import { ProfileGuard } from "./profile/profile.guard";
-import { PagesComponent } from "./pages/pages.component";
+import { SharedModule } from "./shared/shared.module";
 
 const routes: Routes = [
     {
@@ -31,4 +30,4 @@ const routes: Routes = [
     ],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
