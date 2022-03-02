@@ -68,9 +68,9 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   changeSegment(e) {
     this.geolist.dataSource = null;
     switch (e.value) {
-      case 'departement': this.geolist.dataSource = this.departementDataSource; break;
-      case 'region': this.geolist.dataSource = this.regionDataSource; break;
-      case 'zone': this.geolist.dataSource = this.zoneGeographiqueDataSource; break;
+      case this.localSegment[0]: this.geolist.dataSource = this.departementDataSource; break;
+      case this.localSegment[1]: this.geolist.dataSource = this.regionDataSource; break;
+      case this.localSegment[2]: this.geolist.dataSource = this.zoneGeographiqueDataSource; break;
     }
   }
 
@@ -82,6 +82,12 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
     e.component.content().parentNode.classList.add('article-origine-popup');
     this.geolist.selectedItemKeys = null;
     this.dataSource = this.departementDataSource;
+    this.geolist.instance.repaint();
+  }
+
+  onItemRendered(e) {
+    // Identify origin on list
+    if (e.itemData.libelle === this.origine && !this.newOrigine) setTimeout(() => this.geolist.selectedItems = [e.itemData], 10);
   }
 
   onSelectionChanged(e) {
