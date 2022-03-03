@@ -1,4 +1,4 @@
-<br>
+<br />
 <div class="main-search-container">
   <dx-box direction="row">
     <dxi-item [ratio]="12">
@@ -8,7 +8,7 @@
           <dx-autocomplete
             placeholder="..."
             (onEnterKey)="findOrder()"
-            (onKeyDown)="this.showGridResults=false"
+            (onKeyDown)="this.showGridResults = false"
           >
           </dx-autocomplete>
         </div>
@@ -17,16 +17,17 @@
     <dxi-item [ratio]="1"></dxi-item>
     <dxi-item [ratio]="10">
       <div class="dx-field">
-        <div class="dx-field-label">{{ "rechOrdres-critere" | localize }}</div>
+        <div class="dx-field-label">
+          {{ "rechOrdres-critere" | localize }}
+        </div>
         <div class="dx-field-value">
-          <dx-select-box #searchCriteria
+          <dx-select-box
+            #searchCriteria
             [items]="searchItems"
             [displayExpr]="searchDisplayExpr"
             (valueChange)="changeSearchCriteria()"
           >
-          <dxo-drop-down-options>
-            [width]="250">
-          </dxo-drop-down-options>
+            <dxo-drop-down-options> [width]="250"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
       </div>
@@ -34,9 +35,12 @@
     <dxi-item [ratio]="1"></dxi-item>
     <dxi-item [ratio]="11">
       <div class="dx-field field-large">
-        <div class="dx-field-label campagne-label">{{ campagneEnCours?.description }}</div>
+        <div class="dx-field-label campagne-label">
+          {{ campagneEnCours?.description }}
+        </div>
         <div class="dx-field-value width0pct">
-          <dx-check-box #currCampaign
+          <dx-check-box
+            #currCampaign
             [value]="true"
             (valueChange)="changeCampaign()"
           >
@@ -53,6 +57,6 @@
 ></app-grid-suivi>
 
 <div class="histo-container">
-  <h2>{{ 'ordres-suivi-historiqueordres' | localize }}</h2>
+  <h2>{{ "ordres-suivi-historiqueordres" | localize }}</h2>
   <app-grid-historique></app-grid-historique>
 </div>

@@ -1,100 +1,119 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import DataSource from 'devextreme/data/data_source';
-import { LoadOptions } from 'devextreme/data/load_options';
-import { StockArticleAge } from '../../models/stock-article-age.model';
-import { APIRead, ApiService, RelayPage } from '../api.service';
+import { Injectable } from "@angular/core";
+import { Apollo } from "apollo-angular";
+import DataSource from "devextreme/data/data_source";
+import { LoadOptions } from "devextreme/data/load_options";
+import { StockArticleAge } from "../../models/stock-article-age.model";
+import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root",
 })
 export class StockArticlesAgeService extends ApiService implements APIRead {
+    fieldsFilter = /.*\.(?:article|age)$/i;
+    customVariables: { [key: string]: any | any[] } = {};
 
-  fieldsFilter = /.*\.(?:article|age)$/i;
-  customVariables: { [key: string]: any | any[] } = {};
+    constructor(apollo: Apollo) {
+        super(apollo, StockArticleAge);
+        this.gqlKeyType = "GeoStockArticleAgeKeyInput";
+    }
 
-  constructor(
-    apollo: Apollo,
-  ) {
-    super(apollo, StockArticleAge);
-    this.gqlKeyType = 'GeoStockArticleAgeKeyInput';
-  }
-
-  byKey = (key) => new Promise(async (resolve) => {
-    const query = await this.buildGetOne();
-    type Response = { stockArticleAge: StockArticleAge };
-    const variables = { id: key };
-    this.listenQuery<Response>(query, { variables }, res => {
-      if (res.data && res.data.stockArticleAge)
-        resolve(new StockArticleAge(res.data.stockArticleAge));
-    });
-  })
-
-  getDataSource() {
-    return new DataSource({
-      store: this.createCustomStore({
-        key: this.model.getKeyField(),
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
-
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+    byKey = (key) =>
+        new Promise(async (resolve) => {
+            const query = await this.buildGetOne();
+            type Response = { stockArticleAge: StockArticleAge };
+            const variables = { id: key };
+            this.listenQuery<Response>(query, { variables }, (res) => {
+                if (res.data && res.data.stockArticleAge)
+                    resolve(new StockArticleAge(res.data.stockArticleAge));
             });
+        })
 
-          const query = await this.buildGetAll(3);
-          type Response = { allStockArticleAge: RelayPage<StockArticleAge> };
-          const variables = this.mapLoadOptionsToVariables(options);
+    getDataSource() {
+        return new DataSource({
+            store: this.createCustomStore({
+                key: this.model.getKeyField(),
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
 
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allStockArticleAge)
-              resolve(this.asInstancedListCount(res.data.allStockArticleAge));
-          });
-        }),
-        byKey: this.byKey,
-      }),
-    });
-  }
+                        const query = await this.buildGetAll(3);
+                        type Response = {
+                            allStockArticleAge: RelayPage<StockArticleAge>;
+                        };
+                        const variables =
+                            this.mapLoadOptionsToVariables(options);
 
-  getFilterDatasource(selector: string) {
-    const dt = new DataSource({
-      store: this.createCustomStore({
-        key: this.model.getKeyField(),
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.allStockArticleAge)
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allStockArticleAge,
+                                        ),
+                                    );
+                            },
+                        );
+                    }),
+                byKey: this.byKey,
+            }),
+        });
+    }
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
+    getFilterDatasource(selector: string) {
+        const dt = new DataSource({
+            store: this.createCustomStore({
+                key: this.model.getKeyField(),
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
 
-          const [value] = options.filter.slice(-1);
-          options.filter = [selector, '=', value];
-          return this
-            .loadDistinctQuery({ ...options, group: { selector } }, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
-        }),
-      }),
-    });
-    dt.group({ selector });
-    return dt;
-  }
+                        const [value] = options.filter.slice(-1);
+                        options.filter = [selector, "=", value];
+                        return this.loadDistinctQuery(
+                            { ...options, group: { selector } },
+                            (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            },
+                        );
+                    }),
+            }),
+        });
+        dt.group({ selector });
+        return dt;
+    }
 
-  getFetchDatasource() {
-    return new DataSource({
-      store: this.createCustomStore({
-        key: this.model.getKeyField(),
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+    getFetchDatasource() {
+        return new DataSource({
+            store: this.createCustomStore({
+                key: this.model.getKeyField(),
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
-
-          const query = `
+                        const query = `
             query FetchStock(
               $societe: GeoSocieteInput,
               $secteurs: [GeoSecteurInput],
@@ -127,19 +146,28 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
             }
           `;
 
-          type Response = { fetchStock: RelayPage<StockArticleAge> };
-          const variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            ...this.customVariables,
-          };
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.fetchStock)
-              resolve(this.asInstancedListCount(res.data.fetchStock));
-          });
-        }),
-        byKey: this.byKey,
-      }),
-    });
-  }
-
+                        type Response = {
+                            fetchStock: RelayPage<StockArticleAge>;
+                        };
+                        const variables = {
+                            ...this.mapLoadOptionsToVariables(options),
+                            ...this.customVariables,
+                        };
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.fetchStock)
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.fetchStock,
+                                        ),
+                                    );
+                            },
+                        );
+                    }),
+                byKey: this.byKey,
+            }),
+        });
+    }
 }

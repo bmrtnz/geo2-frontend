@@ -1,77 +1,70 @@
-
 ::ng-deep .articles-page .dx-datagrid-search-panel {
-    display: none;
+  display: none;
 }
 ::ng-deep .articles-page .search-criteria-subcontainer {
-    // overflow: hidden;
-    .dx-field {
-        float: left;
-        margin-right: 15px;
-        width: 200px;
-        .dx-field-label {
-            text-overflow: visible;
-            white-space: normal;
-            font-size: 12px;
-            line-height: 12px;
-            padding: 10px 0;
-            text-align: left;
-            margin-right: 10px;
-            overflow: visible;
-            align-self: baseline;
-            &.noPadding {
-                padding: 0 !important;
-            }
-        }
-        .dx-texteditor {
-            font-size: 12px;
-            .dx-texteditor-input {
-                font-size: 13px;
-            }
-        }
-        .dx-field-value {
-            width :70%;
-            &.small-field {
-                width: 30%;
-            }
-        }
-        .dx-field-label {
-            width :30%;
-        }
-        &.valid-field {
-            width: 100px;
-        }
+  // overflow: hidden;
+  .dx-field {
+    float: left;
+    margin-right: 15px;
+    width: 200px;
+    .dx-field-label {
+      text-overflow: visible;
+      white-space: normal;
+      font-size: 12px;
+      line-height: 12px;
+      padding: 10px 0;
+      text-align: left;
+      margin-right: 10px;
+      overflow: visible;
+      align-self: baseline;
+      &.noPadding {
+        padding: 0 !important;
+      }
     }
-    
-    .dx-tagbox {
-        .dx-tag ~ .dx-texteditor-input {
-            display: none;
-        }
-        .dx-tag-content {
-            line-height: 1;
-        }
-        .dx-texteditor-buttons-container {
-            width: 34px
-        }
+    .dx-texteditor {
+      font-size: 12px;
+      .dx-texteditor-input {
+        font-size: 13px;
+      }
     }
-    .refresh {
-        top: 0;
-        margin-left: 10px;
-        float: left;
+    .dx-field-value {
+      width: 70%;
+      &.small-field {
+        width: 30%;
+      }
     }
+    .dx-field-label {
+      width: 30%;
+    }
+    &.valid-field {
+      width: 100px;
+    }
+  }
+  .dx-field-value {
+    width: 70%;
+    &.small-field {
+      width: 30%;
+    }
+  }
+  .refresh {
+    top: 0;
+    margin-left: 10px;
+    float: left;
+  }
 }
 
 h6 {
-    margin: 0;
-    float: left;
+  margin: 0;
+  float: left;
 }
 .refresh {
-    top: -8px;
-    float: right;
+  top: -8px;
+  float: right;
 }
 .title-container {
-    height: 36px;
+  height: 36px;
 }
 .inactive {
-    opacity: 0.2;
-    pointer-events: none;
+  opacity: 0.2;
+  pointer-events: none;
 }

@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import DataSource from 'devextreme/data/data_source';
-import { LoadOptions } from 'devextreme/data/load_options';
-import { ModeCulture } from '../../models';
-import { APIRead, ApiService, RelayPage } from '../api.service';
-import { OperationVariables } from '@apollo/client/core';
+import { Injectable } from "@angular/core";
+import { Apollo } from "apollo-angular";
+import DataSource from "devextreme/data/data_source";
+import { LoadOptions } from "devextreme/data/load_options";
+import { ModeCulture } from "../../models";
+import { APIRead, ApiService, RelayPage } from "../api.service";
+import { OperationVariables } from "@apollo/client/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ModesCultureService extends ApiService implements APIRead {
 
@@ -17,7 +17,7 @@ export class ModesCultureService extends ApiService implements APIRead {
     apollo: Apollo,
   ) {
     super(apollo, ModeCulture);
-    this.gqlKeyType = 'Int';
+    this.gqlKeyType = "Int";
   }
 
   getOne(id: number) {

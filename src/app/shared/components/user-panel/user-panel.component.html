@@ -1,16 +1,18 @@
 <div class="user-panel">
-    <div class="user-name">{{ authService.currentUser?.nomInterne }}</div>
-    <dx-context-menu
-        *ngIf="menuMode === 'context'"
-        [items]="menuItems"
-        target=".user-button"
-        showEvent="dxclick"
-        width="170px"
-        cssClass="user-menu">
-    </dx-context-menu>
-    <dx-list
-        *ngIf="menuMode === 'list'"
-        class="dx-toolbar-menu-action"
-        [items]="menuItems">
-    </dx-list>
+  <div class="user-name">{{ authService.currentUser?.nomInterne }}</div>
+  <dx-context-menu
+    *ngIf="menuMode === 'context'"
+    [items]="menuItems"
+    target=".user-button"
+    showEvent="dxclick"
+    width="170px"
+    cssClass="user-menu"
+  >
+  </dx-context-menu>
+  <dx-list
+    *ngIf="menuMode === 'list'"
+    class="dx-toolbar-menu-action"
+    [items]="menuItems"
+  >
+  </dx-list>
 </div>

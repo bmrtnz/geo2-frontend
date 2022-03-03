@@ -1,57 +1,63 @@
 <header class="dx-swatch-additional">
-    <dx-toolbar class="header-toolbar">
-        <dxi-item
-            *ngIf="menuToggleEnabled"
-            location="before"
-            widget="dxButton"
-            cssClass="menu-button"
-            [options]="{
-                icon: 'menu',
-                stylingMode: 'text',
-                onClick: toggleMenu
-            }">
-        </dxi-item>
-        <dxi-item
-            location="before"
-            cssClass="header-title"
-            *ngIf="title"
-            [text]="title">
-        </dxi-item>
-        <dxi-item location="center">
-            <img 
-            class="header-logo"
-            src="/assets/images/BW-blanc-256.png"
-            alt="bluewhale-logo">
-        </dxi-item>
-        <dxi-item
-            location="after"
-            locateInMenu="auto"
-            menuItemTemplate="menuItem">
-            <div *dxTemplate="let data of 'item'">
-                <dx-button
-                    class="user-button authorization"
-                    height="100%"
-                    stylingMode="text">
-                    <div *dxTemplate="let data of 'content'">
-                        <app-user-panel [menuItems]="userMenuItems" menuMode="context"></app-user-panel>
-                    </div>
-                </dx-button>
-                <dx-button
-                    class="company-button"
-                    height="100%"
-                    stylingMode="text">
-                    <div *dxTemplate="let data of 'content'">
-                        <app-company-chooser-panel [companyItems]="societeSource" menuMode="context"></app-company-chooser-panel>
-                    </div>
-                </dx-button>
-            </div>
-        </dxi-item>
-        <div *dxTemplate="let data of 'menuItem'">
-            <app-user-panel [menuItems]="userMenuItems" menuMode="list"></app-user-panel>
-        </div>
-        <!-- <div *dxTemplate="let data of 'menuItem'">
+  <dx-toolbar class="header-toolbar">
+    <dxi-item
+      *ngIf="menuToggleEnabled"
+      location="before"
+      widget="dxButton"
+      cssClass="menu-button"
+      [options]="{
+        icon: 'menu',
+        stylingMode: 'text',
+        onClick: toggleMenu
+      }"
+    >
+    </dxi-item>
+    <dxi-item
+      location="before"
+      cssClass="header-title"
+      *ngIf="title"
+      [text]="title"
+    >
+    </dxi-item>
+    <dxi-item location="center">
+      <img
+        class="header-logo"
+        src="/assets/images/BW-blanc-256.png"
+        alt="bluewhale-logo"
+      />
+    </dxi-item>
+    <dxi-item location="after" locateInMenu="auto" menuItemTemplate="menuItem">
+      <div *dxTemplate="let data of 'item'">
+        <dx-button
+          class="user-button authorization"
+          height="100%"
+          stylingMode="text"
+        >
+          <div *dxTemplate="let data of 'content'">
+            <app-user-panel
+              [menuItems]="userMenuItems"
+              menuMode="context"
+            ></app-user-panel>
+          </div>
+        </dx-button>
+        <dx-button class="company-button" height="100%" stylingMode="text">
+          <div *dxTemplate="let data of 'content'">
+            <app-company-chooser-panel
+              [companyItems]="societeSource"
+              menuMode="context"
+            ></app-company-chooser-panel>
+          </div>
+        </dx-button>
+      </div>
+    </dxi-item>
+    <div *dxTemplate="let data of 'menuItem'">
+      <app-user-panel
+        [menuItems]="userMenuItems"
+        menuMode="list"
+      ></app-user-panel>
+    </div>
+    <!-- <div *dxTemplate="let data of 'menuItem'">
             <app-company-chooser-panel [companyItems]="societeSource" menuMode="list"></app-company-chooser-panel>
         </div> -->
-    </dx-toolbar>
+  </dx-toolbar>
 </header>
-

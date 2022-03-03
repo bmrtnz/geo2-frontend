@@ -2,17 +2,15 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { loadavg } from 'os';
-
 export const environment = {
-  production: false,
-  debugRouting: false,
-  apiEndpoint: 'http://localhost:8081',
-  columnChooser: {
-    width: 400,
-    height: 500,
-    searchTimeout: 200
-  },
+    production: false,
+    debugRouting: false,
+    apiEndpoint: "http://localhost:8081",
+    columnChooser: {
+        width: 400,
+        height: 500,
+        searchTimeout: 200,
+    },
 };
 
 /*

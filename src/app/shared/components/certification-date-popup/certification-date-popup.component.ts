@@ -1,74 +1,76 @@
-import { Component, EventEmitter, NgModule, ViewChild } from '@angular/core';
-import { CertificationFournisseur } from 'app/shared/models';
-import { SharedModule } from 'app/shared/shared.module';
-import { DxButtonModule, DxDataGridComponent, DxDataGridModule, DxPopupComponent, DxPopupModule } from 'devextreme-angular';
-import { RequiredRule } from 'devextreme/ui/validation_rules';
-import { take } from 'rxjs/operators';
+import { Component, EventEmitter, NgModule, ViewChild } from "@angular/core";
+import { CertificationFournisseur } from "app/shared/models";
+import { SharedModule } from "app/shared/shared.module";
+import {
+    DxButtonModule,
+    DxDataGridComponent,
+    DxDataGridModule,
+    DxPopupComponent,
+    DxPopupModule,
+} from "devextreme-angular";
+import { RequiredRule } from "devextreme/ui/validation_rules";
+import { take } from "rxjs/operators";
 
 @Component({
-  selector: 'app-certification-date-popup',
-  templateUrl: './certification-date-popup.component.html',
-  styleUrls: ['./certification-date-popup.component.scss']
+    selector: "app-certification-date-popup",
+    templateUrl: "./certification-date-popup.component.html",
+    styleUrls: ["./certification-date-popup.component.scss"],
 })
 export class CertificationDatePopupComponent {
+    @ViewChild(DxPopupComponent, { static: false })
+    popupComponent: DxPopupComponent;
 
-  @ViewChild(DxPopupComponent, { static: false })
-  popupComponent: DxPopupComponent;
+    @ViewChild(DxDataGridComponent, { static: false })
+    dataGrid: DxDataGridComponent;
 
-  @ViewChild(DxDataGridComponent, { static: false })
-  dataGrid: DxDataGridComponent;
+    alterate = new EventEmitter<CertificationFournisseur[]>();
 
-  alterate = new EventEmitter<CertificationFournisseur[]>();
+    dateValidationRules: RequiredRule[] = [{ type: "required" }];
+    certifications: CertificationFournisseur[];
 
-  dateValidationRules: RequiredRule[] = [{ type: 'required' }];
-  certifications: CertificationFournisseur[];
+    constructor() {}
 
-  constructor() { }
-
-  async onSubmit() {
-    await this.dataGrid.instance.saveEditData();
-    if (this.certifications.every(({ dateValidite }) => dateValidite)) {
-      this.alterate.emit(this.certifications);
-      this.popupComponent.instance.hide();
+    async onSubmit() {
+        await this.dataGrid.instance.saveEditData();
+        if (this.certifications.every(({ dateValidite }) => dateValidite)) {
+            this.alterate.emit(this.certifications);
+            this.popupComponent.instance.hide();
+        }
     }
-  }
 
-  onHiding() {
-    // this.dateValidationRules = [];
-  }
+    onHiding() {
+        // this.dateValidationRules = [];
+    }
 
-  onShowing() {
-    // this.dateValidationRules = [
-    //   { type: 'required' },
-    // ];
-  }
+    onShowing() {
+        // this.dateValidationRules = [
+        //   { type: 'required' },
+        // ];
+    }
 
-  onCellPrepared(event) {
-    if (event.rowType === 'data' && event.column.dataField === 'dateValidite')
-      if (!event.value)
-        event.cellElement.classList.add('dx-datagrid-invalid');
-  }
+    onCellPrepared(event) {
+        if (
+            event.rowType === "data" &&
+            event.column.dataField === "dateValidite"
+        )
+            if (!event.value)
+                event.cellElement.classList.add("dx-datagrid-invalid");
+    }
 
-  present(data) {
-    this.certifications = data;
-    this.popupComponent.instance.show();
-    return this.alterate.asObservable().pipe(take(1));
-  }
+    present(data) {
+        this.certifications = data;
+        this.popupComponent.instance.show();
+        return this.alterate.asObservable().pipe(take(1));
+    }
 
-  onToolbarPreparing({ toolbarOptions }: { toolbarOptions: any }) {
-    toolbarOptions.items.shift();
-  }
-
+    onToolbarPreparing({ toolbarOptions }: { toolbarOptions: any }) {
+        toolbarOptions.items.shift();
+    }
 }
 
 @NgModule({
-  declarations: [CertificationDatePopupComponent],
-  imports: [
-    SharedModule,
-    DxDataGridModule,
-    DxPopupModule,
-    DxButtonModule,
-  ],
-  exports: [CertificationDatePopupComponent],
+    declarations: [CertificationDatePopupComponent],
+    imports: [SharedModule, DxDataGridModule, DxPopupModule, DxButtonModule],
+    exports: [CertificationDatePopupComponent],
 })
-export class CertificationDatePopupModule { }
+export class CertificationDatePopupModule {}

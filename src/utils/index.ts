@@ -1,2 +1,2 @@
-import * as Filter from './Filter';
-import * as GraphQLBuilder from './GraphQLBuilder';
+import * as Filter from "./Filter";
+import * as GraphQLBuilder from "./GraphQLBuilder";

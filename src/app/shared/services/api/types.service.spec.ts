@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { TypesService } from './types.service';
+import { TypesService } from "./types.service";
 
-describe('TypesService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("TypesService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: TypesService = TestBed.inject(TypesService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: TypesService = TestBed.inject(TypesService);
+        expect(service).toBeTruthy();
+    });
 });

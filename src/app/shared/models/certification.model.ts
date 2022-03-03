@@ -1,10 +1,10 @@
-import {Field, Model, ModelName} from './model';
+import { Field, Model, ModelName } from "./model";
 
-@ModelName('Certification')
+@ModelName("Certification")
 export class Certification extends Model {
 
-  @Field({asKey: true}) public id: number;
-  @Field({asLabel: true}) public description?: string;
+  @Field({ asKey: true }) public id: number;
+  @Field({ asLabel: true }) public description?: string;
   @Field() public maskTiers?: string;
   @Field() public valide?: boolean;
 

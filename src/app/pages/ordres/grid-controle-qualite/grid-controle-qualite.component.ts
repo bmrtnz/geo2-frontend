@@ -1,46 +1,48 @@
-import { Component, Input, ViewChild } from '@angular/core';
-import Ordre from 'app/shared/models/ordre.model';
-import { LocalizationService } from 'app/shared/services';
-import { CQLignesService } from 'app/shared/services/api/cq-lignes.service';
-import { GridConfiguratorService } from 'app/shared/services/grid-configurator.service';
-import * as gridConfig from 'assets/configurations/grids.json';
-import { GridColumn } from 'basic';
-import { DxDataGridComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import { environment } from 'environments/environment';
-import { ToggledGrid } from '../form/form.component';
+import { Component, Input, ViewChild } from "@angular/core";
+import Ordre from "app/shared/models/ordre.model";
+import { LocalizationService } from "app/shared/services";
+import { CQLignesService } from "app/shared/services/api/cq-lignes.service";
+import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import * as gridConfig from "assets/configurations/grids.json";
+import { GridColumn } from "basic";
+import { DxDataGridComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import { environment } from "environments/environment";
+import { ToggledGrid } from "../form/form.component";
 
 @Component({
-  selector: 'app-grid-controle-qualite',
-  templateUrl: './grid-controle-qualite.component.html',
-  styleUrls: ['./grid-controle-qualite.component.scss']
+    selector: "app-grid-controle-qualite",
+    templateUrl: "./grid-controle-qualite.component.html",
+    styleUrls: ["./grid-controle-qualite.component.scss"],
 })
 export class GridControleQualiteComponent implements ToggledGrid {
-  @Input() public ordre: Ordre;
-  @ViewChild(DxDataGridComponent, { static: true })
-  dataGrid: DxDataGridComponent;
+    @Input() public ordre: Ordre;
+    @ViewChild(DxDataGridComponent, { static: true })
+    dataGrid: DxDataGridComponent;
 
-  public dataSource: DataSource;
-  public columnChooser = environment.columnChooser;
-  public detailedFields: GridColumn[];
+    public dataSource: DataSource;
+    public columnChooser = environment.columnChooser;
+    public detailedFields: GridColumn[];
 
-  constructor(
-    private cqLignesService: CQLignesService,
-    public gridConfiguratorService: GridConfiguratorService,
-    public localizeService: LocalizationService
-  ) {
-    this.detailedFields = gridConfig['controle-qualite'].columns;
-  }
-
-  enableFilters() {
-    if (this?.ordre?.id) {
-      this.dataSource = this.cqLignesService.getDataSource_v2(this.detailedFields.map(property => property.dataField));
-      this.dataSource.filter([['ordre.id', '=', this.ordre.id]]);
-      this.dataGrid.dataSource = this.dataSource;
+    constructor(
+        private cqLignesService: CQLignesService,
+        public gridConfiguratorService: GridConfiguratorService,
+        public localizeService: LocalizationService,
+    ) {
+        this.detailedFields = gridConfig["controle-qualite"].columns;
     }
-  }
 
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : this.dataSource = null;
-  }
+    enableFilters() {
+        if (this?.ordre?.id) {
+            this.dataSource = this.cqLignesService.getDataSource_v2(
+                this.detailedFields.map((property) => property.dataField),
+            );
+            this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
+            this.dataGrid.dataSource = this.dataSource;
+        }
+    }
+
+    onToggling(toggled: boolean) {
+        toggled ? this.enableFilters() : (this.dataSource = null);
+    }
 }

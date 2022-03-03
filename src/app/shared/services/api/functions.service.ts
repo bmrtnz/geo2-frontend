@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Apollo, gql } from 'apollo-angular';
-import { ApiService } from '../api.service';
+import { Injectable } from "@angular/core";
+import { Apollo, gql } from "apollo-angular";
+import { ApiService } from "../api.service";
 
 export type FunctionResponse = { res: number, msg?: string, data?: Record<string, any> };
-const body = ['res', 'msg', 'data'];
+const body = ["res", "msg", "data"];
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class FunctionsService {
 
@@ -18,44 +18,44 @@ export class FunctionsService {
    * Vérifie si la création de l'ordre pour l'entrepot est autorisé
    */
   public ofValideEntrepotForOrdre =
-    (entrepotID: string) => this.apollo.watchQuery<{ofValideEntrepotForOrdre: FunctionResponse}>({
+    (entrepotID: string) => this.apollo.watchQuery<{ ofValideEntrepotForOrdre: FunctionResponse }>({
       query: gql(ApiService.buildGraph(
-        'query',
+        "query",
         [
           {
-            name: 'ofValideEntrepotForOrdre',
+            name: "ofValideEntrepotForOrdre",
             body,
-            params: [{ name: 'entrepotID', value: 'entrepotID', isVariable: true }]
+            params: [{ name: "entrepotID", value: "entrepotID", isVariable: true }]
           }
         ],
         [
-          { name: 'entrepotID', type: 'String', isOptionnal: false }
+          { name: "entrepotID", type: "String", isOptionnal: false }
         ],
       )),
       variables: { entrepotID },
-      fetchPolicy: 'network-only',
+      fetchPolicy: "network-only",
     })
 
   /**
    * Genere un nouvel ordre pour une société
    */
   public fNouvelOrdre =
-    (societe: string) => this.apollo.watchQuery<{fNouvelOrdre: FunctionResponse}>({
+    (societe: string) => this.apollo.watchQuery<{ fNouvelOrdre: FunctionResponse }>({
       query: gql(ApiService.buildGraph(
-        'query',
+        "query",
         [
           {
-            name: 'fNouvelOrdre',
+            name: "fNouvelOrdre",
             body,
-            params: [{ name: 'societe', value: 'societe', isVariable: true }]
+            params: [{ name: "societe", value: "societe", isVariable: true }]
           }
         ],
         [
-          { name: 'societe', type: 'String', isOptionnal: false }
+          { name: "societe", type: "String", isOptionnal: false }
         ],
       )),
       variables: { societe },
-      fetchPolicy: 'network-only',
+      fetchPolicy: "network-only",
     })
 
   /**
@@ -63,55 +63,55 @@ export class FunctionsService {
    */
   public ofInitArticle =
     (ordreRef: string, articleRef: string, societeCode: string) => this.apollo
-    .watchQuery<{ofInitArticle: FunctionResponse}>({
-      query: gql(ApiService.buildGraph(
-        'query',
-        [
-          {
-            name: 'ofInitArticle',
-            body,
-            params: [
-              { name: 'ordreRef', value: 'ordreRef', isVariable: true },
-              { name: 'articleRef', value: 'articleRef', isVariable: true },
-              { name: 'societeCode', value: 'societeCode', isVariable: true },
-            ]
-          }
-        ],
-        [
-          { name: 'ordreRef', type: 'String', isOptionnal: false },
-          { name: 'articleRef', type: 'String', isOptionnal: false },
-          { name: 'societeCode', type: 'String', isOptionnal: false },
-        ],
-      )),
-      variables: { ordreRef, articleRef, societeCode },
-      fetchPolicy: 'network-only',
-    })
+      .watchQuery<{ ofInitArticle: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofInitArticle",
+              body,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "articleRef", value: "articleRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "articleRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef, articleRef, societeCode },
+        fetchPolicy: "network-only",
+      })
 
   /**
    * Indicateur du blocage de l'ordre dont le départ est aujourd'hui
    */
   public fInitBlocageOrdre =
     (ordreRef: string, userName: string) => this.apollo
-    .watchQuery<{fInitBlocageOrdre: FunctionResponse}>({
-      query: gql(ApiService.buildGraph(
-        'query',
-        [
-          {
-            name: 'fInitBlocageOrdre',
-            body,
-            params: [
-              { name: 'ordreRef', value: 'ordreRef', isVariable: true },
-              { name: 'userName', value: 'userName', isVariable: true },
-            ]
-          }
-        ],
-        [
-          { name: 'ordreRef', type: 'String', isOptionnal: false },
-          { name: 'userName', type: 'String', isOptionnal: false },
-        ],
-      )),
-      variables: { ordreRef, userName },
-      fetchPolicy: 'network-only',
-    })
+      .watchQuery<{ fInitBlocageOrdre: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fInitBlocageOrdre",
+              body,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "userName", value: "userName", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "userName", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef, userName },
+        fetchPolicy: "network-only",
+      })
 
 }

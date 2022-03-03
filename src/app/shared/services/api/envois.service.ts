@@ -1,104 +1,124 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import DataSource from 'devextreme/data/data_source';
-import { LoadOptions } from 'devextreme/data/load_options';
-import Envois from 'app/shared/models/envois.model';
-import { APIRead, ApiService, RelayPage } from '../api.service';
+import { Injectable } from "@angular/core";
+import { Apollo } from "apollo-angular";
+import DataSource from "devextreme/data/data_source";
+import { LoadOptions } from "devextreme/data/load_options";
+import Envois from "app/shared/models/envois.model";
+import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root",
 })
 export class EnvoisService extends ApiService implements APIRead {
+    // listRegexp = /.*\.(?:id|libelle)$/i;
 
-  // listRegexp = /.*\.(?:id|libelle)$/i;
+    constructor(apollo: Apollo) {
+        super(apollo, Envois);
+    }
 
-  constructor(
-    apollo: Apollo,
-  ) {
-    super(apollo, Envois);
-  }
+    /**
+     * @deprecated Use getDataSource_v2
+     */
+    getDataSource() {
+        return new DataSource({
+            // sort: [
+            //   { selector: this.model.getLabelField() }
+            // ],
+            store: this.createCustomStore({
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
 
-  /**
-   * @deprecated Use getDataSource_v2
-   */
-  getDataSource() {
-    return new DataSource({
-      // sort: [
-      //   { selector: this.model.getLabelField() }
-      // ],
-      store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+                        // const query = await this.buildGetAll(1, this.listRegexp);
+                        const query = await this.buildGetAll(1);
+                        type Response = { allEnvois: RelayPage<Envois> };
+                        const variables =
+                            this.mapLoadOptionsToVariables(options);
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
-
-          // const query = await this.buildGetAll(1, this.listRegexp);
-          const query = await this.buildGetAll(1);
-          type Response = { allEnvois: RelayPage<Envois> };
-          const variables = this.mapLoadOptionsToVariables(options);
-
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allEnvois)
-              resolve(this.asInstancedListCount(res.data.allEnvois));
-          });
-        }),
-        byKey: (key) => new Promise(async (resolve) => {
-          // const query = await this.buildGetOne(1, this.listRegexp);
-          const query = await this.buildGetOne(1);
-          type Response = { envois: Envois };
-          const variables = { id: key };
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.envois)
-              resolve(new Envois(res.data.envois));
-          });
-        }),
-      }),
-    });
-  }
-
-  private byKey(columns: Array<string>) {
-    return (key) =>
-      new Promise(async (resolve) => {
-        const query = await this.buildGetOne_v2(columns);
-        type Response = { envois: Envois };
-        const variables = { id: key };
-        this.listenQuery<Response>(query, { variables }, res => {
-          if (res.data && res.data.envois)
-            resolve(new Envois(res.data.envois));
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.allEnvois)
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allEnvois,
+                                        ),
+                                    );
+                            },
+                        );
+                    }),
+                byKey: (key) =>
+                    new Promise(async (resolve) => {
+                        // const query = await this.buildGetOne(1, this.listRegexp);
+                        const query = await this.buildGetOne(1);
+                        type Response = { envois: Envois };
+                        const variables = { id: key };
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.envois)
+                                    resolve(new Envois(res.data.envois));
+                            },
+                        );
+                    }),
+            }),
         });
-      });
-  }
+    }
 
-  getDataSource_v2(columns: Array<string>) {
-    return new DataSource({
-      sort: [
-        { selector: this.model.getKeyField() }
-      ],
-      store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
-
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+    private byKey(columns: Array<string>) {
+        return (key) =>
+            new Promise(async (resolve) => {
+                const query = await this.buildGetOne_v2(columns);
+                type Response = { envois: Envois };
+                const variables = { id: key };
+                this.listenQuery<Response>(query, { variables }, (res) => {
+                    if (res.data && res.data.envois)
+                        resolve(new Envois(res.data.envois));
+                });
             });
+    }
 
-          type Response = { allEnvois: RelayPage<Envois> };
-          const query = await this.buildGetAll_v2(columns);
-          const variables = this.mapLoadOptionsToVariables(options);
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allEnvois) {
-              resolve(this.asInstancedListCount(res.data.allEnvois));
-            }
-          });
-        }),
-        byKey: this.byKey(columns),
-      }),
-    });
-  }
+    getDataSource_v2(columns: Array<string>) {
+        return new DataSource({
+            sort: [{ selector: this.model.getKeyField() }],
+            store: this.createCustomStore({
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
 
-
+                        type Response = { allEnvois: RelayPage<Envois> };
+                        const query = await this.buildGetAll_v2(columns);
+                        const variables =
+                            this.mapLoadOptionsToVariables(options);
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.allEnvois) {
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allEnvois,
+                                        ),
+                                    );
+                                }
+                            },
+                        );
+                    }),
+                byKey: this.byKey(columns),
+            }),
+        });
+    }
 }

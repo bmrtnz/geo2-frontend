@@ -1,12 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { ModifiedFieldsService } from './modified-fields.service';
+import { ModifiedFieldsService } from "./modified-fields.service";
 
-describe('ModifiedFieldsService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("ModifiedFieldsService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: ModifiedFieldsService = TestBed.get(ModifiedFieldsService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: ModifiedFieldsService = TestBed.inject(
+            ModifiedFieldsService,
+        );
+        expect(service).toBeTruthy();
+    });
 });

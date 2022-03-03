@@ -1,5 +1,9 @@
-<br>
-<dx-button class="upperButton" text="{{ 'btn-blAutoSend' | localize }}" [disabled]="true"></dx-button>
+<br />
+<dx-button
+  class="upperButton"
+  text="{{ 'btn-blAutoSend' | localize }}"
+  [disabled]="true"
+></dx-button>
 <div>
   <dx-box>
     <dxi-item [ratio]="1">
@@ -19,10 +23,10 @@
         </div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]=".2"></dxi-item>
-    <dxi-item [ratio]="1.4" style="justify-content: center;">
+    <dxi-item [ratio]="0.2"></dxi-item>
+    <dxi-item [ratio]="1.4" style="justify-content: center">
       <div class="dx-field">
-        <div class="dx-field-label" style="width: 3400px;">
+        <div class="dx-field-label" style="width: 3400px">
           {{ "ordre-planning-depart-diff-expe" | localize }}
         </div>
         <dx-check-box
@@ -33,17 +37,19 @@
         ></dx-check-box>
       </div>
     </dxi-item>
-    <dxi-item [ratio]=".1"></dxi-item>
-    <dxi-item [ratio]="1" style="justify-content: center;">
+    <dxi-item [ratio]="0.1"></dxi-item>
+    <dxi-item [ratio]="1" style="justify-content: center">
       <div class="dx-field">
-        <div class="dx-field-label" style="width: 50px;">{{ "sur" | localize }}</div>
+        <div class="dx-field-label" style="width: 50px">
+          {{ "sur" | localize }}
+        </div>
         <dx-number-box
           #daysOfService
           [value]="1"
           [width]="50"
           (valueChange)="changeDays()"
           (onContentReady)="onDaysOfServiceInputReady()"
-          [inputAttr]="{'style': 'text-align: center'}"
+          [inputAttr]="{ style: 'text-align: center' }"
         ></dx-number-box>
         <div class="dx-field-label">{{ "jours" | localize }}</div>
       </div>
@@ -64,7 +70,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [scrolling]="{
-      useNative:true
+      useNative: true
     }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
@@ -78,7 +84,11 @@
     (onCellPrepared)="onCellPrepared($event)"
   >
     <!-- Grid configuration -->
-    <dxo-export [enabled]="true" fileName="Planning départ" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-export
+      [enabled]="true"
+      fileName="Planning départ"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
     <dxo-header-filter
       [visible]="true"
       [allowSearch]="true"
@@ -113,14 +123,17 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
-      [caption]="('ordres-' + column.dataField?.split('.').join('-') | localize) || column.name"
+      [caption]="
+        ('ordres-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
       [allowSearch]="
-      column.allowSearch !== undefined
-        ? column.allowSearch
-        : ['string'].includes(column.dataType)
+        column.allowSearch !== undefined
+          ? column.allowSearch
+          : ['string'].includes(column.dataType)
       "
       [allowHeaderFiltering]="
         column.allowHeaderFiltering !== undefined
@@ -132,7 +145,9 @@
 
     <dxo-master-detail [enabled]="true" template="details"></dxo-master-detail>
     <div *dxTemplate="let masterRow of 'details'">
-        <app-grid-detail-planning-departs [masterRow]="masterRow"></app-grid-detail-planning-departs>
+      <app-grid-detail-planning-departs
+        [masterRow]="masterRow"
+      ></app-grid-detail-planning-departs>
     </div>
   </dx-data-grid>
 </div>

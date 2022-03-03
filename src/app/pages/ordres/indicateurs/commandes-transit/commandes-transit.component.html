@@ -1,30 +1,33 @@
-<h2 class="content-block">{{ 'ordres-commandesTransit' | localize }}</h2>
+<h2 class="content-block">{{ "ordres-commandesTransit" | localize }}</h2>
 
 <div class="content-block">
+  <dx-box>
+    <dxi-item [ratio]="4">
+      <!-- Secteurs -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-clients-secteur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #secteurValue
+            [dataSource]="secteurs"
+            displayExpr="description"
+            [searchEnabled]="true"
+            searchExpr="description"
+            (valueChange)="updateFilters()"
+          ></dx-select-box>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="10.5"></dxi-item>
+  </dx-box>
 
-    <dx-box>
-        <dxi-item [ratio]="4">
-            <!-- Secteurs -->
-            <div class="dx-field">
-                <div class="dx-field-label">{{ 'tiers-clients-secteur' | localize }}</div>
-                <div class="dx-field-value">
-                    <dx-select-box #secteurValue
-                        [dataSource]="secteurs"
-                        displayExpr="description"
-                        [searchEnabled]="true"
-                        searchExpr="description"
-                        (valueChange)="updateFilters()"
-                    ></dx-select-box>
-                </div>
-            </div>
+  <br />
 
-        </dxi-item>
-        <dxi-item [ratio]="10.5"></dxi-item>
-    </dx-box>   
-
-    <br>
-
-    <dx-data-grid class="dx-card wide-card" #gridCOMMANDESTRANSIT
+  <dx-data-grid
+    class="dx-card wide-card"
+    #gridCOMMANDESTRANSIT
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -33,15 +36,28 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [scrolling]="{
-      useNative:true
+      useNative: true
     }"
     (onRowDblClick)="onRowDblClick($event)"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('', $event, gridConfiguratorService.Grid.CommandesTransit, enableFilters.bind(this))"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.CommandesTransit,
+        enableFilters.bind(this)
+      )
+    "
   >
-
     <!-- Grid configuration -->
-    <dxo-export [enabled]="true" fileName="Commandes en transit" [allowExportSelectedData]="false"></dxo-export>
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-export
+      [enabled]="true"
+      fileName="Commandes en transit"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -49,7 +65,7 @@
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
     ></dxo-pager>
-    <dxo-state-storing 
+    <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.CommandesTransit"
       [enabled]="true"
       type="custom"
@@ -64,7 +80,8 @@
       title="{{ 'columnChooser' | localize }}"
       [allowSearch]="true"
       [width]="columnChooser.width"
-      [height]="columnChooser.height">
+      [height]="columnChooser.height"
+    >
     </dxo-column-chooser>
     <dxi-column
       *ngFor="let column of this.columns | async"
@@ -73,11 +90,13 @@
       trueText="Oui"
       falseText="Non"
       [dataType]="column?.dataType"
-      [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-      [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
-
   </dx-data-grid>
 </div>
-  

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 export class NavHomeList {
     id: number;
@@ -7,10 +7,10 @@ export class NavHomeList {
 }
 
 const navigation: NavHomeList[] = [
-    { id: 1, text: 'Clients', path: 'tiers/clients' },
-    { id: 2, text: 'Fournisseurs', path: 'tiers/fournisseurs' },
-    { id: 3, text: 'Transporteurs', path: 'tiers/transporteurs' },
-    { id: 4, text: 'Passages à quai', path: 'tiers/lieux-passage-a-quai' }
+    { id: 1, text: "Clients", path: "tiers/clients" },
+    { id: 2, text: "Fournisseurs", path: "tiers/fournisseurs" },
+    { id: 3, text: "Transporteurs", path: "tiers/transporteurs" },
+    { id: 4, text: "Passages à quai", path: "tiers/lieux-passage-a-quai" },
 ];
 
 @Injectable()

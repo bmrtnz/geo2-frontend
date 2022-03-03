@@ -1,12 +1,18 @@
 $material-design-icons-class-icons-generate-codepoints: true;
-$material-design-icons-font-directory-path: '~material-design-icons-iconfont/dist/fonts/';
+$material-design-icons-font-directory-path: "~material-design-icons-iconfont/dist/fonts/";
 
-@import '~material-design-icons-iconfont/src/material-design-icons';
+@import "~material-design-icons-iconfont/src/material-design-icons";
 
 /* Rules for sizing the icon. */
-.material-icons.sm { font-size: 18px !important; }
-.material-icons.lg { font-size: 36px !important; }
-.material-icons.xl { font-size: 48px !important; }
+.material-icons.sm {
+  font-size: 18px !important;
+}
+.material-icons.lg {
+  font-size: 36px !important;
+}
+.material-icons.xl {
+  font-size: 48px !important;
+}
 
 .icon-btn {
   display: block;
