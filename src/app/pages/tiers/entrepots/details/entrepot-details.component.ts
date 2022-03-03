@@ -158,7 +158,13 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                 } else {
                     if (this.route.snapshot.params.client !== "null") {
                         this.clientsService.getOne(this.route.snapshot.params.client)
-                            .subscribe(res => this.client = res.data.client);
+                            .subscribe(res => {
+                                this.client = res.data.client;
+                                if (this.client.incoterm) {
+                                    // Report incoterm client
+                                    this.formGroup.get("incoterm").patchValue(this.client.incoterm);
+                                }
+                            });
                     }
                     // Set current username if commercial
                     this.tempData = this.personnesService.getDataSource();
