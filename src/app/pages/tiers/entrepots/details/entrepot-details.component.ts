@@ -1,24 +1,12 @@
-import {
-    AfterViewInit,
-    Component,
-    EventEmitter,
-    OnInit,
-    ViewChild,
-    ViewChildren,
-} from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { EditingAlertComponent } from "app/shared/components/editing-alert/editing-alert.component";
 import { ModificationListComponent } from "app/shared/components/modification-list/modification-list.component";
 import { Editable } from "app/shared/guards/editing-guard";
-import { Entrepot, Role } from "app/shared/models";
-import {
-    AuthService,
-    ClientsService,
-    EntrepotsService,
-    TransporteursService,
-} from "app/shared/services";
+import { Entrepot, Role, Client } from "app/shared/models";
+import { AuthService, ClientsService, EntrepotsService, TransporteursService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { ModesLivraisonService } from "app/shared/services/api/modes-livraison.service";
@@ -40,10 +28,10 @@ import { DxAccordionComponent } from "devextreme-angular";
 @Component({
     selector: "app-entrepot-details",
     templateUrl: "./entrepot-details.component.html",
-    styleUrls: ["./entrepot-details.component.scss"],
+    styleUrls: ["./entrepot-details.component.scss"]
 })
-export class EntrepotDetailsComponent
-    implements OnInit, AfterViewInit, NestedPart, Editable {
+export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPart, Editable {
+
     formGroup = this.fb.group({
         code: [""],
         client: [""],
@@ -84,19 +72,13 @@ export class EntrepotDetailsComponent
         lieuFonctionEanDepot: [""],
         lieuFonctionEanAcheteur: [""],
         valide: [false],
-        preSaisie: [""],
+        preSaisie: [""]
     });
     refreshGrid = new EventEmitter();
-    helpBtnOptions = {
-        icon: "help",
-        elementAttr: { id: "help-1" },
-        onClick: () => this.toggleVisible(),
-    };
+    helpBtnOptions = { icon: "help", elementAttr: { id: "help-1" }, onClick: () => this.toggleVisible() };
     contentReadyEvent = new EventEmitter<any>();
-    @ViewChild(EditingAlertComponent, { static: true })
-    alertComponent: EditingAlertComponent;
-    @ViewChild(ModificationListComponent, { static: false })
-    modifListe: ModificationListComponent;
+    @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
+    @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
     @ViewChildren(DxAccordionComponent) accordion: any;
     editing = false;
 
@@ -118,6 +100,8 @@ export class EntrepotDetailsComponent
     createMode = false;
     ifcoChecked = false;
     preSaisie: string;
+    client: Client;
+    paysClientIdentique: boolean;
 
     constructor(
         private fb: FormBuilder,
@@ -153,85 +137,49 @@ export class EntrepotDetailsComponent
     }
 
     ngOnInit() {
+
         this.route.params
-            .pipe(tap((_) => this.formGroup.reset()))
-            .subscribe((params) => {
+            .pipe(tap(_ => this.formGroup.reset()))
+            .subscribe(params => {
                 const url = this.route.snapshot.url;
-                this.createMode =
-                    url[0].path === "create" ||
-                    (url[2] ? url[2].path === "create" : false);
+                this.createMode = url[0].path === "create" || (url[2] ? url[2].path === "create" : false);
                 this.readOnlyMode = !this.createMode;
                 if (!this.createMode) {
-                    this.entrepotsService.getOne(params.id).subscribe((res) => {
-                        this.entrepot = res.data.entrepot;
-                        this.formGroup.patchValue(this.entrepot);
-                        this.contentReadyEvent.emit();
-                        this.preSaisie =
-                            this.entrepot.preSaisie === true ? "preSaisie" : "";
-                    });
+                    this.entrepotsService.getOne(params.id)
+                        .subscribe(res => {
+                            this.entrepot = res.data.entrepot;
+                            this.client = this.entrepot.client;
+                            this.formGroup.patchValue(this.entrepot);
+                            this.contentReadyEvent.emit();
+                            this.preSaisie = this.entrepot.preSaisie === true ? "preSaisie" : "";
+                            this.clientsService.getOne(this.entrepot.client.id)
+                                .subscribe(result => this.client = result.data.client);
+                        });
                 } else {
-                    this.entrepot = new Entrepot({});
-                    // In case we create from the full entrepots list (no associated client)
                     if (this.route.snapshot.params.client !== "null") {
-                        this.clientsService
-                            .getOne(this.route.snapshot.params.client)
-                            .subscribe((result) => {
-                                // On reprend le code client (si pas existant) pour le code entrepôt
-                                const code =
-                                    result.data.client.code.toUpperCase();
-                                const entrepotsSource =
-                                    this.entrepotsService.getDataSource_v2([
-                                        "code",
-                                    ]);
-                                entrepotsSource.load().then((res) => {
-                                    if (!res.length) {
-                                        this.entrepot.code = code;
-                                        this.formGroup.patchValue(
-                                            this.entrepot,
-                                        );
-                                    }
-                                });
-                            });
+                        this.clientsService.getOne(this.route.snapshot.params.client)
+                            .subscribe(res => this.client = res.data.client);
                     }
                     // Set current username if commercial
                     this.tempData = this.personnesService.getDataSource();
                     this.tempData.filter([
-                        ["valide", "=", true],
-                        "and",
-                        ["role", "=", Role.COMMERCIAL],
-                        "and",
-                        [
-                            "nomUtilisateur",
-                            "=",
-                            this.authService.currentUser.nomUtilisateur,
-                        ],
+                        ["valide", "=", true], "and", ["role", "=", Role.COMMERCIAL],
+                        "and", ["nomUtilisateur", "=", this.authService.currentUser.nomUtilisateur]
                     ]);
                     this.tempData.load().then((res) => {
                         if (res.length) {
-                            this.formGroup
-                                .get("commercial")
-                                .setValue({ id: res[0].id });
+                            this.formGroup.get("commercial").setValue({ id: res[0].id });
                             this.formGroup.get("commercial").markAsDirty();
                         }
                     });
                     // Set current username if assistant(e)
                     this.tempData = this.personnesService.getDataSource();
-                    this.tempData.filter([
-                        ["valide", "=", true],
-                        "and",
-                        ["role", "=", Role.ASSISTANT],
-                        "and",
-                        [
-                            "nomUtilisateur",
-                            "=",
-                            this.authService.currentUser.nomUtilisateur,
-                        ],
+                    this.tempData.filter([["valide", "=", true], "and", ["role", "=", Role.ASSISTANT],
+                        "and", ["nomUtilisateur", "=", this.authService.currentUser.nomUtilisateur]
                     ]);
                     this.tempData.load().then((res) => {
                         if (res.length) {
-                            this.formGroup
-                                .get("assistante")
-                                .setValue({ id: res[0].id });
+                            this.formGroup.get("assistante").setValue({ id: res[0].id });
                             this.formGroup.get("assistante").markAsDirty();
                         }
                     });
@@ -258,11 +206,7 @@ export class EntrepotDetailsComponent
         this.typesPalette = this.typesPaletteService.getDataSource();
         this.incoterms = this.incotermsService.getDataSource();
         this.regimesTva = this.regimesTvaService.getDataSource();
-        this.transporteurs = this.transporteursService.getDataSource_v2([
-            "id",
-            "raisonSocial",
-            "ville",
-        ]);
+        this.transporteurs = this.transporteursService.getDataSource_v2(["id", "raisonSocial", "ville"]);
         this.basesTarif = this.basesTarifService.getDataSource();
         this.typesCamion = this.typesCamionService.getDataSource();
         this.transitaires = this.transitairesService.getDataSource();
@@ -280,7 +224,7 @@ export class EntrepotDetailsComponent
 
     openCloseAccordions(action) {
         if (!this.accordion) return;
-        this.accordion.toArray().forEach((element) => {
+        this.accordion.toArray().forEach(element => {
             if (action) {
                 element.instance.expandItem(0);
             } else {
@@ -291,11 +235,9 @@ export class EntrepotDetailsComponent
 
     checkCode(params) {
         const code = params.value.toUpperCase();
-        const entrepotsSource = this.entrepotsService.getDataSource_v2([
-            "code",
-        ]);
+        const entrepotsSource = this.entrepotsService.getDataSource_v2(["code"]);
         entrepotsSource.filter(["code", "=", code]);
-        return entrepotsSource.load().then((res) => !res.length);
+        return entrepotsSource.load().then(res => !(res.length));
     }
 
     onCodeChange(e) {
@@ -307,6 +249,27 @@ export class EntrepotDetailsComponent
         this.ifcoChecked = params.value;
     }
 
+    onPaysChange(e) {
+        if (!this.editing || !this.client) return;
+        this.paysClientIdentique = ((e.value?.id === this.client.pays?.id) && e.value?.id !== null);
+        if (this.paysClientIdentique) {
+            this.formGroup.get("tvaCee").patchValue(this.client.tvaCee ? this.client.tvaCee : "");
+        } else {
+            this.onTvaCeeChange({ value: this.formGroup.get("tvaCee").value });
+        }
+        this.formGroup.get("tvaCee").markAsDirty();
+    }
+
+    onTvaCeeChange(e) {
+        if (!this.editing || !this.client) return;
+        // Checking that if different country idtva is also different
+        const tvaClient = this.client.tvaCee;
+        if (this.formGroup.get("pays").value && !this.paysClientIdentique && e.value && e.value === tvaClient) {
+            this.formGroup.get("tvaCee").reset();
+            if (e.element) notify("Id TVA - " + e.value + " - incorrect", "warning", 5000);
+        }
+    }
+
     valueToUpperCase(e) {
         if (!e.component.option("value")) return;
         e.component.option("value", e.component.option("value").toUpperCase());
@@ -315,20 +278,15 @@ export class EntrepotDetailsComponent
 
     onNonRequiredSBChange(e) {
         if (this.editing && e.value === null) {
-            this.formUtils.setIdToNull(
-                this.formGroup,
-                e.element.attributes.formcontrolname.nodeValue,
-            );
+            this.formUtils.setIdToNull(this.formGroup, e.element.attributes.formcontrolname.nodeValue);
         }
     }
 
     onSubmit() {
+
         if (!this.formGroup.pristine && this.formGroup.valid) {
             // 11-2021: Lea/Stéphane wants to avoid pre-saisie/modifications step
-            if (
-                this.formGroup.get("valide").value !== false ||
-                !this.formGroup.get("valide").dirty
-            ) {
+            if (this.formGroup.get("valide").value !== false || !this.formGroup.get("valide").dirty) {
                 this.formGroup.get("valide").setValue(true);
                 this.formGroup.get("valide").markAsDirty();
             }
@@ -336,10 +294,7 @@ export class EntrepotDetailsComponent
             this.formGroup.get("preSaisie").markAsDirty();
             this.preSaisie = "";
 
-            const entrepot = this.formUtils.extractDirty(
-                this.formGroup.controls,
-                Entrepot.getKeyField(),
-            );
+            const entrepot = this.formUtils.extractDirty(this.formGroup.controls, Entrepot.getKeyField());
 
             if (!this.createMode) {
                 entrepot.id = this.entrepot.id;
@@ -347,8 +302,7 @@ export class EntrepotDetailsComponent
                 entrepot.client = { id: this.route.snapshot.params.client };
             }
 
-            this.entrepotsService
-                .save_v2(this.getDirtyFieldsPath(), { entrepot })
+            this.entrepotsService.save_v2(this.getDirtyFieldsPath(), { entrepot })
                 .subscribe({
                     next: (e) => {
                         this.refreshGrid.emit();
@@ -363,16 +317,14 @@ export class EntrepotDetailsComponent
                             this.readOnlyMode = true;
                         } else {
                             this.editing = false;
-                            this.router.navigate([
-                                `/pages/tiers/entrepots/${e.data.saveEntrepot.id}`,
-                            ]);
+                            this.router.navigate([`/pages/tiers/entrepots/${e.data.saveEntrepot.id}`]);
                         }
                         this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
                     },
-                    error: () =>
-                        notify("Echec de la sauvegarde", "error", 3000),
+                    error: () => notify("Echec de la sauvegarde", "error", 3000),
                 });
         }
+
     }
 
     onCancel() {
@@ -385,21 +337,13 @@ export class EntrepotDetailsComponent
     }
 
     displayIDBefore(data) {
-        return data
-            ? data.id +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
-            : null;
+        return data ? (data.id + " - " +
+            (data.nomUtilisateur ? data.nomUtilisateur :
+                (data.raisonSocial ? data.raisonSocial : data.description))) : null;
     }
 
     displayEntrepot(data) {
-        return data
-            ? data.id + " - " + data.raisonSocial + " (" + data.ville + ")"
-            : null;
+        return data ? data.id + " - " + data.raisonSocial + " (" + data.ville + ")" : null;
     }
 
     toggleVisible() {
@@ -407,20 +351,19 @@ export class EntrepotDetailsComponent
     }
 
     contactsBtnClick() {
-        this.router.navigate([
-            `/pages/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`,
-        ]);
+        this.router.navigate([`/pages/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`]);
     }
 
     private getDirtyFieldsPath() {
-        const dirtyFields = this.formUtils.extractDirty(
-            this.formGroup.controls,
-            Entrepot.getKeyField(),
-        );
-        const gridFields = entrepotsGridConfig.columns.map(
-            ({ dataField }) => dataField,
-        );
+        const dirtyFields = this.formUtils
+            .extractDirty(this.formGroup.controls, Entrepot.getKeyField());
+        const gridFields = entrepotsGridConfig.columns
+            .map(({ dataField }) => dataField);
 
-        return [...this.formUtils.extractPaths(dirtyFields), ...gridFields];
+        return [
+            ...this.formUtils.extractPaths(dirtyFields),
+            ...gridFields,
+        ];
     }
+
 }

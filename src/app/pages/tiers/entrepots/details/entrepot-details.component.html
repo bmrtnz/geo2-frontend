@@ -357,6 +357,7 @@
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
+                      (onValueChanged)="onPaysChange($event)"
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-pays' | localize }}"
@@ -474,12 +475,11 @@
                   <div class="dx-field-value">
                     <dx-text-box
                       formControlName="tvaCee"
-                      [readOnly]="readOnlyMode"
-                      [inputAttr]="{
-                        style: 'text-transform: uppercase'
-                      }"
+                      [readOnly]="readOnlyMode || paysClientIdentique"
+                      [inputAttr]="{ style: 'text-transform: uppercase' }"
                       (onValueChanged)="valueToUpperCase($event)"
                       valueChangeEvent="keyup"
+                      (onValueChanged)="onTvaCeeChange($event)"
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-tvaCee' | localize }}"
@@ -488,6 +488,9 @@
                           [trim]="false"
                           type="stringLength"
                           [max]="20"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          type="required"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -744,7 +747,7 @@
                       formControlName="modeLivraison"
                       [readOnly]="readOnlyMode"
                       [dataSource]="modesLivraison"
-                      (onValueChanged)="onNonRequiredSBChange($event)"
+                      [showClearButton]="true"
                     ></dx-select-box>
                   </div>
                 </div>
