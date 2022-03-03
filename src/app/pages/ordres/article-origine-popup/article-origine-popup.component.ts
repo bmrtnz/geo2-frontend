@@ -107,12 +107,12 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
     })
     .subscribe({
       next: () => {
-        notify(this.localizeService.localize('articles-save-origin'), 'success', 3000);
+        notify(this.localizeService.localize('articles-save-origin'), 'success', 2000);
         this.changeLigne.emit(null);
       },
       error: (err) => {
         console.log(err);
-        notify(this.localizeService.localize('articles-save-origin-error'), 'error', 3000);
+        notify(this.localizeService.localize('articles-save-origin-error'), 'error', 2000);
       }
     });
     this.hidePopup();

@@ -134,12 +134,12 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
     })
     .subscribe({
       next: () => {
-        notify(this.localizeService.localize('articles-save-certification'), 'success', 3000);
+        notify(this.localizeService.localize('articles-save-certification'), 'success', 2000);
         this.changeLigne.emit(null);
       },
       error: (err) => {
         console.log(err);
-        notify(this.localizeService.localize('articles-save-certification-error'), 'error', 3000);
+        notify(this.localizeService.localize('articles-save-certification-error'), 'error', 2000);
       }
     });
     this.hidePopup();

@@ -34,6 +34,7 @@
       (onEditorPrepared)="onEditorPrepared($event)"
       (onFocusedRowChanged)="onFocusedRowChanged($event)"
       (onCellDblClick)="openFilePopup($event)"
+      (onCellClick)="onCellClick($event)"
       (onEditingStart)="onEditingStart($event)"
       (onContentReady)="onContentReady()"
       (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Lignes de commande', $event, gridConfiguratorService.Grid.OrdreLigne,enableFilters.bind(this))"
@@ -111,7 +112,7 @@
       (onValueChanged)="onValueChanged($event, cell)"
       >
         <dxo-drop-down-options
-          [width]="400">
+          [width]="SelectBoxPopupWidth">
         </dxo-drop-down-options>
       </dx-select-box>
     </div>

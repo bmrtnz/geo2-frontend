@@ -37,7 +37,8 @@
         text-align: center !important;
     }
     .dx-row-focused.dx-data-row > td {
-        border-bottom-color: #e0e0e0 !important;
+        // border-bottom-color: #e0e0e0 !important;
+        border-bottom-color: $base-accent !important;
     }
     .dx-link-delete {
         color: $base-accent !important;
@@ -65,6 +66,6 @@
         }
     }
 }
-::ng-deep .cursor-pointer {
+::ng-deep .cursor-pointer, ::ng-deep .cursor-pointer input {
     cursor: pointer !important;
 }

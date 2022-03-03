@@ -68,6 +68,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public certifsMD: any;
   public certificationText: string;
   public originText: string;
+  public SelectBoxPopupWidth: number;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -102,6 +103,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.hintDblClick = this.localizeService.localize('hint-DblClick-file');
     this.certificationText = this.localizeService.localize('btn-certification');
     this.originText = this.localizeService.localize('btn-origine')
+    this.SelectBoxPopupWidth = 400;
   }
 
   async ngOnInit() {
@@ -210,7 +212,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
         e.cellElement.classList.add('cursor-pointer');
         // Bio en vert
         if (infoArt.bio) e.cellElement.classList.add('bio-article');
-      }
+      } else if (e.column.dataField === 'numero') e.cellElement.classList.add('cursor-pointer');
     }
   }
 
@@ -274,13 +276,18 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (cell.setValue) cell.setValue(event.value);
   }
 
-  openFilePopup(e) {
+  onCellClick(e) {
+    // Way to avoid Dx Selectbox list to appear when cell is readonly
+    this.SelectBoxPopupWidth = e.cellElement.classList.contains('dx-datagrid-readonly') ? 0 : 400;
+  }
 
+  openFilePopup(e) {
     if (e.column?.dataField === 'article.id') {
       this.articleLigneId = e.data.article.id;
       this.zoomArticlePopup.visible = true;
     }
     if (['fournisseur', 'proprietaireMarchandise'].includes(e.column?.dataField)) {
+      this.SelectBoxPopupWidth = 0;
       const idFour = e.data[e.column.dataField].id;
       if (!idFour) return;
       this.fournisseurLigneId = idFour;

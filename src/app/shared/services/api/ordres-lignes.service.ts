@@ -190,7 +190,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
     // Locking step
     const data = e.data;
-    const bloquer = window.sessionStorage.getItem('blockage') ? true : false;
+    const bloquer = window.sessionStorage.getItem('blockage') === 'true' ? true : false;
 
     switch (e.column.dataField) {
 
