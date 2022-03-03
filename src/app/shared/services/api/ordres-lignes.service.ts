@@ -86,7 +86,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [
-        { selector: 'numero',  }
+        { selector: 'numero', }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
@@ -140,7 +140,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
           const queryGraph = this.buildGetSummaryGraph(
             operation,
-            columns.map( c => `edges.node.${ c }`),
+            columns.map(c => `edges.node.${c}`),
             summary,
           );
           type Response = { [operation: string]: RelayPage<OrdreLigne> };
@@ -154,8 +154,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
             variables,
             fetchPolicy: 'no-cache',
           })
-          .pipe(takeWhile(res => res.loading === false))
-          .subscribe(({data}) => resolve(this.asInstancedListCount(data[operation])));
+            .pipe(takeWhile(res => res.loading === false))
+            .subscribe(({ data }) => resolve(this.asInstancedListCount(data[operation])));
 
         }),
         byKey: this.byKey_v2(columns),
@@ -196,8 +196,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
       case 'nombrePalettesCommandees': {
         if ((data.expedieStation === true
-            || data.ordre.secteurCommercial.id === 'F'
-            || bloquer === true)
+          || data.ordre.secteurCommercial.id === 'F'
+          || bloquer === true)
           && data.ordre.type !== 'RPR'
           && data.ordre.type !== 'RPO'
           && data.ordre.societe.id !== 'BWS'
@@ -207,43 +207,43 @@ export class OrdreLignesService extends ApiService implements APIRead {
       }
       case 'nombrePalettesIntermediaires': {
         if (data.expedieStation === true ||
-            data.indicateurPalette === 1
-            || bloquer === true
-            ) this.lock(e);
+          data.indicateurPalette === 1
+          || bloquer === true
+        ) this.lock(e);
         break;
       }
       case 'nombreColisPalette': {
         if (data.expedieStation === true
           || bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'nombreColisCommandes': {
         if (data.expedieStation === true
           || bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'proprietaireMarchandise': {
         if (data.expedieStation === true
-            || bloquer === true
-            || data.ordre.type === 'RDF'
-            || data.ordre.type === 'REP'
-            || (data.ordre.type === 'RPR'
-              && data.ordre.commentaireUsageInterne.substring(0, 3) === 'B02'
-              && data.ordre.entrepot.modeLivraison.id !== 'S')
-              ) this.lock(e);
+          || bloquer === true
+          || data.ordre.type === 'RDF'
+          || data.ordre.type === 'REP'
+          || (data.ordre.type === 'RPR'
+            && data.ordre.commentaireUsageInterne.substring(0, 3) === 'B02'
+            && data.ordre.entrepot.modeLivraison.id !== 'S')
+        ) this.lock(e);
         break;
       }
       case 'fournisseur': { // Emballeur/Expéditeur
         if (data.expedieStation === true
-            || bloquer === true
-            || data.ordre.type === 'RDF'
-            || data.ordre.type === 'REP'
-            || (data.ordre.type === 'RPR'
-              && !data.ordre.commentaireUsageInterne.includes('B02')
-              && data.ordre.entrepot.modeLivraison !== 'S')
-              ) this.lock(e);
+          || bloquer === true
+          || data.ordre.type === 'RDF'
+          || data.ordre.type === 'REP'
+          || (data.ordre.type === 'RPR'
+            && !data.ordre.commentaireUsageInterne.includes('B02')
+            && data.ordre.entrepot.modeLivraison !== 'S')
+        ) this.lock(e);
         break;
       }
       case 'ventePrixUnitaire': {
@@ -251,7 +251,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           && data.ordre.type !== 'REP'
           && data.ordre.type !== 'RPF')
           && bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'venteUnite': {
@@ -259,14 +259,14 @@ export class OrdreLignesService extends ApiService implements APIRead {
           && data.ordre.type !== 'REP'
           && data.ordre.type !== 'RPF')
           && bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'gratuit': {
         if (data.venteACommission !== true
           && (data.expedieStation === true
             || bloquer === true)
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'achatPrixUnitaire': {
@@ -275,7 +275,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           && data.ordre.type !== 'RPF')
           && (data.expedieStation === true
             || bloquer === true)
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'achatUnite': {
@@ -283,7 +283,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           && data.ordre.type !== 'REP'
           && data.ordre.type !== 'RPF')
           && bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'typePalette': {
@@ -291,7 +291,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           || data.ordre.type === 'REP'
           || data.ordre.type === 'RPF'
           || bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'paletteInter': {
@@ -299,24 +299,24 @@ export class OrdreLignesService extends ApiService implements APIRead {
           || data.ordre.type === 'REP'
           || data.ordre.type === 'RPF'
           || bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'fraisPrixUnitaire': {
         if (data.ordre.societe.id !== 'IMP'
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'articleKit': {
         if (data.ordre.bonAFacturer === true
           || bloquer === true
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
       case 'gtinColisKit': {
         if (data.ordre.bonAFacturer === true
           || data.ordre.ordreEDI?.id !== null
-          ) this.lock(e);
+        ) this.lock(e);
         break;
       }
 

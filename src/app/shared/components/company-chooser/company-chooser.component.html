@@ -1,21 +1,23 @@
 <div class="company-chooser-panel">
-    <div class="company-info">
-        <div class="company-name">{{ societe }}</div>
-    </div>
-    <dx-context-menu
-        *ngIf="menuMode === 'context'"
-        [dataSource]="companyItems"
-        target=".company-button"
-        showEvent="dxclick"
-        (onItemClick)="selectCompany($event)"
-        width="170px"
-        displayExpr="raisonSocial"
-        cssClass="company-chooser-menu">
-    </dx-context-menu>
-    <dx-list
-        *ngIf="menuMode === 'list'"
-        class="dx-toolbar-menu-action company-list"
-        [dataSource]="companyItems"
-        displayExpr="raisonSocial">
-    </dx-list>
+  <div class="company-info">
+    <div class="company-name">{{ societe }}</div>
+  </div>
+  <dx-context-menu
+    *ngIf="menuMode === 'context'"
+    [dataSource]="companyItems"
+    target=".company-button"
+    showEvent="dxclick"
+    (onItemClick)="selectCompany($event)"
+    width="170px"
+    displayExpr="raisonSocial"
+    cssClass="company-chooser-menu"
+  >
+  </dx-context-menu>
+  <dx-list
+    *ngIf="menuMode === 'list'"
+    class="dx-toolbar-menu-action company-list"
+    [dataSource]="companyItems"
+    displayExpr="raisonSocial"
+  >
+  </dx-list>
 </div>

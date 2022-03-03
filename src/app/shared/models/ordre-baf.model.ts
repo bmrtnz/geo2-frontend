@@ -1,7 +1,7 @@
-import { Model, ModelName, Field } from './model';
-import Ordre from './ordre.model';
+import { Model, ModelName, Field } from "./model";
+import Ordre from "./ordre.model";
 
-@ModelName('OrdreBaf')
+@ModelName("OrdreBaf")
 export class OrdreBaf extends Model {
     @Field({ asKey: true }) public ordreRef: string;
     @Field({ asLabel: true }) public numeroOrdre: string;
@@ -20,9 +20,10 @@ export class OrdreBaf extends Model {
     @Field() public indicateurDate: string;
     @Field() public indicateurStation: string;
     @Field() public description: string;
-    @Field({format: { type: 'percent', precision: 2 }}) public pourcentageMargeBrut: number;
+    @Field({ format: { type: "percent", precision: 2 } })
+    public pourcentageMargeBrut: number;
 
-    @Field({model: import('./ordre.model')}) public ordre: Ordre;
+    @Field({ model: import("./ordre.model") }) public ordre: Ordre;
 }
 
 export default OrdreBaf;

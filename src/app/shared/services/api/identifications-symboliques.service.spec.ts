@@ -1,12 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { IdentificationsSymboliquesService } from './identifications-symboliques.service';
+import { IdentificationsSymboliquesService } from "./identifications-symboliques.service";
 
-describe('IdentificationsSymboliquesService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("IdentificationsSymboliquesService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: IdentificationsSymboliquesService = TestBed.get(IdentificationsSymboliquesService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: IdentificationsSymboliquesService = TestBed.inject(
+            IdentificationsSymboliquesService,
+        );
+        expect(service).toBeTruthy();
+    });
 });

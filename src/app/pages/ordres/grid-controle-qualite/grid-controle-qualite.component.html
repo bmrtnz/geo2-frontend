@@ -1,51 +1,69 @@
-<dx-data-grid class="dx-card wide-card"
-    [remoteOperations]="true"
-    [showBorders]="false"
-    [columnAutoWidth]="true"
-    [columnHidingEnabled]="false"
-    [allowColumnReordering]="true"
-    [scrolling]="{
-      useNative:true
-    }"
-    (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Contrôle Qualité', $event, gridConfiguratorService.Grid.ControleQualite, enableFilters.bind(this))"
+<dx-data-grid
+  class="dx-card wide-card"
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [scrolling]="{
+    useNative: true
+  }"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      'Contrôle Qualité',
+      $event,
+      gridConfiguratorService.Grid.ControleQualite,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-state-storing
+    [enabled]="true"
+    type="custom"
+    [storageKey]="gridConfiguratorService.Grid.ControleQualite"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
   >
-
-    <!-- Grid configuration -->
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-paging></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-pager>
-    <dxo-state-storing 
-      [enabled]="true" 
-      type="custom" 
-      [storageKey]="gridConfiguratorService.Grid.ControleQualite"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser
-      [enabled]="true"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height">
-    </dxo-column-chooser>
-    <dxi-column
-      *ngFor="let field of detailedFields"
-      [dataField]="field.dataField"
-      [caption]="('ControleQualite-' + field.dataField?.split('.').join('-') | localize) || field.name"
-      [visible]="false"
-      trueText="Oui"
-      falseText="Non"
-      [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
-    ></dxi-column>
-
-  </dx-data-grid>
+  </dxo-column-chooser>
+  <dxi-column
+    *ngFor="let field of detailedFields"
+    [dataField]="field.dataField"
+    [caption]="
+      ('ControleQualite-' + field.dataField?.split('.').join('-') | localize) ||
+      field.name
+    "
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [dataType]="field.dataType"
+    [allowSearch]="
+      field.allowSearch !== undefined
+        ? field.allowSearch
+        : ['string'].includes(field.dataType)
+    "
+    [allowHeaderFiltering]="
+      field.allowHeaderFiltering !== undefined
+        ? field.allowHeaderFiltering
+        : ['string'].includes(field.dataType)
+    "
+  ></dxi-column>
+</dx-data-grid>

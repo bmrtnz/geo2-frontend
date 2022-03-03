@@ -7,9 +7,20 @@
   [(visible)]="visible"
 >
   <div *dxTemplate="let data of 'content'">
-    <p>La fiche est en cours d'édition, les informations saisies seront perdues si vous poursuivez la navigation</p>
-    <br>
-    <dx-button type="default" text="retour fiche" (onClick)="cancelClick()"></dx-button>
-    <dx-button type="normal" text="poursuivre" (onClick)="continueClick()"></dx-button>
+    <p>
+      La fiche est en cours d'édition, les informations saisies seront perdues
+      si vous poursuivez la navigation
+    </p>
+    <br />
+    <dx-button
+      type="default"
+      text="retour fiche"
+      (onClick)="cancelClick()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="poursuivre"
+      (onClick)="continueClick()"
+    ></dx-button>
   </div>
 </dx-popup>

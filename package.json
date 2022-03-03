@@ -1,6 +1,10 @@
 {
   "name": "geo2",
-  "version": "0.9.1",
+  "version": "0.9.2",
+  "engines": {
+    "npm": "6",
+    "node": "14"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
@@ -14,7 +18,7 @@
     "analyze": "webpack-bundle-analyzer dist/geo2/stats.json",
     "test": "ng test",
     "test:headless": "ng test --watch=false --browsers=HeadlessChrome",
-    "lint": "ng lint",
+    "lint": "npx prettier --write ./src/**/*.{json,scss,html} && ng lint --fix",
     "e2e": "ng e2e",
     "e2e:no-serve": "ng e2e --devServerTarget=",
     "e2e:headless": "ng e2e --configuration=headless",
@@ -24,18 +28,18 @@
   },
   "private": true,
   "pre-commit": [
-    "build"
+    "lint"
   ],
   "dependencies": {
-    "@angular/animations": "~9.1.12",
-    "@angular/cdk": "^9.2.4",
-    "@angular/common": "~9.1.12",
-    "@angular/compiler": "~9.1.12",
-    "@angular/core": "~9.1.12",
-    "@angular/forms": "~9.1.12",
-    "@angular/platform-browser": "~9.1.12",
-    "@angular/platform-browser-dynamic": "~9.1.12",
-    "@angular/router": "~9.1.12",
+    "@angular/animations": "~10.2.5",
+    "@angular/cdk": "^10.2.7",
+    "@angular/common": "~10.2.5",
+    "@angular/compiler": "~10.2.5",
+    "@angular/core": "~10.2.5",
+    "@angular/forms": "~10.2.5",
+    "@angular/platform-browser": "~10.2.5",
+    "@angular/platform-browser-dynamic": "~10.2.5",
+    "@angular/router": "~10.2.5",
     "@apollo/client": "^3.3.0",
     "apollo-angular": "^2.1.0",
     "apollo-angular-link-http": "^1.11.0",
@@ -46,14 +50,14 @@
     "material-design-icons": "^3.0.1",
     "material-design-icons-iconfont": "^5.0.1",
     "rxjs": "~6.6.3",
-    "tslib": "^1.10.0",
+    "tslib": "^1.14.1",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.901.12",
-    "@angular/cli": "^9.1.13",
-    "@angular/compiler-cli": "~9.1.12",
-    "@angular/language-service": "~9.1.12",
+    "@angular-devkit/build-angular": "^0.1002.4",
+    "@angular/cli": "^10.2.4",
+    "@angular/compiler-cli": "^10.2.5",
+    "@angular/language-service": "~10.2.5",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^9.6.61",
@@ -61,7 +65,6 @@
     "codelyzer": "^6.0.1",
     "devextreme-cli": "^1.2.7",
     "devextreme-themebuilder": "^20.2.10",
-    "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
     "karma-chrome-launcher": "~2.2.0",
@@ -69,10 +72,11 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
     "pre-commit": "^1.2.2",
+    "prettier": "^2.5.1",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.8.3",
+    "typescript": "~4.0.8",
     "webpack-bundle-analyzer": "^4.3.0"
   }
 }

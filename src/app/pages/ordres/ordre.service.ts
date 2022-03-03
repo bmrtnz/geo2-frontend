@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-enum TabType { Indicateur, Ordre }
+enum TabType {
+    Indicateur,
+    Ordre,
+}
 
 class Tab {}
 
 @Injectable()
 export class OrdreService {
-
-  constructor() { }
+    constructor() {}
 }

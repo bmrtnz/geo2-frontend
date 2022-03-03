@@ -1,62 +1,69 @@
-import { Apollo } from 'apollo-angular';
-import { OperationVariables } from '@apollo/client/core';
-import { Injectable } from '@angular/core';
-import { LieuPassageAQuai } from '../../models';
-import { ApiService, APIRead, RelayPage } from '../api.service';
+import { Apollo } from "apollo-angular";
+import { OperationVariables } from "@apollo/client/core";
+import { Injectable } from "@angular/core";
+import { LieuPassageAQuai } from "../../models";
+import { ApiService, APIRead, RelayPage } from "../api.service";
 
-
-import { LoadOptions } from 'devextreme/data/load_options';
-import DataSource from 'devextreme/data/data_source';
+import { LoadOptions } from "devextreme/data/load_options";
+import DataSource from "devextreme/data/data_source";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root",
 })
 export class LieuxPassageAQuaiService extends ApiService implements APIRead {
+    fieldsFilter =
+        /.*\.(?:id|raisonSocial|description|ville|codePostal|adresse1|valide|typeTiers)$/i;
 
-  fieldsFilter = /.*\.(?:id|raisonSocial|description|ville|codePostal|adresse1|valide|typeTiers)$/i;
+    constructor(apollo: Apollo) {
+        super(apollo, LieuPassageAQuai);
+    }
 
-  constructor(
-    apollo: Apollo,
-  ) {
-    super(apollo, LieuPassageAQuai);
-  }
+    getOne(id: string) {
+        const variables: OperationVariables = { id };
+        type Response = { lieuPassageAQuai: LieuPassageAQuai };
+        return this.watchGetOneQuery<Response>({ variables });
+    }
 
-  getOne(id: string) {
-    const variables: OperationVariables = { id };
-    type Response = { lieuPassageAQuai: LieuPassageAQuai };
-    return this.watchGetOneQuery<Response>({variables});
-  }
+    getDataSource_v2(columns: Array<string>) {
+        type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
+        return new DataSource({
+            store: this.createCustomStore({
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
 
-  getDataSource_v2(columns: Array<string>) {
-    type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
-    return new DataSource({
-      store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+                        const query = await this.buildGetAll_v2(columns);
+                        const variables =
+                            this.mapLoadOptionsToVariables(options);
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.allLieuPassageAQuai)
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allLieuPassageAQuai,
+                                        ),
+                                    );
+                            },
+                        );
+                    }),
+            }),
+        });
+    }
 
-          const query = await this.buildGetAll_v2(columns);
-          const variables = this.mapLoadOptionsToVariables(options);
+    save(variables: OperationVariables) {
+        return this.watchSaveQuery({ variables });
+    }
 
-          this.listenQuery<Response>(query, {variables}, res => {
-            if (res.data && res.data.allLieuPassageAQuai)
-              resolve(this.asInstancedListCount(res.data.allLieuPassageAQuai));
-          });
-        }),
-      }),
-    });
-  }
-
-  save(variables: OperationVariables) {
-    return this.watchSaveQuery({ variables });
-  }
-
-  save_v2(columns: Array<string>, variables: OperationVariables) {
-    return this.watchSaveQuery_v2({ variables }, columns);
-  }
-
+    save_v2(columns: Array<string>, variables: OperationVariables) {
+        return this.watchSaveQuery_v2({ variables }, columns);
+    }
 }

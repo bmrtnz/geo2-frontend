@@ -1,24 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import clients from '../../../shared/data/clients';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import clients from "../../../shared/data/clients";
 
 @Component({
-  selector: 'app-test-grid-form',
-  templateUrl: './test-grid-form.component.html',
-  styleUrls: ['./test-grid-form.component.scss']
+    selector: "app-test-grid-form",
+    templateUrl: "./test-grid-form.component.html",
+    styleUrls: ["./test-grid-form.component.scss"],
 })
 export class TestGridFormComponent implements OnInit {
-  clientsDS = clients;
+    clientsDS = clients;
 
-  constructor(
-    private router: Router
-  ) {
-  }
+    constructor(private router: Router) {}
 
-  ngOnInit() {
-  }
+    ngOnInit() {}
 
-  onRowDblClick(e: any) {
-    this.router.navigate([{ outlets: { gridForm : `/profile` }}]);
-  }
+    onRowDblClick(e: any) {
+        this.router.navigate([{ outlets: { gridForm: `/profile` } }]);
+    }
 }

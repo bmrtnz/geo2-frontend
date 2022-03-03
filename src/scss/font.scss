@@ -1,25 +1,39 @@
+$base-fonts-path: "./fonts/";
+
 @import url("https://fonts.googleapis.com/css?family=Barlow:300,400,500,700");
 @font-face {
-  font-family: 'BarlowFallback';
+  font-family: "BarlowFallback";
   font-style: normal;
   font-weight: 300;
-  src: local('Barlow Light'), local('Barlow-Light'), url(#{$base-fonts-path}/Barlow-Light.woff2) format('woff2'), url(#{$base-fonts-path}/Barlow-Light.woff) format('woff'), url(#{$base-fonts-path}/Barlow-Light.ttf) format('truetype');
+  src: local("Barlow Light"), local("Barlow-Light"),
+    url(#{$base-fonts-path}/Barlow-Light.woff2) format("woff2"),
+    url(#{$base-fonts-path}/Barlow-Light.woff) format("woff"),
+    url(#{$base-fonts-path}/Barlow-Light.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'BarlowFallback';
+  font-family: "BarlowFallback";
   font-style: normal;
   font-weight: 400;
-  src: local('Barlow'), local('Barlow-Regular'), url(#{$base-fonts-path}/Barlow-Regular.woff2) format('woff2'), url(#{$base-fonts-path}/Barlow-Regular.woff) format('woff'), url(#{$base-fonts-path}/Barlow-Regular.ttf) format('truetype');
+  src: local("Barlow"), local("Barlow-Regular"),
+    url(#{$base-fonts-path}/Barlow-Regular.woff2) format("woff2"),
+    url(#{$base-fonts-path}/Barlow-Regular.woff) format("woff"),
+    url(#{$base-fonts-path}/Barlow-Regular.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'BarlowFallback';
+  font-family: "BarlowFallback";
   font-style: normal;
   font-weight: 500;
-  src: local('Barlow Medium'), local('Barlow-Medium'), url(#{$base-fonts-path}/Barlow-Medium.woff2) format('woff2'), url(#{$base-fonts-path}/Barlow-Medium.woff) format('woff'), url(#{$base-fonts-path}/Barlow-Medium.ttf) format('truetype');
+  src: local("Barlow Medium"), local("Barlow-Medium"),
+    url(#{$base-fonts-path}/Barlow-Medium.woff2) format("woff2"),
+    url(#{$base-fonts-path}/Barlow-Medium.woff) format("woff"),
+    url(#{$base-fonts-path}/Barlow-Medium.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'BarlowFallback';
+  font-family: "BarlowFallback";
   font-style: normal;
   font-weight: 700;
-  src: local('Barlow Bold'), local('Barlow-Bold'), url(#{$base-fonts-path}/Barlow-Bold.woff2) format('woff2'), url(#{$base-fonts-path}/Barlow-Bold.woff) format('woff'), url(#{$base-fonts-path}/Barlow-Bold.ttf) format('truetype');
+  src: local("Barlow Bold"), local("Barlow-Bold"),
+    url(#{$base-fonts-path}/Barlow-Bold.woff2) format("woff2"),
+    url(#{$base-fonts-path}/Barlow-Bold.woff) format("woff"),
+    url(#{$base-fonts-path}/Barlow-Bold.ttf) format("truetype");
 }

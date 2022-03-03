@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { OrdresFraisService } from './ordres-frais.service';
+import { OrdresFraisService } from "./ordres-frais.service";
 
-describe('OrdresFraisService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("OrdresFraisService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: OrdresFraisService = TestBed.get(OrdresFraisService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: OrdresFraisService = TestBed.inject(OrdresFraisService);
+        expect(service).toBeTruthy();
+    });
 });

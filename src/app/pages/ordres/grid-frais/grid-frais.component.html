@@ -1,15 +1,22 @@
-<dx-data-grid class="dx-card wide-card"
+<dx-data-grid
+  class="dx-card wide-card"
   [remoteOperations]="true"
   [showBorders]="false"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{
-    useNative:true
+    useNative: true
   }"
-  (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Frais', $event, gridConfiguratorService.Grid.OrdreFrais, enableFilters.bind(this))"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      'Frais',
+      $event,
+      gridConfiguratorService.Grid.OrdreFrais,
+      enableFilters.bind(this)
+    )
+  "
 >
-
   <!-- Grid configuration -->
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
   <dxo-paging></dxo-paging>
@@ -19,9 +26,9 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-state-storing 
-    [enabled]="true" 
-    type="custom" 
+  <dxo-state-storing
+    [enabled]="true"
+    type="custom"
     [storageKey]="gridConfiguratorService.Grid.OrdreFrais"
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
@@ -34,18 +41,29 @@
     title="{{ 'columnChooser' | localize }}"
     [allowSearch]="true"
     [width]="columnChooser.width"
-    [height]="columnChooser.height">
+    [height]="columnChooser.height"
+  >
   </dxo-column-chooser>
   <dxi-column
     *ngFor="let field of detailedFields"
     [dataField]="field.dataField"
-    [caption]="('ordreFrais-' + field.dataField?.split('.').join('-') | localize) || field.name"
+    [caption]="
+      ('ordreFrais-' + field.dataField?.split('.').join('-') | localize) ||
+      field.name
+    "
     [visible]="false"
     trueText="Oui"
     falseText="Non"
     [dataType]="field.dataType"
-    [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-    [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
+    [allowSearch]="
+      field.allowSearch !== undefined
+        ? field.allowSearch
+        : ['string'].includes(field.dataType)
+    "
+    [allowHeaderFiltering]="
+      field.allowHeaderFiltering !== undefined
+        ? field.allowHeaderFiltering
+        : ['string'].includes(field.dataType)
+    "
   ></dxi-column>
-
 </dx-data-grid>

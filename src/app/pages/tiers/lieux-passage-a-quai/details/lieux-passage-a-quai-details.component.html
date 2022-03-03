@@ -1,21 +1,26 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div class="content-block">
-    <h2><span *ngIf="createMode === true">{{ 'create' | localize }}</span>
-      {{ 'tiers-lieuxpassageaquai-details-title' | localize }}<span class="red-font"> {{ preSaisie | localize}}</span>
+    <h2>
+      <span *ngIf="createMode === true">{{ "create" | localize }}</span>
+      {{ "tiers-lieuxpassageaquai-details-title" | localize
+      }}<span class="red-font"> {{ preSaisie | localize }}</span>
       <div class="right">
-        <dx-button class="upperButton submit"
+        <dx-button
+          class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
           [visible]="!readOnlyMode"
           [useSubmitBehavior]="true"
         ></dx-button>
-        <dx-button class="upperButton"
+        <dx-button
+          class="upperButton"
           type="default"
           text="{{ 'btn-editer' | localize }}"
           [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
-        <dx-button class="upperButton"
+        <dx-button
+          class="upperButton"
           type="normal"
           text="{{ 'btn-annuler' | localize }}"
           [visible]="!readOnlyMode"
@@ -34,14 +39,15 @@
           type="danger"
           icon="material-icons person"
           text="{{ 'tiers-lieuxpassageaquai-contacts' | localize }}"
-          (onClick)="contactsBtnClick()">
+          (onClick)="contactsBtnClick()"
+        >
         </dx-button>
 
         <dx-check-box
           class="vertical"
           formControlName="valide"
           [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
-          [text]="formGroup.get('valide') ? 'Valide' : 'Invalide' | localize"
+          [text]="formGroup.get('valide') ? 'Valide' : ('Invalide' | localize)"
         ></dx-check-box>
         <dx-button
           class="black"
@@ -49,59 +55,106 @@
           icon="material-icons folder"
           [disabled]="!lieupassageaquai"
           (onClick)="fileManagerClick()"
-          text="{{ 'btn-docsjoints' | localize }}">
+          text="{{ 'btn-docsjoints' | localize }}"
+        >
         </dx-button>
       </dxi-item>
       <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
       <dxi-item [ratio]="8.2">
-        <app-modification-list (listChange)="checkEmptyModificationList($event)" [entite]="'LieuPassageAQuai'" [entiteID]="lieupassageaquai.id" *ngIf="!createMode && lieupassageaquai"></app-modification-list>
+        <app-modification-list
+          (listChange)="checkEmptyModificationList($event)"
+          [entite]="'LieuPassageAQuai'"
+          [entiteID]="lieupassageaquai.id"
+          *ngIf="!createMode && lieupassageaquai"
+        ></app-modification-list>
         <dx-box direction="row">
           <dxi-item [ratio]="4">
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-infos' | localize }}</span>
-    
+            <div
+              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
+            >
+              <span class="dx-form-group-caption">{{
+                "tiers-lieuxpassageaquai-details-groupe-infos" | localize
+              }}</span>
+
               <div class="dx-form-group-content">
                 <!-- Code -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-code' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-code" | localize }}
+                  </div>
                   <div class="dx-field-value">
                     <dx-text-box
-                    formControlName="id"
-                    [readOnly]="!createMode"
-                    [inputAttr]="{'style': 'text-transform: uppercase'}"
-                    (onValueChanged)="onCodeChange($event)"
-                    valueChangeEvent="keyup change"
+                      formControlName="id"
+                      [readOnly]="!createMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="onCodeChange($event)"
+                      valueChangeEvent="keyup change"
                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-code' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule *ngIf="createMode" [trim]="false" type="stringLength" [max]="12"></dxi-validation-rule>
-                        <dxi-validation-rule *ngIf="createMode" type="pattern" pattern="^[A-Z0-9]+$" message="Seuls les caractères A-Z et 0-9 sont acceptés"></dxi-validation-rule>
-                        <dxi-validation-rule *ngIf="createMode === true" type="async" message="Ce code est déjà utilisé" [validationCallback]="checkCode"></dxi-validation-rule>
-                    </dx-validator>
+                      <dx-validator
+                        name="{{ 'tiers-lieuxpassageaquai-code' | localize }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          *ngIf="createMode"
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="12"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          *ngIf="createMode"
+                          type="pattern"
+                          pattern="^[A-Z0-9]+$"
+                          message="Seuls les caractères A-Z et 0-9 sont acceptés"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          *ngIf="createMode === true"
+                          type="async"
+                          message="Ce code est déjà utilisé"
+                          [validationCallback]="checkCode"
+                        ></dxi-validation-rule>
+                      </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
                 <!-- Lieu fonction EAN -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-lieuFonctionEan" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="lieuFonctionEan"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-lieuFonctionEan' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="lieuFonctionEan"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-lieuFonctionEan' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="35"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Langue -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-langue' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-langue" | localize }}
+                  </div>
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="langue"
@@ -109,155 +162,252 @@
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
+                      [searchExpr]="['id', 'description']"
                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-langue' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      <dx-validator
+                        name="{{ 'tiers-lieuxpassageaquai-langue' | localize }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-select-box>
                   </div>
                 </div>
-    
+
                 <!-- tvaCee -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-tvaCee" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="tvaCee"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="20"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="tvaCee"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{ 'tiers-lieuxpassageaquai-tvaCee' | localize }}"
+                      >
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="20"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
               </div>
-    
             </div>
-    
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-adresses' | localize }}</span>
-    
+
+            <div
+              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
+            >
+              <span class="dx-form-group-caption">{{
+                "tiers-lieuxpassageaquai-details-groupe-adresses" | localize
+              }}</span>
+
               <div class="dx-form-group-content">
                 <!-- Raison sociale -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-raisonSocial" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="raisonSocial"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-raisonSocial' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
-                     </dx-validator>
+                    <dx-text-box
+                      formControlName="raisonSocial"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-raisonSocial' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="35"
+                        ></dxi-validation-rule>
+                      </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Adresse 1 -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-adresse1" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="adresse1"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse1' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="adresse1"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-adresse1' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="70"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Adresse 2 -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-adresse2" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="adresse2"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse2' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="adresse2"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-adresse2' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="70"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Adresse 3 -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-adresse3" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="adresse3"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-adresse3' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="70"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="adresse3"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-adresse3' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="70"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Code postal -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-codePostal" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="codePostal"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-codePostal' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="9"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="codePostal"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-codePostal' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="9"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Ville -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-ville' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-ville" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box 
-                     formControlName="ville"
-                     [readOnly]="readOnlyMode"
-                     [inputAttr]="{'style': 'text-transform: uppercase'}"
-                     (onValueChanged)="valueToUpperCase($event)"
-                     valueChangeEvent="keyup"
-                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-ville' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="ville"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{ 'tiers-lieuxpassageaquai-ville' | localize }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="35"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Pays -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-pays' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-pays" | localize }}
+                  </div>
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="pays"
@@ -265,59 +415,83 @@
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
+                      [searchExpr]="['id', 'description']"
                     >
-                    <dx-validator name="{{ 'tiers-lieuxpassageaquai-pays' | localize }}">
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-select-box>
+                      <dx-validator
+                        name="{{ 'tiers-lieuxpassageaquai-pays' | localize }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
                   </div>
                 </div>
               </div>
-    
             </div>
           </dxi-item>
-          <dxi-item [ratio]="0.2">
-          </dxi-item>
+          <dxi-item [ratio]="0.2"> </dxi-item>
           <dxi-item [ratio]="4">
-    
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{ 'tiers-lieuxpassageaquai-details-groupe-paiement' | localize }}</span>
-    
+            <div
+              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
+            >
+              <span class="dx-form-group-caption">{{
+                "tiers-lieuxpassageaquai-details-groupe-paiement" | localize
+              }}</span>
+
               <div class="dx-form-group-content">
                 <!-- Nb Jour Echeance -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-nbJourEcheance" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="nbJourEcheance" [readOnly]="readOnlyMode">
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-nbJourEcheance' | localize }}">
-                        <dxi-validation-rule type="numeric"></dxi-validation-rule>
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="3"></dxi-validation-rule>
+                    <dx-text-box
+                      formControlName="nbJourEcheance"
+                      [readOnly]="readOnlyMode"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-nbJourEcheance' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          type="numeric"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="3"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
+
                 <!-- Regime Tva -->
                 <div class="dx-field">
-                    <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-regimeTva' | localize }}</div>
-                    <div class="dx-field-value">
-                      <dx-select-box
-                        formControlName="regimeTva"
-                        [readOnly]="readOnlyMode"
-                        [dataSource]="regimesTva"
-                        [displayExpr]="displayIDBefore"
-                        [searchEnabled]="true"
-                        [searchExpr]="['id','description']"
-                        [showClearButton]="true"
-                        (onValueChanged)="onNonRequiredSBChange($event)"
-                      ></dx-select-box>
-                    </div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-regimeTva" | localize }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="regimeTva"
+                      [readOnly]="readOnlyMode"
+                      [dataSource]="regimesTva"
+                      [displayExpr]="displayIDBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id', 'description']"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
+                    ></dx-select-box>
+                  </div>
                 </div>
-    
+
                 <!-- Devise -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-devise' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-devise" | localize }}
+                  </div>
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="devise"
@@ -325,18 +499,24 @@
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
+                      [searchExpr]="['id', 'description']"
                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-devise' | localize }}">
-                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                      <dx-validator
+                        name="{{ 'tiers-lieuxpassageaquai-devise' | localize }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-select-box>
                   </div>
                 </div>
-    
+
                 <!-- Moyen Paiement -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-moyenPaiement' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-moyenPaiement" | localize }}
+                  </div>
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="moyenPaiement"
@@ -344,16 +524,18 @@
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
+                      [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
                   </div>
                 </div>
-    
+
                 <!-- Base Paiement -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-basePaiement' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-basePaiement" | localize }}
+                  </div>
                   <div class="dx-field-value">
                     <dx-select-box
                       formControlName="basePaiement"
@@ -361,7 +543,7 @@
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
                       [searchEnabled]="true"
-                      [searchExpr]="['id','description']"
+                      [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -370,23 +552,42 @@
 
                 <!-- Compte comptable -->
                 <div class="dx-field">
-                  <div class="dx-field-label">{{ 'tiers-lieuxpassageaquai-compteComptable' | localize }}</div>
+                  <div class="dx-field-label">
+                    {{ "tiers-lieuxpassageaquai-compteComptable" | localize }}
+                  </div>
                   <div class="dx-field-value">
-                    <dx-text-box formControlName="compteComptable" 
-                      [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
-                      [inputAttr]="{'style': 'text-transform: uppercase'}"
+                    <dx-text-box
+                      formControlName="compteComptable"
+                      [readOnly]="
+                        readOnlyMode || !authService.currentUser.adminClient
+                      "
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
                       (onValueChanged)="checkCompteComptable($event)"
                       valueChangeEvent="keyup change"
                     >
-                      <dx-validator name="{{ 'tiers-lieuxpassageaquai-compteComptable' | localize }}">
-                        <dxi-validation-rule [trim]="false" type="stringLength" [max]="35"></dxi-validation-rule>
+                      <dx-validator
+                        name="{{
+                          'tiers-lieuxpassageaquai-compteComptable' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="35"
+                        ></dxi-validation-rule>
                         <!-- Workaround. Apparemment bug de Devextreme qui apparait lorsqu'il y a 2 async validation rules sur la page, et crée une référence circulaire. -->
-                        <dxi-validation-rule *ngIf="createMode === true && CCexists" type="stringLength" [max]="0" message="Ce code est déjà utilisé"></dxi-validation-rule>
+                        <dxi-validation-rule
+                          *ngIf="createMode === true && CCexists"
+                          type="stringLength"
+                          [max]="0"
+                          message="Ce code est déjà utilisé"
+                        ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
                   </div>
                 </div>
-    
               </div>
             </div>
           </dxi-item>
@@ -394,7 +595,11 @@
       </dxi-item>
     </dx-box>
   </div>
-
 </form>
 <app-editing-alert></app-editing-alert>
-<app-file-manager-popup key="lieux_passage_a_quai" [subTitle]="lieupassageaquai.id" [id]="lieupassageaquai.id" *ngIf="lieupassageaquai"></app-file-manager-popup>
+<app-file-manager-popup
+  key="lieux_passage_a_quai"
+  [subTitle]="lieupassageaquai.id"
+  [id]="lieupassageaquai.id"
+  *ngIf="lieupassageaquai"
+></app-file-manager-popup>

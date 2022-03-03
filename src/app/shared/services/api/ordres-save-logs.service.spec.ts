@@ -1,12 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { OrdresSaveLogsService } from './ordres-save-logs.service';
+import { OrdresSaveLogsService } from "./ordres-save-logs.service";
 
-describe('OrdresSaveLogsService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("OrdresSaveLogsService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: OrdresSaveLogsService = TestBed.get(OrdresSaveLogsService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: OrdresSaveLogsService = TestBed.inject(
+            OrdresSaveLogsService,
+        );
+        expect(service).toBeTruthy();
+    });
 });

@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { BasesTarifService } from './bases-tarif.service';
+import { BasesTarifService } from "./bases-tarif.service";
 
-describe('BasesTarifService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("BasesTarifService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: BasesTarifService = TestBed.inject(BasesTarifService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: BasesTarifService = TestBed.inject(BasesTarifService);
+        expect(service).toBeTruthy();
+    });
 });

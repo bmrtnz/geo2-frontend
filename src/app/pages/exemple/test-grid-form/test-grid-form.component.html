@@ -13,11 +13,18 @@
     [allowColumnReordering]="true"
     (onRowDblClick)="onRowDblClick($event)"
   >
-
     <!-- Grid configuration -->
-    <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+    <dxo-search-panel
+      [visible]="true"
+      [width]="240"
+      placeholder="Search..."
+    ></dxo-search-panel>
     <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
-    <dxo-export [enabled]="true" fileName="Clients" [allowExportSelectedData]="false"></dxo-export>
+    <dxo-export
+      [enabled]="true"
+      fileName="Clients"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -27,34 +34,34 @@
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-    <dxi-column
-      dataField="id"
-      [width]="90"
-      [hidingPriority]="2">
-    </dxi-column>
+    <dxi-column dataField="id" [width]="90" [hidingPriority]="2"> </dxi-column>
     <dxi-column
       dataField="raisonSocial"
       [width]="190"
       caption="{{ 'tiers-clients-raisonSocial' | localize }}"
-      [hidingPriority]="8">
+      [hidingPriority]="8"
+    >
     </dxi-column>
     <dxi-column
       dataField="pays.description"
       [width]="190"
       caption="{{ 'tiers-clients-pays' | localize }}"
-      [hidingPriority]="8">
+      [hidingPriority]="8"
+    >
     </dxi-column>
     <dxi-column
       dataField="ville"
       [width]="190"
       caption="{{ 'tiers-clients-ville' | localize }}"
-      [hidingPriority]="8">
+      [hidingPriority]="8"
+    >
     </dxi-column>
     <dxi-column
       dataField="secteur.description"
       [width]="190"
       caption="{{ 'tiers-clients-secteur' | localize }}"
-      [hidingPriority]="8">
+      [hidingPriority]="8"
+    >
     </dxi-column>
   </dx-data-grid>
 </div>

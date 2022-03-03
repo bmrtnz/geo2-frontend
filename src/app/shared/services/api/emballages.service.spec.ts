@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { EmballagesService } from './emballages.service';
+import { EmballagesService } from "./emballages.service";
 
-describe('EmballagesService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("EmballagesService", () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: EmballagesService = TestBed.inject(EmballagesService);
-    expect(service).toBeTruthy();
-  });
+    it("should be created", () => {
+        const service: EmballagesService = TestBed.inject(EmballagesService);
+        expect(service).toBeTruthy();
+    });
 });

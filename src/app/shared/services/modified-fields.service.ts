@@ -1,34 +1,27 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root",
 })
 export class ModifiedFieldsService {
+    constructor() {}
 
-  constructor() { }
+    saveModifiedFields(data, toRemove) {
+        const keys = Object.keys(data);
+        const index = keys.indexOf(toRemove);
+        if (index > -1) {
+            keys.splice(index, 1);
+        }
 
-  saveModifiedFields(data, toRemove) {
-
-    let keys = Object.keys(data);
-    let index = keys.indexOf(toRemove);
-    if (index > -1) {
-      keys.splice(index, 1);
+        const modifiedKeys = "(" + keys.join("/") + ")";
+        window.localStorage.setItem("modifiedKeys", modifiedKeys);
     }
 
-    const modifiedKeys = '(' + keys.join('/') + ')';
-    window.localStorage.setItem('modifiedKeys', modifiedKeys);
-    
-  }
+    getModifiedFields() {
+        return window.localStorage.getItem("modifiedKeys");
+    }
 
-  getModifiedFields() {
-
-    return window.localStorage.getItem('modifiedKeys');
-
-  }
-
-  clearModifiedFields() {
-
-    window.localStorage.removeItem('modifiedKeys');
-
-  }
+    clearModifiedFields() {
+        window.localStorage.removeItem("modifiedKeys");
+    }
 }

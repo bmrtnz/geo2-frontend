@@ -1,36 +1,46 @@
-<dx-data-grid class="dx-card wide-card"
-    [remoteOperations]="true"
-    [showBorders]="false"
-    [focusedRowEnabled]="true"
-    [focusedRowIndex]="0"
-    [columnAutoWidth]="true"
-    [columnHidingEnabled]="false"
-    [allowColumnReordering]="true"
-    [scrolling]="{ useNative:true }"
-    (onToolbarPreparing)="gridConfigHandler($event)"
-  >
-
-    <!-- Grid configuration -->
-    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-    <dxo-paging></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-pager>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxi-column
-      *ngFor="let field of columns | async"
-      [dataField]="field.dataField"
-      [caption]="('choixEntrepot-' + field.dataField?.split('.').join('-') | localize) || field.name"
-      [visible]="false"
-      trueText="Oui"
-      falseText="Non"
-      [dataType]="field.dataType"
-      [allowSearch]="field.allowSearch !== undefined ? field.allowSearch : ['string'].includes(field.dataType)"
-      [allowHeaderFiltering]="field.allowHeaderFiltering !== undefined ? field.allowHeaderFiltering : ['string'].includes(field.dataType)"
-    ></dxi-column>
-
-  </dx-data-grid>
+<dx-data-grid
+  class="dx-card wide-card"
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [focusedRowEnabled]="true"
+  [focusedRowIndex]="0"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [scrolling]="{ useNative: true }"
+  (onToolbarPreparing)="gridConfigHandler($event)"
+>
+  <!-- Grid configuration -->
+  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxi-column
+    *ngFor="let field of columns | async"
+    [dataField]="field.dataField"
+    [caption]="
+      ('choixEntrepot-' + field.dataField?.split('.').join('-') | localize) ||
+      field.name
+    "
+    [visible]="false"
+    trueText="Oui"
+    falseText="Non"
+    [dataType]="field.dataType"
+    [allowSearch]="
+      field.allowSearch !== undefined
+        ? field.allowSearch
+        : ['string'].includes(field.dataType)
+    "
+    [allowHeaderFiltering]="
+      field.allowHeaderFiltering !== undefined
+        ? field.allowHeaderFiltering
+        : ['string'].includes(field.dataType)
+    "
+  ></dxi-column>
+</dx-data-grid>

@@ -7,9 +7,14 @@
   [(visible)]="visible"
 >
   <div *dxTemplate="let data of 'content'">
-    <p>{{customText}}</p>
-    <br>
-    <dx-button type="default" class="save-popup-button" text="Compris !" (onClick)="continueClick()"></dx-button>
+    <p>{{ customText }}</p>
+    <br />
+    <dx-button
+      type="default"
+      class="save-popup-button"
+      text="Compris !"
+      (onClick)="continueClick()"
+    ></dx-button>
     <!-- <dx-button type="normal" text="Non, je m'en occupe !" (onClick)="cancelClick()"></dx-button> -->
   </div>
 </dx-popup>

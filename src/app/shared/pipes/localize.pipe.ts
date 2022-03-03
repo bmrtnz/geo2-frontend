@@ -1,5 +1,5 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { LocalizationService } from '../services';
+import { Pipe, PipeTransform } from "@angular/core";
+import { LocalizationService } from "../services";
 
 /*
  * Transform value of key to localized value.
@@ -8,17 +8,14 @@ import { LocalizationService } from '../services';
  *   value | localize:[format]
  * Example:
  *   {{ home.key | localize }}
-*/
+ */
 @Pipe({
-  name: 'localize'
+    name: "localize",
 })
 export class LocalizePipe implements PipeTransform {
+    constructor(private localizationService: LocalizationService) {}
 
-  constructor(private localizationService: LocalizationService) {
-  }
-
-  transform(value: any, ...args: any[]): any {
-    return this.localizationService.localize(value, args);
-  }
-
+    transform(value: any, ...args: any[]): any {
+        return this.localizationService.localize(value, args);
+    }
 }

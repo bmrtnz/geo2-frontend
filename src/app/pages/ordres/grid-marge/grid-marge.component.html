@@ -1,4 +1,5 @@
-<dx-data-grid class="dx-card wide-card"
+<dx-data-grid
+  class="dx-card wide-card"
   [dataSource]="dataSource"
   [remoteOperations]="true"
   [showBorders]="false"
@@ -6,11 +7,17 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{
-    useNative:true
+    useNative: true
   }"
-  (onToolbarPreparing)="gridConfiguratorService.onToolbarPreparing('Marges', $event, gridConfiguratorService.Grid.OrdreMarge, enableFilters.bind(this))"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      'Marges',
+      $event,
+      gridConfiguratorService.Grid.OrdreMarge,
+      enableFilters.bind(this)
+    )
+  "
 >
-
   <!-- Grid configuration -->
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
   <dxo-paging></dxo-paging>
@@ -20,9 +27,9 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-state-storing 
-    [enabled]="true" 
-    type="custom" 
+  <dxo-state-storing
+    [enabled]="true"
+    type="custom"
     [storageKey]="gridConfiguratorService.Grid.OrdreMarge"
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
@@ -35,12 +42,16 @@
     title="{{ 'columnChooser' | localize }}"
     [allowSearch]="true"
     [width]="columnChooser.width"
-    [height]="columnChooser.height">
+    [height]="columnChooser.height"
+  >
   </dxo-column-chooser>
   <dxo-summary [totalItems]="totalItems"></dxo-summary>
   <dxi-column
     *ngFor="let column of this.columns | async"
-    [caption]="('ordreMarge-' + column.dataField.split('.').join('-') | localize) || column.name"
+    [caption]="
+      ('ordreMarge-' + column.dataField.split('.').join('-') | localize) ||
+      column.name
+    "
     [format]="column?.format"
     [dataField]="column.dataField"
     [visible]="false"
@@ -48,8 +59,9 @@
     falseText="Non"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-    [allowHeaderFiltering]="column?.allowHeaderFiltering || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
     [showInColumnChooser]="column?.showInColumnChooser"
   ></dxi-column>
-
-</dx-data-grid> 
+</dx-data-grid>
