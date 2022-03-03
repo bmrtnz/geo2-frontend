@@ -58,7 +58,7 @@
           [readOnly]="true"
           [dataSource]="societe"
           displayExpr="raisonSocial"
-          (onFocusIn)="findAssociatedCompanies($event)"
+          (onFocusIn)="findAssociatedCompanies()"
           (onSelectionChanged)="societeOnChange($event)"
           [value]="['']"
           width="100%"
