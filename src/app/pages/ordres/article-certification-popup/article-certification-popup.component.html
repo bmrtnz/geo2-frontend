@@ -10,21 +10,20 @@
   (onShowing)="onShowing($event)"
   (onHidden)="onHidden()"
 >
-    <div class="list-certification">
-        <dx-list
-        [items]="certifications"
-        selectionMode="multiple"
-        selectAllMode="false"
-        [showSelectionControls]="true"
-        [selectedItemKeys]="[]"
-        ></dx-list>
-    </div>
+  <div class="list-certification">
+    <dx-list
+      [items]="certifications"
+      selectionMode="multiple"
+      selectAllMode="false"
+      [showSelectionControls]="true"
+      [selectedItemKeys]="[]"
+    ></dx-list>
+  </div>
 
-    <dx-button
+  <dx-button
     class="valid-button"
     type="default"
     text="Valider"
     (onClick)="saveCertification()"
-    ></dx-button> 
-
+  ></dx-button>
 </dx-popup>

@@ -1184,24 +1184,96 @@
         "allowEditing": true,
         "visible": true
       },
-      { "dataField": "article.matierePremiere.variete.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.cahierDesCharge.categorie.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.normalisation.calibreMarquage.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.emballage.poidsNetClient", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.emballage.prepese", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.modeCulture.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.modeCulture.description", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.origine.description", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.logistiques.expedieStation", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.secteurCommercial.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.type", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.societe.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "indicateurPalette", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.entrepot.modeLivraison", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.bonAFacturer", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.ordreEDI.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "origineCertification", "showInColumnChooser": false, "visible": false },
-      { "dataField": "listeCertifications", "showInColumnChooser": false, "visible": false },
+      {
+        "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.cahierDesCharge.categorie.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.normalisation.calibreMarquage.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.poidsNetClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.prepese",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.logistiques.expedieStation",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.secteurCommercial.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.type",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.societe.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "indicateurPalette",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.entrepot.modeLivraison",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.bonAFacturer",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.ordreEDI.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "origineCertification",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "listeCertifications",
+        "showInColumnChooser": false,
+        "visible": false
+      },
       { "dataField": "valide", "visible": false }
     ]
   },
@@ -2274,21 +2346,81 @@
       },
       { "dataField": "id", "visible": false },
       { "dataField": "logistique.fournisseur.id", "visible": false },
-      { "dataField": "nombreColisCommandes", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.variete.description", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.variete.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.cahierDesCharge.categorie.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.normalisation.calibreMarquage.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.emballage.poidsNetClient", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.emballage.prepese", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.modeCulture.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.modeCulture.description", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.origine.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "article.matierePremiere.origine.description", "showInColumnChooser": false, "visible": false },
-      { "dataField": "ordre.devise.id", "showInColumnChooser": false, "visible": false },
-      { "dataField": "achatUnite.description", "showInColumnChooser": false, "visible": false },
-      { "dataField": "venteUnite.description", "showInColumnChooser": false, "visible": false }
+      {
+        "dataField": "nombreColisCommandes",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.variete.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.cahierDesCharge.categorie.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.normalisation.calibreMarquage.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.poidsNetClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.prepese",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.devise.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "achatUnite.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "venteUnite.description",
+        "showInColumnChooser": false,
+        "visible": false
+      }
     ]
   },
   "mouv-clients-comptes-palox": {

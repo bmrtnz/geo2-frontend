@@ -23,7 +23,7 @@
     "au": "au",
     "depuis": "depuis",
     "avec": "avec",
-    "preFilter-title" : "Pré-filtrage",
+    "preFilter-title": "Pré-filtrage",
     "aucune": "Aucune",
 
     "fileManager-name": "Nom",
@@ -471,7 +471,7 @@
     "tiers-contacts-societe": "Société",
     "tiers-contacts-societe-id": "Société",
 
-    "articles-title" : "Articles",
+    "articles-title": "Articles",
     "articles-saisieCode": "Saisie directe code(s) :",
     "articles-saisieCode-erreur": "Code article",
     "articles-preFilter-title": "Pré-filtrage",

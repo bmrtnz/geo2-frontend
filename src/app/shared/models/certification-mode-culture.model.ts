@@ -1,6 +1,6 @@
-import {Field, Model, ModelName} from './model';
+import {Field, Model, ModelName} from "./model";
 
-@ModelName('CertificationModeCulture')
+@ModelName("CertificationModeCulture")
 export class CertificationModeCulture extends Model {
   @Field({asKey: true}) public id: number;
   @Field({asLabel: true}) public description: string;

@@ -417,7 +417,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private handleTabChange() {
         return this.route.paramMap.pipe(
             first(),
-            switchMap(params => this.tabContext.onTabChange.pipe(map(data => [data, params.get(RouteParam.TabID)] as [TabChangeData, string]))),
+            switchMap(params =>
+                this.tabContext.onTabChange
+                    .pipe(map(data => [data, params.get(RouteParam.TabID)] as [TabChangeData, string]))),
             filter(([{ item }, id]) => item.id === id),
             map(([item]) => item),
             takeUntil(this.destroy),
