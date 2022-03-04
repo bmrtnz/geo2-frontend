@@ -68,7 +68,6 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     switchEntity: DxSwitchComponent;
 
     public columnChooser = environment.columnChooser;
-    public switchOptions = [];
     public columns: Observable<GridColumn[]>[];
     public ordresDataSource: DataSource;
     public commercial: DataSource;
@@ -83,6 +82,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     } as Inputs<FormControl>);
 
     private datasources: DataSource[] = [];
+    public toRefresh: boolean;
 
     constructor(
         public gridConfiguratorService: GridConfiguratorService,
@@ -118,10 +118,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             "and",
             ["nomUtilisateur", "<>", "null"],
         ]);
-        this.switchOptions = ["mouv", "recap", "Clients", "Fournisseurs"];
     }
 
     async ngOnInit() {
+        this.toRefresh = true;
         this.columns = [
             Grid.MouvClientsComptesPalox,
             Grid.RecapClientsComptesPalox,
@@ -149,7 +149,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             ),
         );
 
-        this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
+        this.formGroup.valueChanges.subscribe((_) => this.toRefresh = true);
         if (
             !this.authService.isAdmin &&
             this.authService.currentUser?.commercial
@@ -160,6 +160,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     }
 
     enableFilters() {
+        this.toRefresh = false;
         const values: Inputs = this.formGroup.value;
         this.supervisionPaloxsService.setPersisantVariables({
             codeSociete: this.currentCompanyService.getCompany().id,
@@ -169,7 +170,6 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         });
         const index = this.getActiveGridIndex();
         this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
-        this.paloxGrids.toArray()[index].visible = true;
     }
 
     onRowDblClick({ data }: { data: Ordre }) {
@@ -179,22 +179,24 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     displayCodeBefore(data) {
         return data
             ? (data.code ? data.code : data.id) +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
             : null;
     }
 
     switchChange(e) {
+        this.toRefresh = true;
         this.paloxGrids.map((component) => {
             component.dataSource = null;
             component.visible = false;
             return component;
         });
-        this.enableFilters();
+        const index = this.getActiveGridIndex();
+        this.paloxGrids.toArray()[index].visible = true;
     }
 
     private getActiveGridIndex() {

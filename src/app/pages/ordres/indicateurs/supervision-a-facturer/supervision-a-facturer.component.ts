@@ -293,7 +293,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         this.tabContext.openOrdre(data.numero);
     }
 
-    launch(e) {}
+    launch(e) { }
 
     onCellPrepared(event) {
         const field = event.column.dataField;
@@ -314,7 +314,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
                 event.cellElement.classList.add(this.colorizeCell(event.value));
                 event.cellElement.innerText =
                     Object.keys(status)[
-                        (Object.values(status) as string[]).indexOf(event.value)
+                    (Object.values(status) as string[]).indexOf(event.value)
                     ];
                 if (event.data.description) {
                     event.cellElement.setAttribute(
