@@ -69,6 +69,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public certificationText: string;
   public originText: string;
   public SelectBoxPopupWidth: number;
+  public dataField: string;
+  public idLigne: string;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -326,8 +328,19 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
   }
 
+  onEditorPreparing(e) {
+    // Saving cell main info
+    if (e.parentType === "dataRow") {
+      e.editorOptions.onFocusIn = () => {
+        this.dataField = e.dataField;
+        this.idLigne = e.row?.data?.id;
+      };
+      e.editorOptions.onFocusOut = () => this.dataField = null;
+    }
+  }
+
   onContentReady() {
-    // Grid is loaded with new articles: save order rows numbers
+    // Grid is loaded with new articles: save order row numbers
     if (this.newArticles === this.nbInsertedArticles) {
       let info = this.nbInsertedArticles + " ";
       info += " " + this.localizeService.localize("article-ajoutes");
@@ -337,6 +350,24 @@ export class GridLignesComponent implements OnChanges, OnInit {
       this.newNumero = 0;
       this.nbInsertedArticles = null;
       this.datagrid.instance.saveEditData();
+    }
+  }
+
+  cellValueChange() {
+
+    if (!this.dataField) return;
+    const dataField = this.dataField;
+    const idLigne = this.idLigne;
+    console.log(dataField, "has been changed");
+    switch (dataField) {
+      case "nombrePalettesCommandees": {
+        this.functionsService.onChangeCdeNbPal(idLigne, this.ordre.secteurCommercial.id)
+          .valueChanges
+          .subscribe(res => {
+            this.datagrid.instance.refresh();
+          });
+        break;
+      }
     }
   }
 

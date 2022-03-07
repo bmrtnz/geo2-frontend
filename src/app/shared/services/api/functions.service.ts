@@ -114,4 +114,31 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event modification nb palettes commandées sur une ligne d'ordre
+   */
+  public onChangeCdeNbPal =
+    (ordreLigneRef: string, secteurCommercialCode: string) => this.apollo
+      .watchQuery<{ onChangeCdeNbPal: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangeCdeNbPal",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+                { name: "secteurCommercialCode", value: "secteurCommercialCode", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+            { name: "secteurCommercialCode", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreLigneRef, secteurCommercialCode },
+        fetchPolicy: "network-only",
+      })
+
 }
