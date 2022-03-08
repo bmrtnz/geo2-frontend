@@ -358,8 +358,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (!this.dataField) return;
     const dataField = this.dataField;
     const idLigne = this.idLigne;
-    console.log(dataField, "has been changed");
+    console.log(dataField, " has been changed");
+
     switch (dataField) {
+
       case "nombrePalettesCommandees": {
         this.functionsService.onChangeCdeNbPal(idLigne, this.ordre.secteurCommercial.id)
           .valueChanges
@@ -368,6 +370,31 @@ export class GridLignesComponent implements OnChanges, OnInit {
           });
         break;
       }
+      case "nombrePalettesIntermediaires": {
+        this.functionsService.onChangeDemipalInd(idLigne, this.authService.currentUser.nomUtilisateur)
+          .valueChanges
+          .subscribe(res => {
+            this.datagrid.instance.refresh();
+          });
+        break;
+      }
+      case "nombreColisPalette": {
+        this.functionsService.onChangePalNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
+          .valueChanges
+          .subscribe(res => {
+            this.datagrid.instance.refresh();
+          });
+        break;
+      }
+      case "nombreColisCommandes": {
+        this.functionsService.onChangeCdeNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
+          .valueChanges
+          .subscribe(res => {
+            this.datagrid.instance.refresh();
+          });
+        break;
+      }
+
     }
   }
 
