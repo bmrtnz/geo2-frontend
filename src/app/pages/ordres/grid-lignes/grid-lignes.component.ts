@@ -113,16 +113,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
       return (this.addKeyToField(column.dataField));
     })));
     const gridFields = await fields.toPromise();
-    this.fournisseurSource = this.fournisseurService.getDataSource_v2(["id", "code", "raisonSocial"]);
-    this.fournisseurSource.filter([
-      ["valide", "=", true],
-    ]);
-    this.proprietaireMarchandiseSource = this.fournisseurService.getDataSource_v2(["id", "code", "raisonSocial"]);
-    this.proprietaireMarchandiseSource.filter([
-      ["valide", "=", true],
-      "and",
-      ["natureStation", "<>", "F"]
-    ]);
+    this.filterFournisseurDS();
+    this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     this.achatUniteSource = this.achatUniteService.getDataSource_v2(["id", "description"]);
     this.achatUniteSource.filter([
       ["valide", "=", true],
@@ -147,6 +139,18 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   ngOnChanges() {
     this.enableFilters();
+  }
+
+  filterFournisseurDS(filters?) {
+    const myFilter: any[] = [["valide", "=", true]];
+    if (filters) myFilter.push("and", filters);
+    this.fournisseurSource = this.fournisseurService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.fournisseurSource.filter(myFilter);
+  }
+  filterProprietaireDS(filters) {
+    this.proprietaireMarchandiseSource = this.fournisseurService
+      .getDataSource_v2(["id", "code", "raisonSocial", "listeExpediteurs"]);
+    this.proprietaireMarchandiseSource.filter(filters);
   }
 
   refreshGrid() {
@@ -270,11 +274,18 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.switchNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
     this.datagrid.instance.cellValue(this.currentfocusedRow + moveDirection, "numero", this.currNumero);
     this.datagrid.instance.cellValue(this.currentfocusedRow, "numero", this.switchNumero);
+    this.datagrid.focusedRowIndex = -1;
     this.datagrid.instance.saveEditData();
   }
 
   onValueChanged(event, cell) {
-    if (cell.setValue) cell.setValue(event.value);
+    console.log("onValueChanged");
+    if (cell.setValue) {
+      this.cellValueChange(event);
+      cell.setValue(event.value);
+      this.idLigne = cell.data.id;
+      this.dataField = cell.column.dataField;
+    }
   }
 
   onCellClick(e) {
@@ -353,7 +364,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
   }
 
-  cellValueChange() {
+  cellValueChange(data) {
+
+    console.log("data : ", data);
 
     if (!this.dataField) return;
     const dataField = this.dataField;
@@ -392,6 +405,54 @@ export class GridLignesComponent implements OnChanges, OnInit {
           .subscribe(res => {
             this.datagrid.instance.refresh();
           });
+        break;
+      }
+      // case "proprietaireMarchandise": {
+      //   this.dataField = null;
+      //   let newFour = null;
+      //   const listExp = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise?.listeExpediteurs;
+      //   const filters = [];
+      //   if (listExp) {
+      //     listExp.split(",").map(exp => {
+      //       filters.push(["code", "=", exp]);
+      //       filters.push("or");
+      //     });
+      //     filters.pop();
+      //   } else {
+      //     newFour = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise.id;
+      //     filters.push(["id", "=", newFour]);
+      //   }
+      //   this.filterFournisseurDS(filters);
+      //   // data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur");
+      //   data.component
+      //     .cellValue(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur", { id: newFour });
+      //   // data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "proprietaireMarchandise");
+      //   this.datagrid.instance.saveEditData();
+      //   break;
+      // }
+      case "proprietaireMarchandise": {
+        this.dataField = null;
+        let newFour = null;
+        console.log(data);
+        const listExp = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise?.listeExpediteurs;
+        const filters = [];
+        if (listExp) {
+          listExp.split(",").map(exp => {
+            filters.push(["code", "=", exp]);
+            filters.push("or");
+          });
+          filters.pop();
+        } else {
+          newFour = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise.id;
+          filters.push(["id", "=", newFour]);
+        }
+        this.filterFournisseurDS(filters);
+        data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur");
+        data.component
+          .cellValue(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur",
+            { id: newFour, raisonSocial: data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise.raisonSocial });
+        // data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "proprietaireMarchandise");
+        this.datagrid.instance.saveEditData();
         break;
       }
 

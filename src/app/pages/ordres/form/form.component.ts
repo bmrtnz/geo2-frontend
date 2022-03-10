@@ -392,7 +392,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.ordre === null) return;
                 this.fraisClient = this.getFraisClient();
                 this.gestEntrepot = this.getGestEntrepot();
-                this;
                 this.fetchFullOrderNumber();
                 if (this.ordre.numero) this.status = " - " + Statut[this.ordre.statut] + (this.ordre.factureEDI ? " EDI" : "");
                 this.refOrdre = this.ordre?.id ? ordre.id : "-";

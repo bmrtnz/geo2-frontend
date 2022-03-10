@@ -73,7 +73,7 @@ export class Fournisseur extends Model {
     @Field({ dataType: "date" }) public dateDebutIfco: string;
     @Field() public consignePaloxSa: boolean;
     @Field() public consignePaloxUdc: boolean;
-    @Field() public listeExpediteurs: string;
+    @Field(({ asLabel: true })) public listeExpediteurs: string;
     @Field({ allowHeaderFiltering: false, allowSearch: false })
     public typeTiers: TypeTiers;
     @Field() public autoFacturation: boolean;
