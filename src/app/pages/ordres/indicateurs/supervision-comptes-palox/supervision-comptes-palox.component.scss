@@ -7,8 +7,14 @@
   margin-right: 20px;
 }
 
+.inactive {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
 ::ng-deep .paloxAccountsFilterArea {
   width: 1024px;
+  background: #eee;
   .dx-field:not(.palox-switch) {
     margin-bottom: 0;
   }
@@ -27,8 +33,9 @@
       }
     }
     .dx-field-label {
-      width: 43% !important;
+      width: 56% !important;
       &.dx-field-label-left {
+        width: 34% !important;
         text-align: right !important;
       }
       &.dx-field-label-right {

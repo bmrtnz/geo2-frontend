@@ -1,7 +1,7 @@
 <form class="dx-fieldset" [formGroup]="formGroup">
   <div class="paloxAccountsFilterArea">
     <dx-box>
-      <dxi-item [ratio]="7">
+      <dxi-item [ratio]="8">
         <div class="dx-field palox-switch">
           <div class="dx-field-label dx-field-label-left">
             {{ "ordres-palox-mouvements" | localize }}
@@ -38,7 +38,7 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="7">
+      <dxi-item [ratio]="8">
         <!-- Commercial -->
         <div class="dx-field">
           <div class="dx-field-label noEllipsis">
@@ -75,7 +75,7 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="5">
+      <dxi-item [ratio]="7">
         <!-- Date max Mouvements -->
         <div class="dx-field field-large">
           <div class="dx-field-label">
@@ -89,6 +89,16 @@
             ></dx-date-box>
           </div>
         </div>
+      </dxi-item>
+      <dxi-item [ratio]="3">
+        <dx-button
+          class="refresh"
+          [width]="130"
+          [class]="toRefresh ? '' : 'inactive'"
+          type="default"
+          text="{{ 'btn-refresh' | localize }}"
+          (onClick)="enableFilters()"
+        ></dx-button>
       </dxi-item>
     </dx-box>
   </div>
@@ -120,7 +130,7 @@
 >
   <!-- Grid configuration -->
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-  <dxo-paging></dxo-paging>
+  <dxo-paging>[pageSize]="10"</dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
@@ -196,7 +206,7 @@
     [allowExportSelectedData]="false"
   ></dxo-export>
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-  <dxo-paging></dxo-paging>
+  <dxo-paging>[pageSize]="10"</dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
@@ -267,7 +277,7 @@
 >
   <!-- Grid configuration -->
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-  <dxo-paging></dxo-paging>
+  <dxo-paging>[pageSize]="10"</dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
@@ -280,7 +290,8 @@
     type="custom"
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
+  >
+  </dxo-state-storing>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
@@ -338,7 +349,7 @@
 >
   <!-- Grid configuration -->
   <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
-  <dxo-paging></dxo-paging>
+  <dxo-paging>[pageSize]="10"</dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
@@ -351,7 +362,8 @@
     type="custom"
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
+  >
+  </dxo-state-storing>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
