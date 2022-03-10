@@ -105,7 +105,7 @@ export class NouvelOrdreComponent implements OnInit {
         private societesService: SocietesService,
         private devisesRefsService: DevisesRefsService,
         private authService: AuthService,
-    ) {}
+    ) { }
 
     ngOnInit() {
         const { id } = this.currentCompanyService.getCompany();
@@ -170,13 +170,13 @@ export class NouvelOrdreComponent implements OnInit {
         const assistante = entrepot.assistante
             ? { id: entrepot.assistante.id }
             : entrepot.client.assistante
-            ? { id: entrepot.client.assistante.id }
-            : null;
+                ? { id: entrepot.client.assistante.id }
+                : null;
         const commercial = entrepot.commercial
             ? { id: entrepot.commercial.id }
             : entrepot.client.commercial
-            ? { id: entrepot.client.commercial.id }
-            : null;
+                ? { id: entrepot.client.commercial.id }
+                : null;
 
         return this.fetchDeviseRef(entrepot.client?.devise).pipe(
             switchMap((deviseRef) =>
@@ -184,6 +184,7 @@ export class NouvelOrdreComponent implements OnInit {
                     ordre: {
                         // from `heriteEntrepot.pbl`
                         numero,
+                        codeAlphaEntrepot: entrepot.id,
                         campagne: { id: this.societe.campagne.id },
                         dateDepartPrevue:
                             this.dateManagementService.findDate(0),
@@ -200,18 +201,18 @@ export class NouvelOrdreComponent implements OnInit {
                             : null,
                         ...(this.societe.id !== "BUK"
                             ? {
-                                  prixUnitaireTarifTransport: 0,
-                                  transporteurDEVPrixUnitaire: 0,
-                                  transporteur: { id: "-" },
-                                  bassinTransporteur: "",
-                              }
+                                prixUnitaireTarifTransport: 0,
+                                transporteurDEVPrixUnitaire: 0,
+                                transporteur: { id: "-" },
+                                bassinTransporteur: "",
+                            }
                             : {
-                                  transporteur: {
-                                      id: entrepot.transporteur?.id ?? "-",
-                                  },
-                                  prixUnitaireTarifTransport:
-                                      entrepot.prixUnitaireTarifTransport,
-                              }),
+                                transporteur: {
+                                    id: entrepot.transporteur?.id ?? "-",
+                                },
+                                prixUnitaireTarifTransport:
+                                    entrepot.prixUnitaireTarifTransport,
+                            }),
                         baseTarifTransport: entrepot.baseTarifTransport
                             ? { id: entrepot.baseTarifTransport.id }
                             : null,
@@ -222,6 +223,7 @@ export class NouvelOrdreComponent implements OnInit {
                             ? { id: entrepot.baseTarifTransit.id }
                             : null,
                         transporteurDEVTaux: 1,
+                        transporteurDEVCode: this.currentCompanyService.getCompany().devise.id,
                         prixUnitaireTarifTransport:
                             entrepot.prixUnitaireTarifTransport,
                         assistante,
@@ -230,23 +232,23 @@ export class NouvelOrdreComponent implements OnInit {
                             ? { id: entrepot.typeCamion.id }
                             : null,
                         ...(this.societe.id === "SA" &&
-                        this.authService.currentUser.getSUP()
+                            this.authService.currentUser.getSUP()
                             ? {
-                                  assistante: this.authService.currentUser
-                                      ?.assistante // Toujours pas
-                                      ? {
-                                            id: this.authService.currentUser
-                                                ?.assistante?.id,
-                                        }
-                                      : assistante,
-                                  commercial: this.authService.currentUser
-                                      ?.commercial // Pareil
-                                      ? {
-                                            id: this.authService.currentUser
-                                                ?.commercial?.id,
-                                        }
-                                      : commercial,
-                              }
+                                assistante: this.authService.currentUser
+                                    ?.assistante // Toujours pas
+                                    ? {
+                                        id: this.authService.currentUser
+                                            ?.assistante?.id,
+                                    }
+                                    : assistante,
+                                commercial: this.authService.currentUser
+                                    ?.commercial // Pareil
+                                    ? {
+                                        id: this.authService.currentUser
+                                            ?.commercial?.id,
+                                    }
+                                    : commercial,
+                            }
                             : {}),
                         // from `heriteClient.pbl`
                         codeClient: entrepot?.client.code,
@@ -293,52 +295,52 @@ export class NouvelOrdreComponent implements OnInit {
                             : null,
                         fraisUnite: entrepot?.client?.fraisMarketingModeCalcul
                             ? {
-                                  id: entrepot?.client?.fraisMarketingModeCalcul
-                                      .id,
-                              }
+                                id: entrepot?.client?.fraisMarketingModeCalcul
+                                    .id,
+                            }
                             : null,
                         ...(this.societe.id === "SA" &&
-                        this.authService.currentUser.getSUP() === "SUP" &&
-                        entrepot?.client?.courtier?.id === "LAPARRA"
+                            this.authService.currentUser.getSUP() === "SUP" &&
+                            entrepot?.client?.courtier?.id === "LAPARRA"
                             ? {
-                                  // On supprime les frais de courtage
-                                  courtier: { id: "" },
-                                  baseTarifCourtage: { id: "" },
-                                  prixUnitaireTarifCourtage: 0,
-                              }
+                                // On supprime les frais de courtage
+                                courtier: { id: "" },
+                                baseTarifCourtage: { id: "" },
+                                prixUnitaireTarifCourtage: 0,
+                            }
                             : {}),
                         // Gestion de la devise par société
                         ...(entrepot?.client?.devise.id ===
-                        this.societe?.devise.id
+                            this.societe?.devise.id
                             ? {
-                                  tauxDevise: 1,
-                              }
+                                tauxDevise: 1,
+                            }
                             : {
-                                  ...(entrepot?.client?.deviseTauxFix
-                                      ? {
-                                            ...(entrepot?.client
-                                                ?.dateDeviseTauxFix &&
-                                                Date.parse(
+                                ...(entrepot?.client?.deviseTauxFix
+                                    ? {
+                                        ...(entrepot?.client
+                                            ?.dateDeviseTauxFix &&
+                                            Date.parse(
+                                                entrepot.client
+                                                    .dateDeviseTauxFix,
+                                            ) < Date.now() &&
+                                            ((entrepot.client.dateDeviseTauxFix =
+                                                null),
+                                                {})),
+                                        ...(entrepot?.client
+                                            ?.dateDeviseTauxFix
+                                            ? {
+                                                tauxDevise:
+                                                    deviseRef?.taux,
+                                            }
+                                            : {
+                                                tauxDevise:
                                                     entrepot.client
                                                         .dateDeviseTauxFix,
-                                                ) < Date.now() &&
-                                                ((entrepot.client.dateDeviseTauxFix =
-                                                    null),
-                                                {})),
-                                            ...(entrepot?.client
-                                                ?.dateDeviseTauxFix
-                                                ? {
-                                                      tauxDevise:
-                                                          deviseRef?.taux,
-                                                  }
-                                                : {
-                                                      tauxDevise:
-                                                          entrepot.client
-                                                              .dateDeviseTauxFix,
-                                                  }),
-                                        }
-                                      : { tauxDevise: deviseRef?.taux }),
-                              }),
+                                            }),
+                                    }
+                                    : { tauxDevise: deviseRef?.taux }),
+                            }),
                     } as Partial<Ordre>,
                 }),
             ),

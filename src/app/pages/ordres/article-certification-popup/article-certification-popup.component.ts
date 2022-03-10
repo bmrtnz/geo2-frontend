@@ -1,22 +1,22 @@
-import { Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
-import { LocalizationService } from 'app/shared/services';
-import { DxPopupComponent, DxListComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import notify from 'devextreme/ui/notify';
-import OrdreLigne from 'app/shared/models/ordre-ligne.model';
-import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
-import { DepartementsService } from 'app/shared/services/api/departements.service';
-import { ZonesGeographiquesService } from 'app/shared/services/api/zones-geographiques.service';
-import { RegionsService } from 'app/shared/services/api/regions.service';
-import { ModesCultureService } from 'app/shared/services/api/modes-culture.service';
-import { CertificationsService } from 'app/shared/services/api/certification.service';
-import { CertificationsModesCultureService } from 'app/shared/services/api/certifications-modes-culture.service';
-import Ordre from 'app/shared/models/ordre.model';
+import { Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from "@angular/core";
+import { LocalizationService } from "app/shared/services";
+import { DxPopupComponent, DxListComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
+import OrdreLigne from "app/shared/models/ordre-ligne.model";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { DepartementsService } from "app/shared/services/api/departements.service";
+import { ZonesGeographiquesService } from "app/shared/services/api/zones-geographiques.service";
+import { RegionsService } from "app/shared/services/api/regions.service";
+import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
+import { CertificationsService } from "app/shared/services/api/certification.service";
+import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
+import Ordre from "app/shared/models/ordre.model";
 
 @Component({
-  selector: 'app-article-certification-popup',
-  templateUrl: './article-certification-popup.component.html',
-  styleUrls: ['./article-certification-popup.component.scss']
+  selector: "app-article-certification-popup",
+  templateUrl: "./article-certification-popup.component.html",
+  styleUrls: ["./article-certification-popup.component.scss"]
 })
 export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
 
@@ -54,14 +54,14 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
 
   displayNumeroBefore(data) {
     return data ?
-    (data.numero ? (data.numero.length === 1 ? '0' + data.numero : data.numero)
-     + ' - ' + data.libelle : data.libelle)
+    (data.numero ? (data.numero.length === 1 ? "0" + data.numero : data.numero)
+     + " - " + data.libelle : data.libelle)
      : null;
   }
 
   onShowing(e) {
 
-    e.component.content().parentNode.classList.add('article-certification-popup');
+    e.component.content().parentNode.classList.add("article-certification-popup");
     this.certlist.selectedItemKeys = null;
     this.newCertification = this.certification;
     // Retrieves article mode de culture cert
@@ -74,11 +74,11 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
             this.selectLastCertAdded();
           }
         }
-        this.certDataSource = this.certificationsService.getDataSource('id');
+        this.certDataSource = this.certificationsService.getDataSource("id");
         this.certDataSource.filter([
-          ['valide', '=', true],
-          'and',
-          ['maskTiers', 'startswith', '1'],
+          ["valide", "=", true],
+          "and",
+          ["maskTiers", "startswith", "1"],
         ]);
          // Retrieves all other certs
         this.certDataSource.load().then(certs => {
@@ -87,13 +87,13 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
           if (certs) {
             certs.map(cert => {
               this.certifications.push({text: this.formatCert(cert)});
-              if (this.certification?.split(',').includes(cert.id.toString())) this.selectLastCertAdded();
+              if (this.certification?.split(",").includes(cert.id.toString())) this.selectLastCertAdded();
             });
           }
           if (!this.certification) {
             this.ordre.client.certifications.map(certClt => {
               this.certifications.map(cert => {
-                if (certClt.certification.id === parseInt(cert.text.split('-')[0], 10)) {
+                if (certClt.certification.id === parseInt(cert.text.split("-")[0], 10)) {
                   this.certlist.selectedItemKeys.push(cert);
                 }
               });
@@ -115,7 +115,7 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
   }
 
   formatCert(data) {
-    return data.id + ' - ' + data.description;
+    return data.id + " - " + data.description;
   }
 
   hidePopup() {
@@ -125,21 +125,21 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
   saveCertification() {
 
     const list = [];
-    this.certlist.selectedItemKeys.map(cert => list.push(parseInt(cert.text.split('-')[0], 10)));
-    this.newCertification = list.join(',');
+    this.certlist.selectedItemKeys.map(cert => list.push(parseInt(cert.text.split("-")[0], 10)));
+    this.newCertification = list.join(",");
 
     const ordreLigne = {id : this.ordreLigne.id, listeCertifications: this.newCertification};
-    this.OrdreLigneService.save_v2(['id', 'listeCertifications'], {
+    this.OrdreLigneService.save_v2(["id", "listeCertifications"], {
       ordreLigne,
     })
     .subscribe({
       next: () => {
-        notify(this.localizeService.localize('articles-save-certification'), 'success', 3000);
+        notify(this.localizeService.localize("articles-save-certification"), "success", 2000);
         this.changeLigne.emit(null);
       },
       error: (err) => {
         console.log(err);
-        notify(this.localizeService.localize('articles-save-certification-error'), 'error', 3000);
+        notify(this.localizeService.localize("articles-save-certification-error"), "error", 2000);
       }
     });
     this.hidePopup();

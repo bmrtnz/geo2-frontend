@@ -7,11 +7,10 @@
   (onShowing)="onShowing($event)"
   [resizeEnabled]="true"
 >
-
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view width="100%" height="100%">
       <app-articles [articleLigneId]="articleLigneId"></app-articles>
-      <br>
+      <br />
     </dx-scroll-view>
   </div>
 </dx-popup>

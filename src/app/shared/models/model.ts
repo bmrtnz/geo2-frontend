@@ -39,15 +39,15 @@ const DEFAULT_FILTER = /.*/;
  */
 export const Field =
     (options: ModelFieldOptions = {}) =>
-    (target: any, key: string | symbol) => {
-        Object.defineProperty(target, "fields", {
-            value: {
-                ...target.fields,
-                [key]: options,
-            },
-            writable: true,
-        });
-    };
+        (target: any, key: string | symbol) => {
+            Object.defineProperty(target, "fields", {
+                value: {
+                    ...target.fields,
+                    [key]: options,
+                },
+                writable: true,
+            });
+        };
 
 /**
  * Base abstract class for model definition
@@ -66,8 +66,8 @@ export abstract class Model {
                 this[field] =
                     rawEntity[field].length !== undefined
                         ? rawEntity[field].map(
-                              (e) => new (options.fetchedModel as any)(e),
-                          )
+                            (e) => new (options.fetchedModel as any)(e),
+                        )
                         : new (options.fetchedModel as any)(rawEntity[field]);
             else this[field] = rawEntity[field];
         }

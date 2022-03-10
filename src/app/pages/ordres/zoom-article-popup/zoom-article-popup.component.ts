@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, Input, OnChanges } from '@angular/core';
-import { LocalizationService } from 'app/shared/services';
+import { AfterViewInit, Component, Input, OnChanges } from "@angular/core";
+import { LocalizationService } from "app/shared/services";
 
 @Component({
-  selector: 'app-zoom-article-popup',
-  templateUrl: './zoom-article-popup.component.html',
-  styleUrls: ['./zoom-article-popup.component.scss']
+  selector: "app-zoom-article-popup",
+  templateUrl: "./zoom-article-popup.component.html",
+  styleUrls: ["./zoom-article-popup.component.scss"]
 })
 
 export class ZoomArticlePopupComponent implements AfterViewInit, OnChanges {
@@ -26,11 +26,11 @@ export class ZoomArticlePopupComponent implements AfterViewInit, OnChanges {
   }
 
   setTitle() {
-    this.title = this.localizeService.localize('zoom-article') + this.articleLigneId;
+    this.title = this.localizeService.localize("zoom-article") + this.articleLigneId;
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add('zoom-article-popup');
+    e.component.content().parentNode.classList.add("zoom-article-popup");
   }
 
 }

@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import DataSource from 'devextreme/data/data_source';
-import { LoadOptions } from 'devextreme/data/load_options';
-import { ZoneGeographique } from '../../models';
-import { APIRead, ApiService, RelayPage } from '../api.service';
+import { Injectable } from "@angular/core";
+import { Apollo } from "apollo-angular";
+import DataSource from "devextreme/data/data_source";
+import { LoadOptions } from "devextreme/data/load_options";
+import { ZoneGeographique } from "../../models";
+import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ZonesGeographiquesService extends ApiService implements APIRead {
 

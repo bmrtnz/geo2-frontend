@@ -1,18 +1,18 @@
-import { Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
-import { LocalizationService } from 'app/shared/services';
-import { DxPopupComponent, DxListComponent } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import notify from 'devextreme/ui/notify';
-import OrdreLigne from 'app/shared/models/ordre-ligne.model';
-import { OrdreLignesService } from 'app/shared/services/api/ordres-lignes.service';
-import { DepartementsService } from 'app/shared/services/api/departements.service';
-import { ZonesGeographiquesService } from 'app/shared/services/api/zones-geographiques.service';
-import { RegionsService } from 'app/shared/services/api/regions.service';
+import { Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from "@angular/core";
+import { LocalizationService } from "app/shared/services";
+import { DxPopupComponent, DxListComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
+import OrdreLigne from "app/shared/models/ordre-ligne.model";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { DepartementsService } from "app/shared/services/api/departements.service";
+import { ZonesGeographiquesService } from "app/shared/services/api/zones-geographiques.service";
+import { RegionsService } from "app/shared/services/api/regions.service";
 
 @Component({
-  selector: 'app-article-origine-popup',
-  templateUrl: './article-origine-popup.component.html',
-  styleUrls: ['./article-origine-popup.component.scss']
+  selector: "app-article-origine-popup",
+  templateUrl: "./article-origine-popup.component.html",
+  styleUrls: ["./article-origine-popup.component.scss"]
 })
 export class ArticleOriginePopupComponent implements OnInit, OnChanges {
 
@@ -41,17 +41,17 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
 
   ) {
     this.localSegment = [
-      'departement',
-      'region',
-      'zone'
+      "departement",
+      "region",
+      "zone"
     ];
     this.displaySegment = this.displaySegment.bind(this);
    }
 
   ngOnInit() {
-    this.departementDataSource = this.departementsService.getDataSource_v2(['id', 'numero', 'libelle']);
-    this.regionDataSource = this.regionsService.getDataSource_v2(['id', 'libelle']);
-    this.zoneGeographiqueDataSource = this.zonesGeographiquesService.getDataSource_v2(['id', 'libelle']);
+    this.departementDataSource = this.departementsService.getDataSource_v2(["id", "numero", "libelle"]);
+    this.regionDataSource = this.regionsService.getDataSource_v2(["id", "libelle"]);
+    this.zoneGeographiqueDataSource = this.zonesGeographiquesService.getDataSource_v2(["id", "libelle"]);
   }
 
   ngOnChanges() {
@@ -60,8 +60,8 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
 
   displayNumeroBefore(data) {
     return data ?
-    (data.numero ? (data.numero.length === 1 ? '0' + data.numero : data.numero)
-     + ' - ' + data.libelle : data.libelle)
+    (data.numero ? (data.numero.length === 1 ? "0" + data.numero : data.numero)
+     + " - " + data.libelle : data.libelle)
      : null;
   }
 
@@ -75,11 +75,11 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   }
 
   displaySegment(data) {
-      return data ? this.localizeService.localize('articles-liste-origine-' + data) : null;
+      return data ? this.localizeService.localize("articles-liste-origine-" + data) : null;
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add('article-origine-popup');
+    e.component.content().parentNode.classList.add("article-origine-popup");
     this.geolist.selectedItemKeys = null;
     this.dataSource = this.departementDataSource;
     this.geolist.instance.repaint();
@@ -101,18 +101,18 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   }
 
   saveOrigine() {
-    const ordreLigne = {id : this.ordreLigne.id, origineCertification: this.newOrigine ? this.newOrigine : ''};
-    this.OrdreLigneService.save_v2(['id', 'origineCertification'], {
+    const ordreLigne = {id : this.ordreLigne.id, origineCertification: this.newOrigine ? this.newOrigine : ""};
+    this.OrdreLigneService.save_v2(["id", "origineCertification"], {
       ordreLigne,
     })
     .subscribe({
       next: () => {
-        notify(this.localizeService.localize('articles-save-origin'), 'success', 3000);
+        notify(this.localizeService.localize("articles-save-origin"), "success", 2000);
         this.changeLigne.emit(null);
       },
       error: (err) => {
         console.log(err);
-        notify(this.localizeService.localize('articles-save-origin-error'), 'error', 3000);
+        notify(this.localizeService.localize("articles-save-origin-error"), "error", 2000);
       }
     });
     this.hidePopup();

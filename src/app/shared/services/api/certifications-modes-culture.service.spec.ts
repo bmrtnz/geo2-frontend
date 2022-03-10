@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { CertificationsModesCultureService } from './certifications-modes-culture.service';
+import { CertificationsModesCultureService } from "./certifications-modes-culture.service";
 
-describe('CertificationsModesCultureService', () => {
+describe("CertificationsModesCultureService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
+  it("should be created", () => {
     const service: CertificationsModesCultureService = TestBed.get(CertificationsModesCultureService);
     expect(service).toBeTruthy();
   });

@@ -2,69 +2,76 @@
 @import "~themes/generated/variables.base";
 @import "~scss/variables.scss";
 
-.down-move-button, .up-move-button {
-    position: absolute;
-    z-index: 2;
-    margin-top: 6px;
-    right: 220px;
-    &.down-move-button {
-        right: 149px;
-    }
+.down-move-button,
+.up-move-button {
+  position: absolute;
+  z-index: 2;
+  margin-top: 6px;
+  right: 220px;
+  &.down-move-button {
+    right: 149px;
+  }
 }
 
-::ng-deep .grid-ordre-ligne .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
-    input, div {
-        color: #FFF;
-    }
+::ng-deep
+  .grid-ordre-ligne
+  .dx-row-focused:not(.dx-edit-row)
+  td:not(.dx-focused):first-of-type {
+  input,
+  div {
+    color: #fff;
+  }
 }
 ::ng-deep .grid-ordre-ligne {
-    td:first-of-type input {
-        text-align: center !important;
-    }
-    .bio-article {
-        color: #39970e !important;
-        cursor: pointer;
-    }
-    .dx-editor-cell.dx-focused:not(.dx-datagrid-readonly) {
-        background: rgba(51,145,176,0.26);
-    }
+  td:first-of-type input {
+    text-align: center !important;
+  }
+  .bio-article {
+    color: #39970e !important;
+    cursor: pointer;
+  }
+  .dx-editor-cell.dx-focused:not(.dx-datagrid-readonly) {
+    background: rgba(51, 145, 176, 0.26);
+  }
 
-    .dx-row-focused.dx-data-row > td:not(.dx-focused):not(:first-of-type) {
-        color: #000;
-        background-color: transparent !important;
-    }
-    .td:first-of-type input {
-        text-align: center !important;
-    }
-    .dx-row-focused.dx-data-row > td {
-        border-bottom-color: #e0e0e0 !important;
-    }
-    .dx-link-delete {
-        color: $base-accent !important;
-        background-color: transparent !important;
-    }
-    .dx-datagrid-focus-overlay:after {  
-        background-color: transparent; 
-    }
+  .dx-row-focused.dx-data-row > td:not(.dx-focused):not(:first-of-type) {
+    color: #000;
+    background-color: transparent !important;
+  }
+  .td:first-of-type input {
+    text-align: center !important;
+  }
+  .dx-row-focused.dx-data-row > td {
+    // border-bottom-color: #e0e0e0 !important;
+    border-bottom-color: $base-accent !important;
+  }
+  .dx-link-delete {
+    color: $base-accent !important;
+    background-color: transparent !important;
+  }
+  .dx-datagrid-focus-overlay:after {
+    background-color: transparent;
+  }
 }
 ::ng-deep .small-article-button {
-    height: 18px;
-    min-width: 0;
-    padding: 0 4px !important;
-    .dx-button-content {
-        padding: 0;
-        font-size: 10px;
-        .dx-button-text {
-            line-height: 19px; 
-        }
+  height: 18px;
+  min-width: 0;
+  padding: 0 4px !important;
+  .dx-button-content {
+    padding: 0;
+    font-size: 10px;
+    .dx-button-text {
+      line-height: 19px;
     }
-    &.certification {
-        background-color: $BW-purple-medium !important;
-        &:hover {
-            background-color: $BW-purple-dark !important;
-        }
+  }
+  &.certification {
+    background-color: $BW-purple-medium !important;
+    &:hover {
+      background-color: $BW-purple-dark !important;
     }
+  }
 }
-::ng-deep .cursor-pointer {
-    cursor: pointer !important;
+::ng-deep .cursor-pointer,
+::ng-deep .cursor-pointer input {
+  cursor: pointer !important;
 }

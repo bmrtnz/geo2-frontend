@@ -1,11 +1,11 @@
 
-import { AfterViewInit, Component, Input } from '@angular/core';
-import { LocalizationService } from 'app/shared/services';
+import { AfterViewInit, Component, Input } from "@angular/core";
+import { LocalizationService } from "app/shared/services";
 
 @Component({
-  selector: 'app-zoom-fournisseur-popup',
-  templateUrl: './zoom-fournisseur-popup.component.html',
-  styleUrls: ['./zoom-fournisseur-popup.component.scss']
+  selector: "app-zoom-fournisseur-popup",
+  templateUrl: "./zoom-fournisseur-popup.component.html",
+  styleUrls: ["./zoom-fournisseur-popup.component.scss"]
 })
 
 export class ZoomFournisseurPopupComponent implements AfterViewInit {
@@ -24,11 +24,11 @@ export class ZoomFournisseurPopupComponent implements AfterViewInit {
   }
 
   setTitle(fournisseur) {
-    this.title = this.localizeService.localize('zoom-fournisseur') + fournisseur;
+    this.title = this.localizeService.localize("zoom-fournisseur") + fournisseur;
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add('zoom-fournisseur-popup');
+    e.component.content().parentNode.classList.add("zoom-fournisseur-popup");
   }
 
 }
