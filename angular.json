@@ -23,7 +23,9 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "allowedCommonJsDependencies": ["devextreme"],
+            "allowedCommonJsDependencies": [
+              "devextreme"
+            ],
             "aot": false,
             "assets": [
               "src/favicon.ico",
@@ -31,7 +33,6 @@
             ],
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
-
               "src/themes/generated/theme.base.css",
               "src/themes/generated/theme.additional.css",
               "src/styles.scss"
@@ -59,7 +60,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumError": "6mb"
                 },
                 {
                   "type": "anyComponentStyle",
