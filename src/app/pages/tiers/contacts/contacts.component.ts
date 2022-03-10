@@ -54,7 +54,7 @@ export class ContactsComponent implements OnInit, NestedPart {
         public authService: AuthService,
         public gridConfiguratorService: GridConfiguratorService,
         public gridRowStyleService: GridRowStyleService,
-    ) {}
+    ) { }
 
     async ngOnInit() {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -110,24 +110,25 @@ export class ContactsComponent implements OnInit, NestedPart {
             ]);
         }
     }
-
     enableFilters() {
         this.contacts.filter([
             ["codeTiers", "=", this.codeTiers],
             "and",
             ["typeTiers", "=", this.typeTiers],
+            "and",
+            ["societe.id", "=", this.currentCompanyService.getCompany().id]
         ]);
     }
 
     displayIDBefore(data) {
         return data
             ? data.id +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
             : null;
     }
 
