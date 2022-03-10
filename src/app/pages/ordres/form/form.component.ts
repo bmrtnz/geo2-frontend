@@ -137,6 +137,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public transporteursDS: DataSource;
     public typeTransportDS: DataSource;
     public baseTarifTransportDS: DataSource;
+    public fraisClient: string;
+    public gestEntrepot: string;
+    public instructionsComm: string;
 
     @ViewChild(FileManagerComponent, { static: false })
     fileManagerComponent: FileManagerComponent;
@@ -387,12 +390,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(ordre => {
                 this.ordre = ordre;
                 if (this.ordre === null) return;
-                if (this.comLog) this.comLog.instance.option("hint", this.ordre.instructionsLogistiques);
+                this.fraisClient = this.getFraisClient();
+                this.gestEntrepot = this.getGestEntrepot();
+                this;
                 this.fetchFullOrderNumber();
                 if (this.ordre.numero) this.status = " - " + Statut[this.ordre.statut] + (this.ordre.factureEDI ? " EDI" : "");
                 this.refOrdre = this.ordre?.id ? ordre.id : "-";
                 this.canDuplicate = !!this?.ordre?.id;
                 this.formGroup.reset(ordre);
+                const instLog = this.getInstructionsLog();
+                this.instructionsComm = this.getinstructionsComm();
+                if (this.comLog) this.comLog.instance.option("hint", instLog);
                 this.addLinkedOrders();
                 this.refreshBadges();
                 window.sessionStorage.setItem("idOrdre", this.ordre.id);
@@ -494,6 +502,54 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.dotCQ = this.ordre.cqLignesCount;
             this.dotCommentaires = this.ordre.commentairesOrdreCount;
         }
+    }
+
+    getFraisClient() {
+
+        const fraisPU = this.ordre.fraisPrixUnitaire;
+        let fraisUnite = this.ordre.fraisUnite?.id;
+        const fraisPlateforme = this.ordre.fraisPlateforme;
+        let messFraisPlateforme = "";
+
+        if (fraisPlateforme > 0) {
+            messFraisPlateforme = "Frais plateforme "
+                + fraisPlateforme + " "
+                + this.currentCompanyService.getCompany().devise.id
+                + " le kilo";
+        }
+
+        if (!fraisUnite) fraisUnite = "";
+
+        return "Frais client " + fraisPU + " " + fraisUnite + " " + messFraisPlateforme;
+
+    }
+
+    getGestEntrepot() {
+        if (!this.ordre.entrepot.gestionnaireChep) return;
+        return this.ordre.entrepot.gestionnaireChep
+            + " " + this.ordre.entrepot.referenceChep;
+    }
+
+    getInstructionsLog() {
+        if (!this.ordre.instructionsLogistiques) {
+            const instClt = this.ordre.client.instructionLogistique ?
+                this.ordre.client.instructionLogistique : "";
+            const instEnt = this.ordre.entrepot.instructionLogistique ?
+                this.ordre.entrepot.instructionLogistique : "";
+            this.formGroup.get("instructionsLogistiques")
+                .patchValue(instClt + (instClt ? " " : "") + instEnt);
+            return instClt + (instClt ? " " : "") + instEnt;
+        } else {
+            return this.ordre.instructionsLogistiques;
+        }
+    }
+
+    getinstructionsComm() {
+        const instCommClt = this.ordre.client.instructionCommercial ?
+            this.ordre.client.instructionCommercial : "";
+        const instCommEnt = this.ordre.entrepot.instructionSecretaireCommercial ?
+            this.ordre.entrepot.instructionSecretaireCommercial : "";
+        return instCommClt + (instCommClt ? " " : "") + instCommEnt;
     }
 
 }

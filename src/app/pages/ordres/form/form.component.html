@@ -221,8 +221,7 @@
                             formControlName="entrepot"
                             [dataSource]="entrepotDS"
                             [displayExpr]="displayCodeBefore"
-                            [searchEnabled]="true"
-                            [searchExpr]="['id', 'raisonSocial']"
+                            [readOnly]="true"
                           >
                             <dx-validator
                               name="{{ 'ordres-entrepotLivre' | localize }}"
@@ -673,12 +672,25 @@
                                 class="thin-checkbox"
                                 [disabled]="true"
                                 formControlName="venteACommission"
-                              ></dx-check-box>
+                              >
+                              </dx-check-box>
                             </div>
                           </div>
                         </dxi-item>
                         <dxi-item [ratio]="1"></dxi-item>
                         <dxi-item [ratio]="4"> </dxi-item>
+                      </dx-box>
+                      <dx-box>
+                        <dxi-item [ratio]="9">
+                          <!-- CHEP et frais client -->
+                          <div class="dx-field red-font info-supp">
+                            {{ gestEntrepot }}<br />{{ fraisClient }}
+                          </div>
+                          <!-- Instructions internes -->
+                          <div class="dx-field blue-font info-supp">
+                            {{ instructionsComm }}
+                          </div>
+                        </dxi-item>
                       </dx-box>
 
                       <!-- <dx-box>
@@ -846,7 +858,8 @@
                       [hidden]="!dotLitiges"
                       #gridLitigesLignes
                       [ordre]="ordre"
-                    ></app-grid-litiges-lignes>
+                    >
+                    </app-grid-litiges-lignes>
                   </dxi-item>
                 </dx-accordion>
               </div>
@@ -1015,7 +1028,8 @@
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
     (lignesChanged)="onLignesChanged($event)"
-  ></app-ajout-articles-manu-popup>
+  >
+  </app-ajout-articles-manu-popup>
   <app-file-manager-popup
     key="ordres"
     [subTitle]="ordre.numero"

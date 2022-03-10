@@ -1,5 +1,6 @@
 // Var
 @import "~scss/variables.scss";
+@import "~themes/generated/variables.base";
 
 ::ng-deep .form-ordres-page {
   margin-right: 20px;
@@ -91,6 +92,12 @@
 }
 .red-font {
   color: #ff325a;
+}
+.blue-font {
+  color: $base-accent;
+}
+.info-supp {
+  font-size: 16px;
 }
 .shiftedRight {
   margin-right: 50px;
