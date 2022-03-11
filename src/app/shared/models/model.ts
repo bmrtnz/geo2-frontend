@@ -294,6 +294,14 @@ export abstract class Model {
         return fields.length ? fields.shift() : false;
     }
 
+    /**
+     * Return the field decorated as custom label
+     */
+    static getCustomLabelField() {
+        const fields = this.getFieldsWithAttribute("asCustomLabel");
+        return fields.length ? fields.shift() : false;
+    }
+
     static getFields(): { [field: string]: ModelFieldOptions } {
         return this.prototype.constructor.prototype.fields;
     }

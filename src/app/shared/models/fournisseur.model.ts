@@ -24,7 +24,7 @@ export enum NatureStation {
 @ModelName("Fournisseur")
 export class Fournisseur extends Model {
     @Field({ asKey: true }) public id: string;
-    @Field() public code: string;
+    @Field({ asLabel: true }) public code: string;
     @Field({ model: import("./identifiant.fournisseur.model") })
     public identifiant: IdentifiantFournisseur;
     @Field({ asLabel: true }) public raisonSocial: string;

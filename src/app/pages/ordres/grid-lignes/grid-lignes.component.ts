@@ -5,7 +5,7 @@ import { environment } from "environments/environment";
 import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services/localization.service";
-import { DxDataGridComponent, DxPopupComponent } from "devextreme-angular";
+import { DxDataGridComponent } from "devextreme-angular";
 import { GridColumn, TotalItem } from "basic";
 import { SummaryType, SummaryInput } from "app/shared/services/api.service";
 import { from, Observable } from "rxjs";
@@ -21,7 +21,6 @@ import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
-import { CertificationClient, Certification } from "app/shared/models";
 
 @Component({
   selector: "app-grid-lignes",
@@ -274,15 +273,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.switchNumero = this.datagrid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
     this.datagrid.instance.cellValue(this.currentfocusedRow + moveDirection, "numero", this.currNumero);
     this.datagrid.instance.cellValue(this.currentfocusedRow, "numero", this.switchNumero);
-    this.datagrid.focusedRowIndex = -1;
     this.datagrid.instance.saveEditData();
   }
 
   onValueChanged(event, cell) {
-    console.log("onValueChanged");
     if (cell.setValue) {
-      this.cellValueChange(event);
       cell.setValue(event.value);
+      this.cellValueChange(event);
       this.idLigne = cell.data.id;
       this.dataField = cell.column.dataField;
     }
@@ -360,13 +357,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
       this.newArticles = 0;
       this.newNumero = 0;
       this.nbInsertedArticles = null;
+      // this.datagrid.instance.clearSelection();
+      this.datagrid.instance.option("focusedRowIndex", this.gridRowsTotal); // Focus on 1st added item
       this.datagrid.instance.saveEditData();
     }
   }
 
   cellValueChange(data) {
-
-    console.log("data : ", data);
 
     if (!this.dataField) return;
     const dataField = this.dataField;
@@ -377,82 +374,44 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
       case "nombrePalettesCommandees": {
         this.functionsService.onChangeCdeNbPal(idLigne, this.ordre.secteurCommercial.id)
-          .valueChanges
-          .subscribe(res => {
-            this.datagrid.instance.refresh();
-          });
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
         break;
       }
       case "nombrePalettesIntermediaires": {
         this.functionsService.onChangeDemipalInd(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges
-          .subscribe(res => {
-            this.datagrid.instance.refresh();
-          });
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
         break;
       }
       case "nombreColisPalette": {
         this.functionsService.onChangePalNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges
-          .subscribe(res => {
-            this.datagrid.instance.refresh();
-          });
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
         break;
       }
       case "nombreColisCommandes": {
         this.functionsService.onChangeCdeNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges
-          .subscribe(res => {
-            this.datagrid.instance.refresh();
-          });
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
         break;
       }
-      // case "proprietaireMarchandise": {
-      //   this.dataField = null;
-      //   let newFour = null;
-      //   const listExp = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise?.listeExpediteurs;
-      //   const filters = [];
-      //   if (listExp) {
-      //     listExp.split(",").map(exp => {
-      //       filters.push(["code", "=", exp]);
-      //       filters.push("or");
-      //     });
-      //     filters.pop();
-      //   } else {
-      //     newFour = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise.id;
-      //     filters.push(["id", "=", newFour]);
-      //   }
-      //   this.filterFournisseurDS(filters);
-      //   // data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur");
-      //   data.component
-      //     .cellValue(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur", { id: newFour });
-      //   // data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "proprietaireMarchandise");
-      //   this.datagrid.instance.saveEditData();
-      //   break;
-      // }
       case "proprietaireMarchandise": {
         this.dataField = null;
-        let newFour = null;
-        console.log(data);
-        const listExp = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise?.listeExpediteurs;
+        let newFourId = null;
+        let newFourCode = null;
+        const proprietaireMarchandise = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise;
+        const listExp = proprietaireMarchandise?.listeExpediteurs;
         const filters = [];
         if (listExp) {
-          listExp.split(",").map(exp => {
-            filters.push(["code", "=", exp]);
-            filters.push("or");
-          });
+          listExp.split(",").map(exp => filters.push(["code", "=", exp], "or"));
           filters.pop();
         } else {
-          newFour = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise.id;
-          filters.push(["id", "=", newFour]);
+          newFourId = proprietaireMarchandise?.id ? proprietaireMarchandise.id : null;
+          newFourCode = proprietaireMarchandise?.code ? proprietaireMarchandise.code : null;
+          filters.push(["id", "=", newFourId]);
         }
         this.filterFournisseurDS(filters);
-        data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur");
-        data.component
-          .cellValue(data.component.getRowIndexByKey(data.changes[0].key), "fournisseur",
-            { id: newFour, raisonSocial: data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise.raisonSocial });
-        // data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "proprietaireMarchandise");
-        this.datagrid.instance.saveEditData();
+        data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
+          "fournisseur",
+          { id: newFourId, code: newFourCode });
+        setTimeout(() => this.datagrid.instance.saveEditData());
         break;
       }
 
