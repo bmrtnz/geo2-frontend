@@ -360,16 +360,27 @@ export class ClientDetailsComponent
             ],
         ]);
         this.typesClient = this.typesClientService.getDataSource();
+        this.typesClient.filter(["valide", "=", "true"]);
         this.incoterms = this.incotermsService.getDataSource();
+        this.incoterms.filter(["valide", "=", "true"]);
         this.regimesTva = this.regimesTvaService.getDataSource();
+        this.regimesTva.filter(["valide", "=", "true"]);
         this.devises = this.devisesService.getDataSource();
+        this.devises.filter(["valide", "=", "true"]);
         this.moyensPaiement = this.moyensPaiementService.getDataSource();
+        this.moyensPaiement.filter(["valide", "=", "true"]);
         this.basesPaiement = this.basesPaiementService.getDataSource();
+        this.basesPaiement.filter(["valide", "=", "true"]);
         this.typesVente = this.typesVenteService.getDataSource();
+        this.typesVente.filter(["valide", "=", "true"]);
         this.groupesClient = this.groupesClientService.getDataSource();
+        this.groupesClient.filter(["valide", "=", "true"]);
         this.courtiers = this.courtiersService.getDataSource();
+        this.courtiers.filter(["valide", "=", "true"]);
         this.basesTarif = this.basesTarifService.getDataSource();
+        this.basesTarif.filter(["valide", "=", "true"]);
         this.conditionsVente = this.conditionsVenteService.getDataSource();
+        this.conditionsVente.filter(["valide", "=", "true"]);
         this.certifications = this.certificationsService.getDataSource();
         this.paloxRaisonSocial = this.clientsService.getDataSource_v2([
             "id",
@@ -416,12 +427,12 @@ export class ClientDetailsComponent
     displayIDBefore(data) {
         return data
             ? data.id +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
             : null;
     }
 
@@ -580,12 +591,12 @@ export class ClientDetailsComponent
         );
 
         (client.valide !== undefined &&
-        (this.client.valide !== client.valide || validModif) &&
-        !this.createMode
+            (this.client.valide !== client.valide || validModif) &&
+            !this.createMode
             ? this.validatePopup.present(HistoryType.CLIENT, {
-                  client: { id: client.id },
-                  valide: client.valide,
-              })
+                client: { id: client.id },
+                valide: client.valide,
+            })
             : of(undefined)
         )
             .pipe(

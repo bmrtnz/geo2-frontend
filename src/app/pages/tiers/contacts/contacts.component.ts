@@ -91,13 +91,17 @@ export class ContactsComponent implements OnInit, NestedPart {
 
     }
     enableFilters() {
-        this.contacts.filter([
+        const filter = [
             ["codeTiers", "=", this.codeTiers],
             "and",
-            ["typeTiers", "=", this.typeTiers],
-            "and",
-            ["societe.id", "=", this.currentCompanyService.getCompany().id]
-        ]);
+            ["typeTiers", "=", this.typeTiers]
+        ];
+        // Seuls les clients et entrepôts sont rattachés à une société
+        if (this.typeTiers === "C" || this.typeTiers === "E") {
+            filter.push("and", ["societe.id", "=", this.currentCompanyService.getCompany().id]);
+        }
+
+        this.contacts.filter(filter);
     }
 
     displayIDBefore(data) {
@@ -137,7 +141,9 @@ export class ContactsComponent implements OnInit, NestedPart {
     onRowInserting(event) {
         (event.data as Contact).codeTiers = this.codeTiers;
         (event.data as Contact).typeTiers = this.typeTiers;
-        (event.data as Contact).societe = this.currentCompanyService.getCompany();
+        // Seuls les clients et entrepôts sont rattachés à une société
+        if (this.typeTiers === "C" || this.typeTiers === "E")
+            (event.data as Contact).societe = this.currentCompanyService.getCompany();
     }
 
     onRowClick({ rowIndex }) {
