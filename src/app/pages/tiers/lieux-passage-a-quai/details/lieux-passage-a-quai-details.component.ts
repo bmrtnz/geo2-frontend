@@ -152,9 +152,13 @@ export class LieuxPassageAQuaiDetailsComponent
         this.pays = this.paysService.getDataSource_v2(["id", "description"]);
         this.pays.filter(["valide", "=", "true"]);
         this.regimesTva = this.regimesTvaService.getDataSource();
+        this.regimesTva.filter(["valide", "=", "true"]);
         this.devises = this.devisesService.getDataSource();
+        this.devises.filter(["valide", "=", "true"]);
         this.moyensPaiement = this.moyensPaiementService.getDataSource();
+        this.moyensPaiement.filter(["valide", "=", "true"]);
         this.basesPaiement = this.basesPaiementService.getDataSource();
+        this.basesPaiement.filter(["valide", "=", "true"]);
     }
 
     checkCode(params) {
@@ -208,12 +212,12 @@ export class LieuxPassageAQuaiDetailsComponent
     displayIDBefore(data) {
         return data
             ? data.id +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
             : null;
     }
 

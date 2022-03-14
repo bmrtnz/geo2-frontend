@@ -163,9 +163,13 @@ export class TransporteurDetailsComponent
         this.pays = this.paysService.getDataSource_v2(["id", "description"]);
         this.pays.filter(["valide", "=", "true"]);
         this.regimesTva = this.regimesTvaService.getDataSource();
+        this.regimesTva.filter(["valide", "=", "true"]);
         this.devises = this.devisesService.getDataSource();
+        this.devises.filter(["valide", "=", "true"]);
         this.moyensPaiement = this.moyensPaiementService.getDataSource();
+        this.moyensPaiement.filter(["valide", "=", "true"]);
         this.basesPaiement = this.basesPaiementService.getDataSource();
+        this.basesPaiement.filter(["valide", "=", "true"]);
         this.clientsRaisonSocial = this.clientsService.getDataSource_v2([
             "id",
             "raisonSocial",
@@ -235,12 +239,12 @@ export class TransporteurDetailsComponent
     displayIDBefore(data) {
         return data
             ? data.id +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
             : null;
     }
 

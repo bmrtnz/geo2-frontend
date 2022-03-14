@@ -210,12 +210,19 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.pays = this.paysService.getDataSource_v2(["id", "description"]);
         this.pays.filter(["valide", "=", "true"]);
         this.typesPalette = this.typesPaletteService.getDataSource();
+        this.typesPalette.filter(["valide", "=", "true"]);
         this.incoterms = this.incotermsService.getDataSource();
+        this.incoterms.filter(["valide", "=", "true"]);
         this.regimesTva = this.regimesTvaService.getDataSource();
+        this.regimesTva.filter(["valide", "=", "true"]);
         this.transporteurs = this.transporteursService.getDataSource_v2(["id", "raisonSocial", "ville"]);
+        this.transporteurs.filter(["valide", "=", "true"]);
         this.basesTarif = this.basesTarifService.getDataSource();
+        this.basesTarif.filter(["valide", "=", "true"]);
         this.typesCamion = this.typesCamionService.getDataSource();
+        this.typesCamion.filter(["valide", "=", "true"]);
         this.transitaires = this.transitairesService.getDataSource();
+        this.transitaires.filter(["valide", "=", "true"]);
     }
 
     ngAfterViewInit(): void {
