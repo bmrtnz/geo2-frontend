@@ -22,6 +22,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { cpuUsage } from "process";
 
 @Component({
   selector: "app-grid-lignes",
@@ -395,7 +396,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (!this.dataField) return;
     const dataField = this.dataField;
     const idLigne = this.idLigne;
-    console.log(dataField, " has been changed");
+    console.log(dataField, "has been changed");
 
     switch (dataField) {
 
@@ -419,7 +420,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
           .valueChanges.subscribe(() => this.datagrid.instance.refresh());
         break;
       }
-      case "proprietaireMarchandise": {
+      case "proprietaireMarchandise": { // Adjust fournisseurs list & other stuff
         this.dataField = null;
         const proprietaireMarchandise = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise;
         this.updateFournisseurField(proprietaireMarchandise);
@@ -427,6 +428,16 @@ export class GridLignesComponent implements OnChanges, OnInit {
           "fournisseur",
           { id: this.newFourId, code: this.newFourCode });
         setTimeout(() => this.datagrid.instance.saveEditData());
+        break;
+      }
+      case "ventePrixUnitaire": { // Unckeck 'gratuit' when an unit price is set
+        if (data.changes[0].data.data.saveOrdreLigne.gratuit &&
+          data.changes[0].data.data.saveOrdreLigne.ventePrixUnitaire) {
+          data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "gratuit");
+          data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
+            "gratuit", false);
+          setTimeout(() => this.datagrid.instance.saveEditData());
+        }
         break;
       }
 
