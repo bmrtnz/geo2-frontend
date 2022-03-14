@@ -5,7 +5,6 @@
   <dx-button [focusStateEnabled]="false" class="up-move-button" type="normal" text="up" icon="arrowup"
     hint="{{ 'hint-deplacer-ligne-haut' | localize }}" [disabled]="!currentfocusedRow || env.production"
     (onClick)="moveRowUpDown($event)"></dx-button>
-
   <dx-data-grid class="dx-card wide-card" [focusedRowEnabled]="true" [remoteOperations]="true" [showBorders]="false"
     [elementAttr]="{ class: 'grid-ordre-ligne' }" [focusedRowIndex]="0" [columnAutoWidth]="true"
     [columnHidingEnabled]="false" [allowColumnReordering]="true" (onCellPrepared)="onCellPrepared($event)"

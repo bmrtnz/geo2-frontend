@@ -21,6 +21,7 @@ import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
 @Component({
   selector: "app-grid-lignes",
@@ -70,6 +71,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public SelectBoxPopupWidth: number;
   public dataField: string;
   public idLigne: string;
+  public newFourId: string;
+  public newFourCode: string;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -80,6 +83,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     public achatUniteService: BasesTarifService,
     public venteUniteService: BasesTarifService,
     public fraisUniteService: BasesTarifService,
+    public currentCompanyService: CurrentCompanyService,
     public typePaletteService: TypesPaletteService,
     public paletteInterService: TypesPaletteService,
     public certificationsModesCultureService: CertificationsModesCultureService,
@@ -142,7 +146,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   filterFournisseurDS(filters?) {
     const myFilter: any[] = [["valide", "=", true]];
-    if (filters) myFilter.push("and", filters);
+    if (filters?.length) myFilter.push("and", filters);
     this.fournisseurSource = this.fournisseurService.getDataSource_v2(["id", "code", "raisonSocial"]);
     this.fournisseurSource.filter(myFilter);
   }
@@ -288,6 +292,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
   onCellClick(e) {
     // Way to avoid Dx Selectbox list to appear when cell is readonly
     this.SelectBoxPopupWidth = e.cellElement.classList.contains("dx-datagrid-readonly") ? 0 : 400;
+    if (e.column.dataField === "fournisseur") {
+      this.updateFournisseurField(e.data.proprietaireMarchandise);
+    }
   }
 
   openFilePopup(e) {
@@ -357,10 +364,30 @@ export class GridLignesComponent implements OnChanges, OnInit {
       this.newArticles = 0;
       this.newNumero = 0;
       this.nbInsertedArticles = null;
-      // this.datagrid.instance.clearSelection();
       this.datagrid.instance.option("focusedRowIndex", this.gridRowsTotal); // Focus on 1st added item
       this.datagrid.instance.saveEditData();
     }
+  }
+
+  updateFournisseurField(proprietaireMarchandise) {
+
+    this.newFourId = proprietaireMarchandise?.id;
+    this.newFourCode = proprietaireMarchandise?.code;
+    const filters = [];
+
+    if (this.currentCompanyService.getCompany().id !== "BUK" || proprietaireMarchandise?.code?.substring(0, 2) !== "BW") {
+      const listExp = proprietaireMarchandise?.listeExpediteurs;
+      if (listExp) {
+        listExp.split(",").map(exp => filters.push(["code", "=", exp], "or"));
+        filters.pop();
+        this.newFourId = null;
+        this.newFourCode = null;
+      } else {
+        filters.push(["id", "=", this.newFourId]);
+      }
+    }
+    this.filterFournisseurDS(filters);
+
   }
 
   cellValueChange(data) {
@@ -394,23 +421,11 @@ export class GridLignesComponent implements OnChanges, OnInit {
       }
       case "proprietaireMarchandise": {
         this.dataField = null;
-        let newFourId = null;
-        let newFourCode = null;
         const proprietaireMarchandise = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise;
-        const listExp = proprietaireMarchandise?.listeExpediteurs;
-        const filters = [];
-        if (listExp) {
-          listExp.split(",").map(exp => filters.push(["code", "=", exp], "or"));
-          filters.pop();
-        } else {
-          newFourId = proprietaireMarchandise?.id ? proprietaireMarchandise.id : null;
-          newFourCode = proprietaireMarchandise?.code ? proprietaireMarchandise.code : null;
-          filters.push(["id", "=", newFourId]);
-        }
-        this.filterFournisseurDS(filters);
+        this.updateFournisseurField(proprietaireMarchandise);
         data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
           "fournisseur",
-          { id: newFourId, code: newFourCode });
+          { id: this.newFourId, code: this.newFourCode });
         setTimeout(() => this.datagrid.instance.saveEditData());
         break;
       }
