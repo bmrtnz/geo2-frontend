@@ -26,7 +26,7 @@ export class CompanyChooserComponent implements OnInit {
     constructor(
         private router: Router,
         public currentCompanyService: CurrentCompanyService,
-    ) {}
+    ) { }
 
     ngOnInit() {
         // Session storage
@@ -49,10 +49,7 @@ export class CompanyChooserComponent implements OnInit {
             e = e.itemData;
         }
 
-        const societe = {
-            id: e.id,
-            raisonSocial: e.raisonSocial,
-        };
+        const societe = e;
         // Session storage
         this.currentCompanyService.setCompany(societe);
         this.societe = societe.raisonSocial;
@@ -68,4 +65,4 @@ export class CompanyChooserComponent implements OnInit {
     declarations: [CompanyChooserComponent],
     exports: [CompanyChooserComponent],
 })
-export class CompanyChooserModule {}
+export class CompanyChooserModule { }

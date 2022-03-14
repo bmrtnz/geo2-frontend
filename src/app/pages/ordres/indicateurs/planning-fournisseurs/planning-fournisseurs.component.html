@@ -13,7 +13,6 @@
                 formControlName="bureauAchat"
                 [dataSource]="bureauxAchat"
                 [displayExpr]="displayCodeBefore"
-                [showClearButton]="true"
                 [searchEnabled]="true"
                 [searchExpr]="['id', 'raisonSocial']"
                 [showClearButton]="true"
@@ -146,7 +145,8 @@
                   hint="{{ 'hint-bascule-fournisseurs-valide' | localize }}"
                   text="{{ 'button-bascule-fournisseurs-valide' | localize }}"
                   (onClick)="validOrAll($event)"
-                ></dx-button>
+                >
+                </dx-button>
               </dxi-item>
               <dxi-item [ratio]="10"></dxi-item>
             </dx-box>
