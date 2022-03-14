@@ -16,12 +16,9 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import {
-    GridConfiguratorService,
-    Grid,
-    GridConfig,
-} from "app/shared/services/grid-configurator.service";
+import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+
 
 @Component({
     selector: "app-contacts",
@@ -29,6 +26,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
     styleUrls: ["./contacts.component.scss"],
 })
 export class ContactsComponent implements OnInit, NestedPart {
+
     contacts: DataSource;
     fluxSource: DataSource;
     societeSource: DataSource;
@@ -39,8 +37,7 @@ export class ContactsComponent implements OnInit, NestedPart {
     public columns: Observable<GridColumn[]>;
     private gridConfig: Promise<GridConfig>;
     columnChooser = environment.columnChooser;
-    @ViewChild(DxDataGridComponent, { static: true })
-    dataGrid: DxDataGridComponent;
+    @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
     contentReadyEvent = new EventEmitter<any>();
 
     constructor(
@@ -57,67 +54,54 @@ export class ContactsComponent implements OnInit, NestedPart {
     ) { }
 
     async ngOnInit() {
-        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-            Grid.Contact,
-        );
-        this.columns = from(this.gridConfig).pipe(
-            map((config) => config.columns),
-        );
+        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Contact);
+        this.columns = from(this.gridConfig).pipe(map(config => config.columns));
         this.codeTiers = this.route.snapshot.paramMap.get("codeTiers");
         this.typeTiers = this.route.snapshot.paramMap.get("typeTiers");
 
-        this.typeTiersLabel = Object.entries(TypeTiers)
+        this.typeTiersLabel = Object
+            .entries(TypeTiers)
             .find(([, value]) => value === this.typeTiers)
-            .map((value) => value.toLowerCase())
+            .map(value => value.toLowerCase())
             .shift();
 
-        const fields = this.columns.pipe(
-            map((columns) =>
-                columns.map((column) => {
-                    let field = column.dataField;
-                    if (field === "moyenCommunication")
-                        field += `.${this.moyenCommunicationService.model.getKeyField()}`;
-                    if (field === "flux")
-                        field += `.${this.fluxService.model.getKeyField()}`;
-                    return field;
-                }),
-            ),
-        );
-        this.contacts = this.contactsService.getDataSource_v2(
-            await fields.toPromise(),
-        );
+        const fields = this.columns.pipe(map(columns => columns.map(column => {
+            let field = column.dataField;
+            if (field === "moyenCommunication")
+                field += `.${this.moyenCommunicationService.model.getKeyField()}`;
+            if (field === "flux")
+                field += `.${this.fluxService.model.getKeyField()}`;
+            return field;
+        })));
+        this.contacts = this.contactsService.getDataSource_v2(await fields.toPromise());
 
         this.enableFilters();
         this.dataGrid.dataSource = this.contacts;
         this.societeSource = this.societeService.getDataSource();
         this.fluxSource = this.fluxService.getDataSource();
-        this.moyenCommunicationSource =
-            this.moyenCommunicationService.getDataSource();
+        this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
 
         // Léa 09/2021
         // Moyen : les moyens EDIFACT et FTP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
         // Flux : les flux FACTUR et FACDUP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
         if (!this.authService.currentUser.adminClient) {
-            this.moyenCommunicationSource.filter([
-                ["id", "<>", "FTP"],
-                "and",
-                ["id", "<>", "EFT"],
-            ]);
-            this.fluxSource.filter([
-                ["id", "<>", "FACDUP"],
-                "and",
-                ["id", "<>", "FACTUR"],
-            ]);
+            this.moyenCommunicationSource.filter([["id", "<>", "FTP"], "and", ["id", "<>", "EFT"]]);
+            this.fluxSource.filter([["id", "<>", "FACDUP"], "and", ["id", "<>", "FACTUR"]]);
         }
+
     }
     enableFilters() {
-        this.contacts.filter([
+        const filter = [
             ["codeTiers", "=", this.codeTiers],
             "and",
-            ["typeTiers", "=", this.typeTiers],
-            "and",
-            ["societe.id", "=", this.currentCompanyService.getCompany().id]
-        ]);
+            ["typeTiers", "=", this.typeTiers]
+        ];
+        // Seuls les clients et entrepôts sont rattachés à une société
+        if (this.typeTiers === "C" || this.typeTiers === "E") {
+            filter.push("and", ["societe.id", "=", this.currentCompanyService.getCompany().id]);
+        }
+
+        this.contacts.filter(filter);
     }
 
     displayIDBefore(data) {
@@ -157,8 +141,9 @@ export class ContactsComponent implements OnInit, NestedPart {
     onRowInserting(event) {
         (event.data as Contact).codeTiers = this.codeTiers;
         (event.data as Contact).typeTiers = this.typeTiers;
-        (event.data as Contact).societe =
-            this.currentCompanyService.getCompany();
+        // Seuls les clients et entrepôts sont rattachés à une société
+        if (this.typeTiers === "C" || this.typeTiers === "E")
+            (event.data as Contact).societe = this.currentCompanyService.getCompany();
     }
 
     onRowClick({ rowIndex }) {
@@ -166,6 +151,8 @@ export class ContactsComponent implements OnInit, NestedPart {
     }
 
     onValueChanged(event, cell) {
-        if (cell.setValue) cell.setValue(event.value);
+        if (cell.setValue)
+            cell.setValue(event.value);
     }
+
 }
