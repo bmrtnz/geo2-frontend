@@ -100,13 +100,10 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         if (this.authService.currentUser.secteurCommercial) {
-            this.secteurSB.value =
-                this.authService.currentUser.secteurCommercial;
-        } else if (!this.authService.isAdmin) {
-            this.withSector.value = true;
-        } else {
-            this.enableFilters();
+            this.secteurSB.value = this.authService.currentUser.secteurCommercial;
         }
+        if (!this.authService.isAdmin) this.withSector.value = true;
+        this.enableFilters();
     }
 
     enableFilters() {
@@ -120,26 +117,26 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
         else if (!this.authService.isAdmin)
             filters.push(
                 ...(this.authService.currentUser.personne?.role?.toString() ===
-                Role[Role.COMMERCIAL]
+                    Role[Role.COMMERCIAL]
                     ? [
-                          "and",
-                          [
-                              "commercial.id",
-                              "=",
-                              this.authService.currentUser.commercial.id,
-                          ],
-                      ]
+                        "and",
+                        [
+                            "commercial.id",
+                            "=",
+                            this.authService.currentUser.commercial.id,
+                        ],
+                    ]
                     : []),
                 ...(this.authService.currentUser.personne?.role?.toString() ===
-                Role[Role.ASSISTANT]
+                    Role[Role.ASSISTANT]
                     ? [
-                          "and",
-                          [
-                              "assistante.id",
-                              "=",
-                              this.authService.currentUser.assistante.id,
-                          ],
-                      ]
+                        "and",
+                        [
+                            "assistante.id",
+                            "=",
+                            this.authService.currentUser.assistante.id,
+                        ],
+                    ]
                     : []),
             );
 

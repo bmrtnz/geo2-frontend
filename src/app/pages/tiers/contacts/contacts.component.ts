@@ -90,19 +90,26 @@ export class ContactsComponent implements OnInit, NestedPart {
         }
 
     }
-
     enableFilters() {
         this.contacts.filter([
             ["codeTiers", "=", this.codeTiers],
             "and",
             ["typeTiers", "=", this.typeTiers],
+            "and",
+            ["societe.id", "=", this.currentCompanyService.getCompany().id]
         ]);
     }
 
     displayIDBefore(data) {
-        return data ? (data.id + " - " +
-            (data.nomUtilisateur ? data.nomUtilisateur :
-                (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+        return data
+            ? data.id +
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
+            : null;
     }
 
     onRowPrepared(e) {
