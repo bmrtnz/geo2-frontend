@@ -224,15 +224,24 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, Neste
         this.pays = this.paysService.getDataSource_v2(["id", "description"]);
         this.pays.filter(["valide", "=", "true"]);
         this.bureauxAchat = this.bureauxAchatService.getDataSource_v2(["id", "raisonSocial"]);
+        this.bureauxAchat.filter(["valide", "=", "true"]);
         this.identifiant = this.identifiantsFournisseurService.getDataSource();
+        this.identifiant.filter(["valide", "=", "true"]);
         this.typesFournisseur = this.typesFournisseurService.getDataSource();
+        this.typesFournisseur.filter(["valide", "=", "true"]);
         this.regimesTva = this.regimesTvaService.getDataSource();
+        this.regimesTva.filter(["valide", "=", "true"]);
         this.devises = this.devisesService.getDataSource();
+        this.devises.filter(["valide", "=", "true"]);
         this.moyensPaiement = this.moyensPaiementService.getDataSource();
+        this.moyensPaiement.filter(["valide", "=", "true"]);
         this.basesPaiement = this.basesPaiementService.getDataSource();
+        this.basesPaiement.filter(["valide", "=", "true"]);
         this.naturesStation = this.naturesStationService.getDataSource();
         this.conditionsVente = this.conditionsVenteService.getDataSource();
+        this.conditionsVente.filter(["valide", "=", "true"]);
         this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(["id", "raisonSocial"]);
+        this.fournisseursDeRattachement.filter(["valide", "=", "true"]);
         this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
         this.certifications = this.certificationsService.getDataSource();
 
