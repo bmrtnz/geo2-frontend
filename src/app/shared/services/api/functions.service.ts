@@ -310,14 +310,14 @@ export class FunctionsService {
   /**
    * Event modification gratuit
    */
-  public onChangeGratuit =
+  public onChangeIndGratuit =
     (ordreLigneRef: string) => this.apollo
-      .watchQuery<{ onChangeGratuit: FunctionResponse }>({
+      .watchQuery<{ onChangeIndGratuit: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
             {
-              name: "onChangeGratuit",
+              name: "onChangeIndGratuit",
               body,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true }

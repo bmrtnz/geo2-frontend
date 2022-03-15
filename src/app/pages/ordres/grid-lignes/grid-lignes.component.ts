@@ -294,6 +294,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (e.column.dataField === "fournisseur") {
       this.updateFfilterFournisseurDS(e.data.proprietaireMarchandise);
     }
+    // Different approach for checkboxes - Force edit mode
+    if (e.column.dataField === "gratuit") {
+      e.component.editCell(e.rowIndex, e.column.dataField);
+    }
   }
 
   openFilePopup(e) {
@@ -349,7 +353,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
         this.dataField = e.dataField;
         this.idLigne = e.row?.data?.id;
       };
-      e.editorOptions.onFocusOut = () => this.dataField = null;
+      e.editorOptions.onFocusOut = () => {
+        this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
+      };
     }
   }
 
@@ -398,22 +404,22 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
       case "nombrePalettesCommandees": {
         this.functionsService.onChangeCdeNbPal(idLigne, this.ordre.secteurCommercial.id)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "nombrePalettesIntermediaires": {
         this.functionsService.onChangeDemipalInd(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "nombreColisPalette": {
         this.functionsService.onChangePalNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "nombreColisCommandes": {
         this.functionsService.onChangeCdeNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "proprietaireMarchandise": { // Adjust fournisseurs list & other stuff
@@ -426,39 +432,40 @@ export class GridLignesComponent implements OnChanges, OnInit {
         setTimeout(() => this.datagrid.instance.saveEditData());
         this.functionsService
           .onChangeProprCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "fournisseur": {
         this.functionsService
           .onChangeFouCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "ventePrixUnitaire": { // Unckeck 'gratuit' when an unit price is set
         this.functionsService.onChangeVtePu(idLigne)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "gratuit": { // Set unit price to zero when 'gratuit' is checked
-        this.functionsService.onChangeGratuit(idLigne)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+        this.functionsService.onChangeIndGratuit(idLigne)
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "typePalette": {
         this.functionsService
           .onChangePalCode(idLigne, this.ordre.secteurCommercial.id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
       case "paletteInter": {
         this.functionsService
           .onChangePalinterCode(idLigne)
-          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+          .valueChanges.subscribe(() => this.refreshGrid());
         break;
       }
 
     }
+
   }
 
 }
