@@ -72,8 +72,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public SelectBoxPopupWidth: number;
   public dataField: string;
   public idLigne: string;
-  public newFourId: string;
-  public newFourCode: string;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -294,7 +292,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     // Way to avoid Dx Selectbox list to appear when cell is readonly
     this.SelectBoxPopupWidth = e.cellElement.classList.contains("dx-datagrid-readonly") ? 0 : 400;
     if (e.column.dataField === "fournisseur") {
-      this.updateFournisseurField(e.data.proprietaireMarchandise);
+      this.updateFfilterFournisseurDS(e.data.proprietaireMarchandise);
     }
   }
 
@@ -370,21 +368,19 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
   }
 
-  updateFournisseurField(proprietaireMarchandise) {
+  updateFfilterFournisseurDS(proprietaireMarchandise) {
 
-    this.newFourId = proprietaireMarchandise?.id;
-    this.newFourCode = proprietaireMarchandise?.code;
+    const newFourId = proprietaireMarchandise?.id;
+    const newFourCode = proprietaireMarchandise?.code;
     const filters = [];
 
-    if (this.currentCompanyService.getCompany().id !== "BUK" || proprietaireMarchandise?.code?.substring(0, 2) !== "BW") {
+    if (this.currentCompanyService.getCompany().id !== "BUK" || newFourCode.substring(0, 2) !== "BW") {
       const listExp = proprietaireMarchandise?.listeExpediteurs;
       if (listExp) {
         listExp.split(",").map(exp => filters.push(["code", "=", exp], "or"));
         filters.pop();
-        this.newFourId = null;
-        this.newFourCode = null;
       } else {
-        filters.push(["id", "=", this.newFourId]);
+        filters.push(["id", "=", newFourId]);
       }
     }
     this.filterFournisseurDS(filters);
@@ -423,21 +419,42 @@ export class GridLignesComponent implements OnChanges, OnInit {
       case "proprietaireMarchandise": { // Adjust fournisseurs list & other stuff
         this.dataField = null;
         const proprietaireMarchandise = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise;
-        this.updateFournisseurField(proprietaireMarchandise);
+        this.updateFfilterFournisseurDS(proprietaireMarchandise);
         data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
           "fournisseur",
-          { id: this.newFourId, code: this.newFourCode });
+          { id: null, code: null });
         setTimeout(() => this.datagrid.instance.saveEditData());
+        this.functionsService
+          .onChangeProprCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+        break;
+      }
+      case "fournisseur": {
+        this.functionsService
+          .onChangeFouCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
         break;
       }
       case "ventePrixUnitaire": { // Unckeck 'gratuit' when an unit price is set
-        if (data.changes[0].data.data.saveOrdreLigne.gratuit &&
-          data.changes[0].data.data.saveOrdreLigne.ventePrixUnitaire) {
-          data.component.editCell(data.component.getRowIndexByKey(data.changes[0].key), "gratuit");
-          data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
-            "gratuit", false);
-          setTimeout(() => this.datagrid.instance.saveEditData());
-        }
+        this.functionsService.onChangeVtePu(idLigne)
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+        break;
+      }
+      case "gratuit": { // Set unit price to zero when 'gratuit' is checked
+        this.functionsService.onChangeGratuit(idLigne)
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+        break;
+      }
+      case "typePalette": {
+        this.functionsService
+          .onChangePalCode(idLigne, this.ordre.secteurCommercial.id, this.authService.currentUser.nomUtilisateur)
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
+        break;
+      }
+      case "paletteInter": {
+        this.functionsService
+          .onChangePalinterCode(idLigne)
+          .valueChanges.subscribe(() => this.datagrid.instance.refresh());
         break;
       }
 

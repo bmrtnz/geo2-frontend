@@ -223,5 +223,167 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event modification propriétaire marchandise
+   */
+  public onChangeProprCode =
+    (ordreLigneRef: string, societeCode: string, username: string) => this.apollo
+      .watchQuery<{ onChangeProprCode: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangeProprCode",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "username", value: "username", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "username", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef, societeCode, username },
+        fetchPolicy: "network-only",
+      })
+
+  /**
+   * Event modification fournisseur
+   */
+  public onChangeFouCode =
+    (ordreLigneRef: string, societeCode: string, username: string) => this.apollo
+      .watchQuery<{ onChangeFouCode: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangeFouCode",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "username", value: "username", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "username", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef, societeCode, username },
+        fetchPolicy: "network-only",
+      })
+
+
+  /**
+   * Event modification PU Vente
+   */
+  public onChangeVtePu =
+    (ordreLigneRef: string) => this.apollo
+      .watchQuery<{ onChangeVtePu: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangeVtePu",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef },
+        fetchPolicy: "network-only",
+      })
+
+  /**
+   * Event modification gratuit
+   */
+  public onChangeGratuit =
+    (ordreLigneRef: string) => this.apollo
+      .watchQuery<{ onChangeGratuit: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangeGratuit",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef },
+        fetchPolicy: "network-only",
+      })
+
+  /**
+   * Event modification type palette
+   */
+  public onChangePalCode =
+    (ordreLigneRef: string, secteurCode: string, username: string) => this.apollo
+      .watchQuery<{ onChangePalCode: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangePalCode",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+                { name: "secteurCode", value: "secteurCode", isVariable: true },
+                { name: "username", value: "username", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+            { name: "secteurCode", type: "String", isOptionnal: false },
+            { name: "username", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef, secteurCode, username },
+        fetchPolicy: "network-only",
+      })
+
+  /**
+   * Event modification palette intermédiaire
+   */
+  public onChangePalinterCode =
+    (ordreLigneRef: string) => this.apollo
+      .watchQuery<{ onChangePalinterCode: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangePalinterCode",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef },
+        fetchPolicy: "network-only",
+      })
 
 }
