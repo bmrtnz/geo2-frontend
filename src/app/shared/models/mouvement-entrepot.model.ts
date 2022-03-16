@@ -1,6 +1,7 @@
 import SupervisionPalox from "./supervision-palox.model";
-import { Field } from "./model";
+import { Field, ModelName } from "./model";
 
+@ModelName("MouvementEntrepot")
 export class MouvementEntrepot extends SupervisionPalox {
     @Field() numeroOrdre: string;
     @Field({ dataType: "datetime" }) dateDepartOrdre: string;
