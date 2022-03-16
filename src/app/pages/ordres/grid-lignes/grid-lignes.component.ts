@@ -266,7 +266,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   onFocusedRowChanged(e) {
     this.gridRowsTotal = this.datagrid.instance.getVisibleRows().length;
-    this.currentfocusedRow = e.row.rowIndex;
+    this.currentfocusedRow = e.row?.rowIndex;
     this.lastRowFocused = (this.currentfocusedRow === (this.gridRowsTotal - 1));
   }
 
