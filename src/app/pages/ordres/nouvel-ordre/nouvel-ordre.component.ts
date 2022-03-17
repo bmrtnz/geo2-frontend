@@ -124,6 +124,7 @@ export class NouvelOrdreComponent implements OnInit {
                     this.fNouvelOrdreRef,
                     this.entrepotsService.getOne_v2(entrepot.id, [
                         "id",
+                        "code",
                         ...this.inheritedFields,
                     ]),
                 ),
@@ -177,14 +178,13 @@ export class NouvelOrdreComponent implements OnInit {
             : entrepot.client.commercial
                 ? { id: entrepot.client.commercial.id }
                 : null;
-
         return this.fetchDeviseRef(entrepot.client?.devise).pipe(
             switchMap((deviseRef) =>
                 this.ordresService.save_v2(["id", "numero"], {
                     ordre: {
                         // from `heriteEntrepot.pbl`
                         numero,
-                        codeAlphaEntrepot: entrepot.id,
+                        codeAlphaEntrepot: entrepot.code,
                         campagne: { id: this.societe.campagne.id },
                         dateDepartPrevue:
                             this.dateManagementService.findDate(0),

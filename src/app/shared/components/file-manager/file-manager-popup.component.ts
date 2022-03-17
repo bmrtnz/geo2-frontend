@@ -14,6 +14,7 @@ import { DxFileManagerModule, DxPopupModule } from "devextreme-angular";
 import { CommonModule } from "@angular/common";
 import CustomFileSystemProvider from "devextreme/file_management/custom_provider";
 import { SharedModule } from "../../shared.module";
+import {AuthService} from "../../services";
 
 @Component({
     selector: "app-file-manager-popup",
@@ -29,10 +30,11 @@ export class FileManagerComponent implements OnChanges {
     @Input() subTitle: string;
 
     visible = false;
+    userAdmin = false;
     fileProvider: CustomFileSystemProvider;
     items: any;
 
-    constructor(public fileManagerService: FileManagerService) {
+    constructor(public fileManagerService: FileManagerService, private authService: AuthService) {
         this.items = [
             "showNavPane",
             "create",
@@ -46,6 +48,7 @@ export class FileManagerComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         const key = changes.key ? changes.key.currentValue : this.key;
 
+        this.userAdmin = this.authService.currentUser.adminClient;
         this.fileProvider = this.fileManagerService.getProvider(
             key,
             changes.id.currentValue,
