@@ -2,15 +2,8 @@ import { Component, Input, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
-import {
-    OrdreLignesService,
-    SummaryOperation,
-} from "app/shared/services/api/ordres-lignes.service";
-import {
-    Grid,
-    GridConfig,
-    GridConfiguratorService,
-} from "app/shared/services/grid-configurator.service";
+import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -22,7 +15,7 @@ import { ToggledGrid } from "../form/form.component";
 @Component({
     selector: "app-grid-marge",
     templateUrl: "./grid-marge.component.html",
-    styleUrls: ["./grid-marge.component.scss"],
+    styleUrls: ["./grid-marge.component.scss"]
 })
 export class GridMargeComponent implements ToggledGrid {
     @Input() public ordre: Ordre;
@@ -39,24 +32,18 @@ export class GridMargeComponent implements ToggledGrid {
     constructor(
         private ordreLignesService: OrdreLignesService,
         public gridConfiguratorService: GridConfiguratorService,
-        public localizeService: LocalizationService,
+        public localizeService: LocalizationService
     ) {
-        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-            Grid.OrdreMarge,
-        );
-        this.columns = from(this.gridConfig).pipe(
-            map((config) => config.columns),
-        );
+        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreMarge);
+        this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     }
 
     async enableFilters() {
+
         const summaryInputs: SummaryInput[] = [
             { selector: "totalAchat", summaryType: SummaryType.SUM },
             { selector: "totalCourtage", summaryType: SummaryType.SUM },
-            {
-                selector: "totalFraisAdditionnels",
-                summaryType: SummaryType.SUM,
-            },
+            { selector: "totalFraisAdditionnels", summaryType: SummaryType.SUM },
             { selector: "totalFraisMarketing", summaryType: SummaryType.SUM },
             { selector: "totalRemise", summaryType: SummaryType.SUM },
             { selector: "totalTransit", summaryType: SummaryType.SUM },
@@ -70,32 +57,29 @@ export class GridMargeComponent implements ToggledGrid {
         ];
 
         const columns = await this.columns.toPromise();
-        const fields = columns.map((column) => column.dataField);
+        const fields = columns.map(column => column.dataField);
 
-        this.dataSource = this.ordreLignesService.getSummarisedDatasource(
-            SummaryOperation.Marge,
-            fields,
-            summaryInputs,
-        );
+        this.dataSource = this.ordreLignesService
+            .getSummarisedDatasource(SummaryOperation.Marge, fields, summaryInputs);
 
-        this.totalItems = summaryInputs.map(
-            ({ selector: column, summaryType }) => ({
+        this.totalItems = summaryInputs
+            .map(({ selector: column, summaryType }) => ({
                 column,
                 summaryType,
-                displayFormat: !column.toLowerCase().includes("pourcentage")
-                    ? "Total : {0}"
-                    : "{0}",
-                valueFormat: columns?.find(
-                    ({ dataField }) => dataField === column,
-                )?.format,
-            }),
-        );
+                displayFormat: !column.toLowerCase().includes("pourcentage") ? this.localizeService.localize("total") + " : {0}" : "{0}",
+                valueFormat: columns
+                    ?.find(({ dataField }) => dataField === column)
+                    ?.format,
+            }));
 
         if (this?.ordre?.id)
             this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
+
     }
 
     onToggling(toggled: boolean) {
-        toggled ? this.enableFilters() : (this.dataSource = null);
+
+        toggled ? this.enableFilters() : this.dataSource = null;
+
     }
 }

@@ -1,0 +1,61 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  width="600"
+  height="500"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  title="Choix de l'origine"
+  [focusStateEnabled]="false"
+  (onShowing)="onShowing($event)"
+>
+  <dxi-item [ratio]="1">
+    <dx-box direction="row">
+      <dxi-item [ratio]="1">
+        <div class="dx-field segment-box">
+          <div class="dx-field-value">
+            <dx-radio-group
+              [items]="localSegment"
+              [value]="localSegment[0]"
+              [displayExpr]="displaySegment"
+              (onValueChanged)="changeSegment($event)"
+              layout="vertical"
+            >
+            </dx-radio-group>
+          </div>
+        </div>
+        <div *ngIf="origine">
+          <div class="bold-text">{{ "articles-curr-origin" | localize }} :</div>
+          <div class="blue-text">{{ origine }}</div>
+        </div>
+        <div class="spacer"></div>
+        <!-- <div>
+            <div class="bold-text">{{ 'articles-new-origin' | localize }} :</div>
+            <div *ngIf="newOrigine">{{ newOrigine }}</div>
+            <div *ngIf="!newOrigine">{{ 'aucune' | localize }}</div>
+          </div> -->
+      </dxi-item>
+      <dxi-item [ratio]="1.5" class="list-origine">
+        <dx-list
+          [dataSource]="dataSource"
+          [height]="300"
+          [displayExpr]="displayNumeroBefore"
+          selectionMode="multiple"
+          selectAllMode="false"
+          [showSelectionControls]="true"
+          [selectedItemKeys]="[]"
+          (onSelectionChanged)="onSelectionChanged($event)"
+          (onItemRendered)="onItemRendered($event)"
+        ></dx-list>
+      </dxi-item>
+    </dx-box>
+  </dxi-item>
+
+  <dx-button
+    class="save-button"
+    type="default"
+    text="Enregistrer"
+    [disabled]="newOrigine === origine"
+    (onClick)="saveOrigine()"
+  ></dx-button>
+</dx-popup>

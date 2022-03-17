@@ -6,21 +6,12 @@ import { FileManagerModule } from "app/shared/components/file-manager/file-manag
 import { EditingGuard } from "app/shared/guards/editing-guard";
 import { NestedGuard } from "app/shared/guards/nested-guard";
 import {
-    DxAccordionModule,
-    DxBoxModule,
-    DxButtonModule,
-    DxCheckBoxModule,
-    DxDataGridModule,
-    DxDateBoxModule,
-    DxFormModule,
-    DxListModule,
-    DxNumberBoxModule,
-    DxPopoverModule,
-    DxSelectBoxModule,
-    DxTagBoxModule,
-    DxTextAreaModule,
-    DxTextBoxModule,
-    DxValidatorModule,
+  DxAccordionModule, DxBoxModule,
+  DxButtonModule, DxCheckBoxModule,
+  DxDataGridModule, DxDateBoxModule,
+  DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTagBoxModule,
+  DxTextAreaModule,
+  DxTextBoxModule, DxValidatorModule
 } from "devextreme-angular";
 import { HistoriqueValideModule } from "../../../shared/components/historique-valide/historique-valide.component";
 import { PushHistoryPopupModule } from "../../../shared/components/push-history-popup/push-history-popup.component";
@@ -31,36 +22,43 @@ import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.com
 import { FournisseursListComponent } from "./list/fournisseurs-list.component";
 import { ModificationListModule } from "app/shared/components/modification-list/modification-list.component";
 
+
 @NgModule({
-    imports: [
-        SharedModule,
-        FournisseursRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        DxFormModule,
-        DxDataGridModule,
-        DxTagBoxModule,
-        DxButtonModule,
-        DxAccordionModule,
-        DxListModule,
-        DxSelectBoxModule,
-        DxTextBoxModule,
-        DxBoxModule,
-        DxCheckBoxModule,
-        DxTextAreaModule,
-        DxDateBoxModule,
-        DxPopoverModule,
-        DxNumberBoxModule,
-        DxValidatorModule,
-        HistoriqueValideModule,
-        PushHistoryPopupModule,
-        EditingAlertModule,
-        InfoPopupModule,
-        FileManagerModule,
-        CertificationDatePopupModule,
-        ModificationListModule,
-    ],
-    declarations: [FournisseursListComponent, FournisseurDetailsComponent],
-    providers: [NestedGuard, EditingGuard],
+  imports: [
+    SharedModule,
+    FournisseursRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DxFormModule,
+    DxDataGridModule,
+    DxTagBoxModule,
+    DxButtonModule,
+    DxAccordionModule,
+    DxListModule,
+    DxSelectBoxModule,
+    DxTextBoxModule,
+    DxBoxModule,
+    DxCheckBoxModule,
+    DxTextAreaModule,
+    DxDateBoxModule,
+    DxPopoverModule,
+    DxNumberBoxModule,
+    DxValidatorModule,
+    HistoriqueValideModule,
+    PushHistoryPopupModule,
+    EditingAlertModule,
+    InfoPopupModule,
+    FileManagerModule,
+    CertificationDatePopupModule,
+    ModificationListModule,
+  ],
+  declarations: [
+    FournisseursListComponent,
+    FournisseurDetailsComponent
+  ],
+  providers: [NestedGuard, EditingGuard],
+  exports: [FournisseurDetailsComponent]
 })
-export class FournisseursModule {}
+export class FournisseursModule { }
+
+

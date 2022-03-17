@@ -44,7 +44,12 @@
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-editing [allowUpdating]="true" [allowAdding]="true"> </dxo-editing>
+    <dxo-editing
+      [allowUpdating]="true"
+      [allowAdding]="true"
+      [selectTextOnEditStart]="true"
+    >
+    </dxo-editing>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"

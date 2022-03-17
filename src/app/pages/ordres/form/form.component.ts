@@ -1,25 +1,13 @@
 import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    OnDestroy,
-    OnInit,
-    Output,
-    QueryList,
-    ViewChild,
-    ViewChildren,
+    AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit,
+    Output, QueryList, ViewChild, ViewChildren, Input, OnChanges, AfterContentChecked, AfterViewChecked
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
-import {
-    ClientsService,
-    EntrepotsService,
-    TransporteursService,
-    AuthService,
-} from "app/shared/services";
+import { ClientsService, EntrepotsService, TransporteursService, AuthService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
@@ -34,21 +22,12 @@ import { DxAccordionComponent, DxTextBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import {
-    concatMap,
-    filter,
-    first,
-    map,
-    switchMap,
-    takeUntil,
-} from "rxjs/operators";
-import {
-    RouteParam,
-    TabChangeData,
-    TabContext,
-    TAB_ORDRE_CREATE_ID,
-} from "../root/root.component";
+import { concatMap, filter, first, map, switchMap, takeUntil } from "rxjs/operators";
+import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
+import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
+import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 
 /**
@@ -74,7 +53,7 @@ enum Fragments {
 enum LinkedCriterias {
     Client = "Réf. Clt",
     Compl = "Compl.",
-    Regul = "Régul.",
+    Regul = "Régul."
 }
 
 let self;
@@ -82,10 +61,12 @@ let self;
 @Component({
     selector: "app-form",
     templateUrl: "./form.component.html",
-    styleUrls: ["./form.component.scss"],
+    styleUrls: ["./form.component.scss"]
 })
 export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
+
     @Output() public ordre: Ordre;
+    @Output() openArticleManuPopup = new EventEmitter<any>();
 
     private destroy = new Subject<boolean>();
     private anchorsInitialized = false;
@@ -143,6 +124,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public dotCQ: number;
     public orderNumber: string;
     public fullOrderNumber: string;
+    public env = environment;
 
     public clientsDS: DataSource;
     public entrepotDS: DataSource;
@@ -155,14 +137,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public transporteursDS: DataSource;
     public typeTransportDS: DataSource;
     public baseTarifTransportDS: DataSource;
+    public fraisClient: string;
+    public gestEntrepot: string;
+    public instructionsComm: string;
 
     @ViewChild(FileManagerComponent, { static: false })
     fileManagerComponent: FileManagerComponent;
     @ViewChild("comLog", { static: false }) comLog: DxTextBoxComponent;
     @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
-    @ViewChildren("anchor") anchors: QueryList<
-        ElementRef | DxAccordionComponent
-    >;
+    @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
+    @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
+    @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
 
     constructor(
         private router: Router,
@@ -183,10 +168,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         private litigesService: LitigesService,
         private mruOrdresService: MruOrdresService,
         private tabContext: TabContext,
+        private authService: AuthService
     ) {
-        this.handleTabChange().subscribe((event) => {
-            this.initializeAnchors(event);
-        });
+        this.handleTabChange()
+            .subscribe(event => {
+                this.initializeAnchors(event);
+            });
         self = this;
     }
 
@@ -194,14 +181,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.initializeForm();
         this.initializeAnchors();
 
-        this.clientsDS = this.clientsService.getDataSource_v2([
-            "id",
-            "raisonSocial",
-        ]);
-        this.entrepotDS = this.entrepotsService.getDataSource_v2([
-            "id",
-            "raisonSocial",
-        ]);
+        this.clientsDS = this.clientsService.getDataSource_v2(["id", "raisonSocial"]);
+        this.entrepotDS = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
         this.deviseDS = this.devisesService.getDataSource();
         this.incotermsDS = this.incotermsService.getDataSource();
         this.typeTransportDS = this.typesCamionService.getDataSource();
@@ -211,33 +192,31 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.commercialDS.filter([
             ["valide", "=", true],
             "and",
-            ["role", "=", Role.COMMERCIAL],
+            ["role", "=", Role.COMMERCIAL]
         ]);
 
         this.assistanteDS = this.personnesService.getDataSource();
         this.assistanteDS.filter([
             ["valide", "=", true],
             "and",
-            ["role", "=", Role.ASSISTANT],
+            ["role", "=", Role.ASSISTANT]
         ]);
         this.portTypeDDS = this.portsService.getDataSource();
         this.portTypeDDS.filter([
             ["valide", "=", true],
             "and",
-            ["type", "=", Type.PORT_DE_DEPART],
+            ["type", "=", Type.PORT_DE_DEPART]
         ]);
 
         this.portTypeADS = this.portsService.getDataSource();
         this.portTypeADS.filter([
             ["valide", "=", true],
             "and",
-            ["type", "=", Type.PORT_D_ARRIVEE],
+            ["type", "=", Type.PORT_D_ARRIVEE]
         ]);
 
-        this.transporteursDS = this.transporteursService.getDataSource_v2([
-            "id",
-            "raisonSocial",
-        ]);
+        this.transporteursDS = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+
     }
 
     ngOnDestroy() {
@@ -253,6 +232,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         // if (!this.formGroup.pristine && this.formGroup.valid) {
         //   const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
         //   ordre.societe = { id: this.currentCompanyService.getCompany().id };
+
         //   this.ordresService.save({ ordre }).subscribe({
         //     next: () => {
         //       notify('Sauvegardé', 'success', 3000);
@@ -267,7 +247,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             overrideTogglingTo = false,
             itemElement,
         }: { overrideTogglingTo: boolean; itemElement: HTMLElement },
-        grids: ToggledGrid[],
+        grids: ToggledGrid[]
     ) {
         if (!itemElement.dataset.toggled) itemElement.dataset.toggled = "false";
         itemElement.dataset.toggled =
@@ -275,7 +255,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (overrideTogglingTo)
             itemElement.dataset.toggled = overrideTogglingTo.toString();
         grids.forEach((grid) =>
-            grid.onToggling(itemElement.dataset.toggled === "true"),
+            grid.onToggling(itemElement.dataset.toggled === "true")
         );
     }
 
@@ -292,16 +272,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.fileManagerComponent.visible = true;
     }
 
+    onArticleManClick() {
+        this.ajoutArtManu.visible = true;
+    }
+
     detailExp() {
         this.ordresLignesViewExp = !this.ordresLignesViewExp;
     }
 
     duplicate() {
         if (this.formGroup.pristine && this.formGroup.valid) {
-            const ordre = this.formUtils.extractDirty(
-                this.formGroup.controls,
-                Ordre.getKeyField(),
-            );
+            const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
 
             this.ordresService.clone({ ordre }).subscribe({
                 next: (e) => {
@@ -313,12 +294,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     deleteOrder() {
-        const ordre = this.formUtils.extractDirty(
-            this.formGroup.controls,
-            Ordre.getKeyField(),
-        );
+        const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
         if (!ordre.id) return;
-        this.ordresService.delete({ ordre }).subscribe({
+        this.ordresService.delete({ id: ordre.id }).subscribe({
             next: (_) => {
                 notify("Ordre supprimé", "success", 3000);
             },
@@ -340,12 +318,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             const ordresSource = this.ordresService.getDataSource();
             ordresSource.filter(["referenceClient", "=", refClt]);
             ordresSource.load().then((res) => {
-                res.map((value) => {
+                res.map(value => {
                     if (numero !== value.numero) {
-                        this.linkedOrders.push({
-                            ordre: value,
-                            criteria: LinkedCriterias.Client,
-                        });
+                        this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
                     }
                 });
                 this.findComplRegulLinkedOrders(refClt);
@@ -357,24 +332,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     findComplRegulLinkedOrders(refClt) {
+
         const hasCompl = this.ordre.listeOrdresComplementaires;
         const hasRegul = this.ordre.listeOrdresRegularisations;
         if (hasCompl) {
-            hasCompl.split(",").map((res) => {
-                this.linkedOrders.push({
-                    ordre: { numero: res },
-                    criteria: LinkedCriterias.Compl,
-                    class: "Compl",
-                });
+            hasCompl.split(",").map(res => {
+                this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Compl, class: "Compl" });
             });
         }
         if (hasRegul) {
-            hasRegul.split(";").map((res) => {
-                this.linkedOrders.push({
-                    ordre: { numero: res },
-                    criteria: LinkedCriterias.Regul,
-                    class: "Regul",
-                });
+            hasRegul.split(";").map(res => {
+                this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Regul, class: "Regul" });
             });
         }
         if (!refClt) this.linkedOrdersSearch = false;
@@ -389,21 +357,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     deviseDisplayExpr(item) {
-        return item
-            ? item.description + " (" + self.ordre?.tauxDevise + ")"
-            : null;
+        return item ? item.description + " (" + self.ordre?.tauxDevise + ")" : null;
     }
 
     displayIDBefore(data) {
-        return data
-            ? data.id +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+        return data ?
+            (data.id + " - " + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
             : null;
+    }
+
+    displayCodeBefore(data) {
+        return data ? data.code + " - " + data.raisonSocial : null;
+    }
+
+    public onLignesChanged(e) {
+        this.gridLignes.nbInsertedArticles = e;
+        this.gridLignes.enableFilters();
     }
 
     private initializeForm() {
@@ -411,42 +380,40 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.route.paramMap
             .pipe(
                 first(),
-                map((params) => params.get(RouteParam.TabID)),
-                switchMap((id) => {
+                map(params => params.get(RouteParam.TabID)),
+                switchMap(id => {
                     if (id === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
-                    return this.ordresService.getOneByNumeroAndSociete(
-                        id,
-                        currentCompany.id,
-                    );
+                    return this.ordresService
+                        .getOneByNumeroAndSociete(id, currentCompany.id);
                 }),
             )
-            .subscribe((ordre) => {
+            .subscribe(ordre => {
                 this.ordre = ordre;
                 if (this.ordre === null) return;
-                if (this.comLog)
-                    this.comLog.instance.option(
-                        "hint",
-                        this.ordre.instructionsLogistiques,
-                    );
+                this.fraisClient = this.getFraisClient();
+                this.gestEntrepot = this.getGestEntrepot();
                 this.fetchFullOrderNumber();
-                if (this.ordre.numero)
-                    this.status =
-                        " - " +
-                        Statut[this.ordre.statut] +
-                        (this.ordre.factureEDI ? " EDI" : "");
+                if (this.ordre.numero) this.status = " - " + Statut[this.ordre.statut] + (this.ordre.factureEDI ? " EDI" : "");
                 this.refOrdre = this.ordre?.id ? ordre.id : "-";
                 this.canDuplicate = !!this?.ordre?.id;
                 this.formGroup.reset(ordre);
+                const instLog = this.getInstructionsLog();
+                this.instructionsComm = this.getinstructionsComm();
+                if (this.comLog) this.comLog.instance.option("hint", instLog);
                 this.addLinkedOrders();
                 this.refreshBadges();
+                window.sessionStorage.setItem("idOrdre", this.ordre.id);
+                window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
                 this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
             });
     }
 
     private initializeAnchors(event?: TabChangeData) {
         if (event) {
-            if (event.status === "in") this.enableAnchors();
-            if (event.status === "out") this.disableAnchors();
+            if (event.status === "in")
+                this.enableAnchors();
+            if (event.status === "out")
+                this.disableAnchors();
         }
         if (!this.anchorsInitialized) {
             this.handleAnchorsNavigation();
@@ -457,40 +424,31 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private handleTabChange() {
         return this.route.paramMap.pipe(
             first(),
-            switchMap((params) =>
-                this.tabContext.onTabChange.pipe(
-                    map(
-                        (data) =>
-                            [data, params.get(RouteParam.TabID)] as [
-                                TabChangeData,
-                                string,
-                            ],
-                    ),
-                ),
-            ),
+            switchMap(params =>
+                this.tabContext.onTabChange
+                    .pipe(map(data => [data, params.get(RouteParam.TabID)] as [TabChangeData, string]))),
             filter(([{ item }, id]) => item.id === id),
             map(([item]) => item),
             takeUntil(this.destroy),
         );
     }
 
-    private getAnchorElement(
-        anchor: DxAccordionComponent | ElementRef<any>,
-    ): dxElement | HTMLElement {
+    private getAnchorElement(anchor: DxAccordionComponent | ElementRef<any>)
+        : dxElement | HTMLElement {
         return anchor instanceof DxAccordionComponent
             ? anchor.instance.element()
             : anchor.nativeElement;
     }
 
     private enableAnchors() {
-        this.anchors.forEach((anchor) => {
+        this.anchors.forEach(anchor => {
             const element = this.getAnchorElement(anchor);
             element.setAttribute("id", element.dataset.fragmentId);
         });
     }
 
     private disableAnchors() {
-        this.anchors.forEach((anchor) => {
+        this.anchors.forEach(anchor => {
             const element = this.getAnchorElement(anchor);
             element.removeAttribute("id");
         });
@@ -502,51 +460,38 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.router.events
             .pipe(
-                filter((event) => event instanceof NavigationEnd),
-                switchMap((_) => this.route.fragment),
-                filter((fragment) => !!fragment),
-                concatMap((fragment) =>
-                    of(
-                        this.anchors.find(
-                            (item) =>
-                                this.getAnchorElement(item).id === fragment,
-                        ),
-                    ),
+                filter(event => event instanceof NavigationEnd),
+                switchMap(_ => this.route.fragment),
+                filter(fragment => !!fragment),
+                concatMap(fragment => of(this.anchors.find(item => this.getAnchorElement(item).id === fragment))
                 ),
-                filter((item) => !!item),
+                filter(item => !!item),
             )
-            .subscribe((item) => {
+            .subscribe(item => {
                 if (item instanceof DxAccordionComponent) {
                     item.instance.expandItem(0);
                     // @ts-ignore
-                    (item.onItemTitleClick as EventEmitter<>).emit(
-                        {
+                    (item.onItemTitleClick as EventEmitter<>)
+                        .emit({
                             overrideTogglingTo: true,
-                            itemElement: item.instance
-                                .element()
-                                .querySelector("[role=\"tab\"]"),
-                        },
-                        [item],
-                    );
+                            itemElement: item.instance.element().querySelector("[role=\"tab\"]"),
+                        }, [item]);
                     scrollTo(item.instance.element());
                 } else scrollTo(item.nativeElement);
             });
     }
 
     private fetchFullOrderNumber() {
+
         const nouveau = this?.ordre?.statut;
 
-        this.fullOrderNumber = nouveau.includes("NON_CONFIRME")
-            ? "Nouvel "
-            : "";
+        this.fullOrderNumber = nouveau.includes("NON_CONFIRME") ? "Nouvel " : "";
 
-        this.fullOrderNumber += `Ordre N° ${
-            (this.ordre.campagne
-                ? (this.ordre.campagne.id
-                      ? this.ordre.campagne.id
-                      : this.ordre.campagne) + "-"
-                : "") + this.ordre.numero
-        }`;
+        this.fullOrderNumber += `Ordre N° ${(this.ordre.campagne
+            ? (this.ordre.campagne.id ? this.ordre.campagne.id : this.ordre.campagne) + "-"
+            : "") + this.ordre.numero
+            }`;
+
     }
 
     private refreshBadges() {
@@ -557,4 +502,53 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.dotCommentaires = this.ordre.commentairesOrdreCount;
         }
     }
+
+    getFraisClient() {
+
+        const fraisPU = this.ordre.fraisPrixUnitaire;
+        let fraisUnite = this.ordre.fraisUnite?.id;
+        const fraisPlateforme = this.ordre.fraisPlateforme;
+        let messFraisPlateforme = "";
+
+        if (fraisPlateforme > 0) {
+            messFraisPlateforme = "Frais plateforme "
+                + fraisPlateforme + " "
+                + this.currentCompanyService.getCompany().devise.id
+                + " le kilo";
+        }
+
+        if (!fraisUnite) fraisUnite = "";
+
+        return "Frais client " + fraisPU + " " + fraisUnite + " " + messFraisPlateforme;
+
+    }
+
+    getGestEntrepot() {
+        if (!this.ordre.entrepot.gestionnaireChep) return;
+        return this.ordre.entrepot.gestionnaireChep
+            + " " + this.ordre.entrepot.referenceChep;
+    }
+
+    getInstructionsLog() {
+        if (!this.ordre.instructionsLogistiques) {
+            const instClt = this.ordre.client.instructionLogistique ?
+                this.ordre.client.instructionLogistique : "";
+            const instEnt = this.ordre.entrepot.instructionLogistique ?
+                this.ordre.entrepot.instructionLogistique : "";
+            this.formGroup.get("instructionsLogistiques")
+                .patchValue(instClt + (instClt ? " " : "") + instEnt);
+            return instClt + (instClt ? " " : "") + instEnt;
+        } else {
+            return this.ordre.instructionsLogistiques;
+        }
+    }
+
+    getinstructionsComm() {
+        const instCommClt = this.ordre.client.instructionCommercial ?
+            this.ordre.client.instructionCommercial : "";
+        const instCommEnt = this.ordre.entrepot.instructionSecretaireCommercial ?
+            this.ordre.entrepot.instructionSecretaireCommercial : "";
+        return instCommClt + (instCommClt ? " " : "") + instCommEnt;
+    }
+
 }

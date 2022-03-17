@@ -7,13 +7,15 @@ import { Fournisseur } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
-    providedIn: "root",
+    providedIn: "root"
 })
 export class FournisseursService extends ApiService implements APIRead {
-    byKeyFilter =
-        /.*\.(?:id|code|raisonSocial|description|ville|valide|commentaire|userModification|dateModification|typeTiers)$/i;
 
-    constructor(apollo: Apollo) {
+    byKeyFilter = /.*\.(?:id|code|raisonSocial|description|ville|valide|commentaire|userModification|dateModification|typeTiers)$/i;
+
+    constructor(
+        apollo: Apollo,
+    ) {
         super(apollo, Fournisseur);
     }
 
@@ -24,55 +26,38 @@ export class FournisseursService extends ApiService implements APIRead {
     }
 
     getDataSource_v2(columns: Array<string>) {
+
         return new DataSource({
-            sort: [{ selector: this.model.getLabelField() }],
+            sort: [
+                { selector: "code" }
+            ],
             store: this.createCustomStore({
-                load: (options: LoadOptions) =>
-                    new Promise(async (resolve) => {
-                        if (options.group)
-                            return this.loadDistinctQuery(options, (res) => {
-                                if (res.data && res.data.distinct)
-                                    resolve(
-                                        this.asListCount(res.data.distinct),
-                                    );
-                            });
+                load: (options: LoadOptions) => new Promise(async (resolve) => {
 
-                        const query = await this.buildGetAll_v2(columns);
-                        type Response = {
-                            allFournisseur: RelayPage<Fournisseur>;
-                        };
-                        const variables =
-                            this.mapLoadOptionsToVariables(options);
+                    if (options.group)
+                        return this.loadDistinctQuery(options, res => {
+                            if (res.data && res.data.distinct)
+                                resolve(this.asListCount(res.data.distinct));
+                        });
 
-                        this.listenQuery<Response>(
-                            query,
-                            { variables },
-                            (res) => {
-                                if (res.data && res.data.allFournisseur)
-                                    resolve(
-                                        this.asInstancedListCount(
-                                            res.data.allFournisseur,
-                                        ),
-                                    );
-                            },
-                        );
-                    }),
-                byKey: (key) =>
-                    new Promise(async (resolve) => {
-                        const query = await this.buildGetOne_v2(columns);
-                        type Response = { fournisseur: Fournisseur };
-                        const variables = { id: key };
-                        this.listenQuery<Response>(
-                            query,
-                            { variables },
-                            (res) => {
-                                if (res.data && res.data.fournisseur)
-                                    resolve(
-                                        new Fournisseur(res.data.fournisseur),
-                                    );
-                            },
-                        );
-                    }),
+                    const query = await this.buildGetAll_v2(columns);
+                    type Response = { allFournisseur: RelayPage<Fournisseur> };
+                    const variables = this.mapLoadOptionsToVariables(options);
+
+                    this.listenQuery<Response>(query, { variables }, res => {
+                        if (res.data && res.data.allFournisseur)
+                            resolve(this.asInstancedListCount(res.data.allFournisseur));
+                    });
+                }),
+                byKey: (key) => new Promise(async (resolve) => {
+                    const query = await this.buildGetOne_v2(columns);
+                    type Response = { fournisseur: Fournisseur };
+                    const variables = { id: key };
+                    this.listenQuery<Response>(query, { variables }, res => {
+                        if (res.data && res.data.fournisseur)
+                            resolve(new Fournisseur(res.data.fournisseur));
+                    });
+                }),
             }),
         });
     }

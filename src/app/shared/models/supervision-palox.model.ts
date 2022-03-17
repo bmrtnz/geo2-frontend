@@ -1,5 +1,6 @@
-import { Field, Model } from "./model";
+import { Field, Model, ModelName } from "./model";
 
+@ModelName("SupervisionPalox")
 export class SupervisionPalox extends Model {
     @Field({ asKey: true }) id: number;
     @Field({ asLabel: true }) codeEntrepot: string;

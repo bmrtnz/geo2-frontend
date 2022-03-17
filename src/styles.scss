@@ -100,7 +100,7 @@ body {
     font-size: 18px;
   }
 
-  .dx-button:not(.subButton):not(.icon-btn):not(.upperButton) {
+  .dx-button:not(.subButton):not(.small-article-button):not(.icon-btn):not(.upperButton) {
     margin-bottom: 10px;
     .dx-button-content {
       padding: 10px 3px;
@@ -179,6 +179,10 @@ body {
   transform: translateX(-50%) !important;
 }
 
+.dx-toast-warning {
+  background-color: #ff7f07;
+}
+
 .dx-invalid-message > .dx-overlay-content {
   background-color: rgba(255, 255, 255, 1);
   font-size: 14px;
@@ -203,6 +207,21 @@ body {
       min-height: 31px;
       line-height: 17px;
     }
+  }
+}
+
+// For big popup contents
+// .dx-popup-normal.ajout-articles-manu-popup {
+//   overflow-y: auto;
+// }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1.2);
+  }
+
+  50% {
+    transform: scale(1);
   }
 }
 

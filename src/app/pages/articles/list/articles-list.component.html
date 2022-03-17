@@ -1,10 +1,14 @@
-<h2 class="content-block">{{ "articles-title" | localize }}</h2>
+<h2 class="content-block articles-title">{{ "articles-title" | localize }}</h2>
 
 <div class="content-block articles-page">
   <div class="search-criteria-container">
     <div class="title-container">
-      <h6>{{ "articles-preFilter-title" | localize }}</h6>
+      <h6 *ngIf="!ordre">{{ "articles-preFilter-title" | localize }}</h6>
+      <h6 *ngIf="ordre">
+        {{ "articles-catalogue-preFilter-title" | localize }}
+      </h6>
       <dx-button
+        *ngIf="!ordre"
         class="refresh"
         [class]="toRefresh ? '' : 'inactive'"
         type="default"
@@ -21,6 +25,7 @@
         </div>
         <div class="dx-field-value">
           <dx-tag-box
+            #especeSB
             [dataSource]="especes"
             (valueChange)="
               onFieldValueChange($event, 'matierePremiere.espece.id')
@@ -41,6 +46,7 @@
         </div>
         <div class="dx-field-value">
           <dx-tag-box
+            #varieteSB
             [dataSource]="varietes"
             (valueChange)="
               onFieldValueChange($event, 'matierePremiere.variete.description')
@@ -61,6 +67,7 @@
         </div>
         <div class="dx-field-value">
           <dx-tag-box
+            #modesCultureSB
             [dataSource]="modesCulture"
             (valueChange)="
               onFieldValueChange(
@@ -84,6 +91,7 @@
         </div>
         <div class="dx-field-value">
           <dx-tag-box
+            #emballageSB
             [dataSource]="emballages"
             (valueChange)="
               onFieldValueChange($event, 'emballage.emballage.description')
@@ -104,6 +112,7 @@
         </div>
         <div class="dx-field-value">
           <dx-tag-box
+            #origineSB
             [dataSource]="origines"
             (valueChange)="
               onFieldValueChange($event, 'matierePremiere.origine.description')
@@ -119,11 +128,10 @@
       </div>
       <!-- Valide ? -->
       <div class="dx-field valid-field">
-        <div class="dx-field-label">
-          {{ "articles-valide" | localize }}
-        </div>
+        <div class="dx-field-label">{{ "articles-valide" | localize }}</div>
         <div class="dx-field-value small-field">
           <dx-select-box
+            #valideSB
             [items]="trueFalse"
             (valueChange)="onFieldValueChange($event, 'valide')"
             [value]="trueFalse[0]"
@@ -132,6 +140,14 @@
           </dx-select-box>
         </div>
       </div>
+      <dx-button
+        *ngIf="ordre"
+        class="refresh"
+        [class]="toRefresh ? '' : 'inactive'"
+        type="default"
+        text="{{ 'btn-refresh' | localize }}"
+        (onClick)="refreshArticlesGrid()"
+      ></dx-button>
     </div>
   </div>
   <div style="clear: both"></div>
@@ -145,10 +161,12 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [scrolling]="{ useNative: true }"
+    [keyExpr]="'id'"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
+    (onSelectionChanged)="onSelectionChanged($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',

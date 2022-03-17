@@ -18,7 +18,11 @@
         (onToolbarPreparing)="onToolbarPreparing($event)"
         dateSerializationFormat="yyyy-MM-dd"
       >
-        <dxo-editing [allowUpdating]="true" [mode]="'batch'"></dxo-editing>
+        <dxo-editing
+          [allowUpdating]="true"
+          [mode]="'batch'"
+          [selectTextOnEditStart]="true"
+        ></dxo-editing>
 
         <dxi-column
           dataField="certification.description"

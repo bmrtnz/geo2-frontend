@@ -1,0 +1,75 @@
+// Var
+@import "~themes/generated/variables.base";
+
+::ng-deep .dx-popup-content .articles-title {
+  display: none;
+}
+
+::ng-deep .quickCode-area {
+  width: 50%;
+  min-height: 33px;
+  float: left;
+  .dx-field-label {
+    margin-left: 40px;
+    background: #00759c;
+    color: #fff;
+    padding: 7px 15px;
+    width: auto !important;
+    margin-right: 15px;
+    overflow: visible;
+  }
+}
+::ng-deep .articles-valid-button,
+::ng-deep .cancel-button {
+  transition: transform 0.5s;
+  transform: scale(1);
+  float: right;
+}
+
+::ng-deep .dx-popup-content .valid-field {
+  display: none;
+}
+
+.pulse {
+  animation: pulse 0.5s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dx-template-wrapper.dx-popup-title {
+  overflow: hidden;
+  .title-start,
+  .title-end {
+    font-size: 20px;
+    font-weight: 500;
+    float: left;
+    margin: 17px 0;
+    line-height: 29px;
+  }
+  .title-end {
+    position: relative;
+    top: -1px;
+    font-size: 22px;
+    color: $base-accent;
+  }
+  .close-article-popup {
+    top: 13px;
+    float: right;
+  }
+}
+
+::ng-deep .ajout-articles-manu-popup {
+  .dx-popup-content {
+    overflow-y: auto;
+  }
+}

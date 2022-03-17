@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, OnInit, ViewChild, Input, OnChanges } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -9,11 +9,7 @@ import { ViewDocument } from "app/shared/components/view-document-popup/view-doc
 import { Editable } from "app/shared/guards/editing-guard";
 import { Article } from "app/shared/models";
 import Document from "app/shared/models/document.model";
-import {
-    ArticlesService,
-    AuthService,
-    LocalizationService,
-} from "app/shared/services";
+import { ArticlesService, AuthService, LocalizationService } from "app/shared/services";
 import { AlveolesService } from "app/shared/services/api/alveoles.service";
 import { CalibresMarquageService } from "app/shared/services/api/calibres-marquage.service";
 import { CalibresUnifiesService } from "app/shared/services/api/calibres-unifies.service";
@@ -52,7 +48,10 @@ import { environment } from "environments/environment";
     templateUrl: "./article-details.component.html",
     styleUrls: ["./article-details.component.scss"],
 })
-export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
+export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges {
+
+    @Input() public articleLigneId: string;
+
     formGroup = this.fb.group({
         id: [""],
         description: [""],
@@ -189,27 +188,43 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
         private formUtils: FormUtilsService,
         public authService: AuthService,
         private localization: LocalizationService,
-    ) {}
+    ) { }
 
     ngOnInit() {
+
+        this.formGroup.reset();
+        this.readOnlyMode = true;
+        this.editing = false;
+        this.cloneMode = false;
+
+        if (this.route.snapshot.url[0]?.path !== "articles") return;
+
         this.route.params
             .pipe(
-                tap((_) => {
-                    this.formGroup.reset();
-                    this.readOnlyMode = true;
-                    this.editing = false;
-                    this.cloneMode = false;
-                }),
-                switchMap((params) => this.articlesService.getOne(params.id)),
+                switchMap(params => this.articlesService.getOne(params.id)),
             )
-            .subscribe((res) => {
-                this.article = new Article(res.data.article);
-                this.formGroup.patchValue(this.article);
-                this.contentReadyEvent.emit();
-                this.ucBW = this.article.emballage.uniteParColis > 0;
-                this.preSaisie =
-                    this.article.preSaisie === true ? "preSaisie" : "";
-            });
+            .subscribe(res => this.afterLoadInitForm(res));
+    }
+
+    ngOnChanges() {
+
+        // Zoom article mode when clicking on an order article
+        if (this.articleLigneId) {
+            this.formGroup.reset();
+            this.preSaisie = "";
+            this.articlesService
+                .getOne(this.articleLigneId)
+                .subscribe(res => this.afterLoadInitForm(res));
+        }
+
+    }
+
+    afterLoadInitForm(res) {
+        this.article = new Article(res.data.article);
+        this.formGroup.patchValue(this.article);
+        this.contentReadyEvent.emit();
+        this.ucBW = this.article.emballage.uniteParColis > 0;
+        this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
     }
 
     onCancel() {
@@ -249,12 +264,12 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
     displayIDBefore(data) {
         return data
             ? data.id +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
             : null;
     }
 
@@ -286,12 +301,12 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable {
             }
 
             (article.valide !== undefined &&
-            this.article.valide !== article.valide &&
-            !this.cloneMode
+                this.article.valide !== article.valide &&
+                !this.cloneMode
                 ? this.validatePopup.present(HistoryType.ARTICLE, {
-                      article: { id: article.id },
-                      valide: article.valide,
-                  })
+                    article: { id: article.id },
+                    valide: article.valide,
+                })
                 : of(undefined)
             )
                 .pipe(

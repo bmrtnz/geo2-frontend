@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <div class="content-block" [hidden]="env.production">
+  <div class="content-block" *ngIf="!articleLigneId" [hidden]="env.production">
     <h2>
       <span *ngIf="cloneMode">{{ "create" | localize }}</span>
       {{ "articles-details-title" | localize
@@ -44,7 +44,9 @@
   <div class="content-block article-page">
     <dx-box direction="row">
       <dxi-item [ratio]="1" [visible]="!cloneMode" [height]="800">
-        <h4 class="entity-id">N°&nbsp;{{ article?.id }}</h4>
+        <h4 *ngIf="!articleLigneId" class="entity-id">
+          N°&nbsp;{{ article?.id }}
+        </h4>
 
         <dx-check-box
           #valideCheckBox
@@ -58,6 +60,7 @@
           [historique]="article?.historique"
         ></app-historique-valide>
         <dx-button
+          *ngIf="!articleLigneId"
           class="black"
           height="auto"
           icon="material-icons folder"
@@ -72,9 +75,7 @@
           <div class="dx-form-group-content">
             <!-- Code -->
             <div *ngIf="!cloneMode" class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-id" | localize }}
-              </div>
+              <div class="dx-field-label">{{ "articles-id" | localize }}</div>
               <div class="dx-field-value">
                 <dx-text-box formControlName="id" [readOnly]="true">
                 </dx-text-box>
@@ -315,9 +316,7 @@
                 <dx-text-box
                   formControlName="codePlu"
                   [readOnly]="readOnlyMode"
-                  [inputAttr]="{
-                    style: 'text-transform: uppercase'
-                  }"
+                  [inputAttr]="{ style: 'text-transform: uppercase' }"
                   (onValueChanged)="valueToUpperCase($event)"
                   valueChangeEvent="keyup"
                 >
@@ -489,9 +488,7 @@
                 <dx-text-area
                   formControlName="instructionStation"
                   [readOnly]="readOnlyMode"
-                  [inputAttr]="{
-                    style: 'text-transform: uppercase'
-                  }"
+                  [inputAttr]="{ style: 'text-transform: uppercase' }"
                   (onValueChanged)="valueToUpperCase($event)"
                   valueChangeEvent="keyup"
                 >
@@ -921,9 +918,7 @@
                 <dx-text-box
                   formControlName="articleClient"
                   [readOnly]="readOnlyMode"
-                  [inputAttr]="{
-                    style: 'text-transform: uppercase'
-                  }"
+                  [inputAttr]="{ style: 'text-transform: uppercase' }"
                   (onValueChanged)="valueToUpperCase($event)"
                   valueChangeEvent="keyup"
                 >

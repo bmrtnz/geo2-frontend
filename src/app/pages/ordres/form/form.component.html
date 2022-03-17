@@ -120,9 +120,7 @@
                 [visible]="!fullOrderNumber"
                 class="order-loader"
               ></dx-load-indicator>
-              <div class="order-number">
-                {{ fullOrderNumber }}
-              </div>
+              <div class="order-number">{{ fullOrderNumber }}</div>
               <div class="linkedOrders-container">
                 <span *ngIf="linkedOrdersSearch" class="search-linkedOrders"
                   >Recherche ordres liés...</span
@@ -222,9 +220,8 @@
                           <dx-select-box
                             formControlName="entrepot"
                             [dataSource]="entrepotDS"
-                            displayExpr="raisonSocial"
-                            [searchEnabled]="true"
-                            [searchExpr]="['id', 'raisonSocial']"
+                            [displayExpr]="displayCodeBefore"
+                            [readOnly]="true"
                           >
                             <dx-validator
                               name="{{ 'ordres-entrepotLivre' | localize }}"
@@ -675,12 +672,25 @@
                                 class="thin-checkbox"
                                 [disabled]="true"
                                 formControlName="venteACommission"
-                              ></dx-check-box>
+                              >
+                              </dx-check-box>
                             </div>
                           </div>
                         </dxi-item>
                         <dxi-item [ratio]="1"></dxi-item>
                         <dxi-item [ratio]="4"> </dxi-item>
+                      </dx-box>
+                      <dx-box>
+                        <dxi-item [ratio]="9">
+                          <!-- CHEP et frais client -->
+                          <div class="dx-field red-font info-supp">
+                            {{ gestEntrepot }}<br />{{ fraisClient }}
+                          </div>
+                          <!-- Instructions internes -->
+                          <div class="dx-field blue-font info-supp">
+                            {{ instructionsComm }}
+                          </div>
+                        </dxi-item>
                       </dx-box>
 
                       <!-- <dx-box>
@@ -705,24 +715,44 @@
                 }}</span>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="true"
-                  type="default"
+                  [disabled]="!fullOrderNumber || env.production"
+                  type="success"
+                  hint="{{ 'hint-ajout-ordre' | localize }} {{
+                    'hint-source-stock' | localize
+                  }}"
                   text="{{ 'btn-stock' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="true"
-                  type="default"
+                  [disabled]="!fullOrderNumber || env.production"
+                  type="success"
+                  hint="{{ 'hint-ajout-ordre' | localize }} {{
+                    'hint-source-refClt' | localize
+                  }}"
+                  text="{{ 'btn-referenceClt' | localize }}"
+                ></dx-button>
+                <dx-button
+                  class="upperButton subButton"
+                  [disabled]="!fullOrderNumber || env.production"
+                  type="success"
+                  hint="{{ 'hint-ajout-ordre' | localize }} {{
+                    'hint-source-historique' | localize
+                  }}"
                   text="{{ 'btn-historique' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="true"
-                  type="default"
+                  [disabled]="!fullOrderNumber || env.production"
+                  type="success"
+                  hint="{{ 'hint-ajout-ordre' | localize }} {{
+                    'hint-source-manuel' | localize
+                  }}"
+                  (onClick)="onArticleManClick()"
                   text="{{ 'btn-manuel' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton shiftedRight"
+                  [disabled]="!fullOrderNumber"
                   type="default"
                   height="auto"
                   icon="material-icons info"
@@ -828,7 +858,8 @@
                       [hidden]="!dotLitiges"
                       #gridLitigesLignes
                       [ordre]="ordre"
-                    ></app-grid-litiges-lignes>
+                    >
+                    </app-grid-litiges-lignes>
                   </dxi-item>
                 </dx-accordion>
               </div>
@@ -994,6 +1025,11 @@
   </form>
 
   <app-editing-alert></app-editing-alert>
+  <app-ajout-articles-manu-popup
+    [ordre]="ordre"
+    (lignesChanged)="onLignesChanged($event)"
+  >
+  </app-ajout-articles-manu-popup>
   <app-file-manager-popup
     key="ordres"
     [subTitle]="ordre.numero"
