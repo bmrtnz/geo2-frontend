@@ -166,4 +166,11 @@ export class ArticlesService extends ApiService implements APIRead {
         return { concatDesc: desc, bio: isBio };
     }
 
+    concatArtDescriptAbregee(article) {
+        let desc = "  " + article.id + " " + (article.description ? article.description : "");
+        const isBio = article.matierePremiere?.modeCulture?.description?.toLowerCase().includes("bio");
+        if (!article.id) desc = "Erreur article (id)";
+        return { concatDesc: desc, bio: isBio };
+    }
+
 }

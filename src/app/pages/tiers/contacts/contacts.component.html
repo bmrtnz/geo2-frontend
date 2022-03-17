@@ -1,126 +1,70 @@
 <div class="content-block">
   <h2>
-    {{ "tiers-contacts-title" | localize }}
-    -
-    {{ typeTiersLabel | localize }} {{ codeTiers }}
+    {{ "tiers-contacts-title" | localize }}<span *ngIf="!fournisseurCode"> - {{ typeTiersLabel | localize }} {{
+      codeTiers
+      }}</span>
   </h2>
 </div>
 <div class="content-block contact-page">
-  <dx-data-grid
-    [remoteOperations]="true"
-    [allowColumnReordering]="true"
-    [showBorders]="true"
-    dateSerializationFormat="yyyy-MM-dd"
-    [scrolling]="{
+  <dx-data-grid [remoteOperations]="true" [allowColumnReordering]="true" [showBorders]="true"
+    dateSerializationFormat="yyyy-MM-dd" [scrolling]="{
       useNative: true
-    }"
-    (onEditingStart)="onEditingStart($event)"
-    (onRowPrepared)="onRowPrepared($event)"
-    (onRowInserting)="onRowInserting($event)"
-    (onRowClick)="onRowClick($event)"
-    (onInitNewRow)="onInitNewRow($event)"
-    (onContentReady)="contentReadyEvent.emit($event)"
-    (onToolbarPreparing)="
+    }" (onEditingStart)="onEditingStart($event)" (onRowPrepared)="onRowPrepared($event)"
+    (onRowInserting)="onRowInserting($event)" (onRowClick)="onRowClick($event)" (onInitNewRow)="onInitNewRow($event)"
+    (onContentReady)="contentReadyEvent.emit($event)" (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
         $event,
         gridConfiguratorService.Grid.Contact,
         enableFilters.bind(this)
       )
-    "
-  >
+    ">
     <!-- Grid configuration -->
     <dxo-paging></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-    ></dxo-pager>
-    <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.Contact"
-      [enabled]="true"
-      type="custom"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
+    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true"></dxo-pager>
+    <dxo-state-storing [storageKey]="gridConfiguratorService.Grid.Contact" [enabled]="true" type="custom"
+      [customLoad]="gridConfiguratorService.load" [customSave]="gridConfiguratorService.save"></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-editing
-      [allowUpdating]="true"
-      [allowAdding]="true"
-      [selectTextOnEditStart]="true"
-    >
+    <dxo-editing *ngIf="!fournisseurCode" [allowUpdating]="true" [allowAdding]="true" [selectTextOnEditStart]="true">
     </dxo-editing>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-column-chooser
-      [enabled]="true"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height"
-    >
+    <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}" [allowSearch]="true"
+      [width]="columnChooser.width" [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxo-selection mode="single"></dxo-selection>
 
-    <dxi-column
-      *ngFor="let column of this.columns | async"
-      [dataField]="column.dataField"
-      [visible]="false"
-      [caption]="
+    <dxi-column *ngFor="let column of this.columns | async" [dataField]="column.dataField" [visible]="false" [caption]="
         ('tiers-contacts-' + column.dataField?.split('.').join('-')
           | localize) || column.name
-      "
-      trueText="Oui"
-      falseText="Non"
-      [width]="column.dataField === 'fluxAccess1' ? '300' : '100%'"
-      [dataType]="column?.dataType"
-      [allowSearch]="
+      " trueText="Oui" falseText="Non" [width]="column.dataField === 'fluxAccess1' ? '300' : '100%'"
+      [dataType]="column?.dataType" [allowSearch]="
         column?.allowSearch || ['string'].includes(column?.dataType)
-      "
-      [allowHeaderFiltering]="
+      " [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-      "
-      [allowEditing]="
-        column.name !== 'valide' && column?.allowEditing !== false
-      "
-      [validationRules]="column.validationRules"
-      [editCellTemplate]="
+      " [allowEditing]="
+        column.name !== 'valide' && column?.allowEditing !== false && !fournisseurCode
+      " [validationRules]="column.validationRules" [editCellTemplate]="
         column.dataField === 'flux' || column.dataField === 'moyenCommunication'
           ? 'selectBoxEditTemplate'
           : false
-      "
-      [showEditorAlways]="true"
-      [showInColumnChooser]="column.showInColumnChooser"
-    >
-      <dxi-validation-rule
-        *ngIf="
+      " [showEditorAlways]="true" [showInColumnChooser]="column.showInColumnChooser">
+      <dxi-validation-rule *ngIf="
           column.dataField === 'flux' ||
           column.dataField === 'moyenCommunication'
-        "
-        type="required"
-      ></dxi-validation-rule>
+        " type="required"></dxi-validation-rule>
     </dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
-      <dx-select-box
-        [readOnly]="
-          cell?.data?.flux?.id === 'FACTUR' &&
-          !authService.currentUser.adminClient
-        "
-        [dataSource]="this[cell.column.dataField + 'Source']"
-        [displayExpr]="
+      <dx-select-box [readOnly]="(cell?.data?.flux?.id === 'FACTUR' && !authService.currentUser.adminClient) 
+        || !!fournisseurCode" [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="
           cell.column.dataField === 'flux'
             ? displayIDBefore
             : this[cell.column.dataField + 'Service'].model.getLabelField()
-        "
-        [searchExpr]="[
+        " [searchExpr]="[
           this[cell.column.dataField + 'Service'].model.getKeyField(),
           this[cell.column.dataField + 'Service'].model.getLabelField()
-        ]"
-        [searchEnabled]="true"
-        [value]="cell.data[cell.column.dataField]"
-        (onValueChanged)="onValueChanged($event, cell)"
-      >
+        ]" [searchEnabled]="true" [value]="cell.data[cell.column.dataField]"
+        (onValueChanged)="onValueChanged($event, cell)">
         <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
       </dx-select-box>
     </div>

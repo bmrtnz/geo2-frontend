@@ -397,8 +397,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.refOrdre = this.ordre?.id ? ordre.id : "-";
                 this.canDuplicate = !!this?.ordre?.id;
                 this.formGroup.reset(ordre);
-                const instLog = this.getInstructionsLog();
                 this.instructionsComm = this.getinstructionsComm();
+                const instLog = this.ordre.instructionsLogistiques;
                 if (this.comLog) this.comLog.instance.option("hint", instLog);
                 this.addLinkedOrders();
                 this.refreshBadges();
@@ -527,20 +527,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!this.ordre.entrepot.gestionnaireChep) return;
         return this.ordre.entrepot.gestionnaireChep
             + " " + this.ordre.entrepot.referenceChep;
-    }
-
-    getInstructionsLog() {
-        if (!this.ordre.instructionsLogistiques) {
-            const instClt = this.ordre.client.instructionLogistique ?
-                this.ordre.client.instructionLogistique : "";
-            const instEnt = this.ordre.entrepot.instructionLogistique ?
-                this.ordre.entrepot.instructionLogistique : "";
-            this.formGroup.get("instructionsLogistiques")
-                .patchValue(instClt + (instClt ? " " : "") + instEnt);
-            return instClt + (instClt ? " " : "") + instEnt;
-        } else {
-            return this.ordre.instructionsLogistiques;
-        }
     }
 
     getinstructionsComm() {

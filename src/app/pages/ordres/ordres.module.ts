@@ -88,6 +88,7 @@ import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-pop
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
 import { ArticleCertificationPopupComponent } from "./article-certification-popup/article-certification-popup.component";
+import { ContactsModule } from "../tiers/contacts/contacts.module";
 
 @NgModule({
   declarations: [
@@ -174,7 +175,8 @@ import { ArticleCertificationPopupComponent } from "./article-certification-popu
     ViewDocumentPopupModule,
     DxLoadPanelModule,
     ButtonLoaderModule,
-    FournisseursModule
+    FournisseursModule,
+    ContactsModule
   ],
   providers: [
     OrdresIndicatorsService,
