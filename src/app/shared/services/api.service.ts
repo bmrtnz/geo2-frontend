@@ -528,8 +528,8 @@ export abstract class ApiService implements OnDestroy {
     return typeof options.searchExpr === "object" ?
       (options.searchExpr as [])
         .map(expr => [expr, options.searchOperation, options.searchValue])
-        .join("-or-")
-        .split("-")
+        .join("¤or¤")
+        .split("¤")
         .map((value: any) => {
           const mapped = value.split(",");
           return mapped.length > 1 ? mapped : mapped.shift();
