@@ -8,7 +8,7 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { DxDataGridComponent } from "devextreme-angular";
 import { GridColumn, TotalItem } from "basic";
 import { SummaryType, SummaryInput } from "app/shared/services/api.service";
-import { from, Observable } from "rxjs";
+import { from, Observable, PartialObserver } from "rxjs";
 import { map } from "rxjs/operators";
 import { FournisseursService, ArticlesService, AuthService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
@@ -404,22 +404,22 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
       case "nombrePalettesCommandees": {
         this.functionsService.onChangeCdeNbPal(idLigne, this.ordre.secteurCommercial.id)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "nombrePalettesIntermediaires": {
         this.functionsService.onChangeDemipalInd(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "nombreColisPalette": {
         this.functionsService.onChangePalNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "nombreColisCommandes": {
         this.functionsService.onChangeCdeNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "proprietaireMarchandise": { // Adjust fournisseurs list & other stuff
@@ -432,40 +432,49 @@ export class GridLignesComponent implements OnChanges, OnInit {
         setTimeout(() => this.datagrid.instance.saveEditData());
         this.functionsService
           .onChangeProprCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "fournisseur": {
         this.functionsService
           .onChangeFouCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "ventePrixUnitaire": { // Unckeck 'gratuit' when an unit price is set
         this.functionsService.onChangeVtePu(idLigne)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "gratuit": { // Set unit price to zero when 'gratuit' is checked
         this.functionsService.onChangeIndGratuit(idLigne)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "typePalette": {
         this.functionsService
           .onChangePalCode(idLigne, this.ordre.secteurCommercial.id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "paletteInter": {
         this.functionsService
           .onChangePalinterCode(idLigne)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
 
     }
 
+  }
+
+  private handleCellChangeEventResponse<T>(): PartialObserver<T> {
+    return {
+      next: v => this.refreshGrid(),
+      error: (message: string) => notify({
+        message,
+      }, "error", 3000),
+    };
   }
 
 }
