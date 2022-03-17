@@ -35,5 +35,6 @@ import {
         DxValidatorModule,
     ],
     declarations: [ContactsComponent],
+    exports: [ContactsComponent]
 })
-export class ContactsModule {}
+export class ContactsModule { }

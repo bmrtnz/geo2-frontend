@@ -178,6 +178,13 @@ export class NouvelOrdreComponent implements OnInit {
             : entrepot.client.commercial
                 ? { id: entrepot.client.commercial.id }
                 : null;
+
+        const instLogClt = entrepot.client.instructionLogistique ?
+            entrepot.client.instructionLogistique : "";
+        const instLogEnt = entrepot.instructionLogistique ?
+            entrepot.instructionLogistique : "";
+        const instLog = instLogClt + (instLogClt ? " " : "") + instLogEnt;
+
         return this.fetchDeviseRef(entrepot.client?.devise).pipe(
             switchMap((deviseRef) =>
                 this.ordresService.save_v2(["id", "numero"], {
@@ -185,6 +192,7 @@ export class NouvelOrdreComponent implements OnInit {
                         // from `heriteEntrepot.pbl`
                         numero,
                         codeAlphaEntrepot: entrepot.code,
+                        instructionsLogistiques: instLog,
                         campagne: { id: this.societe.campagne.id },
                         dateDepartPrevue:
                             this.dateManagementService.findDate(0),
@@ -356,4 +364,5 @@ export class NouvelOrdreComponent implements OnInit {
             )
             .pipe(map((res) => res.data.allDeviseRefList?.[0]));
     }
+
 }

@@ -662,10 +662,17 @@ export class ClientDetailsComponent
 
     onSecteurChange(e) {
         // France => Echéance 30 J (et non modifiable voir html)
+        // Gestion des frais clients (marketing) lorsque secteur France et société SAS
         if (this.editing && e.value) {
             this.formGroup.get("nbJourEcheance").markAsDirty();
             if (e.value.id === "F") {
                 this.formGroup.get("nbJourEcheance").setValue(30);
+            }
+            if (e.value.id === "F" && this.currentCompanyService.getCompany().id === "SA") {
+                this.formGroup.get("fraisMarketing").patchValue(0.01);
+                this.formGroup.get("fraisMarketing").markAsDirty();
+                this.formGroup.get("fraisMarketingModeCalcul").patchValue({ id: "KILO" });
+                this.formGroup.get("fraisMarketingModeCalcul").markAsDirty();
             }
         }
         this.freeUEVAT(e.value, this.formGroup.get("pays").value);

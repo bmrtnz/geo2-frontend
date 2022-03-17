@@ -12,7 +12,9 @@
       <app-fournisseur-details
         [fournisseurLigneId]="fournisseurLigneId"
         (fournisseurLigneCode)="setTitle($event)"
-      ></app-fournisseur-details>
+      >
+      </app-fournisseur-details>
+      <app-contacts [fournisseurCode]="fournisseurCode"></app-contacts>
       <br />
     </dx-scroll-view>
   </div>

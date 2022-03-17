@@ -107,6 +107,11 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             "code",
             "raisonSocial",
         ]);
+        this.entrepot.filter([
+            ["valide", "=", true],
+            "and",
+            ["client.societe.id", "=", this.currentCompanyService.getCompany().id]
+        ]);
         this.commercial = this.personnesService.getDataSource_v2([
             "id",
             "nomUtilisateur",

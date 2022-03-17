@@ -8,7 +8,7 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { DxDataGridComponent } from "devextreme-angular";
 import { GridColumn, TotalItem } from "basic";
 import { SummaryType, SummaryInput } from "app/shared/services/api.service";
-import { from, Observable } from "rxjs";
+import { from, Observable, PartialObserver } from "rxjs";
 import { map } from "rxjs/operators";
 import { FournisseursService, ArticlesService, AuthService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
@@ -23,6 +23,7 @@ import { ArticleCertificationPopupComponent } from "../article-certification-pop
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { cpuUsage } from "process";
+import { Fournisseur } from "app/shared/models";
 
 @Component({
   selector: "app-grid-lignes",
@@ -36,6 +37,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Output() public articleLigneId: string;
   @Output() public ordreLigne: OrdreLigne;
   @Output() public fournisseurLigneId: string;
+  @Output() public fournisseurCode: string;
 
   public certifMDDS: DataSource;
   public dataSource: DataSource;
@@ -220,6 +222,24 @@ export class GridLignesComponent implements OnChanges, OnInit {
         // Bio en vert
         if (infoArt.bio) e.cellElement.classList.add("bio-article");
       }
+      if (e.column.dataField === "article.description") {
+        // Descript. article
+        const infoArt = this.articlesService.concatArtDescriptAbregee(e.data.article);
+        e.cellElement.innerText = infoArt.concatDesc;
+        e.cellElement.title = infoArt.concatDesc.substring(2) + "\r\n"
+          + this.hintDblClick;
+        e.cellElement.classList.add("cursor-pointer");
+        // Bio en vert
+        if (infoArt.bio) e.cellElement.classList.add("bio-article");
+      }
+      if (e.column.dataField === "nombrePalettesCommandees") {
+        let volumetrie;
+        if (e.data.nombreColisPalette && e.data.nombreColisCommandes) {
+          volumetrie = e.data.nombreColisCommandes / e.data.nombreColisPalette;
+          volumetrie /= (e.data.nombrePalettesIntermediaires ? e.data.nombrePalettesIntermediaires + 1 : 1);
+          e.cellElement.title = volumetrie;
+        }
+      }
     }
   }
 
@@ -266,7 +286,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   onFocusedRowChanged(e) {
     this.gridRowsTotal = this.datagrid.instance.getVisibleRows().length;
-    this.currentfocusedRow = e.row.rowIndex;
+    this.currentfocusedRow = e.row?.rowIndex;
     this.lastRowFocused = (this.currentfocusedRow === (this.gridRowsTotal - 1));
   }
 
@@ -309,6 +329,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       const idFour = e.data[e.column.dataField].id;
       if (!idFour) return;
       this.fournisseurLigneId = idFour;
+      this.fournisseurCode = e.data[e.column.dataField].code;
       this.zoomFournisseurPopup.visible = true;
     }
   }
@@ -352,6 +373,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       e.editorOptions.onFocusIn = () => {
         this.dataField = e.dataField;
         this.idLigne = e.row?.data?.id;
+        console.log("555");
       };
       e.editorOptions.onFocusOut = () => {
         this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
@@ -366,6 +388,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       info += " " + this.localizeService.localize("article-ajoutes");
       info = info.split("&&").join(this.nbInsertedArticles > 1 ? "s" : "");
       notify(info, "success", 3000);
+      this.datagrid.instance.getScrollable().scrollTo(0); // Reset scrollbar
       this.newArticles = 0;
       this.newNumero = 0;
       this.nbInsertedArticles = null;
@@ -404,22 +427,22 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
       case "nombrePalettesCommandees": {
         this.functionsService.onChangeCdeNbPal(idLigne, this.ordre.secteurCommercial.id)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "nombrePalettesIntermediaires": {
         this.functionsService.onChangeDemipalInd(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "nombreColisPalette": {
         this.functionsService.onChangePalNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "nombreColisCommandes": {
         this.functionsService.onChangeCdeNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "proprietaireMarchandise": { // Adjust fournisseurs list & other stuff
@@ -432,40 +455,49 @@ export class GridLignesComponent implements OnChanges, OnInit {
         setTimeout(() => this.datagrid.instance.saveEditData());
         this.functionsService
           .onChangeProprCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "fournisseur": {
         this.functionsService
           .onChangeFouCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "ventePrixUnitaire": { // Unckeck 'gratuit' when an unit price is set
         this.functionsService.onChangeVtePu(idLigne)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "gratuit": { // Set unit price to zero when 'gratuit' is checked
         this.functionsService.onChangeIndGratuit(idLigne)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "typePalette": {
         this.functionsService
           .onChangePalCode(idLigne, this.ordre.secteurCommercial.id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "paletteInter": {
         this.functionsService
           .onChangePalinterCode(idLigne)
-          .valueChanges.subscribe(() => this.refreshGrid());
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
 
     }
 
+  }
+
+  private handleCellChangeEventResponse<T>(): PartialObserver<T> {
+    return {
+      next: v => this.refreshGrid(),
+      error: (message: string) => notify({
+        message,
+      }, "error", 3000),
+    };
   }
 
 }

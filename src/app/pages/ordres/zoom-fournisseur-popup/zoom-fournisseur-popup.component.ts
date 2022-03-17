@@ -1,5 +1,6 @@
 
 import { AfterViewInit, Component, Input } from "@angular/core";
+import { Fournisseur } from "app/shared/models";
 import { LocalizationService } from "app/shared/services";
 
 @Component({
@@ -11,7 +12,7 @@ import { LocalizationService } from "app/shared/services";
 export class ZoomFournisseurPopupComponent implements AfterViewInit {
 
   @Input() public fournisseurLigneId: string;
-  @Input() public fournisseurLigneCode: string;
+  @Input() public fournisseurCode: string;
 
   visible: boolean;
   title: string;
