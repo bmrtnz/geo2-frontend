@@ -1346,10 +1346,6 @@
       {
         "dataField": "id",
         "visible": false
-      },
-      {
-        "dataField": "campagne.id",
-        "visible": false
       }
     ]
   },
