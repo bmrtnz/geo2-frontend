@@ -1018,8 +1018,8 @@
     "choixEntrepot-entrepot-commercial-id": "Commercial entrep.",
     "choixEntrepot-entrepot-client-assistante-nomUtilisateur": "Assistante client",
     "choixEntrepot-entrepot-client-commercial-nomUtilisateur": "Commercial client",
-    "choixEntrepot-entrepot-raisonSocial": "Raison sociale",
-    "choixEntrepot-codeEntrepot": "Code",
+    "choixEntrepot-entrepot-raisonSocial": "Raison sociale entrep.",
+    "choixEntrepot-codeEntrepot": "Code entrep.",
     "choixEntrepot-entrepot-client-raisonSocial": "Raison sociale client",
     "choixEntrepot-entrepot-client-code": "Code client",
     "choixEntrepot-entrepot-client-secteur-id": "Secteur"
