@@ -109,8 +109,7 @@ export class FileManagerService {
     /**
      * Build file action url.
      *
-     * @param command
-     * @private
+     * @param command Command to execute.
      */
     private static _buildUrl(command: string): string {
         return `${environment.apiEndpoint}/file-manager/execute/${command}`;
@@ -118,8 +117,6 @@ export class FileManagerService {
 
     /**
      * Create and append hidden input to given form.
-     *
-     * @private
      */
     private static _formAppendInput(form, name, value) {
         const input = document.createElement("input");
@@ -256,8 +253,6 @@ export class FileManagerService {
 
     /**
      * Post request.
-     *
-     * @private
      */
     private _execute(command: string, args: object): Promise<any> {
         const url = FileManagerService._buildUrl(command);
