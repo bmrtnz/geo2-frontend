@@ -373,10 +373,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
       e.editorOptions.onFocusIn = () => {
         this.dataField = e.dataField;
         this.idLigne = e.row?.data?.id;
-        console.log("555");
-      };
-      e.editorOptions.onFocusOut = () => {
-        this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
       };
     }
   }
