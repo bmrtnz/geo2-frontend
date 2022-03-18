@@ -370,9 +370,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
   onEditorPreparing(e) {
     // Saving cell main info
     if (e.parentType === "dataRow") {
-      e.editorOptions.onFocusIn = () => {
+      e.editorOptions.onFocusIn = (elem) => {
         this.dataField = e.dataField;
         this.idLigne = e.row?.data?.id;
+        elem.element.querySelector(".dx-texteditor-input").select();
       };
       // e.editorOptions.onFocusOut = () => {
       //   this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
