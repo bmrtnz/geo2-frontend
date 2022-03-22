@@ -373,8 +373,12 @@ export class GridLignesComponent implements OnChanges, OnInit {
       e.editorOptions.onFocusIn = (elem) => {
         this.dataField = e.dataField;
         this.idLigne = e.row?.data?.id;
-        elem.element.querySelector(".dx-texteditor-input").select();
+        if (e.dataField !== "numero")
+          elem.element.querySelector(".dx-texteditor-input")?.select();
       };
+      // if (e.dataField === "nombrePalettesIntermediaires") {
+      //   e.editorOptions.max = 99;
+      // }
       // e.editorOptions.onFocusOut = () => {
       //   this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
       // };
@@ -496,7 +500,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       next: v => this.refreshGrid(),
       error: (message: string) => notify({
         message,
-      }, "error", 3000),
+      }, "error", 5000),
     };
   }
 
