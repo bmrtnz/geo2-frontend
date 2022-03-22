@@ -498,9 +498,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
   private handleCellChangeEventResponse<T>(): PartialObserver<T> {
     return {
       next: v => this.refreshGrid(),
-      error: (message: string) => notify({
-        message,
-      }, "error", 5000),
+      error: (message: string) => {
+        notify({ message }, "error", 7000);
+        console.log(message);
+      }
     };
   }
 
