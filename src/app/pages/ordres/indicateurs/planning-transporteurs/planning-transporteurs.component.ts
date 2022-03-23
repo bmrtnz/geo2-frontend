@@ -150,12 +150,12 @@ export class PlanningTransporteursComponent implements OnInit {
     displayCodeBefore(data) {
         return data
             ? (data.code ? data.code : data.id) +
-                  " - " +
-                  (data.nomUtilisateur
-                      ? data.nomUtilisateur
-                      : data.raisonSocial
-                      ? data.raisonSocial
-                      : data.description)
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
             : null;
     }
 
@@ -176,7 +176,7 @@ export class PlanningTransporteursComponent implements OnInit {
             }
             // Ajout version ordre
             if (e.column.dataField === "numero") {
-                e.cellElement.innerText += " - " + e.data.version;
+                e.cellElement.innerText += (e.data.version ? " - " + e.data.version : "");
                 e.cellElement.classList += " bold";
             }
             // Ajout type colis
@@ -214,6 +214,10 @@ export class PlanningTransporteursComponent implements OnInit {
                         e.data.items[0].entrepotPays +
                         ")";
                 }
+                e.cellElement.classList.add("entrepot-planning-transporteurs");
+            }
+            if (e.data.items && e.column.dataField === "numero") {
+                e.cellElement.classList.add("numero-planning-transporteurs");
             }
         }
     }

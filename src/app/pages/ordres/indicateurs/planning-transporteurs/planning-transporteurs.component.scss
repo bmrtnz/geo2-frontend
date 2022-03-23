@@ -1,4 +1,6 @@
+// Var
 @import "src/themes/generated/variables.base.scss";
+@import "~scss/variables.scss";
 
 .dx-fieldset {
   display: flex;
@@ -37,19 +39,14 @@
   }
 }
 
-// Highlight orders
-::ng-deep .dx-row.dx-data-row {
-  & {
-    &.highlight-order-row > td {
-      color: #fff;
-      background: #386e59;
-    }
+// Highlight groups entrepot/numero
+::ng-deep .dx-row:not(.dx-row-focused) {
+  .numero-planning-transporteurs {
+    background: $BW-khaki-dark;
+    color: white;
   }
-
-  &.dx-row-focused {
-    &.highlight-order-row > td {
-      color: #fff;
-      background: #789e89;
-    }
+  .entrepot-planning-transporteurs {
+    background: $BW-orange-medium;
+    color: white;
   }
 }
