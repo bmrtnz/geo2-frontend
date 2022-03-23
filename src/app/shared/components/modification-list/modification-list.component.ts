@@ -43,9 +43,9 @@ export class ModificationListComponent implements OnInit, OnChanges {
         private dateManagementService: DateManagementService,
         public modificationsService: ModificationsService,
         public validationService: ValidationService,
-    ) {}
+    ) { }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     ngOnChanges() {
         this.modifs = [];
@@ -99,7 +99,9 @@ export class ModificationListComponent implements OnInit, OnChanges {
             id: modifID,
             statut: true,
         };
-        this.modificationsService.save({ modification }).subscribe({
+        this.modificationsService.save_v2([
+            "id",
+        ], { modification }).subscribe({
             next: (e) => {
                 this.modifs = this.modifs.filter((res) => res.id !== modifID);
                 // Show red badges (unvalidated forms)
@@ -130,4 +132,4 @@ export class ModificationListComponent implements OnInit, OnChanges {
     declarations: [ModificationListComponent],
     exports: [ModificationListComponent],
 })
-export class ModificationListModule {}
+export class ModificationListModule { }
