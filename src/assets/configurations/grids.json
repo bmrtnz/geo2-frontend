@@ -1694,6 +1694,13 @@
         "visible": true
       },
       {
+        "visibleIndex": 27,
+        "dataField": "codePromo",
+        "dataType": "boolean",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
         "visibleIndex": 28,
         "dataField": "achatPrixUnitaire",
         "dataType": "number",

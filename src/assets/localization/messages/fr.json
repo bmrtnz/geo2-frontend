@@ -719,6 +719,7 @@
     "ordreLignes-typePalette-description": "Type Pal. Sol",
     "ordreLignes-paletteInter-id": "Type Pal. Inter",
     "ordreLignes-paletteInter-description": "Type Pal. Inter",
+    "ordreLignes-codePromo": "Promo",
     "ordreLignes-fraisPrixUnitaire": "Frais PU",
     "ordreLignes-tauxRemiseSurFacture": "Rem. sur fact",
     "ordreLignes-fraisCommentaires": "Commentaires frais",

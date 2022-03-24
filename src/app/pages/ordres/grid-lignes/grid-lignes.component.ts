@@ -24,6 +24,7 @@ import { CertificationsModesCultureService } from "app/shared/services/api/certi
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { cpuUsage } from "process";
 import { Fournisseur } from "app/shared/models";
+import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
 
 @Component({
   selector: "app-grid-lignes",
@@ -48,6 +49,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public venteUniteSource: DataSource;
   public typePaletteSource: DataSource;
   public paletteInterSource: DataSource;
+  public codePromoSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public totalItems: TotalItem[] = [];
@@ -63,6 +65,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public currNumero: string;
   public switchNumero: string;
   public itemsWithSelectBox: string[];
+  public CodeBeforeInSelectBox: string[];
   public env = environment;
   public nbInsertedArticles: number;
   public newArticles: number;
@@ -84,6 +87,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     public achatUniteService: BasesTarifService,
     public venteUniteService: BasesTarifService,
     public fraisUniteService: BasesTarifService,
+    public codePromoService: CodesPromoService,
     public currentCompanyService: CurrentCompanyService,
     public typePaletteService: TypesPaletteService,
     public paletteInterService: TypesPaletteService,
@@ -102,8 +106,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
       "fraisUnite",
       "typePalette",
       "paletteInter",
-      "proprietaireMarchandise"
+      "proprietaireMarchandise",
+      "codePromo"
     ];
+    this.CodeBeforeInSelectBox = this.itemsWithSelectBox.filter(item => item !== "codePromo");
     this.newArticles = 0;
     this.newNumero = 0;
     this.hintDblClick = this.localizeService.localize("hint-DblClick-file");
@@ -139,6 +145,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       this.certifsMD = res; // Store certifications Mode culture
       this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
     });
+    this.filterCodesPromoDS();
   }
 
   ngOnChanges() {
@@ -155,6 +162,12 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.proprietaireMarchandiseSource = this.fournisseurService
       .getDataSource_v2(["id", "code", "raisonSocial", "listeExpediteurs"]);
     this.proprietaireMarchandiseSource.filter(filters);
+  }
+  filterCodesPromoDS(filters?) {
+    const myFilter: any[] = [["valide", "=", true]];
+    if (filters?.length) myFilter.push("and", filters);
+    this.codePromoSource = this.codePromoService.getDataSource();
+    this.codePromoSource.filter(myFilter);
   }
 
   refreshGrid() {
@@ -233,11 +246,11 @@ export class GridLignesComponent implements OnChanges, OnInit {
         if (infoArt.bio) e.cellElement.classList.add("bio-article");
       }
       if (e.column.dataField === "nombrePalettesCommandees") {
-        let volumetrie;
+        let tauxEncombrement;
         if (e.data.nombreColisPalette && e.data.nombreColisCommandes) {
-          volumetrie = e.data.nombreColisCommandes / e.data.nombreColisPalette;
-          volumetrie /= (e.data.nombrePalettesIntermediaires ? e.data.nombrePalettesIntermediaires + 1 : 1);
-          e.cellElement.title = volumetrie + "\r\n" + "(Taux encombrement au sol)";
+          tauxEncombrement = e.data.nombreColisCommandes / e.data.nombreColisPalette;
+          tauxEncombrement /= (e.data.nombrePalettesIntermediaires ? e.data.nombrePalettesIntermediaires + 1 : 1);
+          e.cellElement.title = tauxEncombrement + "\r\n" + "(Taux encombrement au sol)";
         }
       }
     }
@@ -311,13 +324,21 @@ export class GridLignesComponent implements OnChanges, OnInit {
   onCellClick(e) {
     // Way to avoid Dx Selectbox list to appear when cell is readonly
     this.SelectBoxPopupWidth = e.cellElement.classList.contains("dx-datagrid-readonly") ? 0 : 400;
-    if (e.column.dataField === "fournisseur") {
-      this.updateFfilterFournisseurDS(e.data.proprietaireMarchandise);
+
+    switch (e.column.dataField) {
+      case "fournisseur": this.updateFilterFournisseurDS(e.data.proprietaireMarchandise); break;
+      // Different approach for checkboxes - Force edit mode
+      case "gratuit": e.component.editCell(e.rowIndex, e.column.dataField); break;
+      case "codePromo": {
+        this.filterCodesPromoDS([
+          ["variete.id", "=", e.data.article.matierePremiere.variete.id],
+          "and",
+          ["espece.id", "=", e.data.article.matierePremiere.espece.id],
+        ]);
+        break;
+      }
     }
-    // Different approach for checkboxes - Force edit mode
-    if (e.column.dataField === "gratuit") {
-      e.component.editCell(e.rowIndex, e.column.dataField);
-    }
+
   }
 
   openFilePopup(e) {
@@ -401,7 +422,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
   }
 
-  updateFfilterFournisseurDS(proprietaireMarchandise) {
+  updateFilterFournisseurDS(proprietaireMarchandise) {
 
     const newFourId = proprietaireMarchandise?.id;
     const newFourCode = proprietaireMarchandise?.code;
@@ -413,7 +434,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
         listExp.split(",").map(exp => filters.push(["code", "=", exp], "or"));
         filters.pop();
       } else {
-        filters.push(["id", "=", newFourId]);
+        if (newFourId !== null) filters.push(["id", "=", newFourId]);
       }
     }
     this.filterFournisseurDS(filters);
@@ -452,7 +473,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       case "proprietaireMarchandise": { // Adjust fournisseurs list & other stuff
         this.dataField = null;
         const proprietaireMarchandise = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise;
-        this.updateFfilterFournisseurDS(proprietaireMarchandise);
+        this.updateFilterFournisseurDS(proprietaireMarchandise);
         data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
           "fournisseur",
           { id: null, code: null });

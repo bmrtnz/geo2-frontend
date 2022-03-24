@@ -5,6 +5,7 @@ import { Field, Model, ModelName } from "./model";
 import OrdreLogistique from "./ordre-logistique.model";
 import { Ordre } from "./ordre.model";
 import Palette from "./type-palette.model";
+import CodePromo from "./code-promo.model";
 
 @ModelName("OrdreLigne")
 export class OrdreLigne extends Model {
@@ -31,6 +32,7 @@ export class OrdreLigne extends Model {
   @Field({ model: import("./fournisseur.model") }) public proprietaireMarchandise?: Fournisseur;
   @Field() public ventePrixUnitaire?: number;
   @Field() public gratuit?: boolean;
+  @Field({ model: import("./code-promo.model") }) public codePromo?: CodePromo;
   @Field() public achatPrixUnitaire?: number;
   @Field() public achatDevise?: string;
   @Field() public fraisCommentaires?: string;

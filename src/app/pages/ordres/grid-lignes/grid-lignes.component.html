@@ -148,7 +148,7 @@
       <dx-select-box
         [dataSource]="this[cell.column.dataField + 'Source']"
         [displayExpr]="
-          itemsWithSelectBox.includes(cell.column.dataField)
+          CodeBeforeInSelectBox.includes(cell.column.dataField)
             ? displayCodeBefore
             : this[cell.column.dataField + 'Service'].model.getLabelField()
         "
