@@ -9,18 +9,17 @@ import { APIRead, ApiService, RelayPage } from "../api.service";
   providedIn: "root",
 })
 export class CodesPromoService extends ApiService implements APIRead {
-  listRegexp = /.\.*(?:id|description)$/i;
 
   constructor(apollo: Apollo) {
     super(apollo, DefCodePromo);
     this.gqlKeyType = "GeoDefCodePromoIdInput";
   }
 
-  getDataSource() {
+  getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: "numeroTri" }],
       store: this.createCustomStore({
-        key: ["id", "especeId", "varieteId", "codePromoId"],
+        key: ["codePromoId", "especeId", "varieteId"],
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group)
@@ -31,10 +30,7 @@ export class CodesPromoService extends ApiService implements APIRead {
                   );
               });
 
-            const query = await this.buildGetAll(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetAll_v2(columns);
             type Response = { allDefCodePromo: RelayPage<DefCodePromo> };
             const variables =
               this.mapLoadOptionsToVariables(options);
@@ -57,7 +53,11 @@ export class CodesPromoService extends ApiService implements APIRead {
             const query = await this.buildGetOne();
             type Response = { defCodePromo: DefCodePromo };
             const id = key
-              ? { id: key.id, espece: key.especeId || "", variete: key.varieteId || "", codePromo: key.codePromoId || "" }
+              ? {
+                codePromo: key.codePromoId || "",
+                espece: key.especeId || "",
+                variete: key.varieteId || "",
+              }
               : {};
             const variables = { id };
             this.listenQuery<Response>(
