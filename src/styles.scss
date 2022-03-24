@@ -243,7 +243,23 @@ body {
   .dx-column-indicators span {
     color: #fff !important;
   }
+  // Better highlihting when column is filtered
   .dx-header-filter:not(.dx-header-filter-empty) {
-    color: #79b23f !important;
+    color: white !important;
+    background-color: $base-accent;
+    border-radius: 100%;
   }
+}
+// Filter panel adjustments
+.dx-datagrid-filter-panel {
+  padding: 0 18px;
+  .dx-checkbox-icon {
+    top: 16px;
+  }
+  .dx-datagrid-filter-panel-text {
+    margin: auto;
+  }
+}
+.dx-datagrid-filter-panel-clear-filter {
+  padding: 15px 0;
 }
