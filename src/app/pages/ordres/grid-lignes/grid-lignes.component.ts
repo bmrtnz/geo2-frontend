@@ -237,7 +237,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
         if (e.data.nombreColisPalette && e.data.nombreColisCommandes) {
           volumetrie = e.data.nombreColisCommandes / e.data.nombreColisPalette;
           volumetrie /= (e.data.nombrePalettesIntermediaires ? e.data.nombrePalettesIntermediaires + 1 : 1);
-          e.cellElement.title = volumetrie;
+          e.cellElement.title = volumetrie + "\r\n" + "(Taux encombrement au sol)";
         }
       }
     }
@@ -370,10 +370,18 @@ export class GridLignesComponent implements OnChanges, OnInit {
   onEditorPreparing(e) {
     // Saving cell main info
     if (e.parentType === "dataRow") {
-      e.editorOptions.onFocusIn = () => {
+      e.editorOptions.onFocusIn = (elem) => {
         this.dataField = e.dataField;
         this.idLigne = e.row?.data?.id;
+        if (e.dataField !== "numero")
+          elem.element.querySelector(".dx-texteditor-input")?.select();
       };
+      // if (e.dataField === "nombrePalettesIntermediaires") {
+      //   e.editorOptions.max = 99;
+      // }
+      // e.editorOptions.onFocusOut = () => {
+      //   this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
+      // };
     }
   }
 
@@ -490,9 +498,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
   private handleCellChangeEventResponse<T>(): PartialObserver<T> {
     return {
       next: v => this.refreshGrid(),
-      error: (message: string) => notify({
-        message,
-      }, "error", 3000),
+      error: (message: string) => {
+        notify({ message }, "error", 7000);
+        console.log(message);
+      }
     };
   }
 

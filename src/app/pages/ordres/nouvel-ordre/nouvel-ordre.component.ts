@@ -207,20 +207,6 @@ export class NouvelOrdreComponent implements OnInit {
                         regimeTva: entrepot.regimeTva
                             ? { id: entrepot.regimeTva.id }
                             : null,
-                        ...(this.societe.id !== "BUK"
-                            ? {
-                                prixUnitaireTarifTransport: 0,
-                                transporteurDEVPrixUnitaire: 0,
-                                transporteur: { id: "-" },
-                                bassinTransporteur: "",
-                            }
-                            : {
-                                transporteur: {
-                                    id: entrepot.transporteur?.id ?? "-",
-                                },
-                                prixUnitaireTarifTransport:
-                                    entrepot.prixUnitaireTarifTransport,
-                            }),
                         baseTarifTransport: entrepot.baseTarifTransport
                             ? { id: entrepot.baseTarifTransport.id }
                             : null,
@@ -230,6 +216,7 @@ export class NouvelOrdreComponent implements OnInit {
                         baseTarifTransit: entrepot.baseTarifTransit
                             ? { id: entrepot.baseTarifTransit.id }
                             : null,
+                        transporteur: { id: entrepot.transporteur?.id ?? "-" },
                         transporteurDEVTaux: 1,
                         transporteurDEVCode: this.currentCompanyService.getCompany().devise.id,
                         prixUnitaireTarifTransport:

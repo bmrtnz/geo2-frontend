@@ -31,7 +31,6 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onCellPrepared)="onCellPrepared($event)"
-    (onEditingStart)="onEditingStart($event)"
     (onEditorPrepared)="onEditorPrepared($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
     (onFocusedRowChanged)="onFocusedRowChanged($event)"
@@ -113,7 +112,37 @@
       "
       [showInColumnChooser]="column.showInColumnChooser"
       [showEditorAlways]="true"
-    ></dxi-column>
+    >
+      <!-- Restrictions valeurs saisies -->
+      <dxi-validation-rule
+        *ngIf="column.dataField === 'nombrePalettesIntermediaires'"
+        type="range"
+        [min]="0"
+        [max]="9"
+        message="{{ 'valeurIncorrecte' | localize }}"
+      ></dxi-validation-rule>
+      <dxi-validation-rule
+        *ngIf="column.dataField === 'nombrePalettesCommandees'"
+        type="range"
+        [min]="0"
+        [max]="999"
+        message="{{ 'valeurIncorrecte' | localize }}"
+      ></dxi-validation-rule>
+      <dxi-validation-rule
+        *ngIf="column.dataField === 'nombreColisPalette'"
+        type="range"
+        [min]="0"
+        [max]="999"
+        message="{{ 'valeurIncorrecte' | localize }}"
+      ></dxi-validation-rule>
+      <dxi-validation-rule
+        *ngIf="column.dataField === 'nombreColisCommandes'"
+        type="range"
+        [min]="0"
+        [max]="9999"
+        message="{{ 'valeurIncorrecte' | localize }}"
+      ></dxi-validation-rule>
+    </dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
