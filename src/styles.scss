@@ -263,3 +263,7 @@ body {
 .dx-datagrid-filter-panel-clear-filter {
   padding: 15px 0;
 }
+// Reduce vertical spacing in popup list items
+.dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+  padding: 6px 15px !important;
+}
