@@ -54,6 +54,10 @@ export class ModificationsService extends ApiService implements APIRead {
         return this.watchSaveQuery({ variables }, depth);
     }
 
+    save_v2(columns: Array<string>, variables: OperationVariables) {
+        return this.watchSaveQuery_v2({ variables }, columns);
+    }
+
     getValue(el) {
         if (typeof el === "object" && !Array.isArray(el) && el !== null && el.id !== null) {
             return (el.nomUtilisateur ? el.nomUtilisateur : el.libelle ? el.libelle : el.raisonSocial ? el.raisonSocial : el.description);
