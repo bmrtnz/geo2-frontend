@@ -1,6 +1,11 @@
 {
   "common": {
-    "allowedPageSizes": [10, 25, 50, 100],
+    "allowedPageSizes": [
+      10,
+      25,
+      50,
+      100
+    ],
     "filterPanel": {
       "filterEnabled": true
     },
@@ -1696,7 +1701,6 @@
       {
         "visibleIndex": 27,
         "dataField": "codePromo",
-        "dataType": "boolean",
         "allowEditing": true,
         "visible": true
       },
@@ -1794,6 +1798,11 @@
       },
       {
         "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.espece.id",
         "showInColumnChooser": false,
         "visible": false
       },

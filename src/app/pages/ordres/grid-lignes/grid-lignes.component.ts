@@ -65,6 +65,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public currNumero: string;
   public switchNumero: string;
   public itemsWithSelectBox: string[];
+  public specialItemsWithSelectBox: string[];
   public CodeBeforeInSelectBox: string[];
   public env = environment;
   public nbInsertedArticles: number;
@@ -106,10 +107,11 @@ export class GridLignesComponent implements OnChanges, OnInit {
       "fraisUnite",
       "typePalette",
       "paletteInter",
-      "proprietaireMarchandise",
+      "proprietaireMarchandise"
+    ];
+    this.specialItemsWithSelectBox = [
       "codePromo"
     ];
-    this.CodeBeforeInSelectBox = this.itemsWithSelectBox.filter(item => item !== "codePromo");
     this.newArticles = 0;
     this.newNumero = 0;
     this.hintDblClick = this.localizeService.localize("hint-DblClick-file");
@@ -166,7 +168,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
   filterCodesPromoDS(filters?) {
     const myFilter: any[] = [["valide", "=", true]];
     if (filters?.length) myFilter.push("and", filters);
-    this.codePromoSource = this.codePromoService.getDataSource();
+    this.codePromoSource = this.codePromoService.getDataSource_v2(
+      ["codePromo.id", "codePromo.description", "espece.id", "variete.id"]
+    );
     this.codePromoSource.filter(myFilter);
   }
 
@@ -219,6 +223,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (this.itemsWithSelectBox.includes(field)) {
       field += `.${this[field + "Service"].model.getKeyField()}`;
     }
+    if (this.specialItemsWithSelectBox.includes(field)) {
+      field += ".id";
+    }
     return field;
   }
 
@@ -267,8 +274,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
     let templ;
     if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
+    if (this.specialItemsWithSelectBox.includes(field)) templ = "specialSelectBoxEditTemplate";
     if (field === "article.matierePremiere.origine.id") templ = "origineTemplate";
     if (field === "ordre.client.id") templ = "certificationTemplate";
+    if (field === "codePromo.id") templ = "selectBoxEditTemplate";
     return templ ? templ : false;
   }
 
