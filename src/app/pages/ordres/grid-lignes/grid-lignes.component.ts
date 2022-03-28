@@ -438,8 +438,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   updateFilterFournisseurDS(proprietaireMarchandise) {
 
-    const newFourId = proprietaireMarchandise?.id;
-    const newFourCode = proprietaireMarchandise?.code;
+    let newFourId = proprietaireMarchandise?.id;
+    let newFourCode = proprietaireMarchandise?.code;
     const filters = [];
 
     if (this.currentCompanyService.getCompany().id !== "BUK" || newFourCode.substring(0, 2) !== "BW") {
@@ -447,11 +447,14 @@ export class GridLignesComponent implements OnChanges, OnInit {
       if (listExp) {
         listExp.split(",").map(exp => filters.push(["code", "=", exp], "or"));
         filters.pop();
+        newFourId = null;
+        newFourCode = null;
       } else {
         if (newFourId !== null) filters.push(["id", "=", newFourId]);
       }
     }
     this.filterFournisseurDS(filters);
+    return [newFourId, newFourCode];
 
   }
 
@@ -487,10 +490,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
       case "proprietaireMarchandise": { // Adjust fournisseurs list & other stuff
         this.dataField = null;
         const proprietaireMarchandise = data.changes[0].data.data.saveOrdreLigne.proprietaireMarchandise;
-        this.updateFilterFournisseurDS(proprietaireMarchandise);
+        const [newFourId, newFourCode] = this.updateFilterFournisseurDS(proprietaireMarchandise);
         data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
           "fournisseur",
-          { id: null, code: null });
+          { id: newFourId, code: newFourCode });
         setTimeout(() => this.datagrid.instance.saveEditData());
         this.functionsService
           .onChangeProprCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
