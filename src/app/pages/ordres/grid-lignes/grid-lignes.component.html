@@ -147,7 +147,11 @@
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
         [dataSource]="this[cell.column.dataField + 'Source']"
-        [displayExpr]="displayCodeBefore"
+        [displayExpr]="
+          noCodeBeforeSelectBox.includes(cell.column.dataField)
+            ? this[cell.column.dataField + 'Service'].model.getLabelField()
+            : displayCodeBefore
+        "
         [searchExpr]="[
           this[cell.column.dataField + 'Service'].model.getKeyField(),
           this[cell.column.dataField + 'Service'].model.getLabelField()
@@ -159,18 +163,6 @@
       >
         <dxo-drop-down-options [width]="SelectBoxPopupWidth">
         </dxo-drop-down-options>
-      </dx-select-box>
-    </div>
-    <div *dxTemplate="let cell of 'specialSelectBoxEditTemplate'">
-      <dx-select-box
-        [dataSource]="this[cell.column.dataField + 'Source']"
-        displayExpr="codePromo.description"
-        [searchExpr]="['codePromo.id', 'codePromo.description']"
-        [searchEnabled]="true"
-        [value]="cell.data[cell.column.dataField].codePromo"
-        (onValueChanged)="onValueChanged($event, cell)"
-      >
-        <dxo-drop-down-options [width]="180"> </dxo-drop-down-options>
       </dx-select-box>
     </div>
     <div *dxTemplate="let cell of 'origineTemplate'">
