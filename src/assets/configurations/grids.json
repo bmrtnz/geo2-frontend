@@ -1,11 +1,6 @@
 {
   "common": {
-    "allowedPageSizes": [
-      10,
-      25,
-      50,
-      100
-    ],
+    "allowedPageSizes": [10, 25, 50, 100],
     "filterPanel": {
       "filterEnabled": true
     },
@@ -1687,7 +1682,7 @@
         "visibleIndex": 24,
         "dataField": "venteUnite",
         "dataType": "number",
-        "width": "150",
+        "width": "130",
         "allowEditing": true,
         "visible": true
       },
@@ -1702,6 +1697,7 @@
         "visibleIndex": 27,
         "dataField": "codePromo",
         "allowEditing": true,
+        "width": "150",
         "visible": true
       },
       {

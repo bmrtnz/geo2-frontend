@@ -1,9 +1,9 @@
 <div class="grid-lignes-container">
   <dx-button [focusStateEnabled]="false" class="down-move-button" type="normal" text="down" icon="arrowdown"
-    hint="{{ 'hint-deplacer-ligne-bas' | localize }}" [disabled]="lastRowFocused || !gridRowsTotal || !allowMutations"
+    hint="{{ 'hint-deplacer-ligne-bas' | localize }}" [disabled]="lastRowFocused || !gridRowsTotal || env.production"
     (onClick)="moveRowUpDown($event)"></dx-button>
   <dx-button [focusStateEnabled]="false" class="up-move-button" type="normal" text="up" icon="arrowup"
-    hint="{{ 'hint-deplacer-ligne-haut' | localize }}" [disabled]="!currentfocusedRow || !allowMutations"
+    hint="{{ 'hint-deplacer-ligne-haut' | localize }}" [disabled]="!currentfocusedRow || env.production"
     (onClick)="moveRowUpDown($event)"></dx-button>
   <!-- <div>Champ : {{ dataField }}</div> -->
   <dx-data-grid class="dx-card wide-card" [focusedRowEnabled]="true" [remoteOperations]="true" [showBorders]="false"
@@ -60,21 +60,16 @@
     </dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
-      <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="displayCodeBefore"
-        [searchExpr]="[
+      <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="
+          noCodeBeforeSelectBox.includes(cell.column.dataField)
+            ? this[cell.column.dataField + 'Service'].model.getLabelField()
+            : displayCodeBefore
+        " [searchExpr]="[
           this[cell.column.dataField + 'Service'].model.getKeyField(),
           this[cell.column.dataField + 'Service'].model.getLabelField()
         ]" [searchEnabled]="true" [value]="cell.data[cell.column.dataField]"
         [hint]="hintFournisseur(cell.column.dataField)" (onValueChanged)="onValueChanged($event, cell)">
         <dxo-drop-down-options [width]="SelectBoxPopupWidth">
-        </dxo-drop-down-options>
-      </dx-select-box>
-    </div>
-    <div *dxTemplate="let cell of 'specialSelectBoxEditTemplate'">
-      <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" displayExpr="codePromo.description"
-        [searchExpr]="['codePromo.id', 'codePromo.description']" [searchEnabled]="true"
-        [value]="cell.data[cell.column.dataField].codePromo" (onValueChanged)="onValueChanged($event, cell)">
-        <dxo-drop-down-options [width]="180">
         </dxo-drop-down-options>
       </dx-select-box>
     </div>

@@ -653,7 +653,8 @@
   <app-editing-alert></app-editing-alert>
   <app-ajout-articles-manu-popup [ordre]="ordre" (lignesChanged)="onLignesChanged($event)">
   </app-ajout-articles-manu-popup>
-  <app-file-manager-popup key="ordres" [subTitle]="ordre.numero" [id]="ordre.id" *ngIf="ordre"></app-file-manager-popup>
+  <app-file-manager-popup key="ordres" [subTitle]="'Ordre n°' + ordre.numero" [id]="ordre.id" *ngIf="ordre">
+  </app-file-manager-popup>
   <dx-popup [width]="400" [height]="165" [showTitle]="false" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="validationPopupVisible">
     <p>Cet ordre va être supprimé, voulez-vous continuer ?</p>

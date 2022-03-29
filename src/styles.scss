@@ -258,6 +258,14 @@ body {
   }
   .dx-datagrid-filter-panel-text {
     margin: auto;
+    pointer-events: none;
+    display: none;
+  }
+  .dx-icon-filter {
+    display: none;
+  }
+  .dx-datagrid-filter-panel-checkbox ~ .dx-datagrid-filter-panel-text {
+    display: block;
   }
 }
 .dx-datagrid-filter-panel-clear-filter {
