@@ -3,7 +3,7 @@ import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/g
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
-import Ordre from "app/shared/models/ordre.model";
+import Ordre, { Statut } from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { DxDataGridComponent } from "devextreme-angular";
 import { GridColumn, TotalItem } from "basic";
@@ -59,6 +59,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @ViewChild(ArticleCertificationPopupComponent, { static: false }) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ZoomFournisseurPopupComponent, { static: false }) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
   private gridConfig: Promise<GridConfig>;
+  public allowMutations = false;
   public currentfocusedRow: number;
   public gridRowsTotal: number;
   public lastRowFocused: boolean;
@@ -151,6 +152,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
+    this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
     this.enableFilters();
   }
 

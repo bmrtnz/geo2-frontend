@@ -1,9 +1,9 @@
 <div class="grid-lignes-container">
   <dx-button [focusStateEnabled]="false" class="down-move-button" type="normal" text="down" icon="arrowdown"
-    hint="{{ 'hint-deplacer-ligne-bas' | localize }}" [disabled]="lastRowFocused || !gridRowsTotal || env.production"
+    hint="{{ 'hint-deplacer-ligne-bas' | localize }}" [disabled]="lastRowFocused || !gridRowsTotal || !allowMutations"
     (onClick)="moveRowUpDown($event)"></dx-button>
   <dx-button [focusStateEnabled]="false" class="up-move-button" type="normal" text="up" icon="arrowup"
-    hint="{{ 'hint-deplacer-ligne-haut' | localize }}" [disabled]="!currentfocusedRow || env.production"
+    hint="{{ 'hint-deplacer-ligne-haut' | localize }}" [disabled]="!currentfocusedRow || !allowMutations"
     (onClick)="moveRowUpDown($event)"></dx-button>
   <!-- <div>Champ : {{ dataField }}</div> -->
   <dx-data-grid class="dx-card wide-card" [focusedRowEnabled]="true" [remoteOperations]="true" [showBorders]="false"
@@ -31,7 +31,7 @@
       [customLoad]="gridConfiguratorService.load" [customSave]="gridConfiguratorService.save"></dxo-state-storing>
     <dxo-filter-row [visible]="false"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-editing [selectTextOnEditStart]="true" [allowUpdating]="!env.production" [allowDeleting]="!env.production"
+    <dxo-editing [selectTextOnEditStart]="true" [allowUpdating]="allowMutations" [allowDeleting]="allowMutations"
       [mode]="'cell'">
     </dxo-editing>
     <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}" [allowSearch]="true"

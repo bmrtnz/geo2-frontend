@@ -42,13 +42,13 @@ export enum OrdreType {
 }
 
 export enum Statut {
-    ANNULE = "Annulé",
-    A_FACTURER = "À facturer",
-    CONFIRME = "Confirmé",
-    EN_PREPARATION = "En préparation",
-    EXPEDIE = "Expédié",
-    FACTURE = "Facturé",
-    NON_CONFIRME = "Non confirmé",
+    ANNULE = "Annulé" as any,
+    A_FACTURER = "À facturer" as any,
+    CONFIRME = "Confirmé" as any,
+    EN_PREPARATION = "En préparation" as any,
+    EXPEDIE = "Expédié" as any,
+    FACTURE = "Facturé" as any,
+    NON_CONFIRME = "Non confirmé" as any,
 }
 
 @ModelName("Ordre")
@@ -158,6 +158,13 @@ export class Ordre extends Model {
     public sommeColisExpedies?: number;
     @Field({ model: import("./transitaire.model") })
     public transitaire?: Transitaire;
+    public static isCloture(ordre: Partial<Ordre>) {
+        return [
+            Statut[Statut.EXPEDIE],
+            Statut[Statut.FACTURE],
+        ]
+            .includes(ordre?.statut.toString());
+    }
 }
 
 export default Ordre;

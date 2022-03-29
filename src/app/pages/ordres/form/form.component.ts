@@ -125,6 +125,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public orderNumber: string;
     public fullOrderNumber: string;
     public env = environment;
+    public allowMutations = false;
 
     public clientsDS: DataSource;
     public entrepotDS: DataSource;
@@ -390,6 +391,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(ordre => {
                 this.ordre = ordre;
                 if (this.ordre === null) return;
+                this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
                 this.fraisClient = this.getFraisClient();
                 this.gestEntrepot = this.getGestEntrepot();
                 this.fetchFullOrderNumber();
@@ -485,7 +487,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const nouveau = this?.ordre?.statut;
 
-        this.fullOrderNumber = nouveau.includes("NON_CONFIRME") ? "Nouvel " : "";
+        this.fullOrderNumber = [Statut[nouveau]].includes("NON_CONFIRME") ? "Nouvel " : "";
 
         this.fullOrderNumber += `Ordre N° ${(this.ordre.campagne
             ? (this.ordre.campagne.id ? this.ordre.campagne.id : this.ordre.campagne) + "-"
