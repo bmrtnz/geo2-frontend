@@ -27,6 +27,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
     getDataSource_v2(columns: Array<string>) {
         type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
         return new DataSource({
+            sort: [{ selector: "id" }],
             store: this.createCustomStore({
                 load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {

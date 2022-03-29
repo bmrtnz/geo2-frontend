@@ -1,6 +1,11 @@
 {
   "common": {
-    "allowedPageSizes": [10, 25, 50, 100],
+    "allowedPageSizes": [
+      10,
+      25,
+      50,
+      100
+    ],
     "filterPanel": {
       "filterEnabled": true
     },
@@ -2098,26 +2103,36 @@
       {
         "visibleIndex": 1,
         "dataField": "codeFournisseur",
+        "sortIndex": 2,
+        "sortOrder": "asc",
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "expedieStation",
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "dateDepartPrevueFournisseur",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "transporteurGroupage.id",
+        "dataField": "transporteurGroupage",
+        "dataType": "string",
+        "width": "200",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "groupage.id",
+        "dataField": "groupage",
+        "dataType": "string",
+        "width": "200",
         "visible": true
       },
       {
@@ -2200,12 +2215,14 @@
         "visibleIndex": 21,
         "dataField": "referenceDocument",
         "dataType": "string",
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 22,
         "dataField": "numeroImmatriculation",
         "dataType": "string",
+        "allowEditing": false,
         "visible": true
       },
       {
@@ -2252,6 +2269,16 @@
       },
       {
         "dataField": "id",
+        "visible": false
+      },
+      {
+        "dataField": "transporteurGroupage.raisonSocial",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "groupage.ville",
+        "showInColumnChooser": false,
         "visible": false
       }
     ]

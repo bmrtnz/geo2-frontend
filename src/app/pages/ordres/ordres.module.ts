@@ -88,6 +88,10 @@ import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-pop
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
 import { ArticleCertificationPopupComponent } from "./article-certification-popup/article-certification-popup.component";
+import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
+import { TransporteursModule } from "../tiers/transporteurs/transporteurs.module";
+import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-passage-a-quai.module";
 
 @NgModule({
   declarations: [
@@ -136,6 +140,8 @@ import { ArticleCertificationPopupComponent } from "./article-certification-popu
     ZoomFournisseurPopupComponent,
     ArticleOriginePopupComponent,
     ArticleCertificationPopupComponent,
+    ZoomTransporteurPopupComponent,
+    ZoomLieupassageaquaiPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,
@@ -174,7 +180,9 @@ import { ArticleCertificationPopupComponent } from "./article-certification-popu
     ViewDocumentPopupModule,
     DxLoadPanelModule,
     ButtonLoaderModule,
-    FournisseursModule
+    FournisseursModule,
+    TransporteursModule,
+    LieuxPassageAQuaiModule
   ],
   providers: [
     OrdresIndicatorsService,

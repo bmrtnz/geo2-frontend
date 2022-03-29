@@ -52,5 +52,6 @@ import { ModificationListModule } from "app/shared/components/modification-list/
     ],
     declarations: [TransporteursListComponent, TransporteurDetailsComponent],
     providers: [NestedGuard, EditingGuard],
+    exports: [TransporteurDetailsComponent]
 })
-export class TransporteursModule {}
+export class TransporteursModule { }

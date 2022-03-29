@@ -307,7 +307,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     }
     if (["fournisseur", "proprietaireMarchandise"].includes(e.column?.dataField)) {
       const idFour = e.data[e.column.dataField].id;
-      if (!idFour) return;
+      if (idFour === null) return;
       this.fournisseurLigneId = idFour;
       this.zoomFournisseurPopup.visible = true;
     }

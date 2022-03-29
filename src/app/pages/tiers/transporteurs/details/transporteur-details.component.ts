@@ -2,6 +2,8 @@ import {
     AfterViewInit,
     Component,
     EventEmitter,
+    Input,
+    OnChanges,
     OnInit,
     ViewChild,
     ViewChildren,
@@ -37,7 +39,11 @@ import { tap } from "rxjs/operators";
     styleUrls: ["./transporteur-details.component.scss"],
 })
 export class TransporteurDetailsComponent
-    implements OnInit, AfterViewInit, NestedPart, Editable {
+    implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
+
+    @Input() public transporteurLigneId: string;
+    @Input() public transporteurTitle: string;
+
     formGroup = this.fb.group({
         id: [""],
         raisonSocial: [""],
@@ -136,6 +142,9 @@ export class TransporteurDetailsComponent
     }
 
     ngOnInit() {
+
+        if (this.route.snapshot.url[1]?.path !== "transporteurs") return;
+
         this.route.params
             .pipe(tap((_) => this.formGroup.reset()))
             .subscribe((params) => {
@@ -146,13 +155,7 @@ export class TransporteurDetailsComponent
                     this.transporteursService
                         .getOne(params.id)
                         .subscribe((res) => {
-                            this.transporteur = res.data.transporteur;
-                            this.formGroup.patchValue(this.transporteur);
-                            this.contentReadyEvent.emit();
-                            this.preSaisie =
-                                this.transporteur.preSaisie === true
-                                    ? "preSaisie"
-                                    : "";
+                            this.afterLoadInitForm(res);
                         });
                 } else {
                     this.transporteur = new Transporteur({});
@@ -174,6 +177,29 @@ export class TransporteurDetailsComponent
             "id",
             "raisonSocial",
         ]);
+    }
+
+    ngOnChanges() {
+
+        // Zoom transporteur mode when clicking on an order logistic row
+        if (this.transporteurLigneId) {
+            this.formGroup.reset();
+            this.preSaisie = "";
+            this.transporteursService
+                .getOne(this.transporteurLigneId)
+                .subscribe(res => this.afterLoadInitForm(res));
+        }
+
+    }
+
+    afterLoadInitForm(res) {
+        this.transporteur = res.data.transporteur;
+        this.formGroup.patchValue(this.transporteur);
+        this.contentReadyEvent.emit();
+        this.preSaisie =
+            this.transporteur.preSaisie === true
+                ? "preSaisie"
+                : "";
     }
 
     checkCode(params) {

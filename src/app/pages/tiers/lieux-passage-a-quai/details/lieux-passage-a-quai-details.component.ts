@@ -2,6 +2,8 @@ import {
     AfterViewInit,
     Component,
     EventEmitter,
+    Input,
+    OnChanges,
     OnInit,
     ViewChild,
 } from "@angular/core";
@@ -34,7 +36,11 @@ import { tap } from "rxjs/operators";
     styleUrls: ["./lieux-passage-a-quai-details.component.scss"],
 })
 export class LieuxPassageAQuaiDetailsComponent
-    implements OnInit, AfterViewInit, NestedPart, Editable {
+    implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
+
+    @Input() public lieupassageaquaiLigneId: string;
+    @Input() public lieupassageaquaiTitle: string;
+
     formGroup = this.fb.group({
         id: [""],
         raisonSocial: [""],
@@ -125,6 +131,9 @@ export class LieuxPassageAQuaiDetailsComponent
     }
 
     ngOnInit() {
+
+        if (this.route.snapshot.url[1]?.path !== "lieux-passage-a-quai") return;
+
         this.route.params
             .pipe(tap((_) => this.formGroup.reset()))
             .subscribe((params) => {
@@ -135,13 +144,7 @@ export class LieuxPassageAQuaiDetailsComponent
                     this.lieupassageaquaiService
                         .getOne(params.id)
                         .subscribe((res) => {
-                            this.lieupassageaquai = res.data.lieuPassageAQuai;
-                            this.formGroup.patchValue(this.lieupassageaquai);
-                            this.contentReadyEvent.emit();
-                            this.preSaisie =
-                                this.lieupassageaquai.preSaisie === true
-                                    ? "preSaisie"
-                                    : "";
+                            this.afterLoadInitForm(res);
                         });
                 } else {
                     this.lieupassageaquai = new LieuPassageAQuai({});
@@ -159,6 +162,29 @@ export class LieuxPassageAQuaiDetailsComponent
         this.moyensPaiement.filter(["valide", "=", "true"]);
         this.basesPaiement = this.basesPaiementService.getDataSource();
         this.basesPaiement.filter(["valide", "=", "true"]);
+    }
+
+    ngOnChanges() {
+
+        // Zoom fournisseur mode when clicking on an order article
+        if (this.lieupassageaquaiLigneId) {
+            this.formGroup.reset();
+            this.preSaisie = "";
+            this.lieupassageaquaiService
+                .getOne(this.lieupassageaquaiLigneId)
+                .subscribe(res => this.afterLoadInitForm(res));
+        }
+
+    }
+
+    afterLoadInitForm(res) {
+        this.lieupassageaquai = res.data.lieuPassageAQuai;
+        this.formGroup.patchValue(this.lieupassageaquai);
+        this.contentReadyEvent.emit();
+        this.preSaisie =
+            this.lieupassageaquai.preSaisie === true
+                ? "preSaisie"
+                : "";
     }
 
     checkCode(params) {

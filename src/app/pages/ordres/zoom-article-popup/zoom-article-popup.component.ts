@@ -26,7 +26,9 @@ export class ZoomArticlePopupComponent implements AfterViewInit, OnChanges {
   }
 
   setTitle() {
-    this.title = this.localizeService.localize("zoom-article") + this.articleLigneId;
+    this.title = this.localizeService.localize("zoom-article")
+      + " "
+      + this.articleLigneId;
   }
 
   onShowing(e) {

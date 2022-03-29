@@ -4,7 +4,6 @@
     "home": "Accueil",
     "copyright": "Copyright © 2020{0} Microtec Informatique ",
     "version": "v",
-
     "documents": "Documents",
     "valide": "Validé",
     "valide-comment": "Commentaire",
@@ -25,18 +24,15 @@
     "avec": "avec",
     "preFilter-title": "Pré-filtrage",
     "aucune": "Aucune",
-
     "fileManager-name": "Nom",
     "fileManager-dateModified": "Modifié le",
     "fileManager-size": "Taille",
-
     "client": "client",
     "entrepot": "entrepôt",
     "fournisseur": "fournisseur",
     "lieupassageaquai": "lieu de passage à quai",
     "sortie_stock": "sortie stock",
     "transporteur": "transporteur",
-
     "btn-historique": "Historique",
     "btn-docsjoints": "Docs joints",
     "btn-affecter": "Affecter",
@@ -67,7 +63,6 @@
     "btn-valider-articles": "Ajouter && articles",
     "btn-origine": "Origine",
     "btn-certification": "Certif",
-
     "columnChooser": "Sélection des colonnes affichées",
     "search": "Recherche…",
     "saveError": "Sauvegardé",
@@ -79,16 +74,18 @@
     "ajout-article": "Ajout d'un article sur l'ordre",
     "article-ajoutes": "article&& ajouté&&",
     "zoom-article": "Zoom article n°",
-    "zoom-fournisseur": "Zoom fournisseur ",
+    "zoom-fournisseur": "Zoom fournisseur",
+    "zoom-transporteur": "Zoom transporteur",
+    "zoom-transporteurGroupage": "Zoom transporteur groupage",
+    "zoom-lieupassageaquai": "Zoom Lieu de passage à quai",
+    "zoom-groupage": "Zoom Lieu de groupage",
     "ajout-code": "Code...",
     "en-cours": "en cours...",
     "total": "Total",
     "totaux": "Totaux",
-
     "button-bascule-clients-valide": "CV",
     "button-bascule-entrepots-valide": "EV",
     "button-bascule-fournisseurs-valide": "FV",
-
     "hint-bascule-clients-valide": "Bascule entre clients valides uniquement ou tous clients",
     "hint-bascule-entrepots-valide": "Bascule entre entrepôts valides uniquement ou tous entrepôts",
     "hint-bascule-fournisseurs-valide": "Bascule entre fournisseurs valides uniquement ou tous fournisseurs",
@@ -101,13 +98,10 @@
     "hint-deplacer-ligne-haut": "Déplacer la ligne vers le haut",
     "hint-deplacer-ligne-bas": "Déplacer la ligne vers le bas",
     "hint-DblClick-file": "Double-cliquez pour voir la fiche",
-
     "text-clients-popup-documents": "N'oubliez pas de joindre les documents obligatoires !",
     "text-fournisseurs-popup-documents": "N'oubliez pas de joindre CGA signées (OBLIGATOIRE) et certifications si nécessaire",
     "text-transporteurs-popup-documents": "N’oubliez pas de joindre la lettre d’engagement pour validation du tiers par l’administrateur",
-
     "datagridTitle-SyntheseExpeditions": "Synthèse expéditions",
-
     "auth-logout": "Déconnexion",
     "auth-subtitle": "Connectez-vous à votre compte",
     "auth-login": "Identifiant",
@@ -116,7 +110,6 @@
     "auth-validation-password": "Le mot de passe est obligatoire",
     "auth-login-btn": "Connexion",
     "auth-societe": "Société",
-
     "tiers-clients-title": "Clients",
     "tiers-client": "Client",
     "tiers-clients-id": "ID",
@@ -217,7 +210,6 @@
     "tiers-clients-enCours90Plus": "+ de 90 j",
     "tiers-clients-alerteCoface": "COFACE !!",
     "tiers-clients-enCoursDouteux": "Encours douteux",
-
     "tiers-clients-details-title": "Fiche client",
     "tiers-clients-details-groupe-infos": "Infos générales",
     "tiers-clients-details-groupe-references": "Références",
@@ -226,7 +218,6 @@
     "tiers-clients-details-groupe-commentaires": "Commentaires",
     "tiers-clients-instructionCommercial": "Instructions internes",
     "tiers-clients-instructionLogistique": "Instructions logistique",
-
     "tiers-fournisseurs-title": "Fournisseurs",
     "tiers-fournisseur": "Fournisseur",
     "tiers-fournisseurs-details-groupe-infos": "Infos générales",
@@ -290,7 +281,6 @@
     "tiers-fournisseurs-fournisseurDeRattachement": "Affecté au fournisseur",
     "tiers-fournisseurs-fournisseurDeRattachement-raisonSocial": "Affecté au fournisseur",
     "tiers-fournisseurs-groupeFournisseur": "Groupé dans",
-
     "tiers-fournisseurs-details-groupe-certifications": "Certifications",
     "tiers-fournisseurs-details-groupe-paramavances": "Paramètres avancés",
     "tiers-fournisseurs-details-title": "Fiche fournisseur",
@@ -307,7 +297,6 @@
     "tiers-fournisseurs-dateConditionGeneraleAchatSignee": "Condition générale d'achat signée",
     "tiers-fournisseurs-indicateurModificationDetail": "BW modifie détail",
     "tiers-fournisseurs-conditionVente": "Contrat Achat",
-
     "tiers-transporteurs-details-title": "Fiche transporteur",
     "tiers-transporteur-title": "Transporteur",
     "tiers-transporteurs-title": "Transporteurs",
@@ -343,7 +332,6 @@
     "tiers-transporteurs-devise": "Devise",
     "tiers-transporteurs-moyenPaiement": "Moyen de paiement",
     "tiers-transporteurs-basePaiement": "Base de paiement",
-
     "tiers-lieuxpassageaquai-title": "Lieux de passage à quai",
     "tiers-lieuxpassageaquai-details-title": "Fiche lieu de passage à quai",
     "tiers-lieuxpassageaquai-code": "Code passage à quai",
@@ -374,7 +362,6 @@
     "tiers-lieuxpassageaquai-compteComptable": "Compte comptable",
     "tiers-lieuxpassageaquai-contacts": "Contacts",
     "tiers-lieuxpassageaquai-typeTiers": "Type tiers",
-
     "tiers-entrepot": "Entrepôt",
     "tiers-entrepots-contacts": "Contacts",
     "tiers-entrepots-title": "Entrepôts",
@@ -429,7 +416,6 @@
     "tiers-entrepots-instructionLogistique": "Instructions logistique",
     "tiers-entrepots-details-title": "Fiche entrepôt",
     "tiers-entrepots-typeTiers": "Type tiers",
-
     "tiers-MRUentrepots-codeEntrepot": "Code Entrepôt",
     "tiers-MRUentrepots-entrepot-raisonSocial": "Raison sociale Entrepôt",
     "tiers-MRUentrepots-entrepot-client-raisonSocial": "Raison sociale Client",
@@ -439,7 +425,6 @@
     "tiers-MRUentrepots-entrepot-client-assistante-nomUtilisateur": "Ass. Client",
     "tiers-MRUentrepots-entrepot-commercial-id": "Comm. Entrepôt",
     "tiers-MRUentrepots-entrepot-assistante-id": "Ass. Entrepôt",
-
     "tiers-ordre-entrepots-code": "Code Entrepôt",
     "tiers-ordre-entrepots-raisonSocial": "Raison sociale Entrepôt",
     "tiers-ordre-entrepots-client-raisonSocial": "Raison sociale Client",
@@ -449,7 +434,6 @@
     "tiers-ordre-entrepots-client-assistante-nomUtilisateur": "Ass. Client",
     "tiers-ordre-entrepots-commercial-id": "Comm. Entrepôt",
     "tiers-ordre-entrepots-assistante-id": "Ass. Entrepôt",
-
     "tiers-contacts-title": "Contacts",
     "tiers-contacts-nom": "Nom",
     "tiers-contacts-prenom": "Prénom",
@@ -470,7 +454,6 @@
     "tiers-contacts-typeTiers": "Type tiers",
     "tiers-contacts-societe": "Société",
     "tiers-contacts-societe-id": "Société",
-
     "articles-title": "Articles",
     "articles-saisieCode": "Saisie directe code(s) :",
     "articles-saisieCode-erreur": "Code article",
@@ -482,20 +465,17 @@
     "articles-gtinColisBlueWhale": "GTIN Colis BW",
     "articles-gtinUcBlueWhale": "GTIN UC BW",
     "articles-articleAssocie": "Article associé",
-
     "articles-groupe-CDC": "CDC",
     "articles-groupe-matierePremiere": "Matière première",
     "articles-groupe-normalisation": "Normalisation",
     "articles-groupe-emballage": "Emballage",
     "articles-code": "Code",
-
     "articles-type": "Type",
     "articles-dateModification": "Date de modification",
     "articles-details-title": "Fiche article",
     "articles-description": "Description abrégée",
     "articles-blueWhaleStock": "BW STOCK",
     "articles-instructionStation": "Instructions au fournisseur",
-
     "articles-matierePremiere-variete": "Variété",
     "articles-matierePremiere-calibreUnifie": "Calibre unifié",
     "articles-matierePremiere-origine": "Origine",
@@ -504,7 +484,6 @@
     "articles-matierePremiere-modeCulture": "Mode de culture",
     "articles-matierePremiere-espece": "Espèce",
     "articles-matierePremiere-codePlu": "Code PLU",
-
     "articles-emballage-emballage": "Emballage",
     "articles-emballage-poidsNetColis": "Poids net colis",
     "articles-emballage-poidsNetTheo": "Poids net théorique",
@@ -515,14 +494,12 @@
     "articles-emballage-poidsNetGaranti": "Poids garanti UC",
     "articles-emballage-conditionSpecial": "Conditionnement spécial",
     "articles-emballage-alveole": "Alvéole",
-
     "articles-cahierDesCharge-coloration": "Coloration",
     "articles-cahierDesCharge-categorie": "Catégorie",
     "articles-cahierDesCharge-cirage": "Cirage",
     "articles-cahierDesCharge-penetro": "Pénétrométrie",
     "articles-cahierDesCharge-rangement": "Rangement",
     "articles-cahierDesCharge-sucre": "Sucre",
-
     "articles-normalisation-marque": "Marque",
     "articles-normalisation-stickeur": "Stickeur",
     "articles-normalisation-etiquetteColis": "Etiquette client",
@@ -534,16 +511,13 @@
     "articles-normalisation-articleClient": "Code article client",
     "articles-normalisation-calibreMarquage": "Calibre marquage",
     "articles-normalisation-produitMdd": "Marque distributeur",
-
     "articles-descrSpecialeCalClt": "Description spéciale calibre client",
     "articles-etiquetteColis": "Etiquette Colis",
     "articles-valide": "Valide",
     "articles-preSaisie": "Pré-saisie",
     "articles-commentaire": "Commentaire",
-
     "articles-ordre-numero": "Numéro d'ordre",
     "articles-article-description": "Description",
-
     "articles-liste-origine-departement": "Département",
     "articles-liste-origine-region": "Région",
     "articles-liste-origine-zone": "Zone",
@@ -553,7 +527,6 @@
     "articles-save-certification-error": "Echec sauvegarde certification",
     "articles-curr-origin": "Origine actuelle",
     "articles-new-origin": "Origine sélectionnée",
-
     "stocks-title": "Stocks",
     "stocks-fournisseurs-title": "Fourniss.",
     "stocks-groupeEmballage": "Groupe emballage",
@@ -566,7 +539,6 @@
     "stocks-articles-actions": "Actions",
     "stocks-articles-total": "Total",
     "stocks-articles-comm": "Commentaires",
-
     "ordres-accueil-ordre-title": "Accueil Ordres de commande",
     "ordres-nouvel-ordre-title": "Choisir un entrepôt",
     "ordres-configuration": "Configuration",
@@ -678,7 +650,6 @@
     "ordres-days": "jours",
     "ordre-planning-depart-diff-expe": "Différence sur expédition et/ou sans détail client",
     "ordres-dateMaxMouvements": "Mvts jusqu'au",
-
     "ordresTransporteur-entrepotRaisonSocial": "Lieu de livraison",
     "ordresTransporteur-numero": "Ordre - version",
     "ordresTransporteur-version": "Version",
@@ -706,7 +677,6 @@
     "ordresTransporteur-flagEntrepot": "Flag entrepôt",
     "ordresTransporteur-ordre-statut": "Statut",
     "ordresTransporteur-ordre-id": "Réf. ordre",
-
     "ordreLignesPalox-logistique-dateDepartPrevueFournisseur": "Chargement",
     "ordreLignesPalox-logistique-fournisseur-code": "Fournisseur",
     "ordreLignesPalox-logistique-fournisseur-id": "Id Fournisseur",
@@ -726,10 +696,8 @@
     "ordreLignesPalox-achatPrixUnitaire": "Prix d'achat",
     "ordreLignesPalox-nombreColisExpedies": "Colis",
     "ordreLignesPalox-article-description": "Description article résumée",
-
     "ordres-palox-mouvements": "Mouvements",
     "ordres-palox-recapitulatif": "Récap. soldes non nuls",
-
     "ordreLignes-id": "Réf. ligne",
     "ordreLignes-ordre-id": "Réf. ordre",
     "ordreLignes-numero": "n°",
@@ -786,7 +754,6 @@
     "ordreLignes-article-matierePremiere-origine-id": " ",
     "ordreLignes-article-matierePremiere-origine-description": "Origine",
     "ordreLignes-ordre-client-id": " ",
-
     "ordreEnvois-id": "n°",
     "ordreEnvois-imprimanteID": "Imprimante",
     "ordreEnvois-dateEnvoi": "Date Envoi",
@@ -809,7 +776,6 @@
     "ordreEnvois-document-type": "Type doc",
     "ordreEnvois-document-uri": "URI doc",
     "ordreEnvois-commentairesAvancement": "Statut",
-
     "ordreLigneLogistique-fournisseur-raisonSocial": " ",
     "ordreLigneLogistique-nombrePalettesAuSol": "Pal Sol",
     "ordreLigneLogistique-nombrePalettes100x120": "100x120",
@@ -825,7 +791,6 @@
     "ordreLigneLogistique-detecteurTemperature": "Enr. Temp.",
     "ordreLigneLogistique-certificatPhytosanitaire": "Certif. Phyto",
     "ordreLigneLogistique-billOfLanding": "Bill of landing",
-
     "ordreLogistique-id": "id",
     "ordreLogistique-fournisseur-code": "Lieu de chargement",
     "ordreLogistique-codeFournisseur": "Lieu de chargement",
@@ -859,7 +824,6 @@
     "ordreLogistique-groupage-id": "Lieu Group.",
     "ordreLogistique-dateLivraisonLieuGroupage": "Date arrivée lieu group.",
     "ordreLogistique-dateDepartPrevueGroupage": "Date depart lieu group.",
-
     "ordres-litiges-id": "Litige n°",
     "ordres-litiges-ordreAvoirClient": "Avoir client",
     "ordres-litiges-avoirClient": "Avoir au client",
@@ -875,7 +839,6 @@
     "ordres-litiges-fraisAnnexes": "Frais annexes",
     "ordres-litiges-noLitiges": "Aucun litige trouvé pour cet ordre de commande",
     "ordres-litiges-resultat": "Résultat",
-
     "ordreLitigesLignes-numeroGroupementLitige": "N°",
     "ordreLitigesLignes-ordreLigne-article-description": "Produit",
     "ordreLitigesLignes-ordreLigne-proprietaireMarchandise": "Propriétaire",
@@ -900,14 +863,11 @@
     "ordreLitigesLignes-nombrePalettesExpediees": "Nb Palettes",
     "ordreLitigesLignes-nombreColisExpedies": "Nb Colis",
     "ordreLitigesLignes-unite": "Unité",
-
     "ordreSaveLog-dateModification": "Date/Heure Sauvegarde",
     "ordreSaveLog-utilisateur": "Par",
-
     "ordreCommentaire-dateModification": "Quand",
     "ordreCommentaire-userModification": "Qui",
     "ordreCommentaire-commentaires": "Quoi",
-
     "ordreLignesTotauxDetail-fournisseur-raisonSocial": "Fournisseur",
     "ordreLignesTotauxDetail-nombrePalettesExpediees": "Pal",
     "ordreLignesTotauxDetail-nombreColisExpedies": "Colis",
@@ -917,7 +877,6 @@
     "ordreLignesTotauxDetail-logistique-nombrePalettes100x120": "100x120",
     "ordreLignesTotauxDetail-logistique-nombrePalettes80x120": "80x120",
     "ordreLignesTotauxDetail-logistique-nombrePalettes60x80": "60x80",
-
     "ordreDetailPalettes-arboCode": "Arbo",
     "ordreDetailPalettes-nombreColis": "Colis",
     "ordreDetailPalettes-tracabiliteDetailPalette-SSCC": "Code Palette",
@@ -937,7 +896,6 @@
     "ordreDetailPalettes-ordreLigne-article-emballage-emballage-description": "Emballage",
     "ordreDetailPalettes-ordreLigne-article-description": "Article",
     "ordreDetailPalettes-ordreLigne-ordre-client-raisonSocial": "Client / Entrepot",
-
     "ordreMarge-numero": "N° ligne",
     "ordreMarge-id": "ID ligne",
     "ordreMarge-article-matierePremiere-variete-id": "Variete",
@@ -956,7 +914,6 @@
     "ordreMarge-margeBrute": "Marge Brute",
     "ordreMarge-pourcentageMargeBrute": "Marge Brute %",
     "ordreMarge-pourcentageMargeNette": "Marge Nette %",
-
     "ordreFrais-frais-description": "Type de Frais",
     "ordreFrais-montant": "Montant",
     "ordreFrais-devise-id": "Devise",
@@ -964,7 +921,6 @@
     "ordreFrais-codePlus": "Fournisseur / Objet",
     "ordreFrais-description": "Description",
     "ordreFrais-montantTotal": "Montant",
-
     "ordresBAF-numeroOrdre": "Ordre",
     "ordresBAF-ordreRef": "Réf. Ordre",
     "ordresBAF-indicateurBaf": "BAF ?",
@@ -981,7 +937,6 @@
     "ordresBAF-indicateurQte": "QTÉ ?",
     "ordresBAF-indicateurAutre": "AUTRE ?",
     "ordresBAF-description": "Détail",
-
     "ControleQualite-id": "CQ",
     "ControleQualite-isExp": "Exp",
     "ControleQualite-nombrePalettes": "Pal",
@@ -989,7 +944,6 @@
     "ControleQualite-poidsNetTheoriqueParColis": "Poids",
     "ControleQualite-fournisseur-raisonSocial": "Fournisseur",
     "ControleQualite-description": "Desc. abrégée - Données du contrôle",
-
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-id": "Réf. ordre",
     "rechOrdres-client-raisonSocial": "Client",
@@ -1002,7 +956,6 @@
     "rechOrdres-portTypeA": "Port arrivée",
     "rechOrdres-campagne": "Campagne en cours",
     "rechOrdres-campagne-id": "N° Campagne",
-
     "pays-description": "Pays",
     "pays-clientsSommeAgrement": "Permanent",
     "pays-clientsSommeEnCoursTemporaire": "Temporaire",
@@ -1016,15 +969,12 @@
     "pays-clientsSommeEnCours61a90": "61 à 90j",
     "pays-clientsSommeEnCours90Plus": "+ de 90j",
     "pays-clientsSommeAlerteCoface": "COFACE !!",
-
     "grid-situation-depart-title": "Situation des départs",
     "grid-situation-depart-title-today": "Situation des départs d'aujourd'hui",
     "grid-situation-depart-detail-title": "Détail des lignes",
     "grid-depassement-encours-pays-title": "Total par pays",
     "grid-depassement-encours-client-title": "Détail des clients",
-
     "ordres-planningFournisseurs-afficherPrix": "Afficher les prix",
-
     "comptesPalox-entrepots-codeClient": "Client",
     "comptesPalox-entrepots-codeFournisseur": "Station",
     "comptesPalox-entrepots-codeEntrepot": "Entrepôt",
@@ -1041,7 +991,6 @@
     "comptesPalox-entrepots-bonRetour": "Bon retour",
     "comptesPalox-entrepots-cmr": "CMR",
     "comptesPalox-entrepots-numeroOrdre": "n° Ordre",
-
     "comptesPalox-fournisseurs-codeClient": "Client",
     "comptesPalox-fournisseurs-codeFournisseur": "Fournisseur",
     "comptesPalox-fournisseurs-codeEntrepot": "Entrepôt",
@@ -1058,7 +1007,6 @@
     "comptesPalox-fournisseurs-bonRetour": "Bon retour",
     "comptesPalox-fournisseurs-cmr": "CMR",
     "comptesPalox-fournisseurs-numeroOrdre": "n° Ordre",
-
     "choixEntrepot-id": "id",
     "choixEntrepot-assistante-id": "Assistante entrep.",
     "choixEntrepot-commercial-id": "Commercial entrep.",
@@ -1069,7 +1017,6 @@
     "choixEntrepot-client-raisonSocial": "Raison sociale client",
     "choixEntrepot-client-code": "Code client",
     "choixEntrepot-client-secteur-id": "Secteur",
-
     "choixEntrepot-entrepot-id": "id",
     "choixEntrepot-entrepot-assistante-id": "Assistante entrep.",
     "choixEntrepot-entrepot-commercial-id": "Commercial entrep.",

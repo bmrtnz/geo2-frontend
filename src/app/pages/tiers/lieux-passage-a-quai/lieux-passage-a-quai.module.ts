@@ -54,5 +54,6 @@ import { ModificationListModule } from "app/shared/components/modification-list/
         LieuxPassageAQuaiDetailsComponent,
     ],
     providers: [NestedGuard, EditingGuard],
+    exports: [LieuxPassageAQuaiDetailsComponent]
 })
-export class LieuxPassageAQuaiModule {}
+export class LieuxPassageAQuaiModule { }

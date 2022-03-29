@@ -1,12 +1,6 @@
-<dx-data-grid
-  class="dx-card wide-card"
-  [remoteOperations]="true"
-  [showBorders]="false"
-  [columnAutoWidth]="true"
-  [columnHidingEnabled]="false"
-  [allowColumnReordering]="true"
-  [scrolling]="{ useNative: true }"
-  (onCellPrepared)="onCellPrepared($event)"
+<dx-data-grid class="dx-card wide-card" [remoteOperations]="true" [showBorders]="false" [columnAutoWidth]="true"
+  [columnHidingEnabled]="false" [allowColumnReordering]="true" [scrolling]="{ useNative: true }"
+  (onCellClick)="onCellClick($event)" (onCellDblClick)="openFilePopup($event)" (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Logistique',
@@ -14,51 +8,44 @@
       gridConfiguratorService.Grid.OrdreLogistique,
       enableFilters.bind(this)
     )
-  "
->
+  ">
   <!-- Grid configuration -->
-  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <!-- <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter> -->
   <dxo-paging></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [showInfo]="true"
-    [showNavigationButtons]="true"
-    [showPageSizeSelector]="true"
-  ></dxo-pager>
-  <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.OrdreLogistique"
-    [enabled]="true"
-    type="custom"
-    [customLoad]="gridConfiguratorService.load"
-    [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-pager [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"></dxo-pager>
+  <dxo-editing [selectTextOnEditStart]="true" [allowUpdating]="!env.production" [allowDeleting]="!env.production"
+    [mode]="'cell'"></dxo-editing>
+  <dxo-state-storing [storageKey]="gridConfiguratorService.Grid.OrdreLogistique" [enabled]="true" type="custom"
+    [customLoad]="gridConfiguratorService.load" [customSave]="gridConfiguratorService.save"></dxo-state-storing>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-  <dxo-column-chooser
-    [enabled]="true"
-    mode="select"
-    title="{{ 'columnChooser' | localize }}"
-    [allowSearch]="true"
-    [width]="columnChooser.width"
-    [height]="columnChooser.height"
-  >
+  <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}" [allowSearch]="true"
+    [width]="columnChooser.width" [height]="columnChooser.height">
   </dxo-column-chooser>
 
-  <dxi-column
-    *ngFor="let column of this.columns | async"
-    [dataField]="column.dataField"
-    [visible]="false"
-    [caption]="
+  <dxi-column *ngFor="let column of this.columns | async" [dataField]="column.dataField" [visible]="false" [caption]="
       ('ordreLogistique-' + column.dataField?.split('.').join('-')
         | localize) || column.name
-    "
-    trueText="Oui"
-    falseText="Non"
-    [dataType]="column?.dataType"
+    " trueText="Oui" falseText="Non" [dataType]="column?.dataType" [allowEditing]="column.allowEditing"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-    [allowHeaderFiltering]="
-      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-    "
-    [showInColumnChooser]="column.showInColumnChooser"
-  ></dxi-column>
+    [editCellTemplate]="defineTemplate(column.dataField)" [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType) 
+    " [showInColumnChooser]="column.showInColumnChooser"></dxi-column>
+
+  <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
+    <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="displayIdBefore" [searchExpr]="[
+          this[cell.column.dataField + 'Service'].model.getKeyField(),
+          this[cell.column.dataField + 'Service'].model.getLabelField()
+        ]" [searchEnabled]="true" [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)">
+      <dxo-drop-down-options [width]="SelectBoxPopupWidth">
+      </dxo-drop-down-options>
+    </dx-select-box>
+  </div>
+
 </dx-data-grid>
+<app-zoom-transporteur-popup [transporteurLigneId]="transporteurLigneId" [transporteurTitle]="transporteurTitle">
+</app-zoom-transporteur-popup>
+<app-zoom-lieupassageaquai-popup [lieupassageaquaiLigneId]="lieupassageaquaiLigneId"
+  [lieupassageaquaiTitle]="lieupassageaquaiTitle"></app-zoom-lieupassageaquai-popup>

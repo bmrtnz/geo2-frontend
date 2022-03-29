@@ -24,7 +24,7 @@ export class ZoomFournisseurPopupComponent implements AfterViewInit {
   }
 
   setTitle(fournisseur) {
-    this.title = this.localizeService.localize("zoom-fournisseur") + fournisseur;
+    this.title = this.localizeService.localize("zoom-fournisseur") + " " + fournisseur;
   }
 
   onShowing(e) {
