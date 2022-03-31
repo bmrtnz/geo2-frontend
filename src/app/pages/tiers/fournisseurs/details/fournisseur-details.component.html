@@ -116,7 +116,8 @@
                           [trim]="false"
                           type="stringLength"
                           [max]="12"
-                        ></dxi-validation-rule>
+                        >
+                        </dxi-validation-rule>
                         <dxi-validation-rule
                           *ngIf="createMode"
                           type="pattern"
@@ -924,6 +925,17 @@
                     </dx-select-box>
                   </div>
                 </div>
+                <!-- Incoterm -->
+                <!-- <div class="dx-field">
+                  <div class="dx-field-label">
+                    {{ "tiers-fournisseurs-incoterm" | localize }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-select-box formControlName="incoterm" [readOnly]="readOnlyMode" [dataSource]="incoterms"
+                      [displayExpr]="displayIDBefore" [searchEnabled]="true" [searchExpr]="['id', 'description']">
+                    </dx-select-box>
+                  </div>
+                </div> -->
                 <!-- Devise -->
                 <div class="dx-field">
                   <div class="dx-field-label">
@@ -1321,7 +1333,8 @@
                       [displayExpr]="displayCertifNameDate"
                       placeholder="Sélectionner une ou plusieurs certifications..."
                       [readOnly]="readOnlyMode"
-                    ></dx-tag-box>
+                    >
+                    </dx-tag-box>
                   </div>
                 </div>
                 <!-- Date cond achat signée -->
@@ -1355,11 +1368,13 @@
   [subTitle]="fournisseur.code"
   [id]="fournisseur.id"
   *ngIf="fournisseur"
-></app-file-manager-popup>
+>
+</app-file-manager-popup>
 <app-push-history-popup
   title="{{ 'valide-comment-title' | localize }}"
   [placeholder]="'valide-comment' | localize"
-></app-push-history-popup>
+>
+</app-push-history-popup>
 <app-certification-date-popup></app-certification-date-popup>
 <app-info-popup
   [customText]="'text-fournisseurs-popup-documents' | localize"

@@ -1,6 +1,7 @@
 import { Field, Model, ModelName } from "./model";
 import Secteur from "./secteur.model";
 import Personne from "./personne.model";
+import ParamUserClientRestrictionModel from "./param-user-client-restriction.model";
 
 @ModelName("Utilisateur")
 export class Utilisateur extends Model {
@@ -9,7 +10,8 @@ export class Utilisateur extends Model {
     @Field() public accessGeoTiers?: boolean;
     @Field() public accessGeoProduct?: boolean;
     @Field() public accessGeoOrdre?: boolean;
-    @Field() public restrictionClient?: boolean;
+    @Field({ model: import("./param-user-client-restriction.model") })
+    public restrictions?: ParamUserClientRestrictionModel[];
     @Field() public perimetre?: string;
     @Field() public limitationSecteur?: boolean;
     @Field({ model: import("./secteur.model") })

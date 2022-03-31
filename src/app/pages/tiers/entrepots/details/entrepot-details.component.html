@@ -56,7 +56,8 @@
           [entite]="'Entrepot'"
           [entiteID]="entrepot.id"
           *ngIf="!createMode && entrepot"
-        ></app-modification-list>
+        >
+        </app-modification-list>
         <dx-box direction="row">
           <dxi-item [ratio]="4">
             <div
@@ -93,7 +94,8 @@
                           [trim]="false"
                           type="stringLength"
                           [max]="18"
-                        ></dxi-validation-rule>
+                        >
+                        </dxi-validation-rule>
                         <dxi-validation-rule
                           *ngIf="createMode"
                           type="pattern"
@@ -737,7 +739,7 @@
               }}</span>
 
               <div class="dx-form-group-content">
-                <!-- Mode de livraion -->
+                <!-- Mode de livraison -->
                 <div class="dx-field">
                   <div class="dx-field-label">
                     {{ "tiers-entrepots-modeLivraison" | localize }}
@@ -931,11 +933,9 @@
                         <div class="dx-field-value">
                           <dx-check-box
                             formControlName="envoieAutomatiqueDetail"
-                            [readOnly]="
-                              readOnlyMode ||
-                              !authService.currentUser.adminClient
-                            "
-                          ></dx-check-box>
+                            [readOnly]="readOnlyMode"
+                          >
+                          </dx-check-box>
                         </div>
                       </div>
                     </dxi-item>

@@ -361,6 +361,7 @@ export abstract class ApiService implements OnDestroy {
   protected async buildGetOne_v2(columns: Array<string>) {
     const operation = this.withLowerCaseFirst(this.model.name);
     const alias = operation.ucFirst();
+    if (Array.isArray(this.keyField)) this.keyField = "id";
     return `
       query ${alias}($${this.keyField}: ${this.gqlKeyType}!) {
         ${operation}(${this.keyField}:$${this.keyField}) {
@@ -528,8 +529,8 @@ export abstract class ApiService implements OnDestroy {
     return typeof options.searchExpr === "object" ?
       (options.searchExpr as [])
         .map(expr => [expr, options.searchOperation, options.searchValue])
-        .join("-or-")
-        .split("-")
+        .join("¤or¤")
+        .split("¤")
         .map((value: any) => {
           const mapped = value.split(",");
           return mapped.length > 1 ? mapped : mapped.shift();

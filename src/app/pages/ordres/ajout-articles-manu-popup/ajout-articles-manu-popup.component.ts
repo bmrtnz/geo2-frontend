@@ -8,7 +8,7 @@ import { DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
-import { mergeMap, takeWhile } from "rxjs/operators";
+import { concatMap, mergeMap, takeWhile } from "rxjs/operators";
 
 @Component({
   selector: "app-ajout-articles-manu-popup",
@@ -28,15 +28,15 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   validBtnText: string;
   nbARticles: number;
   nbArticlesOld: number;
-  chosenArticles: [];
+  chosenArticles: string[];
   ordreInfo = "";
   titleStart: string;
   titleEnd: string;
   pulseBtnOn: boolean;
 
-  @ViewChild(ArticlesListComponent, {static: false}) catalogue: ArticlesListComponent;
-  @ViewChild(DxTagBoxComponent, {static: false}) saisieCode: DxTagBoxComponent;
-  @ViewChild(DxPopupComponent, {static: false}) popup: DxPopupComponent;
+  @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
+  @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
   constructor(
     private articlesService: ArticlesService,
@@ -64,7 +64,7 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
     this.nbARticles = this.chosenArticles.length;
     this.articlesKO = !this.nbARticles;
     this.validBtnText = this.localizeService.localize("btn-valider-article" + (this.nbARticles > 1 ? "s" : ""))
-    .replace("&&", this.nbARticles.toString());
+      .replace("&&", this.nbARticles.toString());
     if (this.nbARticles !== this.nbArticlesOld) {
       this.pulseBtnOn = false;
       setTimeout(() => this.pulseBtnOn = true, 1);
@@ -93,7 +93,7 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
   }
 
   onShown(e) {
-    this.catalogue.dataGrid.selection = { mode : "multiple", allowSelectAll: false };
+    this.catalogue.dataGrid.selection = { mode: "multiple", allowSelectAll: false };
     this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
   }
 
@@ -119,17 +119,17 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
         e.component.option("value", tagArray);
         this.articlesKO = true;
         this.articlesService.getOne(myValue)
-        .subscribe(res => {
-          const myArt = res?.data?.article;
-          this.articlesKO = !myArt || myArt.valide !== true;
-          if (this.articlesKO) {
-            notify("L'article " + myValue + " n'existe pas", "error", 3000);
-            if (tagArray.includes(myValue)) tagArray.pop();
-            e.component.option("value", tagArray);
-          }
-          this.updateChosenArticles();
-          this.codeChangeProcess = false;
-        });
+          .subscribe(res => {
+            const myArt = res?.data?.article;
+            this.articlesKO = !myArt || myArt.valide !== true;
+            if (this.articlesKO) {
+              notify("L'article " + myValue + " n'existe pas", "error", 3000);
+              if (tagArray.includes(myValue)) tagArray.pop();
+              e.component.option("value", tagArray);
+            }
+            this.updateChosenArticles();
+            this.codeChangeProcess = false;
+          });
         return;
 
       }
@@ -168,16 +168,17 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
     const info = this.localizeService.localize("ajout-article" + (this.nbARticles > 1 ? "s" : "")) + "...";
     notify(info, "info", 3000);
     from(this.chosenArticles)
-    .pipe(
-      mergeMap( articleID => this.functionsService
-        .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
-        .valueChanges),
-      takeWhile( res => res.loading === true),
-    )
-    .subscribe({
-      error: ({message}: Error) => notify(message),
-      complete: () => this.clearAndHidePopup(),
-    });
+      .pipe(
+        concatMap(articleID => this.functionsService
+          .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
+          .valueChanges
+          .pipe(takeWhile(res => res.loading === true))
+        ),
+      )
+      .subscribe({
+        error: ({ message }: Error) => notify(message),
+        complete: () => this.clearAndHidePopup(),
+      });
 
   }
 

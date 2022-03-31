@@ -124,6 +124,7 @@ export class NouvelOrdreComponent implements OnInit {
                     this.fNouvelOrdreRef,
                     this.entrepotsService.getOne_v2(entrepot.id, [
                         "id",
+                        "code",
                         ...this.inheritedFields,
                     ]),
                 ),
@@ -178,13 +179,20 @@ export class NouvelOrdreComponent implements OnInit {
                 ? { id: entrepot.client.commercial.id }
                 : null;
 
+        const instLogClt = entrepot.client.instructionLogistique ?
+            entrepot.client.instructionLogistique : "";
+        const instLogEnt = entrepot.instructionLogistique ?
+            entrepot.instructionLogistique : "";
+        const instLog = instLogClt + (instLogClt ? " " : "") + instLogEnt;
+
         return this.fetchDeviseRef(entrepot.client?.devise).pipe(
             switchMap((deviseRef) =>
                 this.ordresService.save_v2(["id", "numero"], {
                     ordre: {
                         // from `heriteEntrepot.pbl`
                         numero,
-                        codeAlphaEntrepot: entrepot.id,
+                        codeAlphaEntrepot: entrepot.code,
+                        instructionsLogistiques: instLog,
                         campagne: { id: this.societe.campagne.id },
                         dateDepartPrevue:
                             this.dateManagementService.findDate(0),
@@ -199,20 +207,6 @@ export class NouvelOrdreComponent implements OnInit {
                         regimeTva: entrepot.regimeTva
                             ? { id: entrepot.regimeTva.id }
                             : null,
-                        ...(this.societe.id !== "BUK"
-                            ? {
-                                prixUnitaireTarifTransport: 0,
-                                transporteurDEVPrixUnitaire: 0,
-                                transporteur: { id: "-" },
-                                bassinTransporteur: "",
-                            }
-                            : {
-                                transporteur: {
-                                    id: entrepot.transporteur?.id ?? "-",
-                                },
-                                prixUnitaireTarifTransport:
-                                    entrepot.prixUnitaireTarifTransport,
-                            }),
                         baseTarifTransport: entrepot.baseTarifTransport
                             ? { id: entrepot.baseTarifTransport.id }
                             : null,
@@ -222,6 +216,7 @@ export class NouvelOrdreComponent implements OnInit {
                         baseTarifTransit: entrepot.baseTarifTransit
                             ? { id: entrepot.baseTarifTransit.id }
                             : null,
+                        transporteur: { id: entrepot.transporteur?.id ?? "-" },
                         transporteurDEVTaux: 1,
                         transporteurDEVCode: this.currentCompanyService.getCompany().devise.id,
                         prixUnitaireTarifTransport:
@@ -356,4 +351,5 @@ export class NouvelOrdreComponent implements OnInit {
             )
             .pipe(map((res) => res.data.allDeviseRefList?.[0]));
     }
+
 }

@@ -42,13 +42,13 @@ export enum OrdreType {
 }
 
 export enum Statut {
-    ANNULE = "Annulé",
-    A_FACTURER = "À facturer",
-    CONFIRME = "Confirmé",
-    EN_PREPARATION = "En préparation",
-    EXPEDIE = "Expédié",
-    FACTURE = "Facturé",
-    NON_CONFIRME = "Non confirmé",
+    ANNULE = "Annulé" as any,
+    A_FACTURER = "À facturer" as any,
+    CONFIRME = "Confirmé" as any,
+    EN_PREPARATION = "En préparation" as any,
+    EXPEDIE = "Expédié" as any,
+    FACTURE = "Facturé" as any,
+    NON_CONFIRME = "Non confirmé" as any,
 }
 
 @ModelName("Ordre")
@@ -75,8 +75,8 @@ export class Ordre extends Model {
     @Field({ model: import("./port.model") }) public portTypeD?: Port;
     @Field({ model: import("./port.model") }) public portTypeA?: Port;
     @Field({ model: import("./entrepot.model") }) public entrepot?: Entrepot;
-    @Field({ dataType: "localdate" }) public dateDepartPrevue?: string;
-    @Field({ dataType: "localdate" }) public dateLivraisonPrevue?: string;
+    @Field({ dataType: "datetime" }) public dateDepartPrevue?: string;
+    @Field({ dataType: "datetime" }) public dateLivraisonPrevue?: string;
     @Field() public venteACommission?: boolean;
     @Field() public bonAFacturer?: boolean;
     @Field() public facture?: boolean;
@@ -158,6 +158,13 @@ export class Ordre extends Model {
     public sommeColisExpedies?: number;
     @Field({ model: import("./transitaire.model") })
     public transitaire?: Transitaire;
+    public static isCloture(ordre: Partial<Ordre>) {
+        return [
+            Statut[Statut.EXPEDIE],
+            Statut[Statut.FACTURE],
+        ]
+            .includes(ordre?.statut.toString());
+    }
 }
 
 export default Ordre;

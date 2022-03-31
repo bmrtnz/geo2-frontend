@@ -115,7 +115,8 @@
                           [trim]="false"
                           type="stringLength"
                           [max]="13"
-                        ></dxi-validation-rule>
+                        >
+                        </dxi-validation-rule>
                         <dxi-validation-rule
                           *ngIf="createMode"
                           type="pattern"
@@ -976,9 +977,7 @@
                       <div class="dx-field-value">
                         <dx-check-box
                           formControlName="soumisCtifl"
-                          [readOnly]="
-                            readOnlyMode || !authService.currentUser.adminClient
-                          "
+                          [readOnly]="readOnlyMode"
                         >
                           <dx-validator
                             name="{{ 'tiers-clients-soumisCtifl' | localize }}"
@@ -1001,9 +1000,7 @@
                       <div class="dx-field-value">
                         <dx-check-box
                           formControlName="releveFactures"
-                          [readOnly]="
-                            readOnlyMode || !authService.currentUser.adminClient
-                          "
+                          [readOnly]="readOnlyMode"
                         ></dx-check-box>
                       </div>
                     </div>
@@ -1855,7 +1852,8 @@
                       displayExpr="description"
                       placeholder="Sélectionner une ou plusieurs certifications..."
                       [readOnly]="readOnlyMode"
-                    ></dx-tag-box>
+                    >
+                    </dx-tag-box>
                   </div>
                 </div>
               </div>
@@ -2023,11 +2021,13 @@
   [subTitle]="client?.code"
   [id]="client?.id"
   *ngIf="client"
-></app-file-manager-popup>
+>
+</app-file-manager-popup>
 <app-info-popup
   [customText]="'text-clients-popup-documents' | localize"
 ></app-info-popup>
 <app-push-history-popup
   [title]="'valide-comment-title' | localize"
   [placeholder]="'valide-comment' | localize"
-></app-push-history-popup>
+>
+</app-push-history-popup>

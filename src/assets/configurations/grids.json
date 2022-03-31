@@ -1346,10 +1346,6 @@
       {
         "dataField": "id",
         "visible": false
-      },
-      {
-        "dataField": "campagne.id",
-        "visible": false
       }
     ]
   },
@@ -1609,6 +1605,14 @@
       },
       {
         "visibleIndex": 4,
+        "dataField": "article.description",
+        "dataType": "string",
+        "allowEditing": false,
+        "width": "250",
+        "visible": false
+      },
+      {
+        "visibleIndex": 6,
         "dataField": "ordre.client.id",
         "showInColumnChooser": false,
         "dataType": "string",
@@ -1616,7 +1620,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 8,
         "dataField": "article.matierePremiere.origine.id",
         "showInColumnChooser": false,
         "dataType": "string",
@@ -1624,35 +1628,35 @@
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 10,
         "dataField": "nombrePalettesCommandees",
         "dataType": "number",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 7,
+        "visibleIndex": 12,
         "dataField": "nombrePalettesIntermediaires",
         "dataType": "number",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 14,
         "dataField": "nombreColisPalette",
         "dataType": "number",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 9,
+        "visibleIndex": 16,
         "dataField": "nombreColisCommandes",
         "dataType": "number",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 18,
         "dataField": "proprietaireMarchandise",
         "dataType": "string",
         "width": "200",
@@ -1660,7 +1664,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 11,
+        "visibleIndex": 20,
         "dataField": "fournisseur",
         "dataType": "string",
         "width": "200",
@@ -1668,36 +1672,43 @@
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 22,
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 13,
+        "visibleIndex": 24,
         "dataField": "venteUnite",
         "dataType": "number",
-        "width": "150",
+        "width": "130",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 26,
         "dataField": "gratuit",
         "dataType": "boolean",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 15,
+        "visibleIndex": 27,
+        "dataField": "codePromo",
+        "allowEditing": true,
+        "width": "150",
+        "visible": true
+      },
+      {
+        "visibleIndex": 28,
         "dataField": "achatPrixUnitaire",
         "dataType": "number",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 30,
         "dataField": "achatUnite",
         "dataType": "string",
         "width": "150",
@@ -1705,40 +1716,40 @@
         "visible": true
       },
       {
-        "visibleIndex": 17,
+        "visibleIndex": 32,
         "dataField": "achatDevise",
         "allowEditing": false,
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 34,
         "dataField": "typePalette",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 19,
+        "visibleIndex": 36,
         "dataField": "paletteInter",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 38,
         "dataField": "libelleDLV",
         "allowEditing": true,
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 21,
+        "visibleIndex": 40,
         "dataField": "fraisPrixUnitaire",
         "allowEditing": true,
         "dataType": "number",
         "visible": true
       },
       {
-        "visibleIndex": 22,
+        "visibleIndex": 42,
         "dataField": "fraisUnite",
         "allowEditing": false,
         "width": "150",
@@ -1746,35 +1757,35 @@
         "visible": true
       },
       {
-        "visibleIndex": 23,
+        "visibleIndex": 44,
         "dataField": "fraisCommentaires",
         "allowEditing": true,
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 24,
+        "visibleIndex": 46,
         "dataField": "tauxRemiseSurFacture",
         "allowEditing": true,
         "dataType": "number",
         "visible": true
       },
       {
-        "visibleIndex": 25,
+        "visibleIndex": 48,
         "dataField": "tauxRemiseHorsFacture",
         "allowEditing": true,
         "dataType": "number",
         "visible": true
       },
       {
-        "visibleIndex": 26,
+        "visibleIndex": 50,
         "dataField": "articleKit",
         "dataType": "string",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 27,
+        "visibleIndex": 52,
         "dataField": "gtinColisKit",
         "dataType": "string",
         "width": "150",
@@ -1783,6 +1794,11 @@
       },
       {
         "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.espece.id",
         "showInColumnChooser": false,
         "visible": false
       },

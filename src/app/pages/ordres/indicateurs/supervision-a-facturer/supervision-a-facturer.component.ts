@@ -125,8 +125,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
             "nomUtilisateur",
         ]);
         this.commerciaux.filter([
-            ["valide", "=", true],
-            "and",
+            // ["valide", "=", true],
+            // "and",
             ["role", "=", Role.COMMERCIAL],
             "and",
             ["nomUtilisateur", "<>", "null"],
@@ -136,8 +136,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
             "nomUtilisateur",
         ]);
         this.assistantes.filter([
-            ["valide", "=", true],
-            "and",
+            // ["valide", "=", true],
+            // "and",
             ["role", "=", Role.ASSISTANT],
             "and",
             ["nomUtilisateur", "<>", "null"],
@@ -168,6 +168,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
                 .patchValue(this.authService.currentUser.secteurCommercial);
         }
 
+        // console.log(this.authService.currentUser.assistante, this.authService.currentUser.commercial);
+        // console.log(this.authService.currentUser.personne.role.toString(), Role[Role.COMMERCIAL]);
+
         // Fill commercial/assistante input from user role
         if (
             !this.authService.isAdmin &&
@@ -188,6 +191,18 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
                     .get("codeAssistante")
                     .setValue(this.authService.currentUser.assistante);
         }
+    }
+
+    displayIDBefore(data) {
+        return data
+            ? data.id +
+            " - " +
+            (data.nomUtilisateur
+                ? data.nomUtilisateur
+                : data.raisonSocial
+                    ? data.raisonSocial
+                    : data.description)
+            : null;
     }
 
     enableFilters() {
@@ -214,10 +229,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
             this.datagrid.dataSource = this.ordresDataSource;
         }
-    }
-
-    displayIDBefore(data) {
-        return data ? data.code + " - " + data.raisonSocial : null;
     }
 
     onFieldValueChange(e?) {
