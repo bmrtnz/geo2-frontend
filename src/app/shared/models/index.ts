@@ -69,3 +69,4 @@ export * from "./departement.model";
 export * from "./region.model";
 export * from "./zone-geographique.model";
 export * from "./certification-mode-culture.model";
+export * from "./instruction.model";

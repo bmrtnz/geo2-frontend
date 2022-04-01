@@ -220,6 +220,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
         // Bio en vert
         if (infoArt.bio) e.cellElement.classList.add("bio-article");
       }
+      // Title double-click to see specific file: doesn't work, find out why!
+      if (["fournisseur", "proprietaireMarchandise"].includes(e.column?.dataField)) {
+        if (e.value?.id) {
+          e.cellElement.classList.add("cursor-pointer");
+          e.cellElement.title = this.hintDblClick;
+        }
+      }
     }
   }
 
@@ -257,11 +264,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
       isCert = this.ordre.client.certifications?.length > 0;
     }
     return this.certificationText + (isCert ? " ✓" : "");
-  }
-
-  hintFournisseur(field) {
-    const hint = ["fournisseur", "proprietaireMarchandise"].includes(field) ? this.hintDblClick : "";
-    return hint;
   }
 
   onFocusedRowChanged(e) {

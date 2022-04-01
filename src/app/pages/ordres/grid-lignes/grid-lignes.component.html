@@ -1,179 +1,84 @@
 <div class="grid-lignes-container">
-  <dx-button
-    [focusStateEnabled]="false"
-    class="down-move-button"
-    type="normal"
-    text="down"
-    icon="arrowdown"
-    hint="{{ 'hint-deplacer-ligne-bas' | localize }}"
-    [disabled]="lastRowFocused || !gridRowsTotal || env.production"
-    (onClick)="moveRowUpDown($event)"
-  ></dx-button>
-  <dx-button
-    [focusStateEnabled]="false"
-    class="up-move-button"
-    type="normal"
-    text="up"
-    icon="arrowup"
-    hint="{{ 'hint-deplacer-ligne-haut' | localize }}"
-    [disabled]="!currentfocusedRow || env.production"
-    (onClick)="moveRowUpDown($event)"
-  ></dx-button>
+  <dx-button [focusStateEnabled]="false" class="down-move-button" type="normal" text="down" icon="arrowdown"
+    hint="{{ 'hint-deplacer-ligne-bas' | localize }}" [disabled]="lastRowFocused || !gridRowsTotal || env.production"
+    (onClick)="moveRowUpDown($event)"></dx-button>
+  <dx-button [focusStateEnabled]="false" class="up-move-button" type="normal" text="up" icon="arrowup"
+    hint="{{ 'hint-deplacer-ligne-haut' | localize }}" [disabled]="!currentfocusedRow || env.production"
+    (onClick)="moveRowUpDown($event)"></dx-button>
   <!-- <div>Champ : {{ dataField }}</div> -->
-  <dx-data-grid
-    class="dx-card wide-card"
-    [focusedRowEnabled]="true"
-    [remoteOperations]="true"
-    [showBorders]="false"
-    [elementAttr]="{ class: 'grid-ordre-ligne' }"
-    [focusedRowIndex]="0"
-    [columnAutoWidth]="true"
-    [columnHidingEnabled]="false"
-    [allowColumnReordering]="true"
-    (onCellPrepared)="onCellPrepared($event)"
-    (onEditingStart)="onEditingStart($event)"
-    (onEditorPrepared)="onEditorPrepared($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onFocusedRowChanged)="onFocusedRowChanged($event)"
-    (onCellDblClick)="openFilePopup($event)"
-    (onCellClick)="onCellClick($event)"
-    (onSaved)="cellValueChange($event)"
-    (onEditingStart)="onEditingStart($event)"
-    (onContentReady)="onContentReady()"
-    (onToolbarPreparing)="
+  <dx-data-grid class="dx-card wide-card" [focusedRowEnabled]="true" [remoteOperations]="true" [showBorders]="false"
+    [elementAttr]="{ class: 'grid-ordre-ligne' }" [focusedRowIndex]="0" [columnAutoWidth]="true"
+    [columnHidingEnabled]="false" [allowColumnReordering]="true" (onCellPrepared)="onCellPrepared($event)"
+    (onEditingStart)="onEditingStart($event)" (onEditorPrepared)="onEditorPrepared($event)"
+    (onEditorPreparing)="onEditorPreparing($event)" (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onCellDblClick)="openFilePopup($event)" (onCellClick)="onCellClick($event)" (onSaved)="cellValueChange($event)"
+    (onEditingStart)="onEditingStart($event)" (onContentReady)="onContentReady()" (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Lignes de commande',
         $event,
         gridConfiguratorService.Grid.OrdreLigne,
         enableFilters.bind(this)
       )
-    "
-    [scrolling]="{
+    " [scrolling]="{
       useNative: true
-    }"
-  >
+    }">
     <!-- Grid configuration -->
     <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
-    <dxo-header-filter
-      [visible]="true"
-      [allowSearch]="true"
-    ></dxo-header-filter>
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
     <dxo-paging [pageSize]="100" [pageIndex]="0"></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-    ></dxo-pager>
-    <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.OrdreLigne"
-      [enabled]="true"
-      type="custom"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
-    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true"></dxo-pager>
+    <dxo-state-storing [storageKey]="gridConfiguratorService.Grid.OrdreLigne" [enabled]="true" type="custom"
+      [customLoad]="gridConfiguratorService.load" [customSave]="gridConfiguratorService.save"></dxo-state-storing>
+    <!-- <dxo-filter-row [visible]="false"></dxo-filter-row> -->
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-    <dxo-editing
-      [selectTextOnEditStart]="true"
-      [allowUpdating]="!env.production"
-      [allowDeleting]="!env.production"
-      [mode]="'cell'"
-    >
+    <dxo-editing [selectTextOnEditStart]="true" [allowUpdating]="!env.production" [allowDeleting]="!env.production"
+      [mode]="'cell'">
     </dxo-editing>
-    <dxo-column-chooser
-      [enabled]="true"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height"
-    >
+    <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}" [allowSearch]="true"
+      [width]="columnChooser.width" [height]="columnChooser.height">
     </dxo-column-chooser>
     <dxo-summary [totalItems]="totalItems"></dxo-summary>
-    <dxi-column
-      *ngFor="let column of this.columns | async"
-      [dataField]="column.dataField"
-      [visible]="false"
-      [width]="column.width"
-      [caption]="
+    <dxi-column *ngFor="let column of this.columns | async" [dataField]="column.dataField" [visible]="false"
+      [width]="column.width" [caption]="
         ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
         column.name
-      "
-      trueText="Oui"
-      falseText="Non"
-      [fixed]="column.fixed"
-      [allowEditing]="column.allowEditing"
-      [dataType]="column?.dataType"
-      [editCellTemplate]="defineTemplate(column.dataField)"
-      [allowSearch]="
+      " trueText="Oui" falseText="Non" [fixed]="column.fixed" [allowEditing]="column.allowEditing"
+      [dataType]="column?.dataType" [editCellTemplate]="defineTemplate(column.dataField)" [allowSearch]="
         column?.allowSearch || ['string'].includes(column?.dataType)
-      "
-      [allowHeaderFiltering]="
+      " [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-      "
-      [showInColumnChooser]="column.showInColumnChooser"
-      [showEditorAlways]="true"
-    ></dxi-column>
+      " [showInColumnChooser]="column.showInColumnChooser" [showEditorAlways]="true"></dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
-      <dx-select-box
-        [dataSource]="this[cell.column.dataField + 'Source']"
-        [displayExpr]="
+      <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="
           itemsWithSelectBox.includes(cell.column.dataField)
             ? displayCodeBefore
             : this[cell.column.dataField + 'Service'].model.getLabelField()
-        "
-        [searchExpr]="[
+        " [searchExpr]="[
           this[cell.column.dataField + 'Service'].model.getKeyField(),
           this[cell.column.dataField + 'Service'].model.getLabelField()
-        ]"
-        [searchEnabled]="true"
-        [value]="cell.data[cell.column.dataField]"
-        [hint]="hintFournisseur(cell.column.dataField)"
-        (onValueChanged)="onValueChanged($event, cell)"
-      >
+        ]" [searchEnabled]="true" [value]="cell.data[cell.column.dataField]"
+        (onValueChanged)="onValueChanged($event, cell)">
         <dxo-drop-down-options [width]="SelectBoxPopupWidth">
         </dxo-drop-down-options>
       </dx-select-box>
     </div>
     <div *dxTemplate="let cell of 'origineTemplate'">
-      <dx-button
-        class="small-article-button origin"
-        type="default"
-        [focusStateEnabled]="false"
-        [visible]="showOriginButton(cell)"
-        [text]="showOriginCheck(cell.data)"
-        (onClick)="openOriginePopup(cell.data)"
-      >
+      <dx-button class="small-article-button origin" type="default" [focusStateEnabled]="false"
+        [visible]="showOriginButton(cell)" [text]="showOriginCheck(cell.data)" (onClick)="openOriginePopup(cell.data)">
       </dx-button>
     </div>
     <div *dxTemplate="let cell of 'certificationTemplate'">
-      <dx-button
-        class="small-article-button certification"
-        type="default"
-        [focusStateEnabled]="false"
-        [text]="showCertificationCheck(cell.data)"
-        (onClick)="openCertificationPopup(cell.data)"
-      ></dx-button>
+      <dx-button class="small-article-button certification" type="default" [focusStateEnabled]="false"
+        [text]="showCertificationCheck(cell.data)" (onClick)="openCertificationPopup(cell.data)"></dx-button>
     </div>
   </dx-data-grid>
 </div>
-<app-zoom-article-popup
-  [articleLigneId]="articleLigneId"
-></app-zoom-article-popup>
-<app-article-origine-popup
-  [ordreLigne]="ordreLigne"
-  (changeLigne)="refreshGrid()"
-></app-article-origine-popup>
-<app-article-certification-popup
-  [ordre]="ordre"
-  [ordreLigne]="ordreLigne"
-  (changeLigne)="refreshGrid()"
->
+<app-zoom-article-popup [articleLigneId]="articleLigneId"></app-zoom-article-popup>
+<app-article-origine-popup [ordreLigne]="ordreLigne" (changeLigne)="refreshGrid()"></app-article-origine-popup>
+<app-article-certification-popup [ordre]="ordre" [ordreLigne]="ordreLigne" (changeLigne)="refreshGrid()">
 </app-article-certification-popup>
-<app-zoom-fournisseur-popup
-  [fournisseurLigneId]="fournisseurLigneId"
-></app-zoom-fournisseur-popup>
+<app-zoom-fournisseur-popup [fournisseurLigneId]="fournisseurLigneId"></app-zoom-fournisseur-popup>
 
 <!-- [visible]="showOriginButton(cell)"
 [text]="showOriginCheck(cell.data)" -->

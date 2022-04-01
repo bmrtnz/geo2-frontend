@@ -1,0 +1,40 @@
+<dx-popup [showTitle]="true" [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="visible"
+    title="Ajout Logistique" [width]="600" [height]="300" (onShowing)="onShowing($event)" (onHidden)="onHidden()"
+    [resizeEnabled]="true">
+
+    <div *dxTemplate="let data of 'content'">
+        <div class="popup-subtitle">
+            Choisir un lieu de passage à quai...
+        </div>
+        <br>
+        <dx-box class="SBBox">
+            <dxi-item [ratio]="2">
+                <!-- Groupage -->
+                <div class="dx-field">
+                    <div class="dx-field-value">
+                        <dx-select-box #groupageSB [dataSource]="groupageDS" [displayExpr]="capitalize">
+                        </dx-select-box>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [ratio]="3">
+                <!-- Lieu de passage à quai -->
+                <div class="dx-field">
+                    <div class="dx-field-value">
+                        <dx-select-box #lieuSB [disabled]="!groupageSB.value && lieuxGroupage.length > 1"
+                            [readOnly]="lieuxGroupage.length === 1" [dataSource]="lieupassageaquaiDS" displayExpr="id">
+                            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+                        </dx-select-box>
+                    </div>
+                </div>
+            </dxi-item>
+        </dx-box>
+
+
+        <div class="popup-buttons-container">
+            <dx-button type="normal" text="Appliquer" [disabled]="!groupageSB.value || !lieuSB.value"
+                (onClick)="applyClick()"></dx-button>
+            <dx-button type="default" text="Annuler" (onClick)="cancelClick()"></dx-button>
+        </div>
+    </div>
+</dx-popup>

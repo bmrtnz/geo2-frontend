@@ -1,6 +1,11 @@
 {
   "common": {
-    "allowedPageSizes": [10, 25, 50, 100],
+    "allowedPageSizes": [
+      10,
+      25,
+      50,
+      100
+    ],
     "filterPanel": {
       "filterEnabled": true
     },
@@ -2096,7 +2101,7 @@
   "ordre-logistique": {
     "columns": [
       {
-        "visibleIndex": 1,
+        "visibleIndex": 0,
         "dataField": "codeFournisseur",
         "sortIndex": 2,
         "sortOrder": "asc",
@@ -2106,158 +2111,148 @@
       {
         "visibleIndex": 2,
         "dataField": "expedieStation",
+        "width": "40",
         "allowEditing": false,
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 4,
         "dataField": "dateDepartPrevueFournisseur",
         "sortIndex": 1,
+        "width": "180",
+        "dataType": "datetime",
+        "format": "dd-MM-yyyy HH:mm",
         "sortOrder": "asc",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 5,
         "dataField": "transporteurGroupage",
         "dataType": "string",
         "width": "200",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 7,
         "dataField": "groupage",
         "dataType": "string",
         "width": "200",
         "visible": true
       },
       {
-        "visibleIndex": 6,
-        "dataField": "dateLivraisonLieuGroupage",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "dateDepartPrevueGroupage",
-        "visible": true
-      },
-      {
         "visibleIndex": 8,
-        "dataField": "ordre.typeTransport.id",
-        "visible": true
-      },
-      {
-        "visibleIndex": 9,
-        "dataField": "fournisseurReferenceDOC",
+        "dataField": "dateLivraisonLieuGroupage",
+        "dataType": "datetime",
+        "width": "120",
+        "format": "dd-MM-yyyy HH:mm",
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "ordre.prixUnitaireTarifTransport",
+        "dataField": "dateDepartPrevueGroupage",
+        "dataType": "datetime",
+        "width": "120",
+        "format": "dd-MM-yyyy HH:mm",
         "visible": true
       },
       {
         "visibleIndex": 11,
-        "dataField": "ordre.transporteurDEVCode",
+        "dataField": "instructions",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 12,
-        "dataField": "ordre.baseTarifTransport.id",
-        "visible": true
-      },
-      {
-        "visibleIndex": 13,
-        "dataField": "ordre.codeChargement",
-        "visible": true
+        "dataField": "ordre.typeTransport.id",
+        "allowEditing": false,
+        "visible": false
       },
       {
         "visibleIndex": 14,
-        "dataField": "ordre.ETDDate",
-        "visible": true
-      },
-      {
-        "visibleIndex": 15,
-        "dataField": "ordre.ETADate",
+        "dataField": "fournisseurReferenceDOC",
         "visible": true
       },
       {
         "visibleIndex": 16,
-        "dataField": "ordre.ETDLocation",
-        "visible": true
-      },
-      {
-        "visibleIndex": 17,
-        "dataField": "ordre.ETALocation",
-        "visible": true
+        "dataField": "ordre.prixUnitaireTarifTransport",
+        "allowEditing": false,
+        "visible": false
       },
       {
         "visibleIndex": 18,
-        "dataField": "ordre.incoterm.id",
-        "visible": true
-      },
-      {
-        "visibleIndex": 19,
-        "dataField": "ordre.incotermLieu",
-        "visible": true
+        "dataField": "ordre.transporteurDEVCode",
+        "allowEditing": false,
+        "visible": false
       },
       {
         "visibleIndex": 20,
+        "dataField": "ordre.baseTarifTransport.id",
+        "allowEditing": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 32,
+        "dataField": "incotermFournisseur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 36,
         "dataField": "referenceLogistique",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 21,
+        "visibleIndex": 38,
         "dataField": "referenceDocument",
         "dataType": "string",
         "allowEditing": false,
         "visible": true
       },
       {
-        "visibleIndex": 22,
+        "visibleIndex": 40,
         "dataField": "numeroImmatriculation",
         "dataType": "string",
         "allowEditing": false,
         "visible": true
       },
       {
-        "visibleIndex": 23,
+        "visibleIndex": 42,
         "dataField": "numeroContainer",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 24,
+        "visibleIndex": 44,
         "dataField": "locusTrace",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 25,
+        "visibleIndex": 46,
         "dataField": "numeroPlomb",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 26,
+        "visibleIndex": 48,
         "dataField": "detecteurTemperature",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 27,
+        "visibleIndex": 50,
         "dataField": "certificatControle",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 28,
+        "visibleIndex": 52,
         "dataField": "certificatPhytosanitaire",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 29,
+        "visibleIndex": 54,
         "dataField": "billOfLanding",
         "dataType": "string",
         "visible": true
@@ -2268,6 +2263,11 @@
       },
       {
         "dataField": "transporteurGroupage.raisonSocial",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "groupage.id",
         "showInColumnChooser": false,
         "visible": false
       },

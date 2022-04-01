@@ -1,23 +1,27 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import Ordre from "app/shared/models/ordre.model";
 import { LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
+import { IncotermsService } from "app/shared/services/api/incoterms.service";
+import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
-import DataSource from "devextreme/data/data_source";
-import { environment } from "environments/environment";
-import { ToggledGrid } from "../form/form.component";
-import * as gridConfig from "assets/configurations/grids.json";
-import { ZoomLieupassageaquaiPopupComponent } from "../zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
-import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { DxDataGridComponent } from "devextreme-angular";
+import { DateManagementService } from "app/shared/services/date-management.service";
+import {
+    Grid,
+    GridConfig, GridConfiguratorService
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
+import { DxDataGridComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
+import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import {
-    GridConfiguratorService,
-    Grid,
-    GridConfig,
-} from "app/shared/services/grid-configurator.service";
-import { DateManagementService } from "app/shared/services/date-management.service";
+import { AjoutEtapeLogistiquePopupComponent } from "../ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
+import { ToggledGrid } from "../form/form.component";
+import { ZoomLieupassageaquaiPopupComponent } from "../zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
+import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+
 
 @Component({
     selector: "app-grid-logistiques",
@@ -28,27 +32,37 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     public dataSource: DataSource;
     public transporteurGroupageSource: DataSource;
     public groupageSource: DataSource;
+    public incotermFournisseurSource: DataSource;
+    public instructionsList: string[];
     public SelectBoxPopupWidth: number;
     public itemsWithSelectBox: string[];
     public columnChooser = environment.columnChooser;
     public columns: Observable<GridColumn[]>;
     private gridConfig: Promise<GridConfig>;
     private hintDblClick: string;
+    public addStepText: string;
+    public infoPopupText: string;
     public env = environment;
     @Input() public ordre: Ordre;
     @Output() public transporteurLigneId: string;
     @Output() public transporteurTitle: string;
     @Output() public lieupassageaquaiLigneId: string;
     @Output() public lieupassageaquaiTitle: string;
+    @Output() public lieuxGroupage: string[];
+    @Output() public ligneId: string;
     @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
     @ViewChild(ZoomTransporteurPopupComponent, { static: false }) zoomTransporteurPopup: ZoomTransporteurPopupComponent;
     @ViewChild(ZoomLieupassageaquaiPopupComponent, { static: false }) zoomLieupassageaquaiPopup: ZoomLieupassageaquaiPopupComponent;
+    @ViewChild(AjoutEtapeLogistiquePopupComponent, { static: false }) ajoutEtapePopup: AjoutEtapeLogistiquePopupComponent;
+    @ViewChild(InfoPopupComponent, { static: false }) infoPopup: InfoPopupComponent;
 
     constructor(
         private ordresLogistiquesService: OrdresLogistiquesService,
         public gridConfiguratorService: GridConfiguratorService,
         public dateManagementService: DateManagementService,
         public groupageService: LieuxPassageAQuaiService,
+        public instructionsService: InstructionsService,
+        public incotermFournisseurService: IncotermsService,
         public transporteurGroupageService: TransporteursService,
         public localizeService: LocalizationService,
     ) {
@@ -58,15 +72,29 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         this.columns = from(this.gridConfig).pipe(
             map((config) => config.columns),
         );
+        this.addStep = this.addStep.bind(this);
         this.itemsWithSelectBox = [
             "transporteurGroupage",
-            "groupage"
+            "groupage",
+            "incotermFournisseur"
         ];
+        this.lieuxGroupage = [];
+        this.instructionsList = [];
         this.hintDblClick = this.localizeService.localize("hint-DblClick-file");
+        this.addStepText = this.localizeService.localize("hint-addStep");
         this.transporteurGroupageSource = this.transporteurGroupageService.getDataSource_v2(["id", "raisonSocial"]);
         this.transporteurGroupageSource.filter(["valide", "=", true]);
         this.groupageSource = this.groupageService.getDataSource_v2(["id", "ville"]);
         this.groupageSource.filter(["valide", "=", true]);
+        this.incotermFournisseurSource = this.incotermFournisseurService.getDataSource_v2(["id", "description"]);
+        this.incotermFournisseurSource.filter(["valide", "=", true]);
+        if (!this.instructionsList?.length) {
+            this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
+                res
+                    .filter(inst => inst.valide)
+                    .map(inst => this.instructionsList.push(inst.description));
+            });
+        }
     }
 
     async enableFilters() {
@@ -100,6 +128,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     onValueChanged(event, cell) {
         if (cell.setValue) {
             cell.setValue(event.value);
+            this.datagrid.instance.saveEditData();
             // this.cellValueChange(event);
             // this.idLigne = cell.data.id;
             // this.dataField = cell.column.dataField;
@@ -111,13 +140,37 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         this.SelectBoxPopupWidth = e.cellElement.classList.contains("dx-datagrid-readonly") ? 0 : 400;
     }
 
-    defineTemplate(field) {
+    defineEditTemplate(field) {
 
         let templ;
-        if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
-        // if (field === "article.matierePremiere.origine.id") templ = "origineTemplate";
-        // if (field === "ordre.client.id") templ = "certificationTemplate";
+        if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxTemplate";
+        if (
+            field === "dateDepartPrevueFournisseur" ||
+            field === "dateLivraisonLieuGroupage" ||
+            field === "dateDepartPrevueGroupage"
+        ) templ = "datetimeBoxTemplate";
+        // if (
+        //     field === "ordre.ETDDate" ||
+        //     field === "ordre.ETADate"
+        // ) templ = "dateBoxTemplate";
+        if (field === "codeFournisseur") templ = "simpleElementEditTemplate";
+        if (field === "instructions") templ = "customSelectBoxTemplate";
         return templ ? templ : false;
+    }
+
+    defineCellTemplate(field) {
+        // return (field === "codeFournisseur") ? "simpleElementEditTemplate" : false;
+    }
+
+    addStep(e) {
+        e.event.preventDefault();
+        // if (e.row.data.groupage?.id) { // This condition may be more logical (?)
+        if (this.lieuxGroupage?.length) {
+            this.ligneId = e.row.data.id;
+            this.ajoutEtapePopup.visible = true;
+        } else {
+            notify(this.localizeService.localize("text-groupage-popup"), "warning", 5000);
+        }
     }
 
     displayIdBefore(data) {
@@ -142,26 +195,35 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         }
     }
 
+    onContentReady(e) {
+        this.lieuxGroupage = [];
+        e.component.getVisibleRows()
+            .filter(row => row.data.groupage.id !== null)
+            .map(row => {
+                if (!this.lieuxGroupage?.includes(row.data.groupage?.id))
+                    this.lieuxGroupage.push(row.data.groupage?.id);
+            });
+    }
+
+    showBLCheck(cell) {
+        return !!cell.data.fournisseurReferenceDOC;
+    }
+
     onCellPrepared(e) {
         if (e.rowType === "data") {
-            // Best expression for date
-            if (
-                e.column.dataField === "dateLivraisonPrevue" ||
-                e.column.dataField === "dateDepartPrevueFournisseur" ||
-                e.column.dataField === "dateLivraisonLieuGroupage" ||
-                e.column.dataField === "dateDepartPrevueGroupage" ||
-                e.column.dataField === "ordre.ETDDate" ||
-                e.column.dataField === "ordre.ETADate"
-            ) {
-                if (e.value)
-                    e.cellElement.innerText =
-                        this.dateManagementService.friendlyDate(e.value, true);
-            }
             if (this.itemsWithSelectBox.includes(e.column.dataField)) {
                 if (e.value?.id) {
                     e.cellElement.classList.add("cursor-pointer");
-                    e.cellElement.title = this.hintDblClick;
+                    e.cellElement.title = e.value.id
+                        + " ("
+                        + (e.value.ville ? e.value.ville : e.value.raisonSocial)
+                        + ")"
+                        + "\r\n"
+                        + this.hintDblClick;
                 }
+            }
+            if (e.column.dataField === "instructions") {
+                if (e.value) e.cellElement.title = e.value;
             }
         }
     }

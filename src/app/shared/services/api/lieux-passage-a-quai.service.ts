@@ -24,6 +24,19 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
         return this.watchGetOneQuery<Response>({ variables });
     }
 
+    private byKey(columns: Array<string>) {
+        return (key) =>
+            new Promise(async (resolve) => {
+                const query = await this.buildGetOne_v2(columns);
+                type Response = { lieuPassageAQuai: LieuPassageAQuai };
+                const variables = { id: key };
+                this.listenQuery<Response>(query, { variables }, (res) => {
+                    if (res.data && res.data.lieuPassageAQuai)
+                        resolve(new LieuPassageAQuai(res.data.lieuPassageAQuai));
+                });
+            });
+    }
+
     getDataSource_v2(columns: Array<string>) {
         type Response = { allLieuPassageAQuai: RelayPage<LieuPassageAQuai> };
         return new DataSource({
@@ -56,6 +69,7 @@ export class LieuxPassageAQuaiService extends ApiService implements APIRead {
                             },
                         );
                     }),
+                byKey: this.byKey(columns),
             }),
         });
     }

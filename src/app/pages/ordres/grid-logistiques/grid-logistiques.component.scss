@@ -1,0 +1,36 @@
+
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .grid-logistiques {
+    .add-step-button {
+        background: $base-accent !important;
+        border-radius: 100%;
+        color: white !important;
+        font-size: 15px !important;
+    }
+    .simpleCellText {
+        padding-left: 18px;
+    }
+    .check-bl-icon {
+        position: relative;
+        top: -4px;
+        margin-top: 2px;
+        width: 14px;
+        height: 14px;
+        color: #FFF !important;
+        background-color: $base-accent !important;
+        border-radius: 100%;
+        display: inline-block;
+        font-size: 12px;
+        padding: 6px 3px;
+        cursor: help;
+    }
+    .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
+        padding-right: 10px !important;
+    }
+    .dx-datagrid-text-content {
+        // white-space: normal !important;
+    }
+}

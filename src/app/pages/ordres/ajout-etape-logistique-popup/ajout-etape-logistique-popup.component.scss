@@ -1,0 +1,27 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .ajout-etape-logistique-popup {
+  .popup-subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: $base-accent;
+  }
+
+  .SBBox {
+    position: relative;
+    left: 50px;
+  }
+
+  .popup-buttons-container {
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    .dx-button {
+      margin: 5px;
+    }
+  }
+}

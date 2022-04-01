@@ -92,6 +92,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { TransporteursModule } from "../tiers/transporteurs/transporteurs.module";
 import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-passage-a-quai.module";
+import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 
 @NgModule({
   declarations: [
@@ -142,6 +143,7 @@ import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-pas
     ArticleCertificationPopupComponent,
     ZoomTransporteurPopupComponent,
     ZoomLieupassageaquaiPopupComponent,
+    AjoutEtapeLogistiquePopupComponent,
   ],
   imports: [
     OrdresRoutingModule,

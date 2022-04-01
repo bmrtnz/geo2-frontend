@@ -17,7 +17,7 @@ export class InfoPopupComponent {
 
     @Input() customText: string;
 
-    constructor() {}
+    constructor() { }
 
     cancelClick() {
         this.visible = false;
@@ -28,6 +28,9 @@ export class InfoPopupComponent {
         this.visible = false;
         this.doNavigate.emit(true);
     }
+    onShowing(e) {
+        e.component.content().parentNode.classList.add("info-popup");
+    }
 }
 
 @NgModule({
@@ -35,4 +38,4 @@ export class InfoPopupComponent {
     declarations: [InfoPopupComponent],
     exports: [InfoPopupComponent],
 })
-export class InfoPopupModule {}
+export class InfoPopupModule { }

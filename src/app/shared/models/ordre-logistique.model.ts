@@ -3,6 +3,7 @@ import { Fournisseur } from "./fournisseur.model";
 import { Ordre } from "./ordre.model";
 import Groupage from "./groupage.model";
 import Transporteur from "./transporteur.model";
+import Incoterm from "./incoterm.model";
 
 @ModelName("OrdreLogistique")
 export class OrdreLogistique extends Model {
@@ -25,12 +26,13 @@ export class OrdreLogistique extends Model {
     @Field() public detecteurTemperature?: string;
     @Field() public certificatPhytosanitaire?: string;
     @Field() public billOfLanding?: string;
+    @Field() public instructions?: string;
+    @Field({ model: import("./incoterm.model") }) public incotermFournisseur?: Incoterm;
     @Field() public codeFournisseur?: string;
-    @Field({ dataType: "localdate" })
-    public dateDepartPrevueFournisseur?: string;
-    @Field({ dataType: "localdate" })
-    public dateDepartReelleFournisseur?: string;
-    @Field({ dataType: "localdate" }) public dateDepartPrevueGroupage?: string;
+    @Field({ dataType: "datetime" }) public dateDepartPrevueFournisseur?: string;
+    @Field({ dataType: "datetime" }) public dateLivraisonLieuGroupage?: string;
+    @Field({ dataType: "datetime" }) public dateDepartPrevueGroupage?: string;
+    @Field({ dataType: "datetime" }) public dateDepartReelleFournisseur?: string;
     @Field({ model: import("./groupage.model") }) public groupage?: Groupage;
     @Field({ model: import("./transporteur.model") })
     public transporteurGroupage?: Transporteur;
