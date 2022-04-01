@@ -67,7 +67,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         moyenPaiement: [""],
         tvaCee: [""],
         bureauAchat: [""],
-        // incoterm: [""],
+        incoterm: [""],
         basePaiement: [""],
         compteComptable: [""],
         langue: [""],
@@ -126,7 +126,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     regimesTva: DataSource;
     bureauxAchat: DataSource;
     typesFournisseur: DataSource;
-    // incoterms: DataSource;
+    incoterms: DataSource;
     defaultVisible: boolean;
     validateCommentPromptVisible = false;
     conditionsVente: DataSource;
@@ -148,7 +148,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         private fournisseursService: FournisseursService,
         private bureauxAchatService: BureauxAchatService,
         private conditionsVenteService: ConditionsVenteService,
-        // private incotermsService: IncotermsService,
+        private incotermsService: IncotermsService,
         private identifiantsFournisseurService: IdentifiantsFournisseurService,
         private typesFournisseurService: TypesFournisseurService,
         private regimesTvaService: RegimesTvaService,
@@ -241,8 +241,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         this.fournisseursDeRattachement.filter(["valide", "=", "true"]);
         this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
         this.certifications = this.certificationsService.getDataSource();
-        // this.incoterms = this.incotermsService.getDataSource();
-        // this.incoterms.filter(["valide", "=", "true"]);
+        this.incoterms = this.incotermsService.getDataSource();
+        this.incoterms.filter(["valide", "=", "true"]);
 
     }
 
