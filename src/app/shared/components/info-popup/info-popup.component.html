@@ -1,9 +1,21 @@
-<dx-popup [width]="450" [height]="150" [showTitle]="false" [dragEnabled]="false" [closeOnOutsideClick]="false"
-  (onShowing)="onShowing($event)" [(visible)]="visible">
+<dx-popup
+  [width]="450"
+  [height]="150"
+  [showTitle]="false"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  (onShowing)="onShowing($event)"
+  [(visible)]="visible"
+>
   <div *dxTemplate="let data of 'content'">
     <div class="popup-subtitle">{{ customText }}</div>
-    <br>
-    <dx-button type="default" class="save-popup-button" text="Compris !" (onClick)="continueClick()"></dx-button>
+    <br />
+    <dx-button
+      type="default"
+      class="save-popup-button"
+      text="Compris !"
+      (onClick)="continueClick()"
+    ></dx-button>
     <!-- <dx-button type="normal" text="Non, je m'en occupe !" (onClick)="cancelClick()"></dx-button> -->
   </div>
 </dx-popup>
