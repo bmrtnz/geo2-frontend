@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
-import { Contact } from "app/shared/models";
+import { Contact, Fournisseur } from "app/shared/models";
 import { TypeTiers } from "app/shared/models/tier.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { ContactsService } from "app/shared/services/api/contacts.service";
@@ -25,7 +25,9 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
     templateUrl: "./contacts.component.html",
     styleUrls: ["./contacts.component.scss"],
 })
-export class ContactsComponent implements OnInit, NestedPart {
+export class ContactsComponent implements OnInit, NestedPart, OnChanges {
+
+    @Input() public fournisseurCode: string;
 
     contacts: DataSource;
     fluxSource: DataSource;
@@ -53,17 +55,49 @@ export class ContactsComponent implements OnInit, NestedPart {
         public gridRowStyleService: GridRowStyleService,
     ) { }
 
-    async ngOnInit() {
-        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Contact);
-        this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    ngOnChanges() {
+        // Zoom fournisseur
+        if (this.fournisseurCode) {
+            this.codeTiers = this.fournisseurCode;
+            this.typeTiers = "F";
+
+            this.startGrid();
+        }
+    }
+
+    ngOnInit() {
+
+        this.societeSource = this.societeService.getDataSource();
+        this.fluxSource = this.fluxService.getDataSource();
+        this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
+        // Léa 09/2021
+        // Moyen : les moyens EDIFACT et FTP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
+        // Flux : les flux FACTUR et FACDUP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
+        if (!this.authService.currentUser.adminClient) {
+            this.moyenCommunicationSource.filter([["id", "<>", "FTP"], "and", ["id", "<>", "EFT"]]);
+            this.fluxSource.filter([["id", "<>", "FACDUP"], "and", ["id", "<>", "FACTUR"]]);
+        }
+
+        if (this.fournisseurCode) return;
+
         this.codeTiers = this.route.snapshot.paramMap.get("codeTiers");
         this.typeTiers = this.route.snapshot.paramMap.get("typeTiers");
+
+        this.startGrid();
+
+    }
+
+    async startGrid() {
 
         this.typeTiersLabel = Object
             .entries(TypeTiers)
             .find(([, value]) => value === this.typeTiers)
             .map(value => value.toLowerCase())
             .shift();
+
+        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Contact);
+        this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+
 
         const fields = this.columns.pipe(map(columns => columns.map(column => {
             let field = column.dataField;
@@ -77,19 +111,9 @@ export class ContactsComponent implements OnInit, NestedPart {
 
         this.enableFilters();
         this.dataGrid.dataSource = this.contacts;
-        this.societeSource = this.societeService.getDataSource();
-        this.fluxSource = this.fluxService.getDataSource();
-        this.moyenCommunicationSource = this.moyenCommunicationService.getDataSource();
-
-        // Léa 09/2021
-        // Moyen : les moyens EDIFACT et FTP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
-        // Flux : les flux FACTUR et FACDUP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
-        if (!this.authService.currentUser.adminClient) {
-            this.moyenCommunicationSource.filter([["id", "<>", "FTP"], "and", ["id", "<>", "EFT"]]);
-            this.fluxSource.filter([["id", "<>", "FACDUP"], "and", ["id", "<>", "FACTUR"]]);
-        }
 
     }
+
     enableFilters() {
         const filter = [
             ["codeTiers", "=", this.codeTiers],

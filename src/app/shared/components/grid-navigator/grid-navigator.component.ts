@@ -3,6 +3,8 @@ import { DxButtonModule, DxDataGridComponent } from "devextreme-angular";
 import { Location, CommonModule } from "@angular/common";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 
+const BACK_STATE = "BACK_NESTED";
+
 @Component({
     selector: "app-grid-navigator",
     templateUrl: "./grid-navigator.component.html",
@@ -12,13 +14,6 @@ export class GridNavigatorComponent {
     backBtnDisabled = true;
     @Input() dataGrid: DxDataGridComponent;
 
-    // closest(elem, selector) {
-    //   for (; elem && elem !== document; elem = elem.parentNode) {
-    //     if (elem.matches(selector)) return elem;
-    //   }
-    //   return null;
-    // }
-
     constructor(
         public location: Location,
         public router: Router,
@@ -27,7 +22,7 @@ export class GridNavigatorComponent {
     ) {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd)
-                this.backBtnDisabled = !/^\/nested\/.*details.*/.test(
+                this.backBtnDisabled = !/^\/pages\/nested\/.*(details|entrepot).*/.test(
                     event.url,
                 );
         });
@@ -40,9 +35,9 @@ export class GridNavigatorComponent {
 
         if (
             this.dataGrid.focusedRowIndex + 1 >=
-                this.dataGrid.instance.totalCount() &&
+            this.dataGrid.instance.totalCount() &&
             this.dataGrid.instance.pageIndex() + 1 >=
-                this.dataGrid.instance.pageCount()
+            this.dataGrid.instance.pageCount()
         ) {
             return false;
         }
@@ -127,7 +122,6 @@ export class GridNavigatorComponent {
         this.element.nativeElement.scrollIntoView(options);
     }
 
-    // TODO Create directive backButton
     backClick() {
         this.location.back();
     }
@@ -138,4 +132,4 @@ export class GridNavigatorComponent {
     declarations: [GridNavigatorComponent],
     exports: [GridNavigatorComponent],
 })
-export class GridNavigatorModule {}
+export class GridNavigatorModule { }

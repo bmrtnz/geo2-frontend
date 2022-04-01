@@ -1,8 +1,9 @@
 <div class="content-block">
   <h2>
-    {{ "tiers-contacts-title" | localize }}
-    -
-    {{ typeTiersLabel | localize }} {{ codeTiers }}
+    {{ "tiers-contacts-title" | localize
+    }}<span *ngIf="!fournisseurCode">
+      - {{ typeTiersLabel | localize }} {{ codeTiers }}</span
+    >
   </h2>
 </div>
 <div class="content-block contact-page">
@@ -45,6 +46,7 @@
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-editing
+      *ngIf="!fournisseurCode"
       [allowUpdating]="true"
       [allowAdding]="true"
       [selectTextOnEditStart]="true"
@@ -81,7 +83,9 @@
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [allowEditing]="
-        column.name !== 'valide' && column?.allowEditing !== false
+        column.name !== 'valide' &&
+        column?.allowEditing !== false &&
+        !fournisseurCode
       "
       [validationRules]="column.validationRules"
       [editCellTemplate]="
@@ -104,8 +108,9 @@
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
         [readOnly]="
-          cell?.data?.flux?.id === 'FACTUR' &&
-          !authService.currentUser.adminClient
+          (cell?.data?.flux?.id === 'FACTUR' &&
+            !authService.currentUser.adminClient) ||
+          !!fournisseurCode
         "
         [dataSource]="this[cell.column.dataField + 'Source']"
         [displayExpr]="

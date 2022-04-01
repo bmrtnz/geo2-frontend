@@ -93,6 +93,7 @@ import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popu
 import { TransporteursModule } from "../tiers/transporteurs/transporteurs.module";
 import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-passage-a-quai.module";
 import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
+import { ContactsModule } from "../tiers/contacts/contacts.module";
 
 @NgModule({
   declarations: [
@@ -184,7 +185,8 @@ import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-pop
     ButtonLoaderModule,
     FournisseursModule,
     TransporteursModule,
-    LieuxPassageAQuaiModule
+    LieuxPassageAQuaiModule,
+    ContactsModule,
   ],
   providers: [
     OrdresIndicatorsService,

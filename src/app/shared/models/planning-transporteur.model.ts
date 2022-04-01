@@ -1,6 +1,7 @@
-import { Field, Model } from "./model";
+import { Field, Model, ModelName } from "./model";
 import Ordre from "./ordre.model";
 
+@ModelName("PlanningTransporteur")
 export class PlanningTransporteur extends Model {
     @Field({ asKey: true }) id: number;
     @Field({ model: import("./ordre.model") }) public ordre?: Ordre;

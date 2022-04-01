@@ -388,6 +388,7 @@ export class GridConfiguratorService {
             });
 
         this.fetchConfig(grid).then((config) => component.state(config));
+        component.option("filterPanel", { visible: true });
     }
 
     /** @deprecated Use `init()` instead */
