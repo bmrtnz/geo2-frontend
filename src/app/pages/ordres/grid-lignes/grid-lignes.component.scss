@@ -13,7 +13,8 @@
   }
 }
 
-::ng-deep .grid-ordre-ligne
+::ng-deep
+  .grid-ordre-ligne
   .dx-row-focused:not(.dx-edit-row)
   td:not(.dx-focused):first-of-type {
   input,
