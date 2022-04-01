@@ -128,10 +128,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     onValueChanged(event, cell) {
         if (cell.setValue) {
             cell.setValue(event.value);
-            this.datagrid.instance.saveEditData();
-            // this.cellValueChange(event);
-            // this.idLigne = cell.data.id;
-            // this.dataField = cell.column.dataField;
+            // this.datagrid.instance.saveEditData();
         }
     }
 
@@ -149,17 +146,9 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
             field === "dateLivraisonLieuGroupage" ||
             field === "dateDepartPrevueGroupage"
         ) templ = "datetimeBoxTemplate";
-        // if (
-        //     field === "ordre.ETDDate" ||
-        //     field === "ordre.ETADate"
-        // ) templ = "dateBoxTemplate";
         if (field === "codeFournisseur") templ = "simpleElementEditTemplate";
         if (field === "instructions") templ = "customSelectBoxTemplate";
         return templ ? templ : false;
-    }
-
-    defineCellTemplate(field) {
-        // return (field === "codeFournisseur") ? "simpleElementEditTemplate" : false;
     }
 
     addStep(e) {

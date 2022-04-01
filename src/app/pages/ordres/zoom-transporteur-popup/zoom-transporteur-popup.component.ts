@@ -12,6 +12,7 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
 
   @Input() public transporteurLigneId: string;
   @Input() public transporteurTitle: string;
+  @Input() public transporteurId: string;
 
   visible: boolean;
   title: string;

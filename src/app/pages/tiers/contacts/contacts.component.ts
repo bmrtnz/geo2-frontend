@@ -28,6 +28,8 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 export class ContactsComponent implements OnInit, NestedPart, OnChanges {
 
     @Input() public fournisseurCode: string;
+    @Input() public transporteurLigneId: string;
+    @Input() public lieupassageaquaiLigneId: string;
 
     contacts: DataSource;
     fluxSource: DataSource;
@@ -56,11 +58,20 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
     ) { }
 
     ngOnChanges() {
-        // Zoom fournisseur
+        // Zooms fournisseur, transporteur...
         if (this.fournisseurCode) {
             this.codeTiers = this.fournisseurCode;
             this.typeTiers = "F";
-
+            this.startGrid();
+        }
+        if (this.transporteurLigneId) {
+            this.codeTiers = this.transporteurLigneId;
+            this.typeTiers = "T";
+            this.startGrid();
+        }
+        if (this.lieupassageaquaiLigneId) {
+            this.codeTiers = this.lieupassageaquaiLigneId;
+            this.typeTiers = "G";
             this.startGrid();
         }
     }
@@ -78,7 +89,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
             this.fluxSource.filter([["id", "<>", "FACDUP"], "and", ["id", "<>", "FACTUR"]]);
         }
 
-        if (this.fournisseurCode) return;
+        if (this.fournisseurCode || this.transporteurLigneId || this.lieupassageaquaiLigneId) return;
 
         this.codeTiers = this.route.snapshot.paramMap.get("codeTiers");
         this.typeTiers = this.route.snapshot.paramMap.get("typeTiers");
