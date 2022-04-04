@@ -257,8 +257,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
       if (["fournisseur", "proprietaireMarchandise"].includes(e.column?.dataField)) {
         if (e.value?.id) {
           e.cellElement.classList.add("cursor-pointer");
-          const titleDiv = e.cellElement.querySelector(".SB-edit-title-element");
-          if (titleDiv) titleDiv.title = this.hintDblClick;
         }
       }
       if (e.column.dataField === "article.description") {
@@ -463,6 +461,16 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   }
 
+  private handleCellChangeEventResponse<T>(): PartialObserver<T> {
+    return {
+      next: v => this.refreshGrid(),
+      error: (message: string) => {
+        notify({ message }, "error", 7000);
+        console.log(message);
+      }
+    };
+  }
+
   cellValueChange(data) {
 
     if (!this.dataField) return;
@@ -536,16 +544,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
     }
 
-  }
-
-  private handleCellChangeEventResponse<T>(): PartialObserver<T> {
-    return {
-      next: v => this.refreshGrid(),
-      error: (message: string) => {
-        notify({ message }, "error", 7000);
-        console.log(message);
-      }
-    };
   }
 
 }

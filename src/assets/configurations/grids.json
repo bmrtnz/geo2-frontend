@@ -1898,6 +1898,11 @@
         "visible": false
       },
       {
+        "dataField": "fournisseur.code",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
         "dataField": "proprietaireMarchandise.listeExpediteurs",
         "showInColumnChooser": false,
         "visible": false
