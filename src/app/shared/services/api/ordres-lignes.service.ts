@@ -141,7 +141,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
           const queryGraph = this.buildGetSummaryGraph(
             operation,
             columns.map(c => `edges.node.${c}`),
-            summary,
           );
           type Response = { [operation: string]: RelayPage<OrdreLigne> };
           const variables = {

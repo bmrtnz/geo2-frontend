@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { takeWhile } from "rxjs/operators";
 import { Variete } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
@@ -50,21 +51,62 @@ export class VarietesService extends ApiService implements APIRead {
                             },
                         );
                     }),
-                byKey: (key) =>
+                byKey: this.byKey,
+            }),
+        });
+    }
+
+    getList(search: string, columns: Array<string>) {
+        return this.apollo
+            .query<{ allVarieteList: Variete[] }>({
+                query: gql(this.buildGetListGraph(columns)),
+                variables: { search },
+            })
+            .pipe(takeWhile((res) => res.loading === false));
+    }
+
+    getDistinctDataSource(columns: Array<string>) {
+        return new DataSource({
+            store: this.createCustomStore({
+                load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {
-                        const query = await this.buildGetOne();
-                        type Response = { variete: Variete };
-                        const variables = { id: key };
+
+                        type Response = { allDistinctVariete: RelayPage<Variete> };
+                        const query = await this.buildDistinctQuery(columns.map(c => `edges.node.${c}`));
+                        const variables = this.mapLoadOptionsToVariables(options);
                         this.listenQuery<Response>(
                             query,
                             { variables },
                             (res) => {
-                                if (res.data && res.data.variete)
-                                    resolve(new Variete(res.data.variete));
+                                if (res.data && res.data.allDistinctVariete) {
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allDistinctVariete,
+                                        ),
+                                    );
+                                }
                             },
                         );
                     }),
+                byKey: this.byKey,
             }),
         });
     }
+
+    private byKey(key) {
+        return new Promise(async (resolve) => {
+            const query = await this.buildGetOne();
+            type Response = { variete: Variete };
+            const variables = { id: key };
+            this.listenQuery<Response>(
+                query,
+                { variables },
+                (res) => {
+                    if (res.data && res.data.variete)
+                        resolve(new Variete(res.data.variete));
+                },
+            );
+        });
+    }
+
 }

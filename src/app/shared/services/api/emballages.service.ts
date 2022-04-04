@@ -52,24 +52,57 @@ export class EmballagesService extends ApiService implements APIRead {
                             },
                         );
                     }),
-                byKey: (key) =>
+                byKey: this.byKey,
+            }),
+        });
+    }
+
+    getDistinctDataSource(columns: Array<string>) {
+        return new DataSource({
+            sort: [{ selector: this.model.getKeyField() }],
+            store: this.createCustomStore({
+                key: ["id", "especeId"],
+                load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {
-                        const query = await this.buildGetOne();
-                        type Response = { emballage: Emballage };
-                        const id = key
-                            ? { id: key.id, espece: key.especeId || "" }
-                            : {};
-                        const variables = { id };
+
+                        type Response = { allDistinctEmballage: RelayPage<Emballage> };
+                        const query = await this.buildDistinctQuery(columns.map(c => `edges.node.${c}`));
+                        const variables = this.mapLoadOptionsToVariables(options);
                         this.listenQuery<Response>(
                             query,
                             { variables },
                             (res) => {
-                                if (res.data && res.data.emballage)
-                                    resolve(new Emballage(res.data.emballage));
+                                if (res.data && res.data.allDistinctEmballage) {
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allDistinctEmballage,
+                                        ),
+                                    );
+                                }
                             },
                         );
                     }),
+                byKey: this.byKey,
             }),
+        });
+    }
+
+    byKey(key) {
+        return new Promise(async (resolve) => {
+            const query = await this.buildGetOne();
+            type Response = { emballage: Emballage };
+            const id = key
+                ? { id: key.id, espece: key.especeId || "" }
+                : {};
+            const variables = { id };
+            this.listenQuery<Response>(
+                query,
+                { variables },
+                (res) => {
+                    if (res.data && res.data.emballage)
+                        resolve(new Emballage(res.data.emballage));
+                },
+            );
         });
     }
 }
