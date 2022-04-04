@@ -203,12 +203,15 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
             if (this.itemsWithSelectBox.includes(e.column.dataField)) {
                 if (e.value?.id) {
                     e.cellElement.classList.add("cursor-pointer");
-                    e.cellElement.title = e.value.id
-                        + " ("
-                        + (e.value.ville ? e.value.ville : e.value.raisonSocial)
-                        + ")"
-                        + "\r\n"
-                        + this.hintDblClick;
+                    const titleDiv = e.cellElement.querySelector(".SB-edit-title-element");
+                    if (titleDiv) {
+                        titleDiv.title = e.value.id
+                            + " ("
+                            + (e.value.ville ? e.value.ville : e.value.raisonSocial)
+                            + ")"
+                            + "\r\n"
+                            + this.hintDblClick;
+                    }
                 }
             }
             if (e.column.dataField === "instructions") {

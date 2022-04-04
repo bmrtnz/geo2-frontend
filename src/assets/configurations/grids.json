@@ -1,6 +1,11 @@
 {
   "common": {
-    "allowedPageSizes": [10, 25, 50, 100],
+    "allowedPageSizes": [
+      10,
+      25,
+      50,
+      100
+    ],
     "filterPanel": {
       "filterEnabled": true
     },
@@ -2122,7 +2127,6 @@
       {
         "visibleIndex": 2,
         "dataField": "expedieStation",
-        "width": "40",
         "allowEditing": false,
         "visible": true
       },
@@ -2130,7 +2134,7 @@
         "visibleIndex": 4,
         "dataField": "dateDepartPrevueFournisseur",
         "sortIndex": 1,
-        "width": "180",
+        "width": "300",
         "dataType": "datetime",
         "format": "dd-MM-yyyy HH:mm",
         "sortOrder": "asc",

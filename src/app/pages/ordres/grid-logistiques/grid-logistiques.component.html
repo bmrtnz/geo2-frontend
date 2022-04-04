@@ -1,168 +1,88 @@
-<dx-data-grid
-  class="dx-card wide-card grid-logistiques"
-  [remoteOperations]="true"
-  [showBorders]="false"
-  [columnAutoWidth]="true"
-  [columnHidingEnabled]="false"
-  [allowColumnReordering]="true"
-  [scrolling]="{ useNative: true }"
-  (onCellClick)="onCellClick($event)"
-  (onCellDblClick)="openFilePopup($event)"
-  (onCellPrepared)="onCellPrepared($event)"
-  (onContentReady)="onContentReady($event)"
-  (onToolbarPreparing)="
+<dx-data-grid class="dx-card wide-card grid-logistiques" [remoteOperations]="true" [showBorders]="false"
+  [columnAutoWidth]="true" [columnHidingEnabled]="false" [allowColumnReordering]="true"
+  [scrolling]="{ useNative: true }" (onCellClick)="onCellClick($event)" (onCellDblClick)="openFilePopup($event)"
+  (onCellPrepared)="onCellPrepared($event)" (onContentReady)="onContentReady($event)" (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Logistique',
       $event,
       gridConfiguratorService.Grid.OrdreLogistique,
       enableFilters.bind(this)
     )
-  "
->
+  ">
   <!-- Grid configuration -->
   <!-- <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter> -->
   <dxo-paging></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [showInfo]="true"
-    [showNavigationButtons]="true"
-    [showPageSizeSelector]="true"
-  ></dxo-pager>
-  <dxo-editing
-    [selectTextOnEditStart]="true"
-    [allowUpdating]="!env.production"
-    [allowDeleting]="!env.production"
-    [mode]="'cell'"
-  ></dxo-editing>
-  <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.OrdreLogistique"
-    [enabled]="true"
-    type="custom"
-    [customLoad]="gridConfiguratorService.load"
-    [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
+  <dxo-pager [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"></dxo-pager>
+  <dxo-editing [selectTextOnEditStart]="true" [allowUpdating]="!env.production" [allowDeleting]="!env.production"
+    [mode]="'cell'"></dxo-editing>
+  <dxo-state-storing [storageKey]="gridConfiguratorService.Grid.OrdreLogistique" [enabled]="true" type="custom"
+    [customLoad]="gridConfiguratorService.load" [customSave]="gridConfiguratorService.save"></dxo-state-storing>
   <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-  <dxo-column-chooser
-    [enabled]="true"
-    mode="select"
-    title="{{ 'columnChooser' | localize }}"
-    [allowSearch]="true"
-    [width]="columnChooser.width"
-    [height]="columnChooser.height"
-  >
+  <dxo-column-chooser [enabled]="true" mode="select" title="{{ 'columnChooser' | localize }}" [allowSearch]="true"
+    [width]="columnChooser.width" [height]="columnChooser.height">
   </dxo-column-chooser>
 
-  <dxi-column
-    *ngFor="let column of this.columns | async"
-    [dataField]="column.dataField"
-    [visible]="false"
-    [caption]="
+  <dxi-column *ngFor="let column of this.columns | async" [dataField]="column.dataField" [visible]="false" [caption]="
       ('ordreLogistique-' + column.dataField?.split('.').join('-')
         | localize) || column.name
-    "
-    trueText="Oui"
-    falseText="Non"
-    [dataType]="column?.dataType"
-    [showEditorAlways]="true"
-    [allowEditing]="column.allowEditing"
-    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-    [format]="column.format"
-    [editCellTemplate]="defineEditTemplate(column.dataField)"
-    [allowHeaderFiltering]="
+    " trueText="Oui" falseText="Non" [dataType]="column?.dataType" [showEditorAlways]="true"
+    [allowEditing]="column.allowEditing" [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [format]="column.format" [editCellTemplate]="defineEditTemplate(column.dataField)" [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-    "
-    [showInColumnChooser]="column.showInColumnChooser"
-  ></dxi-column>
+    " [showInColumnChooser]="column.showInColumnChooser"></dxi-column>
   <dxi-column type="buttons" [width]="80" [showInColumnChooser]="false">
-    <dxi-button
-      cssClass="add-step-button"
-      [hint]="addStepText"
-      icon="plus"
-      [onClick]="addStep"
-    ></dxi-button>
+    <dxi-button cssClass="add-step-button" [hint]="addStepText" icon="plus" [onClick]="addStep"></dxi-button>
     <dxi-button name="edit"></dxi-button>
     <dxi-button name="delete"></dxi-button>
   </dxi-column>
 
   <div *dxTemplate="let cell of 'selectBoxTemplate'">
-    <dx-select-box
-      [dataSource]="this[cell.column.dataField + 'Source']"
-      [displayExpr]="displayIdBefore"
-      [searchExpr]="[
+    <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="displayIdBefore" [searchExpr]="[
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()
-      ]"
-      [searchEnabled]="true"
-      [value]="cell.data[cell.column.dataField]"
-      (onValueChanged)="onValueChanged($event, cell)"
-    >
+      ]" [searchEnabled]="true" [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)">
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
     </dx-select-box>
+    <div class="SB-edit-title-element"></div>
   </div>
   <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
-    <dx-select-box
-      [items]="instructionsList"
-      [value]="cell.data[cell.column.dataField]"
-      [acceptCustomValue]="true"
-      (onValueChanged)="onValueChanged($event, cell)"
-    >
+    <dx-select-box [items]="instructionsList" [value]="cell.data[cell.column.dataField]" [acceptCustomValue]="true"
+      (onValueChanged)="onValueChanged($event, cell)">
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
     </dx-select-box>
   </div>
   <div *dxTemplate="let cell of 'datetimeBoxTemplate'">
-    <dx-date-box
-      type="datetime"
-      [displayFormat]="'dd-MM-yyyy HH:mm'"
-      dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
-      [acceptCustomValue]="false"
-      [value]="cell.data[cell.column.dataField]"
-      (onValueChanged)="onValueChanged($event, cell)"
-    >
+    <dx-date-box type="datetime" [displayFormat]="'dd-MM-yyyy HH:mm'" dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+      [acceptCustomValue]="false" [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)">
     </dx-date-box>
   </div>
   <div *dxTemplate="let cell of 'dateBoxTemplate'">
-    <dx-date-box
-      type="date"
-      [acceptCustomValue]="false"
-      dateSerializationFormat="yyyy-MM-dd"
-      dateSerializationFormat="yyyy-MM-dd"
-      [value]="cell.data[cell.column.dataField]"
-      (onValueChanged)="onValueChanged($event, cell)"
-    >
+    <dx-date-box type="date" [acceptCustomValue]="false" dateSerializationFormat="yyyy-MM-dd"
+      dateSerializationFormat="yyyy-MM-dd" [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)">
     </dx-date-box>
   </div>
   <div *dxTemplate="let cell of 'simpleElementEditTemplate'">
-    <span class="simpleCellText"
-      >{{ cell.data[cell.column.dataField] }}&nbsp;&nbsp;</span
-    >
+    <span class="simpleCellText">{{ cell.data[cell.column.dataField] }}&nbsp;&nbsp;</span>
     <span>
-      <div
-        *ngIf="!!cell.data.fournisseurReferenceDOC"
-        class="check-bl-icon"
-        title="{{ 'hint-BL' | localize }} :&#10;{{
+      <div *ngIf="!!cell.data.fournisseurReferenceDOC" class="check-bl-icon" title="{{ 'hint-BL' | localize }} :&#10;{{
           cell.data.fournisseurReferenceDOC
-        }}"
-      >
+        }}">
         ✓
       </div>
     </span>
   </div>
 </dx-data-grid>
-<app-zoom-transporteur-popup
-  [transporteurLigneId]="transporteurLigneId"
-  [transporteurTitle]="transporteurTitle"
->
+<app-zoom-transporteur-popup [transporteurLigneId]="transporteurLigneId" [transporteurTitle]="transporteurTitle">
 </app-zoom-transporteur-popup>
-<app-zoom-lieupassageaquai-popup
-  [lieupassageaquaiLigneId]="lieupassageaquaiLigneId"
-  [lieupassageaquaiTitle]="lieupassageaquaiTitle"
-></app-zoom-lieupassageaquai-popup>
-<app-ajout-etape-logistique-popup
-  [lieuxGroupage]="lieuxGroupage"
-  [ligneId]="ligneId"
->
+<app-zoom-lieupassageaquai-popup [lieupassageaquaiLigneId]="lieupassageaquaiLigneId"
+  [lieupassageaquaiTitle]="lieupassageaquaiTitle"></app-zoom-lieupassageaquai-popup>
+<app-ajout-etape-logistique-popup [lieuxGroupage]="lieuxGroupage" [ligneId]="ligneId">
 </app-ajout-etape-logistique-popup>
 <app-info-popup [customText]="infoPopupText"></app-info-popup>

@@ -257,7 +257,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
       if (["fournisseur", "proprietaireMarchandise"].includes(e.column?.dataField)) {
         if (e.value?.id) {
           e.cellElement.classList.add("cursor-pointer");
-          e.cellElement.title = this.hintDblClick;
+          const titleDiv = e.cellElement.querySelector(".SB-edit-title-element");
+          if (titleDiv) titleDiv.title = this.hintDblClick;
         }
       }
       if (e.column.dataField === "article.description") {
