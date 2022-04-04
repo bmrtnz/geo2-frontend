@@ -1,8 +1,18 @@
-<dx-popup [showTitle]="true" [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="visible" [title]="title"
-  (onShowing)="onShowing($event)" [resizeEnabled]="true">
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [title]="title"
+  (onShowing)="onShowing($event)"
+  [resizeEnabled]="true"
+>
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-      <app-fournisseur-details [fournisseurLigneId]="fournisseurLigneId" (fournisseurLigneCode)="setTitle($event)">
+      <app-fournisseur-details
+        [fournisseurLigneId]="fournisseurLigneId"
+        (fournisseurLigneCode)="setTitle($event)"
+      >
       </app-fournisseur-details>
       <app-contacts [fournisseurCode]="fournisseurCode"></app-contacts>
       <br />

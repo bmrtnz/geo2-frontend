@@ -1,11 +1,22 @@
-<dx-popup [showTitle]="true" [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="visible" [title]="title"
-  (onShowing)="onShowing($event)" [resizeEnabled]="true">
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [title]="title"
+  (onShowing)="onShowing($event)"
+  [resizeEnabled]="true"
+>
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-      <app-lieux-passage-a-quai-details [lieupassageaquaiLigneId]="lieupassageaquaiLigneId"
-        [lieupassageaquaiTitle]="lieupassageaquaiTitle">
+      <app-lieux-passage-a-quai-details
+        [lieupassageaquaiLigneId]="lieupassageaquaiLigneId"
+        [lieupassageaquaiTitle]="lieupassageaquaiTitle"
+      >
       </app-lieux-passage-a-quai-details>
-      <app-contacts [lieupassageaquaiLigneId]="lieupassageaquaiLigneId"></app-contacts>
+      <app-contacts
+        [lieupassageaquaiLigneId]="lieupassageaquaiLigneId"
+      ></app-contacts>
       <br />
     </dx-scroll-view>
   </div>
