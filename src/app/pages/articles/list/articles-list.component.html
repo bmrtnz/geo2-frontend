@@ -31,9 +31,9 @@
               onFieldValueChange($event, 'matierePremiere.espece.id')
             "
             [searchEnabled]="true"
-            searchExpr="matierePremiere.espece.id"
+            [searchExpr]="['id', 'description']"
             [displayExpr]="capitalize"
-            valueExpr="key"
+            valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-tag-box>
@@ -49,12 +49,12 @@
             #varieteSB
             [dataSource]="varietes"
             (valueChange)="
-              onFieldValueChange($event, 'matierePremiere.variete.description')
+              onFieldValueChange($event, 'matierePremiere.variete.id')
             "
             [searchEnabled]="true"
-            searchExpr="matierePremiere.variete.description"
+            [searchExpr]="['id', 'description']"
             [displayExpr]="capitalize"
-            valueExpr="key"
+            valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-tag-box>
@@ -93,13 +93,11 @@
           <dx-tag-box
             #emballageSB
             [dataSource]="emballages"
-            (valueChange)="
-              onFieldValueChange($event, 'emballage.emballage.description')
-            "
+            (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
             [searchEnabled]="true"
-            searchExpr="emballage.emballage.description"
+            [searchExpr]="['id', 'description']"
             [displayExpr]="capitalize"
-            valueExpr="key"
+            valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-tag-box>
@@ -115,12 +113,12 @@
             #origineSB
             [dataSource]="origines"
             (valueChange)="
-              onFieldValueChange($event, 'matierePremiere.origine.description')
+              onFieldValueChange($event, 'matierePremiere.origine.id')
             "
             [searchEnabled]="true"
-            searchExpr="matierePremiere.origine.description"
+            [searchExpr]="['id', 'description']"
             [displayExpr]="capitalize"
-            valueExpr="key"
+            valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-tag-box>
@@ -163,7 +161,6 @@
     [scrolling]="{ useNative: true }"
     [keyExpr]="'id'"
     (onRowPrepared)="onRowPrepared($event)"
-    (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onSelectionChanged)="onSelectionChanged($event)"

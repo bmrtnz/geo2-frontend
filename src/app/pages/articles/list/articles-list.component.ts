@@ -5,6 +5,10 @@ import Ordre from "app/shared/models/ordre.model";
 import { ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
+import { EmballagesService } from "app/shared/services/api/emballages.service";
+import { EspecesService } from "app/shared/services/api/especes.service";
+import { OriginesService } from "app/shared/services/api/origines.service";
+import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
@@ -13,7 +17,6 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-
 
 @Component({
     selector: "app-articles-list",
@@ -55,19 +58,18 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         public localizeService: LocalizationService,
         public gridConfiguratorService: GridConfiguratorService,
         public gridRowStyleService: GridRowStyleService,
-        public clientsService: ClientsService
+        public clientsService: ClientsService,
+        public especesService: EspecesService,
+        public varietesService: VarietesService,
+        public emballagesService: EmballagesService,
+        public originesService: OriginesService,
     ) {
         this.apiService = this.articlesService;
-        this.especes = this.articlesService
-            .getFilterDatasource("matierePremiere.espece.id");
-        this.origines = this.articlesService
-            .getFilterDatasource("matierePremiere.origine.description");
-        this.varietes = this.articlesService
-            .getFilterDatasource("matierePremiere.variete.description");
-        this.emballages = this.articlesService
-            .getFilterDatasource("emballage.emballage.description");
-        this.modesCulture = this.articlesService
-            .getFilterDatasource("matierePremiere.modeCulture.description");
+        this.especes = this.especesService.getDistinctDataSource(["id"]);
+        this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
+        this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
+        this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
+        this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
         this.trueFalse = ["Tous", "Oui", "Non"];
     }
 
@@ -77,17 +79,6 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
         this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
         this.toRefresh = true;
-    }
-
-    onCellPrepared(e) {
-        // Adding code (prefix) before "variété" and "emballage"
-        if (e.rowType === "data") {
-            if (e.column.dataField === "matierePremiere.variete.description") {
-                e.cellElement.innerText = e.data.matierePremiere?.variete.id + " " + e.cellElement.innerText;
-            } else if (e.column.dataField === "emballage.emballage.description") {
-                e.cellElement.innerText = e.data.emballage?.emballage.id + " " + e.cellElement.innerText;
-            }
-        }
     }
 
     onSelectionChanged(e) {
@@ -156,16 +147,16 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
             if (event.length) {
                 event.forEach(element => {
-                    filter.push(["matierePremiere.espece.id", "=", element]);
+                    filter.push(["espece.id", "=", element]);
                     filter.push("or");
                 });
                 filter.pop(); // Remove last 'or'
 
-                this.varietes = this.articlesService.getFilterDatasource("matierePremiere.variete.description");
+                this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
                 if (event[0] !== "null") this.varietes.filter(filter);
-                this.emballages = this.articlesService.getFilterDatasource("emballage.emballage.description");
+                this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
                 if (event[0] !== "null") this.emballages.filter(filter);
-                this.origines = this.articlesService.getFilterDatasource("matierePremiere.origine.description");
+                this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
                 if (event[0] !== "null") this.origines.filter(filter);
             }
         }
@@ -173,7 +164,13 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
 
     capitalize(data) {
-        return data ? data.key.charAt(0).toUpperCase() + data.key.slice(1).toLowerCase() : null;
+        if (data?.description)
+            return `${data.id.toLowerCase().ucFirst()}: ${data.description?.toLowerCase()}`;
+        if (data?.id)
+            return data.id.toLowerCase().ucFirst();
+        if (data?.key)
+            return data.key.toLowerCase().ucFirst();
+        return data.toString();
     }
 
 }

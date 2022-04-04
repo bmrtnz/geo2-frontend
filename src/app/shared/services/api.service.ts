@@ -141,6 +141,17 @@ export abstract class ApiService implements OnDestroy {
     this.keyField = this?.model?.getKeyField() || DEFAULT_KEY;
   }
 
+  /**
+   * It takes a list of operations, a list of variables and an optional alias and returns a string that
+   * represents the GraphQL query
+   * @param type - the type of the query, either "query" or "mutation"
+   * @param operations - an array of objects that contain the name of the operation, the body
+   * of the operation (if any) and the parameters of the operation.
+   * @param variables - an array of variables
+   * that will be used in the query.
+   * @param alias - The name of the query, mutation or subscription.
+   * @returns The GraphQL query.
+   */
   static buildGraph(
     type: "query" | "mutation",
     operations: { name: string, body?: Array<string>, params: { name: string, value: any, isVariable: boolean }[] }[],
@@ -885,6 +896,11 @@ export abstract class ApiService implements OnDestroy {
       );
   }
 
+  /**
+   * It builds a graphql query that fetches a single entity of the model
+   * @param body - The body of the query.
+   * @returns The GraphQL query.
+   */
   protected buildGetOneGraph(body: Array<string>) {
     return ApiService.buildGraph(
       "query",
@@ -899,6 +915,12 @@ export abstract class ApiService implements OnDestroy {
     );
   }
 
+  /**
+   * It builds a graph of queries,
+   * which is a list of queries, each query being a query to get a list of entities
+   * @param body - The body of the query.
+   * @returns The GraphQL query.
+   */
   protected buildGetListGraph(body: Array<string>) {
     return ApiService.buildGraph(
       "query",
@@ -913,7 +935,14 @@ export abstract class ApiService implements OnDestroy {
     );
   }
 
-  protected buildGetSummaryGraph(operationName: string, body: string[], summary: SummaryInput[]) {
+  /**
+   * It builds a graphql query that will fetch the data needed to display the summary of the list of
+   * summaries
+   * @param {string} operationName - The name of the operation to build.
+   * @param {string[]} body - The body of the query.
+   * @returns The GraphQL query that will be executed.
+   */
+  protected buildGetSummaryGraph(operationName: string, body: string[]) {
     return ApiService.buildGraph(
       "query",
       [
@@ -942,6 +971,11 @@ export abstract class ApiService implements OnDestroy {
     );
   }
 
+  /**
+   * It builds a graphql mutation that will save a GeoModel
+   * @param body - The body of the mutation.
+   * @returns The GraphQL mutation.
+   */
   protected buildSaveGraph(body: Array<string>) {
 
     return ApiService.buildGraph(
@@ -954,6 +988,36 @@ export abstract class ApiService implements OnDestroy {
         },
       ],
       [{ name: this.model.name.lcFirst(), type: `Geo${this.model.name}Input`, isOptionnal: false }],
+    );
+  }
+
+  /**
+   * It builds a query that returns all distinct values of a given field
+   * @param body - The body of the query.
+   * @returns The query is being returned as a string.
+   */
+  protected buildDistinctQuery(body: Array<string>) {
+    return ApiService.buildGraph(
+      "query",
+      [{
+        name: `allDistinct${this.model.name}`,
+        params: [
+          { name: "search", value: "search", isVariable: true },
+          { name: "pageable", value: "pageable", isVariable: true },
+        ],
+        body: [
+          "pageInfo.startCursor",
+          "pageInfo.endCursor",
+          "pageInfo.hasPreviousPage",
+          "pageInfo.hasNextPage",
+          "totalCount",
+          ...body,
+        ],
+      }],
+      [
+        { name: "search", type: "String", isOptionnal: true },
+        { name: "pageable", type: "PaginationInput", isOptionnal: false },
+      ]
     );
   }
 
