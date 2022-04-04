@@ -48,7 +48,7 @@ export class Fournisseur extends Model {
     @Field({ model: import("./regime-tva.model") }) public regimeTva: RegimeTva;
     @Field() public nbJourEcheance: number;
     @Field() public echeanceLe: number;
-    // @Field({ model: import("./incoterm.model") }) public incoterm: Incoterm;
+    @Field({ model: import("./incoterm.model") }) public incoterm: Incoterm;
     @Field() public tvaCee: string;
     @Field({ model: import("./bureau-achat.model") })
     public bureauAchat: BureauAchat;

@@ -333,6 +333,25 @@
                     </dx-text-box>
                   </div>
                 </div>
+                <!-- Incoterm -->
+                <div class="dx-field">
+                  <div class="dx-field-label">
+                    {{ "tiers-fournisseurs-incoterm" | localize }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="incoterm"
+                      [readOnly]="readOnlyMode"
+                      [showClearButton]="true"
+                      (onValueChanged)="onNonRequiredSBChange($event)"
+                      [dataSource]="incoterms"
+                      [displayExpr]="displayIDBefore"
+                      [searchEnabled]="true"
+                      [searchExpr]="['id', 'description']"
+                    >
+                    </dx-select-box>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -925,17 +944,6 @@
                     </dx-select-box>
                   </div>
                 </div>
-                <!-- Incoterm -->
-                <!-- <div class="dx-field">
-                  <div class="dx-field-label">
-                    {{ "tiers-fournisseurs-incoterm" | localize }}
-                  </div>
-                  <div class="dx-field-value">
-                    <dx-select-box formControlName="incoterm" [readOnly]="readOnlyMode" [dataSource]="incoterms"
-                      [displayExpr]="displayIDBefore" [searchEnabled]="true" [searchExpr]="['id', 'description']">
-                    </dx-select-box>
-                  </div>
-                </div> -->
                 <!-- Devise -->
                 <div class="dx-field">
                   <div class="dx-field-label">
