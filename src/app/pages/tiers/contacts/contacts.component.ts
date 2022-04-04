@@ -28,6 +28,8 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 export class ContactsComponent implements OnInit, NestedPart, OnChanges {
 
     @Input() public fournisseurCode: string;
+    @Input() public transporteurLigneId: string;
+    @Input() public lieupassageaquaiLigneId: string;
 
     contacts: DataSource;
     fluxSource: DataSource;
@@ -56,12 +58,21 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
     ) { }
 
     ngOnChanges() {
-        // Zoom fournisseur
+        // Zooms fournisseur, transporteur...
         if (this.fournisseurCode) {
             this.codeTiers = this.fournisseurCode;
             this.typeTiers = "F";
-
-            this.startGrid();
+            this.updateGrid();
+        }
+        if (this.transporteurLigneId) {
+            this.codeTiers = this.transporteurLigneId;
+            this.typeTiers = "T";
+            this.updateGrid();
+        }
+        if (this.lieupassageaquaiLigneId) {
+            this.codeTiers = this.lieupassageaquaiLigneId;
+            this.typeTiers = "G";
+            this.updateGrid();
         }
     }
 
@@ -78,16 +89,16 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
             this.fluxSource.filter([["id", "<>", "FACDUP"], "and", ["id", "<>", "FACTUR"]]);
         }
 
-        if (this.fournisseurCode) return;
+        if (this.fournisseurCode || this.transporteurLigneId || this.lieupassageaquaiLigneId) return;
 
         this.codeTiers = this.route.snapshot.paramMap.get("codeTiers");
         this.typeTiers = this.route.snapshot.paramMap.get("typeTiers");
 
-        this.startGrid();
+        this.updateGrid();
 
     }
 
-    async startGrid() {
+    async updateGrid() {
 
         this.typeTiersLabel = Object
             .entries(TypeTiers)
@@ -95,21 +106,24 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
             .map(value => value.toLowerCase())
             .shift();
 
-        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Contact);
-        this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+        if (!this.dataGrid.dataSource) {
+            this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Contact);
+            this.columns = from(this.gridConfig).pipe(map(config => config.columns));
 
 
-        const fields = this.columns.pipe(map(columns => columns.map(column => {
-            let field = column.dataField;
-            if (field === "moyenCommunication")
-                field += `.${this.moyenCommunicationService.model.getKeyField()}`;
-            if (field === "flux")
-                field += `.${this.fluxService.model.getKeyField()}`;
-            return field;
-        })));
-        this.contacts = this.contactsService.getDataSource_v2(await fields.toPromise());
+            const fields = this.columns.pipe(map(columns => columns.map(column => {
+                let field = column.dataField;
+                if (field === "moyenCommunication")
+                    field += `.${this.moyenCommunicationService.model.getKeyField()}`;
+                if (field === "flux")
+                    field += `.${this.fluxService.model.getKeyField()}`;
+                return field;
+            })));
+            this.contacts = this.contactsService.getDataSource_v2(await fields.toPromise());
+        }
 
         this.enableFilters();
+        this.dataGrid.dataSource = null;
         this.dataGrid.dataSource = this.contacts;
 
     }
