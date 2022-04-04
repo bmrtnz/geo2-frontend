@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, Input, OnChanges } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
+import { DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-zoom-article-popup",
@@ -11,6 +12,7 @@ export class ZoomArticlePopupComponent implements AfterViewInit, OnChanges {
 
   @Input() public articleLigneId: string;
 
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
   visible: boolean;
   title: string;
 
@@ -22,6 +24,7 @@ export class ZoomArticlePopupComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.setTitle();
   }
 

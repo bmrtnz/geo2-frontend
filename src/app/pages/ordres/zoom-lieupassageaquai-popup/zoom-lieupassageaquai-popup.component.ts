@@ -1,6 +1,7 @@
 
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
+import { DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-zoom-lieupassageaquai-popup",
@@ -13,6 +14,7 @@ export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
   @Input() public lieupassageaquaiLigneId: string;
   @Input() public lieupassageaquaiTitle: string;
 
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
   visible: boolean;
   title: string;
 
@@ -21,6 +23,7 @@ export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.setTitle();
   }
 

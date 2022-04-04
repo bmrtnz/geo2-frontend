@@ -1,7 +1,8 @@
 
-import { AfterViewInit, Component, Input } from "@angular/core";
+import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import { Fournisseur } from "app/shared/models";
 import { LocalizationService } from "app/shared/services";
+import { DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-zoom-fournisseur-popup",
@@ -13,6 +14,7 @@ export class ZoomFournisseurPopupComponent implements AfterViewInit {
 
   @Input() public fournisseurLigneId: string;
   @Input() public fournisseurCode: string;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   visible: boolean;
   title: string;
@@ -25,6 +27,7 @@ export class ZoomFournisseurPopupComponent implements AfterViewInit {
   }
 
   setTitle(fournisseur) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.title = this.localizeService.localize("zoom-fournisseur") + " " + fournisseur;
   }
 

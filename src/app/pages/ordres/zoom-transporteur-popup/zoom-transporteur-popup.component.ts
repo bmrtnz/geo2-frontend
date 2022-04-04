@@ -1,6 +1,7 @@
 
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
+import { DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-zoom-transporteur-popup",
@@ -14,6 +15,7 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
   @Input() public transporteurTitle: string;
   @Input() public transporteurId: string;
 
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
   visible: boolean;
   title: string;
 
@@ -22,6 +24,7 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.setTitle();
   }
 
