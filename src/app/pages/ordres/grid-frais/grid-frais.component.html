@@ -1,13 +1,12 @@
 <dx-data-grid
-  class="dx-card wide-card"
+  class="dx-card wide-card grid-frais"
   [remoteOperations]="true"
   [showBorders]="false"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
+  [scrolling]="{ useNative: true }"
+  (onCellClick)="onCellClick($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Frais',
@@ -18,7 +17,7 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <!-- <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter> -->
   <dxo-paging></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -26,14 +25,21 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [allowAdding]="!env.production"
+    [allowUpdating]="!env.production"
+    [allowDeleting]="!env.production"
+    [mode]="'cell'"
+  ></dxo-editing>
   <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.OrdreFrais"
     [enabled]="true"
     type="custom"
-    [storageKey]="gridConfiguratorService.Grid.OrdreFrais"
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
@@ -44,26 +50,58 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
+
   <dxi-column
-    *ngFor="let field of detailedFields"
-    [dataField]="field.dataField"
-    [caption]="
-      ('ordreFrais-' + field.dataField?.split('.').join('-') | localize) ||
-      field.name
-    "
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
     [visible]="false"
+    [caption]="
+      ('ordreFrais-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
     trueText="Oui"
     falseText="Non"
-    [dataType]="field.dataType"
-    [allowSearch]="
-      field.allowSearch !== undefined
-        ? field.allowSearch
-        : ['string'].includes(field.dataType)
-    "
+    [dataType]="column?.dataType"
+    [showEditorAlways]="true"
+    [allowEditing]="column.allowEditing"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [format]="column.format"
+    [editCellTemplate]="defineEditTemplate(column.dataField)"
     [allowHeaderFiltering]="
-      field.allowHeaderFiltering !== undefined
-        ? field.allowHeaderFiltering
-        : ['string'].includes(field.dataType)
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
+    [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'selectBoxTemplate'">
+    <dx-select-box
+      [dataSource]="this[cell.column.dataField + 'Source']"
+      [displayExpr]="
+        descriptionOnlyDisplaySB.includes(cell.column.dataField)
+          ? displayDescOnly
+          : displayIdBefore
+      "
+      [searchExpr]="[
+        this[cell.column.dataField + 'Service'].model.getKeyField(),
+        this[cell.column.dataField + 'Service'].model.getLabelField()
+      ]"
+      [searchEnabled]="true"
+      [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)"
+    >
+      <dxo-drop-down-options [width]="SelectBoxPopupWidth">
+      </dxo-drop-down-options>
+    </dx-select-box>
+  </div>
+  <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
+    <dx-select-box
+      [items]="codePlusList"
+      [value]="cell.data[cell.column.dataField]"
+      [acceptCustomValue]="true"
+      (onValueChanged)="onValueChanged($event, cell)"
+    >
+      <dxo-drop-down-options [width]="SelectBoxPopupWidth">
+      </dxo-drop-down-options>
+    </dx-select-box>
+  </div>
 </dx-data-grid>

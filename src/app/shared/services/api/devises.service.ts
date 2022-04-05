@@ -13,6 +13,9 @@ export class DevisesService extends ApiService implements APIRead {
         super(apollo, Devise);
     }
 
+    /**
+     * @deprecated Use getDataSource_v2
+     */
     getDataSource() {
         return new DataSource({
             sort: [{ selector: "id" }],
@@ -59,6 +62,56 @@ export class DevisesService extends ApiService implements APIRead {
                             },
                         );
                     }),
+            }),
+        });
+    }
+
+    private byKey(columns: Array<string>) {
+        return (key) =>
+            new Promise(async (resolve) => {
+                const query = await this.buildGetOne_v2(columns);
+                type Response = { devise: Devise };
+                const variables = { id: key };
+                this.listenQuery<Response>(query, { variables }, (res) => {
+                    if (res.data && res.data.devise)
+                        resolve(new Devise(res.data.devise));
+                });
+            });
+    }
+
+    getDataSource_v2(columns: Array<string>) {
+        return new DataSource({
+            sort: [{ selector: this.model.getKeyField() }],
+            store: this.createCustomStore({
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        if (options.group)
+                            return this.loadDistinctQuery(options, (res) => {
+                                if (res.data && res.data.distinct)
+                                    resolve(
+                                        this.asListCount(res.data.distinct),
+                                    );
+                            });
+
+                        type Response = { allDevise: RelayPage<Devise> };
+                        const query = await this.buildGetAll_v2(columns);
+                        const variables =
+                            this.mapLoadOptionsToVariables(options);
+                        this.listenQuery<Response>(
+                            query,
+                            { variables },
+                            (res) => {
+                                if (res.data && res.data.allDevise) {
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allDevise,
+                                        ),
+                                    );
+                                }
+                            },
+                        );
+                    }),
+                byKey: this.byKey(columns),
             }),
         });
     }

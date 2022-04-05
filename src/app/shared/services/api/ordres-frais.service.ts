@@ -117,6 +117,18 @@ export class OrdresFraisService extends ApiService implements APIRead {
                         );
                     }),
                 byKey: this.byKey(columns),
+                insert: (values) => {
+                    const variables = { ordreLogistique: values };
+                    return this.watchSaveQuery({ variables }).toPromise();
+                },
+                update: (key, values) => {
+                    const variables = { ordreLogistique: { id: key, ...values } };
+                    return this.watchSaveQuery({ variables }).toPromise();
+                },
+                remove: (key) => {
+                    const variables = { id: key };
+                    return this.watchDeleteQuery({ variables }).toPromise();
+                },
             }),
         });
     }

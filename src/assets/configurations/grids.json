@@ -1,6 +1,11 @@
 {
   "common": {
-    "allowedPageSizes": [10, 25, 50, 100],
+    "allowedPageSizes": [
+      10,
+      25,
+      50,
+      100
+    ],
     "filterPanel": {
       "filterEnabled": true
     },
@@ -4076,7 +4081,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "frais.description",
+        "dataField": "frais",
         "visible": true
       },
       {
@@ -4086,12 +4091,13 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "devise.id",
+        "dataField": "devise",
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "deviseTaux",
+        "allowEditing": false,
         "visible": true
       },
       {

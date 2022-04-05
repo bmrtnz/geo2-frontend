@@ -187,7 +187,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     onContentReady(e) {
         this.lieuxGroupage = [];
         e.component.getVisibleRows()
-            .filter(row => row.data.groupage.id !== null)
+            .filter(row => row.data.groupage?.id !== null)
             .map(row => {
                 if (!this.lieuxGroupage?.includes(row.data.groupage?.id))
                     this.lieuxGroupage.push(row.data.groupage?.id);
