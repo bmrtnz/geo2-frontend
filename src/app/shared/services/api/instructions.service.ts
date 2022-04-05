@@ -29,6 +29,7 @@ export class InstructionsService extends ApiService implements APIRead {
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [{ selector: this.model.getLabelField() }],
+      pageSize: 500,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {

@@ -44,7 +44,7 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("ajout-etape-logistique-popup");
-    this.groupageDS = this.typesTiersService.getDataSource_v2(["id", "description"]);
+    this.groupageDS = this.typesTiersService.getDataSource_v2(["id", "description"], 100);
     this.groupageDS.filter([
       ["valide", "=", true],
       "and",
@@ -64,6 +64,9 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
         this.lieuSB.value = { id: this.lieuxGroupage[0] };
       }
     });
+    this.groupageDS.load().then(() => {
+      this.groupageSB.value = { id: "G" }; // Seen with Léa 4-04-22: default value
+    });
   }
 
   onHidden() {
@@ -76,7 +79,7 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
   }
 
   capitalize(data) {
-    return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
+    return data?.description ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
   }
 
 }

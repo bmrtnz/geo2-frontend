@@ -68,7 +68,7 @@
           this[cell.column.dataField + 'Service'].model.getKeyField(),
           this[cell.column.dataField + 'Service'].model.getLabelField()
         ]" [searchEnabled]="true" [value]="cell.data[cell.column.dataField]"
-        [hint]="hintFournisseur(cell.column.dataField)" (onValueChanged)="onValueChanged($event, cell)">
+        (onValueChanged)="onValueChanged($event, cell)">
         <dxo-drop-down-options [width]="SelectBoxPopupWidth">
         </dxo-drop-down-options>
       </dx-select-box>

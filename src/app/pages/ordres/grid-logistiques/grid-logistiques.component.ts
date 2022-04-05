@@ -88,13 +88,11 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         this.groupageSource.filter(["valide", "=", true]);
         this.incotermFournisseurSource = this.incotermFournisseurService.getDataSource_v2(["id", "description"]);
         this.incotermFournisseurSource.filter(["valide", "=", true]);
-        if (!this.instructionsList?.length) {
-            this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
-                res
-                    .filter(inst => inst.valide)
-                    .map(inst => this.instructionsList.push(inst.description));
-            });
-        }
+        this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
+            res
+                .filter(inst => inst.valide)
+                .map(inst => this.instructionsList.push(inst.description));
+        });
     }
 
     async enableFilters() {
@@ -154,7 +152,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     addStep(e) {
         e.event.preventDefault();
         // if (e.row.data.groupage?.id) { // This condition may be more logical (?)
-        if (this.lieuxGroupage?.length) {
+        if (this.lieuxGroupage && this.lieuxGroupage.length) {
             this.ligneId = e.row.data.id;
             this.ajoutEtapePopup.visible = true;
         } else {
