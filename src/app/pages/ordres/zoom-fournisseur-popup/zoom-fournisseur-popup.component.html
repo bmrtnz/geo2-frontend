@@ -8,7 +8,10 @@
   [resizeEnabled]="true"
 >
   <div *dxTemplate="let data of 'content'">
-    <dx-scroll-view width="100%" height="100%">
+    <dx-scroll-view
+      width="100%"
+      height="100%"
+    >
       <app-fournisseur-details
         [fournisseurLigneId]="fournisseurLigneId"
         (fournisseurLigneCode)="setTitle($event)"

@@ -14,9 +14,6 @@ export class CommentairesOrdresService extends ApiService implements APIRead {
         this.gqlKeyType = "GeoCommentaireOrdreKeyInput";
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             sort: [{ selector: "dateModification" }],

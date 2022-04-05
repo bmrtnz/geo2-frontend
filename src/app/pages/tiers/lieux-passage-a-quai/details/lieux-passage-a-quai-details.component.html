@@ -1,4 +1,7 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="onSubmit()"
+>
   <div class="content-block">
     <h2>
       <span *ngIf="createMode === true">{{ "create" | localize }}</span>
@@ -32,7 +35,10 @@
 
   <div class="content-block lieupassageaquai-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1" [visible]="!createMode">
+      <dxi-item
+        [ratio]="1"
+        [visible]="!createMode"
+      >
         <h5 class="entity-id">{{ lieupassageaquai?.id }}</h5>
         <dx-button
           height="auto"
@@ -59,7 +65,10 @@
         >
         </dx-button>
       </dxi-item>
-      <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
+      <dxi-item
+        [ratio]="0.3"
+        [visible]="!createMode"
+      ></dxi-item>
       <dxi-item [ratio]="8.2">
         <app-modification-list
           (listChange)="checkEmptyModificationList($event)"

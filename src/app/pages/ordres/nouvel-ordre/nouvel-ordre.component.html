@@ -35,5 +35,8 @@
   #grid
   *ngIf="favorites"
 ></app-grid-historique-entrepots>
-<app-grid-entrepots #grid *ngIf="!favorites"></app-grid-entrepots>
+<app-grid-entrepots
+  #grid
+  *ngIf="!favorites"
+></app-grid-entrepots>
 <app-info-popup [customText]="errorText"></app-info-popup>

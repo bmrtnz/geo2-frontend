@@ -10,7 +10,10 @@
   [closeOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
-    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <form
+      #form="ngForm"
+      (ngSubmit)="onSubmit(form)"
+    >
       <dx-text-box
         ngModel
         name="commentaire"

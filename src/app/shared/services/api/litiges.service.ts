@@ -15,9 +15,6 @@ export class LitigesService extends ApiService implements APIRead {
         super(apollo, Litige);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             store: this.createCustomStore({

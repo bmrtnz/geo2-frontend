@@ -18,9 +18,6 @@ export class BasesTarifService extends ApiService implements APIRead {
     super(apollo, BaseTarif);
   }
 
-  /**
-   * @deprecated Use getDataSource_v2
-   */
   getDataSource() {
     return new DataSource({
       sort: [

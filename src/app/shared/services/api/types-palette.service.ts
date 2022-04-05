@@ -18,9 +18,6 @@ export class TypesPaletteService extends ApiService implements APIRead {
     super(apollo, TypePalette);
   }
 
-  /**
-   * @deprecated Use getDataSource_v2
-   */
   getDataSource() {
     return new DataSource({
       sort: [

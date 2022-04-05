@@ -1,4 +1,7 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="onSubmit()"
+>
   <div class="content-block">
     <h2>
       <span *ngIf="createMode === true">{{ "create" | localize }}</span>
@@ -32,7 +35,10 @@
 
   <div class="content-block client-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1" [visible]="!createMode">
+      <dxi-item
+        [ratio]="1"
+        [visible]="!createMode"
+      >
         <h4 class="entity-id">N°&nbsp;{{ client?.id }}</h4>
         <dx-button
           height="auto"
@@ -71,7 +77,10 @@
         >
         </dx-button>
       </dxi-item>
-      <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
+      <dxi-item
+        [ratio]="0.3"
+        [visible]="!createMode"
+      ></dxi-item>
       <dxi-item [ratio]="8.2">
         <app-modification-list
           (listChange)="checkEmptyModificationList($event)"
@@ -1308,7 +1317,10 @@
                     {{ "tiers-clients-couvertureTotale" | localize }}
                   </div>
                   <div class="dx-field-value">
-                    <dx-text-box #couvertureTotale [readOnly]="true">
+                    <dx-text-box
+                      #couvertureTotale
+                      [readOnly]="true"
+                    >
                     </dx-text-box>
                   </div>
                 </div>

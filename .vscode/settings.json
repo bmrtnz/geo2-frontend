@@ -4,6 +4,19 @@
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features",
   },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.insertMode": "replace",
+    "gitlens.codeLens.scopes": [
+        "document"
+    ]
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": true
   }
