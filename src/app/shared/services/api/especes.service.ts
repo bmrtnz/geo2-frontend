@@ -50,21 +50,52 @@ export class EspecesService extends ApiService implements APIRead {
                             },
                         );
                     }),
-                byKey: (key) =>
+                byKey: this.byKey,
+            }),
+        });
+    }
+
+    getDistinctDataSource(columns: Array<string>) {
+        return new DataSource({
+            store: this.createCustomStore({
+                load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {
-                        const query = await this.buildGetOne();
-                        type Response = { espece: Espece };
-                        const variables = { id: key };
+
+                        type Response = { allDistinctEspece: RelayPage<Espece> };
+                        const query = await this.buildDistinctQuery(columns.map(c => `edges.node.${c}`));
+                        const variables = this.mapLoadOptionsToVariables(options);
                         this.listenQuery<Response>(
                             query,
                             { variables },
                             (res) => {
-                                if (res.data && res.data.espece)
-                                    resolve(new Espece(res.data.espece));
+                                if (res.data && res.data.allDistinctEspece) {
+                                    resolve(
+                                        this.asInstancedListCount(
+                                            res.data.allDistinctEspece,
+                                        ),
+                                    );
+                                }
                             },
                         );
                     }),
+                byKey: this.byKey,
             }),
+        });
+    }
+
+    byKey(key) {
+        return new Promise(async (resolve) => {
+            const query = await this.buildGetOne();
+            type Response = { espece: Espece };
+            const variables = { id: key };
+            this.listenQuery<Response>(
+                query,
+                { variables },
+                (res) => {
+                    if (res.data && res.data.espece)
+                        resolve(new Espece(res.data.espece));
+                },
+            );
         });
     }
 }
