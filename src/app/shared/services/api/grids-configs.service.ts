@@ -128,7 +128,6 @@ export class GridsConfigsService
         });
     }
 
-    /** @deprecated Use `save_v2` instead */
     save(variables: OperationVariables) {
         return this.watchSaveQuery({ variables, fetchPolicy: "no-cache" });
     }

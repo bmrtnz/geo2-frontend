@@ -56,7 +56,10 @@
           class="tile-button indicator-button"
         ></dx-button>
         <div class="number-container">
-          <div *ngIf="indicator.withCount" class="indicator">
+          <div
+            *ngIf="indicator.withCount"
+            class="indicator"
+          >
             <dx-load-indicator
               [visible]="indicator.loading"
               height="40"

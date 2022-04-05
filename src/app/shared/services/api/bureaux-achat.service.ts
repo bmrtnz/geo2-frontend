@@ -15,9 +15,6 @@ export class BureauxAchatService extends ApiService implements APIRead {
         super(apollo, BureauAchat);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             sort: [{ selector: this.model.getLabelField() }],

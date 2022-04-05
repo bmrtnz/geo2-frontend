@@ -92,9 +92,6 @@ export class ArticlesService extends ApiService implements APIRead {
         return dt;
     }
 
-    /**
-     * @deprecated Use save_v2
-     */
     save(variables: OperationVariables & { clone: boolean }) {
         return from(this.buildSaveWithClone(2, this.fieldsFilter))
             .pipe(
@@ -119,9 +116,6 @@ export class ArticlesService extends ApiService implements APIRead {
             );
     }
 
-    /**
-     * @deprecated Use buildSaveWithClone_v2
-     */
     protected async buildSaveWithClone(depth?: number, filter?: RegExp) {
         return `
       mutation SaveArticle($article: GeoArticleInput!,$clone: Boolean = false) {

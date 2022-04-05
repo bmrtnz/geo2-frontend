@@ -1,6 +1,9 @@
 <!-- LITIGES -->
 
-<div *ngIf="noLitiges" class="nolitiges">
+<div
+  *ngIf="noLitiges"
+  class="nolitiges"
+>
   {{ "ordres-litiges-noLitiges" | localize }}
 </div>
 <form
@@ -29,7 +32,10 @@
                   <div class="dx-field-label">
                     {{ "ordres-litiges-ordreAvoirClient" | localize }}
                   </div>
-                  <div class="dx-field-value" formGroupName="ordreAvoirClient">
+                  <div
+                    class="dx-field-value"
+                    formGroupName="ordreAvoirClient"
+                  >
                     <dx-text-box formControlName="id"></dx-text-box>
                   </div>
                 </div>
@@ -201,7 +207,10 @@
                   </div>
                 </div>
                 <!-- Remise sur facture -->
-                <div *ngIf="totalMontantRistourne" class="dx-field field-large">
+                <div
+                  *ngIf="totalMontantRistourne"
+                  class="dx-field field-large"
+                >
                   <div class="dx-field-label">
                     {{ "ordres-litiges-totalMontantRistourne" | localize }}
                   </div>
@@ -291,7 +300,10 @@
                   </div>
                 </div>
                 <!-- Remise sur facture Taux-->
-                <div *ngIf="totalMontantRistourne" class="dx-field field-small">
+                <div
+                  *ngIf="totalMontantRistourne"
+                  class="dx-field field-small"
+                >
                   <div class="dx-field-label"></div>
                   <div class="dx-field-value">
                     <dx-number-box
