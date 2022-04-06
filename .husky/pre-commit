@@ -1,4 +1,14 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Stash unstaged changes
+git stash -q --keep-index
+
+# Lint/check staged changes
 npm run lint
+
+# Stage updated files
+git add -u
+
+# Re-apply original unstaged changes
+git stash pop -q
