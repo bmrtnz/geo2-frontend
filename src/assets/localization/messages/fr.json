@@ -719,6 +719,7 @@
     "ordreLignes-fournisseur-code": "Expéditeur march.",
     "ordreLignes-fraisUnite-description": "Frais Unité",
     "ordreLignes-proprietaireMarchandise": "Propriétaire",
+    "ordreLignes-fournisseur": "Emballeur/Expéditeur",
     "ordreLignes-ventePrixUnitaire": "PU Vente",
     "ordreLignes-gratuit": "Gratuit",
     "ordreLignes-achatPrixUnitaire": "PU Achat",

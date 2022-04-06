@@ -4111,6 +4111,7 @@
         "visible": true,
         "fixed": true,
         "fixedPosition": "right"
+        
       },
       {
         "dataField": "id",

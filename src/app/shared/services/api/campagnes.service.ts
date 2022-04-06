@@ -14,7 +14,7 @@ export class CampagnesService extends ApiService implements APIRead {
     }
 
     /**
-     * deprecated Use getDataSource_v2
+     * @deprecated Use getDataSource_v2
      */
     getDataSource() {
         return new DataSource({

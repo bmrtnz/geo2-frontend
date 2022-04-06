@@ -39,7 +39,8 @@
   </dxi-column>
 
   <div *dxTemplate="let cell of 'selectBoxTemplate'">
-    <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="displayIdBefore" [searchExpr]="[
+    <dx-select-box [dataSource]="this[cell.column.dataField + 'Source']" [displayExpr]="displayIdBefore"
+      [acceptCustomValue]="true" [searchExpr]="[
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]" [searchEnabled]="true" [value]="cell.data[cell.column.dataField]"
