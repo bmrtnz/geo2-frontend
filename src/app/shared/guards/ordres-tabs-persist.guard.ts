@@ -5,11 +5,12 @@ import {
     CanDeactivate,
     Router,
     RouterStateSnapshot,
+    UrlSerializer,
     UrlTree,
 } from "@angular/router";
 import { RootComponent } from "app/pages/ordres/root/root.component";
-import { defer, iif, Observable, of } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { defer, EMPTY, iif, Observable, of } from "rxjs";
+import { catchError, concatMap, debounceTime, map, mergeMap, switchMap, tap } from "rxjs/operators";
 import { Societe } from "../models";
 import { AuthService } from "../services";
 import { CurrentCompanyService } from "../services/current-company.service";
@@ -23,10 +24,11 @@ export class OrdresTabsPersistGuard
         private router: Router,
         private authService: AuthService,
         private currentCompanyService: CurrentCompanyService,
-    ) {}
+        private URLSerializer: UrlSerializer,
+    ) { }
 
     /**
-     * Entering/Restore tabs config
+     * Entering/Restore tabs config*
      */
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -38,19 +40,20 @@ export class OrdresTabsPersistGuard
         | UrlTree {
         const societe: Societe = this.currentCompanyService?.getCompany();
         this.currentCompany = societe;
-        return iif(
-            () =>
-                !!this.authService.currentUser?.configTabsOrdres?.[
-                    this?.currentCompany?.id
-                ],
-            defer(() =>
-                of(
-                    this.authService.currentUser.configTabsOrdres[
-                        this.currentCompany.id
-                    ],
-                ),
-            ).pipe(map((url) => this.router.parseUrl(url))),
-            of(this.router.createUrlTree(["/pages/ordres/home"])),
+        return defer(() =>
+            of(this.authService.currentUser.configTabsOrdres[this.currentCompany.id]),
+        ).pipe(
+            concatMap(url => {
+                if (!url.startsWith("/pages/ordres/"))
+                    throw Error("Invalid ordre-tabs configuration");
+                if (!Object.keys(this.URLSerializer.parse(url).queryParams).length)
+                    throw Error("No query params found in the ordre-tabs configuration");
+                return of(this.router.parseUrl(url));
+            }),
+            catchError(err => {
+                console.warn(err);
+                return of(this.router.createUrlTree(["/pages/ordres/home"]));
+            }),
         );
     }
 
@@ -70,7 +73,7 @@ export class OrdresTabsPersistGuard
         // Trigger save, but don't block navigation
         of(
             this?.currentCompany?.id ??
-                this?.currentCompanyService?.getCompany()?.id,
+            this?.currentCompanyService?.getCompany()?.id,
         )
             .pipe(
                 switchMap((companyID) =>
