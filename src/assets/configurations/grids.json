@@ -4076,45 +4076,48 @@
     "columns": [
       {
         "visibleIndex": 0,
+        "dataField": "id",
+        "sortOrder": "desc",
+        "allowEditing": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
         "dataField": "frais",
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 4,
         "dataField": "montant",
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 6,
         "dataField": "devise",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 8,
         "dataField": "deviseTaux",
         "allowEditing": false,
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 10,
         "dataField": "codePlus",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 12,
         "dataField": "description",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 14,
         "dataField": "montantTotal",
         "visible": true,
         "fixed": true,
         "fixedPosition": "right"
-      },
-      {
-        "dataField": "id",
-        "visible": false
       }
     ]
   }

@@ -101,7 +101,10 @@ export class OrdresFraisService extends ApiService implements APIRead {
                             this.mapLoadOptionsToVariables(options);
                         this.listenQuery<Response>(
                             query,
-                            { variables },
+                            {
+                                variables,
+                                fetchPolicy: "network-only" // to work with editable dx-grid
+                            },
                             (res) => {
                                 if (res.data && res.data.allOrdreFrais) {
                                     resolve(

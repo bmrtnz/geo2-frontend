@@ -92,11 +92,12 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
             ["declarantDouanier", "=", true]
         ]);
         this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-        this.entrepotSource.filter([
-            ["valide", "=", true],
-            // "and",
-            // ["valide", "=", true]
-        ]);
+
+        // (
+        //     (:arg_sco_code = 'GB' AND C.SCO_CODE = :arg_sco_code) OR
+        //         (:arg_sco_code <> 'GB' AND C.SCO_CODE = 'F')
+        //     )
+
 
         // this.codePlusSource = this.transitaireSource;
 
@@ -105,8 +106,6 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
     updateCodePlusDataSource(data) {
 
         const frais = data.frais.id;
-        const key = data.key;
-        this.codePlusSource = null;
         if (frais === "RAMASS" || frais === "FRET") this.codePlusSource = this.transporteurSource;
         if (frais === "DEDIMP" || frais === "DEDEXP") this.codePlusSource = this.transitaireSource;
         if (frais === "ENTBWS") this.codePlusSource = this.entrepotSource;
@@ -123,6 +122,16 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
             );
             this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
             this.datagrid.dataSource = this.dataSource;
+
+            this.entrepotSource.filter([
+                ["valide", "=", true],
+                "and",
+                ["client.id", "=", this.ordre.client.id],
+                "and",
+                ["client.valide", "=", true],
+            ]);
+
+
         } else if (this.datagrid) this.datagrid.dataSource = null;
     }
 
@@ -133,47 +142,36 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
     onInitNewRow(e) {
         e.data.valide = true;
         e.data.ordre = { id: this.ordre.id };
+        e.data.devise = { id: this.ordre.client.devise.id, description: this.ordre.client.devise.description };
+        e.data.deviseTaux = this.ordre.client.devise.taux;
+        this.datagrid.instance.saveEditData();
     }
 
     onValueChanged(event, cell) {
         let valueToSave;
+
         if (cell.setValue) {
-            if (typeof event.value === "object" && cell.column.dataField === "codePlus")
+            if (typeof event.value === "object" && cell.column.dataField === "codePlus") {
                 valueToSave = this.displayCodeBefore(event.value);
-        } else {
-            valueToSave = event.value;
+            } else {
+                valueToSave = event.value;
+            }
         }
+
+        switch (cell.column.dataField) {
+
+            case "frais": {
+                cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key), "codePlus", "");
+                break;
+            }
+        }
+
         cell.setValue(valueToSave);
         this.codePlusSource = null;
 
-        switch (cell.column.dataField) {
-            case "devise": {
-                cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key),
-                    "deviseTaux", cell.value.taux);
-                break;
-            }
-            case "frais": {
-                cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key),
-                    "codePlus", "");
-                break;
-            }
-        }
-
-        // this.datagrid.instance.saveEditData();
     }
 
     onEditorPreparing(e) {
-        // Saving cell main info
-        // if (e.parentType === "dataRow") {
-        //     e.editorOptions.onFocusIn = (elem) => {
-        //         console.log("focus");
-        //         if (e.dataField === "codePlus") {
-        //             console.log(e);
-        //         }
-        //         // if (e.dataField !== "numero")
-        //         elem.element.querySelector(".dx-texteditor-input")?.select();
-        //     };
-        // }
     }
 
     displayCodeBefore(data) {
@@ -225,6 +223,10 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
             field += `.${this[field + "Service"].model.getKeyField()}`;
         }
         return field;
+    }
+
+    onSaved(e) {
+        // this.codePlusSource = null;
     }
 
     onToggling(toggled: boolean) {

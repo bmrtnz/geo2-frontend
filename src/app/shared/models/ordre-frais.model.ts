@@ -16,6 +16,7 @@ export class OrdreFrais extends Model {
     @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
     @Field({ format: { type: "currency", precision: 2 }, currency: "EUR" })
     public montantTotal?: number;
+    @Field() public valide?: string;
 }
 
 export default OrdreFrais;

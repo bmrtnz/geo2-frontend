@@ -9,6 +9,7 @@
   (onEditorPreparing)="onEditorPreparing($event)"
   (onCellClick)="onCellClick($event)"
   (onInitNewRow)="onInitNewRow($event)"
+  (onSaved)="onSaved($event)"
   (onCellDblClick)="(onCellClick)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -74,7 +75,16 @@
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
     [showInColumnChooser]="column.showInColumnChooser"
-  ></dxi-column>
+  >
+    <!-- <dxi-validation-rule
+    *ngIf="
+      column.dataField === 'codePlus' ||
+      column.dataField === 'montant' ||
+      column.dataField === 'frais'
+    "
+    type="required"
+  ></dxi-validation-rule> -->
+  </dxi-column>
 
   <div *dxTemplate="let cell of 'selectBoxTemplate'">
     <dx-select-box
