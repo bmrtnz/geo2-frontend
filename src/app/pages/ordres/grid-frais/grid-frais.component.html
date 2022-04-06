@@ -8,6 +8,7 @@
   [scrolling]="{ useNative: true }"
   (onEditorPreparing)="onEditorPreparing($event)"
   (onCellClick)="onCellClick($event)"
+  (onInitNewRow)="onInitNewRow($event)"
   (onCellDblClick)="(onCellClick)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(

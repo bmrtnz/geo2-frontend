@@ -1,5 +1,11 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <div class="content-block" *ngIf="!fournisseurLigneId">
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="onSubmit()"
+>
+  <div
+    class="content-block"
+    *ngIf="!fournisseurLigneId"
+  >
     <h2>
       <span *ngIf="createMode === true">{{ "create" | localize }}</span>
       {{ "tiers-fournisseurs-details-title" | localize
@@ -32,8 +38,14 @@
 
   <div class="content-block fournisseur-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1" [visible]="!createMode">
-        <h5 *ngIf="!fournisseurLigneId" class="entity-id">
+      <dxi-item
+        [ratio]="1"
+        [visible]="!createMode"
+      >
+        <h5
+          *ngIf="!fournisseurLigneId"
+          class="entity-id"
+        >
           {{ fournisseur?.id }}
         </h5>
         <dx-button
@@ -72,7 +84,10 @@
         >
         </dx-button>
       </dxi-item>
-      <dxi-item [ratio]="0.3" [visible]="!createMode"></dxi-item>
+      <dxi-item
+        [ratio]="0.3"
+        [visible]="!createMode"
+      ></dxi-item>
       <dxi-item [ratio]="8.2">
         <app-modification-list
           (listChange)="checkEmptyModificationList($event)"

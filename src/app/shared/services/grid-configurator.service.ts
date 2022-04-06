@@ -391,7 +391,6 @@ export class GridConfiguratorService {
         component.option("filterPanel", { visible: true });
     }
 
-    /** @deprecated Use `init()` instead */
     public onToolbarPreparing(title, options, grid: Grid, cbk?: () => void) {
         this.init(grid, {
             ...options,

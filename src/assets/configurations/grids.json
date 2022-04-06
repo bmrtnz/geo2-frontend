@@ -1,6 +1,11 @@
 {
   "common": {
-    "allowedPageSizes": [10, 25, 50, 100],
+    "allowedPageSizes": [
+      10,
+      25,
+      50,
+      100
+    ],
     "filterPanel": {
       "filterEnabled": true
     },

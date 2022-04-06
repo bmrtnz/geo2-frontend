@@ -13,9 +13,6 @@ export class TracabiliteLignesService extends ApiService implements APIRead {
         super(apollo, TracabiliteLigne);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource(depth = 1, filter?: RegExp) {
         return new DataSource({
             store: this.createCustomStore({

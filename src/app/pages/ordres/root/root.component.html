@@ -16,9 +16,18 @@
         class="dx-item-content dx-tab-content"
         [attr.data-item-id]="tab.id"
       >
-        <i class="dx-icon" [ngClass]="tab.icon"></i>
-        <span *ngIf="tab.title" class="tab-separator"></span>
-        <span *ngIf="tab.title" class="dx-tab-text">
+        <i
+          class="dx-icon"
+          [ngClass]="tab.icon"
+        ></i>
+        <span
+          *ngIf="tab.title"
+          class="tab-separator"
+        ></span>
+        <span
+          *ngIf="tab.title"
+          class="dx-tab-text"
+        >
           <span>{{ tab.title }}</span>
           <ng-container *ngIf="tab.details">
             <small>{{ tab.details }}</small>

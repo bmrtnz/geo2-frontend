@@ -24,7 +24,12 @@
     >
     </dx-button>
     <div class="button-container">
-      <div *ngIf="dotLitiges" class="dot">{{ dotLitiges }}</div>
+      <div
+        *ngIf="dotLitiges"
+        class="dot"
+      >
+        {{ dotLitiges }}
+      </div>
       <dx-button
         class="black dotted-button"
         data-accordion="litiges"
@@ -60,7 +65,12 @@
     >
     </dx-button>
     <div class="button-container">
-      <div *ngIf="dotCQ" class="dot">{{ dotCQ }}</div>
+      <div
+        *ngIf="dotCQ"
+        class="dot"
+      >
+        {{ dotCQ }}
+      </div>
       <dx-button
         class="black dotted-button"
         data-accordion="CQ"
@@ -74,7 +84,12 @@
       </dx-button>
     </div>
     <div class="button-container">
-      <div *ngIf="dotCommentaires" class="dot">{{ dotCommentaires }}</div>
+      <div
+        *ngIf="dotCommentaires"
+        class="dot"
+      >
+        {{ dotCommentaires }}
+      </div>
       <dx-button
         class="black dotted-button"
         data-accordion="commentaires"
@@ -109,7 +124,10 @@
     </dx-button>
   </div>
 
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <form
+    [formGroup]="formGroup"
+    (ngSubmit)="onSubmit()"
+  >
     <dx-validation-group name="loginGroup">
       <div class="content-block"></div>
       <div class="ordres-page">
@@ -122,7 +140,9 @@
               ></dx-load-indicator>
               <div class="order-number">{{ fullOrderNumber }}</div>
               <div class="linkedOrders-container">
-                <span *ngIf="linkedOrdersSearch" class="search-linkedOrders"
+                <span
+                  *ngIf="linkedOrdersSearch"
+                  class="search-linkedOrders"
                   >Recherche ordres liés...</span
                 >
                 <dx-button
@@ -181,7 +201,9 @@
                   class="dx-form-group-caption order-status"
                   >{{ status }}</span
                 >
-                <span *ngIf="refOrdre" class="order-id"
+                <span
+                  *ngIf="refOrdre"
+                  class="order-id"
                   >&nbsp;&nbsp;{{ "ordres-ref" | localize }} :
                   {{ refOrdre }}</span
                 >

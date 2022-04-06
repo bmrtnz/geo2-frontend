@@ -13,9 +13,6 @@ export class OrdresSaveLogsService extends ApiService implements APIRead {
         super(apollo, OrdreSaveLog);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             store: this.createCustomStore({

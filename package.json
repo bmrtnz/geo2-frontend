@@ -18,18 +18,16 @@
     "analyze": "webpack-bundle-analyzer dist/geo2/stats.json",
     "test": "ng test",
     "test:headless": "ng test --watch=false --browsers=HeadlessChrome",
-    "lint": "npx prettier --write ./src/**/*.{json,scss,html} && ng lint --fix",
+    "lint": "npx tsc && npx prettier --write ./src/**/*.{json,scss,html} && ng lint --fix",
     "e2e": "ng e2e",
     "e2e:no-serve": "ng e2e --devServerTarget=",
     "e2e:headless": "ng e2e --configuration=headless",
     "build-themes": "devextreme build",
     "postinstall": "npm run build-themes && ngcc",
-    "devx": "devextreme"
+    "devx": "devextreme",
+    "prepare": "husky install"
   },
   "private": true,
-  "pre-commit": [
-    "lint"
-  ],
   "dependencies": {
     "@angular/animations": "~10.2.5",
     "@angular/cdk": "^10.2.7",
@@ -65,14 +63,14 @@
     "codelyzer": "^6.0.1",
     "devextreme-cli": "^1.2.7",
     "devextreme-themebuilder": "^20.2.10",
+    "husky": "^7.0.4",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
-    "pre-commit": "^1.2.2",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.2",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",

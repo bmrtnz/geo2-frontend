@@ -26,7 +26,11 @@
         alt="bluewhale-logo"
       />
     </dxi-item>
-    <dxi-item location="after" locateInMenu="auto" menuItemTemplate="menuItem">
+    <dxi-item
+      location="after"
+      locateInMenu="auto"
+      menuItemTemplate="menuItem"
+    >
       <div *dxTemplate="let data of 'item'">
         <dx-button
           class="user-button authorization"
@@ -40,7 +44,11 @@
             ></app-user-panel>
           </div>
         </dx-button>
-        <dx-button class="company-button" height="100%" stylingMode="text">
+        <dx-button
+          class="company-button"
+          height="100%"
+          stylingMode="text"
+        >
           <div *dxTemplate="let data of 'content'">
             <app-company-chooser-panel
               [companyItems]="societeSource"

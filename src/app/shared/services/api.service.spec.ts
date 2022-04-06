@@ -9,6 +9,7 @@ import {
 import { LoadOptions } from "devextreme/data/load_options";
 import { Field, Model } from "../models/model";
 import { ApiService, Direction, RelayPage } from "./api.service";
+import { FormUtilsService } from "./form-utils.service";
 
 class Test extends Model {
     @Field({ asKey: true }) public id?: string;
@@ -90,6 +91,7 @@ describe("ApiService", () => {
 
     it("should handle `extractDirty()`", () => {
         const service: TestApiService = TestBed.inject(TestApiService);
+        const formUtils: FormUtilsService = TestBed.inject(FormUtilsService);
         const formGroup = new FormGroup({
             id: new FormControl(),
             description: new FormControl(),
@@ -102,7 +104,7 @@ describe("ApiService", () => {
         formGroup.get("description").setValue("Still a copy");
         formGroup.get("description").markAsDirty();
 
-        const extracted = service.extractDirty(formGroup.controls);
+        const extracted = formUtils.extractDirty(formGroup.controls, "id");
         expect(extracted.id).toEqual("002"); // Keyfield always provided
         expect(extracted.description).toEqual("Still a copy");
         expect(extracted.valide).toBeUndefined();

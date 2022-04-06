@@ -15,9 +15,6 @@ export class PersonnesService extends ApiService implements APIRead {
         super(apollo, Personne);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             sort: [{ selector: "nomUtilisateur" }],

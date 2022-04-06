@@ -35,7 +35,10 @@
             <div *ngIf="!newOrigine">{{ 'aucune' | localize }}</div>
           </div> -->
       </dxi-item>
-      <dxi-item [ratio]="1.5" class="list-origine">
+      <dxi-item
+        [ratio]="1.5"
+        class="list-origine"
+      >
         <dx-list
           [dataSource]="dataSource"
           [height]="300"

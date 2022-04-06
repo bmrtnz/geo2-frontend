@@ -18,9 +18,6 @@ export class LitigesLignesService extends ApiService implements APIRead {
         super(apollo, LitigeLigne);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             sort: [{ selector: this.model.getLabelField() }],

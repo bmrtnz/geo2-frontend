@@ -1,4 +1,7 @@
-<form class="dx-fieldset" [formGroup]="formGroup">
+<form
+  class="dx-fieldset"
+  [formGroup]="formGroup"
+>
   <div class="orderTileFilterArea">
     <dx-box>
       <dxi-item [ratio]="3">
@@ -167,7 +170,10 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
   <dxo-paging></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"

@@ -15,9 +15,6 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
         super(apollo, OrdreLogistique);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource(depth = 1, filter = this.listRegexp) {
         return new DataSource({
             sort: [{ selector: this.model.getLabelField() }],

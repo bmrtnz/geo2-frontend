@@ -30,9 +30,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
     super(apollo, OrdreLigne);
   }
 
-  /**
-   * @deprecated Use getDataSource_v2
-   */
   getDataSource(depth = 1, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({

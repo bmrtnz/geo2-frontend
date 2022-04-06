@@ -25,9 +25,6 @@ export class PaysService
         super(apollo, Pays);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource(
         depth = 1,
         filter = this.fieldsFilter,

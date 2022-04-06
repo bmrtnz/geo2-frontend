@@ -75,7 +75,11 @@
     [showInColumnChooser]="column.showInColumnChooser"
     [showEditorAlways]="true"
   ></dxi-column>
-  <dxi-column type="buttons" [width]="80" [showInColumnChooser]="false">
+  <dxi-column
+    type="buttons"
+    [width]="80"
+    [showInColumnChooser]="false"
+  >
     <dxi-button
       cssClass="add-step-button"
       [hint]="addStepText"
@@ -90,7 +94,6 @@
     <dx-select-box
       [dataSource]="this[cell.column.dataField + 'Source']"
       [displayExpr]="displayIdBefore"
-      [acceptCustomValue]="true"
       [searchExpr]="[
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()

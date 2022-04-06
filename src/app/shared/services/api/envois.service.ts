@@ -15,9 +15,6 @@ export class EnvoisService extends ApiService implements APIRead {
         super(apollo, Envois);
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             // sort: [

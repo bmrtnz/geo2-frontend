@@ -1,9 +1,19 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <div class="content-block" *ngIf="!articleLigneId" [hidden]="env.production">
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="onSubmit()"
+>
+  <div
+    class="content-block"
+    *ngIf="!articleLigneId"
+    [hidden]="env.production"
+  >
     <h2>
       <span *ngIf="cloneMode">{{ "create" | localize }}</span>
       {{ "articles-details-title" | localize
-      }}<span *ngIf="!cloneMode" class="red-font">
+      }}<span
+        *ngIf="!cloneMode"
+        class="red-font"
+      >
         {{ preSaisie | localize }} </span
       ><!-- {{ article.id }} -->
       <span *ngIf="cloneMode"> ({{ "clone" | localize }})</span>
@@ -43,8 +53,15 @@
   </div>
   <div class="content-block article-page">
     <dx-box direction="row">
-      <dxi-item [ratio]="1" [visible]="!cloneMode" [height]="800">
-        <h4 *ngIf="!articleLigneId" class="entity-id">
+      <dxi-item
+        [ratio]="1"
+        [visible]="!cloneMode"
+        [height]="800"
+      >
+        <h4
+          *ngIf="!articleLigneId"
+          class="entity-id"
+        >
           N°&nbsp;{{ article?.id }}
         </h4>
 
@@ -74,10 +91,16 @@
         <div class="dx-form-group dx-card responsive-paddings">
           <div class="dx-form-group-content">
             <!-- Code -->
-            <div *ngIf="!cloneMode" class="dx-field">
+            <div
+              *ngIf="!cloneMode"
+              class="dx-field"
+            >
               <div class="dx-field-label">{{ "articles-id" | localize }}</div>
               <div class="dx-field-value">
-                <dx-text-box formControlName="id" [readOnly]="true">
+                <dx-text-box
+                  formControlName="id"
+                  [readOnly]="true"
+                >
                 </dx-text-box>
               </div>
             </div>
@@ -103,7 +126,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-espece" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-select-box
                   formControlName="espece"
                   [readOnly]="readOnlyMode"
@@ -152,7 +178,10 @@
               <dxi-item [ratio]="1"></dxi-item>
               <dxi-item [ratio]="4">
                 <!-- Produit MDD -->
-                <div class="dx-field" formGroupName="normalisation">
+                <div
+                  class="dx-field"
+                  formGroupName="normalisation"
+                >
                   <div class="dx-field-label checkbox-label">
                     {{ "articles-normalisation-produitMdd" | localize }}
                   </div>
@@ -181,7 +210,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-variete" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-select-box
                   formControlName="variete"
                   [readOnly]="readOnlyMode"
@@ -203,7 +235,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-type" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-select-box
                   formControlName="type"
                   [readOnly]="readOnlyMode"
@@ -220,7 +255,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-modeCulture" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-select-box
                   formControlName="modeCulture"
                   [readOnly]="readOnlyMode"
@@ -244,7 +282,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-origine" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-select-box
                   formControlName="origine"
                   [readOnly]="readOnlyMode"
@@ -266,7 +307,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-calibreUnifie" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-select-box
                   formControlName="calibreUnifie"
                   [readOnly]="readOnlyMode"
@@ -290,7 +334,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-typeVente" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-select-box
                   formControlName="typeVente"
                   [readOnly]="readOnlyMode"
@@ -312,7 +359,10 @@
               <div class="dx-field-label">
                 {{ "articles-matierePremiere-codePlu" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="matierePremiere">
+              <div
+                class="dx-field-value"
+                formGroupName="matierePremiere"
+              >
                 <dx-text-box
                   formControlName="codePlu"
                   [readOnly]="readOnlyMode"
@@ -346,7 +396,10 @@
               <div class="dx-field-label">
                 {{ "articles-cahierDesCharge-categorie" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="cahierDesCharge">
+              <div
+                class="dx-field-value"
+                formGroupName="cahierDesCharge"
+              >
                 <dx-select-box
                   formControlName="categorie"
                   [readOnly]="readOnlyMode"
@@ -368,7 +421,10 @@
               <div class="dx-field-label">
                 {{ "articles-cahierDesCharge-coloration" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="cahierDesCharge">
+              <div
+                class="dx-field-value"
+                formGroupName="cahierDesCharge"
+              >
                 <dx-select-box
                   formControlName="coloration"
                   [readOnly]="readOnlyMode"
@@ -392,7 +448,10 @@
               <div class="dx-field-label">
                 {{ "articles-cahierDesCharge-sucre" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="cahierDesCharge">
+              <div
+                class="dx-field-value"
+                formGroupName="cahierDesCharge"
+              >
                 <dx-select-box
                   formControlName="sucre"
                   [readOnly]="readOnlyMode"
@@ -414,7 +473,10 @@
               <div class="dx-field-label">
                 {{ "articles-cahierDesCharge-penetro" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="cahierDesCharge">
+              <div
+                class="dx-field-value"
+                formGroupName="cahierDesCharge"
+              >
                 <dx-select-box
                   formControlName="penetro"
                   [readOnly]="readOnlyMode"
@@ -436,7 +498,10 @@
               <div class="dx-field-label">
                 {{ "articles-cahierDesCharge-cirage" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="cahierDesCharge">
+              <div
+                class="dx-field-value"
+                formGroupName="cahierDesCharge"
+              >
                 <dx-select-box
                   formControlName="cirage"
                   [readOnly]="readOnlyMode"
@@ -453,7 +518,10 @@
               <div class="dx-field-label">
                 {{ "articles-cahierDesCharge-rangement" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="cahierDesCharge">
+              <div
+                class="dx-field-value"
+                formGroupName="cahierDesCharge"
+              >
                 <dx-select-box
                   formControlName="rangement"
                   [readOnly]="readOnlyMode"
@@ -484,7 +552,10 @@
           <div class="dx-form-group-content">
             <!-- Instructions au fournisseur -->
             <div class="dx-field">
-              <div class="dx-field-value" formGroupName="cahierDesCharge">
+              <div
+                class="dx-field-value"
+                formGroupName="cahierDesCharge"
+              >
                 <dx-text-area
                   formControlName="instructionStation"
                   [readOnly]="readOnlyMode"
@@ -509,7 +580,10 @@
               <div class="dx-field-label">
                 {{ "articles-emballage-emballage" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="emballage">
+              <div
+                class="dx-field-value"
+                formGroupName="emballage"
+              >
                 <dx-select-box
                   formControlName="emballage"
                   [readOnly]="readOnlyMode"
@@ -531,7 +605,10 @@
               <div class="dx-field-label">
                 {{ "articles-emballage-conditionSpecial" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="emballage">
+              <div
+                class="dx-field-value"
+                formGroupName="emballage"
+              >
                 <dx-select-box
                   formControlName="conditionSpecial"
                   [readOnly]="readOnlyMode"
@@ -548,7 +625,10 @@
               <div class="dx-field-label">
                 {{ "articles-emballage-alveole" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="emballage">
+              <div
+                class="dx-field-value"
+                formGroupName="emballage"
+              >
                 <dx-select-box
                   formControlName="alveole"
                   [readOnly]="readOnlyMode"
@@ -565,7 +645,10 @@
               <div class="dx-field-label">
                 {{ "articles-emballage-uniteParColis" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="emballage">
+              <div
+                class="dx-field-value"
+                formGroupName="emballage"
+              >
                 <dx-text-box
                   formControlName="uniteParColis"
                   (onValueChanged)="onUParColisChange($event)"
@@ -579,7 +662,10 @@
               <div class="dx-field-label">
                 {{ "articles-emballage-poidsNetColis" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="emballage">
+              <div
+                class="dx-field-value"
+                formGroupName="emballage"
+              >
                 <dx-text-box
                   formControlName="poidsNetColis"
                   [readOnly]="readOnlyMode"
@@ -598,7 +684,10 @@
               <div class="dx-field-label">
                 {{ "articles-emballage-poidsNetGaranti" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="emballage">
+              <div
+                class="dx-field-value"
+                formGroupName="emballage"
+              >
                 <dx-text-box
                   formControlName="poidsNetGaranti"
                   [readOnly]="readOnlyMode"
@@ -616,7 +705,10 @@
               <div class="dx-field-label">
                 {{ "articles-emballage-poidsNetClient" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="emballage">
+              <div
+                class="dx-field-value"
+                formGroupName="emballage"
+              >
                 <dx-text-box
                   formControlName="poidsNetClient"
                   [readOnly]="readOnlyMode"
@@ -636,7 +728,10 @@
                   "articles-normalisation-identificationSymbolique" | localize
                 }}
               </div>
-              <div class="dx-field-value" formGroupName="normalisation">
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
                 <dx-select-box
                   formControlName="identificationSymbolique"
                   [readOnly]="readOnlyMode"
@@ -655,7 +750,10 @@
                   <div class="dx-field-label checkbox-label">
                     {{ "articles-emballage-prepese" | localize }}
                   </div>
-                  <div class="dx-field-value" formGroupName="emballage">
+                  <div
+                    class="dx-field-value"
+                    formGroupName="emballage"
+                  >
                     <dx-check-box
                       formControlName="prepese"
                       [readOnly]="readOnlyMode"
@@ -716,7 +814,10 @@
               <div class="dx-field-label">
                 {{ "articles-normalisation-marque" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="normalisation">
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
                 <dx-select-box
                   formControlName="marque"
                   [readOnly]="readOnlyMode"
@@ -738,7 +839,10 @@
               <div class="dx-field-label">
                 {{ "articles-normalisation-calibreMarquage" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="normalisation">
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
                 <dx-select-box
                   formControlName="calibreMarquage"
                   [readOnly]="readOnlyMode"
@@ -865,13 +969,22 @@
               <div class="dx-field-label">
                 {{ "articles-normalisation-gtinUc" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="normalisation">
-                <dx-text-box formControlName="gtinUc" [readOnly]="readOnlyMode">
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-text-box
+                  formControlName="gtinUc"
+                  [readOnly]="readOnlyMode"
+                >
                 </dx-text-box>
               </div>
             </div>
             <!-- GTIN UC BW -->
-            <div *ngIf="ucBW && !cloneMode" class="dx-field">
+            <div
+              *ngIf="ucBW && !cloneMode"
+              class="dx-field"
+            >
               <div class="dx-field-label">
                 {{ "articles-gtinUcBlueWhale" | localize }}
               </div>
@@ -888,7 +1001,10 @@
               <div class="dx-field-label">
                 {{ "articles-normalisation-gtinColis" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="normalisation">
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
                 <dx-text-box
                   formControlName="gtinColis"
                   [readOnly]="readOnlyMode"
@@ -897,7 +1013,10 @@
               </div>
             </div>
             <!-- GTIN Colis BW-->
-            <div *ngIf="!ucBW && !cloneMode" class="dx-field">
+            <div
+              *ngIf="!ucBW && !cloneMode"
+              class="dx-field"
+            >
               <div class="dx-field-label">
                 {{ "articles-gtinColisBlueWhale" | localize }}
               </div>
@@ -914,7 +1033,10 @@
               <div class="dx-field-label">
                 {{ "articles-normalisation-articleClient" | localize }}
               </div>
-              <div class="dx-field-value" formGroupName="normalisation">
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
                 <dx-text-box
                   formControlName="articleClient"
                   [readOnly]="readOnlyMode"

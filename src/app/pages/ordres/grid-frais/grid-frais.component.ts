@@ -130,6 +130,11 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
         this.enableFilters();
     }
 
+    onInitNewRow(e) {
+        e.data.valide = true;
+        e.data.ordre = { id: this.ordre.id };
+    }
+
     onValueChanged(event, cell) {
         let valueToSave;
         if (cell.setValue) {
@@ -138,8 +143,8 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
         } else {
             valueToSave = event.value;
         }
-        this.codePlusSource = null;
         cell.setValue(valueToSave);
+        this.codePlusSource = null;
 
         switch (cell.column.dataField) {
             case "devise": {

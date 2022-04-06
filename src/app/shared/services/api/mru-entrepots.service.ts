@@ -14,9 +14,6 @@ export class MruEntrepotsService extends ApiService implements APIRead {
         this.gqlKeyType = "GeoMRUEntrepotKeyInput";
     }
 
-    /**
-     * @deprecated Use getDataSource_v2
-     */
     getDataSource() {
         return new DataSource({
             store: this.createCustomStore({
