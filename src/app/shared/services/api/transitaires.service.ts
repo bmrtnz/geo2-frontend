@@ -16,7 +16,7 @@ export class TransitairesService extends ApiService implements APIRead {
     }
 
     /**
-     * deprecated Use getDataSource_v2
+     * @deprecated Use getDataSource_v2
      */
     getDataSource() {
         return new DataSource({
@@ -91,9 +91,10 @@ export class TransitairesService extends ApiService implements APIRead {
             });
     }
 
-    getDataSource_v2(columns: Array<string>) {
+    getDataSource_v2(columns: Array<string>, pageSize?) {
         return new DataSource({
             sort: [{ selector: this.model.getKeyField() }],
+            pageSize: pageSize ? pageSize : 20,
             store: this.createCustomStore({
                 load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {

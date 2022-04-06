@@ -517,6 +517,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
         this.functionsService
           .onChangeFouCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
           .valueChanges.subscribe(this.handleCellChangeEventResponse());
+        // Ajouter f... puis refresh grid logistique fVerifLogistiqueOrdre(String ordRef)
         break;
       }
       case "ventePrixUnitaire": { // Unckeck 'gratuit' when an unit price is set

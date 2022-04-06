@@ -31,6 +31,10 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
     public dataSource: DataSource;
     public fraisSource: DataSource;
     public deviseSource: DataSource;
+    public codePlusSource: DataSource;
+    public transporteurSource: DataSource;
+    public entrepotSource: DataSource;
+    public transitaireSource: DataSource;
     public codePlusList: string[];
     public codePlusTransporteurs: string[];
     public codePlusTransitaires: string[];
@@ -49,54 +53,63 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
         public fraisService: TypesFraisService,
         public deviseService: DevisesService,
         public gridConfiguratorService: GridConfiguratorService,
+        public codePlusService: TransporteursService,
         public transporteursService: TransporteursService,
         public transitairesService: TransitairesService,
         public entrepotsService: EntrepotsService,
         public localizeService: LocalizationService,
     ) {
-        this.displayDescOnly = this.displayDescOnly.bind(this),
-            this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-                Grid.OrdreFrais,
-            );
+        this.displayDescOnly = this.displayDescOnly.bind(this);
+        this.displayCustom = this.displayCustom.bind(this);
+        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+            Grid.OrdreFrais,
+        );
         this.columns = from(this.gridConfig).pipe(
             map((config) => config.columns),
         );
         this.itemsWithSelectBox = [
             "frais",
-            "devise"
+            "devise",
+            "codePlus"
         ];
         this.descriptionOnlyDisplaySB = [
             "frais"
         ];
+        this.codePlusTransporteurs = [];
+        this.codePlusTransitaires = [];
+        this.codePlusEntrepots = [];
         this.fraisSource = this.fraisService.getDataSource_v2(["id", "description"]);
         this.fraisSource.filter(["valide", "=", true]);
         this.deviseSource = this.deviseService.getDataSource_v2(["id", "description", "taux"]);
         this.deviseSource.filter(["valide", "=", true]);
-        if (!this.codePlusTransporteurs?.length) {
-            this.transporteursService.getDataSource_v2(["id", "raisonSocial", "valide"]).load().then(res => {
-                res
-                    .filter(result => result.valide)
-                    .map(result => this.codePlusTransporteurs.push(this.displayIdBefore(result)));
-                console.log("codePlusTransporteurs ", this.codePlusTransporteurs);
-            });
-        }
-        if (!this.codePlusTransitaires?.length) {
-            this.transitairesService.getDataSource_v2(["id", "raisonSocial", "valide"]).load().then(res => {
-                res
-                    .filter(result => result.valide)
-                    .map(result => this.codePlusTransitaires.push(this.displayIdBefore(result)));
-                console.log("codePlusTransitaires ", this.codePlusTransitaires);
-            });
-        }
-        if (!this.codePlusEntrepots?.length) {
-            this.entrepotsService.getDataSource_v2(["id", "raisonSocial", "valide"]).load().then(res => {
-                res
-                    .filter(result => result.valide)
-                    .map(result => this.codePlusEntrepots.push(this.displayIdBefore(result)));
-                console.log("codePlusEntrepots ", this.codePlusEntrepots);
-            });
-        }
 
+        this.transporteurSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+        this.transporteurSource.filter(["valide", "=", true]);
+        this.transitaireSource = this.transitairesService.getDataSource_v2(["id", "raisonSocial"]);
+        this.transitaireSource.filter([
+            ["valide", "=", true],
+            "and",
+            ["declarantDouanier", "=", true]
+        ]);
+        this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+        this.entrepotSource.filter([
+            ["valide", "=", true],
+            // "and",
+            // ["valide", "=", true]
+        ]);
+
+        // this.codePlusSource = this.transitaireSource;
+
+    }
+
+    updateCodePlusDataSource(data) {
+
+        const frais = data.frais.id;
+        const key = data.key;
+        this.codePlusSource = null;
+        if (frais === "RAMASS" || frais === "FRET") this.codePlusSource = this.transporteurSource;
+        if (frais === "DEDIMP" || frais === "DEDEXP") this.codePlusSource = this.transitaireSource;
+        if (frais === "ENTBWS") this.codePlusSource = this.entrepotSource;
 
     }
 
@@ -117,35 +130,73 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
         this.enableFilters();
     }
 
+    onInitNewRow(e) {
+        e.data.valide = true;
+        e.data.ordre = { id: this.ordre.id };
+    }
+
     onValueChanged(event, cell) {
+        let valueToSave;
         if (cell.setValue) {
-            cell.setValue(event.value);
-            // console.log(cell, cell.column.dataField);
-
-            switch (cell.column.dataField) {
-                case "devise": {
-                    cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key),
-                        "deviseTaux", cell.value.taux);
-                }
-            }
-
-            // this.datagrid.instance.saveEditData();
+            if (typeof event.value === "object" && cell.column.dataField === "codePlus")
+                valueToSave = this.displayCodeBefore(event.value);
+        } else {
+            valueToSave = event.value;
         }
+        cell.setValue(valueToSave);
+        this.codePlusSource = null;
+
+        switch (cell.column.dataField) {
+            case "devise": {
+                cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key),
+                    "deviseTaux", cell.value.taux);
+                break;
+            }
+            case "frais": {
+                cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key),
+                    "codePlus", "");
+                break;
+            }
+        }
+
+        // this.datagrid.instance.saveEditData();
     }
 
-    updateFournisseurObjetDataSource() {
-
+    onEditorPreparing(e) {
+        // Saving cell main info
+        // if (e.parentType === "dataRow") {
+        //     e.editorOptions.onFocusIn = (elem) => {
+        //         console.log("focus");
+        //         if (e.dataField === "codePlus") {
+        //             console.log(e);
+        //         }
+        //         // if (e.dataField !== "numero")
+        //         elem.element.querySelector(".dx-texteditor-input")?.select();
+        //     };
+        // }
     }
 
-    displayIdBefore(data) {
+    displayCodeBefore(data) {
         return data ?
-            data.id + " - " + (data.raisonSocial ? data.raisonSocial :
+            (data.code ? data.code : data.id) + " - " + (data.raisonSocial ? data.raisonSocial :
                 (data.ville ? data.ville : data.description))
             : null;
     }
 
     displayDescOnly(data) {
         return data ? this.capitalize(data.description) : null;
+    }
+
+    displayCustom(data) {
+        if (this.codePlusSource) {
+            return this.displayCodeBefore(data);
+        } else {
+            return data;
+        }
+    }
+
+    returnCodeId(data) {
+        return data.code ? data.code : data.id;
     }
 
     capitalize(data) {
@@ -155,6 +206,10 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
     onCellClick(e) {
         // Way to avoid Dx Selectbox list to appear when cell is readonly
         this.SelectBoxPopupWidth = e.cellElement.classList.contains("dx-datagrid-readonly") ? 0 : 400;
+
+        if (e.column.dataField === "codePlus") {
+            this.updateCodePlusDataSource(e.data);
+        }
     }
 
     defineEditTemplate(field) {
@@ -166,7 +221,7 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
     }
 
     addKeyToField(field) {
-        if (this.itemsWithSelectBox.includes(field)) {
+        if (this.itemsWithSelectBox.includes(field) && field !== "codePlus") {
             field += `.${this[field + "Service"].model.getKeyField()}`;
         }
         return field;

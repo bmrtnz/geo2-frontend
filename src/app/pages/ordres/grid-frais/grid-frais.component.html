@@ -6,7 +6,10 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [scrolling]="{ useNative: true }"
+  (onEditorPreparing)="onEditorPreparing($event)"
   (onCellClick)="onCellClick($event)"
+  (onInitNewRow)="onInitNewRow($event)"
+  (onCellDblClick)="(onCellClick)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Frais',
@@ -79,7 +82,7 @@
       [displayExpr]="
         descriptionOnlyDisplaySB.includes(cell.column.dataField)
           ? displayDescOnly
-          : displayIdBefore
+          : displayCodeBefore
       "
       [searchExpr]="[
         this[cell.column.dataField + 'Service'].model.getKeyField(),
@@ -95,9 +98,15 @@
   </div>
   <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
     <dx-select-box
-      [items]="codePlusList"
-      [value]="cell.data[cell.column.dataField]"
+      [dataSource]="this[cell.column.dataField + 'Source']"
+      [displayExpr]="displayCustom"
+      [searchExpr]="[
+        this[cell.column.dataField + 'Service'].model.getKeyField(),
+        this[cell.column.dataField + 'Service'].model.getLabelField()
+      ]"
+      [searchEnabled]="true"
       [acceptCustomValue]="true"
+      [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
     >
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">

@@ -13,6 +13,9 @@ export class CampagnesService extends ApiService implements APIRead {
         super(apollo, Campagne);
     }
 
+    /**
+     * @deprecated Use getDataSource_v2
+     */
     getDataSource() {
         return new DataSource({
             sort: [{ selector: this.model.getKeyField() }],
