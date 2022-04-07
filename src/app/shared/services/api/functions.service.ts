@@ -115,6 +115,32 @@ export class FunctionsService {
       })
 
   /**
+   * Verification de la bonne conformité de la logistique
+   * avant envoi de documents et validation bon à facturer
+   */
+  public fVerifLogistiqueOrdre =
+    (ordreRef: string) => this.apollo
+      .watchQuery<{ fVerifLogistiqueOrdre: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fVerifLogistiqueOrdre",
+              body,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef },
+        fetchPolicy: "network-only",
+      })
+
+  /**
    * Event modification nb palettes commandées sur une ligne d'ordre
    */
   public onChangeCdeNbPal =
