@@ -786,9 +786,14 @@
                 ></dx-button>
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
-                  <app-grid-lignes [ordre]="ordre"></app-grid-lignes>
+                  <app-grid-lignes
+                    [ordre]="ordre"
+                    [gridLignesLogistique]="gridLignesLogistique"
+                    [gridLogistiques]="gridLogistiques"
+                  ></app-grid-lignes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
+                    #gridLignesLogistique
                     [ordre]="ordre"
                   ></app-grid-ordre-ligne-logistique>
                   <div *ngIf="ordresLignesViewExp">

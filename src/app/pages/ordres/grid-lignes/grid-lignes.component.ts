@@ -1,29 +1,31 @@
-import { Component, Input, OnChanges, OnInit, ViewChild, Output } from "@angular/core";
-import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
-import DataSource from "devextreme/data/data_source";
-import { environment } from "environments/environment";
-import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
-import Ordre, { Statut } from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services/localization.service";
-import { DxDataGridComponent } from "devextreme-angular";
-import { GridColumn, TotalItem } from "basic";
-import { SummaryType, SummaryInput } from "app/shared/services/api.service";
-import { from, Observable, PartialObserver } from "rxjs";
-import { map } from "rxjs/operators";
-import { FournisseursService, ArticlesService, AuthService } from "app/shared/services";
-import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
-import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
-import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
-import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
-import notify from "devextreme/ui/notify";
-import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
+import { Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import { FunctionsService } from "app/shared/services/api/functions.service";
-import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
+import Ordre from "app/shared/models/ordre.model";
+import { ArticlesService, AuthService, FournisseursService } from "app/shared/services";
+import { SummaryInput, SummaryType } from "app/shared/services/api.service";
+import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
 import { DefCodesPromoService } from "app/shared/services/api/def-codes-promo.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
+import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
+import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { LocalizationService } from "app/shared/services/localization.service";
+import { GridColumn, TotalItem } from "basic";
+import { DxDataGridComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
+import { environment } from "environments/environment";
+import { from, Observable, PartialObserver } from "rxjs";
+import { concatMapTo, map, tap } from "rxjs/operators";
+import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
+import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
+import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
+import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
+import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 
 @Component({
   selector: "app-grid-lignes",
@@ -33,6 +35,8 @@ import { DefCodesPromoService } from "app/shared/services/api/def-codes-promo.se
 export class GridLignesComponent implements OnChanges, OnInit {
 
   @Input() public ordre: Ordre;
+  @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
+  @Input() public gridLogistiques: GridLogistiquesComponent;
   @Input() public fournisseurLigneCode: string;
   @Output() public articleLigneId: string;
   @Output() public ordreLigne: OrdreLigne;
@@ -507,17 +511,44 @@ export class GridLignesComponent implements OnChanges, OnInit {
         data.component.cellValue(data.component.getRowIndexByKey(data.changes[0].key),
           "fournisseur",
           { id: newFourId, code: newFourCode });
-        setTimeout(() => this.datagrid.instance.saveEditData());
+        setTimeout(() => {
+          from(this.datagrid.instance.saveEditData())
+            .pipe(
+              concatMapTo(
+                this.functionsService
+                  .fVerifLogistiqueOrdre(this.ordre.id)
+                  .valueChanges
+              ),
+              tap(res => {
+                this.gridLignesLogistique.refresh();
+                this.gridLogistiques.refresh();
+              }),
+            ).subscribe(this.handleCellChangeEventResponse());
+        });
         this.functionsService
           .onChangeProprCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
           .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "fournisseur": {
-        this.functionsService
-          .onChangeFouCode(idLigne, this.currentCompanyService.getCompany().id, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(this.handleCellChangeEventResponse());
-        // Ajouter f... puis refresh grid logistique fVerifLogistiqueOrdre(String ordRef)
+        from(this.datagrid.instance.saveEditData())
+          .pipe(
+            concatMapTo(this.functionsService
+              .fVerifLogistiqueOrdre(this.ordre.id)
+              .valueChanges),
+            concatMapTo(this.functionsService
+              .onChangeFouCode(
+                idLigne,
+                this.currentCompanyService.getCompany().id,
+                this.authService.currentUser.nomUtilisateur,
+              )
+              .valueChanges),
+            tap(res => {
+              this.gridLignesLogistique.refresh();
+              this.gridLogistiques.refresh();
+            }),
+          )
+          .subscribe(this.handleCellChangeEventResponse());
         break;
       }
       case "ventePrixUnitaire": { // Unckeck 'gratuit' when an unit price is set

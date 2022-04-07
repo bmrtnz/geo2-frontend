@@ -107,7 +107,10 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
                             this.mapLoadOptionsToVariables(options);
                         this.listenQuery<Response>(
                             query,
-                            { variables },
+                            {
+                                variables,
+                                fetchPolicy: "network-only", // to work with editable dx-grid
+                            },
                             (res) => {
                                 if (res.data && res.data.allOrdreLogistique) {
                                     resolve(

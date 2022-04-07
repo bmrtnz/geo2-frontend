@@ -217,4 +217,8 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
             }
         }
     }
+
+    public refresh() {
+        this.datagrid.instance.refresh();
+    }
 }

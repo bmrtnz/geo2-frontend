@@ -84,4 +84,8 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
             }
         }
     }
+
+    public refresh() {
+        this.datagrid.instance.refresh();
+    }
 }
