@@ -141,6 +141,35 @@ export class FunctionsService {
       })
 
   /**
+   * Ajoute un lieu de passage dans la logistique
+   */
+  public fAjoutOrdlog =
+    (orxRef: string, typePassage: string, choixPassage: string) => this.apollo
+      .watchQuery<{ fAjoutOrdlog: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fAjoutOrdlog",
+              body,
+              params: [
+                { name: "orxRef", value: "orxRef", isVariable: true },
+                { name: "typePassage", value: "typePassage", isVariable: true },
+                { name: "choixPassage", value: "choixPassage", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "orxRef", type: "String", isOptionnal: false },
+            { name: "typePassage", type: "String", isOptionnal: false },
+            { name: "choixPassage", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { orxRef, typePassage, choixPassage },
+        fetchPolicy: "network-only",
+      })
+
+  /**
    * Event modification nb palettes commandées sur une ligne d'ordre
    */
   public onChangeCdeNbPal =
