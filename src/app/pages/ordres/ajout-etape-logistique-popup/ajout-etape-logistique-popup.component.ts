@@ -1,8 +1,13 @@
 import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LieuxPassageAQuaiService } from "app/shared/services";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import { TypesTiersService } from "app/shared/services/api/types-tiers.service";
 import { DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
+import { take } from "rxjs/operators";
+import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
+import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 
 @Component({
   selector: "app-ajout-etape-logistique-popup",
@@ -13,6 +18,8 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
 
   @Input() public lieuxGroupage: string[];
   @Input() public ligneId: string;
+  @Input() public gridLogistiquesComponent: GridLogistiquesComponent;
+  @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
 
   visible: boolean;
   groupageDS: DataSource;
@@ -25,6 +32,7 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
   constructor(
     private typesTiersService: TypesTiersService,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
+    private functionsService: FunctionsService,
   ) { }
 
   ngOnChanges() {
@@ -35,11 +43,18 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
   }
 
   applyClick() {
-    // Apply step to create new line
-    // this.ligneId : current logistic row id
-    // this.lieuSB.value : Step type (Groupage, port or transitaire)
-    // this.lieupassageaquaiDS.value : lieu de passage
-    this.visible = false;
+    this.functionsService
+      .fAjoutOrdlog(this.ligneId, this.groupageSB.value.id, this.lieuSB.value.id)
+      .valueChanges
+      .pipe(take(1))
+      .subscribe({
+        next: res => {
+          this.gridLogistiquesComponent.refresh();
+          this.gridLignesLogistique.refresh();
+        },
+        error: (message: string) => notify({ message }, "error", 7000),
+        complete: () => this.visible = false,
+      });
   }
 
   onShowing(e) {
