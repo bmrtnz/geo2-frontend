@@ -34,7 +34,7 @@ export class EntrepotsService extends ApiService implements APIRead {
 
     getDataSource_v2(columns: Array<string>) {
         return new DataSource({
-            sort: [{ selector: this.model.getKeyField() }],
+            sort: [{ selector: "code" }],
             store: this.createCustomStore({
                 load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {
