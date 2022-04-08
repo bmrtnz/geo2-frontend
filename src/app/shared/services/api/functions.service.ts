@@ -144,7 +144,7 @@ export class FunctionsService {
    * Ajoute un lieu de passage dans la logistique
    */
   public fAjoutOrdlog =
-    (orxRef: string, typePassage: string, choixPassage: string) => this.apollo
+    (ordreLogRef: string, typePassage: string, choixPassage: string) => this.apollo
       .watchQuery<{ fAjoutOrdlog: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
@@ -153,19 +153,19 @@ export class FunctionsService {
               name: "fAjoutOrdlog",
               body,
               params: [
-                { name: "orxRef", value: "orxRef", isVariable: true },
+                { name: "ordreLogRef", value: "ordreLogRef", isVariable: true },
                 { name: "typePassage", value: "typePassage", isVariable: true },
                 { name: "choixPassage", value: "choixPassage", isVariable: true },
               ]
             }
           ],
           [
-            { name: "orxRef", type: "String", isOptionnal: false },
+            { name: "ordreLogRef", type: "String", isOptionnal: false },
             { name: "typePassage", type: "String", isOptionnal: false },
             { name: "choixPassage", type: "String", isOptionnal: false },
           ],
         )),
-        variables: { orxRef, typePassage, choixPassage },
+        variables: { ordreLogRef, typePassage, choixPassage },
         fetchPolicy: "network-only",
       })
 

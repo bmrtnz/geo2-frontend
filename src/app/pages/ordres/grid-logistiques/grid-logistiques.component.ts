@@ -19,6 +19,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { AjoutEtapeLogistiquePopupComponent } from "../ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 import { ToggledGrid } from "../form/form.component";
+import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 import { ZoomLieupassageaquaiPopupComponent } from "../zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 
@@ -44,6 +45,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     public infoPopupText: string;
     public env = environment;
     @Input() public ordre: Ordre;
+    @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
     @Output() public transporteurLigneId: string;
     @Output() public transporteurTitle: string;
     @Output() public lieupassageaquaiLigneId: string;
@@ -220,5 +222,14 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
 
     public refresh() {
         this.datagrid.instance.refresh();
+    }
+
+    public onRowRemoved() {
+        this.gridLignesLogistique.refresh();
+    }
+
+    public afterAjoutOrdlog() {
+        this.refresh();
+        this.gridLignesLogistique.refresh();
     }
 }

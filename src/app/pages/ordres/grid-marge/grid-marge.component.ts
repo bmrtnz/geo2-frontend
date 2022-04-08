@@ -79,7 +79,7 @@ export class GridMargeComponent implements ToggledGrid {
 
     onToggling(toggled: boolean) {
 
-        toggled ? this.enableFilters() : this.dataSource = null;
+        toggled && this?.ordre?.id ? this.enableFilters() : this.dataSource = null;
 
     }
 }

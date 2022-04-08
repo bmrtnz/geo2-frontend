@@ -10,6 +10,7 @@
   (onCellDblClick)="openFilePopup($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onContentReady)="onContentReady($event)"
+  (onRowRemoved)="onRowRemoved()"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Logistique',
@@ -169,6 +170,7 @@
 <app-ajout-etape-logistique-popup
   [lieuxGroupage]="lieuxGroupage"
   [ligneId]="ligneId"
+  (afterAjoutOrdlog)="afterAjoutOrdlog()"
 >
 </app-ajout-etape-logistique-popup>
 <app-info-popup [customText]="infoPopupText"></app-info-popup>
