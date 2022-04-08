@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { LieuxPassageAQuaiService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { TypesTiersService } from "app/shared/services/api/types-tiers.service";
@@ -6,8 +6,6 @@ import { DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { take } from "rxjs/operators";
-import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
-import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 
 @Component({
   selector: "app-ajout-etape-logistique-popup",
@@ -18,9 +16,7 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
 
   @Input() public lieuxGroupage: string[];
   @Input() public ligneId: string;
-  @Input() public afterAjoutOrdlog: EventEmitter<any>;
-  // @Input() public gridLogistiques: GridLogistiquesComponent;
-  // @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
+  @Output() public afterAjoutOrdlog = new EventEmitter();
 
   visible: boolean;
   groupageDS: DataSource;
