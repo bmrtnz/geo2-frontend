@@ -1328,13 +1328,15 @@
       {
         "visibleIndex": 5,
         "dataField": "dateDepartPrevue",
-        "dataType": "string",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "dateLivraisonPrevue",
-        "dataType": "string",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
@@ -1377,13 +1379,15 @@
       {
         "visibleIndex": 4,
         "dataField": "ordre.dateDepartPrevue",
-        "dataType": "string",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "ordre.dateLivraisonPrevue",
-        "dataType": "string",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
@@ -4117,6 +4121,7 @@
         "dataField": "montantTotal",
         "visible": true,
         "fixed": true,
+        "allowEditing": false,
         "fixedPosition": "right"
       }
     ]

@@ -62,7 +62,7 @@
           class="vertical"
           formControlName="valide"
           [text]="formGroup.get('valide') ? 'Valide' : ('Invalide' | localize)"
-          [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
+          [readOnly]="readOnlyMode"
         ></dx-check-box>
         <app-historique-valide
           [historique]="client?.historique"

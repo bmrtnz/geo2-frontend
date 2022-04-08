@@ -61,7 +61,7 @@
         <dx-check-box
           class="vertical"
           formControlName="valide"
-          [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
+          [readOnly]="readOnlyMode"
           [text]="formGroup.get('valide') ? 'Valide' : ('Invalide' | localize)"
         ></dx-check-box>
         <dx-button
@@ -170,7 +170,7 @@
                       formControlName="clientRaisonSocial"
                       [readOnly]="readOnlyMode"
                       [dataSource]="clientsRaisonSocial"
-                      displayExpr="raisonSocial"
+                      displayExpr="displayIDBefore"
                       [searchEnabled]="true"
                       [searchExpr]="['id', 'raisonSocial']"
                       [showClearButton]="true"

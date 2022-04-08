@@ -68,7 +68,7 @@
           #valideCheckBox
           class="vertical"
           formControlName="valide"
-          [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
+          [readOnly]="readOnlyMode"
           [text]="formGroup.get('valide') ? 'Valide' : ('Invalide' | localize)"
         ></dx-check-box>
         <app-historique-valide
