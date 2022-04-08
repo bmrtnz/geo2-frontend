@@ -173,10 +173,8 @@ export class TransporteurDetailsComponent
         this.moyensPaiement.filter(["valide", "=", "true"]);
         this.basesPaiement = this.basesPaiementService.getDataSource();
         this.basesPaiement.filter(["valide", "=", "true"]);
-        this.clientsRaisonSocial = this.clientsService.getDataSource_v2([
-            "id",
-            "raisonSocial",
-        ]);
+        this.clientsRaisonSocial = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+        this.clientsRaisonSocial.filter(["valide", "=", "true"]);
     }
 
     ngOnChanges() {
@@ -272,6 +270,10 @@ export class TransporteurDetailsComponent
                     ? data.raisonSocial
                     : data.description)
             : null;
+    }
+
+    displayCodeBefore(data) {
+        return data ? data.code + " - " + data.raisonSocial : null;
     }
 
     onSubmit() {

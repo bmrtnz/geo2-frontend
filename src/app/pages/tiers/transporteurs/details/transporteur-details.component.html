@@ -170,9 +170,9 @@
                       formControlName="clientRaisonSocial"
                       [readOnly]="readOnlyMode"
                       [dataSource]="clientsRaisonSocial"
-                      displayExpr="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchEnabled]="true"
-                      [searchExpr]="['id', 'raisonSocial']"
+                      [searchExpr]="['code', 'raisonSocial']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >

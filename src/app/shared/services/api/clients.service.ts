@@ -25,7 +25,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
 
     getDataSource_v2(columns: Array<string>) {
         return new DataSource({
-            sort: [{ selector: this.model.getLabelField() }],
+            sort: [{ selector: "code" }],
             store: this.createCustomStore({
                 load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {
