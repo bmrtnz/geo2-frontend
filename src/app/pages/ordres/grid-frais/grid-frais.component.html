@@ -8,6 +8,7 @@
   [scrolling]="{ useNative: true }"
   (onEditorPreparing)="onEditorPreparing($event)"
   (onCellClick)="onCellClick($event)"
+  (onEditingStart)="onEditingStart($event)"
   (onInitNewRow)="onInitNewRow($event)"
   (onSaved)="onSaved($event)"
   (onCellDblClick)="(onCellClick)"
@@ -108,12 +109,13 @@
   </div>
   <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
     <dx-select-box
-      [dataSource]="this[cell.column.dataField + 'Source']"
+      [id]="cell.key"
       [displayExpr]="displayCustom"
       [searchExpr]="[
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
+      [deferRendering]="false"
       [searchEnabled]="true"
       [acceptCustomValue]="true"
       [value]="cell.data[cell.column.dataField]"
@@ -124,3 +126,5 @@
     </dx-select-box>
   </div>
 </dx-data-grid>
+
+<!-- [dataSource]="this[cell.column.dataField + 'Source']" -->

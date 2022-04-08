@@ -10,6 +10,7 @@ import { TypeCamion } from "./type-camion.model";
 import { BaseTarif } from "./base-tarif.model";
 import { Transitaire } from "./transitaire.model";
 import { Client } from "./client.model";
+import Ordre from "./ordre.model";
 
 export enum ModeLivraison {
     DIRECT = "D",
@@ -30,6 +31,7 @@ export class Entrepot extends Model {
     @Field() public adresse2: string;
     @Field() public adresse3: string;
     @Field() public codePostal: string;
+    @Field({ model: import("./ordre.model") }) public ordres: Ordre[];
     @Field({ model: import("./pays.model") }) public langue: Pays;
     @Field({ model: import("./incoterm.model") }) public incoterm: Incoterm;
     @Field() public tvaCee: string;

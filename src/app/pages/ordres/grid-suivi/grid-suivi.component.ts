@@ -49,7 +49,7 @@ export class GridSuiviComponent implements OnInit, AfterViewInit {
         );
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     ngAfterViewInit() {
         this.enableFilters();
@@ -75,19 +75,5 @@ export class GridSuiviComponent implements OnInit, AfterViewInit {
     }
 
     onCellPrepared(e) {
-        if (e.rowType === "data") {
-            // Best expression for date/time
-            if (
-                e.column.dataField === "dateDepartPrevue" ||
-                e.column.dataField === "dateLivraisonPrevue"
-            ) {
-                if (e.value)
-                    e.cellElement.innerText =
-                        this.dateManagementService.formatDate(
-                            e.value,
-                            "dd-MM-yyyy",
-                        );
-            }
-        }
     }
 }
