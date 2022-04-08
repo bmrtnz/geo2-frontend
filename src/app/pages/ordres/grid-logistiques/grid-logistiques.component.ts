@@ -227,4 +227,9 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     public onRowRemoved() {
         this.gridLignesLogistique.refresh();
     }
+
+    public afterAjoutOrdlog() {
+        this.refresh();
+        this.gridLignesLogistique.refresh();
+    }
 }

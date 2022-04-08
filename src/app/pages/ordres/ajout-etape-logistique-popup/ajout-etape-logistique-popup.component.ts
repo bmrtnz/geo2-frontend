@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, ViewChild } from "@angular/core";
 import { LieuxPassageAQuaiService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { TypesTiersService } from "app/shared/services/api/types-tiers.service";
@@ -18,8 +18,9 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
 
   @Input() public lieuxGroupage: string[];
   @Input() public ligneId: string;
-  @Input() public gridLogistiquesComponent: GridLogistiquesComponent;
-  @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
+  @Input() public afterAjoutOrdlog: EventEmitter<any>;
+  // @Input() public gridLogistiques: GridLogistiquesComponent;
+  // @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
 
   visible: boolean;
   groupageDS: DataSource;
@@ -48,10 +49,7 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
       .valueChanges
       .pipe(take(1))
       .subscribe({
-        next: res => {
-          this.gridLogistiquesComponent.refresh();
-          this.gridLignesLogistique.refresh();
-        },
+        next: res => this.afterAjoutOrdlog.emit(),
         error: (message: string) => notify({ message }, "error", 7000),
         complete: () => this.visible = false,
       });
