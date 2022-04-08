@@ -195,7 +195,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         return `
       query OrdreByNumeroAndSociete($numero: String!, $societe: String!) {
         ordreByNumeroAndSociete(numero:$numero, societe:$societe) {
-          ${await this.model.getGQLFields(depth, fieldsFilter).toPromise()}
+          ${await this.model.getGQLFields(depth, fieldsFilter, null, { noList: true }).toPromise()}
         }
       }
     `;
