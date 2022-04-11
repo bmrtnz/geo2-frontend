@@ -67,6 +67,7 @@ export class VarietesService extends ApiService implements APIRead {
 
     getDistinctDataSource(columns: Array<string>) {
         return new DataSource({
+            sort: [{ selector: this.model.getKeyField() }],
             store: this.createCustomStore({
                 load: (options: LoadOptions) =>
                     new Promise(async (resolve) => {
