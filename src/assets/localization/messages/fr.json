@@ -324,6 +324,7 @@
     "tiers-transporteurs-lieuFonctionEan": "Lieu fonction EAN",
     "tiers-transporteurs-langue": "Langue",
     "tiers-transporteurs-tvaCee": "ID TVA CEE",
+    "tiers-transporteurs-clientRaisonSocial": "Client Raison sociale",
     "tiers-transporteurs-clientRaisonSocial-raisonSocial": "Client Raison sociale",
     "tiers-transporteurs-clientRaisonSocial-facturationRaisonSocial": "Client facturation raison sociale",
     "tiers-transporteurs-indicationFacture": "Indications sur facture",
