@@ -1,6 +1,6 @@
 {
   "name": "geo2",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "engines": {
     "npm": ">=6",
     "node": ">=14"
