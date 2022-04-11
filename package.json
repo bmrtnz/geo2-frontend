@@ -18,7 +18,7 @@
     "analyze": "webpack-bundle-analyzer dist/geo2/stats.json",
     "test": "ng test",
     "test:headless": "ng test --watch=false --browsers=HeadlessChrome",
-    "lint": "npx tsc && npx prettier --write ./src/**/*.{json,scss,html} && ng lint --fix",
+    "lint": "npx tsc && npx prettier --write ./src/**/*.{scss,html} && ng lint --fix",
     "e2e": "ng e2e",
     "e2e:no-serve": "ng e2e --devServerTarget=",
     "e2e:headless": "ng e2e --configuration=headless",
