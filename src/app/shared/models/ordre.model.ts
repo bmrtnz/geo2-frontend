@@ -132,6 +132,7 @@ export class Ordre extends Model {
     @Field() public fraisPrixUnitaire: number;
     @Field() public fraisPlateforme: number;
     @Field() public incotermLieu?: string;
+    @Field() public fileCMR?: string;
     @Field() public listeOrdresComplementaires?: string;
     @Field() public listeOrdresRegularisations?: string;
     @Field() public cqLignesCount?: number;

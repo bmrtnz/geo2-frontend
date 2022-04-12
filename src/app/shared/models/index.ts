@@ -72,3 +72,4 @@ export * from "./certification-mode-culture.model";
 export * from "./instruction.model";
 export * from "./code-promo.model";
 export * from "./def-code-promo.model";
+export * from "./imprimante.model";

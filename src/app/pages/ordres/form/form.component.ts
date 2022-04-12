@@ -119,6 +119,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "referenceClient",
         "client.raisonSocial",
     ];
+
     public dotLitiges: string;
     public dotCommentaires: number;
     public dotCQ: number;

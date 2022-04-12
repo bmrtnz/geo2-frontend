@@ -1,0 +1,10 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .delete-document-button {
+  position: absolute;
+  right: 147px;
+  margin-top: 7px;
+  z-index: 1;
+}

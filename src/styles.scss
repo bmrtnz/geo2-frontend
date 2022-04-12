@@ -100,7 +100,7 @@ body {
     font-size: 18px;
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(.icon-btn):not(.upperButton) {
+  .dx-button:not(.subButton):not(.small-article-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
     margin-bottom: 10px;
     .dx-button-content {
       padding: 10px 3px;
@@ -292,4 +292,14 @@ body {
   background: #8fc459;
   border-radius: 100%;
   color: white !important;
+}
+
+.dx-actionsheet-popover-wrapper {
+  .dx-button {
+    height: 34px;
+    font-size: 13px;
+    .dx-button-content {
+      padding: 6px 13px;
+    }
+  }
 }

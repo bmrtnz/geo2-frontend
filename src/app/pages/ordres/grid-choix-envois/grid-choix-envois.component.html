@@ -1,63 +1,56 @@
 <div class="content-block">
-  <h2>
-    {{ "tiers-contacts-title" | localize
-    }}<span
-      *ngIf="
-        !fournisseurCode && !transporteurLigneId && !lieupassageaquaiLigneId
-      "
-    >
-      - {{ typeTiersLabel | localize }} {{ codeTiers }}</span
-    >
-  </h2>
-</div>
-<div class="content-block contact-page">
+  <dx-button
+    class="delete-document-button"
+    type="danger"
+    text="{{ 'btn-deleterows' | localize }}"
+    [visible]="!!rowKeys?.length"
+    (onClick)="deleteSelectedRows()"
+  ></dx-button>
+
   <dx-data-grid
     [remoteOperations]="true"
     [allowColumnReordering]="true"
     [showBorders]="true"
+    [columnAutoWidth]="false"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="false"
     dateSerializationFormat="yyyy-MM-dd"
     [scrolling]="{
       useNative: true
     }"
-    (onEditingStart)="onEditingStart($event)"
     (onRowPrepared)="onRowPrepared($event)"
-    (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
-    (onInitNewRow)="onInitNewRow($event)"
+    (onSelectionChanged)="onSelectionChanged()"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        '',
+        'Liste des documents',
         $event,
-        gridConfiguratorService.Grid.Contact,
-        enableFilters.bind(this)
+        gridConfiguratorService.Grid.ChoixEnvois
       )
     "
   >
     <!-- Grid configuration -->
     <dxo-paging></dxo-paging>
+    <dxo-editing
+      [selectTextOnEditStart]="true"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [mode]="'cell'"
+    ></dxo-editing>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
       [showNavigationButtons]="true"
     ></dxo-pager>
     <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.Contact"
+      [storageKey]="gridConfiguratorService.Grid.ChoixEnvois"
       [enabled]="true"
       type="custom"
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-editing
-      *ngIf="
-        !fournisseurCode && !transporteurLigneId && !lieupassageaquaiLigneId
-      "
-      [allowUpdating]="true"
-      [allowAdding]="true"
-      [selectTextOnEditStart]="true"
-    >
-    </dxo-editing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
@@ -68,19 +61,23 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
-    <dxo-selection mode="single"></dxo-selection>
+    <dxo-selection mode="multiple"></dxo-selection>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
       [caption]="
-        ('tiers-contacts-' + column.dataField?.split('.').join('-')
-          | localize) || column.name
+        ('choixEnvois-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
       "
       trueText="Oui"
       falseText="Non"
-      [width]="column.dataField === 'fluxAccess1' ? '300' : 'auto'"
+      [width]="
+        ['fluxAccess1', 'commentaire'].includes(column?.dataField)
+          ? '300'
+          : 'auto'
+      "
       [dataType]="column?.dataType"
       [allowSearch]="
         column?.allowSearch || ['string'].includes(column?.dataType)
@@ -88,16 +85,10 @@
       [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
-      [allowEditing]="
-        column.name !== 'valide' &&
-        column?.allowEditing !== false &&
-        !fournisseurCode &&
-        !transporteurLigneId &&
-        !lieupassageaquaiLigneId
-      "
+      [allowEditing]="column?.allowEditing !== false"
       [validationRules]="column.validationRules"
       [editCellTemplate]="
-        column.dataField === 'flux' || column.dataField === 'moyenCommunication'
+        ['moyenCommunication', 'imprimante'].includes(column?.dataField)
           ? 'selectBoxEditTemplate'
           : false
       "
@@ -105,26 +96,18 @@
       [showInColumnChooser]="column.showInColumnChooser"
     >
       <dxi-validation-rule
-        *ngIf="
-          column.dataField === 'flux' ||
-          column.dataField === 'moyenCommunication'
-        "
-        type="required"
+        *ngIf="column.dataField === 'commentaire'"
+        type="stringLength"
+        [max]="70"
+        [trim]="false"
       ></dxi-validation-rule>
     </dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
       <dx-select-box
-        [readOnly]="
-          (cell?.data?.flux?.id === 'FACTUR' &&
-            !authService.currentUser.adminClient) ||
-          !!fournisseurCode ||
-          !!transporteurLigneId ||
-          !!lieupassageaquaiLigneId
-        "
         [dataSource]="this[cell.column.dataField + 'Source']"
         [displayExpr]="
-          cell.column.dataField === 'flux'
+          ['imprimante'].includes(cell.column.dataField)
             ? displayIDBefore
             : this[cell.column.dataField + 'Service'].model.getLabelField()
         "
@@ -136,7 +119,7 @@
         [value]="cell.data[cell.column.dataField]"
         (onValueChanged)="onValueChanged($event, cell)"
       >
-        <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+        <dxo-drop-down-options [width]="250"></dxo-drop-down-options>
       </dx-select-box>
     </div>
   </dx-data-grid>

@@ -15,6 +15,7 @@ import {
   DxBoxModule,
   DxButtonModule,
   DxCheckBoxModule,
+  DxActionSheetModule,
   DxDataGridModule,
   DxDateBoxModule,
   DxFormModule,
@@ -94,6 +95,9 @@ import { TransporteursModule } from "../tiers/transporteurs/transporteurs.module
 import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-passage-a-quai.module";
 import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 import { ContactsModule } from "../tiers/contacts/contacts.module";
+import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/actions-documents-ordres.component";
+import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
+import { GridChoixEnvoisComponent } from "./grid-choix-envois/grid-choix-envois.component";
 
 @NgModule({
   declarations: [
@@ -145,6 +149,9 @@ import { ContactsModule } from "../tiers/contacts/contacts.module";
     ZoomTransporteurPopupComponent,
     ZoomLieupassageaquaiPopupComponent,
     AjoutEtapeLogistiquePopupComponent,
+    ActionsDocumentsOrdresComponent,
+    DocumentsOrdresPopupComponent,
+    GridChoixEnvoisComponent,
   ],
   imports: [
     OrdresRoutingModule,
@@ -167,6 +174,7 @@ import { ContactsModule } from "../tiers/contacts/contacts.module";
     DxSelectBoxModule,
     DxSortableModule,
     DxTabPanelModule,
+    DxActionSheetModule,
     DxTextBoxModule,
     DxRadioGroupModule,
     DxBoxModule,

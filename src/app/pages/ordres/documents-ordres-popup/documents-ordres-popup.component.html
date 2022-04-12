@@ -1,0 +1,38 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [resizeEnabled]="true"
+  (onShowing)="onShowing($event)"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ titleStart }}&nbsp;</div>
+    <div class="title-end">{{ titleEnd }}</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    >
+    </dx-button>
+  </div>
+
+  <div class="action-buttons-container">
+    <dx-button
+      class="cancel-button"
+      type="normal"
+      text="{{ 'btn-annuler' | localize }}"
+      (onClick)="clearAndHidePopup()"
+    ></dx-button>
+    <dx-button
+      #validButton
+      class="documents-valid-button"
+      type="success"
+      text="OK"
+      (onClick)="goDocuments()"
+    ></dx-button>
+  </div>
+  <br />
+  <app-grid-choix-envois></app-grid-choix-envois>
+  <br />
+</dx-popup>

@@ -1,0 +1,33 @@
+<div class="flux-docs-buttons-container">
+  <div *ngFor="let action of actionsFlux.slice(0, visibleActionsNumber - 1)">
+    <dx-button
+      class="flux-doc-button"
+      type="default"
+      text="{{ action.text }}"
+      [visible]="action.visible"
+      (onClick)="sendAction(action.id)"
+    ></dx-button>
+  </div>
+  <dx-button
+    class="flux-doc-button flux-doc-button-plus"
+    type="default"
+    hint="{{ 'hint-autres-actions' | localize }}"
+    [focusStateEnabled]="false"
+    text="..."
+    (onClick)="showFluxDoxOtherBtns($event)"
+  ></dx-button>
+  <dx-action-sheet
+    #actionSheet
+    width="auto"
+    [items]="plusActionsFlux"
+    [showTitle]="false"
+    target=".flux-doc-button-plus"
+    [showCancelButton]="true"
+    [usePopover]="true"
+    (onItemClick)="sendAction($event.itemData.id)"
+  ></dx-action-sheet>
+  <app-documents-ordres-popup
+    [ordre]="ordre"
+    [flux]="flux"
+  ></app-documents-ordres-popup>
+</div>
