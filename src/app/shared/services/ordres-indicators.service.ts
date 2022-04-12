@@ -56,9 +56,9 @@ export class Indicator implements dxButtonOptions {
     component?: Promise<any>;
     detailedFields?:
         | Observable<
-              | ModelFieldOptions<typeof Model>
-              | ModelFieldOptions<typeof Model>[]
-          >
+            | ModelFieldOptions<typeof Model>
+            | ModelFieldOptions<typeof Model>[]
+        >
         | GridColumn[];
     constructor(args) {
         Object.assign(this, args);
@@ -129,7 +129,7 @@ const indicators: Indicator[] = [
     },
     {
         id: "OrdresNonClotures",
-        enabled: true,
+        enabled: false,
         withCount: true,
         parameter: "Ordres",
         subParameter: "non clôturés",
@@ -365,20 +365,20 @@ export class OrdresIndicatorsService {
                 instance.fetchCount = paysService.count.bind(paysService, [
                     ...instance.filter,
                     ...(this.authService.currentUser.secteurCommercial &&
-                    !this.authService.isAdmin
+                        !this.authService.isAdmin
                         ? [
-                              "and",
-                              [
-                                  "clients.secteur.id",
-                                  "=",
-                                  this.authService.currentUser.secteurCommercial
-                                      ?.id,
-                              ],
-                          ]
+                            "and",
+                            [
+                                "clients.secteur.id",
+                                "=",
+                                this.authService.currentUser.secteurCommercial
+                                    ?.id,
+                            ],
+                        ]
                         : []),
                 ]) as (
-                    dxFilter?: any[],
-                ) => Observable<ApolloQueryResult<CountResponsePays>>;
+                        dxFilter?: any[],
+                    ) => Observable<ApolloQueryResult<CountResponsePays>>;
             }
 
             // Ordres non cloturés
@@ -419,48 +419,48 @@ export class OrdresIndicatorsService {
                 instance.fetchCount = ordresService.count.bind(ordresService, [
                     ...instance.filter,
                     ...(this.authService.currentUser.secteurCommercial &&
-                    !this.authService.isAdmin
+                        !this.authService.isAdmin
                         ? [
-                              "and",
-                              [
-                                  "secteurCommercial.id",
-                                  "=",
-                                  this.authService.currentUser.secteurCommercial
-                                      ?.id,
-                              ],
-                          ]
+                            "and",
+                            [
+                                "secteurCommercial.id",
+                                "=",
+                                this.authService.currentUser.secteurCommercial
+                                    ?.id,
+                            ],
+                        ]
                         : []),
                     ...(this.authService.isAdmin
                         ? []
                         : [
-                              ...(this.authService.currentUser.personne?.role.toString() ===
-                              Role[Role.COMMERCIAL]
-                                  ? [
-                                        "and",
-                                        [
-                                            "commercial.id",
-                                            "=",
-                                            this.authService.currentUser
-                                                .commercial.id,
-                                        ],
-                                    ]
-                                  : []),
-                              ...(this.authService.currentUser.personne?.role.toString() ===
-                              Role[Role.ASSISTANT]
-                                  ? [
-                                        "and",
-                                        [
-                                            "assistante.id",
-                                            "=",
-                                            this.authService.currentUser
-                                                .assistante.id,
-                                        ],
-                                    ]
-                                  : []),
-                          ]),
+                            ...(this.authService.currentUser.personne?.role.toString() ===
+                                Role[Role.COMMERCIAL]
+                                ? [
+                                    "and",
+                                    [
+                                        "commercial.id",
+                                        "=",
+                                        this.authService.currentUser
+                                            .commercial.id,
+                                    ],
+                                ]
+                                : []),
+                            ...(this.authService.currentUser.personne?.role.toString() ===
+                                Role[Role.ASSISTANT]
+                                ? [
+                                    "and",
+                                    [
+                                        "assistante.id",
+                                        "=",
+                                        this.authService.currentUser
+                                            .assistante.id,
+                                    ],
+                                ]
+                                : []),
+                        ]),
                 ]) as (
-                    dxFilter?: any[],
-                ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+                        dxFilter?: any[],
+                    ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
             }
 
             // Ordres non confirmés
@@ -492,48 +492,48 @@ export class OrdresIndicatorsService {
                 instance.fetchCount = ordresService.count.bind(ordresService, [
                     ...instance.filter,
                     ...(this.authService.currentUser.secteurCommercial &&
-                    !this.authService.isAdmin
+                        !this.authService.isAdmin
                         ? [
-                              "and",
-                              [
-                                  "secteurCommercial.id",
-                                  "=",
-                                  this.authService.currentUser.secteurCommercial
-                                      ?.id,
-                              ],
-                          ]
+                            "and",
+                            [
+                                "secteurCommercial.id",
+                                "=",
+                                this.authService.currentUser.secteurCommercial
+                                    ?.id,
+                            ],
+                        ]
                         : []),
                     ...(this.authService.isAdmin
                         ? []
                         : [
-                              ...(this.authService.currentUser.personne?.role.toString() ===
-                              Role[Role.COMMERCIAL]
-                                  ? [
-                                        "and",
-                                        [
-                                            "commercial.id",
-                                            "=",
-                                            this.authService.currentUser
-                                                .commercial.id,
-                                        ],
-                                    ]
-                                  : []),
-                              ...(this.authService.currentUser.personne?.role.toString() ===
-                              Role[Role.ASSISTANT]
-                                  ? [
-                                        "and",
-                                        [
-                                            "assistante.id",
-                                            "=",
-                                            this.authService.currentUser
-                                                .assistante.id,
-                                        ],
-                                    ]
-                                  : []),
-                          ]),
+                            ...(this.authService.currentUser.personne?.role.toString() ===
+                                Role[Role.COMMERCIAL]
+                                ? [
+                                    "and",
+                                    [
+                                        "commercial.id",
+                                        "=",
+                                        this.authService.currentUser
+                                            .commercial.id,
+                                    ],
+                                ]
+                                : []),
+                            ...(this.authService.currentUser.personne?.role.toString() ===
+                                Role[Role.ASSISTANT]
+                                ? [
+                                    "and",
+                                    [
+                                        "assistante.id",
+                                        "=",
+                                        this.authService.currentUser
+                                            .assistante.id,
+                                    ],
+                                ]
+                                : []),
+                        ]),
                 ]) as (
-                    dxFilter?: any[],
-                ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+                        dxFilter?: any[],
+                    ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
             }
 
             // Litiges
@@ -566,8 +566,8 @@ export class OrdresIndicatorsService {
                 instance.fetchCount = ordresService.count.bind(
                     ordresService,
                 ) as (
-                    dxFilter?: any[],
-                ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+                        dxFilter?: any[],
+                    ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
                 instance.filter = [
                     ...instance.filter,
                     "and",
@@ -591,8 +591,8 @@ export class OrdresIndicatorsService {
                 instance.fetchCount = ordresService.count.bind(
                     ordresService,
                 ) as (
-                    dxFilter?: any[],
-                ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+                        dxFilter?: any[],
+                    ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
             }
 
             // Commandes en transit

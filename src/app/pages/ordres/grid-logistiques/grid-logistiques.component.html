@@ -80,6 +80,7 @@
     type="buttons"
     [width]="80"
     [showInColumnChooser]="false"
+    *ngIf="!env.production"
   >
     <dxi-button
       cssClass="add-step-button"
