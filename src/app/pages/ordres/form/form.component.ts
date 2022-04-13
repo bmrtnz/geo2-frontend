@@ -91,11 +91,15 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "portTypeD.id",
         "portTypeA.id",
         "incotermLieu",
+        "devise.id",
         "tauxDevise",
         "commercial.id",
         "assistante.id",
         "venteACommission",
         "secteurCommercial.id",
+        "transporteurDEVCode",
+        "transporteurDEVTaux",
+        "baseTarifTransport.id",
     ];
 
     private destroy = new Subject<boolean>();
