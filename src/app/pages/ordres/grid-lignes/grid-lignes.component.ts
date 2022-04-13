@@ -132,6 +132,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       return (this.addKeyToField(column.dataField));
     })));
     const gridFields = await fields.toPromise();
+    this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
     this.filterFournisseurDS();
     this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     this.achatUniteSource = this.achatUniteService.getDataSource_v2(["id", "description"]);
@@ -152,7 +153,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.certifMDDS.filter(["type", "=", "CERTIF"]);
     this.certifMDDS.load().then(res => {
       this.certifsMD = res; // Store certifications Mode culture
-      this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
     });
     this.codePromoSource = this.codePromoService.getDataSource_v2(["id", "description"]);
   }

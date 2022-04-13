@@ -1857,7 +1857,7 @@
         "visible": false
       },
       {
-        "dataField": "ordre.type",
+        "dataField": "ordre.type.description",
         "showInColumnChooser": false,
         "visible": false
       },

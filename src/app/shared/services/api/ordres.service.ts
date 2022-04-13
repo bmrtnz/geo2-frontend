@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { ApolloQueryResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from "@apollo/client/core";
+import { gql, MutationOptions, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { from, Subject } from "rxjs";
-import { filter, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import { from } from "rxjs";
+import { first, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 
@@ -48,29 +48,30 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     getOneByNumeroAndSociete(
         numero: string,
         societe: string,
-        depth = 3,
-        fieldsFilter?: RegExp
+        body: string[],
     ) {
-        type Response = { ordreByNumeroAndSociete: Ordre };
-        const variables: OperationVariables = { numero, societe };
-
-        const done = new Subject<ApolloQueryResult<Response>>();
-        from(this.buildGetOrdreByNumeroAndSociete(depth, fieldsFilter))
-            .pipe(
-                takeUntil(this.destroy),
-                takeUntil(done),
-                mergeMap(query => this.query<Response>(query, {
-                    fetchPolicy: "cache-and-network",
-                    variables,
-                } as WatchQueryOptions)),
-                filter(res => !!Object.keys(res.data).length),
-            )
-            .subscribe(res => {
-                done.next(res);
-                if (!res.loading)
-                    done.complete();
+        return this.apollo
+            .watchQuery<{ ordreByNumeroAndSociete: Ordre }>({
+                query: gql(ApiService.buildGraph(
+                    "query",
+                    [
+                        {
+                            name: "ordreByNumeroAndSociete",
+                            body,
+                            params: [
+                                { name: "numero", value: "numero", isVariable: true },
+                                { name: "societe", value: "societe", isVariable: true },
+                            ]
+                        }
+                    ],
+                    [
+                        { name: "numero", type: "String", isOptionnal: false },
+                        { name: "societe", type: "String", isOptionnal: false },
+                    ],
+                )),
+                variables: { numero, societe },
+                fetchPolicy: "cache-and-network",
             });
-        return done.pipe(map(res => res.data.ordreByNumeroAndSociete));
     }
 
     getDataSource(indicator?: Operation, depth = 2, qFilter = this.queryFilter) {

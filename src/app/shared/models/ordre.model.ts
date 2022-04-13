@@ -20,25 +20,11 @@ import MoyenPaiement from "./moyen-paiement.model";
 import BasePaiement from "./base.paiement.model";
 import TypeVente from "./type-vente.model";
 import Courtier from "./courtier.model";
+import TypeOrdre from "./type-ordre.model";
 
 export enum FactureAvoir {
     FACTURE = "F",
     AVOIR = "A",
-}
-
-export enum OrdreType {
-    COM = "COM",
-    ORD = "ORD",
-    ORI = "ORI",
-    REF = "REF",
-    REG = "REG",
-    REP = "REP",
-    RGP = "RGP",
-    RPF = "RPF",
-    RPO = "RPO",
-    RPR = "RPR",
-    UNK = "UNK",
-    UKT = "UKT",
 }
 
 export enum Statut {
@@ -142,8 +128,8 @@ export class Ordre extends Model {
     @Field() public bassinTransporteur?: string;
     @Field({ dataType: "datetime" }) public dateModification?: string;
     @Field({ dataType: "datetime" }) public dateCreation?: string;
-    @Field({ allowHeaderFiltering: false, allowSearch: false })
-    public type?: OrdreType;
+    @Field({ model: import("./type-ordre.model") })
+    public type?: TypeOrdre;
     @Field({
         allowSorting: false,
         allowHeaderFiltering: false,
