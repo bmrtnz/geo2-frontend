@@ -1,17 +1,18 @@
 import {
     AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit,
-    Output, QueryList, ViewChild, ViewChildren, Input, OnChanges, AfterContentChecked, AfterViewChecked
+    Output, QueryList, ViewChild, ViewChildren
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
-import { ClientsService, EntrepotsService, TransporteursService, AuthService } from "app/shared/services";
+import { AuthService, ClientsService, EntrepotsService, TransporteursService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
+import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { PortsService } from "app/shared/services/api/ports.service";
@@ -28,7 +29,6 @@ import { concatMap, filter, first, map, switchMap, takeUntil } from "rxjs/operat
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
-import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 
 /**
  * Grid with loading toggled by parent
@@ -67,6 +67,36 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Output() public ordre: Ordre;
     @Output() openArticleManuPopup = new EventEmitter<any>();
+
+    private readonly headerFields = [
+        "id",
+        "numero",
+        "statut",
+        "campagne.id",
+        "client.id",
+        "entrepot.id",
+        "referenceClient",
+        "dateDepartPrevue",
+        "dateLivraisonPrevue",
+        "incoterm.id",
+        "transporteur.id",
+        "typeTransport.id",
+        "prixUnitaireTarifTransport",
+        "fraisUnite.id",
+        "instructionsLogistiques",
+        "commentaireUsageInterne",
+        "codeChargement",
+        "ETDDate",
+        "ETADate",
+        "portTypeD.id",
+        "portTypeA.id",
+        "incotermLieu",
+        "tauxDevise",
+        "commercial.id",
+        "assistante.id",
+        "venteACommission",
+        "secteurCommercial.id",
+    ];
 
     private destroy = new Subject<boolean>();
     private anchorsInitialized = false;
@@ -386,7 +416,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 switchMap(id => {
                     if (id === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
                     return this.ordresService
-                        .getOneByNumeroAndSociete(id, currentCompany.id);
+                        .getOneByNumeroAndSociete(id, currentCompany.id, this.headerFields)
+                        .valueChanges
+                        .pipe(map(res => res.data.ordreByNumeroAndSociete));
                 }),
             )
             .subscribe(ordre => {
