@@ -100,6 +100,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "transporteurDEVCode",
         "transporteurDEVTaux",
         "baseTarifTransport.id",
+        "client.instructionCommercial",
+        "entrepot.instructionSecretaireCommercial",
+        "entrepot.gestionnaireChep",
+        "entrepot.referenceChep",
     ];
 
     private destroy = new Subject<boolean>();
