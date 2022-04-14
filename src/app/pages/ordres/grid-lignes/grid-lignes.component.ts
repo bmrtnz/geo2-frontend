@@ -477,7 +477,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   cellValueChange(data) {
 
+    if (!data.changes) return;
+    if (data.changes.some(c => c.type !== "update")) return;
     if (!this.dataField) return;
+
     const dataField = this.dataField;
     const idLigne = this.idLigne;
     console.log(dataField, "has been changed");
