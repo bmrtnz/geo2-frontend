@@ -168,6 +168,50 @@ export class FunctionsService {
         variables: { ordreLogRef, typePassage, choixPassage },
         fetchPolicy: "network-only",
       })
+  /**
+   * Point d'entrée pour la gestion des flux de documents
+   */
+  public geoPrepareEnvois =
+    (
+      ordRef: string,
+      fluCode: string,
+      modeAuto: boolean,
+      annOrdre: boolean,
+      user: string,
+    ) => this.apollo
+      .watchQuery<{ geoPrepareEnvois: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "geoPrepareEnvois",
+              body,
+              params: [
+                { name: "ordRef", value: "ordRef", isVariable: true },
+                { name: "fluCode", value: "fluCode", isVariable: true },
+                { name: "modeAuto", value: "modeAuto", isVariable: true },
+                { name: "annOrdre", value: "annOrdre", isVariable: true },
+                { name: "user", value: "user", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordRef", type: "String", isOptionnal: false },
+            { name: "fluCode", type: "String", isOptionnal: false },
+            { name: "modeAuto", type: "Boolean", isOptionnal: false },
+            { name: "annOrdre", type: "Boolean", isOptionnal: false },
+            { name: "user", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: {
+          ordRef,
+          fluCode,
+          modeAuto,
+          annOrdre,
+          user
+        },
+        fetchPolicy: "network-only",
+      })
 
   /**
    * Event modification nb palettes commandées sur une ligne d'ordre
