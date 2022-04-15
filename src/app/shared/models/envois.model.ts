@@ -5,6 +5,7 @@ import { Ordre } from "./ordre.model";
 import { TypeTiers } from "./type-tiers.model";
 import { MoyenCommunication } from "./moyen-communication.model";
 import { Document } from "./document.model";
+import Imprimante from "./imprimante.model";
 
 @ModelName("Envois")
 export class Envois extends Model {
@@ -12,7 +13,7 @@ export class Envois extends Model {
     @Field({ model: import("./personne.model") }) public assistante: Personne;
     @Field({ model: import("./personne.model") }) public commercial: Personne;
     @Field() public commentairesAvancement: string;
-    @Field() public imprimanteID: string;
+    @Field({ model: import("./imprimante.model") }) public imprimante: Imprimante;
     @Field({ dataType: "localdate " }) public dateEnvoi?: string;
     @Field({ dataType: "localdate " }) public dateAccuseReception?: string;
     @Field({ dataType: "localdate " }) public dateDemande?: string;

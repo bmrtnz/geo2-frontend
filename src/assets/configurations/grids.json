@@ -2738,12 +2738,6 @@
         "visible": true
       },
       {
-        "visibleIndex": 13,
-        "dataField": "imprimanteID",
-        "dataType": "string",
-        "visible": true
-      },
-      {
         "visibleIndex": 14,
         "dataField": "commentairesAvancement",
         "dataType": "string",
