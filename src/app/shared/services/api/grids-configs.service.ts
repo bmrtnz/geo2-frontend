@@ -68,7 +68,7 @@ export class GridsConfigsService
                     },
                 },
             })
-            .pipe(takeWhile((res) => res.loading === false));
+            .pipe(takeWhile((res) => !res.loading));
     }
 
     getDataSource() {

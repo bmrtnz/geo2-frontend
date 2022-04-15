@@ -19,7 +19,7 @@ export class DevisesRefsService extends ApiService {
                 query: gql(this.buildGetOneGraph(columns)),
                 variables: { id },
             })
-            .pipe(takeWhile((res) => res.loading === false));
+            .pipe(takeWhile((res) => !res.loading));
     }
 
     getList(search: string, columns: Array<string>) {
@@ -28,6 +28,6 @@ export class DevisesRefsService extends ApiService {
                 query: gql(this.buildGetListGraph(columns)),
                 variables: { search },
             })
-            .pipe(takeWhile((res) => res.loading === false));
+            .pipe(takeWhile((res) => !res.loading));
     }
 }

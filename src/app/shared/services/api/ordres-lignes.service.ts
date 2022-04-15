@@ -150,7 +150,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
             variables,
             fetchPolicy: "no-cache",
           })
-            .pipe(takeWhile(res => res.loading === false))
+            .pipe(takeWhile(res => !res.loading))
             .subscribe(({ data }) => resolve(this.asInstancedListCount(data[operation])));
 
         }),

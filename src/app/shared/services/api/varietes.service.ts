@@ -62,7 +62,7 @@ export class VarietesService extends ApiService implements APIRead {
                 query: gql(this.buildGetListGraph(columns)),
                 variables: { search },
             })
-            .pipe(takeWhile((res) => res.loading === false));
+            .pipe(takeWhile((res) => !res.loading));
     }
 
     getDistinctDataSource(columns: Array<string>) {

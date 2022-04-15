@@ -59,7 +59,7 @@ export class UtilisateursService extends ApiService {
                 variables: { nomUtilisateur, motDePasse },
                 ...options,
             })
-            .pipe(takeWhile((res) => res.loading === false));
+            .pipe(takeWhile((res) => !res.loading));
     }
 
     save(variables: OperationVariables) {

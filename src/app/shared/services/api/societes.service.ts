@@ -20,7 +20,7 @@ export class SocietesService extends ApiService implements APIRead {
                 query: gql(this.buildGetOneGraph(columns)),
                 variables: { id },
             })
-            .pipe(takeWhile((res) => res.loading === false));
+            .pipe(takeWhile((res) => !res.loading));
     }
 
     getDataSource() {
