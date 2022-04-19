@@ -28,7 +28,6 @@ export class Envois extends Model {
     @Field({ model: import("./ordre.model") }) public ordre: Ordre;
     @Field({ model: import("./type-tiers.model") }) public typeTiers: TypeTiers;
     @Field() public codeTiers: string;
-    // @Field() public userModification: string;
     @Field() public versionOrdre: string;
     @Field({ model: import("./document.model") }) public document: Document;
 }
