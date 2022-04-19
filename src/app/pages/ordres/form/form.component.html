@@ -161,7 +161,7 @@
                 <dx-button
                   class="upperButton submit"
                   type="default"
-                  [disabled]="true"
+                  [disabled]="env.production"
                   text="{{ 'btn-valider' | localize }}"
                   [useSubmitBehavior]="true"
                 ></dx-button>

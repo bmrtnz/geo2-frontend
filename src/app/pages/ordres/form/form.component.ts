@@ -272,17 +272,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onSubmit() {
-        // if (!this.formGroup.pristine && this.formGroup.valid) {
-        //   const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-        //   ordre.societe = { id: this.currentCompanyService.getCompany().id };
+        if (!this.formGroup.pristine && this.formGroup.valid && !this.env.production) {
+            const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+            ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
-        //   this.ordresService.save({ ordre }).subscribe({
-        //     next: () => {
-        //       notify('Sauvegardé', 'success', 3000);
-        //     },
-        //     error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        //   });
-        // }
+            this.ordresService.save({ ordre }).subscribe({
+                next: () => {
+                    notify("Sauvegardé", "success", 3000);
+                },
+                error: () => notify("Echec de la sauvegarde", "error", 3000),
+            });
+        }
     }
 
     onAccordionToggled(
