@@ -383,6 +383,8 @@ export class OrdresIndicatorsService {
 
             // Ordres non cloturés
             if (instance.id === "OrdresNonClotures") {
+                const currDateTime0 = new Date();
+                currDateTime0.setHours(0, 0, 0, 0);
                 instance.detailedFields =
                     this.ordresService.model.getDetailedFields(
                         3,
@@ -407,10 +409,10 @@ export class OrdresIndicatorsService {
                         "dateDepartPrevue",
                         ">=",
                         this.datePipe.transform(
-                            new Date()
-                                .setDate(new Date().getDate() - 180)
+                            currDateTime0
+                                .setDate(currDateTime0.getDate() - 180)
                                 .valueOf(),
-                            "yyyy-MM-dd",
+                            "yyyy-MM-ddTHH:mm:ss",
                         ),
                     ],
                     "and",
