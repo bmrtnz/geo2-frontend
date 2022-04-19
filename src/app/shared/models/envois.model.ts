@@ -12,7 +12,6 @@ export class Envois extends Model {
     @Field({ model: import("./personne.model") }) public assistante: Personne;
     @Field({ model: import("./personne.model") }) public commercial: Personne;
     @Field() public commentairesAvancement: string;
-    @Field() public imprimanteID: string;
     @Field({ dataType: "localdate " }) public dateEnvoi?: string;
     @Field({ dataType: "localdate " }) public dateAccuseReception?: string;
     @Field({ dataType: "localdate " }) public dateDemande?: string;
