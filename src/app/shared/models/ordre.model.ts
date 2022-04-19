@@ -98,10 +98,10 @@ export class Ordre extends Model {
     public baseTarifTransit?: BaseTarif;
     @Field({ model: import("./type-vente.model") })
     public typeVente?: TypeVente;
-    @Field({ dataType: "localdate" }) public ETDDate?: string;
-    @Field({ dataType: "localdate" }) public ETADate?: string;
-    // @Field() public ETDLocation?: string;
-    // @Field() public ETALocation?: string;
+    @Field({ dataType: "localdate" }) public etdDate?: string;
+    @Field({ dataType: "localdate" }) public etaDate?: string;
+    // @Field() public etdLocation?: string;
+    // @Field() public etaLocation?: string;
     @Field({ model: import("./incoterm.model") }) public incoterm?: Incoterm;
     @Field({ model: import("./pays.model") }) public pays?: Pays;
     @Field({ model: import("./regime-tva.model") })

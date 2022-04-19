@@ -161,7 +161,7 @@
                 <dx-button
                   class="upperButton submit"
                   type="default"
-                  [disabled]="true"
+                  [disabled]="env.production"
                   text="{{ 'btn-valider' | localize }}"
                   [useSubmitBehavior]="true"
                 ></dx-button>
@@ -282,8 +282,9 @@
                         <div class="dx-field-value">
                           <dx-date-box
                             formControlName="dateDepartPrevue"
-                            dateSerializationFormat="yyyy-MM-dd HH:mm"
-                            type="dateTime"
+                            [displayFormat]="'dd-MM-yyyy HH:mm'"
+                            dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+                            type="datetime"
                           >
                             <dx-validator
                               name="{{ 'ordres-dateDepartPrevue' | localize }}"
@@ -303,8 +304,9 @@
                         <div class="dx-field-value">
                           <dx-date-box
                             formControlName="dateLivraisonPrevue"
-                            dateSerializationFormat="yyyy-MM-dd HH:mm"
-                            type="dateTime"
+                            [displayFormat]="'dd-MM-yyyy HH:mm'"
+                            dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+                            type="datetime"
                           >
                             <dx-validator
                               name="{{
@@ -531,7 +533,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-date-box
-                                formControlName="ETDDate"
+                                formControlName="etdDate"
                                 dateSerializationFormat="yyyy-MM-dd"
                                 type="date"
                               >
@@ -570,7 +572,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-date-box
-                                formControlName="ETADate"
+                                formControlName="etaDate"
                                 dateSerializationFormat="yyyy-MM-dd"
                                 type="date"
                               >
@@ -962,9 +964,6 @@
                 >
                   <dxi-item>
                     <div class="dx-form-group-content">
-                      <app-actions-documents-ordres
-                        [ordre]="ordre"
-                      ></app-actions-documents-ordres>
                       <app-grid-envois
                         #gridEnvois
                         [ordre]="ordre"

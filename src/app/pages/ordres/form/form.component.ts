@@ -87,8 +87,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "instructionsLogistiques",
         "commentaireUsageInterne",
         "codeChargement",
-        "ETDDate",
-        "ETADate",
+        "etdDate",
+        "etaDate",
         "portTypeD.id",
         "portTypeA.id",
         "incotermLieu",
@@ -133,8 +133,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         instructionsLogistiques: [""],
         dateDepartPrevue: [""],
         dateLivraisonPrevue: [""],
-        ETDDate: [""],
-        ETADate: [""],
+        etdDate: [""],
+        etaDate: [""],
         portTypeD: [""],
         portTypeA: [""],
         codeChargement: [""],
@@ -161,7 +161,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "referenceClient",
         "client.raisonSocial",
     ];
-
     public dotLitiges: string;
     public dotCommentaires: number;
     public dotCQ: number;
@@ -273,17 +272,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onSubmit() {
-        // if (!this.formGroup.pristine && this.formGroup.valid) {
-        //   const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-        //   ordre.societe = { id: this.currentCompanyService.getCompany().id };
+        if (!this.formGroup.pristine && this.formGroup.valid && !this.env.production) {
+            const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+            ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
-        //   this.ordresService.save({ ordre }).subscribe({
-        //     next: () => {
-        //       notify('Sauvegardé', 'success', 3000);
-        //     },
-        //     error: () => notify('Echec de la sauvegarde', 'error', 3000),
-        //   });
-        // }
+            this.ordresService.save({ ordre }).subscribe({
+                next: () => {
+                    notify("Sauvegardé", "success", 3000);
+                },
+                error: () => notify("Echec de la sauvegarde", "error", 3000),
+            });
+        }
     }
 
     onAccordionToggled(
