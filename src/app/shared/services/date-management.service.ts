@@ -9,7 +9,7 @@ export class DateManagementService {
     constructor(
         private datePipe: DatePipe,
         private ordresIndicatorsService: OrdresIndicatorsService,
-    ) {}
+    ) { }
 
     formatDate(myDate, myFormat?) {
         return this.datePipe.transform(
@@ -251,6 +251,14 @@ export class DateManagementService {
     findDate(delta) {
         return this.ordresIndicatorsService.getFormatedDate(
             new Date().setDate(new Date().getDate() + delta).valueOf(),
+        );
+    }
+
+    findDateTimeZero(delta) {
+        const currDateTime0 = new Date();
+        currDateTime0.setHours(0, 0, 0, 0);
+        return this.ordresIndicatorsService.getFormatedDate(
+            currDateTime0.setDate(currDateTime0.getDate() + delta).valueOf(), "yyyy-MM-ddTHH:mm:ss"
         );
     }
 

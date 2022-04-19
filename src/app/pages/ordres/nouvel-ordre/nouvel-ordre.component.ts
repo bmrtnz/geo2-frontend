@@ -195,9 +195,9 @@ export class NouvelOrdreComponent implements OnInit {
                         instructionsLogistiques: instLog,
                         campagne: { id: this.societe.campagne.id },
                         dateDepartPrevue:
-                            this.dateManagementService.findDate(0),
+                            this.dateManagementService.findDateTimeZero(0),
                         dateLivraisonPrevue:
-                            this.dateManagementService.findDate(1),
+                            this.dateManagementService.findDateTimeZero(1),
                         societe: { id: this.societe.id },
                         entrepot: { id: entrepot.id },
                         pays: entrepot.pays ? { id: entrepot.pays.id } : null,
