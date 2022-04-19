@@ -615,7 +615,8 @@ export class OrdresIndicatorsService {
         return this.indicators.find((i) => i?.id === name);
     }
 
-    getFormatedDate(date) {
-        return this.datePipe.transform(date, "yyyy-MM-dd");
+    getFormatedDate(date, dateFormat?) {
+        dateFormat = dateFormat || "yyyy-MM-dd";
+        return this.datePipe.transform(date, dateFormat);
     }
 }
