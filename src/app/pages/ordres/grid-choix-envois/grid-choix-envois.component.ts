@@ -136,10 +136,6 @@ export class GridChoixEnvoisComponent implements OnInit {
       : null;
   }
 
-  onRowPrepared(e) {
-
-  }
-
   onRowClick({ rowIndex }) {
     this.dataGrid.instance.editRow(rowIndex);
   }
@@ -167,4 +163,3 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
 }
-
