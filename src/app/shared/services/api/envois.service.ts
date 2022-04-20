@@ -39,7 +39,7 @@ export class EnvoisService extends ApiService implements APIRead {
 
                         this.listenQuery<Response>(
                             query,
-                            { variables },
+                            { variables, fetchPolicy: "no-cache" },
                             (res) => {
                                 if (res.data && res.data.allEnvois)
                                     resolve(

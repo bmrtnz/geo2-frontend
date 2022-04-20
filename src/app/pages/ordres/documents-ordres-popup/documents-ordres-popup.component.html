@@ -1,4 +1,5 @@
 <dx-popup
+  *ngIf="ordre?.id"
   [showTitle]="true"
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
@@ -33,6 +34,10 @@
     ></dx-button>
   </div>
   <br />
-  <app-grid-choix-envois></app-grid-choix-envois>
+  <app-grid-choix-envois
+    *ngIf="visible"
+    [ordreID]="ordre.id"
+    [fluxID]="'ORDRE'"
+  ></app-grid-choix-envois>
   <br />
 </dx-popup>

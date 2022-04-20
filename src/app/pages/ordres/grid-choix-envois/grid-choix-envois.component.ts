@@ -1,19 +1,22 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from "@angular/core";
 import { AuthService, LocalizationService } from "app/shared/services";
+import { EnvoisService } from "app/shared/services/api/envois.service";
 import { FluxService } from "app/shared/services/api/flux.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
+import { ImprimantesService } from "app/shared/services/api/imprimantes.service";
 import { MoyenCommunicationService } from "app/shared/services/api/moyens-communication.service";
 import { SocietesService } from "app/shared/services/api/societes.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { confirm } from "devextreme/ui/dialog";
-import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { ImprimantesService } from "app/shared/services/api/imprimantes.service";
+import { map, takeWhile } from "rxjs/operators";
 
 @Component({
   selector: "app-grid-choix-envois",
@@ -22,6 +25,27 @@ import { ImprimantesService } from "app/shared/services/api/imprimantes.service"
 })
 
 export class GridChoixEnvoisComponent implements OnInit {
+
+  @Input() public ordreID: string;
+  @Input() public fluxID: string;
+  @Input() public fournisseurCode: string;
+  @Input() public transporteurLigneId: string;
+  @Input() public lieupassageaquaiLigneId: string;
+
+  readonly CHOIX_ENVOIS_FIELDS = [
+    "typeTiers",
+    "flux.id",
+    // "nom",
+    "moyenCommunication.id",
+    // "fluxAccess1",
+    "imprimante.id",
+    // "contact",
+    "commentairesAvancement",
+    // "dernierEnvoi",
+    // "modifLignes",
+    // "modifEntete",
+    // "lieuPassage",
+  ];
 
   dataSource: any;
   rowKeys: any[];
@@ -48,6 +72,8 @@ export class GridChoixEnvoisComponent implements OnInit {
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
+    private functionsService: FunctionsService,
+    private envoisService: EnvoisService,
   ) { }
 
   ngOnInit() {
@@ -80,52 +106,21 @@ export class GridChoixEnvoisComponent implements OnInit {
       // })));
     }
 
-
-    this.dataSource = [{
-      typeTiers: "Fournisseur",
-      flux: "FACTURE",
-      nom: "COFRA",
-      moyenCommunication: "WEB",
-      fluxAccess1: "www.geo.fr",
-      imprimante: "SCAMA",
-      contact: "Richard",
-      commentaire: "Un commentaire...",
-      dernierEnvoi: "12/04/22",
-      modifLignes: "12/04/22",
-      modifEntete: "12/04/22",
-      lieuPassage: "",
-    },
-    {
-      typeTiers: "Fournisseur",
-      flux: "FACTURE",
-      nom: "COFRA",
-      moyenCommunication: "MAI",
-      fluxAccess1: "Bernard.dupond@cofra3.fr",
-      imprimante: "SCAMA",
-      contact: "Bernard DUPONT",
-      commentaire: "Un autre commentaire...",
-      dernierEnvoi: "12/04/22",
-      modifLignes: "12/04/22",
-      modifEntete: "12/04/22",
-      lieuPassage: "",
-    },
-    {
-      typeTiers: "Propriétaire",
-      flux: "FACTURE",
-      nom: "3D",
-      moyenCommunication: "FTP",
-      fluxAccess1: "web_geo",
-      imprimante: "",
-      contact: "Hervé RITABLE",
-      commentaire: "Test",
-      dernierEnvoi: "12/04/22",
-      modifLignes: "12/04/22",
-      modifEntete: "12/04/22",
-      lieuPassage: "",
-    }
-    ];
-    this.dataGrid.dataSource = this.dataSource;
-
+    this.functionsService.geoPrepareEnvois(
+      this.ordreID,
+      this.fluxID,
+      true,
+      false,
+      this.authService.currentUser.nomUtilisateur,
+    )
+      .valueChanges
+      .pipe(
+        takeWhile(res => !res.loading),
+      )
+      .subscribe({
+        complete: () => this.dataGrid.dataSource = this.envoisService.getDataSource_v2(this.CHOIX_ENVOIS_FIELDS),
+        error: message => notify({ message }, "error", 7000),
+      });
 
   }
 

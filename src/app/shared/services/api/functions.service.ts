@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import ContactEnvois from "app/shared/models/contact-envois.model";
 import { ApiService } from "../api.service";
 
-export type FunctionResponse = { res: number, msg?: string, data?: Record<string, any> };
+export type FunctionResponse<T = Record<string, any>> = { res: number, msg?: string, data?: T };
 const body = ["res", "msg", "data"];
 
 @Injectable({
@@ -179,7 +180,7 @@ export class FunctionsService {
       annOrdre: boolean,
       user: string,
     ) => this.apollo
-      .watchQuery<{ geoPrepareEnvois: FunctionResponse }>({
+      .watchQuery<{ geoPrepareEnvois: FunctionResponse<{ contacts: any[] }> }>({
         query: gql(ApiService.buildGraph(
           "query",
           [

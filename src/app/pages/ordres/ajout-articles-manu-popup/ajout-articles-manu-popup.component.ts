@@ -172,7 +172,7 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
         concatMap(articleID => this.functionsService
           .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
           .valueChanges
-          .pipe(takeWhile(res => res.loading === true))
+          .pipe(takeWhile(res => res.loading))
         ),
       )
       .subscribe({
