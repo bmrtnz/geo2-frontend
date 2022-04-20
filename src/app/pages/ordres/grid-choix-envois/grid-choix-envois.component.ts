@@ -23,10 +23,6 @@ import { ImprimantesService } from "app/shared/services/api/imprimantes.service"
 
 export class GridChoixEnvoisComponent implements OnInit {
 
-  @Input() public fournisseurCode: string;
-  @Input() public transporteurLigneId: string;
-  @Input() public lieupassageaquaiLigneId: string;
-
   dataSource: any;
   rowKeys: any[];
   fluxSource: DataSource;

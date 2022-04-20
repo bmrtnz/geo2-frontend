@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
+import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 
 @Component({
@@ -20,6 +21,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @ViewChild("actionSheet", { static: false }) actionSheet: DxActionSheetComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DocumentsOrdresPopupComponent, { static: false }) docsPopup: DocumentsOrdresPopupComponent;
+  @ViewChild(AnnuleRemplacePopupComponent, { static: false }) remplacePopup: AnnuleRemplacePopupComponent;
 
   constructor() {
     this.actionsFlux = [
@@ -57,6 +59,10 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   sendAction(e) {
     // On récupère ici le code de l'action:
     this.flux = e;
-    this.docsPopup.visible = true;
+    if (this.flux === "ORDRE" && this.ordre.commentaireUsageInterne === "POPUP") { // Fake condition for testing purposes
+      this.remplacePopup.visible = true;
+    } else {
+      this.docsPopup.visible = true;
+    }
   }
 }

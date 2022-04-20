@@ -8,3 +8,9 @@
   margin-top: 7px;
   z-index: 1;
 }
+
+::ng-deep .grid-choix-envois {
+  .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
+    padding: 0 !important;
+  }
+}

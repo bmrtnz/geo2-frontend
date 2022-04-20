@@ -2763,7 +2763,7 @@
         "visibleIndex": 0,
         "dataField": "typeTiers",
         "dataType": "string",
-        "width": "150",
+        "width": "100",
         "allowEditing": false,
         "visible": true
       },
@@ -2771,6 +2771,7 @@
         "visibleIndex": 2,
         "dataField": "flux",
         "dataType": "string",
+        "width": "100",
         "allowEditing": false,
         "visible": true
       },
@@ -2778,6 +2779,7 @@
         "visibleIndex": 4,
         "dataField": "nom",
         "dataType": "string",
+        "width": "150",
         "allowEditing": false,
         "visible": true
       },
@@ -2786,30 +2788,35 @@
         "dataField": "moyenCommunication",
         "dataType": "string",
         "width": "100",
+        "editCellTemplate": "selectBoxEditTemplate",
         "visible": true
       },
       {
         "visibleIndex": 10,
         "dataField": "fluxAccess1",
         "dataType": "string",
+        "width": "200",
         "visible": true
       },
       {
         "visibleIndex": 12,
         "dataField": "imprimante",
         "dataType": "string",
+        "editCellTemplate": "selectBoxEditTemplate",
         "visible": true
       },
       {
         "visibleIndex": 14,
         "dataField": "contact",
         "dataType": "string",
+        "width": "150",
         "visible": true
       },
       {
         "visibleIndex": 16,
         "dataField": "commentaire",
         "dataType": "string",
+        "width": "300",
         "visible": true
       },
       {
@@ -2841,6 +2848,65 @@
         "dataField": "lieuPassage",
         "dataType": "string",
         "allowEditing": false,
+        "visible": true
+      }
+    ]
+  },
+  "annule-remplace": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "modifEntete",
+        "dataType": "string",
+        "allowEditing": false,
+        "width": "170",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "modifLignes",
+        "dataType": "string",
+        "allowEditing": false,
+        "width": "170",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "dernierEnvoi",
+        "dataType": "string",
+        "allowEditing": false,
+        "width": "170",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "typeTiers",
+        "dataType": "string",
+        "width": "auto",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "nom",
+        "dataType": "string",
+        "width": "200",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "raisonAnnuleRemplace",
+        "dataType": "string",
+        "width": "300",
+        "editCellTemplate": "customSelectBoxTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "nePasEnvoyer",
+        "dataType": "boolean",
+        "width": "150",
         "visible": true
       }
     ]

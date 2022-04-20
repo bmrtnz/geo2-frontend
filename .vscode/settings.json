@@ -8,14 +8,15 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.suggest.insertMode": "replace",
     "gitlens.codeLens.scopes": [
-        "document"
+      "document"
     ]
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
   "[scss]": {
-    "editor.defaultFormatter": "vscode.css-language-features"
+    "editor.defaultFormatter": "vscode.css-language-features",
+    "files.insertFinalNewline": true,
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": true

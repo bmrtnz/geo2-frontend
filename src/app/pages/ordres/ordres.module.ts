@@ -98,6 +98,8 @@ import { ContactsModule } from "../tiers/contacts/contacts.module";
 import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/actions-documents-ordres.component";
 import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
 import { GridChoixEnvoisComponent } from "./grid-choix-envois/grid-choix-envois.component";
+import { GridAnnuleRemplaceComponent } from "./grid-annule-remplace/grid-annule-remplace.component";
+import { AnnuleRemplacePopupComponent } from "./annule-remplace-popup/annule-remplace-popup.component";
 
 @NgModule({
   declarations: [
@@ -152,6 +154,8 @@ import { GridChoixEnvoisComponent } from "./grid-choix-envois/grid-choix-envois.
     ActionsDocumentsOrdresComponent,
     DocumentsOrdresPopupComponent,
     GridChoixEnvoisComponent,
+    GridAnnuleRemplaceComponent,
+    AnnuleRemplacePopupComponent,
   ],
   imports: [
     OrdresRoutingModule,

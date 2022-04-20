@@ -1,0 +1,15 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .grid-choix-envois {
+  max-width: none !important;
+}
+
+::ng-deep .copy-paste-firstrow-button {
+  position: absolute;
+  right: 147px;
+  margin-top: 7px;
+  font-size: 13px;
+  z-index: 1;
+}
