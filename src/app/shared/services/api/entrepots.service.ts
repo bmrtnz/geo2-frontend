@@ -6,6 +6,7 @@ import { LoadOptions } from "devextreme/data/load_options";
 import { Entrepot } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { takeWhile } from "rxjs/operators";
+import { AuthService } from "../auth.service";
 
 @Injectable({
     providedIn: "root",
@@ -13,7 +14,10 @@ import { takeWhile } from "rxjs/operators";
 export class EntrepotsService extends ApiService implements APIRead {
     fieldsFilter = /.*\.(?:id|code|raisonSocial|ville|valide|typeTiers)$/i;
 
-    constructor(apollo: Apollo) {
+    constructor(
+        apollo: Apollo,
+        private authService: AuthService
+    ) {
         super(apollo, Entrepot);
     }
 
@@ -88,5 +92,14 @@ export class EntrepotsService extends ApiService implements APIRead {
 
     save_v2(columns: Array<string>, variables: OperationVariables) {
         return this.watchSaveQuery_v2({ variables }, columns);
+    }
+
+    disableCreation(societeID, codeClient) {   // Some companies/clients can't create new ones
+        const disable = !this.authService.currentUser.adminClient
+            && (
+                (societeID === "IMP")
+                || ((societeID === "BWS") && ["BWSTOCK", "BWS GBP", "BWSTOCKGBPAL", "BWSTOCK GB"].includes(codeClient))
+            );
+        return disable;
     }
 }

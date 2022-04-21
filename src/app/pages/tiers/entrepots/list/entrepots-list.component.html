@@ -4,6 +4,7 @@
     class="upperButton"
     type="default"
     text="{{ 'btn-nouveau' | localize }}"
+    [visible]="!entrepotsService.disableCreation(currCompanyID, clientCode)"
     (onClick)="onCreate()"
   ></dx-button>
   <div style="clear: both"></div>
