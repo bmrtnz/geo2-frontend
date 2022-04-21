@@ -18,6 +18,7 @@
                 [displayExpr]="displayCodeBefore"
                 [searchEnabled]="true"
                 [searchExpr]="['id', 'raisonSocial']"
+                (onValueChanged)="filterFournisseurs($event)"
                 [showClearButton]="true"
               >
                 <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
