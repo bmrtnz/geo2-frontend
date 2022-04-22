@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { EventEmitter, Injectable, NgModule } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { GridColumn } from "basic";
+import { confirm } from "devextreme/ui/dialog";
 import {
     DxoColumnChooserComponent,
     DxoStateStoringComponent
@@ -450,16 +451,20 @@ export class GridConfiguratorService {
                         const defaultState = await this.fetchDefaultConfig(
                             grid,
                         );
-                        component.state(defaultState);
+                        const result = confirm("Êtes-vous sûr de vouloir réinitialiser l'affichage ?", "Configuration grille");
+                        result.then(res => {
+                            if (res) {
+                                component.state(defaultState);
 
-                        // manual state reloading
-                        component
-                            .option("stateStoring")
-                            .customLoad.call(component.option("stateStoring"));
-
-                        if (onConfigReload) onConfigReload(defaultState);
-                        if (onColumnsChange)
-                            onColumnsChange({ current: defaultState.columns });
+                                // manual state reloading
+                                component
+                                    .option("stateStoring")
+                                    .customLoad.call(component.option("stateStoring"));
+                                if (onConfigReload) onConfigReload(defaultState);
+                                if (onColumnsChange)
+                                    onColumnsChange({ current: defaultState.columns });
+                            }
+                        });
                     },
                 },
             },
