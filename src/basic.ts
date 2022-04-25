@@ -135,6 +135,16 @@ interface GridColumn {
      * Specifies the column's width in pixels or as a percentage. Ignored if it is less than minWidth.
      */
     width?: number | string;
+
+    /**
+     * Specifies a column's class.
+     */
+    cssClass?: string;
+
+    /**
+     * Allow column sorting
+     */
+    allowSorting?: boolean;
 }
 
 /**
@@ -233,40 +243,40 @@ type format =
     | string
     | ((value: number | Date) => string)
     | {
-          currency?: string;
-          formatter?: (value: number | Date) => string;
-          parser?: (value: string) => number | Date;
-          precision?: number;
-          type?:
-              | "billions"
-              | "currency"
-              | "day"
-              | "decimal"
-              | "exponential"
-              | "fixedPoint"
-              | "largeNumber"
-              | "longDate"
-              | "longTime"
-              | "millions"
-              | "millisecond"
-              | "month"
-              | "monthAndDay"
-              | "monthAndYear"
-              | "percent"
-              | "quarter"
-              | "quarterAndYear"
-              | "shortDate"
-              | "shortTime"
-              | "thousands"
-              | "trillions"
-              | "year"
-              | "dayOfWeek"
-              | "hour"
-              | "longDateLongTime"
-              | "minute"
-              | "second"
-              | "shortDateShortTime";
-      };
+        currency?: string;
+        formatter?: (value: number | Date) => string;
+        parser?: (value: string) => number | Date;
+        precision?: number;
+        type?:
+        | "billions"
+        | "currency"
+        | "day"
+        | "decimal"
+        | "exponential"
+        | "fixedPoint"
+        | "largeNumber"
+        | "longDate"
+        | "longTime"
+        | "millions"
+        | "millisecond"
+        | "month"
+        | "monthAndDay"
+        | "monthAndYear"
+        | "percent"
+        | "quarter"
+        | "quarterAndYear"
+        | "shortDate"
+        | "shortTime"
+        | "thousands"
+        | "trillions"
+        | "year"
+        | "dayOfWeek"
+        | "hour"
+        | "longDateLongTime"
+        | "minute"
+        | "second"
+        | "shortDateShortTime";
+    };
 
 export const ONE_SECOND = 1000;
 export const ONE_MINUTE = ONE_SECOND * 60;

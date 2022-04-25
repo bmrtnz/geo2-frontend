@@ -106,13 +106,10 @@
       [fixed]="column.fixed"
       [allowEditing]="column.allowEditing"
       [dataType]="column?.dataType"
+      [cssClass]="column?.cssClass"
       [editCellTemplate]="defineTemplate(column.dataField)"
-      [allowSearch]="
-        column?.allowSearch || ['string'].includes(column?.dataType)
-      "
-      [allowHeaderFiltering]="
-        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-      "
+      allowSearch="false"
+      [allowHeaderFiltering]="false"
       [showInColumnChooser]="column.showInColumnChooser"
       [showEditorAlways]="true"
     >
@@ -145,6 +142,14 @@
         [max]="9999"
         message="{{ 'valeurIncorrecte' | localize }}"
       ></dxi-validation-rule>
+    </dxi-column>
+
+    <dxi-column
+      *ngIf="allowMutations"
+      type="buttons"
+      [width]="30"
+      [showInColumnChooser]="false"
+    >
     </dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">

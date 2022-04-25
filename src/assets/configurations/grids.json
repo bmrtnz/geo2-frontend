@@ -1585,7 +1585,10 @@
         "dataField": "numero",
         "dataType": "string",
         "sortOrder": "asc",
+        "width": 50,
         "allowEditing": false,
+        "allowSorting": false,
+        "cssClass": "no-padding text-align-center",
         "showInColumnChooser": false,
         "fixed": true,
         "visible": true
@@ -1609,7 +1612,9 @@
         "dataField": "article.id",
         "dataType": "string",
         "allowEditing": false,
-        "width": "250",
+        "allowSorting": true,
+        "cssClass": "small-left-padding",
+        "width": 250,
         "visible": true
       },
       {
@@ -1617,14 +1622,18 @@
         "dataField": "article.description",
         "dataType": "string",
         "allowEditing": false,
-        "width": "250",
+        "allowSorting": true,
+        "cssClass": "small-left-padding",
+        "width": 250,
         "visible": false
       },
       {
         "visibleIndex": 6,
         "dataField": "ordre.client.id",
         "showInColumnChooser": false,
+        "allowSorting": false,
         "dataType": "string",
+        "width": 60,
         "allowEditing": false,
         "visible": true
       },
@@ -1633,6 +1642,8 @@
         "dataField": "article.matierePremiere.origine.id",
         "showInColumnChooser": false,
         "dataType": "string",
+        "width": 60,
+        "allowSorting": false,
         "allowEditing": false,
         "visible": true
       },
@@ -1640,6 +1651,8 @@
         "visibleIndex": 10,
         "dataField": "nombrePalettesCommandees",
         "dataType": "number",
+        "width": 35,
+        "cssClass": "two-lines-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1647,6 +1660,8 @@
         "visibleIndex": 12,
         "dataField": "nombrePalettesIntermediaires",
         "dataType": "number",
+        "width": 30,
+        "cssClass": "two-lines-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1654,6 +1669,8 @@
         "visibleIndex": 14,
         "dataField": "nombreColisPalette",
         "dataType": "number",
+        "width": 45,
+        "cssClass": "two-lines-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1661,6 +1678,8 @@
         "visibleIndex": 16,
         "dataField": "nombreColisCommandes",
         "dataType": "number",
+        "width": 45,
+        "cssClass": "two-lines-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1668,22 +1687,26 @@
         "visibleIndex": 18,
         "dataField": "proprietaireMarchandise",
         "dataType": "string",
-        "width": "200",
+        "width": 200,
         "allowEditing": true,
+        "allowSorting": true,
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "fournisseur",
         "dataType": "string",
-        "width": "200",
+        "width": 200,
         "allowEditing": true,
+        "allowSorting": true,
         "visible": true
       },
       {
         "visibleIndex": 22,
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
+        "width": 45,
+        "cssClass": "two-lines-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1691,7 +1714,7 @@
         "visibleIndex": 24,
         "dataField": "venteUnite",
         "dataType": "number",
-        "width": "130",
+        "width": 130,
         "allowEditing": true,
         "visible": true
       },
@@ -1706,13 +1729,15 @@
         "visibleIndex": 27,
         "dataField": "codePromo",
         "allowEditing": true,
-        "width": "150",
+        "width": 150,
         "visible": true
       },
       {
         "visibleIndex": 28,
         "dataField": "achatPrixUnitaire",
         "dataType": "number",
+        "width": 45,
+        "cssClass": "two-lines-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1720,7 +1745,7 @@
         "visibleIndex": 30,
         "dataField": "achatUnite",
         "dataType": "string",
-        "width": "150",
+        "width": 150,
         "allowEditing": true,
         "visible": true
       },
@@ -1755,13 +1780,15 @@
         "dataField": "fraisPrixUnitaire",
         "allowEditing": true,
         "dataType": "number",
+        "width": 45,
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 42,
         "dataField": "fraisUnite",
         "allowEditing": false,
-        "width": "150",
+        "width": 150,
         "dataType": "string",
         "visible": true
       },
@@ -1777,6 +1804,8 @@
         "dataField": "tauxRemiseSurFacture",
         "allowEditing": true,
         "dataType": "number",
+        "width": 45,
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
@@ -1784,6 +1813,8 @@
         "dataField": "tauxRemiseHorsFacture",
         "allowEditing": true,
         "dataType": "number",
+        "width": 45,
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
@@ -1797,7 +1828,7 @@
         "visibleIndex": 52,
         "dataField": "gtinColisKit",
         "dataType": "string",
-        "width": "150",
+        "width": 150,
         "allowEditing": true,
         "visible": true
       },

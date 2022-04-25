@@ -455,7 +455,6 @@ export class GridConfiguratorService {
                         result.then(res => {
                             if (res) {
                                 component.state(defaultState);
-
                                 // manual state reloading
                                 component
                                     .option("stateStoring")
