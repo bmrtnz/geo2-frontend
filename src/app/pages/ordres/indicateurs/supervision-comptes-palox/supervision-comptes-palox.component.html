@@ -60,7 +60,10 @@
           </div>
         </div>
         <!-- Client -->
-        <div class="dx-field">
+        <div
+          class="dx-field"
+          *ngIf="!switchEntity.value"
+        >
           <div class="dx-field-label noEllipsis">
             {{ "tiers-client" | localize }}
           </div>
@@ -68,6 +71,27 @@
             <dx-select-box
               formControlName="entrepot"
               [dataSource]="entrepot"
+              [displayExpr]="displayCodeBefore"
+              [showClearButton]="true"
+              [searchEnabled]="true"
+              [searchExpr]="['code', 'raisonSocial']"
+            >
+              <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+            </dx-select-box>
+          </div>
+        </div>
+        <!-- Fournisseur -->
+        <div
+          class="dx-field"
+          *ngIf="switchEntity.value"
+        >
+          <div class="dx-field-label noEllipsis">
+            {{ "tiers-fournisseur" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              formControlName="fournisseur"
+              [dataSource]="fournisseur"
               [displayExpr]="displayCodeBefore"
               [showClearButton]="true"
               [searchEnabled]="true"

@@ -44,6 +44,7 @@ enum GridModel {
 
 enum InputField {
     entrepot = "entrepot",
+    fournisseur = "fournisseur",
     commercial = "commercial",
     dateMaxMouvements = "dateMaxMouvements",
 }
@@ -75,6 +76,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     public fournisseur: DataSource;
     public formGroup = new FormGroup({
         entrepot: new FormControl(),
+        fournisseur: new FormControl(),
         commercial: new FormControl(),
         dateMaxMouvements: new FormControl(
             this.dateManagementService.startOfDay(),
@@ -112,6 +114,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             "and",
             ["client.societe.id", "=", this.currentCompanyService.getCompany().id]
         ]);
+        this.fournisseur = this.fournisseursService.getDataSource_v2([
+            "id",
+            "code",
+            "raisonSocial",
+        ]);
+        this.fournisseur.filter(["valide", "=", true]);
         this.commercial = this.personnesService.getDataSource_v2([
             "id",
             "nomUtilisateur",
