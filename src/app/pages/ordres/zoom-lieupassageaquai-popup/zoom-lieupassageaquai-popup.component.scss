@@ -1,13 +1,20 @@
 ::ng-deep .zoom-lieupassageaquai-popup {
   background-color: #f2f2f2 !important;
+
   .dx-popup-title {
     background-color: #fff;
     overflow: hidden;
   }
+
   .dx-popup-content {
     padding: 0 5px 0 0;
   }
+
   h2 {
     font-size: 29px;
+  }
+
+  dx-data-grid {
+    max-width: none !important;
   }
 }
