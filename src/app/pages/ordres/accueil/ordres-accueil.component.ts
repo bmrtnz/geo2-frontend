@@ -1,17 +1,15 @@
-import { DatePipe } from "@angular/common";
 import {
     Component,
     EventEmitter,
     OnDestroy,
     OnInit,
-    ViewChild,
+    ViewChild
 } from "@angular/core";
 import { AuthService } from "app/shared/services";
-import { UtilisateursService } from "app/shared/services/api/utilisateurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
     Indicator,
-    OrdresIndicatorsService,
+    OrdresIndicatorsService
 } from "app/shared/services/ordres-indicators.service";
 import { ONE_DAY } from "basic";
 import { DxTagBoxComponent } from "devextreme-angular";
@@ -22,7 +20,7 @@ import {
     mergeMap,
     startWith,
     switchMap,
-    tap,
+    tap
 } from "rxjs/operators";
 import { TabContext } from "../root/root.component";
 
@@ -44,11 +42,9 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     constructor(
         public ordresIndicatorsService: OrdresIndicatorsService,
         public authService: AuthService,
-        public utilisateursService: UtilisateursService,
         public currentCompanyService: CurrentCompanyService,
-        private datePipe: DatePipe,
         private tabContext: TabContext,
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.configureIndicator();
@@ -67,7 +63,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
                     (indicator) =>
                         new Indicator({
                             ...indicator,
-                            loading: indicator.withCount,
+                            loading: !!indicator?.withCount,
                         }),
                 ),
                 tap((indicator) => this.indicators.push(indicator)),
@@ -151,6 +147,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     }
 
     tileNumber(e) {
+        console.log(e);
         this.authService
             .persist({
                 configTuilesOrdres: {
