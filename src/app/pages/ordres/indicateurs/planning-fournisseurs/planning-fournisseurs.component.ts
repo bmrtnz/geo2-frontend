@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService, FournisseursService, ArticlesService } from "app/shared/services";
-import { Operation, OrdresService } from "app/shared/services/api/ordres.service";
-import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { GridColumn, ONE_DAY } from "basic";
@@ -82,13 +80,13 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
         private ordresIndicatorsService: OrdresIndicatorsService,
         public currentCompanyService: CurrentCompanyService,
         private tabContext: TabContext,
-        private formUtils: FormUtilsService,
     ) {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.PlanningFournisseurs);
         this.columns = from(this.gridConfig).pipe(map(config => config.columns));
         this.secteurs = secteursService.getDataSource();
-        this.fournisseurs = fournisseursService.getDataSource_v2(["id", "code", "raisonSocial"]);
+        this.filterFournisseurs(); // Initialize fournisseurs
         this.bureauxAchat = bureauxAchatService.getDataSource_v2(["id", "raisonSocial"]);
+        this.bureauxAchat.filter(["valide", "=", true]);
         this.validRequiredEntity = { client: true, entrepot: true, fournisseur: true };
 
         this.secteurs.filter([
@@ -129,6 +127,13 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
                 : [],
         ]);
         this.datagrid.dataSource = this.ordresLignesDataSource;
+    }
+
+    filterFournisseurs(bureauAchat?) {
+        bureauAchat = bureauAchat?.value ? bureauAchat.value : null;
+        this.fournisseurs = this.fournisseursService.getDataSource_v2(["id", "code", "raisonSocial"]);
+        this.fournisseurs.filter(["valide", "=", true]);
+        if (bureauAchat) this.fournisseurs.filter(["bureauAchat.id", "=", bureauAchat.id]);
     }
 
     validOrAll(e) {

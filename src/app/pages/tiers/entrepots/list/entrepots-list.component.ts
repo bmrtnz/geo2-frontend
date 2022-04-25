@@ -16,6 +16,7 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { Entrepot } from "app/shared/models";
 import { map } from "rxjs/operators";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
 @Component({
     selector: "app-entrepots-list",
@@ -26,6 +27,8 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     readonly gridID = Grid.Entrepot;
     clientID: string;
     clientName: string;
+    clientCode: string;
+    currCompanyID: string;
     public columns: Observable<GridColumn[]>;
     contentReadyEvent = new EventEmitter<any>();
     @ViewChild(DxDataGridComponent, { static: true })
@@ -42,6 +45,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
         public clientsService: ClientsService,
         public gridService: GridsConfigsService,
         public localizeService: LocalizationService,
+        public currentCompanyService: CurrentCompanyService,
         private router: Router,
         private route: ActivatedRoute,
         private gridConfiguratorService: GridConfiguratorService,
@@ -56,8 +60,10 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
         if (this.clientID) {
             this.clientsService.getOne(this.clientID).subscribe((res) => {
                 this.clientName = res.data.client.raisonSocial;
+                this.clientCode = res.data.client.code;
             });
         }
+        this.currCompanyID = this.currentCompanyService.getCompany().id;
         this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
     }
 
