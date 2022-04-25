@@ -25,22 +25,22 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
   constructor() {
     this.actionsFlux = [
-      { id: "ORDRE", text: "Confirmation cde", visible: true },
-      { id: "DETAIL", text: "Détail expédition", visible: true },
-      { id: "MINI", text: "Confirmation px achat", visible: true },
-      { id: "FICPAL", text: "Editer fiches palettes", visible: true },
-      { id: "? (Générer Traçabilité)", text: "Générer une traçabilité", visible: true },
-      { id: "? (Traçabilité)", text: "Traçabilité", visible: true },
-      { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR },
-      { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: true },
-      { id: "BONLIV", text: "Bon de livraison", visible: true },
-      { id: "PROFOR", text: "Pro forma", visible: true },
-      { id: "customtemplate", text: "Custom template", visible: true },
-      { id: "? (Packing list)", text: "Packing list", visible: true },
-      { id: "CUSINV", text: "Relevé de factures", visible: true },
-      { id: "DECDOU", text: "Facture douanière", visible: true },
-      { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true },
-      { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true }
+      { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
+      { id: "DETAIL", text: "Détail expédition", visible: true, disabled: true },
+      { id: "MINI", text: "Confirmation px achat", visible: true, disabled: true },
+      { id: "FICPAL", text: "Editer fiches palettes", visible: true, disabled: true },
+      { id: "? (Générer Traçabilité)", text: "Générer une traçabilité", visible: true, disabled: true },
+      { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true },
+      { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR, disabled: true },
+      { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: true, disabled: true },
+      { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: true },
+      { id: "PROFOR", text: "Pro forma", visible: true, disabled: true },
+      { id: "customtemplate", text: "Custom template", visible: true, disabled: true },
+      { id: "? (Packing list)", text: "Packing list", visible: true, disabled: true },
+      { id: "CUSINV", text: "Relevé de factures", visible: true, disabled: true },
+      { id: "DECDOU", text: "Facture douanière", visible: true, disabled: true },
+      { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true, disabled: true },
+      { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true, disabled: true }
     ];
     this.plusActionsFlux = this.actionsFlux.slice(this.visibleActionsNumber - this.actionsFlux.length);
   }

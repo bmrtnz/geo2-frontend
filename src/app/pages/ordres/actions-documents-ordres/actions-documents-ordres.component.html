@@ -5,6 +5,7 @@
       type="default"
       text="{{ action.text }}"
       [visible]="action.visible"
+      [disabled]="action.disabled"
       (onClick)="sendAction(action.id)"
     ></dx-button>
   </div>
