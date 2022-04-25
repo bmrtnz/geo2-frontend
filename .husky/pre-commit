@@ -1,8 +1,21 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# exit on merging
+if [[ -n $(git rev-parse -q --verify MERGE_HEAD) ]]; then
+    exit 0
+fi
+
+STASH_ID=temp-stash-for-pre-commit
+
+# Temp commit to allow stashing only unstaged
+git commit --quiet --no-verify -m "temp for stash-working"
+
 # Stash unstaged changes
-git stash -q --keep-index
+git stash push -q -m "$STASH_ID"
+
+# Reset last commit
+git reset --quiet --soft HEAD~1
 
 # Lint/check staged changes
 npm run lint
@@ -11,4 +24,5 @@ npm run lint
 git add -u
 
 # Re-apply original unstaged changes
-git stash pop -q
+git stash apply -q stash^{/$STASH_ID} || true
+git stash drop -q stash^{/$STASH_ID} || true

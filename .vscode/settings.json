@@ -16,7 +16,7 @@
   },
   "[scss]": {
     "editor.defaultFormatter": "vscode.css-language-features",
-    "files.insertFinalNewline": true,
+    "files.insertFinalNewline": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": true

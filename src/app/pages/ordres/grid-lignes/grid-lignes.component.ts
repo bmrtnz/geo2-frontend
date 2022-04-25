@@ -211,10 +211,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
     });
 
     this.totalItems = summaryInputs
-      .map(({ selector: column, summaryType }, index) => ({
+      .map(({ selector: column, summaryType }) => ({
         column,
         summaryType,
-        displayFormat: !index ? this.localizeService.localize("totaux") + " : {0}" : "{0}",
+        displayFormat: "{0}",
         valueFormat: columns
           ?.find(({ dataField }) => dataField === column)
           ?.format,

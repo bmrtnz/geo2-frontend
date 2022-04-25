@@ -179,6 +179,8 @@ export abstract class ApiService implements OnDestroy {
           return { [key]: null };
         if (typeof value?.id !== "undefined" && value?.id === null)
           return { [key]: null };
+        if (Array.isArray(value))
+          return { [key]: value };
         if (typeof value === "object" && value !== null) {
           if (typeof value.length !== "undefined")
             return { [key]: value.map(v => this.mapForSave(v)) };
