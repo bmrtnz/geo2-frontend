@@ -40,7 +40,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "CUSINV", text: "Relevé de factures", visible: true, disabled: true },
       { id: "DECDOU", text: "Facture douanière", visible: true, disabled: true },
       { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true, disabled: true },
-      { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true, disabled: true }
+      { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true, disabled: true },
     ];
     this.plusActionsFlux = this.actionsFlux.slice(this.visibleActionsNumber - this.actionsFlux.length);
   }

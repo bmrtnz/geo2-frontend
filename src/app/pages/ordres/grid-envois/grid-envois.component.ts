@@ -61,7 +61,7 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
         );
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     async enableFilters() {
         if (this?.ordre?.id) {
@@ -71,7 +71,11 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
             this.dataSource = this.envoisService.getDataSource_v2(
                 await fields.toPromise(),
             );
-            this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
+            this.dataSource.filter([
+                ["ordre.id", "=", this.ordre.id],
+                "and",
+                ["traite", "<>", "A"],
+            ]);
             this.dataGrid.dataSource = this.dataSource;
         }
     }
@@ -91,9 +95,8 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
         }
 
         this.currentDocument = {
-            title: `${envoi.flux.description.ucFirst()} ${
-                envoi.typeTiers.description
-            }`,
+            title: `${envoi.flux.description.ucFirst()} ${envoi.typeTiers.description
+                }`,
             document: envoi.document,
         };
         this.documentVisible = true;

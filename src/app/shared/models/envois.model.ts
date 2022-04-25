@@ -22,6 +22,7 @@ export class Envois extends Model {
     @Field({ model: import("./moyen-communication.model") })
     public moyenCommunication: MoyenCommunication;
     @Field() public nomFichier: string;
+    @Field() public nomContact: string;
     @Field() public nombreTentatives: number;
     @Field() public numeroAcces1: string;
     @Field() public numeroOrdre: string;

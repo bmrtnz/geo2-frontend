@@ -33,15 +33,15 @@ export class GridChoixEnvoisComponent implements OnInit {
   @Input() public lieupassageaquaiLigneId: string;
 
   readonly CHOIX_ENVOIS_FIELDS = [
-    "typeTiers",
-    "flux.id",
-    // "nom",
+    "id",
+    "typeTiers.description",
+    "flux.description",
     "moyenCommunication.id",
-    // "fluxAccess1",
+    "numeroAcces1",
     "imprimante.id",
-    // "contact",
+    "nomContact",
     "commentairesAvancement",
-    // "dernierEnvoi",
+    "dateEnvoi",
     // "modifLignes",
     // "modifEntete",
     // "lieuPassage",
@@ -115,10 +115,20 @@ export class GridChoixEnvoisComponent implements OnInit {
     )
       .valueChanges
       .pipe(
-        takeWhile(res => !res.loading),
+        takeWhile(res => res.loading),
       )
       .subscribe({
-        complete: () => this.dataGrid.dataSource = this.envoisService.getDataSource_v2(this.CHOIX_ENVOIS_FIELDS),
+        complete: () => {
+          console.log("complete");
+          const datasource = this.envoisService.getDataSource_v2(this.CHOIX_ENVOIS_FIELDS);
+          datasource.filter([
+            ["ordre.id", "=", this.ordreID],
+          ]);
+          this.dataGrid.dataSource = datasource;
+        },
+        next: (res) => {
+          console.log(res);
+        },
         error: message => notify({ message }, "error", 7000),
       });
 

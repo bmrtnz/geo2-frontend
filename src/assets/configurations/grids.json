@@ -2792,7 +2792,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "typeTiers",
+        "dataField": "typeTiers.description",
         "dataType": "string",
         "width": "100",
         "allowEditing": false,
@@ -2800,7 +2800,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "flux",
+        "dataField": "flux.description",
         "dataType": "string",
         "width": "100",
         "allowEditing": false,
@@ -2808,7 +2808,7 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "nom",
+        "dataField": "nomContact",
         "dataType": "string",
         "width": "150",
         "allowEditing": false,
@@ -2824,7 +2824,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "fluxAccess1",
+        "dataField": "numeroAcces1",
         "dataType": "string",
         "width": "200",
         "visible": true
@@ -2837,48 +2837,18 @@
         "visible": true
       },
       {
-        "visibleIndex": 14,
-        "dataField": "contact",
-        "dataType": "string",
-        "width": "150",
-        "visible": true
-      },
-      {
         "visibleIndex": 16,
-        "dataField": "commentaire",
+        "dataField": "commentairesAvancement",
         "dataType": "string",
         "width": "300",
         "visible": true
       },
       {
         "visibleIndex": 18,
-        "dataField": "dernierEnvoi",
+        "dataField": "dateEnvoi",
         "dataType": "string",
         "allowEditing": false,
         "width": "100",
-        "visible": true
-      },
-      {
-        "visibleIndex": 20,
-        "dataField": "modifLignes",
-        "dataType": "string",
-        "allowEditing": false,
-        "width": "100",
-        "visible": true
-      },
-      {
-        "visibleIndex": 22,
-        "dataField": "modifEntete",
-        "dataType": "string",
-        "allowEditing": false,
-        "width": "100",
-        "visible": true
-      },
-      {
-        "visibleIndex": 24,
-        "dataField": "lieuPassage",
-        "dataType": "string",
-        "allowEditing": false,
         "visible": true
       }
     ]
@@ -2911,7 +2881,7 @@
       },
       {
         "visibleIndex": 6,
-        "dataField": "typeTiers",
+        "dataField": "typeTiers.description",
         "dataType": "string",
         "width": "auto",
         "allowEditing": false,
