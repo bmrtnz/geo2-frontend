@@ -1105,6 +1105,7 @@
         "visibleIndex": 5,
         "dataField": "fluxAccess1",
         "dataType": "string",
+        "width": 300,
         "visible": true
       },
       {
