@@ -208,7 +208,7 @@ export class DateManagementService {
                     "-" +
                     (quarterStart + 2) +
                     "-" +
-                    this.daysInMonth(year, quarterStart + 3);
+                    this.daysInMonth(year, quarterStart + 2);
                 break;
             case "Année civile en cours":
                 deb = year + "-01-01";
