@@ -29,6 +29,7 @@
 .noEllipsis {
   text-overflow: clip;
 }
+
 .lowOpacity {
   opacity: 0.5;
 }
@@ -53,6 +54,7 @@
   -ms-flex-align: center;
   align-items: center;
 }
+
 .dx-toast-icon {
   display: none;
 }
@@ -102,13 +104,16 @@ body {
 
   .dx-button:not(.subButton):not(.small-article-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
     margin-bottom: 10px;
+
     .dx-button-content {
       padding: 10px 3px;
     }
+
     .dx-icon {
       padding: 0;
       margin: 0;
     }
+
     .dx-button-text {
       display: block;
       margin-top: 5px;
@@ -158,10 +163,12 @@ body {
     margin-bottom: 0 !important;
   }
 }
+
 // Reducing space between checkboxes
 .dx-box .dx-field-value:not(.dx-widget) > .dx-checkbox {
   margin: 10px 0 !important;
 }
+
 // Centering Oui/Non text in datagrid filter row
 .dx-datagrid-filter-row .dx-texteditor-input[aria-haspopup="listbox"] {
   position: relative;
@@ -199,9 +206,11 @@ body {
 .dx-datagrid-column-chooser {
   .dx-treeview-node-container {
     margin-top: 5px;
+
     .dx-checkbox {
       top: 7px;
     }
+
     .dx-item {
       padding: 5px 8px 4px 40px;
       min-height: 31px;
@@ -230,19 +239,23 @@ body {
   td {
     background-color: #666 !important;
     color: #fff !important;
+
     .dx-sort-indicator {
       font-weight: bold;
       color: #fff !important;
     }
+
     &:hover {
       div {
         color: #fff !important;
       }
     }
   }
+
   .dx-column-indicators span {
     color: #fff !important;
   }
+
   // Better highlihting when column is filtered
   .dx-header-filter:not(.dx-header-filter-empty) {
     color: white !important;
@@ -250,33 +263,41 @@ body {
     border-radius: 100%;
   }
 }
+
 // Filter panel adjustments
 .dx-datagrid-filter-panel {
   padding: 0 18px;
+
   .dx-checkbox-icon {
     top: 16px;
   }
+
   .dx-datagrid-filter-panel-text {
     margin: auto;
     pointer-events: none;
     display: none;
   }
+
   .dx-icon-filter {
     display: none;
   }
+
   .dx-datagrid-filter-panel-checkbox ~ .dx-datagrid-filter-panel-text {
     display: block;
   }
+
+  .dx-datagrid-filter-panel-clear-filter {
+    padding: 15px 0;
+  }
 }
-.dx-datagrid-filter-panel-clear-filter {
-  padding: 15px 0;
-}
+
 // Reduce vertical spacing in popup list items
 .dx-dropdownlist-popup-wrapper
   .dx-list:not(.dx-list-select-decorator-enabled)
   .dx-list-item-content {
   padding: 6px 15px !important;
 }
+
 // Special case: title element to overcome datagrid edit cell no title
 .SB-edit-title-element {
   position: absolute;
@@ -284,9 +305,11 @@ body {
   width: 100%;
   height: 100%;
 }
+
 .dx-editor-cell.dx-focused .SB-edit-title-element {
   display: none;
 }
+
 // Better lisibility
 .dx-icon-edit-button-addrow {
   background: #8fc459;
@@ -298,8 +321,37 @@ body {
   .dx-button {
     height: 34px;
     font-size: 13px;
+
     .dx-button-content {
       padding: 6px 13px;
     }
   }
+}
+
+// Datagrid Header text on two lines
+.two-lines-header {
+  text-align: center !important;
+  text-overflow: initial;
+  line-height: 12px !important;
+  padding: 0 !important;
+
+  .dx-datagrid-text-content,
+  td,
+  input {
+    white-space: normal !important;
+    text-align: center !important;
+    padding: 0 !important;
+  }
+}
+
+.small-left-padding {
+  padding-left: 10px !important;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.text-align-center {
+  text-align: center !important;
 }

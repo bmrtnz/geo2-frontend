@@ -140,6 +140,16 @@ interface GridColumn {
      * Specifies the column edit cell template when required
      */
     editCellTemplate?: string;
+
+    /**
+     * Specifies a column's class.
+     */
+    cssClass?: string;
+
+    /**
+     * Allow column sorting
+     */
+    allowSorting?: boolean;
 }
 
 /**
