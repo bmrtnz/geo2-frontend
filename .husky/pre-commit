@@ -2,7 +2,7 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # exit on merging
-if [[ -n $(git rev-parse -q --verify MERGE_HEAD) ]]; then
+if [ -n $(git rev-parse -q --verify MERGE_HEAD) ]; then
     exit 0
 fi
 
