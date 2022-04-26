@@ -71,12 +71,14 @@ export class SupervisionPaloxsService extends ApiService {
         $dateMaxMouvements: LocalDateTime!,
         $codeSociete: String!,
         $codeEntrepot: String,
+        $codeFournisseur: String,
         $codeCommercial: String
       ) {
         ${operationName}(
           dateMaxMouvements: $dateMaxMouvements
           codeSociete: $codeSociete
           codeEntrepot: $codeEntrepot
+          codeFournisseur: $codeFournisseur,
           codeCommercial: $codeCommercial
         ) {
           ${await this.model.getGQLObservable(columns).toPromise()}

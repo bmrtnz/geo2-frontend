@@ -3,6 +3,7 @@
 .dx-fieldset {
   display: flex;
 }
+
 .dx-field {
   margin-right: 20px;
 }
@@ -12,32 +13,44 @@
   pointer-events: none;
 }
 
+::ng-deep .bold-text {
+  font-weight: bold !important;
+}
+
 ::ng-deep .paloxAccountsFilterArea {
   width: 1024px;
   background: #eee;
+
   .dx-field:not(.palox-switch) {
     margin-bottom: 0;
   }
+
   .palox-switch {
     .dx-field-value {
       width: 36px !important;
       margin-right: 10px;
+
       .dx-switch {
         margin: 6px 0;
+
         .dx-switch-handle:before {
           background-color: #00759c !important;
         }
+
         .dx-switch-container:before {
           background-color: rgba(0, 117, 156, 0.5) !important;
         }
       }
     }
+
     .dx-field-label {
       width: 56% !important;
+
       &.dx-field-label-left {
         width: 34% !important;
         text-align: right !important;
       }
+
       &.dx-field-label-right {
         text-align: left !important;
       }
