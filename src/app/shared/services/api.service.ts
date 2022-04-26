@@ -994,6 +994,26 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
+   * It builds a graphql mutation that will save a collection of GeoModel
+   * @param body - The body of the mutation.
+   * @returns The GraphQL mutation.
+   */
+  protected buildSaveAllGraph(body: Array<string>) {
+
+    return ApiService.buildGraph(
+      "mutation",
+      [
+        {
+          name: `saveAll${this.model.name}`,
+          body,
+          params: [{ name: `all${this.model.name}`, value: `all${this.model.name}`, isVariable: true }],
+        },
+      ],
+      [{ name: `all${this.model.name}`, type: `[Geo${this.model.name}Input]`, isOptionnal: false }],
+    );
+  }
+
+  /**
    * It builds a query that returns all distinct values of a given field
    * @param body - The body of the query.
    * @returns The query is being returned as a string.
