@@ -5,15 +5,14 @@ import {
     NgModule,
     OnChanges,
     OnInit,
-    Output,
-    SimpleChanges,
+    Output
 } from "@angular/core";
-import { SharedModule } from "../../shared.module";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { DxPopupModule } from "devextreme-angular";
-import { DomSanitizer, SafeUrl, SafeValue } from "@angular/platform-browser";
 import { environment } from "environments/environment";
-import { ScreenService } from "../../services";
 import Document from "../../models/document.model";
+import { ScreenService } from "../../services";
+import { SharedModule } from "../../shared.module";
 
 export interface ViewDocument {
     title: string;
@@ -38,7 +37,7 @@ export class ViewDocumentPopupComponent implements OnInit, OnChanges {
     constructor(
         private screen: ScreenService,
         private sanitizer: DomSanitizer,
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.fullScreen = !this.screen.sizes["screen-large"];
@@ -76,4 +75,4 @@ export class ViewDocumentPopupComponent implements OnInit, OnChanges {
     imports: [SharedModule, DxPopupModule],
     exports: [ViewDocumentPopupComponent],
 })
-export class ViewDocumentPopupModule {}
+export class ViewDocumentPopupModule { }

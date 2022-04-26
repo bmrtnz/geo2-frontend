@@ -3,6 +3,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
+import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -13,6 +14,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
   @Input() public ordre: Ordre;
   @Output() public flux: string;
+  @Input() public gridEnvois: GridEnvoisComponent;
 
   public actionsFlux: any[];
   public plusActionsFlux: any[];

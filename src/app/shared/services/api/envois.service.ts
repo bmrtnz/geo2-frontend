@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
+import Envois from "app/shared/models/envois.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import Envois from "app/shared/models/envois.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
@@ -102,7 +102,7 @@ export class EnvoisService extends ApiService implements APIRead {
                             this.mapLoadOptionsToVariables(options);
                         this.listenQuery<Response>(
                             query,
-                            { variables },
+                            { variables, fetchPolicy: "no-cache", },
                             (res) => {
                                 if (res.data && res.data.allEnvois) {
                                     resolve(
@@ -115,7 +115,18 @@ export class EnvoisService extends ApiService implements APIRead {
                         );
                     }),
                 byKey: this.byKey(columns),
+                update: (key, values) => {
+                    const variables = { ordreLigne: { id: key, ...values } };
+                    return this.watchSaveQuery({ variables }).toPromise();
+                },
             }),
+        });
+    }
+
+    saveAll(allEnvois: Partial<Envois>[], columns: Set<string>) {
+        return this.apollo.mutate({
+            mutation: gql(this.buildSaveAllGraph([...columns])),
+            variables: { allEnvois },
         });
     }
 }

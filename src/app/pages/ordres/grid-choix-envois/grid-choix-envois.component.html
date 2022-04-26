@@ -1,12 +1,4 @@
 <div class="content-block">
-  <dx-button
-    class="delete-document-button"
-    type="danger"
-    text="{{ 'btn-deleterows' | localize }}"
-    [visible]="!!rowKeys?.length"
-    (onClick)="deleteSelectedRows()"
-  ></dx-button>
-
   <dx-data-grid
     class="grid-choix-envois"
     [remoteOperations]="true"
@@ -20,8 +12,7 @@
       useNative: true
     }"
     (onRowClick)="onRowClick($event)"
-    (onSelectionChanged)="onSelectionChanged()"
-    (onContentReady)="contentReadyEvent.emit($event)"
+    (onContentReady)="onContentReady($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Liste des documents',
@@ -35,7 +26,6 @@
     <dxo-editing
       [selectTextOnEditStart]="true"
       [allowUpdating]="true"
-      [allowDeleting]="true"
       [mode]="'cell'"
     ></dxo-editing>
     <dxo-pager
@@ -61,7 +51,10 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
-    <dxo-selection mode="multiple"></dxo-selection>
+    <dxo-selection
+      mode="multiple"
+      [allowSelectAll]="true"
+    ></dxo-selection>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
@@ -93,13 +86,6 @@
         [max]="70"
         [trim]="false"
       ></dxi-validation-rule>
-    </dxi-column>
-
-    <dxi-column
-      type="buttons"
-      [width]="30"
-      [showInColumnChooser]="false"
-    >
     </dxi-column>
 
     <div *dxTemplate="let cell of 'selectBoxEditTemplate'">

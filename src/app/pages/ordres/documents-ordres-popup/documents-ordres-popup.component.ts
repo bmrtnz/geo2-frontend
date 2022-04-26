@@ -3,6 +3,8 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
 import { confirm } from "devextreme/ui/dialog";
+import { GridChoixEnvoisComponent } from "../grid-choix-envois/grid-choix-envois.component";
+import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 
 @Component({
   selector: "app-documents-ordres-popup",
@@ -13,11 +15,13 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
 
   @Input() public ordre: Ordre;
   @Input() public flux: string;
+  @Input() public gridEnvois: GridEnvoisComponent;
 
   visible: boolean;
   titleStart: string;
   titleEnd: string;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+  @ViewChild(GridChoixEnvoisComponent) gridChoixEnvoisComponent: GridChoixEnvoisComponent;
 
   constructor(
     public localizeService: LocalizationService
@@ -55,6 +59,10 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   }
 
   goDocuments() {
+    this.gridChoixEnvoisComponent.done()
+      .subscribe({
+        complete: () => (this.popup.instance.hide(), this.gridEnvois.reload()),
+      });
   }
 
 }
