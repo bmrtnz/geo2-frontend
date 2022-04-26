@@ -99,6 +99,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
     isReadOnlyMode = true;
     createMode = false;
     ifcoChecked = false;
+    idTvaRequired: boolean;
     preSaisie: string;
     client: Client;
     paysClientIdentique: boolean;
@@ -273,6 +274,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
             this.onTvaCeeChange({ value: this.formGroup.get("tvaCee").value });
         }
         this.formGroup.get("tvaCee").markAsDirty();
+    }
+
+    onRegimeTvaChange(e) {
+        this.idTvaRequired = ["C", "O", "N"].includes(e.value?.id);
     }
 
     onTvaCeeChange(e) {
