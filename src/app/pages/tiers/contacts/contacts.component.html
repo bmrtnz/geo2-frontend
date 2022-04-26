@@ -80,7 +80,7 @@
       "
       trueText="Oui"
       falseText="Non"
-      [width]="column.dataField === 'fluxAccess1' ? '300' : 'auto'"
+      [width]="column.dataField === 'fluxAccess1' ? '300' : column.width"
       [dataType]="column?.dataType"
       [allowSearch]="
         column?.allowSearch || ['string'].includes(column?.dataType)
