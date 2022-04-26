@@ -16,7 +16,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map, takeWhile } from "rxjs/operators";
+import { concatMapTo, map, take } from "rxjs/operators";
 
 @Component({
   selector: "app-grid-choix-envois",
@@ -61,7 +61,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     // "lieuPassage",
   ];
 
-  dataSource: any;
+  gridData: Envois[];
   rowKeys: any[];
   fluxSource: DataSource;
   societeSource: DataSource;
@@ -98,28 +98,6 @@ export class GridChoixEnvoisComponent implements OnInit {
       this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     }
 
-    this.functionsService.geoPrepareEnvois(
-      this.ordreID,
-      this.fluxID,
-      true,
-      false,
-      this.authService.currentUser.nomUtilisateur,
-    )
-      .valueChanges
-      .pipe(
-        takeWhile(res => res.loading),
-      )
-      .subscribe({
-        complete: () => {
-          const datasource = this.envoisService.getDataSource_v2(this.CHOIX_ENVOIS_FIELDS);
-          datasource.filter([
-            ["ordre.id", "=", this.ordreID],
-          ]);
-          this.dataGrid.dataSource = datasource;
-        },
-        error: message => notify({ message }, "error", 7000),
-      });
-
   }
 
   onContentReady(event) {
@@ -146,6 +124,29 @@ export class GridChoixEnvoisComponent implements OnInit {
   onValueChanged(event, cell) {
     if (cell.setValue)
       cell.setValue(event.value);
+  }
+
+  reload() {
+    this.functionsService.geoPrepareEnvois(
+      this.ordreID,
+      this.fluxID,
+      true,
+      false,
+      this.authService.currentUser.nomUtilisateur,
+    )
+      .valueChanges
+      .pipe(
+        concatMapTo(this.envoisService.getList(
+          `ordre.id==${this.ordreID}`,
+          this.CHOIX_ENVOIS_FIELDS,
+        )),
+        take(1),
+        map(res => res.data.allEnvoisList),
+      )
+      .subscribe({
+        next: data => this.gridData = data,
+        error: message => notify({ message }, "error", 7000),
+      });
   }
 
   public done() {

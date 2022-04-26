@@ -1,13 +1,25 @@
 <div class="content-block">
   <dx-data-grid
     class="grid-choix-envois"
-    [remoteOperations]="true"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: true,
+      groupPaging: false,
+      paging: false,
+      sorting: true,
+      summary: false
+    }"
     [allowColumnReordering]="true"
     [showBorders]="true"
     [columnAutoWidth]="false"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="false"
     dateSerializationFormat="yyyy-MM-dd"
+    [dataSource]="gridData"
+    [keyExpr]="'id'"
+    [paging]="{
+      enabled: false
+    }"
     [scrolling]="{
       useNative: true
     }"
@@ -22,17 +34,11 @@
     "
   >
     <!-- Grid configuration -->
-    <dxo-paging></dxo-paging>
     <dxo-editing
       [selectTextOnEditStart]="true"
       [allowUpdating]="true"
       [mode]="'cell'"
     ></dxo-editing>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-    ></dxo-pager>
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.ChoixEnvois"
       [enabled]="true"

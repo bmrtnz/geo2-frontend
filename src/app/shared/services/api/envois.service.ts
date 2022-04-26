@@ -3,6 +3,7 @@ import { Apollo, gql } from "apollo-angular";
 import Envois from "app/shared/models/envois.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
@@ -123,10 +124,18 @@ export class EnvoisService extends ApiService implements APIRead {
         });
     }
 
+    getList(search: string, columns: Array<string>) {
+        return this.apollo
+            .query<{ allEnvoisList: Envois[] }>({
+                query: gql(this.buildGetListGraph(columns)),
+                variables: { search },
+            });
+    }
+
     saveAll(allEnvois: Partial<Envois>[], columns: Set<string>) {
         return this.apollo.mutate({
             mutation: gql(this.buildSaveAllGraph([...columns])),
             variables: { allEnvois },
-        });
+        }).pipe(take(1));
     }
 }

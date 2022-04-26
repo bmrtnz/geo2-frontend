@@ -54,6 +54,10 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
     e.component.content().parentNode.classList.add("documents-ordres-popup");
   }
 
+  onShown(e) {
+    this.gridChoixEnvoisComponent.reload();
+  }
+
   clearAndHidePopup() {
     this.hidePopup();
   }

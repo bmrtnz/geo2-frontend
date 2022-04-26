@@ -6,6 +6,7 @@
   [(visible)]="visible"
   [resizeEnabled]="true"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
