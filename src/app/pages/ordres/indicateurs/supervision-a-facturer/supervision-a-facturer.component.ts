@@ -168,9 +168,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
                 .patchValue(this.authService.currentUser.secteurCommercial);
         }
 
-        // console.log(this.authService.currentUser.assistante, this.authService.currentUser.commercial);
-        // console.log(this.authService.currentUser.personne.role.toString(), Role[Role.COMMERCIAL]);
-
         // Fill commercial/assistante input from user role
         if (
             !this.authService.isAdmin &&
@@ -182,14 +179,14 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
             )
                 this.formGroup
                     .get("codeCommercial")
-                    .setValue(this.authService.currentUser.commercial);
+                    .setValue(this.authService.currentUser.assistante); // API Inverted, don't worry
             if (
                 this.authService.currentUser.personne?.role?.toString() ===
                 Role[Role.ASSISTANT]
             )
                 this.formGroup
                     .get("codeAssistante")
-                    .setValue(this.authService.currentUser.assistante);
+                    .setValue(this.authService.currentUser.commercial); // API Inverted, don't worry
         }
     }
 
@@ -223,8 +220,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
                 clientCode: values.clientCode?.id,
                 societeCode: this.currentCompanyService.getCompany().id,
                 entrepotCode: values.entrepotCode?.id,
-                codeCommercial: values.codeCommercial?.id,
-                codeAssistante: values.codeAssistante?.id,
+                codeCommercial: values.codeAssistante?.id, // Inverted as inverted in orders table
+                codeAssistante: values.codeCommercial?.id, // Inverted as inverted in orders table
             } as Inputs);
 
             this.datagrid.dataSource = this.ordresDataSource;

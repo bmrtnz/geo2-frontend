@@ -1,6 +1,7 @@
 <dx-popup
   [dragEnabled]="false"
   [height]="'auto'"
+  [width]="800"
   title="{{ 'valide-date-title' | localize }}"
   (onHiding)="onHiding()"
   (onShowing)="onShowing()"
@@ -32,6 +33,7 @@
         <dxi-column
           dataField="dateValidite"
           caption="{{ 'valide-date-validite' | localize }}"
+          [width]="150"
           [allowEditing]="true"
           [showEditorAlways]="true"
           [validationRules]="this.dateValidationRules"
