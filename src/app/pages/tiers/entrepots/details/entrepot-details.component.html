@@ -501,6 +501,7 @@
                           [max]="20"
                         ></dxi-validation-rule>
                         <dxi-validation-rule
+                          *ngIf="idTvaRequired"
                           type="required"
                         ></dxi-validation-rule>
                         <dxi-validation-rule
@@ -514,7 +515,7 @@
                   </div>
                 </div>
               </div>
-              <!-- Regime Tva -->
+              <!-- Régime Tva -->
               <div class="dx-field">
                 <div class="dx-field-label">
                   {{ "tiers-entrepots-regimeTva" | localize }}
@@ -527,6 +528,7 @@
                     [displayExpr]="displayIDBefore"
                     [searchEnabled]="true"
                     [searchExpr]="['id', 'description']"
+                    (onValueChanged)="onRegimeTvaChange($event)"
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-regimeTva' | localize }}"

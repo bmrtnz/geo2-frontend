@@ -325,7 +325,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         if (data && this.fournisseur) {
             let dateCert = this.fournisseur?.certifications &&
                 this.fournisseur.certifications
-                    .find(res => res.certification.id === data.id)?.dateValidite;
+                    .find(res => res.certification?.id === data.id)?.dateValidite;
             if (dateCert) {
                 const mydate = new Date(dateCert);
                 dateCert = mydate.toLocaleDateString();
@@ -442,7 +442,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
                     }
                     this.fournisseur.historique = e.data.saveFournisseur.historique;
                     this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
-                    this.fournisseur.certifications = e.data.saveFournisseur.certifications;
+                    this.fournisseur.certifications = certifications;
                     this.formGroup.markAsPristine();
                 },
                 error: (err) => {

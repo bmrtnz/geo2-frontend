@@ -44,6 +44,7 @@ enum GridModel {
 
 enum InputField {
     entrepot = "entrepot",
+    fournisseur = "fournisseur",
     commercial = "commercial",
     dateMaxMouvements = "dateMaxMouvements",
 }
@@ -75,6 +76,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     public fournisseur: DataSource;
     public formGroup = new FormGroup({
         entrepot: new FormControl(),
+        fournisseur: new FormControl(),
         commercial: new FormControl(),
         dateMaxMouvements: new FormControl(
             this.dateManagementService.startOfDay(),
@@ -108,9 +110,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             "raisonSocial",
         ]);
         this.entrepot.filter([
-            ["valide", "=", true],
-            "and",
             ["client.societe.id", "=", this.currentCompanyService.getCompany().id]
+        ]);
+        this.fournisseur = this.fournisseursService.getDataSource_v2([
+            "id",
+            "code",
+            "raisonSocial",
         ]);
         this.commercial = this.personnesService.getDataSource_v2([
             "id",
@@ -170,11 +175,32 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         this.supervisionPaloxsService.setPersisantVariables({
             codeSociete: this.currentCompanyService.getCompany().id,
             codeCommercial: values.commercial?.id,
-            codeEntrepot: values.entrepot?.id,
+            codeEntrepot: this.switchEntity.value ? null : values.entrepot?.id,
+            codeFournisseur: this.switchEntity.value ? values.fournisseur?.code : null,
             dateMaxMouvements: values.dateMaxMouvements,
         });
         const index = this.getActiveGridIndex();
         this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
+        this.datasources[index].filter([
+            [
+                ["entree", "=", 0],
+                "and",
+                ["sortie", "<>", 0]
+            ],
+            "or",
+            [
+                ["entree", "<>", 0],
+                "and",
+                ["sortie", "=", 0]
+            ],
+            "or",
+            [
+                ["entree", "<>", 0],
+                "and",
+                ["sortie", "<>", 0]
+            ]
+        ]);
+
     }
 
     onRowDblClick({ data }: { data: Ordre }) {
@@ -224,8 +250,13 @@ export class SupervisionComptesPaloxComponent implements OnInit {
                             "dd-MM-yyyy",
                         );
             }
+            if (e.column.dataField === "sommeQuantiteInventaire") {
+                e.cellElement.innerText = e.data.entree - e.data.sortie;
+                e.cellElement.classList.add("bold-text");
+            }
         }
     }
+
 }
 
 export default SupervisionComptesPaloxComponent;

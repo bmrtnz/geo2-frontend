@@ -99,7 +99,7 @@
               [showClearButton]="true"
               [displayExpr]="displayIDBefore"
               [searchEnabled]="true"
-              searchExpr="nomUtilisateur"
+              [searchExpr]="['id', 'nomUtilisateur']"
               (valueChange)="onFieldValueChange($event)"
             >
             </dx-select-box>
@@ -121,7 +121,7 @@
               [showClearButton]="true"
               [displayExpr]="displayIDBefore"
               [searchEnabled]="true"
-              searchExpr="nomUtilisateur"
+              [searchExpr]="['id', 'nomUtilisateur']"
               (valueChange)="onFieldValueChange($event)"
             >
             </dx-select-box>
