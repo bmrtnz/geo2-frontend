@@ -167,7 +167,7 @@ export abstract class ApiService implements OnDestroy {
     const mapPaths = pths => Model.getGQL(pths).toGraphQL();
 
     const mapOperations = ops => ops
-      .map(o => `${o.name}(${mapParams(o.params)}) {${mapPaths(o?.body ?? [])}}`);
+      .map(o => `${o.name}(${mapParams(o.params)}) ${o?.body ? `{${mapPaths(o?.body)}}` : ""}`);
 
     return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
   }
