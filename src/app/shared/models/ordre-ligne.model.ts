@@ -35,6 +35,7 @@ export class OrdreLigne extends Model {
   @Field({ model: import("./code-promo.model") }) public codePromo?: CodePromo;
   @Field() public achatPrixUnitaire?: number;
   @Field() public achatDevise?: string;
+  @Field() public achatDevisePrixUnitaire?: number;
   @Field() public fraisCommentaires?: string;
   @Field() public origineCertification?: string;
   @Field() public listeCertifications?: string;

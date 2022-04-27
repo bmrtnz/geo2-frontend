@@ -1627,7 +1627,7 @@
       },
       {
         "visibleIndex": 28,
-        "dataField": "achatPrixUnitaire",
+        "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
         "width": 45,
         "cssClass": "two-lines-header",
