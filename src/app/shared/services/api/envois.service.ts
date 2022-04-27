@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import { Flux } from "app/shared/models";
 import Envois from "app/shared/models/envois.model";
+import Ordre from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { take } from "rxjs/operators";
@@ -137,5 +139,27 @@ export class EnvoisService extends ApiService implements APIRead {
             mutation: gql(this.buildSaveAllGraph([...columns])),
             variables: { allEnvois },
         }).pipe(take(1));
+    }
+
+    public countByOrdreAndFlux(
+        ordre: { id: string } & Partial<Ordre>,
+        flux: { id: string } & Partial<Flux>,
+    ) {
+        return this.apollo.query<{ countByOrdreAndFlux: number }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "countByOrdreAndFlux",
+                    params: [
+                        { name: "ordre", value: "ordre", isVariable: true },
+                        { name: "flux", value: "flux", isVariable: true },
+                    ],
+                },
+            ], [
+                { name: "ordre", type: "GeoOrdreInput", isOptionnal: false },
+                { name: "flux", type: "GeoFluxInput", isOptionnal: false },
+            ])),
+            variables: { ordre, flux },
+            fetchPolicy: "network-only",
+        });
     }
 }

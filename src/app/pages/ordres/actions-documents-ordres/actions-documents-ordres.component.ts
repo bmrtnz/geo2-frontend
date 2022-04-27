@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
+import { EnvoisService } from "app/shared/services/api/envois.service";
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
@@ -25,7 +26,9 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @ViewChild(DocumentsOrdresPopupComponent, { static: false }) docsPopup: DocumentsOrdresPopupComponent;
   @ViewChild(AnnuleRemplacePopupComponent, { static: false }) remplacePopup: AnnuleRemplacePopupComponent;
 
-  constructor() {
+  constructor(
+    private envoisService: EnvoisService,
+  ) {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
       { id: "DETAIL", text: "Détail expédition", visible: true, disabled: true },
@@ -61,10 +64,12 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   sendAction(e) {
     // On récupère ici le code de l'action:
     this.flux = e;
-    if (this.flux === "ORDRE" && this.ordre.commentaireUsageInterne === "POPUP") { // Fake condition for testing purposes
-      this.remplacePopup.visible = true;
-    } else {
-      this.docsPopup.visible = true;
-    }
+    if (this.flux === "ORDRE")
+      this.envoisService
+        .countByOrdreAndFlux({ id: this.ordre.id }, { id: this.flux })
+        .subscribe(res => {
+          const popup = res.data.countByOrdreAndFlux ? "remplacePopup" : "docsPopup";
+          this[popup].visible = true;
+        });
   }
 }
