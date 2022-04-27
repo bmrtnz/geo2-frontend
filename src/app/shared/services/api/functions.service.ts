@@ -441,4 +441,32 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event modification PU Dev Achat
+   */
+  public onChangeAchDevPu =
+    (ordreLigneRef: string, societeCode: string) => this.apollo
+      .watchQuery<{ onChangePalinterCode: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangeAchDevPu",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef, societeCode },
+        fetchPolicy: "network-only",
+      })
+
+
 }

@@ -571,6 +571,11 @@ export class GridLignesComponent implements OnChanges, OnInit {
           .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
+      case "achatDevisePrixUnitaire": { // Recalculate PU
+        this.functionsService.onChangeAchDevPu(idLigne, this.currentCompanyService.getCompany().id)
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
+        break;
+      }
       case "typePalette": {
         this.functionsService
           .onChangePalCode(idLigne, this.ordre.secteurCommercial.id, this.authService.currentUser.nomUtilisateur)
