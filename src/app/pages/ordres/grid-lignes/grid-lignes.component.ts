@@ -20,7 +20,6 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, PartialObserver } from "rxjs";
 import { concatMapTo, map, tap } from "rxjs/operators";
-import { listenerCount } from "stream";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";

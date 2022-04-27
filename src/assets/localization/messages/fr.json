@@ -731,7 +731,7 @@
     "ordreLignes-fournisseur": "Emballeur/Expéditeur",
     "ordreLignes-ventePrixUnitaire": "PU Vente",
     "ordreLignes-gratuit": "Gratuit",
-    "ordreLignes-achatPrixUnitaire": "PU Achat",
+    "ordreLignes-achatDevisePrixUnitaire": "PU Achat",
     "ordreLignes-achatDevise": "Devise",
     "ordreLignes-typePalette-description": "Type Pal. Sol",
     "ordreLignes-paletteInter-id": "Type Pal. inter",
