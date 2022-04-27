@@ -590,7 +590,7 @@ export abstract class ApiService implements OnDestroy {
           }
 
           // Format object
-          if (typeof value === "object") {
+          if (typeof value === "object" && value) {
             const firstField = Object
               .entries(value)
               .filter(([key]) => key !== "__typename")
@@ -600,7 +600,7 @@ export abstract class ApiService implements OnDestroy {
           }
 
           // Map value
-          if (selector === "this") {
+          if (selector === "this" && value) {
             const mappedFilter = Object
               .entries(value)
               .filter(([key]) => key !== "__typename")

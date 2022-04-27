@@ -20,6 +20,7 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, PartialObserver } from "rxjs";
 import { concatMapTo, map, tap } from "rxjs/operators";
+import { listenerCount } from "stream";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
@@ -445,18 +446,25 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   updateFilterFournisseurDS(proprietaireMarchandise) {
 
-    let newFourId = proprietaireMarchandise?.id;
-    let newFourCode = proprietaireMarchandise?.code;
+    let newFourId = null;
+    let newFourCode = null;
     const filters = [];
 
     if (this.currentCompanyService.getCompany().id !== "BUK" || newFourCode.substring(0, 2) !== "BW") {
       const listExp = proprietaireMarchandise?.listeExpediteurs;
       if (listExp) {
-        listExp.split(",").map(exp => filters.push(["code", "=", exp], "or"));
+        listExp.split(",").map(exp => {
+          filters.push(["code", "=", exp], "or");
+          // Automatically selected when included in the list
+          if (exp === proprietaireMarchandise.code) {
+            newFourId = proprietaireMarchandise?.id;
+            newFourCode = proprietaireMarchandise?.code;
+          }
+        });
         filters.pop();
-        newFourId = null;
-        newFourCode = null;
       } else {
+        newFourId = proprietaireMarchandise?.id;
+        newFourCode = proprietaireMarchandise?.code;
         if (newFourId !== null) filters.push(["id", "=", newFourId]);
       }
     }
