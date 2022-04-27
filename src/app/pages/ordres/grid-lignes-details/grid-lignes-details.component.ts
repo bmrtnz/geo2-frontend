@@ -11,6 +11,7 @@ import { SummaryType } from "app/shared/services/api.service";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
+import { ArticlesService } from "app/shared/services";
 
 
 @Component({
@@ -30,6 +31,7 @@ export class GridLignesDetailsComponent implements AfterViewInit {
 
     constructor(
         public ordreLignesService: OrdreLignesService,
+        public articlesService: ArticlesService,
         public gridConfiguratorService: GridConfiguratorService,
         public localizeService: LocalizationService
     ) {
@@ -58,9 +60,10 @@ export class GridLignesDetailsComponent implements AfterViewInit {
         if (e.rowType === "data") {
             // Descript. article
             if (e.column.dataField === "article.description") {
-                e.cellElement.innerText = e.data.article.matierePremiere.variete.description + " " + e.cellElement.innerText;
+                const infoArt = this.articlesService.concatArtDescript(e.data.article);
+                e.cellElement.innerText = infoArt.concatDesc;
+                e.cellElement.title = infoArt.concatDesc.substring(2) + "\r\n";
             }
         }
     }
-
 }

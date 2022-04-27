@@ -1945,6 +1945,61 @@
       {
         "dataField": "article.matierePremiere.variete.description",
         "visible": false
+      },
+      {
+        "dataField": "article.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.espece.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.cahierDesCharge.categorie.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.normalisation.calibreMarquage.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.poidsNetClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.prepese",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
