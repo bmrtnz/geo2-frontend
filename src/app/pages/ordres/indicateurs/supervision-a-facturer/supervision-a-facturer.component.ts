@@ -7,6 +7,7 @@ import {
     EntrepotsService,
     ClientsService,
     AuthService,
+    LocalizationService,
 } from "app/shared/services";
 import DataSource from "devextreme/data/data_source";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -25,6 +26,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import notify from "devextreme/ui/notify";
+import OrdreBaf from "app/shared/models/ordre-baf.model";
 
 enum InputField {
     secteurCode = "secteur",
@@ -86,6 +88,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         private personnesService: PersonnesService,
         private entrepotsService: EntrepotsService,
         private clientsService: ClientsService,
+        private localization: LocalizationService,
         private dateManagementService: DateManagementService,
         private currentCompanyService: CurrentCompanyService,
         public ordresBafService: OrdresBafService,
@@ -192,7 +195,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
     displayIDBefore(data) {
         return data
-            ? data.id +
+            ? (data.code ? data.code : data.id) +
             " - " +
             (data.nomUtilisateur
                 ? data.nomUtilisateur
@@ -297,14 +300,24 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         });
     }
 
-    onRowDblClick({ data }: { data: Ordre }) {
-        this.tabContext.openOrdre(data.numero);
+    onCellClick(e) {
+        if (e.column.dataField !== "numeroOrdre") return;
+        e.event.stopImmediatePropagation();
+        this.tabContext.openOrdre(e.data.numeroOrdre);
     }
 
     launch(e) { }
 
     onCellPrepared(event) {
         const field = event.column.dataField;
+
+        if (field === "numeroOrdre") {
+            event.cellElement.classList.add("text-underlined");
+            event.cellElement.setAttribute(
+                "title",
+                this.localization.localize("hint-click-ordre"),
+            );
+        }
 
         if (field?.includes("indicateur")) {
             event.cellElement.style.textAlign = "center";

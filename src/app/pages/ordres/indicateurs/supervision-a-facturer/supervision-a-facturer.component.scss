@@ -2,16 +2,19 @@ h6 {
   margin: 0;
   float: left;
 }
+
 .refresh {
   top: -8px;
   float: right;
 }
+
 .launch {
   position: absolute;
   right: 147px;
   margin-top: 7px;
   z-index: 1;
 }
+
 .inactive {
   opacity: 0.2;
   pointer-events: none;
@@ -20,20 +23,30 @@ h6 {
 ::ng-deep .blocked-color {
   background-color: #ff325a !important;
 }
+
 ::ng-deep .alert-color {
   background-color: #ffa100 !important;
 }
+
 ::ng-deep .OK-color {
   background-color: #8fc459 !important;
 }
+
 ::ng-deep .BAFstatus-cell {
   cursor: help !important;
   color: #fff !important;
   transition: 0.1s;
+
   &:hover {
     opacity: 0.65;
   }
 }
+
 ::ng-deep .period-list .dx-list-item {
   padding: 6px 15px;
+}
+
+::ng-deep .text-underlined {
+  text-decoration: underline;
+  cursor: pointer;
 }

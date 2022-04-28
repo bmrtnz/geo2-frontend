@@ -304,6 +304,16 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.ifcoChecked = params.value;
     }
 
+    onChepRefChange(e) {
+        const CHEP = "CHEP";
+        if (e.value !== "") {
+            this.formGroup.get("gestionnaireChep").patchValue(CHEP);
+        } else {
+            this.formGroup.get("gestionnaireChep").reset();
+        }
+        this.formGroup.get("gestionnaireChep").markAsDirty();
+    }
+
     onPaysChange(e) {
         if (!this.editing || !this.client) return;
         this.idTvaRequired = ((e.value?.id !== this.client.pays?.id) && e.value?.id !== null);
