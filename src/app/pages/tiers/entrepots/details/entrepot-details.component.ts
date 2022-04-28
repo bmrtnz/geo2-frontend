@@ -265,19 +265,7 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
     onPaysChange(e) {
         if (!this.editing || !this.client) return;
-        this.paysClientIdentique = ((e.value?.id === this.client.pays?.id) && e.value?.id !== null);
-        if (this.paysClientIdentique) {
-            if (!this.client.tvaCee)
-                notify("Attention, l'Id TVA CEE n'est pas renseigné dans la fiche client", "warning", 5000);
-            this.formGroup.get("tvaCee").patchValue(this.client.tvaCee ? this.client.tvaCee : "");
-        } else {
-            this.onTvaCeeChange({ value: this.formGroup.get("tvaCee").value });
-        }
-        this.formGroup.get("tvaCee").markAsDirty();
-    }
-
-    onRegimeTvaChange(e) {
-        this.idTvaRequired = ["C", "O", "N"].includes(e.value?.id);
+        this.idTvaRequired = ((e.value?.id !== this.client.pays?.id) && e.value?.id !== null);
     }
 
     onTvaCeeChange(e) {
