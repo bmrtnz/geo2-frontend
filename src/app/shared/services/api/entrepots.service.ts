@@ -27,7 +27,7 @@ export class EntrepotsService extends ApiService implements APIRead {
         return this.watchGetOneQuery<Response>({ variables });
     }
 
-    getOne_v2(id: string, columns: Array<string>) {
+    getOne_v2(id: string, columns: Array<string>|Set<string>) {
         return this.apollo
             .query<{ entrepot: Entrepot }>({
                 query: gql(this.buildGetOneGraph(columns)),
