@@ -217,6 +217,7 @@
                         </div>
                         <div class="dx-field-value">
                           <dx-select-box
+                            [readOnly]="ordreFacture"
                             formControlName="client"
                             [dataSource]="clientsDS"
                             displayExpr="raisonSocial"
@@ -240,6 +241,7 @@
                         </div>
                         <div class="dx-field-value">
                           <dx-select-box
+                            [readOnly]="ordreFacture"
                             formControlName="entrepot"
                             [dataSource]="entrepotDS"
                             [displayExpr]="displayCodeBefore"
@@ -281,6 +283,7 @@
                         </div>
                         <div class="dx-field-value">
                           <dx-date-box
+                            [readOnly]="ordreFacture"
                             formControlName="dateDepartPrevue"
                             [displayFormat]="'dd-MM-yyyy HH:mm'"
                             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
@@ -303,6 +306,7 @@
                         </div>
                         <div class="dx-field-value">
                           <dx-date-box
+                            [readOnly]="ordreFacture"
                             formControlName="dateLivraisonPrevue"
                             [displayFormat]="'dd-MM-yyyy HH:mm'"
                             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
@@ -327,6 +331,7 @@
                         </div>
                         <div class="dx-field-value">
                           <dx-select-box
+                            [readOnly]="ordreFacture"
                             formControlName="incoterm"
                             [dataSource]="incotermsDS"
                             [displayExpr]="displayIDBefore"
@@ -352,6 +357,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
+                                [readOnly]="ordreFacture"
                                 formControlName="transporteur"
                                 [dataSource]="transporteursDS"
                                 [displayExpr]="displayIDBefore"
@@ -380,6 +386,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
+                                [readOnly]="ordreFacture"
                                 formControlName="typeTransport"
                                 [dataSource]="typeTransportDS"
                                 [displayExpr]="displayIDBefore"
@@ -407,6 +414,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-number-box
+                                [readOnly]="ordreFacture"
                                 class="alignright"
                                 formControlName="prixUnitaireTarifTransport"
                               >
@@ -425,6 +433,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
+                                [readOnly]="ordreFacture"
                                 formControlName="transporteurDEVCode"
                                 [dataSource]="deviseDS"
                                 [readOnly]="true"
@@ -450,6 +459,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
+                                [readOnly]="ordreFacture"
                                 formControlName="baseTarifTransport"
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"
@@ -471,6 +481,7 @@
                         <div class="dx-field-value">
                           <dx-text-box
                             #comLog
+                            [readOnly]="ordreFacture"
                             formControlName="instructionsLogistiques"
                           >
                             <dx-validator
@@ -493,6 +504,7 @@
                         </div>
                         <div class="dx-field-value small-font">
                           <dx-text-box
+                            [readOnly]="ordreFacture"
                             formControlName="commentaireUsageInterne"
                           >
                             <dx-validator
@@ -519,7 +531,10 @@
                           {{ "ordres-codeChargement" | localize }}
                         </div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="codeChargement">
+                          <dx-text-box
+                            formControlName="codeChargement"
+                            [readOnly]="ordreFacture"
+                          >
                           </dx-text-box>
                         </div>
                       </div>
@@ -533,6 +548,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-date-box
+                                [readOnly]="ordreFacture"
                                 formControlName="etdDate"
                                 dateSerializationFormat="yyyy-MM-dd"
                                 type="date"
@@ -551,6 +567,7 @@
                             <div class="dx-field-value">
                               <dx-select-box
                                 formControlName="portTypeD"
+                                [readOnly]="ordreFacture"
                                 [dataSource]="portTypeDDS"
                                 displayExpr="name"
                                 [searchEnabled]="true"
@@ -573,6 +590,7 @@
                             <div class="dx-field-value">
                               <dx-date-box
                                 formControlName="etaDate"
+                                [readOnly]="ordreFacture"
                                 dateSerializationFormat="yyyy-MM-dd"
                                 type="date"
                               >
@@ -590,6 +608,7 @@
                             <div class="dx-field-value">
                               <dx-select-box
                                 formControlName="portTypeA"
+                                [readOnly]="ordreFacture"
                                 [dataSource]="portTypeADS"
                                 displayExpr="name"
                                 [searchEnabled]="true"
@@ -609,7 +628,10 @@
                           {{ "ordres-incotermLieu" | localize }}
                         </div>
                         <div class="dx-field-value small-font">
-                          <dx-text-box formControlName="incotermLieu">
+                          <dx-text-box
+                            formControlName="incotermLieu"
+                            [readOnly]="ordreFacture"
+                          >
                           </dx-text-box>
                         </div>
                       </div>
@@ -621,6 +643,7 @@
                         <div class="dx-field-value">
                           <dx-select-box
                             formControlName="devise"
+                            [readOnly]="ordreFacture"
                             [dataSource]="deviseDS"
                             [readOnly]="true"
                             [displayExpr]="deviseDisplayExpr"
@@ -645,6 +668,7 @@
                         <div class="dx-field-value">
                           <dx-select-box
                             formControlName="commercial"
+                            [readOnly]="ordreFacture"
                             [dataSource]="commercialDS"
                             [displayExpr]="displayIDBefore"
                             [searchEnabled]="true"
@@ -668,6 +692,7 @@
                         <div class="dx-field-value">
                           <dx-select-box
                             formControlName="assistante"
+                            [readOnly]="ordreFacture"
                             [dataSource]="assistanteDS"
                             [displayExpr]="displayIDBefore"
                             [searchEnabled]="true"
