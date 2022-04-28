@@ -19,12 +19,14 @@ import { ArticlesService } from "app/shared/services";
     templateUrl: "./grid-lignes-details.component.html",
     styleUrls: ["./grid-lignes-details.component.scss"]
 })
-export class GridLignesDetailsComponent implements AfterViewInit {
+export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
 
     public dataSource: DataSource;
     public columnChooser = environment.columnChooser;
     public columns: Observable<GridColumn[]>;
     private gridConfig: Promise<GridConfig>;
+    public allowMutations = false;
+    public env = environment;
     public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
     @Input() public ordre: Ordre;
     @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -41,6 +43,10 @@ export class GridLignesDetailsComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.enableFilters();
+    }
+
+    ngOnChanges() {
+        this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
     }
 
     async enableFilters() {
