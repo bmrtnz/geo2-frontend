@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { OperationVariables } from "@apollo/client/core";
+import {gql, OperationVariables} from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { Client } from "../../models";
 import { APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
+import {takeWhile} from "rxjs/operators";
 
 @Injectable({
     providedIn: "root",
@@ -21,6 +22,15 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
         type Response = { client: Client };
         const variables: OperationVariables = { id };
         return this.watchGetOneQuery<Response>({ variables }, 2);
+    }
+
+    getOne_v2(id: string, columns: Array<string>|Set<string>) {
+      return this.apollo
+        .query<{ client: Client }>({
+          query: gql(this.buildGetOneGraph(columns)),
+          variables: { id },
+        })
+        .pipe(takeWhile((res) => res.loading === false));
     }
 
     getDataSource_v2(columns: Array<string>) {
