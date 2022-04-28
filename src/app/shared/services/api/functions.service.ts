@@ -215,6 +215,32 @@ export class FunctionsService {
       })
 
   /**
+   * Gestion spécifique des annule-et-remplace
+   * Pour Geo2, créé des lignes envois avec `traite = R`
+   */
+  public ofAREnvois =
+    (ordRef: string) => this.apollo
+      .watchQuery<{ ofAREnvois: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofAREnvois",
+              body,
+              params: [
+                { name: "ordRef", value: "ordRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordRef },
+        fetchPolicy: "network-only",
+      })
+
+  /**
    * Event modification nb palettes commandées sur une ligne d'ordre
    */
   public onChangeCdeNbPal =

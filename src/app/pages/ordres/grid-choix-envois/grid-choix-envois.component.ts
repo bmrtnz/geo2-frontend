@@ -84,7 +84,6 @@ export class GridChoixEnvoisComponent implements OnInit {
     this.imprimanteSource = this.imprimanteService.getDataSource_v2(["id", "description"]);
     this.imprimanteSource.filter(["valide", "=", true]);
 
-
     // Léa 09/2021
     // Moyen : les moyens EDIFACT et FTP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)
     // Flux : les flux FACTUR et FACDUP ne doivent pas pouvoir être ajoutés par les utilisateurs de base (uniquement par les admin)

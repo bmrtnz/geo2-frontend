@@ -5,6 +5,7 @@
   [(visible)]="visible"
   [resizeEnabled]="true"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}</div>
@@ -32,6 +33,6 @@
     ></dx-button>
   </div>
   <br />
-  <app-grid-annule-remplace></app-grid-annule-remplace>
+  <app-grid-annule-remplace [ordre]="ordre"></app-grid-annule-remplace>
   <br />
 </dx-popup>

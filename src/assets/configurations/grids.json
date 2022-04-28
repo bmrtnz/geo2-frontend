@@ -2750,24 +2750,21 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "modifEntete",
-        "dataType": "string",
+        "dataField": "dateDemande",
         "allowEditing": false,
         "width": "170",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "modifLignes",
-        "dataType": "string",
+        "dataField": "dateSoumission",
         "allowEditing": false,
         "width": "170",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "dernierEnvoi",
-        "dataType": "string",
+        "dataField": "dateEnvoi",
         "allowEditing": false,
         "width": "170",
         "visible": true
@@ -2782,25 +2779,17 @@
       },
       {
         "visibleIndex": 8,
-        "dataField": "nom",
-        "dataType": "string",
+        "dataField": "codeTiers",
         "width": "200",
         "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "raisonAnnuleRemplace",
+        "dataField": "commentairesAvancement",
         "dataType": "string",
         "width": "300",
         "editCellTemplate": "customSelectBoxTemplate",
-        "visible": true
-      },
-      {
-        "visibleIndex": 12,
-        "dataField": "nePasEnvoyer",
-        "dataType": "boolean",
-        "width": "150",
         "visible": true
       }
     ]

@@ -1,26 +1,26 @@
+import BaseTarif from "./base-tarif.model";
+import BasePaiement from "./base.paiement.model";
+import { Campagne } from "./campagne.model";
 import { Client } from "./client.model";
-import { Port } from "./port.model";
+import Courtier from "./courtier.model";
+import { Devise } from "./devise.model";
 import Entrepot from "./entrepot.model";
+import Incoterm from "./incoterm.model";
 import { Field, Model, ModelName } from "./model";
+import MoyenPaiement from "./moyen-paiement.model";
 import { OrdreLigne } from "./ordre-ligne.model";
 import { OrdreLogistique } from "./ordre-logistique.model";
+import Pays from "./pays.model";
 import Personne from "./personne.model";
+import { Port } from "./port.model";
+import RegimeTva from "./regime-tva.model";
 import { Secteur } from "./secteur.model";
 import { Societe } from "./societe.model";
-import { Devise } from "./devise.model";
-import { Campagne } from "./campagne.model";
+import Transitaire from "./transitaire.model";
 import Transporteur from "./transporteur.model";
 import TypeCamion from "./type-camion.model";
-import BaseTarif from "./base-tarif.model";
-import Incoterm from "./incoterm.model";
-import Pays from "./pays.model";
-import RegimeTva from "./regime-tva.model";
-import Transitaire from "./transitaire.model";
-import MoyenPaiement from "./moyen-paiement.model";
-import BasePaiement from "./base.paiement.model";
-import TypeVente from "./type-vente.model";
-import Courtier from "./courtier.model";
 import TypeOrdre from "./type-ordre.model";
+import TypeVente from "./type-vente.model";
 
 export enum FactureAvoir {
     FACTURE = "F",
@@ -39,7 +39,7 @@ export enum Statut {
 
 @ModelName("Ordre")
 export class Ordre extends Model {
-    @Field({ asKey: true }) public id?: string;
+    @Field({ asKey: true }) public id: string;
     @Field({ model: import("./societe.model") }) public societe?: Societe;
     @Field({ model: import("./devise.model") }) public devise?: Devise;
     @Field() public commentaireUsageInterne?: string;

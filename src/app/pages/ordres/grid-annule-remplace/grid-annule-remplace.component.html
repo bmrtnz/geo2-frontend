@@ -9,7 +9,14 @@
 
   <dx-data-grid
     class="grid-choix-envois"
-    [remoteOperations]="true"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: true,
+      groupPaging: false,
+      paging: false,
+      sorting: true,
+      summary: false
+    }"
     [allowColumnReordering]="true"
     [showBorders]="true"
     [columnAutoWidth]="false"
@@ -20,7 +27,7 @@
       useNative: true
     }"
     (onRowClick)="onRowClick($event)"
-    (onContentReady)="onContentReady()"
+    (onContentReady)="onContentReady($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Veuillez indiquer le motif des annule et remplace...',
@@ -30,17 +37,11 @@
     "
   >
     <!-- Grid configuration -->
-    <dxo-paging></dxo-paging>
     <dxo-editing
       [selectTextOnEditStart]="true"
       [allowUpdating]="true"
       [mode]="'cell'"
     ></dxo-editing>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-    ></dxo-pager>
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.AnnuleRemplace"
       [enabled]="true"
@@ -59,6 +60,10 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
+    <dxo-selection
+      mode="multiple"
+      [allowSelectAll]="true"
+    ></dxo-selection>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
