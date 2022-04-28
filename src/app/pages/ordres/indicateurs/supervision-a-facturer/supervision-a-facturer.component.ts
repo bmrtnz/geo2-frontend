@@ -192,7 +192,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
     displayIDBefore(data) {
         return data
-            ? data.id +
+            ? (data.code ? data.code : data.id) +
             " - " +
             (data.nomUtilisateur
                 ? data.nomUtilisateur
