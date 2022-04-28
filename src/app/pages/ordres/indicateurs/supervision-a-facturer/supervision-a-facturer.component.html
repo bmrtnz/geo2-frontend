@@ -211,7 +211,7 @@
   [scrolling]="{ useNative: true }"
   [selection]="{ mode: 'multiple' }"
   (onCellPrepared)="onCellPrepared($event)"
-  (onRowDblClick)="onRowDblClick($event)"
+  (onCellClick)="onCellClick($event)"
   (onContentReady)="onGridContentReady($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
