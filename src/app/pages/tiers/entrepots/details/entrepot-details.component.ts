@@ -115,6 +115,12 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
       "valide",
       "preSaisie"
     ]);
+    readonly inheritedClientFields = new Set([
+      "id",
+      "pays.id", "pays.description",
+      "incoterm.id", "incoterm.description",
+      "tvaCee"
+    ]);
     refreshGrid = new EventEmitter();
     helpBtnOptions = { icon: "help", elementAttr: { id: "help-1" }, onClick: () => this.toggleVisible() };
     contentReadyEvent = new EventEmitter<any>();
@@ -194,12 +200,12 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                             this.formGroup.patchValue(this.entrepot);
                             this.contentReadyEvent.emit();
                             this.preSaisie = this.entrepot.preSaisie === true ? "preSaisie" : "";
-                            this.clientsService.getOne(this.entrepot.client.id)
+                            this.clientsService.getOne_v2(this.entrepot.client.id, this.inheritedClientFields)
                                 .subscribe(result => this.client = result.data.client);
                         });
                 } else {
                     if (this.route.snapshot.params.client !== "null") {
-                        this.clientsService.getOne(this.route.snapshot.params.client)
+                        this.clientsService.getOne_v2(this.route.snapshot.params.client, this.inheritedClientFields)
                             .subscribe(res => {
                                 this.client = res.data.client;
                                 if (this.client.incoterm) {
