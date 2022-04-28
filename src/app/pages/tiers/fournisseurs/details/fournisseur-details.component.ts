@@ -488,13 +488,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         });
     }
 
-    toUppercase(e) {
-        console.log(e);
-        // e.value = e.value.toUpperCase();
-    }
-
     onCancel() {
-
         if (!this.createMode) {
             this.formGroup.reset(this.fournisseur);
             this.readOnlyMode = true;
