@@ -4,6 +4,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
 import { GridAnnuleRemplaceComponent } from "../grid-annule-remplace/grid-annule-remplace.component";
+import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 
 @Component({
   selector: "app-annule-remplace-popup",
@@ -13,6 +14,7 @@ import { GridAnnuleRemplaceComponent } from "../grid-annule-remplace/grid-annule
 export class AnnuleRemplacePopupComponent implements OnChanges {
 
   @Input() public ordre: Ordre;
+  @Input() public gridEnvois: GridEnvoisComponent;
 
   visible: boolean;
   title: string;
@@ -48,6 +50,10 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   }
 
   goDocuments() {
+    this.gridAnnuleRemplaceComponent.done();
+    // .subscribe({
+    //   complete: () => (this.popup.instance.hide(), this.gridEnvois.reload()),
+    // });
   }
 
 }

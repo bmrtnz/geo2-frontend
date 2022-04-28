@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
@@ -12,15 +12,15 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { concatMapTo, map, take } from "rxjs/operators";
+import { from, Observable, of } from "rxjs";
+import { concatMap, concatMapTo, map, take } from "rxjs/operators";
 
 @Component({
   selector: "app-grid-annule-remplace",
   templateUrl: "./grid-annule-remplace.component.html",
   styleUrls: ["./grid-annule-remplace.component.scss"]
 })
-export class GridAnnuleRemplaceComponent {
+export class GridAnnuleRemplaceComponent implements OnInit {
 
   readonly AR_ENVOIS_FIELDS = [
     "id",
@@ -56,11 +56,14 @@ export class GridAnnuleRemplaceComponent {
     });
   }
 
-  onContentReady(event) {
-    if (!this.dataGrid.dataSource) {
+  ngOnInit() {
+    if (!this?.dataGrid?.dataSource) {
       this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.AnnuleRemplace);
       this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     }
+  }
+
+  onContentReady(event) {
     this.handleRaisonAR();
     this.dataGrid.instance.selectAll();
   }
@@ -94,9 +97,15 @@ export class GridAnnuleRemplaceComponent {
   }
 
   reload() {
-    this.functionsService.ofAREnvois(this.ordre.id)
-      .valueChanges
+    this.envoisService.countByOrdreFluxTraite(
+      { id: this.ordre.id },
+      { id: "ORDRE" },
+      "R",
+    )
       .pipe(
+        concatMap(res => res.data.countByOrdreFluxTraite
+          ? of({ res: 1 })
+          : this.functionsService.ofAREnvois(this.ordre.id).valueChanges),
         concatMapTo(this.envoisService.getList(
           `ordre.id==${this.ordre.id} and traite==R`,
           this.AR_ENVOIS_FIELDS,
@@ -108,6 +117,14 @@ export class GridAnnuleRemplaceComponent {
         next: data => this.dataGrid.dataSource = data,
         error: message => notify({ message }, "error", 7000),
       });
+  }
+
+  public done() {
+    const selection = this.dataGrid.instance.getSelectedRowsData();
+    console.log(selection);
+    // .map(({ id }: Partial<Envois>) => ({ id, traite: "N" }));
+    // return this.envoisService
+    //   .saveAll(allEnvois, new Set(["id", "traite"]));
   }
 
 }

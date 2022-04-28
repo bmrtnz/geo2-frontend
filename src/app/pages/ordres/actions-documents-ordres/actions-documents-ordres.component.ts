@@ -66,9 +66,9 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
     this.flux = e;
     if (this.flux === "ORDRE")
       this.envoisService
-        .countByOrdreAndFlux({ id: this.ordre.id }, { id: this.flux })
+        .countByOrdreFluxTraite({ id: this.ordre.id }, { id: this.flux }, "N")
         .subscribe(res => {
-          const popup = res.data.countByOrdreAndFlux ? "remplacePopup" : "docsPopup";
+          const popup = res.data.countByOrdreFluxTraite ? "remplacePopup" : "docsPopup";
           this[popup].visible = true;
         });
   }

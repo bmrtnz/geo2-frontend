@@ -15,8 +15,8 @@ import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { concatMapTo, map, take } from "rxjs/operators";
+import { from, Observable, of } from "rxjs";
+import { concatMap, concatMapTo, map, take } from "rxjs/operators";
 
 @Component({
   selector: "app-grid-choix-envois",
@@ -126,15 +126,24 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   reload() {
-    this.functionsService.geoPrepareEnvois(
-      this.ordreID,
-      this.fluxID,
-      true,
-      false,
-      this.authService.currentUser.nomUtilisateur,
+    this.envoisService.countByOrdreFluxTraite(
+      { id: this.ordreID },
+      { id: this.fluxID },
+      "A",
     )
-      .valueChanges
       .pipe(
+        concatMap(res =>
+          res.data.countByOrdreFluxTraite
+            ? of({ res: 1 })
+            : this.functionsService.geoPrepareEnvois(
+              this.ordreID,
+              this.fluxID,
+              true,
+              false,
+              this.authService.currentUser.nomUtilisateur,
+            )
+              .valueChanges
+        ),
         concatMapTo(this.envoisService.getList(
           `ordre.id==${this.ordreID}`,
           this.CHOIX_ENVOIS_FIELDS,

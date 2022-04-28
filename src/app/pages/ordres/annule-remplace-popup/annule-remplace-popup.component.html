@@ -33,6 +33,9 @@
     ></dx-button>
   </div>
   <br />
-  <app-grid-annule-remplace [ordre]="ordre"></app-grid-annule-remplace>
+  <app-grid-annule-remplace
+    *ngIf="visible"
+    [ordre]="ordre"
+  ></app-grid-annule-remplace>
   <br />
 </dx-popup>

@@ -74,7 +74,11 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
             this.dataSource.filter([
                 ["ordre.id", "=", this.ordre.id],
                 "and",
-                ["traite", "<>", "A"],
+                [
+                    ["traite", "=", "N"],
+                    "or",
+                    ["traite", "=", "O"],
+                ],
             ]);
             this.dataGrid.dataSource = this.dataSource;
         }

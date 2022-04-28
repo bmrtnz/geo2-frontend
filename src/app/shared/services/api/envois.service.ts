@@ -162,4 +162,30 @@ export class EnvoisService extends ApiService implements APIRead {
             fetchPolicy: "network-only",
         });
     }
+
+    public countByOrdreFluxTraite(
+        ordre: { id: string } & Partial<Ordre>,
+        flux: { id: string } & Partial<Flux>,
+        traite: string,
+    ) {
+        return this.apollo.query<{ countByOrdreFluxTraite: number }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "countByOrdreFluxTraite",
+                    params: [
+                        { name: "ordre", value: "ordre", isVariable: true },
+                        { name: "flux", value: "flux", isVariable: true },
+                        { name: "traite", value: "traite", isVariable: true },
+                    ],
+                },
+            ], [
+                { name: "ordre", type: "GeoOrdreInput", isOptionnal: false },
+                { name: "flux", type: "GeoFluxInput", isOptionnal: false },
+                { name: "traite", type: "Char", isOptionnal: false },
+            ])),
+            variables: { ordre, flux, traite },
+            fetchPolicy: "network-only",
+        });
+    }
+
 }
