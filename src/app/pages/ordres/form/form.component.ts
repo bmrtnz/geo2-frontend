@@ -24,6 +24,7 @@ import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
+import { STATUS_CODES } from "http";
 import { of, Subject } from "rxjs";
 import { concatMap, filter, first, map, switchMap, takeUntil } from "rxjs/operators";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
@@ -115,6 +116,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public fragments = Fragments;
     public status: string;
+    public ordreFacture: boolean;
     public refOrdre: string;
     public formGroup = this.formBuilder.group({
         id: [""],
@@ -440,6 +442,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.gestEntrepot = this.getGestEntrepot();
                 this.fetchFullOrderNumber();
                 if (this.ordre.numero) this.status = " - " + Statut[this.ordre.statut] + (this.ordre.factureEDI ? " EDI" : "");
+                this.ordreFacture = (this.ordre.statut.toString() === "FACTURE");
                 this.refOrdre = this.ordre?.id ? ordre.id : "-";
                 this.canDuplicate = !!this?.ordre?.id;
                 this.formGroup.reset(ordre);
