@@ -478,11 +478,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
             this.formGroup.get("codeStation").setValue(idTracabilite);
         }
         // Check if already exists
-        const fournisseursSource = this.fournisseursService.getDataSource_v2(["idTracabilite"]);
+        const fournisseursSource = this.fournisseursService.getDataSource_v2(["code", "idTracabilite"]);
         fournisseursSource.searchExpr("idTracabilite");
         fournisseursSource.searchOperation("=");
         fournisseursSource.searchValue(idTracabilite);
-        fournisseursSource.load().then(res => res.length ? this.IDTracaexists = true : this.IDTracaexists = false);
+        fournisseursSource.load().then(res => {
+            res.length && (res[0].code !== this.fournisseur.code) ?
+                this.IDTracaexists = true : this.IDTracaexists = false;
+        });
     }
 
     toUppercase(e) {
