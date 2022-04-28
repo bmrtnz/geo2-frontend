@@ -11,6 +11,7 @@ import { SummaryType } from "app/shared/services/api.service";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
+import { ArticlesService } from "app/shared/services";
 
 
 @Component({
@@ -18,18 +19,21 @@ import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/g
     templateUrl: "./grid-lignes-details.component.html",
     styleUrls: ["./grid-lignes-details.component.scss"]
 })
-export class GridLignesDetailsComponent implements AfterViewInit {
+export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
 
     public dataSource: DataSource;
     public columnChooser = environment.columnChooser;
     public columns: Observable<GridColumn[]>;
     private gridConfig: Promise<GridConfig>;
+    public allowMutations = false;
+    public env = environment;
     public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
     @Input() public ordre: Ordre;
     @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
     constructor(
         public ordreLignesService: OrdreLignesService,
+        public articlesService: ArticlesService,
         public gridConfiguratorService: GridConfiguratorService,
         public localizeService: LocalizationService
     ) {
@@ -39,6 +43,10 @@ export class GridLignesDetailsComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.enableFilters();
+    }
+
+    ngOnChanges() {
+        this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
     }
 
     async enableFilters() {
@@ -58,9 +66,10 @@ export class GridLignesDetailsComponent implements AfterViewInit {
         if (e.rowType === "data") {
             // Descript. article
             if (e.column.dataField === "article.description") {
-                e.cellElement.innerText = e.data.article.matierePremiere.variete.description + " " + e.cellElement.innerText;
+                const infoArt = this.articlesService.concatArtDescript(e.data.article);
+                e.cellElement.innerText = infoArt.concatDesc;
+                e.cellElement.title = infoArt.concatDesc.substring(2) + "\r\n";
             }
         }
     }
-
 }

@@ -2,6 +2,7 @@
   class="dx-card wide-card"
   [remoteOperations]="true"
   [showBorders]="false"
+  [elementAttr]="{ class: 'grid-ordre-ligne-detail' }"
   [focusedRowEnabled]="true"
   [focusedRowIndex]="0"
   [columnAutoWidth]="true"
@@ -33,6 +34,12 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [allowUpdating]="allowMutations"
+    [mode]="'cell'"
+  >
+  </dxo-editing>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.OrdreLigneDetails"
     [enabled]="true"
@@ -40,7 +47,7 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
@@ -63,6 +70,8 @@
     "
     trueText="Oui"
     falseText="Non"
+    [cssClass]="column?.cssClass"
+    allowSearch="false"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="

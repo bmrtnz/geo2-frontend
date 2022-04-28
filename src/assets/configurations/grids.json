@@ -1847,48 +1847,63 @@
         "visibleIndex": 0,
         "dataField": "fournisseur.code",
         "dataType": "string",
+        "width": 50,
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 1,
         "dataField": "article.description",
         "dataType": "string",
+        "cssClass": "small-left-padding",
+        "width": 250,
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "nombrePalettesCommandees",
         "dataType": "number",
+        "width": 40,
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "nombrePalettesExpediees",
         "dataType": "number",
+        "width": 40,
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "nombreColisCommandes",
         "dataType": "number",
+        "width": 40,
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "nombreColisExpedies",
         "dataType": "number",
+        "width": 40,
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "poidsNetExpedie",
         "dataType": "number",
+        "width": 40,
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "poidsBrutExpedie",
         "dataType": "number",
+        "width": 40,
         "visible": true
       },
       {
@@ -1931,6 +1946,7 @@
         "visibleIndex": 13,
         "dataField": "referenceControleQualite",
         "dataType": "string",
+        "allowEditing": false,
         "visible": true
       },
       {
@@ -1944,6 +1960,62 @@
       },
       {
         "dataField": "article.matierePremiere.variete.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.espece.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.cahierDesCharge.categorie.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.normalisation.calibreMarquage.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.poidsNetClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.prepese",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.id",
+        "showInColumnChooser": false,
         "visible": false
       }
     ]
