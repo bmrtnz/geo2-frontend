@@ -2194,9 +2194,9 @@
         "visible": false
       },
       {
-        "visibleIndex": 32,
+        "visibleIndex": 34,
         "dataField": "incotermFournisseur",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 36,
@@ -2288,6 +2288,7 @@
         "dataField": "numeroOrdre",
         "sortOrder": "asc",
         "sortIndex": 2,
+        "fixed": true,
         "visible": true
       },
       {

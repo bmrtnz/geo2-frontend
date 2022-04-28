@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import Ordre from "app/shared/models/ordre.model";
-import { LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
+import { AuthService, LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
@@ -66,6 +66,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         public instructionsService: InstructionsService,
         public incotermFournisseurService: IncotermsService,
         public transporteurGroupageService: TransporteursService,
+        public authService: AuthService,
         public localizeService: LocalizationService,
     ) {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -107,6 +108,8 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
             );
             this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
             this.datagrid.dataSource = this.dataSource;
+            this.datagrid.instance
+                .columnOption("incotermFournisseur", "visible", this.authService.currentUser.indicateurVisualisationIncotermFournisseur);
         } else if (this.datagrid) this.datagrid.dataSource = null;
     }
 
