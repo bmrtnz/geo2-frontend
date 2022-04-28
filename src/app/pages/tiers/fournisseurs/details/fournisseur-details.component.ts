@@ -136,6 +136,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     groupesFournisseur: DataSource;
     isReadOnlyMode = true;
     createMode = false;
+    zeroTracaValue = false;
     preSaisie: string;
     autoFacturationChecked = false;
     ifcoChecked = false;
@@ -273,8 +274,13 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         this.fournisseur = res.data.fournisseur;
         const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
         this.formGroup.patchValue({ ...this.fournisseur, certifications });
+        this.updateZeroTracaValue();
         this.preSaisie = this.fournisseur.preSaisie === true ? "preSaisie" : "";
         this.fournisseurLigneCode.emit(this.fournisseur.code);
+    }
+
+    updateZeroTracaValue() {
+        this.zeroTracaValue = (this.formGroup.get("idTracabilite").value === "0");
     }
 
     valueToUpperCase(e) {
@@ -440,6 +446,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
                         this.editing = false;
                         this.router.navigate([`/pages/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
                     }
+                    this.updateZeroTracaValue();
                     this.fournisseur.historique = e.data.saveFournisseur.historique;
                     this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
                     this.fournisseur.certifications = certifications;
@@ -465,7 +472,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 
     onIDTracaChange(e) {
         const idTracabilite = this.valueToUpperCase(e);
-        if (!idTracabilite || !this.createMode) return;
         // Code station = idTracabilite
         if (idTracabilite) {
             this.formGroup.get("codeStation").markAsDirty();

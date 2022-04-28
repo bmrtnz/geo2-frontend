@@ -237,7 +237,10 @@
                   <div class="dx-field-value">
                     <dx-text-box
                       formControlName="idTracabilite"
-                      [readOnly]="!createMode"
+                      [readOnly]="
+                        !createMode &&
+                        !zeroTracaValue && authService.currentUser.adminClient
+                      "
                       (onValueChanged)="onIDTracaChange($event)"
                       valueChangeEvent="keyup change"
                     >
@@ -250,7 +253,6 @@
                           type="numeric"
                         ></dxi-validation-rule>
                         <dxi-validation-rule
-                          *ngIf="createMode"
                           [trim]="false"
                           type="stringLength"
                           [max]="3"
@@ -258,10 +260,15 @@
                         ></dxi-validation-rule>
                         <!-- Workaround. Apparemment bug de Devextreme qui apparait lorsqu'il y a 2 async validation rules sur la page, et crée une référence circulaire. -->
                         <dxi-validation-rule
-                          *ngIf="createMode === true && IDTracaexists"
+                          *ngIf="IDTracaexists"
                           type="stringLength"
                           [max]="0"
                           message="Cet identifiant est déjà utilisé"
+                        ></dxi-validation-rule>
+                        <dxi-validation-rule
+                          type="pattern"
+                          pattern="^[0-9]+$"
+                          message="Seuls les caractères 0-9 sont acceptés"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
