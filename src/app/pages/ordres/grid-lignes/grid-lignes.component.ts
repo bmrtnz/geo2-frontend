@@ -499,11 +499,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
           .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
-      case "nombrePalettesIntermediaires": {
-        this.functionsService.onChangeDemipalInd(idLigne, this.authService.currentUser.nomUtilisateur)
-          .valueChanges.subscribe(this.handleCellChangeEventResponse());
-        break;
-      }
       case "nombreColisPalette": {
         this.functionsService.onChangePalNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
           .valueChanges.subscribe(this.handleCellChangeEventResponse());
@@ -588,7 +583,12 @@ export class GridLignesComponent implements OnChanges, OnInit {
           .valueChanges.subscribe(this.handleCellChangeEventResponse());
         break;
       }
-
+      case "nombrePalettesIntermediaires": {
+        this.functionsService
+          .onChangePalNbPalinter(idLigne, this.authService.currentUser.nomUtilisateur)
+          .valueChanges.subscribe(this.handleCellChangeEventResponse());
+        break;
+      }
     }
 
   }

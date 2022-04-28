@@ -200,29 +200,29 @@ export class FunctionsService {
   /**
    * Event modification nb palettes intermédiaires sur une ligne d'ordre
    */
-  public onChangeDemipalInd =
-    (ordreLigneRef: string, username: string) => this.apollo
-      .watchQuery<{ onChangeCdeNbPal: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeDemipalInd",
-              body,
-              params: [
-                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
-                { name: "username", value: "username", isVariable: true },
-              ]
-            }
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { ordreLigneRef, username },
-        fetchPolicy: "network-only",
-      })
+  // public onChangeDemipalInd =
+  //   (ordreLigneRef: string, username: string) => this.apollo
+  //     .watchQuery<{ onChangeCdeNbPal: FunctionResponse }>({
+  //       query: gql(ApiService.buildGraph(
+  //         "query",
+  //         [
+  //           {
+  //             name: "onChangeDemipalInd",
+  //             body,
+  //             params: [
+  //               { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+  //               { name: "username", value: "username", isVariable: true },
+  //             ]
+  //           }
+  //         ],
+  //         [
+  //           { name: "ordreLigneRef", type: "String", isOptionnal: false },
+  //           { name: "username", type: "String", isOptionnal: false },
+  //         ],
+  //       )),
+  //       variables: { ordreLigneRef, username },
+  //       fetchPolicy: "network-only",
+  //     })
 
   /**
    * Event modification nb colis par palette sur une ligne d'ordre
@@ -417,7 +417,7 @@ export class FunctionsService {
       })
 
   /**
-   * Event modification palette intermédiaire
+   * Event modification type palette intermédiaire
    */
   public onChangePalinterCode =
     (ordreLigneRef: string) => this.apollo
@@ -438,6 +438,33 @@ export class FunctionsService {
           ],
         )),
         variables: { ordreLigneRef },
+        fetchPolicy: "network-only",
+      })
+
+  /**
+   * Event modification nb palette intermédiaire
+   */
+  public onChangePalNbPalinter =
+    (ordreLigneRef: string, userName: string) => this.apollo
+      .watchQuery<{ onChangePalNbPalinter: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangePalNbPalinter",
+              body,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+                { name: "userName", value: "userName", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+            { name: "userName", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreLigneRef, userName },
         fetchPolicy: "network-only",
       })
 
