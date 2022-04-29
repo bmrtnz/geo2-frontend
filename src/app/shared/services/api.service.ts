@@ -154,7 +154,7 @@ export abstract class ApiService implements OnDestroy {
    */
   static buildGraph(
     type: "query" | "mutation",
-    operations: { name: string, body?: Array<string>, params: { name: string, value: any, isVariable: boolean }[] }[],
+    operations: { name: string, body?: Array<string>|Set<string>, params: { name: string, value: any, isVariable: boolean }[] }[],
     variables: { name: string, type: string, isOptionnal: boolean }[] = [],
     alias = operations?.[0].name.ucFirst(),
   ) {
@@ -903,7 +903,7 @@ export abstract class ApiService implements OnDestroy {
    * @param body - The body of the query.
    * @returns The GraphQL query.
    */
-  protected buildGetOneGraph(body: Array<string>) {
+  protected buildGetOneGraph(body: Array<string>|Set<string>) {
     return ApiService.buildGraph(
       "query",
       [

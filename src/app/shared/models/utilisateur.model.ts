@@ -15,6 +15,7 @@ export class Utilisateur extends Model {
     @Field() public perimetre?: string;
     @Field() public limitationSecteur?: boolean;
     @Field({ model: import("./secteur.model") })
+    @Field() public indicateurVisualisationIncotermFournisseur?: boolean;
     public secteurCommercial?: Secteur;
     @Field({ model: import("./personne.model") }) public commercial?: Personne;
     @Field({ model: import("./personne.model") }) public assistante?: Personne;

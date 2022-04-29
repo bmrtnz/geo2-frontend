@@ -882,7 +882,7 @@
                 </dx-select-box>
                 <dx-button
                   *ngIf="
-                    article?.normalisation?.etiquetteColis?.document.isPresent
+                    article?.normalisation?.etiquetteColis?.document?.isPresent
                   "
                   (onClick)="
                     viewEtiquette(

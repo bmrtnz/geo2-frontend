@@ -2017,6 +2017,61 @@
         "dataField": "article.matierePremiere.origine.id",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "article.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.espece.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.cahierDesCharge.categorie.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.normalisation.calibreMarquage.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.poidsNetClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.prepese",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
@@ -2211,9 +2266,9 @@
         "visible": false
       },
       {
-        "visibleIndex": 32,
+        "visibleIndex": 34,
         "dataField": "incotermFournisseur",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 36,
@@ -2305,6 +2360,7 @@
         "dataField": "numeroOrdre",
         "sortOrder": "asc",
         "sortIndex": 2,
+        "fixed": true,
         "visible": true
       },
       {

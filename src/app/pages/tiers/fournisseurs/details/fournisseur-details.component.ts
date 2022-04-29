@@ -136,6 +136,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     groupesFournisseur: DataSource;
     isReadOnlyMode = true;
     createMode = false;
+    zeroTracaValue = false;
     preSaisie: string;
     autoFacturationChecked = false;
     ifcoChecked = false;
@@ -273,8 +274,13 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         this.fournisseur = res.data.fournisseur;
         const certifications = this.mapCertificationsForDisplay(this.fournisseur.certifications);
         this.formGroup.patchValue({ ...this.fournisseur, certifications });
+        this.updateZeroTracaValue();
         this.preSaisie = this.fournisseur.preSaisie === true ? "preSaisie" : "";
         this.fournisseurLigneCode.emit(this.fournisseur.code);
+    }
+
+    updateZeroTracaValue() {
+        this.zeroTracaValue = (this.formGroup.get("idTracabilite").value === "0");
     }
 
     valueToUpperCase(e) {
@@ -440,6 +446,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
                         this.editing = false;
                         this.router.navigate([`/pages/tiers/fournisseurs/${e.data.saveFournisseur.id}`]);
                     }
+                    this.updateZeroTracaValue();
                     this.fournisseur.historique = e.data.saveFournisseur.historique;
                     this.fournisseur.typeTiers = e.data.saveFournisseur.typeTiers;
                     this.fournisseur.certifications = certifications;
@@ -465,27 +472,23 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 
     onIDTracaChange(e) {
         const idTracabilite = this.valueToUpperCase(e);
-        if (!idTracabilite || !this.createMode) return;
         // Code station = idTracabilite
         if (idTracabilite) {
             this.formGroup.get("codeStation").markAsDirty();
             this.formGroup.get("codeStation").setValue(idTracabilite);
         }
         // Check if already exists
-        const fournisseursSource = this.fournisseursService.getDataSource_v2(["idTracabilite"]);
+        const fournisseursSource = this.fournisseursService.getDataSource_v2(["code", "idTracabilite"]);
         fournisseursSource.searchExpr("idTracabilite");
         fournisseursSource.searchOperation("=");
         fournisseursSource.searchValue(idTracabilite);
-        fournisseursSource.load().then(res => res.length ? this.IDTracaexists = true : this.IDTracaexists = false);
-    }
-
-    toUppercase(e) {
-        console.log(e);
-        // e.value = e.value.toUpperCase();
+        fournisseursSource.load().then(res => {
+            res.length && (res[0].code !== this.fournisseur.code) ?
+                this.IDTracaexists = true : this.IDTracaexists = false;
+        });
     }
 
     onCancel() {
-
         if (!this.createMode) {
             this.formGroup.reset(this.fournisseur);
             this.readOnlyMode = true;

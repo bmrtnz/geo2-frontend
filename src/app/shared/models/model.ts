@@ -171,8 +171,12 @@ export abstract class Model {
     static getGQLObservable(columns: Array<string> = []): Observable<string> {
         return of(Model.getGQL(columns).toGraphQL());
     }
-    static getGQL(columns: Array<string> = []) {
+    static getGQL(columns: Array<string>|Set<string> = []) {
         const obj = new GraphQLObject();
+
+        if (columns instanceof Set) {
+          columns = [...columns];
+        }
 
         columns.sort().forEach((value) => {
             const strings = value.split(".");

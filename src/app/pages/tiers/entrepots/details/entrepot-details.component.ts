@@ -36,7 +36,6 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         code: [""],
         client: [""],
         raisonSocial: [""],
-        societe: [""],
         adresse1: [""],
         adresse2: [""],
         adresse3: [""],
@@ -74,6 +73,54 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         valide: [false],
         preSaisie: [""]
     });
+    readonly inheritedFields = new Set([
+      "id",
+      "code",
+      "client.id", "client.raisonSocial",
+      "raisonSocial",
+      "adresse1",
+      "adresse2",
+      "adresse3",
+      "codePostal",
+      "ville",
+      "pays.id", "pays.description",
+      "incoterm.id", "incoterm.description",
+      "regimeTva.id", "regimeTva.description",
+      "tvaCee",
+      "instructionSecretaireCommercial",
+      "instructionLogistique",
+      "typePalette.id", "typePalette.description",
+      "mentionClientSurFacture",
+      "transporteur.id", "transporteur.raisonSocial",
+      "baseTarifTransport.id", "baseTarifTransport.description",
+      "prixUnitaireTarifTransport",
+      "typeCamion.id", "typeCamion.description",
+      "transitaire.id", "transitaire.raisonSocial",
+      "baseTarifTransit.id", "baseTarifTransit.description",
+      "prixUnitaireTarifTransit",
+      "modeLivraison",
+      "langue.id", "langue.description",
+      "commercial.id", "commercial.nomUtilisateur",
+      "assistante.id", "assistante.nomUtilisateur",
+      "declarationTransit",
+      "controlReferenceClient",
+      "declarationEur1",
+      "envoieAutomatiqueDetail",
+      "gestionnaireChep",
+      "referenceChep",
+      "referenceIfco",
+      "dateDebutIfco",
+      "lieuFonctionEanDepot",
+      "lieuFonctionEanAcheteur",
+      "valide",
+      "preSaisie"
+    ]);
+    readonly inheritedClientFields = new Set([
+      "id",
+      "pays.id", "pays.description",
+      "incoterm.id", "incoterm.description",
+      "tvaCee"
+    ]);
     refreshGrid = new EventEmitter();
     helpBtnOptions = { icon: "help", elementAttr: { id: "help-1" }, onClick: () => this.toggleVisible() };
     contentReadyEvent = new EventEmitter<any>();
@@ -146,19 +193,19 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
                 this.createMode = url[0].path === "create" || (url[2] ? url[2].path === "create" : false);
                 this.readOnlyMode = !this.createMode;
                 if (!this.createMode) {
-                    this.entrepotsService.getOne(params.id)
+                    this.entrepotsService.getOne_v2(params.id, this.inheritedFields)
                         .subscribe(res => {
                             this.entrepot = res.data.entrepot;
                             this.client = this.entrepot.client;
                             this.formGroup.patchValue(this.entrepot);
                             this.contentReadyEvent.emit();
                             this.preSaisie = this.entrepot.preSaisie === true ? "preSaisie" : "";
-                            this.clientsService.getOne(this.entrepot.client.id)
+                            this.clientsService.getOne_v2(this.entrepot.client.id, this.inheritedClientFields)
                                 .subscribe(result => this.client = result.data.client);
                         });
                 } else {
                     if (this.route.snapshot.params.client !== "null") {
-                        this.clientsService.getOne(this.route.snapshot.params.client)
+                        this.clientsService.getOne_v2(this.route.snapshot.params.client, this.inheritedClientFields)
                             .subscribe(res => {
                                 this.client = res.data.client;
                                 if (this.client.incoterm) {
@@ -263,21 +310,19 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
         this.ifcoChecked = params.value;
     }
 
-    onPaysChange(e) {
-        if (!this.editing || !this.client) return;
-        this.paysClientIdentique = ((e.value?.id === this.client.pays?.id) && e.value?.id !== null);
-        if (this.paysClientIdentique) {
-            if (!this.client.tvaCee)
-                notify("Attention, l'Id TVA CEE n'est pas renseigné dans la fiche client", "warning", 5000);
-            this.formGroup.get("tvaCee").patchValue(this.client.tvaCee ? this.client.tvaCee : "");
+    onChepRefChange(e) {
+        const CHEP = "CHEP";
+        if (e.value !== "") {
+            this.formGroup.get("gestionnaireChep").patchValue(CHEP);
         } else {
-            this.onTvaCeeChange({ value: this.formGroup.get("tvaCee").value });
+            this.formGroup.get("gestionnaireChep").reset();
         }
-        this.formGroup.get("tvaCee").markAsDirty();
+        this.formGroup.get("gestionnaireChep").markAsDirty();
     }
 
-    onRegimeTvaChange(e) {
-        this.idTvaRequired = ["C", "O", "N"].includes(e.value?.id);
+    onPaysChange(e) {
+        if (!this.editing || !this.client) return;
+        this.idTvaRequired = ((e.value?.id !== this.client.pays?.id) && e.value?.id !== null);
     }
 
     onTvaCeeChange(e) {

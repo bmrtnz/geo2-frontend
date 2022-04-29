@@ -265,7 +265,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         ) this.lock(e);
         break;
       }
-      case "achatPrixUnitaire": {
+      case "achatDevisePrixUnitaire": {
         if ((data.venteACommission !== true
           && data.ordre.type.id !== "REP"
           && data.ordre.type.id !== "RPF")

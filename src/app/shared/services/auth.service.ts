@@ -41,6 +41,9 @@ export class AuthService {
         // Configurations
         "configTuilesOrdres",
         "configTabsOrdres",
+
+        // Autres accès
+        "indicateurVisualisationIncotermFournisseur"
     ];
 
     constructor(

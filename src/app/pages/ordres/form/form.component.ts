@@ -115,6 +115,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public fragments = Fragments;
     public status: string;
+    public ordreFacture: boolean;
     public refOrdre: string;
     public formGroup = this.formBuilder.group({
         id: [""],
@@ -440,6 +441,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.gestEntrepot = this.getGestEntrepot();
                 this.fetchFullOrderNumber();
                 if (this.ordre.numero) this.status = " - " + Statut[this.ordre.statut] + (this.ordre.factureEDI ? " EDI" : "");
+                this.ordreFacture = (this.ordre.statut.toString() === "FACTURE");
                 this.refOrdre = this.ordre?.id ? ordre.id : "-";
                 this.canDuplicate = !!this?.ordre?.id;
                 this.formGroup.reset(ordre);

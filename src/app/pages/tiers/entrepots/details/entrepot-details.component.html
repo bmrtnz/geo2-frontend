@@ -528,7 +528,6 @@
                     [displayExpr]="displayIDBefore"
                     [searchEnabled]="true"
                     [searchExpr]="['id', 'description']"
-                    (onValueChanged)="onRegimeTvaChange($event)"
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-regimeTva' | localize }}"
@@ -634,7 +633,9 @@
                     [inputAttr]="{
                       style: 'text-transform: uppercase'
                     }"
-                    (onValueChanged)="valueToUpperCase($event)"
+                    (onValueChanged)="
+                      onChepRefChange($event); valueToUpperCase($event)
+                    "
                     valueChangeEvent="keyup"
                   >
                     <dx-validator
@@ -644,6 +645,11 @@
                         [trim]="false"
                         type="stringLength"
                         [max]="35"
+                      ></dxi-validation-rule>
+                      <dxi-validation-rule
+                        type="pattern"
+                        pattern="^[0-9]+$"
+                        message="Seuls les caractères 0-9 sont acceptés"
                       ></dxi-validation-rule>
                     </dx-validator>
                   </dx-text-box>
