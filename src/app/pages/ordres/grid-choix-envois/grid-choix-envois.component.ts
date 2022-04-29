@@ -75,6 +75,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
+  private envoisFilter: any[];
 
   ngOnInit() {
 
@@ -152,7 +153,11 @@ export class GridChoixEnvoisComponent implements OnInit {
         map(res => res.data.allEnvoisList),
       )
       .subscribe({
-        next: data => this.gridData = data,
+        next: data => {
+          if (this.envoisFilter.length)
+            data = data.filter(({ id }) => this.envoisFilter.includes(id));
+          this.gridData = data;
+        },
         error: message => notify({ message }, "error", 7000),
       });
   }
@@ -164,9 +169,8 @@ export class GridChoixEnvoisComponent implements OnInit {
       .saveAll(allEnvois, new Set(["id", "traite"]));
   }
 
-  public applyFilter(filter: any[]) {
-    this.dataGrid.instance.filter(filter);
-    console.log(this.dataGrid.instance.getSelectedRowsData());
+  public setFilter(filter: any[]) {
+    this.envoisFilter = filter;
   }
 
 }

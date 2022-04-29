@@ -2871,6 +2871,12 @@
         "allowEditing": false,
         "width": "100",
         "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "id",
+        "allowEditing": false,
+        "visible": false
       }
     ]
   },
