@@ -69,4 +69,13 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
       });
   }
 
+  public async openFiltered(envois: Set<string>) {
+    await this.popup.instance.show();
+    this.gridChoixEnvoisComponent.
+      applyFilter([...envois]
+        .flatMap(envoi => [["id", "=", envoi], "or"])
+        .slice(0, -1),
+      );
+  }
+
 }

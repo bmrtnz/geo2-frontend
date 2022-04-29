@@ -164,4 +164,9 @@ export class GridChoixEnvoisComponent implements OnInit {
       .saveAll(allEnvois, new Set(["id", "traite"]));
   }
 
+  public applyFilter(filter: any[]) {
+    this.dataGrid.instance.filter(filter);
+    console.log(this.dataGrid.instance.getSelectedRowsData());
+  }
+
 }

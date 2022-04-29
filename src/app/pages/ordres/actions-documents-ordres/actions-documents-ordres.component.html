@@ -5,7 +5,7 @@
       type="default"
       text="{{ action.text }}"
       [visible]="action.visible"
-      [disabled]="action.disabled"
+      [disabled]="action.disabled || env.production"
       (onClick)="sendAction(action.id)"
     ></dx-button>
   </div>
@@ -32,5 +32,8 @@
     [flux]="flux"
     [gridEnvois]="gridEnvois"
   ></app-documents-ordres-popup>
-  <app-annule-remplace-popup [ordre]="ordre"></app-annule-remplace-popup>
+  <app-annule-remplace-popup
+    [docsPopup]="docsPopup"
+    [ordre]="ordre"
+  ></app-annule-remplace-popup>
 </div>

@@ -120,11 +120,9 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   public done() {
-    const selection = this.dataGrid.instance.getSelectedRowsData();
-    console.log(selection);
-    // .map(({ id }: Partial<Envois>) => ({ id, traite: "N" }));
-    // return this.envoisService
-    //   .saveAll(allEnvois, new Set(["id", "traite"]));
+    const selection = this.dataGrid.instance.getSelectedRowsData()
+      .map(envoi => envoi.id);
+    return of(new Set(selection));
   }
 
 }

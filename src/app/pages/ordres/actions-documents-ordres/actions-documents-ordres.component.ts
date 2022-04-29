@@ -5,6 +5,7 @@ import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
+import { environment } from "environments/environment";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -17,6 +18,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @Output() public flux: string;
   @Input() public gridEnvois: GridEnvoisComponent;
 
+  public readonly env = environment;
   public actionsFlux: any[];
   public plusActionsFlux: any[];
   public visibleActionsNumber = 6; // Visible buttons number, others in a popup
