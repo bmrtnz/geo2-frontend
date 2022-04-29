@@ -72,4 +72,33 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
             }
         }
     }
+
+    onValueChanged(event, cell) {
+        if (cell.setValue) {
+            cell.setValue(event.value);
+        }
+    }
+
+    defineTemplate(field) {
+
+        let templ;
+        // if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
+        // if (this.specialItemsWithSelectBox.includes(field)) templ = "specialSelectBoxEditTemplate";
+        if (field === "article.matierePremiere.variete.id") templ = "modifAutoBtnTemplate";
+        return templ ? templ : false;
+    }
+
+    autoDetailExp(cell) {
+    }
+
+    modifDetailExp(cell) {
+    }
+
+    showAutoButton(cell) {
+        return false;
+    }
+
+    showModifButton(cell) {
+        return true;
+    }
 }

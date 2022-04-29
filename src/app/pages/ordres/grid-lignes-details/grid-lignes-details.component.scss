@@ -32,3 +32,33 @@
     background-color: transparent;
   }
 }
+
+::ng-deep .small-detail-exp-button {
+  height: 18px;
+  min-width: 0;
+  padding: 0 4px !important;
+
+  .dx-button-content {
+    padding: 0;
+    font-size: 10px;
+    text-overflow: initial;
+
+    .dx-button-text {
+      line-height: 19px;
+    }
+  }
+
+  background-color: $BW-almond-medium !important;
+
+  &:hover {
+    background-color: $BW-almond-dark !important;
+  }
+
+  &.auto {
+    background-color: $BW-green-medium !important;
+
+    &:hover {
+      background-color: $BW-green-dark !important;
+    }
+  }
+}

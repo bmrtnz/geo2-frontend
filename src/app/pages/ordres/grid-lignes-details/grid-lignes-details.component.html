@@ -64,19 +64,59 @@
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
     [caption]="
       ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
       column.name
     "
     trueText="Oui"
     falseText="Non"
+    [fixed]="column.fixed"
     [cssClass]="column?.cssClass"
+    [editCellTemplate]="defineTemplate(column.dataField)"
     allowSearch="false"
     [dataType]="column?.dataType"
-    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
     [showInColumnChooser]="column.showInColumnChooser"
+    [showEditorAlways]="true"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'selectBoxEditTemplate'">
+    <dx-select-box
+      [dataSource]="this[cell.column.dataField + 'Source']"
+      [displayExpr]="
+        this[cell.column.dataField + 'Service'].model.getLabelField()
+      "
+      [searchExpr]="[
+        this[cell.column.dataField + 'Service'].model.getKeyField(),
+        this[cell.column.dataField + 'Service'].model.getLabelField()
+      ]"
+      [searchEnabled]="true"
+      [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)"
+    >
+    </dx-select-box>
+  </div>
+
+  <div *dxTemplate="let cell of 'modifAutoBtnTemplate'">
+    <dx-button
+      class="small-detail-exp-button modif"
+      type="default"
+      [focusStateEnabled]="false"
+      [visible]="showModifButton(cell)"
+      [text]="'Modifier'"
+      (onClick)="modifDetailExp(cell)"
+    >
+    </dx-button>
+    <dx-button
+      class="small-detail-exp-button auto"
+      type="default"
+      [focusStateEnabled]="false"
+      [visible]="showAutoButton(cell)"
+      [text]="'Auto'"
+      (onClick)="autoDetailExp(cell)"
+    ></dx-button>
+  </div>
 </dx-data-grid>
