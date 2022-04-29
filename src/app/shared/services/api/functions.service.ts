@@ -516,7 +516,7 @@ export class FunctionsService {
    * Event modification nb palette intermédiaire
    */
   public onChangePalNbPalinter =
-    (ordreLigneRef: string, userName: string) => this.apollo
+    (ordreLigneRef: string, username: string) => this.apollo
       .watchQuery<{ onChangePalNbPalinter: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
@@ -526,16 +526,16 @@ export class FunctionsService {
               body,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
-                { name: "userName", value: "userName", isVariable: true }
+                { name: "username", value: "username", isVariable: true }
               ]
             }
           ],
           [
             { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "userName", type: "String", isOptionnal: false }
+            { name: "username", type: "String", isOptionnal: false }
           ],
         )),
-        variables: { ordreLigneRef, userName },
+        variables: { ordreLigneRef, username },
         fetchPolicy: "network-only",
       })
 

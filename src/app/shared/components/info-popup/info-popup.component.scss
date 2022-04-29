@@ -8,9 +8,8 @@
 
 ::ng-deep .save-popup-button {
   display: inline-block;
-  position: absolute;
+  position: relative;
   left: 50%;
-  bottom: 30px;
   transform: translateX(-50%);
 }
 
