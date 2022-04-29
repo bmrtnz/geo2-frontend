@@ -100,7 +100,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     this.envoisService.countByOrdreFluxTraite(
       { id: this.ordre.id },
       { id: "ORDRE" },
-      "R",
+      new Set(["R"]),
     )
       .pipe(
         concatMap(res => res.data.countByOrdreFluxTraite

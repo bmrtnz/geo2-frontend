@@ -3,6 +3,7 @@ import { Apollo, gql } from "apollo-angular";
 import { Flux } from "app/shared/models";
 import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
+import TracabiliteLigne from "app/shared/models/tracabilite-ligne.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { take } from "rxjs/operators";
@@ -166,7 +167,7 @@ export class EnvoisService extends ApiService implements APIRead {
     public countByOrdreFluxTraite(
         ordre: { id: string } & Partial<Ordre>,
         flux: { id: string } & Partial<Flux>,
-        traite: string,
+        traite: Set<string>,
     ) {
         return this.apollo.query<{ countByOrdreFluxTraite: number }>({
             query: gql(ApiService.buildGraph("query", [
@@ -181,9 +182,9 @@ export class EnvoisService extends ApiService implements APIRead {
             ], [
                 { name: "ordre", type: "GeoOrdreInput", isOptionnal: false },
                 { name: "flux", type: "GeoFluxInput", isOptionnal: false },
-                { name: "traite", type: "Char", isOptionnal: false },
+                { name: "traite", type: "[Char]", isOptionnal: false },
             ])),
-            variables: { ordre, flux, traite },
+            variables: { ordre, flux, traite: [...traite] },
             fetchPolicy: "network-only",
         });
     }

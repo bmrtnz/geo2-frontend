@@ -129,7 +129,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     this.envoisService.countByOrdreFluxTraite(
       { id: this.ordreID },
       { id: this.fluxID },
-      "A",
+      new Set(["A", "R"]),
     )
       .pipe(
         concatMap(res =>
