@@ -210,7 +210,7 @@ export class ClientDetailsComponent
         "fraisRamasse",
         "refusCoface",
         "enCoursDateLimite",
-        "certifications.id", "certifications.certification.id",
+        "certifications.id", "certifications.certification.id", "certifications.certification.description",
         "fraisMarketingModeCalcul.id", "fraisMarketingModeCalcul.description",
         "formatDluo",
         "dateDebutIfco",
