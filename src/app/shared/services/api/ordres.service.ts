@@ -45,6 +45,14 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         return this.watchGetOneQuery<Response>({ variables });
     }
 
+    getOne_v2(id: string, columns: Array<string> | Set<string>) {
+        return this.apollo
+            .query<{ ordre: Ordre }>({
+                query: gql(this.buildGetOneGraph(columns)),
+                variables: { id },
+            });
+    }
+
     getOneByNumeroAndSociete(
         numero: string,
         societe: string,

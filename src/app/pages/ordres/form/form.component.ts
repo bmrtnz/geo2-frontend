@@ -25,7 +25,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { concatMap, filter, first, map, switchMap, takeUntil } from "rxjs/operators";
+import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
@@ -217,6 +217,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.handleTabChange()
             .subscribe(event => {
                 this.initializeAnchors(event);
+                if (event.status === "in")
+                    this.refetchStatut();
             });
         self = this;
     }
@@ -278,7 +280,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
             this.ordresService.save({ ordre }).subscribe({
-                next: () => {
+                next: (res) => {
+                    this.refreshStatus(res.data.saveOrdre.statut);
                     notify("Sauvegardé", "success", 3000);
                 },
                 error: () => notify("Echec de la sauvegarde", "error", 3000),
@@ -440,8 +443,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.fraisClient = this.getFraisClient();
                 this.gestEntrepot = this.getGestEntrepot();
                 this.fetchFullOrderNumber();
-                if (this.ordre.numero) this.status = " - " + Statut[this.ordre.statut] + (this.ordre.factureEDI ? " EDI" : "");
-                this.ordreFacture = (this.ordre.statut.toString() === "FACTURE");
                 this.refOrdre = this.ordre?.id ? ordre.id : "-";
                 this.canDuplicate = !!this?.ordre?.id;
                 this.formGroup.reset(ordre);
@@ -583,6 +584,31 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         const instCommEnt = this.ordre.entrepot.instructionSecretaireCommercial ?
             this.ordre.entrepot.instructionSecretaireCommercial : "";
         return instCommClt + (instCommClt ? " " : "") + instCommEnt;
+    }
+
+    private refreshStatus(statut: Statut) {
+        this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
+        this.ordreFacture = (this.status.toString() === "FACTURE");
+    }
+
+    private refetchStatut() {
+        this.route.paramMap
+            .pipe(
+                first(),
+                map(params => params.get(RouteParam.TabID)),
+                concatMap(numero => this.ordresService
+                    .getOneByNumeroAndSociete(
+                        numero,
+                        this.currentCompanyService.getCompany().id,
+                        ["id", "statut"],
+                    )
+                    .valueChanges),
+                takeWhile(res => res.loading),
+                map(res => res.data.ordreByNumeroAndSociete),
+            )
+            .subscribe({
+                next: ordre => this.refreshStatus(ordre.statut),
+            });
     }
 
 }
