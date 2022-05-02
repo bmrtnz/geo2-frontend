@@ -1904,6 +1904,7 @@
         "visibleIndex": 14,
         "dataField": "poidsNetExpedie",
         "dataType": "number",
+        "cssClass": "two-lines-header",
         "width": 40,
         "visible": true
       },
@@ -1911,6 +1912,7 @@
         "visibleIndex": 16,
         "dataField": "poidsBrutExpedie",
         "dataType": "number",
+        "cssClass": "two-lines-header",
         "width": 40,
         "visible": true
       },

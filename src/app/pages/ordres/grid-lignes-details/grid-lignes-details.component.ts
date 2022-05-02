@@ -104,10 +104,10 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     }
 
     showAutoButton(cell) {
-        return false;
+        return true;
     }
 
     showModifButton(cell) {
-        return true;
+        return false;
     }
 }

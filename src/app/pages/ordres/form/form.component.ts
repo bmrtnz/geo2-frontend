@@ -1,5 +1,5 @@
 import {
-    AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit,
+    AfterViewInit, Component, ElementRef, EventEmitter, isDevMode, OnDestroy, OnInit,
     Output, QueryList, ViewChild, ViewChildren
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
@@ -153,7 +153,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     public linkedOrdersSearch: boolean;
     public linkedOrders: any;
-    public ordresLignesViewExp: boolean;
+    public ordresLignesViewExp = isDevMode();
+
     public canDuplicate = false;
     public validationPopupVisible = false;
     public searchItems = [
