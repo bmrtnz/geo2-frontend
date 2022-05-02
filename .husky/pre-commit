@@ -1,28 +1,30 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# exit on merging
-if [ -n "$(git rev-parse -q --verify MERGE_HEAD)" ]; then
-    exit 0
-fi
+# NE FONCTIONNE PAS DANS CERTAINS CAS, A REVOIR DANS LE FUTUR
 
-STASH_ID=temp-stash-for-pre-commit
+# # exit on merging
+# if [ -n "$(git rev-parse -q --verify MERGE_HEAD)" ]; then
+#     exit 0
+# fi
 
-# Temp commit to allow stashing only unstaged
-git commit --quiet --no-verify -m "temp for stash-working"
+# STASH_ID=temp-stash-for-pre-commit
 
-# Stash unstaged changes
-git stash push -q -m "$STASH_ID"
+# # Temp commit to allow stashing only unstaged
+# git commit --quiet --no-verify -m "temp for stash-working"
 
-# Reset last commit
-git reset --quiet --soft HEAD~1
+# # Stash unstaged changes
+# git stash push -q -m "$STASH_ID"
 
-# Lint/check staged changes
-npm run lint
+# # Reset last commit
+# git reset --quiet --soft HEAD~1
 
-# Stage updated files
-git add -u
+# # Lint/check staged changes
+# npm run lint
 
-# Re-apply original unstaged changes
-git stash apply -q stash^{/$STASH_ID} || true
-git stash drop -q stash^{/$STASH_ID} || true
+# # Stage updated files
+# git add -u
+
+# # Re-apply original unstaged changes
+# git stash apply -q stash^{/$STASH_ID} || true
+# git stash drop -q stash^{/$STASH_ID} || true
