@@ -79,6 +79,15 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         }
     }
 
+    onEditorPreparing(e) {
+        // Saving cell main info
+        if (e.parentType === "dataRow") {
+            e.editorOptions.onFocusIn = (elem) => {
+                elem.element.querySelector(".dx-texteditor-input")?.select();
+            };
+        }
+    }
+
     defineTemplate(field) {
 
         let templ;

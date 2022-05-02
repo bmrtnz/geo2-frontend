@@ -9,6 +9,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onCellPrepared)="onCellPrepared($event)"
+  (onEditorPreparing)="onEditorPreparing($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Détail expéditions',
@@ -76,6 +77,7 @@
     [editCellTemplate]="defineTemplate(column.dataField)"
     allowSearch="false"
     [dataType]="column?.dataType"
+    [allowEditing]="column.allowEditing"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
