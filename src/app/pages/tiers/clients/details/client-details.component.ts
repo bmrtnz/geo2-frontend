@@ -222,6 +222,7 @@ export class ClientDetailsComponent
         "historique.valide",
         "historique.userModification",
         "historique.dateModification",
+        "typeTiers"
     ]);
 
     contentReadyEvent = new EventEmitter<any>();
