@@ -142,6 +142,27 @@ export class EnvoisService extends ApiService implements APIRead {
         }).pipe(take(1));
     }
 
+    buildDuplicateMergeAllGraph(body: Array<string>) {
+        return ApiService.buildGraph(
+            "mutation",
+            [
+                {
+                    name: `duplicateMergeAll${this.model.name}`,
+                    body,
+                    params: [{ name: `all${this.model.name}`, value: `all${this.model.name}`, isVariable: true }],
+                },
+            ],
+            [{ name: `all${this.model.name}`, type: `[Geo${this.model.name}Input]`, isOptionnal: false }],
+        );
+    }
+
+    duplicateMergeAllEnvois(allEnvois: Partial<Envois>[], columns: Set<string>) {
+        return this.apollo.mutate({
+            mutation: gql(this.buildDuplicateMergeAllGraph([...columns])),
+            variables: { allEnvois },
+        }).pipe(take(1));
+    }
+
     public countByOrdreAndFlux(
         ordre: { id: string } & Partial<Ordre>,
         flux: { id: string } & Partial<Flux>,
