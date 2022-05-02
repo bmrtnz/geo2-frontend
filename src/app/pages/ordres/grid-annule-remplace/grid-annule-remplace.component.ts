@@ -24,6 +24,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
 
   readonly AR_ENVOIS_FIELDS = [
     "id",
+    "typeTiers.id",
     "typeTiers.description",
     "codeTiers",
     "dateDemande", // date_entete
@@ -120,8 +121,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   public done() {
-    const selection: Array<string> = this.dataGrid.instance.getSelectedRowsData()
-      .map(envoi => envoi.id);
+    const selection: Array<Partial<Envois>> = this.dataGrid.instance.getSelectedRowsData();
     return of(selection);
   }
 

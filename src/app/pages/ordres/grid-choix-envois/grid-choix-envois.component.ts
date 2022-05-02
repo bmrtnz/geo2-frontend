@@ -48,7 +48,9 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   readonly CHOIX_ENVOIS_FIELDS = [
     "id",
+    "typeTiers.id",
     "typeTiers.description",
+    "flux.id",
     "flux.description",
     "moyenCommunication.id",
     "numeroAcces1",
@@ -56,12 +58,13 @@ export class GridChoixEnvoisComponent implements OnInit {
     "nomContact",
     "commentairesAvancement",
     "dateEnvoi",
+    "traite",
     // "modifLignes",
     // "modifEntete",
     // "lieuPassage",
   ];
 
-  gridData: Envois[];
+  gridData: Partial<Envois>[];
   rowKeys: any[];
   fluxSource: DataSource;
   societeSource: DataSource;
@@ -75,7 +78,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
-  private envoisFilter: any[];
+  private envoisARFilter: Partial<Envois>[] = [];
 
   ngOnInit() {
 
@@ -146,16 +149,22 @@ export class GridChoixEnvoisComponent implements OnInit {
               .valueChanges
         ),
         concatMapTo(this.envoisService.getList(
-          `ordre.id==${this.ordreID}`,
+          `ordre.id==${this.ordreID} and traite=isnotnull=null`,
           this.CHOIX_ENVOIS_FIELDS,
         )),
         take(1),
-        map(res => res.data.allEnvoisList),
+        map(res => JSON.parse(JSON.stringify(res.data.allEnvoisList))), // unseal data
       )
       .subscribe({
         next: data => {
-          if (this.envoisFilter.length)
-            data = data.filter(({ id }) => this.envoisFilter.includes(id));
+
+          // handle annule&replace
+          if (this.envoisARFilter.length)
+            data = data
+              .filter(({ typeTiers }) => this.envoisARFilter
+                .find((envoi: Partial<Envois>) => envoi.typeTiers.id === typeTiers.id))
+              .filter(({ dateEnvoi }) => !dateEnvoi);
+
           this.gridData = data;
         },
         error: message => notify({ message }, "error", 7000),
@@ -164,13 +173,13 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   public done() {
     const allEnvois = this.dataGrid.instance.getSelectedRowsData()
-      .map(({ id }: Partial<Envois>) => ({ id, traite: "N" }));
-    return this.envoisService
-      .saveAll(allEnvois, new Set(["id", "traite"]));
+      .map(({ id, commentairesAvancement }: Partial<Envois>) => ({ id, commentairesAvancement, traite: "N" }));
+    const action = this.envoisARFilter.length ? "duplicateMergeAllEnvois" : "saveAll";
+    return this.envoisService[action](allEnvois, new Set(["id", "traite"]));
   }
 
-  public setFilter(filter: any[]) {
-    this.envoisFilter = filter;
+  public setAREnvoisFilter(filter: Partial<Envois>[]) {
+    this.envoisARFilter = filter;
   }
 
 }
