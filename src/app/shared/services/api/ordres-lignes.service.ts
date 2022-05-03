@@ -188,6 +188,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
     const data = e.data;
     const bloquer = window.sessionStorage.getItem("blockage") === "true" ? true : false;
 
+    // console.log("oooo", data.expedie, data.expedieStation);
+
     switch (e.column.dataField) {
 
       case "nombrePalettesCommandees": {

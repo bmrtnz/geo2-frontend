@@ -54,6 +54,7 @@ export class Client extends Model {
     @Field() public instructionCommercial: string;
     @Field() public siret: string;
     @Field() public blocageAvoirEdi: boolean;
+    @Field() public modificationDetail: boolean;
     @Field() public debloquerEnvoieJour: boolean;
     @Field() public ifco: string;
     @Field() public instructionLogistique: string;

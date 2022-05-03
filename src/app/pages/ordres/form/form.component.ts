@@ -74,7 +74,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "statut",
         "campagne.id",
         "client.id",
+        "client.code",
         "client.raisonSocial",
+        "client.modificationDetail",
         "entrepot.id",
         "referenceClient",
         "dateDepartPrevue",
@@ -226,7 +228,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.initializeForm();
         this.initializeAnchors();
 
-        this.clientsDS = this.clientsService.getDataSource_v2(["id", "raisonSocial"]);
+        this.clientsDS = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
         this.entrepotDS = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
         this.deviseDS = this.devisesService.getDataSource();
         this.incotermsDS = this.incotermsService.getDataSource();

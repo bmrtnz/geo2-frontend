@@ -1853,7 +1853,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "article.description",
+        "dataField": "article.id",
         "dataType": "string",
         "cssClass": "small-left-padding",
         "width": 250,
@@ -1942,13 +1942,13 @@
       },
       {
         "visibleIndex": 26,
-        "dataField": "typePalette.description",
+        "dataField": "typePalette",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 28,
-        "dataField": "paletteInter.id",
+        "dataField": "paletteInter",
         "dataType": "string",
         "visible": true
       },
@@ -2019,9 +2019,50 @@
         "visible": false
       },
       {
-        "dataField": "article.id",
+        "dataField": "article.description",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordre.client.modificationDetail",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "fournisseur.indicateurModificationDetail",
+        "showInColumnChooser": true
+      },
+      {
+        "dataField": "ordre.societe.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.secteurCommercial.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.type.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "article.matierePremiere.variete.modificationDetail",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "article.emballage.emballage.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "article.emballage.emballage.groupe.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "article.cahierDesCharge.espece.id",
+        "showInColumnChooser": false,
+        "visible": true
+      },
+      {
+        "dataField": "expedie",
+        "showInColumnChooser": false
       }
     ]
   },

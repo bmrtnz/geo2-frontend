@@ -220,7 +220,7 @@
                             [readOnly]="true"
                             formControlName="client"
                             [dataSource]="clientsDS"
-                            displayExpr="raisonSocial"
+                            [displayExpr]="displayCodeBefore"
                             [searchEnabled]="true"
                             [searchExpr]="['id', 'raisonSocial']"
                           >
