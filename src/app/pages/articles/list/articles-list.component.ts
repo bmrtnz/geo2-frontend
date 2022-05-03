@@ -127,6 +127,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         this.allGridFilters = Object
             .entries(this.tagFilters)
             .filter(([, values]) => values.length)
+            .filter(([, [value]]) => value !== "null")
             .map(([path, values]) => values
                 .map(value => [path, value === "null" ? "isnotnull" : "=", value])
                 .map(value => JSON.stringify(value))
