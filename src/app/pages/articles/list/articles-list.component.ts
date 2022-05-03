@@ -124,21 +124,26 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         if (event.toString() === "Tous") { event = ["null"]; }
         this.tagFilters[dataField] = event;
 
-        this.allGridFilters = Object
-            .entries(this.tagFilters)
-            .filter(([, values]) => values.length)
-            .filter(([, [value]]) => value !== "null")
-            .map(([path, values]) => values
-                .map(value => [path, value === "null" ? "isnotnull" : "=", value])
+        try {
+            this.allGridFilters = Object
+                .entries(this.tagFilters)
+                .filter(([, values]) => values.length)
+                .filter(([, [value]]) => value !== "null")
+                .map(([path, values]) => values
+                    .map(value => [path, value === "null" ? "isnotnull" : "=", value])
+                    .map(value => JSON.stringify(value))
+                    .join(`¤${JSON.stringify(["or"])}¤`)
+                    .split("¤")
+                    .map(v => JSON.parse(v))
+                )
                 .map(value => JSON.stringify(value))
-                .join(`¤${JSON.stringify(["or"])}¤`)
+                .join(`¤${JSON.stringify(["and"])}¤`)
                 .split("¤")
-                .map(v => JSON.parse(v))
-            )
-            .map(value => JSON.stringify(value))
-            .join(`¤${JSON.stringify(["and"])}¤`)
-            .split("¤")
-            .map(v => JSON.parse(v));
+                .map(v => JSON.parse(v));
+        } catch (error) {
+            console.warn("Failed to parse filter, resetted to empty");
+            this.allGridFilters = null;
+        }
 
         // Filtering variete, emballage & origine selectBox list depending on specy
         const filter = [];
