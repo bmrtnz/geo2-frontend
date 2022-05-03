@@ -227,7 +227,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           || data.ordre.type.id === "REP"
           || (data.ordre.type.id === "RPR"
             && data.ordre.commentaireUsageInterne.substring(0, 3) === "B02"
-            && data.ordre.entrepot.modeLivraison.id !== "S")
+            && data.ordre.entrepot.modeLivraison !== "S")
         ) this.lock(e);
         break;
       }
