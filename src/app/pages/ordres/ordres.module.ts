@@ -66,7 +66,6 @@ import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/or
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
 import { PlanningDepartComponent } from "./indicateurs/planning-depart/planning-depart.component";
 import { SupervisionLivraisonComponent } from "./indicateurs/supervision-livraison/supervision-livraison.component";
-import { OrdreService } from "./ordre.service";
 import { OrdresRoutingModule } from "./ordres-routing.module";
 import { LoadingTabComponent, RootComponent, TabContext } from "./root/root.component";
 import OrdresSuiviComponent from "./suivi/ordres-suivi.component";
@@ -202,7 +201,6 @@ import { AnnuleRemplacePopupComponent } from "./annule-remplace-popup/annule-rem
   ],
   providers: [
     OrdresIndicatorsService,
-    OrdreService,
     DatePipe,
     LocalizePipe,
     TabContext,

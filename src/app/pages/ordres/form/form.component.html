@@ -196,6 +196,10 @@
                 <span class="dx-form-group-caption">{{
                   "ordres-suivi-groupe-infos" | localize
                 }}</span>
+
+                <!-- separator -->
+                <span> - </span>
+                
                 <span
                   *ngIf="ordre"
                   class="dx-form-group-caption order-status"
@@ -341,9 +345,9 @@
                             <dx-validator
                               name="{{ 'ordres-incoterm' | localize }}"
                             >
-                              <dxi-validation-rule
+                              <!-- <dxi-validation-rule
                                 type="required"
-                              ></dxi-validation-rule>
+                              ></dxi-validation-rule> -->
                             </dx-validator>
                           </dx-select-box>
                         </div>
@@ -677,9 +681,9 @@
                             <dx-validator
                               name="{{ 'ordres-commercial' | localize }}"
                             >
-                              <dxi-validation-rule
+                              <!-- <dxi-validation-rule
                                 type="required"
-                              ></dxi-validation-rule>
+                              ></dxi-validation-rule> -->
                             </dx-validator>
                           </dx-select-box>
                         </div>
@@ -701,9 +705,9 @@
                             <dx-validator
                               name="{{ 'ordres-assistante' | localize }}"
                             >
-                              <dxi-validation-rule
+                              <!-- <dxi-validation-rule
                                 type="required"
-                              ></dxi-validation-rule>
+                              ></dxi-validation-rule> -->
                             </dx-validator>
                           </dx-select-box>
                         </div>
@@ -867,13 +871,6 @@
                               [searchEnabled]="true"
                               [searchExpr]="['id', 'raisonSocial']"
                             >
-                              <dx-validator
-                                name="{{ 'ordres-transporteur' | localize }}"
-                              >
-                                <dxi-validation-rule
-                                  type="required"
-                                ></dxi-validation-rule>
-                              </dx-validator>
                             </dx-select-box>
                           </div>
                         </div>

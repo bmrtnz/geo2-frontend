@@ -198,8 +198,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   async enableFilters() {
 
-    if (!this.dataSource) return;
-
     const summaryInputs: SummaryInput[] = [
       { selector: "nombrePalettesCommandees", summaryType: SummaryType.SUM },
       { selector: "nombreColisCommandes", summaryType: SummaryType.SUM }
