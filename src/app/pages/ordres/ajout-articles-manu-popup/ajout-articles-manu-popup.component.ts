@@ -16,7 +16,7 @@ import { concatMap, mergeMap, takeWhile } from "rxjs/operators";
   styleUrls: ["./ajout-articles-manu-popup.component.scss"]
 })
 
-export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges {
+export class AjoutArticlesManuPopupComponent implements OnChanges {
 
   @Input() public ordre: Ordre;
   @Output() public lignesChanged = new EventEmitter();
@@ -44,9 +44,6 @@ export class AjoutArticlesManuPopupComponent implements AfterViewInit, OnChanges
     private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
   ) { }
-
-  ngAfterViewInit() {
-  }
 
   ngOnChanges() {
     this.setTitle();
