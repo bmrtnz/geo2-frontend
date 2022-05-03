@@ -24,6 +24,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
 
   readonly AR_ENVOIS_FIELDS = [
     "id",
+    "typeTiers.id",
     "typeTiers.description",
     "codeTiers",
     "dateDemande", // date_entete
@@ -100,7 +101,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     this.envoisService.countByOrdreFluxTraite(
       { id: this.ordre.id },
       { id: "ORDRE" },
-      "R",
+      new Set(["R"]),
     )
       .pipe(
         concatMap(res => res.data.countByOrdreFluxTraite
@@ -120,9 +121,8 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   public done() {
-    const selection = this.dataGrid.instance.getSelectedRowsData()
-      .map(envoi => envoi.id);
-    return of(new Set(selection));
+    const selection: Array<Partial<Envois>> = this.dataGrid.instance.getSelectedRowsData();
+    return of(selection);
   }
 
 }

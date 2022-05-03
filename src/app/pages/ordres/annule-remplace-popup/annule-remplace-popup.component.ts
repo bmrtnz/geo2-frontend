@@ -54,7 +54,10 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   goDocuments() {
     this.gridAnnuleRemplaceComponent.done()
       .subscribe({
-        next: filter => (this.popup.instance.hide(), this.docsPopup.openFiltered(filter)),
+        next: async filter => {
+          this.popup.instance.hide();
+          await this.docsPopup.openFiltered(new Set(filter));
+        }
       });
   }
 

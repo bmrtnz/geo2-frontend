@@ -113,7 +113,7 @@ export class ModificationsService extends ApiService implements APIRead {
         });
         fGroup.markAsPristine();
 
-        return this.save({ modification })
+        return this.save_v2(["id"], { modification })
             .pipe(
                 catchError(() => {
                     notify("Erreur enregistrement demande de modification", "error", 3000);

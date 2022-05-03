@@ -30,6 +30,7 @@ export class Envois extends Model {
     @Field({ model: import("./type-tiers.model") }) public typeTiers: TypeTiers;
     @Field() public codeTiers: string;
     @Field() public versionOrdre: string;
+    @Field() public traite: string;
     @Field({ model: import("./document.model") }) public document: Document;
 }
 

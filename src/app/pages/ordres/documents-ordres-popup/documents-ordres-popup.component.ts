@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
+import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
@@ -69,13 +70,9 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
       });
   }
 
-  public async openFiltered(envois: Set<string>) {
+  public async openFiltered(envois: Set<Partial<Envois>>) {
     await this.popup.instance.show();
-    this.gridChoixEnvoisComponent.
-      applyFilter([...envois]
-        .flatMap(envoi => [["id", "=", envoi], "or"])
-        .slice(0, -1),
-      );
+    this.gridChoixEnvoisComponent.setAREnvoisFilter([...envois]);
   }
 
 }

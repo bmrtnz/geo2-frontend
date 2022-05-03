@@ -25,6 +25,7 @@ import {
 import { FormComponent } from "../form/form.component";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { AuthService } from "app/shared/services/auth.service";
+import notify from "devextreme/ui/notify";
 
 const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
@@ -365,6 +366,7 @@ export class TabContext {
      * @param numero Ordre numero
      */
     public openOrdre(numero: string) {
+        notify("Ouverture ordre n° " + numero, "info", 1500);
         return this.with(TabType.Ordre, numero);
     }
 
