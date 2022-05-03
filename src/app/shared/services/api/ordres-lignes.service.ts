@@ -191,7 +191,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
     switch (e.column.dataField) {
 
       case "nombrePalettesCommandees": {
-        if ((data.expedieStation === true
+        if ((data.logistique.expedieStation === true
           || data.ordre.secteurCommercial.id === "F"
           || bloquer === true)
           && data.ordre.type.id !== "RPR"
@@ -202,26 +202,26 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "nombrePalettesIntermediaires": {
-        if (data.expedieStation === true ||
+        if (data.logistique.expedieStation === true ||
           data.indicateurPalette === 1
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "nombreColisPalette": {
-        if (data.expedieStation === true
+        if (data.logistique.expedieStation === true
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "nombreColisCommandes": {
-        if (data.expedieStation === true
+        if (data.logistique.expedieStation === true
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "proprietaireMarchandise": {
-        if (data.expedieStation === true
+        if (data.logistique.expedieStation === true
           || bloquer === true
           || data.ordre.type.id === "RDF"
           || data.ordre.type.id === "REP"
@@ -232,7 +232,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "fournisseur": { // Emballeur/Expéditeur
-        if (data.expedieStation === true
+        if (data.logistique.expedieStation === true
           || bloquer === true
           || data.ordre.type.id === "RDF"
           || data.ordre.type.id === "REP"
@@ -243,7 +243,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "ventePrixUnitaire": {
-        if ((data.venteACommission !== true
+        if ((data.ordre.venteACommission !== true
           && data.ordre.type.id !== "REP"
           && data.ordre.type.id !== "RPF")
           && bloquer === true
@@ -251,7 +251,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "venteUnite": {
-        if ((data.venteACommission !== true
+        if ((data.ordre.venteACommission !== true
           && data.ordre.type.id !== "REP"
           && data.ordre.type.id !== "RPF")
           && bloquer === true
@@ -259,23 +259,23 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "gratuit": {
-        if (data.venteACommission !== true
-          && (data.expedieStation === true
+        if (data.ordre.venteACommission !== true
+          && (data.logistique.expedieStation === true
             || bloquer === true)
         ) this.lock(e);
         break;
       }
       case "achatDevisePrixUnitaire": {
-        if ((data.venteACommission !== true
+        if ((data.ordre.venteACommission !== true
           && data.ordre.type.id !== "REP"
           && data.ordre.type.id !== "RPF")
-          && (data.expedieStation === true
+          && (data.logistique.expedieStation === true
             || bloquer === true)
         ) this.lock(e);
         break;
       }
       case "achatUnite": {
-        if ((data.venteACommission !== true
+        if ((data.ordre.venteACommission !== true
           && data.ordre.type.id !== "REP"
           && data.ordre.type.id !== "RPF")
           && bloquer === true
@@ -283,7 +283,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "typePalette": {
-        if (data.expedieStation === true
+        if (data.logistique.expedieStation === true
           || data.ordre.type.id === "REP"
           || data.ordre.type.id === "RPF"
           || bloquer === true
@@ -291,7 +291,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "paletteInter": {
-        if (data.expedieStation === true
+        if (data.logistique.expedieStation === true
           || data.ordre.type.id === "REP"
           || data.ordre.type.id === "RPF"
           || bloquer === true
@@ -321,4 +321,3 @@ export class OrdreLignesService extends ApiService implements APIRead {
   }
 
 }
-

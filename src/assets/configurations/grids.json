@@ -1838,6 +1838,36 @@
       {
         "dataField": "valide",
         "visible": false
+      },
+      {
+        "dataField": "ordre.type.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "venteUnite.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "achatUnite.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.venteACommission",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.commentaireUsageInterne",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "logistique.expedieStation",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
