@@ -1,14 +1,15 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
-import { concatMap, mergeMap, takeWhile } from "rxjs/operators";
+import { concatMap, takeWhile } from "rxjs/operators";
 
 @Component({
   selector: "app-ajout-articles-manu-popup",
@@ -40,6 +41,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
   constructor(
     private articlesService: ArticlesService,
+    private gridConfiguratorService: GridConfiguratorService,
     private functionsService: FunctionsService,
     private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
@@ -89,9 +91,14 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     e.component.content().parentNode.classList.add("ajout-articles-manu-popup");
   }
 
-  onShown(e) {
+  async onShown(e) {
     this.catalogue.dataGrid.selection = { mode: "multiple", allowSelectAll: false };
     this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
+
+    // datagrid state loading is not executed automatically in this component...
+    const gridConfig = await this.gridConfiguratorService.fetchConfig(Grid.Article);
+    this.catalogue.dataGrid.instance.state(gridConfig);
+    this.catalogue.dataGrid.instance.repaint();
   }
 
   alreadySelected() {
@@ -140,8 +147,6 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.codeChangeProcess = true;
     this.saisieCode.instance.reset();
     this.catalogue.dataGrid.dataSource = [];
-    this.catalogue.dataGrid.instance.repaint();
-    this.catalogue.dataGrid.dataSource = null;
     this.updateChosenArticles();
     this.catalogue.especeSB.instance.reset();
     this.catalogue.varieteSB.instance.reset();

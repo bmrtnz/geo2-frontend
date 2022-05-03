@@ -86,8 +86,10 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     }
 
     refreshArticlesGrid() {
-        if (this.dataGrid.dataSource === null) this.dataGrid.dataSource = this.articles;
-        this.dataGrid.instance.repaint();
+        if (this.dataGrid.dataSource === null
+            || (Array.isArray(this.dataGrid.dataSource)
+                && !this.dataGrid.dataSource.length))
+            this.dataGrid.dataSource = this.articles;
         this.dataGrid.instance.refresh();
         this.dataGrid.instance.filter(this.allGridFilters);
         this.toRefresh = false;
