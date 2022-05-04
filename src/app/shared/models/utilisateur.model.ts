@@ -13,6 +13,7 @@ export class Utilisateur extends Model {
     @Field({ model: import("./param-user-client-restriction.model") })
     public restrictions?: ParamUserClientRestrictionModel[];
     @Field() public perimetre?: string;
+    @Field() public geoClient?: string;
     @Field() public limitationSecteur?: boolean;
     @Field({ model: import("./secteur.model") })
     @Field() public indicateurVisualisationIncotermFournisseur?: boolean;

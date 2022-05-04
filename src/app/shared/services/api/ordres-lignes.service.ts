@@ -115,6 +115,18 @@ export class OrdreLignesService extends ApiService implements APIRead {
               resolve(new OrdreLigne(res.data.ordreLigne));
           });
         }),
+        insert: (values) => {
+          const variables = { ordreLigne: values };
+          return this.watchSaveQuery({ variables }).toPromise();
+        },
+        update: (key, values) => {
+          const variables = { ordreLigne: { id: key, ...values } };
+          return this.watchSaveQuery({ variables }).toPromise();
+        },
+        remove: (key) => {
+          const variables = { id: key };
+          return this.watchDeleteQuery({ variables }).toPromise();
+        },
       }),
     });
   }
@@ -187,8 +199,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
     // Locking step
     const data = e.data;
     const bloquer = window.sessionStorage.getItem("blockage") === "true" ? true : false;
-
-    // console.log("oooo", data.expedie, data.expedieStation);
 
     switch (e.column.dataField) {
 
@@ -321,6 +331,42 @@ export class OrdreLignesService extends ApiService implements APIRead {
     }
 
   }
+
+  lockFieldsDetails(e) {
+
+    // Locking step
+    const data = e.data;
+
+    switch (e.column.dataField) {
+
+      case "nombrePalettesExpediees":
+      case "nombreColisExpedies":
+      case "poidsNetExpedie":
+      case "poidsBrutExpedie":
+      case "venteQuantite":
+      case "venteUnite.description":
+      case "achatUnite.description":
+      case "achatQuantite":
+      case "typePalette":
+      case "paletteInter":
+      case "paletteInter": {
+        if (data.logistique.expedieStation ||
+          !(data.ordre.client.modificationDetail !== false ||
+            data.ordre.secteurCommercial.id === "PAL" ||
+            this.authService.currentUser.geoClient === "2" ||
+            data.ordre.societe.id === "IMP" ||
+            data.ordre.societe.id === "UDC" ||
+            data.article.cahierDesCharge.espece.id.substring(0, 5) === "EMBAL" ||
+            data.ordre.type.id === "RPR" ||
+            data.ordre.type.id === "RPO" ||
+            data.article.matierePremiere.variete.modificationDetail ||
+            data.ordre.societe.id === "IUK"
+          )) this.lock(e);
+        break;
+      }
+    }
+  }
+
 
 }
 
