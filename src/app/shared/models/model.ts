@@ -4,7 +4,7 @@ import {
     MonoTypeOperatorFunction,
     Observable,
     of,
-    OperatorFunction,
+    OperatorFunction
 } from "rxjs";
 import {
     concatAll,
@@ -14,7 +14,7 @@ import {
     mergeMap,
     reduce,
     takeWhile,
-    toArray,
+    toArray
 } from "rxjs/operators";
 
 export type ModelFieldOptions<T = typeof Model> = {
@@ -53,22 +53,39 @@ export const Field =
  * Base abstract class for model definition
  */
 export abstract class Model {
-    constructor(rawEntity = {}) {
+
+    /**
+     * It takes a raw entity and assigns it to the model's fields
+     * @param rawEntity - The raw entity that is being converted to a model.
+     * @param options
+     * @param options.deepFetch - Fetch submodels as needed
+     */
+    constructor(rawEntity = {}, options: { deepFetch: boolean } = { deepFetch: false }) {
         const fieldsEntries = Object.entries<ModelFieldOptions>(
             this.constructor.prototype.fields,
         );
-        for (const [field, options] of fieldsEntries) {
+
+        const assignField = (field: string, fieldOptions: ModelFieldOptions) => {
+            this[field] =
+                rawEntity[field].length !== undefined
+                    ? rawEntity[field].map(
+                        (e) => new (fieldOptions.fetchedModel as any)(e),
+                    )
+                    : new (fieldOptions.fetchedModel as any)(rawEntity[field]);
+        };
+
+        for (let [field, fieldOptions] of fieldsEntries) {
             if (rawEntity[field] === null || rawEntity[field] === undefined) {
                 const type = Reflect.getMetadata("design:type", this, field);
                 if (type.name !== "String") continue;
             }
-            if (options.fetchedModel)
-                this[field] =
-                    rawEntity[field].length !== undefined
-                        ? rawEntity[field].map(
-                            (e) => new (options.fetchedModel as any)(e),
-                        )
-                        : new (options.fetchedModel as any)(rawEntity[field]);
+            if (options.deepFetch && fieldOptions.model && !fieldOptions.fetchedModel)
+                (async () => {
+                    fieldOptions = await Model.fetchModel(fieldOptions);
+                    if (fieldOptions.fetchedModel) assignField(field, fieldOptions);
+                    else this[field] = rawEntity[field];
+                })();
+            else if (fieldOptions.fetchedModel) assignField(field, fieldOptions);
             else this[field] = rawEntity[field];
         }
     }
@@ -171,11 +188,11 @@ export abstract class Model {
     static getGQLObservable(columns: Array<string> = []): Observable<string> {
         return of(Model.getGQL(columns).toGraphQL());
     }
-    static getGQL(columns: Array<string>|Set<string> = []) {
+    static getGQL(columns: Array<string> | Set<string> = []) {
         const obj = new GraphQLObject();
 
         if (columns instanceof Set) {
-          columns = [...columns];
+            columns = [...columns];
         }
 
         columns.sort().forEach((value) => {
@@ -317,13 +334,15 @@ export abstract class Model {
         FieldDescriptor,
         FieldDescriptor
     > {
-        return mergeMap(async ([propertyName, options]) => {
-            if (options.model) {
-                const module = await options.model;
-                options.fetchedModel = module.default;
-            }
-            return [propertyName, options] as FieldDescriptor;
-        });
+        return mergeMap(async ([fieldName, options]) => [fieldName, await this.fetchModel(options)] as FieldDescriptor);
+    }
+
+    private static async fetchModel(options: ModelFieldOptions<typeof Model>) {
+        if (options.model) {
+            const module = await options.model;
+            options.fetchedModel = module.default;
+        }
+        return options;
     }
 
     /**
