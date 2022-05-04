@@ -16,6 +16,7 @@ export class Envois extends Model {
     @Field({ model: import("./imprimante.model") }) public imprimante: Imprimante;
     @Field({ dataType: "localdate " }) public dateEnvoi?: string;
     @Field({ dataType: "localdate " }) public dateAccuseReception?: string;
+    @Field({ dataType: "localdate " }) public dateSoumission?: string;
     @Field({ dataType: "localdate " }) public dateDemande?: string;
     // @Field({ dataType: 'date ' }) public dateModification?: string;
     @Field({ model: import("./flux.model") }) public flux: Flux;

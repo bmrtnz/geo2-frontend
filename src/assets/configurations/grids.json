@@ -2819,11 +2819,18 @@
         "visible": true
       },
       {
+        "visibleIndex": 3,
+        "dataField": "codeTiers",
+        "dataType": "string",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
         "visibleIndex": 4,
         "dataField": "nomContact",
         "dataType": "string",
         "width": "150",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true
       },
       {
@@ -2858,6 +2865,22 @@
       {
         "visibleIndex": 18,
         "dataField": "dateEnvoi",
+        "dataType": "string",
+        "allowEditing": false,
+        "width": "100",
+        "visible": true
+      },
+      {
+        "visibleIndex": 19,
+        "dataField": "dateSoumission",
+        "dataType": "string",
+        "allowEditing": false,
+        "width": "100",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "dateDemande",
         "dataType": "string",
         "allowEditing": false,
         "width": "100",
