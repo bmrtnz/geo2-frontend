@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from "@angular/core";
 import Envois from "app/shared/models/envois.model";
+import TypeTiers from "app/shared/models/type-tiers.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { EnvoisService } from "app/shared/services/api/envois.service";
 import { FluxService } from "app/shared/services/api/flux.service";
@@ -78,7 +79,27 @@ export class GridChoixEnvoisComponent implements OnInit {
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
-  private envoisARFilter: Partial<Envois>[] = [];
+  private dataMask: Partial<Envois>[] = [];
+
+  /**
+   * It takes an array of Envois and an array of Partial<Envois> and returns an array of Envois with
+   * the properties of the Partial<Envois> applied to the Envois
+   * @param {Envois[]} data - Envois[]
+   * @param {Partial<Envois>[]} mask - Partial<Envois>[]
+   * @returns - The data is being filtered by the mask.
+   *   - The data is being filtered by the dateEnvoi.
+   *   - The data is being mapped from the mask.
+   */
+  private static applyMask(data: Envois[], mask: Partial<Envois>[]) {
+    const byMatchingTypeTiers = (tt: TypeTiers) => (e: Partial<Envois>) => e.typeTiers.id === tt.id;
+    return data
+      .filter(({ typeTiers }) => mask.find(byMatchingTypeTiers(typeTiers)))
+      .filter(({ dateEnvoi }) => !dateEnvoi)
+      .map(envoi => ({
+        ...envoi,
+        ...mask.find(byMatchingTypeTiers(envoi.typeTiers)) ?? {},
+      }));
+  }
 
   ngOnInit() {
 
@@ -153,17 +174,14 @@ export class GridChoixEnvoisComponent implements OnInit {
           this.CHOIX_ENVOIS_FIELDS,
         )),
         take(1),
-        map(res => JSON.parse(JSON.stringify(res.data.allEnvoisList))), // unseal data
+        map(res => JSON.parse(JSON.stringify(res.data.allEnvoisList)) as Envois[]), // unseal data
       )
       .subscribe({
         next: data => {
 
-          // handle annule&replace
-          if (this.envoisARFilter.length)
-            data = data
-              .filter(({ typeTiers }) => this.envoisARFilter
-                .find((envoi: Partial<Envois>) => envoi.typeTiers.id === typeTiers.id))
-              .filter(({ dateEnvoi }) => !dateEnvoi);
+          // handle annule&remplace
+          if (this.dataMask.length)
+            data = GridChoixEnvoisComponent.applyMask(data, this.dataMask);
 
           this.gridData = data;
         },
@@ -174,12 +192,12 @@ export class GridChoixEnvoisComponent implements OnInit {
   public done() {
     const allEnvois = this.dataGrid.instance.getSelectedRowsData()
       .map(({ id, commentairesAvancement }: Partial<Envois>) => ({ id, commentairesAvancement, traite: "N" }));
-    const action = this.envoisARFilter.length ? "duplicateMergeAllEnvois" : "saveAll";
+    const action = this.dataMask.length ? "duplicateMergeAllEnvois" : "saveAll";
     return this.envoisService[action](allEnvois, new Set(["id", "traite"]));
   }
 
-  public setAREnvoisFilter(filter: Partial<Envois>[]) {
-    this.envoisARFilter = filter;
+  public setMask(data: Partial<Envois>[]) {
+    this.dataMask = data;
   }
 
 }

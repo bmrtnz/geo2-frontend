@@ -115,7 +115,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
         map(res => res.data.allEnvoisList),
       )
       .subscribe({
-        next: data => this.dataGrid.dataSource = data,
+        next: data => this.dataGrid.dataSource = JSON.parse(JSON.stringify(data)),
         error: message => notify({ message }, "error", 7000),
       });
   }

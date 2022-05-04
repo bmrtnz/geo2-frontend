@@ -70,9 +70,9 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
       });
   }
 
-  public async openFiltered(envois: Set<Partial<Envois>>) {
+  public async openWithMask(envois: Set<Partial<Envois>>) {
     await this.popup.instance.show();
-    this.gridChoixEnvoisComponent.setAREnvoisFilter([...envois]);
+    this.gridChoixEnvoisComponent.setMask([...envois]);
   }
 
 }
