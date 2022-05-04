@@ -1,9 +1,8 @@
-import { Component, Input, OnChanges, OnInit, AfterViewInit, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, AfterViewInit, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import Ordre from "app/shared/models/ordre.model";
-import * as gridConfig from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -11,7 +10,7 @@ import { SummaryType } from "app/shared/services/api.service";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
-import { ArticlesService } from "app/shared/services";
+import { ArticlesService, AuthService } from "app/shared/services";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 
 
@@ -40,6 +39,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         public articlesService: ArticlesService,
         public typePaletteService: TypesPaletteService,
         public paletteInterService: TypesPaletteService,
+        public authService: AuthService,
         public gridConfiguratorService: GridConfiguratorService,
         public localizeService: LocalizationService
     ) {
@@ -120,30 +120,35 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         }
     }
 
+    onEditingStart(e) {
+        if (!e.column || !e.data.numero) return;
+        this.ordreLignesService.lockFieldsDetails(e);
+    }
+
     defineTemplate(field) {
         let templ;
         if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
+        // We use a invisible random field to show modify/auto buttons
         if (field === "article.matierePremiere.variete.id") templ = "modifAutoBtnTemplate";
         return templ ? templ : false;
     }
 
     autoDetailExp(cell) {
-        console.log(this.ordre.client);
     }
 
     modifDetailExp(cell) {
     }
 
-    showAutoButton(cell) {
+    showModifButton(cell) {
         const data = cell.data;
-        const unlock = data.expedie && (
+        const show = data.logistique.expedieStation && (
             data.ordre.client.modificationDetail !== false ||
-            !data.fournisseur.indicateurModificationDetail !== false ||
+            data.fournisseur.indicateurModificationDetail !== false ||
             (data.fournisseur.indicateurModificationDetail === false && data.article.emballage.emballage.groupe.id === "PALOX") ||
             data.ordre.secteurCommercial.id === "IND" ||
             data.ordre.secteurCommercial.id === "PAL" ||
             data.ordre.societe.id === "IMP" ||
-            // data.utilisateur.client === "2" ||
+            this.authService.currentUser.geoClient === "2" ||
             data.ordre.type.id === "REF" ||
             data.ordre.type.id === "RPO" ||
             data.ordre.type.id === "RPR" ||
@@ -151,38 +156,34 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
             data.article.matierePremiere.variete.modificationDetail ||
             data.ordre.societe.id === "IUK"
         );
-        return unlock;
+        return show;
     }
 
-    showModifButton(cell) {
+    showAutoButton(cell) {
+
+        let show;
         const data = cell.data;
-        let unlock = !data.expedie;
-        if (data.expedie) unlock = (
-            data.ordre.client.modificationDetail !== false ||
-            !data.fournisseur.indicateurModificationDetail !== false ||
-            data.ordre.secteurCommercial.id === "PAL" ||
-            // data.utilisateur.client === "2" ||
-            data.ordre.societe.id === "UDC" ||
-            data.article.cahierDesCharge.espece.id.substring(0, 5) === "EMBAL" ||
-            data.ordre.type.id === "REF" ||
-            data.ordre.type.id === "REF" ||
-            data.ordre.type.id === "RPO" ||
-            data.ordre.type.id === "RPR" ||
-            data.ordre.type.id === "RDF" ||
-            data.article.matierePremiere.variete.modificationDetail ||
-            data.ordre.societe.id === "IUK"
-        );
-        return unlock;
+        if (data.logistique.expedieStation) {
+            show = false;
+        } else {
+            show = (
+                data.ordre.client.modificationDetail !== false ||
+                data.fournisseur.indicateurModificationDetail !== false ||
+                data.ordre.secteurCommercial.id === "PAL" ||
+                this.authService.currentUser.geoClient === "2" ||
+                data.ordre.societe.id === "UDC" ||
+                data.article.cahierDesCharge.espece.id.substring(0, 5) === "EMBAL" ||
+                data.ordre.type.id === "REP" ||
+                data.ordre.type.id === "REF" ||
+                data.ordre.type.id === "RPO" ||
+                data.ordre.type.id === "RPR" ||
+                data.ordre.type.id === "RDF" ||
+                data.article.matierePremiere.variete.modificationDetail ||
+                data.ordre.societe.id === "IUK"
+            );
+        }
+        return show;
     }
 }
 
-// ordre.client.modificationDetail
-// fournisseur.indicateurModificationDetail
-// ordre.societe.id
-// ordre.secteurCommercial.id
-// ordre.type.id
-// article.matierePremiere.variete.modificationDetail
-// article.emballage.emballage.id
-// article.emballage.emballage.groupe.id
-// expedie
 

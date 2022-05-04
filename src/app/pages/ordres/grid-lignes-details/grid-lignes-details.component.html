@@ -10,6 +10,7 @@
   [allowColumnReordering]="true"
   (onCellPrepared)="onCellPrepared($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
+  (onEditingStart)="onEditingStart($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Détail expéditions',
@@ -59,7 +60,7 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
-
+ 
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
