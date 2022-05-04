@@ -54,7 +54,7 @@ export class PushHistoryPopupComponent {
     constructor(
         private historiqueService: HistoriqueService,
         private modifiedFieldsService: ModifiedFieldsService,
-    ) {}
+    ) { }
 
     async onSubmit(form: NgForm) {
         if (this.commentValidator.instance.validate().isValid) {
@@ -84,7 +84,7 @@ export class PushHistoryPopupComponent {
     onShowing() {
         this.commentValidationRules = [
             { type: "required" },
-            // { type: 'stringLength', min: 5 }, // Léa 11-2021: mettent souvent 'Ok'
+            { type: "stringLength", max: 128 }
         ];
     }
 
@@ -112,4 +112,4 @@ export class PushHistoryPopupComponent {
     ],
     exports: [PushHistoryPopupComponent],
 })
-export class PushHistoryPopupModule {}
+export class PushHistoryPopupModule { }
