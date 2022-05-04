@@ -10,9 +10,10 @@ import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/g
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable, of } from "rxjs";
+import { from, Observable, of, throwError } from "rxjs";
 import { concatMap, concatMapTo, map, take } from "rxjs/operators";
 
 @Component({
@@ -60,13 +61,9 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   ngOnInit() {
     if (!this?.dataGrid?.dataSource) {
       this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.AnnuleRemplace);
-      this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+      this.columns = from(this.gridConfig)
+        .pipe(map(config => config.columns));
     }
-  }
-
-  onContentReady(event) {
-    this.handleRaisonAR();
-    this.dataGrid.instance.selectAll();
   }
 
   onRowClick({ rowIndex }) {
@@ -79,13 +76,13 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   handleRaisonAR() {
-    this.firstReason = this.dataGrid?.dataSource?.[0]?.commentairesAvancement;
+    this.firstReason = (this.dataGrid?.dataSource as DataSource).items()[0].commentairesAvancement;
     let sameText = true;
-    (this.dataGrid?.dataSource as Partial<Envois>[])?.map((ds) => {
+    (this.dataGrid?.dataSource as DataSource).items().map((ds) => {
       if (ds.commentairesAvancement !== this.firstReason) sameText = false;
     });
-    this.copyPasteVisible = !!(this.dataGrid?.dataSource?.[0]?.commentairesAvancement)
-      && !sameText && (this.dataGrid?.dataSource as Partial<Envois>[]).length > 1;
+    this.copyPasteVisible = !!(this.firstReason)
+      && !sameText && (this.dataGrid?.dataSource as DataSource).items().length > 1;
   }
 
   displayCapitalize(data) {
@@ -98,15 +95,8 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   reload() {
-    this.envoisService.countByOrdreFluxTraite(
-      { id: this.ordre.id },
-      { id: "ORDRE" },
-      new Set(["R"]),
-    )
+    this.functionsService.ofAREnvois(this.ordre.id).valueChanges
       .pipe(
-        concatMap(res => res.data.countByOrdreFluxTraite
-          ? of({ res: 1 })
-          : this.functionsService.ofAREnvois(this.ordre.id).valueChanges),
         concatMapTo(this.envoisService.getList(
           `ordre.id==${this.ordre.id} and traite==R`,
           this.AR_ENVOIS_FIELDS,
@@ -115,13 +105,20 @@ export class GridAnnuleRemplaceComponent implements OnInit {
         map(res => res.data.allEnvoisList),
       )
       .subscribe({
-        next: data => this.dataGrid.dataSource = JSON.parse(JSON.stringify(data)),
+        next: data => this.dataGrid.dataSource = new DataSource(JSON.parse(JSON.stringify(data)))
+          .on("changed", () => {
+            this.handleRaisonAR();
+            this.dataGrid.instance.selectAll();
+          }),
         error: message => notify({ message }, "error", 7000),
+        complete: () => this.dataGrid.instance.selectAll(),
       });
   }
 
   public done() {
     const selection: Array<Partial<Envois>> = this.dataGrid.instance.getSelectedRowsData();
+    if (!selection.every(envoi => envoi.commentairesAvancement))
+      return throwError(Error("Le motif d'annulation est obligatoire pour les envois sélectionnés"));
     return of(selection);
   }
 

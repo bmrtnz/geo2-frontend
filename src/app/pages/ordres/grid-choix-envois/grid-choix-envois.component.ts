@@ -49,6 +49,7 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   readonly CHOIX_ENVOIS_FIELDS = [
     "id",
+    "codeTiers",
     "typeTiers.id",
     "typeTiers.description",
     "flux.id",
@@ -58,14 +59,13 @@ export class GridChoixEnvoisComponent implements OnInit {
     "imprimante.id",
     "nomContact",
     "commentairesAvancement",
-    "dateEnvoi",
     "traite",
-    // "modifLignes",
-    // "modifEntete",
-    // "lieuPassage",
+    "dateEnvoi",
+    "dateSoumission",
+    "dateDemande",
   ];
 
-  gridData: Partial<Envois>[];
+  gridData: DataSource;
   rowKeys: any[];
   fluxSource: DataSource;
   societeSource: DataSource;
@@ -126,7 +126,6 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   onContentReady(event) {
     this.contentReadyEvent.emit(event);
-    this.dataGrid.instance.selectAll();
   }
 
   displayIDBefore(data) {
@@ -151,26 +150,16 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   reload() {
-    this.envoisService.countByOrdreFluxTraite(
-      { id: this.ordreID },
-      { id: this.fluxID },
-      new Set(["A", "R"]),
-    )
+    this.functionsService.geoPrepareEnvois(
+      this.ordreID,
+      this.fluxID,
+      true,
+      false,
+      this.authService.currentUser.nomUtilisateur,
+    ).valueChanges
       .pipe(
-        concatMap(res =>
-          res.data.countByOrdreFluxTraite
-            ? of({ res: 1 })
-            : this.functionsService.geoPrepareEnvois(
-              this.ordreID,
-              this.fluxID,
-              true,
-              false,
-              this.authService.currentUser.nomUtilisateur,
-            )
-              .valueChanges
-        ),
         concatMapTo(this.envoisService.getList(
-          `ordre.id==${this.ordreID} and traite=isnotnull=null`,
+          `ordre.id==${this.ordreID} and traite==A`,
           this.CHOIX_ENVOIS_FIELDS,
         )),
         take(1),
@@ -183,15 +172,17 @@ export class GridChoixEnvoisComponent implements OnInit {
           if (this.dataMask.length)
             data = GridChoixEnvoisComponent.applyMask(data, this.dataMask);
 
-          this.gridData = data;
+          this.gridData = new DataSource(data)
+            .on("changed", () => this.dataGrid.instance.selectAll());
         },
         error: message => notify({ message }, "error", 7000),
+        complete: () => this.dataGrid.instance.selectAll(),
       });
   }
 
   public done() {
     const allEnvois = this.dataGrid.instance.getSelectedRowsData()
-      .map(({ id, commentairesAvancement }: Partial<Envois>) => ({ id, commentairesAvancement, traite: "N" }));
+      .map((envoi: Partial<Envois>) => new Envois({ ...envoi, traite: "N" }, { deepFetch: true }));
     const action = this.dataMask.length ? "duplicateMergeAllEnvois" : "saveAll";
     return this.envoisService[action](allEnvois, new Set(["id", "traite"]));
   }
