@@ -1,10 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
-import ContactEnvois from "app/shared/models/contact-envois.model";
 import { ApiService } from "../api.service";
 
-export type FunctionResponse<T = Record<string, any>> = { res: number, msg?: string, data?: T };
-const body = ["res", "msg", "data"];
+export enum FunctionResult {
+  Error = 0,    // Unknown/error
+  OK = 1,       // OK
+  Warning = 2,  // Warning
+}
+export type FunctionResponse<T = Record<string, any>> = { res: FunctionResult, msg?: string, data?: T };
+export const functionBody = ["res", "msg", "data"];
 
 @Injectable({
   providedIn: "root"
@@ -25,7 +29,7 @@ export class FunctionsService {
         [
           {
             name: "ofValideEntrepotForOrdre",
-            body,
+            body: functionBody,
             params: [{ name: "entrepotID", value: "entrepotID", isVariable: true }]
           }
         ],
@@ -47,7 +51,7 @@ export class FunctionsService {
         [
           {
             name: "fNouvelOrdre",
-            body,
+            body: functionBody,
             params: [{ name: "societe", value: "societe", isVariable: true }]
           }
         ],
@@ -70,7 +74,7 @@ export class FunctionsService {
           [
             {
               name: "ofInitArticle",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreRef", value: "ordreRef", isVariable: true },
                 { name: "articleRef", value: "articleRef", isVariable: true },
@@ -99,7 +103,7 @@ export class FunctionsService {
           [
             {
               name: "fInitBlocageOrdre",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreRef", value: "ordreRef", isVariable: true },
                 { name: "userName", value: "userName", isVariable: true },
@@ -127,7 +131,7 @@ export class FunctionsService {
           [
             {
               name: "fVerifLogistiqueOrdre",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreRef", value: "ordreRef", isVariable: true },
               ]
@@ -152,7 +156,7 @@ export class FunctionsService {
           [
             {
               name: "fAjoutOrdlog",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLogRef", value: "ordreLogRef", isVariable: true },
                 { name: "typePassage", value: "typePassage", isVariable: true },
@@ -186,7 +190,7 @@ export class FunctionsService {
           [
             {
               name: "geoPrepareEnvois",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordRef", value: "ordRef", isVariable: true },
                 { name: "fluCode", value: "fluCode", isVariable: true },
@@ -226,7 +230,7 @@ export class FunctionsService {
           [
             {
               name: "ofAREnvois",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordRef", value: "ordRef", isVariable: true },
               ]
@@ -251,7 +255,7 @@ export class FunctionsService {
           [
             {
               name: "onChangeCdeNbPal",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "secteurCommercialCode", value: "secteurCommercialCode", isVariable: true },
@@ -306,7 +310,7 @@ export class FunctionsService {
           [
             {
               name: "onChangePalNbCol",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "username", value: "username", isVariable: true },
@@ -333,7 +337,7 @@ export class FunctionsService {
           [
             {
               name: "onChangeCdeNbCol",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "username", value: "username", isVariable: true },
@@ -360,7 +364,7 @@ export class FunctionsService {
           [
             {
               name: "onChangeProprCode",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "societeCode", value: "societeCode", isVariable: true },
@@ -389,7 +393,7 @@ export class FunctionsService {
           [
             {
               name: "onChangeFouCode",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "societeCode", value: "societeCode", isVariable: true },
@@ -419,7 +423,7 @@ export class FunctionsService {
           [
             {
               name: "onChangeVtePu",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true }
               ]
@@ -444,7 +448,7 @@ export class FunctionsService {
           [
             {
               name: "onChangeIndGratuit",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true }
               ]
@@ -469,7 +473,7 @@ export class FunctionsService {
           [
             {
               name: "onChangePalCode",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "secteurCode", value: "secteurCode", isVariable: true },
@@ -498,7 +502,7 @@ export class FunctionsService {
           [
             {
               name: "onChangePalinterCode",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true }
               ]
@@ -523,7 +527,7 @@ export class FunctionsService {
           [
             {
               name: "onChangePalNbPalinter",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "username", value: "username", isVariable: true }
@@ -550,7 +554,7 @@ export class FunctionsService {
           [
             {
               name: "onChangeAchDevPu",
-              body,
+              body: functionBody,
               params: [
                 { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
                 { name: "societeCode", value: "societeCode", isVariable: true }
