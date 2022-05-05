@@ -4,6 +4,7 @@
 
 ::ng-deep .grid-ordre-ligne-detail {
   .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+
     input,
     div {
       color: #fff;
@@ -14,7 +15,7 @@
     background: rgba(51, 145, 176, 0.26);
   }
 
-  .dx-row-focused.dx-data-row > td:not(.dx-focused):not(:first-of-type) {
+  .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type) {
     color: #000;
     background-color: transparent !important;
   }
@@ -23,7 +24,7 @@
     text-align: center !important;
   }
 
-  .dx-row-focused.dx-data-row > td {
+  .dx-row-focused.dx-data-row>td {
     // border-bottom-color: #e0e0e0 !important;
     border-bottom-color: $base-accent !important;
   }
@@ -34,6 +35,9 @@
 }
 
 ::ng-deep .small-detail-exp-button {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
   height: 18px;
   min-width: 0;
   padding: 0 4px !important;
