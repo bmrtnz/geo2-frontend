@@ -14,7 +14,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, of, throwError } from "rxjs";
-import { concatMap, concatMapTo, map, take } from "rxjs/operators";
+import { concatMapTo, map, take } from "rxjs/operators";
 
 @Component({
   selector: "app-grid-annule-remplace",
@@ -90,7 +90,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   copyPasteFirstRow() {
-    (this.dataGrid.dataSource as Partial<Envois>[]).map(ds => ds.commentairesAvancement = this.firstReason);
+    (this.dataGrid.dataSource as DataSource).items().map(ds => ds.commentairesAvancement = this.firstReason);
     this.dataGrid.instance.refresh();
   }
 
