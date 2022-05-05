@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridAnnuleRemplaceComponent } from "../grid-annule-remplace/grid-annule-remplace.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
@@ -54,10 +55,13 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   goDocuments() {
     this.gridAnnuleRemplaceComponent.done()
       .subscribe({
-        next: async filter => {
+        next: async arData => {
+          const mask = arData
+            .map(({ typeTiers, commentairesAvancement }) => ({ typeTiers, commentairesAvancement }));
           this.popup.instance.hide();
-          await this.docsPopup.openFiltered(new Set(filter));
-        }
+          await this.docsPopup.openWithMask(new Set(mask));
+        },
+        error: message => notify({ message }, "error", 7000),
       });
   }
 
