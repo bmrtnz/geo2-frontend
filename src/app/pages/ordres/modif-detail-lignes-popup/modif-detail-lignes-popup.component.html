@@ -1,0 +1,81 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  title="Modification détail expédition"
+  [width]="'auto'"
+  [height]="'auto'"
+  (onShowing)="onShowing($event)"
+  (onHidden)="onHidden()"
+  [resizeEnabled]="true"
+>
+  <div *dxTemplate="let data of 'content'">
+
+    <form
+    #form="ngForm">
+      <div class="textbox-left">
+        <span class="popup-detail-expediteur-title">Expéditeur :</span>
+        <br><br>
+        <span class="popup-detail-article-title">Desc. :</span>
+      </div>
+      <div class="textbox-right">
+        <span class="popup-detail-expediteur">&nbsp;{{ ligneDetail?.fournisseur?.code }}</span>
+        <br><br>
+        <span class="popup-detail-article">&nbsp;{{ articleDesc }}</span>
+      </div>
+      <br>
+      <div style="clear:both"></div>
+      <br>
+      <div class="textbox-left">
+        <div class="header-form-modif-popup">Valeur</div>
+        <div style="clear:both"></div>
+        <div class="dx-field">
+          <div class="dx-field-label">Nb Pal</div>
+          <dx-text-box value="{{ ligneDetail?.nombrePalettesCommandees }}" [readOnly]="true"></dx-text-box>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">Nb Col</div>
+          <dx-text-box value="{{ ligneDetail?.nombreColisCommandes }}" [readOnly]="true"></dx-text-box>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">Poids brut*</div>
+          <dx-text-box value="{{ ligneDetail?.poidsBrutExpedie }}" [readOnly]="true"></dx-text-box>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">Poids net*</div>
+          <dx-text-box value="{{ ligneDetail?.poidsNetExpedie }}" [readOnly]="true"></dx-text-box>
+        </div>
+      </div>
+        
+      <div class="textbox-right">
+        <div class="header-form-modif-popup">Changement**</div>
+        <div style="clear:both"></div>
+        <dx-text-box ngModel name="nombrePalettesExpediees" ></dx-text-box>
+        <dx-text-box ngModel name="nombreColisExpedies"></dx-text-box>
+        <dx-text-box ngModel name="poidsBrutExpedie"></dx-text-box>
+        <dx-text-box ngModel name="poidsNetExpedie"></dx-text-box>
+      </div>
+      <div style="clear:both"></div>
+      <br>
+      <div class="textbox-left">
+        <div>* En kilo</div>
+        <div>** Ne saisir que les valeurs à modifier</div>
+      </div>
+      <div style="clear:both"></div>
+
+      <div class="popup-buttons-container">
+        <dx-button
+          type="normal"
+          text="Appliquer"
+          (onClick)="applyClick(form)"
+        ></dx-button>
+        <dx-button
+          type="default"
+          text="Annuler"
+          (onClick)="cancelClick()"
+        ></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>
