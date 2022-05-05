@@ -155,7 +155,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     public linkedOrdersSearch: boolean;
     public linkedOrders: any;
-    public ordresLignesViewExp = isDevMode();
+    public ordresLignesViewExp: boolean;
 
     public canDuplicate = false;
     public validationPopupVisible = false;

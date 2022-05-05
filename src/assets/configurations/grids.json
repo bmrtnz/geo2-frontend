@@ -2092,24 +2092,28 @@
         "visibleIndex": 4,
         "dataField": "nombrePalettesAuSol",
         "dataType": "number",
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "nombrePalettes100x120",
         "dataType": "number",
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "nombrePalettes60x80",
         "dataType": "number",
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {
         "visibleIndex": 7,
         "dataField": "nombrePalettes80x120",
         "dataType": "number",
+        "cssClass": "two-lines-header",
         "visible": true
       },
       {

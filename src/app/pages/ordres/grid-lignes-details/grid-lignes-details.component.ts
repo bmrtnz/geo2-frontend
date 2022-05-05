@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, AfterViewInit, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, AfterViewInit, ViewChild, Output } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -12,6 +12,7 @@ import { map } from "rxjs/operators";
 import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
 import { ArticlesService, AuthService } from "app/shared/services";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
+import { ModifDetailLignesPopupComponent } from "../modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 
 
 @Component({
@@ -32,7 +33,9 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     public env = environment;
     public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
     @Input() public ordre: Ordre;
+    @Output() public ligneDetail: any;
     @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+    @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
 
     constructor(
         public ordreLignesService: OrdreLignesService,
@@ -137,6 +140,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     }
 
     modifDetailExp(cell) {
+        this.ligneDetail = cell.data;
+        this.modifDetailPopup.visible = true;
     }
 
     showModifButton(cell) {
