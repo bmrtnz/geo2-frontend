@@ -15,11 +15,6 @@ h6 {
   z-index: 1;
 }
 
-.inactive {
-  opacity: 0.2;
-  pointer-events: none;
-}
-
 ::ng-deep .blocked-color {
   background-color: #ff325a !important;
 }

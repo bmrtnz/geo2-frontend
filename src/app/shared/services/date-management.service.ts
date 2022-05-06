@@ -67,8 +67,6 @@ export class DateManagementService {
     }
 
     getDates(e) {
-        // We check that this change is coming from the user, not following a prog change
-        if (!e.event) return;
 
         const periode = e.value;
 
@@ -127,7 +125,7 @@ export class DateManagementService {
                 fin =
                     (month === 12 ? year + 1 : year) +
                     "-" +
-                    (month === 12 ? 1 : month) +
+                    (month === 12 ? 1 : month + 1) +
                     "-" +
                     date;
                 break;

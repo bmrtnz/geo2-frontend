@@ -147,7 +147,6 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     }
 
     tileNumber(e) {
-        console.log(e);
         this.authService
             .persist({
                 configTuilesOrdres: {

@@ -137,6 +137,11 @@ interface GridColumn {
     width?: number | string;
 
     /**
+     * Specifies the column cell template when required
+     */
+    cellTemplate?: string;
+
+    /**
      * Specifies the column edit cell template when required
      */
     editCellTemplate?: string;

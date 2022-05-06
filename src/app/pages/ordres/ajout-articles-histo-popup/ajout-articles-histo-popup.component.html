@@ -1,15 +1,15 @@
 <dx-popup
-  [height]="'auto'"
   [showTitle]="true"
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
   [(visible)]="visible"
   (onShowing)="onShowing($event)"
-  (onShown)="onShown($event)"
+  [resizeEnabled]="true"
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
-    <div class="title-end">{{ titleEnd }}</div>
+    <div class="title-mid">{{ titleMid }}</div>
+    <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
     <dx-button
       class="close-article-popup"
       icon="close"
@@ -18,20 +18,6 @@
     </dx-button>
   </div>
 
-  <!-- code article -->
-  <div class="dx-field quickCode-area">
-    <div class="dx-field-label">{{ "articles-saisieCode" | localize }}</div>
-    <div class="dx-field-value">
-      <dx-tag-box
-        [acceptCustomValue]="true"
-        [placeholder]="'Code...'"
-        [readOnly]="codeChangeProcess"
-        (onValueChanged)="onValueChanged($event)"
-      >
-        <dxo-drop-down-options [width]="0"> </dxo-drop-down-options>
-      </dx-tag-box>
-    </div>
-  </div>
   <dx-button
     class="cancel-button"
     type="normal"
@@ -43,16 +29,18 @@
     [ngClass]="{ pulse: pulseBtnOn }"
     class="articles-valid-button"
     type="success"
-    [disabled]="articlesKO"
     [visible]="nbARticles > 0"
     [text]="validBtnText"
     (onClick)="insertArticles()"
   ></dx-button>
+  
+  <div style="clear:both"></div>
   <br />
-  <div style="clear: both"></div>
-  <app-articles-list
-    [ordre]="ordre"
+
+  <app-grid-lignes-historique
+    [clientId]="clientId"
     (selectChange)="selectFromGrid($event)"
-  ></app-articles-list>
+    [popupShown]="popupShown"
+  ></app-grid-lignes-historique>
   <br />
 </dx-popup>

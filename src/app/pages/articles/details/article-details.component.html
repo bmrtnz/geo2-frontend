@@ -915,12 +915,12 @@
                 </dx-select-box>
                 <dx-button
                   *ngIf="
-                    article?.normalisation?.etiquetteUc?.document.isPresent
+                    article?.normalisation?.etiquetteUc?.document?.isPresent
                   "
                   (onClick)="
                     viewEtiquette(
                       'articles-normalisation-etiquetteUc',
-                      article.normalisation.etiquetteUc.document
+                      article.normalisation?.etiquetteUc?.document
                     )
                   "
                   class="icon-btn"

@@ -26,6 +26,7 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
 import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
@@ -194,6 +195,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
     @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
     @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
+    @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
     @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
 
     constructor(
@@ -326,6 +328,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.ajoutArtManu.visible = true;
     }
 
+    onArticleHistoClick() {
+        this.ajoutArtHisto.visible = true;
+    }
+
     detailExp() {
         this.ordresLignesViewExp = !this.ordresLignesViewExp;
     }
@@ -421,6 +427,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public onLignesChanged(e) {
+        if (!e) return;
         this.gridLignes.nbInsertedArticles = e;
         this.gridLignes.enableFilters();
     }

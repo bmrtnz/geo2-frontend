@@ -100,6 +100,8 @@ import { GridChoixEnvoisComponent } from "./grid-choix-envois/grid-choix-envois.
 import { GridAnnuleRemplaceComponent } from "./grid-annule-remplace/grid-annule-remplace.component";
 import { AnnuleRemplacePopupComponent } from "./annule-remplace-popup/annule-remplace-popup.component";
 import { ModifDetailLignesPopupComponent } from "./modif-detail-lignes-popup/modif-detail-lignes-popup.component";
+import { AjoutArticlesHistoPopupComponent } from "./ajout-articles-histo-popup/ajout-articles-histo-popup.component";
+import { GridLignesHistoriqueComponent } from "./grid-lignes-historique/grid-lignes-historique.component";
 
 @NgModule({
   declarations: [
@@ -157,6 +159,8 @@ import { ModifDetailLignesPopupComponent } from "./modif-detail-lignes-popup/mod
     GridAnnuleRemplaceComponent,
     AnnuleRemplacePopupComponent,
     ModifDetailLignesPopupComponent,
+    AjoutArticlesHistoPopupComponent,
+    GridLignesHistoriqueComponent,
   ],
   imports: [
     OrdresRoutingModule,

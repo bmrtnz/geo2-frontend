@@ -2067,6 +2067,168 @@
       }
     ]
   },
+  "ordre-ligne-historique": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "ordre.numero",
+        "dataType": "string",
+        "width": 80,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordre.dateDepartPrevue",
+        "dataType": "date",
+        "sortOrder": "desc",
+        "format": "dd-MM-yyyy",
+        "width": 110,
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ordre.dateLivraisonPrevue",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "width": 110,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "article.id",
+        "dataType": "string",
+        "cssClass": "small-left-padding",
+        "width": 250,
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "article.matierePremiere.origine.id",
+        "width": 22,
+        "cssClass": "two-lines-header",
+        "cellTemplate": "zoomButtonTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "nombrePalettesCommandees",
+        "width": 50,
+        "cssClass": "two-lines-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "nombreColisCommandes",
+        "width": 100,
+        "cssClass": "two-lines-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "ventePrixUnitaire",
+        "dataType": "number",
+        "width": 100,
+        "cssClass": "two-lines-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "achatDevisePrixUnitaire",
+        "dataType": "number",
+        "width": 100,
+        "cssClass": "two-lines-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "fournisseur.code",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "gtinColisKit",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "ordre.client.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.espece.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.cahierDesCharge.categorie.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.normalisation.calibreMarquage.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.poidsNetClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.emballage.prepese",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.matierePremiere.origine.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "article.valide",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "venteUnite.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "achatUnite.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nombreColisExpedies",
+        "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
+  },
   "ordre-ligne-logistique": {
     "columns": [
       {

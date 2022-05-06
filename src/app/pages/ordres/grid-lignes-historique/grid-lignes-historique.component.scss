@@ -1,0 +1,59 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+
+::ng-deep .grid-ordre-ligne-historique {
+    .dx-data-row {
+        .dx-icon {
+            color: $base-accent;
+        }
+
+        &.dx-row-focused {
+            .dx-icon {
+                color: white;
+            }
+        }
+    }
+
+    &.dx-row-focused .dx-icon {
+        color: white !important;
+    }
+
+    .bio-article {
+        color: #39970e !important;
+        cursor: pointer;
+    }
+}
+
+
+::ng-deep .grid-zoom-button {
+    width: 22px !important;
+    height: 22px;
+    min-width: 0 !important;
+    background-color: transparent !important;
+
+    .dx-button-content {
+        padding: 0;
+    }
+}
+
+::ng-deep .periode-container {
+    margin-bottom: 15px;
+    overflow: hidden;
+
+    dx-box {
+        width: 700px;
+        padding: 0 20px;
+        float: left;
+
+        .dx-texteditor-container input {
+            padding-right: 0 !important;
+        }
+    }
+
+    .refresh {
+        float: left;
+        margin-left: 30px;
+    }
+}

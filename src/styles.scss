@@ -89,6 +89,7 @@ body {
 .form-ordres-page,
 .form-scrollTo-buttons-container,
 .accueil-ordres-page {
+
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
   .dx-field-label {
     font-size: 16px;
@@ -102,7 +103,7 @@ body {
     font-size: 18px;
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(.small-detail-exp-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
+  .dx-button:not(.subButton):not(.small-article-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
     margin-bottom: 10px;
 
     .dx-button-content {
@@ -140,19 +141,17 @@ body {
 }
 
 // Thinner grids
-.dx-datagrid-rowsview .dx-row > td {
+.dx-datagrid-rowsview .dx-row>td {
   line-height: 0;
 
-  & > .dx-filemanager-details-item-name-wrapper {
+  &>.dx-filemanager-details-item-name-wrapper {
     line-height: initial;
   }
 }
 
 // Datagrid title customization
-.dx-datagrid-header-panel
-  .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
-.dx-datagrid-header-panel
-  .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
+.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
+.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
   border: 0;
 }
 
@@ -165,7 +164,7 @@ body {
 }
 
 // Reducing space between checkboxes
-.dx-box .dx-field-value:not(.dx-widget) > .dx-checkbox {
+.dx-box .dx-field-value:not(.dx-widget)>.dx-checkbox {
   margin: 10px 0 !important;
 }
 
@@ -190,7 +189,7 @@ body {
   background-color: #ff7f07;
 }
 
-.dx-invalid-message > .dx-overlay-content {
+.dx-invalid-message>.dx-overlay-content {
   background-color: rgba(255, 255, 255, 1);
   font-size: 14px;
   padding: 3px 8px 4px 0px;
@@ -282,7 +281,7 @@ body {
     display: none;
   }
 
-  .dx-datagrid-filter-panel-checkbox ~ .dx-datagrid-filter-panel-text {
+  .dx-datagrid-filter-panel-checkbox~.dx-datagrid-filter-panel-text {
     display: block;
   }
 
@@ -292,9 +291,7 @@ body {
 }
 
 // Reduce vertical spacing in popup list items
-.dx-dropdownlist-popup-wrapper
-  .dx-list:not(.dx-list-select-decorator-enabled)
-  .dx-list-item-content {
+.dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
   padding: 6px 15px !important;
 }
 
@@ -354,4 +351,10 @@ body {
 
 .text-align-center {
   text-align: center !important;
+}
+
+// Inactive low opacity button
+.inactive-button {
+  opacity: 0.2 !important;
+  pointer-events: none !important;
 }

@@ -768,7 +768,7 @@
                 }}</span>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="!fullOrderNumber || !allowMutations"
+                  [disabled]="!fullOrderNumber || !allowMutations || true"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
                     'hint-source-stock' | localize
@@ -777,7 +777,7 @@
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="!fullOrderNumber || !allowMutations"
+                  [disabled]="!fullOrderNumber || !allowMutations || true"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
                     'hint-source-refClt' | localize
@@ -789,19 +789,20 @@
                   [disabled]="!fullOrderNumber || !allowMutations"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-historique' | localize
+                    'hint-source-manuel' | localize
                   }}"
-                  text="{{ 'btn-historique' | localize }}"
+                  (onClick)="onArticleManClick()"
+                  text="{{ 'btn-manuel' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
                   [disabled]="!fullOrderNumber || !allowMutations"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-manuel' | localize
+                    'hint-source-historique' | localize
                   }}"
-                  (onClick)="onArticleManClick()"
-                  text="{{ 'btn-manuel' | localize }}"
+                  (onClick)="onArticleHistoClick()"
+                  text="{{ 'btn-historique' | localize }}"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton shiftedRight"
@@ -1094,6 +1095,11 @@
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-manu-popup>
+  <app-ajout-articles-histo-popup
+    [ordre]="ordre"
+    (lignesChanged)="onLignesChanged($event)"
+  >
+  </app-ajout-articles-histo-popup>
   <app-file-manager-popup
     key="ordres"
     [subTitle]="'Ordre n°' + ordre.numero"

@@ -83,7 +83,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         ];
         this.lieuxGroupage = [];
         this.instructionsList = [];
-        this.hintDblClick = this.localizeService.localize("hint-DblClick-file");
+        this.hintDblClick = this.localizeService.localize("hint-dblClick-file");
         this.addStepText = this.localizeService.localize("hint-addStep");
         this.transporteurGroupageSource = this.transporteurGroupageService.getDataSource_v2(["id", "raisonSocial"]);
         this.transporteurGroupageSource.filter(["valide", "=", true]);

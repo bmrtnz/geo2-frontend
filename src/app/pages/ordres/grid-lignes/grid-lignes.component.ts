@@ -121,7 +121,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     ];
     this.newArticles = 0;
     this.newNumero = 0;
-    this.hintDblClick = this.localizeService.localize("hint-DblClick-file");
+    this.hintDblClick = this.localizeService.localize("hint-dblClick-file");
     this.certificationText = this.localizeService.localize("btn-certification");
     this.originText = this.localizeService.localize("btn-origine");
   }

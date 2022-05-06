@@ -1,0 +1,175 @@
+
+  <form
+  class="periode-container"
+  [formGroup]="formGroup"
+  >
+  <dx-box>
+      <dxi-item [ratio]="5">
+          <!-- Période -->
+          <div class="dx-field">
+              <div class="dx-field-label noEllipsis">
+              {{ "ordres-periode" | localize }}
+              </div>
+              <div class="dx-field-value">
+              <dx-select-box
+                  #periodeSB
+                  [items]="periodes"
+                  (onValueChanged)="setDates($event)"
+              >
+                  <dxo-drop-down-options
+                  [width]="300"
+                  [elementAttr]="{ class: 'period-list' }"
+                  >
+                  </dxo-drop-down-options>
+              </dx-select-box>
+              </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+        <!-- Date de début -->
+        <div class="dx-field field">
+            <div class="dx-field-label">
+            {{ "ordres-Du" | localize }}
+            </div>
+            <div class="dx-field-value">
+            <dx-date-box
+                formControlName="dateMin"
+                class="dateStart"
+                type="date"
+                [displayFormat]="'dd-MM-yyyy'"
+                (onValueChanged)="manualDate($event)"
+            ></dx-date-box>
+            </div>
+        </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+        <!-- Date de fin -->
+        <div class="dx-field field">
+            <div class="dx-field-label">
+            {{ "ordres-au" | localize }}
+            </div>
+            <div class="dx-field-value">
+            <dx-date-box
+                formControlName="dateMax"
+                class="dateEnd"
+                type="date"
+                [displayFormat]="'dd-MM-yyyy'"
+                (onValueChanged)="manualDate($event)"
+            ></dx-date-box>
+            </div>
+        </div>
+      </dxi-item>
+  </dx-box>
+  <dx-button
+    class="refresh"
+    [class]="toRefresh ? '' : 'inactive-button'"
+    type="default"
+    text="{{ 'btn-refresh' | localize }}"
+    (onClick)="enableFilters()"
+    ></dx-button>
+</form>
+
+<div class="grid-lignes-historique-container">
+    <dx-data-grid
+      class="dx-card wide-card"
+      [width]="'100%'"
+      [focusedRowEnabled]="true"
+      [remoteOperations]="true"
+      [showBorders]="false"
+      [elementAttr]="{ class: 'grid-ordre-ligne-historique' }"
+      [focusedRowIndex]="0"
+      [columnAutoWidth]="true"
+      [columnHidingEnabled]="false"
+      [allowColumnReordering]="true"
+      (onRowPrepared)="onRowPrepared($event)"
+      (onCellPrepared)="onCellPrepared($event)"
+      (onCellClick)="onCellClick($event)"
+      (onSelectionChanged)="onSelectionChanged($event)"
+      (onToolbarPreparing)="
+        gridConfiguratorService.onToolbarPreparing(
+          '',
+          $event,
+          gridConfiguratorService.Grid.OrdreLigneHistorique,
+          enableFilters.bind(this)
+        )
+      "
+      [scrolling]="{
+        useNative: true
+      }"
+    >
+      <!-- Grid configuration -->
+      <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+      <dxo-header-filter
+        [visible]="true"
+        [allowSearch]="true"
+      ></dxo-header-filter>
+      <dxo-pager
+        [showPageSizeSelector]="true"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      ></dxo-pager>
+      <dxo-selection
+        mode="multiple"
+        [allowSelectAll]="false"
+        [selectAllMode]="'page'"
+        ></dxo-selection>
+      <dxo-state-storing
+        [storageKey]="gridConfiguratorService.Grid.OrdreLigneHistorique"
+        [enabled]="true"
+        type="custom"
+        [customLoad]="gridConfiguratorService.load"
+        [customSave]="gridConfiguratorService.save"
+      ></dxo-state-storing>
+      <!-- <dxo-filter-row [visible]="false"></dxo-filter-row> -->
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <dxo-group-panel [visible]="true"> </dxo-group-panel>
+      <dxo-column-chooser
+        [enabled]="true"
+        mode="select"
+        title="{{ 'columnChooser' | localize }}"
+        [allowSearch]="true"
+        [width]="columnChooser.width"
+        [height]="columnChooser.height"
+      >
+      </dxo-column-chooser>
+      <dxo-summary [totalItems]="totalItems"></dxo-summary>
+      <dxi-column
+        *ngFor="let column of this.columns | async"
+        [dataField]="column.dataField"
+        [visible]="false"
+        [width]="column.width"
+        [caption]="
+          ('ordreLignesHisto-' + column.dataField?.split('.').join('-') | localize) ||
+          column.name
+        "
+        [cellTemplate]="column.cellTemplate"
+        [fixed]="column.fixed"
+        [dataType]="column?.dataType"
+        [cssClass]="column?.cssClass"
+        allowSearch="false"
+        [allowHeaderFiltering]="false"
+        [showInColumnChooser]="column.showInColumnChooser"
+      >
+      </dxi-column>
+    
+      <div *dxTemplate="let cell of 'zoomButtonTemplate'">
+        <dx-button
+          class="grid-zoom-button"
+          type="default"
+          icon="material-icons search"
+          [focusStateEnabled]="false"
+          (onClick)="openFilePopup(cell, $event)"
+        >
+        </dx-button>
+      </div>
+
+    </dx-data-grid>
+  </div>
+
+  <app-zoom-article-popup
+    [articleLigneId]="articleLigneId"
+  ></app-zoom-article-popup>
+
+   
