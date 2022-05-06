@@ -3,11 +3,11 @@ import { Apollo, gql } from "apollo-angular";
 import { Flux } from "app/shared/models";
 import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
-import TracabiliteLigne from "app/shared/models/tracabilite-ligne.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
+import { functionBody, FunctionResponse } from "./functions.service";
 
 @Injectable({
     providedIn: "root",
@@ -206,6 +206,36 @@ export class EnvoisService extends ApiService implements APIRead {
                 { name: "traite", type: "[Char]", isOptionnal: false },
             ])),
             variables: { ordre, flux, traite: [...traite] },
+            fetchPolicy: "network-only",
+        });
+    }
+
+    public fConfirmationCommande(
+        ordreRef: string,
+        societeCode: string,
+        username: string,
+    ) {
+        return this.apollo.query<{ fConfirmationCommande: FunctionResponse }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "fConfirmationCommande",
+                    body: functionBody,
+                    params: [
+                        { name: "ordreRef", value: "ordreRef", isVariable: true },
+                        { name: "societeCode", value: "societeCode", isVariable: true },
+                        { name: "username", value: "username", isVariable: true },
+                    ],
+                },
+            ], [
+                { name: "ordreRef", type: "String", isOptionnal: false },
+                { name: "societeCode", type: "String", isOptionnal: false },
+                { name: "username", type: "String", isOptionnal: false },
+            ])),
+            variables: {
+                ordreRef,
+                societeCode,
+                username,
+            },
             fetchPolicy: "network-only",
         });
     }

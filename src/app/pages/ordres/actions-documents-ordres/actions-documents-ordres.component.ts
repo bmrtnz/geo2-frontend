@@ -1,11 +1,16 @@
 import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Societe } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
+import { AuthService } from "app/shared/services";
 import { EnvoisService } from "app/shared/services/api/envois.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
+import { environment } from "environments/environment";
+import { of } from "rxjs";
+import { concatMap, concatMapTo } from "rxjs/operators";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
-import { environment } from "environments/environment";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -30,6 +35,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
   constructor(
     private envoisService: EnvoisService,
+    private currentCompanyService: CurrentCompanyService,
+    private authService: AuthService,
   ) {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
@@ -66,12 +73,30 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   sendAction(e) {
     // On récupère ici le code de l'action:
     this.flux = e;
+
+    const societe: Societe = this.currentCompanyService.getCompany();
+    const user = this.authService.currentUser;
+
     if (this.flux === "ORDRE")
       this.envoisService
-        .countByOrdreFluxTraite({ id: this.ordre.id }, { id: this.flux }, new Set(["N"]))
-        .subscribe(res => {
-          const popup = res.data.countByOrdreFluxTraite ? "remplacePopup" : "docsPopup";
-          this[popup].visible = true;
+        .fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur)
+        .pipe(
+          concatMap(res => {
+            // if (res.data.fConfirmationCommande.res === FunctionResult.Warning)
+            // TODO WARNING POPUP
+            console.table(res.data.fConfirmationCommande);
+            return of(null);
+          }),
+          concatMapTo(this.envoisService
+            .countByOrdreFluxTraite({ id: this.ordre.id }, { id: this.flux }, new Set(["N", "O"]))),
+        )
+        .subscribe({
+          next: res => {
+            const popup = res.data.countByOrdreFluxTraite ? "remplacePopup" : "docsPopup";
+            this[popup].visible = true;
+          },
+          error: message => console.error(message), // TODO ERROR POPUP
+          complete: () => console.log("complete"),
         });
   }
 }
