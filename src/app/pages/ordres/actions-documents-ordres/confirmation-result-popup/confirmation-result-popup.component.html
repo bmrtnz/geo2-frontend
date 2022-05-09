@@ -1,0 +1,30 @@
+<dx-popup
+  [width]="600"
+  [height]="450"
+  [showTitle]="false"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  [showCloseButton]="false"
+  [shading]="true"
+>
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="before"
+    [options]="backButtonOptions"
+  >
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    *ngIf="state === 'WARNING'"
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+    [options]="continueButtonOptions"
+  >
+  </dxi-toolbar-item>
+  <div
+    class="content-block"
+    *dxTemplate="let data of 'content'"
+    [innerHTML]="content"
+  ></div>
+</dx-popup>

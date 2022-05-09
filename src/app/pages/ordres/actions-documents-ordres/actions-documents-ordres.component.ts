@@ -3,14 +3,16 @@ import { Societe } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService } from "app/shared/services";
 import { EnvoisService } from "app/shared/services/api/envois.service";
+import { FunctionResult } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
 import { environment } from "environments/environment";
 import { of } from "rxjs";
-import { concatMap, concatMapTo } from "rxjs/operators";
+import { catchError, concatMap, concatMapTo, filter } from "rxjs/operators";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
+import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/confirmation-result-popup.component";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -32,6 +34,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DocumentsOrdresPopupComponent, { static: false }) docsPopup: DocumentsOrdresPopupComponent;
   @ViewChild(AnnuleRemplacePopupComponent, { static: false }) remplacePopup: AnnuleRemplacePopupComponent;
+  @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
 
   constructor(
     private envoisService: EnvoisService,
@@ -82,21 +85,18 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
         .fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur)
         .pipe(
           concatMap(res => {
-            // if (res.data.fConfirmationCommande.res === FunctionResult.Warning)
-            // TODO WARNING POPUP
-            console.table(res.data.fConfirmationCommande);
-            return of(null);
+            if (res.data.fConfirmationCommande.res === FunctionResult.Warning)
+              return this.resultPopup.openAs("WARNING", res.data.fConfirmationCommande.msg);
+            return of(true);
           }),
+          catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
+          filter(res => res),
           concatMapTo(this.envoisService
             .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
         )
-        .subscribe({
-          next: res => {
-            const popup = res.data.countBy ? "remplacePopup" : "docsPopup";
-            this[popup].visible = true;
-          },
-          error: message => console.error(message), // TODO ERROR POPUP
-          complete: () => console.log("complete"),
+        .subscribe(res => {
+          const popup = res.data.countBy ? "remplacePopup" : "docsPopup";
+          this[popup].visible = true;
         });
   }
 }
