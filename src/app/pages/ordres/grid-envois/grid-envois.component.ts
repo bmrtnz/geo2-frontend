@@ -78,6 +78,8 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
                     ["traite", "=", "N"],
                     "or",
                     ["traite", "=", "O"],
+                    "or",
+                    ["traite", "=isnull=", "null"], // pour les envois historiques ;)
                 ],
             ]);
             this.dataGrid.dataSource = this.dataSource;

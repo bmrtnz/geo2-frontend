@@ -88,11 +88,11 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
             return of(null);
           }),
           concatMapTo(this.envoisService
-            .countByOrdreFluxTraite({ id: this.ordre.id }, { id: this.flux }, new Set(["N", "O"]))),
+            .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
         )
         .subscribe({
           next: res => {
-            const popup = res.data.countByOrdreFluxTraite ? "remplacePopup" : "docsPopup";
+            const popup = res.data.countBy ? "remplacePopup" : "docsPopup";
             this[popup].visible = true;
           },
           error: message => console.error(message), // TODO ERROR POPUP

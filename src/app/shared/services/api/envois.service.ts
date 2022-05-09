@@ -240,4 +240,21 @@ export class EnvoisService extends ApiService implements APIRead {
         });
     }
 
+    public countBy(search: string) {
+        return this.apollo.query<{ countBy: number }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "countBy",
+                    params: [
+                        { name: "search", value: "search", isVariable: true },
+                    ],
+                },
+            ], [
+                { name: "search", type: "String", isOptionnal: true },
+            ])),
+            variables: { search },
+            fetchPolicy: "network-only",
+        });
+    }
+
 }
