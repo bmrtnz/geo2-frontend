@@ -91,8 +91,8 @@ export class OrdresSuiviComponent implements AfterViewInit {
     searchDisplayExpr(item) {
         return item
             ? self.localizeService.localize(
-                  "rechOrdres-" + item.split(".").join("-"),
-              )
+                "rechOrdres-" + item.split(".").join("-"),
+            )
             : null;
     }
 
@@ -122,7 +122,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     enableFilters(value) {
         if (!value?.length) return;
         const criteria = this.searchCriteria.instance.option("value");
-        const operator = ["numero", "numeroFacture", "id"].includes(value)
+        const operator = ["numero", "numeroFacture", "id"].includes(criteria)
             ? "="
             : "contains";
 
