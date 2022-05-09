@@ -461,6 +461,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.comLog) this.comLog.instance.option("hint", instLog);
                 this.addLinkedOrders();
                 this.refreshBadges();
+                this.refreshStatus(this.ordre.statut);
                 window.sessionStorage.setItem("idOrdre", this.ordre.id);
                 window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
                 this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
