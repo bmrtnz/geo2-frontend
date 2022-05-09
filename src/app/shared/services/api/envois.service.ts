@@ -132,6 +132,7 @@ export class EnvoisService extends ApiService implements APIRead {
             .query<{ allEnvoisList: Envois[] }>({
                 query: gql(this.buildGetListGraph(columns)),
                 variables: { search },
+                fetchPolicy: "network-only",
             });
     }
 
