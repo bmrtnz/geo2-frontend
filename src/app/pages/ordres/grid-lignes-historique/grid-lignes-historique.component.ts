@@ -1,11 +1,9 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService } from "app/shared/services";
-import { SummaryInput, SummaryType } from "app/shared/services/api.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
-import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -46,7 +44,6 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
 
   public certifMDDS: DataSource;
-  public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public totalItems: TotalItem[] = [];
@@ -106,20 +103,20 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       return column.dataField;
     })));
     const gridFields = await fields.toPromise();
-    this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
+    const dataSource = this.ordreLignesService.getListDataSource(gridFields);
 
     const values: Inputs = {
       ...this.formGroup.value,
     };
 
-    this.dataSource.filter([
+    dataSource.filter([
       ["ordre.client.id", "=", this.clientId],
       "and",
       ["ordre.dateDepartPrevue", ">=", values.dateMin],
       "and",
       ["ordre.dateDepartPrevue", "<=", values.dateMax],
     ]);
-    this.datagrid.dataSource = this.dataSource;
+    this.datagrid.dataSource = dataSource;
 
   }
 
