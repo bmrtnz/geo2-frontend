@@ -614,5 +614,31 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  public fDetailsExpClickModifier =
+    (ordreRef: string, ordreLigneRef: string, historiqueRef: string) => this.apollo
+      .watchQuery<{ fDetailsExpClickModifier: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fDetailsExpClickModifier",
+              body: functionBody,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+                { name: "historiqueRef", value: "historiqueRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+            { name: "historiqueRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef, ordreLigneRef, historiqueRef },
+        fetchPolicy: "network-only",
+      })
+
 
 }
