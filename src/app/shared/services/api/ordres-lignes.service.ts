@@ -367,5 +367,30 @@ export class OrdreLignesService extends ApiService implements APIRead {
     }
   }
 
+  public getList(search: string, columns: Array<string>) {
+    return this.apollo
+      .query<{ allOrdreLigneList: OrdreLigne[] }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+      })
+      .pipe(takeWhile((res) => !res.loading));
+  }
+
+  getListDataSource(columns: Array<string>) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            const { search } = this.mapLoadOptionsToVariables(options);
+            const res = await this.getList(search, columns).toPromise();
+            resolve({
+              data: res.data.allOrdreLigneList,
+              totalCount: res.data.allOrdreLigneList.length,
+            });
+          }),
+        byKey: this.byKey_v2(columns),
+      }),
+    });
+  }
 
 }
