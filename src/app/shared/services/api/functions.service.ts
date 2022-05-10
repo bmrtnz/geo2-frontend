@@ -570,5 +570,27 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  public fDetailsExpOnClickAuto =
+    (ordreLigneRef: string) => this.apollo
+      .watchQuery<{ fDetailsExpOnClickAuto: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fDetailsExpOnClickAuto",
+              body: functionBody,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreLigneRef },
+        fetchPolicy: "network-only",
+      })
+
 
 }
