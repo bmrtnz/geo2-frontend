@@ -592,5 +592,27 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  public fChgtQteArtRet =
+    (ordreRef: string) => this.apollo
+      .watchQuery<{ fChgtQteArtRet: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fChgtQteArtRet",
+              body: functionBody,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef },
+        fetchPolicy: "network-only",
+      })
+
 
 }
