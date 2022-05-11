@@ -99,7 +99,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
           .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
       )
       .subscribe(res => {
-        const popup = res.data.countBy ? "remplacePopup" : "docsPopup";
+        const popup = res.data.countBy && this.flux === "ORDRE" ? "remplacePopup" : "docsPopup";
         this[popup].visible = true;
       });
   }
