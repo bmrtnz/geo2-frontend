@@ -7,8 +7,8 @@ import { FunctionResult } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
 import { environment } from "environments/environment";
-import { of } from "rxjs";
-import { catchError, concatMap, concatMapTo, filter } from "rxjs/operators";
+import { defer, of } from "rxjs";
+import { catchError, concatMap, concatMapTo, filter, map } from "rxjs/operators";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
@@ -43,7 +43,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   ) {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
-      { id: "DETAIL", text: "Détail expédition", visible: true, disabled: true },
+      { id: "DETAIL", text: "Détail expédition", visible: true, disabled: false },
       { id: "MINI", text: "Confirmation px achat", visible: true, disabled: true },
       { id: "FICPAL", text: "Editer fiches palettes", visible: true, disabled: true },
       { id: "? (Générer Traçabilité)", text: "Générer une traçabilité", visible: true, disabled: true },
@@ -80,23 +80,27 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
     const societe: Societe = this.currentCompanyService.getCompany();
     const user = this.authService.currentUser;
 
-    if (this.flux === "ORDRE")
-      this.envoisService
-        .fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur)
-        .pipe(
-          concatMap(res => {
-            if (res.data.fConfirmationCommande.res === FunctionResult.Warning)
-              return this.resultPopup.openAs("WARNING", res.data.fConfirmationCommande.msg);
-            return of(true);
-          }),
-          catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
-          filter(res => res),
-          concatMapTo(this.envoisService
-            .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
-        )
-        .subscribe(res => {
-          const popup = res.data.countBy ? "remplacePopup" : "docsPopup";
-          this[popup].visible = true;
-        });
+    defer(() => {
+      if (this.flux === "ORDRE") return this.envoisService
+        .fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur);
+      if (this.flux === "DETAIL") return this.envoisService
+        .fDocumentEnvoiDetailsExp(this.ordre.id, societe.id);
+    })
+      .pipe(
+        map(result => Object.values(result.data)[0]),
+        concatMap(response => {
+          if (response.res === FunctionResult.Warning)
+            return this.resultPopup.openAs("WARNING", response.msg);
+          return of(true);
+        }),
+        catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
+        filter(res => res),
+        concatMapTo(this.envoisService
+          .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
+      )
+      .subscribe(res => {
+        const popup = res.data.countBy ? "remplacePopup" : "docsPopup";
+        this[popup].visible = true;
+      });
   }
 }
