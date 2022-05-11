@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { ApolloQueryResult } from "@apollo/client/core";
 import grids from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
@@ -281,6 +281,10 @@ export class OrdresIndicatorsService {
         private ordresService: OrdresService,
         private paysService: PaysService,
     ) {
+        this.updateIndicators();
+    }
+
+    updateIndicators() {
         this.indicators = this.indicators.map((indicator) => {
             const instance = new Indicator(indicator);
 
@@ -336,7 +340,7 @@ export class OrdresIndicatorsService {
                         instance.select,
                         { forceFilter: true },
                     );
-                instance.dataSource = paysService.getDataSource(
+                instance.dataSource = this.paysService.getDataSource(
                     1,
                     instance.select,
                     PaysOperation.AllDistinct,
@@ -362,7 +366,7 @@ export class OrdresIndicatorsService {
                         ["clients.enCours90Plus", "<>", 0],
                     ],
                 ];
-                instance.fetchCount = paysService.count.bind(paysService, [
+                instance.fetchCount = this.paysService.count.bind(this.paysService, [
                     ...instance.filter,
                     ...(this.authService.currentUser.secteurCommercial &&
                         !this.authService.isAdmin
@@ -391,7 +395,7 @@ export class OrdresIndicatorsService {
                         instance.select,
                         { forceFilter: true },
                     );
-                instance.dataSource = ordresService.getDataSource(
+                instance.dataSource = this.ordresService.getDataSource(
                     null,
                     2,
                     instance.select,
@@ -418,7 +422,7 @@ export class OrdresIndicatorsService {
                     "and",
                     ["bonAFacturer", "=", false],
                 ];
-                instance.fetchCount = ordresService.count.bind(ordresService, [
+                instance.fetchCount = this.ordresService.count.bind(this.ordresService, [
                     ...instance.filter,
                     ...(this.authService.currentUser.secteurCommercial &&
                         !this.authService.isAdmin
@@ -491,7 +495,7 @@ export class OrdresIndicatorsService {
                         this.datePipe.transform(Date.now(), "yyyy-MM-dd"),
                     ],
                 ];
-                instance.fetchCount = ordresService.count.bind(ordresService, [
+                instance.fetchCount = this.ordresService.count.bind(this.ordresService, [
                     ...instance.filter,
                     ...(this.authService.currentUser.secteurCommercial &&
                         !this.authService.isAdmin
@@ -565,8 +569,8 @@ export class OrdresIndicatorsService {
                     1,
                     instance.select,
                 );
-                instance.fetchCount = ordresService.count.bind(
-                    ordresService,
+                instance.fetchCount = this.ordresService.count.bind(
+                    this.ordresService,
                 ) as (
                         dxFilter?: any[],
                     ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
@@ -590,8 +594,8 @@ export class OrdresIndicatorsService {
                 instance.dataSource = this.ordresService.getDataSource_v2(
                     instance.detailedFields.map((field) => field.dataField),
                 );
-                instance.fetchCount = ordresService.count.bind(
-                    ordresService,
+                instance.fetchCount = this.ordresService.count.bind(
+                    this.ordresService,
                 ) as (
                         dxFilter?: any[],
                     ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
@@ -610,10 +614,12 @@ export class OrdresIndicatorsService {
         return contents;
     }
     getIndicators(): Indicator[] {
+        this.updateIndicators();
         return this.indicators.filter((indicator) => indicator.enabled);
     }
 
     getIndicatorByName(name: string) {
+        this.updateIndicators();
         return this.indicators.find((i) => i?.id === name);
     }
 
