@@ -284,4 +284,20 @@ export class EnvoisService extends ApiService implements APIRead {
         });
     }
 
+    public deleteTempEnvois(allEnvois: Array<Partial<Envois>>) {
+        return this.apollo.mutate({
+            mutation: gql(ApiService.buildGraph("mutation", [
+                {
+                    name: "deleteTempEnvois",
+                    params: [
+                        { name: "allEnvois", value: "allEnvois", isVariable: true },
+                    ],
+                },
+            ], [
+                { name: "allEnvois", type: "[GeoEnvoisInput]", isOptionnal: true },
+            ])),
+            variables: { allEnvois },
+        });
+    }
+
 }
