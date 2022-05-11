@@ -1,17 +1,18 @@
-import { Component, Input, OnChanges, AfterViewInit, ViewChild, Output } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import Ordre from "app/shared/models/ordre.model";
+import { ArticlesService, AuthService } from "app/shared/services";
+import { SummaryType } from "app/shared/services/api.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { LocalizationService } from "app/shared/services/localization.service";
+import { GridColumn } from "basic";
+import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import Ordre from "app/shared/models/ordre.model";
-import { GridColumn } from "basic";
-import { LocalizationService } from "app/shared/services/localization.service";
-import { DxDataGridComponent } from "devextreme-angular";
-import { SummaryType } from "app/shared/services/api.service";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
-import { ArticlesService, AuthService } from "app/shared/services";
-import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { ModifDetailLignesPopupComponent } from "../modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 
 
@@ -44,7 +45,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         public paletteInterService: TypesPaletteService,
         public authService: AuthService,
         public gridConfiguratorService: GridConfiguratorService,
-        public localizeService: LocalizationService
+        public localizeService: LocalizationService,
+        private functionsService: FunctionsService,
     ) {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigneDetails);
         this.columns = from(this.gridConfig).pipe(map(config => config.columns));
@@ -136,7 +138,11 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         return templ ? templ : false;
     }
 
-    autoDetailExp(cell) {
+    async autoDetailExp({ key }: { key: string }) {
+        await this.functionsService
+            .fDetailsExpOnClickAuto(key)
+            .toPromise();
+        this.datagrid.instance.refresh();
     }
 
     modifDetailExp(cell) {
