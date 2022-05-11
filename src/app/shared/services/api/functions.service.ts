@@ -572,7 +572,7 @@ export class FunctionsService {
 
   public fDetailsExpOnClickAuto =
     (ordreLigneRef: string) => this.apollo
-      .watchQuery<{ fDetailsExpOnClickAuto: FunctionResponse }>({
+      .query<{ fDetailsExpOnClickAuto: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -594,7 +594,7 @@ export class FunctionsService {
 
   public fChgtQteArtRet =
     (ordreRef: string) => this.apollo
-      .watchQuery<{ fChgtQteArtRet: FunctionResponse }>({
+      .query<{ fChgtQteArtRet: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -616,7 +616,7 @@ export class FunctionsService {
 
   public fDetailsExpClickModifier =
     (ordreRef: string, ordreLigneRef: string, historiqueRef: string) => this.apollo
-      .watchQuery<{ fDetailsExpClickModifier: FunctionResponse }>({
+      .query<{ fDetailsExpClickModifier: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
