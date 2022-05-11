@@ -25,7 +25,7 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   @ViewChild(GridChoixEnvoisComponent) gridChoixEnvoisComponent: GridChoixEnvoisComponent;
 
   constructor(
-    public localizeService: LocalizationService
+    public localizeService: LocalizationService,
   ) { }
 
   ngOnInit(): void {
@@ -43,12 +43,14 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
       + " "
       + this.flux;
   }
-  hidePopup() {
 
+  async hidePopup() {
     const result = confirm(this.localizeService.localize("text-popup-annuler-envoi-docs"), "Génération des envois");
-    result.then((quit) => {
-      if (quit) this.popup.visible = false;
-    });
+    const quit = await result;
+    if (quit) {
+      await this.gridChoixEnvoisComponent.clearTemps();
+      this.popup.visible = false;
+    }
   }
 
   onShowing(e) {

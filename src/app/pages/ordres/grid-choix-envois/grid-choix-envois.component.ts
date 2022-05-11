@@ -149,6 +149,13 @@ export class GridChoixEnvoisComponent implements OnInit {
       cell.setValue(event.value);
   }
 
+  async clearTemps() {
+    const temps: Partial<Envois>[] = await this.dataGrid.instance
+      .getSelectedRowsData()
+      .map(({ id }) => ({ id }));
+    return this.envoisService.deleteTempEnvois(temps).toPromise();
+  }
+
   reload() {
     this.functionsService.geoPrepareEnvois(
       this.ordreID,
