@@ -2104,7 +2104,8 @@
         "dataField": "ordre.numero",
         "dataType": "string",
         "width": 80,
-        "visible": true
+        "visible": true,
+        "groupIndex": 0
       },
       {
         "visibleIndex": 2,

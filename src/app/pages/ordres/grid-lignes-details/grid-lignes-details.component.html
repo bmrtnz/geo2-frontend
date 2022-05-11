@@ -60,7 +60,7 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
- 
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
@@ -98,8 +98,7 @@
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
     >
-      <dxo-drop-down-options [width]="400">
-      </dxo-drop-down-options>
+      <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
     </dx-select-box>
   </div>
 
@@ -110,6 +109,7 @@
       [focusStateEnabled]="false"
       [visible]="showModifButton(cell)"
       [text]="'Modifier'"
+      [disabled]="env.production"
       (onClick)="modifDetailExp(cell)"
     >
     </dx-button>
@@ -119,9 +119,11 @@
       [focusStateEnabled]="false"
       [visible]="showAutoButton(cell)"
       [text]="'Auto'"
+      [disabled]="env.production"
       (onClick)="autoDetailExp(cell)"
     ></dx-button>
   </div>
 </dx-data-grid>
-<app-modif-detail-lignes-popup [ligneDetail]="ligneDetail"
+<app-modif-detail-lignes-popup
+  [ligneDetail]="ligneDetail"
 ></app-modif-detail-lignes-popup>
