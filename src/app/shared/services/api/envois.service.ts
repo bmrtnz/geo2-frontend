@@ -241,6 +241,32 @@ export class EnvoisService extends ApiService implements APIRead {
         });
     }
 
+    public fDocumentEnvoiDetailsExp(
+        ordreRef: string,
+        societeCode: string,
+    ) {
+        return this.apollo.query<{ fDocumentEnvoiDetailsExp: FunctionResponse }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "fDocumentEnvoiDetailsExp",
+                    body: functionBody,
+                    params: [
+                        { name: "ordreRef", value: "ordreRef", isVariable: true },
+                        { name: "societeCode", value: "societeCode", isVariable: true },
+                    ],
+                },
+            ], [
+                { name: "ordreRef", type: "String", isOptionnal: false },
+                { name: "societeCode", type: "String", isOptionnal: false },
+            ])),
+            variables: {
+                ordreRef,
+                societeCode,
+            },
+            fetchPolicy: "network-only",
+        });
+    }
+
     public countBy(search: string) {
         return this.apollo.query<{ countBy: number }>({
             query: gql(ApiService.buildGraph("query", [
