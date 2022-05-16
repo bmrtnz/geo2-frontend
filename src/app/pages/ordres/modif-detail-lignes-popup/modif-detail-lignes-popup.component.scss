@@ -19,6 +19,7 @@
         width: 50% !important;
     }
 
+    .dx-numberbox,
     .dx-textbox {
         width: 30%;
     }
@@ -39,7 +40,7 @@
     .textbox-right {
         float: left;
 
-        .dx-textbox {
+        .dx-numberbox {
             width: 45%;
         }
 

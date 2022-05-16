@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { ArticlesService } from "app/shared/services";
-
+import { FunctionsService } from "app/shared/services/api/functions.service";
 
 @Component({
   selector: "app-modif-detail-lignes-popup",
@@ -15,9 +15,11 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
 
   visible: boolean;
   articleDesc: string;
+  validForm: boolean;
 
   constructor(
     private articlesService: ArticlesService,
+    private functionsService: FunctionsService
   ) { }
 
   ngOnChanges() {
@@ -29,6 +31,10 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
 
   applyClick(form) {
     console.log(form.value);
+
+    // this.functionsService.onChangeCdeNbCol(idLigne, this.authService.currentUser.nomUtilisateur)
+    //   .valueChanges.subscribe(this.handleCellChangeEventResponse());
+
     // Retrieve and apply all data with form.value
     this.clearData();
   }
@@ -42,8 +48,23 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
     this.clearData();
   }
 
+  onValueChanged(e) {
+    if (!e.event) return;
+    let sum = 0;
+    // Detecting null or empty values
+    const myInputs = this.NgForm.form.value;
+    Object.keys(myInputs).forEach(key => {
+      if (myInputs[key] === "" || myInputs[key] === null) sum++;
+    });
+    this.validForm = !(sum === 4);
+  }
+
   clearData() {
     this.NgForm.reset();
+  }
+
+  onFocusSB(e) {
+    e.element.querySelector(".dx-texteditor-input")?.select();
   }
 
 }
