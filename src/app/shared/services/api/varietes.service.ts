@@ -51,7 +51,7 @@ export class VarietesService extends ApiService implements APIRead {
                             },
                         );
                     }),
-                byKey: this.byKey,
+                byKey: this.byKey(["id", "description"]),
             }),
         });
     }
@@ -89,25 +89,21 @@ export class VarietesService extends ApiService implements APIRead {
                             },
                         );
                     }),
-                byKey: this.byKey,
+                byKey: this.byKey(columns),
             }),
         });
     }
 
-    private byKey(key) {
-        return new Promise(async (resolve) => {
-            const query = await this.buildGetOne();
-            type Response = { variete: Variete };
-            const variables = { id: key };
-            this.listenQuery<Response>(
-                query,
-                { variables },
-                (res) => {
-                    if (res.data && res.data.variete)
-                        resolve(new Variete(res.data.variete));
-                },
-            );
-        });
+    private byKey(columns: Array<string>) {
+        return id =>
+            new Promise(async (resolve) => {
+                const variables = { id };
+                const res = await this.apollo.query<{ variete: Variete }>({
+                    query: gql(this.buildGetOneGraph(columns)),
+                    variables,
+                }).toPromise();
+                resolve(new Variete(res.data.variete));
+            });
     }
 
 }
