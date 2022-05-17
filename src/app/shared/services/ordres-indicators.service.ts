@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Injectable, OnInit } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { ApolloQueryResult } from "@apollo/client/core";
 import grids from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
@@ -12,12 +12,12 @@ import Ordre from "../models/ordre.model";
 import {
     CountResponse as CountResponseOrdre,
     Operation,
-    OrdresService,
+    OrdresService
 } from "./api/ordres.service";
 import {
     CountResponse as CountResponsePays,
-    Operation as PaysOperation,
-    PaysService,
+
+    PaysService
 } from "./api/pays.service";
 import { AuthService } from "./auth.service";
 import { CurrentCompanyService } from "./current-company.service";
@@ -52,7 +52,8 @@ export class Indicator implements dxButtonOptions {
     withCount?: boolean;
     fetchCount?: (dxFilter?: any[]) => Observable<ApolloQueryResult<any>>;
     dataSource?: DataSource;
-    select?: RegExp;
+    regExpSelection?: RegExp;
+    explicitSelection?: Array<string>;
     component?: Promise<any>;
     detailedFields?:
         | Observable<
@@ -125,7 +126,7 @@ const indicators: Indicator[] = [
             "../../pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component"
         ),
         /* tslint:disable-next-line max-line-length */
-        select: /^(?:id|description|clientsSommeAgrement|clientsSommeEnCoursTemporaire|clientsSommeEnCoursBlueWhale|clientsSommeAutorise|clientsSommeDepassement|clientsSommeEnCoursActuel|clientsSommeEnCoursNonEchu|clientsSommeEnCours1a30|clientsSommeEnCours31a60|clientsSommeEnCours61a90|clientsSommeEnCours90Plus|clientsSommeAlerteCoface)$/,
+        explicitSelection: ["id", "description", "clientsSommeAgrement", "clientsSommeEnCoursTemporaire", "clientsSommeEnCoursBlueWhale", "clientsSommeAutorise", "clientsSommeDepassement", "clientsSommeEnCoursActuel", "clientsSommeEnCoursNonEchu", "clientsSommeEnCours1a30", "clientsSommeEnCours31a60", "clientsSommeEnCours61a90", "clientsSommeEnCours90Plus", "clientsSommeAlerteCoface"]
     },
     {
         id: "OrdresNonClotures",
@@ -337,14 +338,9 @@ export class OrdresIndicatorsService {
                 instance.detailedFields =
                     this.paysService.model.getDetailedFields(
                         1,
-                        instance.select,
+                        instance.regExpSelection,
                         { forceFilter: true },
                     );
-                instance.dataSource = this.paysService.getDataSource(
-                    1,
-                    instance.select,
-                    PaysOperation.AllDistinct,
-                );
                 instance.filter = [
                     ["valide", "=", true],
                     "and",
@@ -366,6 +362,7 @@ export class OrdresIndicatorsService {
                         ["clients.enCours90Plus", "<>", 0],
                     ],
                 ];
+                instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection);
                 instance.fetchCount = this.paysService.count.bind(this.paysService, [
                     ...instance.filter,
                     ...(this.authService.currentUser.secteurCommercial &&
@@ -392,13 +389,13 @@ export class OrdresIndicatorsService {
                 instance.detailedFields =
                     this.ordresService.model.getDetailedFields(
                         3,
-                        instance.select,
+                        instance.regExpSelection,
                         { forceFilter: true },
                     );
                 instance.dataSource = this.ordresService.getDataSource(
                     null,
                     2,
-                    instance.select,
+                    instance.regExpSelection,
                 );
                 instance.filter = [
                     ...instance.filter,
@@ -474,13 +471,13 @@ export class OrdresIndicatorsService {
                 instance.detailedFields =
                     this.ordresService.model.getDetailedFields(
                         3,
-                        instance.select,
+                        instance.regExpSelection,
                         { forceFilter: true },
                     );
                 instance.dataSource = this.ordresService.getDataSource(
                     null,
                     2,
-                    instance.select,
+                    instance.regExpSelection,
                 );
                 instance.filter = [
                     ...instance.filter,
@@ -561,13 +558,13 @@ export class OrdresIndicatorsService {
                 instance.detailedFields =
                     this.ordresService.model.getDetailedFields(
                         2,
-                        instance.select,
+                        instance.regExpSelection,
                         { forceFilter: true },
                     );
                 instance.dataSource = this.ordresService.getDataSource(
                     Operation.SuiviDeparts,
                     1,
-                    instance.select,
+                    instance.regExpSelection,
                 );
                 instance.fetchCount = this.ordresService.count.bind(
                     this.ordresService,

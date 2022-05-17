@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { first, takeWhile } from "rxjs/operators";
 import { Pays } from "../../models";
-import { APIRead, ApiService, RelayPage, APICount } from "../api.service";
-import { first } from "rxjs/operators";
+import { APICount, APIRead, ApiService, RelayPage } from "../api.service";
 
 export enum Operation {
     All = "allPays",
@@ -131,6 +131,46 @@ export class PaysService
                                 }
                             },
                         );
+                    }),
+                byKey: this.byKey(columns),
+            }),
+        });
+    }
+
+    public getDistinctList(columns: Array<string>, search?: string) {
+        return this.apollo
+            .query<{ allPaysList: Pays[] }>({
+                query: gql(this.buildGetDistinctListGraph(columns)),
+                variables: { search },
+            })
+            .pipe(takeWhile((res) => !res.loading));
+    }
+
+    protected buildGetDistinctListGraph(body: Array<string>) {
+        return ApiService.buildGraph(
+            "query",
+            [
+                {
+                    name: `allPaysList`,
+                    body,
+                    params: [{ name: "search", value: "search", isVariable: true }],
+                },
+            ],
+            [{ name: "search", type: "String", isOptionnal: true }],
+        );
+    }
+
+    getDistinctListDataSource(columns: Array<string>) {
+        return new DataSource({
+            store: this.createCustomStore({
+                load: (options: LoadOptions) =>
+                    new Promise(async (resolve) => {
+                        const { search } = this.mapLoadOptionsToVariables(options);
+                        const res = await this.getDistinctList(columns, search).toPromise();
+                        resolve({
+                            data: res.data.allPaysList,
+                            totalCount: res.data.allPaysList.length,
+                        });
                     }),
                 byKey: this.byKey(columns),
             }),
