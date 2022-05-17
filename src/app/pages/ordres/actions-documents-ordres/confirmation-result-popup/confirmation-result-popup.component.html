@@ -10,7 +10,7 @@
   <dxi-toolbar-item
     widget="dxButton"
     toolbar="bottom"
-    location="before"
+    location="center"
     [options]="backButtonOptions"
   >
   </dxi-toolbar-item>
@@ -18,11 +18,11 @@
     *ngIf="state === 'WARNING'"
     widget="dxButton"
     toolbar="bottom"
-    location="after"
+    location="center"
     [options]="continueButtonOptions"
   >
   </dxi-toolbar-item>
-  <div
+  <div class="text-align-center"
     *dxTemplate="let data of 'content'"
     [innerHTML]="content"
   ></div>

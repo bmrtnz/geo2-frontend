@@ -37,6 +37,8 @@ export class ConfirmationResultPopupComponent {
    */
   public openAs(state: MessageState, content: string) {
     this.state = state;
+    console.log(content);
+    if (content.indexOf("Exception while fetching data") >= 0) content = content.substring(content.indexOf(":") + 2);
     this.content = content
       .split("~r")
       .map(chunk => `<p>${chunk}</p>`)
