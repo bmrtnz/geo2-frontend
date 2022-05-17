@@ -28,6 +28,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   public readonly env = environment;
   public actionsFlux: any[];
   public plusActionsFlux: any[];
+  public plusActionsFluxEnabled: boolean;
   public visibleActionsNumber = 6; // Visible buttons number, others in a popup
 
   @ViewChild("actionSheet", { static: false }) actionSheet: DxActionSheetComponent;
@@ -60,6 +61,9 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true, disabled: true },
     ];
     this.plusActionsFlux = this.actionsFlux.slice(this.visibleActionsNumber - this.actionsFlux.length);
+    this.plusActionsFlux.map(flux => {
+      if (flux.disabled === false && flux.visible === true) this.plusActionsFluxEnabled = true;
+    });
   }
 
   ngOnInit(): void {
