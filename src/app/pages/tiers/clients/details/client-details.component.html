@@ -1194,6 +1194,7 @@
                           <div class="dx-field-value">
                             <dx-number-box
                               formControlName="agrement"
+                              format="###0"
                               [readOnly]="readOnlyMode"
                               (onValueChanged)="onCofaceChange($event)"
                             >
@@ -1242,6 +1243,7 @@
                   <div class="dx-field-value">
                     <dx-number-box
                       formControlName="enCoursBlueWhale"
+                      format="###0"
                       [readOnly]="
                         readOnlyMode || !authService.currentUser.adminClient
                       "
@@ -1265,6 +1267,7 @@
                   <div class="dx-field-value">
                     <dx-number-box
                       formControlName="enCoursTemporaire"
+                      format="###0"
                       [readOnly]="
                         readOnlyMode ||
                         cofaceBlocked ||
