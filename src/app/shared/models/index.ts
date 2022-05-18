@@ -73,3 +73,5 @@ export * from "./instruction.model";
 export * from "./code-promo.model";
 export * from "./def-code-promo.model";
 export * from "./imprimante.model";
+export * from "./codif-devalexp.model";
+export * from "./historique-modif-detail.model";
