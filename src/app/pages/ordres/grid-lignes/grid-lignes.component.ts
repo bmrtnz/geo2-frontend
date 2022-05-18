@@ -418,9 +418,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
         if (e.dataField !== "numero")
           elem.element.querySelector(".dx-texteditor-input")?.select();
       };
-      // e.editorOptions.onFocusOut = () => {
-      //   this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
-      // };
     }
   }
 

@@ -1,0 +1,42 @@
+// Var
+@import "~themes/generated/variables.base";
+
+
+::ng-deep .historique-modif-detail-popup {
+    max-width: 1320px;
+
+    .dx-template-wrapper.dx-popup-title {
+        overflow: hidden;
+
+        .title {
+            font-size: 20px;
+            font-weight: 500;
+            float: left;
+            margin: 17px 0;
+            line-height: 29px;
+        }
+
+    }
+
+    .close-histo-detail-popup {
+        top: 13px;
+        float: right;
+    }
+
+    .dx-popup-content {
+        overflow-y: auto;
+
+        .popup-buttons-container {
+            display: inline-block;
+            position: absolute;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+
+            .dx-button {
+                margin: 5px;
+            }
+        }
+    }
+
+}

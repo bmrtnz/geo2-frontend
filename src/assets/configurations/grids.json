@@ -1545,7 +1545,7 @@
         "dataField": "nombrePalettesCommandees",
         "dataType": "number",
         "width": 35,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1554,7 +1554,7 @@
         "dataField": "nombrePalettesIntermediaires",
         "dataType": "number",
         "width": 30,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1563,7 +1563,7 @@
         "dataField": "nombreColisPalette",
         "dataType": "number",
         "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1572,7 +1572,7 @@
         "dataField": "nombreColisCommandes",
         "dataType": "number",
         "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1599,7 +1599,7 @@
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
         "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1630,7 +1630,7 @@
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
         "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "allowEditing": true,
         "visible": true
       },
@@ -1674,7 +1674,7 @@
         "allowEditing": true,
         "dataType": "number",
         "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -1698,7 +1698,7 @@
         "allowEditing": true,
         "dataType": "number",
         "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -1707,7 +1707,7 @@
         "allowEditing": true,
         "dataType": "number",
         "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -1904,7 +1904,7 @@
         "dataType": "number",
         "width": 40,
         "allowEditing": false,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -1912,7 +1912,7 @@
         "dataField": "nombrePalettesExpediees",
         "dataType": "number",
         "width": 40,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -1921,7 +1921,7 @@
         "dataType": "number",
         "width": 40,
         "allowEditing": false,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -1929,14 +1929,14 @@
         "dataField": "nombreColisExpedies",
         "dataType": "number",
         "width": 40,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 14,
         "dataField": "poidsNetExpedie",
         "dataType": "number",
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "width": 40,
         "visible": true
       },
@@ -1944,7 +1944,7 @@
         "visibleIndex": 16,
         "dataField": "poidsBrutExpedie",
         "dataType": "number",
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "width": 40,
         "visible": true
       },
@@ -2136,7 +2136,7 @@
         "visibleIndex": 7,
         "dataField": "article.matierePremiere.origine.id",
         "width": 22,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "cellTemplate": "zoomButtonTemplate",
         "visible": true
       },
@@ -2144,14 +2144,14 @@
         "visibleIndex": 8,
         "dataField": "nombrePalettesCommandees",
         "width": 50,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 10,
         "dataField": "nombreColisCommandes",
         "width": 100,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -2159,7 +2159,7 @@
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
         "width": 100,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -2167,7 +2167,7 @@
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
         "width": 100,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -2266,93 +2266,108 @@
         "visibleIndex": 0,
         "dataField": "fournisseur.raisonSocial",
         "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 1,
-        "dataField": "expedieStation",
-        "dataType": "boolean",
+        "allowEditing": false,
+        "fixed": true,
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "dateDepartReelleFournisseur",
-        "sortOrder": "desc",
-        "dataType": "string",
+        "dataField": "expedieStation",
+        "dataType": "boolean",
+        "cssClass": "multi-line-header",
+        "allowEditing": false,
+        "fixed": true,
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "nombrePalettesAuSol",
-        "dataType": "number",
-        "cssClass": "two-lines-header",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "nombrePalettes100x120",
-        "dataType": "number",
-        "cssClass": "two-lines-header",
+        "dataField": "dateDepartReelleFournisseur",
+        "sortOrder": "desc",
+        "dataType": "string",
+        "allowEditing": false,
+        "fixed": true,
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "nombrePalettes60x80",
+        "dataField": "nombrePalettesAuSol",
         "dataType": "number",
-        "cssClass": "two-lines-header",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "nombrePalettes80x120",
-        "dataType": "number",
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
+        "width": 35,
+        "allowEditing": false,
         "visible": true
       },
       {
         "visibleIndex": 8,
+        "dataField": "nombrePalettes100x120",
+        "dataType": "number",
+        "cssClass": "multi-line-header",
+        "width": 35,
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "nombrePalettes60x80",
+        "dataType": "number",
+        "cssClass": "multi-line-header",
+        "width": 35,
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "nombrePalettes80x120",
+        "dataType": "number",
+        "cssClass": "multi-line-header",
+        "width": 35,
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
         "dataField": "numeroImmatriculation",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 9,
+        "visibleIndex": 16,
         "dataField": "numeroContainer",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 18,
         "dataField": "certificatControle",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 11,
+        "visibleIndex": 20,
         "dataField": "numeroPlomb",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 22,
         "dataField": "locusTrace",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 13,
+        "visibleIndex": 24,
         "dataField": "detecteurTemperature",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 26,
         "dataField": "certificatPhytosanitaire",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 15,
+        "visibleIndex": 28,
         "dataField": "billOfLanding",
         "dataType": "string",
         "visible": true
@@ -2360,6 +2375,16 @@
       {
         "dataField": "id",
         "visible": false
+      },
+      {
+        "dataField": "valide",
+        "visibleIndex": 5,
+        "cellTemplate": "histoBtnTemplate",
+        "cssClass": "multi-line-header",
+        "allowEditing": false,
+        "width": 80,
+        "showInColumnChooser": false,
+        "visible": true
       }
     ]
   },

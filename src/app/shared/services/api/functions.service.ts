@@ -570,6 +570,9 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event auto button click (details expédition)
+   */
   public fDetailsExpOnClickAuto =
     (ordreLigneRef: string) => this.apollo
       .query<{ fDetailsExpOnClickAuto: FunctionResponse }>({
@@ -614,6 +617,9 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event modifier button click (details expédition)
+   */
   public fDetailsExpClickModifier =
     (ordreRef: string, ordreLigneRef: string, historiqueRef: string) => this.apollo
       .query<{ fDetailsExpClickModifier: FunctionResponse }>({

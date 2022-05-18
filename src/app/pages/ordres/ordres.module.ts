@@ -137,6 +137,9 @@ import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-pop
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
+import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
+import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-histo-modif-detail.component";
 
 @NgModule({
   declarations: [
@@ -197,6 +200,9 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     AjoutArticlesHistoPopupComponent,
     GridLignesHistoriqueComponent,
     ConfirmationResultPopupComponent,
+    ChoixRaisonDecloturePopupComponent,
+    HistoriqueModifDetailPopupComponent,
+    GridHistoModifDetailComponent,
   ],
   imports: [
     OrdresRoutingModule,

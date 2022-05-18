@@ -78,6 +78,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "client.code",
         "client.raisonSocial",
         "client.modificationDetail",
+        "client.certifications.certification.id",
         "entrepot.id",
         "referenceClient",
         "dateDepartPrevue",
@@ -160,12 +161,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public canDuplicate = false;
     public validationPopupVisible = false;
-    public searchItems = [
-        "numero",
-        "numeroFacture",
-        "referenceClient",
-        "client.raisonSocial",
-    ];
     public dotLitiges: string;
     public dotCommentaires: number;
     public dotCQ: number;
