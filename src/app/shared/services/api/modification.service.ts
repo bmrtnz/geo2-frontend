@@ -58,9 +58,13 @@ export class ModificationsService extends ApiService implements APIRead {
         return this.watchSaveQuery_v2({ variables }, columns);
     }
 
-    getValue(el) {
+    getValue(key, el) {
         if (typeof el === "object" && !Array.isArray(el) && el !== null && el.id !== null) {
-            return (el.nomUtilisateur ? el.nomUtilisateur : el.libelle ? el.libelle : el.raisonSocial ? el.raisonSocial : el.description);
+            // Tina 05-2022: incoterms, no need for description
+            const suffix = (key !== "incoterm") ? " - " +
+                (el.nomUtilisateur ? el.nomUtilisateur : el.libelle ? el.libelle : el.raisonSocial ? el.raisonSocial : el.description)
+                : "";
+            return el.id + suffix;
         } else {
             return el !== null && el.id !== null ? this.convertTrueFalse(el) : this.notSet;
         }
@@ -90,8 +94,8 @@ export class ModificationsService extends ApiService implements APIRead {
                     };
                 }
                 return {
-                    affichageActuel: this.getValue(entityObject[key]),
-                    affichageDemande: this.getValue(control.value),
+                    affichageActuel: this.getValue(key, entityObject[key]),
+                    affichageDemande: this.getValue(key, control.value),
                     chemin: modelName + "." + key,
                     traductionKey: traductionKey + key,
                     valeurActuelle: entityObject[key] ? entityObject[key].id ? entityObject[key].id : entityObject[key] : entityObject[key],
