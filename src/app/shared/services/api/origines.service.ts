@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { Origine } from "../../models";
@@ -52,7 +52,7 @@ export class OriginesService extends ApiService implements APIRead {
                             },
                         );
                     }),
-                byKey: this.byKey,
+                byKey: this.byKey(["id", "description", "espece.id"]),
             }),
         });
     }
@@ -82,27 +82,23 @@ export class OriginesService extends ApiService implements APIRead {
                             },
                         );
                     }),
-                byKey: this.byKey,
+                byKey: this.byKey(["id", "description", "espece.id"]),
             }),
         });
     }
 
-    byKey(key) {
-        return new Promise(async (resolve) => {
-            const query = await this.buildGetOne();
-            type Response = { origine: Origine };
-            const id = key
-                ? { id: key.id, espece: key.especeId || "" }
-                : {};
-            const variables = { id };
-            this.listenQuery<Response>(
-                query,
-                { variables },
-                (res) => {
-                    if (res.data && res.data.origine)
-                        resolve(new Origine(res.data.origine));
-                },
-            );
-        });
+    private byKey(columns: Array<string>) {
+        return key =>
+            new Promise(async (resolve) => {
+                const id = key
+                    ? { id: key.id, espece: key.especeId || "" }
+                    : {};
+                const variables = { id };
+                const res = await this.apollo.query<{ origine: Origine }>({
+                    query: gql(this.buildGetOneGraph(columns)),
+                    variables,
+                }).toPromise();
+                resolve(new Origine(res.data.origine));
+            });
     }
 }

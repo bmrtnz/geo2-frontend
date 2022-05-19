@@ -26,7 +26,7 @@
   <dx-data-grid
     class="dx-card wide-card"
     [dataSource]="dataSource"
-    [remoteOperations]="true"
+    [remoteOperations]="false"
     [showBorders]="false"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
@@ -68,7 +68,7 @@
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
-    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
