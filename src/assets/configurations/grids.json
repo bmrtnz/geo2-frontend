@@ -1344,6 +1344,92 @@
       }
     ]
   },
+  "histo-modif-detail": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "userModification",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "dateModification",
+        "dataType": "date",
+        "format": "dd-MM-yyyy à HH:mm:ss",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "nombrePalettesExpedieesAvant",
+        "dataType": "number",
+        "width": 45,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "nombrePalettesExpedieesApres",
+        "dataType": "number",
+        "width": 45,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "nombreColisExpediesAvant",
+        "dataType": "number",
+        "width": 45,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "nombreColisExpediesApres",
+        "dataType": "number",
+        "width": 45,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "poidsBrutExpedieAvant",
+        "dataType": "number",
+        "width": 70,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "poidsBrutExpedieApres",
+        "dataType": "number",
+        "width": 70,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "poidsNetExpedieAvant",
+        "dataType": "number",
+        "width": 70,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "poidsNetExpedieApres",
+        "dataType": "number",
+        "width": 70,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "dataField": "id",
+        "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
+  },
   "ordre-historique-entrepot": {
     "columns": [
       {
@@ -2385,7 +2471,7 @@
         "cssClass": "multi-line-header",
         "allowEditing": false,
         "width": 80,
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": true
       }
     ]

@@ -3,7 +3,6 @@
 
 
 ::ng-deep .historique-modif-detail-popup {
-    max-width: 1320px;
 
     .dx-template-wrapper.dx-popup-title {
         overflow: hidden;
@@ -28,9 +27,8 @@
 
         .popup-buttons-container {
             display: inline-block;
-            position: absolute;
+            position: relative;
             left: 50%;
-            bottom: 30px;
             transform: translateX(-50%);
 
             .dx-button {

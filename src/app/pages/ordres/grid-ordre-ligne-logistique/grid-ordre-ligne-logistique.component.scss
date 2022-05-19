@@ -33,6 +33,12 @@
         background-color: transparent;
     }
 
+    .dx-row-lines td {
+        &.multi-line-header {
+            line-height: 0 !important;
+        }
+    }
+
     .small-detail-histo-button {
         position: relative;
         left: 50%;
