@@ -3,8 +3,8 @@ import OrdreLigne from "./ordre-ligne.model";
 import OrdreLogistique from "./ordre-logistique.model";
 import Ordre from "./ordre.model";
 
-@ModelName("HistoriqueModifDetail")
-export class HistoriqueModifDetail extends Model {
+@ModelName("HistoriqueModificationDetail")
+export class HistoriqueModificationDetail extends Model {
     @Field({ asKey: true }) public id?: string;
     @Field({ dataType: "localdate" }) public dateModification?: string;
     @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
@@ -21,5 +21,5 @@ export class HistoriqueModifDetail extends Model {
     @Field() public userModification?: string;
 }
 
-export default HistoriqueModifDetail;
+export default HistoriqueModificationDetail;
 

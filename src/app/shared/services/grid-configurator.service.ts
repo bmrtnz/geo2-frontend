@@ -85,6 +85,7 @@ export enum Grid {
     OrdreEntrepot = "ordre-entrepot",
     CommentaireOrdre = "commentaire-ordre",
     LitigeLigne = "litige-ligne",
+    HistoriqueModifDetail = "histo-modif-detail",
 
     OrdreSupervisionLivraison = "ordre-supervision-livraison",
     OrdreBonAFacturer = "ordre-bon-a-facturer",
@@ -106,7 +107,8 @@ export enum Grid {
     MouvFournisseursComptesPalox = "mouv-fournisseurs-comptes-palox",
     MouvClientsComptesPalox = "mouv-clients-comptes-palox",
     RecapFournisseursComptesPalox = "recap-fournisseurs-comptes-palox",
-    RecapClientsComptesPalox = "recap-clients-comptes-palox",
+    RecapClientsComptesPalox = "recap-clients-comptes-palox"
+
 }
 
 @Injectable()
