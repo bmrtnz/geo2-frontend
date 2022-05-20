@@ -31,7 +31,7 @@ export class ButtonLoaderComponent<T> implements OnChanges {
 
     public loading = false;
 
-    constructor() {}
+    constructor() { }
 
     ngOnChanges(properties) {
         if (
@@ -65,4 +65,4 @@ export class ButtonLoaderComponent<T> implements OnChanges {
     declarations: [ButtonLoaderComponent],
     exports: [ButtonLoaderComponent],
 })
-export class ButtonLoaderModule {}
+export class ButtonLoaderModule { }

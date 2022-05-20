@@ -1,5 +1,6 @@
 import {
     Component,
+    EventEmitter,
     Input,
     OnChanges,
     Output,
@@ -27,6 +28,10 @@ import notify from "devextreme/ui/notify";
 import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import { ChoixRaisonDecloturePopupComponent } from "../choix-raison-decloture-popup/choix-raison-decloture-popup.component";
 import { HistoriqueModifDetailPopupComponent } from "../historique-modif-detail-popup/historique-modif-detail-popup.component";
+import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-logistique.service";
+import { AuthService } from "app/shared/services";
+import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
+import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 
 @Component({
     selector: "app-grid-ordre-ligne-logistique",
@@ -40,11 +45,13 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     private gridConfig: Promise<GridConfig>;
     public allowMutations = false;
     public env = environment;
-    public dataField: string;
-    public idLigne: string;
+    public currentLogId: string;
+    public currentRowIndex: number;
+    public countHisto: boolean;
     @Input() public ordre: Ordre;
     @Output() public ordreLogistique: OrdreLogistique;
     @Input() public ligneLogistiqueId: string;
+    @Output() refreshGridLigneDetail = new EventEmitter();
     @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
     @ViewChild(ChoixRaisonDecloturePopupComponent, { static: false }) choixRaisonPopup: ChoixRaisonDecloturePopupComponent;
     @ViewChild(HistoriqueModifDetailPopupComponent, { static: false }) histoDetailPopup: HistoriqueModifDetailPopupComponent;
@@ -54,6 +61,9 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
         public gridConfiguratorService: GridConfiguratorService,
         public dateManagementService: DateManagementService,
         private functionsService: FunctionsService,
+        public historiqueModificationsDetailService: HistoriqueModificationsDetailService,
+        public authService: AuthService,
+        public historiqueLogistiqueService: HistoriqueLogistiqueService,
         public localizeService: LocalizationService,
     ) {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -108,48 +118,68 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
         this.datagrid.instance.refresh();
     }
 
-    private handleCellChangeEventResponse<T>(): PartialObserver<T> {
-        return {
-            next: v => this.refresh(),
-            error: (message: string) => {
-                notify({ message }, "error", 7000);
-                console.log(message);
-            }
-        };
-    }
-
     showHistoDetail(cell) {
+
+        if (this.countHisto) return;
+        this.countHisto = true;
+        cell.cellElement.classList.add("hide-button");
         this.ligneLogistiqueId = cell.data.id;
-        this.histoDetailPopup.visible = true;
+        this.historiqueModificationsDetailService
+            .countModifDetailHistoryById(this.ligneLogistiqueId)
+            .then((res) => {
+                this.countHisto = false;
+                cell.cellElement.classList.remove("hide-button");
+                if (res.countHistoriqueModificationDetail) {
+                    this.histoDetailPopup.visible = true;
+                    console.log(res.countHistoriqueModificationDetail);
+                } else {
+                    notify("Aucun historique disponible", "warning", 3000);
+                }
+            });
+
     }
 
     onEditorPreparing(e) {
         // Saving cell main info
         if (e.parentType === "dataRow") {
             e.editorOptions.onFocusIn = (elem) => {
-                this.dataField = e.dataField;
-                this.idLigne = e.row?.data?.id;
                 elem.element.querySelector(".dx-texteditor-input")?.select();
             };
         }
     }
 
+    saveGridField(rowIndex, field, state) {
+        this.datagrid.instance.cellValue(rowIndex, field, state);
+        this.datagrid.instance.saveEditData();
+    }
+
     onCellClick(e) {
+        this.currentLogId = e.data.id;
+        this.currentRowIndex = e.component.getRowIndexByKey(this.currentLogId);
         switch (e.column.dataField) {
-            // Conditionnal save
             case "expedieStation": {
                 if (e.data.expedieStation === true) {
                     this.choixRaisonPopup.visible = true;
+                } else {
+                    this.saveGridField(this.currentRowIndex, "expedieStation", true);
+                    this.onCheckCloturer();
+                    break;
                 }
-                this.saveGridField(e, "expedieStation");
-                break;
             }
         }
     }
 
-    saveGridField(e, field) {
-        e.component.cellValue(e.component.getRowIndexByKey(e.data.id), field, !e.data.expedieStation);
-        this.datagrid.instance.saveEditData();
+    reasonChosen(reasonId) {
+        // Save uncloture
+        this.saveGridField(this.currentRowIndex, "expedieStation", false);
+        this.onCheckCloturer();
+
+    }
+
+    onCheckCloturer() {
+
+        // f_details_exp_on_check_cloturer
+        this.refreshGridLigneDetail.emit(true);
     }
 
 }

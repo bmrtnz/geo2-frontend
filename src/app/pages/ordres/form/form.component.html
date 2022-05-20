@@ -825,6 +825,7 @@
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique
+                    (refreshGridLigneDetail)="refreshGridLigneDetail()"
                     [ordre]="ordre"
                   ></app-grid-ordre-ligne-logistique>
                   <div *ngIf="ordresLignesViewExp">

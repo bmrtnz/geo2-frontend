@@ -28,6 +28,7 @@ import { of, Subject } from "rxjs";
 import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
+import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 
@@ -192,6 +193,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
     @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
     @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
+    @ViewChild(GridLignesDetailsComponent) gridLignesDetail: GridLignesDetailsComponent;
 
     constructor(
         private router: Router,
@@ -615,6 +617,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe({
                 next: ordre => this.refreshStatus(ordre.statut),
             });
+    }
+
+    public refreshGridLigneDetail() {
+        this.gridLignesDetail?.refresh();
     }
 
 }

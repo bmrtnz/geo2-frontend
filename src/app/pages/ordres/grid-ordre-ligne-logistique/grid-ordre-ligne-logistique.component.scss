@@ -39,6 +39,20 @@
         }
     }
 
+    .small-loader {
+        position: relative;
+        top: 0;
+        margin-left: 34px;
+        margin-right: 50px;
+        width: 15px;
+        height: 15px;
+        border: none;
+    }
+
+    .hide-button .small-detail-histo-button {
+        display: none !important;
+    }
+
     .small-detail-histo-button {
         position: relative;
         left: 50%;
@@ -57,10 +71,10 @@
             }
         }
 
-        background-color: $BW-khaki-medium !important;
+        background-color: $BW-khaki-dark !important;
 
         &:hover {
-            background-color: $BW-khaki-dark !important;
+            background-color: $BW-khaki-ultradark !important;
         }
 
     }

@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from "@angular/core";
 import { DxPopupComponent, DxListComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import { CodifsDevalexpService } from "app/shared/services/api/codifs-devalexp.service";
 
 @Component({
@@ -11,8 +10,7 @@ import { CodifsDevalexpService } from "app/shared/services/api/codifs-devalexp.s
 })
 export class ChoixRaisonDecloturePopupComponent implements OnInit {
 
-  @Input() public ordreLogistique: OrdreLogistique;
-  @Output() public changeLigne = new EventEmitter();
+  @Output() public reasonChosen = new EventEmitter();
 
   dataSource: DataSource;
   visible: boolean;
@@ -46,20 +44,7 @@ export class ChoixRaisonDecloturePopupComponent implements OnInit {
   }
 
   saveModifDetail() {
-    // const ordreLigne = { id: this.ordreLigne.id, origineCertification: this.newOrigine ? this.newOrigine : "" };
-    // this.OrdreLigneService.save_v2(["id", "origineCertification"], {
-    //   ordreLigne,
-    // })
-    //   .subscribe({
-    //     next: () => {
-    //       notify(this.localizeService.localize("articles-save-origin"), "success", 2000);
-    //       this.changeLigne.emit(null);
-    //     },
-    //     error: (err) => {
-    //       console.log(err);
-    //       notify(this.localizeService.localize("articles-save-origin-error"), "error", 2000);
-    //     }
-    //   });
+    this.reasonChosen.emit(this.reason);
     this.hidePopup();
   }
 

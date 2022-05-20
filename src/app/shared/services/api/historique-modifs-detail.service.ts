@@ -8,12 +8,13 @@ import { LoadOptions } from "devextreme/data/load_options";
 import { AuthService } from "..";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
-
+type GQLResponse = {
+  countHistoriqueModificationDetail: number;
+};
 @Injectable({
   providedIn: "root"
 })
 export class HistoriqueModificationsDetailService extends ApiService implements APIRead {
-
 
   constructor(
     apollo: Apollo,
@@ -77,6 +78,23 @@ export class HistoriqueModificationsDetailService extends ApiService implements 
     return this.apollo.mutate<{ saveHistoriqueModificationDetail: HistoriqueModificationDetail }>({
       mutation: gql(this.buildSaveGraph(columns)),
       variables,
+    });
+  }
+
+  public countModifDetailHistoryById(logistiqueId) {
+    return this.countModifDetailHistory(this.mapDXFilterToRSQL(["logistique.id", "=", logistiqueId]));
+  }
+
+  public countModifDetailHistory(search): Promise<any> {
+    return new Promise(async (resolve) => {
+      this.listenQuery<GQLResponse>(
+        await this.buildCount(),
+        {
+          variables: { search },
+          fetchPolicy: "no-cache",
+        },
+        (res) => resolve(res.data),
+      );
     });
   }
 

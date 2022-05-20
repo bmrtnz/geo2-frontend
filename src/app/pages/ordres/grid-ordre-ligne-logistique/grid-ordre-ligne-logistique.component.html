@@ -92,10 +92,13 @@
       (onClick)="showHistoDetail(cell)"
     >
     </dx-button>
+    <dx-load-indicator
+      class="small-loader"
+    ></dx-load-indicator>
   </div>
 </dx-data-grid>
 <app-choix-raison-decloture-popup
-  [ordreLogistique]="ordreLogistique"
+  (reasonChosen)="reasonChosen($event)"
 ></app-choix-raison-decloture-popup>
 <app-historique-modif-detail-popup
   [ligneLogistiqueId]="ligneLogistiqueId"

@@ -150,6 +150,10 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         this.modifDetailPopup.visible = true;
     }
 
+    refresh() {
+        this.datagrid.instance.refresh();
+    }
+
     showModifButton(cell) {
         const data = cell.data;
         const show = data.logistique.expedieStation && (
