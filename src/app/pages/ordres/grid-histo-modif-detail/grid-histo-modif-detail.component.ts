@@ -84,5 +84,9 @@ export class GridHistoModifDetailComponent implements OnChanges {
     }
   }
 
+  public refresh() {
+    this.datagrid.instance.refresh();
+  }
+
 
 }

@@ -1357,6 +1357,7 @@
         "dataField": "dateModification",
         "dataType": "date",
         "format": "dd-MM-yyyy à HH:mm:ss",
+        "sortOrder": "desc",
         "visible": true
       },
       {
@@ -1425,7 +1426,7 @@
       },
       {
         "dataField": "id",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       }
     ]
@@ -2182,6 +2183,14 @@
       {
         "dataField": "logistique.expedieStation",
         "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "logistique.id",
+        "showInColumnChooser": false
       }
     ]
   },
@@ -2373,7 +2382,6 @@
         "sortOrder": "desc",
         "dataType": "string",
         "allowEditing": false,
-        "fixed": true,
         "visible": true
       },
       {
@@ -2466,12 +2474,11 @@
       },
       {
         "dataField": "valide",
-        "visibleIndex": 5,
+        "visibleIndex": 30,
         "cellTemplate": "histoBtnTemplate",
         "cssClass": "multi-line-header",
         "allowEditing": false,
         "width": 80,
-        "showInColumnChooser": true,
         "visible": true
       }
     ]

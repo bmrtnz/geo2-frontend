@@ -42,7 +42,6 @@ export class HistoriqueModifDetailPopupComponent implements OnChanges {
   }
 
   onHiding(e) {
-    this.gridHistoModif.dataSource = null;
   }
 
   hidePopup() {
