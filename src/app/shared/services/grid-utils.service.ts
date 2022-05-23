@@ -8,6 +8,6 @@ export class GridUtilsService {
 
   // Reset (go to left) datagrid horizontal scroll bar
   public resetGridScrollBar(grid) {
-    grid.instance.getScrollable().scrollTo(0);
+    grid?.instance.getScrollable()?.scrollTo(0);
   }
 }

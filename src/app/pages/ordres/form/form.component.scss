@@ -34,9 +34,13 @@
   .dx-button {
     width: 100%;
 
-    .dx-button-text {
-      padding-right: 3px;
-      padding-left: 3px;
+    .dx-button-content {
+      padding: 5px 0;
+
+      .dx-button-text {
+        padding-right: 3px;
+        padding-left: 3px;
+      }
     }
   }
 }
