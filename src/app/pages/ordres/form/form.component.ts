@@ -114,6 +114,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "fraisPrixUnitaire",
         "fraisUnite.id",
         "fraisPlateforme",
+        "hasLitige",
+        "cqLignesCount",
+        "commentairesOrdreCount"
     ];
 
     private destroy = new Subject<boolean>();
