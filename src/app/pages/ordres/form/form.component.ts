@@ -296,7 +296,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                     console.log(err);
                     this.headerSaving = false;
                 }
-            });;
+            });
         }
     }
 
