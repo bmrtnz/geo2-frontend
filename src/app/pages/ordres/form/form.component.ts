@@ -290,8 +290,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.refreshStatus(res.data.saveOrdre.statut);
                     this.headerSaving = false;
                 },
-                error: () => {
+                error: (err) => {
                     notify("Erreur sauvegarde entête", "error", 3000);
+                    console.log(err);
                     this.headerSaving = false;
                 }
             });
