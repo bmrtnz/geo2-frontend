@@ -100,7 +100,7 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
     Object.keys(myInputs).forEach(key => {
       if (myInputs[key] === "" || myInputs[key] === null) sum++;
     });
-    this.validForm = !(sum === 4);
+    this.validForm = !(sum === Object.keys(myInputs).length);
   }
 
   clearData() {
