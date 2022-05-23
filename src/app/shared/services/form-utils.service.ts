@@ -5,7 +5,7 @@ import { AbstractControl } from "@angular/forms";
     providedIn: "root",
 })
 export class FormUtilsService {
-    constructor() {}
+    constructor() { }
 
     /**
      * Filter dirty controls and map them to their field value
@@ -28,8 +28,8 @@ export class FormUtilsService {
                 const value = JSON.parse(JSON.stringify(control.value));
                 const cleanValue =
                     typeof value === "object" &&
-                    value &&
-                    value.length !== undefined
+                        value &&
+                        value.length !== undefined
                         ? (value as []).map((v) => clean(v))
                         : clean(value);
                 return { [key]: cleanValue };
@@ -55,4 +55,5 @@ export class FormUtilsService {
     public setIdToNull(formGroup, field) {
         formGroup.get(field).patchValue({ id: null });
     }
+
 }

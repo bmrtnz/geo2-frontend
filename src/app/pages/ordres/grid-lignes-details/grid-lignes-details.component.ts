@@ -6,6 +6,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -46,6 +47,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         public authService: AuthService,
         public gridConfiguratorService: GridConfiguratorService,
         public localizeService: LocalizationService,
+        public gridUtilsService: GridUtilsService,
         private functionsService: FunctionsService,
     ) {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigneDetails);
@@ -81,6 +83,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
                 ["ordre.id", "=", this.ordre.id],
             ]);
             this.datagrid.dataSource = this.dataSource;
+            this.gridUtilsService.resetGridScrollBar(this.datagrid);
         } else if (this.datagrid)
             this.datagrid.dataSource = null;
     }
