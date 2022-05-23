@@ -77,6 +77,14 @@
           [historique]="article?.historique"
         ></app-historique-valide>
         <dx-button
+          type="success"
+          height="auto"
+          icon="material-icons description"
+          (onClick)="openDatasheetPDF()"
+          text="{{ 'btn-doctechnique' | localize }}"
+        >
+        </dx-button>
+        <dx-button
           *ngIf="!articleLigneId"
           class="black"
           height="auto"
