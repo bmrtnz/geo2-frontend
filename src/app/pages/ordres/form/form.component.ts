@@ -169,6 +169,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public fullOrderNumber: string;
     public env = environment;
     public allowMutations = false;
+    public headerSaving;
 
     public clientsDS: DataSource;
     public entrepotDS: DataSource;
@@ -276,17 +277,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.comLog.instance.option("hint", this.comLog.value);
     }
 
-    onSubmit() {
+    saveHeaderOnTheFly() {
         if (!this.formGroup.pristine && this.formGroup.valid && !this.env.production) {
+            this.headerSaving = true;
             const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
             ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
             this.ordresService.save({ ordre }).subscribe({
                 next: (res) => {
                     this.refreshStatus(res.data.saveOrdre.statut);
-                    notify("Sauvegardé", "success", 3000);
+                    this.headerSaving = false;
                 },
-                error: () => notify("Echec de la sauvegarde", "error", 3000),
+                error: () => {
+                    notify("Erreur sauvegarde entête", "error", 3000);
+                    this.headerSaving = false;
+                }
             });
         }
     }
@@ -462,6 +467,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 window.sessionStorage.setItem("idOrdre", this.ordre.id);
                 window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
                 this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
+
+                this.formGroup.valueChanges.subscribe((_) => {
+                    this.saveHeaderOnTheFly();
+                });
+
             });
     }
 

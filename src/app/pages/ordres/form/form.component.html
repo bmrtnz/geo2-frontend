@@ -126,7 +126,6 @@
 
   <form
     [formGroup]="formGroup"
-    (ngSubmit)="onSubmit()"
   >
     <dx-validation-group name="loginGroup">
       <div class="content-block"></div>
@@ -158,13 +157,6 @@
                 </dx-button>
               </div>
               <div class="upperButtons-container">
-                <dx-button
-                  class="upperButton submit"
-                  type="default"
-                  [disabled]="env.production"
-                  text="{{ 'btn-valider' | localize }}"
-                  [useSubmitBehavior]="true"
-                ></dx-button>
                 <dx-button
                   class="upperButton"
                   type="danger"
@@ -212,6 +204,16 @@
                   {{ refOrdre }}</span
                 >
                 <div class="dx-form-group-content no-padding-bottom order-header">
+                  <dx-load-panel
+                    #loadPanel
+                    shadingColor="rgba(0,0,0,0.4)"
+                    [position]="{ of: '#head' }"
+                    [visible]="headerSaving"
+                    [showPane]="true"
+                    [shading]="false"
+                    [closeOnOutsideClick]="false"
+                  >
+                  </dx-load-panel>
                   <dx-box>
                     <dxi-item [ratio]="4">
                       <!-- Client -->
