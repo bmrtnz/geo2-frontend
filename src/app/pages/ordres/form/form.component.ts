@@ -280,6 +280,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     saveHeaderOnTheFly() {
+        if (this.headerSaving) return;
         if (!this.formGroup.pristine && this.formGroup.valid && !this.env.production) {
             this.headerSaving = true;
             const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
@@ -295,7 +296,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                     console.log(err);
                     this.headerSaving = false;
                 }
-            });
+            });;
         }
     }
 
