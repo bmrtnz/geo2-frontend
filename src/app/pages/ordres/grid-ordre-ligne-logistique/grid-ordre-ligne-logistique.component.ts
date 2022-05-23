@@ -32,6 +32,7 @@ import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-
 import { AuthService } from "app/shared/services";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 @Component({
     selector: "app-grid-ordre-ligne-logistique",
@@ -61,6 +62,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
         public gridConfiguratorService: GridConfiguratorService,
         public dateManagementService: DateManagementService,
         private functionsService: FunctionsService,
+        public gridUtilsService: GridUtilsService,
         public historiqueModificationsDetailService: HistoriqueModificationsDetailService,
         public authService: AuthService,
         public historiqueLogistiqueService: HistoriqueLogistiqueService,
@@ -89,6 +91,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
             );
             this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
             this.datagrid.dataSource = this.dataSource;
+            this.gridUtilsService.resetGridScrollBar(this.datagrid);
         } else if (this.datagrid) this.datagrid.dataSource = null;
     }
 

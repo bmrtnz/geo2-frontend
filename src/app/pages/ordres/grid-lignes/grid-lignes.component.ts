@@ -12,6 +12,7 @@ import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/or
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -100,6 +101,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     public paletteInterService: TypesPaletteService,
     public certificationsModesCultureService: CertificationsModesCultureService,
     public authService: AuthService,
+    public gridUtilsService: GridUtilsService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
   ) {
@@ -428,7 +430,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       info += " " + this.localizeService.localize("article-ajoutes");
       info = info.split("&&").join(this.nbInsertedArticles > 1 ? "s" : "");
       notify(info, "success", 3000);
-      this.datagrid.instance.getScrollable().scrollTo(0); // Reset scrollbar
+      this.gridUtilsService.resetGridScrollBar(this.datagrid);
       this.newArticles = 0;
       this.newNumero = 0;
       this.nbInsertedArticles = null;
