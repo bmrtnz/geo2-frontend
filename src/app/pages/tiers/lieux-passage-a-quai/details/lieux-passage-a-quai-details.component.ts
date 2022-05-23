@@ -132,6 +132,17 @@ export class LieuxPassageAQuaiDetailsComponent
 
     ngOnInit() {
 
+        this.pays = this.paysService.getDataSource_v2(["id", "description"]);
+        this.pays.filter(["valide", "=", "true"]);
+        this.regimesTva = this.regimesTvaService.getDataSource();
+        this.regimesTva.filter(["valide", "=", "true"]);
+        this.devises = this.devisesService.getDataSource();
+        this.devises.filter(["valide", "=", "true"]);
+        this.moyensPaiement = this.moyensPaiementService.getDataSource();
+        this.moyensPaiement.filter(["valide", "=", "true"]);
+        this.basesPaiement = this.basesPaiementService.getDataSource();
+        this.basesPaiement.filter(["valide", "=", "true"]);
+
         if (this.route.snapshot.url[1]?.path !== "lieux-passage-a-quai") return;
 
         this.route.params
@@ -152,16 +163,6 @@ export class LieuxPassageAQuaiDetailsComponent
                 }
             });
 
-        this.pays = this.paysService.getDataSource_v2(["id", "description"]);
-        this.pays.filter(["valide", "=", "true"]);
-        this.regimesTva = this.regimesTvaService.getDataSource();
-        this.regimesTva.filter(["valide", "=", "true"]);
-        this.devises = this.devisesService.getDataSource();
-        this.devises.filter(["valide", "=", "true"]);
-        this.moyensPaiement = this.moyensPaiementService.getDataSource();
-        this.moyensPaiement.filter(["valide", "=", "true"]);
-        this.basesPaiement = this.basesPaiementService.getDataSource();
-        this.basesPaiement.filter(["valide", "=", "true"]);
     }
 
     ngOnChanges() {

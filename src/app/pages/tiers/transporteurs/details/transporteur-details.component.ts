@@ -143,6 +143,19 @@ export class TransporteurDetailsComponent
 
     ngOnInit() {
 
+        this.pays = this.paysService.getDataSource_v2(["id", "description"]);
+        this.pays.filter(["valide", "=", "true"]);
+        this.regimesTva = this.regimesTvaService.getDataSource();
+        this.regimesTva.filter(["valide", "=", "true"]);
+        this.devises = this.devisesService.getDataSource();
+        this.devises.filter(["valide", "=", "true"]);
+        this.moyensPaiement = this.moyensPaiementService.getDataSource();
+        this.moyensPaiement.filter(["valide", "=", "true"]);
+        this.basesPaiement = this.basesPaiementService.getDataSource();
+        this.basesPaiement.filter(["valide", "=", "true"]);
+        this.clientsRaisonSocial = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+        this.clientsRaisonSocial.filter(["valide", "=", "true"]);
+
         if (this.route.snapshot.url[1]?.path !== "transporteurs") return;
 
         this.route.params
@@ -163,18 +176,6 @@ export class TransporteurDetailsComponent
                 }
             });
 
-        this.pays = this.paysService.getDataSource_v2(["id", "description"]);
-        this.pays.filter(["valide", "=", "true"]);
-        this.regimesTva = this.regimesTvaService.getDataSource();
-        this.regimesTva.filter(["valide", "=", "true"]);
-        this.devises = this.devisesService.getDataSource();
-        this.devises.filter(["valide", "=", "true"]);
-        this.moyensPaiement = this.moyensPaiementService.getDataSource();
-        this.moyensPaiement.filter(["valide", "=", "true"]);
-        this.basesPaiement = this.basesPaiementService.getDataSource();
-        this.basesPaiement.filter(["valide", "=", "true"]);
-        this.clientsRaisonSocial = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-        this.clientsRaisonSocial.filter(["valide", "=", "true"]);
     }
 
     ngOnChanges() {
