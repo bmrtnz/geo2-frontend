@@ -52,7 +52,6 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
     const ligne = this.ligneDetail;
 
     const historiqueModificationDetail = {
-      id: "TESTPH", //// A VIRER juste pour tests temporaires du fait absence générateur
       ligne: { id: ligne.id },
       ordre: { id: ligne.ordre.id },
       logistique: { id: ligne.logistique.id },
