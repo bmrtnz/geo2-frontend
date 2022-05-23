@@ -958,13 +958,12 @@
                 </dx-select-box>
                 <dx-button
                   *ngIf="
-                    article?.normalisation?.etiquetteEvenementielle?.document
-                      .isPresent
+                    article?.normalisation?.etiquetteEvenementielle?.document?.isPresent
                   "
                   (onClick)="
                     viewEtiquette(
                       'articles-normalisation-etiquetteEvenementielle',
-                      article.normalisation.etiquetteEvenementielle.document
+                      article.normalisation?.etiquetteEvenementielle?.document
                     )
                   "
                   class="icon-btn"
