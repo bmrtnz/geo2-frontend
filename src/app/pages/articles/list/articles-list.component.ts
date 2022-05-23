@@ -171,13 +171,13 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
     }
 
-    capitalize(data) {
+    formatListItem(data) {
         if (data?.description)
-            return `${data.id.toLowerCase().ucFirst()}: ${data.description?.toLowerCase()}`;
+            return `${data.id.toUpperCase()} - ${data.description?.toUpperCase()}`;
         if (data?.id)
-            return data.id.toLowerCase().ucFirst();
+            return data.id.toUpperCase();
         if (data?.key)
-            return data.key.toLowerCase().ucFirst();
+            return data.key.toUpperCase();
         return data.toString();
     }
 
