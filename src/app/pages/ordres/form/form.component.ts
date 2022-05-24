@@ -117,7 +117,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "hasLitige",
         "cqLignesCount",
         "commentairesOrdreCount",
-        "regimeTva.id"
+        "regimeTva.id",
+        "facture",
+        "bonAFacturer"
     ];
 
     private destroy = new Subject<boolean>();

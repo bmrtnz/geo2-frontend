@@ -11,6 +11,7 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -150,7 +151,12 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
 
     modifDetailExp(cell) {
         this.ligneDetail = cell.data;
-        this.modifDetailPopup.visible = true;
+        const statut = this.ordre.facture ? "facturé" : this.ordre.bonAFacturer ? "bon à facturer" : "";
+        if (statut) {
+            notify("Ordre " + statut + ", la modification est impossible...", "warning", 3000);
+        } else {
+            this.modifDetailPopup.visible = true;
+        }
     }
 
     refresh() {
