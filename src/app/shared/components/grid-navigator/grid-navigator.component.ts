@@ -1,7 +1,8 @@
-import { Component, OnInit, NgModule, ElementRef, Input } from "@angular/core";
+import { Component, OnInit, NgModule, ElementRef, Input, ViewChild } from "@angular/core";
 import { DxButtonModule, DxDataGridComponent } from "devextreme-angular";
 import { Location, CommonModule } from "@angular/common";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
+import { EntrepotsListComponent } from "app/pages/tiers/entrepots/list/entrepots-list.component";
 
 const BACK_STATE = "BACK_NESTED";
 
@@ -12,7 +13,11 @@ const BACK_STATE = "BACK_NESTED";
 })
 export class GridNavigatorComponent {
     backBtnDisabled = true;
+    returnBtnTxt: string;
+    isEntrepotsList: boolean;
     @Input() dataGrid: DxDataGridComponent;
+    clientID: string;
+
 
     constructor(
         public location: Location,
@@ -25,6 +30,11 @@ export class GridNavigatorComponent {
                 this.backBtnDisabled = !/^\/pages\/nested\/.*(details|entrepot).*/.test(
                     event.url,
                 );
+            const url = window.location.href;
+            const idx = url.indexOf("/clients/");
+            if (idx > 0) this.clientID = url.substring(idx + 9).split("/")[0];
+            this.isEntrepotsList = url.indexOf("/entrepots/") !== -1;
+            this.returnBtnTxt = this.isEntrepotsList ? "Client" : "Retour";
         });
     }
 
@@ -123,7 +133,13 @@ export class GridNavigatorComponent {
     }
 
     backClick() {
-        this.location.back();
+        if (this.isEntrepotsList) {
+            this.router.navigateByUrl(
+                `/pages/nested/n/(tiers/clients/list//details:tiers/clients/${this.clientID})`
+            );
+        } else {
+            this.location.back();
+        }
     }
 }
 

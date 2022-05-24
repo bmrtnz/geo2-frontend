@@ -35,7 +35,7 @@
             "
             [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
-            [displayExpr]="capitalize"
+            [displayExpr]="formatListItem"
             valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
@@ -56,7 +56,7 @@
             "
             [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
-            [displayExpr]="capitalize"
+            [displayExpr]="formatListItem"
             valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
@@ -80,7 +80,7 @@
             "
             [searchEnabled]="true"
             searchExpr="matierePremiere.modeCulture.description"
-            [displayExpr]="capitalize"
+            [displayExpr]="formatListItem"
             valueExpr="key"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
@@ -99,7 +99,7 @@
             (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
             [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
-            [displayExpr]="capitalize"
+            [displayExpr]="formatListItem"
             valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
@@ -120,7 +120,7 @@
             "
             [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
-            [displayExpr]="capitalize"
+            [displayExpr]="formatListItem"
             valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
