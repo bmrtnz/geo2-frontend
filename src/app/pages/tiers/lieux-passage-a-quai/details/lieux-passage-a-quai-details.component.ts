@@ -250,53 +250,23 @@ export class LieuxPassageAQuaiDetailsComponent
 
     onSubmit() {
         if (!this.formGroup.pristine && this.formGroup.valid) {
-            let lieuPassageAQuai = this.formUtils.extractDirty(
+
+            // 05-2022: Lea/Stéphane wants to avoid pre-saisie/modifications step
+            this.formGroup.get("preSaisie").setValue(false);
+            this.formGroup.get("preSaisie").markAsDirty();
+            this.preSaisie = "";
+
+            const lieuPassageAQuai = this.formUtils.extractDirty(
                 this.formGroup.controls,
                 LieuPassageAQuai.getKeyField(),
             );
 
             if (this.createMode) {
-                lieuPassageAQuai.id = this.formGroup
-                    .get("id")
-                    .value.toUpperCase();
-                // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
-                // Avoir pour les valeur par defaut (qui sont not null dans la base)
-                lieuPassageAQuai.valide = false;
-                lieuPassageAQuai.preSaisie = true;
-                this.saveData(lieuPassageAQuai);
+                lieuPassageAQuai.valide = true;
             } else {
-                if (lieuPassageAQuai.valide === true) {
-                    lieuPassageAQuai.preSaisie = false;
-                    this.preSaisie = "";
-                }
                 lieuPassageAQuai.id = this.lieupassageaquai.id;
-
-                // Non-admin user : do not save, just record modifications
-                if (!this.authService.currentUser.adminClient) {
-                    this.readOnlyMode = true;
-                    this.editing = false;
-                    this.preSaisie = "preSaisie";
-                    this.modificationsService
-                        .saveModifications(
-                            LieuPassageAQuai.name,
-                            this.lieupassageaquai,
-                            this.formGroup,
-                            "tiers-lieuxpassageaquai-",
-                        )
-                        .subscribe((e) => {
-                            this.modifListe.refreshList();
-                            // Show red badges (unvalidated forms)
-                            this.validationService.showToValidateBadges();
-                            lieuPassageAQuai = {
-                                id: lieuPassageAQuai.id,
-                                preSaisie: true,
-                            };
-                            this.saveData(lieuPassageAQuai);
-                        });
-                } else {
-                    this.saveData(lieuPassageAQuai);
-                }
             }
+            this.saveData(lieuPassageAQuai);
         }
     }
 
