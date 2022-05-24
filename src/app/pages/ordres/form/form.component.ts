@@ -82,6 +82,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "client.modificationDetail",
         "client.certifications.certification.id",
         "entrepot.id",
+        "entrepot.code",
         "referenceClient",
         "dateDepartPrevue",
         "dateLivraisonPrevue",
