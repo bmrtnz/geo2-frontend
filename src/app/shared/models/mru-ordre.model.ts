@@ -13,6 +13,7 @@ export class MRUOrdre extends Model {
     @Field({ dataType: "datetime" }) public dateModification: string;
     @Field() public nomUtilisateur: string;
     @Field() public socCode: string;
+    @Field() public cenCode: string;
 }
 
 export default MRUOrdre;
