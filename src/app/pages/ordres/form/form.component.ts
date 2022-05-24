@@ -115,7 +115,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "fraisPlateforme",
         "hasLitige",
         "cqLignesCount",
-        "commentairesOrdreCount"
+        "commentairesOrdreCount",
+        "regimeTva.id"
     ];
 
     private destroy = new Subject<boolean>();
@@ -379,12 +380,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.linkedOrdersSearch = true;
             const numero = this.ordre.numero;
             const ordresSource = this.ordresService.getDataSource();
-            ordresSource.filter(["referenceClient", "=", refClt]);
+            ordresSource.filter([
+                ["client.id", "=", this.ordre.client.id],
+                "and",
+                ["referenceClient", "=", refClt],
+                "and",
+                ["dateLivraisonPrevue", "=", this.ordre.dateLivraisonPrevue],
+                "and",
+                ["incoterm.id", "=", this.ordre.incoterm.id],
+                "and",
+                ["regimeTva.id", "=", this.ordre.regimeTva.id]
+            ]);
             ordresSource.load().then((res) => {
-                res.map(value => {
-                    if (numero !== value.numero) {
-                        this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
-                    }
+                res.filter(value => value.numero !== numero).map(value => {
+                    this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
                 });
                 this.findComplRegulLinkedOrders(refClt);
                 this.linkedOrdersSearch = false;
