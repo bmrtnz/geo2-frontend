@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
         this.navigation = service.getNavigationList();
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     onClickMultipleMenu(e) {
         this.drawer.instance.toggle();
@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
 
     navigate(view, nested?) {
         if (nested) {
+            console.log(view);
             this.router.navigateByUrl("/pages/nested/n/(" + view + ")");
         } else {
             this.router.navigateByUrl(view);

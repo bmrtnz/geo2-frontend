@@ -40,12 +40,19 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
 
     async enableFilters() {
 
-        const summaryInputs: SummaryInput[] = [
-            { selector: "nombrePalettesExpediees", summaryType: SummaryType.SUM },
-            { selector: "nombreColisExpedies", summaryType: SummaryType.SUM },
-            { selector: "poidsBrutExpedie", summaryType: SummaryType.SUM },
-            { selector: "poidsNetExpedie", summaryType: SummaryType.SUM },
+        const sumFields = [
+            "nombrePalettesExpediees",
+            "nombreColisExpedies",
+            "poidsBrutExpedie",
+            "poidsNetExpedie",
+            "logistique.nombrePalettesAuSol",
+            "logistique.nombrePalettes100x120",
+            "logistique.nombrePalettes80x120",
+            "logistique.nombrePalettes60x80"
         ];
+
+        const summaryInputs: SummaryInput[] = [];
+        sumFields.map(field => summaryInputs.push({ selector: field, summaryType: SummaryType.SUM }));
 
         const columns = await this.columns.toPromise();
         const fields = columns.map(column => column.dataField);

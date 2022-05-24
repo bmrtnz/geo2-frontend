@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedMain, NestedPart } from "app/pages/nested/nested.component";
 import { ClientsService, LocalizationService } from "app/shared/services";
@@ -25,7 +25,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 })
 export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     readonly gridID = Grid.Entrepot;
-    clientID: string;
+    @Output() clientID: string;
     clientName: string;
     clientCode: string;
     currCompanyID: string;

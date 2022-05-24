@@ -1,25 +1,29 @@
 <div class="content-block">
   <dx-button
-    style="float: left"
     icon="arrowleft"
-    text="Précédent"
-    [disabled]="!hasPrevious()"
-    (onClick)="selectPrevious()"
+    type="default"
+    [text]="returnBtnTxt"
+    [focusStateEnabled]="false"
+    [disabled]="backBtnDisabled"
+    (onClick)="backClick()"
   >
   </dx-button>
-  <dx-button
-    style="float: right"
+  <dx-button 
+    class="float-right"
     icon="arrowright"
     text="Suivant"
+    [focusStateEnabled]="false"
     [disabled]="!hasNext()"
     (onClick)="selectNext()"
   >
   </dx-button>
   <dx-button
-    style="float: left"
-    text="retour"
-    [disabled]="backBtnDisabled"
-    (onClick)="backClick()"
+    class="nav-list-under-btn float-right"
+    icon="arrowleft"
+    text="Précédent"
+    [focusStateEnabled]="false"
+    [disabled]="!hasPrevious()"
+    (onClick)="selectPrevious()"
   >
   </dx-button>
   <div style="clear: both"></div>

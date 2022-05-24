@@ -352,10 +352,10 @@ export class EntrepotDetailsComponent implements OnInit, AfterViewInit, NestedPa
 
         if (!this.formGroup.pristine && this.formGroup.valid) {
             // 11-2021: Lea/Stéphane wants to avoid pre-saisie/modifications step
-            if (this.formGroup.get("valide").value !== false || !this.formGroup.get("valide").dirty) {
-                this.formGroup.get("valide").setValue(true);
-                this.formGroup.get("valide").markAsDirty();
-            }
+            // if (this.formGroup.get("valide").value !== false || !this.formGroup.get("valide").dirty) {
+            //     this.formGroup.get("valide").setValue(true);
+            //     this.formGroup.get("valide").markAsDirty();
+            // }
             this.formGroup.get("preSaisie").setValue(false);
             this.formGroup.get("preSaisie").markAsDirty();
             this.preSaisie = "";

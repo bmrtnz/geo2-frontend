@@ -45,7 +45,7 @@ export class NestedComponent implements OnDestroy {
     @Output() dataGrid: DxDataGridComponent;
     destroy = new Subject<boolean>();
 
-    constructor(private activatedRoute: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute) { }
 
     ngOnDestroy() {
         this.destroy.next(true);

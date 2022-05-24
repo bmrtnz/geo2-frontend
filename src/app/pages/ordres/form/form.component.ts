@@ -216,6 +216,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         private entrepotsService: EntrepotsService,
         private personnesService: PersonnesService,
         private portsService: PortsService,
+        public formUtilsService: FormUtilsService,
         private basesTarifService: BasesTarifService,
         private transporteursService: TransporteursService,
         private litigesService: LitigesService,
