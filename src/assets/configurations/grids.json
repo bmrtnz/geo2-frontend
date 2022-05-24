@@ -1734,7 +1734,7 @@
         "dataField": "achatDevise",
         "allowEditing": false,
         "width": 45,
-        "cssClass": "multi-line-header",
+        "cssClass": "two-lines-header",
         "dataType": "string",
         "visible": true
       },
