@@ -266,7 +266,10 @@
                           {{ "ordres-referenceClient" | localize }}
                         </div>
                         <div class="dx-field-value">
-                          <dx-text-box formControlName="referenceClient">
+                          <dx-text-box 
+                            formControlName="referenceClient"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+                            >
                             <dx-validator
                               name="{{ 'ordres-referenceClient' | localize }}"
                             >
@@ -338,6 +341,7 @@
                             formControlName="incoterm"
                             [dataSource]="incotermsDS"
                             [displayExpr]="displayIDBefore"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [searchEnabled]="true"
                             [searchExpr]="['id', 'description']"
                           >
@@ -364,6 +368,7 @@
                                 formControlName="transporteur"
                                 [dataSource]="transporteursDS"
                                 [displayExpr]="displayIDBefore"
+                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                                 [searchEnabled]="true"
                                 [searchExpr]="['id', 'raisonSocial']"
                               >
@@ -393,6 +398,7 @@
                                 formControlName="typeTransport"
                                 [dataSource]="typeTransportDS"
                                 [displayExpr]="displayIDBefore"
+                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                                 [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
@@ -420,6 +426,7 @@
                                 [readOnly]="ordreFacture"
                                 class="alignright"
                                 formControlName="prixUnitaireTarifTransport"
+                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                               >
                                 <!-- <dx-validator name="{{ 'ordres-prixUnitaireTarifTransport' | localize }}">
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -441,6 +448,7 @@
                                 [dataSource]="deviseDS"
                                 [readOnly]="true"
                                 [displayExpr]="displayIDBefore"
+                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                                 [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
@@ -466,6 +474,7 @@
                                 formControlName="baseTarifTransport"
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"
+                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                                 [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
@@ -486,6 +495,7 @@
                             #comLog
                             [readOnly]="ordreFacture"
                             formControlName="instructionsLogistiques"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                           >
                             <dx-validator
                               name="{{
@@ -509,6 +519,7 @@
                           <dx-text-box
                             [readOnly]="ordreFacture"
                             formControlName="commentaireUsageInterne"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                           >
                             <dx-validator
                               name="{{
@@ -536,6 +547,7 @@
                         <div class="dx-field-value">
                           <dx-text-box
                             formControlName="codeChargement"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [readOnly]="ordreFacture"
                           >
                           </dx-text-box>
@@ -573,6 +585,7 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeDDS"
                                 displayExpr="name"
+                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                                 [searchEnabled]="true"
                                 [searchExpr]="['id', 'name']"
                               >
@@ -614,6 +627,7 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeADS"
                                 displayExpr="name"
+                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                                 [searchEnabled]="true"
                                 [searchExpr]="['id', 'name']"
                               >
@@ -633,6 +647,7 @@
                         <div class="dx-field-value small-font">
                           <dx-text-box
                             formControlName="incotermLieu"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [readOnly]="ordreFacture"
                           >
                           </dx-text-box>
@@ -650,6 +665,7 @@
                             [dataSource]="deviseDS"
                             [readOnly]="true"
                             [displayExpr]="deviseDisplayExpr"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [searchEnabled]="true"
                             [searchExpr]="['id', 'description']"
                           >
@@ -674,6 +690,7 @@
                             [readOnly]="ordreFacture"
                             [dataSource]="commercialDS"
                             [displayExpr]="displayIDBefore"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [searchEnabled]="true"
                             [searchExpr]="['id', 'nomUtilisateur']"
                           >
@@ -698,6 +715,7 @@
                             [readOnly]="ordreFacture"
                             [dataSource]="assistanteDS"
                             [displayExpr]="displayIDBefore"
+                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [searchEnabled]="true"
                             [searchExpr]="['id', 'nomUtilisateur']"
                           >
