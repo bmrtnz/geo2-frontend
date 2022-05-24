@@ -139,22 +139,24 @@
               ></dx-load-indicator>
               <div class="order-number">{{ fullOrderNumber }}</div>
               <div class="linkedOrders-container">
-                <span
-                  *ngIf="linkedOrdersSearch"
-                  class="search-linkedOrders"
-                  >Recherche ordres liés...</span
-                >
-                <dx-button
-                  *ngFor="let linkedOrder of linkedOrders"
-                  class="small-button linkedOrder-{{ linkedOrder.class }}"
-                  type="default"
-                  hint="{{ 'hint-ordres-lies' | localize }}"
-                  text="{{ linkedOrder.ordre.numero }} ({{
-                    linkedOrder.criteria
-                  }})"
-                  (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
-                >
-                </dx-button>
+                <div class="linkedOrders-subcontainer">
+                  <span
+                    *ngIf="linkedOrdersSearch"
+                    class="search-linkedOrders"
+                    >Recherche ordres liés...</span
+                  >
+                  <dx-button
+                    *ngFor="let linkedOrder of linkedOrders"
+                    class="small-button linkedOrder-{{ linkedOrder.class }}"
+                    type="default"
+                    hint="{{ 'hint-ordres-lies' | localize }}"
+                    text="{{ linkedOrder.ordre.numero }} ({{
+                      linkedOrder.criteria
+                    }})"
+                    (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
+                  >
+                  </dx-button>
+                </div>
               </div>
               <div class="upperButtons-container">
                 <dx-button

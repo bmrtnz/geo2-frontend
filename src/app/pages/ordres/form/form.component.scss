@@ -56,27 +56,33 @@
   }
 
   .linkedOrders-container {
-    max-width: 400px;
-    // background-color: #FF4400;
+    display: flex;
+    align-items: center;
+    max-width: 450px;
+    min-height: 38px;
     float: left;
     overflow: hidden;
 
-    .search-linkedOrders {
-      font-size: 13px;
-      color: #00759c;
-    }
+    .linkedOrders-subcontainer {
+      position: relative;
 
-    .small-button {
-      vertical-align: middle;
-      margin: 2px 5px 2px 0 !important;
-      height: 20px;
-      top: 50%;
-
-      .dx-button-text {
-        line-height: 0 !important;
+      .search-linkedOrders {
+        top: 2px;
         font-size: 13px;
-        margin-top: 0 !important;
-        text-transform: none;
+        color: #00759c;
+      }
+
+      .small-button {
+        top: 1px;
+        margin: 2px 5px 2px 0 !important;
+        height: 20px;
+
+        .dx-button-text {
+          line-height: 0 !important;
+          font-size: 13px;
+          margin-top: 0 !important;
+          text-transform: none;
+        }
       }
     }
   }
