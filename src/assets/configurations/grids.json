@@ -2377,7 +2377,6 @@
       {
         "visibleIndex": 4,
         "dataField": "dateDepartReelleFournisseur",
-        "sortOrder": "desc",
         "dataType": "string",
         "allowEditing": false,
         "visible": true
