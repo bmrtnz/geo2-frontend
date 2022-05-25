@@ -448,7 +448,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     let newFourCode = null;
     const filters = [];
 
-    if (this.currentCompanyService.getCompany().id !== "BUK" || newFourCode.substring(0, 2) !== "BW") {
+    if (this.currentCompanyService.getCompany().id !== "BUK" || proprietaireMarchandise?.code.substring(0, 2) !== "BW") {
       const listExp = proprietaireMarchandise?.listeExpediteurs;
       if (listExp) {
         listExp.split(",").map(exp => {
