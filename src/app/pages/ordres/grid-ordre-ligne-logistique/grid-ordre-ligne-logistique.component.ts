@@ -140,7 +140,6 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
                 cell.cellElement.classList.remove("hide-button");
                 if (res.countHistoriqueModificationDetail) {
                     this.histoDetailPopup.visible = true;
-                    console.log(res.countHistoriqueModificationDetail);
                 } else {
                     notify("Aucun historique disponible", "warning", 3000);
                 }
@@ -195,7 +194,10 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
 
     public handleCellChangeEventResponse<T>(): PartialObserver<T> {
         return {
-            next: v => this.refresh(),
+            next: v => {
+                this.refresh();
+                this.refreshGridLigneDetail.emit(true);
+            },
             error: (message: string) => {
                 notify({ message }, "error", 7000);
                 console.log(message);
@@ -205,9 +207,6 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
 
     onCheckCloturer(reasonId?) {
 
-        console.log(this.currentLogId);
-
-        // f_details_exp_on_check_cloturer
         this.functionsService.fDetailsExpOnCheckCloturer(
             reasonId,
             this.currentLogId,
@@ -215,7 +214,6 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
             this.authService.currentUser.nomUtilisateur
         ).valueChanges.subscribe(this.handleCellChangeEventResponse());
 
-        this.refreshGridLigneDetail.emit(true);
     }
 
 }
