@@ -1733,6 +1733,8 @@
         "visibleIndex": 32,
         "dataField": "achatDevise",
         "allowEditing": false,
+        "width": 45,
+        "cssClass": "two-lines-header",
         "dataType": "string",
         "visible": true
       },

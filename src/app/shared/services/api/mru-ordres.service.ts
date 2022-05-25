@@ -28,9 +28,9 @@ export class MruOrdresService extends ApiService implements APIRead {
                 type Response = { MRUOrdre: MRUOrdre };
                 const id = key
                     ? {
-                          utilisateur: key.utilisateur || "",
-                          ordre: key.ordre || "",
-                      }
+                        utilisateur: key.utilisateur || "",
+                        ordre: key.ordre || "",
+                    }
                     : {};
                 const variables = { id };
                 this.listenQuery<Response>(query, { variables }, (res) => {
@@ -115,8 +115,9 @@ export class MruOrdresService extends ApiService implements APIRead {
             utilisateur: {
                 nomUtilisateur: this.authService.currentUser.nomUtilisateur,
             },
+            cenCode: ordre.entrepot.code,
             ordre: { id: ordre.id },
-            entrepot: { id: ordre.entrepot.id, code: ordre.entrepot.code },
+            entrepot: { id: ordre.entrepot.code },
             societe: { id: this.currentCompanyService.getCompany().id },
             numero: ordre.numero,
         };
@@ -136,6 +137,8 @@ export class MruOrdresService extends ApiService implements APIRead {
                 "ordre.statut",
                 "ordre.secteurCommercial.id",
                 "ordre.entrepot.id",
+                "cenCode",
+                "ordre.entrepot.code",
                 "societe.id",
             ],
             {

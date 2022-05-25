@@ -8,6 +8,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
+    "start:wsl": "ng serve --liveReload=false --optimization=false --source-map=true",
     "start:dev": "ng serve --open --liveReload=true",
     "start:webdev": "ng serve --open --liveReload=false --configuration=webdev",
     "build": "ng build",

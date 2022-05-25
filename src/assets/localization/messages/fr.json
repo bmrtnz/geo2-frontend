@@ -739,7 +739,7 @@
     "ordreLignes-ventePrixUnitaire": "PU Vente",
     "ordreLignes-gratuit": "Gratuit",
     "ordreLignes-achatDevisePrixUnitaire": "PU Achat",
-    "ordreLignes-achatDevise": "Devise",
+    "ordreLignes-achatDevise": "Devise Achat",
     "ordreLignes-typePalette-description": "Type Pal. Sol",
     "ordreLignes-paletteInter-id": "Type Pal. inter",
     "ordreLignes-paletteInter-description": "Type Pal. inter",
