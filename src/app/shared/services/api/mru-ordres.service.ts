@@ -117,7 +117,7 @@ export class MruOrdresService extends ApiService implements APIRead {
             },
             cenCode: ordre.entrepot.code,
             ordre: { id: ordre.id },
-            entrepot: { id: ordre.entrepot.id, code: ordre.entrepot.code },
+            entrepot: { id: ordre.entrepot.code },
             societe: { id: this.currentCompanyService.getCompany().id },
             numero: ordre.numero,
         };
