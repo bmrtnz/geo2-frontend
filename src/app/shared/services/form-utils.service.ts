@@ -58,7 +58,8 @@ export class FormUtilsService {
 
     // Best user experience
     selectTextOnFocusIn(e: any) {
-        e.element?.querySelector("input.dx-texteditor-input")?.select();
+        const myInput = e.element?.querySelector("input.dx-texteditor-input");
+        if (!myInput?.hasAttribute("readonly")) myInput?.select();
     }
 
 }
