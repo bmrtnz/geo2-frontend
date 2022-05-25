@@ -11,6 +11,7 @@ import { AuthService, ClientsService, EntrepotsService, TransporteursService } f
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
+import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -19,7 +20,7 @@ import { PortsService } from "app/shared/services/api/ports.service";
 import { TypesCamionService } from "app/shared/services/api/types-camion.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { DxAccordionComponent, DxTextBoxComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
@@ -177,6 +178,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public env = environment;
     public allowMutations = false;
     public headerSaving;
+    public instructionsList: string[];
 
     public clientsDS: DataSource;
     public entrepotDS: DataSource;
@@ -195,7 +197,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild(FileManagerComponent, { static: false })
     fileManagerComponent: FileManagerComponent;
-    @ViewChild("comLog", { static: false }) comLog: DxTextBoxComponent;
+    @ViewChild("comLog", { static: false }) comLog: DxSelectBoxComponent;
     @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
     @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
     @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
@@ -216,6 +218,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         private incotermsService: IncotermsService,
         private entrepotsService: EntrepotsService,
         private personnesService: PersonnesService,
+        private instructionsService: InstructionsService,
         private portsService: PortsService,
         public formUtilsService: FormUtilsService,
         private basesTarifService: BasesTarifService,
@@ -273,6 +276,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         ]);
 
         this.transporteursDS = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+        this.instructionsList = [];
+        this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
+            res
+                .filter(inst => inst.valide)
+                .map(inst => this.instructionsList.push(inst.description));
+        });
 
     }
 
