@@ -270,9 +270,10 @@ body {
 // Filter panel adjustments
 .dx-datagrid-filter-panel {
   padding: 0 18px;
+  justify-content: left;
 
   .dx-checkbox-icon {
-    top: 16px;
+    top: 5px;
   }
 
   .dx-datagrid-filter-panel-text {
@@ -290,7 +291,12 @@ body {
   }
 
   .dx-datagrid-filter-panel-clear-filter {
-    padding: 15px 0;
+    margin: 4px 0 4px 30px;
+    padding: 1px 10px;
+    background: $base-accent;
+    color: #FFF;
+    border-radius: 5px;
+    text-decoration: none !important;
   }
 }
 
