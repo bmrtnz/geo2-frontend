@@ -33,6 +33,8 @@ import { AuthService } from "app/shared/services";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 
 @Component({
     selector: "app-grid-ordre-ligne-logistique",
@@ -49,6 +51,8 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     public currentLogId: string;
     public currentRowIndex: number;
     public countHisto: boolean;
+    public changeCloture: boolean;
+    public reasonId: string;
     @Input() public ordre: Ordre;
     @Output() public ordreLogistique: OrdreLogistique;
     @Input() public ligneLogistiqueId: string;
@@ -65,6 +69,8 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
         public gridUtilsService: GridUtilsService,
         public historiqueModificationsDetailService: HistoriqueModificationsDetailService,
         public authService: AuthService,
+        public formUtilsService: FormUtilsService,
+        private currentCompanyService: CurrentCompanyService,
         public historiqueLogistiqueService: HistoriqueLogistiqueService,
         public localizeService: LocalizationService,
     ) {
@@ -143,10 +149,9 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     }
 
     onEditorPreparing(e) {
-        // Saving cell main info
         if (e.parentType === "dataRow") {
             e.editorOptions.onFocusIn = (elem) => {
-                elem.element.querySelector(".dx-texteditor-input")?.select();
+                this.formUtilsService.selectTextOnFocusIn(elem);
             };
         }
     }
@@ -161,11 +166,14 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
         this.currentRowIndex = e.component.getRowIndexByKey(this.currentLogId);
         switch (e.column.dataField) {
             case "expedieStation": {
+                if (this.changeCloture) return;
                 if (e.data.expedieStation === true) {
                     this.choixRaisonPopup.visible = true;
                 } else {
+                    // Save cloture
+                    this.changeCloture = true;
+                    this.reasonId = "";
                     this.saveGridField(this.currentRowIndex, "expedieStation", true);
-                    this.onCheckCloturer();
                     break;
                 }
             }
@@ -174,14 +182,39 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
 
     reasonChosen(reasonId) {
         // Save uncloture
+        this.reasonId = reasonId;
+        this.changeCloture = true;
         this.saveGridField(this.currentRowIndex, "expedieStation", false);
-        this.onCheckCloturer();
-
     }
 
-    onCheckCloturer() {
+    onSaved() {
+        if (!this.changeCloture) return;
+        this.onCheckCloturer(this.reasonId);
+        this.changeCloture = false;
+    }
+
+    public handleCellChangeEventResponse<T>(): PartialObserver<T> {
+        return {
+            next: v => this.refresh(),
+            error: (message: string) => {
+                notify({ message }, "error", 7000);
+                console.log(message);
+            }
+        };
+    }
+
+    onCheckCloturer(reasonId?) {
+
+        console.log(this.currentLogId);
 
         // f_details_exp_on_check_cloturer
+        this.functionsService.fDetailsExpOnCheckCloturer(
+            reasonId,
+            this.currentLogId,
+            this.currentCompanyService.getCompany().id,
+            this.authService.currentUser.nomUtilisateur
+        ).valueChanges.subscribe(this.handleCellChangeEventResponse());
+
         this.refreshGridLigneDetail.emit(true);
     }
 

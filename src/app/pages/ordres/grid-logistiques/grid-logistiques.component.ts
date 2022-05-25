@@ -6,6 +6,7 @@ import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
     Grid,
     GridConfig, GridConfiguratorService
@@ -67,6 +68,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         public incotermFournisseurService: IncotermsService,
         public transporteurGroupageService: TransporteursService,
         public authService: AuthService,
+        public formUtilsService: FormUtilsService,
         public localizeService: LocalizationService,
     ) {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -220,6 +222,14 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
             if (e.column.dataField === "instructions") {
                 if (e.value) e.cellElement.title = e.value;
             }
+        }
+    }
+
+    onEditorPreparing(e) {
+        if (e.parentType === "dataRow") {
+            e.editorOptions.onFocusIn = (elem) => {
+                this.formUtilsService.selectTextOnFocusIn(elem);
+            };
         }
     }
 

@@ -4,6 +4,7 @@ import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { ArticlesService, AuthService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import notify from "devextreme/ui/notify";
 import { PartialObserver } from "rxjs";
 
@@ -26,6 +27,7 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
   constructor(
     private articlesService: ArticlesService,
     private authService: AuthService,
+    public formUtilsService: FormUtilsService,
     private historiqueModificationsDetailService: HistoriqueModificationsDetailService,
     private functionsService: FunctionsService
   ) { }
@@ -109,10 +111,6 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
 
   hidePopup() {
     this.visible = false;
-  }
-
-  onFocusSB(e) {
-    e.element.querySelector(".dx-texteditor-input")?.select();
   }
 
 }
