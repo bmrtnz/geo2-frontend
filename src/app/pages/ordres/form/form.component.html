@@ -495,23 +495,26 @@
                           {{ "ordres-instructionsLogistiques" | localize }}
                         </div>
                         <div class="dx-field-value">
-                          <dx-text-box
+                          <dx-select-box
                             #comLog
                             [readOnly]="ordreFacture"
                             formControlName="instructionsLogistiques"
+                            [acceptCustomValue]="true"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+                            [items]="instructionsList"
                           >
+                            <dxo-drop-down-options [width]="600">
+                            </dxo-drop-down-options>
                             <dx-validator
-                              name="{{
-                                'ordres-instructionsLogistiques' | localize
-                              }}"
-                            >
-                              <dxi-validation-rule
-                                type="stringLength"
-                                [max]="255"
-                              ></dxi-validation-rule>
-                            </dx-validator>
-                          </dx-text-box>
+                            name="{{ 'ordres-instructionsLogistiques' | localize }}"
+                          >
+                            <dxi-validation-rule
+                              type="stringLength"
+                              [max]="255"
+                            ></dxi-validation-rule>
+                          </dx-validator>
+                          </dx-select-box>
+
                         </div>
                       </div>
                       <!-- Comm interne -->
