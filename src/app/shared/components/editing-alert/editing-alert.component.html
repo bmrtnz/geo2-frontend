@@ -1,13 +1,13 @@
 <dx-popup
   [width]="400"
-  [height]="200"
+  [height]="'auto'"
   [showTitle]="false"
   [dragEnabled]="false"
   [closeOnOutsideClick]="false"
   [(visible)]="visible"
 >
   <div *dxTemplate="let data of 'content'">
-    <p>
+    <p class="text-align-center">
       La fiche est en cours d'édition, les informations saisies seront perdues
       si vous poursuivez la navigation
     </p>

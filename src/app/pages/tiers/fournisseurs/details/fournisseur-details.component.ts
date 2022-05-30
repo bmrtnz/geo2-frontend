@@ -29,7 +29,7 @@ import { TypesFournisseurService } from "app/shared/services/api/types-fournisse
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { fournisseur as fournisseursGridConfig } from "assets/configurations/grids.json";
-import { DxAccordionComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxCheckBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { of } from "rxjs";
@@ -114,6 +114,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     @ViewChild(CertificationDatePopupComponent, { static: false })
     certDatePopup: CertificationDatePopupComponent;
     @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
+    @ViewChild("changeCertifDates", { static: false }) changeCertifDates: DxCheckBoxComponent;
     editing = false;
 
     fournisseur: Fournisseur;
@@ -354,6 +355,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     onSubmit() {
 
         if (!this.formGroup.pristine && this.formGroup.valid) {
+
+            // When an user only needs to change certification date(s)
+            if (this.changeCertifDates.value) this.formGroup.get("certifications").markAsDirty();
+            this.changeCertifDates.value = false;
+
             let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
             if (this.createMode) {
 
