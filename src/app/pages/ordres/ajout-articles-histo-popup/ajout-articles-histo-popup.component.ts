@@ -4,7 +4,7 @@ import { LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { DxPopupComponent } from "devextreme-angular";
+import { DxButtonComponent, DxPopupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
@@ -37,6 +37,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
 
   @ViewChild(GridLignesHistoriqueComponent, { static: false }) gridLignesHisto: GridLignesHistoriqueComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+  @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
 
   constructor(
     private functionsService: FunctionsService,
@@ -70,6 +71,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
       setTimeout(() => this.pulseBtnOn = true, 1);
     }
     this.nbArticlesOld = this.nbARticles;
+    if (this.nbARticles) this.addButton.instance.option("hint", this.chosenArticles.join(" - "));
   }
 
   getGridSelectedArticles() {
