@@ -361,12 +361,16 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 415d9303 (#15301 ajustement)
+=======
+>>>>>>> ef52d08d (#15301 ajustement)
             if (this.changeCertifDates.value) {
                 this.formGroup.get("certifications").markAsDirty();
                 this.changeCertifDates.value = false;
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
             if (this.changeCertifDates.value) this.formGroup.get("certifications").markAsDirty();
@@ -378,6 +382,8 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
             if (this.changeCertifDates.value) this.formGroup.get("certifications").markAsDirty();
             this.changeCertifDates.value = false;
 >>>>>>> 6a79adba (#15301 Ajout case à cocher sur box Certifications  | petit ajustement popup editing alert)
+=======
+>>>>>>> ef52d08d (#15301 ajustement)
 
             let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
             if (this.createMode) {
