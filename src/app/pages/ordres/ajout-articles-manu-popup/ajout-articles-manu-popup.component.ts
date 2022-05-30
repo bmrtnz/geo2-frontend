@@ -5,7 +5,7 @@ import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
+import { DxButtonComponent, DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
@@ -38,6 +38,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
   @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+  @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
 
   constructor(
     private articlesService: ArticlesService,
@@ -70,6 +71,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     }
     this.nbArticlesOld = this.nbARticles;
     this.catalogue.dataGrid.instance.repaint();
+    if (this.nbARticles) this.addButton.instance.option("hint", this.chosenArticles.join(" - "));
   }
 
   getGridSelectedArticles() {
