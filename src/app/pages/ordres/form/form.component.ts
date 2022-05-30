@@ -400,9 +400,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 "and",
                 ["dateLivraisonPrevue", "=", this.ordre.dateLivraisonPrevue],
                 "and",
-                ["incoterm.id", "=", this.ordre.incoterm.id],
+                ["incoterm.id", "=", this.ordre.incoterm?.id],
                 "and",
-                ["regimeTva.id", "=", this.ordre.regimeTva.id]
+                ["regimeTva.id", "=", this.ordre.regimeTva?.id]
             ]);
             ordresSource.load().then((res) => {
                 res.filter(value => value.numero !== numero).map(value => {
