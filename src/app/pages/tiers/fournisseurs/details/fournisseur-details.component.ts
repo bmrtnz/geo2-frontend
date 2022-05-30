@@ -359,14 +359,20 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 
             // When an user only needs to change certification date(s)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 415d9303 (#15301 ajustement)
             if (this.changeCertifDates.value) {
                 this.formGroup.get("certifications").markAsDirty();
                 this.changeCertifDates.value = false;
             }
+<<<<<<< HEAD
 =======
             if (this.changeCertifDates.value) this.formGroup.get("certifications").markAsDirty();
             this.changeCertifDates.value = false;
 >>>>>>> 01e49269 (#15301 Ajout case à cocher sur box Certifications  | petit ajustement popup editing alert)
+=======
+>>>>>>> 415d9303 (#15301 ajustement)
 
             let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
             if (this.createMode) {
