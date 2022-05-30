@@ -17,7 +17,7 @@ export class Envois extends Model {
     @Field({ dataType: "localdate " }) public dateEnvoi?: string;
     @Field({ dataType: "localdate " }) public dateAccuseReception?: string;
     @Field({ dataType: "localdate " }) public dateSoumission?: string;
-    @Field({ dataType: "localdate " }) public dateDemande?: string;
+    @Field({ dataType: "datetime " }) public dateDemande?: string;
     // @Field({ dataType: 'date ' }) public dateModification?: string;
     @Field({ model: import("./flux.model") }) public flux: Flux;
     @Field({ model: import("./moyen-communication.model") })
