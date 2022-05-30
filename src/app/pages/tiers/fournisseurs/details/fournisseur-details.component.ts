@@ -358,8 +358,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         if (!this.formGroup.pristine && this.formGroup.valid) {
 
             // When an user only needs to change certification date(s)
-            if (this.changeCertifDates.value) this.formGroup.get("certifications").markAsDirty();
-            this.changeCertifDates.value = false;
+            if (this.changeCertifDates.value) {
+                this.formGroup.get("certifications").markAsDirty();
+                this.changeCertifDates.value = false;
+            }
 
             let fournisseur = this.formUtils.extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
             if (this.createMode) {
