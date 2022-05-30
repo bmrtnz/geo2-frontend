@@ -1351,6 +1351,15 @@
               <span class="dx-form-group-caption">{{
                 "tiers-fournisseurs-details-groupe-certifications" | localize
               }}</span>
+              <span>
+                <dx-check-box
+                  #changeCertifDates
+                  class="float-right"
+                  text="{{ 'date-a-modifier' | localize }}"
+                  [readOnly]="readOnlyMode"
+                  [visible]="!readOnlyMode && !createMode"
+                ></dx-check-box>
+              </span>
               <div class="dx-form-group-content">
                 <!-- Certifications -->
                 <div class="dx-field">
