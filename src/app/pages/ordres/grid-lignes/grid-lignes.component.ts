@@ -60,7 +60,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public totalItems: TotalItem[] = [];
-  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ArticleOriginePopupComponent, { static: false }) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ArticleCertificationPopupComponent, { static: false }) articleCertificationPopup: ArticleCertificationPopupComponent;
