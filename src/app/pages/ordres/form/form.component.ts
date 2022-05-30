@@ -430,6 +430,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public onLignesChanged(e) {
         if (!e) return;
+        this.gridLignes.datagrid.instance.columnOption(
+            this.gridLignes.datagrid.instance.getVisibleColumnIndex("numero"), "sortOrder", "asc"
+        );
         this.gridLignes.nbInsertedArticles = e;
         this.gridLignes.enableFilters();
     }

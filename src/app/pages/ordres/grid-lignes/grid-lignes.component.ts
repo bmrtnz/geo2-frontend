@@ -57,7 +57,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public totalItems: TotalItem[] = [];
-  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ArticleOriginePopupComponent, { static: false }) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ArticleCertificationPopupComponent, { static: false }) articleCertificationPopup: ArticleCertificationPopupComponent;
@@ -418,9 +418,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
         if (e.dataField !== "numero")
           elem.element.querySelector(".dx-texteditor-input")?.select();
       };
-      // e.editorOptions.onFocusOut = () => {
-      //   this.dataField = this.dataField !== "gratuit" ? null : this.dataField;
-      // };
     }
   }
 
