@@ -392,7 +392,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (refClt) {
             this.linkedOrdersSearch = true;
             const numero = this.ordre.numero;
-            const ordresSource = this.ordresService.getDataSource();
+            const ordresSource = this.ordresService.getDataSource_v2(["id", "numero"]);
             ordresSource.filter([
                 ["client.id", "=", this.ordre.client.id],
                 "and",
