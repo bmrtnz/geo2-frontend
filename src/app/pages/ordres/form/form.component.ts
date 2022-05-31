@@ -355,6 +355,10 @@ export class FormComponent implements OnInit, OnDestroy {
         this.ajoutArtHisto.visible = true;
     }
 
+    onArticleStockClick() {
+
+    }
+
     detailExp() {
         this.ordresLignesViewExp = !this.ordresLignesViewExp;
     }

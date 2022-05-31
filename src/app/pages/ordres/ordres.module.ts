@@ -140,6 +140,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-histo-modif-detail.component";
+import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 
 @NgModule({
   declarations: [
@@ -203,6 +204,7 @@ import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-hi
     ChoixRaisonDecloturePopupComponent,
     HistoriqueModifDetailPopupComponent,
     GridHistoModifDetailComponent,
+    AjoutArticlesStockPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,
