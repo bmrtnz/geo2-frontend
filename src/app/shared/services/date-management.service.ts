@@ -116,26 +116,12 @@ export class DateManagementService {
                 fin = this.findDate(30);
                 break;
             case "Mois à cheval":
-                deb =
-                    (month === 1 ? year - 1 : year) +
-                    "-" +
-                    (month === 1 ? 12 : month - 1) +
-                    "-" +
-                    date;
-                fin =
-                    (month === 12 ? year + 1 : year) +
-                    "-" +
-                    (month === 12 ? 1 : month + 1) +
-                    "-" +
-                    date;
+                const dateTemp = dateNow;
+                deb = dateTemp.setMonth(dateTemp.getMonth() - 1);
+                fin = dateNow.setMonth(dateNow.getMonth() + 2);
                 break;
             case "Depuis 1 mois":
-                deb =
-                    (month === 1 ? year - 1 : year) +
-                    "-" +
-                    (month === 1 ? 12 : month - 1) +
-                    "-" +
-                    date;
+                deb = dateNow.setMonth(dateNow.getMonth() - 1);
                 fin = now;
                 break;
             case "Depuis 30 jours":
@@ -143,21 +129,11 @@ export class DateManagementService {
                 fin = now;
                 break;
             case "Depuis 2 mois":
-                deb =
-                    (month <= 2 ? year - 1 : year) +
-                    "-" +
-                    (month <= 2 ? 10 + month : month - 2) +
-                    "-" +
-                    date;
+                deb = dateNow.setMonth(dateNow.getMonth() - 2);
                 fin = now;
                 break;
             case "Depuis 3 mois":
-                deb =
-                    (month <= 3 ? year - 1 : year) +
-                    "-" +
-                    (month <= 3 ? 9 + month : month - 3) +
-                    "-" +
-                    date;
+                deb = dateNow.setMonth(dateNow.getMonth() - 3);
                 fin = now;
                 break;
             case "Depuis 12 mois":
