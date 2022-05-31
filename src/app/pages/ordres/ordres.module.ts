@@ -141,6 +141,7 @@ import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-pop
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-histo-modif-detail.component";
 import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
+import { GridStockComponent } from "./grid-stock/grid-stock.component";
 
 @NgModule({
   declarations: [
@@ -205,6 +206,7 @@ import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/a
     HistoriqueModifDetailPopupComponent,
     GridHistoModifDetailComponent,
     AjoutArticlesStockPopupComponent,
+    GridStockComponent,
   ],
   imports: [
     OrdresRoutingModule,

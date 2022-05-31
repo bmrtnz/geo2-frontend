@@ -1,0 +1,243 @@
+  <div class="grid-stock">
+    <div class="search-criteria-container">
+        <h6>{{ "articles-preFilter-title" | localize }}</h6>
+        <div style="clear: both"></div>
+        <div
+        class="search-criteria-subcontainer"
+        style="width: auto"
+        >
+        <!-- espèce -->
+        <div class="dx-field">
+            <div class="dx-field-label">
+            {{ "articles-matierePremiere-espece" | localize }}
+            </div>
+            <div class="dx-field-value">
+            <dx-tag-box
+                #especeSB
+                [dataSource]="especes"
+                (valueChange)="onFilterChange()"
+                [searchEnabled]="true"
+                [searchExpr]="['id', 'description']"
+                [displayExpr]="formatListItem"
+                valueExpr="id"
+            >
+                <dxo-drop-down-options [width]="150"> </dxo-drop-down-options>
+            </dx-tag-box>
+            </div>
+        </div>
+        <!-- variété -->
+        <div class="dx-field field-large">
+            <div class="dx-field-label">
+            {{ "articles-matierePremiere-variete" | localize }}
+            </div>
+            <div class="dx-field-value">
+            <dx-tag-box
+                #varieteSB
+                [dataSource]="varietes"
+                [disabled]="noEspeceSet"
+                (valueChange)="onFilterChange()"
+                [searchEnabled]="true"
+                [searchExpr]="['id', 'description']"
+                [displayExpr]="formatListItem"
+                [applyValueMode]="'useButtons'"
+                valueExpr="id"
+            >
+                <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+            </dx-tag-box>
+            </div>
+        </div>
+        <!-- Mode Culture -->
+        <div class="dx-field field-large">
+            <div class="dx-field-label noPadding">
+            {{ "articles-matierePremiere-modeCulture" | localize }}
+            </div>
+            <div class="dx-field-value">
+            <dx-tag-box
+                #modesCultureSB
+                [dataSource]="modesCulture"
+                [disabled]="noEspeceSet"
+                (valueChange)="onFilterChange()"
+                [searchEnabled]="true"
+                searchExpr="matierePremiere.modeCulture.description"
+                [displayExpr]="formatListItem"
+                [applyValueMode]="'useButtons'"
+                valueExpr="key"
+            >
+                <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+            </dx-tag-box>
+            </div>
+        </div>
+        <!-- Emballage -->
+        <div class="dx-field field-large">
+            <div class="dx-field-label">
+            {{ "articles-emballage-emballage" | localize }}
+            </div>
+            <div class="dx-field-value">
+            <dx-tag-box
+                #emballageSB
+                [dataSource]="emballages"
+                [disabled]="noEspeceSet"
+                (valueChange)="onFilterChange()"
+                [searchEnabled]="true"
+                [searchExpr]="['id', 'description']"
+                [displayExpr]="formatListItem"
+                [applyValueMode]="'useButtons'"
+                valueExpr="id"
+            >
+                <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+            </dx-tag-box>
+            </div>
+        </div>
+        <!-- Origine -->
+        <div class="dx-field field-large">
+            <div class="dx-field-label">
+            {{ "articles-matierePremiere-origine" | localize }}
+            </div>
+            <div class="dx-field-value">
+            <dx-tag-box
+                #origineSB
+                [dataSource]="origines"
+                [disabled]="noEspeceSet"
+                (valueChange)="onFilterChange()"
+                [searchEnabled]="true"
+                [searchExpr]="['id', 'description']"
+                [displayExpr]="formatListItem"
+                [applyValueMode]="'useButtons'"
+                valueExpr="id"
+            >
+                <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+            </dx-tag-box>
+            </div>
+        </div>
+
+        <!-- Bureau achat -->
+        <div class="dx-field field-large">
+            <div class="dx-field-label noEllipsis">
+                {{ "tiers-fournisseurs-bureauAchat" | localize }}
+            </div>
+            <div class="dx-field-value">
+                <dx-tag-box
+                [dataSource]="bureauxAchat"
+                [disabled]="noEspeceSet"
+                (valueChange)="onFilterChange()"
+                [displayExpr]="displayCodeBefore"
+                [searchEnabled]="true"
+                [searchExpr]="['id', 'raisonSocial']"
+                [applyValueMode]="'useButtons'"
+                >
+                <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+                </dx-tag-box>
+            </div>
+        </div>
+
+        <dx-button
+            class="refresh"
+            [class]="toRefresh ? '' : 'inactive-button'"
+            type="default"
+            text="{{ 'btn-refresh' | localize }}"
+            (onClick)="refreshArticlesGrid()"
+        ></dx-button>
+    </div>
+    <div style="clear: both"></div>
+    <dx-data-grid
+        class="dx-card wide-card"
+        [remoteOperations]="true"
+        [showBorders]="false"
+        [focusedRowEnabled]="true"
+        [focusedRowIndex]="0"
+        [columnAutoWidth]="true"
+        [columnHidingEnabled]="false"
+        [allowColumnReordering]="true"
+        [scrolling]="{ useNative: true }"
+        [keyExpr]="'id'"
+        (onRowPrepared)="onRowPrepared($event)"
+        (onRowDblClick)="onRowDblClick($event)"
+        (onCellPrepared)="onCellPrepared($event)"
+        (onContentReady)="contentReadyEvent.emit($event)"
+        (onToolbarPreparing)="
+        gridConfiguratorService.onToolbarPreparing(
+            'Double-cliquez sur un article pour l’ajouter à l’ordre',
+            $event,
+            gridConfiguratorService.Grid.OrdreStock
+        )
+        "
+    >
+        <dxo-paging></dxo-paging>
+        <dxo-search-panel
+        [visible]="true"
+        [width]="240"
+        placeholder="{{ 'search' | localize }}"
+        ></dxo-search-panel>
+        <dxo-header-filter
+        [visible]="true"
+        [allowSearch]="true"
+        ></dxo-header-filter>
+        <dxo-export
+        [enabled]="true"
+        fileName="Articles"
+        [allowExportSelectedData]="false"
+        ></dxo-export>
+        <dxo-pager
+        [showPageSizeSelector]="true"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+        ></dxo-pager>
+        <dxo-state-storing
+        [storageKey]="gridConfiguratorService.Grid.OrdreStock"
+        [enabled]="true"
+        type="custom"
+        [customLoad]="gridConfiguratorService.load"
+        [customSave]="gridConfiguratorService.save"
+        ></dxo-state-storing>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+        <dxo-column-chooser
+        [enabled]="true"
+        [width]="columnChooser.width"
+        [height]="columnChooser.height"
+        mode="select"
+        title="{{ 'columnChooser' | localize }}"
+        [allowSearch]="true"
+        >
+        </dxo-column-chooser>
+        <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
+
+        <dxi-column
+        *ngFor="let column of this.columns | async"
+        [dataField]="column.dataField"
+        [visible]="false"
+        [caption]="
+            ('ordreStock-' + column.dataField?.split('.').join('-') | localize) ||
+            column.name
+        "
+        trueText="Oui"
+        falseText="Non"
+        [dataType]="column?.dataType"
+        [width]="column?.width"
+        [cellTemplate]="column.cellTemplate"
+        [allowSearch]="
+            column?.allowSearch || ['string'].includes(column?.dataType)
+        "
+        [allowHeaderFiltering]="
+            column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+        "
+        [showInColumnChooser]="column.showInColumnChooser"
+        ></dxi-column>
+
+        <div *dxTemplate="let cell of 'zoomButtonTemplate'">
+            <dx-button
+              class="grid-zoom-button"
+              type="default"
+              icon="material-icons search"
+              [focusStateEnabled]="false"
+              (onClick)="openFilePopup(cell, $event)"
+            >
+            </dx-button>
+        </div>
+    </dx-data-grid>
+  </div>
+
+  <app-zoom-article-popup
+  [articleLigneId]="articleLigneId"
+></app-zoom-article-popup>
+
