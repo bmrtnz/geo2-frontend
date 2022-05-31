@@ -66,7 +66,7 @@ let self;
     templateUrl: "./form.component.html",
     styleUrls: ["./form.component.scss"]
 })
-export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FormComponent implements OnInit, OnDestroy {
 
     @Output() public ordre: Ordre;
     @Output() openArticleManuPopup = new EventEmitter<any>();
@@ -198,6 +198,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild(FileManagerComponent, { static: false })
     fileManagerComponent: FileManagerComponent;
     @ViewChild("comLog", { static: false }) comLog: DxSelectBoxComponent;
+    @ViewChild("comInt", { static: false }) comInt: DxSelectBoxComponent;
     @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
     @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
     @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
@@ -290,8 +291,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroy.unsubscribe();
     }
 
-    ngAfterViewInit() {
-        this.comLog.instance.option("hint", this.comLog.value);
+    onComChanged() {
+        this.comLog?.instance.option("hint", this.comLog.value);
+        this.comInt?.instance.option("hint", this.comInt.value);
     }
 
     saveHeaderOnTheFly() {
@@ -375,7 +377,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!ordre.id) return;
         this.ordresService.delete({ id: ordre.id }).subscribe({
             next: (_) => {
-                notify("Ordre supprimé", "success", 3000);
+                notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
             },
             error: (_) => notify("Echec de la suppression", "error", 3000),
         });

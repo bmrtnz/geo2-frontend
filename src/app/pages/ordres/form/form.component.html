@@ -501,6 +501,7 @@
                             formControlName="instructionsLogistiques"
                             [acceptCustomValue]="true"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+                            (onValueChanged)="onComChanged()"
                             [items]="instructionsList"
                           >
                             <dxo-drop-down-options [width]="600">
@@ -524,9 +525,11 @@
                         </div>
                         <div class="dx-field-value small-font">
                           <dx-text-box
+                            #comInt
                             [readOnly]="ordreFacture"
                             formControlName="commentaireUsageInterne"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+                            (onValueChanged)="onComChanged()"
                           >
                             <dx-validator
                               name="{{
