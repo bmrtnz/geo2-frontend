@@ -797,18 +797,19 @@
                   [disabled]="!fullOrderNumber || !allowMutations || true"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-stock' | localize
-                  }}"
-                  text="{{ 'btn-stock' | localize }}"
-                ></dx-button>
-                <dx-button
-                  class="upperButton subButton"
-                  [disabled]="!fullOrderNumber || !allowMutations || true"
-                  type="success"
-                  hint="{{ 'hint-ajout-ordre' | localize }} {{
                     'hint-source-refClt' | localize
                   }}"
                   text="{{ 'btn-referenceClt' | localize }}"
+                ></dx-button>
+                <dx-button
+                  class="upperButton subButton"
+                  [disabled]="!fullOrderNumber || !allowMutations"
+                  type="success"
+                  hint="{{ 'hint-ajout-ordre' | localize }} {{
+                    'hint-source-stock' | localize
+                  }}"
+                  text="{{ 'btn-stock' | localize }}"
+                  (onClick)="onArticleStockClick()"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
