@@ -45,6 +45,7 @@ export class NouvelOrdreComponent implements OnInit {
         "typeCamion.id",
         "commercial.id",
         "assistante.id",
+        "instructionLogistique",
         "client.id",
         "client.code",
         "client.assistante.id",
@@ -61,6 +62,7 @@ export class NouvelOrdreComponent implements OnInit {
         "client.dateDeviseTauxFix",
         "client.nbJourEcheance",
         "client.echeanceLe",
+        "client.instructionLogistique",
         "client.courtageValeur",
         "client.tauxRemiseHorsFacture",
         "client.tauxRemiseParFacture",
@@ -184,7 +186,6 @@ export class NouvelOrdreComponent implements OnInit {
         const instLogEnt = entrepot.instructionLogistique ?
             entrepot.instructionLogistique : "";
         const instLog = instLogClt + (instLogClt ? " " : "") + instLogEnt;
-
 
         return this.fetchDeviseRef(entrepot.client?.devise).pipe(
             switchMap((deviseRef) =>
