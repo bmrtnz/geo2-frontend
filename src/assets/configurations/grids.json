@@ -1191,6 +1191,81 @@
       }
     ]
   },
+  "ordre-stock": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 100,
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "valide",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "matierePremiere.origine.id",
+        "width": 22,
+        "showInColumnChooser": false,
+        "cellTemplate": "zoomButtonTemplate",
+        "visible": false
+      },
+      {
+        "dataField": "matierePremiere.variete.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "matierePremiere.espece.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "cahierDesCharge.categorie.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.calibreMarquage.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "emballage.poidsNetClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "emballage.prepese",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "matierePremiere.modeCulture.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "matierePremiere.modeCulture.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "matierePremiere.origine.description",
+        "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
+  },
   "ordre": {
     "columns": [
       {

@@ -1130,6 +1130,11 @@
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-histo-popup>
+  <app-ajout-articles-stock-popup
+    [ordre]="ordre"
+    (lignesChanged)="onLignesChanged($event)"
+  >
+  </app-ajout-articles-stock-popup>
   <app-file-manager-popup
     key="ordres"
     [subTitle]="'Ordre n°' + ordre.numero"

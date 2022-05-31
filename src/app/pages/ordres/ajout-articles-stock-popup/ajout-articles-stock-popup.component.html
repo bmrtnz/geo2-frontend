@@ -1,1 +1,29 @@
-<p>ajout-articles-stock-popup works!</p>
+<dx-popup
+  [height]="'auto'"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+>
+<div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ titleStart }}&nbsp;</div>
+    <div class="title-mid">{{ titleMid }}</div>
+    <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    >
+    </dx-button>
+  </div>
+
+  <h6 *ngIf="stock">
+    {{ "articles-catalogue-preFilter-stock-title" | localize }}
+  </h6>
+  <div style="clear:both;"></div>
+
+  <app-grid-stock
+  ></app-grid-stock>
+  <br />
+</dx-popup>
