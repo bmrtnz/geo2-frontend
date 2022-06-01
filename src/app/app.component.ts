@@ -1,6 +1,6 @@
 import { Component, HostBinding } from "@angular/core";
 import { ScreenService } from "./shared/services";
-
+import selectBox from "devextreme/ui/select_box";
 @Component({
     selector: "app-root",
     templateUrl: "./app.component.html",
@@ -14,6 +14,10 @@ export class AppComponent {
     }
 
     constructor(private screen: ScreenService) {
+
+        // Default settings for selectBoxes
+        selectBox.defaultOptions({ options: { searchMode: "startswith" } });
+
         // Close columnchooser on outside click (non standard)
         document.addEventListener("mousedown", (e) => {
             const el = e.target;
