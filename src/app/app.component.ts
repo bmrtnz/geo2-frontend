@@ -65,6 +65,7 @@ export class AppComponent {
       dxTabPanel.defaultOptions({ options: { swipeEnabled: false }});
       dxDataGrid.defaultOptions({ options: {
         scrolling: { useNative: true },
+        columnFixing: { enabled: true },
         // TODO for better keyboard navigation
         /*keyboardNavigation: {
           enterKeyAction: "moveFocus",
