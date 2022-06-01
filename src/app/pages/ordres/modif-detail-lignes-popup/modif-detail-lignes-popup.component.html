@@ -28,15 +28,15 @@
       <div style="clear:both"></div>
       <br>
       <div class="textbox-left">
-        <div class="header-form-modif-popup">Valeur</div>
+        <div class="header-form-modif-popup">Actuel</div>
         <div style="clear:both"></div>
         <div class="dx-field">
           <div class="dx-field-label">Nb Pal</div>
-          <dx-text-box value="{{ ligneDetail?.nombrePalettesCommandees }}" [readOnly]="true"></dx-text-box>
+          <dx-text-box value="{{ ligneDetail?.nombrePalettesExpediees}}" [readOnly]="true"></dx-text-box>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Nb Col</div>
-          <dx-text-box value="{{ ligneDetail?.nombreColisCommandes }}" [readOnly]="true"></dx-text-box>
+          <dx-text-box value="{{ ligneDetail?.nombreColisExpedies}}" [readOnly]="true"></dx-text-box>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Poids brut*</div>
@@ -49,12 +49,12 @@
       </div>
         
       <div class="textbox-right">
-        <div class="header-form-modif-popup">Changement**</div>
+        <div class="header-form-modif-popup">Remplacé par**</div>
         <div style="clear:both"></div>
-        <dx-text-box ngModel name="nombrePalettesExpediees" ></dx-text-box>
-        <dx-text-box ngModel name="nombreColisExpedies"></dx-text-box>
-        <dx-text-box ngModel name="poidsBrutExpedie"></dx-text-box>
-        <dx-text-box ngModel name="poidsNetExpedie"></dx-text-box>
+        <dx-number-box ngModel name="nombrePalettesExpedieesApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <dx-number-box ngModel name="nombreColisExpediesApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <dx-number-box ngModel name="poidsBrutExpedieApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <dx-number-box ngModel name="poidsNetExpedieApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
       </div>
       <div style="clear:both"></div>
       <br>
@@ -68,6 +68,7 @@
         <dx-button
           type="normal"
           text="Appliquer"
+          [ngClass]="{ 'inactive-button': !validForm }"
           (onClick)="applyClick(form)"
         ></dx-button>
         <dx-button

@@ -2,13 +2,18 @@
   class="dx-card wide-card"
   [remoteOperations]="true"
   [showBorders]="false"
+  [elementAttr]="{ class: 'grid-ordre-ligne-logistique' }"
   [focusedRowEnabled]="true"
   [focusedRowIndex]="0"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [focusedRowIndex]="-1"
   (onRowPrepared)="applySentGridRowStyle($event)"
   (onCellPrepared)="onCellPrepared($event)"
+  (onEditorPreparing)="onEditorPreparing($event)"
+  (onCellClick)="onCellClick($event)"
+  (onSaved)="onSaved()"
   [scrolling]="{
     useNative: true
   }"
@@ -34,6 +39,12 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [allowUpdating]="allowMutations"
+    [mode]="'cell'"
+  >
+  </dxo-editing>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.OrdreLigneLogistique"
     [enabled]="true"
@@ -41,7 +52,7 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
@@ -57,6 +68,9 @@
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
+    [cellTemplate]="column.cellTemplate"
+    [allowEditing]="column.allowEditing"
     [cssClass]="column?.cssClass"
     [caption]="
       ('ordreLigneLogistique-' + column.dataField?.split('.').join('-')
@@ -71,4 +85,24 @@
     "
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+  <div *dxTemplate="let cell of 'histoBtnTemplate'">
+    <dx-button
+      class="small-detail-histo-button"
+      type="default"
+      [focusStateEnabled]="false"
+      [text]="'Histo modifs'"
+      (onClick)="showHistoDetail(cell)"
+    >
+    </dx-button>
+    <dx-load-indicator
+      class="small-loader"
+    ></dx-load-indicator>
+  </div>
 </dx-data-grid>
+<app-choix-raison-decloture-popup
+  (reasonChosen)="reasonChosen($event)"
+></app-choix-raison-decloture-popup>
+<app-historique-modif-detail-popup
+  [ligneLogistiqueId]="ligneLogistiqueId"
+  [ordre]="ordre"
+></app-historique-modif-detail-popup>

@@ -167,6 +167,8 @@
         [searchEnabled]="true"
         [value]="cell.data[cell.column.dataField]"
         (onValueChanged)="onValueChanged($event, cell)"
+        (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+        [readOnly]="!allowMutations"
       >
         <dxo-drop-down-options [width]="SelectBoxPopupWidth">
         </dxo-drop-down-options>

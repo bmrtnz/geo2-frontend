@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService, FournisseursService } from "app/shared/services";
@@ -11,7 +11,9 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -42,6 +44,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Output() public ordreLigne: OrdreLigne;
   @Output() public fournisseurLigneId: string;
   @Output() public fournisseurCode: string;
+  @Output() refreshGridLigneDetail = new EventEmitter();
 
   public certifMDDS: DataSource;
   public dataSource: DataSource;
@@ -100,6 +103,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
     public paletteInterService: TypesPaletteService,
     public certificationsModesCultureService: CertificationsModesCultureService,
     public authService: AuthService,
+    public formUtilsService: FormUtilsService,
+    public gridUtilsService: GridUtilsService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
   ) {
@@ -416,7 +421,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
         this.dataField = e.dataField;
         this.idLigne = e.row?.data?.id;
         if (e.dataField !== "numero")
-          elem.element.querySelector(".dx-texteditor-input")?.select();
+          this.formUtilsService.selectTextOnFocusIn(elem);
       };
     }
   }
@@ -428,7 +433,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       info += " " + this.localizeService.localize("article-ajoutes");
       info = info.split("&&").join(this.nbInsertedArticles > 1 ? "s" : "");
       notify(info, "success", 3000);
-      this.datagrid.instance.getScrollable().scrollTo(0); // Reset scrollbar
+      this.gridUtilsService.resetGridScrollBar(this.datagrid);
       this.newArticles = 0;
       this.newNumero = 0;
       this.nbInsertedArticles = null;
@@ -443,7 +448,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     let newFourCode = null;
     const filters = [];
 
-    if (this.currentCompanyService.getCompany().id !== "BUK" || newFourCode.substring(0, 2) !== "BW") {
+    if (this.currentCompanyService.getCompany().id !== "BUK" || proprietaireMarchandise?.code.substring(0, 2) !== "BW") {
       const listExp = proprietaireMarchandise?.listeExpediteurs;
       if (listExp) {
         listExp.split(",").map(exp => {
@@ -468,7 +473,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   private handleCellChangeEventResponse<T>(): PartialObserver<T> {
     return {
-      next: v => this.refreshGrid(),
+      next: v => {
+        this.refreshGrid();
+        this.refreshGridLigneDetail.emit(true);
+      },
       error: (message: string) => {
         notify({ message }, "error", 7000);
         console.log(message);

@@ -44,7 +44,7 @@ export class GridHistoriqueEntrepotsComponent
         public currentCompanyService: CurrentCompanyService,
         public localizeService: LocalizationService,
         public tabContext: TabContext,
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);

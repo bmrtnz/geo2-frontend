@@ -11,6 +11,7 @@ import { AuthService, ClientsService, EntrepotsService, TransporteursService } f
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
+import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -19,7 +20,7 @@ import { PortsService } from "app/shared/services/api/ports.service";
 import { TypesCamionService } from "app/shared/services/api/types-camion.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { DxAccordionComponent, DxTextBoxComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
@@ -28,6 +29,8 @@ import { of, Subject } from "rxjs";
 import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
+import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
+import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 
@@ -64,7 +67,7 @@ let self;
     templateUrl: "./form.component.html",
     styleUrls: ["./form.component.scss"]
 })
-export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FormComponent implements OnInit, OnDestroy {
 
     @Output() public ordre: Ordre;
     @Output() openArticleManuPopup = new EventEmitter<any>();
@@ -78,6 +81,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "client.code",
         "client.raisonSocial",
         "client.modificationDetail",
+        "client.certifications.certification.id",
         "entrepot.id",
         "entrepot.code",
         "referenceClient",
@@ -112,6 +116,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "fraisPrixUnitaire",
         "fraisUnite.id",
         "fraisPlateforme",
+        "hasLitige",
+        "cqLignesCount",
+        "commentairesOrdreCount",
+        "regimeTva.id",
+        "facture",
+        "bonAFacturer"
     ];
 
     private destroy = new Subject<boolean>();
@@ -161,12 +171,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public canDuplicate = false;
     public validationPopupVisible = false;
-    public searchItems = [
-        "numero",
-        "numeroFacture",
-        "referenceClient",
-        "client.raisonSocial",
-    ];
     public dotLitiges: string;
     public dotCommentaires: number;
     public dotCQ: number;
@@ -174,6 +178,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public fullOrderNumber: string;
     public env = environment;
     public allowMutations = false;
+    public headerSaving;
+    public instructionsList: string[];
 
     public clientsDS: DataSource;
     public entrepotDS: DataSource;
@@ -192,12 +198,15 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild(FileManagerComponent, { static: false })
     fileManagerComponent: FileManagerComponent;
-    @ViewChild("comLog", { static: false }) comLog: DxTextBoxComponent;
+    @ViewChild("comLog", { static: false }) comLog: DxSelectBoxComponent;
+    @ViewChild("comInt", { static: false }) comInt: DxSelectBoxComponent;
     @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
     @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
     @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
     @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
+    @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
     @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
+    @ViewChild(GridLignesDetailsComponent) gridLignesDetail: GridLignesDetailsComponent;
 
     constructor(
         private router: Router,
@@ -212,6 +221,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         private incotermsService: IncotermsService,
         private entrepotsService: EntrepotsService,
         private personnesService: PersonnesService,
+        private instructionsService: InstructionsService,
         private portsService: PortsService,
         public formUtilsService: FormUtilsService,
         private basesTarifService: BasesTarifService,
@@ -269,6 +279,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         ]);
 
         this.transporteursDS = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+        this.instructionsList = [];
+        this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
+            res
+                .filter(inst => inst.valide)
+                .map(inst => this.instructionsList.push(inst.description));
+        });
 
     }
 
@@ -277,21 +293,28 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroy.unsubscribe();
     }
 
-    ngAfterViewInit() {
-        this.comLog.instance.option("hint", this.comLog.value);
+    onComChanged() {
+        this.comLog?.instance.option("hint", this.comLog.value);
+        this.comInt?.instance.option("hint", this.comInt.value);
     }
 
-    onSubmit() {
+    saveHeaderOnTheFly() {
+        if (this.headerSaving) return;
         if (!this.formGroup.pristine && this.formGroup.valid && !this.env.production) {
+            this.headerSaving = true;
             const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
             ordre.societe = { id: this.currentCompanyService.getCompany().id };
 
             this.ordresService.save({ ordre }).subscribe({
                 next: (res) => {
                     this.refreshStatus(res.data.saveOrdre.statut);
-                    notify("Sauvegardé", "success", 3000);
+                    this.headerSaving = false;
                 },
-                error: () => notify("Echec de la sauvegarde", "error", 3000),
+                error: (err) => {
+                    notify("Erreur sauvegarde entête", "error", 3000);
+                    console.log(err);
+                    this.headerSaving = false;
+                }
             });
         }
     }
@@ -334,6 +357,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.ajoutArtHisto.visible = true;
     }
 
+    onArticleStockClick() {
+        this.ajoutArtStock.visible = true;
+    }
+
     detailExp() {
         this.ordresLignesViewExp = !this.ordresLignesViewExp;
     }
@@ -356,7 +383,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!ordre.id) return;
         this.ordresService.delete({ id: ordre.id }).subscribe({
             next: (_) => {
-                notify("Ordre supprimé", "success", 3000);
+                notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
             },
             error: (_) => notify("Echec de la suppression", "error", 3000),
         });
@@ -373,13 +400,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (refClt) {
             this.linkedOrdersSearch = true;
             const numero = this.ordre.numero;
-            const ordresSource = this.ordresService.getDataSource();
-            ordresSource.filter(["referenceClient", "=", refClt]);
+            const ordresSource = this.ordresService.getDataSource_v2(["id", "numero"]);
+            ordresSource.filter([
+                ["client.id", "=", this.ordre.client.id],
+                "and",
+                ["referenceClient", "=", refClt],
+                "and",
+                ["dateLivraisonPrevue", "=", this.ordre.dateLivraisonPrevue],
+                "and",
+                ["incoterm.id", "=", this.ordre.incoterm?.id],
+                "and",
+                ["regimeTva.id", "=", this.ordre.regimeTva?.id]
+            ]);
             ordresSource.load().then((res) => {
-                res.map(value => {
-                    if (numero !== value.numero) {
-                        this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
-                    }
+                res.filter(value => value.numero !== numero).map(value => {
+                    this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
                 });
                 this.findComplRegulLinkedOrders(refClt);
                 this.linkedOrdersSearch = false;
@@ -470,6 +505,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 window.sessionStorage.setItem("idOrdre", this.ordre.id);
                 window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
                 this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
+
+                this.formGroup.valueChanges.subscribe((_) => {
+                    this.saveHeaderOnTheFly();
+                });
+
             });
     }
 
@@ -625,6 +665,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe({
                 next: ordre => this.refreshStatus(ordre.statut),
             });
+    }
+
+    public refreshGridLigneDetail() {
+        this.gridLignesDetail?.refresh();
     }
 
 }

@@ -4,12 +4,11 @@
 
 ::ng-deep .form-ordres-page {
   margin-right: 20px;
-  .thin-checkbox {
-    margin: 12px 0 !important;
-  }
+
   .dx-toolbar-item-auto-hide .dx-item-content {
     width: 36px;
   }
+
   .ordres-page {
     position: relative;
     width: calc(100% - 180px);
@@ -21,57 +20,78 @@
   margin-left: 10px;
   float: right;
 }
+
 .subButton {
   top: -10px;
 }
+
 ::ng-deep .form-scrollTo-buttons-container {
   position: fixed;
   top: 32px;
   width: 170px;
   z-index: 1000;
+
   .dx-button {
     width: 100%;
-    .dx-button-text {
-      padding-right: 3px;
-      padding-left: 3px;
+
+    .dx-button-content {
+      padding: 5px 0;
+
+      .dx-button-text {
+        padding-right: 3px;
+        padding-left: 3px;
+      }
     }
   }
 }
 
 ::ng-deep .top-panel-order {
   margin-bottom: 6px;
+
   .order-number {
     margin: 0 10px;
     min-height: 36px;
     font-size: 30px;
     float: left;
   }
+
   .linkedOrders-container {
-    max-width: 400px;
-    // background-color: #FF4400;
+    display: flex;
+    align-items: center;
+    max-width: 450px;
+    min-height: 38px;
     float: left;
     overflow: hidden;
-    .search-linkedOrders {
-      font-size: 13px;
-      color: #00759c;
-    }
-    .small-button {
-      vertical-align: middle;
-      margin: 2px 5px 2px 0 !important;
-      height: 20px;
-      top: 50%;
-      .dx-button-text {
-        line-height: 0 !important;
+
+    .linkedOrders-subcontainer {
+      position: relative;
+
+      .search-linkedOrders {
+        top: 2px;
         font-size: 13px;
-        margin-top: 0 !important;
-        text-transform: none;
+        color: #00759c;
+      }
+
+      .small-button {
+        top: 1px;
+        margin: 2px 5px 2px 0 !important;
+        height: 20px;
+
+        .dx-button-text {
+          line-height: 0 !important;
+          font-size: 13px;
+          margin-top: 0 !important;
+          text-transform: none;
+        }
       }
     }
   }
+
   .upperButtons-container {
     float: right;
   }
 }
+
 .top-order-number {
   display: block;
   font-size: 14px;
@@ -82,23 +102,29 @@
   margin-bottom: 13px;
   min-height: 22px;
 }
+
 .order-id {
   font-size: 15px;
   color: #00759c;
   float: right;
 }
+
 .order-status {
   color: #ff325a !important;
 }
+
 .red-font {
   color: #ff325a;
 }
+
 .blue-font {
   color: $base-accent;
 }
+
 .info-supp {
   font-size: 16px;
 }
+
 .shiftedRight {
   margin-right: 50px;
 }
@@ -110,15 +136,16 @@ dx-button[type="normal"] {
 //   Lignes cloturées
 ::ng-deep .dx-row.dx-data-row {
   & {
-    &.sent-highlight-datagrid-row > td {
+    &.sent-highlight-datagrid-row>td {
       background: #66ff66;
     }
   }
 
   &.dx-row-focused {
-    &.sent-highlight-datagrid-row > td {
+    &.sent-highlight-datagrid-row>td {
       color: #66ff66;
     }
+
     &.sent-highlight-datagrid-row .dx-checkbox-icon {
       color: #66ff66;
     }
@@ -136,6 +163,7 @@ dx-button[type="normal"] {
   left: 60px;
   top: 13px !important;
 }
+
 ::ng-deep .dx-accordion-item-title-caption {
   text-align: left !important;
 }
@@ -143,17 +171,21 @@ dx-button[type="normal"] {
 ::ng-deep .up-fifty-px {
   margin-top: -50px;
 }
+
 .no-margin-top {
   margin-top: 0;
 }
+
 .no-padding-bottom {
   padding-bottom: 0;
 }
+
 // Grey background for grid headers
 ::ng-deep .order-tabs .dx-datagrid-header-panel,
 ::ng-deep .order-tabs .dx-toolbar {
   background: #f5f5f5;
 }
+
 .grid-separator {
   width: 100%;
   height: 15px;
@@ -162,6 +194,7 @@ dx-button[type="normal"] {
 ::ng-deep .small-font {
   font-size: 13px;
 }
+
 .dot {
   position: absolute;
   right: 0;
@@ -177,9 +210,11 @@ dx-button[type="normal"] {
   text-align: center;
   z-index: 1;
 }
+
 .dotted-button {
   min-width: 100%;
 }
+
 .order-loader {
   position: relative;
   left: 10px;
@@ -187,14 +222,18 @@ dx-button[type="normal"] {
   width: 25px;
   height: 25px;
 }
+
 .linkedOrder-Compl {
   background: $BW-purple-medium;
+
   &:hover {
     background: $BW-purple-dark;
   }
 }
+
 .linkedOrder-Regul {
   background: $BW-turquoise-medium;
+
   &:hover {
     background: $BW-turquoise-dark;
   }
@@ -206,4 +245,50 @@ dx-button[type="normal"] {
 
 ::ng-deep .log-transp {
   width: 500px;
+}
+
+::ng-deep #head {
+  padding: 20px 20px 10px 20px;
+}
+
+::ng-deep .order-header {
+  padding: 2px 0 0 0 !important;
+
+  .dx-field-value {
+    height: 23px;
+  }
+
+  .dx-field-label,
+  .dx-field {
+    font-size: 14px;
+  }
+
+  .dx-box .dx-field-value:not(.dx-widget)>.dx-checkbox {
+    margin-top: 3px !important;
+  }
+
+  .info-supp {
+    line-height: 16px;
+  }
+
+  .dx-texteditor.dx-editor-underlined {
+    height: 23px;
+
+    .dx-texteditor-input,
+    .dx-placeholder {
+      font-size: 14px;
+    }
+
+    &::after {
+      border-bottom: 1px solid rgba(0, 0, 0, .15);
+    }
+
+    &.dx-state-readonly::after {
+      border-bottom: 0;
+    }
+
+    .dx-placeholder::before {
+      padding: 0;
+    }
+  }
 }

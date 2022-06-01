@@ -126,7 +126,6 @@
 
   <form
     [formGroup]="formGroup"
-    (ngSubmit)="onSubmit()"
   >
     <dx-validation-group name="loginGroup">
       <div class="content-block"></div>
@@ -140,31 +139,26 @@
               ></dx-load-indicator>
               <div class="order-number">{{ fullOrderNumber }}</div>
               <div class="linkedOrders-container">
-                <span
-                  *ngIf="linkedOrdersSearch"
-                  class="search-linkedOrders"
-                  >Recherche ordres liés...</span
-                >
-                <dx-button
-                  *ngFor="let linkedOrder of linkedOrders"
-                  class="small-button linkedOrder-{{ linkedOrder.class }}"
-                  type="default"
-                  hint="{{ 'hint-ordres-lies' | localize }}"
-                  text="{{ linkedOrder.ordre.numero }} ({{
-                    linkedOrder.criteria
-                  }})"
-                  (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
-                >
-                </dx-button>
+                <div class="linkedOrders-subcontainer">
+                  <span
+                    *ngIf="linkedOrdersSearch"
+                    class="search-linkedOrders"
+                    >Recherche ordres liés...</span
+                  >
+                  <dx-button
+                    *ngFor="let linkedOrder of linkedOrders"
+                    class="small-button linkedOrder-{{ linkedOrder.class }}"
+                    type="default"
+                    hint="{{ 'hint-ordres-lies' | localize }}"
+                    text="{{ linkedOrder.ordre.numero }} ({{
+                      linkedOrder.criteria
+                    }})"
+                    (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
+                  >
+                  </dx-button>
+                </div>
               </div>
               <div class="upperButtons-container">
-                <dx-button
-                  class="upperButton submit"
-                  type="default"
-                  [disabled]="env.production"
-                  text="{{ 'btn-valider' | localize }}"
-                  [useSubmitBehavior]="true"
-                ></dx-button>
                 <dx-button
                   class="upperButton"
                   type="danger"
@@ -211,7 +205,17 @@
                   >&nbsp;&nbsp;{{ "ordres-ref" | localize }} :
                   {{ refOrdre }}</span
                 >
-                <div class="dx-form-group-content no-padding-bottom">
+                <div class="dx-form-group-content no-padding-bottom order-header">
+                  <dx-load-panel
+                    #loadPanel
+                    shadingColor="rgba(0,0,0,0.4)"
+                    [position]="{ of: '#head' }"
+                    [visible]="headerSaving"
+                    [showPane]="true"
+                    [shading]="false"
+                    [closeOnOutsideClick]="false"
+                  >
+                  </dx-load-panel>
                   <dx-box>
                     <dxi-item [ratio]="4">
                       <!-- Client -->
@@ -491,23 +495,27 @@
                           {{ "ordres-instructionsLogistiques" | localize }}
                         </div>
                         <div class="dx-field-value">
-                          <dx-text-box
+                          <dx-select-box
                             #comLog
                             [readOnly]="ordreFacture"
                             formControlName="instructionsLogistiques"
+                            [acceptCustomValue]="true"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+                            (onValueChanged)="onComChanged()"
+                            [items]="instructionsList"
                           >
+                            <dxo-drop-down-options [width]="600">
+                            </dxo-drop-down-options>
                             <dx-validator
-                              name="{{
-                                'ordres-instructionsLogistiques' | localize
-                              }}"
-                            >
-                              <dxi-validation-rule
-                                type="stringLength"
-                                [max]="255"
-                              ></dxi-validation-rule>
-                            </dx-validator>
-                          </dx-text-box>
+                            name="{{ 'ordres-instructionsLogistiques' | localize }}"
+                          >
+                            <dxi-validation-rule
+                              type="stringLength"
+                              [max]="255"
+                            ></dxi-validation-rule>
+                          </dx-validator>
+                          </dx-select-box>
+
                         </div>
                       </div>
                       <!-- Comm interne -->
@@ -517,9 +525,11 @@
                         </div>
                         <div class="dx-field-value small-font">
                           <dx-text-box
+                            #comInt
                             [readOnly]="ordreFacture"
                             formControlName="commentaireUsageInterne"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+                            (onValueChanged)="onComChanged()"
                           >
                             <dx-validator
                               name="{{
@@ -739,7 +749,6 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-check-box
-                                class="thin-checkbox"
                                 [disabled]="true"
                                 formControlName="venteACommission"
                               >
@@ -788,18 +797,19 @@
                   [disabled]="!fullOrderNumber || !allowMutations || true"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-stock' | localize
-                  }}"
-                  text="{{ 'btn-stock' | localize }}"
-                ></dx-button>
-                <dx-button
-                  class="upperButton subButton"
-                  [disabled]="!fullOrderNumber || !allowMutations || true"
-                  type="success"
-                  hint="{{ 'hint-ajout-ordre' | localize }} {{
                     'hint-source-refClt' | localize
                   }}"
                   text="{{ 'btn-referenceClt' | localize }}"
+                ></dx-button>
+                <dx-button
+                  class="upperButton subButton"
+                  [disabled]="!fullOrderNumber || !allowMutations"
+                  type="success"
+                  hint="{{ 'hint-ajout-ordre' | localize }} {{
+                    'hint-source-stock' | localize
+                  }}"
+                  text="{{ 'btn-stock' | localize }}"
+                  (onClick)="onArticleStockClick()"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
@@ -826,6 +836,7 @@
                   [disabled]="!fullOrderNumber"
                   type="default"
                   height="auto"
+                  [focusStateEnabled]="false"
                   icon="material-icons info"
                   text="{{
                     (ordresLignesViewExp ? 'btn-ordreLignes' : 'btn-detailExp')
@@ -839,10 +850,12 @@
                     [ordre]="ordre"
                     [gridLignesLogistique]="gridLignesLogistique"
                     [gridLogistiques]="gridLogistiques"
+                    (refreshGridLigneDetail)="refreshGridLigneDetail()"
                   ></app-grid-lignes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique
+                    (refreshGridLigneDetail)="refreshGridLigneDetail()"
                     [ordre]="ordre"
                   ></app-grid-ordre-ligne-logistique>
                   <div *ngIf="ordresLignesViewExp">
@@ -1117,6 +1130,11 @@
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-histo-popup>
+  <app-ajout-articles-stock-popup
+    [ordre]="ordre"
+    (lignesChanged)="onLignesChanged($event)"
+  >
+  </app-ajout-articles-stock-popup>
   <app-file-manager-popup
     key="ordres"
     [subTitle]="'Ordre n°' + ordre.numero"

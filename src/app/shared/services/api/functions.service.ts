@@ -570,6 +570,9 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event auto button click (details expédition)
+   */
   public fDetailsExpOnClickAuto =
     (ordreLigneRef: string) => this.apollo
       .query<{ fDetailsExpOnClickAuto: FunctionResponse }>({
@@ -614,6 +617,9 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event modifier button click (details expédition)
+   */
   public fDetailsExpClickModifier =
     (ordreRef: string, ordreLigneRef: string, historiqueRef: string) => this.apollo
       .query<{ fDetailsExpClickModifier: FunctionResponse }>({
@@ -640,5 +646,35 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Event modification clôture row synthèse exp.
+   */
+  public fDetailsExpOnCheckCloturer =
+    (devalexpRef: string, logistiqueRef: string, societeCode: string, username: string) => this.apollo
+      .watchQuery<{ fDetailsExpOnCheckCloturer: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fDetailsExpOnCheckCloturer",
+              body: functionBody,
+              params: [
+                { name: "devalexpRef", value: "devalexpRef", isVariable: true },
+                { name: "logistiqueRef", value: "logistiqueRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "username", value: "username", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "devalexpRef", type: "String", isOptionnal: false },
+            { name: "logistiqueRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "username", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { devalexpRef, logistiqueRef, societeCode, username },
+        fetchPolicy: "network-only",
+      })
 
 }

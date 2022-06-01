@@ -5,11 +5,14 @@ import { SummaryType } from "app/shared/services/api.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -45,7 +48,9 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         public paletteInterService: TypesPaletteService,
         public authService: AuthService,
         public gridConfiguratorService: GridConfiguratorService,
+        public formUtilsService: FormUtilsService,
         public localizeService: LocalizationService,
+        public gridUtilsService: GridUtilsService,
         private functionsService: FunctionsService,
     ) {
         this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigneDetails);
@@ -81,6 +86,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
                 ["ordre.id", "=", this.ordre.id],
             ]);
             this.datagrid.dataSource = this.dataSource;
+            this.gridUtilsService.resetGridScrollBar(this.datagrid);
         } else if (this.datagrid)
             this.datagrid.dataSource = null;
     }
@@ -120,7 +126,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         if (e.parentType === "dataRow") {
             e.editorOptions.onFocusIn = (elem) => {
                 if (e.dataField !== "fournisseur.code")
-                    elem.element.querySelector(".dx-texteditor-input")?.select();
+                    this.formUtilsService.selectTextOnFocusIn(elem);
             };
         }
     }
@@ -147,7 +153,16 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
 
     modifDetailExp(cell) {
         this.ligneDetail = cell.data;
-        this.modifDetailPopup.visible = true;
+        const statut = this.ordre.facture ? "facturé" : this.ordre.bonAFacturer ? "bon à facturer" : "";
+        if (statut) {
+            notify("Ordre " + statut + ", la modification est impossible...", "warning", 3000);
+        } else {
+            this.modifDetailPopup.visible = true;
+        }
+    }
+
+    refresh() {
+        this.datagrid.instance.refresh();
     }
 
     showModifButton(cell) {

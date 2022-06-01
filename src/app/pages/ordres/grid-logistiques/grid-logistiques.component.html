@@ -5,11 +5,13 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [focusedRowIndex]="-1"
   [scrolling]="{ useNative: true }"
   (onCellClick)="onCellClick($event)"
   (onCellDblClick)="openFilePopup($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onContentReady)="onContentReady($event)"
+  (onEditorPreparing)="onEditorPreparing($event)"
   (onRowRemoved)="onRowRemoved()"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -101,7 +103,9 @@
       ]"
       [searchEnabled]="true"
       [value]="cell.data[cell.column.dataField]"
+      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
+      [readOnly]="env.production"
     >
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
@@ -113,7 +117,9 @@
       [items]="instructionsList"
       [value]="cell.data[cell.column.dataField]"
       [acceptCustomValue]="true"
+      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
+      [readOnly]="env.production"
     >
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
@@ -143,7 +149,7 @@
   </div>
   <div *dxTemplate="let cell of 'simpleElementEditTemplate'">
     <span class="simpleCellText"
-      >{{ cell.data[cell.column.dataField] }}&nbsp;&nbsp;</span
+      >{{ cell.data[cell.column.dataField] }}</span
     >
     <span>
       <div

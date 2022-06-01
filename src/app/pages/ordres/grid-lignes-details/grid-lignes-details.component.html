@@ -6,6 +6,7 @@
   [focusedRowEnabled]="true"
   [focusedRowIndex]="0"
   [columnAutoWidth]="true"
+  [focusedRowIndex]="-1"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onCellPrepared)="onCellPrepared($event)"
@@ -97,6 +98,8 @@
       [readOnly]="!allowMutations"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
+      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
+      [readOnly]="!allowMutations"
     >
       <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
     </dx-select-box>
@@ -126,4 +129,5 @@
 </dx-data-grid>
 <app-modif-detail-lignes-popup
   [ligneDetail]="ligneDetail"
+  (refreshGrid)="refresh()"
 ></app-modif-detail-lignes-popup>

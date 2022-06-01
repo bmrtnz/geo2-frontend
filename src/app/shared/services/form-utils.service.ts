@@ -56,9 +56,10 @@ export class FormUtilsService {
         formGroup.get(field).patchValue({ id: null });
     }
 
-    // Way to avoid typing inside current text, puzzling
+    // Best user experience
     selectTextOnFocusIn(e: any) {
-        e.element.querySelector("input.dx-texteditor-input").select();
+        const myInput = e.element?.querySelector("input.dx-texteditor-input");
+        if (!myInput?.hasAttribute("readonly")) myInput?.select();
     }
 
 }

@@ -3,7 +3,6 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { DxButtonComponent, DxPopupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";

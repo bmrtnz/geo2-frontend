@@ -1,0 +1,34 @@
+<dx-popup
+  [width]="800"
+  [height]="'auto'"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onHiding)="onHiding($event)"
+  [resizeEnabled]="true"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-histo-detail-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    >
+    </dx-button>
+  </div>
+   
+  <app-grid-histo-modif-detail
+    [ligneLogistiqueId]="ligneLogistiqueId"
+    [ordre]="ordre"
+  ></app-grid-histo-modif-detail>
+  <br />
+  <div class="popup-buttons-container">
+    <dx-button
+        type="normal"
+        text="{{ 'btn-fermer' | localize }}"
+        (onClick)="hidePopup()"
+    ></dx-button>
+  </div>
+</dx-popup>
