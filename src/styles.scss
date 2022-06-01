@@ -73,7 +73,7 @@
 }
 
 // No text overline
-body {
+body app-root.production {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
