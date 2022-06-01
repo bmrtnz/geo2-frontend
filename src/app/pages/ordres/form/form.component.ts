@@ -450,7 +450,7 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     deviseDisplayExpr(item) {
-        return item ? item.description + " (" + self.ordre?.tauxDevise + ")" : null;
+        return item ? item.description + " (" + item.taux + ")" : null;
     }
 
     displayIDBefore(data) {
