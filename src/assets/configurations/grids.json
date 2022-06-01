@@ -1198,7 +1198,8 @@
         "dataField": "id",
         "dataType": "string",
         "width": 100,
-        "visible": true
+        "visible": true,
+        "groupIndex": 0
       },
       {
         "visibleIndex": 1,
@@ -1207,62 +1208,97 @@
         "visible": true
       },
       {
+        "dataField": "age",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "dataField": "valide",
-        "showInColumnChooser": false,
-        "visible": false
+        "visible": false,
+        "filterValue": true,
+        "selectedFilterOperation": "="
       },
       {
-        "visibleIndex": 7,
-        "dataField": "matierePremiere.origine.id",
-        "width": 22,
-        "showInColumnChooser": false,
-        "cellTemplate": "zoomButtonTemplate",
-        "visible": false
+        "dataField": "stockID"
       },
       {
-        "dataField": "matierePremiere.variete.id",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "origineID"
       },
       {
-        "dataField": "matierePremiere.espece.id",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "varieteID"
       },
       {
-        "dataField": "cahierDesCharge.categorie.id",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "especeID"
       },
       {
-        "dataField": "normalisation.calibreMarquage.id",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "categorieID"
       },
       {
-        "dataField": "emballage.poidsNetClient",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "colisID"
       },
       {
-        "dataField": "emballage.prepese",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "calibreMarquageID"
       },
       {
-        "dataField": "matierePremiere.modeCulture.id",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "calibreFournisseurID"
       },
       {
-        "dataField": "matierePremiere.modeCulture.description",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "fournisseurCode"
       },
       {
-        "dataField": "matierePremiere.origine.description",
-        "showInColumnChooser": false,
-        "visible": false
+        "dataField": "proprietaireCode"
+      },
+      {
+        "dataField": "dateFabrication"
+      },
+      {
+        "dataField": "statut"
+      },
+      {
+        "dataField": "dateStatut"
+      },
+      {
+        "dataField": "typePaletteID"
+      },
+      {
+        "dataField": "quantiteInitiale1"
+      },
+      {
+        "dataField": "quantiteRestante1",
+        "visible": true
+      },
+      {
+        "dataField": "quantiteOptionnelle1"
+      },
+      {
+        "dataField": "quantiteInitiale2"
+      },
+      {
+        "dataField": "quantiteRestante2",
+        "visible": true
+      },
+      {
+        "dataField": "quantiteOptionnelle2"
+      },
+      {
+        "dataField": "quantiteInitiale3"
+      },
+      {
+        "dataField": "quantiteRestante3",
+        "visible": true
+      },
+      {
+        "dataField": "quantiteOptionnelle3"
+      },
+      {
+        "dataField": "quantiteInitiale4"
+      },
+      {
+        "dataField": "quantiteRestante4",
+        "visible": true
+      },
+      {
+        "dataField": "quantiteOptionnelle4"
       }
     ]
   },

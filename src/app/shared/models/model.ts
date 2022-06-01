@@ -327,6 +327,10 @@ export abstract class Model {
         return this.prototype.constructor.prototype.fields;
     }
 
+    static getFieldsName(): Set<string> {
+        return new Set(Object.keys(this.prototype.constructor.prototype.fields));
+    }
+
     /**
      * Fetch and map dynamically imported model
      */
