@@ -171,9 +171,6 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [selection]="{ mode: 'multiple' }"
-    [scrolling]="{
-      useNative: true
-    }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

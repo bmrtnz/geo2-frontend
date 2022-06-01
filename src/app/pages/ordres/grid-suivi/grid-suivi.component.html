@@ -7,9 +7,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowDblClick)="tabContext.openOrdre($event.data.numero)"
   (onToolbarPreparing)="

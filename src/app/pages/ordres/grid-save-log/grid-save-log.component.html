@@ -6,9 +6,6 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onCellPrepared)="onCellPrepared($event)"
-  [scrolling]="{
-    useNative: true
-  }"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Logs',

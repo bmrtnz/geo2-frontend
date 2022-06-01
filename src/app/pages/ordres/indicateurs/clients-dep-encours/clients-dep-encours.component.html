@@ -31,9 +31,6 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{
-      useNative: true
-    }"
     (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

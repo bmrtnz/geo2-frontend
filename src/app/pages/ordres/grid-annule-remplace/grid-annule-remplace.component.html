@@ -23,9 +23,6 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="false"
     dateSerializationFormat="yyyy-MM-dd"
-    [scrolling]="{
-      useNative: true
-    }"
     (onRowClick)="onRowClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

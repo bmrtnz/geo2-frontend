@@ -8,9 +8,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onRowDblClick)="tabContext.openOrdre($event.data.ordre.numero)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(

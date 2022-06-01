@@ -187,9 +187,6 @@
     [allowColumnReordering]="true"
     (onContentReady)="showHidePrices()"
     (onCellPrepared)="onCellPrepared($event)"
-    [scrolling]="{
-      useNative: true
-    }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
