@@ -20,5 +20,6 @@
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": true
-  }
+  },
+  "editor.foldingMaximumRegions": 10000
 }
