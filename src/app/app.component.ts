@@ -1,5 +1,6 @@
 import { Component, HostBinding } from "@angular/core";
 import { ScreenService } from "./shared/services";
+import { environment } from "../environments/environment";
 
 @Component({
     selector: "app-root",
@@ -8,9 +9,14 @@ import { ScreenService } from "./shared/services";
 })
 export class AppComponent {
     @HostBinding("class") get getClass() {
-        return Object.keys(this.screen.sizes)
-            .filter((cl) => this.screen.sizes[cl])
-            .join(" ");
+        const classes = Object.keys(this.screen.sizes)
+            .filter((cl) => this.screen.sizes[cl]);
+
+        if (environment.production) {
+          classes.push("production");
+        }
+
+        return classes.join(" ");
     }
 
     constructor(private screen: ScreenService) {
