@@ -168,9 +168,9 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     showModifButton(cell) {
         const data = cell.data;
         const show = data.logistique.expedieStation && (
-            data.ordre.client.modificationDetail !== false ||
-            data.fournisseur.indicateurModificationDetail !== false ||
-            (data.fournisseur.indicateurModificationDetail === false && data.article.emballage.emballage.groupe.id === "PALOX") ||
+            data.ordre.client.modificationDetail ||
+            data.fournisseur.indicateurModificationDetail ||
+            (data.fournisseur.indicateurModificationDetail && data.article.emballage.emballage.groupe.id === "PALOX") ||
             data.ordre.secteurCommercial.id === "IND" ||
             data.ordre.secteurCommercial.id === "PAL" ||
             data.ordre.societe.id === "IMP" ||
@@ -193,10 +193,11 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
             show = false;
         } else {
             show = (
-                data.ordre.client.modificationDetail !== false ||
-                data.fournisseur.indicateurModificationDetail !== false ||
+                data.ordre.client.modificationDetail ||
+                data.fournisseur.indicateurModificationDetail ||
                 data.ordre.secteurCommercial.id === "PAL" ||
                 this.authService.currentUser.geoClient === "2" ||
+                data.ordre.societe.id === "IMP" ||
                 data.ordre.societe.id === "UDC" ||
                 data.article.cahierDesCharge.espece.id.substring(0, 5) === "EMBAL" ||
                 data.ordre.type.id === "REP" ||
