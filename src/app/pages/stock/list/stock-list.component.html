@@ -271,9 +271,6 @@
           [columnAutoWidth]="true"
           [rowAlternationEnabled]="true"
           [allowColumnReordering]="true"
-          [scrolling]="{
-            useNative: true
-          }"
           (onCellPrepared)="onCellPrepared($event)"
           (onToolbarPreparing)="
             gridConfiguratorService.onToolbarPreparing(
@@ -305,7 +302,6 @@
           >
           </dxo-pager>
           <dxo-filter-row [visible]="true"></dxo-filter-row>
-          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
           <dxo-column-chooser
             [enabled]="true"
             [width]="columnChooser.width"

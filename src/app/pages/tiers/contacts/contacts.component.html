@@ -16,9 +16,6 @@
     [allowColumnReordering]="true"
     [showBorders]="true"
     dateSerializationFormat="yyyy-MM-dd"
-    [scrolling]="{
-      useNative: true
-    }"
     (onEditingStart)="onEditingStart($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowInserting)="onRowInserting($event)"
@@ -58,7 +55,6 @@
       [selectTextOnEditStart]="true"
     >
     </dxo-editing>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"

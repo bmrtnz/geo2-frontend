@@ -14,9 +14,6 @@
     [paging]="{
       enabled: false
     }"
-    [scrolling]="{
-      useNative: true
-    }"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="onContentReady($event)"
     (onToolbarPreparing)="
@@ -41,7 +38,6 @@
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="false"></dxo-filter-row>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"

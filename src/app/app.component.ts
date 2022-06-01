@@ -1,7 +1,9 @@
 import { Component, HostBinding } from "@angular/core";
 import { ScreenService } from "./shared/services";
-import selectBox from "devextreme/ui/select_box";
 import { environment } from "../environments/environment";
+import dxSelectBox from "devextreme/ui/select_box";
+import dxTabPanel from "devextreme/ui/tab_panel";
+import dxDataGrid from "devextreme/ui/data_grid";
 
 @Component({
     selector: "app-root",
@@ -21,10 +23,6 @@ export class AppComponent {
     }
 
     constructor(private screen: ScreenService) {
-
-        // Default settings for selectBoxes
-        selectBox.defaultOptions({ options: { searchMode: "startswith" } });
-
         // Close columnchooser on outside click (non standard)
         document.addEventListener("mousedown", (e) => {
             const el = e.target;
@@ -46,6 +44,8 @@ export class AppComponent {
                     });
             }
         });
+
+        this.defaultDxConfiguration();
     }
 
     closest(elem, selector) {
@@ -58,5 +58,20 @@ export class AppComponent {
     isVisible(el) {
         const style = window.getComputedStyle(el);
         return style.display !== "none" && style.visibility !== "hidden";
+    }
+
+    defaultDxConfiguration() {
+      dxSelectBox.defaultOptions({ options: { searchMode: "startswith" } });
+      dxTabPanel.defaultOptions({ options: { swipeEnabled: false }});
+      dxDataGrid.defaultOptions({ options: {
+        scrolling: { useNative: true },
+        columnFixing: { enabled: true },
+        // TODO for better keyboard navigation
+        /*keyboardNavigation: {
+          enterKeyAction: "moveFocus",
+          enterKeyDirection: "column",
+          editOnKeyPress: true,
+        }*/
+      }});
     }
 }

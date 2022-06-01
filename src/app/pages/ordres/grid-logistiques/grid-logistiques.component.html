@@ -6,7 +6,6 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [focusedRowIndex]="-1"
-  [scrolling]="{ useNative: true }"
   (onCellClick)="onCellClick($event)"
   (onCellDblClick)="openFilePopup($event)"
   (onCellPrepared)="onCellPrepared($event)"
@@ -45,7 +44,6 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="false"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"

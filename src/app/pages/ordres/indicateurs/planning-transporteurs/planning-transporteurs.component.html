@@ -99,7 +99,7 @@
                     text="{{ 'button-bascule-clients-valide' | localize }}"
                     (onClick)="validOrAll($event)"
                   ></dx-button>
-                </dxi-item>  
+                </dxi-item>
                 <dxi-item [ratio]="1">
                   <dx-button class="validOnlyButtons"
                     #validEntrepot
@@ -138,9 +138,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
   (onRowDblClick)="onRowDblClick($event)"
@@ -170,7 +167,6 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <!-- <dxo-filter-row [visible]="true"></dxo-filter-row> -->
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"

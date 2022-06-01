@@ -101,9 +101,6 @@
         enableFilters.bind(this)
       )
     "
-    [scrolling]="{
-      useNative: true
-    }"
   >
     <!-- Grid configuration -->
     <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
@@ -129,7 +126,6 @@
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <!-- <dxo-filter-row [visible]="false"></dxo-filter-row> -->
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-group-panel [visible]="true"> </dxo-group-panel>
     <dxo-column-chooser
       [enabled]="true"
