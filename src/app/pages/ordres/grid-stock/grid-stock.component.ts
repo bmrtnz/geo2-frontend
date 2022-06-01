@@ -1,7 +1,6 @@
 
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import Ordre from "app/shared/models/ordre.model";
 import { ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
@@ -9,6 +8,7 @@ import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.servi
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
+import { StocksService } from "app/shared/services/api/stocks.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
@@ -39,6 +39,7 @@ export class GridStockComponent implements OnInit {
   @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
   @ViewChild("emballageSB", { static: false }) emballageSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) origineSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatSB", { static: false }) bureauAchatSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
 
   public columns: Observable<GridColumn[]>;
@@ -70,6 +71,7 @@ export class GridStockComponent implements OnInit {
     public emballagesService: EmballagesService,
     public originesService: OriginesService,
     public bureauxAchatService: BureauxAchatService,
+    private stocksService: StocksService,
   ) {
     this.apiService = this.articlesService;
     this.especes = this.especesService.getDistinctDataSource(["id"]);
@@ -114,18 +116,19 @@ export class GridStockComponent implements OnInit {
     if (this.dataGrid.dataSource === null
       || (Array.isArray(this.dataGrid.dataSource)
         && !this.dataGrid.dataSource.length))
-      this.dataGrid.dataSource = this.articles;
-    this.dataGrid.instance.refresh();
+      this.stocksService.allStockArticleList(
+        this.especeSB.value,
+        this.varieteSB.value,
+        this.modesCultureSB.value,
+        this.origineSB.value,
+        this.emballageSB.value,
+        this.bureauAchatSB.value,
+      ).subscribe((res) => {
+        this.dataGrid.dataSource = res.data.allStockArticleList;
+        this.dataGrid.instance.refresh();
+        this.toRefresh = false;
+      });
 
-    // Fake filter for testing purposes: beat it!
-    this.dataGrid.instance.filter([
-      ["matierePremiere.espece.id", "=", "POMME"],
-      "and",
-      ["matierePremiere.variete.id", "=", "GALA"],
-      "and",
-      ["valide", "=", true]
-    ]);
-    this.toRefresh = false;
   }
 
   onRowDblClick(e) {
