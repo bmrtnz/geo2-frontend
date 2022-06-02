@@ -2465,6 +2465,21 @@
         "dataField": "nombreColisExpedies",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordre.entrepot.code",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.referenceClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.transporteur.id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
