@@ -22,6 +22,7 @@
     (onRowClick)="onRowClick($event)"
     (onInitNewRow)="onInitNewRow($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
+    (onSaving)="onSaving($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
