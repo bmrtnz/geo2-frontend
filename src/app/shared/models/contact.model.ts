@@ -27,6 +27,7 @@ export class Contact extends Model {
     @Field({ asKey: true, allowEditing: false }) public id: string;
     @Field({ allowEditing: false }) public codeTiers: string;
     @Field({ allowEditing: false }) public typeTiers: TypeTiers | string;
+    @Field() public refClientEntrepot: string;
 }
 
 export default Contact;
