@@ -1,7 +1,8 @@
 {
-    "recommendations": [
-        "esbenp.prettier-vscode",
-        "angular.ng-template",
-        "ms-vscode.vscode-typescript-tslint-plugin"
-    ]
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "angular.ng-template",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "EditorConfig.EditorConfig"
+  ]
 }
