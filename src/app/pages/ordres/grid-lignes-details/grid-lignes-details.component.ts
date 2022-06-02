@@ -113,6 +113,21 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
                 e.cellElement.innerText = infoArt.concatDesc;
                 e.cellElement.title = infoArt.concatDesc.substring(2) + "\r\n";
             }
+            // Higlight important columns
+            if ([
+                "nombrePalettesExpediees",
+                "nombreColisExpedies",
+                "poidsNetExpedie",
+                "poidsBrutExpedie",
+                "venteQuantite",
+                "achatQuantite",
+                "typePalette",
+                "paletteInter",
+                "referenceControleQualite"
+            ].includes(e.column.dataField)) {
+                // Bold text
+                e.cellElement.classList.add("bold-grey-light");
+            }
         }
     }
 
@@ -211,6 +226,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         }
         return show;
     }
+
 }
 
 
