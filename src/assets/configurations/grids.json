@@ -2689,7 +2689,7 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "ordre.transporteurDEVCode",
+        "dataField": "ordre.transporteurDEVCode.id",
         "allowEditing": false,
         "visible": false
       },
