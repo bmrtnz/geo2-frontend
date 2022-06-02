@@ -100,7 +100,6 @@
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
       [value]="cell.data[cell.column.dataField]"
-      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
       [readOnly]="env.production"
     >
@@ -114,7 +113,6 @@
       [items]="instructionsList"
       [value]="cell.data[cell.column.dataField]"
       [acceptCustomValue]="true"
-      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
       [readOnly]="env.production"
     >

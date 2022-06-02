@@ -21,6 +21,8 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public clientId: string;
+  @Output() public entrepotId: string;
+  @Output() public secteurId: string;
   @Output() public popupShown: boolean;
 
   visible: boolean;
@@ -54,6 +56,8 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     if (this.ordre) {
       this.titleMid = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero + " - " + this.ordre.client.raisonSocial;
       this.clientId = this.ordre.client.id;
+      this.entrepotId = this.ordre.entrepot.id;
+      this.secteurId = this.ordre.secteurCommercial.id;
     }
     this.titleEnd = this.localizeService.localize("via-histo-client");
   }
