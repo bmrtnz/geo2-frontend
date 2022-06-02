@@ -298,13 +298,13 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
     let templ;
     if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
-    if (field === "article.matierePremiere.origine.id") templ = "origineTemplate";
+    if (field === "article.matierePremiere.espece.id") templ = "origineTemplate";
     if (field === "ordre.client.id") templ = "certificationTemplate";
     return templ ? templ : false;
   }
 
   showOriginButton(cell) {
-    return cell.value === "F";
+    return cell.data.article.matierePremiere.origine.id === "F";
   }
 
   showOriginCheck(data) {

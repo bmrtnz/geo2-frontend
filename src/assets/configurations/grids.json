@@ -1719,6 +1719,14 @@
         "visible": false
       },
       {
+        "visibleIndex": 5,
+        "dataField": "article.matierePremiere.origine.description",
+        "dataType": "string",
+        "allowSorting": false,
+        "allowEditing": false,
+        "visible": false
+      },
+      {
         "visibleIndex": 6,
         "dataField": "ordre.client.id",
         "showInColumnChooser": false,
@@ -1730,7 +1738,7 @@
       },
       {
         "visibleIndex": 8,
-        "dataField": "article.matierePremiere.origine.id",
+        "dataField": "article.matierePremiere.espece.id",
         "showInColumnChooser": false,
         "dataType": "string",
         "width": 60,
@@ -1925,12 +1933,12 @@
         "visible": true
       },
       {
-        "dataField": "article.matierePremiere.variete.id",
+        "dataField": "article.matierePremiere.origine.id",
         "showInColumnChooser": false,
         "visible": false
       },
       {
-        "dataField": "article.matierePremiere.espece.id",
+        "dataField": "article.matierePremiere.variete.id",
         "showInColumnChooser": false,
         "visible": false
       },
@@ -1961,11 +1969,6 @@
       },
       {
         "dataField": "article.matierePremiere.modeCulture.description",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "article.matierePremiere.origine.description",
         "showInColumnChooser": false,
         "visible": false
       },

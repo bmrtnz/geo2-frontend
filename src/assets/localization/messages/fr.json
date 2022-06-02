@@ -770,6 +770,7 @@
     "ordreLignes-logistique-expedieStation": "OK station",
     "ordreLignes-ordre-assistante-nomUtilisateur": "Assistante",
     "ordreLignes-ordre-commercial-nomUtilisateur": "Commercial",
+    "ordreLignes-article-matierePremiere-espece-id": " ",
     "ordreLignes-article-matierePremiere-variete-id": " ",
     "ordreLignes-article-cahierDesCharge-categorie-id": "Catégorie",
     "ordreLignes-article-normalisation-calibreMarquage-id": "Calibre",
