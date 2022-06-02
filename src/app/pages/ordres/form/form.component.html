@@ -229,7 +229,6 @@
                             formControlName="client"
                             [dataSource]="clientsDS"
                             [displayExpr]="displayCodeBefore"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'raisonSocial']"
                           >
                             <dx-validator
@@ -346,7 +345,6 @@
                             [dataSource]="incotermsDS"
                             [displayExpr]="displayIDBefore"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'description']"
                           >
                             <dx-validator
@@ -373,7 +371,6 @@
                                 [dataSource]="transporteursDS"
                                 [displayExpr]="displayIDBefore"
                                 (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'raisonSocial']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -403,7 +400,6 @@
                                 [dataSource]="typeTransportDS"
                                 [displayExpr]="displayIDBefore"
                                 (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -453,7 +449,6 @@
                                 [readOnly]="true"
                                 [displayExpr]="displayIDBefore"
                                 (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -479,7 +474,6 @@
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"
                                 (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -596,7 +590,6 @@
                                 [dataSource]="portTypeDDS"
                                 displayExpr="name"
                                 (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'name']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -638,7 +631,6 @@
                                 [dataSource]="portTypeADS"
                                 displayExpr="name"
                                 (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'name']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -676,7 +668,6 @@
                             [readOnly]="true"
                             [displayExpr]="deviseDisplayExpr"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'description']"
                           >
                             <dx-validator
@@ -701,7 +692,6 @@
                             [dataSource]="commercialDS"
                             [displayExpr]="displayIDBefore"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'nomUtilisateur']"
                           >
                             <dx-validator
@@ -726,7 +716,6 @@
                             [dataSource]="assistanteDS"
                             [displayExpr]="displayIDBefore"
                             (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'nomUtilisateur']"
                           >
                             <dx-validator
@@ -899,7 +888,6 @@
                               [dataSource]="transporteursDS"
                               displayExpr="raisonSocial"
                               [readOnly]="true"
-                              [searchEnabled]="true"
                               [searchExpr]="['id', 'raisonSocial']"
                             >
                             </dx-select-box>

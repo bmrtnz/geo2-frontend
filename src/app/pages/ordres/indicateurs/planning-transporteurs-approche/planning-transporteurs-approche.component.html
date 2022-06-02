@@ -17,7 +17,6 @@
                 [dataSource]="transporteursDataSource"
                 valueExpr="id"
                 displayExpr="code"
-                [searchEnabled]="true"
                 [searchExpr]="['id', 'code']"
               >
                 <dx-validator>
@@ -40,7 +39,6 @@
                 formControlName="bureauAchat"
                 [dataSource]="bureauxAchat"
                 [displayExpr]="displayCodeBefore"
-                [searchEnabled]="true"
                 [searchExpr]="['id', 'raisonSocial']"
                 [showClearButton]="true"
               >

@@ -160,7 +160,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="bureauxAchat"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'raisonSocial']"
                     >
                       <dx-validator
@@ -184,7 +183,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="identifiant"
                       displayExpr="libelle"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'libelle']"
                     >
                       <dx-validator
@@ -208,7 +206,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesFournisseur"
                       displayExpr="description"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -313,7 +310,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -369,7 +365,6 @@
                       (onValueChanged)="onNonRequiredSBChange($event)"
                       [dataSource]="incoterms"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                     </dx-select-box>
@@ -579,7 +574,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -862,7 +856,6 @@
                       [readOnly]="true"
                       [dataSource]="conditionsVente"
                       displayExpr="id"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                     </dx-select-box>
@@ -954,7 +947,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -978,7 +970,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -1034,7 +1025,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1064,7 +1054,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1315,7 +1304,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="fournisseursDeRattachement"
                       displayExpr="raisonSocial"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'raisonSocial']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1334,7 +1322,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="groupesFournisseur"
                       displayExpr="description"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"

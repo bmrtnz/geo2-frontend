@@ -33,7 +33,6 @@
             (valueChange)="
               onFieldValueChange($event, 'matierePremiere.espece.id')
             "
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="formatListItem"
             valueExpr="id"
@@ -54,7 +53,6 @@
             (valueChange)="
               onFieldValueChange($event, 'matierePremiere.variete.id')
             "
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="formatListItem"
             valueExpr="id"
@@ -78,7 +76,6 @@
                 'matierePremiere.modeCulture.description'
               )
             "
-            [searchEnabled]="true"
             searchExpr="matierePremiere.modeCulture.description"
             [displayExpr]="formatListItem"
             valueExpr="key"
@@ -97,7 +94,6 @@
             #emballageSB
             [dataSource]="emballages"
             (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="formatListItem"
             valueExpr="id"
@@ -118,7 +114,6 @@
             (valueChange)="
               onFieldValueChange($event, 'matierePremiere.origine.id')
             "
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="formatListItem"
             valueExpr="id"

@@ -97,7 +97,6 @@
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
-      [searchEnabled]="true"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
     >
@@ -114,7 +113,7 @@
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
       [deferRendering]="false"
-      [searchEnabled]="true"
+
       [acceptCustomValue]="true"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"

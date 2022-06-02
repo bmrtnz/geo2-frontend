@@ -38,7 +38,6 @@
                         'article.matierePremiere.espece.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.matierePremiere.espece.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -60,7 +59,6 @@
                         'article.matierePremiere.origine.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.matierePremiere.origine.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -82,7 +80,6 @@
                         'article.matierePremiere.variete.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.matierePremiere.variete.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -104,7 +101,6 @@
                         'article.cahierDesCharge.categorie.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.cahierDesCharge.categorie.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -128,7 +124,6 @@
                         'article.matierePremiere.calibreUnifie.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.matierePremiere.calibreUnifie.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -150,7 +145,6 @@
                         'article.normalisation.calibreMarquage.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.normalisation.calibreMarquage.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -172,7 +166,6 @@
                         'article.emballage.emballage.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.emballage.emballage.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -194,7 +187,6 @@
                         'article.matierePremiere.modeCulture.description'
                       )
                     "
-                    [searchEnabled]="true"
                     searchExpr="article.matierePremiere.modeCulture.description"
                     displayExpr="key"
                     valueExpr="key"
@@ -212,7 +204,6 @@
                   <dx-tag-box
                     [dataSource]="secteurs"
                     displayExpr="description"
-                    [searchEnabled]="true"
                     searchExpr="description"
                     (valueChange)="onCustomFilterChange($event, 'secteurs')"
                   ></dx-tag-box>
@@ -227,7 +218,6 @@
                   <dx-tag-box
                     [dataSource]="clients"
                     displayExpr="raisonSocial"
-                    [searchEnabled]="true"
                     searchExpr="raisonSocial"
                     (valueChange)="onCustomFilterChange($event, 'clients')"
                   >
@@ -243,7 +233,6 @@
                   <dx-tag-box
                     [dataSource]="fournisseurs"
                     displayExpr="raisonSocial"
-                    [searchEnabled]="true"
                     searchExpr="raisonSocial"
                     (valueChange)="onCustomFilterChange($event, 'fournisseurs')"
                   ></dx-tag-box>

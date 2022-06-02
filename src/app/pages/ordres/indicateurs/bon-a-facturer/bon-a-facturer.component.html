@@ -21,7 +21,6 @@
             #secteurValue
             [dataSource]="secteurs"
             displayExpr="description"
-            [searchEnabled]="true"
             searchExpr="description"
             (valueChange)="onSecteurChange()"
           ></dx-select-box>
@@ -40,7 +39,6 @@
             #clientValue
             [dataSource]="clients"
             displayExpr="raisonSocial"
-            [searchEnabled]="true"
             searchExpr="raisonSocial"
             (valueChange)="updateFilters()"
           ></dx-select-box>
@@ -59,7 +57,6 @@
             #entrepotValue
             [dataSource]="entrepot"
             displayExpr="raisonSocial"
-            [searchEnabled]="true"
             searchExpr="raisonSocial"
             (valueChange)="updateFilters()"
           ></dx-select-box>
@@ -78,7 +75,6 @@
             #commercialValue
             [dataSource]="commercial"
             displayExpr="nomUtilisateur"
-            [searchEnabled]="true"
             searchExpr="nomUtilisateur"
             (valueChange)="updateFilters()"
           ></dx-select-box>
@@ -98,7 +94,6 @@
             #assistanteValue
             [dataSource]="assistante"
             displayExpr="nomUtilisateur"
-            [searchEnabled]="true"
             searchExpr="nomUtilisateur"
             (valueChange)="updateFilters()"
           ></dx-select-box>

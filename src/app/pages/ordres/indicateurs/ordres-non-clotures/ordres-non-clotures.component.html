@@ -17,7 +17,6 @@
             [dataSource]="secteurs"
             displayExpr="description"
             [disabled]="!withSector.value"
-            [searchEnabled]="true"
             searchExpr="description"
             (valueChange)="enableFilters()"
           ></dx-select-box>

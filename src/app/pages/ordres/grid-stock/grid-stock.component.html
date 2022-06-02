@@ -16,7 +16,6 @@
             #especeSB
             [dataSource]="especes"
             (valueChange)="onFilterChange()"
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -36,7 +35,6 @@
             [dataSource]="varietes"
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -56,7 +54,6 @@
             [dataSource]="modesCulture"
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
-            [searchEnabled]="true"
             searchExpr="matierePremiere.modeCulture.description"
             [displayExpr]="'id'"
             valueExpr="key"
@@ -76,7 +73,6 @@
             [dataSource]="emballages"
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -96,7 +92,6 @@
             [dataSource]="origines"
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
-            [searchEnabled]="true"
             [searchExpr]="['id', 'description']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -118,7 +113,6 @@
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
             [displayExpr]="displayCodeBefore"
-            [searchEnabled]="true"
             [searchExpr]="['id', 'raisonSocial']"
           >
             <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>

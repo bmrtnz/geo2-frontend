@@ -61,17 +61,24 @@ export class AppComponent {
     }
 
     defaultDxConfiguration() {
-      dxSelectBox.defaultOptions({ options: { searchMode: "startswith" } });
-      dxTabPanel.defaultOptions({ options: { swipeEnabled: false }});
-      dxDataGrid.defaultOptions({ options: {
-        scrolling: { useNative: true },
-        columnFixing: { enabled: true },
-        // TODO for better keyboard navigation
-        /*keyboardNavigation: {
-          enterKeyAction: "moveFocus",
-          enterKeyDirection: "column",
-          editOnKeyPress: true,
-        }*/
-      }});
+        dxSelectBox.defaultOptions({
+            options: {
+                searchMode: "startswith",
+                searchEnabled: true
+            }
+        });
+        dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });
+        dxDataGrid.defaultOptions({
+            options: {
+                scrolling: { useNative: true },
+                columnFixing: { enabled: true },
+                // TODO for better keyboard navigation
+                /*keyboardNavigation: {
+                  enterKeyAction: "moveFocus",
+                  enterKeyDirection: "column",
+                  editOnKeyPress: true,
+                }*/
+            }
+        });
     }
 }

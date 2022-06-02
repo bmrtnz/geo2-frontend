@@ -26,7 +26,6 @@
               formControlName="secteurCode"
               [dataSource]="secteurs"
               displayExpr="description"
-              [searchEnabled]="true"
               searchExpr="description"
               (onValueChanged)="onSecteurChange($event)"
             >
@@ -53,7 +52,6 @@
               [dataSource]="clients"
               [showClearButton]="true"
               displayExpr="raisonSocial"
-              [searchEnabled]="true"
               [searchExpr]="['code', 'raisonSocial']"
               (onValueChanged)="onClientChange($event)"
               [displayExpr]="displayIDBefore"
@@ -76,7 +74,6 @@
               [dataSource]="entrepots"
               [showClearButton]="true"
               displayExpr="raisonSocial"
-              [searchEnabled]="true"
               [searchExpr]="['code', 'raisonSocial']"
               (onValueChanged)="onFieldValueChange($event)"
               [displayExpr]="displayIDBefore"
@@ -98,7 +95,6 @@
               [dataSource]="commerciaux"
               [showClearButton]="true"
               [displayExpr]="displayIDBefore"
-              [searchEnabled]="true"
               [searchExpr]="['id', 'nomUtilisateur']"
               (valueChange)="onFieldValueChange($event)"
             >
@@ -120,7 +116,6 @@
               [dataSource]="assistantes"
               [showClearButton]="true"
               [displayExpr]="displayIDBefore"
-              [searchEnabled]="true"
               [searchExpr]="['id', 'nomUtilisateur']"
               (valueChange)="onFieldValueChange($event)"
             >
