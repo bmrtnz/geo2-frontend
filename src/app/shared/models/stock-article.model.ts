@@ -10,6 +10,9 @@ export class StockArticle extends Model {
     articleDescription: string;
 
     @Field()
+    bio: boolean;
+
+    @Field()
     age: string;
 
     @Field()

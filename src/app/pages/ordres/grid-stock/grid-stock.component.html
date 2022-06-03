@@ -55,8 +55,8 @@
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
             searchExpr="matierePremiere.modeCulture.description"
-            [displayExpr]="'id'"
-            valueExpr="key"
+            [displayExpr]="'description'"
+            [valueExpr]="'id'"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-select-box>
