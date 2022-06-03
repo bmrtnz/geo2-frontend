@@ -38,7 +38,7 @@
             type="default"
             icon="material-icons list"
             text="Articles"
-            (onClick)="navigate('pages/articles/list', 'nested')"
+            (onClick)="navigate('articles/list', 'nested')"
           >
           </dx-button>
         </div>
@@ -71,7 +71,7 @@
             type="default"
             icon="material-icons assignment_turned_in"
             text="Ordres de commande"
-            routerLink="/ordres"
+            routerLink="/pages/ordres"
           >
           </dx-button>
           <dx-button
@@ -80,7 +80,7 @@
             icon="material-icons view_module"
             text="Stock"
             [disabled]="prod"
-            routerLink="/stock"
+            routerLink="/pages/stock"
           >
           </dx-button>
           <dx-button
