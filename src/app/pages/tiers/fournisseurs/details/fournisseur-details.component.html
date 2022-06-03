@@ -23,7 +23,7 @@
           type="default"
           text="{{ 'btn-modifier' | localize }}"
           [visible]="readOnlyMode && !createMode"
-          (onClick)="readOnlyMode = !readOnlyMode"
+          (onClick)="readOnlyMode = !readOnlyMode; changeCertifDates.value = false"
         ></dx-button>
         <dx-button
           class="upperButton"
@@ -235,9 +235,10 @@
                     <dx-text-box
                       formControlName="idTracabilite"
                       [readOnly]="
-                        readOnlyMode ||
+                        !createMode &&
+                        (readOnlyMode ||
                         !zeroTracaValue ||
-                        !authService.currentUser.adminClient
+                        !authService.currentUser.adminClient)
                       "
                       (onValueChanged)="onIDTracaChange($event)"
                       valueChangeEvent="keyup change"
