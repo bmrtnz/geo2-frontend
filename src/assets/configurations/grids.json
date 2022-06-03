@@ -3251,7 +3251,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "flux.description",
+        "dataField": "flux.id",
         "dataType": "string",
         "width": "100",
         "allowEditing": false,
