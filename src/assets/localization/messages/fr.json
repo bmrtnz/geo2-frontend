@@ -762,6 +762,7 @@
     "ordreLignes-fraisUnite-id": "Frais Unité",
     "ordreLignes-venteUnite-id": "Unité vente",
     "ordreLignes-venteUnite": "Unité vente",
+    "ordreLignes-libelleDLV": "DLUO",
     "ordreLignes-referenceControleQualite": "Contrôle Qualité",
     "ordreLignes-ordre-transporteur-raisonSocial": "Transporteur",
     "ordreLignes-logistique-fournisseur-code": "Fournisseur",

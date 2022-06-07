@@ -19,6 +19,17 @@
 
   .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type) {
     pointer-events: none;
+
+    &.headerCellBtnTemplate {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      text-align: center !important;
+
+      .small-article-button {
+        margin-top: 2px;
+        pointer-events: auto;
+      }
+    }
   }
 
   .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {

@@ -1852,7 +1852,7 @@
         "visibleIndex": 32,
         "dataField": "achatDevise",
         "allowEditing": false,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "dataType": "string",
         "visible": true
       },
@@ -1873,6 +1873,9 @@
         "dataField": "libelleDLV",
         "allowEditing": true,
         "dataType": "string",
+        "cssClass": "headerCellBtnTemplate",
+        "allowSorting": false,
+        "headerCellTemplate": "headerCellBtnTemplate",
         "visible": true
       },
       {
