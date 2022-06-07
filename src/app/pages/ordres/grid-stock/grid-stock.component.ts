@@ -19,7 +19,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
-import {ModesCultureService} from "../../../shared/services/api/modes-culture.service";
+import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
 
 @Component({
   selector: "app-grid-stock",
@@ -80,7 +80,7 @@ export class GridStockComponent implements OnInit {
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
     this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
     this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
-    //this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
+    // this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
     this.modesCulture = this.modesCultureService.getDataSource();
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
