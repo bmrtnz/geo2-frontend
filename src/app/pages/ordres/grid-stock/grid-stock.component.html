@@ -55,8 +55,8 @@
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
             searchExpr="matierePremiere.modeCulture.description"
-            [displayExpr]="'id'"
-            valueExpr="key"
+            [displayExpr]="'description'"
+            [valueExpr]="'id'"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-select-box>
@@ -158,6 +158,7 @@
         placeholder="{{ 'search' | localize }}"
       ></dxo-search-panel>
       <dxo-group-panel [visible]="true"> </dxo-group-panel>
+      <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
       <dxo-header-filter
         [visible]="true"
         [allowSearch]="true"
@@ -194,6 +195,37 @@
       >
       </dxo-column-chooser>
       <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
+
+      <dxo-summary>
+        <dxi-group-item
+          column="quantiteRestante1"
+          summaryType="sum"
+          [alignByColumn]="true"
+          displayFormat="{0}"
+        >
+        </dxi-group-item>
+        <dxi-group-item
+          column="quantiteRestante2"
+          summaryType="sum"
+          [alignByColumn]="true"
+          displayFormat="{0}"
+        >
+        </dxi-group-item>
+        <dxi-group-item
+          column="quantiteRestante3"
+          summaryType="sum"
+          [alignByColumn]="true"
+          displayFormat="{0}"
+        >
+        </dxi-group-item>
+        <dxi-group-item
+          column="quantiteRestante4"
+          summaryType="sum"
+          [alignByColumn]="true"
+          displayFormat="{0}"
+        >
+        </dxi-group-item>
+      </dxo-summary>
 
       <dxi-column
         *ngFor="let column of this.columns | async"

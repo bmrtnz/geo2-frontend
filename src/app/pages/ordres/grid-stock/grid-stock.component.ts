@@ -19,6 +19,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import {ModesCultureService} from "../../../shared/services/api/modes-culture.service";
 
 @Component({
   selector: "app-grid-stock",
@@ -72,13 +73,15 @@ export class GridStockComponent implements OnInit {
     public originesService: OriginesService,
     public bureauxAchatService: BureauxAchatService,
     private stocksService: StocksService,
+    private modesCultureService: ModesCultureService
   ) {
     this.apiService = this.articlesService;
     this.especes = this.especesService.getDistinctDataSource(["id"]);
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
     this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
     this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
-    this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
+    //this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
+    this.modesCulture = this.modesCultureService.getDataSource();
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
@@ -141,16 +144,25 @@ export class GridStockComponent implements OnInit {
   }
 
   onCellPrepared(e) {
+    if (e.rowType === "group") {
+      if (e.column.dataField === "id" && e.cellElement.textContent) {
+        const items = e.data.items ?? e.data.collapsedItems;
+
+        e.cellElement.textContent += ` ${items[0].articleDescription}`;
+      }
+    }
+
     if (e.rowType === "data") {
-      if (e.column.dataField === "description") {
+      if (e.column.dataField === "articleDescription") {
         // Descript. article
-        const infoArt = this.articlesService.concatArtDescript(e.data);
+        /*const infoArt = this.articlesService.concatArtDescript(e.data);
         infoArt.concatDesc = infoArt.concatDesc.substring(9); // A modifier pourêtre plus générique
-        e.cellElement.innerText = infoArt.concatDesc;
+        e.cellElement.innerText = infoArt.concatDesc
         e.cellElement.title = infoArt.concatDesc.substring(2);
         e.cellElement.classList.add("cursor-pointer");
         // Bio en vert
-        if (infoArt.bio) e.cellElement.classList.add("bio-article");
+        if (infoArt.bio) e.cellElement.classList.add("bio-article");*/
+        if (e.data.bio) e.cellElement.classList.add("bio-article");
       }
     }
   }

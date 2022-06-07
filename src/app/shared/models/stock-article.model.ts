@@ -6,6 +6,12 @@ export class StockArticle extends Model {
     @Field({ asKey: true })
     id: string;
 
+    @Field({ asLabel: true })
+    articleDescription: string;
+
+    @Field()
+    bio: boolean;
+
     @Field()
     age: string;
 
