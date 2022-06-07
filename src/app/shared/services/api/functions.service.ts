@@ -93,6 +93,37 @@ export class FunctionsService {
       })
 
   /**
+   * Génère une nouvelle ligne d'ordre depuis l'historique avec l'article sélectionné.
+   */
+  public ofInitArticleHistory =
+    (ordreRef: string, articleRef: string, societeCode: string, fromLigneRef: string) => this.apollo
+      .watchQuery<{ ofInitArticleHistory: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofInitArticleHistory",
+              body: functionBody,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "articleRef", value: "articleRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "fromLigneRef", value: "fromLigneRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "articleRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "fromLigneRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef, articleRef, societeCode, fromLigneRef },
+        fetchPolicy: "network-only",
+      })
+
+  /**
    * Indicateur du blocage de l'ordre dont le départ est aujourd'hui
    */
   public fInitBlocageOrdre =
