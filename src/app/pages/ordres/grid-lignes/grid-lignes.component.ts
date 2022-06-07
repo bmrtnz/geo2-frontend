@@ -471,6 +471,12 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   }
 
+  onRowRemoved() {
+    // Refresh 2 other grids
+    this.gridLignesLogistique.refresh();
+    this.refreshGridLigneDetail.emit(true);
+  }
+
   copyPaste(e, field) {
     e.event.stopImmediatePropagation();
     let refValue;

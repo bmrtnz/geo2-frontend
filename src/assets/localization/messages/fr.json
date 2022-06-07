@@ -827,6 +827,7 @@
     "ordreEnvois-commentairesAvancement": "Statut",
     "choixEnvois-typeTiers-description": "Type",
     "choixEnvois-flux-description": "Flux",
+    "choixEnvois-flux-id": "Flux",
     "choixEnvois-codeTiers": "Destinataire",
     "choixEnvois-moyenCommunication": "Moyen comm.",
     "choixEnvois-numeroAcces1": "E-mail / N° fax",

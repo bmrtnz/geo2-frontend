@@ -39,6 +39,7 @@
     (onSaved)="cellValueChange($event)"
     (onEditingStart)="onEditingStart($event)"
     (onContentReady)="onContentReady()"
+    (onRowRemoved)="onRowRemoved()"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Lignes de commande',
