@@ -824,6 +824,7 @@
                     [gridLignesLogistique]="gridLignesLogistique"
                     [gridLogistiques]="gridLogistiques"
                     (refreshGridLigneDetail)="refreshGridLigneDetail()"
+                    (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-lignes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
@@ -1094,6 +1095,7 @@
   <app-editing-alert></app-editing-alert>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
+    [articleRowKey]="articleRowKey"
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-manu-popup>

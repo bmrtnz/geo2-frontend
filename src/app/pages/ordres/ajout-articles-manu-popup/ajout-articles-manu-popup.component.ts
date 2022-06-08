@@ -3,6 +3,7 @@ import { ArticlesListComponent } from "app/pages/articles/list/articles-list.com
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { DxButtonComponent, DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
@@ -20,6 +21,7 @@ import { concatMap, takeWhile } from "rxjs/operators";
 export class AjoutArticlesManuPopupComponent implements OnChanges {
 
   @Input() public ordre: Ordre;
+  @Input() public articleRowKey: string;
   @Output() public lignesChanged = new EventEmitter();
 
   visible: boolean;
@@ -34,6 +36,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   titleStart: string;
   titleEnd: string;
   pulseBtnOn: boolean;
+  remplacementArticle: boolean;
 
   @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
   @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
@@ -42,6 +45,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
   constructor(
     private articlesService: ArticlesService,
+    public OrdreLigneService: OrdreLignesService,
     private gridConfiguratorService: GridConfiguratorService,
     private functionsService: FunctionsService,
     private currentCompanyService: CurrentCompanyService,
@@ -49,11 +53,12 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
+    this.remplacementArticle = !!this.articleRowKey;
     this.setTitle();
   }
 
   setTitle() {
-    this.titleStart = this.localizeService.localize("ajout-articles");
+    this.titleStart = this.localizeService.localize(this.remplacementArticle ? "remplacement-article" : "ajout-articles");
     if (!this.ordre) return;
     this.titleEnd = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero + " - " + this.ordre.client.raisonSocial;
   }
@@ -63,8 +68,12 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.chosenArticles = articleTags.concat(this.getGridSelectedArticles());
     this.nbARticles = this.chosenArticles.length;
     this.articlesKO = !this.nbARticles;
-    this.validBtnText = this.localizeService.localize("btn-valider-article" + (this.nbARticles > 1 ? "s" : ""))
-      .replace("&&", this.nbARticles.toString());
+    if (!this.remplacementArticle) {
+      this.validBtnText = this.localizeService.localize("btn-valider-article" + (this.nbARticles > 1 ? "s" : ""))
+        .replace("&&", this.nbARticles.toString());
+    } else {
+      this.validBtnText = this.localizeService.localize("btn-remplacer-article");
+    }
     if (this.nbARticles !== this.nbArticlesOld) {
       this.pulseBtnOn = false;
       setTimeout(() => this.pulseBtnOn = true, 1);
@@ -75,15 +84,24 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   getGridSelectedArticles() {
-    return this.catalogue.dataGrid.instance.getSelectedRowKeys();
+    return this.catalogue?.dataGrid.instance.getSelectedRowKeys();
   }
 
   selectFromGrid(e) {
     const tagArray = this.saisieCode.value;
-    if (tagArray?.length) {
-      if (tagArray.includes(e.currentSelectedRowKeys[0])) {
-        this.alreadySelected();
+    // We do not allow article selection if already tag entered
+    if (this.remplacementArticle) {
+      if (tagArray?.length) {
         e.component.deselectRows(e.currentSelectedRowKeys);
+        return;
+      }
+      if (e.selectedRowKeys?.length === 2) e.component.deselectRows(e.selectedRowKeys[0]);
+    } else {
+      if (tagArray?.length) {
+        if (tagArray.includes(e.currentSelectedRowKeys[0])) {
+          this.alreadySelected();
+          e.component.deselectRows(e.currentSelectedRowKeys);
+        }
       }
     }
     this.updateChosenArticles();
@@ -91,6 +109,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("ajout-articles-manu-popup");
+    if (this.remplacementArticle) this.clearAll();
   }
 
   async onShown(e) {
@@ -168,21 +187,38 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.clearAll();
   }
 
-  insertArticles() {
-    const info = this.localizeService.localize("ajout-article" + (this.nbARticles > 1 ? "s" : "")) + "...";
-    notify(info, "info", 3000);
-    from(this.chosenArticles)
-      .pipe(
-        concatMap(articleID => this.functionsService
-          .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
-          .valueChanges
-          .pipe(takeWhile(res => res.loading))
-        ),
-      )
-      .subscribe({
-        error: ({ message }: Error) => notify(message, "error"),
-        complete: () => this.clearAndHidePopup(),
+  insertReplaceArticles() {
+
+    if (!this.remplacementArticle) {
+      const info = this.localizeService.localize("ajout-article" + (this.nbARticles > 1 ? "s" : "")) + "...";
+      notify(info, "info", 3000);
+      from(this.chosenArticles)
+        .pipe(
+          concatMap(articleID => this.functionsService
+            .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
+            .valueChanges
+            .pipe(takeWhile(res => res.loading))
+          ),
+        )
+        .subscribe({
+          error: ({ message }: Error) => notify(message, "error"),
+          complete: () => this.clearAndHidePopup(),
+        });
+    } else {
+      const ordreLigne = {
+        id: this.articleRowKey,
+        article: { id: this.chosenArticles[0] },
+        listeCertifications: "0",
+        origineCertification: null
+      };
+      this.OrdreLigneService.save_v2(["id"], { ordreLigne }).subscribe({
+        next: (res) => {
+          notify("Article remplacé", "success", 3000);
+          this.clearAndHidePopup();
+        },
+        error: () => notify("Erreur lors du remplacement de l'article", "error", 3000)
       });
+    }
 
   }
 

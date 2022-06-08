@@ -27,6 +27,8 @@
         [placeholder]="'Code...'"
         [readOnly]="codeChangeProcess"
         (onValueChanged)="onValueChanged($event)"
+        [ngClass]="{ 'max-tags': chosenArticles?.length && remplacementArticle }"
+        [disabled]="!!getGridSelectedArticles()?.length && remplacementArticle"
       >
         <dxo-drop-down-options [width]="0"> </dxo-drop-down-options>
       </dx-tag-box>
@@ -46,7 +48,7 @@
     [disabled]="articlesKO"
     [visible]="nbARticles > 0"
     [text]="validBtnText"
-    (onClick)="insertArticles()"
+    (onClick)="insertReplaceArticles()"
   ></dx-button>
   <br />
   <div style="clear: both"></div>

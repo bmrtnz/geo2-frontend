@@ -1747,6 +1747,14 @@
         "visible": true
       },
       {
+        "visibleIndex": 9,
+        "dataField": "valide",
+        "showInColumnChooser": false,
+        "allowEditing": false,
+        "width": 23,
+        "visible": true
+      },
+      {
         "visibleIndex": 10,
         "dataField": "nombrePalettesCommandees",
         "dataType": "number",
@@ -1924,6 +1932,7 @@
         "visibleIndex": 50,
         "dataField": "articleKit",
         "dataType": "string",
+        "width": 75,
         "allowEditing": true,
         "visible": true
       },
@@ -2038,10 +2047,6 @@
       {
         "dataField": "proprietaireMarchandise.listeExpediteurs",
         "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "valide",
         "visible": false
       },
       {

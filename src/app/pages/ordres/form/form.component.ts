@@ -1,5 +1,5 @@
 import {
-  Component, ElementRef, EventEmitter, OnDestroy, OnInit,
+  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit,
   Output, QueryList, ViewChild, ViewChildren
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
@@ -71,6 +71,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
   @Output() public ordre: Ordre;
   @Output() openArticleManuPopup = new EventEmitter<any>();
+  @Output() articleRowKey: string;
 
   private readonly headerFields = [
     "id",
@@ -349,7 +350,8 @@ export class FormComponent implements OnInit, OnDestroy {
     this.fileManagerComponent.visible = true;
   }
 
-  onArticleManClick() {
+  onArticleManClick(e?) {
+    this.articleRowKey = e;
     this.ajoutArtManu.visible = true;
   }
 
