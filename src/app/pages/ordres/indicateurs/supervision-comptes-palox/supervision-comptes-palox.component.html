@@ -53,7 +53,6 @@
               [dataSource]="commercial"
               [displayExpr]="displayCodeBefore"
               [showClearButton]="true"
-              [searchEnabled]="true"
               [searchExpr]="['id', 'nomUtilisateur']"
             >
             </dx-select-box>
@@ -73,7 +72,6 @@
               [dataSource]="entrepot"
               [displayExpr]="displayCodeBefore"
               [showClearButton]="true"
-              [searchEnabled]="true"
               [searchExpr]="['code', 'raisonSocial']"
             >
               <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
@@ -94,7 +92,6 @@
               [dataSource]="fournisseur"
               [displayExpr]="displayCodeBefore"
               [showClearButton]="true"
-              [searchEnabled]="true"
               [searchExpr]="['code', 'raisonSocial']"
             >
               <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
@@ -141,9 +138,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onRowDblClick)="onRowDblClick($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
@@ -175,7 +169,6 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -215,9 +208,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onRowDblClick)="onRowDblClick($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
@@ -254,7 +244,6 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -294,9 +283,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onRowDblClick)="onRowDblClick($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
@@ -329,7 +315,6 @@
   >
   </dxo-state-storing>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -369,9 +354,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onRowDblClick)="onRowDblClick($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
@@ -404,7 +386,6 @@
   >
   </dxo-state-storing>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"

@@ -62,6 +62,7 @@
           placeholder="{{ 'auth-societe' | localize }}"
           [readOnly]="true"
           [dataSource]="societe"
+          [searchEnabled]="false"
           displayExpr="raisonSocial"
           (onFocusIn)="findAssociatedCompanies()"
           (onSelectionChanged)="societeOnChange($event)"

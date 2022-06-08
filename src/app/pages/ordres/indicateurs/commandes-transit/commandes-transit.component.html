@@ -13,7 +13,6 @@
             #secteurValue
             [dataSource]="secteurs"
             displayExpr="description"
-            [searchEnabled]="true"
             searchExpr="description"
             (valueChange)="updateFilters()"
           ></dx-select-box>
@@ -35,9 +34,6 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [scrolling]="{
-      useNative: true
-    }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
@@ -73,7 +69,6 @@
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"

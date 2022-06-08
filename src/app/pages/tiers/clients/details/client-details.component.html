@@ -18,7 +18,7 @@
         <dx-button
           class="upperButton"
           type="default"
-          text="{{ 'btn-editer' | localize }}"
+          text="{{ 'btn-modifier' | localize }}"
           [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
@@ -167,7 +167,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="secteurs"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       (onValueChanged)="onSecteurChange($event)"
                       [searchExpr]="['id', 'description']"
                     >
@@ -193,7 +192,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="commercial"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'nomUtilisateur']"
                     >
                       <dx-validator
@@ -218,7 +216,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="assistante"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'nomUtilisateur']"
                     >
                       <dx-validator
@@ -242,7 +239,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesClient"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -266,7 +262,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="groupesClient"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -285,7 +280,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesVente"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -500,7 +494,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       (onValueChanged)="onPaysChange($event)"
                     >
@@ -715,7 +708,6 @@
                         [readOnly]="readOnlyMode"
                         [dataSource]="pays"
                         displayExpr="description"
-                        [searchEnabled]="true"
                         [searchExpr]="['id', 'description']"
                         [showClearButton]="true"
                         (onValueChanged)="onNonRequiredSBChange($event)"
@@ -779,7 +771,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="incoterms"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -804,7 +795,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -877,7 +867,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -902,7 +891,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -927,7 +915,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -1041,7 +1028,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -1426,7 +1412,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="courtiers"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [showClearButton]="true"
                       (onValueChanged)="onCourtierChange($event)"
                       [searchExpr]="['id', 'raisonSocial']"
@@ -1448,7 +1433,6 @@
                       "
                       [dataSource]="basesTarif"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1508,7 +1492,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="paloxRaisonSocial"
                       [displayExpr]="displayCodeBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['code', 'raisonSocial']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1573,7 +1556,6 @@
                       "
                       [dataSource]="basesTarif"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1643,7 +1625,6 @@
                     [readOnly]="true"
                     [dataSource]="conditionsVente"
                     displayExpr="id"
-                    [searchEnabled]="true"
                     [searchExpr]="['id', 'description']"
                   >
                     <dx-validator

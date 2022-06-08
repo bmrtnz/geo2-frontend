@@ -1,23 +1,23 @@
-import { Component, Input, OnChanges, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { Component, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, EntrepotsService, LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
+import { DevisesService } from "app/shared/services/api/devises.service";
 import { OrdresFraisService } from "app/shared/services/api/ordres-frais.service";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
-import DataSource from "devextreme/data/data_source";
-import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
+import { TransitairesService } from "app/shared/services/api/transitaires.service";
+import { TypesFraisService } from "app/shared/services/api/types-frais.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
     Grid,
     GridConfig, GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
+import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
+import { environment } from "environments/environment";
+import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ToggledGrid } from "../form/form.component";
-import { TypesFraisService } from "app/shared/services/api/types-frais.service";
-import { DevisesService } from "app/shared/services/api/devises.service";
-import { TransitairesService } from "app/shared/services/api/transitaires.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import notify from "devextreme/ui/notify";
 
 @Component({
     selector: "app-grid-frais",
@@ -25,7 +25,7 @@ import notify from "devextreme/ui/notify";
     styleUrls: ["./grid-frais.component.scss"],
 })
 
-export class GridFraisComponent implements ToggledGrid, OnChanges {
+export class GridFraisComponent implements ToggledGrid {
     @Input() public ordre: Ordre;
     @ViewChild(DxDataGridComponent, { static: true })
     dataGrid: DxDataGridComponent;
@@ -105,7 +105,6 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
         ]);
         this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
         this.selectPhase = false;
-
     }
 
     async enableFilters() {
@@ -146,10 +145,6 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
             this.entrepotSource.filter(filtersEnt);
 
         } else if (this.datagrid) this.datagrid.dataSource = null;
-    }
-
-    ngOnChanges() {
-        this.enableFilters();
     }
 
     onInitNewRow(e) {
@@ -274,6 +269,6 @@ export class GridFraisComponent implements ToggledGrid, OnChanges {
     }
 
     onToggling(toggled: boolean) {
-        toggled ? this.enableFilters() : (this.dataSource = null);
+        toggled && this?.ordre?.id ? this.enableFilters() : (this.dataSource = null);
     }
 }

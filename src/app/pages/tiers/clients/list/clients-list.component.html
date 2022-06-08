@@ -15,7 +15,6 @@
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="0"
-    [scrolling]="{ useNative: true }"
     [columnAutoWidth]="true"
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
@@ -41,7 +40,6 @@
       [showNavigationButtons]="true"
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
 
     <dxi-column
       *ngFor="let column of this.columns | async"

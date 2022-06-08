@@ -33,12 +33,13 @@
     [text]="validBtnText"
     (onClick)="insertArticles()"
   ></dx-button>
-  
+
   <div style="clear:both"></div>
-  <br />
 
   <app-grid-lignes-historique
     [clientId]="clientId"
+    [entrepotId]="entrepotId"
+    [secteurId]="secteurId"
     (selectChange)="selectFromGrid($event)"
     [popupShown]="popupShown"
   ></app-grid-lignes-historique>

@@ -124,9 +124,7 @@
     </dx-button>
   </div>
 
-  <form
-    [formGroup]="formGroup"
-  >
+  <form [formGroup]="formGroup">
     <dx-validation-group name="loginGroup">
       <div class="content-block"></div>
       <div class="ordres-page">
@@ -193,7 +191,7 @@
 
                 <!-- separator -->
                 <span> - </span>
-                
+
                 <span
                   *ngIf="ordre"
                   class="dx-form-group-caption order-status"
@@ -205,7 +203,9 @@
                   >&nbsp;&nbsp;{{ "ordres-ref" | localize }} :
                   {{ refOrdre }}</span
                 >
-                <div class="dx-form-group-content no-padding-bottom order-header">
+                <div
+                  class="dx-form-group-content no-padding-bottom order-header"
+                >
                   <dx-load-panel
                     #loadPanel
                     shadingColor="rgba(0,0,0,0.4)"
@@ -229,7 +229,6 @@
                             formControlName="client"
                             [dataSource]="clientsDS"
                             [displayExpr]="displayCodeBefore"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'raisonSocial']"
                           >
                             <dx-validator
@@ -270,10 +269,7 @@
                           {{ "ordres-referenceClient" | localize }}
                         </div>
                         <div class="dx-field-value">
-                          <dx-text-box 
-                            formControlName="referenceClient"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            >
+                          <dx-text-box formControlName="referenceClient">
                             <dx-validator
                               name="{{ 'ordres-referenceClient' | localize }}"
                             >
@@ -345,8 +341,6 @@
                             formControlName="incoterm"
                             [dataSource]="incotermsDS"
                             [displayExpr]="displayIDBefore"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'description']"
                           >
                             <dx-validator
@@ -372,8 +366,6 @@
                                 formControlName="transporteur"
                                 [dataSource]="transporteursDS"
                                 [displayExpr]="displayIDBefore"
-                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'raisonSocial']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -402,8 +394,6 @@
                                 formControlName="typeTransport"
                                 [dataSource]="typeTransportDS"
                                 [displayExpr]="displayIDBefore"
-                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -430,7 +420,6 @@
                                 [readOnly]="ordreFacture"
                                 class="alignright"
                                 formControlName="prixUnitaireTarifTransport"
-                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                               >
                                 <!-- <dx-validator name="{{ 'ordres-prixUnitaireTarifTransport' | localize }}">
                                         <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -452,8 +441,6 @@
                                 [dataSource]="deviseDS"
                                 [readOnly]="true"
                                 [displayExpr]="displayIDBefore"
-                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -478,8 +465,6 @@
                                 formControlName="baseTarifTransport"
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"
-                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'description']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -500,22 +485,22 @@
                             [readOnly]="ordreFacture"
                             formControlName="instructionsLogistiques"
                             [acceptCustomValue]="true"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             (onValueChanged)="onComChanged()"
                             [items]="instructionsList"
                           >
                             <dxo-drop-down-options [width]="600">
                             </dxo-drop-down-options>
                             <dx-validator
-                            name="{{ 'ordres-instructionsLogistiques' | localize }}"
-                          >
-                            <dxi-validation-rule
-                              type="stringLength"
-                              [max]="255"
-                            ></dxi-validation-rule>
-                          </dx-validator>
+                              name="{{
+                                'ordres-instructionsLogistiques' | localize
+                              }}"
+                            >
+                              <dxi-validation-rule
+                                type="stringLength"
+                                [max]="255"
+                              ></dxi-validation-rule>
+                            </dx-validator>
                           </dx-select-box>
-
                         </div>
                       </div>
                       <!-- Comm interne -->
@@ -528,7 +513,6 @@
                             #comInt
                             [readOnly]="ordreFacture"
                             formControlName="commentaireUsageInterne"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             (onValueChanged)="onComChanged()"
                           >
                             <dx-validator
@@ -557,7 +541,6 @@
                         <div class="dx-field-value">
                           <dx-text-box
                             formControlName="codeChargement"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [readOnly]="ordreFacture"
                           >
                           </dx-text-box>
@@ -595,8 +578,6 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeDDS"
                                 displayExpr="name"
-                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'name']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -637,8 +618,6 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeADS"
                                 displayExpr="name"
-                                (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                                [searchEnabled]="true"
                                 [searchExpr]="['id', 'name']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -657,7 +636,6 @@
                         <div class="dx-field-value small-font">
                           <dx-text-box
                             formControlName="incotermLieu"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
                             [readOnly]="ordreFacture"
                           >
                           </dx-text-box>
@@ -675,8 +653,6 @@
                             [dataSource]="deviseDS"
                             [readOnly]="true"
                             [displayExpr]="deviseDisplayExpr"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'description']"
                           >
                             <dx-validator
@@ -700,8 +676,6 @@
                             [readOnly]="ordreFacture"
                             [dataSource]="commercialDS"
                             [displayExpr]="displayIDBefore"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'nomUtilisateur']"
                           >
                             <dx-validator
@@ -725,8 +699,6 @@
                             [readOnly]="ordreFacture"
                             [dataSource]="assistanteDS"
                             [displayExpr]="displayIDBefore"
-                            (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
-                            [searchEnabled]="true"
                             [searchExpr]="['id', 'nomUtilisateur']"
                           >
                             <dx-validator
@@ -851,6 +823,7 @@
                     [gridLignesLogistique]="gridLignesLogistique"
                     [gridLogistiques]="gridLogistiques"
                     (refreshGridLigneDetail)="refreshGridLigneDetail()"
+                    (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-lignes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
@@ -899,7 +872,6 @@
                               [dataSource]="transporteursDS"
                               displayExpr="raisonSocial"
                               [readOnly]="true"
-                              [searchEnabled]="true"
                               [searchExpr]="['id', 'raisonSocial']"
                             >
                             </dx-select-box>
@@ -1122,6 +1094,7 @@
   <app-editing-alert></app-editing-alert>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
+    [articleRowKey]="articleRowKey"
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-manu-popup>

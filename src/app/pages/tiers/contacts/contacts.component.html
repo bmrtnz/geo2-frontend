@@ -16,15 +16,13 @@
     [allowColumnReordering]="true"
     [showBorders]="true"
     dateSerializationFormat="yyyy-MM-dd"
-    [scrolling]="{
-      useNative: true
-    }"
     (onEditingStart)="onEditingStart($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowInserting)="onRowInserting($event)"
     (onRowClick)="onRowClick($event)"
     (onInitNewRow)="onInitNewRow($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
+    (onSaving)="onSaving($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
@@ -58,7 +56,6 @@
       [selectTextOnEditStart]="true"
     >
     </dxo-editing>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"
@@ -132,7 +129,6 @@
           this[cell.column.dataField + 'Service'].model.getKeyField(),
           this[cell.column.dataField + 'Service'].model.getLabelField()
         ]"
-        [searchEnabled]="true"
         [value]="cell.data[cell.column.dataField]"
         (onValueChanged)="onValueChanged($event, cell)"
       >

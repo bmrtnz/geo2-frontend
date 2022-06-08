@@ -21,7 +21,7 @@
         <dx-button
           class="upperButton"
           type="default"
-          text="{{ 'btn-editer' | localize }}"
+          text="{{ 'btn-modifier' | localize }}"
           [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
@@ -171,7 +171,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="clientsRaisonSocial"
                       [displayExpr]="displayCodeBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['code', 'raisonSocial']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -202,7 +201,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -446,7 +444,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -542,7 +539,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -567,7 +563,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -592,7 +587,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -611,7 +605,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"

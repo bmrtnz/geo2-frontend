@@ -20,9 +20,6 @@
       enableFilters.bind(this)
     )
   "
-  [scrolling]="{
-    useNative: true
-  }"
 >
   <!-- Grid configuration -->
   <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
@@ -51,7 +48,6 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="false"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -94,11 +90,9 @@
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
-      [searchEnabled]="true"
       [readOnly]="!allowMutations"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
-      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       [readOnly]="!allowMutations"
     >
       <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>

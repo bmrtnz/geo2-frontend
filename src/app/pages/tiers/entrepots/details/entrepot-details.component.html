@@ -18,7 +18,7 @@
         <dx-button
           class="upperButton"
           type="default"
-          text="{{ 'btn-editer' | localize }}"
+          text="{{ 'btn-modifier' | localize }}"
           [visible]="readOnlyMode && !createMode"
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
@@ -133,7 +133,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="commercial"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'nomUtilisateur']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -156,7 +155,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="assistante"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'nomUtilisateur']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -366,7 +364,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       (onValueChanged)="onPaysChange($event)"
                     >
@@ -464,7 +461,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     >
                       <dx-validator
@@ -526,7 +522,6 @@
                     [readOnly]="readOnlyMode"
                     [dataSource]="regimesTva"
                     [displayExpr]="displayIDBefore"
-                    [searchEnabled]="true"
                     [searchExpr]="['id', 'description']"
                   >
                     <dx-validator
@@ -550,7 +545,6 @@
                     [readOnly]="readOnlyMode"
                     [dataSource]="typesPalette"
                     [displayExpr]="displayIDBefore"
-                    [searchEnabled]="true"
                     [searchExpr]="['id', 'description']"
                     [showClearButton]="true"
                     (onValueChanged)="onNonRequiredSBChange($event)"
@@ -569,7 +563,6 @@
                     [readOnly]="readOnlyMode"
                     [dataSource]="incoterms"
                     [displayExpr]="displayIDBefore"
-                    [searchEnabled]="true"
                     [searchExpr]="['id', 'description']"
                     [showClearButton]="true"
                     (onValueChanged)="onNonRequiredSBChange($event)"
@@ -788,7 +781,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="transporteurs"
                       [displayExpr]="displayEntrepot"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'raisonSocial']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -807,7 +799,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesTarif"
                       displayExpr="description"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                     ></dx-select-box>
                   </div>
@@ -850,7 +841,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesCamion"
                       displayExpr="description"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -869,7 +859,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="transitaires"
                       displayExpr="raisonSocial"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'raisonSocial']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -888,7 +877,6 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesTarif"
                       displayExpr="description"
-                      [searchEnabled]="true"
                       [searchExpr]="['id', 'description']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"

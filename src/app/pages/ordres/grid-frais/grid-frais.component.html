@@ -5,7 +5,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{ useNative: true }"
   (onEditorPreparing)="onEditorPreparing($event)"
   (onCellClick)="onCellClick($event)"
   (onEditingStart)="onEditingStart($event)"
@@ -45,7 +44,6 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="false"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -99,7 +97,6 @@
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
-      [searchEnabled]="true"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
     >
@@ -116,7 +113,7 @@
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
       [deferRendering]="false"
-      [searchEnabled]="true"
+
       [acceptCustomValue]="true"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"

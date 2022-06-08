@@ -1203,7 +1203,7 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "description",
+        "dataField": "articleDescription",
         "dataType": "string",
         "visible": true
       },
@@ -1719,6 +1719,14 @@
         "visible": false
       },
       {
+        "visibleIndex": 5,
+        "dataField": "article.matierePremiere.origine.description",
+        "dataType": "string",
+        "allowSorting": false,
+        "allowEditing": false,
+        "visible": false
+      },
+      {
         "visibleIndex": 6,
         "dataField": "ordre.client.id",
         "showInColumnChooser": false,
@@ -1730,12 +1738,20 @@
       },
       {
         "visibleIndex": 8,
-        "dataField": "article.matierePremiere.origine.id",
+        "dataField": "article.matierePremiere.espece.id",
         "showInColumnChooser": false,
         "dataType": "string",
         "width": 60,
         "allowSorting": false,
         "allowEditing": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "valide",
+        "showInColumnChooser": false,
+        "allowEditing": false,
+        "width": 23,
         "visible": true
       },
       {
@@ -1844,8 +1860,7 @@
         "visibleIndex": 32,
         "dataField": "achatDevise",
         "allowEditing": false,
-        "width": 45,
-        "cssClass": "two-lines-header",
+        "cssClass": "multi-line-header",
         "dataType": "string",
         "visible": true
       },
@@ -1866,6 +1881,9 @@
         "dataField": "libelleDLV",
         "allowEditing": true,
         "dataType": "string",
+        "cssClass": "headerCellBtnTemplate",
+        "allowSorting": false,
+        "headerCellTemplate": "headerCellBtnTemplate",
         "visible": true
       },
       {
@@ -1914,6 +1932,7 @@
         "visibleIndex": 50,
         "dataField": "articleKit",
         "dataType": "string",
+        "width": 75,
         "allowEditing": true,
         "visible": true
       },
@@ -1926,12 +1945,12 @@
         "visible": true
       },
       {
-        "dataField": "article.matierePremiere.variete.id",
+        "dataField": "article.matierePremiere.origine.id",
         "showInColumnChooser": false,
         "visible": false
       },
       {
-        "dataField": "article.matierePremiere.espece.id",
+        "dataField": "article.matierePremiere.variete.id",
         "showInColumnChooser": false,
         "visible": false
       },
@@ -1962,11 +1981,6 @@
       },
       {
         "dataField": "article.matierePremiere.modeCulture.description",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "article.matierePremiere.origine.description",
         "showInColumnChooser": false,
         "visible": false
       },
@@ -2033,10 +2047,6 @@
       {
         "dataField": "proprietaireMarchandise.listeExpediteurs",
         "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "valide",
         "visible": false
       },
       {
@@ -2156,7 +2166,7 @@
       },
       {
         "visibleIndex": 20,
-        "dataField": "venteUnite.description",
+        "dataField": "venteUnite.id",
         "dataType": "string",
         "visible": true
       },
@@ -2168,7 +2178,7 @@
       },
       {
         "visibleIndex": 24,
-        "dataField": "achatUnite.description",
+        "dataField": "achatUnite.id",
         "dataType": "string",
         "visible": true
       },
@@ -2247,7 +2257,7 @@
       },
       {
         "dataField": "article.matierePremiere.origine.id",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
@@ -2367,7 +2377,6 @@
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
         "width": 100,
-        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -2375,7 +2384,6 @@
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
         "width": 100,
-        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -2465,6 +2473,21 @@
         "dataField": "nombreColisExpedies",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordre.entrepot.code",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.referenceClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.transporteur.id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
@@ -2500,7 +2523,6 @@
         "dataType": "number",
         "cssClass": "multi-line-header",
         "width": 35,
-        "allowEditing": false,
         "visible": true
       },
       {
@@ -2509,7 +2531,6 @@
         "dataType": "number",
         "cssClass": "multi-line-header",
         "width": 35,
-        "allowEditing": false,
         "visible": true
       },
       {
@@ -2518,7 +2539,6 @@
         "dataType": "number",
         "cssClass": "multi-line-header",
         "width": 35,
-        "allowEditing": false,
         "visible": true
       },
       {
@@ -2527,7 +2547,6 @@
         "dataType": "number",
         "cssClass": "multi-line-header",
         "width": 35,
-        "allowEditing": false,
         "visible": true
       },
       {
@@ -2674,7 +2693,7 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "ordre.transporteurDEVCode",
+        "dataField": "ordre.transporteurDEVCode.id",
         "allowEditing": false,
         "visible": false
       },
@@ -3240,7 +3259,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "flux.description",
+        "dataField": "flux.id",
         "dataType": "string",
         "width": "100",
         "allowEditing": false,

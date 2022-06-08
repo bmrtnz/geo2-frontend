@@ -6,7 +6,6 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [focusedRowIndex]="-1"
-  [scrolling]="{ useNative: true }"
   (onCellClick)="onCellClick($event)"
   (onCellDblClick)="openFilePopup($event)"
   (onCellPrepared)="onCellPrepared($event)"
@@ -45,7 +44,6 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="false"></dxo-filter-row>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -101,7 +99,6 @@
         this[cell.column.dataField + 'Service'].model.getKeyField(),
         this[cell.column.dataField + 'Service'].model.getLabelField()
       ]"
-      [searchEnabled]="true"
       [value]="cell.data[cell.column.dataField]"
       (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
@@ -148,9 +145,7 @@
     </dx-date-box>
   </div>
   <div *dxTemplate="let cell of 'simpleElementEditTemplate'">
-    <span class="simpleCellText"
-      >{{ cell.data[cell.column.dataField] }}</span
-    >
+    <span class="simpleCellText">{{ cell.data[cell.column.dataField] }}</span>
     <span>
       <div
         *ngIf="!!cell.data.fournisseurReferenceDOC"

@@ -73,7 +73,7 @@
 }
 
 // No text overline
-body {
+body app-root.production {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
@@ -148,7 +148,7 @@ body {
 .dx-datagrid-rowsview .dx-row>td {
   line-height: 0;
 
-  &>.dx-filemanager-details-item-name-wrapper {
+  &>.dx-filemanager-details-item-name-wrapper, & .dx-datagrid-summary-item {
     line-height: initial;
   }
 }

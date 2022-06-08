@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import { ArticlesService, AuthService } from "app/shared/services";
+import { ArticlesService, AuthService, ClientsService, EntrepotsService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -21,6 +22,9 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 enum InputField {
   dateMin = "dateMin",
   dateMax = "dateMax",
+  secteur = "secteur",
+  client = "client",
+  entrepot = "entrepot"
 }
 
 type Inputs<T = any> = { [key in keyof typeof InputField]: T };
@@ -34,6 +38,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   @Input() popupShown: boolean;
   @Input() public clientId: string;
+  @Input() public entrepotId: string;
+  @Input() public secteurId: string;
   @Input() public fournisseurLigneCode: string;
   @Output() public articleLigneId: string;
   @Output() public ordreLigne: OrdreLigne;
@@ -43,6 +49,9 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
 
+  public secteurs: DataSource;
+  public clients: DataSource;
+  public entrepots: DataSource;
   public certifMDDS: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -62,10 +71,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   public formGroup = new FormGroup({
     dateMin: new FormControl(),
     dateMax: new FormControl(),
+    secteur: new FormControl(),
+    client: new FormControl(),
+    entrepot: new FormControl()
   } as Inputs<FormControl>);
 
   constructor(
     public ordreLignesService: OrdreLignesService,
+    public entrepotsService: EntrepotsService,
+    public clientsService: ClientsService,
+    public secteursService: SecteursService,
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     private dateManagementService: DateManagementService,
@@ -80,6 +95,18 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     this.hintClick = this.localizeService.localize("hint-click-file");
     this.hintNotValid = this.localizeService.localize("hint-not-valid-article");
     this.periodes = this.dateManagementService.periods();
+    this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter([
+      ["valide", "=", true],
+      "and",
+      [
+        "societes",
+        "contains",
+        this.currentCompanyService.getCompany().id,
+      ],
+    ]);
+    this.clients = clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.entrepots = entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
   }
 
   ngAfterViewInit() {
@@ -88,7 +115,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges() {
     this.toRefresh = true;
-    if (this.clientId && this.popupShown) this.enableFilters();
+    if (this.clientId && this.popupShown) {
+      this.clients.filter(["secteur.id", "=", this.secteurId]);
+      this.entrepots.filter(["client.id", "=", this.clientId]);
+      this.formGroup.patchValue({
+        client: { id: this.clientId },
+        entrepot: { id: this.entrepotId },
+        secteur: { id: this.secteurId }
+      });
+      this.enableFilters();
+    }
   }
 
   refreshGrid() {
@@ -110,7 +146,11 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     };
 
     dataSource.filter([
-      ["ordre.client.id", "=", this.clientId],
+      ["ordre.secteurCommercial.id", "=", values.secteur.id],
+      "and",
+      ["ordre.entrepot.id", "=", values.entrepot.id],
+      "and",
+      ["ordre.client.id", "=", values.client.id],
       "and",
       ["ordre.dateDepartPrevue", ">=", values.dateMin],
       "and",
@@ -130,6 +170,17 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   onCellPrepared(e) {
+    if (e.rowType === "group") {
+      // Ajout code entrep. + réf client + (code transp.)
+      if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
+        let data = e.data.items ?? e.data.collapsedItems;
+        data = data[0].ordre;
+        e.cellElement.textContent += " - " +
+          (data.entrepot?.code ?? "") + " - " +
+          (data.referenceClient ? data.referenceClient + " " : "") +
+          (data.transporteur?.id ? "(Transporteur : " + data.transporteur.id + ")" : "");
+      }
+    }
     if (e.rowType === "data") {
 
       // Descript. article
@@ -194,6 +245,44 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  onSecteurChanged(e) {
+    this.onFieldValueChange();
+    this.clients = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.clients.filter(["secteur.id", "=", e.value?.id]);
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.formGroup.patchValue({
+      client: null,
+      entrepot: null
+    });
+    this.onFieldValueChange();
+  }
+
+  onClientChanged(e) {
+    this.onFieldValueChange();
+    this.entrepots = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.entrepots.filter(["client.id", "=", e.value?.id]);
+    this.entrepots.load().then(res => {
+      if (res?.length === 1) this.formGroup.get("entrepot").patchValue({ id: res[0].id });
+    });
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.formGroup.patchValue({
+      entrepot: null
+    });
+    this.onFieldValueChange();
+  }
+
+  onEntrepotChanged(e) {
+    this.onFieldValueChange();
+  }
+
+  onEntrepotFocus(e) {
+    if (!this.formGroup.get("client").value) {
+      notify("Veuillez sélectionner un client", "warning", 3000);
+    }
+  }
+
   manualDate(e) {
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
@@ -242,7 +331,9 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   onFieldValueChange() {
-    this.toRefresh = true;
+    this.toRefresh = !!this.formGroup.get("client").value &&
+      !!this.formGroup.get("entrepot").value &&
+      !!this.formGroup.get("secteur").value;
   }
 
   onSelectionChanged(e) {
@@ -256,6 +347,13 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     }
 
     this.selectChange.emit(e);
+  }
+
+  displayCodeBefore(data) {
+    return data ?
+      ((data.code ? data.code : data.id) + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
+        (data.raisonSocial ? data.raisonSocial : data.description)))
+      : null;
   }
 
 }

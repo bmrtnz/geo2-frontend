@@ -21,6 +21,8 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public clientId: string;
+  @Output() public entrepotId: string;
+  @Output() public secteurId: string;
   @Output() public popupShown: boolean;
 
   visible: boolean;
@@ -54,6 +56,8 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     if (this.ordre) {
       this.titleMid = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero + " - " + this.ordre.client.raisonSocial;
       this.clientId = this.ordre.client.id;
+      this.entrepotId = this.ordre.entrepot.id;
+      this.secteurId = this.ordre.secteurCommercial.id;
     }
     this.titleEnd = this.localizeService.localize("via-histo-client");
   }
@@ -109,13 +113,18 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     from(this.chosenArticles)
       .pipe(
         concatMap(articleID => this.functionsService
-          .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
+          .ofInitArticleHistory(
+            this.ordre.id,
+            articleID,
+            this.currentCompanyService.getCompany().id,
+            this.gridLignesHisto.datagrid.instance.getSelectedRowKeys()[0]
+          )
           .valueChanges
           .pipe(takeWhile(res => res.loading))
         ),
       )
       .subscribe({
-        error: ({ message }: Error) => notify(message),
+        error: ({ message }: Error) => notify(message, "error"),
         complete: () => this.clearAndHidePopup(),
       });
   }

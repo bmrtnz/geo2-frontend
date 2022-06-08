@@ -2,7 +2,8 @@
 @import "~themes/generated/variables.base";
 @import "~scss/variables.scss";
 
-.down-move-button,
+
+::ng-deep .down-move-button,
 .up-move-button {
   position: absolute;
   z-index: 2;
@@ -23,6 +24,46 @@
 }
 
 ::ng-deep .grid-ordre-ligne {
+
+  .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type) {
+    pointer-events: none;
+
+    &.headerCellBtnTemplate {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      text-align: center !important;
+
+      .small-article-button {
+        margin-top: 2px;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  .swap-button {
+    width: 22px !important;
+    height: 22px;
+    min-width: 0 !important;
+    background-color: transparent !important;
+    margin-bottom: 0 !important;
+
+    .dx-button-content {
+      padding: 0 !important;
+
+      .dx-icon {
+        color: $base-accent;
+      }
+    }
+  }
+
+  .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+
+    input,
+    div {
+      color: #fff;
+    }
+  }
+
   td:first-of-type input {
     text-align: center !important;
   }
@@ -47,11 +88,11 @@
 
   .dx-row-focused.dx-data-row>td {
     // border-bottom-color: #e0e0e0 !important;
-    border-bottom-color: $base-accent !important;
+    border-bottom-color: $base-accent  !important;
   }
 
   .dx-link-delete {
-    color: $base-accent !important;
+    color: $base-accent  !important;
     background-color: transparent !important;
   }
 
@@ -62,31 +103,33 @@
   .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
     padding: 0 !important;
   }
-}
 
-::ng-deep .small-article-button {
-  height: 18px;
-  min-width: 0;
-  padding: 0 4px !important;
+  .small-article-button {
+    height: 18px;
+    min-width: 0;
+    padding: 0 4px !important;
 
-  .dx-button-content {
-    padding: 0;
-    font-size: 10px;
-    text-overflow: initial;
+    .dx-button-content {
+      padding: 0;
+      font-size: 10px;
+      text-overflow: initial;
 
-    .dx-button-text {
-      line-height: 19px;
+      .dx-button-text {
+        line-height: 19px;
+      }
+    }
+
+    &.certification {
+      background-color: $BW-purple-medium  !important;
+
+      &:hover {
+        background-color: $BW-purple-dark  !important;
+      }
     }
   }
 
-  &.certification {
-    background-color: $BW-purple-medium !important;
-
-    &:hover {
-      background-color: $BW-purple-dark !important;
-    }
-  }
 }
+
 
 ::ng-deep .cursor-pointer,
 ::ng-deep .cursor-pointer input {

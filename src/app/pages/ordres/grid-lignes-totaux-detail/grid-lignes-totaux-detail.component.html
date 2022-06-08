@@ -6,9 +6,6 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [scrolling]="{
-    useNative: true
-  }"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Totaux détail',
@@ -33,7 +30,6 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"

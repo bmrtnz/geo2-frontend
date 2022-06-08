@@ -90,7 +90,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
         ),
       )
       .subscribe({
-        error: ({ message }: Error) => notify(message),
+        error: ({ message }: Error) => notify(message, "error"),
         complete: () => this.clearAndHidePopup(),
       });
 

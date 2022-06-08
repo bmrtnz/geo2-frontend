@@ -16,7 +16,6 @@
                 formControlName="bureauAchat"
                 [dataSource]="bureauxAchat"
                 [displayExpr]="displayCodeBefore"
-                [searchEnabled]="true"
                 [searchExpr]="['id', 'raisonSocial']"
                 (onValueChanged)="filterFournisseurs($event)"
                 [showClearButton]="true"
@@ -35,7 +34,6 @@
                 formControlName="secteurCommercial"
                 [dataSource]="secteurs"
                 displayExpr="description"
-                [searchEnabled]="true"
                 searchExpr="description"
               >
               </dx-select-box>
@@ -52,7 +50,6 @@
                 [dataSource]="fournisseurs"
                 [displayExpr]="displayCodeBefore"
                 [showClearButton]="true"
-                [searchEnabled]="true"
                 [searchExpr]="['code', 'raisonSocial']"
                 [showClearButton]="true"
               >
@@ -187,9 +184,6 @@
     [allowColumnReordering]="true"
     (onContentReady)="showHidePrices()"
     (onCellPrepared)="onCellPrepared($event)"
-    [scrolling]="{
-      useNative: true
-    }"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
@@ -225,7 +219,6 @@
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"

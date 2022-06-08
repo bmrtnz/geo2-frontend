@@ -28,7 +28,7 @@
       <dx-button
         class="upperButton"
         type="default"
-        text="{{ 'btn-editer' | localize }}"
+        text="{{ 'btn-modifier' | localize }}"
         [visible]="
           readOnlyMode && authService.currentUser.accessGeoProduct && !cloneMode
         "
@@ -144,7 +144,6 @@
                   [disabled]="true"
                   [dataSource]="especes"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                   (onValueChanged)="onEspeceChange($event)"
                 >
@@ -227,7 +226,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="varietes"
                   [displayExpr]="displayIDBefore"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -252,7 +250,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="types"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>
@@ -272,7 +269,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="modesCulture"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -299,7 +295,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="origines"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -324,7 +319,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="calibresUnifies"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -351,7 +345,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="typesVente"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -413,7 +406,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="categories"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -438,7 +430,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="colorations"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -465,7 +456,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="sucres"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -490,7 +480,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="penetros"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -515,7 +504,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="cirages"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>
@@ -535,7 +523,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="rangements"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -597,7 +584,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="emballages"
                   [displayExpr]="displayIDBefore"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -622,7 +608,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="conditionsSpecials"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>
@@ -642,7 +627,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="alveoles"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>
@@ -745,7 +729,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="identificationsSymboliques"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>
@@ -795,7 +778,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="stickeurs"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -831,7 +813,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="marques"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -856,7 +837,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="calibresMarquage"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                   <dx-validator
@@ -884,7 +864,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesColis"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>
@@ -917,7 +896,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesUc"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>
@@ -952,7 +930,6 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesEvenementielle"
                   displayExpr="description"
-                  [searchEnabled]="true"
                   [searchExpr]="['id', 'description']"
                 >
                 </dx-select-box>

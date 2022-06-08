@@ -113,6 +113,21 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
                 e.cellElement.innerText = infoArt.concatDesc;
                 e.cellElement.title = infoArt.concatDesc.substring(2) + "\r\n";
             }
+            // Higlight important columns
+            if ([
+                "nombrePalettesExpediees",
+                "nombreColisExpedies",
+                "poidsNetExpedie",
+                "poidsBrutExpedie",
+                "venteQuantite",
+                "achatQuantite",
+                "typePalette",
+                "paletteInter",
+                "referenceControleQualite"
+            ].includes(e.column.dataField)) {
+                // Bold text
+                e.cellElement.classList.add("bold-grey-light");
+            }
         }
     }
 
@@ -168,9 +183,9 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     showModifButton(cell) {
         const data = cell.data;
         const show = data.logistique.expedieStation && (
-            data.ordre.client.modificationDetail !== false ||
-            data.fournisseur.indicateurModificationDetail !== false ||
-            (data.fournisseur.indicateurModificationDetail === false && data.article.emballage.emballage.groupe.id === "PALOX") ||
+            data.ordre.client.modificationDetail ||
+            data.fournisseur.indicateurModificationDetail ||
+            (data.fournisseur.indicateurModificationDetail && data.article.emballage.emballage.groupe.id === "PALOX") ||
             data.ordre.secteurCommercial.id === "IND" ||
             data.ordre.secteurCommercial.id === "PAL" ||
             data.ordre.societe.id === "IMP" ||
@@ -193,10 +208,11 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
             show = false;
         } else {
             show = (
-                data.ordre.client.modificationDetail !== false ||
-                data.fournisseur.indicateurModificationDetail !== false ||
+                data.ordre.client.modificationDetail ||
+                data.fournisseur.indicateurModificationDetail ||
                 data.ordre.secteurCommercial.id === "PAL" ||
                 this.authService.currentUser.geoClient === "2" ||
+                data.ordre.societe.id === "IMP" ||
                 data.ordre.societe.id === "UDC" ||
                 data.article.cahierDesCharge.espece.id.substring(0, 5) === "EMBAL" ||
                 data.ordre.type.id === "REP" ||
@@ -210,6 +226,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         }
         return show;
     }
+
 }
 
 

@@ -65,4 +65,13 @@
       background-color: $BW-green-dark !important;
     }
   }
+
+}
+
+::ng-deep .bold-grey-light {
+  background-color: #EEE;
+
+  input {
+    font-weight: bold;
+  }
 }
