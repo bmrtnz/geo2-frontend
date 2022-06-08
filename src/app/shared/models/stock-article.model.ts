@@ -73,6 +73,9 @@ export class StockArticle extends Model {
   quantiteOptionnelle1: number;
 
   @Field()
+  quantiteCalculee1: number;
+
+  @Field()
   quantiteInitiale2: number;
 
   @Field()
@@ -80,6 +83,9 @@ export class StockArticle extends Model {
 
   @Field()
   quantiteOptionnelle2: number;
+
+  @Field()
+  quantiteCalculee2: number;
 
   @Field()
   quantiteInitiale3: number;
@@ -91,6 +97,9 @@ export class StockArticle extends Model {
   quantiteOptionnelle3: number;
 
   @Field()
+  quantiteCalculee3: number;
+
+  @Field()
   quantiteInitiale4: number;
 
   @Field()
@@ -98,6 +107,9 @@ export class StockArticle extends Model {
 
   @Field()
   quantiteOptionnelle4: number;
+
+  @Field()
+  quantiteCalculee4: number;
 }
 
 export default StockArticle;

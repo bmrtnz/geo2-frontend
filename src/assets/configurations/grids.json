@@ -1261,44 +1261,20 @@
         "dataField": "typePaletteID"
       },
       {
-        "dataField": "quantiteInitiale1"
-      },
-      {
-        "dataField": "quantiteRestante1",
+        "dataField": "quantiteCalculee1",
         "visible": true
       },
       {
-        "dataField": "quantiteOptionnelle1"
-      },
-      {
-        "dataField": "quantiteInitiale2"
-      },
-      {
-        "dataField": "quantiteRestante2",
+        "dataField": "quantiteCalculee2",
         "visible": true
       },
       {
-        "dataField": "quantiteOptionnelle2"
-      },
-      {
-        "dataField": "quantiteInitiale3"
-      },
-      {
-        "dataField": "quantiteRestante3",
+        "dataField": "quantiteCalculee3",
         "visible": true
       },
       {
-        "dataField": "quantiteOptionnelle3"
-      },
-      {
-        "dataField": "quantiteInitiale4"
-      },
-      {
-        "dataField": "quantiteRestante4",
+        "dataField": "quantiteCalculee4",
         "visible": true
-      },
-      {
-        "dataField": "quantiteOptionnelle4"
       }
     ]
   },
