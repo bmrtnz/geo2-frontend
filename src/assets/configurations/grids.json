@@ -2870,6 +2870,11 @@
       {
         "dataField": "description",
         "visible": false
+      },
+      {
+        "dataField": "campagneID",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
@@ -3612,6 +3617,11 @@
       {
         "dataField": "flagEntrepot",
         "visible": false
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
@@ -3778,6 +3788,11 @@
       },
       {
         "dataField": "venteUnite.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.campagne.id",
         "showInColumnChooser": false,
         "visible": false
       }

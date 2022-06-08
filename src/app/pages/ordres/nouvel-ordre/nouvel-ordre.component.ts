@@ -141,7 +141,7 @@ export class NouvelOrdreComponent implements OnInit {
           this.showError(`${err.name}: ${err.message}`), EMPTY
         ),
       ),
-      tap(({ numero }) => this.tabContext.openOrdre(numero)),
+      tap(({ numero }) => this.tabContext.openOrdre(numero, this.societe.campagne.id)),
       debounceTime(2000),
       first(),
     );
