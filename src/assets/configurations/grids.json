@@ -1317,40 +1317,46 @@
         "visible": true
       },
       {
-        "visibleIndex": 2,
-        "dataField": "numeroFacture",
-        "dataType": "string",
-        "visible": true
-      },
-      {
         "visibleIndex": 3,
-        "dataField": "client.raisonSocial",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 4,
-        "dataField": "referenceClient",
+        "dataField": "client.code",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 5,
+        "dataField": "codeAlphaEntrepot",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "referenceClient",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
         "dataField": "dateDepartPrevue",
         "dataType": "date",
         "format": "dd-MM-yyyy",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 11,
         "dataField": "dateLivraisonPrevue",
         "dataType": "date",
         "format": "dd-MM-yyyy",
         "visible": true
       },
       {
-        "visibleIndex": 7,
+        "visibleIndex": 12,
         "dataField": "secteurCommercial.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "numeroFacture",
         "dataType": "string",
         "visible": true
       },
@@ -1602,6 +1608,10 @@
       {
         "dataField": "entrepot.id",
         "dataType": "string"
+      },
+      {
+        "dataField": "entrepot.code",
+        "dataType": "string"
       }
     ]
   },
@@ -1705,6 +1715,7 @@
         "allowEditing": false,
         "allowSorting": true,
         "cssClass": "small-left-padding",
+        "fixed": true,
         "width": 250,
         "visible": true
       },
@@ -1715,6 +1726,7 @@
         "allowEditing": false,
         "allowSorting": true,
         "cssClass": "small-left-padding",
+        "fixed": true,
         "width": 250,
         "visible": false
       },
@@ -1812,15 +1824,13 @@
         "visibleIndex": 22,
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
-        "width": 45,
-        "cssClass": "multi-line-header",
+        "width": 95,
         "allowEditing": true,
         "visible": true
       },
       {
         "visibleIndex": 24,
         "dataField": "venteUnite",
-        "dataType": "number",
         "width": 130,
         "allowEditing": true,
         "visible": true
@@ -1843,8 +1853,7 @@
         "visibleIndex": 28,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
-        "width": 45,
-        "cssClass": "multi-line-header",
+        "width": 95,
         "allowEditing": true,
         "visible": true
       },
@@ -2202,6 +2211,13 @@
         "visible": true
       },
       {
+        "visibleIndex": 32,
+        "dataField": "libelleDLV",
+        "dataType": "string",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
         "dataField": "id",
         "visible": false
       },
@@ -2495,9 +2511,10 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "dataType": "string",
         "allowEditing": false,
+        "showInColumnChooser": false,
         "fixed": true,
         "visible": true
       },
@@ -2507,6 +2524,7 @@
         "dataType": "boolean",
         "cssClass": "multi-line-header",
         "allowEditing": false,
+        "showInColumnChooser": false,
         "fixed": true,
         "visible": true
       },
@@ -2606,6 +2624,7 @@
         "visibleIndex": 30,
         "cellTemplate": "histoBtnTemplate",
         "cssClass": "multi-line-header",
+        "showInColumnChooser": false,
         "allowEditing": false,
         "width": 80,
         "visible": true
