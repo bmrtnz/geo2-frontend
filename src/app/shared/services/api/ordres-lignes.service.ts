@@ -272,7 +272,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       }
       case "gratuit": {
         if (data.ordre.venteACommission !== true
-          && (data.logistique.expedieStation === true
+          && (data.ordre.bonAFacturer === true
             || bloquer === true)
         ) this.lock(e);
         break;

@@ -124,9 +124,7 @@
     </dx-button>
   </div>
 
-  <form
-    [formGroup]="formGroup"
-  >
+  <form [formGroup]="formGroup">
     <dx-validation-group name="loginGroup">
       <div class="content-block"></div>
       <div class="ordres-page">
@@ -153,7 +151,7 @@
                     text="{{ linkedOrder.ordre.numero }} ({{
                       linkedOrder.criteria
                     }})"
-                    (onClick)="openLinkedOrder(linkedOrder.ordre.numero)"
+                    (onClick)="openLinkedOrder(linkedOrder.ordre)"
                   >
                   </dx-button>
                 </div>
@@ -205,7 +203,9 @@
                   >&nbsp;&nbsp;{{ "ordres-ref" | localize }} :
                   {{ refOrdre }}</span
                 >
-                <div class="dx-form-group-content no-padding-bottom order-header">
+                <div
+                  class="dx-form-group-content no-padding-bottom order-header"
+                >
                   <dx-load-panel
                     #loadPanel
                     shadingColor="rgba(0,0,0,0.4)"
@@ -269,9 +269,7 @@
                           {{ "ordres-referenceClient" | localize }}
                         </div>
                         <div class="dx-field-value">
-                          <dx-text-box
-                            formControlName="referenceClient"
-                            >
+                          <dx-text-box formControlName="referenceClient">
                             <dx-validator
                               name="{{ 'ordres-referenceClient' | localize }}"
                             >
@@ -493,15 +491,16 @@
                             <dxo-drop-down-options [width]="600">
                             </dxo-drop-down-options>
                             <dx-validator
-                            name="{{ 'ordres-instructionsLogistiques' | localize }}"
-                          >
-                            <dxi-validation-rule
-                              type="stringLength"
-                              [max]="255"
-                            ></dxi-validation-rule>
-                          </dx-validator>
+                              name="{{
+                                'ordres-instructionsLogistiques' | localize
+                              }}"
+                            >
+                              <dxi-validation-rule
+                                type="stringLength"
+                                [max]="255"
+                              ></dxi-validation-rule>
+                            </dx-validator>
                           </dx-select-box>
-
                         </div>
                       </div>
                       <!-- Comm interne -->
@@ -824,6 +823,7 @@
                     [gridLignesLogistique]="gridLignesLogistique"
                     [gridLogistiques]="gridLogistiques"
                     (refreshGridLigneDetail)="refreshGridLigneDetail()"
+                    (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-lignes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
@@ -1094,6 +1094,7 @@
   <app-editing-alert></app-editing-alert>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
+    [articleRowKey]="articleRowKey"
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-manu-popup>

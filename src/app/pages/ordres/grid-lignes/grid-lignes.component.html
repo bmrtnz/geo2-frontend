@@ -39,6 +39,7 @@
     (onSaved)="cellValueChange($event)"
     (onEditingStart)="onEditingStart($event)"
     (onContentReady)="onContentReady()"
+    (onRowRemoved)="onRowRemoved()"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Lignes de commande',
@@ -104,6 +105,7 @@
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
       [editCellTemplate]="defineTemplate(column.dataField)"
+      [headerCellTemplate]="column?.headerCellTemplate"
       allowSearch="false"
       [allowHeaderFiltering]="false"
       [allowReordering]="false"
@@ -189,6 +191,28 @@
         (onClick)="openCertificationPopup(cell.data)"
       ></dx-button>
     </div>
+    <div *dxTemplate="let cell of 'swapButtonTemplate'">
+      <dx-button
+        class="swap-button"
+        type="default"
+        [focusStateEnabled]="false"
+        icon="material-icons swap_horizontal_circle"
+        [disabled]="!allowMutations"
+        hint="Remplacer"
+        (onClick)="swapArticle(cell.data)"
+      ></dx-button>
+    </div>
+    <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
+      <div>{{ 'ordreLignes-' + cell.column.dataField?.split('.').join('-') | localize }}</div>
+      <dx-button
+        class="small-article-button"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="'Reporter'"
+        (onClick)="copyPaste($event, cell.column.dataField)"
+      ></dx-button>
+    </div>
+
   </dx-data-grid>
 </div>
 <app-zoom-article-popup

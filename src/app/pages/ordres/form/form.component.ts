@@ -1,5 +1,5 @@
 import {
-  Component, ElementRef, EventEmitter, OnDestroy, OnInit,
+  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit,
   Output, QueryList, ViewChild, ViewChildren
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
@@ -71,6 +71,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
   @Output() public ordre: Ordre;
   @Output() openArticleManuPopup = new EventEmitter<any>();
+  @Output() articleRowKey: string;
 
   private readonly headerFields = [
     "id",
@@ -349,7 +350,8 @@ export class FormComponent implements OnInit, OnDestroy {
     this.fileManagerComponent.visible = true;
   }
 
-  onArticleManClick() {
+  onArticleManClick(e?) {
+    this.articleRowKey = e;
     this.ajoutArtManu.visible = true;
   }
 
@@ -400,7 +402,7 @@ export class FormComponent implements OnInit, OnDestroy {
     if (refClt) {
       this.linkedOrdersSearch = true;
       const numero = this.ordre.numero;
-      const ordresSource = this.ordresService.getDataSource_v2(["id", "numero"]);
+      const ordresSource = this.ordresService.getDataSource_v2(["id", "numero", "campagne.id"]);
       ordresSource.filter([
         ["client.id", "=", this.ordre.client.id],
         "and",
@@ -441,8 +443,8 @@ export class FormComponent implements OnInit, OnDestroy {
     if (!refClt) this.linkedOrdersSearch = false;
   }
 
-  openLinkedOrder(numero: string) {
-    this.tabContext.openOrdre(numero);
+  openLinkedOrder(ordre: Partial<Ordre>) {
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 
   cancelClick() {
@@ -477,13 +479,13 @@ export class FormComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(
         first(),
-        map(params => params.get(RouteParam.TabID)),
-        switchMap(id => {
-          if (id === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
+        map(params => this.tabContext.parseTabID(params.get(RouteParam.TabID))),
+        switchMap(([numero, campagneID]) => {
+          if (numero === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
           return this.ordresService
-            .getOneByNumeroAndSociete(id, currentCompany.id, this.headerFields)
+            .getOneByNumeroAndSocieteAndCampagne(numero, currentCompany.id, campagneID, this.headerFields)
             .valueChanges
-            .pipe(map(res => res.data.ordreByNumeroAndSociete));
+            .pipe(map(res => res.data.ordreByNumeroAndSocieteAndCampagne));
         }),
       )
       .subscribe(ordre => {
@@ -651,16 +653,17 @@ export class FormComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(
         first(),
-        map(params => params.get(RouteParam.TabID)),
-        concatMap(numero => this.ordresService
-          .getOneByNumeroAndSociete(
+        map(params => this.tabContext.parseTabID(params.get(RouteParam.TabID))),
+        concatMap(([numero, campagneID]) => this.ordresService
+          .getOneByNumeroAndSocieteAndCampagne(
             numero,
             this.currentCompanyService.getCompany().id,
+            campagneID,
             ["id", "statut"],
           )
           .valueChanges),
         takeWhile(res => res.loading),
-        map(res => res.data.ordreByNumeroAndSociete),
+        map(res => res.data.ordreByNumeroAndSocieteAndCampagne),
       )
       .subscribe({
         next: ordre => this.refreshStatus(ordre.statut),

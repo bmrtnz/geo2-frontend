@@ -73,13 +73,14 @@
           [searchExpr]="['code', 'raisonSocial']"
           (onValueChanged)="onEntrepotChanged($event)"
           (onFocusIn)="onEntrepotFocus($event)"
+          [showClearButton]="true"
         >
           <dx-validator
             name="{{ 'tiers-entrepot' | localize }}"
           >
-            <dxi-validation-rule
+            <!-- <dxi-validation-rule
               type="required"
-            ></dxi-validation-rule>
+            ></dxi-validation-rule> -->
           </dx-validator>
           <dxo-drop-down-options [width]="350">
           </dxo-drop-down-options>

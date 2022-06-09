@@ -45,6 +45,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @Output() public fournisseurLigneId: string;
   @Output() public fournisseurCode: string;
   @Output() refreshGridLigneDetail = new EventEmitter();
+  @Output() swapRowArticle = new EventEmitter();
 
   public certifMDDS: DataSource;
   public dataSource: DataSource;
@@ -300,6 +301,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
     if (field === "article.matierePremiere.espece.id") templ = "origineTemplate";
     if (field === "ordre.client.id") templ = "certificationTemplate";
+    if (field === "valide") templ = "swapButtonTemplate";
     return templ ? templ : false;
   }
 
@@ -309,6 +311,10 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   showOriginCheck(data) {
     return this.originText + (data.origineCertification ? " ✓" : "");
+  }
+
+  swapArticle(cell) {
+    this.swapRowArticle.emit(cell.id);
   }
 
   showCertificationCheck(data) {
@@ -469,6 +475,28 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.filterFournisseurDS(filters);
     return [newFourId, newFourCode];
 
+  }
+
+  onRowRemoved() {
+    // Refresh 2 other grids
+    this.gridLignesLogistique.refresh();
+    this.refreshGridLigneDetail.emit(true);
+  }
+
+  copyPaste(e, field) {
+    e.event.stopImmediatePropagation();
+    let refValue;
+    const rows = this.datagrid.instance.getVisibleRows();
+    if (rows?.length < 2) return;
+    rows.map((res, index) => {
+      if (!index) {
+        refValue = res.data.libelleDLV;
+      } else {
+        this.datagrid.instance.cellValue(res.rowIndex, field, refValue);
+      }
+    });
+    setTimeout(() => this.datagrid.instance.saveEditData());
+    notify("Report DLUO effectué", "success", 3000);
   }
 
   private handleCellChangeEventResponse<T>(): PartialObserver<T> {

@@ -3,6 +3,12 @@
 
 ::ng-deep .ajout-articles-manu-popup {
 
+  .max-tags {
+    input {
+      display: none !important;
+    }
+  }
+
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
 

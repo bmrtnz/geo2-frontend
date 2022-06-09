@@ -145,17 +145,21 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       ...this.formGroup.value,
     };
 
-    dataSource.filter([
+    const filter = [
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
-      "and",
-      ["ordre.entrepot.id", "=", values.entrepot.id],
       "and",
       ["ordre.client.id", "=", values.client.id],
       "and",
       ["ordre.dateDepartPrevue", ">=", values.dateMin],
       "and",
-      ["ordre.dateDepartPrevue", "<=", values.dateMax],
-    ]);
+      ["ordre.dateDepartPrevue", "<=", values.dateMax]
+    ];
+    if (values.entrepot?.id) {
+      filter.push("and",
+        ["ordre.entrepot.id", "=", values.entrepot?.id],
+        "and");
+    }
+    dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
 
   }
@@ -173,7 +177,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "group") {
       // Ajout code entrep. + réf client + (code transp.)
       if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
-        const data = e.data.items[0].ordre;
+        let data = e.data.items ?? e.data.collapsedItems;
+        data = data[0].ordre;
         e.cellElement.textContent += " - " +
           (data.entrepot?.code ?? "") + " - " +
           (data.referenceClient ? data.referenceClient + " " : "") +
@@ -331,7 +336,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   onFieldValueChange() {
     this.toRefresh = !!this.formGroup.get("client").value &&
-      !!this.formGroup.get("entrepot").value &&
+      // !!this.formGroup.get("entrepot").value &&
       !!this.formGroup.get("secteur").value;
   }
 
