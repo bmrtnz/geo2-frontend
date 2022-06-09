@@ -4,10 +4,16 @@ import { Field, Model, ModelName } from "./model";
 export class StockArticle extends Model {
 
   @Field({ asKey: true })
-  id: string;
+  id: number;
 
   @Field({ asLabel: true })
   articleDescription: string;
+
+  @Field()
+  articleID: string;
+
+  @Field()
+  descriptionAbregee: string;
 
   @Field()
   bio: boolean;

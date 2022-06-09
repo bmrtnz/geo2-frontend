@@ -1195,16 +1195,16 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id",
+        "dataField": "articleID",
         "dataType": "string",
         "width": 100,
-        "visible": true,
-        "groupIndex": 0
+        "visible": true
       },
       {
         "visibleIndex": 1,
         "dataField": "articleDescription",
         "dataType": "string",
+        "groupIndex": 0,
         "visible": true
       },
       {
@@ -1219,61 +1219,83 @@
         "selectedFilterOperation": "="
       },
       {
-        "dataField": "stockID"
+        "dataField": "stockID",
+        "visible": false
       },
       {
-        "dataField": "origineID"
+        "dataField": "origineID",
+        "visible": false
       },
       {
-        "dataField": "varieteID"
+        "dataField": "varieteID",
+        "visible": false
       },
       {
-        "dataField": "especeID"
+        "dataField": "especeID",
+        "visible": false
       },
       {
-        "dataField": "categorieID"
+        "dataField": "categorieID",
+        "visible": false
       },
       {
-        "dataField": "colisID"
+        "dataField": "colisID",
+        "visible": false
       },
       {
-        "dataField": "calibreMarquageID"
+        "dataField": "calibreMarquageID",
+        "visible": false
       },
       {
-        "dataField": "calibreFournisseurID"
+        "dataField": "calibreFournisseurID",
+        "visible": false
       },
       {
-        "dataField": "fournisseurCode"
+        "dataField": "fournisseurCode",
+        "visible": false
       },
       {
-        "dataField": "proprietaireCode"
+        "dataField": "proprietaireCode",
+        "visible": false
       },
       {
-        "dataField": "dateFabrication"
+        "dataField": "dateFabrication",
+        "visible": false
       },
       {
-        "dataField": "statut"
+        "dataField": "statut",
+        "visible": false
       },
       {
-        "dataField": "dateStatut"
+        "dataField": "dateStatut",
+        "visible": false
       },
       {
-        "dataField": "typePaletteID"
+        "dataField": "typePaletteID",
+        "visible": false
       },
       {
         "dataField": "quantiteCalculee1",
+        "width": 100,
         "visible": true
       },
       {
         "dataField": "quantiteCalculee2",
+        "width": 100,
         "visible": true
       },
       {
         "dataField": "quantiteCalculee3",
+        "width": 100,
         "visible": true
       },
       {
         "dataField": "quantiteCalculee4",
+        "width": 100,
+        "visible": true
+      },
+      {
+        "dataField": "descriptionAbregee",
         "visible": true
       }
     ]
