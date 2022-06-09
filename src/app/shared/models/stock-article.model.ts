@@ -67,37 +67,49 @@ export class StockArticle extends Model {
   quantiteInitiale1: number;
 
   @Field()
-  quantiteRestante1: number;
+  quantiteReservee1: number;
 
   @Field()
   quantiteOptionnelle1: number;
 
   @Field()
+  quantiteCalculee1: number;
+
+  @Field()
   quantiteInitiale2: number;
 
   @Field()
-  quantiteRestante2: number;
+  quantiteReservee2: number;
 
   @Field()
   quantiteOptionnelle2: number;
 
   @Field()
+  quantiteCalculee2: number;
+
+  @Field()
   quantiteInitiale3: number;
 
   @Field()
-  quantiteRestante3: number;
+  quantiteReservee3: number;
 
   @Field()
   quantiteOptionnelle3: number;
 
   @Field()
+  quantiteCalculee3: number;
+
+  @Field()
   quantiteInitiale4: number;
 
   @Field()
-  quantiteRestante4: number;
+  quantiteReservee4: number;
 
   @Field()
   quantiteOptionnelle4: number;
+
+  @Field()
+  quantiteCalculee4: number;
 }
 
 export default StockArticle;

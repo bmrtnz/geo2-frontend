@@ -303,7 +303,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   onCellClick(e) {
     if (e.column.dataField !== "numeroOrdre") return;
     e.event.stopImmediatePropagation();
-    this.tabContext.openOrdre(e.data.numeroOrdre);
+    this.tabContext.openOrdre(e.data.numeroOrdre, e.data.campagneID);
   }
 
   launch(e) { }
