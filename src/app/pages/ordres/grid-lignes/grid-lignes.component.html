@@ -30,6 +30,14 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    [keyboardNavigation]="{
+      enterKeyAction: 'moveFocus',
+      enterKeyDirection: 'column',
+      editOnKeyPress: true
+    }"
+    [editing]="{
+      mode: 'cell'
+    }"
     (onCellPrepared)="onCellPrepared($event)"
     (onEditorPrepared)="onEditorPrepared($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
@@ -203,7 +211,12 @@
       ></dx-button>
     </div>
     <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
-      <div>{{ 'ordreLignes-' + cell.column.dataField?.split('.').join('-') | localize }}</div>
+      <div>
+        {{
+          "ordreLignes-" + cell.column.dataField?.split(".").join("-")
+            | localize
+        }}
+      </div>
       <dx-button
         class="small-article-button"
         type="default"
@@ -212,7 +225,6 @@
         (onClick)="copyPaste($event, cell.column.dataField)"
       ></dx-button>
     </div>
-
   </dx-data-grid>
 </div>
 <app-zoom-article-popup
