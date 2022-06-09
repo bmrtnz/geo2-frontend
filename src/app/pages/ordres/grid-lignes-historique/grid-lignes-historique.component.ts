@@ -145,17 +145,21 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       ...this.formGroup.value,
     };
 
-    dataSource.filter([
+    const filter = [
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
-      "and",
-      ["ordre.entrepot.id", "=", values.entrepot.id],
       "and",
       ["ordre.client.id", "=", values.client.id],
       "and",
       ["ordre.dateDepartPrevue", ">=", values.dateMin],
       "and",
-      ["ordre.dateDepartPrevue", "<=", values.dateMax],
-    ]);
+      ["ordre.dateDepartPrevue", "<=", values.dateMax]
+    ];
+    if (values.entrepot?.id) {
+      filter.push("and",
+        ["ordre.entrepot.id", "=", values.entrepot?.id],
+        "and");
+    }
+    dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
 
   }
@@ -332,7 +336,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   onFieldValueChange() {
     this.toRefresh = !!this.formGroup.get("client").value &&
-      !!this.formGroup.get("entrepot").value &&
+      // !!this.formGroup.get("entrepot").value &&
       !!this.formGroup.get("secteur").value;
   }
 

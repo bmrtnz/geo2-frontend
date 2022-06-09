@@ -496,7 +496,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       }
     });
     setTimeout(() => this.datagrid.instance.saveEditData());
-    notify("Report DLV effectué", "success", 3000);
+    notify("Report DLUO effectué", "success", 3000);
   }
 
   private handleCellChangeEventResponse<T>(): PartialObserver<T> {
