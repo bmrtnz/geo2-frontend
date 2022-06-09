@@ -30,21 +30,14 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
-    [keyboardNavigation]="{
-      enterKeyAction: 'moveFocus',
-      enterKeyDirection: 'column',
-      editOnKeyPress: true
-    }"
-    [editing]="{
-      mode: 'cell'
-    }"
+    [repaintChangesOnly]="true"
     (onCellPrepared)="onCellPrepared($event)"
     (onEditorPrepared)="onEditorPrepared($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
     (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onCellDblClick)="openFilePopup($event)"
     (onCellClick)="onCellClick($event)"
-    (onSaved)="cellValueChange($event)"
+    (onSaving)="onSaving($event)"
     (onEditingStart)="onEditingStart($event)"
     (onContentReady)="onContentReady()"
     (onRowRemoved)="onRowRemoved()"
@@ -59,6 +52,11 @@
   >
     <!-- Grid configuration -->
     <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+    <dxo-keyboard-navigation
+      [enterKeyAction]="'moveFocus'"
+      [enterKeyDirection]="'column'"
+      [editOnKeyPress]="true"
+    ></dxo-keyboard-navigation>
     <dxo-header-filter
       [visible]="true"
       [allowSearch]="true"
@@ -172,7 +170,6 @@
           this[cell.column.dataField + 'Service'].model.getLabelField()
         ]"
         [value]="cell.data[cell.column.dataField]"
-        (onValueChanged)="onValueChanged($event, cell)"
         [readOnly]="!allowMutations"
       >
         <dxo-drop-down-options [width]="SelectBoxPopupWidth">

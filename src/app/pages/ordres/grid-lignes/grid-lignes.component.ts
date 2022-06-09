@@ -17,11 +17,13 @@ import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
+import dxDataGrid from "devextreme/ui/data_grid";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, PartialObserver } from "rxjs";
-import { concatMapTo, map, tap } from "rxjs/operators";
+import { concatMapTo, map, mapTo, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
@@ -87,6 +89,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public SelectBoxPopupWidth: number;
   public dataField: string;
   public idLigne: string;
+  private gridFields: any[];
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -137,8 +140,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
     const fields = this.columns.pipe(map(columns => columns.map(column => {
       return (this.addKeyToField(column.dataField));
     })));
-    const gridFields = await fields.toPromise();
-    this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
+    this.gridFields = await fields.toPromise();
+    this.dataSource = this.ordreLignesService.getDataSource_v2(this.gridFields);
     this.filterFournisseurDS();
     this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     this.achatUniteSource = this.achatUniteService.getDataSource_v2(["id", "description"]);
@@ -344,14 +347,14 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.datagrid.instance.saveEditData();
   }
 
-  onValueChanged(event, cell) {
-    if (cell.setValue) {
-      cell.setValue(event.value);
-      this.cellValueChange(event);
-      this.idLigne = cell.data.id;
-      this.dataField = cell.column.dataField;
-    }
-  }
+  // onSelectBoxValueChanged(event, cell) {
+  //   if (cell.setValue) {
+  //     cell.setValue(event.value);
+  //     // this.cellValueChange(event);
+  //     this.idLigne = cell.data.id;
+  //     this.dataField = cell.column.dataField;
+  //   }
+  // }
 
   onCellClick(e) {
     // Way to avoid Dx Selectbox list to appear when cell is readonly
@@ -429,6 +432,36 @@ export class GridLignesComponent implements OnChanges, OnInit {
         if (e.dataField !== "numero")
           this.formUtilsService.selectTextOnFocusIn(elem);
       };
+      // e.editorOptions.onFocusOut = args => {
+      //   console.log(e.component.hasEditData());
+      //   if (e.component.hasEditData())
+      //     console.log(e, args);
+      // };
+    }
+  }
+
+  onSaving(event: {
+    cancel: boolean,
+    changes: Array<any>,
+    component: dxDataGrid,
+    element: HTMLElement,
+    promise: Promise<void>,
+  }) {
+    event.cancel = true;
+    if (event.component.hasEditData()) {
+      console.log("Pushing  changes: ", event.changes);
+      const [name, value] = Object.entries(event.changes[0].data)[0];
+      event.promise = this.ordreLignesService.updateField(
+        name,
+        value,
+        event.changes[0].key,
+        this.ordre.secteurCommercial.id,
+        this.gridFields,
+      ).pipe(
+        mapTo(null),
+      )
+        .toPromise();
+      // (this.dataSource.store() as CustomStore).push(event.changes)
     }
   }
 
@@ -512,7 +545,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
     };
   }
 
-  cellValueChange(data) {
+  oldCellValueChange(data) {
 
     if (!data.changes) return;
     if (data.changes.some(c => c.type !== "update")) return;
