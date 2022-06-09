@@ -249,6 +249,14 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }
 
   onCellPrepared(e) {
+
+    // if (e.rowType === "group") {
+    //   // Ajout code entrep. + réf client + (code transp.)
+    //   if (e.column.dataField === "numero") {
+    //     e.cellElement.textContent = "4";
+    //   }
+    // }
+
     if (e.rowType === "data") {
       // e.cellElement.find(".dx-select-checkbox").dxCheckBox("instance").option("disabled", true);
       if (e.column.dataField === "article.id") {

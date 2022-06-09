@@ -6,6 +6,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Marges',
@@ -54,6 +55,8 @@
     [format]="column?.format"
     [dataField]="column.dataField"
     [visible]="false"
+    [cssClass]="column.cssClass"
+    [width]="column.width"
     trueText="Oui"
     falseText="Non"
     [dataType]="column?.dataType"

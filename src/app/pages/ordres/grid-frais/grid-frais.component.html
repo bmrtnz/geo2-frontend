@@ -66,6 +66,8 @@
     falseText="Non"
     [dataType]="column?.dataType"
     [showEditorAlways]="true"
+    [cssClass]="column.cssClass"
+    [width]="column.width"
     [allowEditing]="column.allowEditing"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [format]="column.format"

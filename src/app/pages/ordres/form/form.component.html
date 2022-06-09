@@ -855,7 +855,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   (onItemTitleClick)="
-                    onAccordionToggled($event, [gridLogistiques])
+                    onAccordionToggled($event, [gridLogistiques, gridFrais])
                   "
                 >
                   <dxi-item>
@@ -870,7 +870,7 @@
                             <dx-select-box
                               formControlName="transporteur"
                               [dataSource]="transporteursDS"
-                              displayExpr="raisonSocial"
+                              [displayExpr]="displayIDBefore"
                               [readOnly]="true"
                               [searchExpr]="['id', 'raisonSocial']"
                             >
@@ -885,6 +885,11 @@
                       [gridLignesLogistique]="gridLignesLogistique"
                       [ordre]="ordre"
                     ></app-grid-logistiques>
+                    <div class="grid-separator"></div>
+                    <app-grid-frais
+                      #gridFrais
+                      [ordre]="ordre"
+                    ></app-grid-frais>
                   </dxi-item>
                 </dx-accordion>
               </div>
@@ -940,8 +945,7 @@
                     onAccordionToggled($event, [
                       gridLTD,
                       gridDetailPalettes,
-                      gridMarge,
-                      gridFrais
+                      gridMarge
                     ])
                   "
                 >
@@ -962,10 +966,6 @@
                         [ordre]="ordre"
                       ></app-grid-marge>
                       <div class="grid-separator"></div>
-                      <app-grid-frais
-                        #gridFrais
-                        [ordre]="ordre"
-                      ></app-grid-frais>
                     </div>
                   </dxi-item>
                 </dx-accordion>
