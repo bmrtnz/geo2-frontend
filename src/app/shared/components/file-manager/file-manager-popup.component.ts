@@ -1,16 +1,16 @@
 import {
-    Component,
-    Input,
-    NgModule,
-    OnChanges,
-    SimpleChanges,
+  Component,
+  Input,
+  NgModule,
+  OnChanges,
+  SimpleChanges, ViewChild,
 } from "@angular/core";
 
 import {
     FileManagerService,
     FileItem,
 } from "app/shared/services/file-manager.service";
-import { DxFileManagerModule, DxPopupModule } from "devextreme-angular";
+import {DxFileManagerComponent, DxFileManagerModule, DxPopupModule} from "devextreme-angular";
 import { CommonModule } from "@angular/common";
 import CustomFileSystemProvider from "devextreme/file_management/custom_provider";
 import { SharedModule } from "../../shared.module";
@@ -28,6 +28,9 @@ export class FileManagerComponent implements OnChanges {
     @Input() id: any;
 
     @Input() subTitle: string;
+
+    @ViewChild(DxFileManagerComponent, { static: false })
+    fileManager: DxFileManagerComponent;
 
     visible = false;
     userAdmin = false;
@@ -53,6 +56,11 @@ export class FileManagerComponent implements OnChanges {
             key,
             changes.id.currentValue,
         );
+
+        // If not the first time, set currentPath to "/"
+        if (this.fileManager) {
+          this.fileManager.instance.option("currentPath", "");
+        }
     }
 }
 

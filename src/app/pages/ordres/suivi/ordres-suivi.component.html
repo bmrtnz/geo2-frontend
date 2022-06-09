@@ -53,7 +53,7 @@
 <app-grid-suivi
   [filter]="filter"
   *ngIf="showGridResults"
-  (ordreSelected)="tabContext.openOrdre($event.numero)"
+  (ordreSelected)="tabContext.openOrdre($event.numero, $event.campagne.id)"
 ></app-grid-suivi>
 
 <div class="histo-container">

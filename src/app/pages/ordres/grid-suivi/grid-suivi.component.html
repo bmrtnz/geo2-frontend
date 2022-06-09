@@ -8,7 +8,9 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onCellPrepared)="onCellPrepared($event)"
-  (onRowDblClick)="tabContext.openOrdre($event.data.numero)"
+  (onRowDblClick)="
+    tabContext.openOrdre($event.data.numero, $event.data.campagne.id)
+  "
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Résultat(s) de recherche',

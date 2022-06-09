@@ -1434,6 +1434,10 @@
       {
         "dataField": "ordre.id",
         "visible": true
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "visible": false
       }
     ]
   },
