@@ -240,10 +240,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         this.showWarnings();
     }
 
-    openDatasheetPDF() {
-        const url = `//maddog2/geo_img/${this.article.id}.pdf`;
-        window.open(url, "_blank");
-    }
     onClone() {
         this.readOnlyMode = false;
         this.cloneMode = true;

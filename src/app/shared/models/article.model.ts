@@ -4,6 +4,7 @@ import { ArticleCahierDesCharges } from "./article-cahier-des-charges.model";
 import { ArticleNormalisation } from "./article-normalisation.model";
 import { ArticleEmballage } from "./article-emballage.model";
 import Historique from "./historique.model";
+import Document from "./document.model";
 
 @ModelName("Article")
 export class Article extends Model {
@@ -25,6 +26,8 @@ export class Article extends Model {
     public emballage: ArticleEmballage;
     @Field({ model: import("./historique.model") })
     public historique: Historique[];
+    @Field({ model: import("./document.model") })
+    public document: Document;
 }
 
 export default Article;
