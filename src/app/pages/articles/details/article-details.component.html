@@ -82,7 +82,7 @@
           icon="material-icons description"
           (onClick)="viewEtiquette(
             'btn-doctechnique',
-            article.document
+            article?.document
           )"
           text="{{ 'btn-doctechnique' | localize }}"
         >
@@ -147,7 +147,7 @@
                   [disabled]="true"
                   [dataSource]="especes"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                   (onValueChanged)="onEspeceChange($event)"
                 >
                   <dx-validator name="{{ 'articles-espece' | localize }}">
@@ -229,7 +229,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="varietes"
                   [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-matierePremiere-variete' | localize }}"
@@ -253,7 +253,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="types"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
               </div>
@@ -272,7 +272,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="modesCulture"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{
@@ -298,7 +298,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="origines"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-matierePremiere-origine' | localize }}"
@@ -322,7 +322,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="calibresUnifies"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{
@@ -348,7 +348,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="typesVente"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-matierePremiere-typeVente' | localize }}"
@@ -409,7 +409,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="categories"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-cahierDesCharge-categorie' | localize }}"
@@ -433,7 +433,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="colorations"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{
@@ -459,7 +459,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="sucres"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-cahierDesCharge-sucre' | localize }}"
@@ -483,7 +483,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="penetros"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-cahierDesCharge-penetro' | localize }}"
@@ -507,7 +507,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="cirages"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
               </div>
@@ -526,7 +526,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="rangements"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-cahierDesCharge-rangement' | localize }}"
@@ -587,7 +587,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="emballages"
                   [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-emballage-emballage' | localize }}"
@@ -611,7 +611,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="conditionsSpecials"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
               </div>
@@ -630,7 +630,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="alveoles"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
               </div>
@@ -732,7 +732,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="identificationsSymboliques"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
               </div>
@@ -781,7 +781,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="stickeurs"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-normalisation-stickeur' | localize }}"
@@ -816,7 +816,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="marques"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{ 'articles-normalisation-marque' | localize }}"
@@ -840,7 +840,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="calibresMarquage"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                   <dx-validator
                     name="{{
@@ -867,7 +867,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesColis"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
                 <dx-button
@@ -899,7 +899,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesUc"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
                 <dx-button
@@ -933,7 +933,7 @@
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesEvenementielle"
                   displayExpr="description"
-                  [searchExpr]="['id', 'description']"
+                  [searchExpr]="['id']"
                 >
                 </dx-select-box>
                 <dx-button

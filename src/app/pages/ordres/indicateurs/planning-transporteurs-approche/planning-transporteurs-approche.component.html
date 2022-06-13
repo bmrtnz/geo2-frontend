@@ -17,7 +17,7 @@
                 [dataSource]="transporteursDataSource"
                 valueExpr="id"
                 displayExpr="code"
-                [searchExpr]="['id', 'code']"
+                [searchExpr]="['id']"
               >
                 <dx-validator>
                   <dxi-validation-rule
@@ -39,7 +39,7 @@
                 formControlName="bureauAchat"
                 [dataSource]="bureauxAchat"
                 [displayExpr]="displayCodeBefore"
-                [searchExpr]="['id', 'raisonSocial']"
+                [searchExpr]="['id']"
                 [showClearButton]="true"
               >
                 <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>

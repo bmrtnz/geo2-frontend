@@ -229,7 +229,7 @@
                             formControlName="client"
                             [dataSource]="clientsDS"
                             [displayExpr]="displayCodeBefore"
-                            [searchExpr]="['id', 'raisonSocial']"
+                            [searchExpr]="['id']"
                           >
                             <dx-validator
                               name="{{ 'ordres-client' | localize }}"
@@ -341,7 +341,7 @@
                             formControlName="incoterm"
                             [dataSource]="incotermsDS"
                             [displayExpr]="displayIDBefore"
-                            [searchExpr]="['id', 'description']"
+                            [searchExpr]="['id']"
                           >
                             <dx-validator
                               name="{{ 'ordres-incoterm' | localize }}"
@@ -366,7 +366,7 @@
                                 formControlName="transporteur"
                                 [dataSource]="transporteursDS"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'raisonSocial']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -394,7 +394,7 @@
                                 formControlName="typeTransport"
                                 [dataSource]="typeTransportDS"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'description']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -441,7 +441,7 @@
                                 [dataSource]="deviseDS"
                                 [readOnly]="true"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'description']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -465,7 +465,7 @@
                                 formControlName="baseTarifTransport"
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'description']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -578,7 +578,7 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeDDS"
                                 displayExpr="name"
-                                [searchExpr]="['id', 'name']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -618,7 +618,7 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeADS"
                                 displayExpr="name"
-                                [searchExpr]="['id', 'name']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -653,7 +653,7 @@
                             [dataSource]="deviseDS"
                             [readOnly]="true"
                             [displayExpr]="deviseDisplayExpr"
-                            [searchExpr]="['id', 'description']"
+                            [searchExpr]="['id']"
                           >
                             <dx-validator
                               name="{{ 'ordres-devise' | localize }}"
@@ -872,7 +872,7 @@
                               [dataSource]="transporteursDS"
                               [displayExpr]="displayIDBefore"
                               [readOnly]="true"
-                              [searchExpr]="['id', 'raisonSocial']"
+                              [searchExpr]="['id']"
                             >
                             </dx-select-box>
                           </div>

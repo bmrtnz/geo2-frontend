@@ -168,7 +168,7 @@
                       [dataSource]="secteurs"
                       [displayExpr]="displayIDBefore"
                       (onValueChanged)="onSecteurChange($event)"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-secteur' | localize }}"
@@ -239,7 +239,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesClient"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-typeClient' | localize }}"
@@ -262,7 +262,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="groupesClient"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -280,7 +280,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesVente"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-typeVente' | localize }}"
@@ -494,7 +494,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       (onValueChanged)="onPaysChange($event)"
                     >
                       <dx-validator
@@ -708,7 +708,7 @@
                         [readOnly]="readOnlyMode"
                         [dataSource]="pays"
                         displayExpr="description"
-                        [searchExpr]="['id', 'description']"
+                        [searchExpr]="['id']"
                         [showClearButton]="true"
                         (onValueChanged)="onNonRequiredSBChange($event)"
                       ></dx-select-box>
@@ -771,7 +771,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="incoterms"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-incoterm' | localize }}"
@@ -795,7 +795,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-regimeTva' | localize }}"
@@ -867,7 +867,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-devise' | localize }}"
@@ -891,7 +891,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-moyenPaiement' | localize }}"
@@ -915,7 +915,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-basePaiement' | localize }}"
@@ -1028,7 +1028,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-langue' | localize }}"
@@ -1414,7 +1414,7 @@
                       [displayExpr]="displayIDBefore"
                       [showClearButton]="true"
                       (onValueChanged)="onCourtierChange($event)"
-                      [searchExpr]="['id', 'raisonSocial']"
+                      [searchExpr]="['id']"
                     >
                     </dx-select-box>
                   </div>
@@ -1433,7 +1433,7 @@
                       "
                       [dataSource]="basesTarif"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -1492,7 +1492,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="paloxRaisonSocial"
                       [displayExpr]="displayCodeBefore"
-                      [searchExpr]="['code', 'raisonSocial']"
+                      [searchExpr]="['code']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -1556,7 +1556,7 @@
                       "
                       [dataSource]="basesTarif"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -1625,7 +1625,7 @@
                     [readOnly]="true"
                     [dataSource]="conditionsVente"
                     displayExpr="id"
-                    [searchExpr]="['id', 'description']"
+                    [searchExpr]="['id']"
                   >
                     <dx-validator
                       name="{{ 'tiers-clients-conditionVente' | localize }}"
