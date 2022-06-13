@@ -250,12 +250,22 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
   onCellPrepared(e) {
 
-    // if (e.rowType === "group") {
-    //   // Ajout code entrep. + réf client + (code transp.)
-    //   if (e.column.dataField === "numero") {
-    //     e.cellElement.textContent = "4";
-    //   }
-    // }
+    if (e.rowType === "totalFooter") {
+      // Show order lines number
+      const numberOfLines = this.datagrid.instance.getVisibleRows()?.length;
+      if (numberOfLines) {
+        if (e.column.dataField === "numero") {
+          e.cellElement.textContent = numberOfLines;
+          e.cellElement.classList.add("text-align-right");
+        }
+        if (e.columnIndex === 1) {
+          e.cellElement.textContent = numberOfLines < 2 ?
+            this.localizeService.localize("ligne") :
+            this.localizeService.localize("lignes");
+          e.cellElement.classList.add("order-line-text");
+        }
+      }
+    }
 
     if (e.rowType === "data") {
       // e.cellElement.find(".dx-select-checkbox").dxCheckBox("instance").option("disabled", true);

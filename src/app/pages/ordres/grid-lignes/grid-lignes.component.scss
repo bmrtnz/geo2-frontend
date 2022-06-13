@@ -122,8 +122,11 @@
 
 }
 
-
 ::ng-deep .cursor-pointer,
 ::ng-deep .cursor-pointer input {
   cursor: pointer !important;
+}
+
+::ng-deep .order-line-text {
+  padding-left: 5px !important;
 }

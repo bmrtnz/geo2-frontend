@@ -368,6 +368,14 @@ body app-root.production {
   text-align: center !important;
 }
 
+.text-align-right {
+  text-align: right !important;
+}
+
+.text-align-left {
+  text-align: left !important;
+}
+
 // Inactive low opacity button
 .inactive-button {
   opacity: 0.2 !important;
