@@ -80,7 +80,10 @@
           type="success"
           height="auto"
           icon="material-icons description"
-          (onClick)="openDatasheetPDF()"
+          (onClick)="viewEtiquette(
+            'btn-doctechnique',
+            article.document
+          )"
           text="{{ 'btn-doctechnique' | localize }}"
         >
         </dx-button>
