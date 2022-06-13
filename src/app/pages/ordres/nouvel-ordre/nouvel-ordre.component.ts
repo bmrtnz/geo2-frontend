@@ -76,6 +76,7 @@ export class NouvelOrdreComponent implements OnInit {
   public resolver: Observable<Ordre>;
   public errorText: string;
   public env = environment;
+  public codeEnt: any;
 
   private societe: Societe;
   private ofValideEntrepotForOrdreRef = defer(
@@ -160,8 +161,14 @@ export class NouvelOrdreComponent implements OnInit {
 
   getSelectedEntrepot() {
     const item = this?.grid?.getSelectedItem();
-    if (item instanceof MRUEntrepot) return item.entrepot;
-    if (item instanceof Entrepot) return item;
+    if (item instanceof MRUEntrepot) {
+      this.codeEnt = item.codeEntrepot;
+      return item.entrepot;
+    }
+    if (item instanceof Entrepot) {
+      this.codeEnt = item.code;
+      return item;
+    }
   }
 
   onTypeChange(e) {

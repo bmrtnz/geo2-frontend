@@ -63,6 +63,8 @@
     "
     trueText="Oui"
     falseText="Non"
+    [width]="column.width"
+    [cssClass]="column.cssClass"
     [dataType]="column?.dataType"
     [showEditorAlways]="true"
     [allowEditing]="column.allowEditing"
@@ -96,8 +98,7 @@
       [dataSource]="this[cell.column.dataField + 'Source']"
       [displayExpr]="displayIdBefore"
       [searchExpr]="[
-        this[cell.column.dataField + 'Service'].model.getKeyField(),
-        this[cell.column.dataField + 'Service'].model.getLabelField()
+        this[cell.column.dataField + 'Service'].model.getKeyField()
       ]"
       [value]="cell.data[cell.column.dataField]"
       (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"

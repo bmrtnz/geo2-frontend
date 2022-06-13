@@ -52,7 +52,7 @@
               [dataSource]="clients"
               [showClearButton]="true"
               displayExpr="raisonSocial"
-              [searchExpr]="['code', 'raisonSocial']"
+              [searchExpr]="['code']"
               (onValueChanged)="onClientChange($event)"
               [displayExpr]="displayIDBefore"
             >
@@ -74,7 +74,7 @@
               [dataSource]="entrepots"
               [showClearButton]="true"
               displayExpr="raisonSocial"
-              [searchExpr]="['code', 'raisonSocial']"
+              [searchExpr]="['code']"
               (onValueChanged)="onFieldValueChange($event)"
               [displayExpr]="displayIDBefore"
               >">

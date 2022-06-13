@@ -14,7 +14,7 @@
           formControlName="secteur"
           [dataSource]="secteurs"
           [displayExpr]="displayCodeBefore"
-          [searchExpr]="['id', 'description']"
+          [searchExpr]="['id']"
           (onValueChanged)="onSecteurChanged($event)"
         >
         <dx-validator
@@ -42,7 +42,7 @@
           formControlName="client"
           [dataSource]="clients"
           [displayExpr]="displayCodeBefore"
-          [searchExpr]="['code', 'raisonSocial']"
+          [searchExpr]="['code']"
           (onValueChanged)="onClientChanged($event)"
           >
           <dx-validator
@@ -70,7 +70,7 @@
           formControlName="entrepot"
           [dataSource]="entrepots"
           [displayExpr]="displayCodeBefore"
-          [searchExpr]="['code', 'raisonSocial']"
+          [searchExpr]="['code']"
           (onValueChanged)="onEntrepotChanged($event)"
           (onFocusIn)="onEntrepotFocus($event)"
           [showClearButton]="true"

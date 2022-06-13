@@ -1612,10 +1612,6 @@
       {
         "dataField": "entrepot.id",
         "dataType": "string"
-      },
-      {
-        "dataField": "entrepot.code",
-        "dataType": "string"
       }
     ]
   },
@@ -2540,6 +2536,12 @@
         "visible": true
       },
       {
+        "visibleIndex": 5,
+        "dataField": "fournisseurReferenceDOC",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "visibleIndex": 6,
         "dataField": "nombrePalettesAuSol",
         "dataType": "number",
@@ -2648,6 +2650,8 @@
       {
         "visibleIndex": 2,
         "dataField": "expedieStation",
+        "cssClass": "multi-line-header",
+        "width": 45,
         "allowEditing": false,
         "visible": true
       },
@@ -2655,7 +2659,7 @@
         "visibleIndex": 4,
         "dataField": "dateDepartPrevueFournisseur",
         "sortIndex": 1,
-        "width": "300",
+        "width": "150",
         "dataType": "datetime",
         "format": "dd-MM-yyyy HH:mm",
         "sortOrder": "asc",
@@ -2679,7 +2683,6 @@
         "visibleIndex": 8,
         "dataField": "dateLivraisonLieuGroupage",
         "dataType": "datetime",
-        "width": "120",
         "format": "dd-MM-yyyy HH:mm",
         "visible": true
       },
@@ -2687,13 +2690,13 @@
         "visibleIndex": 10,
         "dataField": "dateDepartPrevueGroupage",
         "dataType": "datetime",
-        "width": "120",
         "format": "dd-MM-yyyy HH:mm",
         "visible": true
       },
       {
         "visibleIndex": 11,
         "dataField": "instructions",
+        "width": 150,
         "dataType": "string",
         "visible": true
       },
@@ -4274,7 +4277,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "visible": true
       },
       {
@@ -4556,12 +4559,9 @@
         "visibleIndex": 0,
         "dataField": "numero",
         "visible": true,
+        "cssClass": "multi-line-header",
+        "width": 55,
         "sortOrder": "asc"
-      },
-      {
-        "visibleIndex": 1,
-        "dataField": "id",
-        "visible": true
       },
       {
         "visibleIndex": 2,
@@ -4681,6 +4681,10 @@
       {
         "visibleIndex": 16,
         "dataField": "pourcentageMargeBrute",
+        "cssClass": "multi-line-header",
+        "width": 60,
+        "fixed": true,
+        "fixedPosition": "right",
         "visible": true,
         "format": {
           "type": "percent",
@@ -4690,6 +4694,10 @@
       {
         "visibleIndex": 17,
         "dataField": "pourcentageMargeNette",
+        "cssClass": "multi-line-header",
+        "width": 60,
+        "fixed": true,
+        "fixedPosition": "right",
         "visible": true,
         "format": {
           "type": "percent",
@@ -4742,6 +4750,10 @@
           "precision": 2
         },
         "currency": "EUR"
+      },
+      {
+        "dataField": "id",
+        "visible": false
       }
     ]
   },
@@ -4752,6 +4764,7 @@
         "dataField": "id",
         "sortOrder": "desc",
         "allowEditing": false,
+        "width": 150,
         "visible": false
       },
       {
@@ -4767,6 +4780,7 @@
       {
         "visibleIndex": 6,
         "dataField": "devise",
+        "width": 120,
         "visible": true
       },
       {

@@ -155,9 +155,10 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       ["ordre.dateDepartPrevue", "<=", values.dateMax]
     ];
     if (values.entrepot?.id) {
-      filter.push("and",
-        ["ordre.entrepot.id", "=", values.entrepot?.id],
-        "and");
+      filter.push(
+        "and",
+        ["ordre.entrepot.id", "=", values.entrepot?.id]
+      );
     }
     dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;

@@ -171,7 +171,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="clientsRaisonSocial"
                       [displayExpr]="displayCodeBefore"
-                      [searchExpr]="['code', 'raisonSocial']"
+                      [searchExpr]="['code']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -201,7 +201,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-transporteurs-langue' | localize }}"
@@ -444,7 +444,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-transporteurs-pays' | localize }}"
@@ -539,7 +539,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-transporteurs-regimeTva' | localize }}"
@@ -563,7 +563,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-transporteurs-devise' | localize }}"
@@ -587,7 +587,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -605,7 +605,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
