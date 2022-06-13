@@ -2512,6 +2512,12 @@
         "visible": true
       },
       {
+        "visibleIndex": 5,
+        "dataField": "fournisseurReferenceDOC",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "visibleIndex": 6,
         "dataField": "nombrePalettesAuSol",
         "dataType": "number",

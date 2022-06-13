@@ -131,10 +131,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
   }
 
   onValueChanged(event, cell) {
-    if (cell.setValue) {
-      cell.setValue(event.value);
-      // this.datagrid.instance.saveEditData();
-    }
+    if (cell.setValue) cell.setValue(event.value);
   }
 
   onCellClick(e) {
@@ -208,19 +205,10 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
       if (this.itemsWithSelectBox.includes(e.column.dataField)) {
         if (e.value?.id) {
           e.cellElement.classList.add("cursor-pointer");
-          // const titleDiv = e.cellElement.querySelector(".SB-edit-title-element");
-          // if (titleDiv) {
-          //     titleDiv.title = e.value.id
-          //         + " ("
-          //         + (e.value.ville ? e.value.ville : e.value.raisonSocial)
-          //         + ")"
-          //         + "\r\n"
-          //         + this.hintDblClick;
-          // }
         }
       }
       if (e.column.dataField === "instructions") {
-        if (e.value) e.cellElement.title = e.value;
+        // if (e.value) e.cellElement.title = e.value;
       }
     }
   }
