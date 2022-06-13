@@ -1208,8 +1208,14 @@
         "visible": true
       },
       {
+        "visibleIndex": 2,
         "dataField": "age",
         "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "fournisseurCode",
         "visible": true
       },
       {
@@ -1248,10 +1254,6 @@
       },
       {
         "dataField": "calibreFournisseurID",
-        "visible": false
-      },
-      {
-        "dataField": "fournisseurCode",
         "visible": false
       },
       {
