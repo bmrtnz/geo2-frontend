@@ -148,7 +148,8 @@ body app-root.production {
 .dx-datagrid-rowsview .dx-row>td {
   line-height: 0;
 
-  &>.dx-filemanager-details-item-name-wrapper, & .dx-datagrid-summary-item {
+  &>.dx-filemanager-details-item-name-wrapper,
+  & .dx-datagrid-summary-item {
     line-height: initial;
   }
 }
@@ -371,4 +372,9 @@ body app-root.production {
 .inactive-button {
   opacity: 0.2 !important;
   pointer-events: none !important;
+}
+
+// Better selection rows readibility
+.dx-selection.dx-row:not(.dx-row-focused)>td {
+  background-color: rgba(0, 117, 156, .3) !important;
 }
