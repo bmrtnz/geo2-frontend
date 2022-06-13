@@ -1588,10 +1588,6 @@
       {
         "dataField": "entrepot.id",
         "dataType": "string"
-      },
-      {
-        "dataField": "entrepot.code",
-        "dataType": "string"
       }
     ]
   },
