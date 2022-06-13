@@ -122,7 +122,8 @@ export class FormComponent implements OnInit, OnDestroy {
     "commentairesOrdreCount",
     "regimeTva.id",
     "facture",
-    "bonAFacturer"
+    "bonAFacturer",
+    "numeroFacture"
   ];
 
   private destroy = new Subject<boolean>();
@@ -131,6 +132,7 @@ export class FormComponent implements OnInit, OnDestroy {
   public fragments = Fragments;
   public status: string;
   public ordreFacture: boolean;
+  public numeroFacture: string;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
     id: [""],
@@ -647,6 +649,7 @@ export class FormComponent implements OnInit, OnDestroy {
   private refreshStatus(statut: Statut) {
     this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
+    if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
   }
 
   private refetchStatut() {

@@ -194,8 +194,13 @@
 
                 <span
                   *ngIf="ordre"
-                  class="dx-form-group-caption order-status"
+                  class="dx-form-group-caption red-font "
                   >{{ status }}</span
+                >
+                <span
+                *ngIf="ordreFacture && numeroFacture?.length"
+                  class="dx-form-group-caption invoice-number red-font"
+                  >&nbsp;({{ numeroFacture }})</span
                 >
                 <span
                   *ngIf="refOrdre"
