@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
@@ -20,6 +20,10 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
+import StockArticle from "app/shared/models/stock-article.model";
+import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
+import Ordre from "app/shared/models/ordre.model";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-grid-stock",
@@ -30,6 +34,7 @@ export class GridStockComponent implements OnInit {
 
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
+  @Input() public ordre: Ordre;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -42,6 +47,7 @@ export class GridStockComponent implements OnInit {
   @ViewChild("origineSB", { static: false }) origineSB: DxSelectBoxComponent;
   @ViewChild("bureauAchatSB", { static: false }) bureauAchatSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
+  @ViewChild(ReservationPopupComponent) reservationPopup: ReservationPopupComponent;
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -134,9 +140,16 @@ export class GridStockComponent implements OnInit {
 
   }
 
-  onRowDblClick(e) {
-    // e.data.id
-    //
+  onRowDblClick({ data }: { data: Partial<StockArticle>, [key: string]: any }) {
+    this.reservationPopup.present(data, this.ordre)
+      .subscribe({
+        error: ({ message }: Error) => notify(message, "error"),
+        complete: () => {
+          this.selectChange.emit();
+          this.dataGrid.dataSource = [];
+          this.toRefresh = true;
+        },
+      });
   }
 
   onRowPrepared(e) {

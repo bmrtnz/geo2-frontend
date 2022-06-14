@@ -101,6 +101,7 @@
         this[cell.column.dataField + 'Service'].model.getKeyField()
       ]"
       [value]="cell.data[cell.column.dataField]"
+      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
       [readOnly]="env.production"
     >
@@ -114,6 +115,7 @@
       [items]="instructionsList"
       [value]="cell.data[cell.column.dataField]"
       [acceptCustomValue]="true"
+      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
       [readOnly]="env.production"
     >
@@ -144,9 +146,7 @@
     </dx-date-box>
   </div>
   <div *dxTemplate="let cell of 'simpleElementEditTemplate'">
-    <span class="simpleCellText"
-      >{{ cell.data[cell.column.dataField] }}</span
-    >
+    <span class="simpleCellText">{{ cell.data[cell.column.dataField] }}</span>
     <span>
       <div
         *ngIf="!!cell.data.fournisseurReferenceDOC"
