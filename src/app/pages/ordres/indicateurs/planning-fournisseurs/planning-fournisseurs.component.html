@@ -16,7 +16,7 @@
                 formControlName="bureauAchat"
                 [dataSource]="bureauxAchat"
                 [displayExpr]="displayCodeBefore"
-                [searchExpr]="['id', 'raisonSocial']"
+                [searchExpr]="['id']"
                 (onValueChanged)="filterFournisseurs($event)"
                 [showClearButton]="true"
               >
@@ -50,7 +50,7 @@
                 [dataSource]="fournisseurs"
                 [displayExpr]="displayCodeBefore"
                 [showClearButton]="true"
-                [searchExpr]="['code', 'raisonSocial']"
+                [searchExpr]="['code']"
                 [showClearButton]="true"
               >
                 <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>

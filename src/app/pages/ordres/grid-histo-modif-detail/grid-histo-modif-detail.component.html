@@ -38,6 +38,9 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="false"></dxo-filter-row>
+  <<<<<<< HEAD
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  ======= >>>>>>> master
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -52,8 +55,8 @@
     [dataField]="column.dataField"
     [visible]="false"
     [caption]="
-      ('ordreHistoModifDetail-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
+      ('ordreHistoModifDetail-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
     "
     trueText="Oui"
     falseText="Non"

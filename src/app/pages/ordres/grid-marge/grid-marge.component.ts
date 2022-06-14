@@ -13,73 +13,86 @@ import { map } from "rxjs/operators";
 import { ToggledGrid } from "../form/form.component";
 
 @Component({
-    selector: "app-grid-marge",
-    templateUrl: "./grid-marge.component.html",
-    styleUrls: ["./grid-marge.component.scss"]
+  selector: "app-grid-marge",
+  templateUrl: "./grid-marge.component.html",
+  styleUrls: ["./grid-marge.component.scss"]
 })
 export class GridMargeComponent implements ToggledGrid {
-    @Input() public ordre: Ordre;
-    @ViewChild(DxDataGridComponent, { static: true })
-    public dataGrid: DxDataGridComponent;
-    public totalItems: TotalItem[] = [];
+  @Input() public ordre: Ordre;
+  @ViewChild(DxDataGridComponent, { static: true })
+  public dataGrid: DxDataGridComponent;
+  public totalItems: TotalItem[] = [];
 
-    private gridConfig: Promise<GridConfig>;
+  private gridConfig: Promise<GridConfig>;
 
-    public columns: Observable<GridColumn[]>;
-    public dataSource: DataSource;
-    public columnChooser = environment.columnChooser;
+  public columns: Observable<GridColumn[]>;
+  public dataSource: DataSource;
+  public columnChooser = environment.columnChooser;
 
-    constructor(
-        private ordreLignesService: OrdreLignesService,
-        public gridConfiguratorService: GridConfiguratorService,
-        public localizeService: LocalizationService
-    ) {
-        this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreMarge);
-        this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+  constructor(
+    private ordreLignesService: OrdreLignesService,
+    public gridConfiguratorService: GridConfiguratorService,
+    public localizeService: LocalizationService
+  ) {
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreMarge);
+    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+  }
+
+  async enableFilters() {
+
+    const summaryInputs: SummaryInput[] = [
+      { selector: "totalAchat", summaryType: SummaryType.SUM },
+      { selector: "totalCourtage", summaryType: SummaryType.SUM },
+      { selector: "totalFraisAdditionnels", summaryType: SummaryType.SUM },
+      { selector: "totalFraisMarketing", summaryType: SummaryType.SUM },
+      { selector: "totalRemise", summaryType: SummaryType.SUM },
+      { selector: "totalTransit", summaryType: SummaryType.SUM },
+      { selector: "totalTransport", summaryType: SummaryType.SUM },
+      { selector: "totalVenteBrut", summaryType: SummaryType.SUM },
+      { selector: "totalObjectifMarge", summaryType: SummaryType.SUM },
+      { selector: "totalRestitue", summaryType: SummaryType.SUM },
+      { selector: "margeBrute", summaryType: SummaryType.SUM },
+      { selector: "pourcentageMargeBrute", summaryType: SummaryType.SUM },
+      { selector: "pourcentageMargeNette", summaryType: SummaryType.SUM },
+    ];
+
+    const columns = await this.columns.toPromise();
+    const fields = columns.map(column => column.dataField);
+
+    this.dataSource = this.ordreLignesService
+      .getSummarisedDatasource(SummaryOperation.Marge, fields, summaryInputs);
+
+    this.totalItems = summaryInputs
+      .map(({ selector: column, summaryType }, index) => ({
+        column,
+        summaryType,
+        displayFormat: !index ? this.localizeService.localize("totaux") + " : {0}" : "{0}",
+        valueFormat: columns
+          ?.find(({ dataField }) => dataField === column)
+          ?.format,
+      }));
+
+    if (this?.ordre?.id)
+      this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
+
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      // Higlight important columns
+      if ([
+        "pourcentageMargeBrute",
+        "pourcentageMargeNette"
+      ].includes(e.column.dataField)) {
+        // Bold text
+        e.cellElement.classList.add("grey-light");
+      }
     }
+  }
 
-    async enableFilters() {
+  onToggling(toggled: boolean) {
 
-        const summaryInputs: SummaryInput[] = [
-            { selector: "totalAchat", summaryType: SummaryType.SUM },
-            { selector: "totalCourtage", summaryType: SummaryType.SUM },
-            { selector: "totalFraisAdditionnels", summaryType: SummaryType.SUM },
-            { selector: "totalFraisMarketing", summaryType: SummaryType.SUM },
-            { selector: "totalRemise", summaryType: SummaryType.SUM },
-            { selector: "totalTransit", summaryType: SummaryType.SUM },
-            { selector: "totalTransport", summaryType: SummaryType.SUM },
-            { selector: "totalVenteBrut", summaryType: SummaryType.SUM },
-            { selector: "totalObjectifMarge", summaryType: SummaryType.SUM },
-            { selector: "totalRestitue", summaryType: SummaryType.SUM },
-            { selector: "margeBrute", summaryType: SummaryType.SUM },
-            { selector: "pourcentageMargeBrute", summaryType: SummaryType.SUM },
-            { selector: "pourcentageMargeNette", summaryType: SummaryType.SUM },
-        ];
+    toggled && this?.ordre?.id ? this.enableFilters() : this.dataSource = null;
 
-        const columns = await this.columns.toPromise();
-        const fields = columns.map(column => column.dataField);
-
-        this.dataSource = this.ordreLignesService
-            .getSummarisedDatasource(SummaryOperation.Marge, fields, summaryInputs);
-
-        this.totalItems = summaryInputs
-            .map(({ selector: column, summaryType }) => ({
-                column,
-                summaryType,
-                displayFormat: !column.toLowerCase().includes("pourcentage") ? this.localizeService.localize("total") + " : {0}" : "{0}",
-                valueFormat: columns
-                    ?.find(({ dataField }) => dataField === column)
-                    ?.format,
-            }));
-
-        if (this?.ordre?.id)
-            this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
-
-    }
-
-    onToggling(toggled: boolean) {
-
-        toggled && this?.ordre?.id ? this.enableFilters() : this.dataSource = null;
-
-    }
+  }
 }

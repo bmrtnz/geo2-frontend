@@ -166,8 +166,7 @@
             : displayCodeBefore
         "
         [searchExpr]="[
-          this[cell.column.dataField + 'Service'].model.getKeyField(),
-          this[cell.column.dataField + 'Service'].model.getLabelField()
+          this[cell.column.dataField + 'Service'].model.getKeyField()
         ]"
         [value]="cell.data[cell.column.dataField]"
         [readOnly]="!allowMutations"
@@ -194,17 +193,6 @@
         [focusStateEnabled]="false"
         [text]="showCertificationCheck(cell.data)"
         (onClick)="openCertificationPopup(cell.data)"
-      ></dx-button>
-    </div>
-    <div *dxTemplate="let cell of 'swapButtonTemplate'">
-      <dx-button
-        class="swap-button"
-        type="default"
-        [focusStateEnabled]="false"
-        icon="material-icons swap_horizontal_circle"
-        [disabled]="!allowMutations"
-        hint="Remplacer"
-        (onClick)="swapArticle(cell.data)"
       ></dx-button>
     </div>
     <div *dxTemplate="let cell of 'headerCellBtnTemplate'">

@@ -66,6 +66,8 @@
     falseText="Non"
     [dataType]="column?.dataType"
     [showEditorAlways]="true"
+    [cssClass]="column.cssClass"
+    [width]="column.width"
     [allowEditing]="column.allowEditing"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [format]="column.format"
@@ -94,8 +96,7 @@
           : displayCodeBefore
       "
       [searchExpr]="[
-        this[cell.column.dataField + 'Service'].model.getKeyField(),
-        this[cell.column.dataField + 'Service'].model.getLabelField()
+        this[cell.column.dataField + 'Service'].model.getKeyField()
       ]"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
@@ -109,8 +110,7 @@
       [id]="cell.key"
       [displayExpr]="displayCustom"
       [searchExpr]="[
-        this[cell.column.dataField + 'Service'].model.getKeyField(),
-        this[cell.column.dataField + 'Service'].model.getLabelField()
+        this[cell.column.dataField + 'Service'].model.getKeyField()
       ]"
       [deferRendering]="false"
 

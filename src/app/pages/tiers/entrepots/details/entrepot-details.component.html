@@ -364,7 +364,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       (onValueChanged)="onPaysChange($event)"
                     >
                       <dx-validator
@@ -461,7 +461,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-langue' | localize }}"
@@ -522,7 +522,7 @@
                     [readOnly]="readOnlyMode"
                     [dataSource]="regimesTva"
                     [displayExpr]="displayIDBefore"
-                    [searchExpr]="['id', 'description']"
+                    [searchExpr]="['id']"
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-regimeTva' | localize }}"
@@ -545,7 +545,7 @@
                     [readOnly]="readOnlyMode"
                     [dataSource]="typesPalette"
                     [displayExpr]="displayIDBefore"
-                    [searchExpr]="['id', 'description']"
+                    [searchExpr]="['id']"
                     [showClearButton]="true"
                     (onValueChanged)="onNonRequiredSBChange($event)"
                   ></dx-select-box>
@@ -563,7 +563,7 @@
                     [readOnly]="readOnlyMode"
                     [dataSource]="incoterms"
                     [displayExpr]="displayIDBefore"
-                    [searchExpr]="['id', 'description']"
+                    [searchExpr]="['id']"
                     [showClearButton]="true"
                     (onValueChanged)="onNonRequiredSBChange($event)"
                   ></dx-select-box>
@@ -781,7 +781,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="transporteurs"
                       [displayExpr]="displayEntrepot"
-                      [searchExpr]="['id', 'raisonSocial']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -799,7 +799,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesTarif"
                       displayExpr="description"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     ></dx-select-box>
                   </div>
                 </div>
@@ -841,7 +841,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesCamion"
                       displayExpr="description"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -859,7 +859,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="transitaires"
                       displayExpr="raisonSocial"
-                      [searchExpr]="['id', 'raisonSocial']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -877,7 +877,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesTarif"
                       displayExpr="description"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>

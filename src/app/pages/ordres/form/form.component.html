@@ -194,8 +194,13 @@
 
                 <span
                   *ngIf="ordre"
-                  class="dx-form-group-caption order-status"
+                  class="dx-form-group-caption red-font "
                   >{{ status }}</span
+                >
+                <span
+                *ngIf="ordreFacture && numeroFacture?.length"
+                  class="dx-form-group-caption invoice-number red-font"
+                  >&nbsp;({{ numeroFacture }})</span
                 >
                 <span
                   *ngIf="refOrdre"
@@ -229,7 +234,7 @@
                             formControlName="client"
                             [dataSource]="clientsDS"
                             [displayExpr]="displayCodeBefore"
-                            [searchExpr]="['id', 'raisonSocial']"
+                            [searchExpr]="['id']"
                           >
                             <dx-validator
                               name="{{ 'ordres-client' | localize }}"
@@ -341,7 +346,7 @@
                             formControlName="incoterm"
                             [dataSource]="incotermsDS"
                             [displayExpr]="displayIDBefore"
-                            [searchExpr]="['id', 'description']"
+                            [searchExpr]="['id']"
                           >
                             <dx-validator
                               name="{{ 'ordres-incoterm' | localize }}"
@@ -366,7 +371,7 @@
                                 formControlName="transporteur"
                                 [dataSource]="transporteursDS"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'raisonSocial']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -394,7 +399,7 @@
                                 formControlName="typeTransport"
                                 [dataSource]="typeTransportDS"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'description']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -441,7 +446,7 @@
                                 [dataSource]="deviseDS"
                                 [readOnly]="true"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'description']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -465,7 +470,7 @@
                                 formControlName="baseTarifTransport"
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"
-                                [searchExpr]="['id', 'description']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -578,7 +583,7 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeDDS"
                                 displayExpr="name"
-                                [searchExpr]="['id', 'name']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -618,7 +623,7 @@
                                 [readOnly]="ordreFacture"
                                 [dataSource]="portTypeADS"
                                 displayExpr="name"
-                                [searchExpr]="['id', 'name']"
+                                [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
                                 </dxo-drop-down-options>
@@ -653,7 +658,7 @@
                             [dataSource]="deviseDS"
                             [readOnly]="true"
                             [displayExpr]="deviseDisplayExpr"
-                            [searchExpr]="['id', 'description']"
+                            [searchExpr]="['id']"
                           >
                             <dx-validator
                               name="{{ 'ordres-devise' | localize }}"
@@ -855,7 +860,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   (onItemTitleClick)="
-                    onAccordionToggled($event, [gridLogistiques])
+                    onAccordionToggled($event, [gridLogistiques, gridFrais])
                   "
                 >
                   <dxi-item>
@@ -870,9 +875,9 @@
                             <dx-select-box
                               formControlName="transporteur"
                               [dataSource]="transporteursDS"
-                              displayExpr="raisonSocial"
+                              [displayExpr]="displayIDBefore"
                               [readOnly]="true"
-                              [searchExpr]="['id', 'raisonSocial']"
+                              [searchExpr]="['id']"
                             >
                             </dx-select-box>
                           </div>
@@ -885,6 +890,11 @@
                       [gridLignesLogistique]="gridLignesLogistique"
                       [ordre]="ordre"
                     ></app-grid-logistiques>
+                    <div class="grid-separator"></div>
+                    <app-grid-frais
+                      #gridFrais
+                      [ordre]="ordre"
+                    ></app-grid-frais>
                   </dxi-item>
                 </dx-accordion>
               </div>
@@ -940,8 +950,7 @@
                     onAccordionToggled($event, [
                       gridLTD,
                       gridDetailPalettes,
-                      gridMarge,
-                      gridFrais
+                      gridMarge
                     ])
                   "
                 >
@@ -962,10 +971,6 @@
                         [ordre]="ordre"
                       ></app-grid-marge>
                       <div class="grid-separator"></div>
-                      <app-grid-frais
-                        #gridFrais
-                        [ordre]="ordre"
-                      ></app-grid-frais>
                     </div>
                   </dxi-item>
                 </dx-accordion>

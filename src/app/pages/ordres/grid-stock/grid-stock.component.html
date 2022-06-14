@@ -16,7 +16,7 @@
             #especeSB
             [dataSource]="especes"
             (valueChange)="onFilterChange()"
-            [searchExpr]="['id', 'description']"
+            [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
           >
@@ -35,7 +35,7 @@
             [dataSource]="varietes"
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
-            [searchExpr]="['id', 'description']"
+            [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
           >
@@ -73,7 +73,7 @@
             [dataSource]="emballages"
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
-            [searchExpr]="['id', 'description']"
+            [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
           >
@@ -92,7 +92,7 @@
             [dataSource]="origines"
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
-            [searchExpr]="['id', 'description']"
+            [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
           >
@@ -113,7 +113,7 @@
             [disabled]="noEspeceSet"
             (valueChange)="onFilterChange()"
             [displayExpr]="displayCodeBefore"
-            [searchExpr]="['id', 'raisonSocial']"
+            [searchExpr]="['id']"
           >
             <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
           </dx-select-box>
@@ -169,7 +169,7 @@
         [allowExportSelectedData]="false"
       ></dxo-export>
       <dxo-selection
-        mode="multiple"
+        mode="single"
         [allowSelectAll]="false"
       ></dxo-selection>
       <dxo-pager
@@ -198,28 +198,28 @@
 
       <dxo-summary>
         <dxi-group-item
-          column="quantiteRestante1"
+          column="quantiteCalculee1"
           summaryType="sum"
           [alignByColumn]="true"
           displayFormat="{0}"
         >
         </dxi-group-item>
         <dxi-group-item
-          column="quantiteRestante2"
+          column="quantiteCalculee2"
           summaryType="sum"
           [alignByColumn]="true"
           displayFormat="{0}"
         >
         </dxi-group-item>
         <dxi-group-item
-          column="quantiteRestante3"
+          column="quantiteCalculee3"
           summaryType="sum"
           [alignByColumn]="true"
           displayFormat="{0}"
         >
         </dxi-group-item>
         <dxi-group-item
-          column="quantiteRestante4"
+          column="quantiteCalculee4"
           summaryType="sum"
           [alignByColumn]="true"
           displayFormat="{0}"
@@ -265,4 +265,6 @@
   <app-zoom-article-popup
     [articleLigneId]="articleLigneId"
   ></app-zoom-article-popup>
+
+  <app-reservation-popup></app-reservation-popup>
 </div>

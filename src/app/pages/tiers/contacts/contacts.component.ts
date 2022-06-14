@@ -190,6 +190,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   }
 
   async processSaving(changes) {
+    if (this.typeTiers !== TypeTiers.ENTREPOT) return;
     for (const change of changes) {
       const refs = await this
         .fetchRefClientEntrepot(change.data.fluxComplement);
@@ -200,20 +201,18 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   async fetchRefClientEntrepot(fluxComplement: string) {
     const fetchEntrepot = (codeEntrepot: string) => this
       .entrepotsService
-      .getOneByCode(codeEntrepot, new Set(["id", "client.id"]))
-      .pipe(map(res => res.data.entrepotByCode))
+      .getOneByCodeAndsocieteId(codeEntrepot, this.currentCompanyService.getCompany().id, new Set(["id", "client.id"]))
+      .pipe(map(res => res.data.entrepotByCodeAndsocieteId))
       .toPromise();
     const entrepot = await fetchEntrepot(this.codeTiers);
     const partialContact: Partial<Contact> = {};
 
-    if (this.typeTiers === TypeTiers.ENTREPOT)
-      partialContact.refClientEntrepot = ["DEMAT", "AGP"]
-        .includes(fluxComplement)
-        ? entrepot.client.id
-        : entrepot.id;
+    partialContact.refClientEntrepot = ["DEMAT", "AGP"]
+      .includes(fluxComplement)
+      ? entrepot.client.id
+      : entrepot.id;
     partialContact.client = new Client({ id: entrepot.client.id });
-    partialContact.entrepot = new Entrepot({ id: entrepot.id });
-
+    partialContact.entrepot = new Entrepot({ id: entrepot.id ?? entrepot.client.id });
     return partialContact;
   }
 

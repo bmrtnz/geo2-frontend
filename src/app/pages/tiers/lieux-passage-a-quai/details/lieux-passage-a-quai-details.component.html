@@ -181,7 +181,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-lieuxpassageaquai-langue' | localize }}"
@@ -291,7 +291,7 @@
                         <dxi-validation-rule
                           [trim]="false"
                           type="stringLength"
-                          [max]="70"
+                          [max]="35"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -321,7 +321,7 @@
                         <dxi-validation-rule
                           [trim]="false"
                           type="stringLength"
-                          [max]="70"
+                          [max]="35"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -351,7 +351,7 @@
                         <dxi-validation-rule
                           [trim]="false"
                           type="stringLength"
-                          [max]="70"
+                          [max]="35"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -433,7 +433,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-lieuxpassageaquai-pays' | localize }}"
@@ -497,7 +497,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -515,7 +515,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-lieuxpassageaquai-devise' | localize }}"
@@ -539,7 +539,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -557,7 +557,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>

@@ -15,6 +15,14 @@
   }
 }
 
+::ng-deep .grid-ordre-ligne .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+
+  input,
+  div {
+    color: #fff;
+  }
+}
+
 ::ng-deep .grid-ordre-ligne {
 
   .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type) {
@@ -80,11 +88,11 @@
 
   .dx-row-focused.dx-data-row>td {
     // border-bottom-color: #e0e0e0 !important;
-    border-bottom-color: $base-accent !important;
+    border-bottom-color: $base-accent  !important;
   }
 
   .dx-link-delete {
-    color: $base-accent !important;
+    color: $base-accent  !important;
     background-color: transparent !important;
   }
 
@@ -112,18 +120,21 @@
     }
 
     &.certification {
-      background-color: $BW-purple-medium !important;
+      background-color: $BW-purple-medium  !important;
 
       &:hover {
-        background-color: $BW-purple-dark !important;
+        background-color: $BW-purple-dark  !important;
       }
     }
   }
 
 }
 
-
 ::ng-deep .cursor-pointer,
 ::ng-deep .cursor-pointer input {
   cursor: pointer !important;
+}
+
+::ng-deep .order-line-text {
+  padding-left: 5px !important;
 }

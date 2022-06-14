@@ -160,7 +160,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="bureauxAchat"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'raisonSocial']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-fournisseurs-bureauAchat' | localize }}"
@@ -183,7 +183,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="identifiant"
                       displayExpr="libelle"
-                      [searchExpr]="['id', 'libelle']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-fournisseurs-identifiant' | localize }}"
@@ -206,7 +206,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="typesFournisseur"
                       displayExpr="description"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     ></dx-select-box>
@@ -311,7 +311,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-fournisseurs-langue' | localize }}"
@@ -366,7 +366,7 @@
                       (onValueChanged)="onNonRequiredSBChange($event)"
                       [dataSource]="incoterms"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                     </dx-select-box>
                   </div>
@@ -436,7 +436,7 @@
                         <dxi-validation-rule
                           [trim]="false"
                           type="stringLength"
-                          [max]="70"
+                          [max]="35"
                         ></dxi-validation-rule>
                         <dxi-validation-rule
                           type="required"
@@ -467,7 +467,7 @@
                         <dxi-validation-rule
                           [trim]="false"
                           type="stringLength"
-                          [max]="70"
+                          [max]="35"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -495,7 +495,7 @@
                         <dxi-validation-rule
                           [trim]="false"
                           type="stringLength"
-                          [max]="70"
+                          [max]="35"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-text-box>
@@ -575,7 +575,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-fournisseurs-pays' | localize }}"
@@ -857,7 +857,7 @@
                       [readOnly]="true"
                       [dataSource]="conditionsVente"
                       displayExpr="id"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                     </dx-select-box>
                   </div>
@@ -948,7 +948,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-fournisseurs-regimeTva' | localize }}"
@@ -971,7 +971,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                     >
                       <dx-validator
                         name="{{ 'tiers-fournisseurs-devise' | localize }}"
@@ -1026,7 +1026,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -1055,7 +1055,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
                       [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -1305,7 +1305,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="fournisseursDeRattachement"
                       displayExpr="raisonSocial"
-                      [searchExpr]="['id', 'raisonSocial']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
@@ -1323,7 +1323,7 @@
                       [readOnly]="readOnlyMode"
                       [dataSource]="groupesFournisseur"
                       displayExpr="description"
-                      [searchExpr]="['id', 'description']"
+                      [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
