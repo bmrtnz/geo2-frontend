@@ -340,6 +340,12 @@ body app-root.production {
   }
 }
 
+.dx-row-lines td {
+  &.multi-line-header {
+    line-height: 0 !important;
+  }
+}
+
 // Datagrid Header text on two lines
 .multi-line-header {
   text-align: center !important;
