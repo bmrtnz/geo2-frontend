@@ -33,6 +33,7 @@ import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
+import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -72,6 +73,8 @@ export class FormComponent implements OnInit, OnDestroy {
   @Output() public ordre: Ordre;
   @Output() openArticleManuPopup = new EventEmitter<any>();
   @Output() articleRowKey: string;
+  @Output() public transporteurLigneId: string;
+  @Output() public transporteurTitle: string;
 
   private readonly headerFields = [
     "id",
@@ -208,6 +211,7 @@ export class FormComponent implements OnInit, OnDestroy {
   @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
   @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
   @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
+  @ViewChild(ZoomTransporteurPopupComponent, { static: false }) zoomTransporteurFilePopup: ZoomTransporteurPopupComponent;
   @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
   @ViewChild(GridLignesDetailsComponent) gridLignesDetail: GridLignesDetailsComponent;
 
@@ -650,6 +654,13 @@ export class FormComponent implements OnInit, OnDestroy {
     this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
+  }
+
+  openTransporteurFilePopup() {
+    this.transporteurLigneId = this.ordre?.transporteur?.id;
+    if (this.transporteurLigneId === null) return;
+    this.transporteurTitle = "transporteur";
+    this.zoomTransporteurFilePopup.visible = true;
   }
 
   private refetchStatut() {

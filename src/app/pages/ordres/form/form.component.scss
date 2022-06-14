@@ -247,6 +247,23 @@ dx-button[type="normal"] {
   width: 500px;
 }
 
+::ng-deep .form-zoom-button {
+  width: 22px !important;
+  height: 22px;
+  min-width: 0 !important;
+  margin: 0 4px !important;
+  border-radius: 4px !important;
+
+  .dx-button-content {
+    padding: 0;
+
+    .dx-icon {
+      margin: -12px !important;
+      font-size: 18px;
+    }
+  }
+}
+
 ::ng-deep #head {
   padding: 20px 20px 10px 20px;
 }
