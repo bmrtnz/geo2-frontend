@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy } from "@angular/core";
+import { Inject, Injectable, OnDestroy, ɵNG_INJ_DEF } from "@angular/core";
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
@@ -564,30 +564,24 @@ export abstract class ApiService implements OnDestroy {
     if (typeof clonedFilter[0] === "string")
       clonedFilter = [clonedFilter];
 
-    const next = (currentFilter: any[], index = 0) => {
-      const node = currentFilter[index];
+    const next = (currentFilter: any[], negate = false, index = 0) => {
+      let node = currentFilter[index];
       if (typeof node === "object") { // comparison
+
+        // Map negation
+        if (node[0] === "!") {
+          node = node[1];
+          negate = !negate;
+        }
 
         // Deep filter
         if (typeof node[0] === "object") {
-          currentFilter[index] = `(${next(node).join(" ")})`;
+          currentFilter[index] = `(${next(node, negate).join(" ")})`;
         } else {
           /* tslint:disable-next-line:prefer-const */
           let [selector, operator, value] = node;
           const dxOperator = operator;
-
-          // Map operator
-          switch (operator) {
-            case "=": operator = "=="; break;
-            case "contains": operator = "=ilike="; break;
-            case "in": operator = "=in="; break;
-            case "startswith": operator = "=ilike="; break;
-            case "endswith": operator = "=ilike="; break;
-            case "notcontains": operator = "=inotlike="; break;
-            case "isnull": operator = "=isnull="; break;
-            case "isnotnull": operator = "=isnotnull="; break;
-            case "<>": operator = "!="; break;
-          }
+          operator = this.mapOperator(operator, negate);
 
           // Format object
           if (typeof value === "object" && value) {
@@ -620,12 +614,40 @@ export abstract class ApiService implements OnDestroy {
 
           }
         }
-      } else currentFilter[index] = node;
+      } else {
+        currentFilter[index] = negate ? this.switchLogicalOperator(node) : node;
+      }
       if (index < currentFilter.length - 1)
-        return next(currentFilter, index + 1);
+        return next(currentFilter, negate, index + 1);
       else return currentFilter;
     };
     return next(clonedFilter).flat().join(" ");
+  }
+
+  /**
+   * Map DXFilter opetator to RSQL operator
+   */
+  private mapOperator(operator: string, negate = false) {
+    switch (operator) {
+      case "=": return negate ? "!=" : "==";
+      case "<>": return negate ? "==" : "!=";
+      case "contains": return negate ? "=inotlike=" : "=ilike=";
+      case "notcontains": return negate ? "=ilike=" : "=inotlike=";
+      case "in": return negate ? "=notin=" : "=in=";
+      case "startswith": return negate ? "=inotlike=" : "=ilike=";
+      case "endswith": return negate ? "=ilike=" : "=ilike=";
+      case "isnull": return negate ? "=isnotnull=" : "=isnull=";
+      case "isnotnull": return negate ? "=isnull=" : "=isnotnull=";
+    }
+  }
+
+  /**
+   * Switch logical operator (and/or)
+   */
+  private switchLogicalOperator(operator: string) {
+    operator = operator.toLowerCase();
+    if (operator === "and") return "or";
+    if (operator === "or") return "and";
   }
 
   public mapLoadOptionsToVariables(options: LoadOptions) {
