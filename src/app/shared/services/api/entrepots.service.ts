@@ -44,6 +44,29 @@ export class EntrepotsService extends ApiService implements APIRead {
     });
   }
 
+  getOneByCodeAndsocieteId(code: string, societeId: string, columns: Set<string>) {
+    return this.apollo.query<{ entrepotByCodeAndsocieteId: Entrepot }>({
+      query: gql(ApiService.buildGraph(
+        "query",
+        [
+          {
+            name: "entrepotByCodeAndsocieteId",
+            body: columns,
+            params: [
+              { name: "code", value: "code", isVariable: true },
+              { name: "societeId", value: "societeId", isVariable: true }
+            ],
+          },
+        ],
+        [
+          { name: "code", type: "String", isOptionnal: false },
+          { name: "societeId", type: "String", isOptionnal: false }
+        ],
+      )),
+      variables: { code, societeId },
+    });
+  }
+
   getOne_v2(id: string, columns: Array<string> | Set<string>) {
     return this.apollo
       .query<{ entrepot: Entrepot }>({
