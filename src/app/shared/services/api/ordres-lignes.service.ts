@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
-import { FunctionsService } from "app/shared/services/api/functions.service";
+import { functionBody, FunctionsService } from "app/shared/services/api/functions.service";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { takeWhile } from "rxjs/operators";
@@ -396,30 +396,29 @@ export class OrdreLignesService extends ApiService implements APIRead {
   }
 
   public updateField(
-    name: string,
+    fieldName: string,
     value: any,
     id: string,
-    secteur: string,
-    body: Array<string>,
+    socCode: string,
   ) {
     return this.apollo.mutate({
       mutation: gql(ApiService.buildGraph("mutation", [{
         name: "updateField",
-        body,
+        body: functionBody,
         params: [
-          { name: "name", value: "name", isVariable: true },
+          { name: "fieldName", value: "fieldName", isVariable: true },
           { name: "value", value: "value", isVariable: true },
           { name: "id", value: "id", isVariable: true },
-          { name: "secteur", value: "secteur", isVariable: true },
-          { name: "societe", value: this.currentCompanyService.getCompany().id, isVariable: false },
+          { name: "socCode", value: "socCode", isVariable: true },
+          // { name: "societe", value: this.currentCompanyService.getCompany().id, isVariable: false },
         ],
       }], [
-        { name: "name", type: "String", isOptionnal: false },
-        { name: "value", type: "Object", isOptionnal: false },
+        { name: "fieldName", type: "String", isOptionnal: false },
+        { name: "value", type: "ObjectScalar", isOptionnal: false },
         { name: "id", type: "String", isOptionnal: false },
-        { name: "secteur", type: "String", isOptionnal: false },
+        { name: "socCode", type: "String", isOptionnal: false },
       ])),
-      variables: { name, value, id, secteur },
+      variables: { fieldName, value, id, socCode },
       fetchPolicy: "network-only",
     });
   }

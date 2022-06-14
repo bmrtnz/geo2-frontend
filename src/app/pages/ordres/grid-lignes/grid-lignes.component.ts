@@ -474,7 +474,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
         value,
         event.changes[0].key,
         this.ordre.secteurCommercial.id,
-        this.gridFields,
       ).pipe(
         mapTo(null),
       )
