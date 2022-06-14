@@ -631,6 +631,10 @@ export abstract class ApiService implements OnDestroy {
     switch (operator) {
       case "=": return negate ? "!=" : "==";
       case "<>": return negate ? "==" : "!=";
+      case ">": return negate ? "<=" : ">";
+      case "<": return negate ? ">=" : "<";
+      case ">=": return negate ? "<" : ">=";
+      case "<=": return negate ? ">" : "<=";
       case "contains": return negate ? "=inotlike=" : "=ilike=";
       case "notcontains": return negate ? "=ilike=" : "=inotlike=";
       case "in": return negate ? "=notin=" : "=in=";

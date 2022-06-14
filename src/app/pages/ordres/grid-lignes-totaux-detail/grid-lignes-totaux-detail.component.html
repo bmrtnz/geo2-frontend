@@ -1,7 +1,14 @@
 <dx-data-grid
   class="dx-card wide-card"
   [dataSource]="dataSource"
-  [remoteOperations]="true"
+  [remoteOperations]="{
+    filtering: true,
+    grouping: false,
+    groupPaging: false,
+    paging: true,
+    sorting: true,
+    summary: true
+  }"
   [showBorders]="false"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"

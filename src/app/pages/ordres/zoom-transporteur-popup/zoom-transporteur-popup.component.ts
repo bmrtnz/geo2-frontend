@@ -13,7 +13,6 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
 
   @Input() public transporteurLigneId: string;
   @Input() public transporteurTitle: string;
-  @Input() public transporteurId: string;
 
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
   visible: boolean;
@@ -24,6 +23,7 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
+    if (!this.transporteurLigneId) return;
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.setTitle();
   }

@@ -27,23 +27,6 @@ export class EntrepotsService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getOneByCode(code: string, columns: Set<string>) {
-    return this.apollo.query<{ entrepotByCode: Entrepot }>({
-      query: gql(ApiService.buildGraph(
-        "query",
-        [
-          {
-            name: "entrepotByCode",
-            body: columns,
-            params: [{ name: "code", value: "code", isVariable: true }],
-          },
-        ],
-        [{ name: "code", type: "String", isOptionnal: false }],
-      )),
-      variables: { code },
-    });
-  }
-
   getOneByCodeAndsocieteId(code: string, societeId: string, columns: Set<string>) {
     return this.apollo.query<{ entrepotByCodeAndsocieteId: Entrepot }>({
       query: gql(ApiService.buildGraph(

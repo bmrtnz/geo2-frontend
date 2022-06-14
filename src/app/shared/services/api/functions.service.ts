@@ -150,6 +150,30 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  public fCalculMargePrevi =
+    (ordreRef: string, socCode: string) => this.apollo
+      .watchQuery<{ fCalculMargePrevi: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fCalculMargePrevi",
+              body: functionBody,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "socCode", value: "socCode", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "socCode", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef, socCode },
+        fetchPolicy: "network-only",
+      })
+
   /**
    * Verification de la bonne conformité de la logistique
    * avant envoi de documents et validation bon à facturer

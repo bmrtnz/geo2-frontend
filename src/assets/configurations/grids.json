@@ -4278,6 +4278,8 @@
       {
         "visibleIndex": 0,
         "dataField": "fournisseur.code",
+        "sortIndex": 2,
+        "sortOrder": "asc",
         "visible": true
       },
       {

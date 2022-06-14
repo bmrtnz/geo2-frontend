@@ -1,6 +1,13 @@
 <dx-data-grid
   class="dx-card wide-card"
-  [remoteOperations]="true"
+  [remoteOperations]="{
+    filtering: true,
+    grouping: true,
+    groupPaging: false,
+    paging: false,
+    sorting: true,
+    summary: false
+  }"
   [showBorders]="false"
   [elementAttr]="{ class: 'grid-ordre-ligne-logistique' }"
   [focusedRowEnabled]="true"
@@ -59,6 +66,33 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
+
+  <dxo-summary>
+    <dxi-total-item
+      column="nombrePalettesAuSol"
+      summaryType="sum"
+      displayFormat="{0}"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      column="nombrePalettes100x120"
+      summaryType="sum"
+      displayFormat="{0}"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      column="nombrePalettes60x80"
+      summaryType="sum"
+      displayFormat="{0}"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      column="nombrePalettes80x120"
+      summaryType="sum"
+      displayFormat="{0}"
+    >
+    </dxi-total-item>
+  </dxo-summary>
 
   <dxi-column
     *ngFor="let column of this.columns | async"
