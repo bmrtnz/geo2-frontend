@@ -40,7 +40,7 @@ export class ConfirmationResultPopupComponent {
     console.log(content);
     if (content.indexOf("Exception while fetching data") >= 0) content = content.substring(content.indexOf(":") + 2);
     this.content = content
-      .split("~r")
+      .split(/~r~n|~r|~n/)
       .map(chunk => `<p>${chunk}</p>`)
       .join("");
     this.popup.instance.show();
