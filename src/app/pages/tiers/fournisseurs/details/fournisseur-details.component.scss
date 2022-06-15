@@ -2,15 +2,14 @@
   margin-left: 10px;
   float: right;
 }
-.red-font {
-  color: #ff325a;
-}
+
 // Vertical alignement of tagboxes (certifications)
 ::ng-deep .dx-tag-container {
   &.dx-texteditor-input-container {
     display: grid;
   }
-  .dx-tag ~ .dx-texteditor-input {
+
+  .dx-tag~.dx-texteditor-input {
     display: none;
   }
 }

@@ -1,6 +1,5 @@
 
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
 import { ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
@@ -68,7 +67,6 @@ export class GridStockComponent implements OnInit {
 
   constructor(
     public articlesService: ArticlesService,
-    private router: Router,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
@@ -140,16 +138,29 @@ export class GridStockComponent implements OnInit {
 
   }
 
-  onRowDblClick({ data }: { data: Partial<StockArticle>, [key: string]: any }) {
-    this.reservationPopup.present(data, this.ordre)
-      .subscribe({
-        error: ({ message }: Error) => notify(message, "error"),
-        complete: () => {
-          this.selectChange.emit();
-          this.dataGrid.dataSource = [];
-          this.toRefresh = true;
-        },
-      });
+  openFilePopup(data) {
+    this.articleLigneId = data.collapsedItems ? data.collapsedItems[0]?.articleID : data.items[0]?.articleID;
+    if (this.articleLigneId) this.zoomArticlePopup.visible = true;
+  }
+
+
+  onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
+    if (!data.articleID) {
+      this.openFilePopup(data);
+    } else {
+      this.reservationPopup.present(data, this.ordre)
+        .subscribe({
+          error: ({ message }: Error) => notify(message, "error", 5000),
+          complete: () => {
+            notify(this.localizeService.localize("ajout-article") + "...", "info", 3000);
+            setTimeout(() => {
+              this.selectChange.emit();
+              this.dataGrid.dataSource = [];
+              this.toRefresh = true;
+            });
+          }
+        });
+    }
   }
 
   onRowPrepared(e) {
@@ -158,33 +169,26 @@ export class GridStockComponent implements OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === "group") {
-      if (e.column.dataField === "id" && e.cellElement.textContent) {
+      if (e.column.dataField === "articleDescription" && e.cellElement.textContent) {
         const items = e.data.items ?? e.data.collapsedItems;
-
-        e.cellElement.textContent += ` ${items[0].articleDescription}`;
+        e.cellElement.textContent = items[0].articleID + " - " + e.cellElement.textContent;
+        e.cellElement.title = this.localizeService.localize("hint-dblClick-file");
+        e.cellElement.classList.add("cursor-pointer");
       }
     }
 
     if (e.rowType === "data") {
       if (e.column.dataField === "articleDescription") {
-        // Descript. article
-        /*const infoArt = this.articlesService.concatArtDescript(e.data);
-        infoArt.concatDesc = infoArt.concatDesc.substring(9); // A modifier pourêtre plus générique
-        e.cellElement.innerText = infoArt.concatDesc
-        e.cellElement.title = infoArt.concatDesc.substring(2);
-        e.cellElement.classList.add("cursor-pointer");
-        // Bio en vert
-        if (infoArt.bio) e.cellElement.classList.add("bio-article");*/
+        // Article bio
         if (e.data.bio) e.cellElement.classList.add("bio-article");
       }
     }
-  }
 
-  openFilePopup(cell, e) {
-    if (cell.column?.dataField === "article.matierePremiere.origine.id") {
-      this.articleLigneId = cell.data.article.id;
-      this.zoomArticlePopup.visible = true;
+    if (["data", "group"].includes(e.rowType)) {
+      // Fond jaune pour les stocks J21
+      if (e.column.dataField === "quantiteCalculee4") e.cellElement.classList.add("highlight-stockJ21-cell");
     }
+
   }
 
   formatListItem(data) {

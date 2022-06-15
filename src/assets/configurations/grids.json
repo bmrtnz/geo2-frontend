@@ -1201,21 +1201,10 @@
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "articleDescription",
         "dataType": "string",
         "groupIndex": 0,
-        "visible": true
-      },
-      {
-        "visibleIndex": 2,
-        "dataField": "age",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "fournisseurCode",
         "visible": true
       },
       {
@@ -1223,6 +1212,22 @@
         "visible": false,
         "filterValue": true,
         "selectedFilterOperation": "="
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "age",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "fournisseurCode",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "proprietaireCode",
+        "visible": true
       },
       {
         "dataField": "stockID",
@@ -1257,10 +1262,6 @@
         "visible": false
       },
       {
-        "dataField": "proprietaireCode",
-        "visible": false
-      },
-      {
         "dataField": "dateFabrication",
         "visible": false
       },
@@ -1278,22 +1279,22 @@
       },
       {
         "dataField": "quantiteCalculee1",
-        "width": 100,
+        "width": 60,
         "visible": true
       },
       {
         "dataField": "quantiteCalculee2",
-        "width": 100,
+        "width": 60,
         "visible": true
       },
       {
         "dataField": "quantiteCalculee3",
-        "width": 100,
+        "width": 60,
         "visible": true
       },
       {
         "dataField": "quantiteCalculee4",
-        "width": 100,
+        "width": 60,
         "visible": true
       },
       {

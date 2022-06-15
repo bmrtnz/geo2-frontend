@@ -18,7 +18,7 @@ import { concatAll, take, takeWhile, tap } from "rxjs/operators";
 export class ReservationPopupComponent {
 
   @ViewChild(DxPopupComponent, { static: false })
-  popupComponent: DxPopupComponent;
+  popup: DxPopupComponent;
 
   @ViewChild(DxTextBoxComponent, { static: false })
   commentBox: DxTextBoxComponent;
@@ -62,11 +62,12 @@ export class ReservationPopupComponent {
         takeWhile(res => res.loading)
       );
     this.persist.emit(save);
-    this.popupComponent.instance.hide();
+    this.popup.instance.hide();
   }
 
   onHidden() {
     this.formGroup.reset();
+    this.negativeStock = false;
   }
 
   onShown() {
@@ -75,18 +76,18 @@ export class ReservationPopupComponent {
 
   present(stockArticle: Partial<StockArticle>, ordre: Partial<Ordre>) {
     this.rowData = { stockArticle, ordre };
-    this.popupComponent.instance.show();
+    this.popup.instance.show();
     this.formGroup.get("commentaire")
-      .setValue(`ordre ${ordre.numero} / ${ordre.entrepot.code}`);
+      .setValue(`Ordre ${ordre.campagne.id}-${ordre.numero} / ${ordre.entrepot.code}`);
     return this.persist.asObservable().pipe(take(1), concatAll());
   }
 
-  onQuantiteChange() {
-    const quantite = this.rowData.stockArticle.quantiteCalculee1
-      + this.rowData.stockArticle.quantiteCalculee2
-      + this.rowData.stockArticle.quantiteCalculee3
-      + this.rowData.stockArticle.quantiteCalculee4;
-    this.negativeStock = quantite - this.formGroup.get("quantite").value < 0;
+  onQuantiteChange(e) {
+    const quantite = this.rowData.stockArticle.quantiteCalculee1 || 0
+      + this.rowData.stockArticle.quantiteCalculee2 || 0
+      + this.rowData.stockArticle.quantiteCalculee3 || 0
+      + this.rowData.stockArticle.quantiteCalculee4 || 0;
+    this.negativeStock = quantite - e.value < 0;
   }
 
 }

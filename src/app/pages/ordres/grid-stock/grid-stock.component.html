@@ -138,6 +138,7 @@
       [columnAutoWidth]="true"
       [columnHidingEnabled]="false"
       [allowColumnReordering]="true"
+      [rowAlternationEnabled]="true"
       [keyExpr]="'id'"
       (onRowPrepared)="onRowPrepared($event)"
       (onRowDblClick)="onRowDblClick($event)"
@@ -248,23 +249,12 @@
         "
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
-
-      <div *dxTemplate="let cell of 'zoomButtonTemplate'">
-        <dx-button
-          class="grid-zoom-button"
-          type="default"
-          icon="material-icons search"
-          [focusStateEnabled]="false"
-          (onClick)="openFilePopup(cell, $event)"
-        >
-        </dx-button>
-      </div>
     </dx-data-grid>
   </div>
 
-  <app-zoom-article-popup
-    [articleLigneId]="articleLigneId"
-  ></app-zoom-article-popup>
-
-  <app-reservation-popup></app-reservation-popup>
 </div>
+<app-zoom-article-popup
+[articleLigneId]="articleLigneId"
+></app-zoom-article-popup>
+
+<app-reservation-popup></app-reservation-popup>
