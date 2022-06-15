@@ -22,8 +22,9 @@ import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/co
 export class ActionsDocumentsOrdresComponent implements OnInit {
 
   @Input() public ordre: Ordre;
-  @Output() public flux: string;
   @Input() public gridEnvois: GridEnvoisComponent;
+  @Input() public orderConfirmationOnly: boolean;
+  @Output() public flux: string;
 
   public readonly env = environment;
   public actionsFlux: any[];
@@ -64,6 +65,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
     this.plusActionsFlux.map(flux => {
       if (flux.disabled === false && flux.visible === true) this.plusActionsFluxEnabled = true;
     });
+    // if (this.orderConfirmationOnly) this.actionsFlux = this.actionsFlux.filter(flux => flux.id === "ORDRE");
+    // console.log(this.orderConfirmationOnly, this.actionsFlux);
   }
 
   ngOnInit(): void {
