@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService, FournisseursService } from "app/shared/services";
@@ -16,7 +16,7 @@ import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/g
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
-import { DxDataGridComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxLoadIndicatorComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -66,6 +66,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
   @ViewChild(ArticleOriginePopupComponent, { static: false }) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ArticleCertificationPopupComponent, { static: false }) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ZoomFournisseurPopupComponent, { static: false }) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
+  @ViewChild("smallMarginLoader", { static: false }) smallMarginLoader: DxLoadIndicatorComponent;
+
   private gridConfig: Promise<GridConfig>;
   public allowMutations = false;
   public currentfocusedRow: number;
@@ -87,6 +89,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public SelectBoxPopupWidth: number;
   public dataField: string;
   public idLigne: string;
+  public marginText: string;
+  public marginBtnVisible = false;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -264,6 +268,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
             this.localizeService.localize("lignes");
           e.cellElement.classList.add("order-line-text");
         }
+        this.marginBtnVisible = true;
       }
     }
 
@@ -530,8 +535,29 @@ export class GridLignesComponent implements OnChanges, OnInit {
     };
   }
 
+  calculMargePrev() {
+
+    this.smallMarginLoader.visible = true;
+    this.marginText = "";
+    this.functionsService.fCalculMargePrevi(this.ordre.id, this.currentCompanyService.getCompany().id)
+      .valueChanges
+      .subscribe({
+        next: res => {
+          const margin = res.data.fCalculMargePrevi.data.result;
+          this.smallMarginLoader.visible = false;
+          if (margin !== null) this.marginText = ": " + margin + " %";
+        },
+        error: (message: string) => {
+          this.smallMarginLoader.visible = false;
+          notify({ message }, "error", 7000);
+          console.log(message);
+        }
+      });
+  }
+
   cellValueChange(data) {
 
+    this.marginText = "";
     if (!data.changes) return;
     if (data.changes.some(c => c.type !== "update")) return;
     if (!this.dataField) return;
