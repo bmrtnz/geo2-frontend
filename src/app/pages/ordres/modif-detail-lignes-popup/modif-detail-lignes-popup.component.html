@@ -47,14 +47,14 @@
           <dx-text-box value="{{ ligneDetail?.poidsNetExpedie }}" [readOnly]="true"></dx-text-box>
         </div>
       </div>
-        
+
       <div class="textbox-right">
         <div class="header-form-modif-popup">Remplacé par**</div>
         <div style="clear:both"></div>
-        <dx-number-box ngModel name="nombrePalettesExpedieesApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
-        <dx-number-box ngModel name="nombreColisExpediesApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
-        <dx-number-box ngModel name="poidsBrutExpedieApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
-        <dx-number-box ngModel name="poidsNetExpedieApres" (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <dx-number-box ngModel name="nombrePalettesExpedieesApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <dx-number-box ngModel name="nombreColisExpediesApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <dx-number-box ngModel name="poidsBrutExpedieApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <dx-number-box ngModel name="poidsNetExpedieApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
       </div>
       <div style="clear:both"></div>
       <br>

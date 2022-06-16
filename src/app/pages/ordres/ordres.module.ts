@@ -70,6 +70,8 @@ import {
   DxTextAreaModule,
   DxTextBoxModule,
   DxTileViewModule,
+  DxTooltipComponent,
+  DxTooltipModule,
   DxValidationGroupModule,
   DxValidatorModule
 } from "devextreme-angular";
@@ -252,6 +254,7 @@ import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reserv
     TransporteursModule,
     LieuxPassageAQuaiModule,
     ContactsModule,
+    DxTooltipModule
   ],
   providers: [
     OrdresIndicatorsService,

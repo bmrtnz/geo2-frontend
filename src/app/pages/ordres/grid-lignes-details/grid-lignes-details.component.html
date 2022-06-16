@@ -71,7 +71,7 @@
     falseText="Non"
     [fixed]="column.fixed"
     [cssClass]="column?.cssClass"
-    [editCellTemplate]="defineTemplate(column.dataField)"
+    [editCellTemplate]="column?.editCellTemplate"
     allowSearch="false"
     [dataType]="column?.dataType"
     [allowEditing]="column.allowEditing"

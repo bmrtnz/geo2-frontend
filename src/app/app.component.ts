@@ -2,6 +2,7 @@ import { Component, HostBinding } from "@angular/core";
 import { ScreenService } from "./shared/services";
 import { environment } from "../environments/environment";
 import dxSelectBox from "devextreme/ui/select_box";
+import dxNumberBox from "devextreme/ui/number_box";
 import dxTabPanel from "devextreme/ui/tab_panel";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { FormUtilsService } from "./shared/services/form-utils.service";
@@ -69,6 +70,11 @@ export class AppComponent {
       options: {
         searchMode: "startswith",
         searchEnabled: true,
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn
+      }
+    });
+    dxNumberBox.defaultOptions({
+      options: {
         onFocusIn: this.formUtilsService.selectTextOnFocusIn
       }
     });

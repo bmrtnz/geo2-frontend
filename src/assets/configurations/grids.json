@@ -2115,6 +2115,7 @@
         "dataField": "article.matierePremiere.variete.id",
         "width": 60,
         "allowEditing": false,
+        "editCellTemplate": "modifAutoBtnTemplate",
         "showInColumnChooser": false,
         "visible": true
       },
@@ -2196,12 +2197,14 @@
         "visibleIndex": 26,
         "dataField": "typePalette",
         "dataType": "string",
+        "editCellTemplate": "selectBoxEditTemplate",
         "visible": true
       },
       {
         "visibleIndex": 28,
         "dataField": "paletteInter",
         "dataType": "string",
+        "editCellTemplate": "selectBoxEditTemplate",
         "visible": true
       },
       {

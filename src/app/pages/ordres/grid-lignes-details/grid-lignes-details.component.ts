@@ -149,14 +149,6 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     this.ordreLignesService.lockFieldsDetails(e);
   }
 
-  defineTemplate(field) {
-    let templ;
-    if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
-    // We use a invisible random field to show modify/auto buttons
-    if (field === "article.matierePremiere.variete.id") templ = "modifAutoBtnTemplate";
-    return templ ? templ : false;
-  }
-
   async autoDetailExp({ key }: { key: string }) {
     await this.functionsService
       .fDetailsExpOnClickAuto(key)
