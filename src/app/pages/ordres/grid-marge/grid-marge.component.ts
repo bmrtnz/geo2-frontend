@@ -90,6 +90,10 @@ export class GridMargeComponent implements ToggledGrid {
     }
   }
 
+  refresh() {
+    this.dataGrid.instance.refresh();
+  }
+
   onToggling(toggled: boolean) {
 
     toggled && this?.ordre?.id ? this.enableFilters() : this.dataSource = null;

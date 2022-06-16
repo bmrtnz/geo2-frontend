@@ -11,40 +11,44 @@ import { environment } from "environments/environment";
 import { ToggledGrid } from "../form/form.component";
 
 @Component({
-    selector: "app-grid-detail-palettes",
-    templateUrl: "./grid-detail-palettes.component.html",
-    styleUrls: ["./grid-detail-palettes.component.scss"],
+  selector: "app-grid-detail-palettes",
+  templateUrl: "./grid-detail-palettes.component.html",
+  styleUrls: ["./grid-detail-palettes.component.scss"],
 })
 export class GridDetailPalettesComponent implements ToggledGrid {
-    @Input() public ordre: Ordre;
-    @ViewChild(DxDataGridComponent, { static: true })
-    dataGrid: DxDataGridComponent;
+  @Input() public ordre: Ordre;
+  @ViewChild(DxDataGridComponent, { static: true })
+  dataGrid: DxDataGridComponent;
 
-    public dataSource: DataSource;
-    public columnChooser = environment.columnChooser;
-    public detailedFields: GridColumn[];
+  public dataSource: DataSource;
+  public columnChooser = environment.columnChooser;
+  public detailedFields: GridColumn[];
 
-    constructor(
-        private tracabiliteLignesService: TracabiliteLignesService,
-        public gridConfiguratorService: GridConfiguratorService,
-        public localizeService: LocalizationService,
-    ) {
-        this.detailedFields = gridConfig["ordre-detail-palettes"].columns;
+  constructor(
+    private tracabiliteLignesService: TracabiliteLignesService,
+    public gridConfiguratorService: GridConfiguratorService,
+    public localizeService: LocalizationService,
+  ) {
+    this.detailedFields = gridConfig["ordre-detail-palettes"].columns;
+  }
+
+  enableFilters() {
+    if (this?.ordre?.id) {
+      this.dataSource = this.tracabiliteLignesService.getDataSource_v2(
+        this.detailedFields.map((property) => property.dataField),
+      );
+      this.dataSource.filter([
+        ["tracabiliteDetailPalette.ordre.id", "=", this.ordre.id],
+      ]);
+      this.dataGrid.dataSource = this.dataSource;
     }
+  }
 
-    enableFilters() {
-        if (this?.ordre?.id) {
-            this.dataSource = this.tracabiliteLignesService.getDataSource_v2(
-                this.detailedFields.map((property) => property.dataField),
-            );
-            this.dataSource.filter([
-                ["tracabiliteDetailPalette.ordre.id", "=", this.ordre.id],
-            ]);
-            this.dataGrid.dataSource = this.dataSource;
-        }
-    }
+  refresh() {
+    this.dataGrid.instance.refresh();
+  }
 
-    onToggling(toggled: boolean) {
-        toggled ? this.enableFilters() : (this.dataSource = null);
-    }
+  onToggling(toggled: boolean) {
+    toggled ? this.enableFilters() : (this.dataSource = null);
+  }
 }

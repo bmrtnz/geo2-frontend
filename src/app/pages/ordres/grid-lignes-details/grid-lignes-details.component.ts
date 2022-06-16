@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService } from "app/shared/services";
 import { SummaryType } from "app/shared/services/api.service";
@@ -38,6 +38,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
   @Input() public ordre: Ordre;
   @Output() public ligneDetail: any;
+  @Output() refreshGridsSynthese = new EventEmitter();
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
 
@@ -153,7 +154,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     await this.functionsService
       .fDetailsExpOnClickAuto(key)
       .toPromise();
-    this.datagrid.instance.refresh();
+    this.refresh();
   }
 
   modifDetailExp(cell) {
@@ -168,6 +169,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
 
   refresh() {
     this.datagrid.instance.refresh();
+    this.refreshGridsSynthese.emit(true);
   }
 
   showModifButton(cell) {
