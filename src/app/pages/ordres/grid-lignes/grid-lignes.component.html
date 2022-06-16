@@ -23,7 +23,14 @@
   <dx-data-grid
     class="dx-card wide-card"
     [focusedRowEnabled]="true"
-    [remoteOperations]="true"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: true,
+      groupPaging: false,
+      paging: false,
+      sorting: true,
+      summary: false
+    }"
     [showBorders]="false"
     [elementAttr]="{ class: 'grid-ordre-ligne' }"
     [focusedRowIndex]="0"
@@ -78,11 +85,13 @@
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <!-- <dxo-filter-row [visible]="false"></dxo-filter-row> -->
+    <dxo-load-panel [enabled]="false"></dxo-load-panel>
     <dxo-editing
       [selectTextOnEditStart]="true"
       [allowUpdating]="allowMutations"
       [allowDeleting]="allowMutations"
       [mode]="'cell'"
+      [(changes)]="changes"
     >
     </dxo-editing>
     <dxo-column-chooser
@@ -170,6 +179,7 @@
         ]"
         [value]="cell.data[cell.column.dataField]"
         [readOnly]="!allowMutations"
+        (onValueChanged)="onSelectBoxCellValueChanged($event, cell)"
       >
         <dxo-drop-down-options [width]="SelectBoxPopupWidth">
         </dxo-drop-down-options>

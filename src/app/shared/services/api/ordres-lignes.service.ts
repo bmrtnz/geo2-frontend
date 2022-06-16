@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
-import { functionBody, FunctionsService } from "app/shared/services/api/functions.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { takeWhile } from "rxjs/operators";
@@ -84,6 +84,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
+      reshapeOnPush: true,
       sort: [
         { selector: "numero", }
       ],
@@ -205,7 +206,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
     switch (e.column.dataField) {
 
       case "nombrePalettesCommandees": {
-        if ((data.logistique.expedieStation === true
+        if ((data.logistique?.expedieStation === true
           || data.ordre.secteurCommercial.id === "F"
           || bloquer === true)
           && data.ordre.type.id !== "RPR"
@@ -216,26 +217,26 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "nombrePalettesIntermediaires": {
-        if (data.logistique.expedieStation === true ||
+        if (data.logistique?.expedieStation === true ||
           data.indicateurPalette === 1
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "nombreColisPalette": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "nombreColisCommandes": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "proprietaireMarchandise": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
           || data.ordre.type.id === "RDF"
           || data.ordre.type.id === "REP"
@@ -246,7 +247,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "fournisseur": { // Emballeur/Expéditeur
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
           || data.ordre.type.id === "RDF"
           || data.ordre.type.id === "REP"
@@ -283,7 +284,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         if ((data.ordre.venteACommission !== true
           && data.ordre.type.id !== "REP"
           && data.ordre.type.id !== "RPF")
-          && (data.logistique.expedieStation === true
+          && (data.logistique?.expedieStation === true
             || bloquer === true)
         ) this.lock(e);
         break;
@@ -297,7 +298,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "typePalette": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || data.ordre.type.id === "REP"
           || data.ordre.type.id === "RPF"
           || bloquer === true
@@ -305,7 +306,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "paletteInter": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || data.ordre.type.id === "REP"
           || data.ordre.type.id === "RPF"
           || bloquer === true
@@ -352,7 +353,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       case "typePalette":
       case "paletteInter":
       case "paletteInter": {
-        if (data.logistique.expedieStation ||
+        if (data.logistique?.expedieStation ||
           !(data.ordre.client.modificationDetail !== false ||
             data.ordre.secteurCommercial.id === "PAL" ||
             this.authService.currentUser.geoClient === "2" ||
@@ -400,17 +401,17 @@ export class OrdreLignesService extends ApiService implements APIRead {
     value: any,
     id: string,
     socCode: string,
+    body: string[],
   ) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<{ updateField: Partial<OrdreLigne> }>({
       mutation: gql(ApiService.buildGraph("mutation", [{
         name: "updateField",
-        body: functionBody,
+        body,
         params: [
           { name: "fieldName", value: "fieldName", isVariable: true },
           { name: "value", value: "value", isVariable: true },
           { name: "id", value: "id", isVariable: true },
           { name: "socCode", value: "socCode", isVariable: true },
-          // { name: "societe", value: this.currentCompanyService.getCompany().id, isVariable: false },
         ],
       }], [
         { name: "fieldName", type: "String", isOptionnal: false },
