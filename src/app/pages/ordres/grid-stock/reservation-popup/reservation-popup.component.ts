@@ -37,6 +37,11 @@ export class ReservationPopupComponent {
     private currentCompanyService: CurrentCompanyService,
   ) { }
 
+  clickSubmitBtn() {
+    const submitBtn = document.getElementById("submitReservationBtn") as HTMLElement;
+    submitBtn.click();
+  }
+
   onSubmit() {
     notify(this.localizeService.localize("ajout-article") + "...", "info", 3000);
     this.stocksService
