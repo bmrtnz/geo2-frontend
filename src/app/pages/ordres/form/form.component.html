@@ -841,13 +841,13 @@
                     [ordre]="ordre"
                     [gridLignesLogistique]="gridLignesLogistique"
                     [gridLogistiques]="gridLogistiques"
-                    (refreshGridLigneDetail)="refreshGridLigneDetail()"
+                    (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
                     (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-lignes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique
-                    (refreshGridLigneDetail)="refreshGridLigneDetail()"
+                    (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
                     [ordre]="ordre"
                   ></app-grid-ordre-ligne-logistique>
                   <div *ngIf="ordresLignesViewExp">

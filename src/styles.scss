@@ -38,6 +38,11 @@
   color: #ff325a;
 }
 
+.text-underlined {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* Toasts */
 
 .dx-toast-content {
@@ -111,7 +116,7 @@ body app-root.production {
     font-size: 18px;
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
+  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
     margin-bottom: 10px;
 
     .dx-button-content {

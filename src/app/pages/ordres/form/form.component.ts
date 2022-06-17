@@ -690,8 +690,8 @@ export class FormComponent implements OnInit, OnDestroy {
       });
   }
 
-  public refreshGridLigneDetail() {
-    this.gridLignesDetail?.refresh();
+  public refreshGridLigneDetail(e) {
+    this.gridLignesDetail?.refresh(e);
   }
 
   public refreshGridsSynthese() {

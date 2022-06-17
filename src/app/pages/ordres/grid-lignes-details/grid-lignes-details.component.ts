@@ -32,10 +32,12 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public itemsWithSelectBox: string[];
+  public itemsWithSelectBox: any;
   public allowMutations = false;
   public env = environment;
   public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
+  public gridFilter: any[];
+  public gridExpFiltered: boolean;
   @Input() public ordre: Ordre;
   @Output() public ligneDetail: any;
   @Output() refreshGridsSynthese = new EventEmitter();
@@ -75,7 +77,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
   }
 
-  async enableFilters() {
+  async enableFilters(e?) {
+
     if (!this.datagrid) return;
     if (this?.ordre?.id) {
       const fields = this.columns.pipe(map(columns => columns.map(column => {
@@ -83,9 +86,13 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
       })));
 
       this.dataSource = this.ordreLignesService.getDataSource_v2(await fields.toPromise());
-      this.dataSource.filter([
-        ["ordre.id", "=", this.ordre.id],
-      ]);
+      this.gridFilter = [["ordre.id", "=", this.ordre.id]];
+
+      // Filtering from synthese expedition grid
+      if (e && Array.isArray(e)) this.gridFilter.push("and", e);
+      if (typeof e === "object" && !Array.isArray(e)) this.gridExpFiltered = false; // In case of manual grid refresh
+
+      this.dataSource.filter(this.gridFilter);
       this.datagrid.dataSource = this.dataSource;
       this.gridUtilsService.resetGridScrollBar(this.datagrid);
     } else if (this.datagrid)
@@ -167,9 +174,18 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  refresh() {
+  refresh(e?) {
+    this.gridExpFiltered = Array.isArray(e);
+    if (this.gridExpFiltered) this.enableFilters(e);
+
     this.datagrid.instance.refresh();
     this.refreshGridsSynthese.emit(true);
+  }
+
+  resetFilter(e) {
+    e.event.stopImmediatePropagation(); // To avoid sortering
+    this.enableFilters();
+    this.gridExpFiltered = false;
   }
 
   showModifButton(cell) {

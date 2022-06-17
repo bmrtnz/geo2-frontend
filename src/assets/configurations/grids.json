@@ -2097,7 +2097,10 @@
         "visibleIndex": 0,
         "dataField": "fournisseur.code",
         "dataType": "string",
+        "width": "210",
         "allowEditing": false,
+        "cssClass": "headerCellBtnTemplate",
+        "headerCellTemplate": "headerCellBtnTemplate",
         "fixed": true,
         "visible": true
       },
@@ -2517,6 +2520,7 @@
         "visibleIndex": 0,
         "dataField": "fournisseur.code",
         "dataType": "string",
+        "width": "210",
         "allowEditing": false,
         "showInColumnChooser": false,
         "fixed": true,

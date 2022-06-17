@@ -67,6 +67,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     public dateManagementService: DateManagementService,
     private functionsService: FunctionsService,
     public gridUtilsService: GridUtilsService,
+    private localization: LocalizationService,
     public historiqueModificationsDetailService: HistoriqueModificationsDetailService,
     public authService: AuthService,
     public formUtilsService: FormUtilsService,
@@ -120,6 +121,16 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
       if (e.column.dataField === "expedieStation") {
         e.cellElement.classList.add("cursor-pointer");
       }
+
+      if (e.column.dataField === "fournisseur.code") {
+        e.cellElement.classList.add("text-underlined");
+        e.cellElement.classList.add("cursor-pointer");
+        e.cellElement.setAttribute(
+          "title",
+          this.localization.localize("hint-click-fournisseur"),
+        );
+      }
+
     }
   }
 
@@ -173,8 +184,13 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
           this.changeCloture = true;
           this.reasonId = "";
           this.saveGridField(this.currentRowIndex, "expedieStation", true);
-          break;
         }
+        break;
+      }
+      case "fournisseur.code": {
+        const addFilter = ["fournisseur.code", "=", e.data.fournisseur.code];
+        this.refreshGridLigneDetail.emit(addFilter);
+        break;
       }
     }
   }
