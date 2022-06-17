@@ -109,9 +109,9 @@
     </dx-select-box>
     <!-- <div class="SB-edit-title-element"></div> -->
   </div>
-  <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
+  <div (mouseenter)="setSBInputTitle('customLogInstSB')" *dxTemplate="let cell of 'customSelectBoxTemplate'">
     <dx-select-box
-      [id]="'customLogInstSB' + cell.key"
+      [class]="'customLogInstSB'"
       [items]="instructionsList"
       [value]="cell.data[cell.column.dataField]"
       [acceptCustomValue]="true"
@@ -121,14 +121,6 @@
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
     </dx-select-box>
-
-    <dx-tooltip
-      [target]="'#customLogInstSB' + cell.key"
-      [closeOnOutsideClick]="false"
-    >
-      <div *dxTemplate="let cell = cell; of: 'content'"> ExcelRemote IR </div>
-    </dx-tooltip>
-
   </div>
   <div *dxTemplate="let cell of 'datetimeBoxTemplate'">
     <dx-date-box
