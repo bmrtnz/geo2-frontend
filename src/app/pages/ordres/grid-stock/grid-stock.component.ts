@@ -143,23 +143,17 @@ export class GridStockComponent implements OnInit {
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
+  ajoutReservation() {
+    this.selectChange.emit();
+    this.dataGrid.dataSource = [];
+    this.toRefresh = true;
+  }
 
   onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
     if (!data.articleID) {
       this.openFilePopup(data);
     } else {
-      this.reservationPopup.present(data, this.ordre)
-        .subscribe({
-          error: ({ message }: Error) => notify(message, "error", 5000),
-          complete: () => {
-            notify(this.localizeService.localize("ajout-article") + "...", "info", 3000);
-            setTimeout(() => {
-              this.selectChange.emit();
-              this.dataGrid.dataSource = [];
-              this.toRefresh = true;
-            });
-          }
-        });
+      this.reservationPopup.present(data, this.ordre);
     }
   }
 
