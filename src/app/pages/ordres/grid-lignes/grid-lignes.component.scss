@@ -88,11 +88,11 @@
 
   .dx-row-focused.dx-data-row>td {
     // border-bottom-color: #e0e0e0 !important;
-    border-bottom-color: $base-accent  !important;
+    border-bottom-color: $base-accent !important;
   }
 
   .dx-link-delete {
-    color: $base-accent  !important;
+    color: $base-accent !important;
     background-color: transparent !important;
   }
 
@@ -120,10 +120,10 @@
     }
 
     &.certification {
-      background-color: $BW-purple-medium  !important;
+      background-color: $BW-purple-medium !important;
 
       &:hover {
-        background-color: $BW-purple-dark  !important;
+        background-color: $BW-purple-dark !important;
       }
     }
   }
@@ -137,4 +137,43 @@
 
 ::ng-deep .order-line-text {
   padding-left: 5px !important;
+}
+
+::ng-deep .small-margin-button {
+  position: absolute;
+  height: 18px;
+  margin: -29px 0 0 301px;
+  z-index: 10;
+  padding: 0 4px !important;
+  z-index: 10;
+
+  .dx-button-content {
+    font-size: 11px;
+
+    .dx-button-text {
+      margin-top: 0;
+      line-height: 0;
+    }
+
+    .margin-title-text {
+      float: left;
+    }
+
+    .margin-value-text {
+      font-weight: bold;
+      font-size: 12px;
+      float: right;
+    }
+
+    .small-loader {
+      position: relative;
+      top: -7px;
+      margin-left: 2px;
+      width: 15px;
+      height: 15px;
+      border: none;
+      float: right;
+    }
+
+  }
 }

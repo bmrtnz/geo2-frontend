@@ -71,7 +71,8 @@
     falseText="Non"
     [fixed]="column.fixed"
     [cssClass]="column?.cssClass"
-    [editCellTemplate]="defineTemplate(column.dataField)"
+    [headerCellTemplate]="column?.headerCellTemplate"
+    [editCellTemplate]="column?.editCellTemplate"
     allowSearch="false"
     [dataType]="column?.dataType"
     [allowEditing]="column.allowEditing"
@@ -117,6 +118,23 @@
       [text]="'Auto'"
       [disabled]="env.production"
       (onClick)="autoDetailExp(cell)"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
+    <div>
+      {{
+        "ordreLignes-" + cell.column.dataField?.split(".").join("-")
+          | localize
+      }}
+    </div>
+    <dx-button
+      class="small-reset-button"
+      type="default"
+      [visible]="gridExpFiltered"
+      [focusStateEnabled]="false"
+      [text]="'VOIR TOUTES LES LIGNES'"
+      (onClick)="resetFilter($event)"
     ></dx-button>
   </div>
 </dx-data-grid>

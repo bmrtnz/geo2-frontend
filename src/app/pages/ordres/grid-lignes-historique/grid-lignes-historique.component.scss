@@ -65,3 +65,10 @@
     margin-left: 30px;
   }
 }
+
+::ng-deep .dx-row-focused {
+
+  .bio-article {
+    color: #a9f77e !important;
+  }
+}

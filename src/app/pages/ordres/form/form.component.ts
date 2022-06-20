@@ -30,8 +30,11 @@ import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
+import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
+import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
+import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 
@@ -214,6 +217,9 @@ export class FormComponent implements OnInit, OnDestroy {
   @ViewChild(ZoomTransporteurPopupComponent, { static: false }) zoomTransporteurFilePopup: ZoomTransporteurPopupComponent;
   @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
   @ViewChild(GridLignesDetailsComponent) gridLignesDetail: GridLignesDetailsComponent;
+  @ViewChild(GridLignesTotauxDetailComponent) gridLTD: GridLignesTotauxDetailComponent;
+  @ViewChild(GridDetailPalettesComponent) gridDetailPalettes: GridDetailPalettesComponent;
+  @ViewChild(GridMargeComponent) gridMarge: GridMargeComponent;
 
   constructor(
     private router: Router,
@@ -684,8 +690,14 @@ export class FormComponent implements OnInit, OnDestroy {
       });
   }
 
-  public refreshGridLigneDetail() {
-    this.gridLignesDetail?.refresh();
+  public refreshGridLigneDetail(e) {
+    this.gridLignesDetail?.refresh(e);
+  }
+
+  public refreshGridsSynthese() {
+    this.gridLTD?.refresh();
+    this.gridDetailPalettes?.refresh();
+    this.gridMarge?.refresh();
   }
 
 }

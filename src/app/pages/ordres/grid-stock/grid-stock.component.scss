@@ -1,83 +1,93 @@
 ::ng-deep .grid-stock .dx-datagrid-search-panel {
-    display: none;
+  display: none;
 }
 
 ::ng-deep .grid-stock .search-criteria-subcontainer {
 
-    // overflow: hidden;
-    .dx-field {
-        float: left;
-        margin-right: 15px;
-        width: 200px;
+  // overflow: hidden;
+  .dx-field {
+    float: left;
+    margin-right: 15px;
+    width: 200px;
 
-        .dx-field-label {
-            text-overflow: visible;
-            white-space: normal;
-            font-size: 12px;
-            line-height: 12px;
-            padding: 10px 0;
-            text-align: left;
-            margin-right: 10px;
-            overflow: visible;
-            align-self: baseline;
+    .dx-field-label {
+      text-overflow: visible;
+      white-space: normal;
+      font-size: 12px;
+      line-height: 12px;
+      padding: 10px 0;
+      text-align: left;
+      margin-right: 10px;
+      overflow: visible;
+      align-self: baseline;
 
-            &.noPadding {
-                padding: 0 !important;
-            }
-        }
+      &.noPadding {
+        padding: 0 !important;
+      }
+    }
 
-        .dx-texteditor {
-            font-size: 12px;
+    .dx-texteditor {
+      font-size: 12px;
 
-            .dx-texteditor-input {
-                font-size: 13px;
-            }
-        }
-
-        .dx-field-value {
-            width: 70%;
-
-            &.small-field {
-                width: 30%;
-            }
-        }
-
-        .dx-field-label {
-            width: 30%;
-        }
-
-        &.valid-field {
-            width: 100px;
-        }
+      .dx-texteditor-input {
+        font-size: 13px;
+      }
     }
 
     .dx-field-value {
-        width: 70%;
+      width: 70%;
 
-        &.small-field {
-            width: 30%;
-        }
+      &.small-field {
+        width: 30%;
+      }
     }
 
-    .refresh {
-        top: 0;
-        margin-left: 10px;
-        float: right;
+    .dx-field-label {
+      width: 30%;
     }
+
+    &.valid-field {
+      width: 100px;
+    }
+  }
+
+  .dx-field-value {
+    width: 70%;
+
+    &.small-field {
+      width: 30%;
+    }
+  }
+
+  .refresh {
+    top: 0;
+    margin-left: 10px;
+    float: right;
+  }
 }
 
 h6 {
-    margin: 0 0 7px 0;
-    float: left;
+  margin: 0 0 7px 0;
+  float: left;
 }
 
 ::ng-deep .grid-zoom-button {
-    width: 22px !important;
-    height: 22px;
-    min-width: 0 !important;
-    background-color: transparent !important;
+  width: 22px !important;
+  height: 22px;
+  min-width: 0 !important;
+  background-color: transparent !important;
 
-    .dx-button-content {
-        padding: 0;
-    }
+  .dx-button-content {
+    padding: 0;
+  }
+}
+
+::ng-deep .cursor-pointer {
+  cursor: pointer !important;
+}
+
+::ng-deep .highlight-stockJ21-cell {
+  background: #ffdd00 !important;
+  color: rgba(0, 0, 0, .7) !important;
+  ;
 }

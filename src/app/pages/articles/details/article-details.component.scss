@@ -11,30 +11,37 @@
   user-select: none;
   padding: 10px 0 0 10px;
 }
+
 ::ng-deep .mobile .tabpanel-item {
   padding-top: 10px;
 }
-::ng-deep .tabpanel-item > div {
+
+::ng-deep .tabpanel-item>div {
   float: left;
   padding: 0 85px 10px 10px;
 }
+
 ::ng-deep .tabpanel-item p {
   font-size: 16px;
   margin: 0;
 }
+
 ::ng-deep .item-box {
   font-size: 16px;
   margin: 15px 0 45px 10px;
 }
+
 ::ng-deep .options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;
 }
+
 ::ng-deep .caption {
   font-size: 18px;
   font-weight: 500;
 }
+
 ::ng-deep .option {
   margin-top: 10px;
 }
@@ -43,6 +50,7 @@
   .dx-tabpanel {
     overflow: hidden;
   }
+
   .dx-tab {
     display: block;
     border-radius: 70px;
@@ -52,6 +60,7 @@
     float: left;
     margin: 0 100px 25px 10px;
   }
+
   .dx-tab span {
     display: block;
     font-size: 23px;
@@ -60,6 +69,7 @@
     margin-top: 10px;
     text-transform: none;
   }
+
   .dx-tab .subtitle {
     position: absolute;
     display: block;
@@ -69,6 +79,7 @@
     margin-top: 22px;
     text-transform: none;
   }
+
   .dx-tabs-wrapper .dx-item:after {
     position: absolute;
     left: 80px;
@@ -76,15 +87,19 @@
     content: "_____________";
     color: $base-accent;
   }
+
   .dx-tabs-wrapper .dx-item:last-child:after {
     content: "";
   }
+
   .dx-tab:before {
     display: none;
   }
+
   .dx-tab-selected {
     background: $base-accent;
   }
+
   .dx-tab-selected:hover {
     background: $base-accent;
   }
@@ -109,7 +124,4 @@
 .upperButton {
   margin-left: 10px;
   float: right;
-}
-.red-font {
-  color: #ff325a;
 }

@@ -1,15 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import Ordre from "app/shared/models/ordre.model";
-import { ArticlesService, LocalizationService } from "app/shared/services";
-import { FunctionsService } from "app/shared/services/api/functions.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { LocalizationService } from "app/shared/services";
 import { DxButtonComponent, DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
-import { from } from "rxjs";
-import { concatMap, takeWhile } from "rxjs/operators";
 
 @Component({
   selector: "app-ajout-articles-stock-popup",
@@ -42,10 +36,6 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
 
   constructor(
-    private articlesService: ArticlesService,
-    private gridConfiguratorService: GridConfiguratorService,
-    private functionsService: FunctionsService,
-    private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
   ) { }
 
@@ -77,23 +67,6 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
     this.hidePopup();
     this.lignesChanged.emit(1);
     this.clearAll();
-  }
-
-  insertArticles() {
-    notify(this.localizeService.localize("ajout-article"), "info", 3000);
-    from(this.chosenArticles)
-      .pipe(
-        concatMap(articleID => this.functionsService
-          .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
-          .valueChanges
-          .pipe(takeWhile(res => res.loading))
-        ),
-      )
-      .subscribe({
-        error: ({ message }: Error) => notify(message, "error"),
-        complete: () => this.clearAndHidePopup(),
-      });
-
   }
 
 }

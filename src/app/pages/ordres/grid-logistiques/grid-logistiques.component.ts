@@ -134,6 +134,14 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     if (cell.setValue) cell.setValue(event.value);
   }
 
+  setSBInputTitle(className) {
+    document.querySelectorAll("." + className + " input").forEach(sb => {
+      const inp = sb as HTMLInputElement;
+      sb.setAttribute("title", inp.value);
+    });
+
+  }
+
   onCellClick(e) {
     // Way to avoid Dx Selectbox list to appear when cell is readonly
     this.SelectBoxPopupWidth = e.cellElement.classList.contains("dx-datagrid-readonly") ? 0 : 400;

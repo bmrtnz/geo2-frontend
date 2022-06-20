@@ -34,6 +34,15 @@
   opacity: 0.5;
 }
 
+.red-font {
+  color: #ff325a;
+}
+
+.text-underlined {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* Toasts */
 
 .dx-toast-content {
@@ -107,7 +116,7 @@ body app-root.production {
     font-size: 18px;
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
+  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
     margin-bottom: 10px;
 
     .dx-button-content {
@@ -293,8 +302,9 @@ body app-root.production {
 
   .dx-datagrid-filter-panel-clear-filter {
     margin: 4px 0 4px 30px;
-    padding: 1px 10px;
+    padding: 0px 10px 2px 10px;
     background: $base-accent;
+    font-size: 13px;
     color: #FFF;
     border-radius: 5px;
     text-decoration: none !important;

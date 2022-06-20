@@ -343,12 +343,12 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   onSelectionChanged(e) {
 
-    if (!e.selectedRowsData?.length) return;
-
-    if (!e.selectedRowsData[e.selectedRowsData.length - 1].article?.valide) {
-      notify(this.hintNotValid, "warning", 3000);
-      e.component.deselectRows(e.currentSelectedRowKeys);
-      return;
+    if (e.selectedRowsData?.length) {
+      if (!e.selectedRowsData[e.selectedRowsData.length - 1].article?.valide) {
+        notify(this.hintNotValid, "warning", 3000);
+        e.component.deselectRows(e.currentSelectedRowKeys);
+        return;
+      }
     }
 
     this.selectChange.emit(e);

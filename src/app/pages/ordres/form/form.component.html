@@ -194,12 +194,12 @@
 
                 <span
                   *ngIf="ordre"
-                  class="dx-form-group-caption red-font "
+                  class="dx-form-group-caption red-font-imp"
                   >{{ status }}</span
                 >
                 <span
                 *ngIf="ordreFacture && numeroFacture?.length"
-                  class="dx-form-group-caption invoice-number red-font"
+                  class="dx-form-group-caption invoice-number red-font-imp"
                   >&nbsp;({{ numeroFacture }})</span
                 >
                 <span
@@ -832,23 +832,29 @@
                 ></dx-button>
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
+                  <app-actions-documents-ordres
+                    [ordre]="ordre"
+                    [gridEnvois]="gridEnvois"
+                    [orderConfirmationOnly]="true"
+                  ></app-actions-documents-ordres>
                   <app-grid-lignes
                     [ordre]="ordre"
                     [gridLignesLogistique]="gridLignesLogistique"
                     [gridLogistiques]="gridLogistiques"
-                    (refreshGridLigneDetail)="refreshGridLigneDetail()"
+                    (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
                     (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-lignes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique
-                    (refreshGridLigneDetail)="refreshGridLigneDetail()"
+                    (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
                     [ordre]="ordre"
                   ></app-grid-ordre-ligne-logistique>
                   <div *ngIf="ordresLignesViewExp">
                     <div class="grid-separator"></div>
                     <app-grid-lignes-details
                       [ordre]="ordre"
+                      (refreshGridsSynthese)="refreshGridsSynthese()"
                     ></app-grid-lignes-details>
                   </div>
                 </div>
@@ -1005,6 +1011,7 @@
                     <app-actions-documents-ordres
                       [ordre]="ordre"
                       [gridEnvois]="gridEnvois"
+                      [orderConfirmationOnly]="false"
                     ></app-actions-documents-ordres>
                     <div class="dx-form-group-content">
                       <app-grid-envois

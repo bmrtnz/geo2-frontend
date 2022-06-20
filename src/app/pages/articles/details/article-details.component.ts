@@ -44,426 +44,426 @@ import { IdentificationsSymboliquesService } from "app/shared/services/api/ident
 import { environment } from "environments/environment";
 
 @Component({
-    selector: "app-articles",
-    templateUrl: "./article-details.component.html",
-    styleUrls: ["./article-details.component.scss"],
+  selector: "app-articles",
+  templateUrl: "./article-details.component.html",
+  styleUrls: ["./article-details.component.scss"],
 })
 export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges {
 
-    @Input() public articleLigneId: string;
+  @Input() public articleLigneId: string;
 
-    formGroup = this.fb.group({
-        id: [""],
-        description: [""],
-        blueWhaleStock: [""],
-        valide: [""],
-        preSaisie: [""],
-        gtinColisBlueWhale: [""],
-        gtinUcBlueWhale: [""],
-        articleAssocie: [""],
-        matierePremiere: this.fb.group({
-            espece: [""],
-            variete: [""],
-            type: [""],
-            modeCulture: [""],
-            origine: [""],
-            calibreUnifie: [""],
-            typeVente: [""],
-            codePlu: [""],
-        }),
-        cahierDesCharge: this.fb.group({
-            instructionStation: [""],
-            coloration: [""],
-            categorie: [""],
-            sucre: [""],
-            penetro: [""],
-            cirage: [""],
-            rangement: [""],
-        }),
-        normalisation: this.fb.group({
-            stickeur: [""],
-            marque: [""],
-            etiquetteColis: [""],
-            etiquetteUc: [""],
-            etiquetteEvenementielle: [""],
-            gtinColis: [""],
-            gtinUc: [""],
-            produitMdd: [""],
-            articleClient: [""],
-            calibreMarquage: [""],
-            identificationSymbolique: [""],
-        }),
-        emballage: this.fb.group({
-            emballage: [""],
-            conditionSpecial: [""],
-            alveole: [""],
-            uniteParColis: [""],
-            prepese: [""],
-            poidsNetColis: [""],
-            poidsNetClient: [""],
-            poidsNetGaranti: [""],
-        }),
-        // poidsNetUC: [''],
-        // descrSpecialeCalClt: [''],
+  formGroup = this.fb.group({
+    id: [""],
+    description: [""],
+    blueWhaleStock: [""],
+    valide: [""],
+    preSaisie: [""],
+    gtinColisBlueWhale: [""],
+    gtinUcBlueWhale: [""],
+    articleAssocie: [""],
+    matierePremiere: this.fb.group({
+      espece: [""],
+      variete: [""],
+      type: [""],
+      modeCulture: [""],
+      origine: [""],
+      calibreUnifie: [""],
+      typeVente: [""],
+      codePlu: [""],
+    }),
+    cahierDesCharge: this.fb.group({
+      instructionStation: [""],
+      coloration: [""],
+      categorie: [""],
+      sucre: [""],
+      penetro: [""],
+      cirage: [""],
+      rangement: [""],
+    }),
+    normalisation: this.fb.group({
+      stickeur: [""],
+      marque: [""],
+      etiquetteColis: [""],
+      etiquetteUc: [""],
+      etiquetteEvenementielle: [""],
+      gtinColis: [""],
+      gtinUc: [""],
+      produitMdd: [""],
+      articleClient: [""],
+      calibreMarquage: [""],
+      identificationSymbolique: [""],
+    }),
+    emballage: this.fb.group({
+      emballage: [""],
+      conditionSpecial: [""],
+      alveole: [""],
+      uniteParColis: [""],
+      prepese: [""],
+      poidsNetColis: [""],
+      poidsNetClient: [""],
+      poidsNetGaranti: [""],
+    }),
+    // poidsNetUC: [''],
+    // descrSpecialeCalClt: [''],
+  });
+  contentReadyEvent = new EventEmitter<any>();
+  refreshGrid = new EventEmitter();
+  @ViewChild(EditingAlertComponent, { static: true })
+  alertComponent: EditingAlertComponent;
+  @ViewChild(FileManagerComponent, { static: false })
+  fileManagerComponent: FileManagerComponent;
+  @ViewChild(PushHistoryPopupComponent, { static: false })
+  validatePopup: PushHistoryPopupComponent;
+  editing = false;
+  public ucBW: boolean;
+  public env = environment;
+
+  article: Article;
+
+  especes: DataSource;
+  varietes: DataSource;
+  types: DataSource;
+  modesCulture: DataSource;
+  origines: DataSource;
+  calibresUnifies: DataSource;
+  calibresMarquage: DataSource;
+  colorations: DataSource;
+  typesVente: DataSource;
+  stickeurs: DataSource;
+  marques: DataSource;
+  emballages: DataSource;
+  conditionsSpecials: DataSource;
+  alveoles: DataSource;
+  categories: DataSource;
+  sucres: DataSource;
+  penetros: DataSource;
+  cirages: DataSource;
+  rangements: DataSource;
+  etiquettesColis: DataSource;
+  etiquettesUc: DataSource;
+  etiquettesEvenementielle: DataSource;
+  identificationsSymboliques: DataSource;
+  validateCommentPromptVisible = false;
+  readOnlyMode = true;
+  cloneMode = false;
+  preSaisie: string;
+  UC = false;
+  CNUFCode: string;
+  warningMode = false;
+
+  etiquetteVisible = false;
+  currentEtiquette: ViewDocument;
+
+  id: string;
+
+  constructor(
+    private articlesService: ArticlesService,
+    private especesService: EspecesService,
+    private varietesService: VarietesService,
+    private typesService: TypesService,
+    private modesCultureService: ModesCultureService,
+    private originesService: OriginesService,
+    private calibresUnifiesService: CalibresUnifiesService,
+    private calibresMarquageService: CalibresMarquageService,
+    private colorationsService: ColorationsService,
+    private typesVenteService: TypesVenteService,
+    private stickeursService: StickeursService,
+    private marquesService: MarquesService,
+    private emballagesService: EmballagesService,
+    private conditionsSpecialesService: ConditionsSpecialesService,
+    private alveolesService: AlveolesService,
+    private categoriesService: CategoriesService,
+    private sucresService: SucresService,
+    private penetrosService: PenetrosService,
+    private ciragesService: CiragesService,
+    private rangementsService: RangementsService,
+    private etiquettesColisService: EtiquettesColisService,
+    private etiquettesUcService: EtiquettesUcService,
+    private etiquettesEvenementiellesService: EtiquettesEvenementiellesService,
+    private validationService: ValidationService,
+    private identificationsSymboliquesService: IdentificationsSymboliquesService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private formUtils: FormUtilsService,
+    public authService: AuthService,
+    private localization: LocalizationService,
+  ) { }
+
+  ngOnInit() {
+
+    this.formGroup.reset();
+    this.readOnlyMode = true;
+    this.editing = false;
+    this.cloneMode = false;
+
+    if (this.route.snapshot.url[0]?.path !== "articles") return;
+
+    this.route.params
+      .pipe(
+        switchMap(params => this.articlesService.getOne(params.id)),
+      )
+      .subscribe(res => this.afterLoadInitForm(res));
+  }
+
+  ngOnChanges() {
+
+    // Zoom article mode when clicking on an order article
+    if (this.articleLigneId) {
+      this.formGroup.reset();
+      this.preSaisie = "";
+      this.articlesService
+        .getOne(this.articleLigneId)
+        .subscribe(res => this.afterLoadInitForm(res));
+    }
+
+  }
+
+  afterLoadInitForm(res) {
+    this.article = new Article(res.data.article);
+    this.formGroup.patchValue(this.article);
+    this.contentReadyEvent.emit();
+    this.ucBW = this.article.emballage.uniteParColis > 0;
+    this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
+  }
+
+  onCancel() {
+    this.cloneMode = false;
+    this.readOnlyMode = true;
+    this.editing = false;
+    this.formGroup.reset(this.article);
+  }
+
+  onEdit() {
+    this.readOnlyMode = false;
+    this.editing = true;
+    this.showWarnings();
+  }
+
+  onClone() {
+    this.readOnlyMode = false;
+    this.cloneMode = true;
+    this.editing = true;
+    Object.keys(this.formGroup.controls).forEach((key) => {
+      this.formGroup.get(key).markAsDirty();
     });
-    contentReadyEvent = new EventEmitter<any>();
-    refreshGrid = new EventEmitter();
-    @ViewChild(EditingAlertComponent, { static: true })
-    alertComponent: EditingAlertComponent;
-    @ViewChild(FileManagerComponent, { static: false })
-    fileManagerComponent: FileManagerComponent;
-    @ViewChild(PushHistoryPopupComponent, { static: false })
-    validatePopup: PushHistoryPopupComponent;
-    editing = false;
-    public ucBW: boolean;
-    public env = environment;
+    this.showWarnings();
+  }
 
-    article: Article;
+  onUParColisChange(event) {
+    this.ucBW = event.value > 0;
+  }
 
-    especes: DataSource;
-    varietes: DataSource;
-    types: DataSource;
-    modesCulture: DataSource;
-    origines: DataSource;
-    calibresUnifies: DataSource;
-    calibresMarquage: DataSource;
-    colorations: DataSource;
-    typesVente: DataSource;
-    stickeurs: DataSource;
-    marques: DataSource;
-    emballages: DataSource;
-    conditionsSpecials: DataSource;
-    alveoles: DataSource;
-    categories: DataSource;
-    sucres: DataSource;
-    penetros: DataSource;
-    cirages: DataSource;
-    rangements: DataSource;
-    etiquettesColis: DataSource;
-    etiquettesUc: DataSource;
-    etiquettesEvenementielle: DataSource;
-    identificationsSymboliques: DataSource;
-    validateCommentPromptVisible = false;
-    readOnlyMode = true;
-    cloneMode = false;
-    preSaisie: string;
-    UC = false;
-    CNUFCode: string;
-    warningMode = false;
+  showWarnings() {
+    // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
+    this.warningMode = true;
+    const Element = document.querySelector(".submit") as HTMLElement;
+    Element.click();
+  }
 
-    etiquetteVisible = false;
-    currentEtiquette: ViewDocument;
+  displayIDBefore(data) {
+    return data
+      ? data.id +
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
+      : null;
+  }
 
-    id: string;
+  valueToUpperCase(e) {
+    if (!e.component.option("value")) return;
+    e.component.option("value", e.component.option("value").toUpperCase());
+    return e.component.option("value");
+  }
 
-    constructor(
-        private articlesService: ArticlesService,
-        private especesService: EspecesService,
-        private varietesService: VarietesService,
-        private typesService: TypesService,
-        private modesCultureService: ModesCultureService,
-        private originesService: OriginesService,
-        private calibresUnifiesService: CalibresUnifiesService,
-        private calibresMarquageService: CalibresMarquageService,
-        private colorationsService: ColorationsService,
-        private typesVenteService: TypesVenteService,
-        private stickeursService: StickeursService,
-        private marquesService: MarquesService,
-        private emballagesService: EmballagesService,
-        private conditionsSpecialesService: ConditionsSpecialesService,
-        private alveolesService: AlveolesService,
-        private categoriesService: CategoriesService,
-        private sucresService: SucresService,
-        private penetrosService: PenetrosService,
-        private ciragesService: CiragesService,
-        private rangementsService: RangementsService,
-        private etiquettesColisService: EtiquettesColisService,
-        private etiquettesUcService: EtiquettesUcService,
-        private etiquettesEvenementiellesService: EtiquettesEvenementiellesService,
-        private validationService: ValidationService,
-        private identificationsSymboliquesService: IdentificationsSymboliquesService,
-        private router: Router,
-        private route: ActivatedRoute,
-        private fb: FormBuilder,
-        private formUtils: FormUtilsService,
-        public authService: AuthService,
-        private localization: LocalizationService,
-    ) { }
+  onSubmit() {
+    if (
+      !this.formGroup.pristine &&
+      this.formGroup.valid &&
+      !this.warningMode
+    ) {
+      const article = this.formUtils.extractDirty(
+        this.formGroup.controls,
+        Article.getKeyField(),
+      );
 
-    ngOnInit() {
-
-        this.formGroup.reset();
-        this.readOnlyMode = true;
-        this.editing = false;
-        this.cloneMode = false;
-
-        if (this.route.snapshot.url[0]?.path !== "articles") return;
-
-        this.route.params
-            .pipe(
-                switchMap(params => this.articlesService.getOne(params.id)),
-            )
-            .subscribe(res => this.afterLoadInitForm(res));
-    }
-
-    ngOnChanges() {
-
-        // Zoom article mode when clicking on an order article
-        if (this.articleLigneId) {
-            this.formGroup.reset();
-            this.preSaisie = "";
-            this.articlesService
-                .getOne(this.articleLigneId)
-                .subscribe(res => this.afterLoadInitForm(res));
+      if (this.cloneMode) {
+        article.preSaisie = true;
+        article.valide = false;
+      } else {
+        if (article.valide === true) {
+          article.preSaisie = false;
+          this.preSaisie = "";
         }
+      }
 
-    }
-
-    afterLoadInitForm(res) {
-        this.article = new Article(res.data.article);
-        this.formGroup.patchValue(this.article);
-        this.contentReadyEvent.emit();
-        this.ucBW = this.article.emballage.uniteParColis > 0;
-        this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
-    }
-
-    onCancel() {
-        this.cloneMode = false;
-        this.readOnlyMode = true;
-        this.editing = false;
-        this.formGroup.reset(this.article);
-    }
-
-    onEdit() {
-        this.readOnlyMode = false;
-        this.editing = true;
-        this.showWarnings();
-    }
-
-    onClone() {
-        this.readOnlyMode = false;
-        this.cloneMode = true;
-        this.editing = true;
-        Object.keys(this.formGroup.controls).forEach((key) => {
-            this.formGroup.get(key).markAsDirty();
-        });
-        this.showWarnings();
-    }
-
-    onUParColisChange(event) {
-        this.ucBW = event.value > 0;
-    }
-
-    showWarnings() {
-        // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
-        this.warningMode = true;
-        const Element = document.querySelector(".submit") as HTMLElement;
-        Element.click();
-    }
-
-    displayIDBefore(data) {
-        return data
-            ? data.id +
-            " - " +
-            (data.nomUtilisateur
-                ? data.nomUtilisateur
-                : data.raisonSocial
-                    ? data.raisonSocial
-                    : data.description)
-            : null;
-    }
-
-    valueToUpperCase(e) {
-        if (!e.component.option("value")) return;
-        e.component.option("value", e.component.option("value").toUpperCase());
-        return e.component.option("value");
-    }
-
-    onSubmit() {
-        if (
-            !this.formGroup.pristine &&
-            this.formGroup.valid &&
-            !this.warningMode
-        ) {
-            const article = this.formUtils.extractDirty(
-                this.formGroup.controls,
-                Article.getKeyField(),
-            );
-
+      (article.valide !== undefined &&
+        this.article.valide !== article.valide &&
+        !this.cloneMode
+        ? this.validatePopup.present(HistoryType.ARTICLE, {
+          article: { id: article.id },
+          valide: article.valide,
+        })
+        : of(undefined)
+      )
+        .pipe(
+          switchMap((_) =>
+            this.articlesService.save_v2(
+              this.getDirtyFieldsPath(),
+              {
+                article,
+                clone: this.cloneMode,
+              },
+            ),
+          ),
+        )
+        .subscribe({
+          next: (event) => {
+            notify("Sauvegardé", "success", 3000);
+            this.refreshGrid.emit();
+            // Show red badges (unvalidated forms)
+            this.validationService.showToValidateBadges();
+            this.article = {
+              ...this.article,
+              ...this.formGroup.getRawValue(),
+            };
             if (this.cloneMode) {
-                article.preSaisie = true;
-                article.valide = false;
-            } else {
-                if (article.valide === true) {
-                    article.preSaisie = false;
-                    this.preSaisie = "";
-                }
+              this.router.navigate([
+                `/pages/articles/${event.data.saveArticle.id}`,
+              ]);
             }
-
-            (article.valide !== undefined &&
-                this.article.valide !== article.valide &&
-                !this.cloneMode
-                ? this.validatePopup.present(HistoryType.ARTICLE, {
-                    article: { id: article.id },
-                    valide: article.valide,
-                })
-                : of(undefined)
-            )
-                .pipe(
-                    switchMap((_) =>
-                        this.articlesService.save_v2(
-                            this.getDirtyFieldsPath(),
-                            {
-                                article,
-                                clone: this.cloneMode,
-                            },
-                        ),
-                    ),
-                )
-                .subscribe({
-                    next: (event) => {
-                        notify("Sauvegardé", "success", 3000);
-                        this.refreshGrid.emit();
-                        // Show red badges (unvalidated forms)
-                        this.validationService.showToValidateBadges();
-                        this.article = {
-                            ...this.article,
-                            ...this.formGroup.getRawValue(),
-                        };
-                        if (this.cloneMode) {
-                            this.router.navigate([
-                                `/pages/articles/${event.data.saveArticle.id}`,
-                            ]);
-                        }
-                        this.readOnlyMode = true;
-                        this.editing = false;
-                        this.article.historique =
-                            event.data.saveArticle.historique;
-                        this.formGroup
-                            .get("gtinColisBlueWhale")
-                            .patchValue(
-                                event.data.saveArticle.gtinColisBlueWhale,
-                            );
-                        this.formGroup
-                            .get("gtinUcBlueWhale")
-                            .patchValue(event.data.saveArticle.gtinUcBlueWhale);
-                        this.formGroup.markAsPristine();
-                    },
-                    error: () =>
-                        notify("Echec de la sauvegarde", "error", 3000),
-                });
-        }
-        this.warningMode = false;
-    }
-
-    onEspeceChange(event) {
-        const filter = event.value ? ["espece.id", "=", event.value.id] : [];
-
-        this.especes = this.especesService.getDataSource();
-        this.varietes = this.varietesService.getDataSource();
-        this.varietes.filter(filter);
-        this.types = this.typesService.getDataSource();
-        this.types.filter(filter);
-        this.modesCulture = this.modesCultureService.getDataSource();
-        this.origines = this.originesService.getDataSource();
-        this.origines.filter(filter);
-        this.calibresUnifies = this.calibresUnifiesService.getDataSource();
-        this.calibresUnifies.filter(filter);
-        this.calibresMarquage = this.calibresMarquageService.getDataSource();
-        this.calibresMarquage.filter(filter);
-        this.colorations = this.colorationsService.getDataSource();
-        this.colorations.filter(filter);
-        this.typesVente = this.typesVenteService.getDataSource();
-        this.stickeurs = this.stickeursService.getDataSource();
-        this.stickeurs.filter(filter);
-        this.marques = this.marquesService.getDataSource();
-        this.marques.filter(filter);
-        this.emballages = this.emballagesService.getDataSource();
-        this.emballages.filter(filter);
-        this.conditionsSpecials =
-            this.conditionsSpecialesService.getDataSource();
-        this.conditionsSpecials.filter(filter);
-        this.alveoles = this.alveolesService.getDataSource();
-        this.alveoles.filter(filter);
-        this.categories = this.categoriesService.getDataSource();
-        this.categories.filter(filter);
-        this.sucres = this.sucresService.getDataSource();
-        this.sucres.filter(filter);
-        this.penetros = this.penetrosService.getDataSource();
-        this.penetros.filter(filter);
-        this.cirages = this.ciragesService.getDataSource();
-        this.cirages.filter(filter);
-        this.rangements = this.rangementsService.getDataSource();
-        this.rangements.filter(filter);
-        this.etiquettesColis = this.etiquettesColisService.getDataSource();
-        this.etiquettesColis.filter(filter);
-        this.etiquettesUc = this.etiquettesUcService.getDataSource();
-        this.etiquettesUc.filter(filter);
-        this.etiquettesEvenementielle =
-            this.etiquettesEvenementiellesService.getDataSource();
-        this.etiquettesEvenementielle.filter(filter);
-        this.identificationsSymboliques =
-            this.identificationsSymboliquesService.getDataSource();
-        this.identificationsSymboliques.filter(filter);
-    }
-
-    fileManagerClick() {
-        this.fileManagerComponent.visible = true;
-    }
-
-    async viewEtiquette(titleKey: string, document: Document) {
-        this.currentEtiquette = {
-            title: this.localization.localize(titleKey),
-            document,
-        };
-
-        this.etiquetteVisible = true;
-    }
-
-    private getDirtyFieldsPath() {
-        const dirtyFields = this.formUtils.extractDirty(
-            this.formGroup.controls,
-            Article.getKeyField(),
-        );
-
-        const gridFields = articlesGridConfig.columns.map(
-            ({ dataField }) => dataField,
-        );
-
-        //     return [
-        //       ...this.formUtils.extractPaths(dirtyFields),
-        //       ...gridFields,
-        //     ];
-
-        const paths = [];
-
-        Object.keys(dirtyFields).forEach((key) => {
-            if (
-                typeof this.formGroup.get(key).value === "object" &&
-                this.formGroup.get(key).value !== null
-            ) {
-                Object.keys(this.formGroup.get(key).value).forEach((key2) => {
-                    const nestedVal = this.formGroup.get(
-                        `${key}.${key2}`,
-                    ).value;
-                    let controlKey;
-                    if (nestedVal !== null) {
-                        controlKey = `${key}.${key2}`;
-                        if (typeof nestedVal === "object" && nestedVal !== null)
-                            controlKey += "." + Object.keys(nestedVal)[0];
-                    }
-                    if (controlKey) paths.push(controlKey);
-                });
-            } else {
-                paths.push(key);
-            }
+            this.readOnlyMode = true;
+            this.editing = false;
+            this.article.historique =
+              event.data.saveArticle.historique;
+            this.formGroup
+              .get("gtinColisBlueWhale")
+              .patchValue(
+                event.data.saveArticle.gtinColisBlueWhale,
+              );
+            this.formGroup
+              .get("gtinUcBlueWhale")
+              .patchValue(event.data.saveArticle.gtinUcBlueWhale);
+            this.formGroup.markAsPristine();
+          },
+          error: () =>
+            notify("Echec de la sauvegarde", "error", 3000),
         });
-
-        return [
-            ...paths,
-            ...gridFields,
-            "gtinColisBlueWhale",
-            "gtinUcBlueWhale",
-        ];
     }
+    this.warningMode = false;
+  }
+
+  onEspeceChange(event) {
+    const filter = event.value ? ["espece.id", "=", event.value.id] : [];
+
+    this.especes = this.especesService.getDataSource();
+    this.varietes = this.varietesService.getDataSource();
+    this.varietes.filter(filter);
+    this.types = this.typesService.getDataSource();
+    this.types.filter(filter);
+    this.modesCulture = this.modesCultureService.getDataSource();
+    this.origines = this.originesService.getDataSource();
+    this.origines.filter(filter);
+    this.calibresUnifies = this.calibresUnifiesService.getDataSource();
+    this.calibresUnifies.filter(filter);
+    this.calibresMarquage = this.calibresMarquageService.getDataSource();
+    this.calibresMarquage.filter(filter);
+    this.colorations = this.colorationsService.getDataSource();
+    this.colorations.filter(filter);
+    this.typesVente = this.typesVenteService.getDataSource();
+    this.stickeurs = this.stickeursService.getDataSource();
+    this.stickeurs.filter(filter);
+    this.marques = this.marquesService.getDataSource();
+    this.marques.filter(filter);
+    this.emballages = this.emballagesService.getDataSource();
+    this.emballages.filter(filter);
+    this.conditionsSpecials =
+      this.conditionsSpecialesService.getDataSource();
+    this.conditionsSpecials.filter(filter);
+    this.alveoles = this.alveolesService.getDataSource();
+    this.alveoles.filter(filter);
+    this.categories = this.categoriesService.getDataSource();
+    this.categories.filter(filter);
+    this.sucres = this.sucresService.getDataSource();
+    this.sucres.filter(filter);
+    this.penetros = this.penetrosService.getDataSource();
+    this.penetros.filter(filter);
+    this.cirages = this.ciragesService.getDataSource();
+    this.cirages.filter(filter);
+    this.rangements = this.rangementsService.getDataSource();
+    this.rangements.filter(filter);
+    this.etiquettesColis = this.etiquettesColisService.getDataSource();
+    this.etiquettesColis.filter(filter);
+    this.etiquettesUc = this.etiquettesUcService.getDataSource();
+    this.etiquettesUc.filter(filter);
+    this.etiquettesEvenementielle =
+      this.etiquettesEvenementiellesService.getDataSource();
+    this.etiquettesEvenementielle.filter(filter);
+    this.identificationsSymboliques =
+      this.identificationsSymboliquesService.getDataSource();
+    this.identificationsSymboliques.filter(filter);
+  }
+
+  fileManagerClick() {
+    this.fileManagerComponent.visible = true;
+  }
+
+  async viewEtiquette(titleKey: string, document: Document) {
+    this.currentEtiquette = {
+      title: this.localization.localize(titleKey),
+      document,
+    };
+
+    this.etiquetteVisible = true;
+  }
+
+  private getDirtyFieldsPath() {
+    const dirtyFields = this.formUtils.extractDirty(
+      this.formGroup.controls,
+      Article.getKeyField(),
+    );
+
+    const gridFields = articlesGridConfig.columns.map(
+      ({ dataField }) => dataField,
+    );
+
+    //     return [
+    //       ...this.formUtils.extractPaths(dirtyFields),
+    //       ...gridFields,
+    //     ];
+
+    const paths = [];
+
+    Object.keys(dirtyFields).forEach((key) => {
+      if (
+        typeof this.formGroup.get(key).value === "object" &&
+        this.formGroup.get(key).value !== null
+      ) {
+        Object.keys(this.formGroup.get(key).value).forEach((key2) => {
+          const nestedVal = this.formGroup.get(
+            `${key}.${key2}`,
+          ).value;
+          let controlKey;
+          if (nestedVal !== null) {
+            controlKey = `${key}.${key2}`;
+            if (typeof nestedVal === "object" && nestedVal !== null)
+              controlKey += "." + Object.keys(nestedVal)[0];
+          }
+          if (controlKey) paths.push(controlKey);
+        });
+      } else {
+        paths.push(key);
+      }
+    });
+
+    return [
+      ...paths,
+      ...gridFields,
+      "gtinColisBlueWhale",
+      "gtinUcBlueWhale",
+    ];
+  }
 }

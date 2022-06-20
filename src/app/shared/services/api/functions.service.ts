@@ -150,6 +150,10 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  /**
+   * Calcule la marge prévisionnelle
+   */
+
   public fCalculMargePrevi =
     (ordreRef: string, socCode: string) => this.apollo
       .watchQuery<{ fCalculMargePrevi: FunctionResponse }>({

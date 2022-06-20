@@ -101,7 +101,6 @@
         this[cell.column.dataField + 'Service'].model.getKeyField()
       ]"
       [value]="cell.data[cell.column.dataField]"
-      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
       [readOnly]="env.production"
     >
@@ -110,12 +109,12 @@
     </dx-select-box>
     <!-- <div class="SB-edit-title-element"></div> -->
   </div>
-  <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
+  <div (mouseenter)="setSBInputTitle('customLogInstSB')" *dxTemplate="let cell of 'customSelectBoxTemplate'">
     <dx-select-box
+      [class]="'customLogInstSB'"
       [items]="instructionsList"
       [value]="cell.data[cell.column.dataField]"
       [acceptCustomValue]="true"
-      (onFocusIn)="formUtilsService.selectTextOnFocusIn($event)"
       (onValueChanged)="onValueChanged($event, cell)"
       [readOnly]="env.production"
     >

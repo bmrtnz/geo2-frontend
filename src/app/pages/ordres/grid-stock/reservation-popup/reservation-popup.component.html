@@ -1,10 +1,10 @@
 <dx-popup
   width="600"
   height="auto"
-  [dragEnabled]="false"
-  [title]="'Réservation de stock'"
+  [dragEnabled]="true"
+  [title]="'Réservation de stock : ' + rowData?.stockArticle?.articleID"
   (onHidden)="onHidden()"
-  (onShown)="onShown()"
+  (onShown)="onShowing()"
   [closeOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
@@ -13,11 +13,8 @@
       <dx-text-box
         formControlName="commentaire"
         valueChangeEvent="keyup"
-        [placeholder]="'commentaires'"
+        [placeholder]="'Veuillez saisir un commentaire'"
       >
-        <dx-validator #validatorCommentaire>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-        </dx-validator>
       </dx-text-box>
 
       <!-- Quantité -->
@@ -25,44 +22,30 @@
       <dx-number-box
         formControlName="quantite"
         valueChangeEvent="keyup"
-        [placeholder]="'quantité'"
-        (onInput)="onQuantiteChange()"
+        (onEnterKey)="clickSubmitBtn()"
+        [placeholder]="'Quantité'"
+        format="###"
+        (onValueChanged)="onQuantiteChange($event)"
       >
-        <dx-validator #validatorQuantite>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-          <dxi-validation-rule
-            type="range"
-            [min]="1"
-          >
-          </dxi-validation-rule>
-        </dx-validator>
       </dx-number-box>
-      <br>
-      <br>
-      <p
-        *ngIf="negativeStock"
-        style="color: red"
-      >
-        Le stock sera négatif avec ce mouvement !
-      </p>
+
+      <p *ngIf="negativeStock" class="red-font">Le stock sera négatif avec ce mouvement !</p>
+      <p *ngIf="!negativeStock">&nbsp;</p>
 
       <!-- Actions/Boutons -->
-      <br />
+      <br>
       <div class="prompt-action">
         <dx-button
           text="{{ 'btn-annuler' | localize }}"
           type="normal"
-          (onClick)="popupComponent.instance.hide()"
+          (onClick)="popup.instance.hide()"
         ></dx-button>
         <dx-button
+          id="submitReservationBtn"
           text="réserver"
           type="default"
           style="float: right"
-          *ngIf="validatorCommentaire.instance || validatorQuantite.instance"
-          [disabled]="
-            !validatorCommentaire.instance.validate().isValid ||
-            !validatorQuantite.instance.validate().isValid
-          "
+          [disabled]="!quantiteBox?.value || !commentBox?.value"
           (onClick)="onSubmit()"
         ></dx-button>
       </div>

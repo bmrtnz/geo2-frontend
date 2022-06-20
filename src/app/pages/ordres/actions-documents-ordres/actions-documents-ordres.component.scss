@@ -1,19 +1,30 @@
 ::ng-deep .flux-docs-buttons-container {
   margin: 0 0 5px -10px;
   overflow: hidden;
+
+  &.order-conf-button {
+    position: absolute;
+    z-index: 1;
+    margin: 4px 292px 0 0;
+    right: 0;
+  }
+
   .dx-button {
     height: 34px;
     font-size: 12px;
     margin: 5px 0 5px 10px;
     float: left;
+
     &.flux-doc-button-plus {
       border-radius: 100%;
       min-width: 33px;
       float: none;
+
       .dx-button-content {
         padding: 0;
       }
     }
+
     .dx-button-content {
       padding: 6px 13px;
     }

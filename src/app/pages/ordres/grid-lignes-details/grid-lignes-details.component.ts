@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService } from "app/shared/services";
 import { SummaryType } from "app/shared/services/api.service";
@@ -32,12 +32,15 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public itemsWithSelectBox: string[];
+  public itemsWithSelectBox: any;
   public allowMutations = false;
   public env = environment;
   public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
+  public gridFilter: any[];
+  public gridExpFiltered: boolean;
   @Input() public ordre: Ordre;
   @Output() public ligneDetail: any;
+  @Output() refreshGridsSynthese = new EventEmitter();
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
 
@@ -74,7 +77,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
   }
 
-  async enableFilters() {
+  async enableFilters(e?) {
+
     if (!this.datagrid) return;
     if (this?.ordre?.id) {
       const fields = this.columns.pipe(map(columns => columns.map(column => {
@@ -82,9 +86,13 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
       })));
 
       this.dataSource = this.ordreLignesService.getDataSource_v2(await fields.toPromise());
-      this.dataSource.filter([
-        ["ordre.id", "=", this.ordre.id],
-      ]);
+      this.gridFilter = [["ordre.id", "=", this.ordre.id]];
+
+      // Filtering from synthese expedition grid
+      if (e && Array.isArray(e)) this.gridFilter.push("and", e);
+      if (typeof e === "object" && !Array.isArray(e)) this.gridExpFiltered = false; // In case of manual grid refresh
+
+      this.dataSource.filter(this.gridFilter);
       this.datagrid.dataSource = this.dataSource;
       this.gridUtilsService.resetGridScrollBar(this.datagrid);
     } else if (this.datagrid)
@@ -149,19 +157,11 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     this.ordreLignesService.lockFieldsDetails(e);
   }
 
-  defineTemplate(field) {
-    let templ;
-    if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxEditTemplate";
-    // We use a invisible random field to show modify/auto buttons
-    if (field === "article.matierePremiere.variete.id") templ = "modifAutoBtnTemplate";
-    return templ ? templ : false;
-  }
-
   async autoDetailExp({ key }: { key: string }) {
     await this.functionsService
       .fDetailsExpOnClickAuto(key)
       .toPromise();
-    this.datagrid.instance.refresh();
+    this.refresh();
   }
 
   modifDetailExp(cell) {
@@ -174,8 +174,18 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  refresh() {
+  refresh(e?) {
+    this.gridExpFiltered = Array.isArray(e);
+    if (this.gridExpFiltered) this.enableFilters(e);
+
     this.datagrid.instance.refresh();
+    this.refreshGridsSynthese.emit(true);
+  }
+
+  resetFilter(e) {
+    e.event.stopImmediatePropagation(); // To avoid sortering
+    this.enableFilters();
+    this.gridExpFiltered = false;
   }
 
   showModifButton(cell) {
