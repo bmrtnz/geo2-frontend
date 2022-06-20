@@ -23,7 +23,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, PartialObserver } from "rxjs";
-import { concatMapTo, map, tap } from "rxjs/operators";
+import { concatMapTo, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
@@ -468,6 +468,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
   }) {
     if (event.component.hasEditData()) {
       if (event?.changes[0]?.type !== "update") return;
+
       event.cancel = true;
       event.promise = new Promise((rsv, rjt) => {
 
@@ -481,15 +482,23 @@ export class GridLignesComponent implements OnChanges, OnInit {
           .entries(event.changes[0].data)[0];
         this.changes = []; // clear changes, or DX won't let us pass
 
+        // update "fournisseur" field when "proprietaire" value changed
         if (name === "proprietaireMarchandise") {
-          console.log("set proprietaire");
           const [id, code] = this.updateFilterFournisseurDS(event.changes[0].data.proprietaireMarchandise);
           event.component.cellValue(
             event.component.getRowIndexByKey(event.changes[0].key),
             "fournisseur",
             { id, code },
           );
+          this.changes = [{
+            ...event.changes[0],
+            data: { fournisseur: { id } },
+          }];
         }
+
+        // map object value
+        if (typeof value === "object")
+          value = value.id;
 
         // request mutation
         this.ordreLignesService.updateField(
@@ -498,23 +507,30 @@ export class GridLignesComponent implements OnChanges, OnInit {
           event.changes[0].key,
           this.currentCompanyService.getCompany().id,
           this.gridFields,
-        ).subscribe({
+        )
+          .pipe(first())
+          .subscribe({
 
-          // build and push response data
-          next: ({ data }) => {
-            (this.dataSource.store() as CustomStore).push([{
-              key: data.updateField.id,
-              type: "update",
-              data: data.updateField,
-            }]);
-          },
+            // build and push response data
+            next: ({ data }) => {
+              (this.dataSource.store() as CustomStore).push([{
+                key: data.updateField.id,
+                type: "update",
+                data: data.updateField,
+              }]);
+            },
 
-          // reject on error
-          error: err => {
-            console.error(err);
-            rjt(err);
-          },
-        });
+            // reject on error
+            error: err => {
+              notify(err.message, "error", 5000);
+              rjt(err);
+            },
+
+            // optionnal chaining
+            complete: () => {
+              this.datagrid.instance.saveEditData();
+            },
+          });
       });
     }
   }
