@@ -82,6 +82,21 @@ export class OrdreLignesService extends ApiService implements APIRead {
       });
   }
 
+  private insert(values) {
+    const variables = { ordreLigne: values };
+    return this.watchSaveQuery({ variables }).toPromise();
+  }
+
+  private update(id, values) {
+    const variables = { ordreLigne: { id, ...values } };
+    return this.watchSaveQuery({ variables }).toPromise();
+  }
+
+  private remove(id) {
+    const variables = { id };
+    return this.watchDeleteQuery({ variables }).toPromise();
+  }
+
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       reshapeOnPush: true,
@@ -118,18 +133,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
               resolve(new OrdreLigne(res.data.ordreLigne));
           });
         }),
-        insert: (values) => {
-          const variables = { ordreLigne: values };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        update: (key, values) => {
-          const variables = { ordreLigne: { id: key, ...values } };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        remove: (key) => {
-          const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise();
-        },
+        insert: this.insert,
+        update: this.update,
+        remove: this.remove,
       }),
     });
   }
@@ -170,18 +176,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
         }),
         byKey: this.byKey_v2(columns),
-        insert: (values) => {
-          const variables = { ordreLigne: values };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        update: (key, values) => {
-          const variables = { ordreLigne: { id: key, ...values } };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        remove: (key) => {
-          const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise();
-        },
+        insert: this.insert,
+        update: this.update,
+        remove: this.remove,
       }),
     });
   }
@@ -381,6 +378,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   getListDataSource(columns: Array<string>) {
     return new DataSource({
+      reshapeOnPush: true,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
@@ -392,6 +390,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
             });
           }),
         byKey: this.byKey_v2(columns),
+        insert: this.insert,
+        update: this.update,
+        remove: this.remove,
       }),
     });
   }
