@@ -36,7 +36,6 @@ export class Emballage extends Model {
   @Field() public largeur: number;
   @Field() public longueur: number;
   @Field() public poidsNetColis: number;
-  @Field() public prepeseBoolean: number;
   @Field() public prixUnitaireAchat: number;
   @Field() public prixUnitaireMainOeuvre: number;
   @Field() public prixUnitaireMatierePremiere: number;
