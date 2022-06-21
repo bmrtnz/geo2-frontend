@@ -1,3 +1,6 @@
+import { EventEmitter } from "@angular/core";
+import { SummaryType } from "app/shared/services/api.service";
+import dxDataGrid from "devextreme/ui/data_grid";
 import {
   AsyncRule,
   CompareRule,
@@ -7,10 +10,8 @@ import {
   PatternRule,
   RangeRule,
   RequiredRule,
-  StringLengthRule,
+  StringLengthRule
 } from "devextreme/ui/validation_rules";
-import { SummaryType } from "app/shared/services/api.service";
-import { EventEmitter } from "@angular/core";
 
 declare global {
   interface String {
@@ -316,3 +317,11 @@ export class Change<T> {
 
   data: Partial<T>;
 }
+
+export type OnSavingEvent = {
+  cancel: boolean,
+  changes: Array<any>,
+  component: dxDataGrid,
+  element: HTMLElement,
+  promise: Promise<void>,
+};
