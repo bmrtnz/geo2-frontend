@@ -1,3 +1,6 @@
+import { Inject, Injector } from "@angular/core";
+import { map } from "rxjs/operators";
+import { OrdresService } from "../services/api/ordres.service";
 import BaseTarif from "./base-tarif.model";
 import BasePaiement from "./base.paiement.model";
 import { Campagne } from "./campagne.model";
@@ -146,6 +149,7 @@ export class Ordre extends Model {
   @Field({ model: import("./transitaire.model") })
   public transitaire?: Transitaire;
   public static isCloture(ordre: Partial<Ordre>) {
+    if (!ordre?.statut) console.warn("Ordre is missing statut");
     return [
       Statut[Statut.EXPEDIE],
       Statut[Statut.FACTURE],
