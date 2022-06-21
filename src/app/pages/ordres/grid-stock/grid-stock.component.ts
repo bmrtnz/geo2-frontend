@@ -180,7 +180,19 @@ export class GridStockComponent implements OnInit {
 
     if (["data", "group"].includes(e.rowType)) {
       // Fond jaune pour les stocks J21
-      if (e.column.dataField === "quantiteCalculee4") e.cellElement.classList.add("highlight-stockJ21-cell");
+      if (e.column.dataField === "quantiteCalculee4") {
+        e.cellElement.classList.add("highlight-stockJ21-cell");
+      } else {
+        if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
+          let neg = false;
+          if (e.rowType === "data") {
+            if (e.value) if (e.value < 0) neg = true;
+          } else {
+            if (e.summaryItems[0].value < 0) neg = true;
+          }
+          if (neg) e.cellElement.classList.add("highlight-negativeStock-cell");
+        }
+      }
     }
 
   }
