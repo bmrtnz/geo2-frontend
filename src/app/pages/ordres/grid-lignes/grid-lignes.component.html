@@ -25,7 +25,7 @@
       [focusedRowEnabled]="true"
       [remoteOperations]="{
         filtering: true,
-        grouping: true,
+        grouping: false,
         groupPaging: false,
         paging: false,
         sorting: true,
@@ -68,15 +68,6 @@
         [visible]="true"
         [allowSearch]="true"
       ></dxo-header-filter>
-      <dxo-paging
-        [pageSize]="100"
-        [pageIndex]="0"
-      ></dxo-paging>
-      <dxo-pager
-        [showPageSizeSelector]="true"
-        [showInfo]="true"
-        [showNavigationButtons]="true"
-      ></dxo-pager>
       <dxo-state-storing
         [storageKey]="gridConfiguratorService.Grid.OrdreLigne"
         [enabled]="true"
@@ -85,7 +76,7 @@
         [customSave]="gridConfiguratorService.save"
       ></dxo-state-storing>
       <!-- <dxo-filter-row [visible]="false"></dxo-filter-row> -->
-      <dxo-load-panel [enabled]="false"></dxo-load-panel>
+      <!-- <dxo-load-panel [enabled]="false"></dxo-load-panel> -->
       <dxo-editing
         [selectTextOnEditStart]="true"
         [allowUpdating]="allowMutations"

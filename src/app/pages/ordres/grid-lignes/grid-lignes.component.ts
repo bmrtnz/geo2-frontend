@@ -15,7 +15,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
-import { Change, GridColumn, TotalItem } from "basic";
+import { Change, GridColumn, OnSavingEvent, TotalItem } from "basic";
 import CustomStore from "devextreme/data/custom_store";
 import { DxDataGridComponent, DxLoadIndicatorComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -146,7 +146,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       return (this.addKeyToField(column.dataField));
     })));
     this.gridFields = await fields.toPromise();
-    this.dataSource = this.ordreLignesService.getDataSource_v2(this.gridFields);
+    this.dataSource = this.ordreLignesService.getListDataSource(this.gridFields);
     this.filterFournisseurDS();
     this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     this.achatUniteSource = this.achatUniteService.getDataSource_v2(["id", "description"]);
@@ -234,8 +234,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
     if (this?.ordre?.id) {
       this.dataSource = this.ordreLignesService
-        .getDataSource_v2(this.gridFields);
-      // .getSummarisedDatasource(SummaryOperation.Totaux, fields, summaryInputs);
+        .getListDataSource(this.gridFields);
       this.dataSource.filter([
         ["ordre.id", "=", this.ordre.id],
         "and",
@@ -464,21 +463,12 @@ export class GridLignesComponent implements OnChanges, OnInit {
   /**
    * Handle dynamic saving on cell change
    */
-  onSaving(event: {
-    cancel: boolean,
-    changes: Array<any>,
-    component: dxDataGrid,
-    element: HTMLElement,
-    promise: Promise<void>,
-  }) {
+  onSaving(event: OnSavingEvent) {
     if (event.component.hasEditData()) {
       if (event?.changes[0]?.type !== "update") return;
 
       event.cancel = true;
       event.promise = new Promise((rsv, rjt) => {
-
-        // resolve early so DX doesn't block cell change too long
-        rsv();
 
         // push input cell changes
         (this.dataSource.store() as CustomStore).push(event.changes);
@@ -532,8 +522,9 @@ export class GridLignesComponent implements OnChanges, OnInit {
             },
 
             // optionnal chaining
-            complete: () => {
-              this.datagrid.instance.saveEditData();
+            complete: async () => {
+              await this.datagrid.instance.saveEditData();
+              rsv();
             },
           });
       });
