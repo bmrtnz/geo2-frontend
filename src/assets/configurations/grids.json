@@ -4271,7 +4271,7 @@
       },
       {
         "visibleIndex": 5,
-        "dataField": "fournisseur.raisonSocial",
+        "dataField": "fournisseur.code",
         "visible": true
       },
       {
