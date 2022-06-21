@@ -46,6 +46,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 
   @Input() public fournisseurLigneId: string;
   @Output() fournisseurLigneCode = new EventEmitter<string>();
+  @Output() modifUserIds: string[];
 
   formGroup = this.fb.group({
     code: [""],
@@ -183,7 +184,6 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 
   checkEmptyModificationList(listLength) {
     if (listLength === 0 && this.authService.currentUser.adminClient) {
-      console.log("rrr", this.formGroup.valid);
       if (this.formGroup.valid) {
         const fournisseur = { id: this.fournisseur.id, preSaisie: false, valide: true };
         this.formGroup.get("valide").setValue(true);
@@ -197,6 +197,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 
   ngOnInit() {
 
+    this.resetModifUserIds();
     this.pays = this.paysService.getDataSource_v2(["id", "description"]);
     this.pays.filter(["valide", "=", "true"]);
     this.bureauxAchat = this.bureauxAchatService.getDataSource_v2(["id", "raisonSocial"]);
@@ -278,6 +279,14 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     this.updateZeroTracaValue();
     this.preSaisie = this.fournisseur.preSaisie === true ? "preSaisie" : "";
     this.fournisseurLigneCode.emit(this.fournisseur.code);
+  }
+
+  addModificationUserIds(userIdFromModifList) {
+    if (!this.modifUserIds.includes(userIdFromModifList)) this.modifUserIds.push(userIdFromModifList);
+  }
+
+  resetModifUserIds() {
+    this.modifUserIds = [];
   }
 
   updateZeroTracaValue() {
@@ -439,6 +448,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         next: (e) => {
           if (this.createMode || this.authService.currentUser.adminClient) notify("Sauvegardé", "success", 3000);
           this.refreshGrid.emit();
+          this.resetModifUserIds();
           // Show red badges (unvalidated forms)
           this.validationService.showToValidateBadges();
           if (!this.createMode) {

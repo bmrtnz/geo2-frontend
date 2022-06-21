@@ -1,18 +1,18 @@
 import {
-    Component,
-    NgModule,
-    Input,
-    OnInit,
-    OnChanges,
-    Output,
-    EventEmitter,
+  Component,
+  NgModule,
+  Input,
+  OnInit,
+  OnChanges,
+  Output,
+  EventEmitter,
 } from "@angular/core";
 import {
-    DxButtonModule,
-    DxPopupModule,
-    DxTemplateModule,
-    DxTextBoxModule,
-    DxBoxModule,
+  DxButtonModule,
+  DxPopupModule,
+  DxTemplateModule,
+  DxTextBoxModule,
+  DxBoxModule,
 } from "devextreme-angular";
 import { CommonModule } from "@angular/common";
 import { AuthService } from "app/shared/services";
@@ -25,111 +25,115 @@ import { ValidationService } from "app/shared/services/api/validation.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 
 @Component({
-    selector: "app-modification-list",
-    templateUrl: "./modification-list.component.html",
-    styleUrls: ["./modification-list.component.scss"],
+  selector: "app-modification-list",
+  templateUrl: "./modification-list.component.html",
+  styleUrls: ["./modification-list.component.scss"],
 })
 export class ModificationListComponent implements OnInit, OnChanges {
-    @Input() entite: string;
-    @Input() entiteID: string;
-    @Output() modifs: any;
+  @Input() entite: string;
+  @Input() entiteID: string;
+  @Output() modifs: any;
 
-    @Output() listChange = new EventEmitter();
+  @Output() listChange = new EventEmitter();
+  @Output() idUtilisateur = new EventEmitter();
 
-    modifications: DataSource;
+  modifications: DataSource;
 
-    constructor(
-        public authService: AuthService,
-        private dateManagementService: DateManagementService,
-        public modificationsService: ModificationsService,
-        public validationService: ValidationService,
-    ) { }
+  constructor(
+    public authService: AuthService,
+    private dateManagementService: DateManagementService,
+    public modificationsService: ModificationsService,
+    public validationService: ValidationService,
+  ) { }
 
-    ngOnInit() { }
+  ngOnInit() { }
 
-    ngOnChanges() {
-        this.modifs = [];
-        this.refreshList();
-    }
+  ngOnChanges() {
+    this.modifs = [];
+    this.refreshList();
+  }
 
-    refreshList() {
-        const columns = [
-            "id",
-            "entite",
-            "entiteID",
-            "dateModification",
-            "initiateur.nomUtilisateur",
-            "statut",
-            "corps.id",
-            "corps.affichageActuel",
-            "corps.affichageDemande",
-            "corps.traductionKey",
-        ];
+  refreshList() {
+    const columns = [
+      "id",
+      "entite",
+      "entiteID",
+      "dateModification",
+      "initiateur.personne.id",
+      "initiateur.nomUtilisateur",
+      "statut",
+      "corps.id",
+      "corps.affichageActuel",
+      "corps.affichageDemande",
+      "corps.traductionKey",
+    ];
 
-        this.modificationsService
-            .getAll(columns, [
-                ["entite", "=", this.entite],
-                "and",
-                ["entiteID", "=", this.entiteID],
-                "and",
-                ["statut", "=", false],
-            ])
-            .subscribe((res) => {
-                const liste = JSON.parse(JSON.stringify(res));
-                if (liste.length) {
-                    liste.sort(
-                        (a, b) =>
-                            new Date(b.dateModification).getTime() -
-                            new Date(a.dateModification).getTime(),
-                    );
-                    this.modifs = liste;
-                    this.modifs.map(
-                        (result) =>
-                            (result.dateModification =
-                                this.dateManagementService.friendlyDate(
-                                    result.dateModification,
-                                )),
-                    );
-                }
-            });
-    }
+    this.modificationsService
+      .getAll(columns, [
+        ["entite", "=", this.entite],
+        "and",
+        ["entiteID", "=", this.entiteID],
+        "and",
+        ["statut", "=", false],
+      ])
+      .subscribe((res) => {
+        const liste = JSON.parse(JSON.stringify(res));
+        if (liste.length) {
+          liste.sort(
+            (a, b) =>
+              new Date(b.dateModification).getTime() -
+              new Date(a.dateModification).getTime(),
+          );
+          this.modifs = liste;
+          this.modifs.map(
+            (result) =>
+              (result.dateModification =
+                this.dateManagementService.friendlyDate(
+                  result.dateModification,
+                )),
+          );
+        }
+      });
+  }
 
-    clearModifications(modifID) {
-        const modification: Partial<Modification> = {
-            id: modifID,
-            statut: true,
-        };
-        this.modificationsService.save_v2([
-            "id",
-        ], { modification }).subscribe({
-            next: (e) => {
-                this.modifs = this.modifs.filter((res) => res.id !== modifID);
-                // Show red badges (unvalidated forms)
-                this.validationService.showToValidateBadges();
-                this.listChange.emit(this.modifs.length);
-                notify("Suppression demande effectuée !", "success", 3000);
-            },
-            error: () =>
-                notify(
-                    "Erreur lors de la demande de suppression",
-                    "error",
-                    3000,
-                ),
-        });
-    }
+  clearModifications(modifID, modifIDUtilisateur) {
+    this.idUtilisateur.emit(modifIDUtilisateur);
+
+    const modification: Partial<Modification> = {
+      id: modifID,
+      statut: true,
+    };
+    this.modificationsService.save_v2([
+      "id",
+    ], { modification }).subscribe({
+      next: (e) => {
+        this.modifs = this.modifs.filter((res) => res.id !== modifID);
+        // Show red badges (unvalidated forms)
+        this.validationService.showToValidateBadges();
+        this.listChange.emit(this.modifs.length);
+        notify("Suppression demande effectuée !", "success", 3000);
+      },
+      error: () =>
+        notify(
+          "Erreur lors de la demande de suppression",
+          "error",
+          3000,
+        ),
+    });
+  }
 }
 
 @NgModule({
-    imports: [
-        CommonModule,
-        DxButtonModule,
-        DxPopupModule,
-        DxTemplateModule,
-        DxTextBoxModule,
-        DxBoxModule,
-        SharedModule,
-    ],
-    declarations: [ModificationListComponent],
-    exports: [ModificationListComponent],
+  imports: [
+    CommonModule,
+    DxButtonModule,
+    DxPopupModule,
+    DxTemplateModule,
+    DxTextBoxModule,
+    DxBoxModule,
+    SharedModule,
+  ],
+  declarations: [ModificationListComponent],
+  exports: [ModificationListComponent],
 })
 export class ModificationListModule { }

@@ -93,6 +93,7 @@
           (listChange)="checkEmptyModificationList($event)"
           [entite]="'Fournisseur'"
           [entiteID]="fournisseur.id"
+          (idUtilisateur)="addModificationUserIds($event)"
           *ngIf="!createMode && fournisseur"
         ></app-modification-list>
         <dx-box direction="row">
@@ -1402,6 +1403,7 @@
 <app-push-history-popup
   title="{{ 'valide-comment-title' | localize }}"
   [placeholder]="'valide-comment' | localize"
+  [modifUserIds]="modifUserIds"
 >
 </app-push-history-popup>
 <app-certification-date-popup></app-certification-date-popup>
