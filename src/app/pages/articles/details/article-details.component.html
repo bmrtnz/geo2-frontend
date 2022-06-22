@@ -758,6 +758,32 @@
               <dxi-item [ratio]="1"></dxi-item>
               <dxi-item [ratio]="4"> </dxi-item>
             </dx-box>
+            <dx-accordion
+                [collapsible]="true"
+                [multiple]="false"
+                [selectedIndex]="-1"
+              >
+                <dxi-item
+                  title="Infos complémentaires"
+                >
+                  <!-- Emballage -->
+                  <div class="dx-field field-large">
+                    <div class="dx-field-label">
+                      {{ "articles-emballage-id" | localize }}
+                    </div>
+                    <div
+                      class="dx-field-value"
+                      formGroupName="emballage"
+                    >
+                      <dx-text-box
+                        formControlName="id"
+                        [readOnly]="readOnlyMode"
+                      >
+                      </dx-text-box>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dx-accordion>
           </div>
         </div>
         <div
