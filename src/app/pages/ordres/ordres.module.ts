@@ -145,6 +145,7 @@ import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-hi
 import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { GridStockComponent } from "./grid-stock/grid-stock.component";
 import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
+import { GridCommandesComponent } from "./grid-commandes/grid-commandes.component";
 
 @NgModule({
   declarations: [
@@ -211,6 +212,7 @@ import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reserv
     AjoutArticlesStockPopupComponent,
     GridStockComponent,
     ReservationPopupComponent,
+    GridCommandesComponent,
   ],
   imports: [
     OrdresRoutingModule,

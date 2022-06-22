@@ -198,7 +198,7 @@
                   >{{ status }}</span
                 >
                 <span
-                *ngIf="ordreFacture && numeroFacture?.length"
+                  *ngIf="ordreFacture && numeroFacture?.length"
                   class="dx-form-group-caption invoice-number red-font-imp"
                   >&nbsp;({{ numeroFacture }})</span
                 >
@@ -386,7 +386,10 @@
                             </div>
                           </div>
                         </dxi-item>
-                        <dxi-item [ratio]="0.5" [baseSize]="10">
+                        <dxi-item
+                          [ratio]="0.5"
+                          [baseSize]="10"
+                        >
                           <dx-button
                             class="form-zoom-button"
                             type="default"
@@ -844,6 +847,10 @@
                     (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
                     (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-lignes>
+                  <div class="grid-separator"></div>
+                  <app-grid-commandes
+                    [ordreID]="ordre?.id"
+                  ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique

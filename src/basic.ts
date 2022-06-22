@@ -315,7 +315,7 @@ export class Change<T> {
 
   key: any;
 
-  data: Partial<T>;
+  data: T;
 }
 
 export type OnSavingEvent = {

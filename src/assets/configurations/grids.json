@@ -1680,7 +1680,6 @@
     ]
   },
   "ordre-ligne": {
-    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 0,
@@ -2088,6 +2087,40 @@
         "dataField": "logistique.expedieStation",
         "showInColumnChooser": false,
         "visible": false
+      }
+    ]
+  },
+  "lignes-commandes": {
+    "columns": [
+      {
+        "dataField": "numero",
+        "visible": true,
+        "allowEditing": false,
+        "allowSorting": false,
+        "fixed": true
+      },
+      {
+        "dataField": "article.articleDescription.descriptionReferenceLongue",
+        "allowEditing": false,
+        "allowSorting": true,
+        "fixed": true,
+        "visible": true
+      },
+      {
+        "dataField": "nombrePalettesCommandees",
+        "visible": true
+      },
+      {
+        "dataField": "nombrePalettesIntermediaires",
+        "visible": true
+      },
+      {
+        "dataField": "nombreColisPalette",
+        "visible": true
+      },
+      {
+        "dataField": "nombreColisCommandes",
+        "visible": true
       }
     ]
   },

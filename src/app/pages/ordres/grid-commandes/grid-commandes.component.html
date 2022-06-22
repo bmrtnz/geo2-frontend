@@ -1,0 +1,29 @@
+<dx-data-grid
+  [remoteOperations]="{
+    filtering: true,
+    sorting: true
+  }"
+  [repaintChangesOnly]="true"
+  [highlightChanges]="true"
+  (onToolbarPreparing)="gridConfigHandler($event)"
+  (onSaving)="onSaving($event)"
+  (focusedColumnIndexChange)="focusedColumnIndexChange()"
+>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [mode]="'batch'"
+    [allowUpdating]="allowMutations"
+    [allowDeleting]="allowMutations"
+    [(changes)]="changes"
+    [refreshMode]="'reshape'"
+  ></dxo-editing>
+  <dxo-keyboard-navigation
+    [enterKeyAction]="'moveFocus'"
+    [enterKeyDirection]="'column'"
+    [editOnKeyPress]="true"
+  ></dxo-keyboard-navigation>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+  ></dxi-column>
+</dx-data-grid>

@@ -378,14 +378,15 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   getListDataSource(columns: Array<string>) {
     return new DataSource({
-      reshapeOnPush: true,
+      // reshapeOnPush: true,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             const { search } = this.mapLoadOptionsToVariables(options);
             const res = await this.getList(search, columns).toPromise();
+            const data = JSON.parse(JSON.stringify(res.data.allOrdreLigneList));
             resolve({
-              data: res.data.allOrdreLigneList,
+              data,
               totalCount: res.data.allOrdreLigneList.length,
             });
           }),
