@@ -44,6 +44,7 @@ export class PushHistoryPopupComponent {
 
   @Input() title = "";
   @Input() placeholder = "";
+  @Input() modifUserIds;
 
   persist = new EventEmitter<Observable<FetchResult>>();
 
@@ -89,6 +90,8 @@ export class PushHistoryPopupComponent {
   }
 
   onShown() {
+    // If applicable, populates field with the ids of the users who suggested modifications
+    if (this.modifUserIds?.length) this.commentBox.value = "(" + this.modifUserIds.join(" / ") + ") ";
     this.commentBox.instance.focus();
   }
 
