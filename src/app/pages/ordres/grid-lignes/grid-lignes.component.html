@@ -161,7 +161,8 @@
               : displayCodeBefore
           "
           [searchExpr]="[
-            this[cell.column.dataField + 'Service'].model.getKeyField()
+            this[cell.column.dataField + 'Service'].model.getKeyField(),
+            this[cell.column.dataField + 'Service'].model.getLabelField()
           ]"
           [value]="cell.data[cell.column.dataField]"
           (onValueChanged)="onValueChanged($event, cell)"
