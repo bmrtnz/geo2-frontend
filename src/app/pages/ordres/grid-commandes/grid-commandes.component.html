@@ -22,8 +22,20 @@
     [enterKeyDirection]="'column'"
     [editOnKeyPress]="true"
   ></dxo-keyboard-navigation>
+  <dxo-summary>
+    <dxi-total-item
+      column="nombrePalettesCommandees"
+      summaryType="sum"
+    ></dxi-total-item>
+    <dxi-total-item
+      column="nombreColisCommandes"
+      summaryType="sum"
+    ></dxi-total-item>
+  </dxo-summary>
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
+    [allowEditing]="column.allowEditing"
+    [allowSorting]="column.allowSorting"
   ></dxi-column>
 </dx-data-grid>
