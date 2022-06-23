@@ -4,22 +4,6 @@
 
 
 ::ng-deep .grid-ordre-ligne-historique {
-  .dx-data-row {
-    .dx-icon {
-      color: $base-accent;
-    }
-
-    &.dx-row-focused {
-      .dx-icon {
-        color: white;
-      }
-    }
-  }
-
-  &.dx-row-focused .dx-icon {
-    color: white !important;
-  }
-
   .bio-article {
     color: #39970e !important;
     cursor: pointer;
@@ -38,7 +22,7 @@
 ::ng-deep .grid-zoom-button {
   width: 22px !important;
   height: 22px;
-  min-width: 0 !important;
+  min-width: 22px !important;
   background-color: transparent !important;
 
   .dx-button-content {

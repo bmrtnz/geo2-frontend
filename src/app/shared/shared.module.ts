@@ -7,13 +7,13 @@ import DataGrid from "devextreme/ui/data_grid";
 import { GridConfiguratorModule } from "./services/grid-configurator.service";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        RouterModule,
-        FormsModule,
-        ReactiveFormsModule,
-        GridConfiguratorModule,
-    ],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    GridConfiguratorModule,
+  ],
     declarations: [LocalizePipe],
     exports: [CommonModule, LocalizePipe],
 })

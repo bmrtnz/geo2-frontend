@@ -43,7 +43,8 @@ export class AuthService {
         "configTabsOrdres",
 
         // Autres accès
-        "indicateurVisualisationIncotermFournisseur"
+        "indicateurVisualisationIncotermFournisseur",
+        "commentaireStock"
     ];
 
     constructor(

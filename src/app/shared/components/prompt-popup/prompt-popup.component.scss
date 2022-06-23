@@ -1,0 +1,9 @@
+.prompt-action {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+
+  & > .dx-button {
+    margin-left: 10px;
+  }
+}
