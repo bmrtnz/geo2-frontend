@@ -161,6 +161,8 @@ interface GridColumn {
    * Allow column sorting
    */
   allowSorting?: boolean;
+
+  calculateDisplayValue?: string;
 }
 
 /**

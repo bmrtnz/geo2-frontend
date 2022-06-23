@@ -1,12 +1,3 @@
-<div *dxTemplate="let cell of 'entityCellTemplate'">
-  <span *ngIf="cell.calculateDisplayValue; else noDisplayValue">
-    {{ cell.displayValue }}
-  </span>
-  <ng-template #noDisplayValue>{{
-    cell.value && fetchDisplayValueByID(cell)
-  }}</ng-template>
-</div>
-
 <div *dxTemplate="let cell of 'entityEditCellTemplate'">
   <dx-select-box
     *ngIf="columnsSettings; else noSettings"

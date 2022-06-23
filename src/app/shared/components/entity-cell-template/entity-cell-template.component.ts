@@ -36,19 +36,6 @@ export class EntityCellTemplateComponent {
     return cell.data[cell.column.dataField.split(".")[0]];
   }
 
-  /** Extract display value from cell */
-  public fetchDisplayValueByID(cell: CellTemplate) {
-    cell.column.calculateDisplayValue = (data) => {
-      console.log(data);
-      return "[DATA]";
-    };
-    // const { dataSource, displayExpression: expr } = this.getSettings(cell.column.dataField);
-    // dataSource.filter(["id", "=", cell.value]);
-    // const [result] = await dataSource.load();
-    // console.log(result, typeof expr === "function" ? expr() : expr);
-    // return result[typeof expr === "function" ? expr() : expr];
-  }
-
 }
 
 @NgModule({
