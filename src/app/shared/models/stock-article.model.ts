@@ -70,6 +70,9 @@ export class StockArticle extends Model {
   typePaletteID: string;
 
   @Field()
+  commentaire: string;
+
+  @Field()
   quantiteInitiale1: number;
 
   @Field()

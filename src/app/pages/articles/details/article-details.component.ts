@@ -225,6 +225,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     this.contentReadyEvent.emit();
     this.ucBW = this.article.emballage.uniteParColis > 0;
     this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
+    console.log(this.article.emballage);
   }
 
   onCancel() {

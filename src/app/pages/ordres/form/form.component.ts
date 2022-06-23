@@ -26,7 +26,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile, tap } from "rxjs/operators";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
@@ -464,7 +464,7 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   deviseDisplayExpr(item) {
-    return item ? item.description + (item.taux !== null ? " (" + item.taux + ")" : "") : null;
+    return item ? item.id + " - " + item.description + (item.taux !== null ? " (" + item.taux + ")" : "") : null;
   }
 
   displayIDBefore(data) {
@@ -496,8 +496,9 @@ export class FormComponent implements OnInit, OnDestroy {
           if (numero === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
           return this.ordresService
             .getOneByNumeroAndSocieteAndCampagne(numero, currentCompany.id, campagneID, this.headerFields)
-            .valueChanges
-            .pipe(map(res => res.data.ordreByNumeroAndSocieteAndCampagne));
+            .pipe(
+              map(res => res.data.ordreByNumeroAndSocieteAndCampagne),
+            );
         }),
       )
       .subscribe(ordre => {
@@ -680,8 +681,7 @@ export class FormComponent implements OnInit, OnDestroy {
             this.currentCompanyService.getCompany().id,
             campagneID,
             ["id", "statut"],
-          )
-          .valueChanges),
+          )),
         takeWhile(res => res.loading),
         map(res => res.data.ordreByNumeroAndSocieteAndCampagne),
       )

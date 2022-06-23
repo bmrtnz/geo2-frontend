@@ -243,7 +243,7 @@ export class FileManagerService {
         FileManagerService._formAppendInput(form, "id", this.baseArgs.id);
 
         for (const file of items) {
-            FileManagerService._formAppendInput(form, "files", file.path);
+            FileManagerService._formAppendInput(form, "files", encodeURIComponent(file.path));
         }
 
         document.body.appendChild(form);

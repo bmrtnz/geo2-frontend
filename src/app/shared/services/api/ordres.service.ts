@@ -60,7 +60,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     body: string[],
   ) {
     return this.apollo
-      .watchQuery<{ ordreByNumeroAndSocieteAndCampagne: Ordre }>({
+      .query<{ ordreByNumeroAndSocieteAndCampagne: Ordre }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -81,7 +81,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
           ],
         )),
         variables: { numero, societe, campagne },
-        fetchPolicy: "cache-and-network",
+        fetchPolicy: "cache-first",
       });
   }
 

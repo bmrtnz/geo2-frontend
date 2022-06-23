@@ -2,6 +2,7 @@
   [showTitle]="true"
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
+  (onShowing)="onShowing()"
   width="1000"
   [title]="('documents' | localize) + (subTitle ? ' - ' + subTitle : '')"
   [(visible)]="visible"
