@@ -2,13 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { EventEmitter, Injectable, NgModule } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { GridColumn } from "basic";
-import { confirm } from "devextreme/ui/dialog";
 import {
   DxoColumnChooserComponent,
   DxoStateStoringComponent
 } from "devextreme-angular/ui/nested";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
+import { confirm } from "devextreme/ui/dialog";
 import { dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
 import { defer, from, interval, Observable } from "rxjs";
@@ -17,7 +17,10 @@ import {
   debounce,
   filter,
   map,
+
+  mergeMap,
   pairwise,
+  reduce,
   share,
   startWith,
   tap
@@ -298,24 +301,22 @@ export class GridConfiguratorService {
     const userConfig: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfig.config));
 
     // merge extra configurations ( not handled by DX state storing )
-    userConfig.columns = userConfig.columns
-      //
-      .map((c) => ({
-        ...c,
-        ...(async () => {
-          const defaultColumn = (await defaultConfig).columns.find(
-            ({ dataField }) => dataField === c.dataField,
-          );
-          return {
-            showInColumnChooser:
-              defaultColumn?.showInColumnChooser ?? true,
-          };
-        })(),
-      }));
-
-    delete userConfig.focusedRowKey;
-    delete userConfig.selectedRowKeys;
-    return userConfig;
+    return from(userConfig.columns)
+      .pipe(
+        mergeMap(async column => [column, (await defaultConfig)
+          .columns.find(c => c.dataField === column.dataField)] as [GridColumn, GridColumn]),
+        map(([userColumn, defaultColumn]) => ({
+          ...userColumn,
+          ...{
+            showInColumnChooser: defaultColumn.showInColumnChooser ?? true,
+            calculateDisplayValue: defaultColumn.calculateDisplayValue,
+            editCellTemplate: defaultColumn.editCellTemplate,
+          } ?? {},
+        })),
+        reduce<GridColumn, GridColumn[]>((acc, value) => [...acc, value]),
+        map(columns => ({ ...userConfig, columns })),
+      )
+      .toPromise();
   }
 
   /**
