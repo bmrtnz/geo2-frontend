@@ -35,7 +35,12 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
-    [allowEditing]="column.allowEditing"
-    [allowSorting]="column.allowSorting"
+    [allowEditing]="column.allowEditing || true"
+    [allowSorting]="column.allowSorting || true"
+    [cellTemplate]="column.cellTemplate"
+    [editCellTemplate]="column.editCellTemplate"
   ></dxi-column>
+  <app-entity-cell-template
+    [columnsSettings]="columnsSettings"
+  ></app-entity-cell-template>
 </dx-data-grid>

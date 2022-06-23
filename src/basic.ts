@@ -1,6 +1,6 @@
 import { EventEmitter } from "@angular/core";
 import { SummaryType } from "app/shared/services/api.service";
-import dxDataGrid from "devextreme/ui/data_grid";
+import dxDataGrid, { dxDataGridColumn, dxDataGridRowObject } from "devextreme/ui/data_grid";
 import {
   AsyncRule,
   CompareRule,
@@ -324,4 +324,19 @@ export type OnSavingEvent = {
   component: dxDataGrid,
   element: HTMLElement,
   promise: Promise<void>,
+};
+
+export type CellTemplate = {
+  column: dxDataGridColumn,
+  columnIndex: number,
+  component: dxDataGrid,
+  data: Record<string, any>,
+  displayValue: any,
+  oldValue: any,
+  row: dxDataGridRowObject,
+  rowIndex: number,
+  rowType: string,
+  text: string,
+  value: any
+  watch: (getter, handler) => void,
 };

@@ -146,6 +146,7 @@ import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/a
 import { GridStockComponent } from "./grid-stock/grid-stock.component";
 import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
 import { GridCommandesComponent } from "./grid-commandes/grid-commandes.component";
+import { EntityCellTemplateModule } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 
 @NgModule({
   declarations: [
@@ -256,7 +257,8 @@ import { GridCommandesComponent } from "./grid-commandes/grid-commandes.componen
     TransporteursModule,
     LieuxPassageAQuaiModule,
     ContactsModule,
-    DxTooltipModule
+    DxTooltipModule,
+    EntityCellTemplateModule,
   ],
   providers: [
     OrdresIndicatorsService,

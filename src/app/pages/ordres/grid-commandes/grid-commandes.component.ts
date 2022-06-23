@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { ColumnsSettings } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
+import { FournisseursService } from "app/shared/services";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -27,12 +29,27 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     private ordreLignesService: OrdreLignesService,
     private route: ActivatedRoute,
     private currentCompanyService: CurrentCompanyService,
-  ) { }
+    private fournisseursService: FournisseursService,
+  ) {
+    const fournisseursDataSource = fournisseursService
+      .getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.columnsSettings = {
+      "proprietaireMarchandise.id": {
+        dataSource: fournisseursDataSource,
+        displayExpression: "raisonSocial",
+      },
+      "fournisseur.id": {
+        dataSource: fournisseursDataSource,
+        displayExpression: "raisonSocial",
+      },
+    };
+  }
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
   public allowMutations = false;
   public changes: Change<Partial<OrdreLigne>>[] = [];
+  public columnsSettings: ColumnsSettings;
 
   @Input() ordreID: string;
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;

@@ -2095,6 +2095,7 @@
       {
         "dataField": "numero",
         "visible": true,
+        "sortOrder": "asc",
         "allowEditing": false,
         "allowSorting": false,
         "fixed": true
@@ -2102,7 +2103,6 @@
       {
         "dataField": "article.articleDescription.descriptionReferenceLongue",
         "allowEditing": false,
-        "allowSorting": true,
         "fixed": true,
         "visible": true
       },
@@ -2121,6 +2121,18 @@
       {
         "dataField": "nombreColisCommandes",
         "visible": true
+      },
+      {
+        "dataField": "proprietaireMarchandise.id",
+        "visible": true,
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "fournisseur.id",
+        "visible": true,
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
       }
     ]
   },
