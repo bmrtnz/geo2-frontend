@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { BrowserService } from './browser.service';
+import { BrowserService } from "./browser.service";
 
-describe('BrowserService', () => {
+describe("BrowserService", () => {
   let service: BrowserService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('BrowserService', () => {
     service = TestBed.inject(BrowserService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

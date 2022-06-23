@@ -80,6 +80,7 @@ export class GridStockComponent implements OnInit {
     private modesCultureService: ModesCultureService
   ) {
     this.apiService = this.articlesService;
+
     this.especes = this.especesService.getDistinctDataSource(["id"]);
     this.especes.filter(["valide", "=", true]);
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
@@ -123,7 +124,9 @@ export class GridStockComponent implements OnInit {
     const filter = [];
 
     if (dataField === "matierePremiere.espece.id") {
-      // Clear all dependent fields
+      this.varieteSB.value = null;
+      this.emballageSB.value = null;
+      this.origineSB.value = null;
 
       if (event) {
         filter.push(["espece.id", "=", event]);

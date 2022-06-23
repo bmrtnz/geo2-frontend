@@ -34,6 +34,7 @@
             #varieteSB
             [dataSource]="varietes"
             [disabled]="noEspeceSet"
+            [showClearButton]="true"
             (valueChange)="onFieldValueChange($event, 'matierePremiere.variete.id')"
             [searchExpr]="['id']"
             [displayExpr]="'id'"
@@ -53,6 +54,7 @@
             #modesCultureSB
             [dataSource]="modesCulture"
             [disabled]="noEspeceSet"
+            [showClearButton]="true"
             (valueChange)="onFieldValueChange($event, 'matierePremiere.modeCulture.description')"
             searchExpr="matierePremiere.modeCulture.description"
             [displayExpr]="'description'"
@@ -72,6 +74,7 @@
             #emballageSB
             [dataSource]="emballages"
             [disabled]="noEspeceSet"
+            [showClearButton]="true"
             (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
             [searchExpr]="['id']"
             [displayExpr]="'id'"
@@ -91,6 +94,7 @@
             #origineSB
             [dataSource]="origines"
             [disabled]="noEspeceSet"
+            [showClearButton]="true"
             (valueChange)="onFieldValueChange($event, 'matierePremiere.origine.id')"
             [searchExpr]="['id']"
             [displayExpr]="'id'"
@@ -111,6 +115,7 @@
             #bureauAchatSB
             [dataSource]="bureauxAchat"
             [disabled]="noEspeceSet"
+            [showClearButton]="true"
             (valueChange)="onFilterChange()"
             [displayExpr]="displayCodeBefore"
             [searchExpr]="['id']"
