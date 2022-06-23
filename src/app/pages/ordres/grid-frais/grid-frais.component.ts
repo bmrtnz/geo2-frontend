@@ -27,8 +27,8 @@ import { ToggledGrid } from "../form/form.component";
 
 export class GridFraisComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
-  @ViewChild(DxDataGridComponent, { static: true })
-  dataGrid: DxDataGridComponent;
+  // @ViewChild(DxDataGridComponent, { static: true })
+  // dataGrid: DxDataGridComponent;
 
   public dataSource: DataSource;
   public fraisSource: DataSource;
@@ -155,10 +155,11 @@ export class GridFraisComponent implements ToggledGrid {
       description: this.currentCompanyService.getCompany().devise.description
     };
     e.data.deviseTaux = 1; // Répercussion comp. Géo1. Ce taux ne change jamais
-    this.datagrid.instance.saveEditData();
+    setTimeout(() => this.datagrid.instance.saveEditData(), 1);
   }
 
   onValueChanged(event, cell) {
+    if (!event.event) return;
     let valueToSave;
 
     if (cell.setValue) {
@@ -178,7 +179,6 @@ export class GridFraisComponent implements ToggledGrid {
         }
       }
       cell.setValue(valueToSave);
-
     }
   }
 
@@ -235,7 +235,8 @@ export class GridFraisComponent implements ToggledGrid {
 
   onCellClick(e) {
     // Warning when no cost type
-    if (!e.data.frais?.id && e.column.dataField === "codePlus") {
+    if (!e.data?.frais?.id && e.column.dataField === "codePlus") {
+      console.log(e.data.frais);
       notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
     }
     // No DS is displayed
