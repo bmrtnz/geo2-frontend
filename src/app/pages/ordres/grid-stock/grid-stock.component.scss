@@ -84,3 +84,14 @@ h6 {
   background: #ff325a !important;
   color: white !important;
 }
+
+::ng-deep .bio-article {
+  color: #39970e !important;
+}
+
+::ng-deep .dx-row-focused {
+
+  .bio-article {
+    color: #a9f77e !important;
+  }
+}

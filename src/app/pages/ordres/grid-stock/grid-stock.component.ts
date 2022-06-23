@@ -84,6 +84,7 @@ export class GridStockComponent implements OnInit {
     private stockConsolideService: StockConsolideService
   ) {
     this.apiService = this.articlesService;
+
     this.especes = this.especesService.getDistinctDataSource(["id"]);
     this.especes.filter(["valide", "=", true]);
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
@@ -127,7 +128,9 @@ export class GridStockComponent implements OnInit {
     const filter = [];
 
     if (dataField === "matierePremiere.espece.id") {
-      // Clear all dependent fields
+      this.varieteSB.value = null;
+      this.emballageSB.value = null;
+      this.origineSB.value = null;
 
       if (event) {
         filter.push(["espece.id", "=", event]);
@@ -162,7 +165,7 @@ export class GridStockComponent implements OnInit {
       this.modesCultureSB.value,
       this.origineSB.value,
       this.emballageSB.value,
-      this.bureauAchatSB.value,
+      this.bureauAchatSB.value?.id
     ).subscribe((res) => {
       this.dataGrid.dataSource = res.data.allStockArticleList;
       this.dataGrid.instance.refresh();
@@ -199,13 +202,9 @@ export class GridStockComponent implements OnInit {
       if (e.column.dataField === "articleDescription" && e.cellElement.textContent) {
         e.cellElement.title = this.localizeService.localize("hint-dblClick-file");
         e.cellElement.classList.add("cursor-pointer");
-      }
-    }
-
-    if (e.rowType === "data") {
-      if (e.column.dataField === "articleDescription") {
-        // Article bio
-        if (e.data.bio) e.cellElement.classList.add("bio-article");
+        let data = e.data.items ?? e.data.collapsedItems;
+        data = data[0].bio;
+        if (data) e.cellElement.classList.add("bio-article");
       }
     }
 
