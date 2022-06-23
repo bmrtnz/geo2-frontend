@@ -81,11 +81,15 @@ export class GridStockComponent implements OnInit {
   ) {
     this.apiService = this.articlesService;
     this.especes = this.especesService.getDistinctDataSource(["id"]);
+    this.especes.filter(["valide", "=", true]);
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
+    this.origines.filter(["valide", "=", true]);
     this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
+    this.varietes.filter(["valide", "=", true]);
     this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
-    // this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
+    this.emballages.filter(["valide", "=", true]);
     this.modesCulture = this.modesCultureService.getDataSource();
+    this.modesCulture.filter(["valide", "=", true]);
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
@@ -107,6 +111,33 @@ export class GridStockComponent implements OnInit {
     this.toRefresh = !this.noEspeceSet;
   }
 
+  /**
+   * Apply filters from tag boxs
+   * @param event List of field values
+   * @param dataField Field path
+   */
+  onFieldValueChange(event: string[], dataField: string) {
+    this.onFilterChange();
+
+    // Filtering variete, emballage & origine selectBox list depending on specy
+    const filter = [];
+
+    if (dataField === "matierePremiere.espece.id") {
+      // Clear all dependent fields
+
+      if (event) {
+        filter.push(["espece.id", "=", event]);
+
+        this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
+        this.varietes.filter(filter);
+        this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
+        this.emballages.filter(filter);
+        this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
+        this.origines.filter(filter);
+      }
+    }
+  }
+
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
@@ -120,22 +151,18 @@ export class GridStockComponent implements OnInit {
   }
 
   refreshArticlesGrid() {
-    if (this.dataGrid.dataSource === null
-      || (Array.isArray(this.dataGrid.dataSource)
-        && !this.dataGrid.dataSource.length))
-      this.stocksService.allStockArticleList(
-        this.especeSB.value,
-        this.varieteSB.value,
-        this.modesCultureSB.value,
-        this.origineSB.value,
-        this.emballageSB.value,
-        this.bureauAchatSB.value,
-      ).subscribe((res) => {
-        this.dataGrid.dataSource = res.data.allStockArticleList;
-        this.dataGrid.instance.refresh();
-        this.toRefresh = false;
-      });
-
+    this.stocksService.allStockArticleList(
+      this.especeSB.value,
+      this.varieteSB.value,
+      this.modesCultureSB.value,
+      this.origineSB.value,
+      this.emballageSB.value,
+      this.bureauAchatSB.value,
+    ).subscribe((res) => {
+      this.dataGrid.dataSource = res.data.allStockArticleList;
+      this.dataGrid.instance.refresh();
+      this.toRefresh = false;
+    });
   }
 
   openFilePopup(data) {

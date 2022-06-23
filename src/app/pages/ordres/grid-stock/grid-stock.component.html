@@ -15,7 +15,7 @@
           <dx-select-box
             #especeSB
             [dataSource]="especes"
-            (valueChange)="onFilterChange()"
+            (valueChange)="onFieldValueChange($event, 'matierePremiere.espece.id')"
             [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -34,7 +34,7 @@
             #varieteSB
             [dataSource]="varietes"
             [disabled]="noEspeceSet"
-            (valueChange)="onFilterChange()"
+            (valueChange)="onFieldValueChange($event, 'matierePremiere.variete.id')"
             [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -53,7 +53,7 @@
             #modesCultureSB
             [dataSource]="modesCulture"
             [disabled]="noEspeceSet"
-            (valueChange)="onFilterChange()"
+            (valueChange)="onFieldValueChange($event, 'matierePremiere.modeCulture.description')"
             searchExpr="matierePremiere.modeCulture.description"
             [displayExpr]="'description'"
             [valueExpr]="'id'"
@@ -72,7 +72,7 @@
             #emballageSB
             [dataSource]="emballages"
             [disabled]="noEspeceSet"
-            (valueChange)="onFilterChange()"
+            (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
             [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -91,7 +91,7 @@
             #origineSB
             [dataSource]="origines"
             [disabled]="noEspeceSet"
-            (valueChange)="onFilterChange()"
+            (valueChange)="onFieldValueChange($event, 'matierePremiere.origine.id')"
             [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
