@@ -6,6 +6,18 @@
     text="{{ 'btn-nouveau' | localize }}"
     (onClick)="onCreate()"
   ></dx-button>
+  <dx-button
+    class="upperButton"
+    type="normal"
+    text="{{ 'btn-wiki-fournisseurs' | localize }}"
+    (onClick)="this.browserService.openWiki('Fournisseurs')"
+  ></dx-button>
+  <dx-button
+    class="upperButton"
+    type="normal"
+    text="{{ 'btn-wiki-plateformes' | localize }}"
+    (onClick)="this.browserService.openWiki('Plateformes')"
+  ></dx-button>
 </h2>
 
 <div class="content-block">
