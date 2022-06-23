@@ -1300,6 +1300,10 @@
       {
         "dataField": "descriptionAbregee",
         "visible": true
+      },
+      {
+        "dataField": "commentaire",
+        "visible": true
       }
     ]
   },
