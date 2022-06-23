@@ -13,6 +13,7 @@ import { GridRowStyleService } from "app/shared/services/grid-row-style.service"
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import { Observable, of } from "rxjs";
+import {BrowserService} from "../../../../shared/services/browser.service";
 
 @Component({
     selector: "app-fournisseurs-list",
@@ -40,6 +41,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
         private gridConfiguratorService: GridConfiguratorService,
         private router: Router,
         public gridRowStyleService: GridRowStyleService,
+        public browserService: BrowserService
     ) {
         this.apiService = this.fournisseursService;
     }

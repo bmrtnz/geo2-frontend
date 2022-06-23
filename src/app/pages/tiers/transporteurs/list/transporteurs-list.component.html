@@ -6,6 +6,12 @@
     text="{{ 'btn-nouveau' | localize }}"
     (onClick)="onCreate()"
   ></dx-button>
+  <dx-button
+    class="upperButton"
+    type="normal"
+    text="{{ 'btn-wiki-transporteurs' | localize }}"
+    (onClick)="this.browserService.openWiki('Transporteurs')"
+  ></dx-button>
 </h2>
 
 <div class="content-block">
