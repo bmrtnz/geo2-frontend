@@ -883,7 +883,7 @@
     "ordreStock-articleID": "n° article",
     "ordreStock-articleDescription": "Article",
     "ordreStock-age": "Âge",
-    "ordreStock-fournisseurCode": "Fournisseur",
+    "ordreStock-fournisseurCode": "Emballeur/Expéditeur",
     "ordreStock-stockID": "Id stock",
     "ordreStock-origineID": "Origine",
     "ordreStock-varieteID": "Variété",

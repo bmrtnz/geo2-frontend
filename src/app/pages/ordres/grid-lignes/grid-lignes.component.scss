@@ -25,6 +25,13 @@
 
 ::ng-deep .grid-ordre-ligne {
 
+  .dx-row-focused {
+
+    .bio-article {
+      color: #39970e !important;
+    }
+  }
+
   .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type) {
     pointer-events: none;
 
@@ -88,11 +95,11 @@
 
   .dx-row-focused.dx-data-row>td {
     // border-bottom-color: #e0e0e0 !important;
-    border-bottom-color: $base-accent !important;
+    border-bottom-color: $base-accent  !important;
   }
 
   .dx-link-delete {
-    color: $base-accent !important;
+    color: $base-accent  !important;
     background-color: transparent !important;
   }
 
@@ -120,10 +127,10 @@
     }
 
     &.certification {
-      background-color: $BW-purple-medium !important;
+      background-color: $BW-purple-medium  !important;
 
       &:hover {
-        background-color: $BW-purple-dark !important;
+        background-color: $BW-purple-dark  !important;
       }
     }
   }
