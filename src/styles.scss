@@ -372,6 +372,21 @@ body app-root.production {
   }
 }
 
+.small-header-right {
+  text-align: center !important;
+  text-overflow: initial;
+  line-height: 12px !important;
+  padding: 0 !important;
+
+  .dx-datagrid-text-content,
+  td,
+  input {
+    white-space: normal !important;
+    text-align: right !important;
+    padding: 0 !important;
+  }
+}
+
 .small-left-padding {
   padding-left: 10px !important;
 }

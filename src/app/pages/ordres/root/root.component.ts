@@ -46,6 +46,7 @@ export type TabPanelItem = dxTabPanelItem & {
   details?: string,
   position: number,
   component?: FormComponent | any,
+  data?: Record<string, any>
 };
 
 export type TabChangeData = { status: "in" | "out", item: Partial<TabPanelItem> };
@@ -284,6 +285,9 @@ export class RootComponent implements OnInit, OnDestroy {
       data.icon = "material-icons description";
       data.title = "Ordre";
       data.details = `N° ${data.id}`; // data.id is ordre.numero !
+      data.data = {
+        clientCode: ""
+      };
     }
     this.items.push(data);
     this.items.sort((a, b) => a.position - b.position);

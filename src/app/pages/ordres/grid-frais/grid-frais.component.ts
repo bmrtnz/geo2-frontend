@@ -247,6 +247,19 @@ export class GridFraisComponent implements ToggledGrid {
     }
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      // Higlight important columns
+      if ([
+        "deviseTaux",
+        "montantTotal"
+      ].includes(e.column.dataField)) {
+        // Grey background
+        e.cellElement.classList.add("grey-light");
+      }
+    }
+  }
+
   isCustomText(data) {
     return (data.frais?.id === "DIVERS" || data.frais?.id === "ANIM");
   }

@@ -1188,6 +1188,10 @@
         "dataField": "prevision7j",
         "dataType": "number",
         "visible": true
+      },
+      {
+        "dataField": "article.bio",
+        "visible": true
       }
     ]
   },
@@ -1222,11 +1226,13 @@
       {
         "visibleIndex": 6,
         "dataField": "fournisseurCode",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "proprietaireCode",
+        "dataType": "string",
         "visible": true
       },
       {
@@ -1844,14 +1850,17 @@
         "visibleIndex": 26,
         "dataField": "gratuit",
         "dataType": "boolean",
+        "cssClass": "multi-line-header",
+        "width": 40,
         "allowEditing": true,
         "visible": true
       },
       {
         "visibleIndex": 27,
         "dataField": "codePromo",
+        "cssClass": "small-header-right",
         "allowEditing": true,
-        "width": 150,
+        "width": 60,
         "visible": true
       },
       {
@@ -2284,7 +2293,7 @@
       },
       {
         "dataField": "article.matierePremiere.origine.id",
-        "showInColumnChooser": true,
+        "showInColumnChooser": false,
         "visible": false
       },
       {
@@ -2322,6 +2331,10 @@
       },
       {
         "dataField": "article.emballage.emballage.groupe.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "article.emballage.uniteParColis",
         "showInColumnChooser": false
       },
       {
@@ -4292,6 +4305,7 @@
         "dataField": "fournisseur.code",
         "sortIndex": 2,
         "sortOrder": "asc",
+        "groupIndex": 0,
         "visible": true
       },
       {
@@ -4778,7 +4792,7 @@
         "dataField": "id",
         "sortOrder": "desc",
         "allowEditing": false,
-        "width": 150,
+        "width": 200,
         "visible": false
       },
       {
