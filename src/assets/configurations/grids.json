@@ -1309,7 +1309,8 @@
       },
       {
         "dataField": "commentaire",
-        "visible": true
+        "visible": true,
+        "cellTemplate": "editButtonTemplate"
       }
     ]
   },

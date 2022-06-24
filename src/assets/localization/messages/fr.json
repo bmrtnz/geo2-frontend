@@ -581,6 +581,7 @@
     "stocks-articles-actions": "Actions",
     "stocks-articles-total": "Total",
     "stocks-articles-comm": "Commentaires",
+    "stocks-articles-modif-comm": "Modification commentaire stock",
     "ordres-accueil-ordre-title": "Accueil Ordres de commande",
     "ordres-nouvel-ordre-title": "Choisir un entrepôt",
     "ordres-configuration": "Configuration",

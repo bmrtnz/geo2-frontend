@@ -1004,7 +1004,7 @@ export abstract class ApiService implements OnDestroy {
    * @param body - The body of the mutation.
    * @returns The GraphQL mutation.
    */
-  protected buildSaveGraph(body: Array<string>) {
+  protected buildSaveGraph(body?: Array<string>) {
 
     return ApiService.buildGraph(
       "mutation",

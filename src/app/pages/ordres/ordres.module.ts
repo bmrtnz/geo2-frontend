@@ -145,6 +145,7 @@ import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-hi
 import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { GridStockComponent } from "./grid-stock/grid-stock.component";
 import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
+import { PromptPopupModule } from "../../shared/components/prompt-popup/prompt-popup.component";
 
 @NgModule({
   declarations: [
@@ -254,7 +255,8 @@ import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reserv
     TransporteursModule,
     LieuxPassageAQuaiModule,
     ContactsModule,
-    DxTooltipModule
+    DxTooltipModule,
+    PromptPopupModule
   ],
   providers: [
     OrdresIndicatorsService,
