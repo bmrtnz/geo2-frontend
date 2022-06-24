@@ -80,7 +80,7 @@ export class GridStockComponent implements OnInit {
     public bureauxAchatService: BureauxAchatService,
     private stocksService: StocksService,
     private modesCultureService: ModesCultureService,
-    private authService: AuthService,
+    public authService: AuthService,
     private stockConsolideService: StockConsolideService
   ) {
     this.apiService = this.articlesService;
