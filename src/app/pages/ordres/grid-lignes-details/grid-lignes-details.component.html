@@ -12,6 +12,7 @@
   (onCellPrepared)="onCellPrepared($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
   (onEditingStart)="onEditingStart($event)"
+  (onSaved)="cellValueChange($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Détail expéditions',
