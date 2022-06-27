@@ -15,6 +15,7 @@
     [mode]="'batch'"
     [allowUpdating]="allowMutations"
     [allowDeleting]="allowMutations"
+    [startEditAction]="'click'"
     [(changes)]="changes"
     [refreshMode]="'reshape'"
   ></dxo-editing>
@@ -40,8 +41,8 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
-    [allowEditing]="column.allowEditing || true"
-    [allowSorting]="column.allowSorting || true"
+    [allowEditing]="column.allowEditing"
+    [allowSorting]="column.allowSorting"
     [cellTemplate]="column.cellTemplate"
     [editCellTemplate]="column.editCellTemplate"
     [calculateDisplayValue]="column?.calculateDisplayValue"

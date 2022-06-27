@@ -115,6 +115,15 @@ export enum Grid {
   RecapClientsComptesPalox = "recap-clients-comptes-palox"
 }
 
+const extraConfigurations = [
+  "showInColumnChooser",
+  "calculateDisplayValue",
+  "cellTemplate",
+  "editCellTemplate",
+  "allowEditing",
+  "allowSorting",
+];
+
 @Injectable({
   providedIn: "root",
 })
@@ -316,20 +325,10 @@ export class GridConfiguratorService {
           .columns.find(c => c.dataField === column.dataField)] as [GridColumn, GridColumn]),
         map(([userColumn, defaultColumn]) => ({
           ...userColumn,
-          ...defaultColumn ? {
-            ...defaultColumn?.showInColumnChooser
-              ? { showInColumnChooser: defaultColumn?.showInColumnChooser }
-              : {},
-            ...defaultColumn?.calculateDisplayValue
-              ? { calculateDisplayValue: defaultColumn?.calculateDisplayValue }
-              : {},
-            ...defaultColumn?.cellTemplate
-              ? { cellTemplate: defaultColumn?.cellTemplate }
-              : {},
-            ...defaultColumn?.editCellTemplate
-              ? { editCellTemplate: defaultColumn?.editCellTemplate }
-              : {},
-          } : {},
+          ...defaultColumn ? extraConfigurations
+            .filter(param => defaultColumn[param] !== undefined)
+            .map(param => ({ [param]: defaultColumn[param] }))
+            .reduce((acm, crt) => ({ ...acm, ...crt })) : {},
         })),
         reduce<GridColumn, GridColumn[]>((acc, value) => [...acc, value]),
         map(columns => ({ ...inputConfig, columns }) as GridConfig),
