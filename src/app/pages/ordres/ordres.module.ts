@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ButtonLoaderModule } from "app/shared/components/button-loader/button-loader.component";
 import { EditingAlertModule } from "app/shared/components/editing-alert/editing-alert.component";
+import { EntityCellTemplateModule } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import { FileManagerModule } from "app/shared/components/file-manager/file-manager-popup.component";
 import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
 import { ViewDocumentPopupModule } from "app/shared/components/view-document-popup/view-document-popup.component";
@@ -12,17 +13,11 @@ import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.s
 import { SharedModule } from "app/shared/shared.module";
 import {
   DxAccordionModule,
-
-
-
-
-
-  DxActionSheetModule, DxAutocompleteModule,
-
+  DxActionSheetModule,
+  DxAutocompleteModule,
   DxBoxModule,
   DxButtonModule,
   DxCheckBoxModule,
-
   DxDataGridModule,
   DxDateBoxModule,
   DxFormModule,
@@ -32,49 +27,21 @@ import {
   DxNumberBoxModule,
   DxPopoverModule,
   DxPopupModule,
-
-
-
-
-
-
-
-
-
-
-  DxRadioGroupModule, DxScrollViewModule,
-
-
-
-
-
-
-
-
-
-
-
-
-
+  DxRadioGroupModule,
+  DxScrollViewModule,
   DxSelectBoxModule,
   DxSortableModule,
-
-
-
-
-
-
-
-  DxSwitchModule, DxTabPanelModule,
+  DxSwitchModule,
+  DxTabPanelModule,
   DxTagBoxModule,
   DxTextAreaModule,
   DxTextBoxModule,
   DxTileViewModule,
-  DxTooltipComponent,
   DxTooltipModule,
   DxValidationGroupModule,
   DxValidatorModule
 } from "devextreme-angular";
+import { PromptPopupModule } from "../../shared/components/prompt-popup/prompt-popup.component";
 import { ArticlesModule } from "../articles/articles.module";
 import { ContactsModule } from "../tiers/contacts/contacts.module";
 import { FournisseursModule } from "../tiers/fournisseurs/fournisseurs.module";
@@ -85,10 +52,12 @@ import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/acti
 import { ConfirmationResultPopupComponent } from "./actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "./ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "./ajout-articles-manu-popup/ajout-articles-manu-popup.component";
+import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 import { AnnuleRemplacePopupComponent } from "./annule-remplace-popup/annule-remplace-popup.component";
 import { ArticleCertificationPopupComponent } from "./article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
+import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
 import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
 import { FormLitigesComponent } from "./form-litiges/form-litiges.component";
 import { FormLogistiqueComponent } from "./form-logistique/form-logistique.component";
@@ -96,6 +65,7 @@ import { FormComponent } from "./form/form.component";
 import { GridAnnuleRemplaceComponent } from "./grid-annule-remplace/grid-annule-remplace.component";
 import { GridChoixEnvoisComponent } from "./grid-choix-envois/grid-choix-envois.component";
 import { GridClientsDepEncoursDetailComponent } from "./grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component";
+import { GridCommandesComponent } from "./grid-commandes/grid-commandes.component";
 import { GridCommentaireOrdreComponent } from "./grid-commentaire-ordre/grid-commentaire-ordre.component";
 import { GridControleQualiteComponent } from "./grid-controle-qualite/grid-controle-qualite.component";
 import { GridDetailPalettesComponent } from "./grid-detail-palettes/grid-detail-palettes.component";
@@ -103,6 +73,7 @@ import { GridDetailPlanningDepartsComponent } from "./grid-detail-planning-depar
 import { GridEntrepotsComponent } from "./grid-entrepots/grid-entrepots.component";
 import { GridEnvoisComponent } from "./grid-envois/grid-envois.component";
 import { GridFraisComponent } from "./grid-frais/grid-frais.component";
+import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-histo-modif-detail.component";
 import { GridHistoriqueEntrepotsComponent } from "./grid-historique-entrepots/grid-historique-entrepots.component";
 import { GridHistoriqueComponent } from "./grid-historique/grid-historique.component";
 import { GridLignesDetailsComponent } from "./grid-lignes-details/grid-lignes-details.component";
@@ -114,7 +85,10 @@ import { GridLogistiquesComponent } from "./grid-logistiques/grid-logistiques.co
 import { GridMargeComponent } from "./grid-marge/grid-marge.component";
 import { GridOrdreLigneLogistiqueComponent } from "./grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 import { GridSaveLogComponent } from "./grid-save-log/grid-save-log.component";
+import { GridStockComponent } from "./grid-stock/grid-stock.component";
+import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
 import { GridSuiviComponent } from "./grid-suivi/grid-suivi.component";
+import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
 import { CommandesTransitComponent } from "./indicateurs/commandes-transit/commandes-transit.component";
@@ -139,14 +113,6 @@ import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-pop
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
-import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
-import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-histo-modif-detail.component";
-import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
-import { GridStockComponent } from "./grid-stock/grid-stock.component";
-import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
-import { GridCommandesComponent } from "./grid-commandes/grid-commandes.component";
-import { EntityCellTemplateModule } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 
 @NgModule({
   declarations: [
@@ -259,6 +225,7 @@ import { EntityCellTemplateModule } from "app/shared/components/entity-cell-temp
     ContactsModule,
     DxTooltipModule,
     EntityCellTemplateModule,
+    PromptPopupModule
   ],
   providers: [
     OrdresIndicatorsService,

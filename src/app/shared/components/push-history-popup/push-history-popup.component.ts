@@ -6,26 +6,16 @@ import {
   NgModule,
   ViewChild,
 } from "@angular/core";
-import { FormsModule, NgForm } from "@angular/forms";
 
 import {
   HistoriqueService,
   HistoryType,
 } from "app/shared/services/api/historique.service";
-import {
-  DxButtonModule,
-  DxPopupComponent,
-  DxPopupModule,
-  DxTextBoxComponent,
-  DxTextBoxModule,
-  DxValidatorComponent,
-  DxValidatorModule,
-} from "devextreme-angular";
-import { RangeRule, RequiredRule } from "devextreme/ui/validation_rules";
 import { Observable } from "rxjs";
 import { mergeAll, take } from "rxjs/operators";
 import { SharedModule } from "../../shared.module";
 import { ModifiedFieldsService } from "app/shared/services/modified-fields.service";
+import { PromptPopupComponent, PromptPopupModule } from "../prompt-popup/prompt-popup.component";
 
 @Component({
   selector: "app-push-history-popup",
@@ -33,14 +23,9 @@ import { ModifiedFieldsService } from "app/shared/services/modified-fields.servi
   styleUrls: ["./push-history-popup.component.scss"],
 })
 export class PushHistoryPopupComponent {
-  @ViewChild(DxPopupComponent, { static: false })
-  popupComponent: DxPopupComponent;
 
-  @ViewChild(DxTextBoxComponent, { static: false })
-  commentBox: DxTextBoxComponent;
-
-  @ViewChild(DxValidatorComponent, { static: false })
-  commentValidator: DxValidatorComponent;
+  @ViewChild(PromptPopupComponent, { static: false })
+  promptPopupComponent: PromptPopupComponent;
 
   @Input() title = "";
   @Input() placeholder = "";
@@ -48,7 +33,6 @@ export class PushHistoryPopupComponent {
 
   persist = new EventEmitter<Observable<FetchResult>>();
 
-  commentValidationRules: (RangeRule | RequiredRule)[];
   historyType: HistoryType;
   sourceData: {};
 
@@ -57,48 +41,31 @@ export class PushHistoryPopupComponent {
     private modifiedFieldsService: ModifiedFieldsService,
   ) { }
 
-  async onSubmit(form: NgForm) {
-    if (this.commentValidator.instance.validate().isValid) {
-      const modifiedFields =
-        this.modifiedFieldsService.getModifiedFields();
-      const save = this.historiqueService.saveByType(this.historyType, {
-        ...this.sourceData,
-        // Adding modified fields list to user comment
-        commentaire:
-          form.value.commentaire +
-          (modifiedFields ? " " + modifiedFields : ""),
-      });
-      this.persist.emit(save);
-      this.popupComponent.instance.hide();
-    }
+  async onSubmit(comment: string) {
+    const modifiedFields = this.modifiedFieldsService.getModifiedFields();
+    const save = this.historiqueService.saveByType(this.historyType, {
+      ...this.sourceData,
+      // Adding modified fields list to user comment
+      commentaire:
+        comment +
+        (modifiedFields ? " " + modifiedFields : ""),
+    });
+    this.persist.emit(save);
   }
 
   onHiding() {
     this.modifiedFieldsService.clearModifiedFields();
-    this.commentValidationRules = [];
-  }
-
-  onHidden() {
-    this.commentBox.instance.reset();
-  }
-
-  onShowing() {
-    this.commentValidationRules = [
-      { type: "required" },
-      { type: "stringLength", max: 128 }
-    ];
   }
 
   onShown() {
     // If applicable, populates field with the ids of the users who suggested modifications
-    if (this.modifUserIds?.length) this.commentBox.value = "(" + this.modifUserIds.join(" / ") + ") ";
-    this.commentBox.instance.focus();
+    if (this.modifUserIds?.length) this.promptPopupComponent.setText(`(${this.modifUserIds.join(" / ")}) `);
   }
 
   present(type: HistoryType, data) {
     this.historyType = type;
     this.sourceData = data;
-    this.popupComponent.instance.show();
+    this.promptPopupComponent.show();
     return this.persist.asObservable().pipe(take(1), mergeAll());
   }
 }
@@ -107,11 +74,7 @@ export class PushHistoryPopupComponent {
   declarations: [PushHistoryPopupComponent],
   imports: [
     SharedModule,
-    FormsModule,
-    DxPopupModule,
-    DxTextBoxModule,
-    DxButtonModule,
-    DxValidatorModule,
+    PromptPopupModule
   ],
   exports: [PushHistoryPopupComponent],
 })

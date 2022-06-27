@@ -71,17 +71,6 @@ h6 {
   float: left;
 }
 
-::ng-deep .grid-zoom-button {
-  width: 22px !important;
-  height: 22px;
-  min-width: 0 !important;
-  background-color: transparent !important;
-
-  .dx-button-content {
-    padding: 0;
-  }
-}
-
 ::ng-deep .cursor-pointer {
   cursor: pointer !important;
 }
@@ -94,4 +83,15 @@ h6 {
 ::ng-deep .highlight-negativeStock-cell {
   background: #ff325a !important;
   color: white !important;
+}
+
+::ng-deep .bio-article {
+  color: #39970e !important;
+}
+
+::ng-deep .dx-row-focused {
+
+  .bio-article {
+    color: #a9f77e !important;
+  }
 }

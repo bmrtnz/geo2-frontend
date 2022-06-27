@@ -1,6 +1,6 @@
 
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { ClientsService, LocalizationService } from "app/shared/services";
+import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
@@ -22,7 +22,8 @@ import { ModesCultureService } from "../../../shared/services/api/modes-culture.
 import StockArticle from "app/shared/models/stock-article.model";
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 import Ordre from "app/shared/models/ordre.model";
-import notify from "devextreme/ui/notify";
+import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
+import { StockConsolideService } from "../../../shared/services/api/stock-consolide.service";
 
 @Component({
   selector: "app-grid-stock",
@@ -47,6 +48,7 @@ export class GridStockComponent implements OnInit {
   @ViewChild("bureauAchatSB", { static: false }) bureauAchatSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ReservationPopupComponent) reservationPopup: ReservationPopupComponent;
+  @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -77,15 +79,22 @@ export class GridStockComponent implements OnInit {
     public originesService: OriginesService,
     public bureauxAchatService: BureauxAchatService,
     private stocksService: StocksService,
-    private modesCultureService: ModesCultureService
+    private modesCultureService: ModesCultureService,
+    public authService: AuthService,
+    private stockConsolideService: StockConsolideService
   ) {
     this.apiService = this.articlesService;
+
     this.especes = this.especesService.getDistinctDataSource(["id"]);
+    this.especes.filter(["valide", "=", true]);
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
+    this.origines.filter(["valide", "=", true]);
     this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
+    this.varietes.filter(["valide", "=", true]);
     this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
-    // this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
+    this.emballages.filter(["valide", "=", true]);
     this.modesCulture = this.modesCultureService.getDataSource();
+    this.modesCulture.filter(["valide", "=", true]);
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
@@ -107,6 +116,35 @@ export class GridStockComponent implements OnInit {
     this.toRefresh = !this.noEspeceSet;
   }
 
+  /**
+   * Apply filters from tag boxs
+   * @param event List of field values
+   * @param dataField Field path
+   */
+  onFieldValueChange(event: string[], dataField: string) {
+    this.onFilterChange();
+
+    // Filtering variete, emballage & origine selectBox list depending on specy
+    const filter = [];
+
+    if (dataField === "matierePremiere.espece.id") {
+      this.varieteSB.value = null;
+      this.emballageSB.value = null;
+      this.origineSB.value = null;
+
+      if (event) {
+        filter.push(["espece.id", "=", event]);
+
+        this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
+        this.varietes.filter(filter);
+        this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
+        this.emballages.filter(filter);
+        this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
+        this.origines.filter(filter);
+      }
+    }
+  }
+
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
@@ -120,22 +158,20 @@ export class GridStockComponent implements OnInit {
   }
 
   refreshArticlesGrid() {
-    if (this.dataGrid.dataSource === null
-      || (Array.isArray(this.dataGrid.dataSource)
-        && !this.dataGrid.dataSource.length))
-      this.stocksService.allStockArticleList(
-        this.especeSB.value,
-        this.varieteSB.value,
-        this.modesCultureSB.value,
-        this.origineSB.value,
-        this.emballageSB.value,
-        this.bureauAchatSB.value,
-      ).subscribe((res) => {
-        this.dataGrid.dataSource = res.data.allStockArticleList;
-        this.dataGrid.instance.refresh();
-        this.toRefresh = false;
-      });
-
+    this.dataGrid.instance.beginCustomLoading("");
+    this.stocksService.allStockArticleList(
+      this.especeSB.value,
+      this.varieteSB.value,
+      this.modesCultureSB.value,
+      this.origineSB.value,
+      this.emballageSB.value,
+      this.bureauAchatSB.value?.id
+    ).subscribe((res) => {
+      this.dataGrid.dataSource = res.data.allStockArticleList;
+      this.dataGrid.instance.refresh();
+      this.dataGrid.instance.endCustomLoading();
+      this.toRefresh = false;
+    });
   }
 
   openFilePopup(data) {
@@ -164,17 +200,11 @@ export class GridStockComponent implements OnInit {
   onCellPrepared(e) {
     if (e.rowType === "group") {
       if (e.column.dataField === "articleDescription" && e.cellElement.textContent) {
-        const items = e.data.items ?? e.data.collapsedItems;
-        e.cellElement.textContent = items[0].articleID + " - " + e.cellElement.textContent;
         e.cellElement.title = this.localizeService.localize("hint-dblClick-file");
         e.cellElement.classList.add("cursor-pointer");
-      }
-    }
-
-    if (e.rowType === "data") {
-      if (e.column.dataField === "articleDescription") {
-        // Article bio
-        if (e.data.bio) e.cellElement.classList.add("bio-article");
+        let data = e.data.items ?? e.data.collapsedItems;
+        data = data[0].bio;
+        if (data) e.cellElement.classList.add("bio-article");
       }
     }
 
@@ -205,6 +235,19 @@ export class GridStockComponent implements OnInit {
     if (data?.key)
       return data.key.toUpperCase();
     return data.toString();
+  }
+
+  editComment(cell, event) {
+    this.articleLigneId = cell.data.articleID;
+    this.promptPopupComponent.show(cell.value);
+  }
+
+  validateComment(comment) {
+    this.dataGrid.instance.beginCustomLoading("");
+    this.stockConsolideService.save({
+      id: this.articleLigneId,
+      commentaire: comment
+    }).subscribe(() => this.refreshArticlesGrid());
   }
 
 }

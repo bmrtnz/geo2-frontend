@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit,
   Output, QueryList, ViewChild, ViewChildren
 } from "@angular/core";
@@ -20,7 +21,7 @@ import { PortsService } from "app/shared/services/api/ports.service";
 import { TypesCamionService } from "app/shared/services/api/types-camion.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { DxAccordionComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxCheckBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
@@ -71,7 +72,7 @@ let self;
   templateUrl: "./form.component.html",
   styleUrls: ["./form.component.scss"]
 })
-export class FormComponent implements OnInit, OnDestroy {
+export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Output() public ordre: Ordre;
   @Output() openArticleManuPopup = new EventEmitter<any>();
@@ -209,6 +210,7 @@ export class FormComponent implements OnInit, OnDestroy {
   fileManagerComponent: FileManagerComponent;
   @ViewChild("comLog", { static: false }) comLog: DxSelectBoxComponent;
   @ViewChild("comInt", { static: false }) comInt: DxSelectBoxComponent;
+  @ViewChild("leftAccessPanel", { static: false }) leftAccessPanel: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
   @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
   @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
@@ -299,6 +301,12 @@ export class FormComponent implements OnInit, OnDestroy {
         .map(inst => this.instructionsList.push(inst.description));
     });
 
+  }
+
+  ngAfterViewInit() {
+    // Show/hide left button panel
+    this.leftAccessPanel.value =
+      window.sessionStorage.getItem("HideOrderleftPanelView") === "true" ? false : true;
   }
 
   ngOnDestroy() {
@@ -487,6 +495,7 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   private initializeForm() {
+
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
       .pipe(
@@ -621,6 +630,10 @@ export class FormComponent implements OnInit, OnDestroy {
       this.dotCQ = this.ordre.cqLignesCount;
       this.dotCommentaires = this.ordre.commentairesOrdreCount;
     }
+  }
+
+  leftPanelChange(e) {
+    window.sessionStorage.setItem("HideOrderleftPanelView", e.value === true ? "false" : "true");
   }
 
   getFraisClient() {

@@ -136,11 +136,13 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         notify(myValue + ": format/type incorrects", "error", 3000);
       } else {
         myValue = ("000000" + myValue).slice(-6);
-        if (!tagArray.includes(myValue) && !this.getGridSelectedArticles().includes(myValue)) {
-          tagArray.push(myValue);
-        } else {
-          this.alreadySelected();
-        }
+        tagArray.push(myValue);
+        // Fonctionnalité anti-doublon au cas où serait pertinente dans le futur
+        // if (!tagArray.includes(myValue) && !this.getGridSelectedArticles().includes(myValue)) {
+        //   tagArray.push(myValue);
+        // } else {
+        //   this.alreadySelected();
+        // }
         e.component.option("value", tagArray);
         this.articlesKO = true;
         this.articlesService.getOne(myValue)

@@ -1,133 +1,132 @@
 <div class="form-ordres-page">
-  <div class="form-scrollTo-buttons-container">
-    <span class="top-order-number">{{ this?.ordre?.numero || "-" }}</span>
-    <dx-button
-      class="black"
-      data-accordion="articles"
-      height="auto"
-      icon="box"
-      text="{{ 'ordres-suivi-articles' | localize }}"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Articles"
-    >
-    </dx-button>
-    <dx-button
-      class="black"
-      data-accordion="logistique"
-      height="auto"
-      icon="material-icons local_shipping"
-      text="{{ 'ordres-suivi-logistique' | localize }}"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Logistique"
-    >
-    </dx-button>
-    <div class="button-container">
-      <div
-        *ngIf="dotLitiges"
-        class="dot"
-      >
-        {{ dotLitiges }}
-      </div>
+    <div class="form-scrollTo-buttons-container" [ngClass]="{ 'display-none': !leftAccessPanel?.value }">
+      <span class="top-order-number">{{ this?.ordre?.numero || "-" }}</span>
       <dx-button
-        class="black dotted-button"
-        data-accordion="litiges"
+        class="black"
+        data-accordion="articles"
         height="auto"
-        icon="material-icons offline_bolt"
+        icon="box"
+        text="{{ 'ordres-suivi-articles' | localize }}"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
-        [fragment]="fragments.Litiges"
-        text="{{ 'ordres-suivi-litiges' | localize }}"
+        [fragment]="fragments.Articles"
       >
       </dx-button>
-    </div>
-    <dx-button
-      class="black"
-      data-accordion="synthese"
-      height="auto"
-      icon="material-icons euro_symbol"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Synthese"
-      text="{{ 'ordres-suivi-synthese' | localize }}"
-    >
-    </dx-button>
-    <dx-button
-      class="black"
-      height="auto"
-      data-accordion="fluxdocs"
-      icon="material-icons folder"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Flux"
-      text="{{ 'ordres-suivi-fluxdocs' | localize }}"
-    >
-    </dx-button>
-    <div class="button-container">
-      <div
-        *ngIf="dotCQ"
-        class="dot"
-      >
-        {{ dotCQ }}
-      </div>
       <dx-button
-        class="black dotted-button"
-        data-accordion="CQ"
+        class="black"
+        data-accordion="logistique"
         height="auto"
-        icon="material-icons insert_chart_outlined"
+        icon="material-icons local_shipping"
+        text="{{ 'ordres-suivi-logistique' | localize }}"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
-        [fragment]="fragments.CQ"
-        text="{{ 'ordres-suivi-CQ' | localize }}"
+        [fragment]="fragments.Logistique"
       >
       </dx-button>
-    </div>
-    <div class="button-container">
-      <div
-        *ngIf="dotCommentaires"
-        class="dot"
-      >
-        {{ dotCommentaires }}
+      <div class="button-container">
+        <div
+          *ngIf="dotLitiges"
+          class="dot"
+        >
+          {{ dotLitiges }}
+        </div>
+        <dx-button
+          class="black dotted-button"
+          data-accordion="litiges"
+          height="auto"
+          icon="material-icons offline_bolt"
+          [routerLink]="[]"
+          [queryParamsHandling]="'merge'"
+          [fragment]="fragments.Litiges"
+          text="{{ 'ordres-suivi-litiges' | localize }}"
+        >
+        </dx-button>
       </div>
       <dx-button
-        class="black dotted-button"
-        data-accordion="commentaires"
+        class="black"
+        data-accordion="synthese"
         height="auto"
-        icon="material-icons message"
+        icon="material-icons euro_symbol"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
-        [fragment]="fragments.Commentaires"
-        text="{{ 'ordres-suivi-commentaires' | localize }}"
+        [fragment]="fragments.Synthese"
+        text="{{ 'ordres-suivi-synthese' | localize }}"
       >
       </dx-button>
-    </div>
-    <dx-button
-      class="black"
-      data-accordion="log"
-      height="auto"
-      icon="material-icons view_headline"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Log"
-      text="{{ 'ordres-suivi-log' | localize }}"
-    >
-    </dx-button>
-    <dx-button
-      class="black"
-      height="auto"
-      icon="material-icons folder"
-      [disabled]="!ordre"
-      (onClick)="fileManagerClick()"
-      text="{{ 'ordres-suivi-documents' | localize }}"
-    >
-    </dx-button>
+      <dx-button
+        class="black"
+        height="auto"
+        data-accordion="fluxdocs"
+        icon="material-icons folder"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Flux"
+        text="{{ 'ordres-suivi-fluxdocs' | localize }}"
+      >
+      </dx-button>
+      <div class="button-container">
+        <div
+          *ngIf="dotCQ"
+          class="dot"
+        >
+          {{ dotCQ }}
+        </div>
+        <dx-button
+          class="black dotted-button"
+          data-accordion="CQ"
+          height="auto"
+          icon="material-icons insert_chart_outlined"
+          [routerLink]="[]"
+          [queryParamsHandling]="'merge'"
+          [fragment]="fragments.CQ"
+          text="{{ 'ordres-suivi-CQ' | localize }}"
+        >
+        </dx-button>
+      </div>
+      <div class="button-container">
+        <div
+          *ngIf="dotCommentaires"
+          class="dot"
+        >
+          {{ dotCommentaires }}
+        </div>
+        <dx-button
+          class="black dotted-button"
+          data-accordion="commentaires"
+          height="auto"
+          icon="material-icons message"
+          [routerLink]="[]"
+          [queryParamsHandling]="'merge'"
+          [fragment]="fragments.Commentaires"
+          text="{{ 'ordres-suivi-commentaires' | localize }}"
+        >
+        </dx-button>
+      </div>
+      <dx-button
+        class="black"
+        data-accordion="log"
+        height="auto"
+        icon="material-icons view_headline"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Log"
+        text="{{ 'ordres-suivi-log' | localize }}"
+      >
+      </dx-button>
+      <dx-button
+        class="black"
+        height="auto"
+        icon="material-icons folder"
+        [disabled]="!ordre"
+        (onClick)="fileManagerClick()"
+        text="{{ 'ordres-suivi-documents' | localize }}"
+      >
+      </dx-button>
   </div>
-
   <form [formGroup]="formGroup">
     <dx-validation-group name="loginGroup">
       <div class="content-block"></div>
-      <div class="ordres-page">
+      <div class="ordres-page" [ngClass]="{ 'ordres-page-fullscreen': !leftAccessPanel?.value }">
         <dx-box direction="row">
           <dxi-item [ratio]="8">
             <div class="top-panel-order">
@@ -202,6 +201,13 @@
                   class="dx-form-group-caption invoice-number red-font-imp"
                   >&nbsp;({{ numeroFacture }})</span
                 >
+                <dx-check-box
+                  #leftAccessPanel
+                  class="float-right leftPanelCheckBox"
+                  hint="{{ 'afficher-boutons-navigation-rapide' | localize }}"
+                  (onValueChanged)="leftPanelChange($event)"
+                >
+                </dx-check-box>
                 <span
                   *ngIf="refOrdre"
                   class="order-id"

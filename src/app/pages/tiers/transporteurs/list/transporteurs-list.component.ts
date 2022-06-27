@@ -14,6 +14,7 @@ import {
     GridConfig,
 } from "app/shared/services/grid-configurator.service";
 import { Transporteur } from "app/shared/models";
+import {BrowserService} from "../../../../shared/services/browser.service";
 
 @Component({
     selector: "app-transporteurs-list",
@@ -41,6 +42,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
         private gridConfiguratorService: GridConfiguratorService,
         private router: Router,
         public gridRowStyleService: GridRowStyleService,
+        public browserService: BrowserService
     ) {
         this.apiService = transporteursService;
     }

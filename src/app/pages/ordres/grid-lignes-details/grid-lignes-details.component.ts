@@ -38,6 +38,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
   public gridFilter: any[];
   public gridExpFiltered: boolean;
+  public dataField: string;
+  public ligneOrdre: any;
   @Input() public ordre: Ordre;
   @Output() public ligneDetail: any;
   @Output() refreshGridsSynthese = new EventEmitter();
@@ -137,6 +139,83 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  cellValueChange(data) {
+
+    return;
+
+    if (!data.changes) return;
+    if (data.changes.some(c => c.type !== "update")) return;
+    if (!this.dataField) return;
+
+    const dataField = this.dataField;
+    const ligneOrdre = this.ligneOrdre;
+    const key = data.component.getRowIndexByKey(data.changes[0].key);
+
+    console.log(dataField, "has been changed");
+
+    switch (dataField) {
+      case "nombrePalettesExpediees": {
+        if (ligneOrdre.achatUnite?.id === "PAL") {
+          data.component.cellValue(key,
+            "achatQuantité",
+            ligneOrdre.nombrePalettesExpediees
+          );
+        }
+        if (ligneOrdre.venteUnite?.id === "PAL") {
+          data.component.cellValue(key,
+            "venteQuantité",
+            ligneOrdre.nombrePalettesExpediees
+          );
+        }
+        break;
+      }
+      case "nombreColisExpedies": {
+        if (ligneOrdre.achatUnite?.id === "COLIS") {
+          data.component.cellValue(key,
+            "achatQuantité",
+            ligneOrdre.nombreColisExpedies
+          );
+        }
+        if (["KILO", "TONNE", "PAL", "CAMION"].includes(ligneOrdre.achatUnite?.id)) {
+          const uc = ligneOrdre.article.emballage.uniteParColis;
+          data.component.cellValue(key,
+            "achatQuantité",
+            Math.ceil(ligneOrdre.nombreColisExpedies * uc)
+          );
+        }
+        if (ligneOrdre.venteUnite?.id === "COLIS") {
+          data.component.cellValue(key,
+            "venteUnite",
+            ligneOrdre.nombreColisExpedies
+          );
+        }
+        if (["KILO", "TONNE", "PAL", "CAMION"].includes(ligneOrdre.venteUnite?.id)) {
+          const uc = ligneOrdre.article.emballage.uniteParColis;
+          if (uc !== 0) {
+            data.component.cellValue(key,
+              "venteUnite",
+              Math.ceil(ligneOrdre.nombreColisExpedies * uc)
+            );
+          }
+        }
+        break;
+      }
+      case "poidsNetExpedie": {
+
+        break;
+      }
+      case "venteQuantite": {
+
+        break;
+      }
+      case "achatQuantite": {
+
+        break;
+      }
+
+    }
+  }
+
   onValueChanged(event, cell) {
     if (cell.setValue) {
       cell.setValue(event.value);
@@ -146,6 +225,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   onEditorPreparing(e) {
     if (e.parentType === "dataRow") {
       e.editorOptions.onFocusIn = (elem) => {
+        this.dataField = e.dataField;
+        this.ligneOrdre = e.row?.data;
         if (e.dataField !== "fournisseur.code")
           this.formUtilsService.selectTextOnFocusIn(elem);
       };
@@ -234,6 +315,12 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     }
     return show;
   }
+
+  changeDetail(cell) {
+    const data = cell.data;
+
+  }
+
 
 }
 
