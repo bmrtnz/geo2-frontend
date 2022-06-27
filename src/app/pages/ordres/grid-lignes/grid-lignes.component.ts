@@ -298,13 +298,18 @@ export class GridLignesComponent implements OnChanges, OnInit {
         // Bio en vert
         if (infoArt.bio) e.cellElement.classList.add("bio-article");
       }
+      // Taux encombrement
       if (e.column.dataField === "nombrePalettesCommandees") {
         let tauxEncombrement;
         if (e.data.nombreColisPalette && e.data.nombreColisCommandes) {
           tauxEncombrement = e.data.nombreColisCommandes / e.data.nombreColisPalette;
           tauxEncombrement /= (e.data.nombrePalettesIntermediaires ? e.data.nombrePalettesIntermediaires + 1 : 1);
-          e.cellElement.title = tauxEncombrement + "\r\n" + "(Taux encombrement au sol)";
+          e.cellElement.title = tauxEncombrement + "\r\n(Taux encombrement au sol)";
         }
+      }
+      // Tooltip prix achat
+      if (e.column.dataField === "achatDevisePrixUnitaire") {
+        if (e.data.achatDeviseTaux) e.cellElement.title = `Taux : ${e.data.achatDeviseTaux}\r\nP.U. : ${e.data.achatPrixUnitaire}`;
       }
     }
   }

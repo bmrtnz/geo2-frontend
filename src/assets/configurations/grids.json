@@ -2114,6 +2114,16 @@
         "dataField": "logistique.expedieStation",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "achatPrixUnitaire",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "achatDeviseTaux",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
