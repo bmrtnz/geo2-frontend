@@ -4,6 +4,7 @@ import { Apollo, gql } from "apollo-angular";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import notify from "devextreme/ui/notify";
 import { takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
@@ -337,6 +338,15 @@ export class OrdreLignesService extends ApiService implements APIRead {
     // Locking step
     const data = e.data;
 
+    // Special case
+    if (e.column.dataField === "achatQuantite") {
+      if (["COLIS", "KILO", "PAL"].includes(data.achatUnite?.id)) this.lock(e);
+    }
+    if (e.column.dataField === "venteQuantite") {
+      if (["COLIS", "KILO", "PAL"].includes(data.venteUnite?.id)) this.lock(e);
+    }
+
+    // Standard Lock
     switch (e.column.dataField) {
 
       case "nombrePalettesExpediees":
@@ -345,10 +355,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
       case "poidsBrutExpedie":
       case "venteQuantite":
       case "venteUnite.description":
-      case "achatUnite.description":
       case "achatQuantite":
+      case "achatUnite.description":
       case "typePalette":
-      case "paletteInter":
       case "paletteInter": {
         if (data.logistique?.expedieStation ||
           !(data.ordre.client.modificationDetail !== false ||

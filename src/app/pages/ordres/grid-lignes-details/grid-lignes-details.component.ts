@@ -139,81 +139,101 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  onCellClick(e) {
+
+    const data = e.data;
+    if (!data) return;
+
+    let warnQty: string;
+    if (e.column?.dataField === "achatQuantite") {
+      if (["KILO", "COLIS", "PAL"].includes(data.achatUnite?.id)) warnQty = "d'achat";
+    }
+    if (e.column?.dataField === "venteQuantite") {
+      if (["KILO", "COLIS", "PAL"].includes(data.venteUnite?.id)) warnQty = "de vente";
+    }
+    if (warnQty) notify(`Vous n'avez pas le droit de modifier la quantité pour l'unité ${warnQty}`, "warning", 3000);
+
+  }
+
   cellValueChange(data) {
 
-    return;
-
-    if (!data.changes) return;
+    if (!data.changes?.length) return;
     if (data.changes.some(c => c.type !== "update")) return;
     if (!this.dataField) return;
 
     const dataField = this.dataField;
-    const ligneOrdre = this.ligneOrdre;
-    const key = data.component.getRowIndexByKey(data.changes[0].key);
+    const currLigneOrdre = this.ligneOrdre;
+    const saveLigneOrdre = data.changes[0].data.data.saveOrdreLigne;
+    const rowIndex = data.component.getRowIndexByKey(data.changes[0].key);
 
     console.log(dataField, "has been changed");
 
+    this.dataField = null;
+
+    /**
+     * Transcription on_det_exp_change.pbl (except warnings, see onCellClick())
+     */
+
     switch (dataField) {
       case "nombrePalettesExpediees": {
-        if (ligneOrdre.achatUnite?.id === "PAL") {
-          data.component.cellValue(key,
-            "achatQuantité",
-            ligneOrdre.nombrePalettesExpediees
-          );
-        }
-        if (ligneOrdre.venteUnite?.id === "PAL") {
-          data.component.cellValue(key,
-            "venteQuantité",
-            ligneOrdre.nombrePalettesExpediees
-          );
-        }
+        if (saveLigneOrdre.nombrePalettesExpediees === currLigneOrdre.nombrePalettesExpediees) return;
+
+        if (currLigneOrdre.achatUnite?.id === "PAL")
+          data.component.cellValue(rowIndex, "achatQuantite", saveLigneOrdre.nombrePalettesExpediees);
+        if (currLigneOrdre.venteUnite?.id === "PAL")
+          data.component.cellValue(rowIndex, "venteQuantite", saveLigneOrdre.nombrePalettesExpediees);
+        this.saveGridEditData();
         break;
       }
       case "nombreColisExpedies": {
-        if (ligneOrdre.achatUnite?.id === "COLIS") {
-          data.component.cellValue(key,
-            "achatQuantité",
-            ligneOrdre.nombreColisExpedies
-          );
+        if (saveLigneOrdre.nombreColisExpedies === currLigneOrdre.nombreColisExpedies) return;
+
+        const uc = currLigneOrdre.article.emballage.uniteParColis;
+        if (currLigneOrdre.achatUnite?.id === "COLIS") {
+          data.component.cellValue(rowIndex, "achatQuantite", saveLigneOrdre.nombreColisExpedies);
+        } else if (["KILO", "TONNE", "PAL", "CAMION"].includes(currLigneOrdre.achatUnite?.id)) {
+        } else {
+          data.component.cellValue(rowIndex, "achatQuantite", Math.ceil(saveLigneOrdre.nombreColisExpedies * uc));
         }
-        if (["KILO", "TONNE", "PAL", "CAMION"].includes(ligneOrdre.achatUnite?.id)) {
-          const uc = ligneOrdre.article.emballage.uniteParColis;
-          data.component.cellValue(key,
-            "achatQuantité",
-            Math.ceil(ligneOrdre.nombreColisExpedies * uc)
-          );
-        }
-        if (ligneOrdre.venteUnite?.id === "COLIS") {
-          data.component.cellValue(key,
-            "venteUnite",
-            ligneOrdre.nombreColisExpedies
-          );
-        }
-        if (["KILO", "TONNE", "PAL", "CAMION"].includes(ligneOrdre.venteUnite?.id)) {
-          const uc = ligneOrdre.article.emballage.uniteParColis;
+
+        if (currLigneOrdre.venteUnite?.id === "COLIS") {
+          data.component.cellValue(rowIndex, "venteQuantite", saveLigneOrdre.nombreColisExpedies);
+        } else if (["KILO", "TONNE", "PAL", "CAMION"].includes(currLigneOrdre.venteUnite?.id)) {
+        } else {
           if (uc !== 0) {
-            data.component.cellValue(key,
-              "venteUnite",
-              Math.ceil(ligneOrdre.nombreColisExpedies * uc)
-            );
+            data.component.cellValue(rowIndex, "venteQuantite", Math.ceil(saveLigneOrdre.nombreColisExpedies * uc));
           }
         }
+        this.saveGridEditData();
         break;
       }
       case "poidsNetExpedie": {
+        if (saveLigneOrdre.poidsNetExpedie === currLigneOrdre.poidsNetExpedie) return;
 
-        break;
-      }
-      case "venteQuantite": {
+        if (currLigneOrdre.achatUnite?.id === "KILO") {
+          data.component.cellValue(rowIndex, "achatQuantite", saveLigneOrdre.poidsNetExpedie);
+        }
+        if (currLigneOrdre.achatUnite?.id === "TONNE") {
+          // Rounded to 3 dec
+          data.component.cellValue(rowIndex, "achatQuantite", Math.ceil(saveLigneOrdre.poidsNetExpedie * 1000) / 1E6);
+        }
 
-        break;
-      }
-      case "achatQuantite": {
-
+        if (currLigneOrdre.venteUnite?.id === "KILO") {
+          data.component.cellValue(rowIndex, "venteQuantite", saveLigneOrdre.poidsNetExpedie);
+        }
+        if (currLigneOrdre.venteUnite?.id === "TONNE") {
+          // Rounded to 3 dec
+          data.component.cellValue(rowIndex, "venteQuantite", Math.ceil(saveLigneOrdre.poidsNetExpedie * 1000) / 1E6);
+        }
+        this.saveGridEditData();
         break;
       }
 
     }
+  }
+
+  saveGridEditData() {
+    setTimeout(() => this.datagrid.instance.saveEditData());
   }
 
   onValueChanged(event, cell) {
@@ -227,8 +247,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
       e.editorOptions.onFocusIn = (elem) => {
         this.dataField = e.dataField;
         this.ligneOrdre = e.row?.data;
-        if (e.dataField !== "fournisseur.code")
-          this.formUtilsService.selectTextOnFocusIn(elem);
+        if (e.dataField !== "fournisseur.code") this.formUtilsService.selectTextOnFocusIn(elem);
       };
     }
   }
