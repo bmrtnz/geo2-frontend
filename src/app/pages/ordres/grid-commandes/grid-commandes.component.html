@@ -3,6 +3,7 @@
     filtering: true,
     sorting: true
   }"
+  [columnAutoWidth]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
@@ -17,6 +18,7 @@
     [(changes)]="changes"
     [refreshMode]="'reshape'"
   ></dxo-editing>
+  <dxo-load-panel [enabled]="false"></dxo-load-panel>
   <dxo-keyboard-navigation
     [enterKeyAction]="'moveFocus'"
     [enterKeyDirection]="'column'"
@@ -26,12 +28,15 @@
     <dxi-total-item
       column="nombrePalettesCommandees"
       summaryType="sum"
+      displayFormat="{0}"
     ></dxi-total-item>
     <dxi-total-item
       column="nombreColisCommandes"
       summaryType="sum"
+      displayFormat="{0}"
     ></dxi-total-item>
   </dxo-summary>
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
@@ -39,7 +44,42 @@
     [allowSorting]="column.allowSorting || true"
     [cellTemplate]="column.cellTemplate"
     [editCellTemplate]="column.editCellTemplate"
-  ></dxi-column>
+    [calculateDisplayValue]="column?.calculateDisplayValue"
+    [caption]="
+      ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+  >
+    <!-- Restrictions valeurs saisies -->
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombrePalettesIntermediaires'"
+      type="range"
+      [min]="0"
+      [max]="9"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombrePalettesCommandees'"
+      type="range"
+      [min]="0"
+      [max]="999"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombreColisPalette'"
+      type="range"
+      [min]="0"
+      [max]="999"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombreColisCommandes'"
+      type="range"
+      [min]="0"
+      [max]="9999"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+  </dxi-column>
   <app-entity-cell-template
     [columnsSettings]="columnsSettings"
   ></app-entity-cell-template>

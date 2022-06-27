@@ -1,10 +1,14 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ColumnsSettings } from "app/shared/components/entity-cell-template/entity-cell-template.component";
+import { Fournisseur } from "app/shared/models";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { FournisseursService } from "app/shared/services";
+import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
+import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { Change, GridColumn, OnSavingEvent } from "basic";
@@ -30,17 +34,50 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private currentCompanyService: CurrentCompanyService,
     private fournisseursService: FournisseursService,
+    private basesTarifService: BasesTarifService,
+    private codesPromoService: CodesPromoService,
+    private typesPaletteService: TypesPaletteService,
   ) {
-    const fournisseursDataSource = fournisseursService
+    const fournisseursDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
+    const sharedBaseTarifDatasource = this.basesTarifService
+      .getDataSource_v2(["id", "description"]);
+    const sharedTypePaletteDatasource = this.typesPaletteService
+      .getDataSource_v2(["id", "description"]);
     this.columnsSettings = {
       "proprietaireMarchandise.id": {
-        dataSource: fournisseursDataSource,
+        dataSource: this.fournisseursService
+          .getDataSource_v2(["id", "code", "raisonSocial"]),
         displayExpression: "raisonSocial",
       },
       "fournisseur.id": {
         dataSource: fournisseursDataSource,
         displayExpression: "raisonSocial",
+      },
+      "venteUnite.id": {
+        dataSource: sharedBaseTarifDatasource,
+        displayExpression: "description",
+      },
+      "codePromo.id": {
+        dataSource: this.codesPromoService
+          .getDataSource_v2(["id", "description"]),
+        displayExpression: "description",
+      },
+      "achatUnite.id": {
+        dataSource: sharedBaseTarifDatasource,
+        displayExpression: "description",
+      },
+      "typePalette.id": {
+        dataSource: sharedTypePaletteDatasource,
+        displayExpression: "description",
+      },
+      "paletteInter.id": {
+        dataSource: sharedTypePaletteDatasource,
+        displayExpression: "description",
+      },
+      "fraisUnite.id": {
+        dataSource: sharedBaseTarifDatasource,
+        displayExpression: "description",
       },
     };
   }
@@ -57,6 +94,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
       ...event,
+      title: "Lignes de commande",
       onColumnsChange: this.onColumnsConfigurationChange.bind(this),
     })
 
@@ -72,7 +110,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     this.columns = this.gridConfigurator.fetchColumns(this.gridID);
   }
 
-  async ngOnChanges({ ordreID }: SimpleChanges) {
+  ngOnChanges({ ordreID }: SimpleChanges) {
     if (ordreID.currentValue) this.updateRestrictions();
   }
 
@@ -81,7 +119,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
   }
 
   onSaving(event: OnSavingEvent) {
-    if (event.component.hasEditData()) {
+    if (event.component.hasEditData())
       while (this?.changes.length) {
 
         if (this?.changes[0]?.type !== "update") continue;
@@ -98,6 +136,24 @@ export class GridCommandesComponent implements OnInit, OnChanges {
 
           /* tslint:disable-next-line:prefer-const */
           let [name, value] = Object.entries(change.data)[0];
+
+          // update "fournisseur" field when "proprietaire" value changed
+          if (name === "proprietaireMarchandise") {
+            const fournisseur = this.updateFilterFournisseurDS(event.changes[0].data.proprietaireMarchandise);
+            event.component.cellValue(
+              event.component.getRowIndexByKey(event.changes[0].key),
+              "fournisseur",
+              fournisseur,
+            );
+            this.changes.push({
+              ...event.changes[0],
+              data: { fournisseur },
+            });
+          }
+
+          // map object value
+          if (typeof value === "object")
+            value = value.id;
 
           // request mutation
           this.columns
@@ -130,7 +186,6 @@ export class GridCommandesComponent implements OnInit, OnChanges {
                 rjt(err);
               },
 
-              // optionnal chaining
               complete: async () => {
                 await this.grid.instance.saveEditData();
                 rsv();
@@ -138,7 +193,6 @@ export class GridCommandesComponent implements OnInit, OnChanges {
             });
         });
       }
-    }
   }
 
   onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
@@ -146,22 +200,28 @@ export class GridCommandesComponent implements OnInit, OnChanges {
   }
 
   private refreshData(columns: GridColumn[]) {
-    this.columns = of(columns);
     if (this.ordreID)
-      this.columns
+      of(columns)
         .pipe(
           GridConfiguratorService.getVisible(),
           GridConfiguratorService.getFields(),
           map(fields => this.ordreLignesService.getListDataSource([
             OrdreLigne.getKeyField() as string,
             ...fields,
+            ...Object
+              .entries(this.columnsSettings)
+              .map(([keyField, column]) => {
+                const members = keyField.split(".");
+                members.splice(-1, 1, column.displayExpression);
+                return members.join(".");
+              }),
           ])),
           tap(datasource => datasource.filter([
             ["ordre.id", "=", this.ordreID],
             "and",
             ["valide", "=", true],
             "and",
-            ["article.id", "isnotnull", "null"]
+            ["article.id", "isnotnull", "null"],
           ])),
         )
         .subscribe(datasource => {
@@ -172,6 +232,38 @@ export class GridCommandesComponent implements OnInit, OnChanges {
   private async updateRestrictions() {
     const isCloture = await this.ordresService.isCloture({ id: this.ordreID });
     this.allowMutations = !environment.production && !isCloture;
+  }
+
+  // OLD codebase beyond this point (grid-lignes.component)
+
+  private updateFilterFournisseurDS(proprietaireMarchandise?: Partial<Fournisseur>) {
+
+    let fournisseur: Partial<Fournisseur>;
+    const filters = [];
+
+    if (
+      this.currentCompanyService.getCompany().id !== "BUK"
+      || proprietaireMarchandise?.code.substring(0, 2) !== "BW"
+    ) {
+      const listExp = proprietaireMarchandise?.listeExpediteurs;
+      if (listExp) {
+        listExp.split(",").map(exp => {
+          filters.push(["code", "=", exp], "or");
+          // Automatically selected when included in the list
+          if (exp === proprietaireMarchandise.code) {
+            fournisseur = proprietaireMarchandise;
+          }
+        });
+        filters.pop();
+      } else {
+        fournisseur = proprietaireMarchandise;
+        if (proprietaireMarchandise.id !== null)
+          filters.push(["id", "=", proprietaireMarchandise.id]);
+      }
+    }
+    this.columnsSettings["fournisseur.id"].dataSource.filter(filters);
+    return fournisseur;
+
   }
 
 }

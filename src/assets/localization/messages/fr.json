@@ -746,6 +746,7 @@
     "ordreLignes-ordre-id": "Réf. ordre",
     "ordreLignes-numero": "n°",
     "ordreLignes-article-id": "Article",
+    "ordreLignes-article-articleDescription-descriptionReferenceLongue": "Article",
     "ordreLignes-article-description": "Description abrégée",
     "ordreLignes-nombrePalettesCommandees": "Pal. sol",
     "ordreLignes-nombrePalettesExpediees": "Pal. sol exp.",
