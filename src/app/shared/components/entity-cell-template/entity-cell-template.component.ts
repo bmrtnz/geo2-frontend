@@ -36,6 +36,13 @@ export class EntityCellTemplateComponent {
     return cell.data[cell.column.dataField.split(".")[0]];
   }
 
+  // Apply select box value to cell
+  onSelectBoxCellValueChanged(event, cell) {
+    if (event.value?.id === event.previousValue?.id) return;
+    if (cell.setValue)
+      cell.setValue(event.value?.id);
+  }
+
 }
 
 @NgModule({
