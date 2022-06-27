@@ -1,12 +1,17 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, NgModule, OnInit } from "@angular/core";
+import { Component, Injectable, Input, NgModule, Pipe, PipeTransform } from "@angular/core";
 import { CellTemplate } from "basic";
 import { DxSelectBoxModule, DxTemplateHost, DxTextBoxModule } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 
+type Cell = {
+  key: any,
+  displayValue: any,
+  column: { displayField: string },
+};
 type ColumnSettings = {
   dataSource: DataSource,
-  displayExpression: string | (() => string),
+  displayExpression: string,
 };
 export type ColumnsSettings = Record<string, ColumnSettings>;
 
@@ -20,6 +25,10 @@ export class EntityCellTemplateComponent {
 
   /** Per column settings for CellTemplate */
   @Input() public columnsSettings: ColumnsSettings;
+
+  constructor(
+    private store: CellDisplayStore,
+  ) { }
 
   /** Get column settings by field name */
   public getSettings(dataField: string): ColumnSettings {
@@ -37,12 +46,37 @@ export class EntityCellTemplateComponent {
   }
 
   // Apply select box value to cell
-  onSelectBoxCellValueChanged(event, cell) {
+  public onSelectBoxCellValueChanged(event, cell) {
     if (event.value?.id === event.previousValue?.id) return;
-    if (cell.setValue)
+    if (cell.setValue) {
+      const { displayExpression } = this.getSettings(cell.column.name);
+      this.store.set(cell, event.value[displayExpression]);
       cell.setValue(event.value?.id);
+    }
   }
 
+}
+
+@Pipe({ name: "cellDisplay" })
+export class CellDisplayPipe implements PipeTransform {
+  constructor(
+    private store: CellDisplayStore,
+  ) { }
+
+  transform(cell: Cell) {
+    return this.store.get(cell) ?? cell.displayValue;
+  }
+}
+
+@Injectable()
+export class CellDisplayStore {
+  private store: Record<string, Record<string, any>> = {};
+  public set(cell: Cell, value: any) {
+    this.store[cell.key] = { [cell.column.displayField]: value };
+  }
+  public get(cell: Cell) {
+    return this.store[cell.key]?.[cell.column.displayField];
+  }
 }
 
 @NgModule({
@@ -51,8 +85,8 @@ export class EntityCellTemplateComponent {
     DxTextBoxModule,
     DxSelectBoxModule,
   ],
-  providers: [DxTemplateHost],
-  declarations: [EntityCellTemplateComponent],
+  providers: [DxTemplateHost, CellDisplayStore],
+  declarations: [EntityCellTemplateComponent, CellDisplayPipe],
   exports: [EntityCellTemplateComponent]
 })
 export class EntityCellTemplateModule { }

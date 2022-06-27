@@ -323,6 +323,9 @@ export class GridConfiguratorService {
             ...defaultColumn?.calculateDisplayValue
               ? { calculateDisplayValue: defaultColumn?.calculateDisplayValue }
               : {},
+            ...defaultColumn?.cellTemplate
+              ? { cellTemplate: defaultColumn?.cellTemplate }
+              : {},
             ...defaultColumn?.editCellTemplate
               ? { editCellTemplate: defaultColumn?.editCellTemplate }
               : {},

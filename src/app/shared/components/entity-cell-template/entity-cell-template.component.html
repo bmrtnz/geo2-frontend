@@ -1,3 +1,7 @@
+<div *dxTemplate="let cell of 'entityCellTemplate'">
+  {{ cell | cellDisplay }}
+</div>
+
 <div *dxTemplate="let cell of 'entityEditCellTemplate'">
   <dx-select-box
     *ngIf="columnsSettings; else noSettings"
