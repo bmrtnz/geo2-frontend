@@ -1,27 +1,27 @@
 import { HttpClient } from "@angular/common/http";
-import { EventEmitter, Injectable, NgModule } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { GridColumn } from "basic";
 import {
   DxoColumnChooserComponent,
   DxoStateStoringComponent
 } from "devextreme-angular/ui/nested";
-import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import { dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
 import { defer, from, interval, Observable } from "rxjs";
 import {
+  concatMap,
   concatMapTo,
   debounce,
   filter,
   map,
-
   mergeMap,
   pairwise,
   reduce,
   share,
+  shareReplay,
   startWith,
   tap
 } from "rxjs/operators";
@@ -113,13 +113,19 @@ export enum Grid {
   MouvClientsComptesPalox = "mouv-clients-comptes-palox",
   RecapFournisseursComptesPalox = "recap-fournisseurs-comptes-palox",
   RecapClientsComptesPalox = "recap-clients-comptes-palox"
-
 }
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class GridConfiguratorService {
   private readonly GRID_CONFIG_FILE = "/assets/configurations/grids.json";
-  private dataSource: DataSource;
+  private fetchConfigFile = this.httpClient
+    .get(this.GRID_CONFIG_FILE)
+    .pipe(
+      concatMap((res: { [key: string]: GridConfig }) => from(Object.entries(res))),
+      shareReplay(),
+    );
   private columnChooser = environment.columnChooser;
 
   constructor(
@@ -130,7 +136,6 @@ export class GridConfiguratorService {
     private localizationService: LocalizationService,
   ) {
     self = this;
-    this.dataSource = this.gridsConfigsService.getDataSource();
   }
 
   // Make enum available in templates
@@ -255,29 +260,25 @@ export class GridConfiguratorService {
       throw Error(
         "Grid name required, use GridConfiguratorService.with(gridName)",
       );
-    const keys = ["common", grid];
     this.evictCache(grid);
-    return this.httpClient
-      .get(this.GRID_CONFIG_FILE)
-      .pipe(
-        map((res: { [key: string]: GridConfig }) =>
-          Object.entries(res)
-            .filter(([key]) => keys.includes(key))
-            .map(([, config]) => config)
-            // .map( config => ({
-            //   ...config,
-            //   columns: config?.columns?.map( column => ({
-            //     ...column,
-            //     visible: column?.visible ?? false,
-            //   })),
-            // }))
-            .reduce((previous, config) => ({
-              ...previous,
-              ...config,
-            })),
-        ),
-      )
-      .toPromise();
+    return this.fetchConfigFile.pipe(
+      filter(([k]) => ["common", grid].includes(k)),
+      // set defaults
+      map(([, config]) => ({
+        ...config,
+        columns: config?.columns ? config.columns.map(column => ({
+          ...column,
+          ...column?.showInColumnChooser
+            ? { showInColumnChooser: column?.showInColumnChooser }
+            : { showInColumnChooser: true },
+          ...column?.visible
+            ? { visible: column?.visible }
+            : { visible: false },
+        })) : [],
+      } as GridConfig)),
+      concatMap(config => this.mergeExtraConfiguration(config, config)),
+      reduce((previous, config) => ({ ...previous, ...config })),
+    ).toPromise();
   }
 
   /**
@@ -301,20 +302,34 @@ export class GridConfiguratorService {
     const userConfig: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfig.config));
 
     // merge extra configurations ( not handled by DX state storing )
-    return from(userConfig.columns)
+    return this.mergeExtraConfiguration(userConfig, await defaultConfig);
+  }
+
+  /**
+   * Merge extra configurations in DxGridConfig ( not handled by DX state storing )
+   */
+  private mergeExtraConfiguration(inputConfig: GridConfig, defaultConfig: GridConfig) {
+    if (!inputConfig.columns) return Promise.resolve(inputConfig);
+    return from(inputConfig.columns)
       .pipe(
-        mergeMap(async column => [column, (await defaultConfig)
+        mergeMap(async column => [column, defaultConfig
           .columns.find(c => c.dataField === column.dataField)] as [GridColumn, GridColumn]),
         map(([userColumn, defaultColumn]) => ({
           ...userColumn,
-          ...{
-            showInColumnChooser: defaultColumn.showInColumnChooser ?? true,
-            calculateDisplayValue: defaultColumn.calculateDisplayValue,
-            editCellTemplate: defaultColumn.editCellTemplate,
-          } ?? {},
+          ...defaultColumn ? {
+            ...defaultColumn?.showInColumnChooser
+              ? { showInColumnChooser: defaultColumn?.showInColumnChooser }
+              : {},
+            ...defaultColumn?.calculateDisplayValue
+              ? { calculateDisplayValue: defaultColumn?.calculateDisplayValue }
+              : {},
+            ...defaultColumn?.editCellTemplate
+              ? { editCellTemplate: defaultColumn?.editCellTemplate }
+              : {},
+          } : {},
         })),
         reduce<GridColumn, GridColumn[]>((acc, value) => [...acc, value]),
-        map(columns => ({ ...userConfig, columns })),
+        map(columns => ({ ...inputConfig, columns }) as GridConfig),
       )
       .toPromise();
   }
@@ -509,8 +524,3 @@ export class GridConfiguratorService {
         });
   }
 }
-
-@NgModule({
-  providers: [GridConfiguratorService],
-})
-export class GridConfiguratorModule { }
