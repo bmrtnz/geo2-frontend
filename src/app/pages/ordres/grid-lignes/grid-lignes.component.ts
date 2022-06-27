@@ -286,9 +286,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       }
       // Title double-click to see specific file: doesn't work, find out why!
       if (["fournisseur", "proprietaireMarchandise"].includes(e.column?.dataField)) {
-        if (e.value?.id) {
-          e.cellElement.classList.add("cursor-pointer");
-        }
+        if (e.value?.id) e.cellElement.classList.add("cursor-pointer");
       }
       if (e.column.dataField === "article.description") {
         // Descript. article

@@ -147,6 +147,11 @@ interface GridColumn {
   editCellTemplate?: string;
 
   /**
+   * Specifies the edit format options
+   */
+  editorOptions?: {};
+
+  /**
    * Specifies the column edit cell template when required
    */
   headerCellTemplate?: string;

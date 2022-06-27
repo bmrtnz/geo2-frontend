@@ -122,6 +122,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         const infoArt = this.articlesService.concatArtDescript(e.data.article);
         e.cellElement.innerText = infoArt.concatDesc;
         e.cellElement.title = infoArt.concatDesc.substring(2) + "\r\n";
+        // Bio in green
+        if (infoArt.bio) e.cellElement.classList.add("bio-article");
       }
       // Higlight important columns
       if ([

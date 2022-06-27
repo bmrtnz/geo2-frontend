@@ -1836,6 +1836,12 @@
         "visibleIndex": 22,
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
+        "editorOptions": {
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
         "width": 95,
         "allowEditing": true,
         "visible": true
@@ -1868,6 +1874,12 @@
         "visibleIndex": 28,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
+        "editorOptions": {
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
         "width": 95,
         "allowEditing": true,
         "visible": true
