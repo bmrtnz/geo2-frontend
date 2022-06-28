@@ -80,6 +80,7 @@
           type="success"
           height="auto"
           icon="material-icons description"
+          [disabled]="!article?.document?.isPresent"
           (onClick)="viewEtiquette(
             'btn-doctechnique',
             article?.document

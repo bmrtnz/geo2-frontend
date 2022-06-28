@@ -43,6 +43,7 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  private staticFields = ["flux.description"];
 
   public documentVisible = false;
   public currentDocument: ViewDocument;
@@ -69,7 +70,7 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
         map((columns) => columns.map((column) => column.dataField)),
       );
       this.dataSource = this.envoisService.getDataSource_v2(
-        await fields.toPromise(),
+        [...await fields.toPromise(), ...this.staticFields]
       );
       this.dataSource.filter([
         ["ordre.id", "=", this.ordre.id],
