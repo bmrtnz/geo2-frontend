@@ -8,20 +8,22 @@ import { CertificationsModesCultureService } from "app/shared/services/api/certi
 import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
 import { DefCodesPromoService } from "app/shared/services/api/def-codes-promo.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
-import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
-import { GridColumn, TotalItem } from "basic";
+import { Change, GridColumn, OnSavingEvent, TotalItem } from "basic";
+import CustomStore from "devextreme/data/custom_store";
 import { DxDataGridComponent, DxLoadIndicatorComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import dxDataGrid from "devextreme/ui/data_grid";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, PartialObserver } from "rxjs";
-import { concatMapTo, map, tap } from "rxjs/operators";
+import { concatMapTo, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
@@ -89,6 +91,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
   public SelectBoxPopupWidth: number;
   public dataField: string;
   public idLigne: string;
+  private gridFields: any[];
+  public changes: Change<Partial<OrdreLigne>>[] = [];
   public marginText: string;
   public marginBtnVisible = false;
 
@@ -141,8 +145,8 @@ export class GridLignesComponent implements OnChanges, OnInit {
     const fields = this.columns.pipe(map(columns => columns.map(column => {
       return (this.addKeyToField(column.dataField));
     })));
-    const gridFields = await fields.toPromise();
-    this.dataSource = this.ordreLignesService.getDataSource_v2(gridFields);
+    this.gridFields = await fields.toPromise();
+    this.dataSource = this.ordreLignesService.getListDataSource(this.gridFields);
     this.filterFournisseurDS();
     this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     this.achatUniteSource = this.achatUniteService.getDataSource_v2(["id", "description"]);
@@ -230,7 +234,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
 
     if (this?.ordre?.id) {
       this.dataSource = this.ordreLignesService
-        .getSummarisedDatasource(SummaryOperation.Totaux, fields, summaryInputs);
+        .getListDataSource(this.gridFields);
       this.dataSource.filter([
         ["ordre.id", "=", this.ordre.id],
         "and",
@@ -370,10 +374,11 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.datagrid.instance.saveEditData();
   }
 
-  onValueChanged(event, cell) {
+  onSelectBoxCellValueChanged(event, cell) {
+    if (event.value.id === event.previousValue.id) return;
     if (cell.setValue) {
       cell.setValue(event.value);
-      this.cellValueChange(event);
+      // this.cellValueChange(event);
       this.idLigne = cell.data.id;
       this.dataField = cell.column.dataField;
     }
@@ -455,6 +460,77 @@ export class GridLignesComponent implements OnChanges, OnInit {
         if (e.dataField !== "numero")
           this.formUtilsService.selectTextOnFocusIn(elem);
       };
+    }
+  }
+
+  /**
+   * Handle dynamic saving on cell change
+   */
+  onSaving(event: OnSavingEvent) {
+    if (event.component.hasEditData()) {
+      if (event?.changes[0]?.type !== "update") return;
+
+      event.cancel = true;
+      event.promise = new Promise((rsv, rjt) => {
+
+        // push input cell changes
+        (this.dataSource.store() as CustomStore).push(event.changes);
+        /* tslint:disable-next-line:prefer-const */
+        let [name, value]: [string, string | number | Record<string, any>] = Object
+          .entries(event.changes[0].data)[0];
+        this.changes = []; // clear changes, or DX won't let us pass
+
+        // update "fournisseur" field when "proprietaire" value changed
+        if (name === "proprietaireMarchandise") {
+          const [id, code] = this.updateFilterFournisseurDS(event.changes[0].data.proprietaireMarchandise);
+          event.component.cellValue(
+            event.component.getRowIndexByKey(event.changes[0].key),
+            "fournisseur",
+            { id, code },
+          );
+          this.changes = [{
+            ...event.changes[0],
+            data: { fournisseur: { id } },
+          }];
+        }
+
+        // map object value
+        if (typeof value === "object")
+          value = value.id;
+
+        // request mutation
+        this.ordreLignesService.updateField(
+          name,
+          value,
+          event.changes[0].key,
+          this.currentCompanyService.getCompany().id,
+          this.gridFields,
+        )
+          .pipe(first())
+          .subscribe({
+
+            // build and push response data
+            next: ({ data }) => {
+              (this.dataSource.store() as CustomStore).push([{
+                key: data.updateField.id,
+                type: "update",
+                data: data.updateField,
+              }]);
+            },
+
+            // reject on error
+            error: err => {
+              notify(err.message, "error", 5000);
+              rjt(err);
+            },
+
+            // optionnal chaining
+            complete: async () => {
+              await this.datagrid.instance.saveEditData();
+              rsv();
+            },
+          });
+      });
     }
   }
 
@@ -558,7 +634,7 @@ export class GridLignesComponent implements OnChanges, OnInit {
       });
   }
 
-  cellValueChange(data) {
+  oldCellValueChange(data) {
 
     this.marginText = "";
     if (!data.changes) return;

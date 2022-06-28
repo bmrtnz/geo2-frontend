@@ -1691,7 +1691,6 @@
     ]
   },
   "ordre-ligne": {
-    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 0,
@@ -2124,6 +2123,142 @@
         "dataField": "achatDeviseTaux",
         "showInColumnChooser": false,
         "visible": false
+      }
+    ]
+  },
+  "lignes-commandes": {
+    "columns": [
+      {
+        "dataField": "numero",
+        "visible": true,
+        "sortOrder": "asc",
+        "allowEditing": false,
+        "allowSorting": false,
+        "fixed": true
+      },
+      {
+        "dataField": "article.articleDescription.descriptionReferenceLongue",
+        "allowEditing": false,
+        "fixed": true,
+        "visible": true
+      },
+      {
+        "dataField": "nombrePalettesCommandees",
+        "visible": true
+      },
+      {
+        "dataField": "nombrePalettesIntermediaires",
+        "visible": true
+      },
+      {
+        "dataField": "nombreColisPalette",
+        "visible": true
+      },
+      {
+        "dataField": "nombreColisCommandes",
+        "visible": true
+      },
+      {
+        "dataField": "proprietaireMarchandise.id",
+        "visible": true,
+        "calculateDisplayValue": "proprietaireMarchandise.raisonSocial",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "fournisseur.id",
+        "visible": true,
+        "calculateDisplayValue": "fournisseur.raisonSocial",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "ventePrixUnitaire",
+        "visible": true
+      },
+      {
+        "dataField": "venteUnite.id",
+        "visible": true,
+        "calculateDisplayValue": "venteUnite.description",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "gratuit",
+        "visible": true
+      },
+      {
+        "dataField": "codePromo.id",
+        "visible": true,
+        "calculateDisplayValue": "codePromo.description",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "achatDevisePrixUnitaire",
+        "visible": true
+      },
+      {
+        "dataField": "achatUnite.id",
+        "visible": true,
+        "calculateDisplayValue": "achatUnite.description",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "achatDevise",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "typePalette.id",
+        "visible": true,
+        "calculateDisplayValue": "typePalette.description",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "paletteInter.id",
+        "visible": true,
+        "calculateDisplayValue": "paletteInter.description",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "libelleDLV",
+        "visible": true,
+        "allowSorting": false
+      },
+      {
+        "dataField": "fraisPrixUnitaire",
+        "visible": true
+      },
+      {
+        "dataField": "fraisUnite.id",
+        "visible": true,
+        "calculateDisplayValue": "fraisUnite.description",
+        "cellTemplate": "entityCellTemplate",
+        "editCellTemplate": "entityEditCellTemplate"
+      },
+      {
+        "dataField": "fraisCommentaires",
+        "visible": true
+      },
+      {
+        "dataField": "tauxRemiseSurFacture",
+        "visible": true
+      },
+      {
+        "dataField": "tauxRemiseHorsFacture",
+        "visible": true
+      },
+      {
+        "dataField": "articleKit",
+        "visible": true
+      },
+      {
+        "dataField": "gtinColisKit",
+        "visible": true
       }
     ]
   },

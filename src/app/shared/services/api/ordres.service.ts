@@ -4,7 +4,7 @@ import { Apollo } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { from } from "rxjs";
-import { first, mergeMap, take, takeUntil } from "rxjs/operators";
+import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 
@@ -250,6 +250,17 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       mutation: gql(this.buildSaveGraph(columns)),
       variables,
     });
+  }
+
+  async isCloture(ordre: Partial<Ordre>) {
+    if (!ordre?.statut) {
+      const chunk = await this
+        .getOne_v2(ordre.id, ["statut"])
+        .pipe(map(res => res.data.ordre))
+        .toPromise();
+      ordre.statut = chunk.statut;
+    }
+    return Ordre.isCloture(ordre);
   }
 
 }

@@ -9,6 +9,7 @@ import { takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
 import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
+import { CurrentCompanyService } from "../current-company.service";
 
 export enum SummaryOperation {
   Marge = "allOrdreLigneMarge",
@@ -26,7 +27,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
   constructor(
     apollo: Apollo,
     public functionsService: FunctionsService,
-    public authService: AuthService
+    public authService: AuthService,
+    private currentCompanyService: CurrentCompanyService,
   ) {
     super(apollo, OrdreLigne);
   }
@@ -81,8 +83,24 @@ export class OrdreLignesService extends ApiService implements APIRead {
       });
   }
 
+  private insert(values) {
+    const variables = { ordreLigne: values };
+    return this.watchSaveQuery({ variables }).toPromise();
+  }
+
+  private update(id, values) {
+    const variables = { ordreLigne: { id, ...values } };
+    return this.watchSaveQuery({ variables }).toPromise();
+  }
+
+  private remove(id) {
+    const variables = { id };
+    return this.watchDeleteQuery({ variables }).toPromise();
+  }
+
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
+      reshapeOnPush: true,
       sort: [
         { selector: "numero", }
       ],
@@ -116,18 +134,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
               resolve(new OrdreLigne(res.data.ordreLigne));
           });
         }),
-        insert: (values) => {
-          const variables = { ordreLigne: values };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        update: (key, values) => {
-          const variables = { ordreLigne: { id: key, ...values } };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        remove: (key) => {
-          const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise();
-        },
+        insert: this.insert,
+        update: this.update,
+        remove: this.remove,
       }),
     });
   }
@@ -168,18 +177,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
         }),
         byKey: this.byKey_v2(columns),
-        insert: (values) => {
-          const variables = { ordreLigne: values };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        update: (key, values) => {
-          const variables = { ordreLigne: { id: key, ...values } };
-          return this.watchSaveQuery({ variables }).toPromise();
-        },
-        remove: (key) => {
-          const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise();
-        },
+        insert: this.insert,
+        update: this.update,
+        remove: this.remove,
       }),
     });
   }
@@ -204,7 +204,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
     switch (e.column.dataField) {
 
       case "nombrePalettesCommandees": {
-        if ((data.logistique.expedieStation === true
+        if ((data.logistique?.expedieStation === true
           || data.ordre.secteurCommercial.id === "F"
           || bloquer === true)
           && data.ordre.type.id !== "RPR"
@@ -215,26 +215,26 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "nombrePalettesIntermediaires": {
-        if (data.logistique.expedieStation === true ||
+        if (data.logistique?.expedieStation === true ||
           data.indicateurPalette === 1
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "nombreColisPalette": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "nombreColisCommandes": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "proprietaireMarchandise": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
           || data.ordre.type.id === "RDF"
           || data.ordre.type.id === "REP"
@@ -245,7 +245,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "fournisseur": { // Emballeur/Expéditeur
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || bloquer === true
           || data.ordre.type.id === "RDF"
           || data.ordre.type.id === "REP"
@@ -282,7 +282,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         if ((data.ordre.venteACommission !== true
           && data.ordre.type.id !== "REP"
           && data.ordre.type.id !== "RPF")
-          && (data.logistique.expedieStation === true
+          && (data.logistique?.expedieStation === true
             || bloquer === true)
         ) this.lock(e);
         break;
@@ -296,7 +296,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "typePalette": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || data.ordre.type.id === "REP"
           || data.ordre.type.id === "RPF"
           || bloquer === true
@@ -304,7 +304,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "paletteInter": {
-        if (data.logistique.expedieStation === true
+        if (data.logistique?.expedieStation === true
           || data.ordre.type.id === "REP"
           || data.ordre.type.id === "RPF"
           || bloquer === true
@@ -359,7 +359,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       case "achatUnite.description":
       case "typePalette":
       case "paletteInter": {
-        if (data.logistique.expedieStation ||
+        if (data.logistique?.expedieStation ||
           !(data.ordre.client.modificationDetail !== false ||
             data.ordre.secteurCommercial.id === "PAL" ||
             this.authService.currentUser.geoClient === "2" ||
@@ -387,18 +387,51 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   getListDataSource(columns: Array<string>) {
     return new DataSource({
+      reshapeOnPush: true,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             const { search } = this.mapLoadOptionsToVariables(options);
             const res = await this.getList(search, columns).toPromise();
+            const data = JSON.parse(JSON.stringify(res.data.allOrdreLigneList));
             resolve({
-              data: res.data.allOrdreLigneList,
+              data,
               totalCount: res.data.allOrdreLigneList.length,
             });
           }),
         byKey: this.byKey_v2(columns),
+        insert: this.insert,
+        update: this.update,
+        remove: this.remove,
       }),
+    });
+  }
+
+  public updateField(
+    fieldName: string,
+    value: any,
+    id: string,
+    socCode: string,
+    body: string[],
+  ) {
+    return this.apollo.mutate<{ updateField: Partial<OrdreLigne> }>({
+      mutation: gql(ApiService.buildGraph("mutation", [{
+        name: "updateField",
+        body,
+        params: [
+          { name: "fieldName", value: "fieldName", isVariable: true },
+          { name: "value", value: "value", isVariable: true },
+          { name: "id", value: "id", isVariable: true },
+          { name: "socCode", value: "socCode", isVariable: true },
+        ],
+      }], [
+        { name: "fieldName", type: "String", isOptionnal: false },
+        { name: "value", type: "ObjectScalar", isOptionnal: false },
+        { name: "id", type: "String", isOptionnal: false },
+        { name: "socCode", type: "String", isOptionnal: false },
+      ])),
+      variables: { fieldName, value, id, socCode },
+      fetchPolicy: "network-only",
     });
   }
 

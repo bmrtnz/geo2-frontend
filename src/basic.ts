@@ -1,3 +1,6 @@
+import { EventEmitter } from "@angular/core";
+import { SummaryType } from "app/shared/services/api.service";
+import dxDataGrid, { dxDataGridColumn, dxDataGridRowObject } from "devextreme/ui/data_grid";
 import {
   AsyncRule,
   CompareRule,
@@ -7,10 +10,8 @@ import {
   PatternRule,
   RangeRule,
   RequiredRule,
-  StringLengthRule,
+  StringLengthRule
 } from "devextreme/ui/validation_rules";
-import { SummaryType } from "app/shared/services/api.service";
-import { EventEmitter } from "@angular/core";
 
 declare global {
   interface String {
@@ -165,6 +166,8 @@ interface GridColumn {
    * Allow column sorting
    */
   allowSorting?: boolean;
+
+  calculateDisplayValue?: string;
 }
 
 /**
@@ -313,3 +316,34 @@ export interface SingleSelection<I> {
   getSelectedItem: () => Partial<I>;
   selectionChanged?: EventEmitter<Partial<I>>;
 }
+
+export class Change<T> {
+  type: "insert" | "update" | "remove";
+
+  key: any;
+
+  data: T;
+}
+
+export type OnSavingEvent = {
+  cancel: boolean,
+  changes: Array<any>,
+  component: dxDataGrid,
+  element: HTMLElement,
+  promise: Promise<void>,
+};
+
+export type CellTemplate = {
+  column: dxDataGridColumn,
+  columnIndex: number,
+  component: dxDataGrid,
+  data: Record<string, any>,
+  displayValue: any,
+  oldValue: any,
+  row: dxDataGridRowObject,
+  rowIndex: number,
+  rowType: string,
+  text: string,
+  value: any
+  watch: (getter, handler) => void,
+};
