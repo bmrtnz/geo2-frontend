@@ -23,9 +23,13 @@ import { concatMap, filter, first, map, tap } from "rxjs/operators";
 @Component({
   selector: "app-grid-commandes",
   templateUrl: "./grid-commandes.component.html",
-  styleUrls: ["./grid-commandes.component.scss"]
+  styleUrls: ["./grid-commandes.component.scss", "../grid-lignes/grid-lignes.component.scss"]
 })
 export class GridCommandesComponent implements OnInit, OnChanges {
+
+  readonly FEATURE = {
+    margePrevisionelle: true,
+  };
 
   constructor(
     private gridConfigurator: GridConfiguratorService,

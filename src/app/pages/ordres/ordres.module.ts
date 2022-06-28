@@ -113,6 +113,7 @@ import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-pop
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/button-marge-previ.component";
 
 @NgModule({
   declarations: [
@@ -180,6 +181,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GridStockComponent,
     ReservationPopupComponent,
     GridCommandesComponent,
+    ButtonMargePreviComponent,
   ],
   imports: [
     OrdresRoutingModule,
