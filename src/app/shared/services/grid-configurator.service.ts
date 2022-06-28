@@ -362,6 +362,9 @@ export class GridConfiguratorService {
       onColumnsChange,
     }: AutoConfig,
   ) {
+
+    component.beginCustomLoading("Initializing...");
+
     if (autoStateStoring)
       this.autoConfigureStateStoring(
         component.option("stateStoring"),
@@ -383,6 +386,7 @@ export class GridConfiguratorService {
             fullName,
             value,
           }: Partial<{ fullName: string; value: any }>) => {
+            component.beginCustomLoading("Initializing columns...");
             const res = fullName.match(
               /^columns\[(\d+)\]\.visible$/,
             );
@@ -413,10 +417,12 @@ export class GridConfiguratorService {
       .subscribe(([previous, current]) => {
         const fresh = current.filter((x) => !previous.includes(x));
         onColumnsChange({ fresh, current, previous });
+        component.endCustomLoading();
       });
 
     this.fetchConfig(grid).then((config) => component.state(config));
     component.option("filterPanel", { visible: true });
+    component.endCustomLoading();
   }
 
   public onToolbarPreparing(title, options, grid: Grid, cbk?: () => void) {
