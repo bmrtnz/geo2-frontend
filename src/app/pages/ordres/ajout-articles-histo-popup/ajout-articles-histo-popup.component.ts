@@ -3,7 +3,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { DxButtonComponent, DxPopupComponent } from "devextreme-angular";
+import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
@@ -39,6 +39,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   @ViewChild(GridLignesHistoriqueComponent, { static: false }) gridLignesHisto: GridLignesHistoriqueComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
     private functionsService: FunctionsService,
@@ -88,6 +89,10 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   onShowing(e) {
     e.component.content().parentNode.classList.add("ajout-articles-histo-popup");
     this.popupShown = true;
+  }
+
+  onShown(e) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
   }
 
   clearAll() {

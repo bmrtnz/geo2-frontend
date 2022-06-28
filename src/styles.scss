@@ -13,6 +13,7 @@
 @import "~scss/dx/form";
 @import "~scss/dx/accordion";
 
+
 .img-responsive {
   max-width: 100%;
   height: auto;
@@ -231,11 +232,6 @@ body app-root.production {
     }
   }
 }
-
-// For big popup contents
-// .dx-popup-normal.ajout-articles-manu-popup {
-//   overflow-y: auto;
-// }
 
 @keyframes pulse {
   0% {

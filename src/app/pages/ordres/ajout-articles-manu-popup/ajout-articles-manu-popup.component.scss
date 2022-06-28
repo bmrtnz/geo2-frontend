@@ -35,7 +35,10 @@
   }
 
   .dx-popup-content {
-    overflow-y: auto;
+
+    .dx-scrollable-content {
+      padding-right: 20px;
+    }
 
     .valid-field {
       display: none;

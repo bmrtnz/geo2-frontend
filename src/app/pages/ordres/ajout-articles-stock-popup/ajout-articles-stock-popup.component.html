@@ -1,10 +1,10 @@
 <dx-popup
-  [height]="'auto'"
   [showTitle]="true"
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
   [(visible)]="visible"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
@@ -18,14 +18,21 @@
     </dx-button>
   </div>
 
-  <h6 *ngIf="stock">
-    {{ "articles-catalogue-preFilter-stock-title" | localize }}
-  </h6>
-  <div style="clear: both"></div>
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view style="margin-left:15px">
 
-  <app-grid-stock
-    [ordre]="ordre"
-    (selectChange)="clearAndHidePopup()"
-  ></app-grid-stock>
-  <br />
+      <h6 *ngIf="stock">
+        {{ "articles-catalogue-preFilter-stock-title" | localize }}
+      </h6>
+      <div style="clear: both"></div>
+
+      <app-grid-stock
+        [ordre]="ordre"
+        (selectChange)="clearAndHidePopup()"
+      ></app-grid-stock>
+      <br />
+
+    </dx-scroll-view>
+  </div>
+
 </dx-popup>
