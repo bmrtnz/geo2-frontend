@@ -4,7 +4,6 @@ import { Apollo, gql } from "apollo-angular";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import notify from "devextreme/ui/notify";
 import { takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
@@ -31,6 +30,14 @@ export class OrdreLignesService extends ApiService implements APIRead {
     private currentCompanyService: CurrentCompanyService,
   ) {
     super(apollo, OrdreLigne);
+  }
+
+  getOne_v2(id: string, columns: Array<string> | Set<string>) {
+    return this.apollo
+      .query<{ ordreLigne: Partial<OrdreLigne> }>({
+        query: gql(this.buildGetOneGraph(columns)),
+        variables: { id },
+      });
   }
 
   getDataSource(depth = 1, filter?: RegExp) {

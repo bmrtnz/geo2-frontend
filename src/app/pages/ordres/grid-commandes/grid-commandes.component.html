@@ -43,6 +43,25 @@
     ></dxi-total-item>
   </dxo-summary>
 
+  <!-- certifications -->
+  <ng-container *ngIf="FEATURE.columnCertifications">
+    <dxi-column
+      *ngIf="allowMutations"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'certificationTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'certificationTemplate'">
+      <dx-button
+        class="small-article-button certification"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="showCertificationCheck(cell.data)"
+        (onClick)="openCertificationPopup(cell.data)"
+      ></dx-button>
+    </div>
+  </ng-container>
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
@@ -91,7 +110,13 @@
   ></app-entity-cell-template>
 </dx-data-grid>
 
+<!-- marge previsionelle -->
 <app-button-marge-previ
   *ngIf="FEATURE.margePrevisionelle"
   [ordreID]="ordreID"
 ></app-button-marge-previ>
+
+<app-article-certification-popup
+  *ngIf="FEATURE.columnCertifications"
+  [ordreLigne]="ordreLigne"
+></app-article-certification-popup>

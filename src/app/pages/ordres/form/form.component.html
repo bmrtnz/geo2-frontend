@@ -860,6 +860,9 @@
                     (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-lignes>
                   <div class="grid-separator"></div>
+                  <app-grid-commandes
+                    [ordreID]="ordre?.id"
+                  ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique

@@ -1,10 +1,12 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Injector, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ColumnsSettings } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import { Fournisseur } from "app/shared/models";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import { FournisseursService } from "app/shared/services";
+import Ordre from "app/shared/models/ordre.model";
+import { FournisseursService, LocalizationService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
+import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
 import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -19,19 +21,87 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { Observable, of } from "rxjs";
 import { concatMap, filter, first, map, tap } from "rxjs/operators";
+import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
+
+class GridCommandesFeatures implements OnInit, OnChanges {
+
+  public certifsMD: any;
+  public certifMDDS: DataSource;
+  public ordre: Partial<Ordre>;
+  public certificationText: string;
+
+  @Input() ordreID: string;
+  @Output() public ordreLigne: OrdreLigne;
+  @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
+
+  constructor(
+    public injector: Injector,
+  ) {
+    this.certificationText = this.injector
+      .get(LocalizationService)
+      .localize("btn-certification");
+  }
+
+  ngOnInit() {
+    this.certifMDDS = this.injector
+      .get(CertificationsModesCultureService)
+      .getDataSource_v2(["id", "description", "type"], 100);
+    this.certifMDDS.filter(["type", "=", "CERTIF"]);
+    this.certifMDDS.load().then(res => {
+      this.certifsMD = res; // Store certifications Mode culture
+    });
+  }
+
+  ngOnChanges() { }
+
+  showCertificationCheck(data) {
+    let isCert = false;
+    if (data.listeCertifications) { // Already recorded
+      this.certifsMD?.map(certType => {
+        if (data.listeCertifications?.split(",").includes(certType.id.toString()))
+          isCert = true;
+      });
+    } else { // Default certifications from customer file
+      isCert = this.ordre?.client?.certifications?.length > 0;
+    }
+    return this.certificationText + (isCert ? " ✓" : "");
+  }
+
+  openCertificationPopup(ligne) {
+    this.ordreLigne = ligne;
+    this.articleCertificationPopup.visible = true;
+  }
+
+}
 
 @Component({
   selector: "app-grid-commandes",
   templateUrl: "./grid-commandes.component.html",
-  styleUrls: ["./grid-commandes.component.scss", "../grid-lignes/grid-lignes.component.scss"]
+  styleUrls: [
+    "./grid-commandes.component.scss",
+    "../grid-lignes/grid-lignes.component.scss", // legacy style
+  ]
 })
-export class GridCommandesComponent implements OnInit, OnChanges {
+export class GridCommandesComponent
+  extends GridCommandesFeatures
+  implements OnInit, OnChanges {
 
-  readonly FEATURE = {
+  public FEATURE = {
     margePrevisionelle: true,
+    columnCertifications: true,
   };
 
+  public readonly gridID = Grid.LignesCommandes;
+  public columns: Observable<GridColumn[]>;
+  public allowMutations = false;
+  public changes: Change<Partial<OrdreLigne>>[] = [];
+  public columnsSettings: ColumnsSettings;
+
+  @Input() ordreID: string;
+  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+
   constructor(
+    public injector: Injector,
     private gridConfigurator: GridConfiguratorService,
     private ordresService: OrdresService,
     private ordreLignesService: OrdreLignesService,
@@ -42,6 +112,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     private codesPromoService: CodesPromoService,
     private typesPaletteService: TypesPaletteService,
   ) {
+    super(injector);
     const fournisseursDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
     const sharedBaseTarifDatasource = this.basesTarifService
@@ -86,15 +157,6 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     };
   }
 
-  public readonly gridID = Grid.LignesCommandes;
-  public columns: Observable<GridColumn[]>;
-  public allowMutations = false;
-  public changes: Change<Partial<OrdreLigne>>[] = [];
-  public columnsSettings: ColumnsSettings;
-
-  @Input() ordreID: string;
-  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
-
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
       ...event,
@@ -112,10 +174,12 @@ export class GridCommandesComponent implements OnInit, OnChanges {
         },
       });
     this.columns = this.gridConfigurator.fetchColumns(this.gridID);
+    super.ngOnInit();
   }
 
-  ngOnChanges({ ordreID }: SimpleChanges) {
-    if (ordreID.currentValue) this.updateRestrictions();
+  ngOnChanges() {
+    super.ngOnChanges();
+    if (this.ordreID) this.updateRestrictions();
   }
 
   focusedColumnIndexChange() {
@@ -211,7 +275,10 @@ export class GridCommandesComponent implements OnInit, OnChanges {
           GridConfiguratorService.getFields(),
           map(fields => this.ordreLignesService.getListDataSource([
             OrdreLigne.getKeyField() as string,
+            // grid config + visible
             ...fields,
+
+            // display expressions
             ...Object
               .entries(this.columnsSettings)
               .map(([keyField, column]) => {
@@ -219,6 +286,9 @@ export class GridCommandesComponent implements OnInit, OnChanges {
                 members.splice(-1, 1, column.displayExpression);
                 return members.join(".");
               }),
+
+            // extra features
+            ...this.FEATURE.columnCertifications ? ["listeCertifications"] : [],
           ])),
           tap(datasource => datasource.filter([
             ["ordre.id", "=", this.ordreID],
