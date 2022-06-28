@@ -33,10 +33,15 @@
   .dx-popup-content {
     .dx-scrollable-content {
       padding-right: 20px;
+      background-color: transparent;
     }
 
     .valid-field {
       display: none;
+    }
+
+    .grid-ordre-ligne-historique {
+      margin-left: 2px !important;
     }
   }
 
