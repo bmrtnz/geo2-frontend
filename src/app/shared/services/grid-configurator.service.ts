@@ -212,12 +212,18 @@ export class GridConfiguratorService {
    * DX DataGrid CustomSave callback, persist configuration
    * @param config GridConfig object
    */
-  save(config: {}) {
+  save(config: GridConfig) {
     const context = this as unknown as DxoStateStoringComponent;
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
     self.gridsConfigsService
       .save_v2(["grid", "utilisateur.nomUtilisateur", "config"], {
-        gridConfig: { ...gridConfig, config },
+        gridConfig: {
+          ...gridConfig,
+          config: {
+            ...config,
+            columns: config.columns.filter(c => c.dataField),
+          },
+        },
       })
       .subscribe();
   }
