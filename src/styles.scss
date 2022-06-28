@@ -118,7 +118,7 @@ body app-root.production {
   }
 
   .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
 
     .dx-button-content {
       padding: 10px 3px;

@@ -24,6 +24,7 @@ import Transporteur from "./transporteur.model";
 import TypeCamion from "./type-camion.model";
 import TypeOrdre from "./type-ordre.model";
 import TypeVente from "./type-vente.model";
+import Document from "./document.model";
 
 export enum FactureAvoir {
   FACTURE = "F",
@@ -148,6 +149,8 @@ export class Ordre extends Model {
   public sommeColisExpedies?: number;
   @Field({ model: import("./transitaire.model") })
   public transitaire?: Transitaire;
+  @Field({ model: import("./document.model") }) public documentFacture: Document;
+
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");
     return [
