@@ -49,7 +49,12 @@
   .cancel-button {
     transition: transform 0.5s;
     transform: scale(1);
+    margin-top: 2px;
     float: right;
+  }
+
+  .articles-valid-button {
+    margin-right: 15px;
   }
 
   .pulse {
