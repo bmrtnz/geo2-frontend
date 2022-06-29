@@ -28,6 +28,7 @@ import { AuthService } from "app/shared/services/auth.service";
 import notify from "devextreme/ui/notify";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 
 const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
@@ -76,6 +77,7 @@ export class RootComponent implements OnInit, OnDestroy {
     private currentCompanyService: CurrentCompanyService,
     private ordresService: OrdresService,
     private functionsService: FunctionsService,
+    private dateManagementService: DateManagementService,
     private authService: AuthService,
     private tabContext: TabContext,
   ) { }
@@ -155,9 +157,15 @@ export class RootComponent implements OnInit, OnDestroy {
         data.id.split("-")[1],
         this.currentCompanyService.getCompany().id,
         data.id.split("-")[0],
-        ["id", "client.code"]
+        ["id", "client.code", "entrepot.code", "dateDepartPrevue"]
       ).subscribe(res => {
-        item.itemElement.title = res.data.ordreByNumeroAndSocieteAndCampagne.client.code;
+        const result = res.data.ordreByNumeroAndSocieteAndCampagne;
+        let dateDep = result.dateDepartPrevue ?? "-";
+        if (result.dateDepartPrevue !== "-")
+          dateDep = this.dateManagementService.friendlyDate(result.dateDepartPrevue, true);
+        item.itemElement.title = `Client : ${result.client.code}\r\n`;
+        item.itemElement.title += `Entrepôt : ${result.entrepot.code}\r\n`;
+        item.itemElement.title += `Date départ : ${dateDep}`;
       });
     }
   }
