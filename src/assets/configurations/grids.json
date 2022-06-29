@@ -1389,6 +1389,7 @@
       {
         "visibleIndex": 1,
         "dataField": "ordre.codeClient",
+        "dataType": "string",
         "visible": true
       },
       {
@@ -1452,6 +1453,7 @@
       },
       {
         "dataField": "ordre.entrepot.raisonSocial",
+        "dataType": "string",
         "visible": false
       },
       {
@@ -1461,18 +1463,22 @@
       },
       {
         "dataField": "ordre.totalNombrePalettesExpediees",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
         "dataField": "ordre.sommeColisExpedies",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
         "dataField": "ordre.id",
+        "dataType": "string",
         "visible": true
       },
       {
         "dataField": "ordre.campagne.id",
+        "dataType": "string",
         "visible": false
       }
     ]
