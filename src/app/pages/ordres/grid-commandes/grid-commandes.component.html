@@ -152,6 +152,15 @@
       message="{{ 'valeurIncorrecte' | localize }}"
     ></dxi-validation-rule>
   </dxi-column>
+
+  <!-- overide mutation buttons -->
+  <dxi-column
+    *ngIf="allowMutations"
+    type="buttons"
+    [width]="30"
+    [showInColumnChooser]="false"
+  ></dxi-column>
+
   <app-entity-cell-template
     [columnsSettings]="columnsSettings"
   ></app-entity-cell-template>
