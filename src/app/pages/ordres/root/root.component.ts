@@ -27,6 +27,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { AuthService } from "app/shared/services/auth.service";
 import notify from "devextreme/ui/notify";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 
 const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
@@ -46,7 +47,7 @@ export type TabPanelItem = dxTabPanelItem & {
   details?: string,
   position: number,
   component?: FormComponent | any,
-  data?: Record<string, any>
+  type?: string
 };
 
 export type TabChangeData = { status: "in" | "out", item: Partial<TabPanelItem> };
@@ -72,6 +73,8 @@ export class RootComponent implements OnInit, OnDestroy {
     public route: ActivatedRoute,
     public router: Router,
     public ordresIndicatorsService: OrdresIndicatorsService,
+    private currentCompanyService: CurrentCompanyService,
+    private ordresService: OrdresService,
     private functionsService: FunctionsService,
     private authService: AuthService,
     private tabContext: TabContext,
@@ -141,6 +144,22 @@ export class RootComponent implements OnInit, OnDestroy {
     };
     on(event.itemElement, "dxpointerdown", e => e.stopPropagation());
     on(event.itemElement, "dxclick", replaceEvent);
+    on(event.itemElement, "dxhoverstart", () => this.setTabTooltip(event));
+  }
+
+  setTabTooltip(item) {
+    const data = item.itemData;
+    // Display client code in tab title
+    if (!item.itemElement.title && data.type === TabType.Ordre) {
+      this.ordresService.getOneByNumeroAndSocieteAndCampagne(
+        data.id.split("-")[1],
+        this.currentCompanyService.getCompany().id,
+        data.id.split("-")[0],
+        ["id", "client.code"]
+      ).subscribe(res => {
+        item.itemElement.title = res.data.ordreByNumeroAndSocieteAndCampagne.client.code;
+      });
+    }
   }
 
   onTabCloseClick(event: MouseEvent) {
@@ -284,10 +303,8 @@ export class RootComponent implements OnInit, OnDestroy {
       data.component = (await import("../form/form.component")).FormComponent;
       data.icon = "material-icons description";
       data.title = "Ordre";
-      data.details = `N° ${data.id}`; // data.id is ordre.numero !
-      data.data = {
-        clientCode: ""
-      };
+      data.details = `N° ${data.id}`; // data.id is ordre.campagne.id-ordre.numero !
+      data.type = TabType.Ordre;
     }
     this.items.push(data);
     this.items.sort((a, b) => a.position - b.position);
