@@ -135,7 +135,7 @@
     </div>
     <div style="clear: both"></div>
     <dx-data-grid
-      class="dx-card wide-card"
+      class="dx-card wide-card grid-ordre-ligne-stock"
       [remoteOperations]="false"
       [showBorders]="false"
       [focusedRowEnabled]="true"
@@ -148,6 +148,7 @@
       (onRowPrepared)="onRowPrepared($event)"
       (onRowDblClick)="onRowDblClick($event)"
       (onCellPrepared)="onCellPrepared($event)"
+      (onCellDblClick)="onCellDblClick($event)"
       (onContentReady)="contentReadyEvent.emit($event)"
       (onToolbarPreparing)="
         gridConfiguratorService.onToolbarPreparing(

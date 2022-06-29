@@ -3,52 +3,60 @@
 
 ::ng-deep .ajout-articles-stock-popup {
 
-    .dx-template-wrapper.dx-popup-title {
-        overflow: hidden;
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
 
-        .title-start,
-        .title-mid {
-            font-size: 20px;
-            font-weight: 500;
-            float: left;
-            margin: 17px 0;
-            line-height: 29px;
-        }
-
-        .title-mid {
-            position: relative;
-            top: -1px;
-            font-size: 22px;
-            color: $base-accent;
-        }
-
-        .close-article-popup {
-            top: 13px;
-            float: right;
-        }
+    .title-start,
+    .title-mid {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
     }
 
-    .dx-popup-content {
-        overflow-y: auto;
-
-        h6 {
-            font-size: 18px;
-        }
-
-        .valid-field {
-            display: none;
-        }
-
-        .articles-title {
-            display: none;
-        }
-
-        .articles-valid-button,
-        .cancel-button {
-            transition: transform 0.5s;
-            transform: scale(1);
-            float: right;
-        }
-
+    .title-mid {
+      position: relative;
+      top: -1px;
+      font-size: 22px;
+      color: $base-accent;
     }
+
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
+  .dx-popup-content {
+
+    .dx-scrollable-content {
+      padding-right: 20px;
+      background-color: #FFF;
+    }
+
+    .grid-ordre-ligne-stock {
+      margin-left: 2px;
+    }
+
+    h6 {
+      font-size: 18px;
+    }
+
+    .valid-field {
+      display: none;
+    }
+
+    .articles-title {
+      display: none;
+    }
+
+    .articles-valid-button,
+    .cancel-button {
+      transition: transform 0.5s;
+      transform: scale(1);
+      float: right;
+    }
+
+  }
 }

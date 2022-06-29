@@ -3,64 +3,76 @@
 
 
 ::ng-deep .ajout-articles-histo-popup {
-    max-width: 1320px;
+  max-width: 1320px;
 
-    .dx-template-wrapper.dx-popup-title {
-        overflow: hidden;
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
 
-        .title-start,
-        .title-mid {
-            font-size: 20px;
-            font-weight: 500;
-            float: left;
-            margin: 17px 0;
-            line-height: 29px;
-        }
-
-        .title-mid {
-            position: relative;
-            top: -1px;
-            font-size: 22px;
-            color: $base-accent;
-        }
-
-        .close-article-popup {
-            top: 13px;
-            float: right;
-        }
+    .title-start,
+    .title-mid {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
     }
 
-    .dx-popup-content {
-        overflow-y: auto;
-
-        .valid-field {
-            display: none;
-        }
+    .title-mid {
+      position: relative;
+      top: -1px;
+      font-size: 22px;
+      color: $base-accent;
     }
 
-    .articles-valid-button,
-    .cancel-button {
-        transition: transform 0.5s;
-        transform: scale(1);
-        float: right;
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
+  .dx-popup-content {
+    .dx-scrollable-content {
+      padding-right: 20px;
+      background-color: transparent;
     }
 
-    .pulse {
-        animation: pulse 0.5s;
+    .valid-field {
+      display: none;
     }
 
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-        }
-
-        50% {
-            transform: scale(1.1);
-        }
-
-        100% {
-            transform: scale(1);
-        }
+    .grid-ordre-ligne-historique {
+      margin-left: 2px !important;
     }
+  }
+
+  .articles-valid-button,
+  .cancel-button {
+    transition: transform 0.5s;
+    transform: scale(1);
+    margin-top: 2px;
+    float: right;
+  }
+
+  .articles-valid-button {
+    margin-right: 15px;
+  }
+
+  .pulse {
+    animation: pulse 0.5s;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.1);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
 
 }

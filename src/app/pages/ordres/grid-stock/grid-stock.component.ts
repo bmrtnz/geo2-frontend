@@ -186,10 +186,12 @@ export class GridStockComponent implements OnInit {
   }
 
   onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
-    if (!data.articleID) {
-      this.openFilePopup(data);
-    } else {
-      this.reservationPopup.present(data, this.ordre);
+    if (data?.articleID) this.reservationPopup.present(data, this.ordre);
+  }
+
+  onCellDblClick(e) {
+    if (e.column.dataField === "articleDescription") {
+      this.openFilePopup(e.data);
     }
   }
 

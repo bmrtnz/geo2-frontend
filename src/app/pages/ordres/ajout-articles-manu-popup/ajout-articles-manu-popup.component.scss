@@ -35,10 +35,18 @@
   }
 
   .dx-popup-content {
-    overflow-y: auto;
+
+    .dx-scrollable-content {
+      padding-right: 20px;
+      background-color: #FFF;
+    }
 
     .valid-field {
       display: none;
+    }
+
+    .grid-ordre-ligne-manu {
+      margin-left: 2px;
     }
 
     .articles-title {
@@ -66,6 +74,11 @@
       transition: transform 0.5s;
       transform: scale(1);
       float: right;
+      margin-top: 2px;
+    }
+
+    .articles-valid-button {
+      margin-right: 15px;
     }
 
   }

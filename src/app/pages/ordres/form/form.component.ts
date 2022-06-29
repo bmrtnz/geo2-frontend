@@ -8,7 +8,13 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
-import { AuthService, ClientsService, EntrepotsService, TransporteursService } from "app/shared/services";
+import {
+  AuthService,
+  ClientsService,
+  EntrepotsService,
+  LocalizationService,
+  TransporteursService
+} from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
@@ -38,6 +44,8 @@ import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+import Document from "../../../shared/models/document.model";
+import {ViewDocument} from "../../../shared/components/view-document-popup/view-document-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -130,7 +138,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "regimeTva.id",
     "facture",
     "bonAFacturer",
-    "numeroFacture"
+    "numeroFacture",
+    "documentFacture.isPresent",
+    "documentFacture.uri",
+    "documentFacture.type"
   ];
 
   private destroy = new Subject<boolean>();
@@ -206,6 +217,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public gestEntrepot: string;
   public instructionsComm: string;
 
+  public factureVisible = false;
+  public currentFacture: ViewDocument;
+
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
   @ViewChild("comLog", { static: false }) comLog: DxSelectBoxComponent;
@@ -244,7 +258,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private litigesService: LitigesService,
     private mruOrdresService: MruOrdresService,
     private tabContext: TabContext,
-    private authService: AuthService
+    private authService: AuthService,
+    private localization: LocalizationService
   ) {
     this.handleTabChange()
       .subscribe(event => {
@@ -711,6 +726,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridLTD?.refresh();
     this.gridDetailPalettes?.refresh();
     this.gridMarge?.refresh();
+  }
+
+  async viewFacture(titleKey: string, document: Document) {
+    if (!document || !document.isPresent) {
+      notify("Désolé, facture non accessible", "error");
+      return;
+    }
+
+    this.currentFacture = {
+      title: this.localization.localize(titleKey),
+      document,
+    };
+
+    this.factureVisible = true;
   }
 
 }

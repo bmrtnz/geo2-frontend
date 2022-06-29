@@ -36,6 +36,7 @@ export class OrdreLigne extends Model {
   @Field() public achatPrixUnitaire?: number;
   @Field() public achatDevise?: string;
   @Field() public achatDevisePrixUnitaire?: number;
+  @Field() public achatDeviseTaux?: number;
   @Field() public fraisCommentaires?: string;
   @Field() public origineCertification?: string;
   @Field() public listeCertifications?: string;

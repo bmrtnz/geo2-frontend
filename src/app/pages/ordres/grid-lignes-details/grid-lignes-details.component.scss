@@ -4,6 +4,18 @@
 
 ::ng-deep .grid-ordre-ligne-detail {
 
+  .dx-row-focused {
+
+    .bio-article {
+      color: #39970e !important;
+    }
+  }
+
+  .bio-article {
+    color: #39970e !important;
+    cursor: pointer;
+  }
+
   .dx-header-row {
 
     .headerCellBtnTemplate {
@@ -53,7 +65,7 @@
 
   .dx-row-focused.dx-data-row>td {
     // border-bottom-color: #e0e0e0 !important;
-    border-bottom-color: $base-accent !important;
+    border-bottom-color: $base-accent  !important;
   }
 
   .dx-datagrid-focus-overlay:after {
@@ -79,17 +91,17 @@
     }
   }
 
-  background-color: $BW-almond-medium !important;
+  background-color: $BW-almond-medium  !important;
 
   &:hover {
-    background-color: $BW-almond-dark !important;
+    background-color: $BW-almond-dark  !important;
   }
 
   &.auto {
-    background-color: $BW-green-medium !important;
+    background-color: $BW-green-medium  !important;
 
     &:hover {
-      background-color: $BW-green-dark !important;
+      background-color: $BW-green-dark  !important;
     }
   }
 

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@a
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
-import { DxButtonComponent, DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
+import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 
 @Component({
@@ -34,6 +34,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
     private localizeService: LocalizationService
@@ -53,6 +54,10 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("ajout-articles-stock-popup");
+  }
+
+  onShown(e) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
   }
 
   clearAll() {

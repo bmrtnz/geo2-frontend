@@ -202,11 +202,23 @@
                   class="dx-form-group-caption red-font-imp"
                   >{{ status }}</span
                 >
-                <span
+
+                <span *ngIf="ordreFacture && numeroFacture?.length">&nbsp;&nbsp;&nbsp;</span>
+                <dx-button
                   *ngIf="ordreFacture && numeroFacture?.length"
-                  class="dx-form-group-caption invoice-number red-font-imp"
-                  >&nbsp;({{ numeroFacture }})</span
+                  class="small-button facture-btn"
+                  type="danger"
+                  hint="{{ 'hint-ordres-factures' | localize }}"
+                  text="Fact. {{ numeroFacture }}"
+                  (onClick)="viewFacture('ordres-view-facture-title', ordre.documentFacture)"
                 >
+                </dx-button>
+                <!--<span
+                *ngIf="ordreFacture && numeroFacture?.length"
+                  class="dx-form-group-caption invoice-number red-font-imp"
+                  >
+                  &nbsp;({{ numeroFacture }})
+                </span>-->
                 <dx-check-box
                   #leftAccessPanel
                   class="float-right leftPanelCheckBox"
@@ -1182,3 +1194,7 @@
     ></dx-button>
   </dx-popup>
 </div>
+<app-view-document-popup
+  [(visible)]="this.factureVisible"
+  [document]="this.currentFacture"
+></app-view-document-popup>

@@ -6,7 +6,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { DxButtonComponent, DxPopupComponent, DxTagBoxComponent } from "devextreme-angular";
+import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
@@ -42,6 +42,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
     private articlesService: ArticlesService,
@@ -113,6 +114,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   async onShown(e) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.catalogue.dataGrid.selection = { mode: "multiple", allowSelectAll: false };
     this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
 

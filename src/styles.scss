@@ -13,6 +13,7 @@
 @import "~scss/dx/form";
 @import "~scss/dx/accordion";
 
+
 .img-responsive {
   max-width: 100%;
   height: auto;
@@ -116,8 +117,12 @@ body app-root.production {
     font-size: 18px;
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
+  .left-button-container-detail .dx-button {
     margin-bottom: 10px;
+  }
+
+  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
+    // margin-bottom: 10px;
 
     .dx-button-content {
       padding: 10px 3px;
@@ -231,11 +236,6 @@ body app-root.production {
     }
   }
 }
-
-// For big popup contents
-// .dx-popup-normal.ajout-articles-manu-popup {
-//   overflow-y: auto;
-// }
 
 @keyframes pulse {
   0% {
