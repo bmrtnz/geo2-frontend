@@ -80,7 +80,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
       setTimeout(() => this.pulseBtnOn = true, 1);
     }
     this.nbArticlesOld = this.nbARticles;
-    this.catalogue.dataGrid.instance.repaint();
+    this.catalogue?.dataGrid.instance.repaint();
     if (this.nbARticles) this.addButton.instance.option("hint", this.chosenArticles.join(" - "));
   }
 
@@ -120,8 +120,8 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
     // datagrid state loading is not executed automatically in this component...
     const gridConfig = await this.gridConfiguratorService.fetchConfig(Grid.Article);
-    this.catalogue.dataGrid.instance.state(gridConfig);
-    this.catalogue.dataGrid.instance.repaint();
+    this.catalogue?.dataGrid.instance.state(gridConfig);
+    this.catalogue?.dataGrid.instance.repaint();
   }
 
   alreadySelected() {
@@ -169,8 +169,9 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   clearAll() {
+    if (!this.catalogue) return;
     this.codeChangeProcess = true;
-    this.saisieCode.instance.reset();
+    this.saisieCode?.instance.reset();
     this.catalogue.dataGrid.dataSource = [];
     this.updateChosenArticles();
     this.catalogue.especeSB.instance.reset();

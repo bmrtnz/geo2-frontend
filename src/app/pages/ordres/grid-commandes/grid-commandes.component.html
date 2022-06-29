@@ -109,6 +109,27 @@
     </div>
   </ng-container>
 
+  <!-- switch article -->
+  <ng-container *ngIf="FEATURE.quickSwitch">
+    <dxi-column
+      *ngIf="allowMutations"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'swapButtonTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'swapButtonTemplate'">
+      <dx-button
+        class="swap-button"
+        type="default"
+        [focusStateEnabled]="false"
+        icon="material-icons swap_horizontal_circle"
+        [disabled]="!allowMutations"
+        hint="Remplacer"
+        (onClick)="swapArticle(cell.data)"
+      ></dx-button>
+    </div>
+  </ng-container>
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"

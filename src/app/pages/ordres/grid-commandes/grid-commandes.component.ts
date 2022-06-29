@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ColumnsSettings } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import { Fournisseur } from "app/shared/models";
@@ -43,6 +43,7 @@ class GridCommandesFeatures implements OnInit {
 
   @Input() ordreID: string;
   @Output() public ordreLigne: OrdreLigne;
+  @Output() swapRowArticle = new EventEmitter();
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
@@ -164,6 +165,10 @@ class GridCommandesFeatures implements OnInit {
     return ("0" + num.toString()).slice(-2);
   }
 
+  swapArticle(cell) {
+    this.swapRowArticle.emit(cell.id);
+  }
+
 }
 
 @Component({
@@ -178,12 +183,13 @@ export class GridCommandesComponent
   extends GridCommandesFeatures
   implements OnInit, OnChanges {
 
-  public FEATURE = {
+  public readonly FEATURE = {
     margePrevisionelle: true,
     columnCertifications: true,
     columnOrigine: true,
     highlightBio: true,
     rowOrdering: true,
+    quickSwitch: true,
   };
 
   public readonly gridID = Grid.LignesCommandes;
