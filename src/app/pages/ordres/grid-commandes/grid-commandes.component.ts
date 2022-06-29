@@ -185,6 +185,10 @@ class GridCommandesFeatures implements OnInit {
     notify("Report DLUO effectué", "success", 3000);
   }
 
+  update() {
+    (this.grid.dataSource as DataSource).reload();
+  }
+
 }
 
 @Component({

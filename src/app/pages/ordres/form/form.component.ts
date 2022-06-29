@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit,
+  Component, ElementRef, EventEmitter, OnDestroy, OnInit,
   Output, QueryList, ViewChild, ViewChildren
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
@@ -33,10 +33,13 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile, tap } from "rxjs/operators";
+import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
+import Document from "../../../shared/models/document.model";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
+import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
@@ -44,8 +47,6 @@ import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-import Document from "../../../shared/models/document.model";
-import {ViewDocument} from "../../../shared/components/view-document-popup/view-document-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -232,6 +233,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
   @ViewChild(ZoomTransporteurPopupComponent, { static: false }) zoomTransporteurFilePopup: ZoomTransporteurPopupComponent;
   @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
+  @ViewChild(GridCommandesComponent) gridCommandes: GridCommandesComponent;
   @ViewChild(GridLignesDetailsComponent) gridLignesDetail: GridLignesDetailsComponent;
   @ViewChild(GridLignesTotauxDetailComponent) gridLTD: GridLignesTotauxDetailComponent;
   @ViewChild(GridDetailPalettesComponent) gridDetailPalettes: GridDetailPalettesComponent;
@@ -507,6 +509,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
     this.gridLignes.nbInsertedArticles = e;
     this.gridLignes.enableFilters();
+    this.gridCommandes.update();
   }
 
   private initializeForm() {
