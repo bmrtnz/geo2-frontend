@@ -1,22 +1,47 @@
+<ng-container *ngIf="FEATURE.rowOrdering">
+  <dx-button
+    [focusStateEnabled]="false"
+    class="down-move-button"
+    type="normal"
+    text="down"
+    icon="arrowdown"
+    hint="{{ 'hint-deplacer-ligne-bas' | localize }}"
+    [disabled]="lastRowFocused || !gridRowsTotal || !allowMutations"
+    (onClick)="moveRowUpDown($event)"
+  ></dx-button>
+  <dx-button
+    [focusStateEnabled]="false"
+    class="up-move-button"
+    type="normal"
+    text="up"
+    icon="arrowup"
+    hint="{{ 'hint-deplacer-ligne-haut' | localize }}"
+    [disabled]="!currentfocusedRow || !allowMutations"
+    (onClick)="moveRowUpDown($event)"
+  ></dx-button>
+</ng-container>
 <dx-data-grid
   [remoteOperations]="{
-    filtering: true,
-    sorting: true
+    filtering: true
   }"
   [columnAutoWidth]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="true"
+  [focusedRowEnabled]="FEATURE.rowOrdering"
+  [focusedRowIndex]="FEATURE.rowOrdering && 0"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
   (focusedColumnIndexChange)="focusedColumnIndexChange()"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
+  (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
+  (onContentReady)="FEATURE.rowOrdering && onContentReady()"
+  (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
 >
   <dxo-editing
     [selectTextOnEditStart]="true"
     [mode]="'batch'"
     [allowUpdating]="allowMutations"
     [allowDeleting]="allowMutations"
-    [startEditAction]="'click'"
     [(changes)]="changes"
     [refreshMode]="'reshape'"
   ></dxo-editing>
