@@ -23,7 +23,7 @@ import { Observable, of } from "rxjs";
 import { concatMap, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 
-class GridCommandesFeatures implements OnInit, OnChanges {
+class GridCommandesFeatures implements OnInit {
 
   public certifsMD: any;
   public certifMDDS: DataSource;
@@ -51,8 +51,6 @@ class GridCommandesFeatures implements OnInit, OnChanges {
       this.certifsMD = res; // Store certifications Mode culture
     });
   }
-
-  ngOnChanges() { }
 
   showCertificationCheck(data) {
     let isCert = false;
@@ -174,11 +172,11 @@ export class GridCommandesComponent
         },
       });
     this.columns = this.gridConfigurator.fetchColumns(this.gridID);
-    super.ngOnInit();
+
+    if (this.FEATURE.columnCertifications) super.ngOnInit();
   }
 
   ngOnChanges() {
-    super.ngOnChanges();
     if (this.ordreID) this.updateRestrictions();
   }
 
@@ -190,9 +188,11 @@ export class GridCommandesComponent
     if (event.component.hasEditData())
       while (this?.changes.length) {
 
-        if (this?.changes[0]?.type !== "update") continue;
-
         const change = this.changes.shift();
+
+        if (change.type !== "update")
+          continue;
+
         event.cancel = true;
         event.promise = new Promise((rsv, rjt) => {
 
