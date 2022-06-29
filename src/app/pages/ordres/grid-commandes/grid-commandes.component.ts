@@ -34,6 +34,7 @@ class GridCommandesFeatures implements OnInit {
 
   @Input() ordreID: string;
   @Output() public ordreLigne: OrdreLigne;
+  @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
 
@@ -99,6 +100,12 @@ class GridCommandesFeatures implements OnInit {
     }
   }
 
+  onDataChanged(data: Partial<OrdreLigne>) {
+    const ds = this.grid.dataSource as DataSource;
+    const store = ds.store() as CustomStore;
+    store.push([{ key: data.id, type: "update", data }]);
+  }
+
 }
 
 @Component({
@@ -127,7 +134,7 @@ export class GridCommandesComponent
   public columnsSettings: ColumnsSettings;
 
   @Input() ordreID: string;
-  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
 
   constructor(
     public injector: Injector,

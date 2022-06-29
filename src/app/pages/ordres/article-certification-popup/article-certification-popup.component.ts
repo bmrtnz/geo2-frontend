@@ -21,7 +21,7 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
 
   @Input() public ordre: Ordre;
   @Input() public ordreLigne: OrdreLigne;
-  @Output() public changeLigne = new EventEmitter();
+  @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
 
   certDataSource: DataSource;
   visible: boolean;
@@ -143,9 +143,9 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
       ordreLigne,
     })
       .subscribe({
-        next: () => {
+        next: res => {
           notify(this.localizeService.localize("articles-save-certification"), "success", 2000);
-          this.changeLigne.emit(null);
+          this.changeLigne.emit(res.data.saveOrdreLigne);
         },
         error: (err) => {
           console.log(err);

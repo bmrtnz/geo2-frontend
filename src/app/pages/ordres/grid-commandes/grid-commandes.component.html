@@ -141,9 +141,11 @@
 <app-article-certification-popup
   *ngIf="FEATURE.columnCertifications"
   [ordreLigne]="ordreLigne"
+  (changeLigne)="onDataChanged($event)"
 ></app-article-certification-popup>
 
 <app-article-origine-popup
   *ngIf="FEATURE.columnOrigine"
   [ordreLigne]="ordreLigne"
+  (changeLigne)="onDataChanged($event)"
 ></app-article-origine-popup>

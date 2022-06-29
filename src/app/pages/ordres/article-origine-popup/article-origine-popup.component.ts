@@ -1,13 +1,13 @@
-import { Component, Input, OnChanges, ViewChild, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
-import { DxPopupComponent, DxListComponent } from "devextreme-angular";
+import { DepartementsService } from "app/shared/services/api/departements.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { RegionsService } from "app/shared/services/api/regions.service";
+import { ZonesGeographiquesService } from "app/shared/services/api/zones-geographiques.service";
+import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import { DepartementsService } from "app/shared/services/api/departements.service";
-import { ZonesGeographiquesService } from "app/shared/services/api/zones-geographiques.service";
-import { RegionsService } from "app/shared/services/api/regions.service";
 
 @Component({
   selector: "app-article-origine-popup",
@@ -17,7 +17,7 @@ import { RegionsService } from "app/shared/services/api/regions.service";
 export class ArticleOriginePopupComponent implements OnInit, OnChanges {
 
   @Input() public ordreLigne: OrdreLigne;
-  @Output() public changeLigne = new EventEmitter();
+  @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
 
   dataSource: DataSource;
   departementDataSource: DataSource;
@@ -29,8 +29,8 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   origine: string;
   newOrigine: string;
 
-  @ViewChild(DxPopupComponent, {static: false}) popup: DxPopupComponent;
-  @ViewChild(DxListComponent, {static: false}) geolist: DxListComponent;
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+  @ViewChild(DxListComponent, { static: false }) geolist: DxListComponent;
 
   constructor(
     private localizeService: LocalizationService,
@@ -46,7 +46,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
       "zone"
     ];
     this.displaySegment = this.displaySegment.bind(this);
-   }
+  }
 
   ngOnInit() {
     this.departementDataSource = this.departementsService.getDataSource_v2(["id", "numero", "libelle"]);
@@ -60,9 +60,9 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
 
   displayNumeroBefore(data) {
     return data ?
-    (data.numero ? (data.numero.length === 1 ? "0" + data.numero : data.numero)
-     + " - " + data.libelle : data.libelle)
-     : null;
+      (data.numero ? (data.numero.length === 1 ? "0" + data.numero : data.numero)
+        + " - " + data.libelle : data.libelle)
+      : null;
   }
 
   changeSegment(e) {
@@ -75,7 +75,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   }
 
   displaySegment(data) {
-      return data ? this.localizeService.localize("articles-liste-origine-" + data) : null;
+    return data ? this.localizeService.localize("articles-liste-origine-" + data) : null;
   }
 
   onShowing(e) {
@@ -101,20 +101,20 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
   }
 
   saveOrigine() {
-    const ordreLigne = {id : this.ordreLigne.id, origineCertification: this.newOrigine ? this.newOrigine : ""};
+    const ordreLigne = { id: this.ordreLigne.id, origineCertification: this.newOrigine ? this.newOrigine : "" };
     this.OrdreLigneService.save_v2(["id", "origineCertification"], {
       ordreLigne,
     })
-    .subscribe({
-      next: () => {
-        notify(this.localizeService.localize("articles-save-origin"), "success", 2000);
-        this.changeLigne.emit(null);
-      },
-      error: (err) => {
-        console.log(err);
-        notify(this.localizeService.localize("articles-save-origin-error"), "error", 2000);
-      }
-    });
+      .subscribe({
+        next: res => {
+          notify(this.localizeService.localize("articles-save-origin"), "success", 2000);
+          this.changeLigne.emit(res.data.saveOrdreLigne);
+        },
+        error: (err) => {
+          console.log(err);
+          notify(this.localizeService.localize("articles-save-origin-error"), "error", 2000);
+        }
+      });
     this.hidePopup();
   }
 
