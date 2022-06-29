@@ -22,6 +22,7 @@ import { environment } from "environments/environment";
 import { Observable, of } from "rxjs";
 import { concatMap, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
+import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 
 class GridCommandesFeatures implements OnInit {
 
@@ -29,10 +30,12 @@ class GridCommandesFeatures implements OnInit {
   public certifMDDS: DataSource;
   public ordre: Partial<Ordre>;
   public certificationText: string;
+  public originText: string;
 
   @Input() ordreID: string;
   @Output() public ordreLigne: OrdreLigne;
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
+  @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
 
   constructor(
     public injector: Injector,
@@ -40,6 +43,9 @@ class GridCommandesFeatures implements OnInit {
     this.certificationText = this.injector
       .get(LocalizationService)
       .localize("btn-certification");
+    this.originText = this.injector
+      .get(LocalizationService)
+      .localize("btn-origine");
   }
 
   ngOnInit() {
@@ -70,6 +76,19 @@ class GridCommandesFeatures implements OnInit {
     this.articleCertificationPopup.visible = true;
   }
 
+  showOriginButton(cell) {
+    return cell.data.article.matierePremiere.origine.id === "F";
+  }
+
+  showOriginCheck(data) {
+    return this.originText + (data.origineCertification ? " ✓" : "");
+  }
+
+  openOriginePopup(ligne) {
+    this.ordreLigne = ligne;
+    this.articleOriginePopup.visible = true;
+  }
+
 }
 
 @Component({
@@ -87,6 +106,7 @@ export class GridCommandesComponent
   public FEATURE = {
     margePrevisionelle: true,
     columnCertifications: true,
+    columnOrigine: true,
   };
 
   public readonly gridID = Grid.LignesCommandes;
@@ -289,6 +309,10 @@ export class GridCommandesComponent
 
             // extra features
             ...this.FEATURE.columnCertifications ? ["listeCertifications"] : [],
+            ...this.FEATURE.columnOrigine ? [
+              "article.matierePremiere.origine.id",
+              "origineCertification",
+            ] : [],
           ])),
           tap(datasource => datasource.filter([
             ["ordre.id", "=", this.ordreID],

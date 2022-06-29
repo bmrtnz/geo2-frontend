@@ -62,6 +62,27 @@
     </div>
   </ng-container>
 
+  <!-- origine -->
+  <ng-container *ngIf="FEATURE.columnOrigine">
+    <dxi-column
+      *ngIf="allowMutations"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'origineTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'origineTemplate'">
+      <dx-button
+        class="small-article-button origin"
+        type="default"
+        [focusStateEnabled]="false"
+        [visible]="showOriginButton(cell)"
+        [text]="showOriginCheck(cell.data)"
+        (onClick)="openOriginePopup(cell.data)"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
@@ -120,3 +141,8 @@
   *ngIf="FEATURE.columnCertifications"
   [ordreLigne]="ordreLigne"
 ></app-article-certification-popup>
+
+<app-article-origine-popup
+  *ngIf="FEATURE.columnOrigine"
+  [ordreLigne]="ordreLigne"
+></app-article-origine-popup>
