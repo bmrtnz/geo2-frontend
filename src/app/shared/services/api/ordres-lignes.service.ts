@@ -23,6 +23,16 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   queryFilter = /.*(?:id)$/i;
 
+  /**
+   * DxDatasource remove hook
+   * @param id OrdreLigne id
+   */
+  private remove = (id: string) =>
+    this.apollo.mutate({
+      mutation: gql(this.buildDeleteGraph()),
+      variables: { id },
+    }).toPromise()
+
   constructor(
     apollo: Apollo,
     public functionsService: FunctionsService,
@@ -100,11 +110,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
     return this.watchSaveQuery({ variables }).toPromise();
   }
 
-  private remove(id) {
-    const variables = { id };
-    return this.watchDeleteQuery({ variables }).toPromise();
-  }
-
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       reshapeOnPush: true,
@@ -132,15 +137,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
               resolve(this.asInstancedListCount(res.data.allOrdreLigne));
           });
         }),
-        byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne_v2(columns);
-          type Response = { ordreLigne: OrdreLigne };
-          const variables = { id: key };
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.ordreLigne)
-              resolve(new OrdreLigne(res.data.ordreLigne));
-          });
-        }),
+        byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
         remove: this.remove,
