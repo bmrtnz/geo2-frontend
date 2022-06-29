@@ -89,6 +89,16 @@ class GridCommandesFeatures implements OnInit {
     this.articleOriginePopup.visible = true;
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      if (e.column.dataField === "article.articleDescription.descriptionReferenceLongue") {
+        // Bio en vert
+        const isBio = e.data.article.matierePremiere?.modeCulture?.description?.toLowerCase().includes("bio");
+        if (isBio) e.cellElement.classList.add("bio-article");
+      }
+    }
+  }
+
 }
 
 @Component({
@@ -107,6 +117,7 @@ export class GridCommandesComponent
     margePrevisionelle: true,
     columnCertifications: true,
     columnOrigine: true,
+    highlightBio: true,
   };
 
   public readonly gridID = Grid.LignesCommandes;
@@ -312,6 +323,9 @@ export class GridCommandesComponent
             ...this.FEATURE.columnOrigine ? [
               "article.matierePremiere.origine.id",
               "origineCertification",
+            ] : [],
+            ...this.FEATURE.highlightBio ? [
+              "article.matierePremiere.modeCulture.description",
             ] : [],
           ])),
           tap(datasource => datasource.filter([

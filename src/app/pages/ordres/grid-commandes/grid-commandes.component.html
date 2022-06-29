@@ -9,6 +9,7 @@
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
   (focusedColumnIndexChange)="focusedColumnIndexChange()"
+  (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
 >
   <dxo-editing
     [selectTextOnEditStart]="true"
