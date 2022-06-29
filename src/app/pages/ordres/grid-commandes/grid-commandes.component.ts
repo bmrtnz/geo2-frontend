@@ -169,6 +169,22 @@ class GridCommandesFeatures implements OnInit {
     this.swapRowArticle.emit(cell.id);
   }
 
+  copyPaste(e, field) {
+    e.event.stopImmediatePropagation();
+    let refValue;
+    const rows = this.grid.instance.getVisibleRows();
+    if (rows?.length < 2) return;
+    rows.map((res, index) => {
+      if (!index) {
+        refValue = res.data.libelleDLV;
+      } else {
+        this.grid.instance.cellValue(res.rowIndex, field, refValue);
+      }
+    });
+    setTimeout(() => this.grid.instance.saveEditData());
+    notify("Report DLUO effectué", "success", 3000);
+  }
+
 }
 
 @Component({
@@ -190,6 +206,7 @@ export class GridCommandesComponent
     highlightBio: true,
     rowOrdering: true,
     quickSwitch: true,
+    reportDLUO: true,
   };
 
   public readonly gridID = Grid.LignesCommandes;

@@ -2227,7 +2227,8 @@
       {
         "dataField": "libelleDLV",
         "visible": true,
-        "allowSorting": false
+        "allowSorting": false,
+        "headerCellTemplate": "headerCellBtnTemplate"
       },
       {
         "dataField": "fraisPrixUnitaire",

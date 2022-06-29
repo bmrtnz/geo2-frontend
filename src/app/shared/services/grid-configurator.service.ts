@@ -120,6 +120,7 @@ const extraConfigurations = [
   "calculateDisplayValue",
   "cellTemplate",
   "editCellTemplate",
+  "headerCellTemplate",
   "allowEditing",
   "allowSorting",
 ];

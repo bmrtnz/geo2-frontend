@@ -130,6 +130,24 @@
     </div>
   </ng-container>
 
+  <ng-container *ngIf="FEATURE.reportDLUO">
+    <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
+      <div>
+        {{
+          "ordreLignes-" + cell.column.dataField?.split(".").join("-")
+            | localize
+        }}
+      </div>
+      <dx-button
+        class="small-article-button"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="'Reporter'"
+        (onClick)="copyPaste($event, cell.column.dataField)"
+      ></dx-button>
+    </div>
+  </ng-container>
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
@@ -137,7 +155,9 @@
     [allowSorting]="column.allowSorting"
     [cellTemplate]="column.cellTemplate"
     [editCellTemplate]="column.editCellTemplate"
+    [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="column?.calculateDisplayValue"
+    [cssClass]="FEATURE.reportDLUO && 'headerCellBtnTemplate'"
     [caption]="
       ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
       column.name
