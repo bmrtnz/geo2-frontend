@@ -25,168 +25,6 @@ import { concatMap, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 
-class GridCommandesFeatures implements OnInit {
-
-  public certifsMD: any;
-  public certifMDDS: DataSource;
-  public ordre: Partial<Ordre>;
-  public certificationText: string;
-  public originText: string;
-  public lastRowFocused: boolean;
-  public gridRowsTotal: number;
-  public currentfocusedRow: number;
-  public currNumero: string;
-  public switchNumero: string;
-  public newArticles = 0;
-  public nbInsertedArticles: number;
-  public newNumero = 0;
-
-  @Input() ordreID: string;
-  @Output() public ordreLigne: OrdreLigne;
-  @Output() swapRowArticle = new EventEmitter();
-  @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
-  @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
-  @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
-
-  constructor(
-    public injector: Injector,
-  ) {
-    this.certificationText = this.injector
-      .get(LocalizationService)
-      .localize("btn-certification");
-    this.originText = this.injector
-      .get(LocalizationService)
-      .localize("btn-origine");
-  }
-
-  ngOnInit() {
-    this.certifMDDS = this.injector
-      .get(CertificationsModesCultureService)
-      .getDataSource_v2(["id", "description", "type"], 100);
-    this.certifMDDS.filter(["type", "=", "CERTIF"]);
-    this.certifMDDS.load().then(res => {
-      this.certifsMD = res; // Store certifications Mode culture
-    });
-  }
-
-  showCertificationCheck(data) {
-    let isCert = false;
-    if (data.listeCertifications) { // Already recorded
-      this.certifsMD?.map(certType => {
-        if (data.listeCertifications?.split(",").includes(certType.id.toString()))
-          isCert = true;
-      });
-    } else { // Default certifications from customer file
-      isCert = this.ordre?.client?.certifications?.length > 0;
-    }
-    return this.certificationText + (isCert ? " ✓" : "");
-  }
-
-  openCertificationPopup(ligne) {
-    this.ordreLigne = ligne;
-    this.articleCertificationPopup.visible = true;
-  }
-
-  showOriginButton(cell) {
-    return cell.data.article.matierePremiere.origine.id === "F";
-  }
-
-  showOriginCheck(data) {
-    return this.originText + (data.origineCertification ? " ✓" : "");
-  }
-
-  openOriginePopup(ligne) {
-    this.ordreLigne = ligne;
-    this.articleOriginePopup.visible = true;
-  }
-
-  onCellPrepared(e) {
-    if (e.rowType === "data") {
-      if (e.column.dataField === "article.articleDescription.descriptionReferenceLongue") {
-        // Bio en vert
-        const isBio = e.data.article.matierePremiere?.modeCulture?.description?.toLowerCase().includes("bio");
-        if (isBio) e.cellElement.classList.add("bio-article");
-      }
-    }
-  }
-
-  onDataChanged(data: Partial<OrdreLigne>) {
-    const ds = this.grid.dataSource as DataSource;
-    const store = ds.store() as CustomStore;
-    store.push([{ key: data.id, type: "update", data }]);
-  }
-
-  onFocusedRowChanged(e) {
-    this.gridRowsTotal = this.grid.instance.getVisibleRows().length;
-    this.currentfocusedRow = e.row?.rowIndex;
-    this.lastRowFocused = (this.currentfocusedRow === (this.gridRowsTotal - 1));
-  }
-
-  moveRowUpDown(e) {
-    const moveDirection = e.element.classList.contains("up-move-button") ? -1 : 1;
-    this.currNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow].data.numero;
-    this.switchNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
-    this.grid.instance.cellValue(this.currentfocusedRow + moveDirection, "numero", this.currNumero);
-    this.grid.instance.cellValue(this.currentfocusedRow, "numero", this.switchNumero);
-    this.grid.instance.saveEditData();
-  }
-
-  handleNewArticles() {
-    // Grid is loaded with new articles: save order row numbers
-    if (this.newArticles === this.nbInsertedArticles) {
-      let info = this.nbInsertedArticles + " ";
-      info += " " + this.injector.get(LocalizationService).localize("article-ajoutes");
-      info = info.split("&&").join(this.nbInsertedArticles > 1 ? "s" : "");
-      notify(info, "success", 3000);
-      this.injector.get(GridUtilsService).resetGridScrollBar(this.grid);
-      this.newArticles = 0;
-      this.newNumero = 0;
-      this.nbInsertedArticles = null;
-      this.grid.instance.option("focusedRowIndex", this.gridRowsTotal); // Focus on 1st added item
-      this.grid.instance.saveEditData();
-    }
-  }
-
-  onEditorPrepared(e) {
-    // Define new order rows numbers
-    if (e.dataField === "numero" && this.newArticles < this.nbInsertedArticles) {
-      if (e.value === null) {
-        this.newNumero++;
-        const newNumero = this.createStringNumero(this.newNumero);
-        e.component.cellValue(e.row.rowIndex, "numero", newNumero);
-        this.newArticles++;
-      } else {
-        this.newNumero = parseInt(e.value, 10);
-      }
-    }
-  }
-
-  createStringNumero(num) {
-    return ("0" + num.toString()).slice(-2);
-  }
-
-  swapArticle(cell) {
-    this.swapRowArticle.emit(cell.id);
-  }
-
-  copyPaste(e, field) {
-    e.event.stopImmediatePropagation();
-    let refValue;
-    const rows = this.grid.instance.getVisibleRows();
-    if (rows?.length < 2) return;
-    rows.map((res, index) => {
-      if (!index) {
-        refValue = res.data.libelleDLV;
-      } else {
-        this.grid.instance.cellValue(res.rowIndex, field, refValue);
-      }
-    });
-    setTimeout(() => this.grid.instance.saveEditData());
-    notify("Report DLUO effectué", "success", 3000);
-  }
-
-}
-
 @Component({
   selector: "app-grid-commandes",
   templateUrl: "./grid-commandes.component.html",
@@ -195,28 +33,7 @@ class GridCommandesFeatures implements OnInit {
     "../grid-lignes/grid-lignes.component.scss", // legacy style
   ]
 })
-export class GridCommandesComponent
-  extends GridCommandesFeatures
-  implements OnInit, OnChanges {
-
-  public readonly FEATURE = {
-    margePrevisionelle: true,
-    columnCertifications: true,
-    columnOrigine: true,
-    highlightBio: true,
-    rowOrdering: true,
-    quickSwitch: true,
-    reportDLUO: true,
-  };
-
-  public readonly gridID = Grid.LignesCommandes;
-  public columns: Observable<GridColumn[]>;
-  public allowMutations = false;
-  public changes: Change<Partial<OrdreLigne>>[] = [];
-  public columnsSettings: ColumnsSettings;
-
-  @Input() ordreID: string;
-  @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
+export class GridCommandesComponent implements OnInit, OnChanges {
 
   constructor(
     public injector: Injector,
@@ -230,7 +47,6 @@ export class GridCommandesComponent
     private codesPromoService: CodesPromoService,
     private typesPaletteService: TypesPaletteService,
   ) {
-    super(injector);
     const fournisseursDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
     const sharedBaseTarifDatasource = this.basesTarifService
@@ -273,7 +89,47 @@ export class GridCommandesComponent
         displayExpression: "description",
       },
     };
+    this.constructorFeatures();
   }
+
+  public readonly FEATURE = {
+    margePrevisionelle: true,
+    columnCertifications: true,
+    columnOrigine: true,
+    highlightBio: true,
+    rowOrdering: true,
+    quickSwitch: true,
+    reportDLUO: true,
+  };
+
+  public readonly gridID = Grid.LignesCommandes;
+  public columns: Observable<GridColumn[]>;
+  public allowMutations = false;
+  public changes: Change<Partial<OrdreLigne>>[] = [];
+  public columnsSettings: ColumnsSettings;
+
+  @Input() ordreID: string;
+  @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
+
+  // legacy features properties
+  public certifsMD: any;
+  public certifMDDS: DataSource;
+  public ordre: Partial<Ordre>;
+  public certificationText: string;
+  public originText: string;
+  public lastRowFocused: boolean;
+  public gridRowsTotal: number;
+  public currentfocusedRow: number;
+  public currNumero: string;
+  public switchNumero: string;
+  public newArticles = 0;
+  public nbInsertedArticles: number;
+  public newNumero = 0;
+
+  @Output() public ordreLigne: OrdreLigne;
+  @Output() swapRowArticle = new EventEmitter();
+  @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
+  @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
 
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
@@ -293,7 +149,7 @@ export class GridCommandesComponent
       });
     this.columns = this.gridConfigurator.fetchColumns(this.gridID);
 
-    if (this.FEATURE.columnCertifications) super.ngOnInit();
+    if (this.FEATURE.columnCertifications) this.initFeatures();
   }
 
   ngOnChanges() {
@@ -315,7 +171,7 @@ export class GridCommandesComponent
   }
 
   public onContentReady(event) {
-    if (this.FEATURE.rowOrdering) super.handleNewArticles();
+    if (this.FEATURE.rowOrdering) this.handleNewArticles();
   }
 
   public async update() {
@@ -507,6 +363,143 @@ export class GridCommandesComponent
     this.columnsSettings["fournisseur.id"].dataSource.filter(filters);
     return fournisseur;
 
+  }
+
+  // legacy features methods
+
+  constructorFeatures() {
+    this.certificationText = this.injector
+      .get(LocalizationService)
+      .localize("btn-certification");
+    this.originText = this.injector
+      .get(LocalizationService)
+      .localize("btn-origine");
+  }
+
+  initFeatures() {
+    this.certifMDDS = this.injector
+      .get(CertificationsModesCultureService)
+      .getDataSource_v2(["id", "description", "type"], 100);
+    this.certifMDDS.filter(["type", "=", "CERTIF"]);
+    this.certifMDDS.load().then(res => {
+      this.certifsMD = res; // Store certifications Mode culture
+    });
+  }
+
+  showCertificationCheck(data) {
+    let isCert = false;
+    if (data.listeCertifications) { // Already recorded
+      this.certifsMD?.map(certType => {
+        if (data.listeCertifications?.split(",").includes(certType.id.toString()))
+          isCert = true;
+      });
+    } else { // Default certifications from customer file
+      isCert = this.ordre?.client?.certifications?.length > 0;
+    }
+    return this.certificationText + (isCert ? " ✓" : "");
+  }
+
+  openCertificationPopup(ligne) {
+    this.ordreLigne = ligne;
+    this.articleCertificationPopup.visible = true;
+  }
+
+  showOriginButton(cell) {
+    return cell.data.article.matierePremiere.origine.id === "F";
+  }
+
+  showOriginCheck(data) {
+    return this.originText + (data.origineCertification ? " ✓" : "");
+  }
+
+  openOriginePopup(ligne) {
+    this.ordreLigne = ligne;
+    this.articleOriginePopup.visible = true;
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      if (e.column.dataField === "article.articleDescription.descriptionReferenceLongue") {
+        // Bio en vert
+        const isBio = e.data.article.matierePremiere?.modeCulture?.description?.toLowerCase().includes("bio");
+        if (isBio) e.cellElement.classList.add("bio-article");
+      }
+    }
+  }
+
+  onDataChanged(data: Partial<OrdreLigne>) {
+    const ds = this.grid.dataSource as DataSource;
+    const store = ds.store() as CustomStore;
+    store.push([{ key: data.id, type: "update", data }]);
+  }
+
+  onFocusedRowChanged(e) {
+    this.gridRowsTotal = this.grid.instance.getVisibleRows().length;
+    this.currentfocusedRow = e.row?.rowIndex;
+    this.lastRowFocused = (this.currentfocusedRow === (this.gridRowsTotal - 1));
+  }
+
+  moveRowUpDown(e) {
+    const moveDirection = e.element.classList.contains("up-move-button") ? -1 : 1;
+    this.currNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow].data.numero;
+    this.switchNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
+    this.grid.instance.cellValue(this.currentfocusedRow + moveDirection, "numero", this.currNumero);
+    this.grid.instance.cellValue(this.currentfocusedRow, "numero", this.switchNumero);
+    this.grid.instance.saveEditData();
+  }
+
+  handleNewArticles() {
+    // Grid is loaded with new articles: save order row numbers
+    if (this.newArticles === this.nbInsertedArticles) {
+      let info = this.nbInsertedArticles + " ";
+      info += " " + this.injector.get(LocalizationService).localize("article-ajoutes");
+      info = info.split("&&").join(this.nbInsertedArticles > 1 ? "s" : "");
+      notify(info, "success", 3000);
+      this.injector.get(GridUtilsService).resetGridScrollBar(this.grid);
+      this.newArticles = 0;
+      this.newNumero = 0;
+      this.nbInsertedArticles = null;
+      this.grid.instance.option("focusedRowIndex", this.gridRowsTotal); // Focus on 1st added item
+      this.grid.instance.saveEditData();
+    }
+  }
+
+  onEditorPrepared(e) {
+    // Define new order rows numbers
+    if (e.dataField === "numero" && this.newArticles < this.nbInsertedArticles) {
+      if (e.value === null) {
+        this.newNumero++;
+        const newNumero = this.createStringNumero(this.newNumero);
+        e.component.cellValue(e.row.rowIndex, "numero", newNumero);
+        this.newArticles++;
+      } else {
+        this.newNumero = parseInt(e.value, 10);
+      }
+    }
+  }
+
+  createStringNumero(num) {
+    return ("0" + num.toString()).slice(-2);
+  }
+
+  swapArticle(cell) {
+    this.swapRowArticle.emit(cell.id);
+  }
+
+  copyPaste(e, field) {
+    e.event.stopImmediatePropagation();
+    let refValue;
+    const rows = this.grid.instance.getVisibleRows();
+    if (rows?.length < 2) return;
+    rows.map((res, index) => {
+      if (!index) {
+        refValue = res.data.libelleDLV;
+      } else {
+        this.grid.instance.cellValue(res.rowIndex, field, refValue);
+      }
+    });
+    setTimeout(() => this.grid.instance.saveEditData());
+    notify("Report DLUO effectué", "success", 3000);
   }
 
 }
