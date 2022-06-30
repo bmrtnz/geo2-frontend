@@ -2,9 +2,7 @@
   <h2>
     {{ "tiers-contacts-title" | localize
     }}<span
-      *ngIf="
-        !fournisseurCode && !transporteurLigneId && !lieupassageaquaiLigneId
-      "
+      *ngIf="!zoomMode"
     >
       - {{ typeTiersLabel | localize }} {{ codeTiers }}</span
     >
@@ -48,9 +46,7 @@
     ></dxo-state-storing>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-editing
-      *ngIf="
-        !fournisseurCode && !transporteurLigneId && !lieupassageaquaiLigneId
-      "
+      *ngIf="!zoomMode"
       [allowUpdating]="true"
       [allowAdding]="true"
       [selectTextOnEditStart]="true"
@@ -88,9 +84,7 @@
       [allowEditing]="
         column.name !== 'valide' &&
         column?.allowEditing !== false &&
-        !fournisseurCode &&
-        !transporteurLigneId &&
-        !lieupassageaquaiLigneId
+        !zoomMode
       "
       [validationRules]="column.validationRules"
       [editCellTemplate]="
@@ -115,9 +109,7 @@
         [readOnly]="
           (cell?.data?.flux?.id === 'FACTUR' &&
             !authService.currentUser.adminClient) ||
-          !!fournisseurCode ||
-          !!transporteurLigneId ||
-          !!lieupassageaquaiLigneId
+            zoomMode
         "
         [dataSource]="this[cell.column.dataField + 'Source']"
         [displayExpr]="

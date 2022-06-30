@@ -9,11 +9,8 @@
 >
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-      <app-transporteur-details
-        [transporteurLigneId]="transporteurLigneId"
-      >
-      </app-transporteur-details>
-      <app-contacts [transporteurLigneId]="transporteurLigneId"></app-contacts>
+      <app-client-details [clientId]="clientId"></app-client-details>
+      <app-contacts [clientCode]="clientCode"></app-contacts>
       <br />
     </dx-scroll-view>
   </div>

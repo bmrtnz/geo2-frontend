@@ -2,6 +2,8 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -60,7 +62,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
   styleUrls: ["./client-details.component.scss"],
 })
 export class ClientDetailsComponent
-  implements OnInit, AfterViewInit, NestedPart, Editable {
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
   private requiredFields = ["soumisCtifl"];
 
   preSaisie: string;
@@ -235,6 +237,7 @@ export class ClientDetailsComponent
   };
 
   @Output() modifUserIds: string[];
+  @Input() clientId: string;
 
   @ViewChild(EditingAlertComponent, { static: true })
   alertComponent: EditingAlertComponent;
@@ -337,88 +340,19 @@ export class ClientDetailsComponent
     }
   }
 
-  ngOnInit() {
-    this.resetModifUserIds();
-    this.route.params
-      .pipe(tap((_) => this.formGroup.reset()))
-      .subscribe((params) => {
-        const url = this.route.snapshot.url;
-        this.createMode = url[url.length - 1].path === "create";
-        this.readOnlyMode = !this.createMode;
-        if (!this.createMode) {
-          this.clientsService.getOne_v2(params.id, this.inheritedFields).subscribe((res) => {
-            this.client = res.data.client;
-            this.freeUEVAT(this.client.secteur, this.client.pays);
-            this.formGroup.get("tvaCee").markAsUntouched(); // Changing 'required' property marks as touched
-            const certifications = this.mapCertificationsForDisplay(
-              this.client.certifications,
-            );
-            this.formGroup.patchValue({
-              ...this.client,
-              certifications,
-            });
-            this.initialFormState = this.formGroup.value; // Saving initial formGroup
-            this.preSaisie =
-              this.client.preSaisie === true ? "preSaisie" : "";
-          });
-        } else {
-          // Apply default value
-          this.client = new Client({
-            soumisCtifl: false,
-            delaiBonFacturer: 8, // Donné par Léa 7-09-2020
-          });
-          this.formGroup.patchValue(this.client);
-          this.formGroup.get("delaiBonFacturer").markAsDirty();
-          // Set current username if commercial
-          this.tempData = this.personnesService.getDataSource();
-          this.tempData.filter([
-            ["valide", "=", true],
-            "and",
-            ["role", "=", Role.COMMERCIAL],
-            "and",
-            [
-              "nomUtilisateur",
-              "=",
-              this.authService.currentUser.nomUtilisateur,
-            ],
-          ]);
-          this.tempData.load().then((res) => {
-            if (res.length) {
-              this.formGroup
-                .get("commercial")
-                .setValue({ id: res[0].id });
-              this.formGroup.get("commercial").markAsDirty();
-            }
-          });
-          // Set current username if assistant(e)
-          this.tempData = this.personnesService.getDataSource();
-          this.tempData.filter([
-            ["valide", "=", true],
-            "and",
-            ["role", "=", Role.ASSISTANT],
-            "and",
-            [
-              "nomUtilisateur",
-              "=",
-              this.authService.currentUser.nomUtilisateur,
-            ],
-          ]);
-          this.tempData.load().then((res) => {
-            if (res.length) {
-              this.formGroup
-                .get("assistante")
-                .setValue({ id: res[0].id });
-              this.formGroup.get("assistante").markAsDirty();
-            }
-          });
-          // Set condit vente
-          this.formGroup
-            .get("conditionVente")
-            .setValue({ id: "COFREU" });
-          this.formGroup.get("conditionVente").markAsDirty();
-        }
-        this.contentReadyEvent.emit();
+  ngOnChanges() {
+
+    // Zoom client mode
+    if (this.clientId) {
+      this.formGroup.reset();
+      this.clientsService.getOne_v2(this.clientId, this.inheritedFields).subscribe((res) => {
+        this.afterLoadInitForm(res);
       });
+    }
+
+  }
+
+  ngOnInit() {
 
     // Load different fields
     this.secteurs = this.secteursService.getDataSource();
@@ -485,6 +419,98 @@ export class ClientDetailsComponent
       "and",
       ["valide", "=", true],
     ]);
+
+    this.resetModifUserIds();
+
+    if (this.route.snapshot.url[1]?.path !== "clients") return;
+
+    this.route.params
+      .pipe(tap((_) => this.formGroup.reset()))
+      .subscribe((params) => {
+        const url = this.route.snapshot.url;
+        this.createMode = url[url.length - 1].path === "create";
+        this.readOnlyMode = !this.createMode;
+        if (!this.createMode) {
+          this.clientsService.getOne_v2(params.id, this.inheritedFields).subscribe((res) => {
+            this.afterLoadInitForm(res);
+          });
+        } else {
+          // Apply default value
+          this.client = new Client({
+            soumisCtifl: false,
+            delaiBonFacturer: 8, // Donné par Léa 7-09-2020
+          });
+          this.formGroup.patchValue(this.client);
+          this.formGroup.get("delaiBonFacturer").markAsDirty();
+          // Set current username if commercial
+          this.tempData = this.personnesService.getDataSource();
+          this.tempData.filter([
+            ["valide", "=", true],
+            "and",
+            ["role", "=", Role.COMMERCIAL],
+            "and",
+            [
+              "nomUtilisateur",
+              "=",
+              this.authService.currentUser.nomUtilisateur,
+            ],
+          ]);
+          this.tempData.load().then((res) => {
+            if (res.length) {
+              this.formGroup
+                .get("commercial")
+                .setValue({ id: res[0].id });
+              this.formGroup.get("commercial").markAsDirty();
+            }
+          });
+          // Set current username if assistant(e)
+          this.tempData = this.personnesService.getDataSource();
+          this.tempData.filter([
+            ["valide", "=", true],
+            "and",
+            ["role", "=", Role.ASSISTANT],
+            "and",
+            [
+              "nomUtilisateur",
+              "=",
+              this.authService.currentUser.nomUtilisateur,
+            ],
+          ]);
+          this.tempData.load().then((res) => {
+            if (res.length) {
+              this.formGroup
+                .get("assistante")
+                .setValue({ id: res[0].id });
+              this.formGroup.get("assistante").markAsDirty();
+            }
+          });
+          // Set condit vente
+          this.formGroup
+            .get("conditionVente")
+            .setValue({ id: "COFREU" });
+          this.formGroup.get("conditionVente").markAsDirty();
+        }
+        this.contentReadyEvent.emit();
+      });
+
+  }
+
+  afterLoadInitForm(res) {
+
+    this.client = res.data.client;
+    this.freeUEVAT(this.client.secteur, this.client.pays);
+    this.formGroup.get("tvaCee").markAsUntouched(); // Changing 'required' property marks as touched
+    const certifications = this.mapCertificationsForDisplay(
+      this.client.certifications,
+    );
+    this.formGroup.patchValue({
+      ...this.client,
+      certifications,
+    });
+    this.initialFormState = this.formGroup.value; // Saving initial formGroup
+    this.preSaisie =
+      this.client.preSaisie === true ? "preSaisie" : "";
+
   }
 
   checkCode(params) {

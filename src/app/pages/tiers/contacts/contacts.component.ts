@@ -26,6 +26,8 @@ import { map } from "rxjs/operators";
 })
 export class ContactsComponent implements OnInit, NestedPart, OnChanges {
 
+  @Input() public clientCode: string;
+  @Input() public entrepotCode: string;
   @Input() public fournisseurCode: string;
   @Input() public transporteurLigneId: string;
   @Input() public lieupassageaquaiLigneId: string;
@@ -37,6 +39,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
+  zoomMode: boolean;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -58,22 +61,40 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   ) { }
 
   ngOnChanges() {
-    // Zooms fournisseur, transporteur...
+    // Zooms client, fournisseur, transporteur...
+
+    this.zoomMode =
+      !!this.fournisseurCode ||
+      !!this.transporteurLigneId ||
+      !!this.lieupassageaquaiLigneId ||
+      !!this.clientCode ||
+      !!this.entrepotCode;
+
+    if (!this.zoomMode) return;
+
+    if (this.clientCode) {
+      this.codeTiers = this.clientCode;
+      this.typeTiers = TypeTiers.CLIENT;
+    }
+    if (this.entrepotCode) {
+      this.codeTiers = this.entrepotCode;
+      this.typeTiers = TypeTiers.ENTREPOT;
+    }
     if (this.fournisseurCode) {
       this.codeTiers = this.fournisseurCode;
-      this.typeTiers = "F";
-      this.updateGrid();
+      this.typeTiers = TypeTiers.FOURNISSEUR;
     }
     if (this.transporteurLigneId) {
       this.codeTiers = this.transporteurLigneId;
-      this.typeTiers = "T";
-      this.updateGrid();
+      this.typeTiers = TypeTiers.TRANSPORTEUR;
     }
     if (this.lieupassageaquaiLigneId) {
       this.codeTiers = this.lieupassageaquaiLigneId;
-      this.typeTiers = "G";
-      this.updateGrid();
+      this.typeTiers = TypeTiers.LIEUPASSAGEAQUAI;
     }
+
+    this.updateGrid();
+
   }
 
   ngOnInit() {
@@ -89,7 +110,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
       this.fluxSource.filter([["id", "<>", "FACDUP"], "and", ["id", "<>", "FACTUR"]]);
     }
 
-    if (this.fournisseurCode || this.transporteurLigneId || this.lieupassageaquaiLigneId) return;
+    if (this.zoomMode) return;
 
     this.codeTiers = this.route.snapshot.paramMap.get("codeTiers");
     this.typeTiers = this.route.snapshot.paramMap.get("typeTiers");

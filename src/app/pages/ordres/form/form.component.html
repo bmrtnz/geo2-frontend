@@ -269,6 +269,15 @@
                             </dx-validator>
                           </dx-select-box>
                         </div>
+                        <dx-button
+                          class="form-zoom-button rightPositioned"
+                          type="default"
+                          icon="material-icons search"
+                          [focusStateEnabled]="false"
+                          hint="{{ 'hint-click-file' | localize }}"
+                          (onClick)="openClientFilePopup()"
+                        >
+                        </dx-button>
                       </div>
                       <!-- Entrepôt livré -->
                       <div class="dx-field">
@@ -291,6 +300,15 @@
                             </dx-validator>
                           </dx-select-box>
                         </div>
+                        <dx-button
+                          class="form-zoom-button rightPositioned"
+                          type="default"
+                          icon="material-icons search"
+                          [focusStateEnabled]="false"
+                          hint="{{ 'hint-click-file' | localize }}"
+                          (onClick)="openEntrepotFilePopup()"
+                        >
+                        </dx-button>
                       </div>
                       <!-- Réf Client -->
                       <div class="dx-field">
@@ -419,6 +437,7 @@
                             type="default"
                             icon="material-icons search"
                             [focusStateEnabled]="false"
+                            hint="{{ 'hint-click-file' | localize }}"
                             (onClick)="openTransporteurFilePopup()"
                           >
                           </dx-button>
@@ -1169,6 +1188,18 @@
     [transporteurTitle]="transporteurTitle"
   >
   </app-zoom-transporteur-popup>
+  <app-zoom-client-popup
+    [clientId]="clientId"
+    [clientCode]="clientCode"
+    [clientTitle]="clientTitle"
+  >
+  </app-zoom-client-popup>
+  <app-zoom-entrepot-popup
+    [entrepotId]="entrepotId"
+    [entrepotCode]="entrepotCode"
+    [entrepotTitle]="entrepotTitle"
+  >
+  </app-zoom-entrepot-popup>
   <dx-popup
     [width]="400"
     [height]="165"

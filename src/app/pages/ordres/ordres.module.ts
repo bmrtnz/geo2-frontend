@@ -47,6 +47,8 @@ import { ContactsModule } from "../tiers/contacts/contacts.module";
 import { FournisseursModule } from "../tiers/fournisseurs/fournisseurs.module";
 import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-passage-a-quai.module";
 import { TransporteursModule } from "../tiers/transporteurs/transporteurs.module";
+import { ClientsModule } from "../tiers/clients/clients.module";
+import { EntrepotsModule } from "../tiers/entrepots/entrepots.module";
 import { OrdresAccueilComponent } from "./accueil/ordres-accueil.component";
 import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/actions-documents-ordres.component";
 import { ConfirmationResultPopupComponent } from "./actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
@@ -113,6 +115,8 @@ import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-pop
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ZoomClientPopupComponent } from "./zoom-client-popup/zoom-client-popup.component";
+import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-popup.component";
 
 @NgModule({
   declarations: [
@@ -159,10 +163,12 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     AjoutArticlesManuPopupComponent,
     ZoomArticlePopupComponent,
     ZoomFournisseurPopupComponent,
-    ArticleOriginePopupComponent,
-    ArticleCertificationPopupComponent,
+    ZoomClientPopupComponent,
+    ZoomEntrepotPopupComponent,
     ZoomTransporteurPopupComponent,
     ZoomLieupassageaquaiPopupComponent,
+    ArticleOriginePopupComponent,
+    ArticleCertificationPopupComponent,
     AjoutEtapeLogistiquePopupComponent,
     ActionsDocumentsOrdresComponent,
     DocumentsOrdresPopupComponent,
@@ -179,7 +185,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     AjoutArticlesStockPopupComponent,
     GridStockComponent,
     ReservationPopupComponent,
-    GridCommandesComponent,
+    GridCommandesComponent
   ],
   imports: [
     OrdresRoutingModule,
@@ -225,7 +231,9 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     ContactsModule,
     DxTooltipModule,
     EntityCellTemplateModule,
-    PromptPopupModule
+    PromptPopupModule,
+    ClientsModule,
+    EntrepotsModule
   ],
   providers: [
     OrdresIndicatorsService,

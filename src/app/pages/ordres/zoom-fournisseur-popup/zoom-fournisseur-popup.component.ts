@@ -1,6 +1,5 @@
 
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-import { Fournisseur } from "app/shared/models";
 import { LocalizationService } from "app/shared/services";
 import { DxScrollViewComponent } from "devextreme-angular";
 

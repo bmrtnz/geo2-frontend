@@ -43,9 +43,11 @@ import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/gr
 import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
-import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import Document from "../../../shared/models/document.model";
-import {ViewDocument} from "../../../shared/components/view-document-popup/view-document-popup.component";
+import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
+import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
+import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -85,6 +87,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public ordre: Ordre;
   @Output() openArticleManuPopup = new EventEmitter<any>();
   @Output() articleRowKey: string;
+  @Output() public clientId: string;
+  @Output() public clientCode: string;
+  @Output() public clientTitle: string;
+  @Output() public entrepotId: string;
+  @Output() public entrepotCode: string;
+  @Output() public entrepotTitle: string;
   @Output() public transporteurLigneId: string;
   @Output() public transporteurTitle: string;
 
@@ -231,6 +239,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
   @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
   @ViewChild(ZoomTransporteurPopupComponent, { static: false }) zoomTransporteurFilePopup: ZoomTransporteurPopupComponent;
+  @ViewChild(ZoomClientPopupComponent, { static: false }) zoomClientFilePopup: ZoomClientPopupComponent;
+  @ViewChild(ZoomEntrepotPopupComponent, { static: false }) zoomEntrepotFilePopup: ZoomEntrepotPopupComponent;
   @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
   @ViewChild(GridLignesDetailsComponent) gridLignesDetail: GridLignesDetailsComponent;
   @ViewChild(GridLignesTotauxDetailComponent) gridLTD: GridLignesTotauxDetailComponent;
@@ -691,11 +701,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
   }
 
+  openClientFilePopup() {
+    this.clientId = this.ordre?.client?.id;
+    this.clientCode = this.ordre?.client?.code;
+    if (this.clientId !== null) this.zoomClientFilePopup.visible = true;
+  }
+
+  openEntrepotFilePopup() {
+    this.entrepotId = this.ordre?.entrepot?.id;
+    this.entrepotCode = this.ordre?.entrepot?.code;
+    if (this.entrepotId !== null) this.zoomEntrepotFilePopup.visible = true;
+  }
+
   openTransporteurFilePopup() {
-    this.transporteurLigneId = this.ordre?.transporteur?.id;
-    if (this.transporteurLigneId === null) return;
-    this.transporteurTitle = "transporteur";
-    this.zoomTransporteurFilePopup.visible = true;
+    this.transporteurLigneId = this.formGroup.get("transporteur").value.id;
+    if (this.transporteurLigneId !== null) this.zoomTransporteurFilePopup.visible = true;
   }
 
   private refetchStatut() {

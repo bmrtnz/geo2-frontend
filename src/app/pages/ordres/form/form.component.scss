@@ -99,7 +99,6 @@
 
 ::ng-deep .small-button {
   top: 1px;
-  //margin: 2px 5px 2px 0 !important;
   height: 20px;
 
   .dx-button-text {
@@ -276,8 +275,13 @@ dx-button[type="normal"] {
   width: 20px !important;
   height: 20px;
   min-width: 0 !important;
-  margin: 0 4px !important;
+  // margin: 0 4px !important;
   border-radius: 4px !important;
+
+  &.rightPositioned {
+    position: absolute;
+    right: 0;
+  }
 
   .dx-button-content {
     padding: 0;

@@ -165,7 +165,7 @@ export class RootComponent implements OnInit, OnDestroy {
           dateDep = this.dateManagementService.friendlyDate(result.dateDepartPrevue, true);
         item.itemElement.title = `Client : ${result.client.code}\r\n`;
         item.itemElement.title += `Entrepôt : ${result.entrepot.code}\r\n`;
-        item.itemElement.title += `Date départ : ${dateDep}`;
+        item.itemElement.title += `Départ : ${dateDep}`;
       });
     }
   }
