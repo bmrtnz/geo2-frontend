@@ -510,13 +510,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     return data ? data.code + " - " + data.raisonSocial : null;
   }
 
-  public onLignesChanged(e) {
-    if (!e) return;
-    this.gridLignes.datagrid.instance.columnOption(
-      this.gridLignes.datagrid.instance.getVisibleColumnIndex("numero"), "sortOrder", "asc"
-    );
-    this.gridLignes.nbInsertedArticles = e;
-    this.gridLignes.enableFilters();
+  public onLignesChanged(nbLignes) {
+    if (nbLignes) {
+      this.gridLignes.datagrid.instance.columnOption(
+        this.gridLignes.datagrid.instance.getVisibleColumnIndex("numero"), "sortOrder", "asc"
+      );
+      this.gridLignes.nbInsertedArticles = nbLignes;
+      this.gridLignes.enableFilters();
+    } else {
+      // For eg. Article replacement
+      this.gridLignes.refreshGrid();
+    }
   }
 
   private initializeForm() {

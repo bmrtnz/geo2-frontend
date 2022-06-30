@@ -80,7 +80,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
       setTimeout(() => this.pulseBtnOn = true, 1);
     }
     this.nbArticlesOld = this.nbARticles;
-    this.catalogue.dataGrid.instance.repaint();
+    // this.catalogue.dataGrid.instance.repaint();
     if (this.nbARticles) this.addButton.instance.option("hint", this.chosenArticles.join(" - "));
   }
 
@@ -97,25 +97,20 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         return;
       }
       if (e.selectedRowKeys?.length === 2) e.component.deselectRows(e.selectedRowKeys[0]);
-    } else {
-      if (tagArray?.length) {
-        if (tagArray.includes(e.currentSelectedRowKeys[0])) {
-          this.alreadySelected();
-          e.component.deselectRows(e.currentSelectedRowKeys);
-        }
-      }
     }
     this.updateChosenArticles();
   }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("ajout-articles-manu-popup");
-    if (this.remplacementArticle) this.clearAll();
   }
 
   async onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
-    this.catalogue.dataGrid.selection = { mode: "multiple", allowSelectAll: false };
+
+    if (this.remplacementArticle) this.clearAll();
+
+    this.catalogue.dataGrid.selection = { mode: "multiple", allowSelectAll: false, showCheckBoxesMode: "always" };
     this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
 
     // datagrid state loading is not executed automatically in this component...
@@ -139,12 +134,6 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
       } else {
         myValue = ("000000" + myValue).slice(-6);
         tagArray.push(myValue);
-        // Fonctionnalité anti-doublon au cas où serait pertinente dans le futur
-        // if (!tagArray.includes(myValue) && !this.getGridSelectedArticles().includes(myValue)) {
-        //   tagArray.push(myValue);
-        // } else {
-        //   this.alreadySelected();
-        // }
         e.component.option("value", tagArray);
         this.articlesKO = true;
         this.articlesService.getOne(myValue)
@@ -173,6 +162,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.saisieCode.instance.reset();
     this.catalogue.dataGrid.dataSource = [];
     this.updateChosenArticles();
+    this.catalogue.dataGrid.instance.clearSelection();
     this.catalogue.especeSB.instance.reset();
     this.catalogue.varieteSB.instance.reset();
     this.catalogue.modesCultureSB.instance.reset();
@@ -218,6 +208,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
       this.OrdreLigneService.save_v2(["id"], { ordreLigne }).subscribe({
         next: (res) => {
           notify("Article remplacé", "success", 3000);
+          this.nbARticles = 0;
           this.clearAndHidePopup();
         },
         error: () => notify("Erreur lors du remplacement de l'article", "error", 3000)
