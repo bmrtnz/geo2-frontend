@@ -727,7 +727,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openTransporteurFilePopup() {
-    this.transporteurLigneId = this.formGroup.get("transporteur").value.id;
+    this.transporteurLigneId = this.formGroup.get("transporteur").value?.id;
     if (this.transporteurLigneId !== null) this.zoomTransporteurFilePopup.visible = true;
   }
 
