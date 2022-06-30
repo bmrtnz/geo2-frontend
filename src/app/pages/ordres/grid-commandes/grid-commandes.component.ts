@@ -185,10 +185,6 @@ class GridCommandesFeatures implements OnInit {
     notify("Report DLUO effectué", "success", 3000);
   }
 
-  update() {
-    (this.grid.dataSource as DataSource).reload();
-  }
-
 }
 
 @Component({
@@ -320,7 +316,12 @@ export class GridCommandesComponent
 
   public onContentReady(event) {
     if (this.FEATURE.rowOrdering) super.handleNewArticles();
-    // if (!this.changes.length) this.reindexing();
+  }
+
+  public async update() {
+    await (this.grid.dataSource as DataSource).reload();
+    this.reindexing();
+    this.grid.instance.saveEditData();
   }
 
   private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
