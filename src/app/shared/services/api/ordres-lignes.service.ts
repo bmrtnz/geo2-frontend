@@ -324,7 +324,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       }
       case "gtinColisKit": {
         if (data.ordre.bonAFacturer === true
-          || data.ordre.ordreEDI?.id !== null
+          || (data.ordre.ordreEDI?.id !== null && data.ordre.ordreEDI?.id !== undefined)
         ) this.lock(e);
         break;
       }
