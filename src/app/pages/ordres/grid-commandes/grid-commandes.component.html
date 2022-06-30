@@ -36,6 +36,7 @@
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
   (onContentReady)="onContentReady($event)"
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
+  (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
 >
   <dxo-editing
     [selectTextOnEditStart]="true"
@@ -224,3 +225,15 @@
   [ordreLigne]="ordreLigne"
   (changeLigne)="onDataChanged($event)"
 ></app-article-origine-popup>
+
+<app-zoom-article-popup
+  *ngIf="FEATURE.zoom"
+  [articleLigneId]="articleLigneId"
+></app-zoom-article-popup>
+
+<app-zoom-fournisseur-popup
+  *ngIf="FEATURE.zoom"
+  [fournisseurCode]="fournisseurCode"
+  [fournisseurLigneId]="fournisseurLigneId"
+>
+</app-zoom-fournisseur-popup>

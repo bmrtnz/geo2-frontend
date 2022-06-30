@@ -24,6 +24,8 @@ import { Observable, of } from "rxjs";
 import { concatMap, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
+import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 
 @Component({
   selector: "app-grid-commandes",
@@ -100,6 +102,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     rowOrdering: true,
     quickSwitch: true,
     reportDLUO: true,
+    zoom: true,
   };
 
   public readonly gridID = Grid.LignesCommandes;
@@ -128,8 +131,13 @@ export class GridCommandesComponent implements OnInit, OnChanges {
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
+  @Output() public articleLigneId: string;
+  @Output() public fournisseurLigneId: string;
+  @Output() public fournisseurCode: string;
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
+  @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
+  @ViewChild(ZoomFournisseurPopupComponent, { static: false }) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
 
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
@@ -294,6 +302,11 @@ export class GridCommandesComponent implements OnInit, OnChanges {
             ] : [],
             ...this.FEATURE.highlightBio ? [
               "article.matierePremiere.modeCulture.description",
+            ] : [],
+            ...this.FEATURE.zoom ? [
+              "article.id",
+              "proprietaireMarchandise.code",
+              "fournisseur.code",
             ] : [],
           ])),
           tap(datasource => datasource.filter([
@@ -500,6 +513,20 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     });
     setTimeout(() => this.grid.instance.saveEditData());
     notify("Report DLUO effectué", "success", 3000);
+  }
+
+  openFilePopup(e) {
+    if (e.column?.dataField === "article.articleDescription.descriptionReferenceLongue") {
+      this.articleLigneId = e.data.article.id;
+      this.zoomArticlePopup.visible = true;
+    }
+    if (["fournisseur.id", "proprietaireMarchandise.id"].includes(e.column?.dataField)) {
+      const { id: idFour, code } = e.data[e.column.dataField.split(".")[0]];
+      if (idFour === null) return;
+      this.fournisseurLigneId = idFour;
+      this.fournisseurCode = code;
+      this.zoomFournisseurPopup.visible = true;
+    }
   }
 
 }
