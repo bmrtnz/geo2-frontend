@@ -200,7 +200,7 @@
       [showInfo]="true"
       [showNavigationButtons]="true"
     ></dxo-pager>
-    <dxo-selection
+    <dxo-selection *ngIf="gridSelectionEnabled"
       mode="multiple"
       [allowSelectAll]="false"
       [showCheckBoxesMode]="'always'"

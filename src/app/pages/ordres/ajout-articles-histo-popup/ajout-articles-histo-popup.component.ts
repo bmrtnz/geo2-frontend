@@ -19,6 +19,8 @@ import { GridLignesHistoriqueComponent } from "../grid-lignes-historique/grid-li
 export class AjoutArticlesHistoPopupComponent implements OnChanges {
 
   @Input() public ordre: Ordre;
+  @Input() public readOnlyMode: boolean;
+  @Output() public gridSelectionEnabled: boolean;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public clientId: string;
   @Output() public entrepotId: string;
@@ -50,17 +52,25 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
 
   ngOnChanges() {
     this.setTitle();
+    this.gridSelectionEnabled = !this.readOnlyMode;
   }
 
   setTitle() {
-    this.titleStart = this.localizeService.localize("ajout-articles");
-    if (this.ordre) {
-      this.titleMid = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero + " - " + this.ordre.client.raisonSocial;
-      this.clientId = this.ordre.client.id;
-      this.entrepotId = this.ordre.entrepot.id;
-      this.secteurId = this.ordre.secteurCommercial.id;
+    if (!this.readOnlyMode) {
+      if (this.ordre) {
+        this.titleStart = this.localizeService.localize("ajout-articles");
+        this.titleMid = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero + " - " + this.ordre.client.raisonSocial;
+        this.clientId = this.ordre.client.id;
+        this.entrepotId = this.ordre.entrepot.id;
+        this.secteurId = this.ordre.secteurCommercial.id;
+        this.titleEnd = this.localizeService.localize("via-histo-client");
+      }
+    } else {
+      this.titleStart = "Historique client ";
+      this.titleMid = this.ordre.client.raisonSocial;
+      this.titleEnd = "";
     }
-    this.titleEnd = this.localizeService.localize("via-histo-client");
+
   }
 
   updateChosenArticles() {

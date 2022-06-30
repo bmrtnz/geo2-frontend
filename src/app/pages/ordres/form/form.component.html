@@ -855,11 +855,9 @@
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="!fullOrderNumber || !allowMutations"
+                  [disabled]="false"
                   type="success"
-                  hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-historique' | localize
-                  }}"
+                  [hint]="(!fullOrderNumber || !allowMutations) ? histoLigneOrdreReadOnlyText : histoLigneOrdreText"
                   (onClick)="onArticleHistoClick()"
                   text="{{ 'btn-historique' | localize }}"
                 ></dx-button>
@@ -1168,6 +1166,7 @@
   </app-ajout-articles-manu-popup>
   <app-ajout-articles-histo-popup
     [ordre]="ordre"
+    [readOnlyMode]="readOnlyMode"
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-histo-popup>

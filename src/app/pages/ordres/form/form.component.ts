@@ -95,6 +95,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public entrepotTitle: string;
   @Output() public transporteurLigneId: string;
   @Output() public transporteurTitle: string;
+  @Output() public readOnlyMode: boolean;
 
   private readonly headerFields = [
     "id",
@@ -224,6 +225,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public fraisClient: string;
   public gestEntrepot: string;
   public instructionsComm: string;
+  public histoLigneOrdreReadOnlyText: string;
+  public histoLigneOrdreText: string;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -401,6 +404,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onArticleHistoClick() {
+    this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
     this.ajoutArtHisto.visible = true;
   }
 
@@ -562,6 +566,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.formGroup.valueChanges.subscribe((_) => {
           this.saveHeaderOnTheFly();
         });
+
+        this.histoLigneOrdreText =
+          `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
+        this.histoLigneOrdreReadOnlyText =
+          `${this.localization.localize("hint-client-historique")}`;
 
       });
   }

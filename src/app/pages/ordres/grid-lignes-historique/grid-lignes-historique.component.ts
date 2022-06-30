@@ -41,6 +41,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @Input() public entrepotId: string;
   @Input() public secteurId: string;
   @Input() public fournisseurLigneCode: string;
+  @Input() public gridSelectionEnabled: boolean;
   @Output() public articleLigneId: string;
   @Output() public ordreLigne: OrdreLigne;
   @Output() selectChange = new EventEmitter<any>();

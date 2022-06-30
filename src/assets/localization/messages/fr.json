@@ -116,6 +116,7 @@
     "hint-source-stock": "du stock",
     "hint-source-historique": "de l'historique client",
     "hint-source-refClt": "des références client",
+    "hint-client-historique": "Voir l'historique des ordres du client",
     "hint-deplacer-ligne-haut": "Déplacer la ligne sélectionnée vers le haut",
     "hint-deplacer-ligne-bas": "Déplacer la ligne sélectionnée vers le bas",
     "hint-dblClick-file": "Double-cliquez pour voir la fiche",

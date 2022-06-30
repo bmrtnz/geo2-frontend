@@ -23,6 +23,7 @@
     <dx-scroll-view>
 
       <dx-button
+        *ngIf="!readOnlyMode"
         class="cancel-button"
         type="normal"
         text="{{ 'btn-annuler' | localize }}"
@@ -45,6 +46,7 @@
         [entrepotId]="entrepotId"
         [secteurId]="secteurId"
         (selectChange)="selectFromGrid($event)"
+        [gridSelectionEnabled]="gridSelectionEnabled"
         [popupShown]="popupShown"
       ></app-grid-lignes-historique>
       <br />
