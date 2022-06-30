@@ -27,10 +27,11 @@ export class OrdreLignesService extends ApiService implements APIRead {
    * DxDatasource remove hook
    * @param id OrdreLigne id
    */
-  private remove = (id: string) =>
+  public remove = (id: string) =>
     this.apollo.mutate({
       mutation: gql(this.buildDeleteGraph()),
       variables: { id },
+      fetchPolicy: "no-cache",
     }).toPromise()
 
   constructor(
@@ -385,6 +386,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       .query<{ allOrdreLigneList: OrdreLigne[] }>({
         query: gql(this.buildGetListGraph(columns)),
         variables: { search },
+        fetchPolicy: "no-cache",
       })
       .pipe(takeWhile((res) => !res.loading));
   }

@@ -43,7 +43,6 @@ import { GridCommandesComponent } from "../grid-commandes/grid-commandes.compone
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
-import { GridLignesComponent } from "../grid-lignes/grid-lignes.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
@@ -232,7 +231,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
   @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
   @ViewChild(ZoomTransporteurPopupComponent, { static: false }) zoomTransporteurFilePopup: ZoomTransporteurPopupComponent;
-  @ViewChild(GridLignesComponent) gridLignes: GridLignesComponent;
   @ViewChild(GridCommandesComponent) gridCommandes: GridCommandesComponent;
   @ViewChild(GridLignesDetailsComponent) gridLignesDetail: GridLignesDetailsComponent;
   @ViewChild(GridLignesTotauxDetailComponent) gridLTD: GridLignesTotauxDetailComponent;
@@ -504,11 +502,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onLignesChanged(e) {
     if (!e) return;
-    this.gridLignes.datagrid.instance.columnOption(
-      this.gridLignes.datagrid.instance.getVisibleColumnIndex("numero"), "sortOrder", "asc"
-    );
-    this.gridLignes.nbInsertedArticles = e;
-    this.gridLignes.enableFilters();
     this.gridCommandes.update();
   }
 

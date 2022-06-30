@@ -131,7 +131,7 @@ class GridCommandesFeatures implements OnInit {
     this.grid.instance.saveEditData();
   }
 
-  onContentReady() {
+  handleNewArticles() {
     // Grid is loaded with new articles: save order row numbers
     if (this.newArticles === this.nbInsertedArticles) {
       let info = this.nbInsertedArticles + " ";
@@ -309,86 +309,104 @@ export class GridCommandesComponent
   }
 
   onSaving(event: OnSavingEvent) {
-    if (event.component.hasEditData())
-      while (this?.changes.length) {
 
-        const change = this.changes.shift();
+    if (event.component.hasEditData()) {
 
-        if (change.type !== "update")
-          continue;
+      event.cancel = true;
+      return this.handleMutations();
 
-        event.cancel = true;
-        event.promise = new Promise((rsv, rjt) => {
-
-          const source = this.grid.dataSource as DataSource;
-          const store = source.store() as CustomStore;
-
-          // push initial cell change to prevent data flickering
-          store.push([change]);
-
-          /* tslint:disable-next-line:prefer-const */
-          let [name, value] = Object.entries(change.data)[0];
-
-          // update "fournisseur" field when "proprietaire" value changed
-          if (name === "proprietaireMarchandise") {
-            const fournisseur = this.updateFilterFournisseurDS(event.changes[0].data.proprietaireMarchandise);
-            event.component.cellValue(
-              event.component.getRowIndexByKey(event.changes[0].key),
-              "fournisseur",
-              fournisseur,
-            );
-            this.changes.push({
-              ...event.changes[0],
-              data: { fournisseur },
-            });
-          }
-
-          // map object value
-          if (typeof value === "object")
-            value = value.id;
-
-          // request mutation
-          this.columns
-            .pipe(
-              GridConfiguratorService.getVisible(),
-              GridConfiguratorService.getFields(),
-              concatMap(fields => this.ordreLignesService.updateField(
-                name,
-                value,
-                change.key,
-                this.currentCompanyService.getCompany().id,
-                ["id", ...fields],
-              )),
-              first(),
-            )
-            .subscribe({
-
-              // build and push response data
-              next: ({ data }) => {
-                store.push([{
-                  key: data.updateField.id,
-                  type: "update",
-                  data: data.updateField,
-                }]);
-              },
-
-              // reject on error
-              error: err => {
-                notify(err.message, "error", 5000);
-                rjt(err);
-              },
-
-              complete: async () => {
-                await this.grid.instance.saveEditData();
-                rsv();
-              },
-            });
-        });
-      }
+    }
   }
 
-  onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
+  public onContentReady(event) {
+    if (this.FEATURE.rowOrdering) super.handleNewArticles();
+    // if (!this.changes.length) this.reindexing();
+  }
+
+  private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
     this.refreshData(current);
+  }
+
+  private handleMutations() {
+    if (!this.changes.length) return;
+
+    const source = this.grid.dataSource as DataSource;
+    const store = source.store() as CustomStore;
+    const change = this.changes.shift();
+
+    if (change.type === "remove") {
+      return store.remove(change.key)
+        .then(() => {
+          store.push([change]);
+          return this.handleMutations();
+        });
+    }
+
+    if (change.type === "update")
+      return new Promise((rsv, rjt) => {
+
+        /* tslint:disable-next-line:prefer-const */
+        let [name, value] = Object.entries(change.data)[0];
+
+        // update "fournisseur" field when "proprietaire" value changed
+        if (name === "proprietaireMarchandise") {
+          const fournisseur = this.updateFilterFournisseurDS(change.data.proprietaireMarchandise);
+          this.grid.instance.cellValue(
+            this.grid.instance.getRowIndexByKey(change.key),
+            "fournisseur",
+            fournisseur,
+          );
+          this.changes.push({
+            key: change.key,
+            type: "update",
+            data: { fournisseur: { id: fournisseur.id } } as Partial<OrdreLigne>,
+          });
+        }
+
+        // map object value
+        if (typeof value === "object")
+          value = value.id;
+
+        // request mutation
+        this.columns
+          .pipe(
+            GridConfiguratorService.getVisible(),
+            GridConfiguratorService.getFields(),
+            concatMap(fields => this.ordreLignesService.updateField(
+              name,
+              value,
+              change.key,
+              this.currentCompanyService.getCompany().id,
+              ["id", ...fields],
+            )),
+            first(),
+          )
+          .subscribe({
+
+            // build and push response data
+            next: ({ data }) => {
+              store.push([change, {
+                key: data.updateField.id,
+                type: "update",
+                data: data.updateField,
+              }]);
+            },
+
+            // reject on error
+            error: err => {
+              notify(err.message, "error", 5000);
+              rjt(err);
+            },
+
+            complete: () => {
+              rsv();
+              this.handleMutations();
+            },
+          });
+      });
+
+    return Promise.resolve();
+
   }
 
   private refreshData(columns: GridColumn[]) {
@@ -437,6 +455,25 @@ export class GridCommandesComponent
   private async updateRestrictions() {
     const isCloture = await this.ordresService.isCloture({ id: this.ordreID });
     this.allowMutations = !environment.production && !isCloture;
+  }
+
+  /**
+   * Recalculate rows numero and push changes
+   */
+  private reindexing() {
+    const datasource = this.grid.dataSource as DataSource;
+    if (!datasource) return;
+    (datasource.items() as Partial<OrdreLigne>[])
+      .sort((a, b) => parseInt(a.numero, 10) - parseInt(b.numero, 10))
+      .forEach((item, index) => {
+        const numero = (index + 1).toString().padStart(2, "0");
+        if (item.numero !== numero)
+          this.changes.push({
+            key: item.id,
+            type: "update",
+            data: { numero },
+          });
+      });
   }
 
   // OLD codebase beyond this point (grid-lignes.component)

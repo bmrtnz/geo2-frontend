@@ -34,7 +34,7 @@
   (focusedColumnIndexChange)="focusedColumnIndexChange()"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
-  (onContentReady)="FEATURE.rowOrdering && onContentReady()"
+  (onContentReady)="onContentReady($event)"
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
 >
   <dxo-editing

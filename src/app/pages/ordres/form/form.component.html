@@ -871,14 +871,6 @@
                     [gridEnvois]="gridEnvois"
                     [orderConfirmationOnly]="true"
                   ></app-actions-documents-ordres>
-                  <app-grid-lignes
-                    [ordre]="ordre"
-                    [gridLignesLogistique]="gridLignesLogistique"
-                    [gridLogistiques]="gridLogistiques"
-                    (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
-                    (swapRowArticle)="onArticleManClick($event)"
-                  ></app-grid-lignes>
-                  <div class="grid-separator"></div>
                   <app-grid-commandes
                     [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
