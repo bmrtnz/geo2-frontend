@@ -1,25 +1,3 @@
-<!-- <ng-container *ngIf="FEATURE.rowOrdering">
-  <dx-button
-    [focusStateEnabled]="false"
-    class="down-move-button"
-    type="normal"
-    text="down"
-    icon="arrowdown"
-    hint="{{ 'hint-deplacer-ligne-bas' | localize }}"
-    [disabled]="lastRowFocused || !gridRowsTotal || !allowMutations"
-    (onClick)="moveRowUpDown($event)"
-  ></dx-button>
-  <dx-button
-    [focusStateEnabled]="false"
-    class="up-move-button"
-    type="normal"
-    text="up"
-    icon="arrowup"
-    hint="{{ 'hint-deplacer-ligne-haut' | localize }}"
-    [disabled]="!currentfocusedRow || !allowMutations"
-    (onClick)="moveRowUpDown($event)"
-  ></dx-button>
-</ng-container> -->
 <dx-data-grid
   class="grid-commandes"
   [remoteOperations]="{
