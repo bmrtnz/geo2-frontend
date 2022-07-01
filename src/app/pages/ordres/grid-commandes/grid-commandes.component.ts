@@ -477,7 +477,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     this.switchNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
     this.grid.instance.cellValue(this.currentfocusedRow + moveDirection, "numero", this.currNumero);
     this.grid.instance.cellValue(this.currentfocusedRow, "numero", this.switchNumero);
-    this.grid.instance.saveEditData();
+    this.grid.instance.saveEditData().then(() => this.update());
   }
 
   handleNewArticles() {
