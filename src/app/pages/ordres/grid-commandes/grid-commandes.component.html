@@ -21,6 +21,7 @@
   ></dx-button>
 </ng-container>
 <dx-data-grid
+  class="grid-commandes"
   [remoteOperations]="{
     filtering: true
   }"
@@ -74,6 +75,7 @@
   <ng-container *ngIf="FEATURE.columnCertifications">
     <dxi-column
       *ngIf="allowMutations"
+      cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
       [cellTemplate]="'certificationTemplate'"
     >
@@ -93,6 +95,7 @@
   <ng-container *ngIf="FEATURE.columnOrigine">
     <dxi-column
       *ngIf="allowMutations"
+      cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
       [cellTemplate]="'origineTemplate'"
     >
@@ -113,6 +116,7 @@
   <!-- switch article -->
   <ng-container *ngIf="FEATURE.quickSwitch">
     <dxi-column
+      cssClass="small-horiz-padding"
       *ngIf="allowMutations"
       [showInColumnChooser]="false"
       [cellTemplate]="'swapButtonTemplate'"
@@ -151,14 +155,18 @@
 
   <dxi-column
     *ngFor="let column of this.columns | async"
+    [fixed]="column.fixed"
     [dataField]="column.dataField"
     [allowEditing]="column.allowEditing"
     [allowSorting]="column.allowSorting"
     [cellTemplate]="column.cellTemplate"
+    [format]="column?.format"
+    [editorOptions]="column?.editorOptions"
     [editCellTemplate]="column.editCellTemplate"
     [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="column?.calculateDisplayValue"
-    [cssClass]="FEATURE.reportDLUO && 'headerCellBtnTemplate'"
+    [showInColumnChooser]="column.showInColumnChooser"
+    [cssClass]="column?.cssClass"
     [caption]="
       ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
       column.name

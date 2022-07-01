@@ -2129,33 +2129,47 @@
   "lignes-commandes": {
     "columns": [
       {
+        "visibleIndex": 0,
         "dataField": "numero",
         "visible": true,
         "sortOrder": "asc",
+        "width": 50,
         "allowEditing": false,
         "allowSorting": false,
+        "cssClass": "no-padding text-align-center",
+        "showInColumnChooser": false,
         "fixed": true
       },
       {
         "dataField": "article.articleDescription.descriptionReferenceLongue",
         "allowEditing": false,
+        "width": 250,
+        "cssClass": "small-left-padding",
         "fixed": true,
         "visible": true
       },
       {
         "dataField": "nombrePalettesCommandees",
+        "width": 35,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "nombrePalettesIntermediaires",
+        "width": 30,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "nombreColisPalette",
+        "width": 45,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "nombreColisCommandes",
+        "width": 45,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -2174,6 +2188,14 @@
       },
       {
         "dataField": "ventePrixUnitaire",
+        "dataType": "number",
+        "editorOptions": {
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
+        "width": 95,
         "visible": true
       },
       {
@@ -2185,6 +2207,8 @@
       },
       {
         "dataField": "gratuit",
+        "cssClass": "multi-line-header",
+        "width": 40,
         "visible": true
       },
       {
@@ -2192,10 +2216,21 @@
         "visible": true,
         "calculateDisplayValue": "codePromo.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "small-header-right",
+        "allowEditing": true,
+        "width": 60
       },
       {
         "dataField": "achatDevisePrixUnitaire",
+        "dataType": "number",
+        "editorOptions": {
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
+        "width": 95,
         "visible": true
       },
       {
@@ -2208,6 +2243,7 @@
       {
         "dataField": "achatDevise",
         "visible": true,
+        "cssClass": "multi-line-header",
         "allowEditing": false
       },
       {
@@ -2228,10 +2264,12 @@
         "dataField": "libelleDLV",
         "visible": true,
         "allowSorting": false,
+        "cssClass": "headerCellBtnTemplate",
         "headerCellTemplate": "headerCellBtnTemplate"
       },
       {
         "dataField": "fraisPrixUnitaire",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -2247,18 +2285,24 @@
       },
       {
         "dataField": "tauxRemiseSurFacture",
+        "width": 45,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "tauxRemiseHorsFacture",
+        "width": 45,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "articleKit",
+        "width": 75,
         "visible": true
       },
       {
         "dataField": "gtinColisKit",
+        "width": 150,
         "visible": true
       }
     ]

@@ -30,10 +30,7 @@ import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fo
 @Component({
   selector: "app-grid-commandes",
   templateUrl: "./grid-commandes.component.html",
-  styleUrls: [
-    "./grid-commandes.component.scss",
-    "../grid-lignes/grid-lignes.component.scss", // legacy style
-  ]
+  styleUrls: ["./grid-commandes.component.scss"]
 })
 export class GridCommandesComponent implements OnInit, OnChanges {
 
@@ -48,6 +45,8 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     private basesTarifService: BasesTarifService,
     private codesPromoService: CodesPromoService,
     private typesPaletteService: TypesPaletteService,
+    public localizeService: LocalizationService,
+
   ) {
     const fournisseursDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
@@ -128,6 +127,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
   public newArticles = 0;
   public nbInsertedArticles: number;
   public newNumero = 0;
+  public hintDblClick: string;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -156,6 +156,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
         },
       });
     this.columns = this.gridConfigurator.fetchColumns(this.gridID);
+    this.hintDblClick = this.localizeService.localize("hint-dblClick-file");
 
     if (this.FEATURE.columnCertifications) this.initFeatures();
   }
@@ -434,8 +435,24 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     if (e.rowType === "data") {
       if (e.column.dataField === "article.articleDescription.descriptionReferenceLongue") {
         // Bio en vert
+        e.cellElement.title = e.data.article.articleDescription.descriptionReferenceLongue + "\r\n"
+          + this.hintDblClick;
+        e.cellElement.classList.add("cursor-pointer");
         const isBio = e.data.article.matierePremiere?.modeCulture?.description?.toLowerCase().includes("bio");
         if (isBio) e.cellElement.classList.add("bio-article");
+      }
+      // Taux encombrement
+      if (e.column.dataField === "nombrePalettesCommandees") {
+        let tauxEncombrement;
+        if (e.data.nombreColisPalette && e.data.nombreColisCommandes) {
+          tauxEncombrement = e.data.nombreColisCommandes / e.data.nombreColisPalette;
+          tauxEncombrement /= (e.data.nombrePalettesIntermediaires ? e.data.nombrePalettesIntermediaires + 1 : 1);
+          e.cellElement.title = tauxEncombrement + "\r\n(Taux encombrement au sol)";
+        }
+      }
+      // Tooltip prix achat
+      if (e.column.dataField === "achatDevisePrixUnitaire") {
+        if (e.data.achatDeviseTaux) e.cellElement.title = `Taux : ${e.data.achatDeviseTaux}\r\nP.U. : ${e.data.achatPrixUnitaire}`;
       }
     }
   }
