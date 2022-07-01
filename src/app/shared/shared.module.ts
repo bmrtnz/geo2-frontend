@@ -26,7 +26,7 @@ export class SharedModule {
             getChooserColumns(loadAllColumns) {
               const result = this.callBase(loadAllColumns);
               return result.sort((column1, column2) =>
-                column1.caption.localeCompare(column2.caption),
+                column1.caption?.localeCompare(column2.caption),
               );
             },
           },

@@ -1,0 +1,15 @@
+<dx-button
+  type="normal"
+  class="small-margin-button"
+  [focusStateEnabled]="false"
+  (onClick)="calculMargePrev()"
+>
+  <span class="margin-title-text">MARGE PREV.&nbsp;</span>
+  <span class="margin-value-text">{{ marginText }}</span>
+  <dx-load-indicator
+    #smallMarginLoader
+    [visible]="false"
+    class="small-loader"
+  >
+  </dx-load-indicator>
+</dx-button>

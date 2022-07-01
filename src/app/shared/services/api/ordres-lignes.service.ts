@@ -4,7 +4,6 @@ import { Apollo, gql } from "apollo-angular";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import notify from "devextreme/ui/notify";
 import { takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
@@ -24,6 +23,17 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   queryFilter = /.*(?:id)$/i;
 
+  /**
+   * DxDatasource remove hook
+   * @param id OrdreLigne id
+   */
+  public remove = (id: string) =>
+    this.apollo.mutate({
+      mutation: gql(this.buildDeleteGraph()),
+      variables: { id },
+      fetchPolicy: "no-cache",
+    }).toPromise()
+
   constructor(
     apollo: Apollo,
     public functionsService: FunctionsService,
@@ -31,6 +41,14 @@ export class OrdreLignesService extends ApiService implements APIRead {
     private currentCompanyService: CurrentCompanyService,
   ) {
     super(apollo, OrdreLigne);
+  }
+
+  getOne_v2(id: string, columns: Array<string> | Set<string>) {
+    return this.apollo
+      .query<{ ordreLigne: Partial<OrdreLigne> }>({
+        query: gql(this.buildGetOneGraph(columns)),
+        variables: { id },
+      });
   }
 
   getDataSource(depth = 1, filter?: RegExp) {
@@ -93,11 +111,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
     return this.watchSaveQuery({ variables }).toPromise();
   }
 
-  private remove(id) {
-    const variables = { id };
-    return this.watchDeleteQuery({ variables }).toPromise();
-  }
-
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       reshapeOnPush: true,
@@ -125,15 +138,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
               resolve(this.asInstancedListCount(res.data.allOrdreLigne));
           });
         }),
-        byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne_v2(columns);
-          type Response = { ordreLigne: OrdreLigne };
-          const variables = { id: key };
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.ordreLigne)
-              resolve(new OrdreLigne(res.data.ordreLigne));
-          });
-        }),
+        byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
         remove: this.remove,
@@ -207,11 +212,11 @@ export class OrdreLignesService extends ApiService implements APIRead {
         if ((data.logistique?.expedieStation === true
           || data.ordre.secteurCommercial.id === "F"
           || bloquer === true)
-          && data.ordre.type.id !== "RPR"
-          && data.ordre.type.id !== "RPO"
+          && data.ordre.type?.id !== "RPR"
+          && data.ordre.type?.id !== "RPO"
           && data.ordre.societe.id !== "BWS"
-          && data.venteUnite.id !== "UNITE"
-          && data.achatUnite.id !== "UNITE") this.lock(e);
+          && data.venteUnite?.id !== "UNITE"
+          && data.achatUnite?.id !== "UNITE") this.lock(e);
         break;
       }
       case "nombrePalettesIntermediaires": {
@@ -236,9 +241,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
       case "proprietaireMarchandise": {
         if (data.logistique?.expedieStation === true
           || bloquer === true
-          || data.ordre.type.id === "RDF"
-          || data.ordre.type.id === "REP"
-          || (data.ordre.type.id === "RPR"
+          || data.ordre.type?.id === "RDF"
+          || data.ordre.type?.id === "REP"
+          || (data.ordre.type?.id === "RPR"
             && data.ordre.commentaireUsageInterne.substring(0, 3) === "B02"
             && data.ordre.entrepot.modeLivraison !== "S")
         ) this.lock(e);
@@ -247,9 +252,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
       case "fournisseur": { // Emballeur/Expéditeur
         if (data.logistique?.expedieStation === true
           || bloquer === true
-          || data.ordre.type.id === "RDF"
-          || data.ordre.type.id === "REP"
-          || (data.ordre.type.id === "RPR"
+          || data.ordre.type?.id === "RDF"
+          || data.ordre.type?.id === "REP"
+          || (data.ordre.type?.id === "RPR"
             && !data.ordre.commentaireUsageInterne.includes("B02")
             && data.ordre.entrepot.modeLivraison !== "S")
         ) this.lock(e);
@@ -257,16 +262,16 @@ export class OrdreLignesService extends ApiService implements APIRead {
       }
       case "ventePrixUnitaire": {
         if ((data.ordre.venteACommission !== true
-          && data.ordre.type.id !== "REP"
-          && data.ordre.type.id !== "RPF")
+          && data.ordre.type?.id !== "REP"
+          && data.ordre.type?.id !== "RPF")
           && bloquer === true
         ) this.lock(e);
         break;
       }
       case "venteUnite": {
         if ((data.ordre.venteACommission !== true
-          && data.ordre.type.id !== "REP"
-          && data.ordre.type.id !== "RPF")
+          && data.ordre.type?.id !== "REP"
+          && data.ordre.type?.id !== "RPF")
           && bloquer === true
         ) this.lock(e);
         break;
@@ -280,8 +285,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
       }
       case "achatDevisePrixUnitaire": {
         if ((data.ordre.venteACommission !== true
-          && data.ordre.type.id !== "REP"
-          && data.ordre.type.id !== "RPF")
+          && data.ordre.type?.id !== "REP"
+          && data.ordre.type?.id !== "RPF")
           && (data.logistique?.expedieStation === true
             || bloquer === true)
         ) this.lock(e);
@@ -289,24 +294,24 @@ export class OrdreLignesService extends ApiService implements APIRead {
       }
       case "achatUnite": {
         if ((data.ordre.venteACommission !== true
-          && data.ordre.type.id !== "REP"
-          && data.ordre.type.id !== "RPF")
+          && data.ordre.type?.id !== "REP"
+          && data.ordre.type?.id !== "RPF")
           && bloquer === true
         ) this.lock(e);
         break;
       }
       case "typePalette": {
         if (data.logistique?.expedieStation === true
-          || data.ordre.type.id === "REP"
-          || data.ordre.type.id === "RPF"
+          || data.ordre.type?.id === "REP"
+          || data.ordre.type?.id === "RPF"
           || bloquer === true
         ) this.lock(e);
         break;
       }
       case "paletteInter": {
         if (data.logistique?.expedieStation === true
-          || data.ordre.type.id === "REP"
-          || data.ordre.type.id === "RPF"
+          || data.ordre.type?.id === "REP"
+          || data.ordre.type?.id === "RPF"
           || bloquer === true
         ) this.lock(e);
         break;
@@ -361,14 +366,14 @@ export class OrdreLignesService extends ApiService implements APIRead {
       case "paletteInter": {
         if (data.logistique?.expedieStation ||
           !(data.ordre.client.modificationDetail !== false ||
-            data.ordre.secteurCommercial.id === "PAL" ||
+            data.ordre.secteurCommercial?.id === "PAL" ||
             this.authService.currentUser.geoClient === "2" ||
             data.ordre.societe.id === "IMP" ||
             data.ordre.societe.id === "UDC" ||
-            data.article.cahierDesCharge.espece.id.substring(0, 5) === "EMBAL" ||
+            data.article.cahierDesCharge?.espece?.id.substring(0, 5) === "EMBAL" ||
             data.ordre.type.id === "RPR" ||
             data.ordre.type.id === "RPO" ||
-            data.article.matierePremiere.variete.modificationDetail ||
+            data.article.matierePremiere?.variete?.modificationDetail ||
             data.ordre.societe.id === "IUK"
           )) this.lock(e);
         break;
@@ -381,6 +386,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       .query<{ allOrdreLigneList: OrdreLigne[] }>({
         query: gql(this.buildGetListGraph(columns)),
         variables: { search },
+        fetchPolicy: "no-cache",
       })
       .pipe(takeWhile((res) => !res.loading));
   }

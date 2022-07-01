@@ -203,14 +203,21 @@
                   >{{ status }}</span
                 >
 
-                <span *ngIf="ordreFacture && numeroFacture?.length">&nbsp;&nbsp;&nbsp;</span>
+                <span *ngIf="ordreFacture && numeroFacture?.length"
+                  >&nbsp;&nbsp;&nbsp;</span
+                >
                 <dx-button
                   *ngIf="ordreFacture && numeroFacture?.length"
                   class="small-button facture-btn"
                   type="danger"
                   hint="{{ 'hint-ordres-factures' | localize }}"
                   text="Fact. {{ numeroFacture }}"
-                  (onClick)="viewFacture('ordres-view-facture-title', ordre.documentFacture)"
+                  (onClick)="
+                    viewFacture(
+                      'ordres-view-facture-title',
+                      ordre.documentFacture
+                    )
+                  "
                 >
                 </dx-button>
                 <!--<span
@@ -881,14 +888,10 @@
                     [gridEnvois]="gridEnvois"
                     [orderConfirmationOnly]="true"
                   ></app-actions-documents-ordres>
-                  <app-grid-lignes
-                    [ordre]="ordre"
-                    [gridLignesLogistique]="gridLignesLogistique"
-                    [gridLogistiques]="gridLogistiques"
-                    (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
+                  <app-grid-commandes
+                    [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
-                  ></app-grid-lignes>
-                  <div class="grid-separator"></div>
+                  ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique

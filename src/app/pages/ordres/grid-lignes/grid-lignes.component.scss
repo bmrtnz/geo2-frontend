@@ -8,14 +8,14 @@
   position: absolute;
   z-index: 2;
   margin-top: 6px;
-  right: 220px;
+  right: 280px;
 
   &.down-move-button {
-    right: 149px;
+    right: 209px;
   }
 }
 
-::ng-deep .grid-ordre-ligne .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+::ng-deep .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
 
   input,
   div {
@@ -23,7 +23,7 @@
   }
 }
 
-::ng-deep .grid-ordre-ligne {
+::ng-deep {
 
   .dx-row-focused {
 

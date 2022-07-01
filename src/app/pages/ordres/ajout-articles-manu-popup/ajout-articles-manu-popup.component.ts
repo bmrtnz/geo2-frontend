@@ -115,8 +115,8 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
     // datagrid state loading is not executed automatically in this component...
     const gridConfig = await this.gridConfiguratorService.fetchConfig(Grid.Article);
-    this.catalogue.dataGrid.instance.state(gridConfig);
-    this.catalogue.dataGrid.instance.repaint();
+    this.catalogue?.dataGrid.instance.state(gridConfig);
+    this.catalogue?.dataGrid.instance.repaint();
   }
 
   alreadySelected() {
@@ -158,8 +158,9 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   clearAll() {
+    if (!this.catalogue) return;
     this.codeChangeProcess = true;
-    this.saisieCode.instance.reset();
+    this.saisieCode?.instance.reset();
     this.catalogue.dataGrid.dataSource = [];
     this.updateChosenArticles();
     this.catalogue.dataGrid.instance.clearSelection();

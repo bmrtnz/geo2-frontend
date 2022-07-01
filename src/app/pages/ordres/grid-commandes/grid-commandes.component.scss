@@ -1,0 +1,200 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+
+::ng-deep .down-move-button,
+.up-move-button {
+  position: absolute;
+  z-index: 2;
+  margin-top: 6px;
+  right: 280px;
+
+  &.down-move-button {
+    right: 209px;
+  }
+}
+
+::ng-deep .grid-commandes {
+
+  .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+
+    input,
+    div {
+      // color: #fff;
+    }
+  }
+
+  .dx-row-focused {
+
+    .bio-article {
+      color: #39970e !important;
+    }
+  }
+
+  .small-horiz-padding {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+  }
+
+  .medium-horiz-padding {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type) {
+    pointer-events: none;
+
+    &.headerCellBtnTemplate {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      text-align: center !important;
+
+      .small-article-button {
+        margin-top: 2px;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  .swap-button {
+    width: 22px !important;
+    height: 22px;
+    min-width: 0 !important;
+    background-color: transparent !important;
+    margin-bottom: 0 !important;
+
+    .dx-button-content {
+      padding: 0 !important;
+
+      .dx-icon {
+        color: $base-accent;
+      }
+    }
+  }
+
+  .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+
+    input,
+    div {
+      color: #fff;
+    }
+  }
+
+  td:first-of-type input {
+    text-align: center !important;
+  }
+
+  .bio-article {
+    color: #39970e !important;
+    cursor: pointer;
+  }
+
+  .dx-editor-cell.dx-focused:not(.dx-datagrid-readonly) {
+    background: rgba(51, 145, 176, 0.26);
+  }
+
+  .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type) {
+    color: #000;
+    background-color: transparent !important;
+  }
+
+  .dx-row-focused.dx-data-row>td.dx-focused {
+    background-color: #CAE3EB !important;
+  }
+
+  .td:first-of-type input {
+    text-align: center !important;
+  }
+
+  .dx-row-focused.dx-data-row>td {
+    // border-bottom-color: #e0e0e0 !important;
+    border-bottom-color: $base-accent  !important;
+  }
+
+  .dx-link-delete {
+    color: $base-accent  !important;
+    background-color: transparent !important;
+  }
+
+  .dx-datagrid-focus-overlay:after {
+    background-color: transparent;
+  }
+
+  .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
+    padding: 0 !important;
+  }
+
+  .small-article-button {
+    height: 18px;
+    min-width: 0;
+    padding: 0 4px !important;
+
+    .dx-button-content {
+      padding: 0;
+      font-size: 10px;
+      text-overflow: initial;
+
+      .dx-button-text {
+        line-height: 19px;
+      }
+    }
+
+    &.certification {
+      background-color: $BW-purple-medium  !important;
+
+      &:hover {
+        background-color: $BW-purple-dark  !important;
+      }
+    }
+  }
+
+}
+
+::ng-deep .cursor-pointer,
+::ng-deep .cursor-pointer input {
+  cursor: pointer !important;
+}
+
+::ng-deep .order-line-text {
+  padding-left: 5px !important;
+}
+
+::ng-deep .small-margin-button {
+  position: absolute;
+  height: 18px;
+  margin: -26px 0 0 147px;
+  z-index: 10;
+  padding: 0 4px !important;
+  z-index: 10;
+
+  .dx-button-content {
+    font-size: 11px;
+
+    .dx-button-text {
+      margin-top: 0;
+      line-height: 0;
+    }
+
+    .margin-title-text {
+      float: left;
+    }
+
+    .margin-value-text {
+      font-weight: bold;
+      font-size: 12px;
+      float: right;
+    }
+
+    .small-loader {
+      position: relative;
+      top: -7px;
+      margin-left: 2px;
+      width: 15px;
+      height: 15px;
+      border: none;
+      float: right;
+    }
+
+  }
+}

@@ -1,6 +1,3 @@
-import { Inject, Injector } from "@angular/core";
-import { map } from "rxjs/operators";
-import { OrdresService } from "../services/api/ordres.service";
 import BaseTarif from "./base-tarif.model";
 import BasePaiement from "./base.paiement.model";
 import { Campagne } from "./campagne.model";

@@ -1,11 +1,11 @@
 import { Article } from "./article.model";
 import { BaseTarif } from "./base-tarif.model";
+import CodePromo from "./code-promo.model";
 import Fournisseur from "./fournisseur.model";
 import { Field, Model, ModelName } from "./model";
 import OrdreLogistique from "./ordre-logistique.model";
 import { Ordre } from "./ordre.model";
 import Palette from "./type-palette.model";
-import CodePromo from "./code-promo.model";
 
 @ModelName("OrdreLigne")
 export class OrdreLigne extends Model {
@@ -80,6 +80,10 @@ export class OrdreLigne extends Model {
   @Field({ format: { type: "percent", precision: 2 } })
   public pourcentageMargeNette?: number;
   @Field() public valide?: boolean;
+
+  static formatNumero(index: number) {
+    return index.toString().padStart(2, "0");
+  }
 }
 
 export default OrdreLigne;

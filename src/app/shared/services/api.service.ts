@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy, ɵNG_INJ_DEF } from "@angular/core";
+import { Inject, Injectable, OnDestroy } from "@angular/core";
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
@@ -1067,6 +1067,20 @@ export abstract class ApiService implements OnDestroy {
         { name: "pageable", type: "PaginationInput", isOptionnal: false },
       ]
     );
+  }
+
+  /**
+   * Build a mutation that delete an entity by his key
+   */
+  protected buildDeleteGraph() {
+    return ApiService.buildGraph("mutation", [{
+      name: `delete${this.model.name}`,
+      params: [
+        { name: "id", value: "id", isVariable: true },
+      ],
+    }], [
+      { name: "id", type: "String", isOptionnal: false },
+    ]);
   }
 
 }
