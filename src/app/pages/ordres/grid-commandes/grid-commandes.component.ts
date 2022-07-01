@@ -12,6 +12,7 @@ import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.servic
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { Change, GridColumn, OnSavingEvent } from "basic";
@@ -44,6 +45,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     private fournisseursService: FournisseursService,
     private basesTarifService: BasesTarifService,
     private codesPromoService: CodesPromoService,
+    private formUtilsService: FormUtilsService,
     private typesPaletteService: TypesPaletteService,
     public localizeService: LocalizationService,
 
@@ -507,6 +509,15 @@ export class GridCommandesComponent implements OnInit, OnChanges {
       }
     }
   }
+
+  // onEditorPreparing(e) {
+  //   if (e.parentType === "dataRow") {
+  //     e.editorOptions.onFocusIn = (elem) => {
+  //       if (e.dataField !== "numero")
+  //         this.formUtilsService.selectTextOnFocusIn(elem);
+  //     };
+  //   }
+  // }
 
   createStringNumero(num) {
     return ("0" + num.toString()).slice(-2);
