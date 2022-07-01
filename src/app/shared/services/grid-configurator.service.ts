@@ -125,6 +125,7 @@ const extraConfigurations = [
   "editorOptions",
   "allowEditing",
   "allowSorting",
+  "width",
 ];
 
 @Injectable({

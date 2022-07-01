@@ -33,8 +33,13 @@
   }
 
   .small-horiz-padding {
-    padding-left: 4px !important;
-    padding-right: 4px !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+  }
+
+  .medium-horiz-padding {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
 
   .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type) {
