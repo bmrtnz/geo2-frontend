@@ -167,6 +167,11 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     if (this.ordreID) this.updateRestrictions();
   }
 
+  displaySummaryFormat(data) {
+    if (!data?.value) return;
+    return data.value + " ligne" + (data.value > 1 ? "s" : "");
+  }
+
   focusedColumnIndexChange() {
     this.grid.instance.saveEditData();
   }
@@ -477,7 +482,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     this.switchNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
     this.grid.instance.cellValue(this.currentfocusedRow + moveDirection, "numero", this.currNumero);
     this.grid.instance.cellValue(this.currentfocusedRow, "numero", this.switchNumero);
-    this.grid.instance.saveEditData().then(() => this.update());
+    this.grid.instance.saveEditData();
   }
 
   handleNewArticles() {
