@@ -121,6 +121,8 @@ const extraConfigurations = [
   "cellTemplate",
   "editCellTemplate",
   "headerCellTemplate",
+  "cssClass",
+  "editorOptions",
   "allowEditing",
   "allowSorting",
 ];
