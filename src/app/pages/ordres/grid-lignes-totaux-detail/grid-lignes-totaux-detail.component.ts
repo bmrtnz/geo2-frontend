@@ -65,6 +65,7 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
         valueFormat: columns
           ?.find(({ dataField }) => dataField === column)
           ?.format,
+        showInGroupFooter: true
       }));
 
     if (this?.ordre?.id) {
@@ -73,6 +74,14 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
       this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
     }
 
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "group") {
+      if (e.column.dataField === "fournisseur.code" && e.cellElement.textContent) {
+        e.cellElement.textContent = e.cellElement.textContent.split(":")[1];
+      }
+    }
   }
 
   refresh() {

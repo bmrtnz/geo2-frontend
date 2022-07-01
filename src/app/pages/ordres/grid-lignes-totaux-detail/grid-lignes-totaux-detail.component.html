@@ -1,5 +1,5 @@
 <dx-data-grid
-  class="dx-card wide-card"
+  class="dx-card wide-card grid-lignes-totaux-detail"
   [dataSource]="dataSource"
   [remoteOperations]="{
     filtering: true,
@@ -13,6 +13,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Totaux détail',
@@ -48,6 +49,24 @@
   >
   </dxo-column-chooser>
   <dxo-summary [totalItems]="totalItems"></dxo-summary>
+  <!-- <dxo-summary>
+    <dxi-group-item
+      column="nombrePalettesExpediees"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="nombreColisExpedies"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+  </dxi-group-item>
+  </dxo-summary> -->
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"

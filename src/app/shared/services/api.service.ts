@@ -66,7 +66,7 @@ export type SummaryInput = {
   /**
    * Specifies how to aggregate data for the summary item.
    */
-  summaryType: SummaryType | string,
+  summaryType: SummaryType | string
 };
 
 export type Pageable = {
