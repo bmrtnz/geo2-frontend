@@ -2133,17 +2133,15 @@
         "dataField": "numero",
         "visible": true,
         "sortOrder": "asc",
-        "width": 50,
         "allowEditing": false,
         "allowSorting": false,
-        "cssClass": "no-padding text-align-center",
+        "cssClass": "medium-horiz-padding text-align-center",
         "showInColumnChooser": false,
         "fixed": true
       },
       {
         "dataField": "article.articleDescription.descriptionReferenceLongue",
         "allowEditing": false,
-        "width": 250,
         "cssClass": "small-left-padding",
         "fixed": true,
         "visible": true
@@ -2297,12 +2295,10 @@
       },
       {
         "dataField": "articleKit",
-        "width": 75,
         "visible": true
       },
       {
         "dataField": "gtinColisKit",
-        "width": 150,
         "visible": true
       }
     ]
