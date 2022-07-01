@@ -194,8 +194,6 @@ export class GridCommandesComponent implements OnInit, OnChanges {
   // Reload grid data after external update
   public async update() {
     await (this.grid.dataSource as DataSource).reload();
-    this.reindexing();
-    this.grid.instance.saveEditData();
   }
 
   private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
@@ -484,8 +482,22 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     fromIndex: number,
     toIndex: number,
   }) {
+    // set moved row
     e.component.cellValue(e.fromIndex, "numero", OrdreLigne.formatNumero(e.toIndex + 1));
-    e.component.cellValue(e.toIndex, "numero", OrdreLigne.formatNumero(e.fromIndex + 1));
+
+    // set offseted rows
+    const offset = Math.sign(e.fromIndex - e.toIndex);
+    const range = new Array(Math.abs(e.toIndex - e.fromIndex))
+      .fill(null)
+      .map((_, index) => [
+        index + Math.min(e.fromIndex, e.toIndex) + (offset > 0 ? 0 : 1),
+        index + Math.min(e.fromIndex, e.toIndex) + (offset > 0 ? 2 : 1),
+      ]);
+    range
+      .forEach(([index, value]) => {
+        e.component.cellValue(index, "numero", OrdreLigne.formatNumero(value));
+      });
+
     e.component.saveEditData();
   }
 
