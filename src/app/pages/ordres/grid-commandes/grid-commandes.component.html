@@ -1,4 +1,4 @@
-<ng-container *ngIf="FEATURE.rowOrdering">
+<!-- <ng-container *ngIf="FEATURE.rowOrdering">
   <dx-button
     [focusStateEnabled]="false"
     class="down-move-button"
@@ -19,7 +19,7 @@
     [disabled]="!currentfocusedRow || !allowMutations"
     (onClick)="moveRowUpDown($event)"
   ></dx-button>
-</ng-container>
+</ng-container> -->
 <dx-data-grid
   class="grid-commandes"
   [remoteOperations]="{
@@ -28,8 +28,6 @@
   [columnAutoWidth]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="true"
-  [focusedRowEnabled]="FEATURE.rowOrdering"
-  [focusedRowIndex]="FEATURE.rowOrdering && 0"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
   (focusedColumnIndexChange)="focusedColumnIndexChange()"
@@ -46,6 +44,7 @@
     [allowDeleting]="allowMutations"
     [(changes)]="changes"
     [refreshMode]="'reshape'"
+    [startEditAction]="'click'"
   ></dxo-editing>
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
   <dxo-keyboard-navigation
@@ -70,6 +69,14 @@
       displayFormat="{0}"
     ></dxi-total-item>
   </dxo-summary>
+
+  <dxo-row-dragging
+    *ngIf="FEATURE.rowOrdering"
+    [allowReordering]="true"
+    [onReorder]="onReorder"
+    [showDragIcons]="true"
+    [dropFeedbackMode]="'push'"
+  ></dxo-row-dragging>
 
   <!-- certifications -->
   <ng-container *ngIf="FEATURE.columnCertifications">

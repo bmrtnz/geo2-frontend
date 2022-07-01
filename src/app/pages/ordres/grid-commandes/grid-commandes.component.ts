@@ -18,6 +18,7 @@ import { Change, GridColumn, OnSavingEvent } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
+import dxDataGrid from "devextreme/ui/data_grid";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { Observable, of } from "rxjs";
@@ -183,6 +184,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
   }
 
+  // Reload grid data after external update
   public async update() {
     await (this.grid.dataSource as DataSource).reload();
     this.reindexing();
@@ -469,13 +471,15 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     this.lastRowFocused = (this.currentfocusedRow === (this.gridRowsTotal - 1));
   }
 
-  moveRowUpDown(e) {
-    const moveDirection = e.element.classList.contains("up-move-button") ? -1 : 1;
-    this.currNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow].data.numero;
-    this.switchNumero = this.grid.instance.getVisibleRows()[this.currentfocusedRow + moveDirection].data.numero;
-    this.grid.instance.cellValue(this.currentfocusedRow + moveDirection, "numero", this.currNumero);
-    this.grid.instance.cellValue(this.currentfocusedRow, "numero", this.switchNumero);
-    this.grid.instance.saveEditData().then(() => this.update());
+  onReorder(e: {
+    component: dxDataGrid,
+    itemData: Partial<OrdreLigne>, // dragged item
+    fromIndex: number,
+    toIndex: number,
+  }) {
+    e.component.cellValue(e.fromIndex, "numero", OrdreLigne.formatNumero(e.toIndex + 1));
+    e.component.cellValue(e.toIndex, "numero", OrdreLigne.formatNumero(e.fromIndex + 1));
+    e.component.saveEditData();
   }
 
   handleNewArticles() {
