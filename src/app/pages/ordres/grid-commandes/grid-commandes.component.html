@@ -56,7 +56,7 @@
     <dxi-total-item
       column="article.articleDescription.descriptionReferenceLongue"
       summaryType="count"
-      displayFormat="{0} ligne(s)"
+      [customizeText]="displaySummaryFormat"
     ></dxi-total-item>
     <dxi-total-item
       column="nombrePalettesCommandees"

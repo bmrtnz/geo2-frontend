@@ -15,15 +15,15 @@
   }
 }
 
-::ng-deep .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+::ng-deep .grid-commandes {
 
-  input,
-  div {
-    color: #fff;
+  .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+
+    input,
+    div {
+      // color: #fff;
+    }
   }
-}
-
-::ng-deep {
 
   .dx-row-focused {
 
@@ -94,6 +94,10 @@
     background-color: transparent !important;
   }
 
+  .dx-row-focused.dx-data-row>td.dx-focused {
+    background-color: #CAE3EB !important;
+  }
+
   .td:first-of-type input {
     text-align: center !important;
   }
@@ -154,7 +158,7 @@
 ::ng-deep .small-margin-button {
   position: absolute;
   height: 18px;
-  margin: -29px 0 0 301px;
+  margin: -26px 0 0 147px;
   z-index: 10;
   padding: 0 4px !important;
   z-index: 10;
