@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ColumnsSettings } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import { Fournisseur } from "app/shared/models";
@@ -26,6 +26,7 @@ import { Observable, of } from "rxjs";
 import { concatMap, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
+import { GridsService } from "../grids.service";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 
@@ -34,7 +35,7 @@ import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fo
   templateUrl: "./grid-commandes.component.html",
   styleUrls: ["./grid-commandes.component.scss"]
 })
-export class GridCommandesComponent implements OnInit, OnChanges {
+export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit {
 
   constructor(
     public injector: Injector,
@@ -49,7 +50,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     private formUtilsService: FormUtilsService,
     private typesPaletteService: TypesPaletteService,
     public localizeService: LocalizationService,
-
+    private gridsService: GridsService,
   ) {
     const fournisseursDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
@@ -168,6 +169,10 @@ export class GridCommandesComponent implements OnInit, OnChanges {
     if (this.ordreID) this.updateRestrictions();
   }
 
+  ngAfterViewInit() {
+    this.gridsService.register("Commande", this.grid);
+  }
+
   displaySummaryFormat(data) {
     if (!data?.value) return;
     return data.value + " ligne" + (data.value > 1 ? "s" : "");
@@ -211,6 +216,7 @@ export class GridCommandesComponent implements OnInit, OnChanges {
       return store.remove(change.key)
         .then(() => {
           store.push([change]);
+          this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
           return this.handleMutations();
         });
     }
@@ -273,6 +279,8 @@ export class GridCommandesComponent implements OnInit, OnChanges {
 
             complete: () => {
               rsv();
+              if (name === "fournisseur")
+                this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
               this.handleMutations();
             },
           });
