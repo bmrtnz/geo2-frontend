@@ -30,4 +30,12 @@ export class GridsService {
   public reload(...ids: (OrdreGridId)[]) {
     ids.forEach(id => this.grids[id]?.instance.refresh());
   }
+
+  /**
+   * Return the grid component if it is registered, undefined otherwise
+   * @param id Grid identifier
+   */
+  public get(id: OrdreGridId) {
+    return this.grids[id] as DxDataGridComponent;
+  }
 }
