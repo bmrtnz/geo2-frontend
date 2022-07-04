@@ -163,7 +163,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
           e.cellElement.innerText = "";
         } else {
           e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.ordre.devise.id + " / " + e.data.venteUnite.description;
+            e.cellElement.innerText + " " + e.data.ordre.devise?.id + " / " + e.data.venteUnite.description;
         }
       }
       if (e.column.dataField === "achatPrixUnitaire") {
@@ -171,7 +171,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
           e.cellElement.innerText = "";
         } else {
           e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.ordre.devise.id + " / " + e.data.achatUnite.description;
+            e.cellElement.innerText + " " + e.data.ordre.devise?.id + " / " + e.data.achatUnite.description;
         }
       }
     }
