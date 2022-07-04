@@ -2153,6 +2153,13 @@
         "visible": true
       },
       {
+        "dataField": "article.articleDescription.descriptionReferenceCourte",
+        "allowEditing": false,
+        "cssClass": "small-left-padding",
+        "fixed": true,
+        "visible": false
+      },
+      {
         "dataField": "nombrePalettesCommandees",
         "width": 35,
         "cssClass": "multi-line-header",
