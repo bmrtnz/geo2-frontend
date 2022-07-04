@@ -126,6 +126,7 @@ const extraConfigurations = [
   "editorOptions",
   "allowEditing",
   "allowSorting",
+  "dataType",
   "width",
 ];
 

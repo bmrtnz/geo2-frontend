@@ -2162,24 +2162,36 @@
       {
         "dataField": "nombrePalettesCommandees",
         "width": 35,
+        "editorOptions": {
+          "step": 0
+        },
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "nombrePalettesIntermediaires",
         "width": 30,
+        "editorOptions": {
+          "step": 0
+        },
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "nombreColisPalette",
         "width": 45,
+        "editorOptions": {
+          "step": 0
+        },
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "nombreColisCommandes",
         "width": 45,
+        "editorOptions": {
+          "step": 0
+        },
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -2201,6 +2213,7 @@
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
         "editorOptions": {
+          "step": 0,
           "format": {
             "type": "fixedPoint",
             "precision": 2
@@ -2236,6 +2249,7 @@
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
         "editorOptions": {
+          "step": 0,
           "format": {
             "type": "fixedPoint",
             "precision": 2
@@ -2280,6 +2294,9 @@
       },
       {
         "dataField": "fraisPrixUnitaire",
+        "editorOptions": {
+          "step": 0
+        },
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -2297,12 +2314,18 @@
       {
         "dataField": "tauxRemiseSurFacture",
         "width": 45,
+        "editorOptions": {
+          "step": 0
+        },
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "tauxRemiseHorsFacture",
         "width": 45,
+        "editorOptions": {
+          "step": 0
+        },
         "cssClass": "multi-line-header",
         "visible": true
       },
