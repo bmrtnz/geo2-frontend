@@ -2157,7 +2157,7 @@
         "allowEditing": false,
         "cssClass": "small-left-padding",
         "fixed": true,
-        "visible": true
+        "visible": false
       },
       {
         "dataField": "nombrePalettesCommandees",
