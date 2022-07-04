@@ -448,10 +448,13 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      if (e.column.dataField === "article.articleDescription.descriptionReferenceLongue") {
-        // Bio en vert
-        e.cellElement.title = e.data.article.articleDescription.descriptionReferenceLongue + "\r\n"
+      if ([
+        "article.articleDescription.descriptionReferenceLongue",
+        "article.articleDescription.descriptionReferenceCourte"]
+        .includes(e.column?.dataField)) {
+        e.cellElement.title = e.value + "\r\n"
           + this.hintDblClick;
+        // Bio en vert
         e.cellElement.classList.add("cursor-pointer");
         const isBio = e.data.article.matierePremiere?.modeCulture?.description?.toLowerCase().includes("bio");
         if (isBio) e.cellElement.classList.add("bio-article");
@@ -542,10 +545,15 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   // onEditorPreparing(e) {
   //   if (e.parentType === "dataRow") {
   //     e.editorOptions.onFocusIn = (elem) => {
-  //       if (e.dataField !== "numero")
-  //         this.formUtilsService.selectTextOnFocusIn(elem);
+  // this.formUtilsService.selectTextOnFocusIn(elem);
   //     };
   //   }
+  // }
+
+  // onFocusedCellChanged(e) {
+  //   if (e.allowEditing === false) return;
+  //   const editingEl = e.component.getCellElement(e.rowIndex, e.column.dataField);
+  //   if (editingEl) setTimeout(() => this.grid.instance.focus(editingEl), 10);
   // }
 
   createStringNumero(num) {
@@ -573,7 +581,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   openFilePopup(e) {
-    if (e.column?.dataField === "article.articleDescription.descriptionReferenceLongue") {
+    if ([
+      "article.articleDescription.descriptionReferenceLongue",
+      "article.articleDescription.descriptionReferenceCourte"]
+      .includes(e.column?.dataField)) {
       this.articleLigneId = e.data.article.id;
       this.zoomArticlePopup.visible = true;
     }
