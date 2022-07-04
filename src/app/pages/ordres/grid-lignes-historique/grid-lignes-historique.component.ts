@@ -228,7 +228,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
           e.cellElement.innerText = "";
         } else {
           e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.venteUnite.description;
+            e.cellElement.innerText + " " + e.data.venteUnite?.description;
         }
       }
       if (e.column.dataField === "achatDevisePrixUnitaire") {
