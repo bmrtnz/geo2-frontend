@@ -16,6 +16,7 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { GridsService } from "../grids.service";
 import { ModifDetailLignesPopupComponent } from "../modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 
 
@@ -57,6 +58,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     public localizeService: LocalizationService,
     public gridUtilsService: GridUtilsService,
     private functionsService: FunctionsService,
+    private gridsService: GridsService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigneDetails);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
@@ -73,6 +75,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     ]);
     this.paletteInterSource = this.typePaletteSource;
     this.enableFilters();
+    this.gridsService.register("DetailExpeditions", this.datagrid);
   }
 
   ngOnChanges() {

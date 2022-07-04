@@ -118,6 +118,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
 import { ZoomClientPopupComponent } from "./zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/button-marge-previ.component";
+import { GridsService } from "./grids.service";
 
 @NgModule({
   declarations: [
@@ -243,6 +244,7 @@ import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/b
     LocalizePipe,
     TabContext,
     OrdresTabsPersistGuard,
+    GridsService,
   ],
 })
 export class OrdresModule { }

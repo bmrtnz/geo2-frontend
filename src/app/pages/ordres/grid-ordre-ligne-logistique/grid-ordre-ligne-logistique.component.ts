@@ -1,47 +1,46 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
+import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import Ordre from "app/shared/models/ordre.model";
+import { AuthService } from "app/shared/services";
+import { FunctionsService } from "app/shared/services/api/functions.service";
+import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-logistique.service";
+import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
+import {
+  Grid,
+  GridConfig, GridConfiguratorService
+} from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
+import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import * as gridConfig from "assets/configurations/grids.json";
-import { GridColumn } from "basic";
 import { from, Observable, PartialObserver } from "rxjs";
 import { map } from "rxjs/operators";
-import {
-  GridConfiguratorService,
-  Grid,
-  GridConfig,
-} from "app/shared/services/grid-configurator.service";
-import { DateManagementService } from "app/shared/services/date-management.service";
-import { FunctionsService } from "app/shared/services/api/functions.service";
-import notify from "devextreme/ui/notify";
-import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import { ChoixRaisonDecloturePopupComponent } from "../choix-raison-decloture-popup/choix-raison-decloture-popup.component";
+import { GridsService } from "../grids.service";
 import { HistoriqueModifDetailPopupComponent } from "../historique-modif-detail-popup/historique-modif-detail-popup.component";
-import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-logistique.service";
-import { AuthService } from "app/shared/services";
-import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
-import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
-import { GridUtilsService } from "app/shared/services/grid-utils.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { FormUtilsService } from "app/shared/services/form-utils.service";
 
 @Component({
   selector: "app-grid-ordre-ligne-logistique",
   templateUrl: "./grid-ordre-ligne-logistique.component.html",
   styleUrls: ["./grid-ordre-ligne-logistique.component.scss"],
 })
-export class GridOrdreLigneLogistiqueComponent implements OnChanges {
+export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewInit {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -74,6 +73,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
     private currentCompanyService: CurrentCompanyService,
     public historiqueLogistiqueService: HistoriqueLogistiqueService,
     public localizeService: LocalizationService,
+    private gridsService: GridsService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreLigneLogistique,
@@ -86,6 +86,10 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     this.enableFilters();
     this.allowMutations = !this.env.production; // We can update some fields even if the order is closed
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("SyntheseExpeditions", this.datagrid);
   }
 
   async enableFilters() {
