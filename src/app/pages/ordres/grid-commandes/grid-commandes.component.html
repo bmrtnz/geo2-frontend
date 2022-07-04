@@ -6,6 +6,7 @@
   [columnAutoWidth]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="true"
+  [focusedRowEnabled]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
   (focusedColumnIndexChange)="focusedColumnIndexChange()"
@@ -59,7 +60,6 @@
   <!-- certifications -->
   <ng-container *ngIf="FEATURE.columnCertifications">
     <dxi-column
-      *ngIf="allowMutations"
       cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
       [cellTemplate]="'certificationTemplate'"
@@ -79,7 +79,6 @@
   <!-- origine -->
   <ng-container *ngIf="FEATURE.columnOrigine">
     <dxi-column
-      *ngIf="allowMutations"
       cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
       [cellTemplate]="'origineTemplate'"
