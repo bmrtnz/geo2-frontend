@@ -28,6 +28,6 @@ export class GridsService {
    * @param ids List of grid identifiers
    */
   public reload(...ids: (OrdreGridId)[]) {
-    ids.forEach(id => this.grids[id].instance.refresh());
+    ids.forEach(id => this.grids[id]?.instance.refresh());
   }
 }
