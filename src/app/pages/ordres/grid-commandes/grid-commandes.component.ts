@@ -199,6 +199,16 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   // Reload grid data after external update
   public async update() {
     await (this.grid.dataSource as DataSource).reload();
+
+    // indexing on new line
+    const focusedRowIndex = this.gridsService.get("Commande").focusedRowIndex;
+    const datasource = this.grid.dataSource as DataSource;
+    (datasource.items() as Partial<OrdreLigne>[])
+      .forEach((ol, index) => {
+        if (ol.numero) return;
+        this.grid.instance.cellValue(index, "numero", OrdreLigne.formatNumero(focusedRowIndex + 1));
+      });
+    await this.grid.instance.saveEditData();
   }
 
   private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
