@@ -54,19 +54,22 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   ) {
     const fournisseursDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
+    fournisseursDataSource.filter(["valide", "=", true]);
+    const proprietairesDataSource = this.fournisseursService
+      .getDataSource_v2(["id", "code", "raisonSocial"]);
+    proprietairesDataSource.filter(["valide", "=", true]);
     const sharedBaseTarifDatasource = this.basesTarifService
       .getDataSource_v2(["id", "description"]);
     const sharedTypePaletteDatasource = this.typesPaletteService
       .getDataSource_v2(["id", "description"]);
     this.columnsSettings = {
       "proprietaireMarchandise.id": {
-        dataSource: this.fournisseursService
-          .getDataSource_v2(["id", "code", "raisonSocial"]),
-        displayExpression: "raisonSocial",
+        dataSource: proprietairesDataSource,
+        displayExpression: "code",
       },
       "fournisseur.id": {
         dataSource: fournisseursDataSource,
-        displayExpression: "raisonSocial",
+        displayExpression: "code",
       },
       "venteUnite.id": {
         dataSource: sharedBaseTarifDatasource,

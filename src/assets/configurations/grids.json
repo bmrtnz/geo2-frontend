@@ -2198,14 +2198,14 @@
       {
         "dataField": "proprietaireMarchandise.id",
         "visible": true,
-        "calculateDisplayValue": "proprietaireMarchandise.raisonSocial",
+        "calculateDisplayValue": "proprietaireMarchandise.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "fournisseur.id",
         "visible": true,
-        "calculateDisplayValue": "fournisseur.raisonSocial",
+        "calculateDisplayValue": "fournisseur.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate"
       },
