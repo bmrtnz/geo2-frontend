@@ -148,6 +148,18 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       ...event,
       title: "Lignes de commande",
       onColumnsChange: this.onColumnsConfigurationChange.bind(this),
+      toolbarItems: [{
+        location: "after",
+        widget: "dxButton",
+        options: {
+          icon: "sorted",
+          hint: "Réindexer les lignes",
+          onClick: () => {
+            this.reindexing();
+            this.grid.instance.saveEditData();
+          },
+        },
+      }],
     })
 
   ngOnInit(): void {
