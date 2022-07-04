@@ -8,7 +8,7 @@ import {
 } from "devextreme-angular/ui/nested";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
-import { dxToolbarOptions } from "devextreme/ui/toolbar";
+import { dxToolbarItem, dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
 import { defer, from, interval, Observable } from "rxjs";
 import {
@@ -52,6 +52,7 @@ export type GridConfig = {
 export type AutoConfig = {
   component: dxDataGrid;
   toolbarOptions: dxToolbarOptions;
+  toolbarItems: dxToolbarItem[];
   title?: string;
   autoStateStoring: boolean;
   autoColumnChooser: boolean;
@@ -478,11 +479,13 @@ export class GridConfiguratorService {
     {
       component,
       toolbarOptions,
+      toolbarItems = [],
       title,
       onConfigReload,
       onColumnsChange,
     }: AutoConfig,
   ) {
+    toolbarOptions.items.unshift(...toolbarItems);
     toolbarOptions.items.unshift(
       {
         location: "after",
