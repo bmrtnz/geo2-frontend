@@ -190,23 +190,19 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
 
       // Descript. article
-      if (e.column.dataField === "article.id") {
-        const infoArt = this.articlesService.concatArtDescript(e.data.article);
-        e.cellElement.innerText = infoArt.concatDesc;
-        e.cellElement.title = infoArt.concatDesc.substring(2);
+      if (e.column.dataField === "article.articleDescription.descriptionReferenceLongue") {
+        e.cellElement.title = e.value;
         if (!e.data.article.valide) e.cellElement.title += + "\r\n" + this.hintNotValid;
         // Bio en vert
-        if (infoArt.bio) e.cellElement.classList.add("bio-article");
+        if (e.data.article.articleDescription.bio) e.cellElement.classList.add("bio-article");
       }
 
       // Descript. article abrégée
-      if (e.column.dataField === "article.description") {
-        const infoArt = this.articlesService.concatArtDescriptAbregee(e.data.article);
-        e.cellElement.innerText = infoArt.concatDesc;
-        e.cellElement.title = infoArt.concatDesc.substring(2);
+      if (e.column.dataField === "article.articleDescription.descriptionReferenceCourte") {
+        e.cellElement.title = e.value;
         if (!e.data.article.valide) e.cellElement.title += + "\r\n" + this.hintNotValid;
         // Bio en vert
-        if (infoArt.bio) e.cellElement.classList.add("bio-article");
+        if (e.data.article.articleDescription.bio) e.cellElement.classList.add("bio-article");
       }
 
       // Clic sur loupe
