@@ -135,6 +135,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public nbInsertedArticles: number;
   public newNumero = 0;
   public hintDblClick: string;
+  public gridHasData: boolean;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -209,6 +210,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   public onContentReady(event) {
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
+    this.gridHasData = !!this.grid.instance.getVisibleRows()?.length;
   }
 
   // Reload grid data after external update
