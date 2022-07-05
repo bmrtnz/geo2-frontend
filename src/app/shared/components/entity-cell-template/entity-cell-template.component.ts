@@ -47,7 +47,7 @@ export class EntityCellTemplateComponent {
 
   // Apply select box value to cell
   public onSelectBoxCellValueChanged(event, cell) {
-    if (event.value?.id === event.previousValue?.id) return;
+    if (!event.value || event.value?.id === event.previousValue?.id) return;
     if (cell.setValue) {
       const { displayExpression } = this.getSettings(cell.column.name);
       this.store.set(cell, event.value[displayExpression]);
