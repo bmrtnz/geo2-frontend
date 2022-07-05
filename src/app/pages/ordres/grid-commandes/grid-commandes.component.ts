@@ -156,7 +156,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         widget: "dxButton",
         options: {
           icon: "sorted",
-          hint: "Réindexer les lignes",
+          hint: "Renuméroter les lignes",
           onClick: () => {
             this.reindexing();
             this.grid.instance.saveEditData();
@@ -374,6 +374,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   private reindexing() {
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
+    notify(this.localizeService.localize("renumerotation-lignes-ordre"), "info", 3000);
     (datasource.items() as Partial<OrdreLigne>[])
       .sort((a, b) => parseInt(a.numero, 10) - parseInt(b.numero, 10))
       .forEach((item, index) => {
