@@ -418,6 +418,7 @@ export class GridConfiguratorService {
         GridConfiguratorService.getVisible(),
         startWith([] as GridColumn[]),
         pairwise(),
+        tap(() => component.endCustomLoading()),
         filter(
           ([previous, current]) =>
             previous.length !== current.length ||
