@@ -5,7 +5,8 @@
 /* tslint:disable-next-line max-line-length */
 // exemple command test clients certifications: npm run e2e:no-serve -- --specs src/login** --specs src/tiers** --grep "(Login|Clients.*certifications)"
 
-import { SpecReporter } from "jasmine-spec-reporter";
+// import { SpecReporter } from "jasmine-spec-reporter";
+const specReporter = require("jasmine-spec-reporter");
 
 /**
  * @type { import("protractor").Config }
@@ -41,6 +42,6 @@ exports.config = {
     require("ts-node").register({
       project: require("path").join(__dirname, "./tsconfig.json"),
     });
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    jasmine.getEnv().addReporter(new specReporter.SpecReporter({ spec: { displayStacktrace: true } }));
   },
 };
