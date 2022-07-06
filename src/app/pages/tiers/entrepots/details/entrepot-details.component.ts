@@ -24,6 +24,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { tap } from "rxjs/operators";
 import { DxAccordionComponent } from "devextreme-angular";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
 @Component({
   selector: "app-entrepot-details",
@@ -171,6 +172,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     private basesTarifService: BasesTarifService,
     private typesCamionService: TypesCamionService,
     private transitairesService: TransitairesService,
+    public currentCompanyService: CurrentCompanyService,
     private router: Router,
     private route: ActivatedRoute,
     public authService: AuthService,
@@ -386,6 +388,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
       } else {
+        entrepot.societe = { id: this.currentCompanyService.getCompany().id };
         entrepot.client = { id: this.route.snapshot.params.client };
       }
 
