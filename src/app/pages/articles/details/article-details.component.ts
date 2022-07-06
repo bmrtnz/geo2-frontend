@@ -94,7 +94,25 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
       identificationSymbolique: [""],
     }),
     emballage: this.fb.group({
-      emballage: [""],
+      emballage: this.fb.group({
+        id: [""],
+        description: [""],
+        tare: [""],
+        xh: [""],
+        xb: [""],
+        yh: [""],
+        yb: [""],
+        dimension: [""],
+        hauteurMaximumPalette: [""],
+        consigne: [""],
+        prixUnitaireMainOeuvre: [""],
+        prixUnitaireMatierePremiere: [""],
+        codeEmbadif: [""],
+        groupe: this.fb.group({
+          id: [""],
+          description: [""]
+        }),
+      }),
       conditionSpecial: [""],
       alveole: [""],
       uniteParColis: [""],
@@ -225,7 +243,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     this.contentReadyEvent.emit();
     this.ucBW = this.article.emballage.uniteParColis > 0;
     this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
-    console.log(this.article.emballage);
   }
 
   onCancel() {
@@ -290,6 +307,9 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         this.formGroup.controls,
         Article.getKeyField(),
       );
+      // Special field: need to adjust data
+      article.emballage.emballage.id = article.emballage.emballage.id.id;
+      article.emballage.emballage.espece = { id: this.article.matierePremiere.espece.id };
 
       if (this.cloneMode) {
         article.preSaisie = true;

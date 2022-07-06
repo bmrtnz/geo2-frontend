@@ -575,27 +575,31 @@
           }}</span>
           <div class="dx-form-group-content">
             <!-- Emballage -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-emballage-emballage" | localize }}
-              </div>
-              <div
-                class="dx-field-value"
-                formGroupName="emballage"
-              >
-                <dx-select-box
-                  formControlName="emballage"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="emballages"
-                  [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id']"
+            <div formGroupName="emballage">
+              <div class="dx-field">
+                <div class="dx-field-label">
+                  {{ "articles-emballage-emballage" | localize }}
+                </div>
+                <div
+                  class="dx-field-value"
+                  formGroupName="emballage"
                 >
-                  <dx-validator
-                    name="{{ 'articles-emballage-emballage' | localize }}"
+
+                  <dx-select-box
+                    formControlName="id"
+                    [readOnly]="readOnlyMode"
+                    [dataSource]="emballages"
+                    [displayExpr]="displayIDBefore"
+                    [searchExpr]="['id']"
+                    [value]="{ id: article?.emballage.emballage.id, especeId: article?.matierePremiere.espece.id }"
                   >
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-select-box>
+                    <dx-validator
+                      name="{{ 'articles-emballage-emballage' | localize }}"
+                    >
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dx-validator>
+                  </dx-select-box>
+                </div>
               </div>
             </div>
             <!-- Conditionnement Spécial -->
@@ -759,6 +763,76 @@
               <dxi-item [ratio]="1"></dxi-item>
               <dxi-item [ratio]="4"> </dxi-item>
             </dx-box>
+            <!-- Emballage infos complémentaires-->
+            <dx-accordion
+                [collapsible]="true"
+                [multiple]="false"
+                [selectedIndex]="-1"
+              >
+                <dxi-item title="Infos complémentaires">
+                  <div formGroupName="emballage">
+                    <!-- groupe emballage -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-groupe" | localize }}</div>
+                      <div formGroupName="emballage">
+                        <div formGroupName="groupe">
+                          <dx-text-box formControlName="id" [readOnly]="true"></dx-text-box>
+                          <dx-text-box formControlName="description" [readOnly]="true"></dx-text-box>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Tare -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-tare" | localize }}</div>
+                      <div class="dx-field-value" formGroupName="emballage">
+                        <dx-text-box formControlName="tare" [readOnly]="true"></dx-text-box>
+                      </div>
+                    </div>
+                    <!-- Consigné ? -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-consigne" | localize }}</div>
+                      <div class="dx-field-value" formGroupName="emballage">
+                        <dx-check-box formControlName="consigne" [readOnly]="true"></dx-check-box>
+                      </div>
+                    </div>
+                    <!-- PU €/kg mat. première -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-prixUnitaireMatierePremiere" | localize }}</div>
+                      <div class="dx-field-value" formGroupName="emballage">
+                        <dx-text-box formControlName="prixUnitaireMatierePremiere" [readOnly]="true"></dx-text-box>
+                      </div>
+                    </div>
+                    <!-- PU €/kg MO -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-prixUnitaireMainOeuvre" | localize }}</div>
+                      <div class="dx-field-value" formGroupName="emballage">
+                        <dx-text-box formControlName="prixUnitaireMainOeuvre" [readOnly]="true"></dx-text-box>
+                      </div>
+                    </div>
+                    <!-- Dimensions -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-dimension" | localize }}</div>
+                      <div class="dx-field-value" formGroupName="emballage">
+                        <dx-text-box formControlName="dimension" [readOnly]="true"></dx-text-box>
+                      </div>
+                    </div>
+                    <!-- Hauteur maxi palette -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-hauteurMaximumPalette" | localize }}</div>
+                      <div class="dx-field-value" formGroupName="emballage">
+                        <dx-text-box formControlName="hauteurMaximumPalette" [readOnly]="true"></dx-text-box>
+                      </div>
+                    </div>
+                    <!-- code Embadif -->
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label">{{ "articles-emballage-emballage-codeEmbadif" | localize }}</div>
+                      <div class="dx-field-value" formGroupName="emballage">
+                        <dx-text-box formControlName="codeEmbadif" [readOnly]="true"></dx-text-box>
+                      </div>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dx-accordion>
           </div>
         </div>
         <div
