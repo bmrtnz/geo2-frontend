@@ -45,9 +45,9 @@ import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-d
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
-import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
+import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -515,7 +515,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onLignesChanged(e) {
-    if (!e) return;
     this.gridCommandes.update();
   }
 
