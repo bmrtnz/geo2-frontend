@@ -194,8 +194,9 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     return data.value + " ligne" + (data.value > 1 ? "s" : "");
   }
 
-  focusedColumnIndexChange() {
-    this.grid.instance.saveEditData();
+  focusedCellChanging(e) {
+    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex)
+      this.grid.instance.saveEditData();
   }
 
   onSaving(event: OnSavingEvent) {
