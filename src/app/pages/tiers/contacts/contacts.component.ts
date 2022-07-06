@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { Client, Contact, Entrepot } from "app/shared/models";
 import { TypeTiers } from "app/shared/models/tier.model";
-import { AuthService, ClientsService, EntrepotsService, LocalizationService } from "app/shared/services";
+import { AuthService, EntrepotsService, LocalizationService } from "app/shared/services";
 import { ContactsService } from "app/shared/services/api/contacts.service";
 import { FluxService } from "app/shared/services/api/flux.service";
 import { MoyenCommunicationService } from "app/shared/services/api/moyens-communication.service";
@@ -222,7 +222,11 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   async fetchRefClientEntrepot(fluxComplement: string) {
     const fetchEntrepot = (codeEntrepot: string) => this
       .entrepotsService
-      .getOneByCodeAndsocieteId(codeEntrepot, this.currentCompanyService.getCompany().id, new Set(["id", "client.id"]))
+      .getOneByCodeAndSocieteId(
+        new Set(["id", "client.id"]),
+        codeEntrepot,
+        this.currentCompanyService.getCompany().id,
+      )
       .pipe(map(res => res.data.entrepotByCodeAndsocieteId))
       .toPromise();
     const entrepot = await fetchEntrepot(this.codeTiers);

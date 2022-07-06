@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { OperationVariables, gql } from "@apollo/client/core";
+import { gql, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { takeWhile } from "rxjs/operators";
 import { Entrepot } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import { takeWhile } from "rxjs/operators";
 import { AuthService } from "../auth.service";
 
 @Injectable({
@@ -27,7 +27,7 @@ export class EntrepotsService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getOneByCodeAndsocieteId(code: string, societeId: string, columns: Set<string>) {
+  getOneByCodeAndSocieteId(columns: Set<string>, code: string, societeId?: string) {
     return this.apollo.query<{ entrepotByCodeAndsocieteId: Entrepot }>({
       query: gql(ApiService.buildGraph(
         "query",
@@ -43,7 +43,7 @@ export class EntrepotsService extends ApiService implements APIRead {
         ],
         [
           { name: "code", type: "String", isOptionnal: false },
-          { name: "societeId", type: "String", isOptionnal: false }
+          { name: "societeId", type: "String", isOptionnal: true }
         ],
       )),
       variables: { code, societeId },
