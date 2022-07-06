@@ -883,11 +883,13 @@
                 ></dx-button>
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
-                  <app-actions-documents-ordres
-                    [ordre]="ordre"
-                    [gridEnvois]="gridEnvois"
-                    [orderConfirmationOnly]="true"
-                  ></app-actions-documents-ordres>
+                  <div [hidden]="!gridCommandes?.gridHasData">
+                    <app-actions-documents-ordres
+                      [ordre]="ordre"
+                      [gridEnvois]="gridEnvois"
+                      [orderConfirmationOnly]="true"
+                    ></app-actions-documents-ordres>
+                  </div>
                   <app-grid-commandes
                     [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
