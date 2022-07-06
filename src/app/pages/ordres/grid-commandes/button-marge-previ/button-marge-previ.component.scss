@@ -1,0 +1,38 @@
+::ng-deep .small-margin-button {
+  position: absolute;
+  height: 18px;
+  margin: -26px 0 0 210px;
+  z-index: 10;
+  padding: 0 4px !important;
+  z-index: 10;
+
+  .dx-button-content {
+    font-size: 11px;
+
+    .dx-button-text {
+      margin-top: 0;
+      line-height: 0;
+    }
+
+    .margin-title-text {
+      float: left;
+    }
+
+    .margin-value-text {
+      font-weight: bold;
+      font-size: 12px;
+      float: right;
+    }
+
+    .small-loader {
+      position: relative;
+      top: -7px;
+      margin-left: 2px;
+      width: 15px;
+      height: 15px;
+      border: none;
+      float: right;
+    }
+
+  }
+}

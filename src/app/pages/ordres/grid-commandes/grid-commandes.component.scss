@@ -79,10 +79,6 @@
     }
   }
 
-  td:first-of-type input {
-    text-align: center !important;
-  }
-
   .bio-article {
     color: #39970e !important;
     cursor: pointer;
@@ -92,13 +88,20 @@
     background: rgba(51, 145, 176, 0.26);
   }
 
-  .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)) {
+  .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)):not(.dx-cell-modified) {
     color: #000;
     background-color: transparent !important;
   }
 
-  .dx-row-focused.dx-data-row>td.dx-focused {
-    background-color: #CAE3EB !important;
+  .dx-row-focused.dx-data-row>td {
+    &.dx-cell-modified {
+      background-color: #DBECCA !important;
+      color: #000;
+    }
+
+    &.dx-focused {
+      background-color: #CAE3EB !important;
+    }
   }
 
   .td:first-of-type input {
@@ -151,47 +154,4 @@
 ::ng-deep .cursor-pointer,
 ::ng-deep .cursor-pointer input {
   cursor: pointer !important;
-}
-
-::ng-deep .order-line-text {
-  padding-left: 5px !important;
-}
-
-::ng-deep .small-margin-button {
-  position: absolute;
-  height: 18px;
-  margin: -26px 0 0 210px;
-  z-index: 10;
-  padding: 0 4px !important;
-  z-index: 10;
-
-  .dx-button-content {
-    font-size: 11px;
-
-    .dx-button-text {
-      margin-top: 0;
-      line-height: 0;
-    }
-
-    .margin-title-text {
-      float: left;
-    }
-
-    .margin-value-text {
-      font-weight: bold;
-      font-size: 12px;
-      float: right;
-    }
-
-    .small-loader {
-      position: relative;
-      top: -7px;
-      margin-left: 2px;
-      width: 15px;
-      height: 15px;
-      border: none;
-      float: right;
-    }
-
-  }
 }
