@@ -227,7 +227,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
         codeEntrepot,
         this.currentCompanyService.getCompany().id,
       )
-      .pipe(map(res => res.data.entrepotByCodeAndsocieteId))
+      .pipe(map(res => res.data.entrepotByCodeAndSocieteId))
       .toPromise();
     const entrepot = await fetchEntrepot(this.codeTiers);
     const partialContact: Partial<Contact> = {};

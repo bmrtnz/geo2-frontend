@@ -28,12 +28,12 @@ export class EntrepotsService extends ApiService implements APIRead {
   }
 
   getOneByCodeAndSocieteId(columns: Set<string>, code: string, societeId?: string) {
-    return this.apollo.query<{ entrepotByCodeAndsocieteId: Entrepot }>({
+    return this.apollo.query<{ entrepotByCodeAndSocieteId: Entrepot }>({
       query: gql(ApiService.buildGraph(
         "query",
         [
           {
-            name: "entrepotByCodeAndsocieteId",
+            name: "entrepotByCodeAndSocieteId",
             body: columns,
             params: [
               { name: "code", value: "code", isVariable: true },
