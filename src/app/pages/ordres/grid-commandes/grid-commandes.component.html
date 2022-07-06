@@ -3,7 +3,7 @@
   [remoteOperations]="{
     filtering: true
   }"
-  [focusedRowEnabled]="true"
+  [focusedRowEnabled]="false"
   [columnAutoWidth]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="true"
@@ -151,6 +151,7 @@
     [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="column?.calculateDisplayValue"
     [showInColumnChooser]="column.showInColumnChooser"
+    [calculateSortValue]="column.dataField === 'numero' && calultateSortValue"
     [cssClass]="column?.cssClass"
     [caption]="
       ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
