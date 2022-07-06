@@ -217,16 +217,13 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   // Reload grid data after external update
   public async update() {
     await (this.grid.dataSource as DataSource).reload();
+    this.reindexing();
+    this.grid.instance.saveEditData();
+  }
 
-    // indexing on new line
-    const focusedRowIndex = this.gridsService.get("Commande").focusedRowIndex;
-    const datasource = this.grid.dataSource as DataSource;
-    (datasource.items() as Partial<OrdreLigne>[])
-      .forEach((ol, index) => {
-        if (ol.numero) return;
-        this.grid.instance.cellValue(index, "numero", OrdreLigne.formatNumero(focusedRowIndex + 1));
-      });
-    await this.grid.instance.saveEditData();
+  public calultateSortValue(event) {
+    if (!event.numero) return Infinity;
+    return parseFloat(event.numero);
   }
 
   private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
@@ -292,11 +289,12 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
             // build and push response data
             next: ({ data }) => {
-              store.push([change, {
-                key: data.updateField.id,
-                type: "update",
-                data: data.updateField,
-              }]);
+              if (data.updateField)
+                store.push([change, {
+                  key: data.updateField.id,
+                  type: "update",
+                  data: data.updateField,
+                }]);
             },
 
             // reject on error
