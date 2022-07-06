@@ -10,7 +10,7 @@
   [focusedRowEnabled]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
-  (focusedColumnIndexChange)="focusedColumnIndexChange()"
+  (onFocusedCellChanging)="focusedCellChanging($event)"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
   (onContentReady)="onContentReady($event)"
