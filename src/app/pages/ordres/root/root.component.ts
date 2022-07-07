@@ -311,7 +311,7 @@ export class RootComponent implements OnInit, OnDestroy {
       data.component = (await import("../form/form.component")).FormComponent;
       data.icon = "material-icons description";
       data.title = "Ordre";
-      data.details = `N° ${data.id}`; // data.id is ordre.campagne.id-ordre.numero !
+      data.details = `${data.id}`; // data.id is ordre.campagne.id-ordre.numero !
       data.type = TabType.Ordre;
     }
     this.items.push(data);

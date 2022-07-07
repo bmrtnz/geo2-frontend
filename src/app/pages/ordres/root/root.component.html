@@ -28,9 +28,9 @@
           *ngIf="tab.title"
           class="dx-tab-text"
         >
-          <span>{{ tab.title }}</span>
+          <small>{{ tab.title }}</small>
           <ng-container *ngIf="tab.details">
-            <small>{{ tab.details }}</small>
+            <span>{{ tab.details }}</span>
           </ng-container>
         </span>
         <i

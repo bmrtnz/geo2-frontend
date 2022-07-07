@@ -2148,14 +2148,14 @@
       {
         "dataField": "article.articleDescription.descriptionReferenceLongue",
         "allowEditing": false,
-        "cssClass": "small-left-padding",
+        "cssClass": "small-left-padding article-column",
         "fixed": true,
         "visible": true
       },
       {
         "dataField": "article.articleDescription.descriptionReferenceCourte",
         "allowEditing": false,
-        "cssClass": "small-left-padding",
+        "cssClass": "small-left-padding article-column",
         "fixed": true,
         "visible": false
       },

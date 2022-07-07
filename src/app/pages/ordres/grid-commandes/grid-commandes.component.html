@@ -51,7 +51,7 @@
   </dxo-summary>
 
   <dxo-row-dragging
-    *ngIf="FEATURE.rowOrdering"
+    *ngIf="FEATURE.rowOrdering && allowMutations"
     [allowReordering]="true"
     [onReorder]="onReorder"
     [showDragIcons]="true"

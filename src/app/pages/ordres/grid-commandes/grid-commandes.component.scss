@@ -93,6 +93,14 @@
     background-color: transparent !important;
   }
 
+  .article-column {
+    background-color: transparent !important;
+
+    &:not(.bio-article) {
+      color: #000 !important;
+    }
+  }
+
   .dx-row-focused.dx-data-row>td {
     &.dx-cell-modified {
       background-color: #DBECCA !important;
