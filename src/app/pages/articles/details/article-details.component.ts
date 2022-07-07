@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild, Input, OnChanges } from "@angular/core";
+import { Component, EventEmitter, OnInit, ViewChild, Input, OnChanges, ViewChildren, AfterViewInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -42,13 +42,14 @@ import { of } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
 import { IdentificationsSymboliquesService } from "app/shared/services/api/identifications-symboliques.service";
 import { environment } from "environments/environment";
+import { DxAccordionComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-articles",
   templateUrl: "./article-details.component.html",
   styleUrls: ["./article-details.component.scss"],
 })
-export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges {
+export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges, AfterViewInit {
 
   @Input() public articleLigneId: string;
 
@@ -103,12 +104,19 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         yh: [""],
         yb: [""],
         dimension: [""],
+        codeEan: [""],
+        codeEanUc: [""],
         hauteurMaximumPalette: [""],
         consigne: [""],
         prixUnitaireMainOeuvre: [""],
         prixUnitaireMatierePremiere: [""],
         codeEmbadif: [""],
+        valide: [""],
         groupe: this.fb.group({
+          id: [""],
+          description: [""]
+        }),
+        preEmballage: this.fb.group({
           id: [""],
           description: [""]
         }),
@@ -131,6 +139,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
+  @ViewChildren(DxAccordionComponent) accordion: any;
   validatePopup: PushHistoryPopupComponent;
   editing = false;
   public ucBW: boolean;
@@ -168,6 +177,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
   UC = false;
   CNUFCode: string;
   warningMode = false;
+  palettesConfig: any;
 
   etiquetteVisible = false;
   currentEtiquette: ViewDocument;
@@ -222,6 +232,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         switchMap(params => this.articlesService.getOne(params.id)),
       )
       .subscribe(res => this.afterLoadInitForm(res));
+
+  }
+
+  ngAfterViewInit(): void {
   }
 
   ngOnChanges() {
@@ -237,12 +251,41 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
 
   }
 
+  openCloseAccordions(action) {
+    if (!this.accordion) return;
+    this.accordion.toArray().forEach((element) => {
+      if (action) {
+        element.instance.expandItem(0);
+      } else {
+        element.instance.collapseItem(0);
+      }
+    });
+  }
+
   afterLoadInitForm(res) {
     this.article = new Article(res.data.article);
     this.formGroup.patchValue(this.article);
     this.contentReadyEvent.emit();
     this.ucBW = this.article.emballage.uniteParColis > 0;
     this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
+    this.palettesConfig = {
+      palette100x120: "",
+      palette80x120: "",
+      palette60x80: ""
+    };
+    // Palette management
+    const emb = this.article.emballage?.emballage;
+    if (emb.xh) this.palettesConfig.palette100x120 = this.coucheColis(emb.xh, emb.xb);
+    if (emb.yh) this.palettesConfig.palette80x120 = this.coucheColis(emb.yh, emb.yb);
+    if (emb.zh) this.palettesConfig.palette60x80 = this.coucheColis(emb.zh, emb.zb);
+    this.openCloseAccordions(!!this.articleLigneId); // When zooming
+
+  }
+
+  coucheColis(couche, colis) {
+    return this.localization.localize("articles-emballage-couchesColis")
+      .replace("&h", couche)
+      .replace("&b", colis);
   }
 
   onCancel() {
@@ -250,12 +293,13 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     this.readOnlyMode = true;
     this.editing = false;
     this.formGroup.reset(this.article);
+    this.openCloseAccordions(this.editing);
   }
 
   onEdit() {
     this.readOnlyMode = false;
     this.editing = true;
-    this.showWarnings();
+    this.showWarningsAccordions();
   }
 
   onClone() {
@@ -265,18 +309,19 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     Object.keys(this.formGroup.controls).forEach((key) => {
       this.formGroup.get(key).markAsDirty();
     });
-    this.showWarnings();
+    this.showWarningsAccordions();
   }
 
   onUParColisChange(event) {
     this.ucBW = event.value > 0;
   }
 
-  showWarnings() {
+  showWarningsAccordions() {
     // Seule solution valable pour le moment pour faire apparaitre les warnings. A revoir...
     this.warningMode = true;
     const Element = document.querySelector(".submit") as HTMLElement;
     Element.click();
+    this.openCloseAccordions(this.editing);
   }
 
   displayIDBefore(data) {
@@ -308,8 +353,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         Article.getKeyField(),
       );
       // Special field: need to adjust data
-      article.emballage.emballage.id = article.emballage.emballage.id.id;
-      article.emballage.emballage.espece = { id: this.article.matierePremiere.espece.id };
+      article.emballage.emballage.id = { id: article.emballage.emballage.id.id, espece: this.article.matierePremiere.espece.id };
 
       if (this.cloneMode) {
         article.preSaisie = true;

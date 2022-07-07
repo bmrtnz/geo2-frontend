@@ -1,6 +1,7 @@
 import { Field, Model, ModelName } from "./model";
 import { Espece } from "./espece.model";
 import GroupeEmballage from "./groupe-emballage.model";
+import PreEmballage from "./pre-emballage.model";
 import Marque from "./marque.model";
 
 @ModelName("Emballage")
@@ -20,6 +21,7 @@ export class Emballage extends Model {
   @Field({ dataType: "datetime" }) public dateModification: string;
   @Field() public descriptionTechnique: string;
   @Field() public dimension: string;
+  @Field({ model: import("./pre-emballage.model") }) public preEmballage: PreEmballage;
   @Field({ model: import("./groupe-emballage.model") }) public groupe: GroupeEmballage;
   @Field() public especeEmballee: string;
   @Field() public idSymbolique: string;

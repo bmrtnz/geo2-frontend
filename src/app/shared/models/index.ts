@@ -14,6 +14,7 @@ export * from "./regime-tva.model";
 export * from "./client.model";
 export * from "./fournisseur.model";
 export * from "./groupe-emballage.model";
+export * from "./pre-emballage.model";
 export * from "./type.fournisseur.model";
 export * from "./transporteur.model";
 export * from "./lieu-passage-a-quai.model";
