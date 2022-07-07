@@ -2220,7 +2220,6 @@
           }
         },
         "width": 95,
-        "allowEditing": false,
         "visible": true
       },
       {
@@ -2315,15 +2314,14 @@
       {
         "dataField": "tauxRemiseSurFacture",
         "width": 45,
-        "editorOptions": {
-          "step": 0
-        },
+        "allowEditing": false,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "dataField": "tauxRemiseHorsFacture",
         "width": 45,
+        "allowEditing": false,
         "editorOptions": {
           "step": 0
         },

@@ -15,6 +15,7 @@
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
   (onContentReady)="onContentReady($event)"
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
+  (onEditingStart)="onEditingStart($event)"
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
 >
   <dxo-editing

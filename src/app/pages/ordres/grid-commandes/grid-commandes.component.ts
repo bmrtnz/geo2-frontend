@@ -349,6 +349,20 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "proprietaireMarchandise.code",
               "fournisseur.code",
             ] : [],
+            // Used to lock fields
+            ...[
+              "ordre.type.id",
+              "ordre.societe.id",
+              "ordre.venteACommission",
+              "ordre.entrepot.modeLivraison",
+              "ordre.commentaireUsageInterne",
+              "indicateurPalette",
+              "logistique.expedieStation",
+              "ordre.ordreEDI.id",
+              "ordre.secteurCommercial.id",
+              "ordre.bonAFacturer",
+              "ordre.societe.id"
+            ]
           ])),
           tap(datasource => datasource.filter([
             ["ordre.id", "=", this.ordreID],
@@ -567,6 +581,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         this.newNumero = parseInt(e.value, 10);
       }
     }
+  }
+
+  onEditingStart(e) {
+    if (!e.column || !e.data.numero || !this.gridRowsTotal) return;
+    this.ordreLignesService.lockFields(e);
   }
 
   // onEditorPreparing(e) {
