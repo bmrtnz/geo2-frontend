@@ -260,14 +260,15 @@ export class OrdreLignesService extends ApiService implements APIRead {
         ) this.lock(e);
         break;
       }
-      case "ventePrixUnitaire": {
-        if ((data.ordre.venteACommission !== true
-          && data.ordre.type?.id !== "REP"
-          && data.ordre.type?.id !== "RPF")
-          && bloquer === true
-        ) this.lock(e);
-        break;
-      }
+      // Modif Léa #17301
+      // case "ventePrixUnitaire": {
+      // if ((data.ordre.venteACommission !== true
+      //   && data.ordre.type?.id !== "REP"
+      //   && data.ordre.type?.id !== "RPF")
+      //   && bloquer === true
+      // ) this.lock(e);
+      //   break;
+      // }
       case "venteUnite": {
         if ((data.ordre.venteACommission !== true
           && data.ordre.type?.id !== "REP"

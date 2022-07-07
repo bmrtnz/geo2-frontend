@@ -32,7 +32,7 @@
     [enterKeyDirection]="'column'"
     [editOnKeyPress]="true"
   ></dxo-keyboard-navigation>
-  <dxo-summary *ngIf="gridHasData">
+  <dxo-summary *ngIf="!!gridRowsTotal">
     <dxi-total-item
       column="article.articleDescription.descriptionReferenceLongue"
       summaryType="count"
@@ -51,7 +51,7 @@
   </dxo-summary>
 
   <dxo-row-dragging
-    *ngIf="FEATURE.rowOrdering && allowMutations"
+    *ngIf="FEATURE.rowOrdering && allowMutations && gridRowsTotal > 1"
     [allowReordering]="true"
     [onReorder]="onReorder"
     [showDragIcons]="true"
@@ -129,6 +129,7 @@
         }}
       </div>
       <dx-button
+        *ngIf="gridRowsTotal > 1"
         class="small-article-button"
         type="default"
         [focusStateEnabled]="false"
@@ -204,7 +205,7 @@
 
 <!-- marge previsionelle -->
 <app-button-marge-previ
-  *ngIf="FEATURE.margePrevisionelle && gridHasData"
+  *ngIf="FEATURE.margePrevisionelle && !!gridRowsTotal"
   [ordreID]="ordreID"
 ></app-button-marge-previ>
 

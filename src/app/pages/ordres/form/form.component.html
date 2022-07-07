@@ -883,7 +883,7 @@
                 ></dx-button>
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
-                  <div [hidden]="!gridCommandes?.gridHasData || !allowMutations">
+                  <div [hidden]="!gridCommandes?.gridRowsTotal || !allowMutations">
                     <app-actions-documents-ordres
                       [ordre]="ordre"
                       [gridEnvois]="gridEnvois"
