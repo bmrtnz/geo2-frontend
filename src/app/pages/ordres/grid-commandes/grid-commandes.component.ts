@@ -343,6 +343,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
             ] : [],
             ...this.FEATURE.highlightBio ? [
               "article.matierePremiere.modeCulture.description",
+              "article.articleDescription.bio"
             ] : [],
             ...this.FEATURE.zoom ? [
               "article.id",
@@ -493,12 +494,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         "article.articleDescription.descriptionReferenceLongue",
         "article.articleDescription.descriptionReferenceCourte"]
         .includes(e.column?.dataField)) {
-        e.cellElement.title = e.value + "\r\n"
-          + this.hintDblClick;
+        e.cellElement.title = e.value + "\r\n" + this.hintDblClick;
         // Bio en vert
         e.cellElement.classList.add("cursor-pointer");
-        const isBio = e.data.article.matierePremiere?.modeCulture?.description?.toLowerCase().includes("bio");
-        if (isBio) e.cellElement.classList.add("bio-article");
+        if (e.data.article.articleDescription.bio) e.cellElement.classList.add("bio-article");
       }
       // Taux encombrement
       if (e.column.dataField === "nombrePalettesCommandees") {

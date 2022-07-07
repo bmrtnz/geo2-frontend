@@ -128,6 +128,7 @@ const extraConfigurations = [
   "allowSorting",
   "dataType",
   "width",
+  "format"
 ];
 
 @Injectable({

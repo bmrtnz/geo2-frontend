@@ -201,7 +201,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
   }
 
   lockFields(e) {
-    console.log(e);
     // Locking step
     const data = e.data;
     const bloquer = window.sessionStorage.getItem("blockage") === "true" ? true : false;
@@ -261,13 +260,11 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "ventePrixUnitaire": {
-        // if ((data.ordre.venteACommission !== true
-        //   && data.ordre.type?.id !== "REP"
-        //   && data.ordre.type?.id !== "RPF")
-        //   && bloquer === true
-        // ) this.lock(e);
-        // Modif Léa #17301
-        this.lock(e);
+        if ((data.ordre.venteACommission !== true
+          && data.ordre.type?.id !== "REP"
+          && data.ordre.type?.id !== "RPF")
+          && bloquer === true
+        ) this.lock(e);
         break;
       }
       case "venteUnite": {
@@ -319,8 +316,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "fraisPrixUnitaire": {
-        if (data.ordre.societe.id !== "IMP"
-        ) this.lock(e);
+        // if (data.ordre.societe.id !== "IMP"
+        // ) this.lock(e);
+        this.lock(e); // Modif Léa #17301
         break;
       }
       case "articleKit": {
