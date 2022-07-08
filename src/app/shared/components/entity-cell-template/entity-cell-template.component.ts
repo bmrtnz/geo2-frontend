@@ -27,8 +27,6 @@ export class EntityCellTemplateComponent {
   /** Per column settings for CellTemplate */
   @Input() public columnsSettings: ColumnsSettings;
 
-  currentValueTyped: string;
-
   constructor(
     public gridUtilsService: GridUtilsService,
     private store: CellDisplayStore,
@@ -61,10 +59,8 @@ export class EntityCellTemplateComponent {
 
   public onInput(elem) {
     // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
-    console.log("onInput SB");
     this.gridUtilsService.secureTypedValueWithEditGrid(elem);
   }
-
 
 }
 
