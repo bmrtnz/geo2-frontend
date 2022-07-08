@@ -215,6 +215,12 @@ export class GridStockComponent implements OnInit {
       if (e.column.dataField === "quantiteCalculee4") {
         e.cellElement.classList.add("highlight-stockJ21-cell");
       } else {
+        // Comment report on group row
+        if (e.column.dataField === "commentaire" && e.rowType === "group") {
+          let data = e.data.items ?? e.data.collapsedItems;
+          data = data[0].commentaire;
+          e.cellElement.innerText = data;
+        }
         if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
           let neg = false;
           if (e.rowType === "data") {

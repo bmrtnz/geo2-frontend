@@ -2,35 +2,66 @@
   display: none;
 }
 
-::ng-deep .grid-stock .search-criteria-subcontainer {
+::ng-deep .grid-stock {
 
-  // overflow: hidden;
-  .dx-field {
-    float: left;
-    margin-right: 15px;
-    width: 200px;
+  .grid-pen-button {
+    width: 22px !important;
+    height: 22px;
+    min-width: 22px !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
 
-    .dx-field-label {
-      text-overflow: visible;
-      white-space: normal;
-      font-size: 12px;
-      line-height: 12px;
-      padding: 10px 0;
-      text-align: left;
-      margin-right: 10px;
-      overflow: visible;
-      align-self: baseline;
-
-      &.noPadding {
-        padding: 0 !important;
-      }
+    .dx-button-content {
+      padding: 0;
     }
+  }
 
-    .dx-texteditor {
-      font-size: 12px;
+  .search-criteria-subcontainer {
 
-      .dx-texteditor-input {
-        font-size: 13px;
+    // overflow: hidden;
+    .dx-field {
+      float: left;
+      margin-right: 15px;
+      width: 200px;
+
+      .dx-field-label {
+        text-overflow: visible;
+        white-space: normal;
+        font-size: 12px;
+        line-height: 12px;
+        padding: 10px 0;
+        text-align: left;
+        margin-right: 10px;
+        overflow: visible;
+        align-self: baseline;
+
+        &.noPadding {
+          padding: 0 !important;
+        }
+      }
+
+      .dx-texteditor {
+        font-size: 12px;
+
+        .dx-texteditor-input {
+          font-size: 13px;
+        }
+      }
+
+      .dx-field-value {
+        width: 70%;
+
+        &.small-field {
+          width: 30%;
+        }
+      }
+
+      .dx-field-label {
+        width: 30%;
+      }
+
+      &.valid-field {
+        width: 100px;
       }
     }
 
@@ -42,27 +73,11 @@
       }
     }
 
-    .dx-field-label {
-      width: 30%;
+    .refresh {
+      top: 0;
+      margin-left: 10px;
+      float: right;
     }
-
-    &.valid-field {
-      width: 100px;
-    }
-  }
-
-  .dx-field-value {
-    width: 70%;
-
-    &.small-field {
-      width: 30%;
-    }
-  }
-
-  .refresh {
-    top: 0;
-    margin-left: 10px;
-    float: right;
   }
 }
 

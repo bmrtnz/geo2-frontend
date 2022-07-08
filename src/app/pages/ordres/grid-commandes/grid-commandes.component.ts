@@ -195,7 +195,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   focusedCellChanging(e) {
     if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex)
-      this.grid.instance.saveEditData();
+      setTimeout(() => this.grid.instance.saveEditData());
   }
 
   onSaving(event: OnSavingEvent) {
@@ -583,9 +583,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   onEditingStart(e) {
+    console.log(e);
     if (!e.column || !e.data.numero || !this.gridRowsTotal) return;
     this.ordreLignesService.lockFields(e);
   }
+
 
   // onEditorPreparing(e) {
   //   if (e.parentType === "dataRow") {
