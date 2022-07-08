@@ -583,25 +583,9 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   onEditingStart(e) {
-    console.log(e);
     if (!e.column || !e.data.numero || !this.gridRowsTotal) return;
     this.ordreLignesService.lockFields(e);
   }
-
-
-  // onEditorPreparing(e) {
-  //   if (e.parentType === "dataRow") {
-  //     e.editorOptions.onFocusIn = (elem) => {
-  // this.formUtilsService.selectTextOnFocusIn(elem);
-  //     };
-  //   }
-  // }
-
-  // onFocusedCellChanged(e) {
-  //   if (e.allowEditing === false) return;
-  //   const editingEl = e.component.getCellElement(e.rowIndex, e.column.dataField);
-  //   if (editingEl) setTimeout(() => this.grid.instance.focus(editingEl), 10);
-  // }
 
   createStringNumero(num) {
     return ("0" + num.toString()).slice(-2);

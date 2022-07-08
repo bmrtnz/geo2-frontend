@@ -883,7 +883,7 @@
                 ></dx-button>
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
-                  <div [hidden]="!gridCommandes?.gridRowsTotal || !allowMutations">
+                  <div [hidden]="!gridCommandes?.gridRowsTotal">
                     <app-actions-documents-ordres
                       [ordre]="ordre"
                       [gridEnvois]="gridEnvois"
@@ -1058,11 +1058,13 @@
                   (onItemTitleClick)="onAccordionToggled($event, [gridEnvois])"
                 >
                   <dxi-item>
-                    <app-actions-documents-ordres
-                      [ordre]="ordre"
-                      [gridEnvois]="gridEnvois"
-                      [orderConfirmationOnly]="false"
-                    ></app-actions-documents-ordres>
+                    <div [hidden]="!gridCommandes?.gridRowsTotal">
+                      <app-actions-documents-ordres
+                        [ordre]="ordre"
+                        [gridEnvois]="gridEnvois"
+                        [orderConfirmationOnly]="false"
+                      ></app-actions-documents-ordres>
+                    </div>
                     <div class="dx-form-group-content">
                       <app-grid-envois
                         #gridEnvois

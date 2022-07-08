@@ -20,6 +20,7 @@
   (onCellPrepared)="onCellPrepared($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
   (onCellClick)="onCellClick($event)"
+  (onContentReady)="onContentReady($event)"
   (onSaved)="onSaved()"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -67,7 +68,7 @@
   >
   </dxo-column-chooser>
 
-  <dxo-summary>
+  <dxo-summary *ngIf="!!gridRowsTotal">
     <dxi-total-item
       column="nombrePalettesAuSol"
       summaryType="sum"

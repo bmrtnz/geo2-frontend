@@ -52,6 +52,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   public countHisto: boolean;
   public changeCloture: boolean;
   public reasonId: string;
+  public gridRowsTotal: number;
   @Input() public ordre: Ordre;
   @Output() public ordreLogistique: OrdreLogistique;
   @Input() public ligneLogistiqueId: string;
@@ -112,6 +113,10 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
         e.rowElement.classList.add("sent-highlight-datagrid-row");
       }
     }
+  }
+
+  onContentReady(e) {
+    this.gridRowsTotal = this.datagrid.instance.getVisibleRows()?.length;
   }
 
   onCellPrepared(e) {
