@@ -135,6 +135,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public nbInsertedArticles: number;
   public newNumero = 0;
   public hintDblClick: string;
+  public currentValueTyped: string;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -495,8 +496,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         "article.articleDescription.descriptionReferenceCourte"]
         .includes(e.column?.dataField)) {
         e.cellElement.title = e.value + "\r\n" + this.hintDblClick;
-        // Bio en vert
         e.cellElement.classList.add("cursor-pointer");
+        // Bio en vert
         if (e.data.article.articleDescription.bio) e.cellElement.classList.add("bio-article");
       }
       // Taux encombrement
@@ -565,6 +566,19 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       this.nbInsertedArticles = null;
       this.grid.instance.option("focusedRowIndex", this.gridRowsTotal); // Focus on 1st added item
       this.grid.instance.saveEditData();
+    }
+  }
+
+  onEditorPreparing(e) {
+    // Saving cell main info
+    if (e.parentType === "dataRow") {
+      e.editorOptions.onInput = (elem) => {
+        if (elem.event.originalEvent.type === "input") {
+          this.currentValueTyped = elem.event.currentTarget.value;
+        } else {
+          elem.event.currentTarget.value = this.currentValueTyped;
+        }
+      };
     }
   }
 
