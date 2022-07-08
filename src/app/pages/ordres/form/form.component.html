@@ -345,7 +345,7 @@
                           <dx-date-box
                             [readOnly]="ordreFacture"
                             formControlName="dateDepartPrevue"
-                            [displayFormat]="'dd-MM-yyyy HH:mm'"
+                            [displayFormat]="'dd-MM-yy HH:mm'"
                             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
                             type="datetime"
                           >
@@ -368,7 +368,7 @@
                           <dx-date-box
                             [readOnly]="ordreFacture"
                             formControlName="dateLivraisonPrevue"
-                            [displayFormat]="'dd-MM-yyyy HH:mm'"
+                            [displayFormat]="'dd-MM-yy HH:mm'"
                             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
                             type="datetime"
                           >
@@ -625,6 +625,7 @@
                               <dx-date-box
                                 [readOnly]="ordreFacture"
                                 formControlName="etdDate"
+                                [displayFormat]="'dd-MM-yy'"
                                 dateSerializationFormat="yyyy-MM-dd"
                                 type="date"
                               >
@@ -665,6 +666,7 @@
                               <dx-date-box
                                 formControlName="etaDate"
                                 [readOnly]="ordreFacture"
+                                [displayFormat]="'dd-MM-yy'"
                                 dateSerializationFormat="yyyy-MM-dd"
                                 type="date"
                               >
