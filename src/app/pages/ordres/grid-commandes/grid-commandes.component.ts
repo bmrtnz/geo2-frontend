@@ -46,6 +46,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     private currentCompanyService: CurrentCompanyService,
     private fournisseursService: FournisseursService,
     private basesTarifService: BasesTarifService,
+    private gridUtilsService: GridUtilsService,
     private codesPromoService: CodesPromoService,
     private formUtilsService: FormUtilsService,
     private typesPaletteService: TypesPaletteService,
@@ -570,14 +571,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   onEditorPreparing(e) {
-    // Saving cell main info
+    // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
     if (e.parentType === "dataRow") {
       e.editorOptions.onInput = (elem) => {
-        if (elem.event.originalEvent.type === "input") {
-          this.currentValueTyped = elem.event.currentTarget.value;
-        } else {
-          elem.event.currentTarget.value = this.currentValueTyped;
-        }
+        console.log("onInput");
+        this.gridUtilsService.secureTypedValueWithEditGrid(elem);
       };
     }
   }

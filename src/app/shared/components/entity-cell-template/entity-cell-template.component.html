@@ -9,6 +9,7 @@
     [displayExpr]="getSettings(cell.column.dataField).displayExpression"
     [value]="extractEntity(cell)"
     (onValueChanged)="onSelectBoxCellValueChanged($event, cell)"
+    (onInput)="onInput($event)"
   ></dx-select-box>
   <ng-template #noSettings>{{ cell.value }}</ng-template>
 </div>

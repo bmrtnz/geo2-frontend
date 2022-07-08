@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, Injectable, Input, NgModule, Pipe, PipeTransform } from "@angular/core";
 import { CellTemplate } from "basic";
 import { DxSelectBoxModule, DxTemplateHost, DxTextBoxModule } from "devextreme-angular";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import DataSource from "devextreme/data/data_source";
 
 type Cell = {
@@ -26,7 +27,10 @@ export class EntityCellTemplateComponent {
   /** Per column settings for CellTemplate */
   @Input() public columnsSettings: ColumnsSettings;
 
+  currentValueTyped: string;
+
   constructor(
+    public gridUtilsService: GridUtilsService,
     private store: CellDisplayStore,
   ) { }
 
@@ -55,7 +59,15 @@ export class EntityCellTemplateComponent {
     }
   }
 
+  public onInput(elem) {
+    // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
+    console.log("onInput SB");
+    this.gridUtilsService.secureTypedValueWithEditGrid(elem);
+  }
+
+
 }
+
 
 @Pipe({ name: "cellDisplay" })
 export class CellDisplayPipe implements PipeTransform {
