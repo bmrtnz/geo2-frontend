@@ -14,11 +14,11 @@
         <div class="dx-field-value">
           <dx-select-box
             #especeSB
-            [dataSource]="especes"
-            (valueChange)="onFieldValueChange($event, 'matierePremiere.espece.id')"
-            [searchExpr]="['id']"
-            [displayExpr]="'id'"
-            valueExpr="id"
+            [dataSource]="especes | async"
+            (valueChange)="onFieldValueChange($event, 'espece')"
+            [searchExpr]="['node.key']"
+            [displayExpr]="'node.key'"
+            valueExpr="node"
           >
             <dxo-drop-down-options [width]="150"> </dxo-drop-down-options>
           </dx-select-box>
@@ -35,7 +35,9 @@
             [dataSource]="varietes"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
-            (valueChange)="onFieldValueChange($event, 'matierePremiere.variete.id')"
+            (valueChange)="
+              onFieldValueChange($event, 'matierePremiere.variete.id')
+            "
             [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -55,7 +57,12 @@
             [dataSource]="modesCulture"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
-            (valueChange)="onFieldValueChange($event, 'matierePremiere.modeCulture.description')"
+            (valueChange)="
+              onFieldValueChange(
+                $event,
+                'matierePremiere.modeCulture.description'
+              )
+            "
             searchExpr="matierePremiere.modeCulture.description"
             [displayExpr]="'description'"
             [valueExpr]="'id'"
@@ -95,7 +102,9 @@
             [dataSource]="origines"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
-            (valueChange)="onFieldValueChange($event, 'matierePremiere.origine.id')"
+            (valueChange)="
+              onFieldValueChange($event, 'matierePremiere.origine.id')
+            "
             [searchExpr]="['id']"
             [displayExpr]="'id'"
             valueExpr="id"
@@ -252,7 +261,10 @@
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
 
-      <div *dxTemplate="let cell of 'editButtonTemplate'" class="cell-with-icon">
+      <div
+        *dxTemplate="let cell of 'editButtonTemplate'"
+        class="cell-with-icon"
+      >
         <div class="text">{{ cell.value }}</div>
         <dx-button
           class="grid-pen-button"
@@ -264,17 +276,17 @@
         >
         </dx-button>
       </div>
-
     </dx-data-grid>
   </div>
-
 </div>
 <app-zoom-article-popup
-[articleLigneId]="articleLigneId"
+  [articleLigneId]="articleLigneId"
 ></app-zoom-article-popup>
 <app-prompt-popup
   [title]="'stocks-articles-modif-comm' | localize"
   (whenValidate)="validateComment($event)"
 ></app-prompt-popup>
 
-<app-reservation-popup (ajoutReservation)="ajoutReservation()"></app-reservation-popup>
+<app-reservation-popup
+  (ajoutReservation)="ajoutReservation()"
+></app-reservation-popup>
