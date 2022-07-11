@@ -12,6 +12,14 @@ const DEFAULT_KEY = "id";
 const DEFAULT_GQL_KEY_TYPE = "String";
 const DEFAULT_PAGE_SIZE = 10;
 const BASE_FIELDS_SIZE = 7;
+const PAGINATION_FIELDS = [
+  "pageInfo.hasNextPage",
+  "pageInfo.hasPreviousPage",
+  "pageInfo.startCursor",
+  "pageInfo.endCursor",
+  "totalPage",
+  "totalCount",
+];
 
 export type PageInfo = {
   startCursor?: string
@@ -1080,6 +1088,31 @@ export abstract class ApiService implements OnDestroy {
       ],
     }], [
       { name: "id", type: "String", isOptionnal: false },
+    ]);
+  }
+
+  /**
+   * Build a distinct query graph
+   */
+  protected buildDistinctGraph() {
+    return ApiService.buildGraph("query", [{
+      name: `distinct`,
+      body: [
+        ...PAGINATION_FIELDS,
+        "edges.node.count",
+        "edges.node.key",
+      ],
+      params: [
+        { name: "field", value: "field", isVariable: true },
+        { name: "type", value: "type", isVariable: true },
+        { name: "pageable", value: "pageable", isVariable: true },
+        { name: "search", value: "search", isVariable: true },
+      ],
+    }], [
+      { name: "field", type: "String", isOptionnal: false },
+      { name: "type", type: "String", isOptionnal: false },
+      { name: "pageable", type: "PaginationInput", isOptionnal: false },
+      { name: "search", type: "String", isOptionnal: true },
     ]);
   }
 

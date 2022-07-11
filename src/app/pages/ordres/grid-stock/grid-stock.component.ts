@@ -1,5 +1,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import Ordre from "app/shared/models/ordre.model";
+import StockArticle from "app/shared/models/stock-article.model";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
@@ -7,6 +9,7 @@ import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.servi
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
+import { StockArticlesAgeService } from "app/shared/services/api/stock-articles-age.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -17,13 +20,11 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
-import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
-import StockArticle from "app/shared/models/stock-article.model";
-import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
-import Ordre from "app/shared/models/ordre.model";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
+import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
 import { StockConsolideService } from "../../../shared/services/api/stock-consolide.service";
+import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 
 @Component({
   selector: "app-grid-stock",
@@ -54,7 +55,7 @@ export class GridStockComponent implements OnInit {
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
   tagFilters: { [path: string]: string[] } = {};
-  especes: DataSource;
+  especes: Observable<DataSource>;
   origines: DataSource;
   varietes: DataSource;
   emballages: DataSource;
@@ -81,12 +82,13 @@ export class GridStockComponent implements OnInit {
     private stocksService: StocksService,
     private modesCultureService: ModesCultureService,
     public authService: AuthService,
-    private stockConsolideService: StockConsolideService
+    private stockConsolideService: StockConsolideService,
+    private stockArticlesAgeService: StockArticlesAgeService,
   ) {
     this.apiService = this.articlesService;
 
-    this.especes = this.especesService.getDistinctDataSource(["id"]);
-    this.especes.filter(["valide", "=", true]);
+    this.especes = this.stockArticlesAgeService.getDistinctEspecesDatasource();
+    // this.especes.filter(["valide", "=", true]);
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
     this.origines.filter(["valide", "=", true]);
     this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
@@ -112,7 +114,7 @@ export class GridStockComponent implements OnInit {
   }
 
   onFilterChange() {
-    this.noEspeceSet = !this.especeSB.value?.length;
+    this.noEspeceSet = !this.especeSB.value;
     this.toRefresh = !this.noEspeceSet;
   }
 
@@ -121,19 +123,19 @@ export class GridStockComponent implements OnInit {
    * @param event List of field values
    * @param dataField Field path
    */
-  onFieldValueChange(event: string[], dataField: string) {
+  onFieldValueChange(event, dataField: string) {
     this.onFilterChange();
 
     // Filtering variete, emballage & origine selectBox list depending on specy
     const filter = [];
 
-    if (dataField === "matierePremiere.espece.id") {
+    if (dataField === "espece") {
       this.varieteSB.value = null;
       this.emballageSB.value = null;
       this.origineSB.value = null;
 
       if (event) {
-        filter.push(["espece.id", "=", event]);
+        filter.push(["espece.id", "=", event.key]);
 
         this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
         this.varietes.filter(filter);
