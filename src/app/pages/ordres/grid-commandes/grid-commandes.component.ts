@@ -416,7 +416,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       || proprietaireMarchandise?.code.substring(0, 2) !== "BW"
     ) {
       const listExp = proprietaireMarchandise?.listeExpediteurs;
-      console.log(listExp);
       if (listExp) {
         listExp.split(",").map(exp => {
           filters.push(["code", "=", exp], "or");

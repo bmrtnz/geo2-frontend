@@ -59,7 +59,12 @@ export class EntityCellTemplateComponent {
 
   public onInput(elem) {
     // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
-    this.gridUtilsService.secureTypedValueWithEditGrid(elem);
+    this.gridUtilsService.secureTypedValueSBWithEditGrid(elem);
+  }
+
+  public onFocusIn(elem) {
+    // KEEP THIS !!! See secureFocusSBTypedValueWithEditGrid() comment
+    this.gridUtilsService.secureFocusSBTypedValueWithEditGrid(elem);
   }
 
 }
