@@ -139,12 +139,12 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         .map(([path, values]) => values
           .map(value => [path, value === "null" ? "isnotnull" : "=", value])
           .map(value => JSON.stringify(value))
-          .join(`¤${JSON.stringify(["or"])}¤`)
+          .join(`¤${JSON.stringify("or")}¤`)
           .split("¤")
           .map(v => JSON.parse(v))
         )
         .map(value => JSON.stringify(value))
-        .join(`¤${JSON.stringify(["and"])}¤`)
+        .join(`¤${JSON.stringify("and")}¤`)
         .split("¤")
         .map(v => JSON.parse(v));
     } catch (error) {
