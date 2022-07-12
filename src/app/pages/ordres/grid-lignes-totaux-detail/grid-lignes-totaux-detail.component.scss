@@ -1,12 +1,19 @@
-// ::ng-deep .grid-lignes-totaux-detail {
+::ng-deep .grid-lignes-totaux-detail {
 
-//   .dx-row-lines,
-//   .dx-datagrid-group-opened {
-//     display: none;
-//   }
-// }
+  .dx-row-lines,
+  .dx-datagrid-group-opened {
+    display: none;
+  }
 
-// ::ng-deep .dx-toolbar-before,
-// ::ng-deep .dx-datagrid-headers.dx-datagrid-nowrap {
-//   pointer-events: none;
-// }
+  .dx-datagrid-rowsview .dx-datagrid-summary-item {
+    font-weight: normal !important;
+    color: #000;
+  }
+
+  .dx-toolbar-before,
+  .dx-datagrid-headers.dx-datagrid-nowrap,
+  .dx-datagrid-group-opened {
+    pointer-events: none;
+  }
+
+}

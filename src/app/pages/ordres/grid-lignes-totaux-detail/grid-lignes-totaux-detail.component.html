@@ -49,7 +49,7 @@
   >
   </dxo-column-chooser>
   <dxo-summary [totalItems]="totalItems"></dxo-summary>
-  <!-- <dxo-summary>
+  <dxo-summary>
     <dxi-group-item
       column="nombrePalettesExpediees"
       summaryType="sum"
@@ -65,8 +65,56 @@
       [showInGroupFooter]="true"
       [alignByColumn]="true"
     >
-  </dxi-group-item>
-  </dxo-summary> -->
+    </dxi-group-item>
+    <dxi-group-item
+      column="poidsBrutExpedie"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="poidsNetExpedie"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="logistique.nombrePalettesAuSol"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="logistique.nombrePalettes100x120"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="logistique.nombrePalettes80x120"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="logistique.nombrePalettes60x80"
+      summaryType="sum"
+      displayFormat="{0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+  </dxo-summary>
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
