@@ -93,6 +93,10 @@ body app-root.production {
   float: right;
 }
 
+.float-left {
+  float: left !important;
+}
+
 .fournisseur-page,
 .article-page,
 .client-page,
