@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import StockArticle from "app/shared/models/stock-article.model";
+import StockReservation from "app/shared/models/stock-reservation.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { Stock } from "../../models/stock.model";
@@ -102,6 +103,31 @@ export class StocksService extends ApiService implements APIRead {
           ],
         )),
         variables: { espece, variete, origine, modeCulture, emballage, bureauAchat },
+        fetchPolicy: "network-only",
+      });
+  }
+
+
+  /** Query fetching stock by article */
+  allStockReservationList(article: string) {
+    return this.apollo
+      .query<{ allStockReservationList: StockReservation[] }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `allStockReservationList`,
+              body: StockReservation.getFieldsName(),
+              params: [
+                { name: "article", value: "article", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "article", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { article },
         fetchPolicy: "network-only",
       });
   }

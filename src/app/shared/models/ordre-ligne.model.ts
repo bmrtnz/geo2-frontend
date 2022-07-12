@@ -5,6 +5,7 @@ import Fournisseur from "./fournisseur.model";
 import { Field, Model, ModelName } from "./model";
 import OrdreLogistique from "./ordre-logistique.model";
 import { Ordre } from "./ordre.model";
+import StockMouvement from "./stock-mouvement.model";
 import Palette from "./type-palette.model";
 
 @ModelName("OrdreLigne")
@@ -80,6 +81,7 @@ export class OrdreLigne extends Model {
   @Field({ format: { type: "percent", precision: 2 } })
   public pourcentageMargeNette?: number;
   @Field() public valide?: boolean;
+  @Field({ model: import("./stock-mouvement.model") }) public mouvement?: StockMouvement;
 
   static formatNumero(index: number) {
     return index.toString().padStart(2, "0");
