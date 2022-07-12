@@ -46,6 +46,8 @@
     "devextreme": "^20.2.11",
     "devextreme-angular": "^20.2.11",
     "devextreme-schematics": "^1.2.7",
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
     "graphql": "^15.0.0",
     "material-design-icons": "^3.0.1",
     "material-design-icons-iconfont": "^5.0.1",

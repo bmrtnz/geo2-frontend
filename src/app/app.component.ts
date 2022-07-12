@@ -6,6 +6,10 @@ import dxNumberBox from "devextreme/ui/number_box";
 import dxTabPanel from "devextreme/ui/tab_panel";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { FormUtilsService } from "./shared/services/form-utils.service";
+// import { Workbook } from "exceljs";
+// import { exportDataGrid } from "devextreme/excel_exporter";
+// import { Export } from "devextreme/exporter/exceljs/export.js";
+// import { saveAs } from "file-saver";
 
 @Component({
   selector: "app-root",
@@ -83,6 +87,7 @@ export class AppComponent {
       options: {
         scrolling: { useNative: true },
         columnFixing: { enabled: true },
+        onExporting: this.onExporting,
         // TODO for better keyboard navigation
         /*keyboardNavigation: {
           enterKeyAction: "moveFocus",
@@ -91,5 +96,49 @@ export class AppComponent {
         }*/
       }
     });
+  }
+
+  private onExporting(event: {
+    cancel: boolean,
+    component: dxDataGrid,
+    element: HTMLElement,
+    fileName: string,
+    format: string | "EXCEL",
+    selectedRowsOnly: boolean,
+  }) {
+    // only handle 'excel' export
+    if (event.format !== "EXCEL") return;
+
+    // const workbook = new Workbook();
+    // const worksheet = workbook.addWorksheet("Data");
+
+    // DANGER ZONE, DO NOT TRY TO REPRODUCT AT HOME
+    // Export.export();
+
+    // const dataProvider = (event.component as any).getDataProvider(false);
+    // console.log(dataProvider);
+    // dataProvider.getRowsCount = function () { return 66; };
+    // dataProvider.getRowsCount.apply(dataProvider, arguments);
+    // (event.component as any).dataProvider = dataProvider;
+    // console.log(dataProvider);
+    // dataProvider.ready().done(() => {
+    //   const dataRowsCount = dataProvider.getRowsCount();
+    //   console.log(dataRowsCount);
+    // });
+
+    // exportDataGrid({
+    //   component: event.component,
+    //   worksheet,
+    // })
+    //   .then((range) => {
+    //     console.log(range);
+    //     return workbook.xlsx.writeBuffer();
+    //   })
+    //   .then((buffer: BlobPart) => {
+    //     saveAs(new Blob([buffer], { type: "application/octet-stream" }), `${event.fileName}.xlsx`);
+    //   });
+
+    // disables the deprecated built-in export implementation with fewer capabilities
+    event.cancel = true;
   }
 }
