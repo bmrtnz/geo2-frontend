@@ -17,6 +17,17 @@
 
 ::ng-deep .grid-commandes {
 
+  .dx-data-row .arrow-right .dx-template-wrapper::after {
+    content: "⏷";
+    color: #5D686C;
+    position: relative;
+    display: block;
+    width: 24px;
+    margin: -1px -25px 0 0;
+    font-size: 1.1em;
+    float: right;
+  }
+
   .dx-command-drag {
     padding: 0 !important;
     width: 25px !important;
