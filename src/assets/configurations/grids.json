@@ -1108,6 +1108,12 @@
         "showInColumnChooser": false
       },
       {
+        "dataField": "matierePremiere.type.id",
+        "dataType": "string",
+        "visible": false,
+        "showInColumnChooser": true
+      },
+      {
         "dataField": "emballage.emballage.id",
         "dataType": "string",
         "visible": false,
@@ -1311,6 +1317,75 @@
         "dataField": "commentaire",
         "visible": true,
         "cellTemplate": "editButtonTemplate"
+      }
+    ]
+  },
+  "ordre-reservation-stock": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "fournisseurCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "proprietaireCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "totalDispo",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "totalDepart",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "totalResa",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "quantiteCalculee1",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "quantiteCalculee2",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "quantiteCalculee3",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "quantiteCalculee4",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "codePalette",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "option",
+        "dataType": "string",
+        "visible": true
       }
     ]
   },

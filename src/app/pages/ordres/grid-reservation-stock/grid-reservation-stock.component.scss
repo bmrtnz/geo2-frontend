@@ -1,0 +1,13 @@
+::ng-deep .grid-reservation-stock {
+
+  .highlight-stockJ21-cell {
+    background: #ffdd00 !important;
+    color: rgba(0, 0, 0, .7) !important;
+  }
+
+  .highlight-negativeStock-cell {
+    background: #ff325a !important;
+    color: white !important;
+  }
+
+}

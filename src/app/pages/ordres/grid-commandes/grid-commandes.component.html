@@ -99,6 +99,28 @@
     </div>
   </ng-container>
 
+  <!-- Réservation -->
+  <ng-container *ngIf="FEATURE.reservation">
+    <dxi-column
+      cssClass="small-horiz-padding"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'reservationTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'reservationTemplate'">
+      <dx-button
+        class="small-article-button origin"
+        type="success"
+        [focusStateEnabled]="false"
+        [visible]="true"
+        hint="{{ 'reservation' | localize }}"
+        [text]="'R'"
+        (onClick)="openReservationPopup(cell.data)"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
+
   <!-- switch article -->
   <ng-container *ngIf="FEATURE.quickSwitch">
     <dxi-column
@@ -209,6 +231,12 @@
   *ngIf="FEATURE.margePrevisionelle && !!gridRowsTotal"
   [ordreID]="ordreID"
 ></app-button-marge-previ>
+
+<app-article-reservation-ordre-popup
+  *ngIf="FEATURE.reservation"
+  [ordreLigne]="ordreLigne"
+  (changeLigne)="onDataChanged($event)"
+></app-article-reservation-ordre-popup>
 
 <app-article-certification-popup
   *ngIf="FEATURE.columnCertifications"
