@@ -121,6 +121,7 @@ import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/b
 import { GridsService } from "./grids.service";
 import { ArticleReservationOrdrePopupComponent } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { GridReservationStockComponent } from "./grid-reservation-stock/grid-reservation-stock.component";
+import { GridReservationStockEnCoursComponent } from "./grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 
 @NgModule({
   declarations: [
@@ -193,6 +194,7 @@ import { GridReservationStockComponent } from "./grid-reservation-stock/grid-res
     ButtonMargePreviComponent,
     ArticleReservationOrdrePopupComponent,
     GridReservationStockComponent,
+    GridReservationStockEnCoursComponent,
   ],
   imports: [
     OrdresRoutingModule,

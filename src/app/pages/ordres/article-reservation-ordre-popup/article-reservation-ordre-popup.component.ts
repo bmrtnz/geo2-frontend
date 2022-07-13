@@ -13,6 +13,7 @@ import DataSource from "devextreme/data/data_source";
 export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   @Input() public ordreLigne: OrdreLigne;
+  @Output() public ordreLigneInfo: OrdreLigne;
   @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
 
   visible: boolean;
@@ -21,17 +22,16 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   titleEnd: string;
   logText: string;
 
-  @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
-  @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
     private localizeService: LocalizationService
   ) {
-    this.logText = "bla bla bla bla\r\nbla bla bla bla bla bla\r\nbla bla blabla bla bla";
-    this.logText += "bla bla bla bla\r\nbla bla bla bla bla bla\r\nbla bla blabla bla bla";
+    this.logText = "tout est OK, rien à modifier\r\n";
+    this.logText += "changement de fournisseur 3D/3D --> VERGERDANJOU/VERGERDANJOU demandé\r\n";
+    this.logText += "1 réservation effectuée sur VERGERDANJOU/3D\r\n";
+    this.logText += "tout est OK, rien à modifier";
   }
 
   ngOnChanges() {
@@ -41,6 +41,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   setTitle() {
     this.titleStart = this.localizeService.localize("title-start-article-reservation-ordre-popup");
     if (this.ordreLigne) {
+      this.ordreLigneInfo = this.ordreLigne;
       this.titleMid = "n° " + this.ordreLigne.ordre.numero + " / " + this.ordreLigne.ordre.entrepot.code;
       this.titleEnd = this.localizeService.localize("title-end-article-reservation-ordre-popup")
         .replace("&A", this.ordreLigne.article.id.toString())

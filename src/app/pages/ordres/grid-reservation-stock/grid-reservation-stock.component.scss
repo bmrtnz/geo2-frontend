@@ -1,5 +1,10 @@
 ::ng-deep .grid-reservation-stock {
 
+  // Reducing non-consistent space when empty grid
+  .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
+    height: 70px;
+  }
+
   .highlight-stockJ9-21-cell {
     background: #ffdd00 !important;
     color: rgba(0, 0, 0, .7) !important;

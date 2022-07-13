@@ -20,23 +20,23 @@ import { PromptPopupComponent } from "../../../shared/components/prompt-popup/pr
 
 
 @Component({
-  selector: "app-grid-reservation-stock",
-  templateUrl: "./grid-reservation-stock.component.html",
-  styleUrls: ["./grid-reservation-stock.component.scss"]
+  selector: "app-grid-reservation-stock-en-cours",
+  templateUrl: "./grid-reservation-stock-en-cours.component.html",
+  styleUrls: ["./grid-reservation-stock-en-cours.component.scss"]
 })
-export class GridReservationStockComponent implements OnInit, OnChanges {
+export class GridReservationStockEnCoursComponent implements OnInit {
 
-  @Output() selectChange = new EventEmitter<any>();
   @Input() public ordreLigneInfo: any;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
-  @ViewChild(DxDataGridComponent, { static: true }) dataGridResa: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGridResaEnCours: DxDataGridComponent;
   @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public gridRowsTotal: number;
   columnChooser = environment.columnChooser;
 
   constructor(
@@ -57,49 +57,26 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreReservationStock);
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreReservationStockEnCours);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
     this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
   }
 
-  ngOnChanges() {
+  onContentReady(e) {
+    this.gridRowsTotal = this.dataGridResaEnCours.instance.getVisibleRows()?.length;
   }
 
   onCellPrepared(e) {
-    if (e.rowType === "data") {
-      // Fond jaune pour les stocks J9-21 si stock et police vert/rouge selon stock
-      if (["quantiteCalculee3", "quantiteCalculee4"].includes(e.column.dataField)) {
-        if (e.value) {
-          e.cellElement.classList.add("highlight-stockJ9-21-cell");
-          if (e.value < 0) e.cellElement.classList.add("highlight-negativeStock-cell");
-          if (e.value > 0) e.cellElement.classList.add("highlight-positiveStock-cell");
-        }
-      }
-      // Fond jaune pour le fournisseur avec stocks J9-21
-      if (e.column.dataField === "fournisseurCode") {
-        if (e.data.quantiteCalculee3 || e.data.quantiteCalculee4) {
-          e.cellElement.classList.add("highlight-stockJ9-21-cell");
-        }
-      }
-    }
     // Higlight important columns
-    if (e.column.dataField.indexOf("quantiteCalculee") === 0 ||
-      e.column.dataField === "totalDispo") {
-      e.cellElement.classList.add("bold-text");
-    }
+    if (e.column.dataField === "quantiteReservee") e.cellElement.classList.add("bold-text");
   }
 
-  onCellClick(e) {
-    if (!e?.data) return;
-    const message = this.localizeService.localize("text-popup-changer-fournisseur");
-    message
-      .replace("&FPC", `${this.ordreLigneInfo.fournisseur.code} / ${this.ordreLigneInfo.proprietaireMarchandise.code}`)
-      .replace("&FPC", `${e.data.fournisseurCode} / ${e.data.proprietaireCode}`);
-    const result = confirm(message, "Choix fournisseur");
+  deleteReservations() {
+    const result = confirm(this.localizeService.localize("text-popup-supprimer-reservations"), "Réservations");
     result.then((ok) => {
       if (ok) {
-        // Modification réservation
+        // Suppression réservations en cours
       }
     });
   }

@@ -1,0 +1,22 @@
+::ng-deep .reservation-stock-en-cours {
+
+  .btn-delete-reservation {
+    position: absolute;
+    z-index: 2;
+    right: 166px;
+    margin-top: 7px;
+  }
+
+  .grid-reservation-stock-en-cours {
+
+    // Reducing non-consistent space when empty grid
+    .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
+      height: 70px;
+    }
+
+    .bold-text {
+      font-weight: bold !important;
+    }
+
+  }
+}

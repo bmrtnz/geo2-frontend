@@ -36,7 +36,7 @@
 
     .dx-texteditor {
       &.stock-resa-log {
-        border: 1px dashed $base-accent;
+        border: 1px dashed #CCC;
         padding: 0 10px;
 
         &:before {
@@ -46,8 +46,13 @@
         textarea {
           font-size: 15px;
           line-height: 18px;
+          color: $base-accent;
         }
       }
+    }
+
+    .article-detail-container {
+      margin: 0 25px;
     }
 
     .blue-style {

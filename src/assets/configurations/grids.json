@@ -1390,13 +1390,56 @@
         "visibleIndex": 18,
         "dataField": "paletteCode",
         "cssClass": "multi-line-header",
-        "width": 70,
+        "width": 60,
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "option",
         "width": 180,
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
+  "ordre-reservation-stock-en-cours": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "fournisseurCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "proprietaireCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "quantiteReservee",
+        "dataType": "number",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "paletteCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "description",
+        "width": 250,
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "option",
         "dataType": "string",
         "visible": true
       }

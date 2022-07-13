@@ -2,7 +2,6 @@
   [showTitle]="true"
   [dragEnabled]="true"
   [width]="1024"
-  [height]="'auto'"
   [resizeEnabled]="true"
   [closeOnOutsideClick]="true"
   [(visible)]="visible"
@@ -22,14 +21,22 @@
   </div>
 
   <div *dxTemplate="let data of 'content'">
-    <dx-scroll-view style="margin-left:15px">
+    <dx-scroll-view>
 
-      <span class="blue-style">Article réf :&nbsp;</span><span>{{ ordreLigne?.article?.id}}</span>
-      <div>{{ ordreLigne?.article?.articleDescription?.descriptionLongue }}</div>
+      <div class="article-detail-container">
+        <span class="blue-style">Article réf :&nbsp;</span><span>{{ ordreLigne?.article?.id}}</span>
+        <div>{{ ordreLigne?.article?.articleDescription?.descriptionLongue }}</div>
+      </div>
 
       <br>
 
+      <app-grid-reservation-stock-en-cours
+        [ordreLigneInfo]="ordreLigneInfo"
+      ></app-grid-reservation-stock-en-cours>
+      <br />
+
       <app-grid-reservation-stock
+        [ordreLigneInfo]="ordreLigneInfo"
         (selectChange)="clearAndHidePopup()"
       ></app-grid-reservation-stock>
       <br />
