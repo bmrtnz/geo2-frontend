@@ -26,6 +26,7 @@ import { Observable, of } from "rxjs";
 import { concatMap, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
+import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { GridsService } from "../grids.service";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
@@ -109,6 +110,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     rowOrdering: true,
     quickSwitch: true,
     reportDLUO: true,
+    reservation: true,
     zoom: true,
   };
 
@@ -146,6 +148,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ZoomFournisseurPopupComponent, { static: false }) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
+  @ViewChild(ArticleReservationOrdrePopupComponent, { static: false }) reservationStockPopup: ArticleReservationOrdrePopupComponent;
 
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
@@ -351,6 +354,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "proprietaireMarchandise.code",
               "fournisseur.code",
             ] : [],
+            ...this.FEATURE.reservation ? [
+              "ordre.numero",
+              "ordre.entrepot.code"
+            ] : [],
             // Used to lock fields
             ...[
               "ordre.type.id",
@@ -468,6 +475,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       isCert = this.ordre?.client?.certifications?.length > 0;
     }
     return this.certificationText + (isCert ? " ✓" : "");
+  }
+
+  openReservationPopup(ligne) {
+    this.ordreLigne = ligne;
+    this.reservationStockPopup.visible = true;
   }
 
   openCertificationPopup(ligne) {

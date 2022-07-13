@@ -1,0 +1,32 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ titleStart }}&nbsp;</div>
+    <div class="title-mid">{{ titleMid }}</div>
+    <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    >
+    </dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view style="margin-left:15px">
+
+      <app-grid-reservation-stock
+        (selectChange)="clearAndHidePopup()"
+      ></app-grid-reservation-stock>
+      <br />
+
+    </dx-scroll-view>
+  </div>
+
+</dx-popup>

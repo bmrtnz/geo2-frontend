@@ -119,6 +119,8 @@ import { ZoomClientPopupComponent } from "./zoom-client-popup/zoom-client-popup.
 import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/button-marge-previ.component";
 import { GridsService } from "./grids.service";
+import { ArticleReservationOrdrePopupComponent } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
+import { GridReservationStockComponent } from "./grid-reservation-stock/grid-reservation-stock.component";
 
 @NgModule({
   declarations: [
@@ -189,6 +191,8 @@ import { GridsService } from "./grids.service";
     ReservationPopupComponent,
     GridCommandesComponent,
     ButtonMargePreviComponent,
+    ArticleReservationOrdrePopupComponent,
+    GridReservationStockComponent,
   ],
   imports: [
     OrdresRoutingModule,
