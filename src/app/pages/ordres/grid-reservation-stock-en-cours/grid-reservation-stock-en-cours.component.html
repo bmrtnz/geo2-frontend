@@ -9,6 +9,7 @@
 
   <dx-data-grid
     class="dx-card wide-card grid-reservation-stock-en-cours"
+    [dataSource]="reservationsSource | async"
     [remoteOperations]="false"
     [showBorders]="false"
     [focusedRowEnabled]="true"
@@ -67,8 +68,8 @@
       [dataField]="column.dataField"
       [visible]="false"
       [caption]="
-        ('ordreReservationStock-' + column.dataField?.split('.').join('-') | localize) ||
-        column.name
+        ('ordreReservationStock-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
       "
       trueText="Oui"
       falseText="Non"
@@ -78,6 +79,5 @@
       [cellTemplate]="column.cellTemplate"
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
-
   </dx-data-grid>
 </div>

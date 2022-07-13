@@ -1410,6 +1410,11 @@
   "ordre-reservation-stock-en-cours": {
     "columns": [
       {
+        "dataField": "id",
+        "dataType": "string",
+        "showInColumnChooser": false
+      },
+      {
         "visibleIndex": 0,
         "dataField": "fournisseurCode",
         "dataType": "string",
@@ -1423,29 +1428,10 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "quantiteReservee",
+        "dataField": "quantite",
         "dataType": "number",
         "cssClass": "multi-line-header",
         "width": 50,
-        "visible": true
-      },
-      {
-        "visibleIndex": 6,
-        "dataField": "typePaletteCode",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 8,
-        "dataField": "description",
-        "width": 250,
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 20,
-        "dataField": "option",
-        "dataType": "string",
         "visible": true
       }
     ]
