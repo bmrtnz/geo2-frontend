@@ -12,10 +12,11 @@
     [rowAlternationEnabled]="true"
     [keyExpr]="'id'"
     (onCellPrepared)="onCellPrepared($event)"
+    (onCellClick)="onCellClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        'Fournisseurs ayant cet article en stock (cliquez pour destocker)',
+        'Fournisseurs ayant cet article en stock (cliquez pour réserver)',
         $event,
         gridConfiguratorService.Grid.OrdreReservationStock
       )

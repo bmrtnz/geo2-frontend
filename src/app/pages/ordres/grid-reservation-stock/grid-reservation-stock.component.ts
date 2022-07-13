@@ -1,15 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
-import { ApiService } from "app/shared/services/api.service";
-import { ArticlesService } from "app/shared/services/api/articles.service";
-import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
-import { EmballagesService } from "app/shared/services/api/emballages.service";
-import { EspecesService } from "app/shared/services/api/especes.service";
-import { OriginesService } from "app/shared/services/api/origines.service";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { StocksService } from "app/shared/services/api/stocks.service";
-import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -27,15 +19,11 @@ import { PromptPopupComponent } from "../../../shared/components/prompt-popup/pr
 })
 export class GridReservationStockComponent implements OnInit, OnChanges {
 
-  @Output() selectChange = new EventEmitter<any>();
   @Input() public ordreLigneInfo: any;
-  @Output() public articleLigneId: string;
-
   @Input() public articleID: string;
+  @Output() selectChange = new EventEmitter<any>();
 
-  articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
-  apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) dataGridResa: DxDataGridComponent;
   @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
 
@@ -45,27 +33,16 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   reservationsSource: Observable<DataSource>;
 
   constructor(
-    public articlesService: ArticlesService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
-    public gridRowStyleService: GridRowStyleService,
-    public clientsService: ClientsService,
-    public especesService: EspecesService,
-    public varietesService: VarietesService,
-    public emballagesService: EmballagesService,
-    public originesService: OriginesService,
-    public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
     private stocksService: StocksService,
   ) {
-    this.apiService = this.articlesService;
   }
 
   async ngOnInit() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreReservationStock);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
-    const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
-    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -100,10 +77,11 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
 
   onCellClick(e) {
     if (!e?.data) return;
-    const message = this.localizeService.localize("text-popup-changer-fournisseur");
-    message
+    // TODO : Contrôle source non actuelle et retour le cas échéant
+    let message = this.localizeService.localize("text-popup-changer-fournisseur");
+    message = message
       .replace("&FPC", `${this.ordreLigneInfo.fournisseur.code} / ${this.ordreLigneInfo.proprietaireMarchandise.code}`)
-      .replace("&FPC", `${e.data.fournisseurCode} / ${e.data.proprietaireCode}`);
+      .replace("&FPN", `${e.data.fournisseurCode} / ${e.data.proprietaireCode}`);
     const result = confirm(message, "Choix fournisseur");
     result.then((ok) => {
       if (ok) {
