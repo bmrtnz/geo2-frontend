@@ -1431,7 +1431,7 @@
       },
       {
         "visibleIndex": 6,
-        "dataField": "paletteCode",
+        "dataField": "typePaletteCode",
         "dataType": "string",
         "visible": true
       },
