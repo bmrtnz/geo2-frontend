@@ -1,7 +1,8 @@
 import { Field, Model, ModelName } from "./model";
+import StockQuantite from "./stock-quantite.model";
 
 @ModelName("StockReservation")
-export class StockReservation extends Model {
+export class StockReservation extends StockQuantite {
 
   @Field({ asKey: true })
   id: number;
@@ -25,28 +26,7 @@ export class StockReservation extends Model {
   quantiteReservee: number;
 
   @Field()
-  quantiteInitiale1: number;
-
-  @Field()
-  quantiteReservee1: number;
-
-  @Field()
-  quantiteInitiale2: number;
-
-  @Field()
-  quantiteReservee2: number;
-
-  @Field()
-  quantiteInitiale3: number;
-
-  @Field()
-  quantiteReservee3: number;
-
-  @Field()
-  quantiteInitiale4: number;
-
-  @Field()
-  quantiteReservee4: number;
+  quantiteDisponible: number;
 }
 
 export default StockReservation;

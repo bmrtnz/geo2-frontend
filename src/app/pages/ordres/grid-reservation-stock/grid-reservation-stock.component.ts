@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
@@ -6,6 +6,7 @@ import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.servi
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
+import { StocksService } from "app/shared/services/api/stocks.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
@@ -28,6 +29,9 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
 
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordreLigneInfo: any;
+  @Output() public articleLigneId: string;
+
+  @Input() public articleID: string;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -38,6 +42,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
+  reservationsSource: Observable<DataSource>;
 
   constructor(
     public articlesService: ArticlesService,
@@ -51,9 +56,9 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
     public originesService: OriginesService,
     public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
+    private stocksService: StocksService,
   ) {
     this.apiService = this.articlesService;
-
   }
 
   async ngOnInit() {
@@ -63,7 +68,10 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
     this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.articleID)
+      this.reservationsSource = this.stocksService
+        .getStockReservationDatasource(changes.articleID.currentValue);
   }
 
   onCellPrepared(e) {

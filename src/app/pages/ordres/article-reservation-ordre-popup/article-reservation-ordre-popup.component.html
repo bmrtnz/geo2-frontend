@@ -38,6 +38,7 @@
       <app-grid-reservation-stock
         [ordreLigneInfo]="ordreLigneInfo"
         (selectChange)="clearAndHidePopup()"
+        [articleID]="ordreLigne?.article?.id"
       ></app-grid-reservation-stock>
       <br />
 
@@ -48,7 +49,7 @@
         [(value)]="logText"
       >
       </dx-text-area>
-      <br>
+      <br />
       <div class="popup-buttons-container">
         <dx-button
           type="success"
@@ -56,8 +57,6 @@
           (onClick)="applyClick()"
         ></dx-button>
       </div>
-
     </dx-scroll-view>
   </div>
-
 </dx-popup>

@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import LigneReservation from "app/shared/models/ligne-reservation.model";
 import StockArticle from "app/shared/models/stock-article.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
+import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { map } from "rxjs/operators";
 import { Stock } from "../../models/stock.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { functionBody, FunctionResponse } from "./functions.service";
@@ -130,6 +133,50 @@ export class StocksService extends ApiService implements APIRead {
         variables: { article },
         fetchPolicy: "network-only",
       });
+  }
+
+  public getStockReservationDatasource(article: string) {
+    return this.allStockReservationList(article)
+      .pipe(map(({ data }) => new DataSource({
+        store: new ArrayStore({
+          data: data.allStockReservationList,
+          key: "id",
+        }),
+      })));
+  }
+
+  /** Query fetching reservations by ordre-ligne */
+  allLigneReservationList(ordreLigne: string) {
+    return this.apollo
+      .query<{ allLigneReservationList: LigneReservation[] }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `allLigneReservationList`,
+              body: LigneReservation.getFieldsName(),
+              params: [
+                { name: "ordreLigne", value: "ordreLigne", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "ordreLigne", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreLigne },
+        fetchPolicy: "network-only",
+      });
+  }
+
+  public getLigneReservationDatasource(ordreLigne: string) {
+    return this.allLigneReservationList(ordreLigne)
+      .pipe(map(({ data }) => new DataSource({
+        store: new ArrayStore({
+          data: data.allLigneReservationList,
+          key: "id",
+        }),
+      })));
   }
 
   reservationStock(ordreId: string, articleId: string, societeId: string, stockId: string, quantite: number, commentaire: string) {
