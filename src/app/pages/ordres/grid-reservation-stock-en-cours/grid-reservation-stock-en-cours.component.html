@@ -62,6 +62,7 @@
     >
     </dxo-column-chooser>
     <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
+    <dxo-editing [allowDeleting]="!env.production"></dxo-editing>
 
     <dxi-column
       *ngFor="let column of this.columns | async"

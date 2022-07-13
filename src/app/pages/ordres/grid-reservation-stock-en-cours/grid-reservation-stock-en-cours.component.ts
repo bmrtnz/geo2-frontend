@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
@@ -6,18 +6,18 @@ import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.servi
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
+import { StocksService } from "app/shared/services/api/stocks.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { confirm } from "devextreme/ui/dialog";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { confirm } from "devextreme/ui/dialog";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
-import { StocksService } from "app/shared/services/api/stocks.service";
 
 
 @Component({
@@ -40,6 +40,7 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
   public gridRowsTotal: number;
   columnChooser = environment.columnChooser;
   reservationsSource: Observable<DataSource>;
+  public env = environment;
 
   constructor(
     public articlesService: ArticlesService,
