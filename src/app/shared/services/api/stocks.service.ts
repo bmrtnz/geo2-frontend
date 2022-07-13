@@ -10,6 +10,7 @@ import { map } from "rxjs/operators";
 import { Stock } from "../../models/stock.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { functionBody, FunctionResponse } from "./functions.service";
+import { StockMouvementsService } from "./stock-mouvements.service";
 
 @Injectable({
   providedIn: "root",
@@ -17,7 +18,7 @@ import { functionBody, FunctionResponse } from "./functions.service";
 export class StocksService extends ApiService implements APIRead {
   fieldsFilter = /.*\.(?:id|raisonSocial|description)$/i;
 
-  constructor(apollo: Apollo) {
+  constructor(apollo: Apollo, private stockMouvementsService: StockMouvementsService) {
     super(apollo, Stock);
   }
 
@@ -176,6 +177,7 @@ export class StocksService extends ApiService implements APIRead {
           data: data.allLigneReservationList,
           key: "id",
         }),
+        remove: key => this.stockMouvementsService.deleteStockMouvement(key).toPromise(),
       })));
   }
 
