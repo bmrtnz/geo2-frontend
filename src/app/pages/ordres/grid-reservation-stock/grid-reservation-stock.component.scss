@@ -1,31 +1,41 @@
 ::ng-deep .grid-reservation-stock {
 
+  .grid-title {
+    .dx-texteditor-container {
+      width: 500px;
+    }
+  }
+
   // Reducing non-consistent space when empty grid
   .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
     height: 70px;
   }
 
-  .highlight-stockJ9-21-cell {
-    background: #ffdd00 !important;
-    color: rgba(0, 0, 0, .7) !important;
-  }
+  .dx-data-row {
+    cursor: pointer;
 
-  .highlight-negativeStock-cell {
-    color: #ff325a !important;
-  }
-
-  .highlight-positiveStock-cell {
-    color: green !important;
-  }
-
-  .dx-datagrid-header-panel {
-    .dx-texteditor-container {
-      width: 500px !important;
+    .highlight-stockJ9-21-cell {
+      background: #ffdd00 !important;
+      color: rgba(0, 0, 0, .7) !important;
     }
-  }
 
-  .bold-text {
-    font-weight: bold !important;
+    .highlight-negativeStock-cell {
+      color: #ff325a !important;
+    }
+
+    .highlight-positiveStock-cell {
+      color: green !important;
+    }
+
+    .dx-datagrid-header-panel {
+      .dx-texteditor-container {
+        width: 500px !important;
+      }
+    }
+
+    .bold-text {
+      font-weight: bold !important;
+    }
   }
 
 }
