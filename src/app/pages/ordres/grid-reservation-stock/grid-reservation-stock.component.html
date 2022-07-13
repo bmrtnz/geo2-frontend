@@ -21,20 +21,13 @@
       "
     >
       <dxo-paging></dxo-paging>
-      <dxo-search-panel
-        [visible]="true"
-        [width]="240"
-        placeholder="{{ 'search' | localize }}"
-      ></dxo-search-panel>
-      <dxo-group-panel [visible]="true"> </dxo-group-panel>
-      <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-      <dxo-header-filter
+      <!-- <dxo-header-filter
         [visible]="true"
         [allowSearch]="true"
-      ></dxo-header-filter>
+      ></dxo-header-filter> -->
       <dxo-export
         [enabled]="true"
-        fileName="Articles"
+        fileName="Réservation stock"
         [allowExportSelectedData]="false"
       ></dxo-export>
       <dxo-pager
@@ -66,12 +59,13 @@
         [dataField]="column.dataField"
         [visible]="false"
         [caption]="
-          ('OrdreReservationStock-' + column.dataField?.split('.').join('-') | localize) ||
+          ('ordreReservationStock-' + column.dataField?.split('.').join('-') | localize) ||
           column.name
         "
         trueText="Oui"
         falseText="Non"
         [dataType]="column?.dataType"
+        [cssClass]="column?.cssClass"
         [width]="column?.width"
         [cellTemplate]="column.cellTemplate"
         [allowSearch]="
