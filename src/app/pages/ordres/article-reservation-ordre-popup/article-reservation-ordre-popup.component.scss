@@ -34,6 +34,10 @@
     padding-top: 10px;
     font-size: 15px;
 
+    .bold-text {
+      font-weight: bold !important;
+    }
+
     .dx-texteditor {
       &.stock-resa-log {
         border: 1px dashed #CCC;
