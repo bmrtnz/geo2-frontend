@@ -165,6 +165,7 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [fixed]="column.fixed"
+    [width]="column.width"
     [dataField]="column.dataField"
     [allowEditing]="column.allowEditing"
     [allowSorting]="column.allowSorting"
