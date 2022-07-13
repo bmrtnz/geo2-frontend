@@ -1388,7 +1388,7 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "codePalette",
+        "dataField": "paletteCode",
         "cssClass": "multi-line-header",
         "width": 70,
         "visible": true

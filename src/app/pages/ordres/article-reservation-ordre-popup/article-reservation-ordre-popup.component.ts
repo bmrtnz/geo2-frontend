@@ -16,17 +16,10 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
 
   visible: boolean;
-  idArticlesDS: DataSource;
-  codeChangeProcess: boolean;
-  articlesKO = true;
-  validBtnText: string;
-  nbARticles: number;
-  nbArticlesOld: number;
-  chosenArticles: string[];
   titleStart: string;
   titleMid: string;
   titleEnd: string;
-  pulseBtnOn: boolean;
+  logText: string;
 
   @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
   @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
@@ -36,7 +29,10 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   constructor(
     private localizeService: LocalizationService
-  ) { }
+  ) {
+    this.logText = "bla bla bla bla\r\nbla bla bla bla bla bla\r\nbla bla blabla bla bla";
+    this.logText += "bla bla bla bla\r\nbla bla bla bla bla bla\r\nbla bla blabla bla bla";
+  }
 
   ngOnChanges() {
     this.setTitle();
@@ -61,7 +57,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   clearAll() {
-
+    this.logText = "";
   }
 
   hidePopup() {
@@ -72,6 +68,12 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     this.hidePopup();
     this.changeLigne.emit();
     this.clearAll();
+  }
+
+  applyClick() {
+    // On ferme en renvoyant le fournisseur courant et le nbre de réservation
+
+    this.clearAndHidePopup();
   }
 
 }

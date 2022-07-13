@@ -356,7 +356,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
             ] : [],
             ...this.FEATURE.reservation ? [
               "ordre.numero",
-              "ordre.entrepot.code"
+              "ordre.entrepot.code",
+              "article.articleDescription.descriptionLongue"
             ] : [],
             // Used to lock fields
             ...[

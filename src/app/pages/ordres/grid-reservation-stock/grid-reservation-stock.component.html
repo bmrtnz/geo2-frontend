@@ -14,17 +14,17 @@
       (onContentReady)="contentReadyEvent.emit($event)"
       (onToolbarPreparing)="
         gridConfiguratorService.onToolbarPreparing(
-          'Fournisseurs ayant cet article en stock (double-cliquez pour destocker)',
+          'Fournisseurs ayant cet article en stock (cliquez pour destocker)',
           $event,
           gridConfiguratorService.Grid.OrdreReservationStock
         )
       "
     >
       <dxo-paging></dxo-paging>
-      <!-- <dxo-header-filter
-        [visible]="true"
+      <dxo-header-filter
+        [visible]="false"
         [allowSearch]="true"
-      ></dxo-header-filter> -->
+      ></dxo-header-filter>
       <dxo-export
         [enabled]="true"
         fileName="Réservation stock"
@@ -68,12 +68,6 @@
         [cssClass]="column?.cssClass"
         [width]="column?.width"
         [cellTemplate]="column.cellTemplate"
-        [allowSearch]="
-          column?.allowSearch || ['string'].includes(column?.dataType)
-        "
-        [allowHeaderFiltering]="
-          column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-        "
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
 

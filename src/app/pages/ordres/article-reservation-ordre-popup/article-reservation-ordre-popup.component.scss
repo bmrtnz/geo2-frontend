@@ -26,9 +26,33 @@
       top: 13px;
       float: right;
     }
+
   }
 
   .dx-popup-content {
+
+    padding-top: 10px;
+    font-size: 15px;
+
+    .dx-texteditor {
+      &.stock-resa-log {
+        border: 1px dashed $base-accent;
+        padding: 0 10px;
+
+        &:before {
+          display: none;
+        }
+
+        textarea {
+          font-size: 15px;
+          line-height: 18px;
+        }
+      }
+    }
+
+    .blue-style {
+      color: $base-accent;
+    }
 
     .dx-scrollable-content {
       padding-right: 20px;
@@ -39,23 +63,16 @@
       margin-left: 2px;
     }
 
-    h6 {
-      font-size: 18px;
-    }
+    .popup-buttons-container {
+      display: inline-block;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
 
-    .valid-field {
-      display: none;
-    }
-
-    .articles-title {
-      display: none;
-    }
-
-    .articles-valid-button,
-    .cancel-button {
-      transition: transform 0.5s;
-      transform: scale(1);
-      float: right;
+      .dx-button {
+        margin: 5px;
+        width: 100px;
+      }
     }
 
   }
