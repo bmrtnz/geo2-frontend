@@ -93,7 +93,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
     }
     // Higlight important columns
     if (e.column.dataField.indexOf("quantiteCalculee") === 0 ||
-      e.column.dataField === "totalDispo") {
+      e.column.dataField === "quantiteDisponible") {
       e.cellElement.classList.add("bold-text");
     }
   }
