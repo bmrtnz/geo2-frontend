@@ -1,82 +1,81 @@
 <div class="grid-reservation-stock">
-    <dx-data-grid
-      class="dx-card wide-card grid-ordre-ligne-stock"
-      [remoteOperations]="false"
-      [showBorders]="false"
-      [focusedRowEnabled]="true"
-      [focusedRowIndex]="0"
-      [columnAutoWidth]="true"
-      [columnHidingEnabled]="false"
-      [allowColumnReordering]="true"
-      [rowAlternationEnabled]="true"
-      [keyExpr]="'id'"
-      (onCellPrepared)="onCellPrepared($event)"
-      (onContentReady)="contentReadyEvent.emit($event)"
-      (onToolbarPreparing)="
-        gridConfiguratorService.onToolbarPreparing(
-          'Fournisseurs ayant cet article en stock (double-cliquez pour destocker)',
-          $event,
-          gridConfiguratorService.Grid.OrdreReservationStock
-        )
-      "
-    >
-      <dxo-paging></dxo-paging>
-      <!-- <dxo-header-filter
+  <dx-data-grid
+    class="dx-card wide-card grid-ordre-ligne-stock"
+    [dataSource]="reservationsSource | async"
+    [remoteOperations]="false"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    [keyExpr]="'id'"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onContentReady)="contentReadyEvent.emit($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        'Fournisseurs ayant cet article en stock (double-cliquez pour destocker)',
+        $event,
+        gridConfiguratorService.Grid.OrdreReservationStock
+      )
+    "
+  >
+    <dxo-paging></dxo-paging>
+    <!-- <dxo-header-filter
         [visible]="true"
         [allowSearch]="true"
       ></dxo-header-filter> -->
-      <dxo-export
-        [enabled]="true"
-        fileName="Réservation stock"
-        [allowExportSelectedData]="false"
-      ></dxo-export>
-      <dxo-pager
-        [showPageSizeSelector]="true"
-        [showInfo]="true"
-        [showNavigationButtons]="true"
-      ></dxo-pager>
-      <dxo-state-storing
-        [storageKey]="gridConfiguratorService.Grid.OrdreReservationStock"
-        [enabled]="true"
-        type="custom"
-        [customLoad]="gridConfiguratorService.load"
-        [customSave]="gridConfiguratorService.save"
-      ></dxo-state-storing>
-      <dxo-filter-row [visible]="true"></dxo-filter-row>
-      <dxo-column-chooser
-        [enabled]="true"
-        [width]="columnChooser.width"
-        [height]="columnChooser.height"
-        mode="select"
-        title="{{ 'columnChooser' | localize }}"
-        [allowSearch]="true"
-      >
-      </dxo-column-chooser>
-      <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
+    <dxo-export
+      [enabled]="true"
+      fileName="Réservation stock"
+      [allowExportSelectedData]="false"
+    ></dxo-export>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    ></dxo-pager>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.OrdreReservationStock"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+    >
+    </dxo-column-chooser>
+    <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
 
-      <dxi-column
-        *ngFor="let column of this.columns | async"
-        [dataField]="column.dataField"
-        [visible]="false"
-        [caption]="
-          ('ordreReservationStock-' + column.dataField?.split('.').join('-') | localize) ||
-          column.name
-        "
-        trueText="Oui"
-        falseText="Non"
-        [dataType]="column?.dataType"
-        [cssClass]="column?.cssClass"
-        [width]="column?.width"
-        [cellTemplate]="column.cellTemplate"
-        [allowSearch]="
-          column?.allowSearch || ['string'].includes(column?.dataType)
-        "
-        [allowHeaderFiltering]="
-          column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-        "
-        [showInColumnChooser]="column.showInColumnChooser"
-      ></dxi-column>
-
-    </dx-data-grid>
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [visible]="false"
+      [caption]="
+        ('ordreReservationStock-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
+      "
+      trueText="Oui"
+      falseText="Non"
+      [dataType]="column?.dataType"
+      [cssClass]="column?.cssClass"
+      [width]="column?.width"
+      [cellTemplate]="column.cellTemplate"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+  </dx-data-grid>
 </div>
-

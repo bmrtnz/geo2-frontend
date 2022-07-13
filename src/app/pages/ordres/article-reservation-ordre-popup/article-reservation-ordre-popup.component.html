@@ -22,14 +22,12 @@
   </div>
 
   <div *dxTemplate="let data of 'content'">
-    <dx-scroll-view style="margin-left:15px">
-
+    <dx-scroll-view style="margin-left: 15px">
       <app-grid-reservation-stock
         (selectChange)="clearAndHidePopup()"
+        [articleID]="ordreLigne?.article?.id"
       ></app-grid-reservation-stock>
       <br />
-
     </dx-scroll-view>
   </div>
-
 </dx-popup>

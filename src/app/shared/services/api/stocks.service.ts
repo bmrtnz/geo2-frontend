@@ -2,8 +2,10 @@ import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import StockArticle from "app/shared/models/stock-article.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
+import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { map } from "rxjs/operators";
 import { Stock } from "../../models/stock.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { functionBody, FunctionResponse } from "./functions.service";
@@ -130,6 +132,16 @@ export class StocksService extends ApiService implements APIRead {
         variables: { article },
         fetchPolicy: "network-only",
       });
+  }
+
+  public getStockReservationDatasource(article: string) {
+    return this.allStockReservationList(article)
+      .pipe(map(({ data }) => new DataSource({
+        store: new ArrayStore({
+          data: data.allStockReservationList,
+          key: "id",
+        }),
+      })));
   }
 
   reservationStock(ordreId: string, articleId: string, societeId: string, stockId: string, quantite: number, commentaire: string) {
