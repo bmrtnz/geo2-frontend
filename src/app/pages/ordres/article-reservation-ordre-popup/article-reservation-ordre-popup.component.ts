@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -44,7 +43,6 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   setTitle() {
-    console.log(this.ordreLigne);
     this.titleStart = this.localizeService.localize("title-start-article-reservation-ordre-popup");
     if (this.ordreLigne) {
       this.titleMid = "n° " + this.ordreLigne.ordre.numero + " / " + this.ordreLigne.ordre.entrepot.code;

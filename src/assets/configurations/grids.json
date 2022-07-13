@@ -1338,52 +1338,65 @@
         "visibleIndex": 4,
         "dataField": "totalDispo",
         "dataType": "number",
+        "cssClass": "multi-line-header",
+        "width": 50,
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "totalDepart",
+        "cssClass": "multi-line-header",
+        "width": 50,
         "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "totalResa",
+        "cssClass": "multi-line-header",
+        "width": 50,
         "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 10,
         "dataField": "quantiteCalculee1",
-        "width": 60,
+        "cssClass": "multi-line-header",
+        "width": 35,
         "visible": true
       },
       {
         "visibleIndex": 12,
         "dataField": "quantiteCalculee2",
-        "width": 60,
+        "cssClass": "multi-line-header",
+        "width": 50,
         "visible": true
       },
       {
         "visibleIndex": 14,
         "dataField": "quantiteCalculee3",
-        "width": 60,
+        "cssClass": "multi-line-header",
+        "width": 50,
         "visible": true
       },
       {
         "visibleIndex": 16,
         "dataField": "quantiteCalculee4",
-        "width": 60,
+        "cssClass": "multi-line-header",
+        "width": 50,
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "codePalette",
+        "cssClass": "multi-line-header",
+        "width": 70,
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "option",
+        "width": 180,
         "dataType": "string",
         "visible": true
       }

@@ -1,13 +1,26 @@
 ::ng-deep .grid-reservation-stock {
 
-  .highlight-stockJ21-cell {
+  .highlight-stockJ9-21-cell {
     background: #ffdd00 !important;
     color: rgba(0, 0, 0, .7) !important;
   }
 
   .highlight-negativeStock-cell {
-    background: #ff325a !important;
-    color: white !important;
+    color: #ff325a !important;
+  }
+
+  .highlight-negativeStock-cell {
+    background: green !important;
+  }
+
+  .dx-datagrid-header-panel {
+    .dx-texteditor-container {
+      width: 500px !important;
+    }
+  }
+
+  .bold-text {
+    font-weight: bold !important;
   }
 
 }

@@ -7,8 +7,6 @@ import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.servi
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
-import { StockArticlesAgeService } from "app/shared/services/api/stock-articles-age.service";
-import { StocksService } from "app/shared/services/api/stocks.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
@@ -19,8 +17,6 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
-import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
-import { StockConsolideService } from "../../../shared/services/api/stock-consolide.service";
 
 
 @Component({
@@ -68,11 +64,7 @@ export class GridReservationStockComponent implements OnInit {
     public emballagesService: EmballagesService,
     public originesService: OriginesService,
     public bureauxAchatService: BureauxAchatService,
-    private stocksService: StocksService,
-    private modesCultureService: ModesCultureService,
     public authService: AuthService,
-    private stockConsolideService: StockConsolideService,
-    private stockArticlesAgeService: StockArticlesAgeService,
   ) {
     this.apiService = this.articlesService;
 
@@ -88,16 +80,20 @@ export class GridReservationStockComponent implements OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Fond jaune pour les stocks J21
-      if (e.column.dataField === "quantiteCalculee4") {
-        e.cellElement.classList.add("highlight-stockJ21-cell");
-      } else {
-        if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
-          if (e.value) if (e.value < 0) e.cellElement.classList.add("highlight-negativeStock-cell");
+      // Fond jaune pour les stocks J9-21 si stock et police vert/rouge selon stock
+      if (["quantiteCalculee3", "quantiteCalculee4"].includes(e.column.dataField)) {
+        if (e.value) {
+          e.cellElement.classList.add("highlight-stockJ9-21-cell");
+          if (e.value < 0) e.cellElement.classList.add("highlight-negativeStock-cell");
+          if (e.value > 0) e.cellElement.classList.add("highlight-positiveStock-cell");
         }
       }
     }
-
+    // Higlight important columns
+    if (e.column.dataField.indexOf("quantiteCalculee") === 0 ||
+      e.column.dataField === "totalDispo") {
+      e.cellElement.classList.add("bold-text");
+    }
   }
 
 }
