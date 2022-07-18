@@ -42,7 +42,7 @@ export class StockMouvementsService extends ApiService {
       desc: string,
       palCode: string,
     ) => this.apollo
-      .watchQuery<{ fResaUneLigne: FunctionResponse }>({
+      .query<{ fResaUneLigne: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -67,7 +67,7 @@ export class StockMouvementsService extends ApiService {
             { name: "propCode", type: "String", isOptionnal: false },
             { name: "artRef", type: "String", isOptionnal: false },
             { name: "username", type: "String", isOptionnal: false },
-            { name: "qteResa", type: "String", isOptionnal: false },
+            { name: "qteResa", type: "Int", isOptionnal: false },
             { name: "ordRef", type: "String", isOptionnal: false },
             { name: "orlRef", type: "String", isOptionnal: false },
             { name: "desc", type: "String", isOptionnal: false },

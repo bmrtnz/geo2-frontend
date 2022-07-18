@@ -941,6 +941,7 @@
     "ordreReservationStock-quantiteCalculee4": "Dispo J21+",
     "ordreReservationStock-typePaletteCode": "Code palette",
     "ordreReservationStock-quantiteReservee": "Total résa",
+    "ordreReservationStock-quantite": "Quantité réservée",
     "ordreReservationStock-option": "Option",
     "ordreLogistique-id": "id ligne",
     "ordreLogistique-fournisseur-code": "Lieu de chargement",

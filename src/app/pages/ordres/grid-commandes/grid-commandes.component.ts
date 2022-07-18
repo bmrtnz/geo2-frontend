@@ -357,7 +357,31 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
             ...this.FEATURE.reservation ? [
               "ordre.numero",
               "ordre.entrepot.code",
-              "article.articleDescription.descriptionLongue"
+              "article.description",
+              "article.matierePremiere.variete.description",
+              "article.matierePremiere.origine.description",
+              "article.cahierDesCharge.categorie.description",
+              "article.normalisation.calibreMarquage.description",
+              "article.cahierDesCharge.coloration.description",
+              "article.cahierDesCharge.sucre.description",
+              "article.cahierDesCharge.penetro.description",
+              "article.normalisation.stickeur.description",
+              "article.cahierDesCharge.cirage.description",
+              "article.cahierDesCharge.rangement.description",
+              "article.emballage.emballage.descriptionTechnique",
+              "article.normalisation.etiquetteEvenementielle.description",
+              "article.normalisation.etiquetteColis.description",
+              "article.normalisation.etiquetteUc.description",
+              "article.emballage.conditionSpecial.description",
+              "article.emballage.alveole.description",
+              "article.normalisation.gtinUc",
+              "article.normalisation.gtinColis",
+              "article.gtinUcBlueWhale",
+              "article.gtinColisBlueWhale",
+              "article.normalisation.produitMdd",
+              "article.normalisation.articleClient",
+              "article.instructionStation",
+              "article.emballage.emballage.idSymbolique"
             ] : [],
             // Used to lock fields
             ...[
@@ -371,7 +395,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "ordre.ordreEDI.id",
               "ordre.secteurCommercial.id",
               "ordre.bonAFacturer",
-              "ordre.societe.id"
+              "ordre.societe.id",
             ]
           ])),
           tap(datasource => datasource.filter([
