@@ -69,8 +69,7 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordreLigneInfo)
-      this.reservationsSource = this.stocksService
-        .getLigneReservationDatasource(this.ordreLigneInfo.id);
+      this.reloadSource(this.ordreLigneInfo.id);
   }
 
   onContentReady(e) {
@@ -89,6 +88,11 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
         // Suppression réservations en cours
       }
     });
+  }
+
+  reloadSource(ordreLigneID: string) {
+    this.reservationsSource = this.stocksService
+      .getLigneReservationDatasource(ordreLigneID);
   }
 
 }
