@@ -1,11 +1,13 @@
 <div class="reservation-stock-en-cours">
-  <dx-button
-    class="btn-delete-reservation"
-    type="danger"
-    stylingMode="outlined"
-    text="{{ 'btn-delete-reservation' | localize }}"
-    (onClick)="deleteReservations()"
-  ></dx-button>
+  <div class="btn-delete-reservation-container">
+    <dx-button
+      class="btn-delete-reservation"
+      type="danger"
+      stylingMode="outlined"
+      text="{{ 'btn-delete-reservation' | localize }}"
+      (onClick)="deleteReservations()"
+    ></dx-button>
+  </div>
 
   <dx-data-grid
     class="dx-card wide-card grid-reservation-stock-en-cours"

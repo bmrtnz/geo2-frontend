@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
-import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
-import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
-import DataSource from "devextreme/data/data_source";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-article-reservation-ordre-popup",

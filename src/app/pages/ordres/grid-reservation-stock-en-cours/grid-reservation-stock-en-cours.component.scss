@@ -1,6 +1,7 @@
 ::ng-deep .reservation-stock-en-cours {
 
-  .btn-delete-reservation {
+  .btn-delete-reservation-container {
+    background: white;
     position: absolute;
     z-index: 2;
     right: 166px;
@@ -9,7 +10,7 @@
 
   .grid-reservation-stock-en-cours {
 
-    // Reducing non-consistent space when empty grid
+    // Reducing grid's height when it's empty
     .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
       height: 70px;
     }
