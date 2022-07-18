@@ -21,46 +21,47 @@
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
 
-      <!-- code article -->
-      <div class="dx-field quickCode-area">
-        <div class="dx-field-label">{{ "articles-saisieCode" | localize }}</div>
-        <div class="dx-field-value">
-          <dx-tag-box
-            [acceptCustomValue]="true"
-            [placeholder]="'Code...'"
-            [readOnly]="codeChangeProcess"
-            (onValueChanged)="onValueChanged($event)"
-            [ngClass]="{ 'max-tags': chosenArticles?.length && remplacementArticle }"
-            [disabled]="!!getGridSelectedArticles()?.length && remplacementArticle"
-          >
-            <dxo-drop-down-options [width]="0"> </dxo-drop-down-options>
-          </dx-tag-box>
+      <div class="ajout-art-manu-content-container">
+        <!-- code article -->
+        <div class="dx-field quickCode-area">
+          <div class="dx-field-label">{{ "articles-saisieCode" | localize }}</div>
+          <div class="dx-field-value">
+            <dx-tag-box
+              [acceptCustomValue]="true"
+              [placeholder]="'Code...'"
+              [readOnly]="codeChangeProcess"
+              (onValueChanged)="onValueChanged($event)"
+              [ngClass]="{ 'max-tags': chosenArticles?.length && remplacementArticle }"
+              [disabled]="!!getGridSelectedArticles()?.length && remplacementArticle"
+            >
+              <dxo-drop-down-options [width]="0"> </dxo-drop-down-options>
+            </dx-tag-box>
+          </div>
         </div>
+        <dx-button
+          class="cancel-button"
+          type="normal"
+          text="{{ 'btn-annuler' | localize }}"
+          (onClick)="clearAndHidePopup()"
+        ></dx-button>
+        <dx-button
+          #addButton
+          [ngClass]="{ pulse: pulseBtnOn }"
+          class="articles-valid-button"
+          type="success"
+          [disabled]="articlesKO"
+          [visible]="nbARticles > 0"
+          [text]="validBtnText"
+          (onClick)="insertReplaceArticles()"
+        ></dx-button>
+        <br />
+        <div style="clear: both"></div>
+        <app-articles-list
+          [ordre]="ordre"
+          (selectChange)="selectFromGrid($event)"
+        ></app-articles-list>
+        <br />
       </div>
-      <dx-button
-        class="cancel-button"
-        type="normal"
-        text="{{ 'btn-annuler' | localize }}"
-        (onClick)="clearAndHidePopup()"
-      ></dx-button>
-      <dx-button
-        #addButton
-        [ngClass]="{ pulse: pulseBtnOn }"
-        class="articles-valid-button"
-        type="success"
-        [disabled]="articlesKO"
-        [visible]="nbARticles > 0"
-        [text]="validBtnText"
-        (onClick)="insertReplaceArticles()"
-      ></dx-button>
-      <br />
-      <div style="clear: both"></div>
-      <app-articles-list
-        [ordre]="ordre"
-        (selectChange)="selectFromGrid($event)"
-      ></app-articles-list>
-      <br />
-
     </dx-scroll-view>
   </div>
 

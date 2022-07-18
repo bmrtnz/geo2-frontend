@@ -34,62 +34,61 @@
     padding-top: 10px;
     font-size: 15px;
 
-    .bold-text {
-      font-weight: bold !important;
-    }
+    .reservation-ordre-content-container {
+      padding: 0 15px 0 2px;
 
-    .dx-texteditor {
-      &.stock-resa-log {
-        border: 1px dashed #CCC;
-        padding: 0 10px;
+      .bold-text {
+        font-weight: bold !important;
+      }
 
-        &:before {
-          display: none;
-        }
+      .dx-texteditor {
+        &.stock-resa-log {
+          border: 1px dashed #CCC;
+          padding: 0 10px;
 
-        textarea {
-          font-size: 15px;
-          line-height: 18px;
-          color: $base-accent;
+          &:before {
+            display: none;
+          }
+
+          textarea {
+            font-size: 15px;
+            line-height: 18px;
+            color: $base-accent;
+          }
         }
       }
-    }
 
-    .article-detail-container {
-      margin: 0 25px;
-    }
+      .article-detail-container {
+        margin: 0 25px;
+      }
 
-    .blue-style {
-      color: $base-accent;
-    }
+      .blue-style {
+        color: $base-accent;
+      }
 
-    .article-resa-description {
-      margin-top: 2px;
-      color: #444;
-      font-size: 14px;
-      line-height: 17px;
-      text-align: justify;
-      text-justify: distribute;
-    }
+      .article-resa-description {
+        margin-top: 2px;
+        color: #444;
+        font-size: 14px;
+        line-height: 17px;
+        text-align: justify;
+        text-justify: distribute;
+      }
 
-    .dx-scrollable-content {
-      padding-right: 20px;
-      background-color: #FFF;
-    }
+      .grid-ordre-ligne-stock {
+        margin-left: 2px;
+      }
 
-    .grid-ordre-ligne-stock {
-      margin-left: 2px;
-    }
+      .popup-buttons-container {
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
 
-    .popup-buttons-container {
-      display: inline-block;
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-
-      .dx-button {
-        margin: 5px;
-        width: 100px;
+        .dx-button {
+          margin: 5px;
+          width: 100px;
+        }
       }
     }
 

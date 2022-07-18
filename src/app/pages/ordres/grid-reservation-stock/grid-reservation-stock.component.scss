@@ -6,7 +6,7 @@
     }
   }
 
-  // Reducing non-consistent space when empty grid
+  // Reducing grid's height when it's empty
   .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
     height: 70px;
   }
