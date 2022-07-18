@@ -11,6 +11,7 @@ import { Field, Model, ModelName } from "./model";
 export class Article extends Model {
   @Field({ asKey: true }) public id: string;
   @Field() public articleAssocie: string;
+  @Field() public instructionStation: string;
   @Field({ model: import("./article-matiere-premiere.model") })
   public matierePremiere: ArticleMatierePremiere;
   @Field({ asLabel: true }) public description: string;
