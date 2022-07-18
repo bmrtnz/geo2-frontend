@@ -1,10 +1,10 @@
 <div class="reservation-stock-en-cours">
-  <div class="btn-delete-reservation-container">
+  <div class="btn-delete-destockage-container">
     <dx-button
-      class="btn-delete-reservation"
+      class="btn-delete-destockage"
       type="danger"
       stylingMode="outlined"
-      text="{{ 'btn-delete-reservation' | localize }}"
+      text="{{ 'btn-delete-destockages' | localize }}"
       (onClick)="deleteReservations()"
     ></dx-button>
   </div>
@@ -25,7 +25,7 @@
     (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        'Réservations actives sur la ligne d\'ordre',
+        'Déstockages actifs sur la ligne d\'ordre',
         $event,
         gridConfiguratorService.Grid.OrdreReservationStockEnCours
       )

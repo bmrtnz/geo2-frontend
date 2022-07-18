@@ -83,10 +83,10 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
   }
 
   deleteReservations() {
-    const result = confirm(this.localizeService.localize("text-popup-supprimer-reservations"), "Réservations");
+    const result = confirm(this.localizeService.localize("text-popup-supprimer-destockages"), "Déstockage");
     result.then((ok) => {
       if (ok) {
-        // Suppression réservations en cours
+        // Suppression déstockages en cours
       }
     });
   }

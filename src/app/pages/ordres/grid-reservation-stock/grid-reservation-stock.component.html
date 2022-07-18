@@ -16,7 +16,7 @@
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        'Fournisseurs ayant cet article en stock (cliquez pour réserver)',
+        'Fournisseurs ayant cet article en stock (cliquez pour déstocker)',
         $event,
         gridConfiguratorService.Grid.OrdreReservationStock
       )

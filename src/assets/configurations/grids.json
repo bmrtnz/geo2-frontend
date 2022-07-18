@@ -1431,7 +1431,7 @@
         "dataField": "quantite",
         "dataType": "number",
         "cssClass": "multi-line-header",
-        "width": 50,
+        "width": 60,
         "visible": true
       }
     ]

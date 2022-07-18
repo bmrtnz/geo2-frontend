@@ -30,7 +30,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   ) {
     this.logText = "tout est OK, rien à modifier\r\n";
     this.logText += "changement de fournisseur 3D/3D --> VERGERDANJOU/VERGERDANJOU demandé\r\n";
-    this.logText += "1 réservation effectuée sur VERGERDANJOU/3D\r\n";
+    this.logText += "1 déstockage effectué sur VERGERDANJOU/3D\r\n";
     this.logText += "tout est OK, rien à modifier";
   }
 

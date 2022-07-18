@@ -85,7 +85,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
     const result = confirm(message, "Choix fournisseur");
     result.then((ok) => {
       if (ok) {
-        // Modification réservation
+        // Modification déstockage
       }
     });
   }
