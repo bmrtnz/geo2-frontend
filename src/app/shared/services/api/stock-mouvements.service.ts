@@ -30,6 +30,20 @@ export class StockMouvementsService extends ApiService {
     });
   }
 
+  public deleteAllByOrdreLigneId(id: string) {
+    return this.apollo.mutate<{ deleteStockMouvement: boolean }>({
+      mutation: gql(ApiService.buildGraph("mutation", [{
+        name: `deleteAllByOrdreLigneId`,
+        params: [
+          { name: "id", value: "id", isVariable: true },
+        ],
+      }], [
+        { name: "id", type: "String", isOptionnal: false },
+      ])),
+      variables: { id },
+    });
+  }
+
   public fResaUneLigne =
     (
       fouCode: string,
