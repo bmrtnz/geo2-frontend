@@ -162,7 +162,7 @@ export class GridStockComponent implements OnInit {
   refreshArticlesGrid() {
     this.dataGrid.instance.beginCustomLoading("");
     this.stocksService.allStockArticleList(
-      this.especeSB.value,
+      this.especeSB.value?.key,
       this.varieteSB.value,
       this.modesCultureSB.value,
       this.origineSB.value,
