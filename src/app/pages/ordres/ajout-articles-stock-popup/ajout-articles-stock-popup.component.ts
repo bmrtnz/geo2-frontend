@@ -47,7 +47,9 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   setTitle() {
     this.titleStart = this.localizeService.localize("ajout-article");
     if (this.ordre) {
-      this.titleMid = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero + " - " + this.ordre.client.raisonSocial;
+      this.titleMid = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero + " - "
+        + this.ordre.client.code
+        + "/" + this.ordre.entrepot.code;
     }
     this.titleEnd = this.localizeService.localize("via-stock");
   }
