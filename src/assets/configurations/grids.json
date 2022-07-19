@@ -2549,7 +2549,7 @@
         "dataType": "number",
         "width": 40,
         "allowEditing": false,
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "visible": true
       },
       {
@@ -2557,14 +2557,14 @@
         "dataField": "nombreColisExpedies",
         "dataType": "number",
         "width": 40,
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "visible": true
       },
       {
         "visibleIndex": 14,
         "dataField": "poidsNetExpedie",
         "dataType": "number",
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "width": 40,
         "visible": true
       },
@@ -2572,13 +2572,15 @@
         "visibleIndex": 16,
         "dataField": "poidsBrutExpedie",
         "dataType": "number",
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "width": 40,
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "venteQuantite",
+        "cssClass": "multi-line-header move-right",
+        "width": 70,
         "dataType": "number",
         "visible": true
       },
@@ -2591,6 +2593,8 @@
       {
         "visibleIndex": 22,
         "dataField": "achatQuantite",
+        "cssClass": "multi-line-header move-right",
+        "width": 70,
         "dataType": "number",
         "visible": true
       },
