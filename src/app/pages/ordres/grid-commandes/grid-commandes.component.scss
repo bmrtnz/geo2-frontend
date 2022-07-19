@@ -51,7 +51,7 @@
     padding-right: 8px !important;
   }
 
-  .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type):not(.article-column) {
+  .dx-datagrid-headers.dx-datagrid-nowrap td {
     pointer-events: none;
 
     &.headerCellBtnTemplate {
