@@ -271,7 +271,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private litigesService: LitigesService,
     private mruOrdresService: MruOrdresService,
     private tabContext: TabContext,
-    private authService: AuthService,
+    public authService: AuthService,
     private localization: LocalizationService
   ) {
     this.handleTabChange()
