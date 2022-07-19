@@ -322,6 +322,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     ]);
 
     this.transporteursDS = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+    this.transporteursDS.filter(["valide", "=", true]);
     this.instructionsList = [];
     this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
       res
