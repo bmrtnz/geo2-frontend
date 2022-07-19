@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
+import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
@@ -26,6 +27,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
+    private calibresFournisseurService: CalibresFournisseurService,
     private localizeService: LocalizationService
   ) {
     this.logText = "tout est OK, rien à modifier\r\n";
@@ -90,6 +92,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
     const article = this.ordreLigne.article;
     this.detailedArticleDescription = "";
+
     if (article.description) this.pushText(article.description);
     this.pushText(article.matierePremiere.variete.description + " " + article.matierePremiere.origine.description);
     if (article.cahierDesCharge.categorie?.description) this.pushText(article.cahierDesCharge.categorie.description);
