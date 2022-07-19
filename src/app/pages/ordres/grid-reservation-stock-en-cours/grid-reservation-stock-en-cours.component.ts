@@ -6,6 +6,7 @@ import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.servi
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
+import { StockMouvementsService } from "app/shared/services/api/stock-mouvements.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -14,9 +15,10 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { concatMapTo, filter, map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 
 
@@ -55,6 +57,7 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
     public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
     private stocksService: StocksService,
+    private stockMouvementsService: StockMouvementsService,
   ) {
     this.apiService = this.articlesService;
 
@@ -69,8 +72,7 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordreLigneInfo)
-      this.reservationsSource = this.stocksService
-        .getLigneReservationDatasource(this.ordreLigneInfo.id);
+      this.reloadSource(this.ordreLigneInfo.id);
   }
 
   onContentReady(e) {
@@ -83,12 +85,20 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
   }
 
   deleteReservations() {
-    const result = confirm(this.localizeService.localize("text-popup-supprimer-destockages"), "Déstockage");
-    result.then((ok) => {
-      if (ok) {
-        // Suppression déstockages en cours
-      }
-    });
+    from(confirm(this.localizeService.localize("text-popup-supprimer-destockages"), "Déstockage"))
+      .pipe(
+        filter(pass => pass),
+        concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(this.ordreLigneInfo.id)),
+      )
+      .subscribe({
+        error: ({ message }: Error) => notify(message, "error"),
+        complete: () => this.reloadSource(this.ordreLigneInfo.id),
+      });
+  }
+
+  reloadSource(ordreLigneID: string) {
+    this.reservationsSource = this.stocksService
+      .getLigneReservationDatasource(ordreLigneID);
   }
 
 }

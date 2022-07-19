@@ -5,10 +5,10 @@ import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/g
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { confirm } from "devextreme/ui/dialog";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { confirm } from "devextreme/ui/dialog";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 
 
@@ -22,6 +22,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   @Input() public ordreLigneInfo: any;
   @Input() public articleID: string;
   @Output() selectChange = new EventEmitter<any>();
+  @Output() reservationChange = new EventEmitter();
 
   contentReadyEvent = new EventEmitter<any>();
   @ViewChild(DxDataGridComponent, { static: true }) dataGridResa: DxDataGridComponent;
@@ -47,8 +48,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.articleID)
-      this.reservationsSource = this.stocksService
-        .getStockReservationDatasource(changes.articleID.currentValue);
+      this.reloadSource(changes.articleID.currentValue);
   }
 
   onCellPrepared(e) {
@@ -88,6 +88,11 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
         // Modification déstockage
       }
     });
+  }
+
+  private reloadSource(articleID: string) {
+    this.reservationsSource = this.stocksService
+      .getStockReservationDatasource(articleID);
   }
 
 }
