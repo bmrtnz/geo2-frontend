@@ -191,6 +191,12 @@ export class GridStockComponent implements OnInit {
     if (data?.articleID) this.reservationPopup.present(data, this.ordre);
   }
 
+  onCellClick(e) {
+    if (e.rowType === "group" && e.column.dataField === "commentaire") {
+      this.dataGrid.instance.expandRow(e.key);
+    }
+  }
+
   onCellDblClick(e) {
     if (e.column.dataField === "articleDescription") {
       this.openFilePopup(e.data);
