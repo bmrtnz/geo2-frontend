@@ -129,12 +129,12 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     notify(info, "info", 3000);
     from(this.chosenArticles)
       .pipe(
-        concatMap(articleID => this.functionsService
+        concatMap((articleID, index) => this.functionsService
           .ofInitArticleHistory(
             this.ordre.id,
             articleID,
             this.currentCompanyService.getCompany().id,
-            this.gridLignesHisto.datagrid.instance.getSelectedRowKeys()[0]
+            this.gridLignesHisto.datagrid.instance.getSelectedRowKeys()[index]
           )
           .valueChanges
           .pipe(takeWhile(res => res.loading))
