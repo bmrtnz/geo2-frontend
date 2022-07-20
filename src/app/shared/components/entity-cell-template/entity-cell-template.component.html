@@ -11,6 +11,9 @@
     (onValueChanged)="onSelectBoxCellValueChanged($event, cell)"
     (onInput)="onInput($event)"
     (onFocusIn)="onFocusIn($event)"
-  ></dx-select-box>
+  >
+    <dxo-drop-down-options [width]="300">
+    </dxo-drop-down-options>
+  </dx-select-box>
   <ng-template #noSettings>{{ cell.value }}</ng-template>
 </div>

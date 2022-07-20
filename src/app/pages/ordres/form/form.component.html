@@ -790,7 +790,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-check-box
-                                [disabled]="!allowMutations || !authService.currentUser.adminClient"
+                                [disabled]="!allowMutations || !authService.currentUser.adminClient || ordreBAFOuFacture"
                                 formControlName="venteACommission"
                               >
                               </dx-check-box>

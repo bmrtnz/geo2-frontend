@@ -59,11 +59,18 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     fournisseursDataSource.filter(["valide", "=", true]);
     const proprietairesDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
-    proprietairesDataSource.filter(["valide", "=", true]);
+    proprietairesDataSource.filter([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     const sharedBaseTarifDatasource = this.basesTarifService
       .getDataSource_v2(["id", "description"]);
+    sharedBaseTarifDatasource.filter([
+      ["valide", "=", true],
+      "and",
+      ["valideLig", "=", true]
+    ]);
     const sharedTypePaletteDatasource = this.typesPaletteService
       .getDataSource_v2(["id", "description"]);
+    sharedTypePaletteDatasource.filter(["valide", "=", true]);
+
     this.columnsSettings = {
       "proprietaireMarchandise.id": {
         dataSource: proprietairesDataSource,
@@ -464,6 +471,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           filters.push(["id", "=", proprietaireMarchandise.id]);
       }
     }
+    console.log(filters);
     this.columnsSettings["fournisseur.id"].dataSource.filter(filters);
     return fournisseur;
 
