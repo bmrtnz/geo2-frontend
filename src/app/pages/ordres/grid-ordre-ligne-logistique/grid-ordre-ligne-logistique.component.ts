@@ -56,6 +56,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   @Input() public ordre: Ordre;
   @Output() public ordreLogistique: OrdreLogistique;
   @Input() public ligneLogistiqueId: string;
+  @Input() public ordreBAFOuFacture;
   @Output() refreshGridLigneDetail = new EventEmitter();
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ChoixRaisonDecloturePopupComponent, { static: false }) choixRaisonPopup: ChoixRaisonDecloturePopupComponent;
@@ -185,7 +186,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
     this.currentRowIndex = e.component.getRowIndexByKey(this.currentLogId);
     switch (e.column.dataField) {
       case "expedieStation": {
-        if (this.changeCloture) return;
+        if (this.changeCloture || this.ordreBAFOuFacture) return;
         if (e.data.expedieStation === true) {
           this.choixRaisonPopup.visible = true;
         } else {

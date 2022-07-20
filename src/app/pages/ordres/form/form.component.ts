@@ -96,6 +96,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public transporteurLigneId: string;
   @Output() public transporteurTitle: string;
   @Output() public readOnlyMode: boolean;
+  @Output() public ordreBAFOuFacture: boolean;
 
   private readonly headerFields = [
     "id",
@@ -704,6 +705,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
+    this.ordreBAFOuFacture = this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
   }
 
   openClientFilePopup() {
