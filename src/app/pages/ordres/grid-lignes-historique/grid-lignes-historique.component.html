@@ -4,6 +4,24 @@
 >
 <dx-box>
   <dxi-item [ratio]="2">
+    <!-- Valides/non valides -->
+    <div class="dx-field">
+      <div class="dx-field-label">
+        {{ "clients-entrepots-valides" | localize }}
+      </div>
+      <div class="dx-field-value">
+        <dx-check-box
+          formControlName="valide"
+          class="float-left"
+          (onValueChanged)="onValideChanged($event)"
+        >
+       </dx-check-box>
+      </div>
+    </div>
+  </dxi-item>
+</dx-box>
+<dx-box>
+  <dxi-item [ratio]="2">
     <!-- Secteur -->
     <div class="dx-field secteur-histo-ligne-field">
       <div class="dx-field-label">
@@ -44,6 +62,12 @@
           [displayExpr]="displayCodeBefore"
           [searchExpr]="['code']"
           (onValueChanged)="onClientChanged($event)"
+          itemTemplate="items">
+          <div *dxTemplate="let data of 'items'">
+              <div [title]="!data.valide ? 'non valide' : ''" [ngClass]="{ 'not-valid' : !data.valide }">
+                {{ displayCodeBefore(data) }}
+              </div>
+          </div>
           >
           <dx-validator
             name="{{ 'tiers-client' | localize }}"
@@ -69,11 +93,17 @@
         <dx-select-box
           formControlName="entrepot"
           [dataSource]="entrepots"
-          [displayExpr]="displayCodeBefore"
           [searchExpr]="['code']"
+          [displayExpr]="displayCodeBefore"
           (onValueChanged)="onEntrepotChanged($event)"
           (onFocusIn)="onEntrepotFocus($event)"
           [showClearButton]="true"
+          itemTemplate="items">
+          <div *dxTemplate="let data of 'items'">
+              <div [title]="!data.valide ? 'non valide' : ''" [ngClass]="{ 'not-valid' : !data.valide }">
+                {{ displayCodeBefore(data) }}
+              </div>
+          </div>
         >
           <dx-validator
             name="{{ 'tiers-entrepot' | localize }}"
@@ -178,7 +208,6 @@
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
-    (onCellClick)="onCellClick($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

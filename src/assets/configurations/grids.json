@@ -2198,14 +2198,16 @@
         "visible": true,
         "calculateDisplayValue": "proprietaireMarchandise.code",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "arrow-right"
       },
       {
         "dataField": "fournisseur.id",
         "visible": true,
         "calculateDisplayValue": "fournisseur.code",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "arrow-right"
       },
       {
         "dataField": "ventePrixUnitaire",
@@ -2229,7 +2231,8 @@
         "visible": true,
         "calculateDisplayValue": "venteUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "arrow-right"
       },
       {
         "dataField": "gratuit",
@@ -2243,7 +2246,7 @@
         "calculateDisplayValue": "codePromo.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "small-header-right",
+        "cssClass": "small-header-right arrow-right",
         "allowEditing": true,
         "width": 60
       },
@@ -2269,7 +2272,8 @@
         "visible": true,
         "calculateDisplayValue": "achatUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "arrow-right"
       },
       {
         "dataField": "achatDevise",
@@ -2282,14 +2286,16 @@
         "visible": true,
         "calculateDisplayValue": "typePalette.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "arrow-right"
       },
       {
         "dataField": "paletteInter.id",
         "visible": true,
         "calculateDisplayValue": "paletteInter.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "arrow-right"
       },
       {
         "dataField": "libelleDLV",
@@ -2319,7 +2325,8 @@
         "visible": true,
         "calculateDisplayValue": "fraisUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "editCellTemplate": "entityEditCellTemplate",
+        "cssClass": "arrow-right"
       },
       {
         "dataField": "fraisCommentaires",

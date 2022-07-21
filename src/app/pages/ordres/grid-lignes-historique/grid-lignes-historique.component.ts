@@ -11,7 +11,7 @@ import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/g
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -20,6 +20,7 @@ import { map } from "rxjs/operators";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
 enum InputField {
+  valide = "valide",
   dateMin = "dateMin",
   dateMax = "dateMax",
   secteur = "secteur",
@@ -70,6 +71,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   public periodes: string[];
   toRefresh: boolean;
   public formGroup = new FormGroup({
+    valide: new FormControl(),
     dateMin: new FormControl(),
     dateMax: new FormControl(),
     secteur: new FormControl(),
@@ -106,8 +108,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         this.currentCompanyService.getCompany().id,
       ],
     ]);
-    this.clients = clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-    this.entrepots = entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.clients = clientsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
+    this.entrepots = entrepotsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
   }
 
   ngAfterViewInit() {
@@ -119,6 +121,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (this.clientId && this.popupShown) {
       this.clients.filter(["secteur.id", "=", this.secteurId]);
       this.entrepots.filter(["client.id", "=", this.clientId]);
+      this.formGroup.get("valide").patchValue(true);
       this.formGroup.patchValue({
         client: { id: this.clientId },
         entrepot: { id: this.entrepotId },
@@ -164,9 +167,6 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
 
-  }
-
-  onCellClick(e) {
   }
 
   onRowPrepared(e) {
@@ -247,10 +247,25 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  onValideChanged(e) {
+    if (!e.event) return; // Only user event
+    this.formGroup.patchValue({
+      client: null,
+      entrepot: null
+    });
+    this.clients = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
+    const filter: any = [["secteur.id", "=", this.formGroup.get("secteur").value?.id]];
+    if (this.formGroup.get("valide").value) filter.push("and", ["valide", "=", true]);
+    this.clients.filter(filter);
+    this.onFieldValueChange();
+  }
+
   onSecteurChanged(e) {
     this.onFieldValueChange();
-    this.clients = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-    this.clients.filter(["secteur.id", "=", e.value?.id]);
+    this.clients = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
+    const filter: any = [["secteur.id", "=", e.value?.id]];
+    if (this.formGroup.get("valide").value) filter.push("and", ["valide", "=", true]);
+    this.clients.filter(filter);
     // We check that this change is coming from the user
     if (!e.event) return;
     this.formGroup.patchValue({
@@ -262,8 +277,13 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   onClientChanged(e) {
     this.onFieldValueChange();
-    this.entrepots = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-    this.entrepots.filter(["client.id", "=", e.value?.id]);
+    this.entrepots = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
+
+    const filter: any = [["client.id", "=", e.value?.id]];
+    if (this.formGroup.get("valide").value) filter.push("and", ["valide", "=", true]);
+    this.entrepots.filter(filter);
+
+
     this.entrepots.load().then(res => {
       if (res?.length === 1) this.formGroup.get("entrepot").patchValue({ id: res[0].id });
     });
@@ -276,6 +296,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   onEntrepotChanged(e) {
+    if (!e.event) return;
     this.onFieldValueChange();
   }
 
@@ -334,7 +355,6 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   onFieldValueChange() {
     this.toRefresh = !!this.formGroup.get("client").value &&
-      // !!this.formGroup.get("entrepot").value &&
       !!this.formGroup.get("secteur").value;
   }
 

@@ -795,9 +795,9 @@ export class ClientDetailsComponent
         this.formGroup.get("nbJourEcheance").setValue(30);
       }
       if (e.value.id === "F" && this.currentCompanyService.getCompany().id === "SA") {
-        this.formGroup.get("fraisMarketing").patchValue(0.01);
+        this.formGroup.get("fraisMarketing").patchValue(1);
         this.formGroup.get("fraisMarketing").markAsDirty();
-        this.formGroup.get("fraisMarketingModeCalcul").patchValue({ id: "KILO" });
+        this.formGroup.get("fraisMarketingModeCalcul").patchValue({ id: "PCENT" });
         this.formGroup.get("fraisMarketingModeCalcul").markAsDirty();
       }
     }

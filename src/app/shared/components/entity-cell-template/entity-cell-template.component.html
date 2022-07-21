@@ -10,6 +10,7 @@
     [value]="extractEntity(cell)"
     (onValueChanged)="onSelectBoxCellValueChanged($event, cell)"
     (onInput)="onInput($event)"
+    (onFocusIn)="onFocusIn($event)"
   ></dx-select-box>
   <ng-template #noSettings>{{ cell.value }}</ng-template>
 </div>

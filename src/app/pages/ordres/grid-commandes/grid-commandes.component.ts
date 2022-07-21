@@ -136,7 +136,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public nbInsertedArticles: number;
   public newNumero = 0;
   public hintDblClick: string;
-  public currentValueTyped: string;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -417,7 +416,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       || proprietaireMarchandise?.code.substring(0, 2) !== "BW"
     ) {
       const listExp = proprietaireMarchandise?.listeExpediteurs;
-      console.log(listExp);
       if (listExp) {
         listExp.split(",").map(exp => {
           filters.push(["code", "=", exp], "or");
@@ -574,7 +572,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
     if (e.parentType === "dataRow") {
       e.editorOptions.onInput = (elem) => {
-        console.log("onInput");
         this.gridUtilsService.secureTypedValueWithEditGrid(elem);
       };
     }
