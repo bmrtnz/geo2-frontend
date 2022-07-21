@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
-import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren, Input, OnChanges, Output } from "@angular/core";
-import { FormBuilder, RequiredValidator } from "@angular/forms";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewChildren } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { CertificationDatePopupComponent } from "app/shared/components/certification-date-popup/certification-date-popup.component";
@@ -12,7 +12,6 @@ import { PushHistoryPopupComponent } from "app/shared/components/push-history-po
 import { Editable } from "app/shared/guards/editing-guard";
 import { AuthService } from "app/shared/services";
 import { BasesPaiementService } from "app/shared/services/api/bases-paiement.service";
-import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { CertificationsService } from "app/shared/services/api/certification.service";
 import { ConditionsVenteService } from "app/shared/services/api/conditions-vente.service";
@@ -20,6 +19,7 @@ import { DevisesService } from "app/shared/services/api/devises.service";
 import { GroupesFournisseurService } from "app/shared/services/api/groupes-fournisseur.service";
 import { HistoryType } from "app/shared/services/api/historique.service";
 import { IdentifiantsFournisseurService } from "app/shared/services/api/identifiants-fournisseur.service";
+import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { ModificationsService } from "app/shared/services/api/modification.service";
 import { MoyensPaiementService } from "app/shared/services/api/moyens-paiement.service";
 import { NaturesStationService } from "app/shared/services/api/natures-station.service";
@@ -36,8 +36,6 @@ import { of } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
 import { Certification, CertificationFournisseur, Fournisseur } from "../../../../shared/models";
 import { FournisseursService } from "../../../../shared/services/api/fournisseurs.service";
-import IdentifiantFournisseur from "app/shared/models/identifiant.fournisseur.model";
-import { DxoAdapterComponent } from "devextreme-angular/ui/nested";
 
 @Component({
   selector: "app-fournisseur-details",
@@ -585,6 +583,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
       "certifications.id",
       "certifications.certification.id",
     ])];
+  }
+
+  // Rerun validation when identifiant change
+  onIdentifiantFournisseurChange(event) {
+    this.cgaValidator.instance.validate();
   }
 
 }

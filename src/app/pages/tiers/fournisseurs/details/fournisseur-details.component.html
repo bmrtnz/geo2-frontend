@@ -188,6 +188,7 @@
                       [dataSource]="identifiant"
                       displayExpr="libelle"
                       [searchExpr]="['id']"
+                      (onValueChanged)="onIdentifiantFournisseurChange($event)"
                     >
                       <dx-validator
                         name="{{ 'tiers-fournisseurs-identifiant' | localize }}"
