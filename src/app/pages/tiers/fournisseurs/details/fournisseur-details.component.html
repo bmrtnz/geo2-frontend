@@ -23,7 +23,9 @@
           type="default"
           text="{{ 'btn-modifier' | localize }}"
           [visible]="readOnlyMode && !createMode"
-          (onClick)="readOnlyMode = !readOnlyMode; changeCertifDates.value = false"
+          (onClick)="
+            readOnlyMode = !readOnlyMode; changeCertifDates.value = false
+          "
         ></dx-button>
         <dx-button
           class="upperButton"
@@ -239,8 +241,8 @@
                       [readOnly]="
                         !createMode &&
                         (readOnlyMode ||
-                        !zeroTracaValue ||
-                        !authService.currentUser.adminClient)
+                          !zeroTracaValue ||
+                          !authService.currentUser.adminClient)
                       "
                       (onValueChanged)="onIDTracaChange($event)"
                       valueChangeEvent="keyup change"
@@ -1382,7 +1384,13 @@
                       [readOnly]="readOnlyMode"
                       type="date"
                       dateSerializationFormat="yyyy-MM-dd"
-                    ></dx-date-box>
+                    >
+                      <dx-validator #cgaValidator>
+                        <dxi-validation-rule
+                          [type]="'required'"
+                        ></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-date-box>
                   </div>
                 </div>
               </div>

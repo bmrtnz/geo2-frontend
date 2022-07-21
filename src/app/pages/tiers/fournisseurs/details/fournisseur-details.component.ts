@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren, Input, OnChanges, Output } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, RequiredValidator } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { CertificationDatePopupComponent } from "app/shared/components/certification-date-popup/certification-date-popup.component";
@@ -29,13 +29,15 @@ import { TypesFournisseurService } from "app/shared/services/api/types-fournisse
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { fournisseur as fournisseursGridConfig } from "assets/configurations/grids.json";
-import { DxAccordionComponent, DxCheckBoxComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxCheckBoxComponent, DxValidatorComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { of } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
 import { Certification, CertificationFournisseur, Fournisseur } from "../../../../shared/models";
 import { FournisseursService } from "../../../../shared/services/api/fournisseurs.service";
+import IdentifiantFournisseur from "app/shared/models/identifiant.fournisseur.model";
+import { DxoAdapterComponent } from "devextreme-angular/ui/nested";
 
 @Component({
   selector: "app-fournisseur-details",
@@ -43,6 +45,8 @@ import { FournisseursService } from "../../../../shared/services/api/fournisseur
   styleUrls: ["./fournisseur-details.component.scss"]
 })
 export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
+
+  private static readonly IDENTIFIANTS_FOURNISSEUR_PLATEFORME = [4, 5, 6];
 
   @Input() public fournisseurLigneId: string;
   @Output() fournisseurLigneCode = new EventEmitter<string>();
@@ -116,6 +120,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
   certDatePopup: CertificationDatePopupComponent;
   @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
   @ViewChild("changeCertifDates", { static: false }) changeCertifDates: DxCheckBoxComponent;
+  @ViewChild("cgaValidator") cgaValidator: DxValidatorComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -257,6 +262,13 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
       const Element = document.querySelector(".submit") as HTMLElement;
       Element.click();
     }
+
+    // override bypass callback of the CGA adpater
+    // bypass cga validator on plateforme identifiant
+    this.cgaValidator.adapter.bypass = () =>
+      FournisseurDetailsComponent
+        .IDENTIFIANTS_FOURNISSEUR_PLATEFORME
+        .includes(this.formGroup.get("identifiant").value?.id);
   }
 
   ngOnChanges() {
