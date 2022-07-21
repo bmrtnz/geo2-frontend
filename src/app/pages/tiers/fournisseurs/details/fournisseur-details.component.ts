@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild, ViewChildren, Input, OnChanges, Output } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewChildren } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -12,7 +12,6 @@ import { PushHistoryPopupComponent } from "app/shared/components/push-history-po
 import { Editable } from "app/shared/guards/editing-guard";
 import { AuthService } from "app/shared/services";
 import { BasesPaiementService } from "app/shared/services/api/bases-paiement.service";
-import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { CertificationsService } from "app/shared/services/api/certification.service";
 import { ConditionsVenteService } from "app/shared/services/api/conditions-vente.service";
@@ -20,6 +19,7 @@ import { DevisesService } from "app/shared/services/api/devises.service";
 import { GroupesFournisseurService } from "app/shared/services/api/groupes-fournisseur.service";
 import { HistoryType } from "app/shared/services/api/historique.service";
 import { IdentifiantsFournisseurService } from "app/shared/services/api/identifiants-fournisseur.service";
+import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { ModificationsService } from "app/shared/services/api/modification.service";
 import { MoyensPaiementService } from "app/shared/services/api/moyens-paiement.service";
 import { NaturesStationService } from "app/shared/services/api/natures-station.service";
@@ -29,7 +29,7 @@ import { TypesFournisseurService } from "app/shared/services/api/types-fournisse
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { fournisseur as fournisseursGridConfig } from "assets/configurations/grids.json";
-import { DxAccordionComponent, DxCheckBoxComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxCheckBoxComponent, DxValidatorComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { of } from "rxjs";
@@ -43,6 +43,8 @@ import { FournisseursService } from "../../../../shared/services/api/fournisseur
   styleUrls: ["./fournisseur-details.component.scss"]
 })
 export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
+
+  private static readonly IDENTIFIANTS_FOURNISSEUR_PLATEFORME = [4, 5, 6];
 
   @Input() public fournisseurLigneId: string;
   @Output() fournisseurLigneCode = new EventEmitter<string>();
@@ -116,6 +118,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
   certDatePopup: CertificationDatePopupComponent;
   @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
   @ViewChild("changeCertifDates", { static: false }) changeCertifDates: DxCheckBoxComponent;
+  @ViewChild("cgaValidator") cgaValidator: DxValidatorComponent;
   editing = false;
 
   fournisseur: Fournisseur;
@@ -257,6 +260,13 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
       const Element = document.querySelector(".submit") as HTMLElement;
       Element.click();
     }
+
+    // override bypass callback of the CGA adpater
+    // bypass cga validator on plateforme identifiant
+    this.cgaValidator.adapter.bypass = () =>
+      FournisseurDetailsComponent
+        .IDENTIFIANTS_FOURNISSEUR_PLATEFORME
+        .includes(this.formGroup.get("identifiant").value?.id);
   }
 
   ngOnChanges() {
@@ -573,6 +583,11 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
       "certifications.id",
       "certifications.certification.id",
     ])];
+  }
+
+  // Rerun validation when identifiant change
+  onIdentifiantFournisseurChange(event) {
+    this.cgaValidator.instance.validate();
   }
 
 }
