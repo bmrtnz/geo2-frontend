@@ -17,6 +17,10 @@
   .highlight-negativeStock-cell {
     background: #ff325a !important;
     color: white !important;
+
+    .dx-datagrid-summary-item {
+      color: white !important;
+    }
   }
 
   .bio-article {
@@ -24,6 +28,10 @@
   }
 
   .dx-row-focused {
+
+    td:not(.highlight-stockJ21-cell):not(.bio-article) .dx-datagrid-summary-item {
+      color: #FFF !important;
+    }
 
     .bio-article {
       color: #a9f77e !important;
