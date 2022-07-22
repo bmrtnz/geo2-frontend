@@ -57,6 +57,13 @@ export class EntityCellTemplateComponent {
     }
   }
 
+  displayCodeBefore(data) {
+    return data ?
+      ((data.code ? data.code : data.id) + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
+        (data.raisonSocial ? data.raisonSocial : data.description)))
+      : null;
+  }
+
   public onInput(elem) {
     // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
     this.gridUtilsService.secureTypedValueSBWithEditGrid(elem);

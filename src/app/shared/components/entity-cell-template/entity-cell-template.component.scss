@@ -1,1 +1,11 @@
+::ng-deep .entityCellTemplate {
+  .dx-texteditor-container {
+    input {
+      font-size: 14px;
+    }
+  }
 
+  .dx-texteditor.dx-editor-underlined:after {
+    border-bottom: 0;
+  }
+}
