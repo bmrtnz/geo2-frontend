@@ -50,11 +50,21 @@ export class EntityCellTemplateComponent {
   // Apply select box value to cell
   public onSelectBoxCellValueChanged(event, cell) {
     if (!event.value || event.value?.id === event.previousValue?.id) return;
+    // console.log("event", event, "cell", cell);
     if (cell.setValue) {
       const { displayExpression } = this.getSettings(cell.column.name);
       this.store.set(cell, event.value[displayExpression]);
       cell.setValue(event.value?.id);
     }
+    // Info needed in editing mode, not saved yet
+    // Don't ask why a timeOut...
+    setTimeout(() => {
+      if (cell.data?.proprietaireMarchandise) {
+        cell.data.proprietaireMarchandise.id = event.value.id;
+        cell.data.proprietaireMarchandise.code = event.value.code;
+        cell.data.proprietaireMarchandise.listeExpediteurs = event.value.listeExpediteurs;
+      }
+    });
   }
 
   displayCodeBefore(data) {

@@ -56,7 +56,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   ) {
     this.filterFournisseurDS();
     this.proprietairesDataSource = this.fournisseursService
-      .getDataSource_v2(["id", "code", "raisonSocial"]);
+      .getDataSource_v2(["id", "code", "raisonSocial", "listeExpediteurs"]);
     this.proprietairesDataSource.filter([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     const sharedBaseTarifDatasource = this.basesTarifService
       .getDataSource_v2(["id", "description"]);
@@ -556,15 +556,25 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
     switch (e.column.dataField) {
       case "fournisseur.id": {
+
+        const proprietaireMarchandise = this.grid.instance.getVisibleRows()[e.rowIndex].data.proprietaireMarchandise;
+
+        if (proprietaireMarchandise) {
+          this.updateFilterFournisseurDS(proprietaireMarchandise);
+        } else {
+          this.filterFournisseurDS();
+        }
+
         // console.log(this.grid.instance.getVisibleRows()[e.rowIndex].values[this.grid.instance.getVisibleColumnIndex("fournisseur.id")]);
-        this.grid.instance.byKey((this.grid.instance.getKeyByRowIndex(e.rowIndex)))
-          .then(rowData => {
-            if (rowData.proprietaireMarchandise) {
-              this.updateFilterFournisseurDS(rowData.proprietaireMarchandise);
-            } else {
-              this.filterFournisseurDS();
-            }
-          });
+        // console.log(this.grid.instance.getVisibleRows()[e.rowIndex]);
+        // this.grid.instance.byKey((this.grid.instance.getKeyByRowIndex(e.rowIndex)))
+        //   .then(rowData => {
+        //     if (rowData.proprietaireMarchandise) {
+        //       this.updateFilterFournisseurDS(rowData.proprietaireMarchandise);
+        //     } else {
+        //       this.filterFournisseurDS();
+        //     }
+        //   });
         break;
       }
     }
