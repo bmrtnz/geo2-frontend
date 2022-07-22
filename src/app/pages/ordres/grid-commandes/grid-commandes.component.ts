@@ -54,12 +54,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     public localizeService: LocalizationService,
     private gridsService: GridsService,
   ) {
-    const fournisseursDataSource = this.fournisseursService
+    this.filterFournisseurDS();
+    this.proprietairesDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial"]);
-    fournisseursDataSource.filter(["valide", "=", true]);
-    const proprietairesDataSource = this.fournisseursService
-      .getDataSource_v2(["id", "code", "raisonSocial"]);
-    proprietairesDataSource.filter([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
+    this.proprietairesDataSource.filter([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     const sharedBaseTarifDatasource = this.basesTarifService
       .getDataSource_v2(["id", "description"]);
     sharedBaseTarifDatasource.filter([
@@ -73,11 +71,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
     this.columnsSettings = {
       "proprietaireMarchandise.id": {
-        dataSource: proprietairesDataSource,
+        dataSource: this.proprietairesDataSource,
         displayExpression: "code",
       },
       "fournisseur.id": {
-        dataSource: fournisseursDataSource,
+        dataSource: this.fournisseursDataSource,
         displayExpression: "code",
       },
       "venteUnite.id": {
@@ -145,6 +143,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public nbInsertedArticles: number;
   public newNumero = 0;
   public hintDblClick: string;
+  public proprietairesDataSource: DataSource;
+  public fournisseursDataSource: DataSource;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -156,6 +156,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ZoomFournisseurPopupComponent, { static: false }) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
   @ViewChild(ArticleReservationOrdrePopupComponent, { static: false }) reservationStockPopup: ArticleReservationOrdrePopupComponent;
+
+  onR;
 
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
@@ -404,6 +406,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "ordre.secteurCommercial.id",
               "ordre.bonAFacturer",
               "ordre.societe.id",
+            ],
+            // Used to filter emballeur/expediteur
+            ...[
+              "proprietaireMarchandise.listeExpediteurs",
             ]
           ])),
           tap(datasource => datasource.filter([
@@ -448,6 +454,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   private updateFilterFournisseurDS(proprietaireMarchandise?: Partial<Fournisseur>) {
 
+    // console.log("proprietaireMarchandise", proprietaireMarchandise);
+
     let fournisseur: Partial<Fournisseur>;
     const filters = [];
 
@@ -471,10 +479,20 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           filters.push(["id", "=", proprietaireMarchandise.id]);
       }
     }
-    console.log(filters);
-    this.columnsSettings["fournisseur.id"].dataSource.filter(filters);
+    this.filterFournisseurDS(filters);
     return fournisseur;
 
+  }
+
+
+
+  filterFournisseurDS(filters?) {
+    const myFilter: any[] = [["valide", "=", true]];
+    if (filters?.length) myFilter.push("and", filters);
+    this.fournisseursDataSource = this.fournisseursService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.fournisseursDataSource.filter(myFilter);
+    if (this.columnsSettings)
+      this.columnsSettings["fournisseur.id"].dataSource = this.fournisseursDataSource;
   }
 
   // legacy features methods
@@ -532,6 +550,25 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   openOriginePopup(ligne) {
     this.ordreLigne = ligne;
     this.articleOriginePopup.visible = true;
+  }
+
+  onFocusedCellChanged(e) {
+
+    switch (e.column.dataField) {
+      case "fournisseur.id": {
+        // console.log(this.grid.instance.getVisibleRows()[e.rowIndex].values[this.grid.instance.getVisibleColumnIndex("fournisseur.id")]);
+        this.grid.instance.byKey((this.grid.instance.getKeyByRowIndex(e.rowIndex)))
+          .then(rowData => {
+            if (rowData.proprietaireMarchandise) {
+              this.updateFilterFournisseurDS(rowData.proprietaireMarchandise);
+            } else {
+              this.filterFournisseurDS();
+            }
+          });
+        break;
+      }
+    }
+
   }
 
   onCellPrepared(e) {
