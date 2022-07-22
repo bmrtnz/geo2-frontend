@@ -20,6 +20,7 @@
     [displayExpr]="displayCodeBefore"
     [searchExpr]="extractEntity(cell)?.code ? ['code'] : ['id']"
     (onValueChanged)="onSelectBoxCellValueChanged($event, cell)"
+    [value]="extractEntity(cell)"
     (onInput)="onInput($event)"
     (onFocusIn)="onFocusIn($event)"
   >
