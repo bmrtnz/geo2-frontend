@@ -15,6 +15,7 @@ import { from, Observable } from "rxjs";
 import { concatMap, map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 
+export type Reservation = [number, string, string];
 
 @Component({
   selector: "app-grid-reservation-stock",
@@ -26,7 +27,7 @@ export class GridReservationStockComponent implements OnInit {
   @Input() public ordreLigneInfo: any;
   @Input() public articleID: string;
   @Output() selectChange = new EventEmitter<any>();
-  @Output() reservationChange = new EventEmitter();
+  @Output() reservationChange = new EventEmitter<Reservation>();
 
   contentReadyEvent = new EventEmitter<any>();
   @ViewChild(DxDataGridComponent, { static: true }) dataGridResa: DxDataGridComponent;
@@ -95,11 +96,12 @@ export class GridReservationStockComponent implements OnInit {
           ))
       )
       .subscribe({
-        error: message => notify({ message }, "error", 7000),
-        complete: () => {
-          this.reloadSource(this.articleID);
-          this.reservationChange.emit();
+        next: res => {
+          const { nb_resa: nombreResa, nb_dispo: quantiteDisponible } = res.data.fResaUneLigne.data;
+          this.reservationChange.emit([nombreResa, event.data.fournisseurCode, event.data.proprietaireCode]);
         },
+        error: message => notify({ message }, "error", 7000),
+        complete: () => this.reloadSource(this.articleID),
       });
   }
 

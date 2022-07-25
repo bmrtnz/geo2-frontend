@@ -4,7 +4,7 @@ import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
-import { GridReservationStockComponent } from "../grid-reservation-stock/grid-reservation-stock.component";
+import { GridReservationStockComponent, Reservation } from "../grid-reservation-stock/grid-reservation-stock.component";
 
 @Component({
   selector: "app-article-reservation-ordre-popup",
@@ -21,9 +21,10 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   titleStart: string;
   titleMid: string;
   titleEnd: string;
-  logText: string;
+  logText = "";
   detailedArticleDescription: string;
   separator = " ● ";
+  quantiteAReserver: number;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
@@ -33,14 +34,15 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   constructor(
     private calibresFournisseurService: CalibresFournisseurService,
     private localizeService: LocalizationService
-  ) {
-    this.logText = "tout est OK, rien à modifier\r\n";
-    this.logText += "changement de fournisseur 3D/3D --> VERGERDANJOU/VERGERDANJOU demandé\r\n";
-    this.logText += "1 déstockage effectué sur VERGERDANJOU/3D\r\n";
-    this.logText += "tout est OK, rien à modifier";
-  }
+  ) { }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.ordreLigne.currentValue !== undefined) {
+      this.quantiteAReserver = changes.ordreLigne.currentValue.nombreColisCommandes;
+      this.clearAll();
+      this.pushLog(`quantité à réserver = ${this.quantiteAReserver}`);
+    }
+
     this.setTitle();
   }
 
@@ -68,6 +70,10 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   clearAll() {
     this.logText = "";
+  }
+
+  pushLog(text: string) {
+    this.logText += `${text}\r\n`;
   }
 
   hidePopup() {
@@ -129,7 +135,14 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   }
 
-  onReservationChange() {
+  onReservationChange([nombreReservations, fournisseur, proprietaire]: Reservation) {
+    if (nombreReservations === 0)
+      this.pushLog(`ERREUR : aucune réservations effectuées sur ${fournisseur}/${proprietaire}`);
+    else {
+      this.pushLog(`${nombreReservations} réservation(s) effectuée(s) sur ${fournisseur}/${proprietaire}`);
+      // is_fou_code	= is_cur_fou_code
+      // is_prop_code	= is_cur_prop_code
+    }
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
   }
 

@@ -42,7 +42,7 @@
         <app-grid-reservation-stock
           [ordreLigneInfo]="ordreLigneInfo"
           (selectChange)="clearAndHidePopup()"
-          (reservationChange)="onReservationChange()"
+          (reservationChange)="onReservationChange($event)"
           [articleID]="ordreLigne?.article?.id"
         ></app-grid-reservation-stock>
         <br />
