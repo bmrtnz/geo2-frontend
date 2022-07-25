@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -17,7 +17,7 @@ import { PromptPopupComponent } from "../../../shared/components/prompt-popup/pr
   templateUrl: "./grid-reservation-stock.component.html",
   styleUrls: ["./grid-reservation-stock.component.scss"]
 })
-export class GridReservationStockComponent implements OnInit, OnChanges {
+export class GridReservationStockComponent implements OnInit {
 
   @Input() public ordreLigneInfo: any;
   @Input() public articleID: string;
@@ -44,11 +44,6 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   async ngOnInit() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreReservationStock);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.articleID)
-      this.reloadSource(changes.articleID.currentValue);
   }
 
   onCellPrepared(e) {
@@ -90,7 +85,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
     });
   }
 
-  private reloadSource(articleID: string) {
+  reloadSource(articleID: string) {
     this.reservationsSource = this.stocksService
       .getStockReservationDatasource(articleID);
   }

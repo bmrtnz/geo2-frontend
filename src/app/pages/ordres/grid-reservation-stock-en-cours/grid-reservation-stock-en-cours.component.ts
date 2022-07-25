@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, ViewChild } from "@angular/core";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
@@ -27,7 +27,7 @@ import { PromptPopupComponent } from "../../../shared/components/prompt-popup/pr
   templateUrl: "./grid-reservation-stock-en-cours.component.html",
   styleUrls: ["./grid-reservation-stock-en-cours.component.scss"]
 })
-export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
+export class GridReservationStockEnCoursComponent implements OnInit {
 
   @Input() public ordreLigneInfo: any;
 
@@ -68,11 +68,6 @@ export class GridReservationStockEnCoursComponent implements OnInit, OnChanges {
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
     this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.ordreLigneInfo)
-      this.reloadSource(this.ordreLigneInfo.id);
   }
 
   onContentReady(e) {

@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
+import { GridReservationStockComponent } from "../grid-reservation-stock/grid-reservation-stock.component";
 
 @Component({
   selector: "app-article-reservation-ordre-popup",
@@ -25,6 +27,8 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(GridReservationStockComponent) gridResa: GridReservationStockComponent;
+  @ViewChild(GridReservationStockEnCoursComponent) gridResaEnCours: GridReservationStockEnCoursComponent;
 
   constructor(
     private calibresFournisseurService: CalibresFournisseurService,
@@ -58,6 +62,8 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.gridResaEnCours.reloadSource(this.ordreLigneInfo.id);
+    this.gridResa.reloadSource(this.ordreLigneInfo.article.id);
   }
 
   clearAll() {
