@@ -39,8 +39,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordreLigne.currentValue !== undefined) {
       this.quantiteAReserver = changes.ordreLigne.currentValue.nombreColisCommandes;
-      this.clearAll();
-      this.pushLog(`quantité à réserver = ${this.quantiteAReserver}`);
+      this.updateQuantity();
     }
 
     this.setTitle();
@@ -146,7 +145,13 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   onReservationEnCoursChange() {
+    this.updateQuantity();
     this.gridResa.reloadSource(this.ordreLigne.article.id);
+  }
+
+  private updateQuantity() {
+    this.clearAll();
+    this.pushLog(`quantité à réserver = ${this.quantiteAReserver}`);
   }
 
 }
