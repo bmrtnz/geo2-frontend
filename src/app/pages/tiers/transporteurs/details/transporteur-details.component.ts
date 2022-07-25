@@ -15,6 +15,8 @@ import { EditingAlertComponent } from "app/shared/components/editing-alert/editi
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { ModificationListComponent } from "app/shared/components/modification-list/modification-list.component";
+import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
+import { HistoryType } from "app/shared/services/api/historique.service";
 import { Editable } from "app/shared/guards/editing-guard";
 import { Transporteur } from "app/shared/models";
 import { AuthService, ClientsService } from "app/shared/services";
@@ -31,7 +33,8 @@ import { transporteur as transporteursGridConfig } from "assets/configurations/g
 import { DxAccordionComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import { tap } from "rxjs/operators";
+import { of } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-transporteur-details",
@@ -73,6 +76,9 @@ export class TransporteurDetailsComponent
   };
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
+
+  modifUserIds: string[];
+
   @ViewChild(EditingAlertComponent, { static: true })
   alertComponent: EditingAlertComponent;
   @ViewChild(InfoPopupComponent, { static: true })
@@ -82,6 +88,8 @@ export class TransporteurDetailsComponent
   @ViewChildren(DxAccordionComponent) accordion: any;
   @ViewChild(ModificationListComponent, { static: false })
   modifListe: ModificationListComponent;
+  @ViewChild(PushHistoryPopupComponent, { static: false })
+  validatePopup: PushHistoryPopupComponent;
   editing = false;
 
   transporteur: Transporteur;
@@ -156,6 +164,8 @@ export class TransporteurDetailsComponent
     this.clientsRaisonSocial.filter(["valide", "=", "true"]);
 
     if (this.route.snapshot.url[1]?.path !== "transporteurs") return;
+
+    this.resetModifUserIds();
 
     this.route.params
       .pipe(tap((_) => this.formGroup.reset()))
@@ -334,10 +344,28 @@ export class TransporteurDetailsComponent
   }
 
   saveData(transporteur) {
-    this.transporteursService
-      .save_v2(this.getDirtyFieldsPath(), { transporteur })
+
+    (transporteur.valide !== undefined &&
+      (this.transporteur.valide !== transporteur.valide /*|| validModif*/) &&
+      !this.createMode
+      ? this.validatePopup.present(HistoryType.TRANSPORTEUR, {
+        transporteur: { id: transporteur.id },
+        valide: transporteur.valide
+      })
+      : of(undefined)
+    )
+      .pipe(
+        switchMap((_) =>
+
+
+
+          this.transporteursService
+            .save_v2(this.getDirtyFieldsPath(), { transporteur })
+        ))
       .subscribe({
         next: (e) => {
+          this.resetModifUserIds();
+
           if (
             this.createMode ||
             this.authService.currentUser.adminClient
@@ -427,4 +455,13 @@ export class TransporteurDetailsComponent
 
     return [...this.formUtils.extractPaths(dirtyFields), ...gridFields];
   }
+
+  addModificationUserIds(userIdFromModifList) {
+    if (!this.modifUserIds.includes(userIdFromModifList)) this.modifUserIds.push(userIdFromModifList);
+  }
+
+  resetModifUserIds() {
+    this.modifUserIds = [];
+  }
+
 }
