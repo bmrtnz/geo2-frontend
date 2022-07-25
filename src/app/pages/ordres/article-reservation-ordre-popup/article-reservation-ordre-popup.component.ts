@@ -129,6 +129,14 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   }
 
+  onReservationChange() {
+    this.gridResaEnCours.reloadSource(this.ordreLigne.id);
+  }
+
+  onReservationEnCoursChange() {
+    this.gridResa.reloadSource(this.ordreLigne.article.id);
+  }
+
 }
 
 

@@ -1,14 +1,18 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import StockReservation from "app/shared/models/stock-reservation.model";
 import { AuthService, LocalizationService } from "app/shared/services";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { StockMouvementsService } from "app/shared/services/api/stock-mouvements.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { concatMap, map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 
 
@@ -38,6 +42,8 @@ export class GridReservationStockComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public authService: AuthService,
     private stocksService: StocksService,
+    private stockMouvementsService: StockMouvementsService,
+    private ordreLignesService: OrdreLignesService,
   ) {
   }
 
@@ -68,6 +74,33 @@ export class GridReservationStockComponent implements OnInit {
       e.column.dataField === "quantiteDisponible") {
       e.cellElement.classList.add("bold-text");
     }
+  }
+
+  public onRowClick(event: {
+    data: Partial<StockReservation>,
+  }) {
+    this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
+      .pipe(
+        concatMap(ol => this.stockMouvementsService
+          .fResaUneLigne(
+            event.data.fournisseurCode,
+            event.data.proprietaireCode,
+            this.articleID,
+            this.authService.currentUser.nomUtilisateur,
+            this.ordreLigneInfo.nombreColisCommandes,
+            ol.data.ordreLigne.ordre.id,
+            this.ordreLigneInfo.id,
+            "???",
+            event.data.typePaletteCode,
+          ))
+      )
+      .subscribe({
+        error: message => notify({ message }, "error", 7000),
+        complete: () => {
+          this.reloadSource(this.articleID);
+          this.reservationChange.emit();
+        },
+      });
   }
 
   onCellClick(e) {

@@ -12,7 +12,7 @@
     [rowAlternationEnabled]="true"
     [keyExpr]="'id'"
     (onCellPrepared)="onCellPrepared($event)"
-    (onCellClick)="onCellClick($event)"
+    (onRowClick)="onRowClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

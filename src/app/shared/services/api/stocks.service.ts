@@ -183,7 +183,7 @@ export class StocksService extends ApiService implements APIRead {
 
   reservationStock(ordreId: string, articleId: string, societeId: string, stockId: string, quantite: number, commentaire: string) {
     return this.apollo
-      .watchQuery<{ reservationStock: FunctionResponse }>({
+      .query<{ reservationStock: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
