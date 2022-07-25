@@ -2320,7 +2320,7 @@
         "calculateDisplayValue": "proprietaireMarchandise.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "width": 170
       },
       {
         "dataField": "fournisseur.id",
@@ -2328,7 +2328,7 @@
         "calculateDisplayValue": "fournisseur.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "width": 170
       },
       {
         "dataField": "ventePrixUnitaire",
@@ -2352,8 +2352,7 @@
         "visible": true,
         "calculateDisplayValue": "venteUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "gratuit",
@@ -2367,7 +2366,7 @@
         "calculateDisplayValue": "codePromo.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "small-header-right arrow-right",
+        "cssClass": "small-header-right",
         "allowEditing": true,
         "width": 60
       },
@@ -2393,8 +2392,7 @@
         "visible": true,
         "calculateDisplayValue": "achatUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "achatDevise",
@@ -2407,16 +2405,14 @@
         "visible": true,
         "calculateDisplayValue": "typePalette.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "paletteInter.id",
         "visible": true,
         "calculateDisplayValue": "paletteInter.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "libelleDLV",
@@ -2446,8 +2442,7 @@
         "visible": true,
         "calculateDisplayValue": "fraisUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "fraisCommentaires",
