@@ -135,14 +135,13 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   }
 
-  onReservationChange([nombreReservations, fournisseur, proprietaire]: Reservation) {
+  onReservationChange([nombreReservations, quantiteDisponible, fournisseur, proprietaire]: Reservation) {
     if (nombreReservations === 0)
       this.pushLog(`ERREUR : aucune réservations effectuées sur ${fournisseur}/${proprietaire}`);
-    else {
+    else
       this.pushLog(`${nombreReservations} réservation(s) effectuée(s) sur ${fournisseur}/${proprietaire}`);
-      // is_fou_code	= is_cur_fou_code
-      // is_prop_code	= is_cur_prop_code
-    }
+    if (quantiteDisponible < 0)
+      this.pushLog(`le fournisseur ${fournisseur}/${proprietaire} est passer en dispo négatif de ${quantiteDisponible}`);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
   }
 

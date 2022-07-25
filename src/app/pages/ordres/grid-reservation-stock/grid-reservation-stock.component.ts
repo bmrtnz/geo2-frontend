@@ -15,7 +15,7 @@ import { from, Observable } from "rxjs";
 import { concatMap, map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 
-export type Reservation = [number, string, string];
+export type Reservation = [number, number, string, string];
 
 @Component({
   selector: "app-grid-reservation-stock",
@@ -98,7 +98,7 @@ export class GridReservationStockComponent implements OnInit {
       .subscribe({
         next: res => {
           const { nb_resa: nombreResa, nb_dispo: quantiteDisponible } = res.data.fResaUneLigne.data;
-          this.reservationChange.emit([nombreResa, event.data.fournisseurCode, event.data.proprietaireCode]);
+          this.reservationChange.emit([nombreResa, quantiteDisponible, event.data.fournisseurCode, event.data.proprietaireCode]);
         },
         error: message => notify({ message }, "error", 7000),
         complete: () => this.reloadSource(this.articleID),
