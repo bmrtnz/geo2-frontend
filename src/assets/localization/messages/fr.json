@@ -943,7 +943,7 @@
     "ordreReservationStock-typePaletteCode": "Code palette",
     "ordreReservationStock-quantiteReservee": "Total résa",
     "ordreReservationStock-quantite": "Quantité déstockée",
-    "ordreReservationStock-option": "Réservations",
+    "ordreReservationStock-option": "Déstockages",
     "ordreLogistique-id": "id ligne",
     "ordreLogistique-fournisseur-code": "Lieu de chargement",
     "ordreLogistique-codeFournisseur": "Lieu de chargement",
