@@ -18,7 +18,7 @@
     *ngIf="columnsSettings; else noSettings"
     [dataSource]="getSettings(cell.column.dataField).dataSource"
     [displayExpr]="displayCodeBefore"
-    [searchExpr]="extractEntity(cell)?.code ? ['code'] : ['id']"
+    [searchExpr]="['proprietaireMarchandise.id', 'fournisseur.id'].includes(cell.column.dataField) ? ['code'] : ['id']"
     (onValueChanged)="onSelectBoxCellValueChanged($event, cell)"
     [value]="extractEntity(cell)"
     (onInput)="onInput($event)"
