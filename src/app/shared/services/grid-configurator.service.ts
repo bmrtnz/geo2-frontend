@@ -130,7 +130,8 @@ const extraConfigurations = [
   "allowSorting",
   "dataType",
   "width",
-  "format"
+  "format",
+  "calculateCellValue",
 ];
 
 @Injectable({

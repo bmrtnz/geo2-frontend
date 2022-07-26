@@ -15,7 +15,7 @@ import { from, Observable } from "rxjs";
 import { concatMap, map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 
-export type Reservation = [number, number, string, string];
+export type Reservation = [number, number, string];
 
 @Component({
   selector: "app-grid-reservation-stock",
@@ -87,27 +87,31 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   public onRowClick(event: {
-    data: Partial<StockReservation>,
+    data: any,
+    key: Array<string>,
+    rowType: "data" | "group",
   }) {
+    if (event.rowType !== "group") return;
+    const [fournisseur, proprietaire] = event.key[0].split("/");
     this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
       .pipe(
         concatMap(ol => this.stockMouvementsService
           .fResaUneLigne(
-            event.data.fournisseurCode,
-            event.data.proprietaireCode,
+            fournisseur,
+            proprietaire,
             this.articleID,
             this.authService.currentUser.nomUtilisateur,
             this.ordreLigneInfo.nombreColisCommandes,
             ol.data.ordreLigne.ordre.id,
             this.ordreLigneInfo.id,
             "???",
-            event.data.typePaletteCode,
+            event.data.collapsedItems[0].typePaletteCode,
           ))
       )
       .subscribe({
         next: res => {
           const { nb_resa: nombreResa, nb_dispo: quantiteDisponible } = res.data.fResaUneLigne.data;
-          this.reservationChange.emit([nombreResa, quantiteDisponible, event.data.fournisseurCode, event.data.proprietaireCode]);
+          this.reservationChange.emit([nombreResa, quantiteDisponible, event.key[0]]);
         },
         error: message => notify({ message }, "error", 7000),
         complete: () => this.reloadSource(this.articleID),
@@ -132,6 +136,16 @@ export class GridReservationStockComponent implements OnInit {
   reloadSource(articleID: string) {
     this.reservationsSource = this.stocksService
       .getStockReservationDatasource(articleID);
+  }
+
+  public calcFouProp(rowData: Partial<StockReservation>) {
+    return `${rowData.fournisseurCode}/${rowData.proprietaireCode}`;
+  }
+
+  public calculateCustomSummary(options) {
+    if (options.name === "typePaletteCode")
+      if (options.summaryProcess === "calculate")
+        options.totalValue = options.value;
   }
 
 }

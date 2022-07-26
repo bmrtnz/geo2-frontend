@@ -1328,11 +1328,10 @@
         "showInColumnChooser": false
       },
       {
-        "visibleIndex": 0,
+        "visibleIndex": 1,
         "dataField": "fournisseurCode",
         "dataType": "string",
-        "visible": true,
-        "groupIndex": 0
+        "visible": true
       },
       {
         "visibleIndex": 2,
