@@ -26,6 +26,7 @@ export class EntityCellTemplateComponent {
 
   /** Per column settings for CellTemplate */
   @Input() public columnsSettings: ColumnsSettings;
+  @Input() public allowMutations: boolean;
 
   constructor(
     public gridUtilsService: GridUtilsService,

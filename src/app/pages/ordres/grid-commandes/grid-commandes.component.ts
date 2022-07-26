@@ -530,6 +530,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   openReservationPopup(ligne) {
+    if (!this.allowMutations) return;
     this.ordreLigne = ligne;
     this.reservationStockPopup.visible = true;
   }

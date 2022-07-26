@@ -101,7 +101,7 @@
   </ng-container>
 
   <!-- Réservation -->
-  <ng-container *ngIf="FEATURE.reservation && allowMutations">
+  <ng-container *ngIf="FEATURE.reservation">
     <dxi-column
       cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
@@ -113,8 +113,8 @@
         class="small-article-button origin"
         type="success"
         [focusStateEnabled]="false"
-        [visible]="true"
         hint="{{ 'destockage' | localize }}"
+        [visible]="allowMutations"
         [text]="'D'"
         (onClick)="openReservationPopup(cell.data)"
       >
@@ -225,6 +225,7 @@
 
   <app-entity-cell-template
     [columnsSettings]="columnsSettings"
+    [allowMutations]="allowMutations"
   ></app-entity-cell-template>
 </dx-data-grid>
 
