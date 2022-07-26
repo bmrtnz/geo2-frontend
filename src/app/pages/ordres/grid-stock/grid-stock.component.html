@@ -84,7 +84,7 @@
             [showClearButton]="true"
             (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
             [searchExpr]="['id']"
-            [displayExpr]="'id'"
+            [displayExpr]="displayCodeBefore"
             valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
@@ -106,7 +106,7 @@
               onFieldValueChange($event, 'matierePremiere.origine.id')
             "
             [searchExpr]="['id']"
-            [displayExpr]="'id'"
+            [displayExpr]="displayCodeBefore"
             valueExpr="id"
           >
             <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>

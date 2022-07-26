@@ -164,8 +164,8 @@ export class GridStockComponent implements OnInit {
     this.stocksService.allStockArticleList(
       this.especeSB.value?.key,
       this.varieteSB.value,
-      this.modesCultureSB.value,
       this.origineSB.value,
+      this.modesCultureSB.value,
       this.emballageSB.value,
       this.bureauAchatSB.value?.id
     ).subscribe((res) => {
