@@ -8,6 +8,7 @@
     [dataSource]="getSettings(cell.column.dataField).dataSource"
     [displayExpr]="displayCodeBefore"
     [value]="extractEntity(cell)"
+    [readOnly]="!allowMutations"
   >
   </dx-select-box>
   <ng-template #noSettings>{{ cell.value }}</ng-template>

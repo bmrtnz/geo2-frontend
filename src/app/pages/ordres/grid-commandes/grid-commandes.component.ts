@@ -121,12 +121,12 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
-  public allowMutations = false;
   public changes: Change<Partial<OrdreLigne>>[] = [];
   public columnsSettings: ColumnsSettings;
 
   @Input() ordreID: string;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
+  @Output() allowMutations = false;
 
   // legacy features properties
   public certifsMD: any;

@@ -101,7 +101,7 @@
   </ng-container>
 
   <!-- Réservation -->
-  <ng-container *ngIf="FEATURE.reservation">
+  <ng-container *ngIf="FEATURE.reservation && allowMutations">
     <dxi-column
       cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
