@@ -22,7 +22,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   titleStart: string;
   titleMid: string;
   titleEnd: string;
-  logText = "";
+  logs: Array<string> = [];
   detailedArticleDescription: string;
   separator = " ● ";
   quantiteAReserver: number;
@@ -71,11 +71,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   clearAll() {
-    this.logText = "";
-  }
-
-  pushLog(text: string) {
-    this.logText += `${text}\r\n`;
+    this.logs = [];
   }
 
   hidePopup() {
@@ -140,11 +136,11 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   onReservationChange([nombreReservations, quantiteDisponible, fournisseur]: Reservation) {
     console.log(nombreReservations, quantiteDisponible, fournisseur);
     if (nombreReservations === 0)
-      this.pushLog(`ERREUR : aucun déstockages effectués sur ${fournisseur}`);
+      this.logs.push(`ERREUR : aucun déstockages effectués sur ${fournisseur}`);
     else
-      this.pushLog(`${nombreReservations} déstockage(s) effectué(s) sur ${fournisseur}`);
+      this.logs.push(`${nombreReservations} déstockage(s) effectué(s) sur ${fournisseur}`);
     if (quantiteDisponible < 0)
-      this.pushLog(`le fournisseur ${fournisseur} est passer en dispo négatif de ${quantiteDisponible}`);
+      this.logs.push(`le fournisseur ${fournisseur} est passer en dispo négatif de ${quantiteDisponible}`);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
     this.cd.detectChanges();
   }
@@ -158,11 +154,11 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   private logOK() {
-    this.pushLog(`Tout est OK, rien a modifier`);
+    this.logs.push(`Tout est OK, rien a modifier`);
   }
 
   private logQuantity() {
-    this.pushLog(`quantité à déstocker = ${this.quantiteAReserver}`);
+    this.logs.push(`quantité à déstocker = ${this.quantiteAReserver}`);
   }
 
 }
