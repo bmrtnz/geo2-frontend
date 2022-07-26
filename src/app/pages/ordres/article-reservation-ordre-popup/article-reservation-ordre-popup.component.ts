@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
+import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
@@ -25,6 +26,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   detailedArticleDescription: string;
   separator = " ● ";
   quantiteAReserver: number;
+  resaStatus: LigneReservation[];
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
@@ -33,13 +35,14 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   constructor(
     private calibresFournisseurService: CalibresFournisseurService,
-    private localizeService: LocalizationService
+    private localizeService: LocalizationService,
+    private cd: ChangeDetectorRef,
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordreLigne.currentValue !== undefined) {
       this.quantiteAReserver = changes.ordreLigne.currentValue.nombreColisCommandes;
-      this.updateQuantity();
+      this.logQuantity();
     }
 
     this.setTitle();
@@ -135,6 +138,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   onReservationChange([nombreReservations, quantiteDisponible, fournisseur]: Reservation) {
+    console.log(nombreReservations, quantiteDisponible, fournisseur);
     if (nombreReservations === 0)
       this.pushLog(`ERREUR : aucun déstockages effectués sur ${fournisseur}`);
     else
@@ -142,15 +146,22 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     if (quantiteDisponible < 0)
       this.pushLog(`le fournisseur ${fournisseur} est passer en dispo négatif de ${quantiteDisponible}`);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
+    this.cd.detectChanges();
   }
 
-  onReservationEnCoursChange() {
-    this.updateQuantity();
+  onReservationEnCoursChange(status: LigneReservation[]) {
+    this.logQuantity();
     this.gridResa.reloadSource(this.ordreLigne.article.id);
+    this.resaStatus = status;
+    if (this.resaStatus.length) this.logOK();
+    this.cd.detectChanges();
   }
 
-  private updateQuantity() {
-    this.clearAll();
+  private logOK() {
+    this.pushLog(`Tout est OK, rien a modifier`);
+  }
+
+  private logQuantity() {
     this.pushLog(`quantité à déstocker = ${this.quantiteAReserver}`);
   }
 

@@ -21,7 +21,7 @@
     [allowColumnReordering]="true"
     [rowAlternationEnabled]="true"
     [keyExpr]="'id'"
-    (onContentReady)="contentReadyEvent.emit($event)"
+    (onContentReady)="onContentReady($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

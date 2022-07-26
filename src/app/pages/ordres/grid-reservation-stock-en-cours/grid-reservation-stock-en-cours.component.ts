@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import LigneReservation from "app/shared/models/ligne-reservation.model";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
@@ -30,7 +31,7 @@ import { PromptPopupComponent } from "../../../shared/components/prompt-popup/pr
 export class GridReservationStockEnCoursComponent implements OnInit {
 
   @Input() public ordreLigneInfo: any;
-  @Output() reservationChange = new EventEmitter();
+  @Output() reservationChange = new EventEmitter<LigneReservation[]>();
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -73,6 +74,8 @@ export class GridReservationStockEnCoursComponent implements OnInit {
 
   onContentReady(e) {
     this.gridRowsTotal = this.dataGridResaEnCours.instance.getVisibleRows()?.length;
+    const items = (this.dataGridResaEnCours.dataSource as DataSource)?.items();
+    this.reservationChange.emit(items ?? []);
   }
 
   onCellPrepared(e) {
@@ -88,10 +91,7 @@ export class GridReservationStockEnCoursComponent implements OnInit {
       )
       .subscribe({
         error: ({ message }: Error) => notify(message, "error"),
-        complete: () => {
-          this.reloadSource(this.ordreLigneInfo.id);
-          this.reservationChange.emit();
-        },
+        complete: () => this.reloadSource(this.ordreLigneInfo.id),
       });
   }
 
