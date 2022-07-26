@@ -557,23 +557,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       case "fournisseur.id": {
 
         const proprietaireMarchandise = this.grid.instance.getVisibleRows()[e.rowIndex].data.proprietaireMarchandise;
-
         if (proprietaireMarchandise) {
           this.updateFilterFournisseurDS(proprietaireMarchandise);
         } else {
           this.filterFournisseurDS();
         }
-
-        // console.log(this.grid.instance.getVisibleRows()[e.rowIndex].values[this.grid.instance.getVisibleColumnIndex("fournisseur.id")]);
-        // console.log(this.grid.instance.getVisibleRows()[e.rowIndex]);
-        // this.grid.instance.byKey((this.grid.instance.getKeyByRowIndex(e.rowIndex)))
-        //   .then(rowData => {
-        //     if (rowData.proprietaireMarchandise) {
-        //       this.updateFilterFournisseurDS(rowData.proprietaireMarchandise);
-        //     } else {
-        //       this.filterFournisseurDS();
-        //     }
-        //   });
         break;
       }
     }
@@ -721,7 +709,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       this.zoomArticlePopup.visible = true;
     }
     if (["fournisseur.id", "proprietaireMarchandise.id"].includes(e.column?.dataField)) {
-      const { id: idFour, code } = e.data[e.column.dataField.split(".")[0]];
+      const { id: idFour, code } = this.grid.instance.getVisibleRows()[e.rowIndex].data[e.column.dataField.split(".")[0]];
       if (idFour === null) return;
       this.fournisseurLigneId = idFour;
       this.fournisseurCode = code;
