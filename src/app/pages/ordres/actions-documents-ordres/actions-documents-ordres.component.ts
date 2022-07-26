@@ -8,10 +8,12 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
 import { environment } from "environments/environment";
 import { defer, of } from "rxjs";
-import { catchError, concatMap, concatMapTo, filter, map } from "rxjs/operators";
+import { catchError, concatMap, concatMapTo, filter, map, tap } from "rxjs/operators";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
+import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
+import { GridsService } from "../grids.service";
 import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/confirmation-result-popup.component";
 
 @Component({
@@ -23,6 +25,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
   @Input() public ordre: Ordre;
   @Input() public gridEnvois: GridEnvoisComponent;
+  @Input() public gridCommandes: GridCommandesComponent;
   @Input() public orderConfirmationOnly: boolean;
   @Output() public flux: string;
 
@@ -41,6 +44,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   constructor(
     private envoisService: EnvoisService,
     private currentCompanyService: CurrentCompanyService,
+    private gridsService: GridsService,
     private authService: AuthService,
   ) {
     this.actionsFlux = [
@@ -96,6 +100,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       .pipe(
         map(result => Object.values(result.data)[0]),
         concatMap(response => {
+          // Some order lines can be deleted
+          this.gridsService.reload("Commande", "SyntheseExpeditions", "DetailExpeditions");
           if (response.res === FunctionResult.Warning)
             return this.resultPopup.openAs("WARNING", response.msg);
           return of(true);

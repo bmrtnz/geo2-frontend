@@ -484,8 +484,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   }
 
-
-
   filterFournisseurDS(filters?) {
     const myFilter: any[] = [["valide", "=", true]];
     if (filters?.length) myFilter.push("and", filters);
