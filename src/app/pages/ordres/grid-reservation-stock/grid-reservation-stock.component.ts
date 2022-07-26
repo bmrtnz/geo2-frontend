@@ -37,6 +37,15 @@ export class GridReservationStockComponent implements OnInit {
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
   reservationsSource: Observable<DataSource>;
+  public summaryFields = [
+    "quantiteDisponible",
+    "quantiteInitiale",
+    "quantiteReservee",
+    "quantiteCalculee1",
+    "quantiteCalculee2",
+    "quantiteCalculee3",
+    "quantiteCalculee4",
+  ];
 
   constructor(
     public localizeService: LocalizationService,

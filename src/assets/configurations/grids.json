@@ -1331,7 +1331,8 @@
         "visibleIndex": 0,
         "dataField": "fournisseurCode",
         "dataType": "string",
-        "visible": true
+        "visible": true,
+        "groupIndex": 0
       },
       {
         "visibleIndex": 2,
