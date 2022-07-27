@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import LigneReservation from "app/shared/models/ligne-reservation.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -26,6 +27,7 @@ export class GridReservationStockComponent implements OnInit {
 
   @Input() public ordreLigneInfo: any;
   @Input() public articleID: string;
+  @Input() private resaStatus: LigneReservation[];
   @Output() selectChange = new EventEmitter<any>();
   @Output() reservationChange = new EventEmitter<Reservation>();
 
@@ -87,7 +89,6 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   private pushReservation(event) {
-    console.log(event);
     const [fournisseur, proprietaire] = event.key[0].split("/");
     this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
       .pipe(
@@ -101,7 +102,7 @@ export class GridReservationStockComponent implements OnInit {
             ol.data.ordreLigne.ordre.id,
             this.ordreLigneInfo.id,
             "???",
-            event.totalItem.data.items[0].typePaletteCode,
+            event.data[event.row.isExpanded ? "items" : "collapsedItems"][0].typePaletteCode,
           ))
       )
       .subscribe({
@@ -115,22 +116,26 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   onCellClick(e) {
+    // cancel action when reservation is already done
+    if (this.resaStatus.length) return;
+
     // do nothing on expand cell click
     if (e.cellElement.classList.contains("dx-command-expand")) return;
 
     if (!e?.data || e.rowType !== "group") return;
     this.pushReservation(e);
-    // TODO : Contrôle source non actuelle et retour le cas échéant
-    let message = this.localizeService.localize("text-popup-changer-fournisseur");
-    message = message
-      .replace("&FPC", `${this.ordreLigneInfo.fournisseur.code} / ${this.ordreLigneInfo.proprietaireMarchandise.code}`)
-      .replace("&FPN", `${e.data.fournisseurCode} / ${e.data.proprietaireCode}`);
-    const result = confirm(message, "Choix fournisseur");
-    result.then((ok) => {
-      if (ok) {
-        // Modification déstockage
-      }
-    });
+
+    // // TODO : Contrôle source non actuelle et retour le cas échéant
+    // let message = this.localizeService.localize("text-popup-changer-fournisseur");
+    // message = message
+    //   .replace("&FPC", `${this.ordreLigneInfo.fournisseur.code} / ${this.ordreLigneInfo.proprietaireMarchandise.code}`)
+    //   .replace("&FPN", `${e.data.fournisseurCode} / ${e.data.proprietaireCode}`);
+    // const result = confirm(message, "Choix fournisseur");
+    // result.then((ok) => {
+    //   if (ok) {
+    //     // Modification déstockage
+    //   }
+    // });
   }
 
   reloadSource(articleID: string) {

@@ -63,6 +63,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("article-reservation-ordre-popup");
+    this.clearAll();
   }
 
   onShown(e) {
