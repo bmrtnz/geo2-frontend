@@ -11,7 +11,7 @@
     [allowColumnReordering]="true"
     [rowAlternationEnabled]="true"
     (onCellPrepared)="onCellPrepared($event)"
-    (onRowClick)="onRowClick($event)"
+    (onCellClick)="onCellClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

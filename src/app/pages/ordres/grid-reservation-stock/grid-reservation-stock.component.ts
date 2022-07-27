@@ -86,12 +86,8 @@ export class GridReservationStockComponent implements OnInit {
     }
   }
 
-  public onRowClick(event: {
-    data: any,
-    key: Array<string>,
-    rowType: "data" | "group",
-  }) {
-    if (event.rowType !== "group") return;
+  private pushReservation(event) {
+    console.log(event);
     const [fournisseur, proprietaire] = event.key[0].split("/");
     this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
       .pipe(
@@ -105,7 +101,7 @@ export class GridReservationStockComponent implements OnInit {
             ol.data.ordreLigne.ordre.id,
             this.ordreLigneInfo.id,
             "???",
-            event.data.collapsedItems[0].typePaletteCode,
+            event.totalItem.data.items[0].typePaletteCode,
           ))
       )
       .subscribe({
@@ -119,7 +115,11 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   onCellClick(e) {
-    if (!e?.data) return;
+    // do nothing on expand cell click
+    if (e.cellElement.classList.contains("dx-command-expand")) return;
+
+    if (!e?.data || e.rowType !== "group") return;
+    this.pushReservation(e);
     // TODO : Contrôle source non actuelle et retour le cas échéant
     let message = this.localizeService.localize("text-popup-changer-fournisseur");
     message = message
