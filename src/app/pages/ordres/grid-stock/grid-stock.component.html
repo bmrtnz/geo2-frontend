@@ -32,17 +32,15 @@
         <div class="dx-field-value">
           <dx-select-box
             #varieteSB
-            [dataSource]="varietes"
+            [dataSource]="varietes | async"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
-            (valueChange)="
-              onFieldValueChange($event, 'matierePremiere.variete.id')
-            "
-            [searchExpr]="['id']"
-            [displayExpr]="'id'"
-            valueExpr="id"
+            (valueChange)="onFieldValueChange($event, 'variete')"
+            [searchExpr]="['node.key']"
+            [displayExpr]="'node.key'"
+            valueExpr="node"
           >
-            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+            <dxo-drop-down-options [width]="200"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
       </div>
@@ -67,11 +65,10 @@
             [displayExpr]="'description'"
             [valueExpr]="'id'"
           >
-            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+            <dxo-drop-down-options [width]="250"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
       </div>
-      <!-- Emballage -->
       <div class="dx-field field-large">
         <div class="dx-field-label">
           {{ "articles-emballage-emballage" | localize }}
