@@ -207,7 +207,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   focusedCellChanging(e) {
-    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex)
+    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
       setTimeout(() => this.grid.instance.saveEditData());
   }
 
@@ -454,8 +454,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   private updateFilterFournisseurDS(proprietaireMarchandise?: Partial<Fournisseur>) {
 
-    // console.log("proprietaireMarchandise", proprietaireMarchandise);
-
     let fournisseur: Partial<Fournisseur>;
     const filters = [];
 
@@ -555,7 +553,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
     switch (e.column.dataField) {
       case "fournisseur.id": {
-
         const proprietaireMarchandise = this.grid.instance.getVisibleRows()[e.rowIndex].data.proprietaireMarchandise;
         if (proprietaireMarchandise) {
           this.updateFilterFournisseurDS(proprietaireMarchandise);
