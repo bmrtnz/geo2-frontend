@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
-import { AuthService, LocalizationService } from "app/shared/services";
+import { AuthService, FournisseursService, LocalizationService } from "app/shared/services";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { StockMouvementsService } from "app/shared/services/api/stock-mouvements.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -12,9 +13,10 @@ import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { concatMap, map } from "rxjs/operators";
+import { from, Observable, zip } from "rxjs";
+import { concatMap, concatMapTo, filter, finalize, map, withLatestFrom } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
+import { GridsService } from "../grids.service";
 
 export type Reservation = [number, number, string];
 
@@ -56,6 +58,9 @@ export class GridReservationStockComponent implements OnInit {
     private stocksService: StocksService,
     private stockMouvementsService: StockMouvementsService,
     private ordreLignesService: OrdreLignesService,
+    private currentCompanyService: CurrentCompanyService,
+    private fournisseursService: FournisseursService,
+    private grids: GridsService,
   ) {
   }
 
@@ -116,26 +121,54 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   onCellClick(e) {
-    // cancel action when reservation is already done
-    if (this.resaStatus.length) return;
+    const [fournisseur, proprietaire] = e.key[0].split("/");
 
     // do nothing on expand cell click
     if (e.cellElement.classList.contains("dx-command-expand")) return;
 
+    // do nothing on expanded rows
     if (!e?.data || e.rowType !== "group") return;
-    this.pushReservation(e);
 
-    // // TODO : Contrôle source non actuelle et retour le cas échéant
-    // let message = this.localizeService.localize("text-popup-changer-fournisseur");
-    // message = message
-    //   .replace("&FPC", `${this.ordreLigneInfo.fournisseur.code} / ${this.ordreLigneInfo.proprietaireMarchandise.code}`)
-    //   .replace("&FPN", `${e.data.fournisseurCode} / ${e.data.proprietaireCode}`);
-    // const result = confirm(message, "Choix fournisseur");
-    // result.then((ok) => {
-    //   if (ok) {
-    //     // Modification déstockage
-    //   }
-    // });
+    // Contrôle source non actuelle et retour le cas échéant
+    let popupMessage = this.localizeService.localize("text-popup-changer-fournisseur");
+    popupMessage = popupMessage
+      .replace("&FPC", `${this.ordreLigneInfo.fournisseur.code} / ${this.ordreLigneInfo.proprietaireMarchandise.code}`)
+      .replace("&FPN", `${fournisseur} / ${proprietaire}`);
+
+    // when selected source differ from the target (fournisseur)
+    if (
+      fournisseur !== this.resaStatus[0].fournisseurCode
+      && proprietaire !== this.resaStatus[0].proprietaireCode
+    )
+      return from(confirm(popupMessage, "Choix fournisseur"))
+        .pipe(
+          filter(v => !!v),
+          concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(this.ordreLigneInfo.id)),
+          withLatestFrom(zip(...[fournisseur, proprietaire]
+            .map(code => this.fournisseursService.getFournisseurByCode(code, ["id"])),
+          )),
+          map(([, [resFournisseur, resProprietaire]]) => [
+            ["fournisseur", resFournisseur.data.fournisseurByCode.id],
+            ["proprietaireMarchandise", resProprietaire.data.fournisseurByCode.id],
+          ]),
+          concatMap((data) => zip(...data
+            .map(([name, value]) => this.ordreLignesService.updateField(
+              name,
+              value,
+              this.ordreLigneInfo.id,
+              this.currentCompanyService.getCompany().id,
+              ["id", `${name}.id`],
+            )),
+          )),
+          finalize(() => this.grids.reload("Commande", "SyntheseExpeditions")),
+        )
+        .subscribe({
+          error: ({ message }: Error) => notify(message, "error"),
+          next: () => this.pushReservation(e),
+        });
+
+    // when no actives resas, accept selection and exit
+    if (!this.resaStatus.length) return this.pushReservation(e);
   }
 
   reloadSource(articleID: string) {
