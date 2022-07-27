@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
+// tslint:disable-next-line: max-line-length
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
@@ -74,6 +75,10 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     this.logs = [];
   }
 
+  pushLog(log: string) {
+    this.logs = [...this.logs, log];
+  }
+
   hidePopup() {
     this.popup.visible = false;
   }
@@ -134,13 +139,12 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   onReservationChange([nombreReservations, quantiteDisponible, fournisseur]: Reservation) {
-    console.log(nombreReservations, quantiteDisponible, fournisseur);
     if (nombreReservations === 0)
-      this.logs.push(`ERREUR : aucun déstockages effectués sur ${fournisseur}`);
+      this.pushLog(`ERREUR : aucun déstockages effectués sur ${fournisseur}`);
     else
-      this.logs.push(`${nombreReservations} déstockage(s) effectué(s) sur ${fournisseur}`);
+      this.pushLog(`${nombreReservations} déstockage(s) effectué(s) sur ${fournisseur}`);
     if (quantiteDisponible < 0)
-      this.logs.push(`le fournisseur ${fournisseur} est passer en dispo négatif de ${quantiteDisponible}`);
+      this.pushLog(`le fournisseur ${fournisseur} est passer en dispo négatif de ${quantiteDisponible}`);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
     this.cd.detectChanges();
   }
@@ -154,13 +158,22 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   private logOK() {
-    this.logs.push(`Tout est OK, rien a modifier`);
+    this.pushLog(`Tout est OK, rien a modifier`);
   }
 
   private logQuantity() {
-    this.logs.push(`quantité à déstocker = ${this.quantiteAReserver}`);
+    this.pushLog(`quantité à déstocker = ${this.quantiteAReserver}`);
   }
 
 }
 
+@Pipe({ name: "list" })
+export class ListPipe implements PipeTransform {
 
+  transform(value: string[]): string {
+    return value
+      .filter((line, index, self) => self[index - 1] !== line)
+      .join("\r\n");
+  }
+
+}

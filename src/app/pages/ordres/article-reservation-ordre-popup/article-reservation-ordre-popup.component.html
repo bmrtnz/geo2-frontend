@@ -51,7 +51,7 @@
           class="stock-resa-log"
           [height]="90"
           [readOnly]="true"
-          [value]="logs.join('\r\n')"
+          [value]="this.logs | list"
         >
         </dx-text-area>
         <br />

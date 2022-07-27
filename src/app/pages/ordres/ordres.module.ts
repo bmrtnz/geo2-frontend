@@ -43,12 +43,12 @@ import {
 } from "devextreme-angular";
 import { PromptPopupModule } from "../../shared/components/prompt-popup/prompt-popup.component";
 import { ArticlesModule } from "../articles/articles.module";
+import { ClientsModule } from "../tiers/clients/clients.module";
 import { ContactsModule } from "../tiers/contacts/contacts.module";
+import { EntrepotsModule } from "../tiers/entrepots/entrepots.module";
 import { FournisseursModule } from "../tiers/fournisseurs/fournisseurs.module";
 import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-passage-a-quai.module";
 import { TransporteursModule } from "../tiers/transporteurs/transporteurs.module";
-import { ClientsModule } from "../tiers/clients/clients.module";
-import { EntrepotsModule } from "../tiers/entrepots/entrepots.module";
 import { OrdresAccueilComponent } from "./accueil/ordres-accueil.component";
 import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/actions-documents-ordres.component";
 import { ConfirmationResultPopupComponent } from "./actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
@@ -59,6 +59,10 @@ import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-pop
 import { AnnuleRemplacePopupComponent } from "./annule-remplace-popup/annule-remplace-popup.component";
 import { ArticleCertificationPopupComponent } from "./article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
+import {
+  ArticleReservationOrdrePopupComponent,
+  ListPipe,
+} from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
 import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
 import { FormLitigesComponent } from "./form-litiges/form-litiges.component";
@@ -67,6 +71,7 @@ import { FormComponent } from "./form/form.component";
 import { GridAnnuleRemplaceComponent } from "./grid-annule-remplace/grid-annule-remplace.component";
 import { GridChoixEnvoisComponent } from "./grid-choix-envois/grid-choix-envois.component";
 import { GridClientsDepEncoursDetailComponent } from "./grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component";
+import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/button-marge-previ.component";
 import { GridCommandesComponent } from "./grid-commandes/grid-commandes.component";
 import { GridCommentaireOrdreComponent } from "./grid-commentaire-ordre/grid-commentaire-ordre.component";
 import { GridControleQualiteComponent } from "./grid-controle-qualite/grid-controle-qualite.component";
@@ -86,10 +91,13 @@ import { GridLitigesLignesComponent } from "./grid-litiges-lignes/grid-litiges-l
 import { GridLogistiquesComponent } from "./grid-logistiques/grid-logistiques.component";
 import { GridMargeComponent } from "./grid-marge/grid-marge.component";
 import { GridOrdreLigneLogistiqueComponent } from "./grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
+import { GridReservationStockEnCoursComponent } from "./grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
+import { GridReservationStockComponent } from "./grid-reservation-stock/grid-reservation-stock.component";
 import { GridSaveLogComponent } from "./grid-save-log/grid-save-log.component";
 import { GridStockComponent } from "./grid-stock/grid-stock.component";
 import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
 import { GridSuiviComponent } from "./grid-suivi/grid-suivi.component";
+import { GridsService } from "./grids.service";
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
@@ -112,16 +120,11 @@ import { OrdresRoutingModule } from "./ordres-routing.module";
 import { LoadingTabComponent, RootComponent, TabContext } from "./root/root.component";
 import OrdresSuiviComponent from "./suivi/ordres-suivi.component";
 import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-popup.component";
+import { ZoomClientPopupComponent } from "./zoom-client-popup/zoom-client-popup.component";
+import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { ZoomClientPopupComponent } from "./zoom-client-popup/zoom-client-popup.component";
-import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-popup.component";
-import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/button-marge-previ.component";
-import { GridsService } from "./grids.service";
-import { ArticleReservationOrdrePopupComponent } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
-import { GridReservationStockComponent } from "./grid-reservation-stock/grid-reservation-stock.component";
-import { GridReservationStockEnCoursComponent } from "./grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 
 @NgModule({
   declarations: [
@@ -195,6 +198,7 @@ import { GridReservationStockEnCoursComponent } from "./grid-reservation-stock-e
     ArticleReservationOrdrePopupComponent,
     GridReservationStockComponent,
     GridReservationStockEnCoursComponent,
+    ListPipe,
   ],
   imports: [
     OrdresRoutingModule,
@@ -248,6 +252,7 @@ import { GridReservationStockEnCoursComponent } from "./grid-reservation-stock-e
     OrdresIndicatorsService,
     DatePipe,
     LocalizePipe,
+    ListPipe,
     TabContext,
     OrdresTabsPersistGuard,
     GridsService,
