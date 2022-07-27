@@ -100,23 +100,42 @@
     </div>
   </ng-container>
 
-  <!-- Réservation -->
-  <ng-container *ngIf="FEATURE.reservation">
+  <!-- Indicateur stock -->
+  <ng-container *ngIf="FEATURE.indicateurStock">
     <dxi-column
       cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
-      [cellTemplate]="'reservationTemplate'"
+      [cellTemplate]="'indicateurStockTemplate'"
     >
     </dxi-column>
-    <div *dxTemplate="let cell of 'reservationTemplate'">
+    <div *dxTemplate="let cell of 'indicateurStockTemplate'">
       <dx-button
-        class="small-article-button origin"
+        class="small-article-button small-stock-button"
+        hint="{{ 'indicateur-stock' | localize }}"
+        [visible]="allowMutations"
+        [text]="'1'"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
+
+  <!-- Déstockage -->
+  <ng-container *ngIf="FEATURE.destockage">
+    <dxi-column
+      cssClass="small-horiz-padding"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'destockageTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'destockageTemplate'">
+      <dx-button
+        class="small-article-button"
         type="success"
         [focusStateEnabled]="false"
         hint="{{ 'destockage' | localize }}"
         [visible]="allowMutations"
         [text]="'D'"
-        (onClick)="openReservationPopup(cell.data)"
+        (onClick)="openDestockagePopup(cell.data)"
       >
       </dx-button>
     </div>
@@ -236,7 +255,7 @@
 ></app-button-marge-previ>
 
 <app-article-reservation-ordre-popup
-  *ngIf="FEATURE.reservation"
+  *ngIf="FEATURE.destockage"
   [ordreLigne]="ordreLigne"
   (changeLigne)="onDataChanged($event)"
 ></app-article-reservation-ordre-popup>

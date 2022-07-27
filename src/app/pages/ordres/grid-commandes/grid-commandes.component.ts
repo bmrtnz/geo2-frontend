@@ -115,7 +115,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     rowOrdering: true,
     quickSwitch: true,
     reportDLUO: true,
-    reservation: true,
+    destockage: true,
+    indicateurStock: true,
     zoom: true,
   };
 
@@ -363,7 +364,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "proprietaireMarchandise.code",
               "fournisseur.code",
             ] : [],
-            ...this.FEATURE.reservation ? [
+            ...this.FEATURE.destockage ? [
               "ordre.numero",
               "ordre.entrepot.code",
               "article.description",
@@ -525,7 +526,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     return this.certificationText + (isCert ? " ✓" : "");
   }
 
-  openReservationPopup(ligne) {
+  openDestockagePopup(ligne) {
     if (!this.allowMutations) return;
     this.ordreLigne = ligne;
     this.reservationStockPopup.visible = true;

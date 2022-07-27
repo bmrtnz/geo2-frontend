@@ -28,6 +28,11 @@
   //   float: right;
   // }
 
+  .small-stock-button {
+    margin-top: -1px !important;
+    pointer-events: none !important;
+  }
+
   .dx-command-drag {
     padding: 0 !important;
     width: 25px !important;
