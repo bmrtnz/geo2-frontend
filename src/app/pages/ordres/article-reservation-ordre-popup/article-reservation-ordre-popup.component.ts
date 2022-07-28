@@ -141,11 +141,11 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   onReservationChange([nombreReservations, quantiteDisponible, fournisseur]: Reservation) {
     if (nombreReservations === 0)
-      this.pushLog(`ERREUR : aucun déstockages effectués sur ${fournisseur}`);
+      this.pushLog(`ERREUR : Aucun déstockage effectué sur ${fournisseur}`);
     else
       this.pushLog(`${nombreReservations} déstockage(s) effectué(s) sur ${fournisseur}`);
     if (quantiteDisponible < 0)
-      this.pushLog(`le fournisseur ${fournisseur} est passer en dispo négatif de ${quantiteDisponible}`);
+      this.pushLog(`Le fournisseur ${fournisseur} est passé en dispo négatif de ${quantiteDisponible}`);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
     this.cd.detectChanges();
   }
@@ -163,7 +163,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   private logQuantity() {
-    this.pushLog(`quantité à déstocker = ${this.quantiteAReserver}`);
+    this.pushLog(`Quantité à déstocker = ${this.quantiteAReserver}`);
   }
 
 }

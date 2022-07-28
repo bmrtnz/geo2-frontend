@@ -121,12 +121,12 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
-  public allowMutations = false;
   public changes: Change<Partial<OrdreLigne>>[] = [];
   public columnsSettings: ColumnsSettings;
 
   @Input() ordreID: string;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
+  @Output() allowMutations = false;
 
   // legacy features properties
   public certifsMD: any;
@@ -207,7 +207,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   focusedCellChanging(e) {
-    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex)
+    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
       setTimeout(() => this.grid.instance.saveEditData());
   }
 
@@ -454,8 +454,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   private updateFilterFournisseurDS(proprietaireMarchandise?: Partial<Fournisseur>) {
 
-    // console.log("proprietaireMarchandise", proprietaireMarchandise);
-
     let fournisseur: Partial<Fournisseur>;
     const filters = [];
 
@@ -483,8 +481,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     return fournisseur;
 
   }
-
-
 
   filterFournisseurDS(filters?) {
     const myFilter: any[] = [["valide", "=", true]];
@@ -530,6 +526,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   openReservationPopup(ligne) {
+    if (!this.allowMutations) return;
     this.ordreLigne = ligne;
     this.reservationStockPopup.visible = true;
   }
@@ -556,25 +553,12 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
     switch (e.column.dataField) {
       case "fournisseur.id": {
-
         const proprietaireMarchandise = this.grid.instance.getVisibleRows()[e.rowIndex].data.proprietaireMarchandise;
-
         if (proprietaireMarchandise) {
           this.updateFilterFournisseurDS(proprietaireMarchandise);
         } else {
           this.filterFournisseurDS();
         }
-
-        // console.log(this.grid.instance.getVisibleRows()[e.rowIndex].values[this.grid.instance.getVisibleColumnIndex("fournisseur.id")]);
-        // console.log(this.grid.instance.getVisibleRows()[e.rowIndex]);
-        // this.grid.instance.byKey((this.grid.instance.getKeyByRowIndex(e.rowIndex)))
-        //   .then(rowData => {
-        //     if (rowData.proprietaireMarchandise) {
-        //       this.updateFilterFournisseurDS(rowData.proprietaireMarchandise);
-        //     } else {
-        //       this.filterFournisseurDS();
-        //     }
-        //   });
         break;
       }
     }
@@ -722,7 +706,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       this.zoomArticlePopup.visible = true;
     }
     if (["fournisseur.id", "proprietaireMarchandise.id"].includes(e.column?.dataField)) {
-      const { id: idFour, code } = e.data[e.column.dataField.split(".")[0]];
+      const { id: idFour, code } = this.grid.instance.getVisibleRows()[e.rowIndex].data[e.column.dataField.split(".")[0]];
       if (idFour === null) return;
       this.fournisseurLigneId = idFour;
       this.fournisseurCode = code;

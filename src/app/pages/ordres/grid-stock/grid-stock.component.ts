@@ -56,10 +56,10 @@ export class GridStockComponent implements OnInit {
   columnChooser = environment.columnChooser;
   tagFilters: { [path: string]: string[] } = {};
   especes: Observable<DataSource>;
-  origines: DataSource;
-  varietes: DataSource;
-  emballages: DataSource;
+  varietes: Observable<DataSource>;
   modesCulture: DataSource;
+  emballages: DataSource;
+  origines: DataSource;
   bureauxAchat: DataSource;
   trueFalse: any;
   initialSpecy: any;
@@ -87,16 +87,14 @@ export class GridStockComponent implements OnInit {
   ) {
     this.apiService = this.articlesService;
 
-    this.especes = this.stockArticlesAgeService.getDistinctEspecesDatasource();
-    // this.especes.filter(["valide", "=", true]);
+    this.especes = this.stockArticlesAgeService.getDistinctEntityDatasource("espece.id");
     this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
     this.origines.filter(["valide", "=", true]);
-    this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
-    this.varietes.filter(["valide", "=", true]);
+    this.varietes = this.stockArticlesAgeService.getDistinctEntityDatasource("variete.id");
     this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
     this.emballages.filter(["valide", "=", true]);
     this.modesCulture = this.modesCultureService.getDataSource();
-    this.modesCulture.filter(["valide", "=", true]);
+    this.modesCulture.filter([["valide", "=", true], "and", ["valide", "<>", false]]);
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
@@ -136,9 +134,7 @@ export class GridStockComponent implements OnInit {
 
       if (event) {
         filter.push(["espece.id", "=", event.key]);
-
-        this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
-        this.varietes.filter(filter);
+        this.varietes = this.stockArticlesAgeService.getDistinctEntityDatasource("variete.id", `(espece.id=='${event.key}')`);
         this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
         this.emballages.filter(filter);
         this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
@@ -163,9 +159,9 @@ export class GridStockComponent implements OnInit {
     this.dataGrid.instance.beginCustomLoading("");
     this.stocksService.allStockArticleList(
       this.especeSB.value?.key,
-      this.varieteSB.value,
-      this.modesCultureSB.value,
+      this.varieteSB.value?.key,
       this.origineSB.value,
+      this.modesCultureSB.value,
       this.emballageSB.value,
       this.bureauAchatSB.value?.id
     ).subscribe((res) => {

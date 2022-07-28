@@ -3,6 +3,7 @@
     <dx-button
       class="btn-delete-destockage"
       type="danger"
+      [visible]="!!gridRowsTotal"
       stylingMode="outlined"
       text="{{ 'btn-delete-destockages' | localize }}"
       (onClick)="deleteReservations()"

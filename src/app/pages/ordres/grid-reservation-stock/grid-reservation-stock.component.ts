@@ -129,17 +129,26 @@ export class GridReservationStockComponent implements OnInit {
     // do nothing on expanded rows
     if (!e?.data || e.rowType !== "group") return;
 
-    // Contrôle source non actuelle et retour le cas échéant
-    let popupMessage = this.localizeService.localize("text-popup-changer-fournisseur");
-    popupMessage = popupMessage
-      .replace("&FPC", `${this.ordreLigneInfo.fournisseur.code} / ${this.ordreLigneInfo.proprietaireMarchandise.code}`)
-      .replace("&FPN", `${fournisseur} / ${proprietaire}`);
+    const currentFournisseur = this.resaStatus.length
+      ? this.resaStatus[0].fournisseurCode
+      : this.ordreLigneInfo.fournisseur.code;
+
+    const currentProprietaire = this.resaStatus.length
+      ? this.resaStatus[0].proprietaireCode
+      : this.ordreLigneInfo.proprietaireMarchandise.code;
 
     // when selected source differ from the target (fournisseur)
     if (
-      fournisseur !== this.resaStatus[0].fournisseurCode
-      && proprietaire !== this.resaStatus[0].proprietaireCode
-    )
+      fournisseur !== currentFournisseur
+      && proprietaire !== currentProprietaire
+    ) {
+
+      // Contrôle source non actuelle et retour le cas échéant
+      let popupMessage = this.localizeService.localize("text-popup-changer-fournisseur");
+      popupMessage = popupMessage
+        .replace("&FPC", `${currentFournisseur} / ${currentProprietaire}`)
+        .replace("&FPN", `${fournisseur} / ${proprietaire}`);
+
       return from(confirm(popupMessage, "Choix fournisseur"))
         .pipe(
           filter(v => !!v),
@@ -166,6 +175,7 @@ export class GridReservationStockComponent implements OnInit {
           error: ({ message }: Error) => notify(message, "error"),
           next: () => this.pushReservation(e),
         });
+    }
 
     // when no actives resas, accept selection and exit
     if (!this.resaStatus.length) return this.pushReservation(e);
