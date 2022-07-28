@@ -4,7 +4,7 @@ import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
-import { DxPopupComponent, DxScrollViewComponent, DxTextAreaComponent } from "devextreme-angular";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 import { GridReservationStockComponent, Reservation } from "../grid-reservation-stock/grid-reservation-stock.component";
 
@@ -145,8 +145,6 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
       this.pushLog(`ERREUR : Aucun déstockage effectué sur ${fournisseur}`);
     else
       this.pushLog(`${nombreReservations} déstockage(s) effectué(s) sur ${fournisseur}`);
-    if (quantiteDisponible < 0)
-      this.pushLog(`Le fournisseur ${fournisseur} est passé en dispo négatif de ${quantiteDisponible}`);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
     this.cd.detectChanges();
   }

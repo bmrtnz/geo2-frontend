@@ -26,7 +26,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, iif, Observable, of } from "rxjs";
+import { iif, Observable, of } from "rxjs";
 import { concatMap, concatMapTo, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
@@ -537,11 +537,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     this.ordreLigne = ligne;
     const current = `${ligne.fournisseur.code} / ${ligne.proprietaireMarchandise.code}`;
     const showConfirm = (resas: LigneReservation[]) => of(resas).pipe(
-      concatMap(res => from(confirm(
+      concatMap(res => confirm(
         `ligne affectée a ${current} et réservations sur ${res[0].fournisseurCode} / ${res[0].proprietaireCode},
         le programme va supprimer les réservations actives sur ${res[0].fournisseurCode}`,
         "Attention",
-      ))),
+      )),
       filter(res => res),
       concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(ligne.id)),
     );
