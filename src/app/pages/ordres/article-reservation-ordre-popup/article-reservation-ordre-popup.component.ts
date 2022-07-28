@@ -4,7 +4,7 @@ import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
-import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import { DxPopupComponent, DxScrollViewComponent, DxTextAreaComponent } from "devextreme-angular";
 import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 import { GridReservationStockComponent, Reservation } from "../grid-reservation-stock/grid-reservation-stock.component";
 
@@ -28,6 +28,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   separator = " ● ";
   quantiteAReserver: number;
   resaStatus: LigneReservation[];
+  textareaScrollHeight: number;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
@@ -68,8 +69,8 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
-    this.gridResaEnCours.reloadSource(this.ordreLigneInfo.id);
-    this.gridResa.reloadSource(this.ordreLigneInfo.article.id);
+    this.gridResaEnCours.reloadSource(this.ordreLigne.id);
+    this.gridResa.reloadSource(this.ordreLigne.article.id);
   }
 
   clearAll() {

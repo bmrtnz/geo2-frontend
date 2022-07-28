@@ -8,6 +8,7 @@ import { ZonesGeographiquesService } from "app/shared/services/api/zones-geograp
 import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-article-origine-popup",
@@ -37,6 +38,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
     public departementsService: DepartementsService,
     public regionsService: RegionsService,
     public OrdreLigneService: OrdreLignesService,
+    public gridsService: GridsService,
     public zonesGeographiquesService: ZonesGeographiquesService
 
   ) {
@@ -108,7 +110,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
       .subscribe({
         next: res => {
           notify(this.localizeService.localize("articles-save-origin"), "success", 2000);
-          this.changeLigne.emit(res.data.saveOrdreLigne);
+          this.gridsService.reload("Commande");
         },
         error: (err) => {
           console.log(err);
