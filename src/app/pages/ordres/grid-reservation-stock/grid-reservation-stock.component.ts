@@ -93,7 +93,7 @@ export class GridReservationStockComponent implements OnInit {
     }
     // Focus on current fournisseur
     if (e.rowType === "group") {
-      if (e.column.dataField === "Fournisseur") {
+      if (e.column.dataField === "Fournisseur" && this.ordreLigneInfo) {
         let data = e.data.items ?? e.data.collapsedItems;
         data = data[0];
         if (data.proprietaireCode === this.ordreLigneInfo.proprietaireMarchandise.code &&
