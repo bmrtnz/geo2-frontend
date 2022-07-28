@@ -1418,20 +1418,41 @@
         "visibleIndex": 0,
         "dataField": "fournisseurCode",
         "dataType": "string",
+        "width": 200,
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "proprietaireCode",
         "dataType": "string",
+        "width": 200,
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "quantite",
         "dataType": "number",
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header bold-text",
         "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "typePalette",
+        "dataType": "string",
+        "width": 100,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "mouvementDescription",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "stockDescription",
+        "dataType": "string",
+        "width": 120,
         "visible": true
       }
     ]

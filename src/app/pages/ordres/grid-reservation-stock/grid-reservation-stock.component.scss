@@ -1,9 +1,7 @@
 ::ng-deep .grid-reservation-stock {
 
-  .grid-title {
-    .dx-texteditor-container {
-      width: 500px;
-    }
+  .grid-title .dx-texteditor {
+    width: 480px !important;
   }
 
   // Reducing grid's height when it's empty
@@ -15,8 +13,11 @@
     font-weight: bold !important;
   }
 
-  .dx-data-row {
+  .dx-group-row {
     cursor: pointer;
+  }
+
+  .dx-data-row {
 
     .highlight-stockJ9-21-cell {
       background: #ffdd00 !important;

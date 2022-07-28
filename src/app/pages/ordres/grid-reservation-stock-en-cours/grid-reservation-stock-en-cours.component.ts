@@ -78,13 +78,9 @@ export class GridReservationStockEnCoursComponent implements OnInit {
     this.reservationChange.emit(items ?? []);
   }
 
-  onCellPrepared(e) {
-    // Higlight important columns
-    if (e.column.dataField === "quantiteReservee") e.cellElement.classList.add("bold-text");
-  }
-
   deleteReservations() {
-    from(confirm(this.localizeService.localize("text-popup-supprimer-destockages"), "Déstockage"))
+    from(confirm(this.localizeService
+      .localize("text-popup-supprimer-destockage" + (this.gridRowsTotal > 1 ? "s" : "")), "Déstockage"))
       .pipe(
         filter(pass => pass),
         concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(this.ordreLigneInfo.id)),
@@ -98,6 +94,10 @@ export class GridReservationStockEnCoursComponent implements OnInit {
   reloadSource(ordreLigneID: string) {
     this.reservationsSource = this.stocksService
       .getLigneReservationDatasource(ordreLigneID);
+  }
+
+  clearDataSource() {
+    this.dataGridResaEnCours.dataSource = null;
   }
 
 }
