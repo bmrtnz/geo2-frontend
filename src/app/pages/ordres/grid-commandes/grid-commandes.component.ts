@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Injector, Input, OnChanges, OnI
 import { ActivatedRoute } from "@angular/router";
 import { ColumnsSettings } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import { Fournisseur } from "app/shared/models";
+import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import Ordre from "app/shared/models/ordre.model";
 import { FournisseursService, LocalizationService } from "app/shared/services";
@@ -10,6 +11,8 @@ import { CertificationsModesCultureService } from "app/shared/services/api/certi
 import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { StockMouvementsService } from "app/shared/services/api/stock-mouvements.service";
+import { StocksService } from "app/shared/services/api/stocks.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
@@ -20,10 +23,11 @@ import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
+import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { Observable, of } from "rxjs";
-import { concatMap, filter, first, map, tap } from "rxjs/operators";
+import { from, iif, Observable, of } from "rxjs";
+import { concatMap, concatMapTo, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
@@ -53,6 +57,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     private typesPaletteService: TypesPaletteService,
     public localizeService: LocalizationService,
     private gridsService: GridsService,
+    private stocksService: StocksService,
+    private stockMouvementsService: StockMouvementsService,
   ) {
     this.filterFournisseurDS();
     this.proprietairesDataSource = this.fournisseursService
@@ -528,7 +534,26 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   openReservationPopup(ligne) {
     if (!this.allowMutations) return;
     this.ordreLigne = ligne;
-    this.reservationStockPopup.visible = true;
+    const current = `${ligne.fournisseur.code} / ${ligne.proprietaireMarchandise.code}`;
+    const showConfirm = (resas: LigneReservation[]) => of(resas).pipe(
+      concatMap(res => from(confirm(
+        `ligne affectée a ${current} et réservations sur ${res[0].fournisseurCode} / ${res[0].proprietaireCode},
+        le programme va supprimer les réservations actives sur ${res[0].fournisseurCode}`,
+        "Attention",
+      ))),
+    );
+    this.stocksService.allLigneReservationList(ligne.id).pipe(
+      map(res => res.data.allLigneReservationList),
+      concatMap(res =>
+        iif(
+          () => !!res.length && res[0].fournisseurCode !== ligne.fournisseur.code,
+          showConfirm(res),
+          of(true),
+        ),
+      ),
+      filter(res => res),
+      concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(ligne.id)),
+    ).subscribe(() => this.reservationStockPopup.visible = true);
   }
 
   openCertificationPopup(ligne) {
