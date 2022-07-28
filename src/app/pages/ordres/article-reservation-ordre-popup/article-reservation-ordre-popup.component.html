@@ -41,7 +41,7 @@
 
         <app-grid-reservation-stock
           [ordreLigneInfo]="ordreLigneInfo"
-          (selectChange)="clearAndHidePopup()"
+          (selectChange)="hidePopup()"
           (reservationChange)="onReservationChange($event)"
           [articleID]="ordreLigne?.article?.id"
           [resaStatus]="resaStatus"
