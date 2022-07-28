@@ -17,7 +17,6 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   @Input() public ordreLigne: OrdreLigne;
   @Output() public ordreLigneInfo: OrdreLigne;
-  @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
 
   visible: boolean;
   titleStart: string;
@@ -87,7 +86,6 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   clearAndHidePopup() {
     this.hidePopup();
-    this.changeLigne.emit();
     this.clearAll();
   }
 

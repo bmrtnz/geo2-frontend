@@ -100,4 +100,8 @@ export class GridReservationStockEnCoursComponent implements OnInit {
       .getLigneReservationDatasource(ordreLigneID);
   }
 
+  clearDataSource() {
+    this.dataGridResaEnCours.dataSource = null;
+  }
+
 }

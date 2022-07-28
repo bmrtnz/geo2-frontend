@@ -5,7 +5,7 @@
       type="danger"
       [visible]="!!gridRowsTotal"
       stylingMode="outlined"
-      text="{{ 'btn-delete-destockages' | localize }}"
+      text="{{ 'btn-delete-destockage' + (gridRowsTotal > 1 ? 's' : '') | localize }}"
       (onClick)="deleteReservations()"
     ></dx-button>
   </div>
@@ -15,7 +15,8 @@
     [dataSource]="reservationsSource | async"
     [remoteOperations]="false"
     [showBorders]="false"
-    [focusedRowEnabled]="true"
+    [noDataText]="'aucun-destockage' | localize"
+    [focusedRowEnabled]="false"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"

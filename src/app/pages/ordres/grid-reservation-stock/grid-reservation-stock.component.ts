@@ -91,6 +91,17 @@ export class GridReservationStockComponent implements OnInit {
       e.column.dataField === "quantiteDisponible") {
       e.cellElement.classList.add("bold-text");
     }
+    // Focus on current fournisseur
+    if (e.rowType === "group") {
+      if (e.column.dataField === "Fournisseur") {
+        let data = e.data.items ?? e.data.collapsedItems;
+        data = data[0];
+        if (data.proprietaireCode === this.ordreLigneInfo.proprietaireMarchandise.code &&
+          data.fournisseurCode === this.ordreLigneInfo.fournisseur.code) {
+          this.dataGridResa.instance.option("focusedRowIndex", e.rowIndex);
+        }
+      }
+    }
   }
 
   private pushReservation(event) {
@@ -121,13 +132,14 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   onCellClick(e) {
-    const [fournisseur, proprietaire] = e.key[0].split("/");
 
     // do nothing on expand cell click
     if (e.cellElement.classList.contains("dx-command-expand")) return;
 
     // do nothing on expanded rows
     if (!e?.data || e.rowType !== "group") return;
+
+    const [fournisseur, proprietaire] = e.key[0].split("/");
 
     const currentFournisseur = this.resaStatus.length
       ? this.resaStatus[0].fournisseurCode
@@ -140,7 +152,7 @@ export class GridReservationStockComponent implements OnInit {
     // when selected source differ from the target (fournisseur)
     if (
       fournisseur !== currentFournisseur
-      && proprietaire !== currentProprietaire
+      || proprietaire !== currentProprietaire
     ) {
 
       // Contrôle source non actuelle et retour le cas échéant
@@ -184,6 +196,10 @@ export class GridReservationStockComponent implements OnInit {
   reloadSource(articleID: string) {
     this.reservationsSource = this.stocksService
       .getStockReservationDatasource(articleID);
+  }
+
+  clearDataSource() {
+    this.dataGridResa.dataSource = null;
   }
 
   public calcFouProp(rowData: Partial<StockReservation>) {
