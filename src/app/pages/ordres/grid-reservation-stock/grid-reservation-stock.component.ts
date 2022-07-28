@@ -96,9 +96,11 @@ export class GridReservationStockComponent implements OnInit {
       if (e.column.dataField === "Fournisseur" && this.ordreLigneInfo) {
         let data = e.data.items ?? e.data.collapsedItems;
         data = data[0];
-        if (data.proprietaireCode === this.ordreLigneInfo.proprietaireMarchandise.code &&
-          data.fournisseurCode === this.ordreLigneInfo.fournisseur.code) {
+        if (data.proprietaireCode === this.ordreLigneInfo.proprietaireMarchandise?.code &&
+          data.fournisseurCode === this.ordreLigneInfo.fournisseur?.code) {
           this.dataGridResa.instance.option("focusedRowIndex", e.rowIndex);
+        } else {
+          this.dataGridResa.instance.option("focusedRowIndex", -1);
         }
       }
     }
@@ -125,6 +127,9 @@ export class GridReservationStockComponent implements OnInit {
         next: res => {
           const { nb_resa: nombreResa, nb_dispo: quantiteDisponible } = res.data.fResaUneLigne.data;
           this.reservationChange.emit([nombreResa, quantiteDisponible, event.key[0]]);
+          // Updating virtual ordreLigneInfo for grid focus purposes
+          this.ordreLigneInfo.proprietaireMarchandise.code = proprietaire.code;
+          this.ordreLigneInfo.fournisseur.code = fournisseur.code;
         },
         error: message => notify({ message }, "error", 7000),
         complete: () => this.reloadSource(this.articleID),
@@ -154,11 +159,11 @@ export class GridReservationStockComponent implements OnInit {
 
     const currentFournisseur = this.resaStatus.length
       ? this.resaStatus[0].fournisseurCode
-      : this.ordreLigneInfo.fournisseur.code;
+      : (this.ordreLigneInfo.fournisseur?.code ?? "-");
 
     const currentProprietaire = this.resaStatus.length
       ? this.resaStatus[0].proprietaireCode
-      : this.ordreLigneInfo.proprietaireMarchandise.code;
+      : (this.ordreLigneInfo.proprietaireMarchandise?.code ?? "-");
 
     const selectedStocks: StockReservation[] = e.data[e.row.isExpanded ? "items" : "collapsedItems"];
     const alertNegative = this.alertNegativeReservation.bind(this,
