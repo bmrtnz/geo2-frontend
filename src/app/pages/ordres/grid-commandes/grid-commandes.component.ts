@@ -542,6 +542,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         le programme va supprimer les réservations actives sur ${res[0].fournisseurCode}`,
         "Attention",
       ))),
+      filter(res => res),
+      concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(ligne.id)),
     );
     this.stocksService.allLigneReservationList(ligne.id).pipe(
       map(res => res.data.allLigneReservationList),
@@ -552,8 +554,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           of(true),
         ),
       ),
-      filter(res => res),
-      concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(ligne.id)),
     ).subscribe(() => this.reservationStockPopup.visible = true);
   }
 
