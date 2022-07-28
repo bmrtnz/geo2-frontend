@@ -13,7 +13,7 @@ import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable, zip } from "rxjs";
+import { defer, from, Observable, of, zip } from "rxjs";
 import { concatMap, concatMapTo, filter, finalize, map, withLatestFrom } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 import { GridsService } from "../grids.service";
@@ -131,6 +131,17 @@ export class GridReservationStockComponent implements OnInit {
       });
   }
 
+  /** Spawn alert popup with confirmation in case of negative stock prediction */
+  private alertNegativeReservation(quantiteDisponible: number, fournisseur: string) {
+    return defer(() => of(quantiteDisponible - this.ordreLigneInfo.nombreColisCommandes)).pipe(
+      concatMap(prediction => prediction < 0
+        // tslint:disable-next-line: max-line-length
+        ? confirm(`le fournisseur ${fournisseur} va passer en dispo négatif de ${prediction} colis, vous voulez quand même réserver ?`, "Attention")
+        : of(true)),
+      filter(result => !!result),
+    );
+  }
+
   onCellClick(e) {
 
     // do nothing on expand cell click
@@ -149,6 +160,12 @@ export class GridReservationStockComponent implements OnInit {
       ? this.resaStatus[0].proprietaireCode
       : this.ordreLigneInfo.proprietaireMarchandise.code;
 
+    const selectedStocks: StockReservation[] = e.data[e.row.isExpanded ? "items" : "collapsedItems"];
+    const alertNegative = this.alertNegativeReservation.bind(this,
+      selectedStocks.map(s => s.quantiteDisponible).reduce((acm, crt) => acm + crt),
+      `${selectedStocks[0].fournisseurCode} / ${selectedStocks[0].proprietaireCode}`,
+    );
+
     // when selected source differ from the target (fournisseur)
     if (
       fournisseur !== currentFournisseur
@@ -164,6 +181,7 @@ export class GridReservationStockComponent implements OnInit {
       return from(confirm(popupMessage, "Choix fournisseur"))
         .pipe(
           filter(v => !!v),
+          concatMapTo(alertNegative()),
           concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(this.ordreLigneInfo.id)),
           withLatestFrom(zip(...[fournisseur, proprietaire]
             .map(code => this.fournisseursService.getFournisseurByCode(code, ["id"])),
@@ -190,7 +208,8 @@ export class GridReservationStockComponent implements OnInit {
     }
 
     // when no actives resas, accept selection and exit
-    if (!this.resaStatus.length) return this.pushReservation(e);
+    if (!this.resaStatus.length) return alertNegative()
+      .subscribe(() => this.pushReservation(e));
   }
 
   reloadSource(articleID: string) {
