@@ -99,8 +99,6 @@ export class GridReservationStockComponent implements OnInit {
         if (data.proprietaireCode === this.ordreLigneInfo.proprietaireMarchandise?.code &&
           data.fournisseurCode === this.ordreLigneInfo.fournisseur?.code) {
           this.dataGridResa.instance.option("focusedRowIndex", e.rowIndex);
-        } else {
-          this.dataGridResa.instance.option("focusedRowIndex", -1);
         }
       }
     }
@@ -127,9 +125,9 @@ export class GridReservationStockComponent implements OnInit {
         next: res => {
           const { nb_resa: nombreResa, nb_dispo: quantiteDisponible } = res.data.fResaUneLigne.data;
           this.reservationChange.emit([nombreResa, quantiteDisponible, event.key[0]]);
-          // Updating virtual ordreLigneInfo for grid focus purposes
-          this.ordreLigneInfo.proprietaireMarchandise.code = proprietaire.code;
-          this.ordreLigneInfo.fournisseur.code = fournisseur.code;
+          // Updating new ordreLigneInfo for grid focus purposes
+          this.ordreLigneInfo.proprietaireMarchandise = { code: proprietaire };
+          this.ordreLigneInfo.fournisseur = { code: fournisseur };
         },
         error: message => notify({ message }, "error", 7000),
         complete: () => this.reloadSource(this.articleID),
@@ -218,6 +216,7 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   reloadSource(articleID: string) {
+    this.dataGridResa.instance.option("focusedRowIndex", -1);
     this.reservationsSource = this.stocksService
       .getStockReservationDatasource(articleID);
   }
