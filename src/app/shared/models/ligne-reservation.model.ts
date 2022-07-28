@@ -4,7 +4,34 @@ import { Field, Model, ModelName } from "./model";
 export class LigneReservation extends Model {
 
   @Field({ asKey: true })
-  id: number;
+  id: string;
+
+  @Field()
+  stockId: string;
+
+  @Field()
+  nomUtilisateur: string;
+
+  @Field()
+  type: string;
+
+  @Field()
+  quantite: number;
+
+  @Field()
+  ordreId: string;
+
+  @Field()
+  articleId: string;
+
+  @Field()
+  ordreLigneId: string;
+
+  @Field()
+  mouvementDescription: string;
+
+  @Field()
+  ligneFournisseurCode: string;
 
   @Field()
   fournisseurCode: string;
@@ -13,7 +40,17 @@ export class LigneReservation extends Model {
   proprietaireCode: string;
 
   @Field()
-  quantite: number;
+  stockDescription: string;
+
+  @Field()
+  quantiteInitiale: number;
+
+  @Field()
+  quantiteReservee: number;
+
+  @Field()
+  typePalette: string;
+
 
 }
 
