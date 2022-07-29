@@ -4,9 +4,13 @@ import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import { concatMap, finalize, map } from "rxjs/operators";
 import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 import { GridReservationStockComponent, Reservation } from "../grid-reservation-stock/grid-reservation-stock.component";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-article-reservation-ordre-popup",
@@ -37,6 +41,9 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     private calibresFournisseurService: CalibresFournisseurService,
     private localizeService: LocalizationService,
     private cd: ChangeDetectorRef,
+    private ordreLignesService: OrdreLignesService,
+    private currentCompanyService: CurrentCompanyService,
+    private grids: GridsService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -86,7 +93,8 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   applyClick() {
-    this.hidePopup();
+    // On ferme en renvoyant le fournisseur courant et le nbre de réservation
+    this.updateNombreResa().subscribe(() => this.hidePopup());
   }
 
   pushText(info) {
@@ -162,6 +170,27 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   private logQuantity() {
     this.pushLog(`Quantité à déstocker = ${this.quantiteAReserver}`);
   }
+
+  private updateNombreResa() {
+    return this.ordreLignesService.fGetInfoResa(this.ordreLigneInfo.id)
+      .pipe(
+        map(res => {
+          const qteDispo = res.data.fGetInfoResa.data.ll_tot_qte_ini - res.data.fGetInfoResa.data.ll_tot_qte_res;
+          let newNbResa = res.data.fGetInfoResa.data.ll_tot_nb_resa;
+          if (qteDispo < 0) newNbResa *= -1;
+          return newNbResa;
+        }),
+        concatMap(nbResa => this.ordreLignesService.updateField(
+          "nombreReservationsSurStock",
+          nbResa,
+          this.ordreLigneInfo.id,
+          this.currentCompanyService.getCompany().id,
+          ["id", "nombreReservationsSurStock"],
+        )),
+        finalize(() => this.grids.reload("Commande"))
+      );
+  }
+
 
 }
 
