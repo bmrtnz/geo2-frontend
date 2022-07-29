@@ -398,7 +398,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "article.normalisation.articleClient",
               "article.instructionStation",
               "article.emballage.emballage.idSymbolique",
-              "article.matierePremiere.espece.id"
+              "article.matierePremiere.espece.id",
+              "nombreReservationsSurStock",
             ] : [],
             // Used to lock fields
             ...[

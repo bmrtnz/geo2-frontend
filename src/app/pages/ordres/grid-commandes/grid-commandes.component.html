@@ -113,7 +113,7 @@
         class="small-article-button small-stock-button"
         hint="{{ 'indicateur-stock' | localize }}"
         [visible]="allowMutations"
-        [text]="'1'"
+        [text]="cell.data.nombreReservationsSurStock"
       >
       </dx-button>
     </div>

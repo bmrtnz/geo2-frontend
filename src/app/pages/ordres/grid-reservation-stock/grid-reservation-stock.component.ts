@@ -14,7 +14,7 @@ import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { defer, from, Observable, of, zip } from "rxjs";
-import { concatMap, concatMapTo, filter, finalize, map, withLatestFrom } from "rxjs/operators";
+import { concatMap, concatMapTo, filter, finalize, map, tap, withLatestFrom } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 import { GridsService } from "../grids.service";
 

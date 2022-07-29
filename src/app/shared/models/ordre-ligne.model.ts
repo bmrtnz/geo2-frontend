@@ -82,6 +82,7 @@ export class OrdreLigne extends Model {
   public pourcentageMargeNette?: number;
   @Field() public valide?: boolean;
   @Field({ model: import("./stock-mouvement.model") }) public mouvement?: StockMouvement;
+  @Field() public nombreReservationsSurStock?: number;
 
   static formatNumero(index: number) {
     return index.toString().padStart(2, "0");
