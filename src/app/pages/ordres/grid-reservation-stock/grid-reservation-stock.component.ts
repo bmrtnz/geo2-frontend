@@ -139,7 +139,7 @@ export class GridReservationStockComponent implements OnInit {
     return defer(() => of(quantiteDisponible - this.ordreLigneInfo.nombreColisCommandes)).pipe(
       concatMap(prediction => prediction < 0
         // tslint:disable-next-line: max-line-length
-        ? confirm(`le fournisseur ${fournisseur} va passer en dispo négatif de ${prediction} colis, vous voulez quand même réserver ?`, "Attention")
+        ? confirm(`le fournisseur ${fournisseur} va passer en dispo négatif de ${prediction} colis, voulez-vous quand même déstocker ?`, "Attention")
         : of(true)),
       filter(result => !!result),
     );

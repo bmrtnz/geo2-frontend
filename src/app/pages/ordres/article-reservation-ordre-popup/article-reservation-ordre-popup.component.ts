@@ -1,5 +1,5 @@
 // tslint:disable-next-line: max-line-length
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnChanges, Output, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
@@ -27,7 +27,6 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   separator = " ● ";
   quantiteAReserver: number;
   resaStatus: LigneReservation[];
-  textareaScrollHeight: number;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
@@ -74,8 +73,8 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   clearAll() {
     this.logs = [];
-    this.gridResa.clearDataSource();
-    this.gridResaEnCours.clearDataSource();
+    if (this.gridResa) this.gridResa.clearDataSource();
+    if (this.gridResaEnCours) this.gridResaEnCours.clearDataSource();
   }
 
   pushLog(log: string) {
@@ -151,6 +150,12 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   }
 
   private logOK() {
+    // Clearing logs
+    if (this.logs.length > 1) {
+      if (this.logs[this.logs.length - 2].indexOf("Quantité à déstocker") === 0) {
+        this.logs.splice(this.logs.length - 2);
+      }
+    }
     this.pushLog(`Tout est OK, rien a modifier`);
   }
 
