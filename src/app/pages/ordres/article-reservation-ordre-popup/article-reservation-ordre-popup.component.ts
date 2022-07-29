@@ -187,7 +187,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
           this.currentCompanyService.getCompany().id,
           ["id", "nombreReservationsSurStock"],
         )),
-        finalize(() => this.grids.reload("Commande"))
+        finalize(() => this.grids.reload("Commande", "SyntheseExpeditions"))
       );
   }
 

@@ -202,7 +202,7 @@ export class GridReservationStockComponent implements OnInit {
               ["id", `${name}.id`],
             )),
           )),
-          finalize(() => this.grids.reload("Commande", "SyntheseExpeditions")),
+          // finalize(() => this.grids.reload("Commande", "SyntheseExpeditions")),
         )
         .subscribe({
           error: ({ message }: Error) => notify(message, "error"),
