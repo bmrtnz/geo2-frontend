@@ -88,13 +88,9 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     this.logs = [...this.logs, log];
   }
 
-  hidePopup() {
-    this.popup.visible = false;
-  }
-
   applyClick() {
     // On ferme en renvoyant le fournisseur courant et le nbre de réservation
-    this.updateNombreResa().subscribe(() => this.hidePopup());
+    this.updateNombreResa().subscribe(() => this.popup.visible = false);
   }
 
   pushText(info) {
