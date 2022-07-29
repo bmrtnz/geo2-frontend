@@ -76,11 +76,13 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
-    this.gridResa.reloadSource(this.ordreLigne.article.id);
+    // this.gridResa.reloadSource(this.ordreLigne.article.id);
   }
 
   clearAll() {
     this.logs = [];
+    this.gridResa.clearDataSource();
+    this.gridResaEnCours.clearDataSource();
   }
 
   pushLog(log: string) {
@@ -91,14 +93,9 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  clearAndHidePopup() {
-    this.hidePopup();
-    this.clearAll();
-  }
-
   applyClick() {
     // On ferme en renvoyant le fournisseur courant et le nbre de réservation
-    this.updateNombreResa().subscribe(() => this.clearAndHidePopup());
+    this.updateNombreResa().subscribe(() => this.hidePopup());
   }
 
   pushText(info) {

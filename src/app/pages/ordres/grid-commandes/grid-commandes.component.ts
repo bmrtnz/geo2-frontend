@@ -536,7 +536,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   openDestockagePopup(ligne) {
     if (!this.allowMutations) return;
     this.ordreLigne = ligne;
-    const current = `${ligne.fournisseur.code} / ${ligne.proprietaireMarchandise.code}`;
+    const current = `${ligne.fournisseur?.code ?? "-"} / ${ligne.proprietaireMarchandise?.code ?? "-"}`;
     const showConfirm = (resas: LigneReservation[]) => of(resas).pipe(
       concatMap(res => confirm(
         `ligne affectée a ${current} et réservations sur ${res[0].fournisseurCode} / ${res[0].proprietaireCode},
@@ -550,7 +550,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       map(res => res.data.allLigneReservationList),
       concatMap(res =>
         iif(
-          () => !!res.length && res[0].fournisseurCode !== ligne.fournisseur.code,
+          () => !!res.length && res[0].fournisseurCode !== ligne.fournisseur?.code,
           showConfirm(res),
           of(true),
         ),
