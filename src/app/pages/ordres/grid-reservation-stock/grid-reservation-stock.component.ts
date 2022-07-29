@@ -117,7 +117,7 @@ export class GridReservationStockComponent implements OnInit {
             this.ordreLigneInfo.nombreColisCommandes,
             ol.data.ordreLigne.ordre.id,
             this.ordreLigneInfo.id,
-            "???",
+            "",
             event.data[event.row.isExpanded ? "items" : "collapsedItems"][0].typePaletteCode,
           ))
       )
