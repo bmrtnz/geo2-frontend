@@ -88,13 +88,9 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     this.logs = [...this.logs, log];
   }
 
-  hidePopup() {
-    this.popup.visible = false;
-  }
-
   applyClick() {
     // On ferme en renvoyant le fournisseur courant et le nbre de réservation
-    this.updateNombreResa().subscribe(() => this.hidePopup());
+    this.updateNombreResa().subscribe(() => this.popup.visible = false);
   }
 
   pushText(info) {
@@ -187,7 +183,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
           this.currentCompanyService.getCompany().id,
           ["id", "nombreReservationsSurStock"],
         )),
-        finalize(() => this.grids.reload("Commande", "SyntheseExpeditions"))
+        finalize(() => this.grids.reload("Commande", "SyntheseExpeditions", "DetailExpeditions"))
       );
   }
 
