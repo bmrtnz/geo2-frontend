@@ -13,7 +13,7 @@ import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { defer, from, Observable, of, zip } from "rxjs";
+import { concat, defer, from, Observable, of, zip } from "rxjs";
 import { concatMap, concatMapTo, filter, finalize, map, tap, withLatestFrom } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 import { GridsService } from "../grids.service";
@@ -194,7 +194,7 @@ export class GridReservationStockComponent implements OnInit {
             ["proprietaireMarchandise", resProprietaire.data.fournisseurByCode.id],
             ["fournisseur", resFournisseur.data.fournisseurByCode.id],
           ]),
-          concatMap((data) => zip(...data
+          concatMap((data) => concat(...data
             .map(([name, value]) => this.ordreLignesService.updateField(
               name,
               value,
