@@ -190,8 +190,8 @@ export class GridReservationStockComponent implements OnInit {
             .map(code => this.fournisseursService.getFournisseurByCode(code, ["id"])),
           )),
           map(([, [resFournisseur, resProprietaire]]) => [
-            ["fournisseur", resFournisseur.data.fournisseurByCode.id],
             ["proprietaireMarchandise", resProprietaire.data.fournisseurByCode.id],
+            ["fournisseur", resFournisseur.data.fournisseurByCode.id],
           ]),
           concatMap((data) => zip(...data
             .map(([name, value]) => this.ordreLignesService.updateField(
