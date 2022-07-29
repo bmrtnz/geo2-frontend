@@ -106,6 +106,7 @@ export class GridReservationStockComponent implements OnInit {
 
   private pushReservation(event) {
     const [fournisseur, proprietaire] = event.key[0].split("/");
+    const desc = `Ordre ${this.ordreLigneInfo.ordre.numero} / ${this.ordreLigneInfo.ordre.entrepot.code} `;
     this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
       .pipe(
         concatMap(ol => this.stockMouvementsService
@@ -117,7 +118,7 @@ export class GridReservationStockComponent implements OnInit {
             this.ordreLigneInfo.nombreColisCommandes,
             ol.data.ordreLigne.ordre.id,
             this.ordreLigneInfo.id,
-            "",
+            desc,
             event.data[event.row.isExpanded ? "items" : "collapsedItems"][0].typePaletteCode,
           ))
       )
