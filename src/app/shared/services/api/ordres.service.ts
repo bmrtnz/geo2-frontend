@@ -1,16 +1,12 @@
 import { Injectable } from "@angular/core";
-import { concatAST } from "graphql";
 import { gql, MutationOptions, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
-import { Societe } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { EMPTY, from, of, zip } from "rxjs";
-import { catchError, concatMap, concatMapTo, filter, first, map, mergeMap, reduce, take, takeUntil, tap } from "rxjs/operators";
+import { from } from "rxjs";
+import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
-import { functionBody, FunctionResponse, FunctionResult } from "./functions.service";
-import { alert, confirm } from "devextreme/ui/dialog";
 
 export enum Operation {
   All = "allOrdre",
@@ -38,9 +34,6 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
-
-  private fBonAFacturerMain = this.buildFBonAFacturer("fBonAFacturer");
-  private fBonAFacturerPrepare = this.buildFBonAFacturer("fBonAFacturerPrepare");
 
   setPersisantVariables(params = this.persistantVariables) {
     this.persistantVariables = params;
@@ -269,48 +262,6 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       ordre.statut = chunk.statut;
     }
     return Ordre.isCloture(ordre);
-  }
-
-  /**
-   * Mise en Bon à facturer - f_bon_a_facturer
-   */
-  private buildFBonAFacturer(queryName: "fBonAFacturer" | "fBonAFacturerPrepare") {
-    return (ordreRef: string, socCode: string) => this.apollo
-      .query<{ [queryName: string]: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: queryName,
-              body: functionBody,
-              params: [
-                { name: "ordreRef", value: "ordreRef", isVariable: true },
-                { name: "socCode", value: "socCode", isVariable: true }
-              ]
-            }
-          ],
-          [
-            { name: "ordreRef", type: "String", isOptionnal: false },
-            { name: "socCode", type: "String", isOptionnal: false }
-          ],
-        )),
-        variables: { ordreRef, socCode },
-        fetchPolicy: "network-only",
-      });
-  }
-
-  public fBonAFacturer(ordreRefs: Array<Ordre["id"]>, societeCode: Societe["id"]) {
-    return from(ordreRefs).pipe(
-      concatMap(ordreRef => zip(of(ordreRef), this.fBonAFacturerPrepare(ordreRef, societeCode))),
-      catchError((err: Error) => (alert(err.message, "Erreur"), EMPTY)),
-      map(([ref, res]) => [ref, res.data.fBonAFacturerPrepare] as [string, FunctionResponse<Record<string, any>>]),
-      concatMap(([ref, result]) => zip(
-        of(ref), result.res === FunctionResult.Warning ? confirm(result.msg, "Attention") : of(true)
-      )),
-      filter(([, choice]) => choice),
-      concatMap(([ref]) => this.fBonAFacturerMain(ref, societeCode)),
-      map(res => res.data.fBonAFacturer),
-    );
   }
 
 }
