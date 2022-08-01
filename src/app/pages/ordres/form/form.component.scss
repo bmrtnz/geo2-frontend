@@ -5,6 +5,14 @@
 ::ng-deep .form-ordres-page {
   // margin-right: 20px;
 
+  .header-btn-baf {
+    top: -11px;
+
+    .dx-button-content {
+      padding: 5px 15px !important;
+    }
+  }
+
   .dx-toolbar-item-auto-hide .dx-item-content {
     width: 36px;
   }

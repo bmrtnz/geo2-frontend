@@ -239,6 +239,12 @@
                   >&nbsp;&nbsp;{{ "ordres-ref" | localize }} :
                   {{ refOrdre }}</span
                 >
+                <dx-button
+                  class="float-right header-btn-baf"
+                  type="default"
+                  text="Bon à facturer"
+                  (onClick)="bonAFacturer()"
+                ></dx-button>
                 <div
                   class="dx-form-group-content no-padding-bottom order-header"
                 >
@@ -1235,3 +1241,4 @@
   [(visible)]="this.factureVisible"
   [document]="this.currentFacture"
 ></app-view-document-popup>
+<app-confirmation-result-popup></app-confirmation-result-popup>

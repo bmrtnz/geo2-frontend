@@ -17,6 +17,7 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
+import { FunctionResult, FunctionsService } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
@@ -33,9 +34,11 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { catchError, concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
+// tslint:disable-next-line: max-line-length
+import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
@@ -250,10 +253,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(GridLignesTotauxDetailComponent) gridLTD: GridLignesTotauxDetailComponent;
   @ViewChild(GridDetailPalettesComponent) gridDetailPalettes: GridDetailPalettesComponent;
   @ViewChild(GridMargeComponent) gridMarge: GridMargeComponent;
+  @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private functionsService: FunctionsService,
     private formBuilder: FormBuilder,
     private formUtils: FormUtilsService,
     private ordresService: OrdresService,
@@ -767,6 +772,34 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.factureVisible = true;
+  }
+
+  public bonAFacturer() {
+
+    const societe: Societe = this.currentCompanyService.getCompany();
+
+    this.functionsService.fBonAFacturer(this.ordre.id, societe.id).valueChanges
+      .pipe(
+        map(result => Object.values(result.data)[0]),
+        concatMap(response => {
+          console.log("response", response);
+          if (response.res === FunctionResult.Warning)
+            return this.resultPopup.openAs("WARNING", response.msg);
+          if (response.res === FunctionResult.OK)
+            notify(response.msg, "info", 7000);
+          return of(true);
+        }),
+        catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
+        // filter(res => res),
+        // concatMapTo(this.envoisService
+        //   .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
+      )
+      .subscribe(res => {
+        console.log("res", res);
+        // const popup = res.data.countBy && this.flux === "ORDRE" ? "remplacePopup" : "docsPopup";
+        // this.resultPopup.visible = true;
+      });
+
   }
 
 }
