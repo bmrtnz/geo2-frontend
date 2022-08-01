@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { gql, Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import { Societe } from "app/shared/models";
 import OrdreBaf from "app/shared/models/ordre-baf.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -45,7 +45,7 @@ export class OrdresBafService
             };
             this.listenQuery<Response>(
               query,
-              { variables },
+              { variables, fetchPolicy: "no-cache" },
               (res) => {
                 if (res.data && res.data.fAfficheBaf) {
                   resolve(res.data.fAfficheBaf);
@@ -170,8 +170,8 @@ export class OrdresBafService
         of(ref), result.res === FunctionResult.Warning ? confirm(result.msg, "Attention") : of(true)
       )),
       filter(([, choice]) => choice),
-      concatMap(([ref]) => this.fBonAFacturerMain(ref, societeCode)),
-      map(res => res.data.fBonAFacturer),
+      concatMap(([ref]) => zip(of(ref), this.fBonAFacturerMain(ref, societeCode))),
+      map(([ordre, res]) => ({ ...res.data.fBonAFacturer, data: { ...res.data.fBonAFacturer.data, ordre } })),
     );
   }
 }

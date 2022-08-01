@@ -191,7 +191,7 @@
   class="launch"
   type="default"
   [visible]="gridHasData"
-  [disabled]="true"
+  [disabled]="env.production"
   text="{{ 'btn-launch' | localize }}"
   (onClick)="launch($event)"
 ></dx-button>
