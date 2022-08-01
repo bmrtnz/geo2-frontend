@@ -318,8 +318,8 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     mess = mess.replace("Exception while fetching data (/fBonAFacturerPrepare) : ", "");
     mess = mess.replaceAll("(", "<br>(");
     mess = mess.replaceAll(/(?:\\[r])+/g, "<br><br>");
-    mess = mess.replaceAll(/(?:\~[r])+/g, "");
-    mess = mess.replaceAll(/(?:\~[n])+/g, "");
+    mess = mess.replaceAll(/(?:\~r\~n)+/g, "");
+    mess = mess.replaceAll(/(?:\~[r])+/g, "<br><br>");
     if (mess.substring(0, 4) === "<br>") mess = mess.substring(4);
     mess = "<div class='text-align-center'>" + mess + "</div>";
     return mess;
