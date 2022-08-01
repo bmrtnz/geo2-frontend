@@ -6,7 +6,23 @@
   // margin-right: 20px;
 
   .header-btn-baf {
-    margin-top: -11px;
+    margin: -9px 5px 0 0;
+    height: 27px;
+
+    .dx-button-content {
+      padding: 0px 13px !important;
+
+      .dx-button-text {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .margin-btn-baf {
+    position: absolute;
+    z-index: 1;
+    right: 151px;
+    margin-top: 7px;
 
     .dx-button-content {
       padding: 5px 15px !important;

@@ -242,6 +242,7 @@
                 <dx-button
                   class="float-right header-btn-baf"
                   type="default"
+                  [disabled]="this.env.production"
                   [visible]="showBAFButton"
                   text="Bon à facturer"
                   (onClick)="bonAFacturer()"
@@ -1042,10 +1043,20 @@
                         [ordre]="ordre"
                       ></app-grid-detail-palettes>
                       <div class="grid-separator"></div>
-                      <app-grid-marge
-                        #gridMarge
-                        [ordre]="ordre"
-                      ></app-grid-marge>
+                      <div class="grid-marge-container">
+                        <dx-button
+                          class="margin-btn-baf"
+                          type="default"
+                          [disabled]="this.env.production"
+                          [visible]="showBAFButton"
+                          text="Bon à facturer"
+                          (onClick)="bonAFacturer()"
+                        ></dx-button>
+                        <app-grid-marge
+                          #gridMarge
+                          [ordre]="ordre"
+                        ></app-grid-marge>
+                      </div>
                       <div class="grid-separator"></div>
                     </div>
                   </dxi-item>
