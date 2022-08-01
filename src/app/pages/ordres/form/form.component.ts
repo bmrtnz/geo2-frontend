@@ -17,11 +17,12 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
-import { FunctionResult, FunctionsService } from "app/shared/services/api/functions.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
+import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { PortsService } from "app/shared/services/api/ports.service";
@@ -34,7 +35,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { catchError, concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 // tslint:disable-next-line: max-line-length
@@ -263,6 +264,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private formBuilder: FormBuilder,
     private formUtils: FormUtilsService,
     private ordresService: OrdresService,
+    private ordresBafService: OrdresBafService,
     private currentCompanyService: CurrentCompanyService,
     private clientsService: ClientsService,
     private typesCamionService: TypesCamionService,
@@ -784,7 +786,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const societe: Societe = this.currentCompanyService.getCompany();
 
-    this.ordresService.fBonAFacturer([this.ordre.id], societe.id).subscribe(res => {
+    this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe(res => {
       this.initializeForm("no-cache");
     });
 

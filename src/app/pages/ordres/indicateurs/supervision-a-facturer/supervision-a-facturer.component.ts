@@ -1,32 +1,31 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
-import { DateManagementService } from "app/shared/services/date-management.service";
-import { SecteursService } from "app/shared/services/api/secteurs.service";
-import { PersonnesService } from "app/shared/services/api/personnes.service";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
+import OrdreBaf from "app/shared/models/ordre-baf.model";
+import { Role } from "app/shared/models/personne.model";
 import {
-  EntrepotsService,
-  ClientsService,
-  AuthService,
-  LocalizationService,
+  AuthService, ClientsService, EntrepotsService,
+
+
+  LocalizationService
 } from "app/shared/services";
-import DataSource from "devextreme/data/data_source";
+import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
+import { PersonnesService } from "app/shared/services/api/personnes.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { DxSelectBoxComponent, DxDataGridComponent } from "devextreme-angular";
-import Ordre from "app/shared/models/ordre.model";
-import { TabContext } from "../../root/root.component";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import {
   Grid,
-  GridConfiguratorService,
-  GridConfig,
+
+  GridConfig, GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
-import { environment } from "environments/environment";
-import { Role } from "app/shared/models/personne.model";
 import { GridColumn } from "basic";
+import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
+import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
-import notify from "devextreme/ui/notify";
-import OrdreBaf from "app/shared/models/ordre-baf.model";
+import { TabContext } from "../../root/root.component";
 
 enum InputField {
   secteurCode = "secteur",
@@ -54,6 +53,7 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
 })
 export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   readonly INDICATOR_NAME = "SupervisionAFacturer";
+  public readonly env = environment;
 
   public ordresDataSource: DataSource;
   public secteurs: DataSource;
@@ -306,7 +306,14 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.tabContext.openOrdre(e.data.numeroOrdre, e.data.campagneID);
   }
 
-  launch(e) { }
+  launch(e) {
+    const ordreRefs = this.datagrid.instance.getSelectedRowsData().map((row: Partial<OrdreBaf>) => row.ordreRef);
+    this.ordresBafService
+      .fBonAFacturer(ordreRefs, this.currentCompanyService.getCompany().id)
+      .subscribe({
+        complete: () => this.enableFilters(),
+      });
+  }
 
   onCellPrepared(event) {
     const field = event.column.dataField;
