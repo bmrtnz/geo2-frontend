@@ -778,27 +778,28 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const societe: Societe = this.currentCompanyService.getCompany();
 
-    this.ordresService.fBonAFacturer(this.ordre.id, societe.id)
-      .pipe(
-        map(result => Object.values(result.data)[0]),
-        concatMap(response => {
-          console.log("response", response);
-          if (response.res === FunctionResult.Warning)
-            return this.resultPopup.openAs("WARNING", response.msg);
-          if (response.res === FunctionResult.OK)
-            notify(response.msg, "info", 7000);
-          return of(true);
-        }),
-        catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
-        // filter(res => res),
-        // concatMapTo(this.envoisService
-        //   .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
-      )
-      .subscribe(res => {
-        console.log("res", res);
-        // const popup = res.data.countBy && this.flux === "ORDRE" ? "remplacePopup" : "docsPopup";
-        // this.resultPopup.visible = true;
-      });
+    this.ordresService.fBonAFacturer([this.ordre.id], societe.id).subscribe();
+    // this.ordresService.fBonAFacturer(this.ordre.id, societe.id)
+    //   .pipe(
+    //     map(result => Object.values(result.data)[0]),
+    //     concatMap(response => {
+    //       console.log("response", response);
+    //       if (response.res === FunctionResult.Warning)
+    //         return this.resultPopup.openAs("WARNING", response.msg);
+    //       if (response.res === FunctionResult.OK)
+    //         notify(response.msg, "info", 7000);
+    //       return of(true);
+    //     }),
+    //     catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
+    //     // filter(res => res),
+    //     // concatMapTo(this.envoisService
+    //     //   .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
+    //   )
+    //   .subscribe(res => {
+    //     console.log("res", res);
+    //     // const popup = res.data.countBy && this.flux === "ORDRE" ? "remplacePopup" : "docsPopup";
+    //     // this.resultPopup.visible = true;
+    //   });
 
   }
 

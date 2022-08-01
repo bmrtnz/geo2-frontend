@@ -1,13 +1,16 @@
 import { Injectable } from "@angular/core";
+import { concatAST } from "graphql";
 import { gql, MutationOptions, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
+import { Societe } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { from } from "rxjs";
-import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import { EMPTY, from, of, zip } from "rxjs";
+import { catchError, concatMap, concatMapTo, filter, first, map, mergeMap, reduce, take, takeUntil, tap } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
-import { functionBody, FunctionResponse } from "./functions.service";
+import { functionBody, FunctionResponse, FunctionResult } from "./functions.service";
+import { alert, confirm } from "devextreme/ui/dialog";
 
 export enum Operation {
   All = "allOrdre",
@@ -36,8 +39,8 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
-  public fBonAFacturer = this.buildFBonAFacturer("fBonAFacturer");
-  public fBonAFacturerPrepare = this.buildFBonAFacturer("fBonAFacturerPrepare");
+  private fBonAFacturerMain = this.buildFBonAFacturer("fBonAFacturer");
+  private fBonAFacturerPrepare = this.buildFBonAFacturer("fBonAFacturerPrepare");
 
   setPersisantVariables(params = this.persistantVariables) {
     this.persistantVariables = params;
@@ -293,6 +296,20 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         variables: { ordreRef, socCode },
         fetchPolicy: "network-only",
       });
+  }
+
+  public fBonAFacturer(ordreRefs: Array<Ordre["id"]>, societeCode: Societe["id"]) {
+    return from(ordreRefs).pipe(
+      concatMap(ordreRef => zip(of(ordreRef), this.fBonAFacturerPrepare(ordreRef, societeCode))),
+      catchError((err: Error) => (alert(err.message, "Erreur"), EMPTY)),
+      map(([ref, res]) => [ref, res.data.fBonAFacturerPrepare] as [string, FunctionResponse<Record<string, any>>]),
+      concatMap(([ref, result]) => zip(
+        of(ref), result.res === FunctionResult.Warning ? confirm(result.msg, "Attention") : of(true)
+      )),
+      filter(([, choice]) => choice),
+      concatMap(([ref]) => this.fBonAFacturerMain(ref, societeCode)),
+      map(res => res.data.fBonAFacturer),
+    );
   }
 
 }
