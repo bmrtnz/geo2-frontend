@@ -4,6 +4,41 @@
 
 ::ng-deep .grid-stock {
 
+  h6 {
+    margin: 0 0 7px 0;
+    float: left;
+  }
+
+  .highlight-stockJ21-cell {
+    background: #ffdd00 !important;
+    color: rgba(0, 0, 0, .7) !important;
+  }
+
+  .highlight-negativeStock-cell {
+    background: #ff325a !important;
+    color: white !important;
+
+    .dx-datagrid-summary-item {
+      color: white !important;
+    }
+  }
+
+  .bio-article {
+    color: #39970e !important;
+  }
+
+  .dx-row-focused {
+
+    td:not(.highlight-stockJ21-cell):not(.bio-article) .dx-datagrid-summary-item {
+      color: #FFF !important;
+    }
+
+    .bio-article {
+      color: #a9f77e !important;
+    }
+  }
+
+
   .grid-pen-button {
     width: 22px !important;
     height: 22px;
@@ -81,32 +116,6 @@
   }
 }
 
-h6 {
-  margin: 0 0 7px 0;
-  float: left;
-}
-
 ::ng-deep .cursor-pointer {
   cursor: pointer !important;
-}
-
-::ng-deep .highlight-stockJ21-cell {
-  background: #ffdd00 !important;
-  color: rgba(0, 0, 0, .7) !important;
-}
-
-::ng-deep .highlight-negativeStock-cell {
-  background: #ff325a !important;
-  color: white !important;
-}
-
-::ng-deep .bio-article {
-  color: #39970e !important;
-}
-
-::ng-deep .dx-row-focused {
-
-  .bio-article {
-    color: #a9f77e !important;
-  }
 }

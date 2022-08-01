@@ -1108,6 +1108,12 @@
         "showInColumnChooser": false
       },
       {
+        "dataField": "matierePremiere.type.id",
+        "dataType": "string",
+        "visible": false,
+        "showInColumnChooser": true
+      },
+      {
         "dataField": "emballage.emballage.id",
         "dataType": "string",
         "visible": false,
@@ -1311,6 +1317,143 @@
         "dataField": "commentaire",
         "visible": true,
         "cellTemplate": "editButtonTemplate"
+      }
+    ]
+  },
+  "ordre-reservation-stock": {
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "showInColumnChooser": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "fournisseurCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "proprietaireCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "quantiteDisponible",
+        "dataType": "number",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "quantiteInitiale",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "quantiteReservee",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "quantiteCalculee1",
+        "cssClass": "multi-line-header",
+        "width": 35,
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "quantiteCalculee2",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "quantiteCalculee3",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "quantiteCalculee4",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "typePaletteCode",
+        "cssClass": "multi-line-header",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "option",
+        "width": 180,
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
+  "ordre-reservation-stock-en-cours": {
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "showInColumnChooser": false
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "fournisseurCode",
+        "dataType": "string",
+        "width": 200,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "proprietaireCode",
+        "dataType": "string",
+        "width": 200,
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "quantite",
+        "dataType": "number",
+        "cssClass": "multi-line-header bold-text",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "typePalette",
+        "dataType": "string",
+        "width": 100,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "mouvementDescription",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "stockDescription",
+        "dataType": "string",
+        "width": 120,
+        "visible": true
       }
     ]
   },
@@ -2138,8 +2281,7 @@
         "visible": true,
         "sortOrder": "asc",
         "allowEditing": false,
-        "allowSorting": false,
-        "cssClass": "medium-horiz-padding text-align-center",
+        "cssClass": "medium-horiz-padding text-align-center number-column",
         "showInColumnChooser": false,
         "fixed": true
       },
@@ -2199,7 +2341,7 @@
         "calculateDisplayValue": "proprietaireMarchandise.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "width": 170
       },
       {
         "dataField": "fournisseur.id",
@@ -2207,7 +2349,7 @@
         "calculateDisplayValue": "fournisseur.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "width": 170
       },
       {
         "dataField": "ventePrixUnitaire",
@@ -2231,8 +2373,7 @@
         "visible": true,
         "calculateDisplayValue": "venteUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "gratuit",
@@ -2246,7 +2387,7 @@
         "calculateDisplayValue": "codePromo.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "small-header-right arrow-right",
+        "cssClass": "small-header-right",
         "allowEditing": true,
         "width": 60
       },
@@ -2272,8 +2413,7 @@
         "visible": true,
         "calculateDisplayValue": "achatUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "achatDevise",
@@ -2286,16 +2426,14 @@
         "visible": true,
         "calculateDisplayValue": "typePalette.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "paletteInter.id",
         "visible": true,
         "calculateDisplayValue": "paletteInter.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "libelleDLV",
@@ -2325,8 +2463,7 @@
         "visible": true,
         "calculateDisplayValue": "fraisUnite.description",
         "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
-        "cssClass": "arrow-right"
+        "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "fraisCommentaires",
@@ -2428,7 +2565,7 @@
         "dataType": "number",
         "width": 40,
         "allowEditing": false,
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "visible": true
       },
       {
@@ -2436,14 +2573,14 @@
         "dataField": "nombreColisExpedies",
         "dataType": "number",
         "width": 40,
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "visible": true
       },
       {
         "visibleIndex": 14,
         "dataField": "poidsNetExpedie",
         "dataType": "number",
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "width": 40,
         "visible": true
       },
@@ -2451,13 +2588,15 @@
         "visibleIndex": 16,
         "dataField": "poidsBrutExpedie",
         "dataType": "number",
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header move-right",
         "width": 40,
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "venteQuantite",
+        "cssClass": "multi-line-header move-right",
+        "width": 70,
         "dataType": "number",
         "visible": true
       },
@@ -2470,6 +2609,8 @@
       {
         "visibleIndex": 22,
         "dataField": "achatQuantite",
+        "cssClass": "multi-line-header move-right",
+        "width": 70,
         "dataType": "number",
         "visible": true
       },

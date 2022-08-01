@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Injector, Input, OnChanges, OnI
 import { ActivatedRoute } from "@angular/router";
 import { ColumnsSettings } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import { Fournisseur } from "app/shared/models";
+import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import Ordre from "app/shared/models/ordre.model";
 import { FournisseursService, LocalizationService } from "app/shared/services";
@@ -10,6 +11,8 @@ import { CertificationsModesCultureService } from "app/shared/services/api/certi
 import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { StockMouvementsService } from "app/shared/services/api/stock-mouvements.service";
+import { StocksService } from "app/shared/services/api/stocks.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
@@ -20,12 +23,14 @@ import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
+import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { Observable, of } from "rxjs";
-import { concatMap, filter, first, map, tap } from "rxjs/operators";
+import { iif, Observable, of } from "rxjs";
+import { concatMap, concatMapTo, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
+import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { GridsService } from "../grids.service";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
@@ -52,24 +57,31 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     private typesPaletteService: TypesPaletteService,
     public localizeService: LocalizationService,
     private gridsService: GridsService,
+    private stocksService: StocksService,
+    private stockMouvementsService: StockMouvementsService,
   ) {
-    const fournisseursDataSource = this.fournisseursService
-      .getDataSource_v2(["id", "code", "raisonSocial"]);
-    fournisseursDataSource.filter(["valide", "=", true]);
-    const proprietairesDataSource = this.fournisseursService
-      .getDataSource_v2(["id", "code", "raisonSocial"]);
-    proprietairesDataSource.filter(["valide", "=", true]);
+    this.filterFournisseurDS();
+    this.proprietairesDataSource = this.fournisseursService
+      .getDataSource_v2(["id", "code", "raisonSocial", "listeExpediteurs"]);
+    this.proprietairesDataSource.filter([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
     const sharedBaseTarifDatasource = this.basesTarifService
       .getDataSource_v2(["id", "description"]);
+    sharedBaseTarifDatasource.filter([
+      ["valide", "=", true],
+      "and",
+      ["valideLig", "=", true]
+    ]);
     const sharedTypePaletteDatasource = this.typesPaletteService
       .getDataSource_v2(["id", "description"]);
+    sharedTypePaletteDatasource.filter(["valide", "=", true]);
+
     this.columnsSettings = {
       "proprietaireMarchandise.id": {
-        dataSource: proprietairesDataSource,
+        dataSource: this.proprietairesDataSource,
         displayExpression: "code",
       },
       "fournisseur.id": {
-        dataSource: fournisseursDataSource,
+        dataSource: this.fournisseursDataSource,
         displayExpression: "code",
       },
       "venteUnite.id": {
@@ -109,17 +121,19 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     rowOrdering: true,
     quickSwitch: true,
     reportDLUO: true,
+    destockage: true,
+    indicateurStock: true,
     zoom: true,
   };
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
-  public allowMutations = false;
   public changes: Change<Partial<OrdreLigne>>[] = [];
   public columnsSettings: ColumnsSettings;
 
   @Input() ordreID: string;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
+  @Output() allowMutations = false;
 
   // legacy features properties
   public certifsMD: any;
@@ -136,6 +150,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public nbInsertedArticles: number;
   public newNumero = 0;
   public hintDblClick: string;
+  public proprietairesDataSource: DataSource;
+  public fournisseursDataSource: DataSource;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -146,6 +162,9 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ZoomFournisseurPopupComponent, { static: false }) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
+  @ViewChild(ArticleReservationOrdrePopupComponent, { static: false }) reservationStockPopup: ArticleReservationOrdrePopupComponent;
+
+  onR;
 
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
@@ -195,7 +214,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   focusedCellChanging(e) {
-    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex)
+    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
       setTimeout(() => this.grid.instance.saveEditData());
   }
 
@@ -351,6 +370,37 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "proprietaireMarchandise.code",
               "fournisseur.code",
             ] : [],
+            ...this.FEATURE.destockage ? [
+              "ordre.numero",
+              "ordre.entrepot.code",
+              "article.description",
+              "article.matierePremiere.variete.description",
+              "article.matierePremiere.origine.description",
+              "article.cahierDesCharge.categorie.description",
+              "article.normalisation.calibreMarquage.description",
+              "article.cahierDesCharge.coloration.description",
+              "article.cahierDesCharge.sucre.description",
+              "article.cahierDesCharge.penetro.description",
+              "article.normalisation.stickeur.description",
+              "article.cahierDesCharge.cirage.description",
+              "article.cahierDesCharge.rangement.description",
+              "article.emballage.emballage.descriptionTechnique",
+              "article.normalisation.etiquetteEvenementielle.description",
+              "article.normalisation.etiquetteColis.description",
+              "article.normalisation.etiquetteUc.description",
+              "article.emballage.conditionSpecial.description",
+              "article.emballage.alveole.description",
+              "article.normalisation.gtinUc",
+              "article.normalisation.gtinColis",
+              "article.gtinUcBlueWhale",
+              "article.gtinColisBlueWhale",
+              "article.normalisation.produitMdd",
+              "article.normalisation.articleClient",
+              "article.instructionStation",
+              "article.emballage.emballage.idSymbolique",
+              "article.matierePremiere.espece.id",
+              "nombreReservationsSurStock",
+            ] : [],
             // Used to lock fields
             ...[
               "ordre.type.id",
@@ -363,7 +413,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "ordre.ordreEDI.id",
               "ordre.secteurCommercial.id",
               "ordre.bonAFacturer",
-              "ordre.societe.id"
+              "ordre.societe.id",
+            ],
+            // Used to filter emballeur/expediteur
+            ...[
+              "proprietaireMarchandise.listeExpediteurs",
             ]
           ])),
           tap(datasource => datasource.filter([
@@ -431,9 +485,18 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           filters.push(["id", "=", proprietaireMarchandise.id]);
       }
     }
-    this.columnsSettings["fournisseur.id"].dataSource.filter(filters);
+    this.filterFournisseurDS(filters);
     return fournisseur;
 
+  }
+
+  filterFournisseurDS(filters?) {
+    const myFilter: any[] = [["valide", "=", true]];
+    if (filters?.length) myFilter.push("and", filters);
+    this.fournisseursDataSource = this.fournisseursService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.fournisseursDataSource.filter(myFilter);
+    if (this.columnsSettings)
+      this.columnsSettings["fournisseur.id"].dataSource = this.fournisseursDataSource;
   }
 
   // legacy features methods
@@ -470,6 +533,31 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     return this.certificationText + (isCert ? " ✓" : "");
   }
 
+  openDestockagePopup(ligne) {
+    if (!this.allowMutations) return;
+    this.ordreLigne = ligne;
+    const current = `${ligne.fournisseur?.code ?? "-"} / ${ligne.proprietaireMarchandise?.code ?? "-"}`;
+    const showConfirm = (resas: LigneReservation[]) => of(resas).pipe(
+      concatMap(res => confirm(
+        `ligne affectée a ${current} et réservations sur ${res[0].fournisseurCode} / ${res[0].proprietaireCode},
+        le programme va supprimer les réservations actives sur ${res[0].fournisseurCode}`,
+        "Attention",
+      )),
+      filter(res => res),
+      concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(ligne.id)),
+    );
+    this.stocksService.allLigneReservationList(ligne.id).pipe(
+      map(res => res.data.allLigneReservationList),
+      concatMap(res =>
+        iif(
+          () => !!res.length && res[0].fournisseurCode !== ligne.fournisseur?.code,
+          showConfirm(res),
+          of(true),
+        ),
+      ),
+    ).subscribe(() => this.reservationStockPopup.visible = true);
+  }
+
   openCertificationPopup(ligne) {
     this.ordreLigne = ligne;
     this.articleCertificationPopup.visible = true;
@@ -486,6 +574,22 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   openOriginePopup(ligne) {
     this.ordreLigne = ligne;
     this.articleOriginePopup.visible = true;
+  }
+
+  onFocusedCellChanged(e) {
+
+    switch (e.column.dataField) {
+      case "fournisseur.id": {
+        const proprietaireMarchandise = this.grid.instance.getVisibleRows()[e.rowIndex].data.proprietaireMarchandise;
+        if (proprietaireMarchandise) {
+          this.updateFilterFournisseurDS(proprietaireMarchandise);
+        } else {
+          this.filterFournisseurDS();
+        }
+        break;
+      }
+    }
+
   }
 
   onCellPrepared(e) {
@@ -629,7 +733,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       this.zoomArticlePopup.visible = true;
     }
     if (["fournisseur.id", "proprietaireMarchandise.id"].includes(e.column?.dataField)) {
-      const { id: idFour, code } = e.data[e.column.dataField.split(".")[0]];
+      const { id: idFour, code } = this.grid.instance.getVisibleRows()[e.rowIndex].data[e.column.dataField.split(".")[0]];
       if (idFour === null) return;
       this.fournisseurLigneId = idFour;
       this.fournisseurCode = code;

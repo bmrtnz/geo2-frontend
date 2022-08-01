@@ -1,0 +1,43 @@
+::ng-deep .grid-reservation-stock {
+
+  .grid-title .dx-texteditor {
+    width: 480px !important;
+  }
+
+  // Reducing grid's height when it's empty
+  .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
+    height: 70px;
+  }
+
+  .bold-text {
+    font-weight: bold !important;
+  }
+
+  .dx-group-row {
+    cursor: pointer;
+  }
+
+  .dx-data-row {
+
+    .highlight-stockJ9-21-cell {
+      background: #ffdd00 !important;
+      color: rgba(0, 0, 0, .7) !important;
+    }
+
+    .highlight-negativeStock-cell {
+      color: #ff325a !important;
+    }
+
+    .highlight-positiveStock-cell {
+      color: green !important;
+    }
+
+    .dx-datagrid-header-panel {
+      .dx-texteditor-container {
+        width: 500px !important;
+      }
+    }
+
+  }
+
+}

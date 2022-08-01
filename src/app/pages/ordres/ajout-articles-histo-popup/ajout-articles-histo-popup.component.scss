@@ -31,18 +31,15 @@
   }
 
   .dx-popup-content {
-    .dx-scrollable-content {
-      padding-right: 20px;
-      background-color: #FFF;
+    .ajout-art-histo-content-container {
+      background: #FFF !important;
+      padding: 0 15px 0 2px;
+
+      .valid-field {
+        display: none;
+      }
     }
 
-    .valid-field {
-      display: none;
-    }
-
-    .grid-ordre-ligne-historique {
-      margin-left: 2px !important;
-    }
   }
 
   .articles-valid-button,

@@ -36,49 +36,45 @@
 
   .dx-popup-content {
 
-    .dx-scrollable-content {
-      padding-right: 20px;
-      background-color: #FFF;
-    }
+    .ajout-art-manu-content-container {
+      background: #FFF !important;
+      padding: 0 15px 0 2px;
 
-    .valid-field {
-      display: none;
-    }
+      // .valid-field {
+      //   display: none;
+      // }
 
-    .grid-ordre-ligne-manu {
-      margin-left: 2px;
-    }
-
-    .articles-title {
-      display: none;
-    }
-
-    .quickCode-area {
-      width: 50%;
-      min-height: 33px;
-      float: left;
-
-      .dx-field-label {
-        margin-left: 40px;
-        background: #00759c;
-        color: #fff;
-        padding: 7px 15px;
-        width: auto !important;
-        margin-right: 15px;
-        overflow: visible;
+      .articles-title {
+        display: none;
       }
-    }
 
-    .articles-valid-button,
-    .cancel-button {
-      transition: transform 0.5s;
-      transform: scale(1);
-      float: right;
-      margin-top: 2px;
-    }
+      .quickCode-area {
+        width: 50%;
+        min-height: 33px;
+        float: left;
 
-    .articles-valid-button {
-      margin-right: 15px;
+        .dx-field-label {
+          margin-left: 40px;
+          background: #00759c;
+          color: #fff;
+          padding: 7px 15px;
+          width: auto !important;
+          margin-right: 15px;
+          overflow: visible;
+        }
+      }
+
+      .articles-valid-button,
+      .cancel-button {
+        transition: transform 0.5s;
+        transform: scale(1);
+        float: right;
+        margin-top: 2px;
+      }
+
+      .articles-valid-button {
+        margin-right: 15px;
+      }
     }
 
   }

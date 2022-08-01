@@ -52,10 +52,6 @@ export class ReservationPopupComponent {
         this.rowData.stockArticle.stockID,
         this.formGroup.get("quantite").value,
         this.formGroup.get("commentaire").value,
-      )
-      .valueChanges
-      .pipe(
-        takeWhile(res => res.loading)
       ).subscribe({
         error: ({ message }: Error) => notify(message, "error", 5000),
         complete: () => {

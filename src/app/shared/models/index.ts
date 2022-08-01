@@ -78,3 +78,5 @@ export * from "./codif-devalexp.model";
 export * from "./historique-modif-detail.model";
 export * from "./historique-logistique.model";
 
+export * from "./ordre-ligne.model";
+

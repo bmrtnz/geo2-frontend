@@ -173,15 +173,16 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
     });
   }
 
-  public getDistinctEspecesDatasource() {
-    return this.apollo.query<{ distinct: RelayPage<{ count: number, key: string }> }>({
+  public getDistinctEntityDatasource(fieldName, searchExpr?) {
+    return this.apollo.query<{ distinct: RelayPage<{ count: number, key: string, description: string }> }>({
       query: gql(this.buildDistinctGraph()),
       variables: {
-        field: "espece.id",
+        field: fieldName, // E.g. "espece.id"
         type: "GeoStockArticleAge",
+        search: searchExpr,
         pageable: {
           pageNumber: 0,
-          pageSize: 10,
+          pageSize: 500,
         } as Pageable,
       },
     }).pipe(

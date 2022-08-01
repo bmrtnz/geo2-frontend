@@ -352,8 +352,12 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         this.formGroup.controls,
         Article.getKeyField(),
       );
+
       // Special field: need to adjust data
-      article.emballage.emballage.id = { id: article.emballage.emballage.id.id, espece: this.article.matierePremiere.espece.id };
+      article.emballage.emballage = {
+        id: article.emballage.emballage.id.id,
+        espece: { id: this.article.matierePremiere.espece.id },
+      };
 
       if (this.cloneMode) {
         article.preSaisie = true;

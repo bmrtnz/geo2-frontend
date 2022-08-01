@@ -105,6 +105,74 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     groupeFournisseur: [""],
     conditionVente: [""]
   });
+
+  readonly inheritedFields = new Set([
+    "id",
+    "code",
+    "valide",
+    "preSaisie",
+    "raisonSocial",
+    "certifications.id", "certifications.certification.id", "certifications.certification.description",
+    "certifications.dateValidite",
+    "historique.id",
+    "historique.commentaire",
+    "historique.valide",
+    "historique.userModification",
+    "historique.dateModification",
+    "typeTiers",
+    "identifiant.id", "identifiant.libelle",
+    "raisonSocial",
+    "stockActif",
+    "stockPrecalibre",
+    "adresse1",
+    "adresse2",
+    "adresse3",
+    "codePostal",
+    "ville",
+    "pays.id", "pays.description",
+    "latitude",
+    "longitude",
+    "regimeTva.id", "regimeTva.description",
+    "nbJourEcheance",
+    "echeanceLe",
+    "moyenPaiement.id", "moyenPaiement.description",
+    "tvaCee",
+    "bureauAchat.id", "bureauAchat.raisonSocial",
+    "incoterm.id", "incoterm.description",
+    "basePaiement.id", "basePaiement.description",
+    "incoterm.id", "incoterm.description",
+    "compteComptable",
+    "langue.id", "langue.description",
+    "devise.id", "devise.description",
+    "agrementBW",
+    "codeStation",
+    "idTracabilite",
+    "type.id", "type.description",
+    "lieuFonctionEan",
+    "formeJuridique",
+    "siretAPE",
+    "tvaId",
+    "rcs",
+    "autoFacturation",
+    "referenceIfco",
+    "dateDebutIfco",
+    "margeObjectifEuroKilo",
+    "margeObjectifPourcentCa",
+    "declarantCHEP",
+    "suiviDestockage",
+    "natureStation",
+    "consignePaloxUdc",
+    "consignePaloxSa",
+    "dateConditionGeneraleAchatSignee",
+    "declarantBacsCHEP",
+    "indicateurModificationDetail",
+    "fournisseurDeRattachement.id", "fournisseurDeRattachement.raisonSocial",
+    "groupeFournisseur.id", "groupeFournisseur.description",
+    "conditionVente.id", "conditionVente.description"
+
+
+  ]);
+
   helpBtnOptions = { icon: "help", elementAttr: { id: "help-1" }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
@@ -224,7 +292,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     this.fournisseursDeRattachement.filter(["valide", "=", "true"]);
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
-    this.incoterms = this.incotermsService.getDataSource();
+    this.incoterms = this.incotermsService.getDataSource_v2(["id", "description"]);
     this.incoterms.filter(["valide", "=", "true"]);
 
     if (this.route.snapshot.url[1]?.path !== "fournisseurs") return;
@@ -236,7 +304,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         this.createMode = url[url.length - 1].path === "create";
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          this.fournisseursService.getOne(params.id)
+          this.fournisseursService.getOne_v2(params.id, this.inheritedFields)
             .subscribe(res => {
               this.afterLoadInitForm(res);
               this.certifications.reload();
@@ -276,7 +344,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
       this.formGroup.reset();
       this.preSaisie = "";
       this.fournisseursService
-        .getOne(this.fournisseurLigneId)
+        .getOne_v2(this.fournisseurLigneId, this.inheritedFields)
         .subscribe(res => this.afterLoadInitForm(res));
     }
 

@@ -16,6 +16,7 @@
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
   (onEditingStart)="onEditingStart($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
+  (onFocusedCellChanged)="onFocusedCellChanged($event)"
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
 >
   <dxo-editing
@@ -99,6 +100,46 @@
     </div>
   </ng-container>
 
+  <!-- Indicateur stock -->
+  <ng-container *ngIf="FEATURE.indicateurStock">
+    <dxi-column
+      cssClass="small-horiz-padding"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'indicateurStockTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'indicateurStockTemplate'">
+      <dx-button
+        class="small-article-button small-stock-button"
+        [visible]="allowMutations && cell.data.nombreReservationsSurStock"
+        [text]="cell.data.nombreReservationsSurStock"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
+
+  <!-- Déstockage -->
+  <ng-container *ngIf="FEATURE.destockage">
+    <dxi-column
+      cssClass="small-horiz-padding"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'destockageTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'destockageTemplate'">
+      <dx-button
+        class="small-article-button"
+        type="success"
+        [focusStateEnabled]="false"
+        hint="{{ 'destockage' | localize }}"
+        [visible]="allowMutations"
+        [text]="'D'"
+        (onClick)="openDestockagePopup(cell.data)"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
+
   <!-- switch article -->
   <ng-container *ngIf="FEATURE.quickSwitch">
     <dxi-column
@@ -143,6 +184,7 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [fixed]="column.fixed"
+    [width]="column.width"
     [dataField]="column.dataField"
     [allowEditing]="column.allowEditing"
     [allowSorting]="column.allowSorting"
@@ -201,6 +243,7 @@
 
   <app-entity-cell-template
     [columnsSettings]="columnsSettings"
+    [allowMutations]="allowMutations"
   ></app-entity-cell-template>
 </dx-data-grid>
 
@@ -209,6 +252,11 @@
   *ngIf="FEATURE.margePrevisionelle && !!gridRowsTotal"
   [ordreID]="ordreID"
 ></app-button-marge-previ>
+
+<app-article-reservation-ordre-popup
+  *ngIf="FEATURE.destockage"
+  [ordreLigne]="ordreLigne"
+></app-article-reservation-ordre-popup>
 
 <app-article-certification-popup
   *ngIf="FEATURE.columnCertifications"

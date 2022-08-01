@@ -96,6 +96,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public transporteurLigneId: string;
   @Output() public transporteurTitle: string;
   @Output() public readOnlyMode: boolean;
+  @Output() public ordreBAFOuFacture: boolean;
 
   private readonly headerFields = [
     "id",
@@ -271,7 +272,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private litigesService: LitigesService,
     private mruOrdresService: MruOrdresService,
     private tabContext: TabContext,
-    private authService: AuthService,
+    public authService: AuthService,
     private localization: LocalizationService
   ) {
     this.handleTabChange()
@@ -322,6 +323,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     ]);
 
     this.transporteursDS = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+    this.transporteursDS.filter(["valide", "=", true]);
     this.instructionsList = [];
     this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
       res
@@ -703,6 +705,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
+    this.ordreBAFOuFacture = this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
   }
 
   openClientFilePopup() {

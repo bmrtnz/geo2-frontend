@@ -1,0 +1,67 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [width]="1040"
+  [resizeEnabled]="true"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ titleStart }}&nbsp;</div>
+    <div class="title-mid">{{ titleMid }}</div>
+    <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
+    <!-- <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    >
+    </dx-button> -->
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="reservation-ordre-content-container">
+        <div class="article-detail-container">
+          <span class="blue-style">Article réf :&nbsp;</span
+          ><span class="bold-text">{{ ordreLigne?.article?.id }}</span>
+          <div class="article-resa-description">
+            {{ detailedArticleDescription }}
+          </div>
+        </div>
+
+        <br />
+
+        <app-grid-reservation-stock-en-cours
+          [ordreLigneInfo]="ordreLigneInfo"
+          (reservationChange)="onReservationEnCoursChange($event)"
+        ></app-grid-reservation-stock-en-cours>
+        <br />
+
+        <app-grid-reservation-stock
+          [ordreLigneInfo]="ordreLigneInfo"
+          (reservationChange)="onReservationChange($event)"
+          [articleID]="ordreLigne?.article?.id"
+          [resaStatus]="resaStatus"
+        ></app-grid-reservation-stock>
+        <br />
+
+        <dx-text-area
+          class="stock-resa-log"
+          [height]="90"
+          [readOnly]="true"
+          [value]="this.logs | list"
+        >
+        </dx-text-area>
+        <br />
+        <div class="popup-buttons-container">
+          <dx-button
+            type="success"
+            text="OK"
+            (onClick)="applyClick()"
+          ></dx-button>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

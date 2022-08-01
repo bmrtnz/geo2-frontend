@@ -11,6 +11,7 @@ import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { concatMap, map } from "rxjs/operators";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-article-certification-popup",
@@ -39,6 +40,7 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
     public ordresService: OrdresService,
     public OrdreLigneService: OrdreLignesService,
     private modesCultureService: ModesCultureService,
+    public gridsService: GridsService,
     private certificationsService: CertificationsService,
   ) {
     this.certifications = [];
@@ -145,7 +147,7 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
       .subscribe({
         next: res => {
           notify(this.localizeService.localize("articles-save-certification"), "success", 2000);
-          this.changeLigne.emit(res.data.saveOrdreLigne);
+          this.gridsService.reload("Commande");
         },
         error: (err) => {
           console.log(err);

@@ -790,7 +790,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-check-box
-                                [disabled]="true"
+                                [disabled]="!allowMutations || !authService.currentUser.adminClient || ordreBAFOuFacture"
                                 formControlName="venteACommission"
                               >
                               </dx-check-box>
@@ -901,6 +901,7 @@
                     #gridLignesLogistique
                     (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
                     [ordre]="ordre"
+                    [ordreBAFOuFacture]="ordreBAFOuFacture"
                   ></app-grid-ordre-ligne-logistique>
                   <div *ngIf="ordresLignesViewExp">
                     <div class="grid-separator"></div>

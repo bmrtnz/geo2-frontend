@@ -88,6 +88,8 @@ export enum Grid {
   OrdreHistoriqueEntrepot = "ordre-historique-entrepot",
   OrdreEntrepot = "ordre-entrepot",
   OrdreStock = "ordre-stock",
+  OrdreReservationStock = "ordre-reservation-stock",
+  OrdreReservationStockEnCours = "ordre-reservation-stock-en-cours",
   CommentaireOrdre = "commentaire-ordre",
   LitigeLigne = "litige-ligne",
   HistoriqueModifDetail = "histo-modif-detail",
@@ -128,7 +130,8 @@ const extraConfigurations = [
   "allowSorting",
   "dataType",
   "width",
-  "format"
+  "format",
+  "calculateCellValue",
 ];
 
 @Injectable({

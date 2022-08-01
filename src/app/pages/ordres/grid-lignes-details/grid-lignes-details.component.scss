@@ -4,6 +4,11 @@
 
 ::ng-deep .grid-ordre-ligne-detail {
 
+  .dx-data-row .move-right input {
+    text-align: right !important;
+    padding-right: 7px !important;
+  }
+
   .dx-row-focused {
 
     .bio-article {

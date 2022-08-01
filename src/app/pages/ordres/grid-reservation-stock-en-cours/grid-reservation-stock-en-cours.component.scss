@@ -1,0 +1,32 @@
+::ng-deep .reservation-stock-en-cours {
+
+  .btn-delete-destockage-container {
+    background: white;
+    position: absolute;
+    z-index: 2;
+    right: 166px;
+    margin-top: 11px;
+
+    .btn-delete-destockage {
+      height: 28px;
+
+      .dx-button-content {
+        font-size: 13px;
+        padding: 0px 11px;
+      }
+    }
+  }
+
+  .grid-reservation-stock-en-cours {
+
+    // Reducing grid's height when it's empty
+    .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
+      height: 70px;
+    }
+
+    .bold-text {
+      font-weight: bold !important;
+    }
+
+  }
+}

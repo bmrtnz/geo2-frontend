@@ -30,32 +30,28 @@
 
   .dx-popup-content {
 
-    .dx-scrollable-content {
-      padding-right: 20px;
-      background-color: #FFF;
-    }
+    .ajout-art-stock-content-container {
+      padding: 0 15px 0 2px;
+      background: #FFF !important;
 
-    .grid-ordre-ligne-stock {
-      margin-left: 2px;
-    }
+      h6 {
+        font-size: 18px;
+      }
 
-    h6 {
-      font-size: 18px;
-    }
+      .valid-field {
+        display: none;
+      }
 
-    .valid-field {
-      display: none;
-    }
+      .articles-title {
+        display: none;
+      }
 
-    .articles-title {
-      display: none;
-    }
-
-    .articles-valid-button,
-    .cancel-button {
-      transition: transform 0.5s;
-      transform: scale(1);
-      float: right;
+      .articles-valid-button,
+      .cancel-button {
+        transition: transform 0.5s;
+        transform: scale(1);
+        float: right;
+      }
     }
 
   }

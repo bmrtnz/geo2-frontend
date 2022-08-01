@@ -1,6 +1,6 @@
 @import "~themes/generated/variables.base.scss";
 
-::ng-deep dx-scroll-view {
+::ng-deep .login-form dx-scroll-view {
   background-color: darken($base-bg, 5);
 }
 

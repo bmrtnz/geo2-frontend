@@ -28,6 +28,16 @@
   //   float: right;
   // }
 
+  .small-stock-button {
+    margin-top: -1px !important;
+    pointer-events: none !important;
+    min-width: 16px !important;
+
+    .dx-button-text {
+      font-weight: bold;
+    }
+  }
+
   .dx-command-drag {
     padding: 0 !important;
     width: 25px !important;
@@ -51,7 +61,7 @@
     padding-right: 8px !important;
   }
 
-  .dx-datagrid-headers.dx-datagrid-nowrap td:not(:first-of-type):not(.article-column) {
+  .dx-datagrid-headers.dx-datagrid-nowrap td {
     pointer-events: none;
 
     &.headerCellBtnTemplate {

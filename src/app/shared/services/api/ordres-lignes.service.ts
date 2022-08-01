@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
-import { FunctionsService } from "app/shared/services/api/functions.service";
+import { functionBody, FunctionResponse, FunctionsService } from "app/shared/services/api/functions.service";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { takeWhile } from "rxjs/operators";
@@ -439,6 +439,36 @@ export class OrdreLignesService extends ApiService implements APIRead {
       variables: { fieldName, value, id, socCode },
       fetchPolicy: "network-only",
     });
+  }
+
+  public fGetInfoResa(orlRef: string) {
+    return this.apollo
+      .query<{
+        fGetInfoResa: FunctionResponse<{
+          ll_tot_qte_ini: number,
+          ll_tot_qte_res: number,
+          ll_tot_mvt_qte: number,
+          ll_tot_nb_resa: number,
+        }>
+      }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fGetInfoResa",
+              body: functionBody,
+              params: [
+                { name: "orlRef", value: "orlRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "orlRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { orlRef },
+        fetchPolicy: "network-only",
+      });
   }
 
 }

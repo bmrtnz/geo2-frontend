@@ -2,7 +2,7 @@
   width="600"
   height="auto"
   [dragEnabled]="true"
-  [title]="'Réservation de stock : ' + rowData?.stockArticle?.articleID"
+  [title]="'Déstockage de stock : ' + rowData?.stockArticle?.articleID"
   (onHidden)="onHidden()"
   (onShown)="onShowing()"
   [closeOnOutsideClick]="true"
@@ -29,11 +29,16 @@
       >
       </dx-number-box>
 
-      <p *ngIf="negativeStock" class="red-font">Le stock sera négatif avec ce mouvement !</p>
+      <p
+        *ngIf="negativeStock"
+        class="red-font"
+      >
+        Le stock sera négatif avec ce mouvement !
+      </p>
       <p *ngIf="!negativeStock">&nbsp;</p>
 
       <!-- Actions/Boutons -->
-      <br>
+      <br />
       <div class="prompt-action">
         <dx-button
           text="{{ 'btn-annuler' | localize }}"
