@@ -6,7 +6,23 @@
   // margin-right: 20px;
 
   .header-btn-baf {
-    top: -11px;
+    margin: -9px 5px 0 0;
+    height: 27px;
+
+    .dx-button-content {
+      padding: 0px 13px !important;
+
+      .dx-button-text {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .margin-btn-baf {
+    position: absolute;
+    z-index: 1;
+    right: 151px;
+    margin-top: 7px;
 
     .dx-button-content {
       padding: 5px 15px !important;
@@ -306,6 +322,7 @@ dx-button[type="normal"] {
 }
 
 ::ng-deep .order-header {
+  margin-top: 0 !important;
   padding: 2px 0 0 0 !important;
 
   .dx-field-value {
