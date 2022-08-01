@@ -59,6 +59,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     societe: string,
     campagne: string,
     body: string[],
+    fetchPol?: any
   ) {
     return this.apollo
       .query<{ ordreByNumeroAndSocieteAndCampagne: Ordre }>({
@@ -82,7 +83,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
           ],
         )),
         variables: { numero, societe, campagne },
-        fetchPolicy: "cache-first",
+        fetchPolicy: fetchPol ? fetchPol : "cache-first"
       });
   }
 

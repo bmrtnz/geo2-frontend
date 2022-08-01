@@ -6,7 +6,7 @@
   // margin-right: 20px;
 
   .header-btn-baf {
-    top: -11px;
+    margin-top: -11px;
 
     .dx-button-content {
       padding: 5px 15px !important;
@@ -306,6 +306,7 @@ dx-button[type="normal"] {
 }
 
 ::ng-deep .order-header {
+  margin-top: 0 !important;
   padding: 2px 0 0 0 !important;
 
   .dx-field-value {

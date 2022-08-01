@@ -242,9 +242,11 @@
                 <dx-button
                   class="float-right header-btn-baf"
                   type="default"
+                  [visible]="showBAFButton"
                   text="Bon à facturer"
                   (onClick)="bonAFacturer()"
                 ></dx-button>
+                <div style="clear:both;"></div>
                 <div
                   class="dx-form-group-content no-padding-bottom order-header"
                 >

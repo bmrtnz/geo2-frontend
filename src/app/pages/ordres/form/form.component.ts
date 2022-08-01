@@ -231,6 +231,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public instructionsComm: string;
   public histoLigneOrdreReadOnlyText: string;
   public histoLigneOrdreText: string;
+  public showBAFButton: boolean;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -525,7 +526,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridCommandes.update();
   }
 
-  private initializeForm() {
+  private initializeForm(fetchPol?) {
 
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
@@ -535,7 +536,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         switchMap(([numero, campagneID]) => {
           if (numero === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
           return this.ordresService
-            .getOneByNumeroAndSocieteAndCampagne(numero, currentCompany.id, campagneID, this.headerFields)
+            .getOneByNumeroAndSocieteAndCampagne(numero, currentCompany.id, campagneID, this.headerFields, fetchPol)
             .pipe(
               map(res => res.data.ordreByNumeroAndSocieteAndCampagne),
             );
@@ -569,6 +570,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
         this.histoLigneOrdreReadOnlyText =
           `${this.localization.localize("hint-client-historique")}`;
+
+        this.showBAFButton =
+          this.ordre.bonAFacturer === false &&
+          this.ordre.client.usageInterne !== true &&
+          (this.ordre.codeAlphaEntrepot ? this.ordre.codeAlphaEntrepot.substring(0, 8) !== "PREORDRE" : true);
 
       });
   }
@@ -785,19 +791,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log("response", response);
           if (response.res === FunctionResult.Warning)
             return this.resultPopup.openAs("WARNING", response.msg);
-          if (response.res === FunctionResult.OK)
+          if (response.res === FunctionResult.OK) {
+            this.initializeForm("no-cache");
             notify(response.msg, "info", 7000);
+          }
           return of(true);
         }),
         catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
-        // filter(res => res),
-        // concatMapTo(this.envoisService
-        //   .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
       )
       .subscribe(res => {
         console.log("res", res);
-        // const popup = res.data.countBy && this.flux === "ORDRE" ? "remplacePopup" : "docsPopup";
-        // this.resultPopup.visible = true;
       });
 
   }
