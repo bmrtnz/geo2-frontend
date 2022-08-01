@@ -784,7 +784,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const societe: Societe = this.currentCompanyService.getCompany();
 
-    this.ordresService.fBonAFacturer([this.ordre.id], societe.id).subscribe();
+    this.ordresService.fBonAFacturer([this.ordre.id], societe.id).subscribe(res => {
+      this.initializeForm("no-cache");
+    });
 
   }
 

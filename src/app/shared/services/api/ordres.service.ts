@@ -302,15 +302,27 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   public fBonAFacturer(ordreRefs: Array<Ordre["id"]>, societeCode: Societe["id"]) {
     return from(ordreRefs).pipe(
       concatMap(ordreRef => zip(of(ordreRef), this.fBonAFacturerPrepare(ordreRef, societeCode))),
-      catchError((err: Error) => (alert(err.message, "Erreur"), EMPTY)),
+      catchError((err: Error) => (alert(this.messageFormat(err.message), "Erreur Mise en bon à facturer"), EMPTY)),
       map(([ref, res]) => [ref, res.data.fBonAFacturerPrepare] as [string, FunctionResponse<Record<string, any>>]),
       concatMap(([ref, result]) => zip(
-        of(ref), result.res === FunctionResult.Warning ? confirm(result.msg, "Attention") : of(true)
+        of(ref), result.res === FunctionResult.Warning ? confirm(this.messageFormat(result.msg), "Attention") : of(true)
       )),
       filter(([, choice]) => choice),
       concatMap(([ref]) => this.fBonAFacturerMain(ref, societeCode)),
       map(res => res.data.fBonAFacturer),
     );
+  }
+
+  private messageFormat(mess) {
+    mess = mess.replaceAll("%%%", "");
+    mess = mess.replace("Exception while fetching data (/fBonAFacturerPrepare) : ", "");
+    mess = mess.replaceAll("(", "<br>(");
+    mess = mess.replaceAll(/(?:\\[r])+/g, "<br><br>");
+    mess = mess.replaceAll(/(?:\~[r])+/g, "");
+    mess = mess.replaceAll(/(?:\~[n])+/g, "");
+    if (mess.substring(0, 4) === "<br>") mess = mess.substring(4);
+    mess = "<div class='text-align-center'>" + mess + "</div>";
+    return mess;
   }
 
 }
