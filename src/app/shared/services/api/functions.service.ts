@@ -736,31 +736,4 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
-  /**
-   * Mise en Bon à facturer - f_bon_a_facturer
-   */
-  public fBonAFacturer =
-    (ordreRef: string, socCode: string) => this.apollo
-      .watchQuery<{ fBonAFacturer: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "fBonAFacturer",
-              body: functionBody,
-              params: [
-                { name: "ordreRef", value: "ordreRef", isVariable: true },
-                { name: "socCode", value: "socCode", isVariable: true }
-              ]
-            }
-          ],
-          [
-            { name: "ordreRef", type: "String", isOptionnal: false },
-            { name: "socCode", type: "String", isOptionnal: false }
-          ],
-        )),
-        variables: { ordreRef, socCode },
-        fetchPolicy: "network-only",
-      })
-
 }

@@ -7,6 +7,7 @@ import { from } from "rxjs";
 import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
+import { functionBody, FunctionResponse } from "./functions.service";
 
 export enum Operation {
   All = "allOrdre",
@@ -262,5 +263,32 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     }
     return Ordre.isCloture(ordre);
   }
+
+  /**
+   * Mise en Bon à facturer - f_bon_a_facturer
+   */
+  public fBonAFacturer =
+    (ordreRef: string, socCode: string) => this.apollo
+      .query<{ fBonAFacturer: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fBonAFacturer",
+              body: functionBody,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "socCode", value: "socCode", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "socCode", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreRef, socCode },
+        fetchPolicy: "network-only",
+      })
 
 }

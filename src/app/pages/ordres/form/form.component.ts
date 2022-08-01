@@ -778,7 +778,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const societe: Societe = this.currentCompanyService.getCompany();
 
-    this.functionsService.fBonAFacturer(this.ordre.id, societe.id).valueChanges
+    this.ordresService.fBonAFacturer(this.ordre.id, societe.id)
       .pipe(
         map(result => Object.values(result.data)[0]),
         concatMap(response => {
