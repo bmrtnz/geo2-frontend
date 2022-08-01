@@ -25,16 +25,19 @@ export type CountResponse = { countOrdre: number };
 })
 export class OrdresService extends ApiService implements APIRead, APIPersist, APICount<CountResponse> {
 
-  /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
-
-  public persistantVariables: Record<string, any> = { onlyColisDiff: false };
-
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, Ordre);
   }
+
+  /* tslint:disable-next-line */
+  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
+
+  public persistantVariables: Record<string, any> = { onlyColisDiff: false };
+
+  public fBonAFacturer = this.buildFBonAFacturer("fBonAFacturer");
+  public fBonAFacturerPrepare = this.buildFBonAFacturer("fBonAFacturerPrepare");
 
   setPersisantVariables(params = this.persistantVariables) {
     this.persistantVariables = params;
@@ -267,14 +270,14 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   /**
    * Mise en Bon à facturer - f_bon_a_facturer
    */
-  public fBonAFacturer =
-    (ordreRef: string, socCode: string) => this.apollo
-      .query<{ fBonAFacturer: FunctionResponse }>({
+  private buildFBonAFacturer(queryName: "fBonAFacturer" | "fBonAFacturerPrepare") {
+    return (ordreRef: string, socCode: string) => this.apollo
+      .query<{ [queryName: string]: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
             {
-              name: "fBonAFacturer",
+              name: queryName,
               body: functionBody,
               params: [
                 { name: "ordreRef", value: "ordreRef", isVariable: true },
@@ -289,6 +292,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         )),
         variables: { ordreRef, socCode },
         fetchPolicy: "network-only",
-      })
+      });
+  }
 
 }
