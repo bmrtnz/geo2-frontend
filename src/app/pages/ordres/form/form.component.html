@@ -1242,6 +1242,7 @@
   [document]="this.currentFacture"
 ></app-view-document-popup>
 <app-prompt-popup
-  [title]="('ordre-delete-title' | localize) + this.ordre?.numero"
-  (whenValidate)="validateDeleteOrder($event)"
+  [purpose]="promptPopupPurpose"
+  [title]="promptPopupTitle"
+  (whenValidate)="onValidatePromptPopup($event)"
 ></app-prompt-popup>

@@ -1,3 +1,6 @@
+// Var
+@import "~themes/generated/variables.base";
+
 .prompt-action {
   position: relative;
   display: inline-block;
@@ -7,4 +10,8 @@
   &>.dx-button {
     margin-left: 10px;
   }
+}
+
+.comment-title {
+  color: $base-accent;
 }

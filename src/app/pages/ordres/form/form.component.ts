@@ -234,6 +234,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public histoLigneOrdreReadOnlyText: string;
   public histoLigneOrdreText: string;
   public showBAFButton: boolean;
+  public promptPopupTitle: string;
+  public promptPopupPurpose: string;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -403,7 +405,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .fTestAnnuleOrdre(this.ordre.id)
       .subscribe({
         next: () => {
-          alert("ok", "");
+          this.promptPopupTitle = this.localization.localize("ordre-cancel-title") + this.ordre?.numero;
+          this.promptPopupPurpose = "cancel";
+          this.promptPopup.show(
+            {
+              validText: "btn-annulation-ordre",
+              commentTitle: this.localization.localize("choose-cancel-reason"),
+              // These items are hard coded in Geo1
+              commentItemsList: [
+                "BW",
+                "CLIENT",
+                "FOURNISSEUR",
+                "TRANSPORTEUR"
+              ],
+            }
+          );
         },
         error: (error: Error) => {
           alert(this.messageFormat(error.message), this.localization.localize("annulation-ordre"));
@@ -411,8 +427,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  validateCancelOrder(comment) {
+    alert("cancel", comment);
+  }
+
   onDeleteOrderClick() {
     if (!this.ordre.id) return;
+    this.promptPopupTitle = this.localization.localize("ordre-delete-title") + this.ordre?.numero;
+    this.promptPopupPurpose = "delete";
     this.promptPopup.show(
       {
         validText: "btn-suppression-ordre",
@@ -422,6 +444,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   validateDeleteOrder(comment) {
+
     this.localization.localize("hint-ajout-ordre");
 
     const result = confirm(
@@ -445,6 +468,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         notify(this.localization.localize("text-popup-abandon-suppression"), "warning", 7000);
       }
     });
+  }
+
+  public onValidatePromptPopup(comment) {
+    if (this.promptPopupPurpose === "delete") this.validateDeleteOrder(comment);
+    if (this.promptPopupPurpose === "cancel") this.validateCancelOrder(comment);
   }
 
   private messageFormat(mess) {

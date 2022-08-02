@@ -10,9 +10,37 @@
 >
   <div *dxTemplate="let d of 'content'">
     <form #form="ngForm">
-      <div *ngIf="commentTitle">{{ commentTitle }}</div>
+
+      <!-- Title shown (if configured) over the title -->
+      <div
+        *ngIf="commentTitle"
+        class="comment-title"
+      >
+      {{ commentTitle }}
+      <br>
+      </div>
+
+      <!-- We can show a simple text box or a selectbox with configurable items -->
+
+      <dx-select-box
+        ngModel
+        #commentSelectBox
+        name="commentaireSB"
+        [visible]="!!commentItemsList"
+        [items]="commentItemsList"
+        [searchEnabled]="false"
+      >
+        <dx-validator
+          #validatorSB
+          [validationRules]="commentValidationRules"
+          name="{{ 'valide-commentaire' | localize }}"
+        ></dx-validator>
+      </dx-select-box>
+
       <dx-text-box
         ngModel
+        #commentBox
+        [visible]="!commentItemsList"
         name="commentaire"
         valueChangeEvent="keyup"
         [showClearButton]="true"
@@ -21,7 +49,7 @@
         <dx-validator
           #validator
           [validationRules]="commentValidationRules"
-          name="{{ 'valide-comment' | localize }}"
+          name="{{ 'valide-motif' | localize }}"
         ></dx-validator>
       </dx-text-box>
       <br>
@@ -37,7 +65,7 @@
           text="{{ (validText ? validText : 'btn-valider') | localize }}"
           type="default"
           *ngIf="validator.instance"
-          [disabled]="!validator.instance.validate().isValid"
+          [disabled]="!validator.instance.validate().isValid && !validatorSB.instance.validate().isValid"
           (onClick)="onSubmit(form)"
         ></dx-button>
       </div>

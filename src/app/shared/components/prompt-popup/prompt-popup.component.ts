@@ -5,7 +5,8 @@ import {
   DxPopupModule,
   DxTextBoxComponent,
   DxTextBoxModule,
-  DxValidatorComponent, DxValidatorModule
+  DxSelectBoxModule,
+  DxValidatorComponent, DxValidatorModule, DxSelectBoxComponent
 } from "devextreme-angular";
 import { FormsModule, NgForm } from "@angular/forms";
 import { RangeRule, RequiredRule } from "devextreme/ui/validation_rules";
@@ -21,13 +22,14 @@ export class PromptPopupComponent {
   @ViewChild(DxPopupComponent, { static: false })
   popupComponent: DxPopupComponent;
 
-  @ViewChild(DxTextBoxComponent, { static: false })
-  commentBox: DxTextBoxComponent;
+  @ViewChild("commentBox", { static: false }) commentBox: DxTextBoxComponent;
+  @ViewChild("commentSelectBox", { static: false }) commentSelectBox: DxSelectBoxComponent;
 
-  @ViewChild(DxValidatorComponent, { static: false })
-  commentValidator: DxValidatorComponent;
+  @ViewChild("validator", { static: false }) commentValidator: DxValidatorComponent;
+  @ViewChild("validatorSB", { static: false }) commentSBValidator: DxValidatorComponent;
 
   @Input() title = "";
+  @Input() purpose = "";
   @Input() placeholder = "";
 
   @Output() whenValidate = new EventEmitter<string>();
@@ -39,12 +41,14 @@ export class PromptPopupComponent {
   cancelText: string;
   commentMaxLength: number;
   commentTitle: string;
+  commentItemsList: string[];
 
   async show(texts?: any) {
     if (texts?.validText) this.validText = texts.validText;
     if (texts?.cancelText) this.cancelText = texts.cancelText;
     if (texts?.commentMaxLength) this.commentMaxLength = texts.commentMaxLength;
     if (texts?.commentTitle) this.commentTitle = texts.commentTitle;
+    if (texts?.commentItemsList) this.commentItemsList = texts.commentItemsList;
     await this.popupComponent.instance.show();
     if (texts?.comment) this.setText(texts.comment);
   }
@@ -67,17 +71,18 @@ export class PromptPopupComponent {
 
   onHidden() {
     this.commentBox.instance.reset();
+    this.commentSelectBox.instance.reset();
   }
 
   onShown() {
     this.whenShown.emit();
-    this.commentBox.instance.focus();
+    this.commentBox?.instance.focus();
     this.setValidationRules();
   }
 
   onSubmit(form: NgForm) {
-    if (this.commentValidator.instance.validate().isValid) {
-      this.whenValidate.emit(form.value.commentaire);
+    if (this.commentValidator.instance.validate().isValid || this.commentSBValidator.instance.validate().isValid) {
+      this.whenValidate.emit(form.value.commentaire || form.value.commentaireSB);
       this.popupComponent.instance.hide();
     }
   }
@@ -92,6 +97,7 @@ export class PromptPopupComponent {
     DxPopupModule,
     DxTextBoxModule,
     DxButtonModule,
+    DxSelectBoxModule,
     DxValidatorModule,
   ],
   exports: [PromptPopupComponent],
