@@ -160,6 +160,7 @@ export class RootComponent implements OnInit, OnDestroy {
         ["id", "client.code", "entrepot.code", "dateDepartPrevue"]
       ).subscribe(res => {
         const result = res.data.ordreByNumeroAndSocieteAndCampagne;
+        if (!result) return;
         let dateDep = result.dateDepartPrevue ?? "-";
         if (result.dateDepartPrevue !== "-")
           dateDep = this.dateManagementService.friendlyDate(result.dateDepartPrevue, true);
