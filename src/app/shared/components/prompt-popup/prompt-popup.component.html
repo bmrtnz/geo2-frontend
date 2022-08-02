@@ -10,10 +10,12 @@
 >
   <div *dxTemplate="let d of 'content'">
     <form #form="ngForm">
+      <div *ngIf="commentTitle">{{ commentTitle }}</div>
       <dx-text-box
         ngModel
         name="commentaire"
         valueChangeEvent="keyup"
+        [showClearButton]="true"
         [placeholder]="placeholder"
       >
         <dx-validator
@@ -27,7 +29,7 @@
       <br>
       <div class="prompt-action">
         <dx-button
-          text="{{ 'btn-annuler' | localize }}"
+          text="{{ (cancelText ? cancelText : 'btn-annuler') | localize }}"
           type="normal"
           (onClick)="popupComponent.instance.hide()"
         ></dx-button>

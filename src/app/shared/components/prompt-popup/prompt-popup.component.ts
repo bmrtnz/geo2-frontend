@@ -30,33 +30,38 @@ export class PromptPopupComponent {
   @Input() title = "";
   @Input() placeholder = "";
 
-  @Output()
-  whenValidate = new EventEmitter<string>();
-
-  @Output()
-  whenHiding = new EventEmitter<any>();
-
-  @Output()
-  whenShown = new EventEmitter<any>();
+  @Output() whenValidate = new EventEmitter<string>();
+  @Output() whenHiding = new EventEmitter<any>();
+  @Output() whenShown = new EventEmitter<any>();
 
   commentValidationRules: (RangeRule | RequiredRule)[];
   validText: string;
   cancelText: string;
+  commentMaxLength: number;
+  commentTitle: string;
 
   async show(texts?: any) {
-    if (texts.validText) this.validText = texts.validText;
-    if (texts.cancelText) this.cancelText = texts.cancelText;
+    if (texts?.validText) this.validText = texts.validText;
+    if (texts?.cancelText) this.cancelText = texts.cancelText;
+    if (texts?.commentMaxLength) this.commentMaxLength = texts.commentMaxLength;
+    if (texts?.commentTitle) this.commentTitle = texts.commentTitle;
     await this.popupComponent.instance.show();
-    if (texts.comment) this.setText(texts.comment);
+    if (texts?.comment) this.setText(texts.comment);
   }
 
   setText(text: string) {
     this.commentBox.value = text;
   }
 
+  setValidationRules() {
+    this.commentValidationRules = [
+      { type: "required" },
+      { type: "stringLength", max: this.commentMaxLength ?? 128 }
+    ];
+  }
+
   onPopupHiding() {
     this.commentValidationRules = [];
-
     this.whenHiding.emit();
   }
 
@@ -67,10 +72,7 @@ export class PromptPopupComponent {
   onShown() {
     this.whenShown.emit();
     this.commentBox.instance.focus();
-    this.commentValidationRules = [
-      { type: "required" },
-      { type: "stringLength", max: 128 }
-    ];
+    this.setValidationRules();
   }
 
   onSubmit(form: NgForm) {

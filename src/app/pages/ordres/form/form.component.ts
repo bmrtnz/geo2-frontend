@@ -400,7 +400,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   onDeleteOrderClick() {
     if (!this.ordre.id) return;
     this.promptPopup.show(
-      { validText: "btn-suppression-ordre" }
+      {
+        validText: "btn-suppression-ordre",
+        commentMaxLength: 70
+      }
     );
   }
 
