@@ -6,8 +6,10 @@ import {
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
+import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
+import { confirm, alert } from "devextreme/ui/dialog";
 import {
   AuthService,
   ClientsService,
@@ -205,7 +207,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public ordresLignesViewExp: boolean;
 
   public canDuplicate = false;
-  public validationPopupVisible = false;
   public dotLitiges: string;
   public dotCommentaires: number;
   public dotCQ: number;
@@ -256,6 +257,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(GridDetailPalettesComponent) gridDetailPalettes: GridDetailPalettesComponent;
   @ViewChild(GridMargeComponent) gridMarge: GridMargeComponent;
   @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
+  @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
 
   constructor(
     private router: Router,
@@ -395,13 +397,41 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  onDeleteClick() {
-    this.validationPopupVisible = true;
+  onDeleteOrderClick() {
+    if (!this.ordre.id) return;
+    this.promptPopup.show(
+      { validText: "btn-suppression-ordre" }
+    );
   }
 
-  deleteClick() {
-    this.validationPopupVisible = false;
-    this.deleteOrder();
+  validateDeleteOrder(comment) {
+    this.localization.localize("hint-ajout-ordre");
+
+    const result = confirm(
+      this.localization.localize("text-popup-supprimer-ordre"),
+      `${this.localization.localize("suppression-ordre")} n°${this.ordre.numero}`
+    );
+    result.then(res => {
+      if (res) {
+        this.ordresService.fSuppressionOrdre(this.ordre.id, comment, this.authService.currentUser.nomUtilisateur)
+          .subscribe({
+            next: () => {
+              notify(this.localization.localize("text-popup-suppression-ok"), "info", 7000);
+            },
+            error: (error: Error) => {
+              alert(this.messageFormat(error.message), this.localization.localize("suppression-ordre"));
+            }
+          });
+      } else {
+        notify(this.localization.localize("text-popup-abandon-suppression"), "warning", 7000);
+      }
+    });
+
+  }
+
+  private messageFormat(mess) {
+    mess = mess.replace("Exception while fetching data (/fSuppressionOrdre) : ", "");
+    return mess;
   }
 
   fileManagerClick() {
@@ -440,14 +470,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteOrder() {
-    const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-    if (!ordre.id) return;
-    this.ordresService.delete({ id: ordre.id }).subscribe({
-      next: (_) => {
-        notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
-      },
-      error: (_) => notify("Echec de la suppression", "error", 3000),
-    });
+    // const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+    // if (!ordre.id) return;
+    // this.ordresService.delete({ id: ordre.id }).subscribe({
+    //   next: (_) => {
+    //     notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
+    //   },
+    //   error: (_) => notify("Echec de la suppression", "error", 3000),
+    // });
   }
 
   addLinkedOrders() {
@@ -504,10 +534,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   openLinkedOrder(ordre: Partial<Ordre>) {
     this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
-  }
-
-  cancelClick() {
-    this.validationPopupVisible = false;
   }
 
   deviseDisplayExpr(item) {

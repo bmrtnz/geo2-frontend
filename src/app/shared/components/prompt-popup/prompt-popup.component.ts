@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, NgModule, Output, ViewChild} from "@angular/core";
+import { Component, EventEmitter, Input, NgModule, Output, ViewChild } from "@angular/core";
 import {
   DxButtonModule,
   DxPopupComponent,
@@ -7,9 +7,9 @@ import {
   DxTextBoxModule,
   DxValidatorComponent, DxValidatorModule
 } from "devextreme-angular";
-import {FormsModule, NgForm} from "@angular/forms";
-import {RangeRule, RequiredRule} from "devextreme/ui/validation_rules";
-import {SharedModule} from "../../shared.module";
+import { FormsModule, NgForm } from "@angular/forms";
+import { RangeRule, RequiredRule } from "devextreme/ui/validation_rules";
+import { SharedModule } from "../../shared.module";
 
 @Component({
   selector: "app-prompt-popup",
@@ -40,10 +40,14 @@ export class PromptPopupComponent {
   whenShown = new EventEmitter<any>();
 
   commentValidationRules: (RangeRule | RequiredRule)[];
+  validText: string;
+  cancelText: string;
 
-  async show(text?: string) {
+  async show(texts?: any) {
+    if (texts.validText) this.validText = texts.validText;
+    if (texts.cancelText) this.cancelText = texts.cancelText;
     await this.popupComponent.instance.show();
-    if (text) this.setText(text);
+    if (texts.comment) this.setText(texts.comment);
   }
 
   setText(text: string) {
