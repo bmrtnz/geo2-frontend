@@ -1,8 +1,14 @@
 import { Component, EventEmitter, Injectable, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, convertToParamMap, NavigationStart, ParamMap, Router } from "@angular/router";
+import { FunctionsService } from "app/shared/services/api/functions.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { AuthService } from "app/shared/services/auth.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { DxTabPanelComponent } from "devextreme-angular";
 import { on } from "devextreme/events";
+import notify from "devextreme/ui/notify";
 import { dxTabPanelItem } from "devextreme/ui/tab_panel";
 import { concat, ConnectableObservable, defer, EMPTY, iif, Observable, of, Subject } from "rxjs";
 import {
@@ -20,15 +26,9 @@ import {
   switchMapTo,
   take,
   takeUntil,
-  tap,
+  tap
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
-import { FunctionsService } from "app/shared/services/api/functions.service";
-import { AuthService } from "app/shared/services/auth.service";
-import notify from "devextreme/ui/notify";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { OrdresService } from "app/shared/services/api/ordres.service";
-import { DateManagementService } from "app/shared/services/date-management.service";
 
 const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
@@ -400,7 +400,17 @@ export class TabContext {
   public openOrdre(numero: string, campagne?: string) {
     notify("Ouverture ordre n° " + numero, "info", 1500);
     const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
-    return this.with(TabType.Ordre, `${campagneID}-${numero}`);
+    return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
+  }
+
+  /**
+   * Push and select ordre in tab panel by routing
+   * @param numero Ordre numero
+   * @param campagne Campagne id
+   */
+  public closeOrdre(numero: string, campagne?: string) {
+    const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
+    return this.mutate("CLOSE", TabType.Ordre, `${campagneID}-${numero}`);
   }
 
   /**
@@ -408,11 +418,15 @@ export class TabContext {
    * @param id Indicator id
    */
   public openIndicator(id: string) {
-    return this.with(TabType.Indicator, id);
+    return this.mutate("OPEN", TabType.Indicator, id);
   }
 
-  private with(tabType: TabType, id: string) {
+  private mutate(action: "OPEN" | "CLOSE", tabType: TabType, id: string) {
     const previous = this.componentRef.route.snapshot.paramMap.get(RouteParam.TabID);
+    const alter = (params: ParamMap) => action === "OPEN"
+      ? new Set([...params.getAll(tabType), id])
+      : new Set([...params.getAll(tabType)].filter(v => v !== id));
+
     this.route.queryParamMap
       .pipe(
         first(),
@@ -420,7 +434,7 @@ export class TabContext {
           .navigate(["pages/ordres", id],
             {
               queryParams: {
-                [tabType]: [...new Set([...params.getAll(tabType), id])],
+                [tabType]: [...alter(params)],
               },
               queryParamsHandling: "merge",
               state: { [PREVIOUS_STATE]: previous },
