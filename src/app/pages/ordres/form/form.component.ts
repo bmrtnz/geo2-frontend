@@ -37,7 +37,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { concatMap, filter, finalize, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 // tslint:disable-next-line: max-line-length
@@ -413,10 +413,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
     result.then(res => {
       if (res) {
-        this.ordresService.fSuppressionOrdre(this.ordre.id, comment, this.authService.currentUser.nomUtilisateur)
+        this.ordresService
+          .fSuppressionOrdre(this.ordre.id, comment, this.authService.currentUser.nomUtilisateur)
           .subscribe({
             next: () => {
               notify(this.localization.localize("text-popup-suppression-ok"), "info", 7000);
+              this.tabContext.closeOrdre(this.ordre.numero, this.ordre.campagne.id);
             },
             error: (error: Error) => {
               alert(this.messageFormat(error.message), this.localization.localize("suppression-ordre"));
