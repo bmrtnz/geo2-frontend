@@ -294,4 +294,57 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         fetchPolicy: "network-only",
       })
 
+
+  /**
+   * Test annulation d'un ordre
+   */
+  public fTestAnnuleOrdre =
+    (ordreRef: string) => this.apollo
+      .query<{ fTestAnnuleOrdre: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fTestAnnuleOrdre",
+              body: functionBody,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { ordreRef },
+        fetchPolicy: "network-only",
+      })
+
+  /**
+   * Annulation d'un ordre
+   */
+  public fAnnulationOrdre =
+    (motif: string, ordreRef: string) => this.apollo
+      .query<{ fTestAnnuleOrdre: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fTestAnnuleOrdre",
+              body: functionBody,
+              params: [
+                { name: "motif", value: "motif", isVariable: true },
+                { name: "ordreRef", value: "ordreRef", isVariable: true }
+              ]
+            }
+          ],
+          [
+            { name: "motif", type: "String", isOptionnal: false },
+            { name: "ordreRef", type: "String", isOptionnal: false }
+          ],
+        )),
+        variables: { motif, ordreRef },
+        fetchPolicy: "network-only",
+      })
+
 }

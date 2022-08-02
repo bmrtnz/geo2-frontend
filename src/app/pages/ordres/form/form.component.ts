@@ -397,6 +397,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
+  onCancelOrderClick() {
+    if (!this.ordre.id) return;
+    this.ordresService
+      .fTestAnnuleOrdre(this.ordre.id)
+      .subscribe({
+        next: () => {
+          alert("ok", "");
+        },
+        error: (error: Error) => {
+          alert(this.messageFormat(error.message), this.localization.localize("annulation-ordre"));
+        }
+      });
+  }
+
   onDeleteOrderClick() {
     if (!this.ordre.id) return;
     this.promptPopup.show(
@@ -431,11 +445,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         notify(this.localization.localize("text-popup-abandon-suppression"), "warning", 7000);
       }
     });
-
   }
 
   private messageFormat(mess) {
-    mess = mess.replace("Exception while fetching data (/fSuppressionOrdre) : ", "");
+    mess = mess
+      .replace("Exception while fetching data (/fSuppressionOrdre) : ", "")
+      .replace("Exception while fetching data (/fTestAnnuleOrdre) : ", "");
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
 

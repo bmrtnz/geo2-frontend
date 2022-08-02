@@ -171,6 +171,14 @@
                 ></dx-button>
                 <dx-button
                   class="upperButton"
+                  type="danger"
+                  [disabled]="this.env.production || ordreFacture"
+                  hint="{{ 'hint-cancelorder' | localize }}"
+                  text="{{ 'btn-cancelorder' | localize }}"
+                  (onClick)="onCancelOrderClick()"
+                ></dx-button>
+                <dx-button
+                  class="upperButton"
                   type="default"
                   text="{{ 'btn-cloneorder' | localize }}"
                   [disabled]="true || !canDuplicate"
