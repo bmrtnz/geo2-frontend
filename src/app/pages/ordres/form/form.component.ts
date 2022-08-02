@@ -420,8 +420,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           .fSuppressionOrdre(this.ordre.id, comment, this.authService.currentUser.nomUtilisateur)
           .subscribe({
             next: () => {
-              notify(this.localization.localize("text-popup-suppression-ok"), "info", 7000);
               this.tabContext.closeOrdre(this.ordre.numero, this.ordre.campagne.id);
+              notify(this.localization.localize("text-popup-suppression-ok"), "info", 7000);
             },
             error: (error: Error) => {
               alert(this.messageFormat(error.message), this.localization.localize("suppression-ordre"));
