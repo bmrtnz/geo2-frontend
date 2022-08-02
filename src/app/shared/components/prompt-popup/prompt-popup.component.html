@@ -1,6 +1,6 @@
 <dx-popup
   width="600"
-  height="200"
+  height="auto"
   [dragEnabled]="false"
   [title]="title"
   (onHiding)="onPopupHiding()"
@@ -22,6 +22,9 @@
           name="{{ 'valide-comment' | localize }}"
         ></dx-validator>
       </dx-text-box>
+      <br>
+      <br>
+      <br>
       <div class="prompt-action">
         <dx-button
           text="{{ 'btn-annuler' | localize }}"
@@ -29,7 +32,7 @@
           (onClick)="popupComponent.instance.hide()"
         ></dx-button>
         <dx-button
-          text="{{ 'btn-valider' | localize }}"
+          text="{{ (validText ? validText : 'btn-valider') | localize }}"
           type="default"
           *ngIf="validator.instance"
           [disabled]="!validator.instance.validate().isValid"

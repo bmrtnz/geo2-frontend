@@ -254,7 +254,7 @@ export class GridStockComponent implements OnInit {
 
   editComment(cell, event) {
     this.articleLigneId = cell.data.articleID;
-    this.promptPopupComponent.show(cell.value);
+    this.promptPopupComponent.show({ comment: cell.value });
   }
 
   validateComment(comment) {

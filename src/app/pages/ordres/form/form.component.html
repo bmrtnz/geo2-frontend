@@ -165,9 +165,9 @@
                 <dx-button
                   class="upperButton"
                   type="danger"
-                  [disabled]="true"
+                  [disabled]="this.env.production || ordreBAFOuFacture"
                   text="{{ 'btn-deleteorder' | localize }}"
-                  (onClick)="onDeleteClick()"
+                  (onClick)="onDeleteOrderClick()"
                 ></dx-button>
                 <dx-button
                   class="upperButton"
@@ -1228,30 +1228,12 @@
     [entrepotTitle]="entrepotTitle"
   >
   </app-zoom-entrepot-popup>
-  <dx-popup
-    [width]="400"
-    [height]="165"
-    [showTitle]="false"
-    [dragEnabled]="false"
-    [closeOnOutsideClick]="true"
-    [(visible)]="validationPopupVisible"
-  >
-    <p>Cet ordre va être supprimé, voulez-vous continuer ?</p>
-    <br />
-    <dx-button
-      type="default"
-      text="Supprimer"
-      (onClick)="deleteClick()"
-    ></dx-button>
-    <dx-button
-      type="normal"
-      text="Annuler"
-      (onClick)="cancelClick()"
-    ></dx-button>
-  </dx-popup>
 </div>
 <app-view-document-popup
   [(visible)]="this.factureVisible"
   [document]="this.currentFacture"
 ></app-view-document-popup>
-<app-confirmation-result-popup></app-confirmation-result-popup>
+<app-prompt-popup
+  [title]="('ordre-delete-title' | localize) + this.ordre?.numero"
+  (whenValidate)="validateDeleteOrder($event)"
+></app-prompt-popup>
