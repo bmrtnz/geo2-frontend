@@ -218,7 +218,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     // It seems that not everything's really ready when event is triggered
     // Conclusion => without a timeOut, major risk of unsaved data!
     setTimeout(() => {
-      if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
+      if (e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
         this.grid.instance.saveEditData();
     }, 10);
   }
