@@ -137,7 +137,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       )
       .subscribe(res => {
         const popup = res.data.countBy && this.flux === "ORDRE" && !annulation ? "remplacePopup" : "docsPopup";
-        if (annulation) this.docsPopup.annuleOrdre = true;
+        this.docsPopup.annuleOrdre = annulation;
         this[popup].visible = true;
       });
   }
