@@ -54,6 +54,7 @@ import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../r
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
 
 /**
  * Grid with loading toggled by parent
@@ -260,6 +261,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(GridMargeComponent) gridMarge: GridMargeComponent;
   @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
+  @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
 
   constructor(
     private router: Router,
@@ -434,7 +436,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (res) => {
           this.initializeForm("no-cache");
-          notify(this.localization.localize("text-popup-annulation-ok"), "info", 7000);
+          this.actionDocs.sendAction("ORDRE", true);
+          // notify(this.localization.localize("text-popup-annulation-ok"), "info", 7000);
         },
         error: (error: Error) => {
           console.log(error);

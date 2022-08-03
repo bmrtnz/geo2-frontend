@@ -28,6 +28,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @Input() public gridCommandes: GridCommandesComponent;
   @Input() public orderConfirmationOnly: boolean;
   @Output() public flux: string;
+  @Output() public annulationOrdre: string;
 
   public readonly env = environment;
   public actionsFlux: any[];
@@ -84,7 +85,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       this.actionSheet.instance.show();
     }
   }
-  sendAction(e) {
+  sendAction(e, annulation?) {
     // On récupère ici le code de l'action:
     this.flux = e;
 
