@@ -191,7 +191,7 @@
   class="launch"
   type="default"
   [visible]="gridHasData"
-  [disabled]="true"
+  [disabled]="env.production"
   text="{{ 'btn-launch' | localize }}"
   (onClick)="launch($event)"
 ></dx-button>
@@ -205,7 +205,6 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
-  [selection]="{ mode: 'multiple' }"
   (onCellPrepared)="onCellPrepared($event)"
   (onCellClick)="onCellClick($event)"
   (onContentReady)="onGridContentReady($event)"
@@ -219,6 +218,11 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-selection
+    mode="multiple"
+    [showCheckBoxesMode]="'always'"
+    [selectAllMode]="'page'"
+></dxo-selection>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"

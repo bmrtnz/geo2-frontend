@@ -17,10 +17,12 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
+import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { PortsService } from "app/shared/services/api/ports.service";
@@ -36,6 +38,8 @@ import { of, Subject } from "rxjs";
 import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
+// tslint:disable-next-line: max-line-length
+import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
@@ -228,6 +232,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public instructionsComm: string;
   public histoLigneOrdreReadOnlyText: string;
   public histoLigneOrdreText: string;
+  public showBAFButton: boolean;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -250,13 +255,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(GridLignesTotauxDetailComponent) gridLTD: GridLignesTotauxDetailComponent;
   @ViewChild(GridDetailPalettesComponent) gridDetailPalettes: GridDetailPalettesComponent;
   @ViewChild(GridMargeComponent) gridMarge: GridMargeComponent;
+  @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private functionsService: FunctionsService,
     private formBuilder: FormBuilder,
     private formUtils: FormUtilsService,
     private ordresService: OrdresService,
+    private ordresBafService: OrdresBafService,
     private currentCompanyService: CurrentCompanyService,
     private clientsService: ClientsService,
     private typesCamionService: TypesCamionService,
@@ -520,7 +528,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridCommandes.update();
   }
 
-  private initializeForm() {
+  private initializeForm(fetchPol?) {
 
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
@@ -530,7 +538,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         switchMap(([numero, campagneID]) => {
           if (numero === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
           return this.ordresService
-            .getOneByNumeroAndSocieteAndCampagne(numero, currentCompany.id, campagneID, this.headerFields)
+            .getOneByNumeroAndSocieteAndCampagne(numero, currentCompany.id, campagneID, this.headerFields, fetchPol)
             .pipe(
               map(res => res.data.ordreByNumeroAndSocieteAndCampagne),
             );
@@ -564,6 +572,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
         this.histoLigneOrdreReadOnlyText =
           `${this.localization.localize("hint-client-historique")}`;
+
+        this.showBAFButton =
+          this.ordre.bonAFacturer === false &&
+          this.ordre.client.usageInterne !== true &&
+          (this.ordre.codeAlphaEntrepot ? this.ordre.codeAlphaEntrepot.substring(0, 8) !== "PREORDRE" : true);
 
       });
   }
@@ -767,6 +780,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.factureVisible = true;
+  }
+
+  public bonAFacturer() {
+
+    const societe: Societe = this.currentCompanyService.getCompany();
+
+    this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe(res => {
+      this.initializeForm("no-cache");
+    });
+
   }
 
 }

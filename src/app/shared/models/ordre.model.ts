@@ -156,6 +156,7 @@ export class Ordre extends Model {
     ]
       .includes(ordre?.statut.toString());
   }
+
 }
 
 export default Ordre;

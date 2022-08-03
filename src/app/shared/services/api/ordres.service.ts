@@ -24,16 +24,16 @@ export type CountResponse = { countOrdre: number };
 })
 export class OrdresService extends ApiService implements APIRead, APIPersist, APICount<CountResponse> {
 
-  /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
-
-  public persistantVariables: Record<string, any> = { onlyColisDiff: false };
-
   constructor(
     apollo: Apollo,
   ) {
     super(apollo, Ordre);
   }
+
+  /* tslint:disable-next-line */
+  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
+
+  public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
   setPersisantVariables(params = this.persistantVariables) {
     this.persistantVariables = params;
@@ -58,6 +58,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     societe: string,
     campagne: string,
     body: string[],
+    fetchPol?: any
   ) {
     return this.apollo
       .query<{ ordreByNumeroAndSocieteAndCampagne: Ordre }>({
@@ -81,7 +82,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
           ],
         )),
         variables: { numero, societe, campagne },
-        fetchPolicy: "cache-first",
+        fetchPolicy: fetchPol ? fetchPol : "cache-first"
       });
   }
 

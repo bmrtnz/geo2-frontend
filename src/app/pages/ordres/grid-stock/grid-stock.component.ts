@@ -23,6 +23,7 @@ import { map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
 import { StockConsolideService } from "../../../shared/services/api/stock-consolide.service";
+import { GridsService } from "../grids.service";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 
@@ -84,6 +85,7 @@ export class GridStockComponent implements OnInit {
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
     private stockArticlesAgeService: StockArticlesAgeService,
+    private grids: GridsService,
   ) {
     this.apiService = this.articlesService;
 
@@ -181,6 +183,7 @@ export class GridStockComponent implements OnInit {
     this.selectChange.emit();
     this.dataGrid.dataSource = [];
     this.toRefresh = true;
+    this.grids.reload("SyntheseExpeditions");
   }
 
   onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
