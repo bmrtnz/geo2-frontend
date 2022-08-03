@@ -7,7 +7,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import { functionBody, FunctionResponse } from "./functions.service";
+import {functionBody, FunctionResponse, FunctionsService} from "./functions.service";
 
 @Injectable({
     providedIn: "root",
@@ -15,7 +15,7 @@ import { functionBody, FunctionResponse } from "./functions.service";
 export class EnvoisService extends ApiService implements APIRead {
     // listRegexp = /.*\.(?:id|libelle)$/i;
 
-    constructor(apollo: Apollo) {
+    constructor(private functionsService: FunctionsService, apollo: Apollo) {
         super(apollo, Envois);
     }
 
@@ -216,55 +216,66 @@ export class EnvoisService extends ApiService implements APIRead {
         societeCode: string,
         username: string,
     ) {
-        return this.apollo.query<{ fConfirmationCommande: FunctionResponse }>({
-            query: gql(ApiService.buildGraph("query", [
-                {
-                    name: "fConfirmationCommande",
-                    body: functionBody,
-                    params: [
-                        { name: "ordreRef", value: "ordreRef", isVariable: true },
-                        { name: "societeCode", value: "societeCode", isVariable: true },
-                        { name: "username", value: "username", isVariable: true },
-                    ],
-                },
-            ], [
-                { name: "ordreRef", type: "String", isOptionnal: false },
-                { name: "societeCode", type: "String", isOptionnal: false },
-                { name: "username", type: "String", isOptionnal: false },
-            ])),
-            variables: {
-                ordreRef,
-                societeCode,
-                username,
-            },
-            fetchPolicy: "network-only",
-        });
+      return this.functionsService.queryFunction("fConfirmationCommande", [
+        { name: "ordreRef", type: "String", value: ordreRef },
+        { name: "societeCode", type: "String", value: societeCode },
+        { name: "username", type: "String", value: username },
+      ]);
     }
 
-    public fDocumentEnvoiDetailsExp(
-        ordreRef: string,
-        societeCode: string,
-    ) {
-        return this.apollo.query<{ fDocumentEnvoiDetailsExp: FunctionResponse }>({
-            query: gql(ApiService.buildGraph("query", [
-                {
-                    name: "fDocumentEnvoiDetailsExp",
-                    body: functionBody,
-                    params: [
-                        { name: "ordreRef", value: "ordreRef", isVariable: true },
-                        { name: "societeCode", value: "societeCode", isVariable: true },
-                    ],
-                },
-            ], [
-                { name: "ordreRef", type: "String", isOptionnal: false },
-                { name: "societeCode", type: "String", isOptionnal: false },
-            ])),
-            variables: {
-                ordreRef,
-                societeCode,
-            },
-            fetchPolicy: "network-only",
-        });
+    public fDocumentEnvoiDetailsExp(ordreRef: string, societeCode: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiDetailsExp", [
+        { name: "ordreRef", type: "String", value: ordreRef },
+        { name: "societeCode", type: "String", value: societeCode }
+      ]);
+    }
+
+    public fDocumentEnvoiConfirmationPrixAchat(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiConfirmationPrixAchat", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
+    }
+
+    public fDocumentEnvoiFichesPalette(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiFichesPalette", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
+    }
+
+    public fDocumentEnvoiGenereTraca(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiGenereTraca", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
+    }
+
+    public fDocumentEnvoiBonLivraison(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiBonLivraison", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
+    }
+
+    public fDocumentEnvoiProforma(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiProforma", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
+    }
+
+    public fDocumentEnvoiCominv(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiCominv", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
+    }
+
+    public fDocumentEnvoiShipmentBuyco(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiShipmentBuyco", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
+    }
+
+    public fDocumentEnvoiDeclarationBollore(ordreRef: string) {
+      return this.functionsService.queryFunction("fDocumentEnvoiDeclarationBollore", [
+        { name: "ordreRef", type: "String", value: ordreRef }
+      ]);
     }
 
     public countBy(search: string) {

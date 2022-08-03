@@ -51,20 +51,20 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
       { id: "DETAIL", text: "Détail expédition", visible: true, disabled: false },
-      { id: "MINI", text: "Confirmation px achat", visible: true, disabled: true },
-      { id: "FICPAL", text: "Editer fiches palettes", visible: true, disabled: true },
-      { id: "? (Générer Traçabilité)", text: "Générer une traçabilité", visible: true, disabled: true },
-      { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true },
-      { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR, disabled: true },
-      { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: true, disabled: true },
-      { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: true },
-      { id: "PROFOR", text: "Pro forma", visible: true, disabled: true },
-      { id: "customtemplate", text: "Custom template", visible: true, disabled: true },
-      { id: "? (Packing list)", text: "Packing list", visible: true, disabled: true },
-      { id: "CUSINV", text: "Relevé de factures", visible: true, disabled: true },
-      { id: "DECDOU", text: "Facture douanière", visible: true, disabled: true },
-      { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true, disabled: true },
-      { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true, disabled: true },
+      { id: "MINI", text: "Confirmation px achat", visible: true, disabled: false },
+      { id: "FICPAO", text: "Editer fiches palettes", visible: true, disabled: false }, // Fake flu_code FICPOA = FICPAL + OLD
+      { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false }, // Fake flu_code FICPON = FICPAL + NEW
+      { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true }, // Génère un PDF, Manque le PBL, on revient vers nous plus tard
+      { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR, disabled: true }, // Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_crm})
+      { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: false, disabled: true }, // Génère un PDF (Stéphane a dit qu'on ne faisait pas)
+      { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: false },
+      { id: "PROFOR", text: "Pro forma", visible: true, disabled: false },
+      { id: "COMINV", text: "Custom template", visible: true, disabled: false },
+      { id: "? (Packing list)", text: "Packing list", visible: true, disabled: true }, // Manque le PBL, on revient vers nous plus tard
+      { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true }, // Manque le PBL, on revient vers nous plus tard
+      { id: "CUSINV", text: "Facture douanière", visible: true, disabled: true }, // Manque le PBL
+      { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true, disabled: false },
+      { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true, disabled: false },
     ];
     this.plusActionsFlux = this.actionsFlux.slice(this.visibleActionsNumber - this.actionsFlux.length);
     this.plusActionsFlux.map(flux => {
@@ -93,10 +93,28 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
     const user = this.authService.currentUser;
 
     defer(() => {
-      if (this.flux === "ORDRE") return this.envoisService
-        .fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur);
-      if (this.flux === "DETAIL") return this.envoisService
-        .fDocumentEnvoiDetailsExp(this.ordre.id, societe.id);
+      switch (this.flux) {
+        case "ORDRE":
+          return this.envoisService.fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur);
+        case "DETAIL":
+          return this.envoisService.fDocumentEnvoiDetailsExp(this.ordre.id, societe.id);
+        case "MINI":
+          return this.envoisService.fDocumentEnvoiConfirmationPrixAchat(this.ordre.id);
+        case "FICPAO":
+          return this.envoisService.fDocumentEnvoiFichesPalette(this.ordre.id);
+        case "FICPAN":
+          return this.envoisService.fDocumentEnvoiGenereTraca(this.ordre.id);
+        case "BONLIV":
+          return this.envoisService.fDocumentEnvoiBonLivraison(this.ordre.id);
+        case "PROFOR":
+          return of({ data: { res: 1 }}); // this.envoisService.fDocumentEnvoiProforma(this.ordre.id); // Because nothing to do
+        case "COMINV":
+          return this.envoisService.fDocumentEnvoiCominv(this.ordre.id);
+        case "BUYCO":
+          return this.envoisService.fDocumentEnvoiShipmentBuyco(this.ordre.id);
+        case "DECBOL":
+          return this.envoisService.fDocumentEnvoiDeclarationBollore(this.ordre.id);
+      }
     })
       .pipe(
         map(result => Object.values(result.data)[0]),
