@@ -214,8 +214,13 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   focusedCellChanging(e) {
-    if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
-      setTimeout(() => this.grid.instance.saveEditData());
+    // Keep the setTimeout function in place!!!
+    // It seems that not everything's really ready when event is triggered
+    // Conclusion => without a timeOut, major risk of unsaved data!
+    setTimeout(() => {
+      if (e.isHighlighted && e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
+        this.grid.instance.saveEditData();
+    }, 10);
   }
 
   onSaving(event: OnSavingEvent) {
