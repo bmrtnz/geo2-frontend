@@ -736,4 +736,29 @@ export class FunctionsService {
         fetchPolicy: "network-only",
       })
 
+  public queryFunction(name: string, parameters: any[]) {
+    const params = [];
+    const variables = [];
+    const variablesValues = parameters.reduce((acc, p) => {
+      params.push({ name: p.name, value: p.name, isVariable: true });
+      variables.push({ name: p.name, type: p.type, isOptionnal: false });
+
+      acc[p.name] = p.value;
+
+      return acc;
+    }, {});
+
+    return this.apollo.query<{ [ name: string ]: FunctionResponse }>({
+      query: gql(ApiService.buildGraph("query", [
+        {
+          name,
+          body: functionBody,
+          params,
+        },
+      ], variables)),
+      variables: variablesValues,
+      fetchPolicy: "network-only",
+    });
+  }
+
 }
