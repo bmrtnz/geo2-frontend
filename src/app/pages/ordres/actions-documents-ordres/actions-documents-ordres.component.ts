@@ -28,7 +28,6 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @Input() public gridCommandes: GridCommandesComponent;
   @Input() public orderConfirmationOnly: boolean;
   @Output() public flux: string;
-  @Output() public annulationOrdre: string;
 
   public readonly env = environment;
   public actionsFlux: any[];
@@ -54,13 +53,17 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "MINI", text: "Confirmation px achat", visible: true, disabled: false },
       { id: "FICPAO", text: "Editer fiches palettes", visible: true, disabled: false }, // Fake flu_code FICPOA = FICPAL + OLD
       { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false }, // Fake flu_code FICPON = FICPAL + NEW
+      // tslint:disable-next-line: max-line-length
       { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true }, // Génère un PDF, Manque le PBL, on revient vers nous plus tard
+      // tslint:disable-next-line: max-line-length
       { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR, disabled: true }, // Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_crm})
+      // tslint:disable-next-line: max-line-length
       { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: false, disabled: true }, // Génère un PDF (Stéphane a dit qu'on ne faisait pas)
       { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: false },
       { id: "PROFOR", text: "Pro forma", visible: true, disabled: false },
       { id: "COMINV", text: "Custom template", visible: true, disabled: false },
       { id: "? (Packing list)", text: "Packing list", visible: true, disabled: true }, // Manque le PBL, on revient vers nous plus tard
+      // tslint:disable-next-line: max-line-length
       { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true }, // Manque le PBL, on revient vers nous plus tard
       { id: "CUSINV", text: "Facture douanière", visible: true, disabled: true }, // Manque le PBL
       { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true, disabled: false },
@@ -94,8 +97,10 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
     defer(() => {
       switch (this.flux) {
-        case "ORDRE":
+        case "ORDRE": {
+          if (annulation) return of({ data: { res: 1 } });
           return this.envoisService.fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur);
+        }
         case "DETAIL":
           return this.envoisService.fDocumentEnvoiDetailsExp(this.ordre.id, societe.id);
         case "MINI":
@@ -107,7 +112,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
         case "BONLIV":
           return this.envoisService.fDocumentEnvoiBonLivraison(this.ordre.id);
         case "PROFOR":
-          return of({ data: { res: 1 }}); // this.envoisService.fDocumentEnvoiProforma(this.ordre.id); // Because nothing to do
+          return of({ data: { res: 1 } }); // this.envoisService.fDocumentEnvoiProforma(this.ordre.id); // Because nothing to do
         case "COMINV":
           return this.envoisService.fDocumentEnvoiCominv(this.ordre.id);
         case "BUYCO":
@@ -131,7 +136,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
           .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
       )
       .subscribe(res => {
-        const popup = res.data.countBy && this.flux === "ORDRE" ? "remplacePopup" : "docsPopup";
+        const popup = res.data.countBy && this.flux === "ORDRE" && !annulation ? "remplacePopup" : "docsPopup";
+        if (annulation) this.docsPopup.annuleOrdre = true;
         this[popup].visible = true;
       });
   }

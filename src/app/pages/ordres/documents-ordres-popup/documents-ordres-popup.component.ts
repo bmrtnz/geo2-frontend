@@ -21,6 +21,7 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   visible: boolean;
   titleStart: string;
   titleEnd: string;
+  annuleOrdre: boolean;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridChoixEnvoisComponent) gridChoixEnvoisComponent: GridChoixEnvoisComponent;
 
@@ -58,7 +59,7 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   }
 
   onShown(e) {
-    this.gridChoixEnvoisComponent.reload();
+    this.gridChoixEnvoisComponent.reload(this.annuleOrdre);
   }
 
   clearAndHidePopup() {

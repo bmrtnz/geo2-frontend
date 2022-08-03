@@ -156,12 +156,12 @@ export class GridChoixEnvoisComponent implements OnInit {
     return this.envoisService.deleteTempEnvois(temps).toPromise();
   }
 
-  reload() {
+  reload(annuleOrdre?) {
     this.functionsService.geoPrepareEnvois(
       this.ordreID,
       this.fluxID,
       true,
-      false,
+      annuleOrdre ? annuleOrdre : false,
       this.authService.currentUser.nomUtilisateur,
     ).valueChanges
       .pipe(
