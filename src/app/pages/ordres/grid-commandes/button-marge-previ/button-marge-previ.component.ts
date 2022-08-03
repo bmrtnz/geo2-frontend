@@ -29,9 +29,10 @@ export class ButtonMargePreviComponent {
       .valueChanges
       .subscribe({
         next: res => {
-          const margin = res.data.fCalculMargePrevi.data.result;
+          let margin = res.data.fCalculMargePrevi.data.result;
           this.smallMarginLoader.visible = false;
-          if (margin !== null) this.marginText = ": " + margin + " %";
+          if (margin === null) margin = 0;
+          this.marginText = ": " + margin + " %";
         },
         error: (message: string) => {
           this.smallMarginLoader.visible = false;
