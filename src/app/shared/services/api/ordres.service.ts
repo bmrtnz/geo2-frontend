@@ -325,12 +325,12 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
    */
   public fAnnulationOrdre =
     (motif: string, ordreRef: string) => this.apollo
-      .query<{ fTestAnnuleOrdre: FunctionResponse }>({
+      .query<{ fAnnulationOrdre: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
             {
-              name: "fTestAnnuleOrdre",
+              name: "fAnnulationOrdre",
               body: functionBody,
               params: [
                 { name: "motif", value: "motif", isVariable: true },

@@ -147,6 +147,7 @@
     "suppression-ordre": "Suppression ordre",
     "annulation-ordre": "Annulation ordre",
     "text-popup-suppression-ok": "L'ordre a bien été supprimé",
+    "text-popup-annulation-ok": "L'ordre a bien été annulé",
     "text-popup-changer-fournisseur": "Voulez-vous vraiment changer le fournisseur &FPC pour &FPN ?",
     "text-popup-supprimer-destockage": "Voulez-vous vraiment supprimer le déstockage associé à la ligne d'ordre ?",
     "text-popup-supprimer-destockages": "Voulez-vous vraiment supprimer les déstockages associés à la ligne d'ordre ?",
