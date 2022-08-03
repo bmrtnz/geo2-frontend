@@ -1,21 +1,22 @@
 import {
   Component,
-  Input,
-  ViewChild,
+
+
+  ViewChild
 } from "@angular/core";
 import { Statut } from "app/shared/models/ordre.model";
 import { AuthService } from "app/shared/services";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
+import { historique } from "assets/configurations/grids.json";
+import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import { historique } from "assets/configurations/grids.json";
-import { GridColumn } from "basic";
 import { TabContext } from "../root/root.component";
-import { DateManagementService } from "app/shared/services/date-management.service";
 
 @Component({
   selector: "app-grid-historique",
@@ -23,7 +24,6 @@ import { DateManagementService } from "app/shared/services/date-management.servi
   styleUrls: ["./grid-historique.component.scss"],
 })
 export class GridHistoriqueComponent {
-  @Input() public filter: [];
   @ViewChild(DxDataGridComponent, { static: true })
   histoGrid: DxDataGridComponent;
 
