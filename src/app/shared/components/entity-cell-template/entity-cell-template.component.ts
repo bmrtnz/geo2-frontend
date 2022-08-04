@@ -9,7 +9,7 @@ import DataSource from "devextreme/data/data_source";
 type Cell = {
   key: any,
   displayValue: any,
-  column: { displayField: string },
+  column: { name: string },
 };
 type ColumnSettings = {
   dataSource: DataSource,
@@ -106,10 +106,10 @@ export class CellDisplayPipe implements PipeTransform {
 export class CellDisplayStore {
   private store: Record<string, Record<string, any>> = {};
   public set(cell: Cell, value: any) {
-    this.store[cell.key] = { [cell.column.displayField]: value };
+    this.store[cell.key] = { [cell.column.name]: value };
   }
   public get(cell: Cell) {
-    return this.store[cell.key]?.[cell.column.displayField];
+    return this.store[cell.key]?.[cell.column.name];
   }
 }
 
