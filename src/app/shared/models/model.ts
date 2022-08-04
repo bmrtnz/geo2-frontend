@@ -335,6 +335,17 @@ export abstract class Model {
   }
 
   /**
+   * Fetch value from context by path
+   * @param path attribute path
+   * @param context model instance
+   */
+  static fetchValue(path: string[], context) {
+    return path.length && context
+      ? Model.fetchValue(path, context?.[path.shift()])
+      : context;
+  }
+
+  /**
    * Fetch and map dynamically imported model
    */
   private static fetchMapModel(): OperatorFunction<

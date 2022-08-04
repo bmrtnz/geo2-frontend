@@ -193,7 +193,9 @@
     [editorOptions]="column?.editorOptions"
     [editCellTemplate]="column.editCellTemplate"
     [headerCellTemplate]="column.headerCellTemplate"
-    [calculateDisplayValue]="column?.calculateDisplayValue"
+    [calculateDisplayValue]="
+      column.cellTemplate === 'entityCellTemplate' ? displayCodeBefore : false
+    "
     [showInColumnChooser]="column.showInColumnChooser"
     [calculateSortValue]="column.dataField === 'numero' && calultateSortValue"
     [cssClass]="column?.cssClass"
