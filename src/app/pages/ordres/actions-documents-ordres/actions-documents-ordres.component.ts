@@ -51,16 +51,24 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
       { id: "DETAIL", text: "Détail expédition", visible: true, disabled: false },
       { id: "MINI", text: "Confirmation px achat", visible: true, disabled: false },
-      { id: "FICPAO", text: "Editer fiches palettes", visible: true, disabled: false }, // Fake flu_code FICPOA = FICPAL + OLD
-      { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false }, // Fake flu_code FICPON = FICPAL + NEW
-      { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true }, // Génère un PDF, Manque le PBL, on revient vers nous plus tard
-      { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR, disabled: true }, // Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_crm})
-      { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: false, disabled: true }, // Génère un PDF (Stéphane a dit qu'on ne faisait pas)
+      //  Fake flu_code FICPOA = FICPAL + OLD
+      { id: "FICPAO", text: "Editer fiches palettes", visible: true, disabled: false },
+      //  Fake flu_code FICPON = FICPAL + NEW
+      { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false },
+      //  Génère un PDF, Manque le PBL, on revient vers nous plus tard
+      { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true },
+      //  Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_crm})
+      { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR, disabled: true },
+      //  Génère un PDF (Stéphane a dit qu'on ne faisait pas)
+      { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: false, disabled: true },
       { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: false },
       { id: "PROFOR", text: "Pro forma", visible: true, disabled: false },
       { id: "COMINV", text: "Custom template", visible: true, disabled: false },
-      { id: "? (Packing list)", text: "Packing list", visible: true, disabled: true }, // Manque le PBL, on revient vers nous plus tard
-      { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true }, // Manque le PBL, on revient vers nous plus tard
+      //  Manque le PBL, on revient vers nous plus tard
+      { id: "? (Packing list)", text: "Packing list", visible: true, disabled: true },
+      //  Manque le PBL, on revient vers nous plus tard
+      { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true },
+      //  Manque le PBL
       { id: "CUSINV", text: "Facture douanière", visible: true, disabled: true }, // Manque le PBL
       { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true, disabled: false },
       { id: "DECBOL", text: "Facture douanière BOLLORE", visible: true, disabled: false },
@@ -106,7 +114,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
         case "BONLIV":
           return this.envoisService.fDocumentEnvoiBonLivraison(this.ordre.id);
         case "PROFOR":
-          return of({ data: { res: 1 }}); // this.envoisService.fDocumentEnvoiProforma(this.ordre.id); // Because nothing to do
+          return of({ data: { res: 1 } }); // this.envoisService.fDocumentEnvoiProforma(this.ordre.id); // Because nothing to do
         case "COMINV":
           return this.envoisService.fDocumentEnvoiCominv(this.ordre.id);
         case "BUYCO":
