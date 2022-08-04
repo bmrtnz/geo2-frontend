@@ -3854,7 +3854,7 @@
         "visibleIndex": 6,
         "dataField": "typeTiers.description",
         "dataType": "string",
-        "width": "auto",
+        "width": "120",
         "allowEditing": false,
         "visible": true
       },
