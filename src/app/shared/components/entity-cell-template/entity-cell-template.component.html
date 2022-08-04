@@ -1,17 +1,5 @@
-<!-- <div *dxTemplate="let cell of 'entityCellTemplate'">
+<div *dxTemplate="let cell of 'entityCellTemplate'">
   {{ cell | cellDisplay }}
-</div> -->
-
-<div *dxTemplate="let cell of 'entityCellTemplate'" [ngClass]="'entityCellTemplate'">
-  <dx-select-box
-    *ngIf="columnsSettings; else noSettings"
-    [dataSource]="getSettings(cell.column.dataField).dataSource"
-    [displayExpr]="displayCodeBefore"
-    [value]="extractEntity(cell)"
-    [readOnly]="!allowMutations"
-  >
-  </dx-select-box>
-  <ng-template #noSettings>{{ cell.value }}</ng-template>
 </div>
 
 <div *dxTemplate="let cell of 'entityEditCellTemplate'">
@@ -19,14 +7,19 @@
     *ngIf="columnsSettings; else noSettings"
     [dataSource]="getSettings(cell.column.dataField).dataSource"
     [displayExpr]="displayCodeBefore"
-    [searchExpr]="['proprietaireMarchandise.id', 'fournisseur.id'].includes(cell.column.dataField) ? ['code'] : ['id']"
+    [searchExpr]="
+      ['proprietaireMarchandise.id', 'fournisseur.id'].includes(
+        cell.column.dataField
+      )
+        ? ['code']
+        : ['id']
+    "
     (onValueChanged)="onSelectBoxCellValueChanged($event, cell)"
     [value]="extractEntity(cell)"
     (onInput)="onInput($event)"
     (onFocusIn)="onFocusIn($event)"
   >
-    <dxo-drop-down-options [width]="300">
-    </dxo-drop-down-options>
+    <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
   </dx-select-box>
   <ng-template #noSettings>{{ cell.value }}</ng-template>
 </div>
