@@ -1,6 +1,7 @@
 ::ng-deep .button-create-order {
   position: relative;
   top: 8px;
+
   .dx-button-content {
     padding: 6px 16px;
   }
@@ -15,4 +16,8 @@ h2.nouvelOrdre-title {
   margin-left: 20px;
   margin-bottom: 0;
   float: left;
+}
+
+::ng-deep .pulse .dx-button {
+  animation: pulse 0.5s;
 }

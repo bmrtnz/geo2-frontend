@@ -26,6 +26,7 @@
   "
   [type]="'success'"
   class="button-create-order"
+  [ngClass]="{ pulse: pulseBtnOn }"
   [hidden]="!getSelectedEntrepot() || env.production"
   [resolver]="resolver"
   (deferedOnClick)="onButtonLoaderClick()"
@@ -33,10 +34,12 @@
 <div style="clear: both"></div>
 <app-grid-historique-entrepots
   #grid
+  (pulseButton)="pulseButton($event)"
   *ngIf="favorites"
 ></app-grid-historique-entrepots>
 <app-grid-entrepots
   #grid
+  (pulseButton)="pulseButton($event)"
   *ngIf="!favorites"
 ></app-grid-entrepots>
 <app-info-popup [customText]="errorText"></app-info-popup>

@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { Entrepot } from "app/shared/models";
 import { AuthService, EntrepotsService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
-    Grid,
-    GridConfig,
-    GridConfiguratorService,
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, SingleSelection } from "basic";
@@ -17,99 +17,105 @@ import { TabContext } from "../root/root.component";
 import { map } from "rxjs/operators";
 
 @Component({
-    selector: "app-grid-entrepots",
-    templateUrl: "./grid-entrepots.component.html",
-    styleUrls: ["./grid-entrepots.component.scss"],
+  selector: "app-grid-entrepots",
+  templateUrl: "./grid-entrepots.component.html",
+  styleUrls: ["./grid-entrepots.component.scss"],
 })
 export class GridEntrepotsComponent
-    implements OnInit, SingleSelection<Entrepot> {
-    readonly gridID = Grid.OrdreEntrepot;
+  implements OnInit, SingleSelection<Entrepot> {
+  readonly gridID = Grid.OrdreEntrepot;
 
-    @ViewChild(DxDataGridComponent, { static: false })
-    private grid: DxDataGridComponent;
+  @Output() public pulseButton = new EventEmitter();
 
-    public columns: Observable<GridColumn[]>;
-    public gridConfigHandler = (event) =>
-        this.gridConfiguratorService.init(this.gridID, {
-            ...event,
-            title: "Liste des entrepôts",
-            onColumnsChange: this.onColumnsChange.bind(this),
-        })
+  @ViewChild(DxDataGridComponent, { static: false })
+  private grid: DxDataGridComponent;
 
-    constructor(
-        public entrepotsService: EntrepotsService,
-        public authService: AuthService,
-        public gridConfiguratorService: GridConfiguratorService,
-        public currentCompanyService: CurrentCompanyService,
-        public localizeService: LocalizationService,
-        public tabContext: TabContext,
-    ) {}
+  public columns: Observable<GridColumn[]>;
+  public gridConfigHandler = (event) =>
+    this.gridConfiguratorService.init(this.gridID, {
+      ...event,
+      title: "Liste des entrepôts",
+      onColumnsChange: this.onColumnsChange.bind(this),
+    })
 
-    ngOnInit() {
-        this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-        // this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreEntrepot);
-        // this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
-        // const visibleFields = from(this.gridConfig)
-        // .pipe(
-        //   GridConfiguratorService.getColumns(),
-        //   GridConfiguratorService.getVisible(),
-        //   GridConfiguratorService.getFields(),
-        // );
-        // this.dataSource = this.entrepotsService
-        // .getDataSource_v2(await visibleFields.toPromise());
-        // this.entrepotGrid.dataSource = this.dataSource;
-        // this.enableFilters();
-    }
+  constructor(
+    public entrepotsService: EntrepotsService,
+    public authService: AuthService,
+    public gridConfiguratorService: GridConfiguratorService,
+    public currentCompanyService: CurrentCompanyService,
+    public localizeService: LocalizationService,
+    public tabContext: TabContext,
+  ) { }
 
-    // enableFilters() {
-    //   const filters = [
-    //     ['client.societe.id', '=', this.currentCompanyService.getCompany().id],
-    //     'and',
-    //     ['valide', '=', true],
-    //     'and',
-    //     ['client.valide', '=', true]
-    //   ];
+  ngOnInit() {
+    this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
+    // this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreEntrepot);
+    // this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
+    // const visibleFields = from(this.gridConfig)
+    // .pipe(
+    //   GridConfiguratorService.getColumns(),
+    //   GridConfiguratorService.getVisible(),
+    //   GridConfiguratorService.getFields(),
+    // );
+    // this.dataSource = this.entrepotsService
+    // .getDataSource_v2(await visibleFields.toPromise());
+    // this.entrepotGrid.dataSource = this.dataSource;
+    // this.enableFilters();
+  }
 
-    //   this.dataSource.filter(filters);
-    // }
+  // enableFilters() {
+  //   const filters = [
+  //     ['client.societe.id', '=', this.currentCompanyService.getCompany().id],
+  //     'and',
+  //     ['valide', '=', true],
+  //     'and',
+  //     ['client.valide', '=', true]
+  //   ];
 
-    private updateData(columns: GridColumn[]) {
-        of(columns)
-            .pipe(
-                GridConfiguratorService.getVisible(),
-                GridConfiguratorService.getFields(),
-                map((fields) =>
-                    this.entrepotsService.getDataSource_v2([
-                        Entrepot.getKeyField() as string,
-                        Entrepot.getLabelField() as string,
-                        ...fields,
-                    ]),
-                ),
-            )
-            .subscribe((datasource) => {
-                datasource.filter([
-                    [
-                        "client.societe.id",
-                        "=",
-                        this.currentCompanyService.getCompany().id,
-                    ],
-                    "and",
-                    ["valide", "=", true],
-                    "and",
-                    ["client.valide", "=", true],
-                ]);
-                this.grid.dataSource = datasource;
-            });
-    }
+  //   this.dataSource.filter(filters);
+  // }
 
-    onColumnsChange({ current }: { current: GridColumn[] }) {
-        this.updateData(current);
-    }
+  private updateData(columns: GridColumn[]) {
+    of(columns)
+      .pipe(
+        GridConfiguratorService.getVisible(),
+        GridConfiguratorService.getFields(),
+        map((fields) =>
+          this.entrepotsService.getDataSource_v2([
+            Entrepot.getKeyField() as string,
+            Entrepot.getLabelField() as string,
+            ...fields,
+          ]),
+        ),
+      )
+      .subscribe((datasource) => {
+        datasource.filter([
+          [
+            "client.societe.id",
+            "=",
+            this.currentCompanyService.getCompany().id,
+          ],
+          "and",
+          ["valide", "=", true],
+          "and",
+          ["client.valide", "=", true],
+        ]);
+        this.grid.dataSource = datasource;
+      });
+  }
 
-    getSelectedItem() {
-        return this.grid.instance
-            .getVisibleRows()
-            .filter((row) => row.key === this.grid.focusedRowKey)
-            .map((row) => row.data)[0] as Partial<Entrepot>;
-    }
+  onColumnsChange({ current }: { current: GridColumn[] }) {
+    this.updateData(current);
+  }
+
+  getSelectedItem() {
+    return this.grid.instance
+      .getVisibleRows()
+      .filter((row) => row.key === this.grid.focusedRowKey)
+      .map((row) => row.data)[0] as Partial<Entrepot>;
+  }
+
+  onFocusedRowChanged(e) {
+    this.pulseButton.emit();
+  }
 }
