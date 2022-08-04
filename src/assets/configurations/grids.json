@@ -2338,7 +2338,6 @@
       {
         "dataField": "proprietaireMarchandise.id",
         "visible": true,
-        "calculateDisplayValue": "proprietaireMarchandise.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
         "width": 170
@@ -2346,7 +2345,6 @@
       {
         "dataField": "fournisseur.id",
         "visible": true,
-        "calculateDisplayValue": "fournisseur.code",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
         "width": 170
@@ -2371,7 +2369,6 @@
       {
         "dataField": "venteUnite.id",
         "visible": true,
-        "calculateDisplayValue": "venteUnite.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate"
       },
@@ -2384,7 +2381,6 @@
       {
         "dataField": "codePromo.id",
         "visible": true,
-        "calculateDisplayValue": "codePromo.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate",
         "cssClass": "small-header-right",
@@ -2411,7 +2407,6 @@
       {
         "dataField": "achatUnite.id",
         "visible": true,
-        "calculateDisplayValue": "achatUnite.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate"
       },
@@ -2424,14 +2419,12 @@
       {
         "dataField": "typePalette.id",
         "visible": true,
-        "calculateDisplayValue": "typePalette.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate"
       },
       {
         "dataField": "paletteInter.id",
         "visible": true,
-        "calculateDisplayValue": "paletteInter.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate"
       },
@@ -2461,7 +2454,6 @@
       {
         "dataField": "fraisUnite.id",
         "visible": true,
-        "calculateDisplayValue": "fraisUnite.description",
         "cellTemplate": "entityCellTemplate",
         "editCellTemplate": "entityEditCellTemplate"
       },

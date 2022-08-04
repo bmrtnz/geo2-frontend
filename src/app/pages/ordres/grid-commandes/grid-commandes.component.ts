@@ -22,7 +22,7 @@ import { Change, GridColumn, OnSavingEvent } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
-import dxDataGrid from "devextreme/ui/data_grid";
+import dxDataGrid, { dxDataGridColumn } from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -35,6 +35,7 @@ import { GridsService } from "../grids.service";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 
+let self: GridCommandesComponent; // thank's DX
 @Component({
   selector: "app-grid-commandes",
   templateUrl: "./grid-commandes.component.html",
@@ -60,6 +61,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     private stocksService: StocksService,
     private stockMouvementsService: StockMouvementsService,
   ) {
+    self = this;
     this.filterFournisseurDS();
     this.proprietairesDataSource = this.fournisseursService
       .getDataSource_v2(["id", "code", "raisonSocial", "listeExpediteurs"]);
@@ -78,36 +80,36 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     this.columnsSettings = {
       "proprietaireMarchandise.id": {
         dataSource: this.proprietairesDataSource,
-        displayExpression: "code",
+        displayExpression: ["proprietaireMarchandise.code", "proprietaireMarchandise.raisonSocial"],
       },
       "fournisseur.id": {
         dataSource: this.fournisseursDataSource,
-        displayExpression: "code",
+        displayExpression: ["fournisseur.code", "fournisseur.raisonSocial"],
       },
       "venteUnite.id": {
         dataSource: sharedBaseTarifDatasource,
-        displayExpression: "description",
+        displayExpression: ["venteUnite.id", "venteUnite.description"],
       },
       "codePromo.id": {
         dataSource: this.codesPromoService
           .getDataSource_v2(["id", "description"]),
-        displayExpression: "description",
+        displayExpression: ["codePromo.id", "codePromo.description"],
       },
       "achatUnite.id": {
         dataSource: sharedBaseTarifDatasource,
-        displayExpression: "description",
+        displayExpression: ["achatUnite.id", "achatUnite.description"],
       },
       "typePalette.id": {
         dataSource: sharedTypePaletteDatasource,
-        displayExpression: "description",
+        displayExpression: ["typePalette.id"],
       },
       "paletteInter.id": {
         dataSource: sharedTypePaletteDatasource,
-        displayExpression: "description",
+        displayExpression: ["paletteInter.id"],
       },
       "fraisUnite.id": {
         dataSource: sharedBaseTarifDatasource,
-        displayExpression: "description",
+        displayExpression: ["fraisUnite.id", "fraisUnite.description"],
       },
     };
     this.constructorFeatures();
@@ -165,6 +167,17 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @ViewChild(ArticleReservationOrdrePopupComponent, { static: false }) reservationStockPopup: ArticleReservationOrdrePopupComponent;
 
   onR;
+
+  public displayCodeBefore(data: Partial<OrdreLigne>) {
+
+    // @ts-ignore
+    const column: dxDataGridColumn = this;
+
+    return self.columnsSettings[column.dataField]
+      .displayExpression
+      .map(field => OrdreLigne.fetchValue(field.split("."), JSON.parse(JSON.stringify(data))))
+      .join(" - ");
+  }
 
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
@@ -354,11 +367,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
             // display expressions
             ...Object
               .entries(this.columnsSettings)
-              .map(([keyField, column]) => {
-                const members = keyField.split(".");
-                members.splice(-1, 1, column.displayExpression);
-                return members.join(".");
-              }),
+              .map(([, column]) => column.displayExpression)
+              .flat(),
 
             // extra features
             ...this.FEATURE.columnCertifications ? ["listeCertifications"] : [],
