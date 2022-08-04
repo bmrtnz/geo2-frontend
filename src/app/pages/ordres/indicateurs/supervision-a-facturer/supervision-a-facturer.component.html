@@ -222,7 +222,7 @@
     mode="multiple"
     [showCheckBoxesMode]="'always'"
     [selectAllMode]="'page'"
-></dxo-selection>
+  ></dxo-selection>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -234,11 +234,6 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-export
-    [enabled]="true"
-    fileName="Vérification BAF"
-    [allowExportSelectedData]="false"
-  ></dxo-export>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.OrdresAFacturer"
     [enabled]="true"
