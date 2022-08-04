@@ -7,6 +7,7 @@
   [resizeEnabled]="true"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
+  (onHiding)="onHiding($event)"
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
@@ -24,7 +25,7 @@
       class="cancel-button"
       type="normal"
       text="{{ 'btn-annuler' | localize }}"
-      (onClick)="clearAndHidePopup()"
+      (onClick)="hidePopup()"
     ></dx-button>
     <dx-button
       #validButton
