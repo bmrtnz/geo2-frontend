@@ -1,8 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, Injectable, Input, NgModule, Pipe, PipeTransform } from "@angular/core";
+import { Model } from "app/shared/models/model";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { CellTemplate } from "basic";
 import { DxSelectBoxModule, DxTemplateHost, DxTextBoxModule } from "devextreme-angular";
-import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import DataSource from "devextreme/data/data_source";
 
 type Cell = {
@@ -12,7 +13,7 @@ type Cell = {
 };
 type ColumnSettings = {
   dataSource: DataSource,
-  displayExpression: string,
+  displayExpression: string[],
 };
 export type ColumnsSettings = Record<string, ColumnSettings>;
 
@@ -51,10 +52,12 @@ export class EntityCellTemplateComponent {
   // Apply select box value to cell
   public onSelectBoxCellValueChanged(event, cell) {
     if (!event.value || event.value?.id === event.previousValue?.id) return;
-    // console.log("event", event, "cell", cell);
     if (cell.setValue) {
       const { displayExpression } = this.getSettings(cell.column.name);
-      this.store.set(cell, event.value[displayExpression]);
+      const value = displayExpression
+        .map(key => Model.fetchValue(key.split(".").splice(1, 1), event.value))
+        .join(" - ");
+      this.store.set(cell, value);
       cell.setValue(event.value?.id);
     }
     // Info needed in editing mode, not saved yet
