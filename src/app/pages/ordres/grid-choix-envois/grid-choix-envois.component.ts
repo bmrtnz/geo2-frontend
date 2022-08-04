@@ -16,7 +16,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable, of } from "rxjs";
+import {from, Observable, of, zip} from "rxjs";
 import { concatMap, concatMapTo, map, take } from "rxjs/operators";
 
 @Component({
@@ -150,9 +150,11 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   async clearTemps() {
-    const temps: Partial<Envois>[] = await this.dataGrid.instance
-      .getSelectedRowsData()
+    const temps: Partial<Envois>[] = this.dataGrid.instance
+      .getDataSource()
+      .items()
       .map(({ id }) => ({ id }));
+
     return this.envoisService.deleteTempEnvois(temps).toPromise();
   }
 
@@ -191,7 +193,15 @@ export class GridChoixEnvoisComponent implements OnInit {
     const allEnvois = this.dataGrid.instance.getSelectedRowsData()
       .map((envoi: Partial<Envois>) => new Envois({ ...envoi, traite: "N" }, { deepFetch: true }));
     const action = this.dataMask.length ? "duplicateMergeAllEnvois" : "saveAll";
-    return this.envoisService[action](allEnvois, new Set(["id", "traite"]));
+
+    const allNonEnvois = this.dataGrid.instance.getDataSource().items()
+      .filter(e => !allEnvois.some(envoi => envoi.id === e.id))
+      .map(({ id }) => ({ id }));
+
+    return zip(
+      this.envoisService[action](allEnvois, new Set(["id", "traite"])),
+      this.envoisService.deleteTempEnvois(allNonEnvois)
+    );
   }
 
   public setMask(data: Partial<Envois>[]) {
