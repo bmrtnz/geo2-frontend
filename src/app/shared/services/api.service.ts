@@ -665,8 +665,10 @@ export abstract class ApiService implements OnDestroy {
   public mapLoadOptionsToVariables(options: LoadOptions) {
     const variables: RelayPageVariables = {
       pageable: {
-        pageNumber: options.skip / options.take || 0,
-        pageSize: options.take || DEFAULT_PAGE_SIZE,
+        // @ts-ignore
+        pageNumber: options.isLoadingAll ? options.exportPage : options.skip / options.take || 0,
+        // @ts-ignore
+        pageSize: options.isLoadingAll ? options.exportTake : options.take || DEFAULT_PAGE_SIZE,
       },
     };
     this.pageSize = options.take;

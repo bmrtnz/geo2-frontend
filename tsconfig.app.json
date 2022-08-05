@@ -3,9 +3,19 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "outDir": "./out-tsc/app",
-    "types": [],
+    "types": [
+      "node"
+    ],
     "paths": {
-      "jszip": ["../node_modules/jszip/dist/jszip.min.js"]
+      "jszip": [
+        "../node_modules/jszip/dist/jszip.min.js"
+      ],
+      "exceljs": [
+        "../node_modules/exceljs/dist/exceljs.min.js"
+      ],
+      "file-saver": [
+        "../node_modules/file-saver/dist/FileSaver.min.js"
+      ]
     }
   },
   "files": [

@@ -24,7 +24,9 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
-              "devextreme"
+              "devextreme",
+              "exceljs",
+              "file-saver"
             ],
             "aot": false,
             "assets": [
