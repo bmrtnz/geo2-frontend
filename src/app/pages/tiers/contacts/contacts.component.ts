@@ -40,6 +40,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   typeTiers: string;
   typeTiersLabel: string;
   zoomMode: boolean;
+  dataField: string;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -161,6 +162,13 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
     }
 
     this.contacts.filter(filter);
+  }
+
+  calculateFilterExpression(filterValue, selectedFilterOperation) {
+    let dataField = this.dataField;
+    if (dataField === "moyenCommunication") dataField += ".description";
+    if (dataField === "flux") dataField += ".id";
+    return [dataField, selectedFilterOperation, filterValue];
   }
 
   displayIDBefore(data) {
