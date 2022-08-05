@@ -172,6 +172,10 @@ export class OrdreLignesService extends ApiService implements APIRead {
             summary,
           };
 
+          // to have correct group summaries
+          if (operation === SummaryOperation.TotauxDetail)
+            variables.pageable.pageSize = 100;
+
           this.apollo.query<Response>({
             query: gql(queryGraph),
             variables,

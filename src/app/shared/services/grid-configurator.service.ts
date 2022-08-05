@@ -549,5 +549,26 @@ export class GridConfiguratorService {
           location: "after",
           name: "columnChooserButton",
         });
+
+    toolbarOptions.items.push({
+      widget: "dxButton",
+      options: {
+        icon: "xlsxfile",
+        hint: "Exporter la page",
+        onClick: () => {
+          const loadOptions = component.getDataSource().loadOptions();
+          component.getDataSource().loadOptions = () => ({
+            ...loadOptions,
+            exportTake: component.pageSize(),
+            exportPage: component.pageIndex(),
+          });
+          // @ts-ignore
+          component.exportToExcel();
+        },
+      },
+      showText: "inMenu",
+      location: "after",
+      name: "exportPage",
+    } as dxToolbarItem);
   }
 }
