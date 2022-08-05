@@ -5,8 +5,10 @@
     display: none;
   }
 
-  .dx-datagrid-rowsview .dx-datagrid-summary-item {
+  .dx-datagrid-rowsview .dx-datagrid-summary-item,
+  .dx-group-cell {
     font-weight: normal !important;
+    text-align: right !important;
     color: #000;
   }
 
@@ -14,6 +16,11 @@
   .dx-datagrid-headers.dx-datagrid-nowrap,
   .dx-datagrid-group-opened {
     pointer-events: none;
+  }
+
+  .dx-command-expand {
+    padding-right: 150px !important;
+    pointer-events: none !important;
   }
 
 }

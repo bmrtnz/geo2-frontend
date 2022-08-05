@@ -19,6 +19,7 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   @Input() public gridEnvois: GridEnvoisComponent;
 
   visible: boolean;
+  closeConfirm = false;
   titleStart: string;
   titleEnd: string;
   annuleOrdre: boolean;
@@ -46,15 +47,11 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   }
 
   async hidePopup() {
-    const result = confirm(this.localizeService.localize("text-popup-annuler-envoi-docs"), "Génération des envois");
-    const quit = await result;
-    if (quit) {
-      await this.gridChoixEnvoisComponent.clearTemps();
-      this.popup.visible = false;
-    }
+    this.popup.instance.hide();
   }
 
   onShowing(e) {
+    this.closeConfirm = false;
     e.component.content().parentNode.classList.add("documents-ordres-popup");
   }
 
@@ -62,14 +59,28 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
     this.gridChoixEnvoisComponent.reload(this.annuleOrdre);
   }
 
-  clearAndHidePopup() {
-    this.hidePopup();
+  async onHiding(event) {
+    if (!this.closeConfirm) {
+      event.cancel = true; // cancel popup hiding
+
+      const result = confirm(this.localizeService.localize("text-popup-annuler-envoi-docs"), "Génération des envois");
+
+      this.closeConfirm = await result;
+      if (this.closeConfirm) {
+        await this.gridChoixEnvoisComponent.clearTemps();
+        this.popup.instance.hide();
+      }
+    }
   }
 
   goDocuments() {
     this.gridChoixEnvoisComponent.done()
       .subscribe({
-        complete: () => (this.popup.instance.hide(), this.gridEnvois.reload()),
+        complete: () => {
+          this.closeConfirm = true; // Force close popup without confirmation
+          this.popup.instance.hide();
+          this.gridEnvois.reload();
+        }
       });
   }
 
