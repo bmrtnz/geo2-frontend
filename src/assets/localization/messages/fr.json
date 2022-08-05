@@ -158,6 +158,7 @@
     "text-popup-supprimer-ordre": "Êtes-vous bien sûr de vouloir supprimer cet ordre ?",
     "text-popup-ordre-compl": "Êtes-vous bien sûr de vouloir créer un ordre complémentaire pour le client &C ?",
     "text-popup-abandon-suppression": "Suppresion abandonnée",
+    "text-popup-abandon-ordre-compl": "Création ordre compleméntaire abandonnée",
     "text-popup-annuler-envoi-docs": "Voulez-vous vraiment annuler l'envoi de ces documents ?",
     "text-clients-popup-documents": "N'oubliez pas de joindre les documents obligatoires !",
     "text-fournisseurs-popup-documents": "N'oubliez pas de joindre CGA signées (OBLIGATOIRE) et certifications si nécessaire",

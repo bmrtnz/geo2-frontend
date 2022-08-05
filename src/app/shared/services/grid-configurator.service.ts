@@ -503,19 +503,19 @@ export class GridConfiguratorService {
             const defaultState = await this.fetchDefaultConfig(
               grid,
             );
-            const result = confirm("Êtes-vous sûr de vouloir réinitialiser l'affichage ?", "Configuration grille");
-            result.then(res => {
-              if (res) {
-                component.state(defaultState);
-                // manual state reloading
-                component
-                  .option("stateStoring")
-                  .customLoad.call(component.option("stateStoring"));
-                if (onConfigReload) onConfigReload(defaultState);
-                if (onColumnsChange)
-                  onColumnsChange({ current: defaultState.columns });
-              }
-            });
+            confirm("Êtes-vous sûr de vouloir réinitialiser l'affichage ?", "Configuration grille")
+              .then(res => {
+                if (res) {
+                  component.state(defaultState);
+                  // manual state reloading
+                  component
+                    .option("stateStoring")
+                    .customLoad.call(component.option("stateStoring"));
+                  if (onConfigReload) onConfigReload(defaultState);
+                  if (onColumnsChange)
+                    onColumnsChange({ current: defaultState.columns });
+                }
+              });
           },
         },
       },

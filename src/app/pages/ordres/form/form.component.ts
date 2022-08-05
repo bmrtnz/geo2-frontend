@@ -416,7 +416,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     ).then(res => {
       if (res) {
         const ordreCompl = "712345";
+        this.initializeForm("no-cache");
         notify("(Fake) " + this.localization.localize("ordre-complementaire-cree").replace("&O", ordreCompl), "info", 7000);
+      } else {
+        notify(this.localization.localize("text-popup-abandon-ordre-compl"), "warning", 7000);
       }
     });
 
@@ -484,11 +487,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.localization.localize("hint-ajout-ordre");
 
-    const result = confirm(
+    confirm(
       this.localization.localize("text-popup-supprimer-ordre"),
       `${this.localization.localize("suppression-ordre")} n°${this.ordre.numero}`
-    );
-    result.then(res => {
+    ).then(res => {
       if (res) {
         this.ordresService
           .fSuppressionOrdre(this.ordre.id, comment, this.authService.currentUser.nomUtilisateur)
