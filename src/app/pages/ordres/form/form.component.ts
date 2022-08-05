@@ -403,6 +403,25 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
+  onComplOrderClick() {
+
+    // Appel fOnBoutonOrdreComplementaire
+
+    const error = { message: "(Fake) Le délai est dépassé pour la création d'un ordre complémentaire" };
+    alert(this.messageFormat(error.message), this.localization.localize("ordre-complementaire"));
+
+    confirm(
+      this.localization.localize("text-popup-ordre-compl").replace("&C", this.ordre.client.code),
+      this.localization.localize("ordre-complementaire")
+    ).then(res => {
+      if (res) {
+        const ordreCompl = "712345";
+        notify("(Fake) " + this.localization.localize("ordre-complementaire-cree").replace("&O", ordreCompl), "info", 7000);
+      }
+    });
+
+  }
+
   onCancelOrderClick() {
     if (!this.ordre.id) return;
     this.ordresService
@@ -497,7 +516,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     mess = mess
       .replace("Exception while fetching data (/fSuppressionOrdre) : ", "")
       .replace("Exception while fetching data (/fTestAnnuleOrdre) : ", "")
-      .replace("Exception while fetching data (/fAnnulationOrdre) : ", "");
+      .replace("Exception while fetching data (/fAnnulationOrdre) : ", "")
+      .replace("Exception while fetching data (/fOnBoutonOrdreComplementaire) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }

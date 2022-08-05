@@ -187,8 +187,8 @@
                 <dx-button
                   class="upperButton"
                   type="default"
-                  [disabled]="true"
                   text="{{ 'btn-complorder' | localize }}"
+                  (onClick)="onComplOrderClick()"
                 ></dx-button>
               </div>
             </div>
