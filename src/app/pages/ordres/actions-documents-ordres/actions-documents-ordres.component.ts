@@ -15,6 +15,10 @@ import { GridCommandesComponent } from "../grid-commandes/grid-commandes.compone
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 import { GridsService } from "../grids.service";
 import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/confirmation-result-popup.component";
+import {
+  ViewDocument,
+  ViewDocumentPopupComponent
+} from "../../../shared/components/view-document-popup/view-document-popup.component";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -34,12 +38,15 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   public plusActionsFlux: any[];
   public plusActionsFluxEnabled: boolean;
   public visibleActionsNumber = 6; // Visible buttons number, others in a popup
+  public currentCMR: ViewDocument;
+  public CMRVisible = false;
 
   @ViewChild("actionSheet", { static: false }) actionSheet: DxActionSheetComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DocumentsOrdresPopupComponent, { static: false }) docsPopup: DocumentsOrdresPopupComponent;
   @ViewChild(AnnuleRemplacePopupComponent, { static: false }) remplacePopup: AnnuleRemplacePopupComponent;
   @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
+  @ViewChild(ViewDocumentPopupComponent) documentPopup: ViewDocumentPopupComponent;
 
   constructor(
     private envoisService: EnvoisService,
@@ -57,8 +64,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false },
       //  Génère un PDF, Manque le PBL, on revient vers nous plus tard
       { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true },
-      //  Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_crm})
-      { id: "? (CRM)", text: "Afficher CRM", visible: this.ordre?.fileCMR, disabled: true },
+      //  Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_cmr})
+      { id: "(CMR)", text: "Afficher CMR", visible: true, disabled: !this.ordre?.documentCMR?.isPresent },
       //  Génère un PDF (Stéphane a dit qu'on ne faisait pas)
       { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: false, disabled: true },
       { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: false },
@@ -98,6 +105,16 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
     const societe: Societe = this.currentCompanyService.getCompany();
     const user = this.authService.currentUser;
+
+    // On gère le cas des CMR à part, car c'est un fichier à afficher
+    if (this.flux === "(CMR)") {
+      this.currentCMR = {
+        title: "Fiche CMR",
+        document: this.ordre.documentCMR,
+      };
+      this.CMRVisible = true;
+      return;
+    }
 
     defer(() => {
       switch (this.flux) {
