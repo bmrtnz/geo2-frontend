@@ -26,7 +26,6 @@ export class ButtonMargePreviComponent {
     this.smallMarginLoader.visible = true;
     this.marginText = "";
     this.functionsService.fCalculMargePrevi(this.ordreID, this.currentCompanyService.getCompany().id)
-      .valueChanges
       .subscribe({
         next: res => {
           let margin = res.data.fCalculMargePrevi.data.result;
