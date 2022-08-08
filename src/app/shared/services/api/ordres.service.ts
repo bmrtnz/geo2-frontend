@@ -7,7 +7,7 @@ import { from } from "rxjs";
 import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
-import { functionBody, FunctionResponse } from "./functions.service";
+import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
 
 export enum Operation {
   All = "allOrdre",
@@ -27,6 +27,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
 
   constructor(
     apollo: Apollo,
+    public functionsService: FunctionsService
   ) {
     super(apollo, Ordre);
   }
@@ -268,57 +269,22 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   /**
    * Suppression d'un ordre
    */
-  public fSuppressionOrdre =
-    (ordreRef: string, commentaire: string, username: string) => this.apollo
-      .query<{ fSuppressionOrdre: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "fSuppressionOrdre",
-              body: functionBody,
-              params: [
-                { name: "ordreRef", value: "ordreRef", isVariable: true },
-                { name: "commentaire", value: "commentaire", isVariable: true },
-                { name: "username", value: "username", isVariable: true },
-              ]
-            }
-          ],
-          [
-            { name: "ordreRef", type: "String", isOptionnal: false },
-            { name: "commentaire", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { ordreRef, commentaire, username },
-        fetchPolicy: "network-only",
-      })
-
+  public fSuppressionOrdre(ordreRef: string, commentaire: string, username: string) {
+    return this.functionsService.queryFunction("fSuppressionOrdre", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+      { name: "commentaire", type: "String", value: commentaire },
+      { name: "username", type: "String", value: username }
+    ]);
+  }
 
   /**
    * Test annulation d'un ordre
    */
-  public fTestAnnuleOrdre =
-    (ordreRef: string) => this.apollo
-      .query<{ fTestAnnuleOrdre: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "fTestAnnuleOrdre",
-              body: functionBody,
-              params: [
-                { name: "ordreRef", value: "ordreRef", isVariable: true }
-              ]
-            }
-          ],
-          [
-            { name: "ordreRef", type: "String", isOptionnal: false }
-          ],
-        )),
-        variables: { ordreRef },
-        fetchPolicy: "network-only",
-      })
+  public fTestAnnuleOrdre(ordreRef: string) {
+    return this.functionsService.queryFunction("fTestAnnuleOrdre", [
+      { name: "ordreRef", type: "String", value: ordreRef }
+    ]);
+  }
 
   /**
    * Annulation d'un ordre
@@ -346,5 +312,16 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         variables: { motif, ordreRef },
         fetchPolicy: "network-only",
       })
+
+  /**
+   * Création d'un ordre complémentaire
+   */
+  public fCreeOrdreComplementaire(ordreRef: string, socCode: string, username: string) {
+    return this.functionsService.queryFunction("fCreeOrdreComplementaire", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+      { name: "socCode", type: "String", value: socCode },
+      { name: "username", type: "String", value: username }
+    ]);
+  }
 
 }

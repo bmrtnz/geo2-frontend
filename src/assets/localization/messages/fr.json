@@ -148,7 +148,7 @@
     "annulation-ordre": "Annulation ordre",
     "ordre-complementaire-creation": "Création Ordre complémentaire",
     "ordre-complementaire-cree": "L'ordre complémentaire n°&O a bien été créé",
-    "text-popup-suppression-ok": "L'ordre a bien été supprimé",
+    "text-popup-suppression-ok": "L'ordre n°&O a bien été supprimé",
     "text-popup-annulation-ok": "L'ordre a bien été annulé",
     "text-popup-changer-fournisseur": "Voulez-vous vraiment changer le fournisseur &FPC pour &FPN ?",
     "text-popup-supprimer-destockage": "Voulez-vous vraiment supprimer le déstockage associé à la ligne d'ordre ?",

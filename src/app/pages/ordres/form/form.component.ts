@@ -56,6 +56,7 @@ import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
 import { DatePipe } from "@angular/common";
+import Utilisateur from "app/shared/models/utilisateur.model";
 
 /**
  * Grid with loading toggled by parent
@@ -379,6 +380,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (res) => {
           this.refreshStatus(res.data.saveOrdre.statut);
           this.headerSaving = false;
+          this.ordre = { ...this.ordre, ...ordre };
+          this.formGroup.markAsPristine();
         },
         error: (err) => {
           notify("Erreur sauvegarde entête", "error", 3000);
@@ -426,33 +429,46 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.localization.localize("ordre-complementaire-creation")
     ).then(res => {
       if (res) {
-        const refOrdreCompl = "1976311";
-        const currOrder = this.ordre;
-        if (refOrdreCompl) {
 
-          // Find numero / adjust listeOrdresComplementaires & save it / Initialize form
-          this.ordresService
-            .getOne_v2(refOrdreCompl, ["id", "numero"]
-            ).subscribe((result) => {
-              const numOrdreCompl = result.data.ordre.numero;
-              let listOrdCompl = currOrder.listeOrdresComplementaires;
+        const societe: Societe = this.currentCompanyService.getCompany();
 
-              if (!listOrdCompl) listOrdCompl = "";
-              listOrdCompl += `${numOrdreCompl},`;
+        this.ordresService
+          .fCreeOrdreComplementaire(this.ordre.id, societe.id, this.authService.currentUser.nomUtilisateur)
+          .subscribe({
+            next: (resCree) => {
+              const refOrdreCompl = resCree.data.fCreeOrdreComplementaire.data.ls_ord_ref_compl;
+              const currOrder = this.ordre;
+              if (refOrdreCompl) {
+                // Find numero / adjust listeOrdresComplementaires & save it / Initialize form
+                this.ordresService
+                  .getOne_v2(refOrdreCompl, ["id", "numero"])
+                  .subscribe((result) => {
+                    const numOrdreCompl = result.data.ordre.numero;
+                    let listOrdCompl = currOrder.listeOrdresComplementaires;
 
-              const ordre = { id: currOrder.id, listeOrdresComplementaires: listOrdCompl };
-              this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
-                next: () => {
-                  this.initializeForm("no-cache");
-                  notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "info", 7000);
-                },
-                error: (err) => {
-                  notify("Erreur sauvegarde liste ordres complémentaires", "error", 3000);
-                  console.log(err);
-                }
-              });
-            });
-        }
+                    if (!listOrdCompl) listOrdCompl = "";
+                    listOrdCompl += `${numOrdreCompl},`;
+
+                    const ordre = { id: currOrder.id, listeOrdresComplementaires: listOrdCompl };
+                    this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
+                      next: () => {
+                        this.initializeForm("no-cache");
+                        notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "info", 7000);
+                      },
+                      error: (err) => {
+                        notify("Erreur sauvegarde liste ordres complémentaires", "error", 3000);
+                        console.log(err);
+                      }
+                    });
+                  });
+              }
+            },
+            error: (error: Error) => {
+              console.log(error);
+              alert(this.messageFormat(error.message), this.localization.localize("ordre-complementaire-creation"));
+            }
+          });
+
       } else {
         notify(this.localization.localize("text-popup-abandon-ordre-compl"), "warning", 7000);
       }
@@ -496,7 +512,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (res) => {
           this.initializeForm("no-cache");
           this.actionDocs.sendAction("ORDRE", true);
-          // notify(this.localization.localize("text-popup-annulation-ok"), "info", 7000);
         },
         error: (error: Error) => {
           console.log(error);
@@ -520,11 +535,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   validateDeleteOrder(comment) {
 
-    this.localization.localize("hint-ajout-ordre");
+    const numero = this.ordre.numero;
 
     confirm(
       this.localization.localize("text-popup-supprimer-ordre"),
-      `${this.localization.localize("suppression-ordre")} n°${this.ordre.numero}`
+      `${this.localization.localize("suppression-ordre")} n°${numero}`
     ).then(res => {
       if (res) {
         this.ordresService
@@ -532,7 +547,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           .subscribe({
             next: () => {
               this.tabContext.closeOrdre(this.ordre.numero, this.ordre.campagne.id);
-              notify(this.localization.localize("text-popup-suppression-ok"), "info", 7000);
+              notify(this.localization.localize("text-popup-suppression-ok").replace("&O", numero), "info", 7000);
             },
             error: (error: Error) => {
               alert(this.messageFormat(error.message), this.localization.localize("suppression-ordre"));
@@ -554,7 +569,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .replace("Exception while fetching data (/fSuppressionOrdre) : ", "")
       .replace("Exception while fetching data (/fTestAnnuleOrdre) : ", "")
       .replace("Exception while fetching data (/fAnnulationOrdre) : ", "")
-      .replace("Exception while fetching data (/fOnBoutonOrdreComplementaire) : ", "");
+      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
@@ -658,7 +673,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openLinkedOrder(ordre: Partial<Ordre>) {
-    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
+    this.tabContext.openOrdre(ordre.numero, this.ordre.campagne.id);
   }
 
   deviseDisplayExpr(item) {
