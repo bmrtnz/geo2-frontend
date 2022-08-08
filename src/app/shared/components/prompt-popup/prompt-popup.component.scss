@@ -1,9 +1,17 @@
-.prompt-action {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+// Var
+@import "~themes/generated/variables.base";
 
-  & > .dx-button {
+.prompt-action {
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &>.dx-button {
     margin-left: 10px;
   }
+}
+
+.comment-title {
+  color: $base-accent;
 }

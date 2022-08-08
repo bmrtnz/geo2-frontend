@@ -182,6 +182,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   }
 
   onCellClick(e) {
+    if (!e.data) return;
     this.currentLogId = e.data.id;
     this.currentRowIndex = e.component.getRowIndexByKey(this.currentLogId);
     switch (e.column.dataField) {

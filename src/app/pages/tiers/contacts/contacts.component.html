@@ -66,6 +66,7 @@
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
+      [calculateFilterExpression]="calculateFilterExpression"
       [visible]="false"
       [caption]="
         ('tiers-contacts-' + column.dataField?.split('.').join('-')

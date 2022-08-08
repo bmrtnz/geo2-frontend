@@ -99,7 +99,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       this.actionSheet.instance.show();
     }
   }
-  sendAction(e) {
+  sendAction(e, annulation?) {
     // On récupère ici le code de l'action:
     this.flux = e;
 
@@ -118,8 +118,10 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
     defer(() => {
       switch (this.flux) {
-        case "ORDRE":
+        case "ORDRE": {
+          if (annulation) return of({ data: { res: 1 } });
           return this.envoisService.fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur);
+        }
         case "DETAIL":
           return this.envoisService.fDocumentEnvoiDetailsExp(this.ordre.id, societe.id);
         case "MINI":
@@ -155,7 +157,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
           .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
       )
       .subscribe(res => {
-        const popup = res.data.countBy && this.flux === "ORDRE" ? "remplacePopup" : "docsPopup";
+        const popup = res.data.countBy && this.flux === "ORDRE" && !annulation ? "remplacePopup" : "docsPopup";
+        this.docsPopup.annuleOrdre = annulation;
         this[popup].visible = true;
       });
   }

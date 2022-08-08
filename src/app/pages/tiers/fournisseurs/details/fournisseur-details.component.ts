@@ -36,6 +36,7 @@ import { of } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
 import { Certification, CertificationFournisseur, Fournisseur } from "../../../../shared/models";
 import { FournisseursService } from "../../../../shared/services/api/fournisseurs.service";
+import { LibelleNatureStation } from "app/shared/models/fournisseur.model";
 
 @Component({
   selector: "app-fournisseur-details",
@@ -413,6 +414,10 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
       (data.id + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
         (data.raisonSocial ? data.raisonSocial : data.description)))
       : null;
+  }
+
+  displayNatureStation(data) {
+    return data ? (LibelleNatureStation[data] ?? null) : null;
   }
 
   displayCertifNameDate(data) {

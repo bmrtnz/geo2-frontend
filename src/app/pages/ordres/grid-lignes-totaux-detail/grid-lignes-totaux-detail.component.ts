@@ -79,9 +79,12 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
   onCellPrepared(e) {
     if (e.rowType === "group") {
       if (e.column.dataField === "fournisseur.code" && e.cellElement.textContent) {
-        e.cellElement.textContent = e.cellElement.textContent.split(":")[1];
+        e.cellElement.textContent = e.data?.items[0]?.nombrePalettesExpediees;
+      } else {
+        if (e.columnIndex === 0) e.cellElement.textContent = e.data.key;
       }
     }
+
   }
 
   refresh() {

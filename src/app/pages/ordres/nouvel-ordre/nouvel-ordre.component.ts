@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { Devise, Entrepot, Societe } from "app/shared/models";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
@@ -89,6 +89,8 @@ export class NouvelOrdreComponent implements OnInit {
     () => this.functionsService.fNouvelOrdre(this.societe.id).valueChanges,
   );
 
+  @Input() pulseBtnOn: boolean;
+
   @ViewChild(GridEntrepotsComponent, { static: false })
   EntrepotGrid: GridEntrepotsComponent;
   @ViewChild(GridHistoriqueEntrepotsComponent, { static: false })
@@ -157,6 +159,11 @@ export class NouvelOrdreComponent implements OnInit {
         ? errorInfo.split(":")[2]
         : errorInfo
       : errorInfo;
+  }
+
+  pulseButton(e) {
+    this.pulseBtnOn = false;
+    setTimeout(() => this.pulseBtnOn = true, 1);
   }
 
   getSelectedEntrepot() {

@@ -1,6 +1,6 @@
 <dx-popup
   width="600"
-  height="200"
+  height="auto"
   [dragEnabled]="false"
   [title]="title"
   (onHiding)="onPopupHiding()"
@@ -10,29 +10,62 @@
 >
   <div *dxTemplate="let d of 'content'">
     <form #form="ngForm">
+
+      <!-- Title shown (if configured) over the title -->
+      <div
+        *ngIf="commentTitle"
+        class="comment-title"
+      >
+      {{ commentTitle }}
+      <br>
+      </div>
+
+      <!-- We can show a simple text box or a selectbox with configurable items -->
+
+      <dx-select-box
+        ngModel
+        #commentSelectBox
+        name="commentaireSB"
+        [visible]="!!commentItemsList"
+        [items]="commentItemsList"
+        [searchEnabled]="false"
+      >
+        <dx-validator
+          #validatorSB
+          [validationRules]="commentValidationRules"
+          name="{{ 'valide-commentaire' | localize }}"
+        ></dx-validator>
+      </dx-select-box>
+
       <dx-text-box
         ngModel
+        #commentBox
+        [visible]="!commentItemsList"
         name="commentaire"
         valueChangeEvent="keyup"
+        [showClearButton]="true"
         [placeholder]="placeholder"
       >
         <dx-validator
           #validator
           [validationRules]="commentValidationRules"
-          name="{{ 'valide-comment' | localize }}"
+          name="{{ 'valide-motif' | localize }}"
         ></dx-validator>
       </dx-text-box>
+      <br>
+      <br>
+      <br>
       <div class="prompt-action">
         <dx-button
-          text="{{ 'btn-annuler' | localize }}"
+          text="{{ (cancelText ? cancelText : 'btn-annuler') | localize }}"
           type="normal"
           (onClick)="popupComponent.instance.hide()"
         ></dx-button>
         <dx-button
-          text="{{ 'btn-valider' | localize }}"
+          text="{{ (validText ? validText : 'btn-valider') | localize }}"
           type="default"
           *ngIf="validator.instance"
-          [disabled]="!validator.instance.validate().isValid"
+          [disabled]="!validator.instance.validate().isValid && !validatorSB.instance.validate().isValid"
           (onClick)="onSubmit(form)"
         ></dx-button>
       </div>

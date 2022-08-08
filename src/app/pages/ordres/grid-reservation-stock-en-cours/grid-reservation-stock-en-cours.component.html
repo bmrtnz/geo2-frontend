@@ -5,7 +5,9 @@
       type="danger"
       [visible]="!!gridRowsTotal"
       stylingMode="outlined"
-      text="{{ 'btn-delete-destockage' + (gridRowsTotal > 1 ? 's' : '') | localize }}"
+      text="{{
+        'btn-delete-destockage' + (gridRowsTotal > 1 ? 's' : '') | localize
+      }}"
       (onClick)="deleteReservations()"
     ></dx-button>
   </div>
@@ -36,11 +38,7 @@
       [visible]="false"
       [allowSearch]="true"
     ></dxo-header-filter>
-    <dxo-export
-      [enabled]="true"
-      fileName="Réservation stock"
-      [allowExportSelectedData]="false"
-    ></dxo-export>
+    <dxo-export fileName="Réservation stock"></dxo-export>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"

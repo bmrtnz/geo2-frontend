@@ -6,8 +6,10 @@ import {
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
+import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
+import { confirm, alert } from "devextreme/ui/dialog";
 import {
   AuthService,
   ClientsService,
@@ -35,7 +37,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { concatMap, filter, finalize, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 // tslint:disable-next-line: max-line-length
@@ -52,6 +54,7 @@ import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../r
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
 
 /**
  * Grid with loading toggled by parent
@@ -208,7 +211,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public ordresLignesViewExp: boolean;
 
   public canDuplicate = false;
-  public validationPopupVisible = false;
   public dotLitiges: string;
   public dotCommentaires: number;
   public dotCQ: number;
@@ -236,6 +238,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public histoLigneOrdreReadOnlyText: string;
   public histoLigneOrdreText: string;
   public showBAFButton: boolean;
+  public promptPopupTitle: string;
+  public promptPopupPurpose: string;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -259,6 +263,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(GridDetailPalettesComponent) gridDetailPalettes: GridDetailPalettesComponent;
   @ViewChild(GridMargeComponent) gridMarge: GridMargeComponent;
   @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
+  @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
+  @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
 
   constructor(
     private router: Router,
@@ -398,13 +404,103 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  onDeleteClick() {
-    this.validationPopupVisible = true;
+  onCancelOrderClick() {
+    if (!this.ordre.id) return;
+    this.ordresService
+      .fTestAnnuleOrdre(this.ordre.id)
+      .subscribe({
+        next: () => {
+          this.promptPopupTitle = this.localization.localize("ordre-cancel-title") + this.ordre?.numero;
+          this.promptPopupPurpose = "cancel";
+          this.promptPopup.show(
+            {
+              validText: "btn-annulation-ordre",
+              commentTitle: this.localization.localize("choose-cancel-reason"),
+              // These items are hard coded in Geo1
+              commentItemsList: [
+                "BW",
+                "CLIENT",
+                "FOURNISSEUR",
+                "TRANSPORTEUR"
+              ],
+            }
+          );
+        },
+        error: (error: Error) => {
+          alert(this.messageFormat(error.message), this.localization.localize("annulation-ordre"));
+        }
+      });
   }
 
-  deleteClick() {
-    this.validationPopupVisible = false;
-    this.deleteOrder();
+  validateCancelOrder(motif) {
+
+    this.ordresService
+      .fAnnulationOrdre(motif, this.ordre.id)
+      .subscribe({
+        next: (res) => {
+          this.initializeForm("no-cache");
+          this.actionDocs.sendAction("ORDRE", true);
+          // notify(this.localization.localize("text-popup-annulation-ok"), "info", 7000);
+        },
+        error: (error: Error) => {
+          console.log(error);
+          alert(this.messageFormat(error.message), this.localization.localize("annulation-ordre"));
+        }
+      });
+
+  }
+
+  onDeleteOrderClick() {
+    if (!this.ordre.id) return;
+    this.promptPopupTitle = this.localization.localize("ordre-delete-title") + this.ordre?.numero;
+    this.promptPopupPurpose = "delete";
+    this.promptPopup.show(
+      {
+        validText: "btn-suppression-ordre",
+        commentMaxLength: 70
+      }
+    );
+  }
+
+  validateDeleteOrder(comment) {
+
+    this.localization.localize("hint-ajout-ordre");
+
+    const result = confirm(
+      this.localization.localize("text-popup-supprimer-ordre"),
+      `${this.localization.localize("suppression-ordre")} n°${this.ordre.numero}`
+    );
+    result.then(res => {
+      if (res) {
+        this.ordresService
+          .fSuppressionOrdre(this.ordre.id, comment, this.authService.currentUser.nomUtilisateur)
+          .subscribe({
+            next: () => {
+              this.tabContext.closeOrdre(this.ordre.numero, this.ordre.campagne.id);
+              notify(this.localization.localize("text-popup-suppression-ok"), "info", 7000);
+            },
+            error: (error: Error) => {
+              alert(this.messageFormat(error.message), this.localization.localize("suppression-ordre"));
+            }
+          });
+      } else {
+        notify(this.localization.localize("text-popup-abandon-suppression"), "warning", 7000);
+      }
+    });
+  }
+
+  public onValidatePromptPopup(comment) {
+    if (this.promptPopupPurpose === "delete") this.validateDeleteOrder(comment);
+    if (this.promptPopupPurpose === "cancel") this.validateCancelOrder(comment);
+  }
+
+  private messageFormat(mess) {
+    mess = mess
+      .replace("Exception while fetching data (/fSuppressionOrdre) : ", "")
+      .replace("Exception while fetching data (/fTestAnnuleOrdre) : ", "")
+      .replace("Exception while fetching data (/fAnnulationOrdre) : ", "");
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
   fileManagerClick() {
@@ -443,14 +539,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteOrder() {
-    const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-    if (!ordre.id) return;
-    this.ordresService.delete({ id: ordre.id }).subscribe({
-      next: (_) => {
-        notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
-      },
-      error: (_) => notify("Echec de la suppression", "error", 3000),
-    });
+    // const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+    // if (!ordre.id) return;
+    // this.ordresService.delete({ id: ordre.id }).subscribe({
+    //   next: (_) => {
+    //     notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
+    //   },
+    //   error: (_) => notify("Echec de la suppression", "error", 3000),
+    // });
   }
 
   addLinkedOrders() {
@@ -507,10 +603,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   openLinkedOrder(ordre: Partial<Ordre>) {
     this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
-  }
-
-  cancelClick() {
-    this.validationPopupVisible = false;
   }
 
   deviseDisplayExpr(item) {
