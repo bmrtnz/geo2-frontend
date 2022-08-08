@@ -203,6 +203,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
 
   ngOnInit() {
 
+
     this.commercial = this.personnesService.getDataSource();
     this.commercial.filter([
       ["valide", "=", true],
@@ -233,8 +234,6 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     this.typesCamion.filter(["valide", "=", "true"]);
     this.transitaires = this.transitairesService.getDataSource();
     this.transitaires.filter(["valide", "=", "true"]);
-
-    if (this.route.snapshot.url[1]?.path !== "entrepots") return;
 
     this.route.params
       .pipe(tap(_ => this.formGroup.reset()))
