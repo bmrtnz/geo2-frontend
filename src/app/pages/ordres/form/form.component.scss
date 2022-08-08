@@ -108,6 +108,10 @@
     .linkedOrders-subcontainer {
       position: relative;
 
+      .small-button {
+        margin: 1px 2px;
+      }
+
       .search-linkedOrders {
         top: 2px;
         font-size: 13px;

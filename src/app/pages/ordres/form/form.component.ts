@@ -55,6 +55,7 @@ import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
+import { DatePipe } from "@angular/common";
 
 /**
  * Grid with loading toggled by parent
@@ -160,7 +161,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "documentFacture.uri",
     "documentFacture.type",
     "listeOrdresRegularisations",
-    "listeOrdresComplementaires"
+    "listeOrdresComplementaires",
+    "type.id"
   ];
 
   private destroy = new Subject<boolean>();
@@ -288,6 +290,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private litigesService: LitigesService,
     private mruOrdresService: MruOrdresService,
     private tabContext: TabContext,
+    private datePipe: DatePipe,
     public authService: AuthService,
     private localization: LocalizationService
   ) {
@@ -405,19 +408,51 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onComplOrderClick() {
 
-    // Appel fOnBoutonOrdreComplementaire
+    if (!this.ordre?.id) return;
 
-    const error = { message: "(Fake) Le délai est dépassé pour la création d'un ordre complémentaire" };
-    alert(this.messageFormat(error.message), this.localization.localize("ordre-complementaire"));
+    if (this.ordre.type.id !== "ORD") {
+      alert(this.localization.localize("text-popup-ordre-non-ORD"), this.localization.localize("ordre-complementaire-creation"));
+      return;
+    }
+
+    const dateNow = this.datePipe.transform(new Date().setDate(new Date().getDate()).valueOf(), "yyyy-MM-dd");
+    if (dateNow > this.ordre.dateDepartPrevue) {
+      alert(this.localization.localize("text-popup-ordre-compl-dateDepassee"), this.localization.localize("ordre-complementaire-creation"));
+      return;
+    }
 
     confirm(
       this.localization.localize("text-popup-ordre-compl").replace("&C", this.ordre.client.code),
-      this.localization.localize("ordre-complementaire")
+      this.localization.localize("ordre-complementaire-creation")
     ).then(res => {
       if (res) {
-        const ordreCompl = "712345";
-        this.initializeForm("no-cache");
-        notify("(Fake) " + this.localization.localize("ordre-complementaire-cree").replace("&O", ordreCompl), "info", 7000);
+        const refOrdreCompl = "1976311";
+        const currOrder = this.ordre;
+        if (refOrdreCompl) {
+
+          // Find numero / adjust listeOrdresComplementaires & save it / Initialize form
+          this.ordresService
+            .getOne_v2(refOrdreCompl, ["id", "numero"]
+            ).subscribe((result) => {
+              const numOrdreCompl = result.data.ordre.numero;
+              let listOrdCompl = currOrder.listeOrdresComplementaires;
+
+              if (!listOrdCompl) listOrdCompl = "";
+              listOrdCompl += `${numOrdreCompl},`;
+
+              const ordre = { id: currOrder.id, listeOrdresComplementaires: listOrdCompl };
+              this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
+                next: () => {
+                  this.initializeForm("no-cache");
+                  notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "info", 7000);
+                },
+                error: (err) => {
+                  notify("Erreur sauvegarde liste ordres complémentaires", "error", 3000);
+                  console.log(err);
+                }
+              });
+            });
+        }
       } else {
         notify(this.localization.localize("text-popup-abandon-ordre-compl"), "warning", 7000);
       }
@@ -611,12 +646,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const hasRegul = this.ordre.listeOrdresRegularisations;
     if (hasCompl) {
       hasCompl.split(",").map(res => {
-        this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Compl, class: "Compl" });
+        if (res) this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Compl, class: "Compl" });
       });
     }
     if (hasRegul) {
       hasRegul.split(";").map(res => {
-        this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Regul, class: "Regul" });
+        if (res) this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Regul, class: "Regul" });
       });
     }
     if (!refClt) this.linkedOrdersSearch = false;
