@@ -24,6 +24,7 @@ import { NestedGuard } from "app/shared/guards/nested-guard";
 import { EditingGuard } from "app/shared/guards/editing-guard";
 import { EditingAlertModule } from "app/shared/components/editing-alert/editing-alert.component";
 import { ModificationListModule } from "app/shared/components/modification-list/modification-list.component";
+import { SetBassinComponent } from "./set-bassin/set-bassin.component";
 
 @NgModule({
   imports: [
@@ -49,7 +50,7 @@ import { ModificationListModule } from "app/shared/components/modification-list/
     EditingAlertModule,
     ModificationListModule,
   ],
-  declarations: [EntrepotsListComponent, EntrepotDetailsComponent],
+  declarations: [EntrepotsListComponent, EntrepotDetailsComponent, SetBassinComponent],
   providers: [NestedGuard, EditingGuard],
   exports: [EntrepotDetailsComponent]
 })
