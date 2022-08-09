@@ -953,6 +953,22 @@
       }
     ]
   },
+  "bassin": {
+    "columns": [
+      {
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "dataField": "bureauAchat.id",
+        "visible": true
+      },
+      {
+        "dataField": "valide",
+        "dataType": "boolean"
+      }
+    ]
+  },
   "contact": {
     "columns": [
       {

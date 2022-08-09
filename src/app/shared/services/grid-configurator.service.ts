@@ -70,6 +70,7 @@ export enum Grid {
   Transporteur = "transporteur",
   LieuPassageAQuai = "lieu-passage-a-quai",
   Entrepot = "entrepot",
+  Bassin = "bassin",
   Contact = "contact",
   Article = "article",
   Stock = "stock",
