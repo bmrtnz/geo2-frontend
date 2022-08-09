@@ -1,0 +1,92 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .motif-regularisation-ordre-popup {
+
+  .radio-group-popup {
+    height: 40px;
+    margin-top: -7px;
+    left: 15px;
+  }
+
+  .midLarge {
+    width: 60%;
+
+    .dx-field-label {
+      text-overflow: initial;
+      width: 100%;
+    }
+
+    .dx-field-value {
+      width: 20% !important;
+    }
+  }
+
+  .dx-field-value:not(.dx-widget)>.dx-checkbox {
+    margin: 0 !important;
+  }
+
+  .popup-buttons-container {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .dx-button {
+      margin: 5px;
+    }
+  }
+
+  .popup-subtitles {
+    color: $base-accent;
+  }
+
+  .bold-text {
+    font-weight: bold;
+  }
+
+  .blue-text {
+    color: #00759c;
+  }
+
+  .save-button {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .dx-radiobutton {
+    padding-bottom: 26px;
+  }
+
+  .segment-box {
+    margin-bottom: -15px;
+  }
+
+  .list-motif {
+    padding: 10px 0;
+    background-color: rgba(191, 191, 191, 0.15);
+
+    .dx-list-item {
+      margin: 3px 0;
+
+      .dx-list-select-radiobutton-container {
+        width: 45px;
+
+        .dx-list-select-radiobutton {
+          padding-bottom: 3px;
+        }
+      }
+
+      .dx-list-item-content {
+        padding: 0;
+        font-size: 13px;
+        line-height: 24px;
+      }
+    }
+  }
+
+  .dx-radiobutton {
+    padding-bottom: 0;
+  }
+}

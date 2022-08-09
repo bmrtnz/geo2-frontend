@@ -57,6 +57,7 @@ import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
 import { DatePipe } from "@angular/common";
 import Utilisateur from "app/shared/models/utilisateur.model";
+import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -242,6 +243,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public showBAFButton: boolean;
   public promptPopupTitle: string;
   public promptPopupPurpose: string;
+  public selectedLignes: string[];
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -267,6 +269,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
   @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
+  @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
 
   constructor(
     private router: Router,
@@ -410,20 +413,93 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onRegulOrderClick() {
-    if (!this.gridCommandes.grid.instance.getSelectedRowKeys()?.length) {
+
+    // As LIST_NORDRE_REGUL is a VARCHAR(50)
+    if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
+      notify("Le nombre maximum d'ordres de régularisation est atteint", "warning", 5000);
+      return;
+    }
+
+    this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
+    if (!this.selectedLignes?.length) {
       this.gridCommandes.grid.instance.columnOption("command:select", "visible", true);
       this.gridCommandes.grid.instance.selectAll();   // Way to avoid "null"
       this.gridCommandes.grid.instance.deselectAll(); // in select checkboxes
-      notify("Veuillez sélectionner une ou plusieurs lignes", "warning", 5000);
+      notify(this.localization.localize("text-selection-lignes"), "warning", 5000);
+      return;
     }
+
+    this.motifRegulPopup.visible = true;
+
   }
 
-  validateRegulOrder() {
+  validateRegulOrder(data) {
+
+    data = {
+      ...data,
+      listOrlRef: this.selectedLignes,
+      ordreRef: this.ordre.id,
+      socCode: this.currentCompanyService.getCompany().id,
+      username: this.authService.currentUser.nomUtilisateur
+    };
+
+    this.ordresService
+      .fCreeOrdreRegularisation(data.indDetail, data.lcaCode, data.listOrlRef, data.typeReg, data.ordreRef, data.socCode, data.username)
+      .subscribe({
+        next: (resCree) => {
+          const refOrdreRegul = resCree.data.fCreeOrdreRegularisation.data.ls_ord_ref_regul;
+          console.log(resCree.data.fCreeOrdreRegularisation.data);
+          const currOrder = this.ordre;
+          if (refOrdreRegul) {
+            // Find numero / adjust listeOrdresRegularisations & save it / Initialize form
+            this.ordresService
+              .getOne_v2(refOrdreRegul, ["id", "numero"])
+              .subscribe((result) => {
+                const numOrdreRegul = result.data.ordre.numero;
+                let listOrdRegul = currOrder.listeOrdresRegularisations;
+
+                if (!listOrdRegul) listOrdRegul = "";
+                listOrdRegul += `${numOrdreRegul};`;
+
+                const ordre = { id: currOrder.id, listeOrdresRegularisations: listOrdRegul };
+                this.ordresService.save_v2(["id", "listeOrdresRegularisations"], { ordre }).subscribe({
+                  next: () => {
+                    this.initializeForm("no-cache");
+                    notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "info", 7000);
+                    this.clearSelectionForRegul();
+                  },
+                  error: (err) => {
+                    this.clearSelectionForRegul();
+                    notify("Erreur sauvegarde liste ordres régularisation", "error", 3000);
+                    console.log(err);
+                  }
+                });
+              });
+          }
+        },
+        error: (error: Error) => {
+          console.log(error);
+          this.clearSelectionForRegul();
+          alert(this.messageFormat(error.message), this.localization.localize("ordre-regularisation-creation"));
+        }
+      });
+
+  }
+
+  clearSelectionForRegul() {
+    this.selectedLignes = [];
+    this.gridCommandes.grid.instance.columnOption("command:select", "visible", false);
+    this.gridCommandes.grid.instance.deselectAll();
   }
 
   onComplOrderClick() {
 
     if (!this.ordre?.id) return;
+    // As LIST_NORDRE_COMP is a VARCHAR(50)
+    if (this.ordre.listeOrdresComplementaires?.split(",").length >= 8) {
+      notify("Le nombre maximum d'ordres complémentaires est atteint", "warning", 5000);
+      return;
+    }
 
     if (this.ordre.type.id !== "ORD") {
       alert(this.localization.localize("text-popup-ordre-non-ORD"), this.localization.localize("ordre-complementaire-creation"));
@@ -581,7 +657,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .replace("Exception while fetching data (/fSuppressionOrdre) : ", "")
       .replace("Exception while fetching data (/fTestAnnuleOrdre) : ", "")
       .replace("Exception while fetching data (/fAnnulationOrdre) : ", "")
-      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "");
+      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "")
+      .replace("Exception while fetching data (/fCreeOrdreRegularisation) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }

@@ -60,8 +60,6 @@ export class GridCommentaireOrdreComponent implements ToggledGrid {
   enableFilters() {
     if (this?.ordre?.id) {
       this.updateGrid();
-      // this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
-      // this.dataGrid.dataSource = this.dataSource;
     }
   }
 

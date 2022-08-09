@@ -324,4 +324,21 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     ]);
   }
 
+  /**
+   * Création d'un ordre de régularisation
+   */
+  public fCreeOrdreRegularisation(
+    indDetail: boolean, lcaCode: string, listOrlRef: string[], typeReg: string, ordreRef: string, socCode: string, username: string
+  ) {
+    return this.functionsService.queryFunction("fCreeOrdreRegularisation", [
+      { name: "indDetail", type: "Boolean", value: indDetail },
+      { name: "lcaCode", type: "String", value: lcaCode },
+      { name: "listOrlRef", type: "[String]", value: listOrlRef },
+      { name: "typeReg", type: "String", value: typeReg },
+      { name: "ordreRef", type: "String", value: ordreRef },
+      { name: "socCode", type: "String", value: socCode },
+      { name: "username", type: "String", value: username }
+    ]);
+  }
+
 }
