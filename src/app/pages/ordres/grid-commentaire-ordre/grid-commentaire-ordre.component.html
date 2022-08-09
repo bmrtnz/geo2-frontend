@@ -6,6 +6,8 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onCellPrepared)="onCellPrepared($event)"
+  (onInitNewRow)="onInitNewRow($event)"
+  (onRowClick)="onRowClick($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Commentaires',
@@ -21,6 +23,10 @@
     [allowSearch]="true"
   ></dxo-header-filter>
   <dxo-paging></dxo-paging>
+  <dxo-editing
+    [allowUpdating]="true"
+    [allowAdding]="true"
+  ></dxo-editing>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
@@ -45,25 +51,27 @@
   >
   </dxo-column-chooser>
   <dxi-column
-    *ngFor="let field of detailedFields"
-    [dataField]="field.dataField"
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
     [caption]="
-      ('ordreCommentaire-' + field.dataField?.split('.').join('-')
-        | localize) || field.name
+      ('ordreCommentaire-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
     "
     [visible]="false"
+    [width]="column.width"
     trueText="Oui"
     falseText="Non"
-    [dataType]="field.dataType"
+    [dataType]="column.dataType"
+    [allowEditing]="column.allowEditing"
     [allowSearch]="
-      field.allowSearch !== undefined
-        ? field.allowSearch
-        : ['string'].includes(field.dataType)
+      column.allowSearch !== undefined
+        ? column.allowSearch
+        : ['string'].includes(column.dataType)
     "
     [allowHeaderFiltering]="
-      field.allowHeaderFiltering !== undefined
-        ? field.allowHeaderFiltering
-        : ['string'].includes(field.dataType)
+      column.allowHeaderFiltering !== undefined
+        ? column.allowHeaderFiltering
+        : ['string'].includes(column.dataType)
     "
   ></dxi-column>
 </dx-data-grid>

@@ -4663,12 +4663,16 @@
         "visibleIndex": 0,
         "dataField": "dateModification",
         "visible": true,
+        "allowEditing": false,
+        "width": 180,
         "selectedFilterOperation": "<",
         "sortOrder": "desc"
       },
       {
         "visibleIndex": 1,
         "dataField": "userModification",
+        "width": 150,
+        "allowEditing": false,
         "visible": true
       },
       {
@@ -4677,7 +4681,8 @@
         "visible": true
       },
       {
-        "dataField": "id"
+        "dataField": "id",
+        "allowEditing": false
       }
     ]
   },
