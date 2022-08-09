@@ -27,7 +27,7 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
       .pipe(takeWhile((res) => !res.loading));
   }
 
-  getDataSource_v2(columns: Array<string>) {
+  getDataSource_v2(columns: Array<string> | Set<string>) {
     return new DataSource({
       store: this.createCustomStore({
         load: (options: LoadOptions) =>

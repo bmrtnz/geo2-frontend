@@ -335,7 +335,7 @@ export abstract class ApiService implements OnDestroy {
    * @param operationName Name of the operation, default to `all{ModelName}`.
    * @protected
    */
-  protected async buildGetAll_v2(columns: Array<string>, operationName?: string) {
+  protected async buildGetAll_v2(columns: Array<string> | Set<string>, operationName?: string) {
     const operation = operationName ?? `all${this.model.name}`;
     const alias = operation.ucFirst();
     return `
@@ -379,7 +379,7 @@ export abstract class ApiService implements OnDestroy {
    * Build getOne query
    * @param columns The fields you want to retrieve.
    */
-  protected async buildGetOne_v2(columns: Array<string>) {
+  protected async buildGetOne_v2(columns: Array<string> | Set<string>) {
     const operation = this.withLowerCaseFirst(this.model.name);
     const alias = operation.ucFirst();
     if (Array.isArray(this.keyField)) this.keyField = "id";
@@ -959,7 +959,7 @@ export abstract class ApiService implements OnDestroy {
    * @param body - The body of the query.
    * @returns The GraphQL query.
    */
-  protected buildGetListGraph(body: Array<string>) {
+  protected buildGetListGraph(body: Array<string> | Set<string>) {
     return ApiService.buildGraph(
       "query",
       [

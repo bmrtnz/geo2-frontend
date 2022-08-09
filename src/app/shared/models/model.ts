@@ -185,7 +185,7 @@ export abstract class Model {
    *   }
    * }
    */
-  static getGQLObservable(columns: Array<string> = []): Observable<string> {
+  static getGQLObservable(columns: Array<string> | Set<string> = []): Observable<string> {
     return of(Model.getGQL(columns).toGraphQL());
   }
   static getGQL(columns: Array<string> | Set<string> = []) {
