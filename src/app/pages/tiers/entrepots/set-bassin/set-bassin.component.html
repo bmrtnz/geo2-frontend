@@ -1,1 +1,27 @@
-<p>set-bassin works!</p>
+<dx-data-grid
+  [dataSource]="etbDatasource"
+  [remoteOperations]="true"
+>
+  <dxi-column
+    *ngFor="let column of columns | async"
+    [dataField]="column.dataField"
+    [visible]="column.visible"
+    [dataType]="column.dataType"
+  ></dxi-column>
+  <dxi-column dataField="transporteur">
+    <dxo-lookup
+      [dataSource]="transporteurs | async"
+      [valueExpr]="'this'"
+      [displayExpr]="'raisonSocial'"
+    >
+    </dxo-lookup>
+  </dxi-column>
+
+  <dxo-editing
+    mode="form"
+    [allowUpdating]="true"
+    [allowAdding]="true"
+    [allowDeleting]="true"
+  >
+  </dxo-editing>
+</dx-data-grid>
