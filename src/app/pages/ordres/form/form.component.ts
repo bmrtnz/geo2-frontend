@@ -448,7 +448,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (resCree) => {
           const refOrdreRegul = resCree.data.fCreeOrdreRegularisation.data.ls_ord_ref_regul;
-          console.log(resCree.data.fCreeOrdreRegularisation.data);
           const currOrder = this.ordre;
           if (refOrdreRegul) {
             // Find numero / adjust listeOrdresRegularisations & save it / Initialize form
