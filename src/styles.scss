@@ -261,6 +261,12 @@ body app-root.production {
     background-color: #666 !important;
     color: #fff !important;
 
+    &.dx-command-select {
+      .dx-checkbox-icon {
+        border-color: #FFF;
+      }
+    }
+
     .dx-sort-indicator {
       font-weight: bold;
       color: #fff !important;

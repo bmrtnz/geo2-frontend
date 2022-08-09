@@ -17,17 +17,6 @@
 
 ::ng-deep .grid-commandes {
 
-  // .dx-data-row .arrow-right .dx-template-wrapper::after {
-  //   content: "⏷";
-  //   color: #5D686C;
-  //   position: relative;
-  //   display: block;
-  //   width: 24px;
-  //   margin: -1px -25px 0 0;
-  //   font-size: 1.1em;
-  //   float: right;
-  // }
-
   .small-stock-button {
     margin-top: -1px !important;
     pointer-events: none !important;
@@ -61,7 +50,7 @@
     padding-right: 8px !important;
   }
 
-  .dx-datagrid-headers.dx-datagrid-nowrap td {
+  .dx-datagrid-headers.dx-datagrid-nowrap td:not(.dx-command-select) {
     pointer-events: none;
 
     &.headerCellBtnTemplate {
@@ -100,6 +89,14 @@
     }
   }
 
+  .dx-row {
+    td.dx-command-select {
+      width: 20px !important;
+      min-width: 20px !important;
+      padding: 0 4px 0 4px !important;
+    }
+  }
+
   .bio-article {
     color: #39970e !important;
     cursor: pointer;
@@ -112,6 +109,12 @@
   .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)):not(.dx-cell-modified) {
     color: #000;
     background-color: transparent !important;
+  }
+
+  .dx-row-focused td.dx-command-select {
+    .dx-checkbox-icon {
+      border-color: #FFF !important;
+    }
   }
 
   .article-column {

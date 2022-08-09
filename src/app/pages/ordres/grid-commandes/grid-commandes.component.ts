@@ -249,6 +249,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public onContentReady(event) {
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
     this.gridRowsTotal = this.grid.instance.getVisibleRows()?.length;
+    this.grid.instance.deselectAll();
   }
 
   // Reload grid data after external update

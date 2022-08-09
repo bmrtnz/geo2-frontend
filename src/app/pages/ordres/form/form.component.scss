@@ -3,7 +3,25 @@
 @import "~themes/generated/variables.base";
 
 ::ng-deep .form-ordres-page {
-  // margin-right: 20px;
+
+
+  .shiftNoMutations .order-conf-button,
+  .shiftNoMutations .order-regul-button {
+    margin-right: -85px;
+  }
+
+  .order-regul-button {
+    position: absolute;
+    z-index: 1;
+    margin-top: 9px;
+    right: 438px;
+    height: 34px;
+    font-size: 12px;
+
+    .dx-button-content {
+      padding: 3px 13px !important;
+    }
+  }
 
   .header-btn-baf {
     margin: -9px 5px 0 0;
@@ -368,4 +386,5 @@ dx-button[type="normal"] {
       padding: 0;
     }
   }
+
 }

@@ -409,6 +409,18 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
+  onRegulOrderClick() {
+    if (!this.gridCommandes.grid.instance.getSelectedRowKeys()?.length) {
+      this.gridCommandes.grid.instance.columnOption("command:select", "visible", true);
+      this.gridCommandes.grid.instance.selectAll();   // Way to avoid "null"
+      this.gridCommandes.grid.instance.deselectAll(); // in select checkboxes
+      notify("Veuillez sélectionner une ou plusieurs lignes", "warning", 5000);
+    }
+  }
+
+  validateRegulOrder() {
+  }
+
   onComplOrderClick() {
 
     if (!this.ordre?.id) return;
