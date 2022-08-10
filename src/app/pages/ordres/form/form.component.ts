@@ -385,6 +385,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.headerSaving = false;
           this.ordre = { ...this.ordre, ...ordre };
           this.formGroup.markAsPristine();
+          this.addLinkedOrders();
         },
         error: (err) => {
           notify("Erreur sauvegarde entête", "error", 3000);
@@ -417,6 +418,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     // As LIST_NORDRE_REGUL is a VARCHAR(50)
     if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
       notify("Le nombre maximum d'ordres de régularisation est atteint", "warning", 5000);
+      this.clearSelectionForRegul();
       return;
     }
 
@@ -695,17 +697,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         error: () => notify("Echec de la duplication", "error", 3000),
       });
     }
-  }
-
-  deleteOrder() {
-    // const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-    // if (!ordre.id) return;
-    // this.ordresService.delete({ id: ordre.id }).subscribe({
-    //   next: (_) => {
-    //     notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
-    //   },
-    //   error: (_) => notify("Echec de la suppression", "error", 3000),
-    // });
   }
 
   addLinkedOrders() {

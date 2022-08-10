@@ -7,11 +7,11 @@
   title="{{ 'ordre-complementaire-creation' | localize }}"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
-  (onHiding)="onHiding($event)"
+  (onHiding)="onHiding()"
 >
 
   <!-- Subtitle -->
-  <div class="popup-subtitles">
+  <div class="blue-text">
     {{ 'text-popup-regularisation-subtitle' | localize }}
   </div>
   <br>
@@ -31,7 +31,7 @@
   <br>
 
   <!-- Solution -->
-  <div class="popup-subtitles">
+  <div class="blue-text">
     {{ 'text-popup-regularisation-solution' | localize }}
   </div>
   <div class="dx-field radio-group-popup">
@@ -61,7 +61,7 @@
     <dx-button
       type="default"
       text="{{ 'btn-annuler' | localize }}"
-      (onClick)="cancelClick()"
+      (onClick)="hidePopup()"
     ></dx-button>
     <dx-button
       type="normal"

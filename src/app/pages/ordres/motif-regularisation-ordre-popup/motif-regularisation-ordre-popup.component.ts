@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { LitigeCausesService } from "app/shared/services/api/litige-causes.service";
 import { DxCheckBoxComponent, DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -8,7 +8,7 @@ import DataSource from "devextreme/data/data_source";
   templateUrl: "./motif-regularisation-ordre-popup.component.html",
   styleUrls: ["./motif-regularisation-ordre-popup.component.scss"]
 })
-export class MotifRegularisationOrdrePopupComponent implements OnInit {
+export class MotifRegularisationOrdrePopupComponent {
 
   @Output() whenValidateRegul = new EventEmitter<any>();
 
@@ -29,21 +29,13 @@ export class MotifRegularisationOrdrePopupComponent implements OnInit {
     this.typesRegul = ["Prix uniquement", "Prix + poids"];
   }
 
-  ngOnInit() {
-  }
-
   enableFilters() {
-
     this.motifDataSource = this.motifsService.getDataSource_v2(["id", "description"]);
     this.motifDataSource.filter([
       ["valide", "=", true],
       "and",
       ["indicateurRegularisation", "=", true]
     ]);
-  }
-
-  displayCodeBefore(data) {
-    return data ? data.id + " - " + data.description : null;
   }
 
   onShowing(e) {
@@ -54,7 +46,7 @@ export class MotifRegularisationOrdrePopupComponent implements OnInit {
     this.motiflist.instance.repaint();
   }
 
-  onHiding(e) {
+  onHiding() {
     this.motif = null;
     this.typeRegul.value = null;
     this.conserverDetail.value = false;
@@ -71,7 +63,6 @@ export class MotifRegularisationOrdrePopupComponent implements OnInit {
   }
 
   applyClick() {
-
     const infosMotif = {
       lcaCode: this.motif,
       typeReg: this.typeRegul.value === this.typesRegul[0] ? "RPR" : "RPO",
@@ -82,9 +73,4 @@ export class MotifRegularisationOrdrePopupComponent implements OnInit {
 
     this.hidePopup();
   }
-
-  cancelClick() {
-    this.hidePopup();
-  }
-
 }
