@@ -1,0 +1,25 @@
+h6 {
+  margin: 0;
+  float: left;
+}
+
+.refresh {
+  top: -8px;
+  float: right;
+}
+
+::ng-deep .blocked-color {
+  background-color: #ff325a !important;
+}
+
+::ng-deep .alert-color {
+  background-color: #ffa100 !important;
+}
+
+::ng-deep .OK-color {
+  background-color: #8fc459 !important;
+}
+
+::ng-deep .period-list .dx-list-item {
+  padding: 6px 15px;
+}

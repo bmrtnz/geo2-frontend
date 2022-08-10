@@ -5263,5 +5263,13 @@
         "fixedPosition": "right"
       }
     ]
+  },
+  "commandes-edi": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id"
+      }
+    ]
   }
 }

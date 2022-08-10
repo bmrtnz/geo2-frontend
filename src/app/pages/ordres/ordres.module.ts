@@ -126,6 +126,7 @@ import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fou
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
+import { CommandesEdiComponent } from "./indicateurs/commandes-edi/commandes-edi.component";
 
 @NgModule({
   declarations: [
@@ -201,6 +202,7 @@ import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-o
     GridReservationStockEnCoursComponent,
     ListPipe,
     MotifRegularisationOrdrePopupComponent,
+    CommandesEdiComponent,
   ],
   imports: [
     OrdresRoutingModule,

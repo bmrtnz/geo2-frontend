@@ -270,7 +270,22 @@ const indicators: Indicator[] = [
     indicatorIcon: "material-icons local_shipping",
     warningIcon: "",
   },
+  {
+    id: "CommandesEdi",
+    enabled: true,
+    withCount: false,
+    parameter: "Commandes",
+    subParameter: "EDI",
+    tileBkg: "#225AA8",
+    indicatorIcon: "material-icons view_list",
+    warningIcon: "",
+    component: import(
+      "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
+    ),
+  },
 ].map((indicator) => ({ ...indicator, loading: false }));
+
+
 
 @Injectable()
 export class OrdresIndicatorsService {
@@ -296,6 +311,11 @@ export class OrdresIndicatorsService {
         "and",
         ["societe.id", "=", this.currentCompanyService.getCompany().id],
       ];
+
+      // Commandes EDI
+      if (instance.id === "CommandesEdi") {
+        instance.enabled = this.authService.currentUser.accessCommandeEdi;
+      }
 
       // Supervision livraison
       if (instance.id === "SupervisionLivraison") {
