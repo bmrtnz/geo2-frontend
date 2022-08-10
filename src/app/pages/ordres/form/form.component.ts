@@ -437,6 +437,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   validateRegulOrder(data) {
 
+    // Quitting without creating a regul order
+    if (!data) {
+      this.clearSelectionForRegul();
+      return;
+    }
+
     data = {
       ...data,
       listOrlRef: this.selectedLignes,

@@ -10,7 +10,7 @@ import DataSource from "devextreme/data/data_source";
 })
 export class MotifRegularisationOrdrePopupComponent {
 
-  @Output() whenValidateRegul = new EventEmitter<any>();
+  @Output() whenQuitRegulPopup = new EventEmitter<any>();
 
   dataSource: DataSource;
   motifDataSource: DataSource;
@@ -69,8 +69,13 @@ export class MotifRegularisationOrdrePopupComponent {
       indDetail: this.conserverDetail.value
     };
 
-    this.whenValidateRegul.emit(infosMotif);
+    this.whenQuitRegulPopup.emit(infosMotif);
 
+    this.hidePopup();
+  }
+
+  cancelClick() {
+    this.whenQuitRegulPopup.emit();
     this.hidePopup();
   }
 }
