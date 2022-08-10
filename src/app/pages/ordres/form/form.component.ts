@@ -464,7 +464,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.ordresService.save_v2(["id", "listeOrdresRegularisations"], { ordre }).subscribe({
                   next: () => {
                     this.initializeForm("no-cache");
-                    notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "info", 7000);
+                    notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "success", 7000);
                     this.clearSelectionForRegul();
                   },
                   error: (err) => {
@@ -540,7 +540,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
                       next: () => {
                         this.initializeForm("no-cache");
-                        notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "info", 7000);
+                        notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "success", 7000);
                       },
                       error: (err) => {
                         notify("Erreur sauvegarde liste ordres complémentaires", "error", 3000);
@@ -634,7 +634,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           .subscribe({
             next: () => {
               this.tabContext.closeOrdre(this.ordre.numero, this.ordre.campagne.id);
-              notify(this.localization.localize("text-popup-suppression-ok").replace("&O", numero), "info", 7000);
+              notify(this.localization.localize("text-popup-suppression-ok").replace("&O", numero), "success", 7000);
             },
             error: (error: Error) => {
               alert(this.messageFormat(error.message), this.localization.localize("suppression-ordre"));
