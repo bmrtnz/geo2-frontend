@@ -4,6 +4,7 @@ import { Role } from "app/shared/models/personne.model";
 import {
   AuthService, ClientsService, LocalizationService
 } from "app/shared/services";
+import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -11,7 +12,7 @@ import {
   Grid, GridConfig, GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxRadioGroupComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -22,10 +23,11 @@ enum InputField {
   clientCode = "client",
   codeCommercial = "commercial",
   codeAssistante = "assistante",
-  statut = "statut",
   dateMin = "dateMin",
   dateMax = "dateMax",
 }
+
+const ALL = "%";
 
 type Inputs<T = any> = { [key in keyof typeof InputField]: T };
 
@@ -43,21 +45,23 @@ export class CommandesEdiComponent implements OnInit, AfterViewInit {
   public commerciaux: DataSource;
   public assistantes: DataSource;
   public periodes: string[];
-  public statuts: string[];
+  public etats: any;
+  public displayedEtat: string[];
   public columnChooser = environment.columnChooser;
-  private gridConfig: Promise<GridConfig>;
   public columns: Observable<GridColumn[]>;
+  private gridConfig: Promise<GridConfig>;
+  public allText: string;
   toRefresh: boolean;
   gridHasData: boolean;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild("etatRB", { static: false }) etatRB: DxRadioGroupComponent;
 
   public formGroup = new FormGroup({
     clientCode: new FormControl(),
     codeAssistante: new FormControl(),
     codeCommercial: new FormControl(),
-    statut: new FormControl(),
     dateMin: new FormControl(this.dateManagementService.startOfDay()),
     dateMax: new FormControl(this.dateManagementService.endOfDay()),
   } as Inputs<FormControl>);
@@ -65,6 +69,7 @@ export class CommandesEdiComponent implements OnInit, AfterViewInit {
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private ordresService: OrdresService,
+    private ordresEdiService: OrdresEdiService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
     private localization: LocalizationService,
@@ -72,27 +77,35 @@ export class CommandesEdiComponent implements OnInit, AfterViewInit {
     public authService: AuthService,
     private tabContext: TabContext,
   ) {
-    this.statuts = ["Tous", "Traités", "Non-traités"];
+    this.allText = this.localization.localize("all");
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdresAFacturer,
+      Grid.CommandesEdi,
     );
     this.columns = from(this.gridConfig).pipe(
       map((config) => config.columns),
     );
 
+    this.etats = [
+      { caption: "Toutes", id: "%" },
+      { caption: "Traitées", id: "T" },
+      { caption: "Non-traitées", id: "N" }
+    ];
+    this.displayedEtat = this.etats.map((res) => res.caption);
+
     this.clients = this.clientsService.getDataSource_v2([
-      "id",
       "code",
-      "raisonSocial",
-      "secteur.id",
+      "raisonSocial"
+    ]);
+    this.clients.filter([
+      ["secteur.id", "=", this.authService.currentUser.secteurCommercial.id]
     ]);
     this.commerciaux = this.personnesService.getDataSource_v2([
       "id",
       "nomUtilisateur",
     ]);
     this.commerciaux.filter([
-      // ["valide", "=", true],
-      // "and",
+      ["valide", "=", true],
+      "and",
       ["role", "=", Role.COMMERCIAL],
       "and",
       ["nomUtilisateur", "<>", "null"],
@@ -102,8 +115,8 @@ export class CommandesEdiComponent implements OnInit, AfterViewInit {
       "nomUtilisateur",
     ]);
     this.assistantes.filter([
-      // ["valide", "=", true],
-      // "and",
+      ["valide", "=", true],
+      "and",
       ["role", "=", Role.ASSISTANT],
       "and",
       ["nomUtilisateur", "<>", "null"],
@@ -117,6 +130,8 @@ export class CommandesEdiComponent implements OnInit, AfterViewInit {
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField)),
     );
+    const d = new Date("2022-05-01T03:24:00");
+    this.formGroup.get("dateMin").setValue(d);
   }
 
   ngAfterViewInit() {
@@ -163,21 +178,24 @@ export class CommandesEdiComponent implements OnInit, AfterViewInit {
       ...this.formGroup.value,
     };
 
-    // this.datagrid.instance.beginCustomLoading("");
-    // this.ordresService.allCommandeEdi(
-    //   this.authService.currentUser.secteurCommercial.id,
-    //   values.clientCode?.id,
-    //   values.statut,
-    //   this.dateManagementService.formatDate(values.dateMin),
-    //   this.dateManagementService.formatDate(values.dateMax),
-    //   values.codeCommercial?.id,
-    //   values.codeAssistante?.id
-    // ).subscribe((res) => {
-    //   this.datagrid.dataSource = res.data.allStockArticleList;
-    //   this.datagrid.instance.refresh();
-    //   this.datagrid.instance.endCustomLoading();
-    //   this.toRefresh = false;
-    // });
+    this.datagrid.instance.beginCustomLoading("");
+    this.ordresEdiService.allCommandeEdi(
+      this.authService.currentUser.secteurCommercial.id,
+      values.clientCode?.id || ALL,
+      values.codeAssistante?.id || ALL,
+      values.codeCommercial?.id || ALL,
+      this.etats.filter((res) => res.caption === this.etatRB.value)[0].id,
+      values.dateMin,
+      values.dateMax,
+    ).subscribe((res) => {
+      console.log(res);
+      this.datagrid.dataSource = res.data.allCommandeEdi;
+      this.datagrid.instance.refresh();
+      this.datagrid.instance.endCustomLoading();
+      this.toRefresh = false;
+    });
+
+    this.datagrid.dataSource = this.ordresDataSource;
 
   }
 

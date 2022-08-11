@@ -5268,7 +5268,53 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id"
+        "dataField": "id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "status",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "numeroLigne",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "libelleProduit",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "eanProduitClient",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "parCombien",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "uniteQtt",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "quantiteColis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "quantite",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "listArticleId",
+        "visible": true
       }
     ]
   }

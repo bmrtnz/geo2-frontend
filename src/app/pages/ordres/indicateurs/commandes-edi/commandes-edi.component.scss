@@ -1,25 +1,67 @@
-h6 {
-  margin: 0;
-  float: left;
-}
+::ng-deep .supervision-commandes-EDI {
 
-.refresh {
-  top: -8px;
-  float: right;
-}
+  h6 {
+    margin: 0;
+    float: left;
+  }
 
-::ng-deep .blocked-color {
-  background-color: #ff325a !important;
-}
+  .refresh {
+    top: -8px;
+    float: right;
+  }
 
-::ng-deep .alert-color {
-  background-color: #ffa100 !important;
-}
+  .BAFFilterArea {
 
-::ng-deep .OK-color {
-  background-color: #8fc459 !important;
-}
+    min-width: 1024px;
 
-::ng-deep .period-list .dx-list-item {
-  padding: 6px 15px;
+    .dx-placeholder {
+      color: rgba(0, 0, 0, .87);
+    }
+
+    .date-field {
+      .dx-field-value {
+
+        input {
+          padding-right: 0 !important;
+        }
+      }
+
+      .dx-field-label {
+        padding: 0 10px 0 30px;
+      }
+    }
+
+    .etat-field {
+      .dx-field-value {
+        min-width: 300px;
+
+        .dx-radiogroup {
+          margin: 6px 0 6px -2px;
+        }
+      }
+    }
+
+    .commercial-field {
+      .dx-field-label {
+        padding: 0 10px 0 30px;
+      }
+    }
+  }
+
+  .blocked-color {
+    background-color: #ff325a !important;
+  }
+
+  .alert-color {
+    background-color: #ffa100 !important;
+  }
+
+  .OK-color {
+    background-color: #8fc459 !important;
+  }
+
+  period-list .dx-list-item {
+    padding: 6px 15px;
+  }
+
 }

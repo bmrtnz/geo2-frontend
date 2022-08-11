@@ -1,5 +1,5 @@
 <form
-  class="dx-fieldset"
+  class="dx-fieldset supervision-commandes-EDI"
   [formGroup]="formGroup"
 >
   <div class="title-container">
@@ -26,6 +26,7 @@
               formControlName="clientCode"
               [dataSource]="clients"
               [showClearButton]="true"
+              [placeholder]="allText"
               [displayExpr]="displayIDBefore"
               [searchExpr]="['code']"
               (onValueChanged)="onFieldValueChange($event)"
@@ -48,6 +49,27 @@
               formControlName="codeAssistante"
               [dataSource]="assistantes"
               [showClearButton]="true"
+              [placeholder]="allText"
+              [displayExpr]="displayIDBefore"
+              [searchExpr]="['id', 'nomUtilisateur']"
+              (valueChange)="onFieldValueChange($event)"
+            >
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="3.6">
+        <!-- Commercial -->
+        <div class="dx-field commercial-field">
+          <div class="dx-field-label">
+            {{ "ordres-commercial" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              formControlName="codeCommercial"
+              [dataSource]="commerciaux"
+              [showClearButton]="true"
+              [placeholder]="allText"
               [displayExpr]="displayIDBefore"
               [searchExpr]="['id', 'nomUtilisateur']"
               (valueChange)="onFieldValueChange($event)"
@@ -59,42 +81,24 @@
     </dx-box>
     <dx-box>
       <dxi-item [ratio]="3">
-        <!-- Commercial -->
-        <div class="dx-field">
+        <!-- État -->
+        <div class="dx-field etat-field">
           <div class="dx-field-label">
-            {{ "ordres-commercial" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              formControlName="codeCommercial"
-              [dataSource]="commerciaux"
-              [showClearButton]="true"
-              [displayExpr]="displayIDBefore"
-              [searchExpr]="['id', 'nomUtilisateur']"
-              (valueChange)="onFieldValueChange($event)"
-            >
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
-        <!-- Statut -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "ordres-statut" | localize }}
+            {{ "ordresEDI-commandes" | localize }}
           </div>
           <div class="dx-field-value">
             <dx-radio-group
-              formControlName="statut"
-              [items]="statuts"
-              [value]="statuts[2]"
+              #etatRB
+              [items]="displayedEtat"
+              [value]="displayedEtat[2]"
               layout="horizontal"
+              (valueChange)="onFieldValueChange($event)"
             >
             </dx-radio-group>
           </div>
         </div>
       </dxi-item>
+      <dxi-item [ratio]="0.5"></dxi-item>
       <dxi-item [ratio]="3">
         <!-- Période -->
         <div class="dx-field">
@@ -117,10 +121,9 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
+      <dxi-item [ratio]="1.8">
         <!-- Date de début -->
-        <div class="dx-field field">
+        <div class="dx-field date-field">
           <div class="dx-field-label">
             {{ "ordres-Du" | localize }}
           </div>
@@ -131,14 +134,17 @@
               type="datetime"
               [displayFormat]="'dd-MM-yy  HH:mm'"
               (onValueChanged)="manualDate($event)"
-            ></dx-date-box>
+            >
+              <dx-validator>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dx-validator>
+            </dx-date-box>
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
+      <dxi-item [ratio]="1.8">
         <!-- Date de fin -->
-        <div class="dx-field field">
+        <div class="dx-field field date-field">
           <div class="dx-field-label">
             {{ "ordres-au" | localize }}
           </div>
@@ -149,7 +155,11 @@
               type="datetime"
               [displayFormat]="'dd-MM-yy  HH:mm'"
               (onValueChanged)="manualDate($event)"
-            ></dx-date-box>
+            >
+              <dx-validator>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dx-validator>
+            </dx-date-box>
           </div>
         </div>
       </dxi-item>
@@ -160,6 +170,8 @@
 
 <dx-data-grid
   [height]="450"
+  [remoteOperations]="false"
+  [keyExpr]="'id'"
   [showBorders]="false"
   [focusedRowEnabled]="false"
   [focusedRowIndex]="0"
@@ -180,11 +192,6 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-selection
-    mode="multiple"
-    [showCheckBoxesMode]="'always'"
-    [selectAllMode]="'page'"
-  ></dxo-selection>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -196,7 +203,7 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-export fileName="Vérification BAF"></dxo-export>
+  <dxo-export fileName="Commandes EDI"></dxo-export>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.CommandesEdi"
     [enabled]="true"
