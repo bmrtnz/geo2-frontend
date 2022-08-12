@@ -1,4 +1,4 @@
-import { Client } from ".";
+import { Client, Entrepot } from ".";
 import { Field, Model, ModelName } from "./model";
 
 @ModelName("CommandeEdi")
@@ -6,8 +6,7 @@ export class CommandeEdi extends Model {
   @Field({ asKey: true }) public id?: string;
   @Field({ model: import("./client.model") }) public client?: Client;
   @Field() public eanProduitClient?: string;
-  @Field() public entrepotId?: string;
-  @Field() public entrepotRaisonSocial?: string;
+  @Field({ model: import("./entrepot.model") }) public entrepot?: Entrepot;
   @Field() public fichierSource?: string;
   @Field() public libelleProduit?: string;
   @Field() public listArticleId?: string;

@@ -168,6 +168,7 @@
 </form>
 
 <dx-data-grid
+  [height]="450"
   [remoteOperations]="false"
   [keyExpr]="'id'"
   [showBorders]="false"
@@ -196,13 +197,13 @@
     [visible]="true"
     [allowSearch]="true"
   ></dxo-header-filter>
-  <dxo-paging></dxo-paging>
-  <dxo-pager
+  <dxo-paging [enabled]="false"></dxo-paging>
+  <!-- <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
-  ></dxo-pager>
+  ></dxo-pager> -->
   <dxo-export fileName="Commandes EDI"></dxo-export>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.CommandesEdi"
@@ -254,17 +255,31 @@
     <dx-button
     class="small-action-button"
       type="normal"
+      [visible]="showViewEDIButton(cell)"
+      [focusStateEnabled]="false"
+      text="{{ 'visualiser' | localize }}"
+    ></dx-button>
+    <dx-button
+    class="small-action-button"
+      type="normal"
+      [visible]="showCreateComplEDIButton(cell)"
+      [focusStateEnabled]="false"
+      text="{{ 'creer-ordre-compl' | localize }}"
+    ></dx-button>
+    <dx-button
+    class="small-action-button"
+      type="normal"
       [visible]="showModifyEDIButton(cell)"
       [focusStateEnabled]="false"
       text="{{ 'modifier-ordre' | localize }}"
     ></dx-button>
     <dx-button
       class="small-action-button"
-        type="normal"
-        [visible]="showCreateEDIButton(cell)"
-        [focusStateEnabled]="false"
-        text="{{ 'creer-ordre' | localize }}"
-      ></dx-button>
+      type="normal"
+      [visible]="showCreateEDIButton(cell)"
+      [focusStateEnabled]="false"
+      text="{{ 'creer-ordre' | localize }}"
+    ></dx-button>
   </div>
 
 </dx-data-grid>

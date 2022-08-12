@@ -5288,6 +5288,13 @@
         "visible": true
       },
       {
+        "visibleIndex": 3,
+        "dataField": "entrepot.id",
+        "width": 50,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
         "visibleIndex": 4,
         "dataField": "libelleProduit",
         "visible": true
@@ -5331,10 +5338,6 @@
       },
       {
         "dataField": "client.raisonSocial",
-        "visible": false
-      },
-      {
-        "dataField": "entrepotId",
         "visible": false
       },
       {

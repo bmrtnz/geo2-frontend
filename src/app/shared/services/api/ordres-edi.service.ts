@@ -26,6 +26,9 @@ export class OrdresEdiService {
     columns.delete("client");
     columns.add("client.id");
     columns.add("client.raisonSocial");
+    columns.delete("entrepot");
+    columns.add("entrepot.id");
+    columns.add("entrepot.raisonSocial");
     return this.apollo
       .query<{ allCommandeEdi: CommandeEdi[] }>({
         query: gql(ApiService.buildGraph(

@@ -5,7 +5,6 @@ import {
   AuthService, ClientsService, LocalizationService
 } from "app/shared/services";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
-import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import {
@@ -300,6 +299,16 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   showCreateEDIButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].status === "C" && data[0].statusGeo === "N";
+  }
+
+  showCreateComplEDIButton(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return data[0].status === "U" && data[0].statusGeo === "N";
+  }
+
+  showViewEDIButton(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return data[0].statusGeo === "T";
   }
 
 }
