@@ -1,10 +1,10 @@
+import { Client } from ".";
 import { Field, Model, ModelName } from "./model";
 
 @ModelName("CommandeEdi")
 export class CommandeEdi extends Model {
   @Field({ asKey: true }) public id?: string;
-  @Field() public clientId?: string;
-  @Field() public clientRaisonSocial?: string;
+  @Field({ model: import("./client.model") }) public client?: Client;
   @Field() public eanProduitClient?: string;
   @Field() public entrepotId?: string;
   @Field() public entrepotRaisonSocial?: string;
@@ -24,6 +24,7 @@ export class CommandeEdi extends Model {
   @Field() public typeColis?: string;
   @Field() public uniteQtt?: string;
   @Field() public version?: string;
+  @Field() public refEdiOrdre: string;
   @Field({ dataType: "datetime" }) public dateDocument?: string;
   @Field({ dataType: "datetime" }) public dateLivraison?: string;
 

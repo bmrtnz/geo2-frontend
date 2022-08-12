@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import { Client } from "app/shared/models";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
@@ -21,6 +22,10 @@ export class OrdresEdiService {
   public allCommandeEdi(
     secteurId: string, clientId: string, assistantId: string, commercialId: string, status: string, dateMin: Date, dateMax: Date
   ) {
+    const columns = CommandeEdi.getFieldsName();
+    columns.delete("client");
+    columns.add("client.id");
+    columns.add("client.raisonSocial");
     return this.apollo
       .query<{ allCommandeEdi: CommandeEdi[] }>({
         query: gql(ApiService.buildGraph(
@@ -28,7 +33,7 @@ export class OrdresEdiService {
           [
             {
               name: `allCommandeEdi`,
-              body: CommandeEdi.getFieldsName(),
+              body: columns,
               params: [
                 { name: "secteurId", value: "secteurId", isVariable: true },
                 { name: "clientId", value: "clientId", isVariable: true },
@@ -55,26 +60,42 @@ export class OrdresEdiService {
       });
   }
 
-  // public  getDistinctEntityDatasource(fieldName, searchExpr?) {
-  //   return this.apollo.query<{ distinct: RelayPage<{ count: number, key: string, description: string }> }>({
-  //     query: gql(ApiService.buildDistinctGraph()),
-  //     variables: {
-  //       field: fieldName, // E.g. "espece.id"
-  //       type: "GeoCommandeEdi",
-  //       search: searchExpr,
-  //       pageable: {
-  //         pageNumber: 0,
-  //         pageSize: 500,
-  //       } as Pageable,
-  //     },
-  //   }).pipe(
-  //     map(res => new DataSource({
-  //       store: new ArrayStore({
-  //         data: res.data.distinct.edges,
-  //       }),
-  //       key: "key",
-  //     })),
-  //   );
-  // }
+  /**
+   * Récupération de tous les clients EDI selon assistante et commercial
+   */
+
+  public allClientEdi(
+    secteurId: string, assistantId: string, commercialId: string
+  ) {
+    const columns = Client.getFieldsName();
+    columns.clear();
+    columns.add("id");
+    columns.add("code");
+    columns.add("raisonSocial");
+    return this.apollo
+      .query<{ allClientEdi: Client[] }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `allClientEdi`,
+              body: columns,
+              params: [
+                { name: "secteurId", value: "secteurId", isVariable: true },
+                { name: "assistantId", value: "assistantId", isVariable: true },
+                { name: "commercialId", value: "commercialId", isVariable: true }
+              ],
+            },
+          ],
+          [
+            { name: "secteurId", type: "String", isOptionnal: false },
+            { name: "assistantId", type: "String", isOptionnal: true },
+            { name: "commercialId", type: "String", isOptionnal: true }
+          ],
+        )),
+        variables: { secteurId, assistantId, commercialId },
+        fetchPolicy: "network-only",
+      });
+  }
 
 }

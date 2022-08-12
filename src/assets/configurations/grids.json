@@ -5268,7 +5268,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "id",
+        "dataField": "refEdiOrdre",
         "groupIndex": 0,
         "groupCellTemplate": "groupCellStatusTemplate",
         "visible": true
@@ -5295,6 +5295,8 @@
       {
         "visibleIndex": 6,
         "dataField": "eanProduitClient",
+        "width": 140,
+        "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
@@ -5306,7 +5308,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "uniteQtt",
+        "dataField": "quantite",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
@@ -5319,21 +5321,16 @@
         "visible": true
       },
       {
-        "visibleIndex": 14,
-        "dataField": "quantite",
-        "visible": true
-      },
-      {
         "visibleIndex": 16,
         "dataField": "listArticleId",
         "visible": true
       },
       {
-        "dataField": "clientId",
+        "dataField": "client.id",
         "visible": false
       },
       {
-        "dataField": "clientRaisonSocial",
+        "dataField": "client.raisonSocial",
         "visible": false
       },
       {
@@ -5370,6 +5367,10 @@
       },
       {
         "dataField": "version",
+        "visible": false
+      },
+      {
+        "dataField": "id",
         "visible": false
       }
     ]

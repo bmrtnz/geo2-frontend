@@ -92,13 +92,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     ];
     this.displayedEtat = this.etats.map((res) => res.caption);
 
-    this.clients = this.clientsService.getDataSource_v2([
-      "code",
-      "raisonSocial"
-    ]);
-    this.clients.filter([
-      ["secteur.id", "=", this.authService.currentUser.secteurCommercial.id]
-    ]);
     this.commerciaux = this.personnesService.getDataSource_v2([
       "id",
       "nomUtilisateur",
@@ -121,41 +114,23 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       "and",
       ["nomUtilisateur", "<>", "null"],
     ]);
+    this.setClientDataSource();
     this.periodes = this.dateMgtService.periods();
     this.gridHasData = false;
   }
 
   async ngOnInit() {
-    this.toRefresh = true;
     this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField)),
     );
 
-    const d = new Date("2022-05-01T03:24:00");
+    const d = new Date("2022-05-11T00:00:00");
     this.formGroup.get("dateMin").setValue(d);
+    const f = new Date("2022-05-11T23:59:59");
+    this.formGroup.get("dateMax").setValue(f);
   }
 
   ngAfterViewInit() {
-    // Fill commercial/assistante input from user role
-    if (
-      !this.authService.isAdmin &&
-      this.authService.currentUser.personne?.role
-    ) {
-      if (
-        this.authService.currentUser.personne?.role?.toString() ===
-        Role[Role.COMMERCIAL]
-      )
-        this.formGroup
-          .get("codeCommercial")
-          .setValue(this.authService.currentUser.assistante); // API Inverted, don't worry
-      if (
-        this.authService.currentUser.personne?.role?.toString() ===
-        Role[Role.ASSISTANT]
-      )
-        this.formGroup
-          .get("codeAssistante")
-          .setValue(this.authService.currentUser.commercial); // API Inverted, don't worry
-    }
   }
 
   displayIDBefore(data) {
@@ -179,8 +154,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       ...this.formGroup.value,
     };
 
-    console.log(values);
-
     this.datagrid.instance.beginCustomLoading("");
     this.ordresEdiService.allCommandeEdi(
       this.authService.currentUser.secteurCommercial.id,
@@ -201,8 +174,40 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
   }
 
-  onFieldValueChange(e?) {
+  onFieldValueChange() {
     this.toRefresh = true;
+  }
+
+  setClientDataSource() {
+    this.onFieldValueChange();
+
+    const values: Inputs = {
+      ...this.formGroup.value,
+    };
+
+    this.formGroup.get("clientCode").reset();
+    this.clients = null;
+
+    // Find all EDI clients depending on sector, assistant and commercial
+    this.ordresEdiService.allClientEdi(
+      this.authService.currentUser.secteurCommercial.id,
+      values.codeAssistante?.id || ALL,
+      values.codeCommercial?.id || ALL
+    ).subscribe((res) => {
+      const clientList = res.data.allClientEdi;
+      if (clientList?.length) {
+        const filters: any = [["secteur.id", "=", this.authService.currentUser.secteurCommercial.id]];
+        const filter = [];
+        clientList.map(clt => {
+          filter.push(["id", "=", clt.id], "or");
+        });
+        filter.pop();
+        filters.push("and", filter);
+        this.clients = this.clientsService.getDataSource_v2(["code", "raisonSocial"]);
+        this.clients.filter(filters);
+      }
+    });
+
   }
 
   onGridContentReady(e) {
@@ -257,7 +262,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     const field = e.column.dataField;
 
     if (e.rowType === "group") {
-      if (field === "id" && e.cellElement.textContent) {
+      if (field === "refEdiOrdre" && e.cellElement.textContent) {
         let data = e.data.items ?? e.data.collapsedItems;
         data = data[0];
 
@@ -267,7 +272,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         // Show ref cmd clt - raison soc clt - Version date - Livraison
         // Fill left text of the group row
         e.cellElement.childNodes[0].children[1].innerText = data.refCmdClient + " - " +
-          (data.clientRaisonSocial ?? "") + " - " +
+          (data.client.raisonSocial ?? "") + " - " +
           "Version : " + (data.version ?? "") + " " +
           "du " + this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";
 
@@ -285,6 +290,16 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       // Hide status on developped rows as it is shown in the group
       if (field === "status") e.cellElement.innerText = "";
     }
+  }
+
+  showModifyEDIButton(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return data[0].status === "U" && data[0].statusGeo === "N";
+  }
+
+  showCreateEDIButton(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return data[0].status === "C" && data[0].statusGeo === "N";
   }
 
 }

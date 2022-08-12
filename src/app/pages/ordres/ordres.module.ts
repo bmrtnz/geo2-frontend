@@ -127,7 +127,7 @@ import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popu
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { CommandesEdiComponent } from "./indicateurs/commandes-edi/commandes-edi.component";
-import { GridCommandesEdiComponent } from './indicateurs/commandes-edi/grid-commandes-edi/grid-commandes-edi.component';
+import { GridCommandesEdiComponent } from "./indicateurs/commandes-edi/grid-commandes-edi/grid-commandes-edi.component";
 
 @NgModule({
   declarations: [
