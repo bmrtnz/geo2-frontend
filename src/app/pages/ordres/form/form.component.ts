@@ -417,7 +417,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // As LIST_NORDRE_REGUL is a VARCHAR(50)
     if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
-      notify("Le nombre maximum d'ordres de régularisation est atteint", "warning", 5000);
+      notify("Le nombre maximum d'ordres de régularisation est atteint", "error", 5000);
       this.clearSelectionForRegul();
       return;
     }
@@ -504,7 +504,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.ordre?.id) return;
     // As LIST_NORDRE_COMP is a VARCHAR(50)
     if (this.ordre.listeOrdresComplementaires?.split(",").length >= 8) {
-      notify("Le nombre maximum d'ordres complémentaires est atteint", "warning", 5000);
+      notify("Le nombre maximum d'ordres complémentaires est atteint", "error", 5000);
       return;
     }
 

@@ -158,6 +158,11 @@ interface GridColumn {
   headerCellTemplate?: string;
 
   /**
+   * Specifies the group row cell template when required
+   */
+  groupCellTemplate?: string;
+
+  /**
    * Specifies a column's class.
    */
   cssClass?: string;

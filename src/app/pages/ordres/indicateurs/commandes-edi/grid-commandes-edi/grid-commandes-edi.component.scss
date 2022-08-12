@@ -1,0 +1,98 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .small-status-button {
+  top: 0px;
+  height: 18px;
+  min-width: 0;
+  margin-right: 15px;
+  pointer-events: none;
+  padding: 2px 14px 0 14px;
+  font-size: 13px;
+}
+
+::ng-deep .group-text-1 {
+  position: relative;
+  top: 3px;
+}
+
+::ng-deep .group-text-2 {
+  position: relative;
+  right: 200px;
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.7);
+  float: right;
+}
+
+::ng-deep .group-back-color {
+  background-color: #FFE7AD !important;
+}
+
+::ng-deep .blocked-color {
+  background-color: #ff325a !important;
+}
+
+::ng-deep .info-U {
+  background-color: #ffa100 !important;
+}
+
+::ng-deep .info-C {
+  background-color: #8fc459 !important;
+}
+
+::ng-deep .grid-commandes-EDI {
+
+  h6 {
+    margin: 0;
+    float: left;
+  }
+
+  .refresh {
+    top: -8px;
+    float: right;
+  }
+
+  .BAFFilterArea {
+
+    min-width: 1024px;
+
+    .dx-placeholder {
+      color: rgba(0, 0, 0, .87);
+    }
+
+    .date-field {
+      .dx-field-value {
+
+        input {
+          padding-right: 0 !important;
+        }
+      }
+
+      .dx-field-label {
+        padding: 0 10px 0 30px;
+      }
+    }
+
+    .etat-field {
+      .dx-field-value {
+        min-width: 300px;
+
+        .dx-radiogroup {
+          margin: 6px 0 6px -2px;
+        }
+      }
+    }
+
+    .commercial-field {
+      .dx-field-label {
+        padding: 0 10px 0 30px;
+      }
+    }
+  }
+
+  period-list .dx-list-item {
+    padding: 6px 15px;
+  }
+
+}
