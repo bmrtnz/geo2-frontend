@@ -2,10 +2,8 @@ import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import { Client } from "app/shared/models";
 import CommandeEdi from "app/shared/models/commande-edi.model";
-import ArrayStore from "devextreme/data/array_store";
-import DataSource from "devextreme/data/data_source";
-import { map } from "rxjs/operators";
-import { ApiService, Pageable, RelayPage } from "../api.service";
+import { ApiService } from "../api.service";
+import { FunctionsService } from "./functions.service";
 
 @Injectable({
   providedIn: "root"
@@ -13,6 +11,7 @@ import { ApiService, Pageable, RelayPage } from "../api.service";
 export class OrdresEdiService {
 
   constructor(
+    public functionsService: FunctionsService,
     public apollo: Apollo
   ) { }
 
@@ -20,7 +19,14 @@ export class OrdresEdiService {
    * Récupération de tous les ordres EDI
    */
   public allCommandeEdi(
-    secteurId: string, clientId: string, assistantId: string, commercialId: string, status: string, dateMin: Date, dateMax: Date
+    ediOrdreId: string,
+    secteurId: string,
+    clientId: string,
+    assistantId: string,
+    commercialId: string,
+    status: string,
+    dateMin: Date,
+    dateMax: Date
   ) {
     const columns = CommandeEdi.getFieldsName();
     columns.delete("client");
@@ -38,6 +44,7 @@ export class OrdresEdiService {
               name: `allCommandeEdi`,
               body: columns,
               params: [
+                { name: "ediOrdreId", value: "ediOrdreId", isVariable: true },
                 { name: "secteurId", value: "secteurId", isVariable: true },
                 { name: "clientId", value: "clientId", isVariable: true },
                 { name: "assistantId", value: "assistantId", isVariable: true },
@@ -49,6 +56,7 @@ export class OrdresEdiService {
             },
           ],
           [
+            { name: "ediOrdreId", type: "String", isOptionnal: false },
             { name: "secteurId", type: "String", isOptionnal: false },
             { name: "clientId", type: "String", isOptionnal: true },
             { name: "assistantId", type: "String", isOptionnal: true },
@@ -58,7 +66,7 @@ export class OrdresEdiService {
             { name: "dateMax", type: "LocalDateTime", isOptionnal: true },
           ],
         )),
-        variables: { secteurId, clientId, assistantId, commercialId, status, dateMin, dateMax },
+        variables: { ediOrdreId, secteurId, clientId, assistantId, commercialId, status, dateMin, dateMax },
         fetchPolicy: "network-only",
       });
   }
@@ -99,6 +107,31 @@ export class OrdresEdiService {
         variables: { secteurId, assistantId, commercialId },
         fetchPolicy: "network-only",
       });
+  }
+
+  /**
+   * Création d'un ordre EDI
+   */
+  public fCreeOrdresEdi(
+    societeId: string,
+    entrepotId: string,
+    dateLivraison: string,
+    campagneId: string,
+    referenceCommande: string,
+    referenceClient: string,
+    ediOrdreId: string,
+    username: string
+  ) {
+    return this.functionsService.queryFunction("fCreeOrdresEdi", [
+      { name: "societeId", type: "String", value: societeId },
+      { name: "entrepotId", type: "String", value: entrepotId },
+      { name: "dateLivraison", type: "String", value: dateLivraison },
+      { name: "campagneId", type: "String", value: campagneId },
+      { name: "referenceCommande", type: "String", value: referenceCommande },
+      { name: "referenceClient", type: "String", value: referenceClient },
+      { name: "ediOrdreId", type: "String", value: ediOrdreId },
+      { name: "username", type: "String", value: username }
+    ]);
   }
 
 }

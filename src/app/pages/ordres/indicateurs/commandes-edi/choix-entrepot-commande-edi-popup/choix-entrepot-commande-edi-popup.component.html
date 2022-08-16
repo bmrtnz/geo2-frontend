@@ -1,0 +1,57 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  title="{{ 'ordre-edi-creation' | localize }}"
+  [width]="500"
+  height="auto"
+  (onShowing)="onShowing($event)"
+  (onHidden)="onHidden()"
+  [resizeEnabled]="false"
+>
+  <div *dxTemplate="let data of 'content'">
+    <div class="popup-subtitle">{{ 'text-popup-choix-entrepot' | localize }}</div>
+    <br />
+    <!-- Client -->
+    <div class="dx-field">
+      <div class="dx-field-label noEllipsis">
+        {{ "tiers-client" | localize }}
+      </div>
+      <div class="dx-field-value">
+        <dx-select-box
+          #clientSB
+          [readOnly]="true"
+          [dataSource]="clientDS"
+          [value]="commandeEDI.client?.id"
+          [displayExpr]="displayCodeBefore"
+        >
+        </dx-select-box>
+      </div>
+    </div>
+    <!-- Entrepôt -->
+    <div class="dx-field">
+      <div class="dx-field-label noEllipsis">
+        {{ "tiers-entrepot" | localize }}
+      </div>
+      <div class="dx-field-value">
+        <dx-select-box
+          #entrepotSB
+          [dataSource]="entrepotDS"
+          [displayExpr]="displayCodeBefore"
+        >
+        </dx-select-box>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div class="popup-buttons-container">
+      <dx-button
+        type="normal"
+        text="{{ 'btn-appliquer' | localize }}"
+        [disabled]="!entrepotSB.value?.id"
+        (onClick)="applyClick()"
+      ></dx-button>
+    </div>
+  </div>
+</dx-popup>

@@ -5269,6 +5269,7 @@
       {
         "visibleIndex": 0,
         "dataField": "refEdiOrdre",
+        "allowGrouping": true,
         "groupIndex": 0,
         "groupCellTemplate": "groupCellStatusTemplate",
         "visible": true
@@ -5283,20 +5284,16 @@
       {
         "visibleIndex": 2,
         "dataField": "numeroLigne",
-        "width": 50,
-        "cssClass": "no-padding text-align-center",
-        "visible": true
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "entrepot.id",
-        "width": 50,
+        "sortOrder": "asc",
+        "sortIndex": 3,
+        "width": 70,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "libelleProduit",
+        "width": 500,
         "visible": true
       },
       {
@@ -5307,28 +5304,33 @@
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 6,
+        "dataField": "prixVente",
+        "visible": false
+      },
+      {
+        "visibleIndex": 10,
         "dataField": "parCombien",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 12,
         "dataField": "quantite",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 14,
         "dataField": "quantiteColis",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 18,
         "dataField": "listArticleId",
         "visible": true
       },
@@ -5341,8 +5343,8 @@
         "visible": false
       },
       {
-        "dataField": "entrepotRaisonSocial",
-        "visible": false
+        "visibleIndex": 8,
+        "dataField": "dateLivraison"
       },
       {
         "dataField": "masqueLigne",

@@ -1,11 +1,16 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { AfterViewInit, Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import CommandeEdi from "app/shared/models/commande-edi.model";
 import { Role } from "app/shared/models/personne.model";
+import { alert } from "devextreme/ui/dialog";
 import {
   AuthService, ClientsService, LocalizationService
 } from "app/shared/services";
+import { CampagnesService } from "app/shared/services/api/campagnes.service";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import {
   Grid, GridConfig, GridConfiguratorService
@@ -16,6 +21,8 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { TabContext } from "../../../root/root.component";
+import { ChoixEntrepotCommandeEdiPopupComponent } from "../choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 
 enum InputField {
   clientCode = "client",
@@ -50,14 +57,19 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public allText: string;
+  public gridTitleCount: string;
+  public gridTitleInput: HTMLInputElement;
+  public campagneEnCours: any;
   toRefresh: boolean;
-  gridHasData: boolean;
 
   @Input() gridTitle: string;
+  @Input() ordreEdiId: string;
+  @Output() commandeEDI: Partial<CommandeEdi>;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("etatRB", { static: false }) etatRB: DxRadioGroupComponent;
+  @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false }) choixEntPopup: ChoixEntrepotCommandeEdiPopupComponent;
 
   public formGroup = new FormGroup({
     clientCode: new FormControl(),
@@ -73,9 +85,18 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
     private localization: LocalizationService,
+    private campagnesService: CampagnesService,
+    private datePipe: DatePipe,
+    public tabContext: TabContext,
+    private currentCompanyService: CurrentCompanyService,
     private dateMgtService: DateManagementService,
     public authService: AuthService,
   ) {
+    this.campagnesService
+      .getDataSource_v2(["id"])
+      .load()
+      .then((camp) => (this.campagneEnCours = camp.slice(-1)[0]));
+
     this.allText = this.localization.localize("all");
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.CommandesEdi,
@@ -115,7 +136,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     ]);
     this.setClientDataSource();
     this.periodes = this.dateMgtService.periods();
-    this.gridHasData = false;
   }
 
   async ngOnInit() {
@@ -123,13 +143,15 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       map((columns) => columns.map((column) => column.dataField)),
     );
 
-    const d = new Date("2022-05-11T00:00:00");
+    const d = new Date("2022-04-02T00:00:00");
     this.formGroup.get("dateMin").setValue(d);
-    const f = new Date("2022-05-11T23:59:59");
+    const f = new Date("2022-04-02T23:59:59");
     this.formGroup.get("dateMax").setValue(f);
   }
 
   ngAfterViewInit() {
+    const dxGridElement = this.datagrid.instance.$element()[0];
+    this.gridTitleInput = dxGridElement.querySelector(".dx-toolbar .grid-title input");
   }
 
   displayIDBefore(data) {
@@ -155,6 +177,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
     this.datagrid.instance.beginCustomLoading("");
     this.ordresEdiService.allCommandeEdi(
+      this.ordreEdiId || ALL,
       this.authService.currentUser.secteurCommercial.id,
       values.clientCode?.code || ALL,
       values.codeAssistante?.id || ALL,
@@ -210,7 +233,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   onGridContentReady(e) {
-    this.gridHasData = this.datagrid.instance.getVisibleRows().length > 0;
+    // Orders count shown
+    this.gridTitleInput.value = this.gridTitle + ` (${this.datagrid.instance.getDataSource()?.items()?.length ?? "0"})`;
   }
 
   manualDate(e) {
@@ -252,6 +276,58 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     });
   }
 
+  createEDIOrder(data, entrId?) {
+
+    // Add entrepot to commande EDI data
+    if (entrId) data = { ...data, entrepot: { id: entrId } };
+
+    console.log(data);
+
+    this.ordresEdiService
+      .fCreeOrdresEdi(
+        this.currentCompanyService.getCompany().id,
+        data.entrepot.id,
+        this.datePipe.transform(data.dateLivraison, "dd/MM/yyyy"),
+        this.campagneEnCours.id,
+        data.refCmdClient,
+        data.client.id,
+        data.refEdiOrdre,
+        this.authService.currentUser.nomUtilisateur
+      )
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          // this.tabContext.openOrdre("671140", this.campagneEnCours.id);
+        },
+        error: (error: Error) => {
+          console.log(error);
+          alert(this.messageFormat(error.message), this.localization.localize("ordre-edi-creation"));
+        }
+      });
+
+
+  }
+
+  private messageFormat(mess) {
+    mess = mess
+      .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "");
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
+  }
+
+  OnClickCreateEDIButton(data) {
+    this.commandeEDI = data.items ?? data.collapsedItems;
+    this.commandeEDI = this.commandeEDI[0];
+
+    // Do we already have a specified entrepot? Otherwise, choose one
+    if (this.commandeEDI.entrepot?.id) {
+      this.createEDIOrder(this.commandeEDI);
+    } else {
+      this.choixEntPopup.visible = true;
+    }
+
+  }
+
   onCellClick(e) {
     if (e.column.dataField !== "numeroOrdre") return;
     e.event.stopImmediatePropagation();
@@ -272,7 +348,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         // Fill left text of the group row
         e.cellElement.childNodes[0].children[1].innerText = data.refCmdClient + " - " +
           (data.client.raisonSocial ?? "") + " - " +
-          "Version : " + (data.version ?? "") + " " +
+          "Version " + (data.version ?? "") + " " +
           "du " + this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";
 
         // Fill right text of the group row
@@ -282,12 +358,17 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         // Fill indicator button text and sets its bck depending on the status
         e.cellElement.childNodes[0].children[0].innerHTML = data.status;
         e.cellElement.childNodes[0].children[0].classList.add(`info-${data.status}`);
-
       }
     }
     if (e.rowType === "data") {
       // Hide status on developped rows as it is shown in the group
       if (field === "status") e.cellElement.innerText = "";
+
+      if (e.column.dataField === "libelleProduit") {
+        // Infobulle Descript. article
+        e.cellElement.title = e.data.libelleProduit;
+      }
+
     }
   }
 
@@ -301,14 +382,14 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     return data[0].status === "C" && data[0].statusGeo === "N";
   }
 
-  showCreateComplEDIButton(cell) {
-    const data = cell.data.items ?? cell.data.collapsedItems;
-    return data[0].status === "U" && data[0].statusGeo === "N";
-  }
-
   showViewEDIButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].statusGeo === "T";
+  }
+
+  showCreateComplEDIButton(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return data[0].status === "U" && data[0].statusGeo === "N";
   }
 
 }

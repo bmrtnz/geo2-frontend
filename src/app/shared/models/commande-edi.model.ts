@@ -16,6 +16,7 @@ export class CommandeEdi extends Model {
   @Field() public ordreId?: string;
   @Field() public parCombien?: string;
   @Field() public quantite?: number;
+  @Field() public prixVente?: number;
   @Field() public quantiteColis?: number;
   @Field() public refCmdClient?: string;
   @Field() public status?: string;

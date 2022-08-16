@@ -163,6 +163,11 @@ interface GridColumn {
   groupCellTemplate?: string;
 
   /**
+   * Allow column grouping
+   */
+  allowGrouping?: boolean;
+
+  /**
    * Specifies a column's class.
    */
   cssClass?: string;

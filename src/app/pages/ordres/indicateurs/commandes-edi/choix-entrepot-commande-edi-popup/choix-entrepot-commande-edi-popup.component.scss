@@ -1,0 +1,22 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .choix-entrepot-commande-edi-popup {
+  .popup-subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: $base-accent;
+  }
+
+  .popup-buttons-container {
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .dx-button {
+      margin: 5px;
+    }
+  }
+}
