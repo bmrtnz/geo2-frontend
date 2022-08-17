@@ -7,8 +7,6 @@ import { Component, OnInit, Output } from "@angular/core";
 })
 export class CommandesEdiComponent implements OnInit {
 
-  @Output() gridTitle = "Liste des commandes EDI";
-
   constructor(
   ) { }
 

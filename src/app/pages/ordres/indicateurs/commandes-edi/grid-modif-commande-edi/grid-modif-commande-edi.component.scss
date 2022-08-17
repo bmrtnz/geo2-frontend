@@ -38,6 +38,7 @@
   height: auto;
   width: 560px;
   white-space: initial;
+  color: rgba(0, 0, 0, .54) !important;
   line-height: 16px;
   float: left;
 }
@@ -63,58 +64,22 @@
   background-color: #8fc459 !important;
 }
 
-::ng-deep .grid-commandes-EDI {
+::ng-deep .white-text {
+  color: #FFF !important;
+}
 
-  h6 {
-    margin: 0;
-    float: left;
+::ng-deep .grid-modif-commande-EDI {
+
+  .dx-datagrid-group-panel {
+    display: none;
   }
 
-  .refresh {
-    top: -8px;
-    float: right;
+  .dx-row-lines {
+    cursor: pointer;
   }
 
-  .BAFFilterArea {
-
-    min-width: 1024px;
-
-    .dx-placeholder {
-      color: rgba(0, 0, 0, .87);
-    }
-
-    .date-field {
-      .dx-field-value {
-
-        input {
-          padding-right: 0 !important;
-        }
-      }
-
-      .dx-field-label {
-        padding: 0 10px 0 30px;
-      }
-    }
-
-    .etat-field {
-      .dx-field-value {
-        min-width: 300px;
-
-        .dx-radiogroup {
-          margin: 6px 0 6px -2px;
-        }
-      }
-    }
-
-    .commercial-field {
-      .dx-field-label {
-        padding: 0 10px 0 30px;
-      }
-    }
+  .dx-datagrid-group-closed,
+  .dx-datagrid-group-opened {
+    color: rgba(0, 0, 0, .54) !important;
   }
-
-  period-list .dx-list-item {
-    padding: 6px 15px;
-  }
-
 }

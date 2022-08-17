@@ -5304,9 +5304,76 @@
         "visible": true
       },
       {
+        "visibleIndex": 10,
+        "dataField": "parCombien",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "quantite",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "quantiteColis",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "listArticleId",
+        "visible": true
+      }
+    ]
+  },
+  "modif-commande-edi": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "refEdiOrdre",
+        "allowGrouping": true,
+        "groupIndex": 0,
+        "groupCellTemplate": "groupCellStatusTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "status",
+        "width": 50,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "numeroLigne",
+        "sortOrder": "asc",
+        "sortIndex": 3,
+        "width": 70,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "libelleProduit",
+        "width": 500,
+        "visible": true
+      },
+      {
         "visibleIndex": 6,
+        "dataField": "eanProduitClient",
+        "width": 140,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
         "dataField": "prixVente",
-        "visible": false
+        "visible": true
       },
       {
         "visibleIndex": 10,
@@ -5330,53 +5397,9 @@
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 16,
         "dataField": "listArticleId",
         "visible": true
-      },
-      {
-        "dataField": "client.id",
-        "visible": false
-      },
-      {
-        "dataField": "client.raisonSocial",
-        "visible": false
-      },
-      {
-        "visibleIndex": 8,
-        "dataField": "dateLivraison"
-      },
-      {
-        "dataField": "masqueLigne",
-        "visible": false
-      },
-      {
-        "dataField": "masqueOrdre",
-        "visible": false
-      },
-      {
-        "dataField": "ordreId",
-        "visible": false
-      },
-      {
-        "dataField": "refCmdClient",
-        "visible": false
-      },
-      {
-        "dataField": "statusGeo",
-        "visible": false
-      },
-      {
-        "dataField": "typeColis",
-        "visible": false
-      },
-      {
-        "dataField": "version",
-        "visible": false
-      },
-      {
-        "dataField": "id",
-        "visible": false
       }
     ]
   }

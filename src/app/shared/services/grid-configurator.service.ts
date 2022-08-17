@@ -116,7 +116,8 @@ export enum Grid {
   MouvClientsComptesPalox = "mouv-clients-comptes-palox",
   RecapFournisseursComptesPalox = "recap-fournisseurs-comptes-palox",
   RecapClientsComptesPalox = "recap-clients-comptes-palox",
-  CommandesEdi = "commandes-edi"
+  CommandesEdi = "commandes-edi",
+  ModifCommandeEdi = "modif-commande-edi"
 }
 
 const extraConfigurations = [

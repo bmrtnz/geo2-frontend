@@ -226,7 +226,6 @@
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [width]="column?.width"
-    [visible]="column.dataField === 'prixVente' && ordreEdiId ? true : column.visible"
     [cssClass]="column?.cssClass"
     trueText="Oui"
     falseText="Non"
@@ -258,6 +257,7 @@
     class="small-action-button"
       type="normal"
       [visible]="showModifyEDIButton(cell)"
+      (onClick)="OnClickModifyEDIButton(cell.data)"
       text="{{ 'modifier-ordre' | localize }}"
     ></dx-button>
     <dx-button
@@ -287,3 +287,6 @@
   (entrepotChosen)="createEDIOrder(commandeEDI, $event)"
 >
 </app-choix-entrepot-commande-edi-popup>
+<app-modif-commande-edi-popup
+  [commandeEDIId]="commandeEDIId"
+></app-modif-commande-edi-popup>
