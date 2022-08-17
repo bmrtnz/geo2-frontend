@@ -360,17 +360,12 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
     }
     if (e.rowType === "data") {
       // Hide status on developped rows as it is shown in the group when full order list
-      // Otherwise, colorize it
-      if (field === "status") {
-        e.cellElement.innerText = "";
-      }
+      if (field === "status") e.cellElement.innerText = "";
 
-      if (field === "libelleProduit") {
-        // Infobulle Descript. article
-        e.cellElement.title = e.data.libelleProduit;
-      }
-
+      // Infobulle Descript. article
+      if (field === "libelleProduit") e.cellElement.title = e.data.libelleProduit ?? "";
     }
+
   }
 
   showModifyEDIButton(cell) {

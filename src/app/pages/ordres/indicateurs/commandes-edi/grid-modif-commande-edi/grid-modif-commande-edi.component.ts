@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
-import CommandeEdi from "app/shared/models/commande-edi.model";
+import { ActivatedRoute } from "@angular/router";
+import { CommandeEdi, MaskModif } from "app/shared/models/commande-edi.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -11,7 +12,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { TabContext } from "../../../root/root.component";
+import { RouteParam, TabContext } from "../../../root/root.component";
 
 const ALL = "%";
 const DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
@@ -38,6 +39,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private ordresEdiService: OrdresEdiService,
+    private route: ActivatedRoute,
     public tabContext: TabContext,
     private dateMgtService: DateManagementService,
     private localization: LocalizationService,
@@ -81,6 +83,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
       new Date(2100, 1, 1),
     ).subscribe((res) => {
       this.datagrid.dataSource = res.data.allCommandeEdi;
+      this.datagrid.instance.option("focusedRowIndex", 0); // Focus on group row
       this.datagrid.instance.refresh();
       this.datagrid.instance.endCustomLoading();
     });
@@ -122,11 +125,18 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
         e.cellElement.classList.add(`info-${e.data.status}`);
         e.cellElement.classList.add("white-text");
       }
+      // Infobulle Descript. article
+      if (field === "libelleProduit") e.cellElement.title = e.data.libelleProduit ?? "";
 
-      if (field === "libelleProduit") {
-        // Infobulle Descript. article
-        e.cellElement.title = e.data.libelleProduit;
+      // Identify modified fields vs mask e.g. "000000001", See MaskModif for details
+      if (e.data.masqueLigne) {
+        e.data.masqueLigne.split("").map((item, index) => {
+          if (MaskModif[field] === (index + 1) && item === "1") e.cellElement.classList.add("red-font");
+        });
       }
+      // Identify ope marketing prices
+      if (e.data.operationMarketing === "PRP" && field === "prixVente") e.cellElement.classList.add("green-font");
+
     }
     if (e.rowType === "header") {
       // Change first column header text status => modif
@@ -135,10 +145,10 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
 
   }
 
-  onCellClick(e) {
+  onEDICellClick(e) {
     if (!e?.data) return;
-    console.log(this.tabContext);
-    this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id);
+    const ordre = e.data.ordre;
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 
 }
