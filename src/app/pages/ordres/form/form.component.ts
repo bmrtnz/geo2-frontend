@@ -795,40 +795,45 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             );
         }),
       )
-      .subscribe(ordre => {
-        this.ordre = ordre;
-        if (this.ordre === null) return;
-        this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
-        this.fraisClient = this.getFraisClient();
-        this.gestEntrepot = this.getGestEntrepot();
-        this.fetchFullOrderNumber();
-        this.refOrdre = this.ordre?.id ? ordre.id : "-";
-        this.canDuplicate = !!this?.ordre?.id;
-        this.formGroup.reset(ordre);
-        this.instructionsComm = this.getinstructionsComm();
-        const instLog = this.ordre.instructionsLogistiques;
-        if (this.comLog) this.comLog.instance.option("hint", instLog);
-        this.addLinkedOrders();
-        this.refreshBadges();
-        this.refreshStatus(this.ordre.statut);
-        window.sessionStorage.setItem("idOrdre", this.ordre.id);
-        window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
-        this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
+      .subscribe({
+        next: ordre => {
+          this.ordre = ordre;
+          if (this.ordre === null) {
+            notify(`Récupération des données de l'ordre impossible...`, "error", 7000);
+            return;
+          }
+          this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
+          this.fraisClient = this.getFraisClient();
+          this.gestEntrepot = this.getGestEntrepot();
+          this.fetchFullOrderNumber();
+          this.refOrdre = this.ordre?.id ? ordre.id : "-";
+          this.canDuplicate = !!this?.ordre?.id;
+          this.formGroup.reset(ordre);
+          this.instructionsComm = this.getinstructionsComm();
+          const instLog = this.ordre.instructionsLogistiques;
+          if (this.comLog) this.comLog.instance.option("hint", instLog);
+          this.addLinkedOrders();
+          this.refreshBadges();
+          this.refreshStatus(this.ordre.statut);
+          window.sessionStorage.setItem("idOrdre", this.ordre.id);
+          window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
+          this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
 
-        this.formGroup.valueChanges.subscribe((_) => {
-          this.saveHeaderOnTheFly();
-        });
+          this.formGroup.valueChanges.subscribe((_) => {
+            this.saveHeaderOnTheFly();
+          });
 
-        this.histoLigneOrdreText =
-          `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
-        this.histoLigneOrdreReadOnlyText =
-          `${this.localization.localize("hint-client-historique")}`;
+          this.histoLigneOrdreText =
+            `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
+          this.histoLigneOrdreReadOnlyText =
+            `${this.localization.localize("hint-client-historique")}`;
 
-        this.showBAFButton =
-          this.ordre.bonAFacturer === false &&
-          this.ordre.client.usageInterne !== true &&
-          (this.ordre.codeAlphaEntrepot ? this.ordre.codeAlphaEntrepot.substring(0, 8) !== "PREORDRE" : true);
-
+          this.showBAFButton =
+            this.ordre.bonAFacturer === false &&
+            this.ordre.client.usageInterne !== true &&
+            (this.ordre.codeAlphaEntrepot ? this.ordre.codeAlphaEntrepot.substring(0, 8) !== "PREORDRE" : true);
+        },
+        error: (message: string) => notify({ message }, "error", 7000),
       });
   }
 
