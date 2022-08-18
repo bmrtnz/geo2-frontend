@@ -5411,7 +5411,7 @@
     ]
   },
   "lignes-edi": {
-    "pageSize": 50,
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 0,

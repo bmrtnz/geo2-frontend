@@ -96,6 +96,20 @@ export class VisualiserOrdresPopupComponent implements OnChanges {
     this.updateChosenOrders();
   }
 
+  onRowClick(e) {
+    // Allows to select an item by clicking on a row
+    // in addition to the expected checkbox
+    const keys = e.component.getSelectedRowKeys();
+    const index = keys.indexOf(e.key);
+
+    if (index > -1) {
+      keys.splice(index, 1);
+    } else {
+      keys.push(e.key);
+    }
+    e.component.selectRows(keys);
+  }
+
   applyClick() {
     [...this.chosenOrders].map(ordre => {
       setTimeout(() => this.tabContext.openOrdre(ordre.split("-")[1], ordre.split("-")[0]));

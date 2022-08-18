@@ -29,6 +29,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
+  (onRowClick)="onRowClick($event)"
   (onSelectionChanged)="selectFromGrid()"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -51,7 +52,7 @@
   ></dxo-pager>
   <dxo-selection
     mode="multiple"
-    [allowSelectAll]="true"
+    [allowSelectAll]="false"
     [showCheckBoxesMode]="'always'"
   ></dxo-selection>
   <dxo-state-storing

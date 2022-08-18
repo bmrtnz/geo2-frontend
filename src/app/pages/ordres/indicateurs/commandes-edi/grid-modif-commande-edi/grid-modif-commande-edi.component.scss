@@ -2,6 +2,19 @@
 @import "~themes/generated/variables.base";
 @import "~scss/variables.scss";
 
+::ng-deep .order-edi-complete-button {
+  position: absolute;
+  z-index: 1;
+  margin-top: 9px;
+  right: 169px;
+  height: 34px;
+  font-size: 12px;
+
+  .dx-button-content {
+    padding: 3px 13px !important;
+  }
+}
+
 ::ng-deep .small-status-button {
   position: relative;
   top: 1px;

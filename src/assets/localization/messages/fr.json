@@ -58,6 +58,7 @@
     "btn-regulorder": "Ordre régul.",
     "btn-deleteorder": "Supprimer ordre",
     "btn-cancelorder": "Annuler ordre",
+    "btn-completeorderedi": "EDI traité",
     "btn-deleterows": "Supprimer lignes sélectionnées",
     "btn-copy-paste-firstrow": "Reporter le texte de la première ligne sur les autres",
     "btn-cloneorder": "Dupliquer ordre",

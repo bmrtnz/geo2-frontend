@@ -17,6 +17,10 @@
       position: relative;
       top: -16px;
       margin: 0 -1px;
+
+      .dx-row-lines {
+        cursor: pointer;
+      }
     }
 
     .popup-buttons-container {

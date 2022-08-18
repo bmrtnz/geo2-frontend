@@ -190,6 +190,10 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
     if (ordre) this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 
+  onCompleteOrderEdiClick() {
+    console.log("EDI traité");
+  }
+
 }
 
 export default GridModifCommandeEdiComponent;
