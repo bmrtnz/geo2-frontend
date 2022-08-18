@@ -1,0 +1,34 @@
+// Var
+@import "~themes/generated/variables.base";
+
+::ng-deep .visualiser-ordres-popup {
+
+  .dx-popup-content {
+
+    .popup-subtitle {
+      position: relative;
+      left: 13px;
+      color: $base-accent;
+      font-size: 16px;
+      z-index: 2;
+    }
+
+    .grid-lignes-edi {
+      position: relative;
+      top: -16px;
+      margin: 0 -1px;
+    }
+
+    .popup-buttons-container {
+      display: inline-block;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .dx-button {
+        margin: 5px;
+      }
+    }
+  }
+
+}

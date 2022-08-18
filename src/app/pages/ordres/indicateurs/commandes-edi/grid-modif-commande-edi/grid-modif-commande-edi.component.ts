@@ -70,6 +70,44 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
 
   enableFilters() {
 
+    const requiredFields = [
+      "id",
+      "eanProduitClient",
+      "eanProduitBw",
+      "eanColisClient",
+      "eanColisBw",
+      "operationMarketing",
+      "fichierSource",
+      "libelleProduit",
+      "listArticleId",
+      "masqueLigne",
+      "masqueOrdre",
+      "numeroLigne",
+      "parCombien",
+      "quantite",
+      "prixVente",
+      "quantiteColis",
+      "refCmdClient",
+      "status",
+      "statusGeo",
+      "typeColis",
+      "uniteQtt",
+      "version",
+      "refEdiOrdre",
+      "dateDocument",
+      "dateLivraison",
+      "client.id",
+      "client.code",
+      "client.raisonSocial",
+      "entrepot.id",
+      "entrepot.code",
+      "entrepot.raisonSocial",
+      "ordre.id",
+      "ordre.numero",
+      "ordre.campagne.id",
+      "ordre."
+    ];
+
     this.datagrid.dataSource = null;
     this.datagrid.instance.beginCustomLoading("");
     this.ordresEdiService.allCommandeEdi(
@@ -81,6 +119,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
       ALL,
       new Date(1980, 1, 1),
       new Date(2100, 1, 1),
+      requiredFields
     ).subscribe((res) => {
       this.datagrid.dataSource = res.data.allCommandeEdi;
       this.datagrid.instance.option("focusedRowIndex", 0); // Focus on group row
@@ -106,7 +145,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
         let leftTextContent =
           data.refCmdClient + " - " +
           (data.client.raisonSocial ?? "");
-        if (data.entrepot?.code) leftTextContent += " - " + data.entrepot.code + " ";
+        // if (data.entrepot?.code) leftTextContent += " - " + data.entrepot.code + " ";
         if (data.entrepot?.raisonSocial) leftTextContent += " / " + data.entrepot.raisonSocial + " ";
         leftTextContent += " - Version " + (data.version ?? "");
         e.cellElement.childNodes[0].children[1].innerText = leftTextContent;
@@ -148,7 +187,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   onEDICellClick(e) {
     if (!e?.data) return;
     const ordre = e.data.ordre;
-    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
+    if (ordre) this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 
 }

@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { AfterViewInit, Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import { Role } from "app/shared/models/personne.model";
@@ -7,7 +7,6 @@ import { alert } from "devextreme/ui/dialog";
 import {
   AuthService, ClientsService, LocalizationService
 } from "app/shared/services";
-import { CampagnesService } from "app/shared/services/api/campagnes.service";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -24,6 +23,7 @@ import { map } from "rxjs/operators";
 import { TabContext } from "../../../root/root.component";
 import { ChoixEntrepotCommandeEdiPopupComponent } from "../choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../modif-commande-edi-popup/modif-commande-edi-popup.component";
+import { VisualiserOrdresPopupComponent } from "../visualiser-ordres-popup/visualiser-ordres-popup.component";
 
 enum InputField {
   clientCode = "client",
@@ -62,12 +62,14 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
 
   @Output() commandeEDI: Partial<CommandeEdi>;
   @Output() commandeEDIId: string;
+  @Output() lignesOrdreIds: string[];
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("etatRB", { static: false }) etatRB: DxRadioGroupComponent;
   @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false }) choixEntPopup: ChoixEntrepotCommandeEdiPopupComponent;
   @ViewChild(ModifCommandeEdiPopupComponent, { static: false }) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
+  @ViewChild(VisualiserOrdresPopupComponent, { static: false }) visuCdeEdiPopup: VisualiserOrdresPopupComponent;
 
   public formGroup = new FormGroup({
     clientCode: new FormControl(),
@@ -136,10 +138,10 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       map((columns) => columns.map((column) => column.dataField)),
     );
 
-    const d = new Date("2022-04-02T00:00:00");
-    this.formGroup.get("dateMin").setValue(d);
-    const f = new Date("2022-04-02T23:59:59");
-    this.formGroup.get("dateMax").setValue(f);
+    const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
+    this.formGroup.get("dateMin").setValue(d); // A VIRER !!
+    const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
+    this.formGroup.get("dateMax").setValue(f); // A VIRER !!
   }
 
   ngOnChanges() { }
@@ -147,6 +149,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
   ngAfterViewInit() {
     const dxGridElement = this.datagrid.instance.$element()[0];
     this.gridTitleInput = dxGridElement.querySelector(".dx-toolbar .grid-title input");
+    this.etatRB.value = this.displayedEtat[0]; // A VIRER !!
   }
 
   displayIDBefore(data) {
@@ -170,6 +173,43 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       ...this.formGroup.value,
     };
 
+    const requiredFields = [
+      "id",
+      "eanProduitClient",
+      "eanProduitBw",
+      "eanColisClient",
+      "eanColisBw",
+      "operationMarketing",
+      "fichierSource",
+      "libelleProduit",
+      "listArticleId",
+      "masqueLigne",
+      "masqueOrdre",
+      "numeroLigne",
+      "parCombien",
+      "quantite",
+      "prixVente",
+      "quantiteColis",
+      "refCmdClient",
+      "status",
+      "statusGeo",
+      "typeColis",
+      "uniteQtt",
+      "version",
+      "refEdiOrdre",
+      "dateDocument",
+      "dateLivraison",
+      "client.id",
+      "client.code",
+      "client.raisonSocial",
+      "entrepot.id",
+      "entrepot.code",
+      "entrepot.raisonSocial",
+      "ordre.id",
+      "ordre.numero",
+      "ordre.campagne.id"
+    ];
+
     this.datagrid.instance.beginCustomLoading("");
     this.ordresEdiService.allCommandeEdi(
       ALL,
@@ -180,6 +220,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       this.etats.filter((res) => res.caption === this.etatRB.value)[0].id,
       values.dateMin,
       values.dateMax,
+      requiredFields
     ).subscribe((res) => {
       this.datagrid.dataSource = res.data.allCommandeEdi;
       this.datagrid.instance.refresh();
@@ -188,8 +229,12 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
 
   }
 
-  onFieldValueChange() {
-    this.toRefresh = true;
+  onFieldValueChange(e?) {
+    if (e) {
+      this.enableFilters();
+    } else {
+      this.toRefresh = true;
+    }
   }
 
   setClientDataSource() {
@@ -225,8 +270,9 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   onGridContentReady(e) {
-    // Orders count shown / title shown/hidden
-    this.gridTitleInput.value = this.gridTitle + ` (${this.datagrid.instance.getDataSource()?.items()?.length ?? "0"})`;
+    // Orders count
+    const counter = this.datagrid.instance.getDataSource()?.items()?.length;
+    this.gridTitleInput.value = this.gridTitle + (counter ? ` (${counter})` : "");
   }
 
   manualDate(e) {
@@ -322,9 +368,15 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
     this.modifCdeEdiPopup.visible = true;
   }
 
-  onCellClick(e) {
-    if (e.column.dataField !== "numeroOrdre") return;
-    e.event.stopImmediatePropagation();
+  OnClickViewEDIButton(data) {
+    data = data.items ?? data.collapsedItems;
+    this.lignesOrdreIds = [];
+    // data.map(info => this.lignesOrdreIds.push(info.id));
+
+    this.lignesOrdreIds = ["1976513", "1908984", "1976517"]; // A virer
+
+    console.log(this.lignesOrdreIds);
+    this.visuCdeEdiPopup.visible = true;
   }
 
   onCellPrepared(e) {
@@ -343,7 +395,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
         let leftTextContent =
           data.refCmdClient + " - " +
           (data.client.raisonSocial ?? "");
-        if (data.entrepot?.code) leftTextContent += " - " + data.entrepot.code + " ";
+        // if (data.entrepot?.code) leftTextContent += " - " + data.entrepot.code + " ";
         if (data.entrepot?.raisonSocial) leftTextContent += " / " + data.entrepot.raisonSocial + " ";
         leftTextContent += " - Version " + (data.version ?? "");
         leftTextContent += " du " + this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";

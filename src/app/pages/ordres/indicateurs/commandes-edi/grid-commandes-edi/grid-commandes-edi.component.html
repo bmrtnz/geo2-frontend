@@ -91,7 +91,7 @@
               [items]="displayedEtat"
               [value]="displayedEtat[2]"
               layout="horizontal"
-              (valueChange)="onFieldValueChange()"
+              (valueChange)="onFieldValueChange(true)"
             >
             </dx-radio-group>
           </div>
@@ -179,7 +179,6 @@
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
   (onCellPrepared)="onCellPrepared($event)"
-  (onCellClick)="onCellClick($event)"
   (onContentReady)="onGridContentReady($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -191,7 +190,6 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-grouping> </dxo-grouping>
   <dxo-group-panel [visible]="true"> </dxo-group-panel>
   <dxo-header-filter
     [visible]="true"
@@ -264,6 +262,7 @@
     class="small-action-button"
       type="normal"
       [visible]="showViewEDIButton(cell)"
+      (onClick)="OnClickViewEDIButton(cell.data)"
       text="{{ 'visualiser' | localize }}"
     ></dx-button>
     <dx-button
@@ -290,3 +289,7 @@
 <app-modif-commande-edi-popup
   [commandeEDIId]="commandeEDIId"
 ></app-modif-commande-edi-popup>
+<app-visualiser-ordres-popup
+[lignesOrdreIds]="lignesOrdreIds"
+>
+</app-visualiser-ordres-popup>

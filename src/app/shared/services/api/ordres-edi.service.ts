@@ -26,21 +26,9 @@ export class OrdresEdiService {
     commercialId: string,
     status: string,
     dateMin: Date,
-    dateMax: Date
+    dateMax: Date,
+    columns: string[]
   ) {
-    const columns = CommandeEdi.getFieldsName();
-    columns.delete("client");
-    columns.add("client.id");
-    columns.add("client.code");
-    columns.add("client.raisonSocial");
-    columns.delete("entrepot");
-    columns.add("entrepot.id");
-    columns.add("entrepot.code");
-    columns.add("entrepot.raisonSocial");
-    columns.delete("ordre");
-    columns.add("ordre.id");
-    columns.add("ordre.numero");
-    columns.add("ordre.campagne.id");
     return this.apollo
       .query<{ allCommandeEdi: CommandeEdi[] }>({
         query: gql(ApiService.buildGraph(
