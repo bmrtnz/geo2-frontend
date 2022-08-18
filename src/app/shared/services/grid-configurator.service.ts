@@ -228,6 +228,7 @@ export class GridConfiguratorService {
   save(config: GridConfig) {
     const context = this as unknown as DxoStateStoringComponent;
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
+    config.selectedRowKeys = []; // Really not consistent to store this info
     self.gridsConfigsService
       .save_v2(["grid", "utilisateur.nomUtilisateur", "config"], {
         gridConfig: {
