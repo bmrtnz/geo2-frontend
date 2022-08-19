@@ -343,10 +343,15 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       .subscribe({
         next: (res) => {
           const result = res.data.fCreeOrdresEdi.data;
-          // const numeros = result?.tab_ordre_cree;
-          // const ids = result?.
-          const refs = "1976517,1038117,"; // A VIRER !!!
-          const numeros = ["700362", "242975"]; // A VIRER !!!
+          const numeros = result?.tab_ordre_cree;
+          const refs = result?.ls_nordre_tot;
+          if (!numeros?.length || !refs) {
+            notify("Erreur lors de la création de l'ordre", "error");
+            console.log(result);
+            return;
+          }
+          // const refs = "1976517,1038117,"; // A VIRER !!!
+          // const numeros = ["700362", "242975"]; // A VIRER !!!
           if (numeros.length === 1) {
             notify(this.localization.localize("ordre-cree").replace("&O", numeros[0]), "success", 7000);
             this.tabContext.openOrdre(numeros[0], this.currentCompanyService.getCompany().campagne.id, false);
