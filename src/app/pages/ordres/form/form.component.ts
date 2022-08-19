@@ -622,6 +622,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.promptPopupPurpose = "delete";
     this.promptPopup.show(
       {
+        commentTitle: this.localization.localize("choose-delete-reason"),
         validText: "btn-suppression-ordre",
         commentMaxLength: 70
       }

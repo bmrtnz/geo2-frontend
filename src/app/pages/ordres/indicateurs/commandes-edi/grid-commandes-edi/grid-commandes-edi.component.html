@@ -269,6 +269,7 @@
     class="small-action-button"
       type="normal"
       [visible]="showCreateComplEDIButton(cell)"
+      (onClick)="onClickCreateComplEDIButton(cell.data)"
       text="{{ 'creer-ordre-compl' | localize }}"
     ></dx-button>
     <dx-button
@@ -290,6 +291,7 @@
   [commandeEDIId]="commandeEDIId"
 ></app-modif-commande-edi-popup>
 <app-visualiser-ordres-popup
-[lignesOrdreIds]="lignesOrdreIds"
+  [lignesOrdreIds]="lignesOrdreIds"
+  [ordresIds]="ordresIds"
 >
 </app-visualiser-ordres-popup>

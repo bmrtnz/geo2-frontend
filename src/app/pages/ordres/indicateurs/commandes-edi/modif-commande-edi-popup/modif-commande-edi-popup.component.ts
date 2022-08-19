@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
+import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import GridModifCommandeEdiComponent from "../grid-modif-commande-edi/grid-modif-commande-edi.component";
 
 
 @Component({
@@ -12,6 +13,8 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
   @Output() public ordreEdiId: string;
   @Output() gridTitle = "";
 
+  @ViewChild(GridModifCommandeEdiComponent) private datagrid: GridModifCommandeEdiComponent;
+
   visible: boolean;
 
   constructor(
@@ -23,6 +26,7 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("modif-commande-edi-popup");
+    this.datagrid.openedOrders = [];
   }
 
 }

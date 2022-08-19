@@ -397,9 +397,11 @@ export class TabContext {
    * Push and select ordre in tab panel by routing
    * @param numero Ordre numero
    * @param campagne Campagne id
+   * @param toastInfo Shows toast by default, false it not desired
    */
-  public openOrdre(numero: string, campagne?: string) {
-    notify("Ouverture ordre n° " + numero, "info", 1500);
+  public openOrdre(numero: string, campagne?: string, toastInfo?: boolean) {
+    toastInfo = (toastInfo === undefined) ? true : toastInfo;
+    if (toastInfo) notify("Ouverture ordre n° " + numero, "info", 1500);
     const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
     return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
   }

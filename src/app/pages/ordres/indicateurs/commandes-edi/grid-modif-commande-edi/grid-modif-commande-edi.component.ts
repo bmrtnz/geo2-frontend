@@ -12,7 +12,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { RouteParam, TabContext } from "../../../root/root.component";
+import { TabContext } from "../../../root/root.component";
 
 const ALL = "%";
 const DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
@@ -29,6 +29,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public gridTitle: string;
+  public openedOrders: string[];
   toRefresh: boolean;
 
   @Input() ordreEdiId: string;
@@ -140,12 +141,11 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
         // Add special background color to the group row
         e.cellElement.parentElement.classList.add("group-back-color");
 
-        // Show ref cmd clt - raison soc clt - Version date - Livraison
         // Fill left text of the group row
+        // ref cmd clt - raison soc clt - raison soc entrep - Version date - Livraison
         let leftTextContent =
           data.refCmdClient + " - " +
           (data.client.raisonSocial ?? "");
-        // if (data.entrepot?.code) leftTextContent += " - " + data.entrepot.code + " ";
         if (data.entrepot?.raisonSocial) leftTextContent += " / " + data.entrepot.raisonSocial + " ";
         leftTextContent += " - Version " + (data.version ?? "");
         e.cellElement.childNodes[0].children[1].innerText = leftTextContent;
@@ -164,7 +164,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
         e.cellElement.classList.add(`info-${e.data.status}`);
         e.cellElement.classList.add("white-text");
       }
-      // Infobulle Descript. article
+      // Tooltip Descript. article
       if (field === "libelleProduit") e.cellElement.title = e.data.libelleProduit ?? "";
 
       // Identify modified fields vs mask e.g. "000000001", See MaskModif for details
@@ -187,6 +187,9 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   onEDICellClick(e) {
     if (!e?.data) return;
     const ordre = e.data.ordre;
+    // Should be replaced by a order already focused check in root-component
+    if (this.openedOrders?.includes(`${ordre.campagne.id}-${ordre.numero}`)) return;
+    this.openedOrders.push(`${ordre.campagne.id}-${ordre.numero}`);
     if (ordre) this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 

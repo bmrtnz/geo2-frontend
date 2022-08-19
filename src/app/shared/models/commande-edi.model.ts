@@ -17,6 +17,7 @@ export enum MaskModif {
 @ModelName("CommandeEdi")
 export class CommandeEdi extends Model {
   @Field({ asKey: true }) public id?: string;
+  @Field() public refEdiLigne?: string;
   @Field({ model: import("./client.model") }) public client?: Client;
   @Field() public eanProduitClient?: string;
   @Field() public eanProduitBw?: string;

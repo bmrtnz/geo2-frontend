@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import { TabContext } from "../../../root/root.component";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
@@ -8,16 +8,16 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { GridsService } from "../../../grids.service";
 
 @Component({
   selector: "app-visualiser-ordres-popup",
   templateUrl: "./visualiser-ordres-popup.component.html",
   styleUrls: ["./visualiser-ordres-popup.component.scss"]
 })
-export class VisualiserOrdresPopupComponent implements OnChanges {
+export class VisualiserOrdresPopupComponent {
 
   @Input() public lignesOrdreIds: string[];
+  @Input() public ordresIds: string[];
 
   public dataSource: DataSource;
   public visible: boolean;
@@ -28,25 +28,18 @@ export class VisualiserOrdresPopupComponent implements OnChanges {
   public chosenOrdersDisplayed: string;
   public gridTitle: string;
 
-  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext,
-    public ordreLignesService: OrdreLignesService,
-    public gridsService: GridsService,
+    public ordreLignesService: OrdreLignesService
   ) {
-    this.gridTitle = ""; // this.localizeService.localize("ordre-edi-choix-ordre");
+    this.gridTitle = "";
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.LignesEdi,
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
-  }
-
-  ngOnChanges() {
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   async enableFilters() {
@@ -54,18 +47,17 @@ export class VisualiserOrdresPopupComponent implements OnChanges {
     if (!this.datagrid) return;
     const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
     this.dataSource = this.ordreLignesService.getDataSource_v2(await fields.toPromise());
+    const filter = [];
 
-    // if (this.lignesOrdreIds?.length) {
-    //   const filter = [];
-    //   this.lignesOrdreIds.map(id => {
-    //     filter.push(["id", "=", id], "or");
-    //   });
-    //   filter.pop();
-    //   this.dataSource.filter(filter);
-    // }
+    // Filtering trought lines ids or order ids apromptccording to the case
     if (this.lignesOrdreIds?.length) {
-      const filter = [];
       this.lignesOrdreIds.map(id => {
+        filter.push(["id", "=", id], "or");
+      });
+      filter.pop();
+      this.dataSource.filter(filter);
+    } else if (this.ordresIds?.length) {
+      this.ordresIds.map(id => {
         filter.push(["ordre.id", "=", id], "or");
       });
       filter.pop();

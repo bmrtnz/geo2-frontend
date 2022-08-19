@@ -3,7 +3,7 @@ import { AfterViewInit, Component, OnChanges, OnInit, Output, ViewChild } from "
 import { FormControl, FormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import { Role } from "app/shared/models/personne.model";
-import { alert } from "devextreme/ui/dialog";
+import { alert, confirm } from "devextreme/ui/dialog";
 import {
   AuthService, ClientsService, LocalizationService
 } from "app/shared/services";
@@ -24,6 +24,9 @@ import { TabContext } from "../../../root/root.component";
 import { ChoixEntrepotCommandeEdiPopupComponent } from "../choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { VisualiserOrdresPopupComponent } from "../visualiser-ordres-popup/visualiser-ordres-popup.component";
+import notify from "devextreme/ui/notify";
+import { Societe } from "app/shared/models";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 
 enum InputField {
   clientCode = "client",
@@ -63,6 +66,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
   @Output() commandeEDI: Partial<CommandeEdi>;
   @Output() commandeEDIId: string;
   @Output() lignesOrdreIds: string[];
+  @Output() ordresIds: string[];
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -82,6 +86,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private ordresEdiService: OrdresEdiService,
+    private ordresService: OrdresService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
     private localization: LocalizationService,
@@ -175,6 +180,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
 
     const requiredFields = [
       "id",
+      "refEdiLigne",
       "eanProduitClient",
       "eanProduitBw",
       "eanColisClient",
@@ -207,7 +213,11 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       "entrepot.raisonSocial",
       "ordre.id",
       "ordre.numero",
-      "ordre.campagne.id"
+      "ordre.campagne.id",
+      "ordre.client.code",
+      "ordre.type.id",
+      "ordre.listeOrdresComplementaires",
+      "ordre.dateDepartPrevue"
     ];
 
     this.datagrid.instance.beginCustomLoading("");
@@ -332,8 +342,20 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       )
       .subscribe({
         next: (res) => {
-          console.log(res);
-          // this.tabContext.openOrdre("671140", this.campagneEnCours.id);
+          const result = res.data.fCreeOrdresEdi.data;
+          // const numeros = result?.tab_ordre_cree;
+          // const ids = result?.
+          const refs = "1976517,1038117,"; // A VIRER !!!
+          const numeros = ["700362", "242975"]; // A VIRER !!!
+          if (numeros.length === 1) {
+            notify(this.localization.localize("ordre-cree").replace("&O", numeros[0]), "success", 7000);
+            this.tabContext.openOrdre(numeros[0], this.currentCompanyService.getCompany().campagne.id, false);
+          } else {
+            this.lignesOrdreIds = [];
+            this.ordresIds = refs.split(",");
+            this.ordresIds.pop();
+            this.visuCdeEdiPopup.visible = true;
+          }
         },
         error: (error: Error) => {
           console.log(error);
@@ -341,13 +363,6 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
         }
       });
 
-  }
-
-  private messageFormat(mess) {
-    mess = mess
-      .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "");
-    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
-    return mess;
   }
 
   OnClickCreateEDIButton(data) {
@@ -370,13 +385,98 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
 
   OnClickViewEDIButton(data) {
     data = data.items ?? data.collapsedItems;
+    this.ordresIds = [];
     this.lignesOrdreIds = [];
-    // data.map(info => this.lignesOrdreIds.push(info.id));
-
-    this.lignesOrdreIds = ["1976513", "1908984", "1976517"]; // A virer
-
-    console.log(this.lignesOrdreIds);
+    data.map(ligne => this.lignesOrdreIds.push(ligne.refEdiLigne));
     this.visuCdeEdiPopup.visible = true;
+  }
+
+  onClickCreateComplEDIButton(data) {
+
+    data = data.items ?? data.collapsedItems;
+    const thatOrdre = data[0].ordre;
+
+    if (!thatOrdre?.id) return;
+    // As LIST_NORDRE_COMP is a VARCHAR(50)
+    if (thatOrdre.listeOrdresComplementaires?.split(",").length >= 8) {
+      notify("Le nombre maximum d'ordres complémentaires est atteint", "error", 5000);
+      return;
+    }
+    if (thatOrdre.type.id !== "ORD") {
+      alert(this.localization.localize("text-popup-ordre-non-ORD"), this.localization.localize("ordre-complementaire-creation"));
+      return;
+    }
+
+    const dateNow = this.datePipe.transform(new Date().setDate(new Date().getDate()).valueOf(), "yyyy-MM-dd");
+    if (dateNow > thatOrdre.dateDepartPrevue) {
+      alert(this.localization.localize("text-popup-ordre-compl-dateDepassee"), this.localization.localize("ordre-complementaire-creation"));
+      return;
+    }
+
+    confirm(
+      this.localization.localize("text-popup-ordre-compl").replace("&C", thatOrdre.client.code),
+      this.localization.localize("ordre-complementaire-creation")
+    ).then(res => {
+      if (res) {
+
+        const societe: Societe = this.currentCompanyService.getCompany();
+
+        this.ordresService
+          .fCreeOrdreComplementaire(thatOrdre.id, societe.id, this.authService.currentUser.nomUtilisateur)
+          .subscribe({
+            next: (resCree) => {
+              const refOrdreCompl = resCree.data.fCreeOrdreComplementaire.data.ls_ord_ref_compl;
+              const currOrder = thatOrdre;
+              if (refOrdreCompl) {
+                // Find numero / adjust listeOrdresComplementaires & save it / Open new order
+                this.ordresService
+                  .getOne_v2(refOrdreCompl, ["id", "numero", "campagne.id"])
+                  .subscribe((result) => {
+                    const numOrdreCompl = result.data.ordre.numero;
+                    const campOrdreCompl = result.data.ordre.campagne;
+                    let listOrdCompl = currOrder.listeOrdresComplementaires;
+
+                    if (!listOrdCompl) listOrdCompl = "";
+                    listOrdCompl += `${numOrdreCompl},`;
+
+                    const ordre = { id: currOrder.id, listeOrdresComplementaires: listOrdCompl };
+                    this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
+                      next: () => {
+                        notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "success", 7000);
+                        ////////////////////////////////////////////
+                        // Sauvegarde Statut à implémenter
+                        ////////////////////////////////////////////
+
+                        // Open new order, without an opening message
+                        this.tabContext.openOrdre(numOrdreCompl, campOrdreCompl.id, false);
+                      },
+                      error: (err) => {
+                        notify("Erreur sauvegarde liste ordres complémentaires", "error", 3000);
+                        console.log(err);
+                      }
+                    });
+                  });
+              }
+            },
+            error: (error: Error) => {
+              console.log(error);
+              alert(this.messageFormat(error.message), this.localization.localize("ordre-complementaire-creation"));
+            }
+          });
+
+      } else {
+        notify(this.localization.localize("text-popup-abandon-ordre-compl"), "warning", 7000);
+      }
+    });
+
+  }
+
+  private messageFormat(mess) {
+    mess = mess
+      .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "")
+      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "");
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
   onCellPrepared(e) {
@@ -390,12 +490,11 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
         // Add special background color to the group row
         e.cellElement.parentElement.classList.add("group-back-color");
 
-        // Show ref cmd clt - raison soc clt - Version date - Livraison
         // Fill left text of the group row
+        // ref cmd clt - raison soc clt - raison soc entrep - Version date - Livraison
         let leftTextContent =
           data.refCmdClient + " - " +
           (data.client.raisonSocial ?? "");
-        // if (data.entrepot?.code) leftTextContent += " - " + data.entrepot.code + " ";
         if (data.entrepot?.raisonSocial) leftTextContent += " / " + data.entrepot.raisonSocial + " ";
         leftTextContent += " - Version " + (data.version ?? "");
         leftTextContent += " du " + this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";
@@ -414,7 +513,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       // Hide status on developped rows as it is shown in the group when full order list
       if (field === "status") e.cellElement.innerText = "";
 
-      // Infobulle Descript. article
+      // Tooltip Descript. article
       if (field === "libelleProduit") e.cellElement.title = e.data.libelleProduit ?? "";
     }
 
