@@ -94,6 +94,7 @@
     "create": "Création",
     "clone": "Clone",
     "choose-cancel-reason": "Choisir un motif d'annulation",
+    "choose-delete-reason": "Veuillez préciser la raison de la suppression de l'ordre",
     "preSaisie": "(Pré-saisie)",
     "via-histo-client": "via l'historique client",
     "via-stock": "via le stock",
