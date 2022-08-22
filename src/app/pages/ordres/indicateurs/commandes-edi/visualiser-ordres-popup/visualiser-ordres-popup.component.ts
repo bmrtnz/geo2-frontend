@@ -52,7 +52,7 @@ export class VisualiserOrdresPopupComponent {
     // Filtering trought lines ids or order ids apromptccording to the case
     if (this.lignesOrdreIds?.length) {
       this.lignesOrdreIds.map(id => {
-        filter.push(["id", "=", id], "or");
+        filter.push(["ediLigne.id", "=", id], "or");
       });
       filter.pop();
       this.dataSource.filter(filter);

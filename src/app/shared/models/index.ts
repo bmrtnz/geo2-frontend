@@ -79,4 +79,5 @@ export * from "./historique-modif-detail.model";
 export * from "./historique-logistique.model";
 
 export * from "./ordre-ligne.model";
+export * from "./edi-ligne.model";
 

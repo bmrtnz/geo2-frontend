@@ -5291,13 +5291,6 @@
         "visible": true
       },
       {
-        "visibleIndex": 3,
-        "dataField": "ordre.numero",
-        "width": 50,
-        "cssClass": "no-padding text-align-center",
-        "visible": false
-      },
-      {
         "visibleIndex": 4,
         "dataField": "libelleProduit",
         "width": 500,
@@ -5416,7 +5409,8 @@
       {
         "visibleIndex": 0,
         "dataField": "ordre.numero",
-        "width": 60,
+        "sortOrder": "asc",
+        "width": 75,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },

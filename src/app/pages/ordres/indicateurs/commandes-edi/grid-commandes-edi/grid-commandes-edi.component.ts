@@ -217,7 +217,9 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
       "ordre.client.code",
       "ordre.type.id",
       "ordre.listeOrdresComplementaires",
-      "ordre.dateDepartPrevue"
+      "ordre.dateDepartPrevue",
+      "initBlocageOrdre",
+      "verifStatusEdi"
     ];
 
     this.datagrid.instance.beginCustomLoading("");
@@ -536,12 +538,16 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
 
   showViewEDIButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
-    return data[0].statusGeo === "T";
+    return data[0].statusGeo === "T" ||
+      (data[0].initBlocageOrdre === true && data[0].verifStatusEdi === false);
   }
 
   showCreateComplEDIButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
-    return data[0].status === "U" && data[0].statusGeo === "N";
+    return data[0].status === "U" &&
+      data[0].statusGeo === "N" &&
+      data[0].initBlocageOrdre === true &&
+      data[0].verifStatusEdi === true;
   }
 
 }

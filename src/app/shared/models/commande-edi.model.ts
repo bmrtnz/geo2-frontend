@@ -42,7 +42,9 @@ export class CommandeEdi extends Model {
   @Field() public typeColis?: string;
   @Field() public uniteQtt?: string;
   @Field() public version?: string;
-  @Field() public refEdiOrdre: string;
+  @Field() public refEdiOrdre?: string;
+  @Field() public initBlocageOrdre?: boolean;
+  @Field() public verifStatusEdi?: boolean;
   @Field({ dataType: "datetime" }) public dateDocument?: string;
   @Field({ dataType: "datetime" }) public dateLivraison?: string;
 

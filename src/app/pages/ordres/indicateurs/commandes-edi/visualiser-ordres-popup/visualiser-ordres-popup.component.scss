@@ -13,14 +13,27 @@
       z-index: 2;
     }
 
+    .popup-visualiser-ordres-grid-container {
+      padding: 0 5px;
+      background-color: red;
+    }
+
     .grid-lignes-edi {
       position: relative;
       top: -16px;
-      margin: 0 -2px;
 
       .dx-row-lines {
         cursor: pointer;
       }
+
+      .dx-row {
+        td.dx-command-select {
+          width: 20px !important;
+          min-width: 20px !important;
+          padding: 0 4px 0 4px !important;
+        }
+      }
+
     }
 
     .popup-buttons-container {
