@@ -13,19 +13,17 @@ import config from "devextreme/core/config";
 import frDxMessage from "devextreme/localization/messages/fr.json";
 // @ts-ignore
 import frMessage from "../../../assets/localization/messages/fr.json";
-import { CurrentCompanyService } from "./current-company.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class LocalizationService {
   constructor(
-    currentCompanyService: CurrentCompanyService
   ) {
     loadMessages(frDxMessage);
     loadMessages(frMessage);
 
-    config({ defaultCurrency: currentCompanyService.getCompany().devise.id });
+    config({ defaultCurrency: "EUR" });
     locale(navigator.language);
   }
 
