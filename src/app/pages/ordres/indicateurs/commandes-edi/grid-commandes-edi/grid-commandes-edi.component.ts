@@ -415,7 +415,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
     if (!thatOrdre?.id) return;
     // As LIST_NORDRE_COMP is a VARCHAR(50)
-    if (thatOrdre.listeOrdresComplementaires?.split(",").length >= 8) {
+    if (thatOrdre.listeOrdresComplementaires?.split(";").join(",").split(",").length >= 8) {
       notify("Le nombre maximum d'ordres complémentaires est atteint", "error", 5000);
       return;
     }
@@ -556,7 +556,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   showCreateComplEdiButton(cell) {
-    return true;
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].status === "U" &&
       data[0].statusGeo === "N" &&

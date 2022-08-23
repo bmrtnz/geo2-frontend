@@ -40,8 +40,9 @@ import { of, Subject } from "rxjs";
 import { concatMap, filter, finalize, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
-// tslint:disable-next-line: max-line-length
-import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
+import {
+  ConfirmationResultPopupComponent
+} from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
@@ -56,7 +57,6 @@ import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
 import { DatePipe } from "@angular/common";
-import Utilisateur from "app/shared/models/utilisateur.model";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 
 /**
@@ -496,7 +496,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (!this.ordre?.id) return;
     // As LIST_NORDRE_COMP is a VARCHAR(50)
-    if (this.ordre.listeOrdresComplementaires?.split(",").length >= 8) {
+    if (this.ordre.listeOrdresComplementaires?.split(";").join(",").split(",").length >= 8) {
       notify("Le nombre maximum d'ordres complémentaires est atteint", "error", 5000);
       return;
     }
@@ -715,9 +715,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         ["regimeTva.id", "=", this.ordre.regimeTva?.id]
       ]);
       ordresSource.load().then((res) => {
-        res.filter(value => value.numero !== numero).map(value => {
-          this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
-        });
+        res
+          .filter(value => value.numero !== numero)
+          .filter(value => !this.ordre.listeOrdresComplementaires?.split(";").join(",").split(",").includes(value.numero))
+          .map(value => {
+            this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
+          });
         this.findComplRegulLinkedOrders(refClt);
         this.linkedOrdersSearch = false;
       });
@@ -731,7 +734,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const hasCompl = this.ordre.listeOrdresComplementaires;
     const hasRegul = this.ordre.listeOrdresRegularisations;
     if (hasCompl) {
-      hasCompl.split(",").map(res => {
+      hasCompl.split(";").join(",").split(",").map(res => {
         if (res) this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Compl, class: "Compl" });
       });
     }
