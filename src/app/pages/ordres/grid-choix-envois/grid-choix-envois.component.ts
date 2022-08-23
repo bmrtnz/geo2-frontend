@@ -126,6 +126,11 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   onContentReady(event) {
     this.contentReadyEvent.emit(event);
+
+    // Workaround for select all rows after loading data (without timeout do always select all)
+    setTimeout(() => {
+      event.component.selectAll();
+    }, 500);
   }
 
   displayIDBefore(data) {
@@ -181,11 +186,10 @@ export class GridChoixEnvoisComponent implements OnInit {
           if (this.dataMask.length)
             data = GridChoixEnvoisComponent.applyMask(data, this.dataMask);
 
-          this.gridData = new DataSource(data)
-            .on("changed", () => this.dataGrid.instance.selectAll());
+          this.gridData = new DataSource(data);
         },
         error: message => notify({ message }, "error", 7000),
-        complete: () => this.dataGrid.instance.selectAll(),
+        // complete: () => this.dataGrid.instance.selectAll(),
       });
   }
 
