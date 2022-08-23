@@ -18,8 +18,7 @@ import frMessage from "../../../assets/localization/messages/fr.json";
   providedIn: "root",
 })
 export class LocalizationService {
-  constructor(
-  ) {
+  constructor() {
     loadMessages(frDxMessage);
     loadMessages(frMessage);
 
