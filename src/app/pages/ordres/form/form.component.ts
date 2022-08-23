@@ -461,26 +461,19 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             // Find numero / adjust listeOrdresRegularisations & save it / Initialize form
             this.ordresService
               .getOne_v2(refOrdreRegul, ["id", "numero"])
-              .subscribe((result) => {
-                const numOrdreRegul = result.data.ordre.numero;
-                let listOrdRegul = currOrder.listeOrdresRegularisations;
-
-                if (!listOrdRegul) listOrdRegul = "";
-                listOrdRegul += `${numOrdreRegul};`;
-
-                const ordre = { id: currOrder.id, listeOrdresRegularisations: listOrdRegul };
-                this.ordresService.save_v2(["id", "listeOrdresRegularisations"], { ordre }).subscribe({
-                  next: () => {
-                    this.initializeForm("no-cache");
-                    notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "success", 7000);
-                    this.clearSelectionForRegul();
-                  },
-                  error: (err) => {
-                    this.clearSelectionForRegul();
-                    notify("Erreur sauvegarde liste ordres régularisation", "error", 3000);
-                    console.log(err);
-                  }
-                });
+              .subscribe({
+                next: (result) => {
+                  const numOrdreRegul = result.data.ordre.numero;
+                  this.initializeForm("no-cache");
+                  notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "success", 7000);
+                  this.clearSelectionForRegul();
+                },
+                error: (error: Error) => {
+                  console.log(error);
+                  this.clearSelectionForRegul();
+                  alert(this.localization.localize("ordre-regularisation-erreur-creation"),
+                    this.localization.localize("ordre-regularisation-creation"));
+                }
               });
           }
         },
@@ -532,29 +525,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           .subscribe({
             next: (resCree) => {
               const refOrdreCompl = resCree.data.fCreeOrdreComplementaire.data.ls_ord_ref_compl;
-              const currOrder = this.ordre;
               if (refOrdreCompl) {
                 // Find numero / adjust listeOrdresComplementaires & save it / Initialize form
                 this.ordresService
                   .getOne_v2(refOrdreCompl, ["id", "numero"])
-                  .subscribe((result) => {
-                    const numOrdreCompl = result.data.ordre.numero;
-                    let listOrdCompl = currOrder.listeOrdresComplementaires;
-
-                    if (!listOrdCompl) listOrdCompl = "";
-                    listOrdCompl += `${numOrdreCompl},`;
-
-                    const ordre = { id: currOrder.id, listeOrdresComplementaires: listOrdCompl };
-                    this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
-                      next: () => {
-                        this.initializeForm("no-cache");
-                        notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "success", 7000);
-                      },
-                      error: (err) => {
-                        notify("Erreur sauvegarde liste ordres complémentaires", "error", 3000);
-                        console.log(err);
-                      }
-                    });
+                  .subscribe({
+                    next: (result) => {
+                      this.initializeForm("no-cache");
+                      notify(this.localization.localize("ordre-complementaire-cree")
+                        .replace("&O", result.data.ordre.numero), "success", 7000);
+                    },
+                    error: (error: Error) => {
+                      console.log(error);
+                      alert(this.localization.localize("ordre-complementaire-erreur-creation"),
+                        this.localization.localize("ordre-complementaire-creation"));
+                    }
                   });
               }
             },

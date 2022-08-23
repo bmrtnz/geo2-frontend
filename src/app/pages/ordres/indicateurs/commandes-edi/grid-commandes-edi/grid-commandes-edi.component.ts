@@ -443,45 +443,38 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
           .subscribe({
             next: (resCree) => {
               const refOrdreCompl = resCree.data.fCreeOrdreComplementaire.data.ls_ord_ref_compl;
-              const currOrder = thatOrdre;
               if (refOrdreCompl) {
-                // Find numero / adjust listeOrdresComplementaires & save it / Open new order
+                // Find numero / Open new order
                 this.ordresService
                   .getOne_v2(refOrdreCompl, ["id", "numero", "campagne.id"])
-                  .subscribe((result) => {
-                    const numOrdreCompl = result.data.ordre.numero;
-                    const campOrdreCompl = result.data.ordre.campagne;
-                    let listOrdCompl = currOrder.listeOrdresComplementaires;
+                  .subscribe({
+                    next: (result) => {
+                      const numOrdreCompl = result.data.ordre.numero;
+                      const campOrdreCompl = result.data.ordre.campagne;
 
-                    if (!listOrdCompl) listOrdCompl = "";
-                    listOrdCompl += `${numOrdreCompl},`;
+                      notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "success", 7000);
 
-                    const ordre = { id: currOrder.id, listeOrdresComplementaires: listOrdCompl };
-                    this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
-                      next: () => {
-                        notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "success", 7000);
+                      //////////////////////////////////////////////////
+                      // A implémenter : Of_sauve_ordre
+                      //////////////////////////////////////////////////
 
-                        //////////////////////////////////////////////////
-                        // A implémenter : Of_sauve_ordre
-                        //////////////////////////////////////////////////
-
-                        // Sauvegarde Statut ordre EDI
-                        const ediOrdre = { id: data[0].refEdiOrdre, statusGeo: "T" };
-                        this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
-                          next: () => this.enableFilters(),
-                          error: (err) => {
-                            notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
-                            console.log(err);
-                          }
-                        });
-                        // Open new order, without an opening message
-                        this.tabContext.openOrdre(numOrdreCompl, campOrdreCompl.id, false);
-                      },
-                      error: (err) => {
-                        notify("Erreur sauvegarde liste ordres complémentaires", "error", 3000);
-                        console.log(err);
-                      }
-                    });
+                      // Sauvegarde Statut ordre EDI
+                      const ediOrdre = { id: data[0].refEdiOrdre, statusGeo: "T" };
+                      this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
+                        next: () => this.enableFilters(),
+                        error: (err) => {
+                          notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
+                          console.log(err);
+                        }
+                      });
+                      // Open new order, without an opening message
+                      this.tabContext.openOrdre(numOrdreCompl, campOrdreCompl.id, false);
+                    },
+                    error: (error: Error) => {
+                      console.log(error);
+                      alert(this.localization.localize("ordre-regularisation-erreur-creation"),
+                        this.localization.localize("ordre-complementaire-creation"));
+                    }
                   });
               }
             },
@@ -563,6 +556,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   showCreateComplEdiButton(cell) {
+    return true;
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].status === "U" &&
       data[0].statusGeo === "N" &&
