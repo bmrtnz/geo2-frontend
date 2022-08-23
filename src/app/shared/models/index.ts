@@ -80,4 +80,5 @@ export * from "./historique-logistique.model";
 
 export * from "./ordre-ligne.model";
 export * from "./edi-ligne.model";
+export * from "./edi-ordre.model";
 

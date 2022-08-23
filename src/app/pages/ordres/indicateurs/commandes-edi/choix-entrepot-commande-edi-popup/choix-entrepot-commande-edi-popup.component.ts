@@ -12,7 +12,7 @@ import DataSource from "devextreme/data/data_source";
 })
 export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
 
-  @Input() public commandeEDI: Partial<CommandeEdi>;
+  @Input() public commandeEdi: Partial<CommandeEdi>;
   @Output() public entrepotChosen = new EventEmitter();
 
   visible: boolean;
@@ -29,13 +29,13 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
-    if (this.commandeEDI) {
+    if (this.commandeEdi) {
       this.clientDS = this.clientsService.getDataSource_v2(["id", "raisonSocial"]);
       this.entrepotDS = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
       this.entrepotDS.filter([
         ["valide", "=", true],
         "and",
-        ["client.id", "=", this.commandeEDI.client?.id]
+        ["client.id", "=", this.commandeEdi.client?.id]
       ]);
     }
   }

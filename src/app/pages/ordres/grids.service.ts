@@ -4,7 +4,8 @@ import { DxDataGridComponent } from "devextreme-angular";
 type OrdreGridId =
   | "Commande"
   | "SyntheseExpeditions"
-  | "DetailExpeditions";
+  | "DetailExpeditions"
+  | "CommandesEdi";
 
 /**
  * Helper service to perform actions on datagrids

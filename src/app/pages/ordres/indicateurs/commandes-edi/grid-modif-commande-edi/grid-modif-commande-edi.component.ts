@@ -1,14 +1,16 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { CommandeEdi, MaskModif } from "app/shared/models/commande-edi.model";
+import { statusGEO } from "app/shared/models/edi-ordre.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import { GridsService } from "../../../grids.service";
 import {
   Grid, GridConfig, GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -33,16 +35,17 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   toRefresh: boolean;
 
   @Input() ordreEdiId: string;
-  @Output() commandeEDI: Partial<CommandeEdi>;
+  @Output() commandeEdi: Partial<CommandeEdi>;
+  @Output() clotureOrdreEdi = new EventEmitter();
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private ordresEdiService: OrdresEdiService,
-    private route: ActivatedRoute,
     public tabContext: TabContext,
     private dateMgtService: DateManagementService,
+    public gridsService: GridsService,
     private localization: LocalizationService,
     public authService: AuthService,
   ) {
@@ -179,12 +182,13 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
     }
     if (e.rowType === "header") {
       // Change first column header text status => modif
-      if (field === "status") e.cellElement.innerHTML = this.localization.localize("ordresEDI-modif");
+      if (field === "status") e.cellElement.innerHTML = this.localization.localize("ordresEdi-modif");
+      if (field === "status") e.cellElement.innerHTML = this.localization.localize("ordresEdi-modif");
     }
 
   }
 
-  onEDICellClick(e) {
+  onEdiCellClick(e) {
     if (!e?.data) return;
     const ordre = e.data.ordre;
     // Should be replaced by a order already focused check in root-component
@@ -194,7 +198,23 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   }
 
   onCompleteOrderEdiClick() {
-    console.log("EDI traité");
+    const ediOrdre = { id: "23844", statusGEO: statusGEO.Traité };
+
+    //////////////////////////////////////////////////
+    // A implémenter : Of_sauve_ordre
+    //////////////////////////////////////////////////
+
+    // Sauvegarde Statut ordre EDI
+    this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
+      next: () => {
+        this.clotureOrdreEdi.emit();
+        notify(this.localization.localize("ordre-edi-cloture"), "success", 7000);
+      },
+      error: (err) => {
+        notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
+        console.log(err);
+      }
+    });
   }
 
 }

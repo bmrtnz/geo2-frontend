@@ -1,8 +1,9 @@
 import { DatePipe } from "@angular/common";
-import { AfterViewInit, Component, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import { Role } from "app/shared/models/personne.model";
+import { statusGEO } from "app/shared/models/edi-ordre.model";
 import { alert, confirm } from "devextreme/ui/dialog";
 import {
   AuthService, ClientsService, LocalizationService
@@ -27,6 +28,7 @@ import { VisualiserOrdresPopupComponent } from "../visualiser-ordres-popup/visua
 import notify from "devextreme/ui/notify";
 import { Societe } from "app/shared/models";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { GridsService } from "app/pages/ordres/grids.service";
 
 enum InputField {
   clientCode = "client",
@@ -46,7 +48,7 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
   templateUrl: "./grid-commandes-edi.component.html",
   styleUrls: ["./grid-commandes-edi.component.scss"]
 })
-export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewInit {
+export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public readonly env = environment;
   public clients: DataSource;
   public commerciaux: DataSource;
@@ -63,12 +65,12 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
   public gridTitleInput: HTMLInputElement;
   toRefresh: boolean;
 
-  @Output() commandeEDI: Partial<CommandeEdi>;
-  @Output() commandeEDIId: string;
+  @Output() commandeEdi: Partial<CommandeEdi>;
+  @Output() commandeEdiId: string;
   @Output() lignesOrdreIds: string[];
   @Output() ordresIds: string[];
 
-  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("etatRB", { static: false }) etatRB: DxRadioGroupComponent;
   @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false }) choixEntPopup: ChoixEntrepotCommandeEdiPopupComponent;
@@ -89,6 +91,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
     private ordresService: OrdresService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
+    private gridsService: GridsService,
     private localization: LocalizationService,
     private datePipe: DatePipe,
     public tabContext: TabContext,
@@ -147,9 +150,16 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
     this.formGroup.get("dateMin").setValue(d); // A VIRER !!
     const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
     this.formGroup.get("dateMax").setValue(f); // A VIRER !!
-  }
 
-  ngOnChanges() { }
+    // Declôture ordre edi
+    // const ediOrdre = { id: 23844, statusGEO: statusGEO.NonTraité };
+    // this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
+    //   error: (err) => {
+    //     notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
+    //     console.log(err);
+    //   }
+    // });
+  }
 
   ngAfterViewInit() {
     const dxGridElement = this.datagrid.instance.$element()[0];
@@ -326,7 +336,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
     });
   }
 
-  createEDIOrder(data, entrId?) {
+  createEdiOrder(data, entrId?) {
 
     // Add entrepot to commande EDI data
     if (entrId) data = { ...data, entrepot: { id: entrId } };
@@ -372,25 +382,25 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
 
   }
 
-  OnClickCreateEDIButton(data) {
-    this.commandeEDI = data.items ?? data.collapsedItems;
-    this.commandeEDI = this.commandeEDI[0];
+  OnClickCreateEdiButton(data) {
+    this.commandeEdi = data.items ?? data.collapsedItems;
+    this.commandeEdi = this.commandeEdi[0];
 
     // Do we already have a specified entrepot? Otherwise, choose one
-    if (this.commandeEDI.entrepot?.id) {
-      this.createEDIOrder(this.commandeEDI);
+    if (this.commandeEdi.entrepot?.id) {
+      this.createEdiOrder(this.commandeEdi);
     } else {
       this.choixEntPopup.visible = true;
     }
   }
 
-  OnClickModifyEDIButton(data) {
-    this.commandeEDI = data.items ?? data.collapsedItems;
-    this.commandeEDIId = this.commandeEDI[0].refEdiOrdre;
+  OnClickModifyEdiButton(data) {
+    this.commandeEdi = data.items ?? data.collapsedItems;
+    this.commandeEdiId = this.commandeEdi[0].refEdiOrdre;
     this.modifCdeEdiPopup.visible = true;
   }
 
-  OnClickViewEDIButton(data) {
+  OnClickViewEdiButton(data) {
     data = data.items ?? data.collapsedItems;
     this.ordresIds = [];
     this.lignesOrdreIds = [];
@@ -398,7 +408,7 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
     this.visuCdeEdiPopup.visible = true;
   }
 
-  onClickCreateComplEDIButton(data) {
+  onClickCreateComplEdiButton(data) {
 
     data = data.items ?? data.collapsedItems;
     const thatOrdre = data[0].ordre;
@@ -450,10 +460,20 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
                     this.ordresService.save_v2(["id", "listeOrdresComplementaires"], { ordre }).subscribe({
                       next: () => {
                         notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "success", 7000);
-                        ////////////////////////////////////////////
-                        // Sauvegarde Statut à implémenter
-                        ////////////////////////////////////////////
 
+                        //////////////////////////////////////////////////
+                        // A implémenter : Of_sauve_ordre
+                        //////////////////////////////////////////////////
+
+                        // Sauvegarde Statut ordre EDI
+                        const ediOrdre = { id: data[0].refEdiOrdre, statusGeo: "T" };
+                        this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
+                          next: () => this.enableFilters(),
+                          error: (err) => {
+                            notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
+                            console.log(err);
+                          }
+                        });
                         // Open new order, without an opening message
                         this.tabContext.openOrdre(numOrdreCompl, campOrdreCompl.id, false);
                       },
@@ -526,23 +546,23 @@ export class GridCommandesEdiComponent implements OnInit, OnChanges, AfterViewIn
 
   }
 
-  showModifyEDIButton(cell) {
+  showModifyEdiButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].status === "U" && data[0].statusGeo === "N";
   }
 
-  showCreateEDIButton(cell) {
+  showCreateEdiButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].status === "C" && data[0].statusGeo === "N";
   }
 
-  showViewEDIButton(cell) {
+  showViewEdiButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].statusGeo === "T" ||
       (data[0].initBlocageOrdre === true && data[0].verifStatusEdi === false);
   }
 
-  showCreateComplEDIButton(cell) {
+  showCreateComplEdiButton(cell) {
     const data = cell.data.items ?? cell.data.collapsedItems;
     return data[0].status === "U" &&
       data[0].statusGeo === "N" &&

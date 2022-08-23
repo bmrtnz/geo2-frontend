@@ -1,19 +1,23 @@
 import { Injectable } from "@angular/core";
+import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { Client } from "app/shared/models";
 import CommandeEdi from "app/shared/models/commande-edi.model";
+import EdiOrdre from "app/shared/models/edi-ordre.model";
 import { ApiService } from "../api.service";
 import { FunctionsService } from "./functions.service";
 
 @Injectable({
   providedIn: "root"
 })
-export class OrdresEdiService {
+export class OrdresEdiService extends ApiService {
 
   constructor(
     public functionsService: FunctionsService,
     public apollo: Apollo
-  ) { }
+  ) {
+    super(apollo, EdiOrdre);
+  }
 
   /**
    * Récupération de tous les ordres EDI
@@ -61,7 +65,7 @@ export class OrdresEdiService {
           ],
         )),
         variables: { ediOrdreId, secteurId, clientId, assistantId, commercialId, status, dateMin, dateMax },
-        fetchPolicy: "network-only",
+        fetchPolicy: "no-cache",
       });
   }
 
@@ -126,6 +130,13 @@ export class OrdresEdiService {
       { name: "ediOrdreId", type: "String", value: ediOrdreId },
       { name: "username", type: "String", value: username }
     ]);
+  }
+
+  save_v2(columns: Array<string>, variables: OperationVariables) {
+    return this.apollo.mutate<{ saveEdiOrdre: EdiOrdre }>({
+      mutation: gql(this.buildSaveGraph(columns)),
+      variables,
+    });
   }
 
 }

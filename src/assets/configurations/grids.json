@@ -5270,7 +5270,8 @@
         "visibleIndex": 0,
         "dataField": "refEdiOrdre",
         "allowGrouping": true,
-        "groupIndex": 0,
+        "groupIndex": 1,
+        "calculateGroupValue": "refCmdClient",
         "groupCellTemplate": "groupCellStatusTemplate",
         "visible": true
       },

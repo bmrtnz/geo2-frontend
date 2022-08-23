@@ -3,12 +3,12 @@
   class="order-edi-complete-button"
   type="default"
   [focusStateEnabled]="false"
-  text="{{ 'btn-completeorderedi' | localize }}"
+  text="{{ 'btn-completeOrderEdi' | localize }}"
   (onClick)="onCompleteOrderEdiClick()"
 ></dx-button>
 
 <dx-data-grid
-  class="grid-modif-commande-EDI"
+  class="grid-modif-commande-Edi"
   [height]="'auto'"
   [remoteOperations]="false"
   [keyExpr]="'id'"
@@ -20,7 +20,7 @@
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
   (onCellPrepared)="onCellPrepared($event)"
-  (onCellClick)="onEDICellClick($event)"
+  (onCellClick)="onEdiCellClick($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       gridTitle,
@@ -59,7 +59,7 @@
     trueText="Oui"
     falseText="Non"
     [caption]="
-      ('ordresEDI-' + column.dataField?.split('.').join('-') | localize) ||
+      ('ordresEdi-' + column.dataField?.split('.').join('-') | localize) ||
       column.name
     "
     [allowGrouping]="column?.allowGrouping ? column.allowGrouping : false"

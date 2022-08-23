@@ -1,8 +1,9 @@
+import Ordre from "./ordre.model";
+import EdiOrdre from "./edi-ordre.model";
 import { Field, Model, ModelName } from "./model";
-import { Ordre } from "./ordre.model";
 
-@ModelName("EDILigne")
-export class EDILigne extends Model {
+@ModelName("EdiLigne")
+export class EdiLigne extends Model {
 
   @Field({ asKey: true, asLabel: true }) public id?: string;
   @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
@@ -12,7 +13,7 @@ export class EDILigne extends Model {
   @Field() public eanColisClient?: string;
   @Field() public eanProduitBlueWhale?: string;
   @Field() public eanProduitClient?: string;
-  @Field() public ediOrdreGeoEDI?: string;
+  @Field({ model: import("./edi-ordre.model") }) public ediOrdre?: EdiOrdre;
   @Field() public libelleProduit?: string;
   @Field() public numeroLigne?: number;
   @Field() public operationMarketing?: boolean;
@@ -25,5 +26,5 @@ export class EDILigne extends Model {
 
 }
 
-export default EDILigne;
+export default EdiLigne;
 

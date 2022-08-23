@@ -163,6 +163,11 @@ interface GridColumn {
   groupCellTemplate?: string;
 
   /**
+   * Sets custom column values used to group grid records
+   */
+  calculateGroupValue?: string;
+
+  /**
    * Allow column grouping
    */
   allowGrouping?: boolean;
