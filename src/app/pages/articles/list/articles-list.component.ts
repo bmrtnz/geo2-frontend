@@ -7,6 +7,7 @@ import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
+import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -62,6 +63,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     public especesService: EspecesService,
     public varietesService: VarietesService,
     public emballagesService: EmballagesService,
+    public modesCultureService: ModesCultureService,
     public originesService: OriginesService,
   ) {
     this.apiService = this.articlesService;
@@ -73,7 +75,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     this.varietes.filter(["valide", "=", true]);
     this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
     this.emballages.filter(["valide", "=", true]);
-    this.modesCulture = this.articlesService.getFilterDatasource("matierePremiere.modeCulture.description");
+    this.modesCulture = this.modesCultureService.getDataSource_v2(["id", "description"]);
     this.modesCulture.filter(["valide", "=", true]);
     this.trueFalse = ["Tous", "Oui", "Non"];
   }

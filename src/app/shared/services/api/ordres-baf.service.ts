@@ -183,7 +183,6 @@ export class OrdresBafService
     mess = mess.replaceAll(/(?:\~r\~n)+/g, "");
     mess = mess.replaceAll(/(?:\~[r])+/g, "<br><br>");
     if (mess.substring(0, 4) === "<br>") mess = mess.substring(4);
-    mess = "<div class='text-align-center'>" + mess + "</div>";
     return mess;
   }
 
