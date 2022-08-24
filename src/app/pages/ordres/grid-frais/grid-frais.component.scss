@@ -1,3 +1,10 @@
-::ng-deep .grey-light {
-  background-color: #EEE !important;
+::ng-deep .grid-frais {
+
+  .grey-light {
+    background-color: #EEE !important;
+  }
+
+  .no-arrow .dx-texteditor-buttons-container {
+    display: none !important;
+  }
 }

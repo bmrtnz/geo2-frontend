@@ -5208,6 +5208,7 @@
       {
         "visibleIndex": 2,
         "dataField": "frais",
+        "editCellTemplate": "selectBoxTemplate",
         "visible": true
       },
       {
@@ -5218,6 +5219,7 @@
       {
         "visibleIndex": 6,
         "dataField": "devise",
+        "editCellTemplate": "selectBoxTemplate",
         "width": 120,
         "visible": true
       },
@@ -5230,6 +5232,7 @@
       {
         "visibleIndex": 10,
         "dataField": "codePlus",
+        "editCellTemplate": "customSelectBoxTemplate",
         "visible": true
       },
       {
