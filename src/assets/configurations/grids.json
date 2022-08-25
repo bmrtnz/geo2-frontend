@@ -956,8 +956,7 @@
   "bassin": {
     "columns": [
       {
-        "dataField": "id",
-        "visible": false
+        "dataField": "id"
       },
       {
         "dataField": "bureauAchat.id",
@@ -966,6 +965,15 @@
       {
         "dataField": "valide",
         "dataType": "boolean"
+      },
+      {
+        "dataField": "prixUnitaireTarifTransport",
+        "dataType": "number",
+        "visible": true,
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        }
       }
     ]
   },

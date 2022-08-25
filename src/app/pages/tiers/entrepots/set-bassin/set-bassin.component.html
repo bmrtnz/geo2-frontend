@@ -1,6 +1,7 @@
 <dx-data-grid
   [dataSource]="etbDatasource"
   [remoteOperations]="true"
+  (onSaved)="onSaved($event)"
 >
   <!-- common columns from grid config -->
   <dxi-column
@@ -8,6 +9,7 @@
     [dataField]="column.dataField"
     [visible]="column.visible"
     [dataType]="column.dataType"
+    [format]="column.format"
   ></dxi-column>
 
   <!-- advanced columns -->
@@ -16,9 +18,29 @@
     calculateDisplayValue="transporteur.raisonSocial"
   >
     <dxo-lookup
-      [dataSource]="transporteurs | async"
+      [dataSource]="transporteurs"
       valueExpr="id"
       displayExpr="raisonSocial"
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column
+    dataField="baseTarifTransport.id"
+    calculateDisplayValue="baseTarifTransport.description"
+  >
+    <dxo-lookup
+      [dataSource]="basesTarif"
+      valueExpr="id"
+      displayExpr="description"
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column
+    dataField="deviseTarifTransport.id"
+    calculateDisplayValue="deviseTarifTransport.description"
+  >
+    <dxo-lookup
+      [dataSource]="devises"
+      valueExpr="id"
+      displayExpr="description"
     ></dxo-lookup>
   </dxi-column>
 
