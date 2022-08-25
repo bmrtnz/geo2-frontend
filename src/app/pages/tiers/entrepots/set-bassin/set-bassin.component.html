@@ -2,23 +2,27 @@
   [dataSource]="etbDatasource"
   [remoteOperations]="true"
 >
+  <!-- common columns from grid config -->
   <dxi-column
     *ngFor="let column of columns | async"
     [dataField]="column.dataField"
     [visible]="column.visible"
     [dataType]="column.dataType"
   ></dxi-column>
-  <dxi-column dataField="transporteur">
+
+  <!-- advanced columns -->
+  <dxi-column
+    dataField="transporteur.id"
+    calculateDisplayValue="transporteur.raisonSocial"
+  >
     <dxo-lookup
       [dataSource]="transporteurs | async"
-      [valueExpr]="'this'"
-      [displayExpr]="'raisonSocial'"
-    >
-    </dxo-lookup>
+      valueExpr="id"
+      displayExpr="raisonSocial"
+    ></dxo-lookup>
   </dxi-column>
 
   <dxo-editing
-    mode="form"
     [allowUpdating]="true"
     [allowAdding]="true"
     [allowDeleting]="true"
