@@ -934,6 +934,32 @@ export abstract class ApiService implements OnDestroy {
       );
   }
 
+  getLookupStore<T>(columns: Array<string>) {
+    return {
+      paginate: true,
+      store: this.createCustomStore({
+        load: options => this.apollo
+          .query<{ [key: string]: RelayPage<T> }>({
+            query: gql(this.buildGetPageGraph(columns)),
+            variables: this.mapLoadOptionsToVariables(options),
+            fetchPolicy: "cache-first",
+          })
+          .pipe(
+            map(res => res.data[`all${this.model.name}`].edges.map(({ node }) => node)),
+          )
+          .toPromise(),
+        byKey: id => this.apollo
+          .query<{ [key: string]: T }>({
+            query: gql(this.buildGetOneGraph(columns)),
+            variables: { id },
+            fetchPolicy: "cache-first",
+          })
+          .pipe(map(res => res.data[this.model.name.lcFirst()]))
+          .toPromise(),
+      })
+    };
+  }
+
   /**
    * It builds a graphql query that fetches a single entity of the model
    * @param body - The body of the query.
