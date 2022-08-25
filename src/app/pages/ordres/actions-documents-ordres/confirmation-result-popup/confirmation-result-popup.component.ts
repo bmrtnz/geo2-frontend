@@ -32,6 +32,10 @@ export class ConfirmationResultPopupComponent {
 
   constructor() { }
 
+  onShowing(e) {
+    e.component.content().parentNode.classList.add("confirmation-result-popup");
+  }
+
   /**
    * It sets the state and content, shows the modal, and returns the advance emitter.
    */

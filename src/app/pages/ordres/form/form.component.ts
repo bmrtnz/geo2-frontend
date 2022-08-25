@@ -40,8 +40,9 @@ import { of, Subject } from "rxjs";
 import { concatMap, filter, finalize, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
-// tslint:disable-next-line: max-line-length
-import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
+import {
+  ConfirmationResultPopupComponent
+} from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
@@ -55,6 +56,8 @@ import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
+import { DatePipe } from "@angular/common";
+import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -159,6 +162,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "documentFacture.isPresent",
     "documentFacture.uri",
     "documentFacture.type",
+    "listeOrdresRegularisations",
+    "listeOrdresComplementaires",
+    "type.id",
     "documentCMR.isPresent",
     "documentCMR.uri",
     "documentCMR.type"
@@ -240,6 +246,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public showBAFButton: boolean;
   public promptPopupTitle: string;
   public promptPopupPurpose: string;
+  public selectedLignes: string[];
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -265,6 +272,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
   @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
+  @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
 
   constructor(
     private router: Router,
@@ -289,6 +297,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private litigesService: LitigesService,
     private mruOrdresService: MruOrdresService,
     private tabContext: TabContext,
+    private datePipe: DatePipe,
     public authService: AuthService,
     private localization: LocalizationService
   ) {
@@ -377,6 +386,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (res) => {
           this.refreshStatus(res.data.saveOrdre.statut);
           this.headerSaving = false;
+          this.ordre = { ...this.ordre, ...ordre };
+          this.formGroup.markAsPristine();
+          this.addLinkedOrders();
         },
         error: (err) => {
           notify("Erreur sauvegarde entête", "error", 3000);
@@ -402,6 +414,149 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     grids.forEach((grid) =>
       grid.onToggling(itemElement.dataset.toggled === "true")
     );
+  }
+
+  onRegulOrderClick() {
+
+    // As LIST_NORDRE_REGUL is a VARCHAR(50)
+    if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
+      notify("Le nombre maximum d'ordres de régularisation est atteint", "error", 5000);
+      this.clearSelectionForRegul();
+      return;
+    }
+
+    this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
+    if (!this.selectedLignes?.length) {
+      this.gridCommandes.grid.instance.columnOption("command:select", "visible", true);
+      this.gridCommandes.grid.instance.selectAll();   // Way to avoid "null"
+      this.gridCommandes.grid.instance.deselectAll(); // in select checkboxes
+      notify(this.localization.localize("text-selection-lignes"), "warning", 5000);
+      return;
+    }
+
+    this.motifRegulPopup.visible = true;
+
+  }
+
+  validateRegulOrder(data) {
+
+    // Quitting without creating a regul order
+    if (!data) {
+      this.clearSelectionForRegul();
+      return;
+    }
+
+    data = {
+      ...data,
+      listOrlRef: this.selectedLignes,
+      ordreRef: this.ordre.id,
+      socCode: this.currentCompanyService.getCompany().id,
+      username: this.authService.currentUser.nomUtilisateur
+    };
+
+    this.ordresService
+      .fCreeOrdreRegularisation(data.indDetail, data.lcaCode, data.listOrlRef, data.typeReg, data.ordreRef, data.socCode, data.username)
+      .subscribe({
+        next: (resCree) => {
+          const refOrdreRegul = resCree.data.fCreeOrdreRegularisation.data.ls_ord_ref_regul;
+          const currOrder = this.ordre;
+          if (refOrdreRegul) {
+            // Find numero / adjust listeOrdresRegularisations & save it / Initialize form
+            this.ordresService
+              .getOne_v2(refOrdreRegul, ["id", "numero"])
+              .subscribe({
+                next: (result) => {
+                  const numOrdreRegul = result.data.ordre.numero;
+                  this.initializeForm("no-cache");
+                  notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "success", 7000);
+                  this.clearSelectionForRegul();
+                },
+                error: (error: Error) => {
+                  console.log(error);
+                  this.clearSelectionForRegul();
+                  alert(this.localization.localize("ordre-regularisation-erreur-creation"),
+                    this.localization.localize("ordre-regularisation-creation"));
+                }
+              });
+          }
+        },
+        error: (error: Error) => {
+          console.log(error);
+          this.clearSelectionForRegul();
+          alert(this.messageFormat(error.message), this.localization.localize("ordre-regularisation-creation"));
+        }
+      });
+
+  }
+
+  clearSelectionForRegul() {
+    this.selectedLignes = [];
+    this.gridCommandes.grid.instance.columnOption("command:select", "visible", false);
+    this.gridCommandes.grid.instance.deselectAll();
+  }
+
+  onComplOrderClick() {
+
+    if (!this.ordre?.id) return;
+    // As LIST_NORDRE_COMP is a VARCHAR(50)
+    if (this.ordre.listeOrdresComplementaires?.split(";").join(",").split(",").length >= 8) {
+      notify("Le nombre maximum d'ordres complémentaires est atteint", "error", 5000);
+      return;
+    }
+
+    if (this.ordre.type.id !== "ORD") {
+      alert(this.localization.localize("text-popup-ordre-non-ORD"), this.localization.localize("ordre-complementaire-creation"));
+      return;
+    }
+
+    const dateNow = this.datePipe.transform(new Date().setDate(new Date().getDate()).valueOf(), "yyyy-MM-dd");
+    if (dateNow > this.ordre.dateDepartPrevue) {
+      alert(this.localization.localize("text-popup-ordre-compl-dateDepassee"), this.localization.localize("ordre-complementaire-creation"));
+      return;
+    }
+
+    confirm(
+      this.localization.localize("text-popup-ordre-compl").replace("&C", this.ordre.client.code),
+      this.localization.localize("ordre-complementaire-creation")
+    ).then(res => {
+      if (res) {
+
+        const societe: Societe = this.currentCompanyService.getCompany();
+
+        this.ordresService
+          .fCreeOrdreComplementaire(this.ordre.id, societe.id, this.authService.currentUser.nomUtilisateur)
+          .subscribe({
+            next: (resCree) => {
+              const refOrdreCompl = resCree.data.fCreeOrdreComplementaire.data.ls_ord_ref_compl;
+              if (refOrdreCompl) {
+                // Find numero / adjust listeOrdresComplementaires & save it / Initialize form
+                this.ordresService
+                  .getOne_v2(refOrdreCompl, ["id", "numero"])
+                  .subscribe({
+                    next: (result) => {
+                      this.initializeForm("no-cache");
+                      notify(this.localization.localize("ordre-complementaire-cree")
+                        .replace("&O", result.data.ordre.numero), "success", 7000);
+                    },
+                    error: (error: Error) => {
+                      console.log(error);
+                      alert(this.localization.localize("ordre-complementaire-erreur-creation"),
+                        this.localization.localize("ordre-complementaire-creation"));
+                    }
+                  });
+              }
+            },
+            error: (error: Error) => {
+              console.log(error);
+              alert(this.messageFormat(error.message), this.localization.localize("ordre-complementaire-creation"));
+            }
+          });
+
+      } else {
+        notify(this.localization.localize("text-popup-abandon-ordre-compl"), "warning", 7000);
+      }
+    });
+
   }
 
   onCancelOrderClick() {
@@ -440,7 +595,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (res) => {
           this.initializeForm("no-cache");
           this.actionDocs.sendAction("ORDRE", true);
-          // notify(this.localization.localize("text-popup-annulation-ok"), "info", 7000);
         },
         error: (error: Error) => {
           console.log(error);
@@ -456,6 +610,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.promptPopupPurpose = "delete";
     this.promptPopup.show(
       {
+        commentTitle: this.localization.localize("choose-delete-reason"),
         validText: "btn-suppression-ordre",
         commentMaxLength: 70
       }
@@ -464,20 +619,19 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   validateDeleteOrder(comment) {
 
-    this.localization.localize("hint-ajout-ordre");
+    const numero = this.ordre.numero;
 
-    const result = confirm(
+    confirm(
       this.localization.localize("text-popup-supprimer-ordre"),
-      `${this.localization.localize("suppression-ordre")} n°${this.ordre.numero}`
-    );
-    result.then(res => {
+      `${this.localization.localize("suppression-ordre")} n°${numero}`
+    ).then(res => {
       if (res) {
         this.ordresService
           .fSuppressionOrdre(this.ordre.id, comment, this.authService.currentUser.nomUtilisateur)
           .subscribe({
             next: () => {
               this.tabContext.closeOrdre(this.ordre.numero, this.ordre.campagne.id);
-              notify(this.localization.localize("text-popup-suppression-ok"), "info", 7000);
+              notify(this.localization.localize("text-popup-suppression-ok").replace("&O", numero), "success", 7000);
             },
             error: (error: Error) => {
               alert(this.messageFormat(error.message), this.localization.localize("suppression-ordre"));
@@ -498,7 +652,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     mess = mess
       .replace("Exception while fetching data (/fSuppressionOrdre) : ", "")
       .replace("Exception while fetching data (/fTestAnnuleOrdre) : ", "")
-      .replace("Exception while fetching data (/fAnnulationOrdre) : ", "");
+      .replace("Exception while fetching data (/fAnnulationOrdre) : ", "")
+      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "")
+      .replace("Exception while fetching data (/fCreeOrdreRegularisation) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
@@ -538,17 +694,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  deleteOrder() {
-    // const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-    // if (!ordre.id) return;
-    // this.ordresService.delete({ id: ordre.id }).subscribe({
-    //   next: (_) => {
-    //     notify("Ordre " + ordre.numero + " supprimé", "success", 3000);
-    //   },
-    //   error: (_) => notify("Echec de la suppression", "error", 3000),
-    // });
-  }
-
   addLinkedOrders() {
     // Accole au numéro d'ordre les ordres liés
 
@@ -573,9 +718,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         ["regimeTva.id", "=", this.ordre.regimeTva?.id]
       ]);
       ordresSource.load().then((res) => {
-        res.filter(value => value.numero !== numero).map(value => {
-          this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
-        });
+        res
+          .filter(value => value.numero !== numero)
+          .filter(value => !this.ordre.listeOrdresComplementaires?.split(";").join(",").split(",").includes(value.numero))
+          .map(value => {
+            this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
+          });
         this.findComplRegulLinkedOrders(refClt);
         this.linkedOrdersSearch = false;
       });
@@ -589,20 +737,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const hasCompl = this.ordre.listeOrdresComplementaires;
     const hasRegul = this.ordre.listeOrdresRegularisations;
     if (hasCompl) {
-      hasCompl.split(",").map(res => {
-        this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Compl, class: "Compl" });
+      hasCompl.split(";").join(",").split(",").map(res => {
+        if (res) this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Compl, class: "Compl" });
       });
     }
     if (hasRegul) {
       hasRegul.split(";").map(res => {
-        this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Regul, class: "Regul" });
+        if (res) this.linkedOrders.push({ ordre: { numero: res }, criteria: LinkedCriterias.Regul, class: "Regul" });
       });
     }
     if (!refClt) this.linkedOrdersSearch = false;
   }
 
   openLinkedOrder(ordre: Partial<Ordre>) {
-    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
+    this.tabContext.openOrdre(ordre.numero, this.ordre.campagne.id);
   }
 
   deviseDisplayExpr(item) {
@@ -639,40 +787,45 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             );
         }),
       )
-      .subscribe(ordre => {
-        this.ordre = ordre;
-        if (this.ordre === null) return;
-        this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
-        this.fraisClient = this.getFraisClient();
-        this.gestEntrepot = this.getGestEntrepot();
-        this.fetchFullOrderNumber();
-        this.refOrdre = this.ordre?.id ? ordre.id : "-";
-        this.canDuplicate = !!this?.ordre?.id;
-        this.formGroup.reset(ordre);
-        this.instructionsComm = this.getinstructionsComm();
-        const instLog = this.ordre.instructionsLogistiques;
-        if (this.comLog) this.comLog.instance.option("hint", instLog);
-        this.addLinkedOrders();
-        this.refreshBadges();
-        this.refreshStatus(this.ordre.statut);
-        window.sessionStorage.setItem("idOrdre", this.ordre.id);
-        window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
-        this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
+      .subscribe({
+        next: ordre => {
+          this.ordre = ordre;
+          if (this.ordre === null) {
+            notify(`Récupération des données de l'ordre impossible...`, "error", 7000);
+            return;
+          }
+          this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
+          this.fraisClient = this.getFraisClient();
+          this.gestEntrepot = this.getGestEntrepot();
+          this.fetchFullOrderNumber();
+          this.refOrdre = this.ordre?.id ? ordre.id : "-";
+          this.canDuplicate = !!this?.ordre?.id;
+          this.formGroup.reset(ordre);
+          this.instructionsComm = this.getinstructionsComm();
+          const instLog = this.ordre.instructionsLogistiques;
+          if (this.comLog) this.comLog.instance.option("hint", instLog);
+          this.addLinkedOrders();
+          this.refreshBadges();
+          this.refreshStatus(this.ordre.statut);
+          window.sessionStorage.setItem("idOrdre", this.ordre.id);
+          window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
+          this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
 
-        this.formGroup.valueChanges.subscribe((_) => {
-          this.saveHeaderOnTheFly();
-        });
+          this.formGroup.valueChanges.subscribe((_) => {
+            this.saveHeaderOnTheFly();
+          });
 
-        this.histoLigneOrdreText =
-          `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
-        this.histoLigneOrdreReadOnlyText =
-          `${this.localization.localize("hint-client-historique")}`;
+          this.histoLigneOrdreText =
+            `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
+          this.histoLigneOrdreReadOnlyText =
+            `${this.localization.localize("hint-client-historique")}`;
 
-        this.showBAFButton =
-          this.ordre.bonAFacturer === false &&
-          this.ordre.client.usageInterne !== true &&
-          (this.ordre.codeAlphaEntrepot ? this.ordre.codeAlphaEntrepot.substring(0, 8) !== "PREORDRE" : true);
-
+          this.showBAFButton =
+            this.ordre.bonAFacturer === false &&
+            this.ordre.client.usageInterne !== true &&
+            (this.ordre.codeAlphaEntrepot ? this.ordre.codeAlphaEntrepot.substring(0, 8) !== "PREORDRE" : true);
+        },
+        error: (message: string) => notify({ message }, "error", 7000),
       });
   }
 

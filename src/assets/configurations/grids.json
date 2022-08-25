@@ -4679,12 +4679,16 @@
         "visibleIndex": 0,
         "dataField": "dateModification",
         "visible": true,
+        "allowEditing": false,
+        "width": 180,
         "selectedFilterOperation": "<",
         "sortOrder": "desc"
       },
       {
         "visibleIndex": 1,
         "dataField": "userModification",
+        "width": 150,
+        "allowEditing": false,
         "visible": true
       },
       {
@@ -4693,7 +4697,8 @@
         "visible": true
       },
       {
-        "dataField": "id"
+        "dataField": "id",
+        "allowEditing": false
       }
     ]
   },
@@ -5061,8 +5066,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 8,
@@ -5071,8 +5075,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 9,
@@ -5081,8 +5084,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 10,
@@ -5091,8 +5093,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 11,
@@ -5101,8 +5102,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 12,
@@ -5111,8 +5111,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 13,
@@ -5121,8 +5120,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 14,
@@ -5131,8 +5129,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 15,
@@ -5141,8 +5138,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 16,
@@ -5184,8 +5180,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "dataField": "ordre.numero",
@@ -5205,8 +5200,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "dataField": "totalRestitue",
@@ -5214,8 +5208,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "dataField": "id",
@@ -5236,6 +5229,7 @@
       {
         "visibleIndex": 2,
         "dataField": "frais",
+        "editCellTemplate": "selectBoxTemplate",
         "visible": true
       },
       {
@@ -5246,6 +5240,7 @@
       {
         "visibleIndex": 6,
         "dataField": "devise",
+        "editCellTemplate": "selectBoxTemplate",
         "width": 120,
         "visible": true
       },
@@ -5258,6 +5253,7 @@
       {
         "visibleIndex": 10,
         "dataField": "codePlus",
+        "editCellTemplate": "customSelectBoxTemplate",
         "visible": true
       },
       {
@@ -5272,6 +5268,200 @@
         "fixed": true,
         "allowEditing": false,
         "fixedPosition": "right"
+      }
+    ]
+  },
+  "commandes-edi": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "refEdiOrdre",
+        "allowGrouping": true,
+        "groupIndex": 1,
+        "calculateGroupValue": "refCmdClient",
+        "groupCellTemplate": "groupCellStatusTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "status",
+        "width": 50,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "numeroLigne",
+        "sortOrder": "asc",
+        "sortIndex": 3,
+        "width": 70,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "libelleProduit",
+        "width": 500,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "eanProduitClient",
+        "width": 140,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "parCombien",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "quantite",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "quantiteColis",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "listArticleId",
+        "visible": true
+      }
+    ]
+  },
+  "modif-commande-edi": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "refEdiOrdre",
+        "allowGrouping": true,
+        "groupIndex": 0,
+        "groupCellTemplate": "groupCellStatusTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "status",
+        "width": 50,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "numeroLigne",
+        "sortOrder": "asc",
+        "sortIndex": 3,
+        "width": 70,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "libelleProduit",
+        "width": 500,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "eanProduitClient",
+        "width": 140,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "prixVente",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "parCombien",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "quantite",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "quantiteColis",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "listArticleId",
+        "visible": true
+      }
+    ]
+  },
+  "lignes-edi": {
+    "pageSize": 100,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "ordre.numero",
+        "sortOrder": "asc",
+        "width": 75,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordre.transporteur.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "article.id",
+        "width": 60,
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "achatQuantite",
+        "width": 80,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "proprietaireMarchandise.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "gtinColisKit",
+        "visible": true
+      },
+      {
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "visible": false
       }
     ]
   }

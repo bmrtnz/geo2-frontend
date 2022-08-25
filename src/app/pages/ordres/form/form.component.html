@@ -187,8 +187,8 @@
                 <dx-button
                   class="upperButton"
                   type="default"
-                  [disabled]="true"
                   text="{{ 'btn-complorder' | localize }}"
+                  (onClick)="onComplOrderClick()"
                 ></dx-button>
               </div>
             </div>
@@ -581,7 +581,7 @@
                             >
                               <dxi-validation-rule
                                 type="stringLength"
-                                [max]="255"
+                                [max]="280"
                               ></dxi-validation-rule>
                             </dx-validator>
                           </dx-select-box>
@@ -606,7 +606,7 @@
                             >
                               <dxi-validation-rule
                                 type="stringLength"
-                                [max]="70"
+                                [max]="128"
                               ></dxi-validation-rule>
                             </dx-validator>
                           </dx-text-box>
@@ -902,12 +902,25 @@
                 ></dx-button>
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
-                  <div [hidden]="!gridCommandes?.gridRowsTotal">
+                  <div
+                    [ngClass]="{'shiftNoMutations' : !allowMutations}"
+                    [hidden]="!gridCommandes?.gridRowsTotal"
+                  >
+                    <!-- Confirmation de l'ordre -->
                     <app-actions-documents-ordres
                       [ordre]="ordre"
                       [gridEnvois]="gridEnvois"
                       [orderConfirmationOnly]="true"
                     ></app-actions-documents-ordres>
+                    <!-- Ordre de régularisation -->
+                    <dx-button
+                      class="order-regul-button"
+                      type="default"
+                      [focusStateEnabled]="false"
+                      text="{{ 'btn-regulorder' | localize }}"
+                      hint="{{ 'hint-regulorder' | localize }}"
+                      (onClick)="onRegulOrderClick()"
+                    ></dx-button>
                   </div>
                   <app-grid-commandes
                     [ordreID]="ordre?.id"
@@ -1246,3 +1259,7 @@
   [title]="promptPopupTitle"
   (whenValidate)="onValidatePromptPopup($event)"
 ></app-prompt-popup>
+<app-motif-regularisation-ordre-popup
+  (whenQuitRegulPopup)="validateRegulOrder($event)"
+></app-motif-regularisation-ordre-popup>
+

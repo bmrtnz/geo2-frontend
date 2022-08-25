@@ -116,7 +116,10 @@ export enum Grid {
   MouvFournisseursComptesPalox = "mouv-fournisseurs-comptes-palox",
   MouvClientsComptesPalox = "mouv-clients-comptes-palox",
   RecapFournisseursComptesPalox = "recap-fournisseurs-comptes-palox",
-  RecapClientsComptesPalox = "recap-clients-comptes-palox"
+  RecapClientsComptesPalox = "recap-clients-comptes-palox",
+  CommandesEdi = "commandes-edi",
+  ModifCommandeEdi = "modif-commande-edi",
+  LignesEdi = "lignes-edi"
 }
 
 const extraConfigurations = [
@@ -226,6 +229,7 @@ export class GridConfiguratorService {
   save(config: GridConfig) {
     const context = this as unknown as DxoStateStoringComponent;
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
+    config.selectedRowKeys = []; // Really not consistent to store this info
     self.gridsConfigsService
       .save_v2(["grid", "utilisateur.nomUtilisateur", "config"], {
         gridConfig: {
@@ -504,19 +508,19 @@ export class GridConfiguratorService {
             const defaultState = await this.fetchDefaultConfig(
               grid,
             );
-            const result = confirm("Êtes-vous sûr de vouloir réinitialiser l'affichage ?", "Configuration grille");
-            result.then(res => {
-              if (res) {
-                component.state(defaultState);
-                // manual state reloading
-                component
-                  .option("stateStoring")
-                  .customLoad.call(component.option("stateStoring"));
-                if (onConfigReload) onConfigReload(defaultState);
-                if (onColumnsChange)
-                  onColumnsChange({ current: defaultState.columns });
-              }
-            });
+            confirm("Êtes-vous sûr de vouloir réinitialiser l'affichage ?", "Configuration grille")
+              .then(res => {
+                if (res) {
+                  component.state(defaultState);
+                  // manual state reloading
+                  component
+                    .option("stateStoring")
+                    .customLoad.call(component.option("stateStoring"));
+                  if (onConfigReload) onConfigReload(defaultState);
+                  if (onColumnsChange)
+                    onColumnsChange({ current: defaultState.columns });
+                }
+              });
           },
         },
       },

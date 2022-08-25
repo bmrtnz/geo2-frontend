@@ -67,13 +67,13 @@
       <div class="popup-buttons-container">
         <dx-button
           type="normal"
-          text="Appliquer"
+          text="{{ 'btn-appliquer' | localize }}"
           [ngClass]="{ 'inactive-button': !validForm }"
           (onClick)="applyClick(form)"
         ></dx-button>
         <dx-button
           type="default"
-          text="Annuler"
+          text="{{ 'btn-annuler' | localize }}"
           (onClick)="cancelClick()"
         ></dx-button>
       </div>

@@ -5,11 +5,10 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  (onEditorPreparing)="onEditorPreparing($event)"
   (onCellClick)="onCellClick($event)"
   (onEditingStart)="onEditingStart($event)"
   (onInitNewRow)="onInitNewRow($event)"
-  (onSaved)="onSaved($event)"
+  (onSaved)="onSaved()"
   (onCellDblClick)="(onCellClick)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
@@ -22,7 +21,6 @@
   "
 >
   <!-- Grid configuration -->
-  <!-- <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter> -->
   <dxo-paging></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -72,20 +70,12 @@
     [allowEditing]="column.allowEditing"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [format]="column.format"
-    [editCellTemplate]="defineEditTemplate(column.dataField)"
+    [editCellTemplate]="column.editCellTemplate"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
     [showInColumnChooser]="column.showInColumnChooser"
   >
-    <!-- <dxi-validation-rule
-    *ngIf="
-      column.dataField === 'codePlus' ||
-      column.dataField === 'montant' ||
-      column.dataField === 'frais'
-    "
-    type="required"
-  ></dxi-validation-rule> -->
   </dxi-column>
 
   <div *dxTemplate="let cell of 'selectBoxTemplate'">
@@ -102,8 +92,7 @@
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
     >
-      <dxo-drop-down-options [width]="SelectBoxPopupWidth">
-      </dxo-drop-down-options>
+      <dxo-drop-down-options [width]="400"></dxo-drop-down-options>
     </dx-select-box>
   </div>
   <div *dxTemplate="let cell of 'customSelectBoxTemplate'">

@@ -1,0 +1,18 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [width]="1140"
+  [closeOnOutsideClick]="false"
+  [shading]="false"
+  [(visible)]="visible"
+  title="{{ 'ordre-edi-modification' | localize }}"
+  height="auto"
+  (onShowing)="onShowing($event)"
+  [resizeEnabled]="true"
+>
+
+  <app-grid-modif-commande-edi
+    [ordreEdiId]="ordreEdiId"
+    (clotureOrdreEdi)="clotureOrdreEdi()"
+  ></app-grid-modif-commande-edi>
+</dx-popup>

@@ -36,7 +36,11 @@
 }
 
 .red-font {
-  color: #ff325a;
+  color: #ff325a !important;
+}
+
+.green-font {
+  color: #39970e !important;
 }
 
 .text-underlined {
@@ -260,6 +264,12 @@ body app-root.production {
   td {
     background-color: #666 !important;
     color: #fff !important;
+
+    &.dx-command-select {
+      .dx-checkbox-icon {
+        border-color: #FFF;
+      }
+    }
 
     .dx-sort-indicator {
       font-weight: bold;

@@ -158,6 +158,21 @@ interface GridColumn {
   headerCellTemplate?: string;
 
   /**
+   * Specifies the group row cell template when required
+   */
+  groupCellTemplate?: string;
+
+  /**
+   * Sets custom column values used to group grid records
+   */
+  calculateGroupValue?: string;
+
+  /**
+   * Allow column grouping
+   */
+  allowGrouping?: boolean;
+
+  /**
    * Specifies a column's class.
    */
   cssClass?: string;

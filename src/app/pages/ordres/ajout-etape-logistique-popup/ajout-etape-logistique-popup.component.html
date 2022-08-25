@@ -48,13 +48,13 @@
     <div class="popup-buttons-container">
       <dx-button
         type="normal"
-        text="Appliquer"
+        text="{{ 'btn-appliquer' | localize }}"
         [disabled]="!groupageSB.value || !lieuSB.value"
         (onClick)="applyClick()"
       ></dx-button>
       <dx-button
         type="default"
-        text="Annuler"
+        text="{{ 'btn-annuler' | localize }}"
         (onClick)="cancelClick()"
       ></dx-button>
     </div>

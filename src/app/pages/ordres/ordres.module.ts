@@ -125,6 +125,15 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
+import { CommandesEdiComponent } from "./indicateurs/commandes-edi/commandes-edi.component";
+import { GridCommandesEdiComponent } from "./indicateurs/commandes-edi/grid-commandes-edi/grid-commandes-edi.component";
+import {
+  ChoixEntrepotCommandeEdiPopupComponent
+} from "./indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
+import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
+import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
+import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
 
 @NgModule({
   declarations: [
@@ -199,6 +208,13 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GridReservationStockComponent,
     GridReservationStockEnCoursComponent,
     ListPipe,
+    MotifRegularisationOrdrePopupComponent,
+    CommandesEdiComponent,
+    GridCommandesEdiComponent,
+    ChoixEntrepotCommandeEdiPopupComponent,
+    ModifCommandeEdiPopupComponent,
+    GridModifCommandeEdiComponent,
+    VisualiserOrdresPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,

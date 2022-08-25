@@ -1,3 +1,4 @@
+import { EdiLigne } from "./edi-ligne.model";
 import { Article } from "./article.model";
 import { BaseTarif } from "./base-tarif.model";
 import CodePromo from "./code-promo.model";
@@ -20,6 +21,7 @@ export class OrdreLigne extends Model {
   @Field({ model: import("./base-tarif.model") }) public venteUnite: BaseTarif;
   @Field({ asKey: true, asLabel: true }) public id?: string;
   @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
+  @Field({ model: import("./edi-ligne.model") }) public ediLigne?: EdiLigne;
   @Field({ model: import("./ordre-logistique.model") }) public logistique?: OrdreLogistique;
   @Field({ model: import("./article.model") }) public article?: Article;
   @Field({ model: import("./fournisseur.model") }) public fournisseur?: Fournisseur;
