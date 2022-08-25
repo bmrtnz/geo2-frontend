@@ -974,6 +974,39 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
+   * It builds a graphql query that will fetch a page of data
+   * @param {string} operationName - The name of the operation to build.
+   * @param {string[]} body - The body of the query.
+   * @returns The GraphQL query that will be executed.
+   */
+  protected buildGetPageGraph(body: string[]) {
+    return ApiService.buildGraph(
+      "query",
+      [
+        {
+          name: `all${this.model.name}`,
+          body: [
+            "pageInfo.startCursor",
+            "pageInfo.endCursor",
+            "pageInfo.hasPreviousPage",
+            "pageInfo.hasNextPage",
+            "totalCount",
+            ...body.map(c => `edges.node.${c}`),
+          ],
+          params: [
+            { name: "search", value: "search", isVariable: true },
+            { name: "pageable", value: "pageable", isVariable: true },
+          ],
+        },
+      ],
+      [
+        { name: "search", type: "String", isOptionnal: true },
+        { name: "pageable", type: "PaginationInput", isOptionnal: false },
+      ],
+    );
+  }
+
+  /**
    * It builds a graphql query that will fetch the data needed to display the summary of the list of
    * summaries
    * @param {string} operationName - The name of the operation to build.
@@ -993,7 +1026,7 @@ export abstract class ApiService implements OnDestroy {
             "pageInfo.hasNextPage",
             "totalCount",
             `summary(summaries:$summary, of:"${operationName}")`,
-            ...body,
+            ...body.map(c => `edges.node.${c}`),
           ],
           params: [
             { name: "search", value: "search", isVariable: true },
