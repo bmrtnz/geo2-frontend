@@ -4,7 +4,7 @@ import { Apollo } from "apollo-angular";
 import EntrepotTransporteurBassin from "app/shared/models/entrepot-transporteur-bassin.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { takeWhile } from "rxjs/operators";
+import { map, take, takeWhile, tap } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { FormUtilsService } from "../form-utils.service";
 
@@ -31,6 +31,7 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
 
   getDataSource_v2(columns: Array<string> | Set<string>) {
     return new DataSource({
+      // reshapeOnPush: true,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
@@ -52,9 +53,10 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
               res => {
                 if (res.data && res.data.allEntrepotTransporteurBassin)
                   resolve(
-                    this.asInstancedListCount(
+                    // map to mutable entity by serializing & deserializing apollo data
+                    JSON.parse(JSON.stringify(this.asInstancedListCount(
                       res.data.allEntrepotTransporteurBassin,
-                    ),
+                    )))
                   );
               },
             );
@@ -74,10 +76,14 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
             );
           }),
         update: (id, values) =>
-          this.apollo.mutate({
+          this.apollo.mutate<{ saveEntrepotTransporteurBassin: EntrepotTransporteurBassin }>({
             mutation: gql(this.buildSaveGraph(this.formUtils.extractPaths(values))),
             variables: { entrepotTransporteurBassin: { id, ...this.formUtils.cleanTypenames(values) } },
-          }).toPromise()
+          })
+            .pipe(
+              map(res => res.data.saveEntrepotTransporteurBassin),
+            )
+            .toPromise(),
       },
       ),
     });
