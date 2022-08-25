@@ -6,6 +6,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { takeWhile } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
+import { FormUtilsService } from "../form-utils.service";
 
 @Injectable({
   providedIn: "root",
@@ -14,6 +15,7 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
 
   constructor(
     apollo: Apollo,
+    private formUtils: FormUtilsService,
   ) {
     super(apollo, EntrepotTransporteurBassin);
   }
@@ -71,7 +73,13 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
               },
             );
           }),
-      }),
+        update: (id, values) =>
+          this.apollo.mutate({
+            mutation: gql(this.buildSaveGraph(this.formUtils.extractPaths(values))),
+            variables: { entrepotTransporteurBassin: { id, ...this.formUtils.cleanTypenames(values) } },
+          }).toPromise()
+      },
+      ),
     });
   }
 
