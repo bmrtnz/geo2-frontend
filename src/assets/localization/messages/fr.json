@@ -168,6 +168,7 @@
     "ordre-regularisation-cree": "L'ordre de regularisation n°&O a bien été créé",
     "ordre-regularisation-erreur-creation": "Erreur création ordre de régularisation",
     "ordre-edi-creation": "Création Ordre EDI",
+    "ordre-erreur-creation": "Erreur création Ordre",
     "ordre-edi-modification": "Modification Ordre EDI",
     "ordre-edi-choix-ordre": "Sélection des ordres à ouvrir",
     "ordre-edi-cloture": "Ordre EDI clôturé",

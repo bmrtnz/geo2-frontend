@@ -338,7 +338,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   createEdiOrder(data, entrId?) {
-
     // Add entrepot to commande EDI data
     if (entrId) data = { ...data, entrepot: { id: entrId } };
 
@@ -359,7 +358,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
           const numeros = result?.tab_ordre_cree;
           const refs = result?.ls_nordre_tot;
           if (!numeros?.length || !refs) {
-            notify("Erreur lors de la création de l'ordre", "error");
+            notify(this.localization.localize("ordre-erreur-creation"), "error");
             console.log(result);
             return;
           }
