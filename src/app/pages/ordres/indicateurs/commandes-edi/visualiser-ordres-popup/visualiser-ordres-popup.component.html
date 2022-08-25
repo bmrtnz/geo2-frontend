@@ -20,7 +20,6 @@
 
 <dx-data-grid
   class="grid-lignes-edi"
-  [height]="350"
   [remoteOperations]="true"
   [showBorders]="false"
   [focusedRowEnabled]="false"
@@ -30,6 +29,7 @@
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
   (onRowClick)="onRowClick($event)"
+  (onCellPrepared)="onCellPrepared($event)"
   (onSelectionChanged)="selectFromGrid()"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(

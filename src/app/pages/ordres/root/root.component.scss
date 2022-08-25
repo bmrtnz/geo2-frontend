@@ -1,54 +1,61 @@
 @import "src/themes/generated/variables.base.scss";
 
-::ng-deep .dx-tab {
-  i.dx-icon-close {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    font-size: 17px;
-    visibility: hidden;
+::ng-deep .tabs-ordres-page {
+  .dx-tab {
 
-    &:hover {
-      color: red;
-    }
-  }
+    padding: 12px 16px 12px 14px;
 
-  .dx-tab-text > i {
-    margin-right: 5px;
-    display: inline;
-  }
+    i.dx-icon-close {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      font-size: 17px;
+      visibility: hidden;
 
-  &:hover i.dx-icon-close {
-    visibility: visible;
-  }
-
-  .dx-badge {
-    position: absolute;
-    left: 2px;
-    top: 4px;
-  }
-
-  &.dx-tab-selected small {
-    color: $base-accent;
-  }
-
-  .dx-template-wrapper {
-    .dx-tab-content {
-      display: flex;
-      align-items: center;
-      .tab-separator {
-        width: 5px;
+      &:hover {
+        color: red;
       }
-      .dx-tab-text {
-        line-height: initial;
+    }
+
+    .dx-tab-text>i {
+      margin-right: 5px;
+      display: inline;
+    }
+
+    &:hover i.dx-icon-close {
+      visibility: visible;
+    }
+
+    .dx-badge {
+      position: absolute;
+      left: 2px;
+      top: 4px;
+    }
+
+    &.dx-tab-selected small {
+      color: $base-accent;
+    }
+
+    .dx-template-wrapper {
+      .dx-tab-content {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+
+        .tab-separator {
+          width: 5px;
+        }
+
+        .dx-tab-text {
+          line-height: initial;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
       }
     }
-  }
 
-  &:first-child {
-    display: none;
+    &:first-child {
+      display: none;
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Injectable, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, convertToParamMap, NavigationStart, ParamMap, Router } from "@angular/router";
+import { LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { AuthService } from "app/shared/services/auth.service";
@@ -366,6 +367,7 @@ export class TabContext {
 
   constructor(
     private route: ActivatedRoute,
+    private localization: LocalizationService,
     private router: Router,
     private currentCompanyService: CurrentCompanyService,
   ) { }
@@ -401,7 +403,7 @@ export class TabContext {
    */
   public openOrdre(numero: string, campagne?: string, toastInfo?: boolean) {
     toastInfo = (toastInfo === undefined) ? true : toastInfo;
-    if (toastInfo) notify("Ouverture ordre n° " + numero, "info", 1500);
+    if (toastInfo) notify(this.localization.localize("ouverture-ordre").replace("&NO", numero), "info", 1500);
     const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
     return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
   }

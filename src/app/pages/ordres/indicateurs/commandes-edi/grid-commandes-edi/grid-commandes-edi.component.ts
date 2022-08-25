@@ -28,7 +28,7 @@ import { VisualiserOrdresPopupComponent } from "../visualiser-ordres-popup/visua
 import notify from "devextreme/ui/notify";
 import { Societe } from "app/shared/models";
 import { OrdresService } from "app/shared/services/api/ordres.service";
-import { GridsService } from "app/pages/ordres/grids.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 
 enum InputField {
   clientCode = "client",
@@ -53,6 +53,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public clients: DataSource;
   public commerciaux: DataSource;
   public assistantes: DataSource;
+  private dataSourceOL: DataSource;
   public periodes: string[];
   public etats: any;
   public displayedEtat: string[];
@@ -91,7 +92,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private ordresService: OrdresService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
-    private gridsService: GridsService,
+    private ordreLignesService: OrdreLignesService,
     private localization: LocalizationService,
     private datePipe: DatePipe,
     public tabContext: TabContext,
@@ -405,7 +406,29 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.ordresIds = [];
     this.lignesOrdreIds = [];
     data.map(ligne => this.lignesOrdreIds.push(ligne.refEdiLigne));
-    this.visuCdeEdiPopup.visible = true;
+
+    // Checks whether one or several orders are concerned
+    // Open if unique, let the user select when multiple choice
+    this.dataSourceOL = this.ordreLignesService.getDataSource_v2(["id", "ordre.numero", "ordre.campagne.id"]);
+    const filter = [];
+    let ordres = [];
+    this.lignesOrdreIds.map(id => filter.push(["ediLigne.id", "=", id], "or"));
+    filter.pop();
+    this.dataSourceOL.filter(filter);
+    this.dataSourceOL.load().then(res => {
+      res.map(ligne => ordres.push({ numero: ligne.ordre.numero, campagneId: ligne.ordre.campagne.id }));
+      ordres = [...new Map(ordres.map(v => [v.numero, v])).values()]; // Removes duplicates
+      if (ordres.length === 1) {
+        notify(
+          this.localization.localize("ouverture-ordre").replace("&NO", `${ordres[0].campagneId}-${ordres[0].numero}`),
+          "success",
+          1500
+        );
+        setTimeout(() => this.tabContext.openOrdre(ordres[0].numero, ordres[0].campagneId, false));
+      } else {
+        this.visuCdeEdiPopup.visible = true;
+      }
+    });
   }
 
   onClickCreateComplEdiButton(data) {

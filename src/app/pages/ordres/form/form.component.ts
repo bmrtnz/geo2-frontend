@@ -461,7 +461,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           const refOrdreRegul = resCree.data.fCreeOrdreRegularisation.data.ls_ord_ref_regul;
           const currOrder = this.ordre;
           if (refOrdreRegul) {
-            // Find numero / adjust listeOrdresRegularisations & save it / Initialize form
+            // Find numero / Initialize form
             this.ordresService
               .getOne_v2(refOrdreRegul, ["id", "numero"])
               .subscribe({
@@ -529,7 +529,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             next: (resCree) => {
               const refOrdreCompl = resCree.data.fCreeOrdreComplementaire.data.ls_ord_ref_compl;
               if (refOrdreCompl) {
-                // Find numero / adjust listeOrdresComplementaires & save it / Initialize form
+                // Find numero / Initialize form
                 this.ordresService
                   .getOne_v2(refOrdreCompl, ["id", "numero"])
                   .subscribe({
