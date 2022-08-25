@@ -5050,8 +5050,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 8,
@@ -5060,8 +5059,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 9,
@@ -5070,8 +5068,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 10,
@@ -5080,8 +5077,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 11,
@@ -5090,8 +5086,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 12,
@@ -5100,8 +5095,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 13,
@@ -5110,8 +5104,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 14,
@@ -5120,8 +5113,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 15,
@@ -5130,8 +5122,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "visibleIndex": 16,
@@ -5173,8 +5164,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "dataField": "ordre.numero",
@@ -5194,8 +5184,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "dataField": "totalRestitue",
@@ -5203,8 +5192,7 @@
         "format": {
           "type": "currency",
           "precision": 2
-        },
-        "currency": "EUR"
+        }
       },
       {
         "dataField": "id",
@@ -5225,6 +5213,7 @@
       {
         "visibleIndex": 2,
         "dataField": "frais",
+        "editCellTemplate": "selectBoxTemplate",
         "visible": true
       },
       {
@@ -5235,6 +5224,7 @@
       {
         "visibleIndex": 6,
         "dataField": "devise",
+        "editCellTemplate": "selectBoxTemplate",
         "width": 120,
         "visible": true
       },
@@ -5247,6 +5237,7 @@
       {
         "visibleIndex": 10,
         "dataField": "codePlus",
+        "editCellTemplate": "customSelectBoxTemplate",
         "visible": true
       },
       {

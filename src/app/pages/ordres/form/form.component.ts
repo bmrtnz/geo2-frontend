@@ -164,7 +164,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "documentFacture.type",
     "listeOrdresRegularisations",
     "listeOrdresComplementaires",
-    "type.id"
+    "type.id",
+    "documentCMR.isPresent",
+    "documentCMR.uri",
+    "documentCMR.type"
   ];
 
   private destroy = new Subject<boolean>();

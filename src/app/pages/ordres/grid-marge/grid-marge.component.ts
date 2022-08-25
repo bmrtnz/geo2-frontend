@@ -88,6 +88,15 @@ export class GridMargeComponent implements ToggledGrid {
         e.cellElement.classList.add("grey-light");
       }
     }
+    if (e.rowType === "totalFooter") {
+      if ([
+        "pourcentageMargeBrute",
+        "pourcentageMargeNette"
+      ].includes(e.column.dataField)) {
+        if (e.cellElement.innerText === "NaN")
+          e.cellElement.innerText = "- %";
+      }
+    }
   }
 
   refresh() {

@@ -91,6 +91,11 @@ export class GridFraisComponent implements ToggledGrid {
     this.fraisSource.filter(["valide", "=", true]);
     this.deviseSource = this.deviseService.getDataSource_v2(["id", "description", "taux"]);
     this.deviseSource.filter(["valide", "=", true]);
+    this.initializeFournDataSources();
+    this.selectPhase = false;
+  }
+
+  initializeFournDataSources() {
     this.transporteurSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
     this.transporteurSource.filter(["valide", "=", true]);
     this.lieuxPassageAQuaiSource = this.lieuxPassageAQuaiService.getDataSource_v2(["id", "raisonSocial"]);
@@ -104,7 +109,6 @@ export class GridFraisComponent implements ToggledGrid {
       ["declarantDouanier", "=", true]
     ]);
     this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-    this.selectPhase = false;
   }
 
   async enableFilters() {
@@ -182,8 +186,6 @@ export class GridFraisComponent implements ToggledGrid {
     }
   }
 
-  onEditorPreparing(e) { }
-
   onEditingStart(cell) {
     if (!cell.column || !cell.data.deviseTaux) return;
     if (cell.column.dataField === "codePlus" && !cell.data.frais?.id) cell.cancel = true;
@@ -221,6 +223,7 @@ export class GridFraisComponent implements ToggledGrid {
     const frais = data.frais?.id;
     if (!frais) return;
     this.selectPhase = true;
+    this.initializeFournDataSources();
     this.selectBoxes
       .filter(component => component.instance.$element()[0].id === data.id)
       .map(component => {
@@ -230,7 +233,6 @@ export class GridFraisComponent implements ToggledGrid {
         if (frais === "QUAI") component.dataSource = this.lieuxPassageAQuaiSource;
         if (frais === "ENTBWS") component.dataSource = this.entrepotSource;
       });
-
   }
 
   onCellClick(e) {
@@ -240,11 +242,20 @@ export class GridFraisComponent implements ToggledGrid {
       notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
     }
     // No DS is displayed
-    this.SelectBoxPopupWidth = 400;
     if (e.column.dataField === "codePlus") {
-      if (this.isCustomText(e.data)) this.SelectBoxPopupWidth = 0;
-      this.updateCodePlusDataSource(e.data);
+      if (this.isCustomText(e.data)) {
+        this.SelectBoxPopupWidth = 0;
+        e.cellElement.classList.add("no-arrow");
+      } else {
+        this.SelectBoxPopupWidth = 400;
+        e.cellElement.classList.remove("no-arrow");
+        this.updateCodePlusDataSource(e.data);
+      }
     }
+  }
+
+  isCustomText(data) {
+    return ["DIVERS", "ANIM"].includes(data.frais?.id);
   }
 
   onCellPrepared(e) {
@@ -260,18 +271,6 @@ export class GridFraisComponent implements ToggledGrid {
     }
   }
 
-  isCustomText(data) {
-    return (data.frais?.id === "DIVERS" || data.frais?.id === "ANIM");
-  }
-
-  defineEditTemplate(field) {
-
-    let templ;
-    if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxTemplate";
-    if (field === "codePlus") templ = "customSelectBoxTemplate";
-    return templ ? templ : false;
-  }
-
   addKeyToField(field) {
     if (this.itemsWithSelectBox.includes(field) && field !== "codePlus") {
       field += `.${this[field + "Service"].model.getKeyField()}`;
@@ -279,7 +278,7 @@ export class GridFraisComponent implements ToggledGrid {
     return field;
   }
 
-  onSaved(e) {
+  onSaved() {
     this.selectPhase = false;
     this.datagrid.instance.repaint();
   }

@@ -619,7 +619,6 @@ export class GridLignesComponent implements OnChanges, OnInit {
     this.smallMarginLoader.visible = true;
     this.marginText = "";
     this.functionsService.fCalculMargePrevi(this.ordre.id, this.currentCompanyService.getCompany().id)
-      .valueChanges
       .subscribe({
         next: res => {
           const margin = res.data.fCalculMargePrevi.data.result;

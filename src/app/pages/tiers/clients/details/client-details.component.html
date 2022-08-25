@@ -298,6 +298,30 @@
                     </dx-select-box>
                   </div>
                 </div>
+                <!-- Usage Interne -->
+                <dx-box>
+                  <dxi-item [ratio]="4">
+                    <div class="dx-field field-large">
+                      <div class="dx-field-label checkbox-label">
+                        {{ "tiers-clients-usageInterne" | localize }}
+                      </div>
+                      <div class="dx-field-value">
+                        <dx-check-box
+                          formControlName="usageInterne"
+                          [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
+                          (onValueChanged)="onUsageInterneChange($event)"
+                        >
+                          <dx-validator
+                            name="{{ 'tiers-clients-usageInterne' | localize }}"
+                          >
+                          </dx-validator>
+                        </dx-check-box>
+                      </div>
+                    </div>
+                  </dxi-item>
+                  <dxi-item [ratio]="1"></dxi-item>
+                  <dxi-item [ratio]="4"> </dxi-item>
+                </dx-box>
               </div>
             </div>
 

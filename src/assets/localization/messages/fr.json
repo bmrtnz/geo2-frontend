@@ -258,6 +258,7 @@
     "tiers-clients-controlReferenceClient": "Contrôle réf. client",
     "tiers-clients-agrement": "Couverture COFACE",
     "tiers-clients-typeVente": "Type de vente",
+    "tiers-clients-usageInterne": "Usage interne",
     "tiers-clients-blocageAvoirEdi": "Blocage avoir EDI",
     "tiers-clients-paloxRaisonSocial": "Compte Palox associé",
     "tiers-clients-paloxRaisonSocial-raisonSocial": "Compte Palox associé",

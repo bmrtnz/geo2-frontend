@@ -56,6 +56,8 @@ import { AuthService, ClientsService } from "../../../../shared/services";
 import { client as clientsGridConfig } from "assets/configurations/grids.json";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 
+const PREORDRE = "PREORDRE";
+
 @Component({
   selector: "app-client-details",
   templateUrl: "./client-details.component.html",
@@ -142,6 +144,7 @@ export class ClientDetailsComponent
     nbJourLimiteLitige: [""],
     detailAutomatique: [""],
     venteACommission: [""],
+    usageInterne: [""]
   });
   readonly inheritedFields = new Set([
     "id",
@@ -802,6 +805,20 @@ export class ClientDetailsComponent
       }
     }
     this.freeUEVAT(e.value, this.formGroup.get("pays").value);
+  }
+
+  onUsageInterneChange(e) {
+    // Ajout PREORDRE en préfixe du code et en mode création
+    // si usageInterne est à true
+    if (!this.createMode) return;
+    const currentCode = this.formGroup.get("code").value;
+    if (e.value) {
+      if (currentCode?.substring(0, PREORDRE.length) !== PREORDRE)
+        this.formGroup.get("code").setValue(PREORDRE + (currentCode ?? ""));
+    } else {
+      if (currentCode?.substring(0, PREORDRE.length) === PREORDRE)
+        this.formGroup.get("code").setValue(currentCode.replaceAll(PREORDRE, ""));
+    }
   }
 
   onPaysChange(e) {

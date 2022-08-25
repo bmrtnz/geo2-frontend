@@ -147,6 +147,7 @@ export class Ordre extends Model {
   @Field({ model: import("./transitaire.model") })
   public transitaire?: Transitaire;
   @Field({ model: import("./document.model") }) public documentFacture: Document;
+  @Field({ model: import("./document.model") }) public documentCMR: Document;
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");

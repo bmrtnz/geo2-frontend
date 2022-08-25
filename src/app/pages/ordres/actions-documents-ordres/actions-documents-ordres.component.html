@@ -42,4 +42,8 @@
     [ordre]="ordre"
   ></app-annule-remplace-popup>
   <app-confirmation-result-popup></app-confirmation-result-popup>
+  <app-view-document-popup
+    [document]="this.currentCMR"
+    [(visible)]="this.CMRVisible"
+  ></app-view-document-popup>
 </div>

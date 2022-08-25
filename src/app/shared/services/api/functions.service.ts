@@ -156,7 +156,7 @@ export class FunctionsService {
 
   public fCalculMargePrevi =
     (ordreRef: string, socCode: string) => this.apollo
-      .watchQuery<{ fCalculMargePrevi: FunctionResponse }>({
+      .query<{ fCalculMargePrevi: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -748,7 +748,7 @@ export class FunctionsService {
       return acc;
     }, {});
 
-    return this.apollo.query<{ [ name: string ]: FunctionResponse }>({
+    return this.apollo.query<{ [name: string]: FunctionResponse }>({
       query: gql(ApiService.buildGraph("query", [
         {
           name,
