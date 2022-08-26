@@ -935,14 +935,17 @@ export abstract class ApiService implements OnDestroy {
       );
   }
 
-  getLookupStore<T>(columns: Array<string>) {
+  getLookupStore<T>(columns: Array<string>, search?: string) {
     return {
       paginate: true,
       store: this.createCustomStore({
         load: options => this.apollo
           .query<{ [key: string]: RelayPage<T> }>({
             query: gql(this.buildGetPageGraph(columns)),
-            variables: this.mapLoadOptionsToVariables(options),
+            variables: {
+              ...this.mapLoadOptionsToVariables(options),
+              search,
+            },
             fetchPolicy: "cache-first",
           })
           .pipe(
