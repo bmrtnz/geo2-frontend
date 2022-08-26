@@ -24,6 +24,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Totaux détails"></dxo-export>
   <dxo-paging></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -123,8 +124,6 @@
         | localize) || column.name
     "
     [visible]="false"
-    trueText="Oui"
-    falseText="Non"
     [dataType]="column?.dataType"
     [format]="column?.format"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"

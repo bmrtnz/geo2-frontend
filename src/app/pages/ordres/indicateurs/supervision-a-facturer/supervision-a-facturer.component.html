@@ -255,8 +255,6 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
-    trueText="Oui"
-    falseText="Non"
     [caption]="
       ('ordresBAF-' + column.dataField?.split('.').join('-') | localize) ||
       column.name

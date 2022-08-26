@@ -15,12 +15,12 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Détail palettes"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
   ></dxo-header-filter>
   <dxo-paging></dxo-paging>
-  <dxo-export fileName="Détail palettes"></dxo-export>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
@@ -52,8 +52,6 @@
         | localize) || field.name
     "
     [visible]="false"
-    trueText="Oui"
-    falseText="Non"
     [dataType]="field.dataType"
     [allowSearch]="
       field.allowSearch !== undefined

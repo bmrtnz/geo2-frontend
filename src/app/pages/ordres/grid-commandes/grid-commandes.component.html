@@ -19,6 +19,8 @@
   (onFocusedCellChanged)="onFocusedCellChanged($event)"
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
 >
+
+  <dxo-export fileName="Lignes de commande"></dxo-export>
   <dxo-editing
     [selectTextOnEditStart]="true"
     [mode]="'batch'"
