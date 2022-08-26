@@ -72,8 +72,6 @@
         ('tiers-contacts-' + column.dataField?.split('.').join('-')
           | localize) || column.name
       "
-      trueText="Oui"
-      falseText="Non"
       [width]="column.dataField === 'fluxAccess1' ? '300' : column.width"
       [dataType]="column?.dataType"
       [allowSearch]="

@@ -5,7 +5,7 @@ import dxSelectBox from "devextreme/ui/select_box";
 import dxTextBox from "devextreme/ui/text_box";
 import dxTabPanel from "devextreme/ui/tab_panel";
 import { environment } from "../environments/environment";
-import { ScreenService } from "./shared/services";
+import { LocalizationService, ScreenService } from "./shared/services";
 import { FormUtilsService } from "./shared/services/form-utils.service";
 
 @Component({
@@ -27,6 +27,7 @@ export class AppComponent {
 
   constructor(
     public formUtilsService: FormUtilsService,
+    private localization: LocalizationService,
     private screen: ScreenService
   ) {
     // Close columnchooser on outside click (non standard)
@@ -89,6 +90,10 @@ export class AppComponent {
       options: {
         scrolling: { useNative: true },
         columnFixing: { enabled: true },
+        commonColumnSettings: {
+          trueText: this.localization.localize("trueText"),
+          falseText: this.localization.localize("falseText")
+        }
         // TODO for better keyboard navigation
         /*keyboardNavigation: {
           enterKeyAction: "moveFocus",

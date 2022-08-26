@@ -209,8 +209,6 @@
       *ngFor="let field of detailedFields | async"
       [dataField]="field.path"
       [visible]="false"
-      trueText="Oui"
-      falseText="Non"
       [dataType]="field.dataType"
       [allowSearch]="
         field.allowSearch !== undefined

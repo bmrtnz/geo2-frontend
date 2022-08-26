@@ -17,6 +17,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Marges"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -57,8 +58,6 @@
     [visible]="false"
     [cssClass]="column.cssClass"
     [width]="column.width"
-    trueText="Oui"
-    falseText="Non"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="
