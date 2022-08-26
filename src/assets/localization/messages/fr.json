@@ -701,6 +701,7 @@
     "ordres-ref": "Réf. ordre",
     "ordres-devise": "Devise",
     "ordres-deviseAvecTaux": "Devise (taux)",
+    "ordres-taux": "Taux",
     "ordres-commentaireUsageInterne": "Commentaire interne",
     "ordres-numeroFacture": "Numéro de facture",
     "ordres-referenceClient": "Référence client",

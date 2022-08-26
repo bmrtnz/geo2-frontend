@@ -38,6 +38,7 @@ export class AuthService {
     "accessCommandeEdi",
     "adminClient",
     "profileClient",
+    "geoClient",
 
     // Configurations
     "configTuilesOrdres",
