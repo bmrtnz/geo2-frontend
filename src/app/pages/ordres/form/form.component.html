@@ -523,7 +523,6 @@
                                 [readOnly]="ordreFacture"
                                 formControlName="transporteurDEVCode"
                                 [dataSource]="deviseDS"
-                                [readOnly]="true"
                                 [displayExpr]="displayIDBefore"
                                 [searchExpr]="['id']"
                               >
@@ -727,30 +726,46 @@
                           </dx-text-box>
                         </div>
                       </div>
-                      <!-- Devise -->
-                      <div class="dx-field">
-                        <div class="dx-field-label">
-                          {{ "ordres-deviseAvecTaux" | localize }}
-                        </div>
-                        <div class="dx-field-value">
-                          <dx-select-box
-                            formControlName="devise"
-                            [readOnly]="ordreFacture"
-                            [dataSource]="deviseDS"
-                            [readOnly]="true"
-                            [displayExpr]="deviseDisplayExpr"
-                            [searchExpr]="['id']"
-                          >
-                            <dx-validator
-                              name="{{ 'ordres-devise' | localize }}"
-                            >
-                              <dxi-validation-rule
-                                type="required"
-                              ></dxi-validation-rule>
-                            </dx-validator>
-                          </dx-select-box>
-                        </div>
-                      </div>
+
+                      <!-- Devise et taux-->
+                      <dx-box>
+                        <dxi-item [ratio]="3">
+                          <div class="dx-field">
+                            <div class="dx-field-label">
+                              {{ "ordres-devise" | localize }}
+                            </div>
+                            <div class="dx-field-value">
+                              <dx-select-box
+                                formControlName="devise"
+                                [readOnly]="true"
+                                [dataSource]="deviseDS"
+                                [displayExpr]="displayIDBefore"
+                              >
+                              </dx-select-box>
+                            </div>
+                          </div>
+                        </dxi-item>
+                        <dxi-item [ratio]="0.5"></dxi-item>
+                        <dxi-item [ratio]="3">
+                          <div class="dx-field">
+                            <div class="dx-field-label">
+                              {{ "ordres-taux" | localize }}
+                            </div>
+                            <div class="dx-field-value">
+                              <dx-number-box
+                                formControlName="tauxDevise"
+                                [readOnly]="ordreFacture"
+                                [format]="{
+                                  type: 'fixedPoint',
+                                  precision: 5
+                                }"
+                              >
+                              </dx-number-box>
+                            </div>
+                          </div>
+                        </dxi-item>
+                      </dx-box>
+
                       <!-- commercial -->
                       <div class="dx-field">
                         <div class="dx-field-label">

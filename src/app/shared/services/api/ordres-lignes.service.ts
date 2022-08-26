@@ -16,6 +16,8 @@ export enum SummaryOperation {
   Totaux = "allOrdreLigneTotaux"
 }
 
+let self;
+
 @Injectable({
   providedIn: "root"
 })
@@ -41,6 +43,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
     private currentCompanyService: CurrentCompanyService,
   ) {
     super(apollo, OrdreLigne);
+    self = this;
   }
 
   getOne_v2(id: string, columns: Array<string> | Set<string>) {
@@ -103,12 +106,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   private insert(values) {
     const variables = { ordreLigne: values };
-    return this.watchSaveQuery({ variables }).toPromise();
+    return self.watchSaveQuery({ variables }).toPromise();
   }
 
   private update(id, values) {
     const variables = { ordreLigne: { id, ...values } };
-    return this.watchSaveQuery({ variables }).toPromise();
+    return self.watchSaveQuery({ variables }).toPromise();
   }
 
   getDataSource_v2(columns: Array<string>) {

@@ -3,11 +3,13 @@ import { TabContext } from "../../../root/root.component";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxPopupComponent } from "devextreme-angular";
+import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import notify from "devextreme/ui/notify";
+import { LocalizationService } from "app/shared/services";
 
 @Component({
   selector: "app-visualiser-ordres-popup",
@@ -32,6 +34,7 @@ export class VisualiserOrdresPopupComponent {
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
+    private localization: LocalizationService,
     public tabContext: TabContext,
     public ordreLignesService: OrdreLignesService
   ) {
@@ -49,7 +52,7 @@ export class VisualiserOrdresPopupComponent {
     this.dataSource = this.ordreLignesService.getDataSource_v2(await fields.toPromise());
     const filter = [];
 
-    // Filtering trought lines ids or order ids apromptccording to the case
+    // Filtering trought lines ids or order ids according to the case
     if (this.lignesOrdreIds?.length) {
       this.lignesOrdreIds.map(id => {
         filter.push(["ediLigne.id", "=", id], "or");
@@ -71,6 +74,7 @@ export class VisualiserOrdresPopupComponent {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("visualiser-ordres-popup");
+    this.datagrid.dataSource = null;
     this.enableFilters();
   }
 
@@ -88,6 +92,13 @@ export class VisualiserOrdresPopupComponent {
     this.updateChosenOrders();
   }
 
+  onCellPrepared(e) {
+
+    if (e.rowType === "data") {
+      if (e.column.dataField === "ordre.numero") e.cellElement.classList.add("bold-text");
+    }
+  }
+
   onRowClick(e) {
     // Allows to select an item by clicking on a row
     // in addition to the expected checkbox
@@ -103,10 +114,16 @@ export class VisualiserOrdresPopupComponent {
   }
 
   applyClick() {
+    const nbOrdres = this.chosenOrders.size;
+    notify(
+      this.localization.localize("ouverture-ordre" + (nbOrdres > 1 ? "s" : "")).replace("&NO", this.chosenOrdersDisplayed),
+      "success",
+      1500
+    );
+
     [...this.chosenOrders].map(ordre => {
-      setTimeout(() => this.tabContext.openOrdre(ordre.split("-")[1], ordre.split("-")[0]));
+      setTimeout(() => this.tabContext.openOrdre(ordre.split("-")[1], ordre.split("-")[0], false));
     });
-    this.visible = false;
   }
 
   cancelClick() {
@@ -115,7 +132,6 @@ export class VisualiserOrdresPopupComponent {
 
   onHiding() {
     this.datagrid.instance.clearSelection();
-    this.dataSource = null;
   }
 
 }

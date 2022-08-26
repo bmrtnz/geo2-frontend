@@ -69,6 +69,35 @@ export class TransporteurDetailsComponent
     valide: [false],
     preSaisie: [""],
   });
+  readonly inheritedFields = new Set([
+    "id",
+    "valide",
+    "preSaisie",
+    "raisonSocial",
+    "adresse1",
+    "adresse2",
+    "adresse3",
+    "codePostal",
+    "ville",
+    "pays.id", "pays.description",
+    "regimeTva.id", "regimeTva.description",
+    "nbJourEcheance",
+    "echeanceLe",
+    "moyenPaiement.id", "moyenPaiement.description",
+    "tvaCee",
+    "clientRaisonSocial.id", "clientRaisonSocial.raisonSocial",
+    "basePaiement.id", "basePaiement.description",
+    "compteComptable",
+    "langue.id", "langue.description",
+    "devise.id", "devise.description",
+    "lieuFonctionEan",
+    "historique.id",
+    "historique.commentaire",
+    "historique.valide",
+    "historique.userModification",
+    "historique.dateModification",
+    "typeTiers"
+  ]);
   helpBtnOptions = {
     icon: "help",
     elementAttr: { id: "help-1" },
@@ -174,11 +203,10 @@ export class TransporteurDetailsComponent
         this.createMode = url[url.length - 1].path === "create";
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          this.transporteursService
-            .getOne(params.id)
-            .subscribe((res) => {
-              this.afterLoadInitForm(res);
-            });
+          this.transporteursService.getOne_v2(params.id, this.inheritedFields)
+            .subscribe((res) =>
+              this.afterLoadInitForm(res)
+            );
         } else {
           this.transporteur = new Transporteur({});
           this.contentReadyEvent.emit();
@@ -189,13 +217,15 @@ export class TransporteurDetailsComponent
 
   ngOnChanges() {
 
-    // Zoom transporteur mode when clicking on an order logistic row
+    // Zoom transporteur mode when clicking on an order logistic row for e.g.
     if (this.transporteurLigneId) {
       this.formGroup.reset();
       this.preSaisie = "";
-      this.transporteursService
-        .getOne(this.transporteurLigneId)
-        .subscribe(res => this.afterLoadInitForm(res));
+
+      this.transporteursService.getOne_v2(this.transporteurLigneId, this.inheritedFields)
+        .subscribe((res) =>
+          this.afterLoadInitForm(res)
+        );
     }
 
   }
@@ -356,9 +386,6 @@ export class TransporteurDetailsComponent
     )
       .pipe(
         switchMap((_) =>
-
-
-
           this.transporteursService
             .save_v2(this.getDirtyFieldsPath(), { transporteur })
         ))
@@ -382,13 +409,12 @@ export class TransporteurDetailsComponent
             this.readOnlyMode = true;
           } else {
             this.editing = false;
-            this.router.navigate([
-              `/pages/tiers/transporteurs/${e.data.saveTransporteur.id}`,
-            ]);
           }
-          this.transporteur.typeTiers =
-            e.data.saveTransporteur.typeTiers;
           this.formGroup.markAsPristine();
+          this.transporteursService.getOne_v2(this.transporteur.id, this.inheritedFields)
+            .subscribe((res) =>
+              this.afterLoadInitForm(res)
+            );
         },
         error: () => notify("Echec de la sauvegarde", "error", 3000),
       });

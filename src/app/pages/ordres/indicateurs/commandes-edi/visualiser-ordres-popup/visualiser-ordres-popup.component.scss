@@ -21,6 +21,7 @@
     .grid-lignes-edi {
       position: relative;
       top: -16px;
+      max-height: 350px;
 
       .dx-row-lines {
         cursor: pointer;
@@ -32,6 +33,10 @@
           min-width: 20px !important;
           padding: 0 4px 0 4px !important;
         }
+      }
+
+      .bold-text {
+        font-weight: bold;
       }
 
     }

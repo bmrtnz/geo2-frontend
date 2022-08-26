@@ -24,6 +24,25 @@ export class TransporteursService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables });
   }
 
+  getOne_v2(id: string, columns: Array<string> | Set<string>) {
+    return this.apollo
+      .query<{ transporteur: Transporteur }>({
+        query: gql(this.buildGetOneGraph(columns)),
+        variables: { id },
+      })
+      .pipe(takeWhile((res) => res.loading === false));
+  }
+
+  getList(search: string, columns: Array<string> | Set<string>) {
+    return this.apollo
+      .query<{ allTransporteurList: Transporteur[] }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+        fetchPolicy: "cache-first",
+      })
+      .pipe(takeWhile(res => !res.loading));
+  }
+
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [{ selector: "id" }],
@@ -86,13 +105,5 @@ export class TransporteursService extends ApiService implements APIRead {
     return this.watchSaveQuery_v2({ variables }, columns);
   }
 
-  getList(search: string, columns: Array<string> | Set<string>) {
-    return this.apollo
-      .query<{ allTransporteurList: Transporteur[] }>({
-        query: gql(this.buildGetListGraph(columns)),
-        variables: { search },
-        fetchPolicy: "cache-first",
-      })
-      .pipe(takeWhile(res => !res.loading));
-  }
+
 }

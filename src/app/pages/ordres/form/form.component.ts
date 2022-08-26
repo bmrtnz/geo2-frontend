@@ -37,7 +37,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
-import { concatMap, filter, finalize, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 import {
@@ -461,7 +461,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           const refOrdreRegul = resCree.data.fCreeOrdreRegularisation.data.ls_ord_ref_regul;
           const currOrder = this.ordre;
           if (refOrdreRegul) {
-            // Find numero / adjust listeOrdresRegularisations & save it / Initialize form
+            // Find numero / Initialize form
             this.ordresService
               .getOne_v2(refOrdreRegul, ["id", "numero"])
               .subscribe({
@@ -529,7 +529,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             next: (resCree) => {
               const refOrdreCompl = resCree.data.fCreeOrdreComplementaire.data.ls_ord_ref_compl;
               if (refOrdreCompl) {
-                // Find numero / adjust listeOrdresComplementaires & save it / Initialize form
+                // Find numero / Initialize form
                 this.ordresService
                   .getOne_v2(refOrdreCompl, ["id", "numero"])
                   .subscribe({
