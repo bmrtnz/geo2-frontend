@@ -53,22 +53,22 @@ export class SetBassinComponent implements OnInit {
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
       "bureauAchat.id",
-      this.bureauxAchatService.getLookupStore<BureauAchat>(["id", "raisonSocial"]),
+      this.bureauxAchatService.getLookupStore<BureauAchat>(["id", "raisonSocial"], "valide==true"),
     );
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
       "transporteur.id",
-      this.transporteursService.getLookupStore<Transporteur>(["id", "raisonSocial"]),
+      this.transporteursService.getLookupStore<Transporteur>(["id", "raisonSocial"], "valide==true"),
     );
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
       "baseTarifTransport.id",
-      this.basesTarifService.getLookupStore<BaseTarif>(["id", "description"]),
+      this.basesTarifService.getLookupStore<BaseTarif>(["id", "description"], "valide==true"),
     );
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
       "deviseTarifTransport.id",
-      this.devisesService.getLookupStore<Devise>(["id", "description"]),
+      this.devisesService.getLookupStore<Devise>(["id", "description"], "valide==true"),
     );
   }
 
