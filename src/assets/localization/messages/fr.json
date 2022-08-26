@@ -31,6 +31,8 @@
     "fileManager-name": "Nom",
     "fileManager-dateModified": "Modifié le",
     "fileManager-size": "Taille",
+    "trueText": "Oui",
+    "falseText": "Non",
     "client": "client",
     "entrepot": "entrepôt",
     "fournisseur": "fournisseur",

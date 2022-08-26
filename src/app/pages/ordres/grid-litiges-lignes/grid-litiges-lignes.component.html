@@ -57,8 +57,6 @@
       ('ordreLitigesLignes-' + column.dataField?.split('.').join('-')
         | localize) || column.name
     "
-    trueText="Oui"
-    falseText="Non"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="

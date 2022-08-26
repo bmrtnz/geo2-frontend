@@ -183,8 +183,6 @@
     *ngFor="let column of this.columns[0] | async"
     [dataField]="column.dataField"
     [visible]="false"
-    trueText="Oui"
-    falseText="Non"
     [caption]="
       ('comptesPalox-entrepots-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -254,8 +252,6 @@
     *ngFor="let column of this.columns[1] | async"
     [dataField]="column.dataField"
     [visible]="false"
-    trueText="Oui"
-    falseText="Non"
     [caption]="
       ('comptesPalox-entrepots-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -325,8 +321,6 @@
     *ngFor="let column of this.columns[2] | async"
     [dataField]="column.dataField"
     [visible]="false"
-    trueText="Oui"
-    falseText="Non"
     [caption]="
       ('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -396,8 +390,6 @@
     *ngFor="let column of this.columns[3] | async"
     [dataField]="column.dataField"
     [visible]="false"
-    trueText="Oui"
-    falseText="Non"
     [caption]="
       ('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-')
         | localize) || column.name

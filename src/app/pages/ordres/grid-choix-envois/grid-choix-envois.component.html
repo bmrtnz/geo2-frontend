@@ -62,8 +62,6 @@
         ('choixEnvois-' + column.dataField?.split('.').join('-') | localize) ||
         column.name
       "
-      trueText="Oui"
-      falseText="Non"
       [width]="column?.width ? column?.width : 'auto'"
       [dataType]="column?.dataType"
       [allowSearch]="
