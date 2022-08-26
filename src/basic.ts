@@ -1,5 +1,6 @@
 import { EventEmitter } from "@angular/core";
 import { SummaryType } from "app/shared/services/api.service";
+import CustomStore from "devextreme/data/custom_store";
 import dxDataGrid, { dxDataGridColumn, dxDataGridRowObject } from "devextreme/ui/data_grid";
 import {
   AsyncRule,
@@ -183,6 +184,8 @@ interface GridColumn {
   allowSorting?: boolean;
 
   calculateDisplayValue?: string;
+
+  lookup?: { valueExpr: string, displayExpr: string, dataSource: any };
 }
 
 /**
@@ -361,4 +364,9 @@ export type CellTemplate = {
   text: string,
   value: any
   watch: (getter, handler) => void,
+};
+
+export type LookupStore = {
+  store: CustomStore,
+  [key: string]: any,
 };

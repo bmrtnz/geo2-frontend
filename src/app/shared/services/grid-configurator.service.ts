@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { EventEmitter, Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { GridColumn } from "basic";
+import { GridColumn, LookupStore } from "basic";
 import {
   DxoColumnChooserComponent,
   DxoStateStoringComponent
@@ -136,20 +136,13 @@ const extraConfigurations = [
   "width",
   "format",
   "calculateCellValue",
+  "lookup",
 ];
 
 @Injectable({
   providedIn: "root",
 })
 export class GridConfiguratorService {
-  private readonly GRID_CONFIG_FILE = "/assets/configurations/grids.json";
-  private fetchConfigFile = this.httpClient
-    .get(this.GRID_CONFIG_FILE)
-    .pipe(
-      concatMap((res: { [key: string]: GridConfig }) => from(Object.entries(res))),
-      shareReplay(),
-    );
-  private columnChooser = environment.columnChooser;
 
   constructor(
     private gridsConfigsService: GridsConfigsService,
@@ -165,6 +158,14 @@ export class GridConfiguratorService {
   get Grid() {
     return Grid;
   }
+  private readonly GRID_CONFIG_FILE = "/assets/configurations/grids.json";
+  private fetchConfigFile = this.httpClient
+    .get(this.GRID_CONFIG_FILE)
+    .pipe(
+      concatMap((res: { [key: string]: GridConfig }) => from(Object.entries(res))),
+      shareReplay(),
+    );
+  private columnChooser = environment.columnChooser;
 
   /**
    * Grid configuration observable mapper to get columns from config
@@ -200,6 +201,12 @@ export class GridConfiguratorService {
     return map((columns: GridColumn[]) =>
       columns.map((column) => column.dataField),
     );
+  }
+
+  /** Bind datasource to lookup column */
+  public static bindLookupColumnSource(dataGrid: dxDataGrid, dataField: string, dataSource: LookupStore) {
+    const originalLookupSettings = dataGrid.columnOption(dataField, "lookup");
+    dataGrid.columnOption(dataField, "lookup", { ...originalLookupSettings, dataSource });
   }
 
   /**

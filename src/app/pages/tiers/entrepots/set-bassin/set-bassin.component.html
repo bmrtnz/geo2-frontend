@@ -2,47 +2,17 @@
   [dataSource]="etbDatasource"
   [remoteOperations]="true"
   (onSaved)="onSaved($event)"
+  (onContentReady)="contentReadyEvent.emit($event)"
 >
-  <!-- common columns from grid config -->
   <dxi-column
     *ngFor="let column of columns | async"
     [dataField]="column.dataField"
     [visible]="column.visible"
     [dataType]="column.dataType"
     [format]="column.format"
+    [calculateDisplayValue]="column.calculateDisplayValue"
+    [lookup]="column.lookup"
   ></dxi-column>
-
-  <!-- advanced columns -->
-  <dxi-column
-    dataField="deviseTarifTransport.id"
-    calculateDisplayValue="deviseTarifTransport.description"
-  >
-    <dxo-lookup
-      [dataSource]="devises"
-      valueExpr="id"
-      displayExpr="description"
-    ></dxo-lookup>
-  </dxi-column>
-  <dxi-column
-    dataField="transporteur.id"
-    calculateDisplayValue="transporteur.raisonSocial"
-  >
-    <dxo-lookup
-      [dataSource]="transporteurs"
-      valueExpr="id"
-      displayExpr="raisonSocial"
-    ></dxo-lookup>
-  </dxi-column>
-  <dxi-column
-    dataField="baseTarifTransport.id"
-    calculateDisplayValue="baseTarifTransport.description"
-  >
-    <dxo-lookup
-      [dataSource]="basesTarif"
-      valueExpr="id"
-      displayExpr="description"
-    ></dxo-lookup>
-  </dxi-column>
 
   <dxo-editing
     [allowUpdating]="true"

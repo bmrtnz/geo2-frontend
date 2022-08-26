@@ -977,6 +977,33 @@
           "type": "fixedPoint",
           "precision": 2
         }
+      },
+      {
+        "dataField": "deviseTarifTransport.id",
+        "calculateDisplayValue": "deviseTarifTransport.description",
+        "visible": true,
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "description"
+        }
+      },
+      {
+        "dataField": "transporteur.id",
+        "calculateDisplayValue": "transporteur.raisonSocial",
+        "visible": true,
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "raisonSocial"
+        }
+      },
+      {
+        "dataField": "baseTarifTransport.id",
+        "calculateDisplayValue": "baseTarifTransport.description",
+        "visible": true,
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "description"
+        }
       }
     ]
   },

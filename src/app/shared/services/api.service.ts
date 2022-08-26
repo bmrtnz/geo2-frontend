@@ -2,6 +2,7 @@ import { Inject, Injectable, OnDestroy } from "@angular/core";
 import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
+import { LookupStore } from "basic";
 import CustomStore, { CustomStoreOptions } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -957,7 +958,7 @@ export abstract class ApiService implements OnDestroy {
           .pipe(map(res => res.data[this.model.name.lcFirst()]))
           .toPromise(),
       })
-    };
+    } as LookupStore;
   }
 
   /**
