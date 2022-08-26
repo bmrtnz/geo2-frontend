@@ -12,7 +12,7 @@ export class EntrepotTransporteurBassin extends Model {
   @Field({ model: import("./transporteur.model") }) public transporteur: Transporteur;
   @Field({ model: import("./bureau-achat.model") }) public bureauAchat: BureauAchat;
   @Field({ model: import("./base-tarif.model") }) public baseTarifTransport: BaseTarif;
-  @Field({ model: import("./devise.model") }) public DeviseTarifTransport: Devise;
+  @Field({ model: import("./devise.model") }) public deviseTarifTransport: Devise;
   @Field() public prixUnitaireTarifTransport: number;
 }
 
