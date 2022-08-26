@@ -4,7 +4,7 @@ import { Apollo } from "apollo-angular";
 import EntrepotTransporteurBassin from "app/shared/models/entrepot-transporteur-bassin.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { map, take, takeWhile, tap } from "rxjs/operators";
+import { map, takeWhile } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { FormUtilsService } from "../form-utils.service";
 
@@ -75,6 +75,15 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
               },
             );
           }),
+        insert: values =>
+          this.apollo.mutate<{ saveEntrepotTransporteurBassin: EntrepotTransporteurBassin }>({
+            mutation: gql(this.buildSaveGraph(this.formUtils.extractPaths(values))),
+            variables: { entrepotTransporteurBassin: { id: null, ...this.formUtils.cleanTypenames(values) } },
+          })
+            .pipe(
+              map(res => res.data.saveEntrepotTransporteurBassin),
+            )
+            .toPromise(),
         update: (id, values) =>
           this.apollo.mutate<{ saveEntrepotTransporteurBassin: EntrepotTransporteurBassin }>({
             mutation: gql(this.buildSaveGraph(this.formUtils.extractPaths(values))),
