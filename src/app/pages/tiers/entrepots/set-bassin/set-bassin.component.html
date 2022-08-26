@@ -14,6 +14,16 @@
 
   <!-- advanced columns -->
   <dxi-column
+    dataField="deviseTarifTransport.id"
+    calculateDisplayValue="deviseTarifTransport.description"
+  >
+    <dxo-lookup
+      [dataSource]="devises"
+      valueExpr="id"
+      displayExpr="description"
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column
     dataField="transporteur.id"
     calculateDisplayValue="transporteur.raisonSocial"
   >
@@ -29,16 +39,6 @@
   >
     <dxo-lookup
       [dataSource]="basesTarif"
-      valueExpr="id"
-      displayExpr="description"
-    ></dxo-lookup>
-  </dxi-column>
-  <dxi-column
-    dataField="deviseTarifTransport.id"
-    calculateDisplayValue="deviseTarifTransport.description"
-  >
-    <dxo-lookup
-      [dataSource]="devises"
       valueExpr="id"
       displayExpr="description"
     ></dxo-lookup>

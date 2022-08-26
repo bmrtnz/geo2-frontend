@@ -960,11 +960,14 @@
       },
       {
         "dataField": "bureauAchat.id",
-        "visible": true
+        "visible": true,
+        "fixed": true,
+        "fixedPosition": "left"
       },
       {
         "dataField": "valide",
-        "dataType": "boolean"
+        "dataType": "boolean",
+        "filterValue": true
       },
       {
         "dataField": "prixUnitaireTarifTransport",
