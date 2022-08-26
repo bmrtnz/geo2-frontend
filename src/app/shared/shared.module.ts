@@ -1,9 +1,10 @@
-import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
-import { LocalizePipe } from "./pipes";
+import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 import DataGrid from "devextreme/ui/data_grid";
+import { LocalizePipe } from "./pipes";
+import { EvalDisplayPipe } from "./services/grid-configurator.service";
 
 @NgModule({
   imports: [
@@ -12,8 +13,8 @@ import DataGrid from "devextreme/ui/data_grid";
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [LocalizePipe],
-  exports: [CommonModule, LocalizePipe],
+  declarations: [LocalizePipe, EvalDisplayPipe],
+  exports: [CommonModule, LocalizePipe, EvalDisplayPipe],
 })
 export class SharedModule {
   constructor() {

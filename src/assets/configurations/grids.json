@@ -971,7 +971,10 @@
       },
       {
         "dataField": "transporteur.id",
-        "calculateDisplayValue": "transporteur.id",
+        "calculateDisplayValue": [
+          "transporteur.id",
+          "transporteur.raisonSocial"
+        ],
         "visible": true,
         "lookup": {
           "valueExpr": "id",
@@ -998,7 +1001,10 @@
       },
       {
         "dataField": "baseTarifTransport.id",
-        "calculateDisplayValue": "baseTarifTransport.id",
+        "calculateDisplayValue": [
+          "baseTarifTransport.id",
+          "baseTarifTransport.description"
+        ],
         "visible": true,
         "lookup": {
           "valueExpr": "id",

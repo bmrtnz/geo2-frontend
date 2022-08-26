@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { EventEmitter, Injectable } from "@angular/core";
+import { EventEmitter, Injectable, Pipe, PipeTransform } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { GridColumn, LookupStore } from "basic";
 import {
@@ -25,6 +25,7 @@ import {
   startWith,
   tap
 } from "rxjs/operators";
+import { Model } from "../models/model";
 import { GridsConfigsService } from "./api/grids-configs.service";
 import { AuthService } from "./auth.service";
 import { LocalizationService } from "./localization.service";
@@ -206,7 +207,10 @@ export class GridConfiguratorService {
   /** Bind datasource to lookup column */
   public static bindLookupColumnSource(dataGrid: dxDataGrid, dataField: string, dataSource: LookupStore) {
     const originalLookupSettings = dataGrid.columnOption(dataField, "lookup");
-    dataGrid.columnOption(dataField, "lookup", { ...originalLookupSettings, dataSource });
+    dataGrid.columnOption(dataField, "lookup", {
+      ...originalLookupSettings,
+      dataSource,
+    });
   }
 
   /**
@@ -582,5 +586,18 @@ export class GridConfiguratorService {
       location: "after",
       name: "exportPage",
     } as dxToolbarItem);
+  }
+}
+
+@Pipe({ name: "evalDisplay" })
+/** Evaluate display value from context & path(s) */
+export class EvalDisplayPipe implements PipeTransform {
+  transform(args) {
+    return data => {
+      if (args)
+        return [args].flat(2)
+          .map(arg => Model.fetchValue(arg.split("."), data))
+          .join(" - ");
+    };
   }
 }

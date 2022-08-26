@@ -74,7 +74,7 @@ export class SetBassinComponent implements OnInit {
 
   private fetchDatasource(entrepotID: Entrepot["id"]) {
     return this.columns.pipe(
-      map(columns => columns.flatMap(({ dataField, calculateDisplayValue }) => [dataField, calculateDisplayValue])),
+      map(columns => columns.map(({ dataField, calculateDisplayValue }) => [dataField, calculateDisplayValue]).flat(2)),
       map(fields => this.etbService.getDataSource_v2([
         ...fields,
       ])),
