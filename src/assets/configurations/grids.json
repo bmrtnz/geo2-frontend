@@ -970,9 +970,13 @@
         }
       },
       {
-        "dataField": "valide",
-        "dataType": "boolean",
-        "filterValue": true
+        "dataField": "transporteur.id",
+        "calculateDisplayValue": "transporteur.raisonSocial",
+        "visible": true,
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "raisonSocial"
+        }
       },
       {
         "dataField": "prixUnitaireTarifTransport",
@@ -993,15 +997,6 @@
         }
       },
       {
-        "dataField": "transporteur.id",
-        "calculateDisplayValue": "transporteur.raisonSocial",
-        "visible": true,
-        "lookup": {
-          "valueExpr": "id",
-          "displayExpr": "raisonSocial"
-        }
-      },
-      {
         "dataField": "baseTarifTransport.id",
         "calculateDisplayValue": "baseTarifTransport.description",
         "visible": true,
@@ -1009,6 +1004,11 @@
           "valueExpr": "id",
           "displayExpr": "description"
         }
+      },
+      {
+        "dataField": "valide",
+        "dataType": "boolean",
+        "filterValue": true
       }
     ]
   },
