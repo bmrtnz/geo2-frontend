@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { BaseTarif, Devise, Entrepot, Transporteur } from "app/shared/models";
+import { BaseTarif, BureauAchat, Devise, Entrepot, Transporteur } from "app/shared/models";
 import { TransporteursService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
+import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { EntrepotsTransporteursBassinsService } from "app/shared/services/api/entrepots-transporteurs-bassins.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -25,6 +26,7 @@ export class SetBassinComponent implements OnInit {
 
   constructor(
     private etbService: EntrepotsTransporteursBassinsService,
+    private bureauxAchatService: BureauxAchatService,
     private transporteursService: TransporteursService,
     private basesTarifService: BasesTarifService,
     private devisesService: DevisesService,
@@ -46,8 +48,13 @@ export class SetBassinComponent implements OnInit {
 
   }
 
+  /** lookup columns datasource binding */
   bindSources(event) {
-    // lookup columns datasource binding
+    GridConfiguratorService.bindLookupColumnSource(
+      event.component,
+      "bureauAchat.id",
+      this.bureauxAchatService.getLookupStore<BureauAchat>(["id", "raisonSocial"]),
+    );
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
       "transporteur.id",

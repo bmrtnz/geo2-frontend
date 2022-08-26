@@ -960,9 +960,14 @@
       },
       {
         "dataField": "bureauAchat.id",
+        "calculateDisplayValue": "bureauAchat.id",
         "visible": true,
         "fixed": true,
-        "fixedPosition": "left"
+        "fixedPosition": "left",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "id"
+        }
       },
       {
         "dataField": "valide",
