@@ -439,7 +439,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         ],
       }], [
         { name: "fieldName", type: "String", isOptionnal: false },
-        { name: "value", type: "ObjectScalar", isOptionnal: false },
+        { name: "value", type: "ObjectScalar", isOptionnal: true },
         { name: "id", type: "String", isOptionnal: false },
         { name: "socCode", type: "String", isOptionnal: false },
       ])),
