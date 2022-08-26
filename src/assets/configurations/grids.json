@@ -971,11 +971,11 @@
       },
       {
         "dataField": "transporteur.id",
-        "calculateDisplayValue": "transporteur.raisonSocial",
+        "calculateDisplayValue": "transporteur.id",
         "visible": true,
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": "raisonSocial"
+          "displayExpr": "id"
         }
       },
       {
@@ -989,20 +989,20 @@
       },
       {
         "dataField": "deviseTarifTransport.id",
-        "calculateDisplayValue": "deviseTarifTransport.description",
+        "calculateDisplayValue": "deviseTarifTransport.id",
         "visible": true,
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": "description"
+          "displayExpr": "id"
         }
       },
       {
         "dataField": "baseTarifTransport.id",
-        "calculateDisplayValue": "baseTarifTransport.description",
+        "calculateDisplayValue": "baseTarifTransport.id",
         "visible": true,
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": "description"
+          "displayExpr": "id"
         }
       },
       {

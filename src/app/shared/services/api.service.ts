@@ -938,6 +938,7 @@ export abstract class ApiService implements OnDestroy {
   getLookupStore<T>(columns: Array<string>, search?: string) {
     return {
       paginate: true,
+      sort: [{ selector: "id" }],
       store: this.createCustomStore({
         load: options => this.apollo
           .query<{ [key: string]: RelayPage<T> }>({
