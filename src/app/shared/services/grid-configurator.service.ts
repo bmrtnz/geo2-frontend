@@ -207,6 +207,11 @@ export class GridConfiguratorService {
   /** Bind datasource to lookup column */
   public static bindLookupColumnSource(dataGrid: dxDataGrid, dataField: string, dataSource: LookupStore) {
     const originalLookupSettings = dataGrid.columnOption(dataField, "lookup");
+
+    // evaluate displayExpression
+    if (originalLookupSettings && Array.isArray(originalLookupSettings.displayExpr))
+      originalLookupSettings.displayExpr = EvalDisplayPipe.doTransform(originalLookupSettings.displayExpr);
+
     dataGrid.columnOption(dataField, "lookup", {
       ...originalLookupSettings,
       dataSource,
@@ -590,14 +595,17 @@ export class GridConfiguratorService {
 }
 
 @Pipe({ name: "evalDisplay" })
-/** Evaluate display value from context & path(s) */
+/** Evaluate display value from data & path(s) */
 export class EvalDisplayPipe implements PipeTransform {
-  transform(args) {
+  static doTransform(paths) {
     return data => {
-      if (args)
-        return [args].flat(2)
+      if (paths)
+        return [paths].flat(2)
           .map(arg => Model.fetchValue(arg.split("."), data))
           .join(" - ");
     };
+  }
+  transform(paths) {
+    return EvalDisplayPipe.doTransform(paths);
   }
 }

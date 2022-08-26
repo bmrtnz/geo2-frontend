@@ -978,7 +978,10 @@
         "visible": true,
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": "id"
+          "displayExpr": [
+            "id",
+            "raisonSocial"
+          ]
         }
       },
       {
@@ -1008,7 +1011,10 @@
         "visible": true,
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": "id"
+          "displayExpr": [
+            "id",
+            "description"
+          ]
         }
       },
       {
