@@ -13,7 +13,7 @@ import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { Observable } from "rxjs";
-import { concatMap, map, takeWhile, tap } from "rxjs/operators";
+import { concatMap, filter, map, takeWhile, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-set-bassin",
@@ -46,13 +46,16 @@ export class SetBassinComponent implements OnInit {
 
     // wait until grid columns a ready
     this.contentReadyEvent
-      .pipe(takeWhile(event => event.component.columnCount() <= 0, true))
+      .pipe(
+        filter(event => event.component.columnCount() !== 0),
+        takeWhile(event => event.component.columnCount() <= 0, true),
+      )
       .subscribe(event => this.bindSources(event));
 
   }
 
   /** lookup columns datasource binding */
-  bindSources(event: { component: dxDataGrid; }) {
+  private bindSources(event: { component: dxDataGrid; }) {
     this.updateBacSource(event.component);
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
