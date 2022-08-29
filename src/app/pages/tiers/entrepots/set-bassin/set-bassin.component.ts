@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { BaseTarif, BureauAchat, Devise, Entrepot, Transporteur } from "app/shared/models";
 import { TransporteursService } from "app/shared/services";
@@ -8,6 +8,7 @@ import { DevisesService } from "app/shared/services/api/devises.service";
 import { EntrepotsTransporteursBassinsService } from "app/shared/services/api/entrepots-transporteurs-bassins.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
+import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { Observable } from "rxjs";
@@ -23,6 +24,7 @@ export class SetBassinComponent implements OnInit {
   public etbDatasource: DataSource;
   public columns: Observable<GridColumn[]>;
   public contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
   constructor(
     private etbService: EntrepotsTransporteursBassinsService,
@@ -84,6 +86,11 @@ export class SetBassinComponent implements OnInit {
         ["entrepot.id", "=", entrepotID],
       ]))
     );
+  }
+
+  public onInserting(event) {
+    event.data.entrepot = { id: this.route.snapshot.paramMap.get("id") } as { id: string } & Partial<Entrepot>;
+    event.data.valide = true;
   }
 
   public onSaved(event: { changes: any[]; }) {

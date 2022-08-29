@@ -2,6 +2,7 @@
   [dataSource]="etbDatasource"
   [remoteOperations]="true"
   [columnAutoWidth]="true"
+  (onRowInserting)="onInserting($event)"
   (onSaved)="onSaved($event)"
   (onContentReady)="contentReadyEvent.emit($event)"
 >

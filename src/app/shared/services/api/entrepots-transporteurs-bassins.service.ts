@@ -31,7 +31,6 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
 
   getDataSource_v2(columns: Array<string> | Set<string>) {
     return new DataSource({
-      // reshapeOnPush: true,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
@@ -44,16 +43,15 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
 
             const query = await this.buildGetAll_v2(columns);
             type Response = { allEntrepotTransporteurBassin: RelayPage<EntrepotTransporteurBassin> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
             this.listenQuery<Response>(
               query,
-              { variables },
+              { variables, fetchPolicy: "network-only" },
               res => {
                 if (res.data && res.data.allEntrepotTransporteurBassin)
                   resolve(
-                    // map to mutable entity by serializing & deserializing apollo data
+                    // map to mutable object by serializing & deserializing apollo data
                     JSON.parse(JSON.stringify(this.asInstancedListCount(
                       res.data.allEntrepotTransporteurBassin,
                     )))
@@ -77,7 +75,7 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
           }),
         insert: values =>
           this.apollo.mutate<{ saveEntrepotTransporteurBassin: EntrepotTransporteurBassin }>({
-            mutation: gql(this.buildSaveGraph(this.formUtils.extractPaths(values))),
+            mutation: gql(this.buildSaveGraph(["id", ...this.formUtils.extractPaths(values)])),
             variables: { entrepotTransporteurBassin: { id: null, ...this.formUtils.cleanTypenames(values) } },
           })
             .pipe(
@@ -86,7 +84,7 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
             .toPromise(),
         update: (id, values) =>
           this.apollo.mutate<{ saveEntrepotTransporteurBassin: EntrepotTransporteurBassin }>({
-            mutation: gql(this.buildSaveGraph(this.formUtils.extractPaths(values))),
+            mutation: gql(this.buildSaveGraph(["id", ...this.formUtils.extractPaths(values)])),
             variables: { entrepotTransporteurBassin: { id, ...this.formUtils.cleanTypenames(values) } },
           })
             .pipe(
