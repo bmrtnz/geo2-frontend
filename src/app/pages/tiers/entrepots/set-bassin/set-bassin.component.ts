@@ -11,6 +11,7 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
+import dxDataGrid from "devextreme/ui/data_grid";
 import { Observable } from "rxjs";
 import { concatMap, map, takeWhile, tap } from "rxjs/operators";
 
@@ -51,12 +52,8 @@ export class SetBassinComponent implements OnInit {
   }
 
   /** lookup columns datasource binding */
-  bindSources(event) {
-    GridConfiguratorService.bindLookupColumnSource(
-      event.component,
-      "bureauAchat.id",
-      this.bureauxAchatService.getLookupStore<BureauAchat>(["id", "raisonSocial"], "valide==true"),
-    );
+  bindSources(event: { component: dxDataGrid; }) {
+    this.updateBacSource(event.component);
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
       "transporteur.id",
@@ -74,6 +71,15 @@ export class SetBassinComponent implements OnInit {
     );
   }
 
+  // used to restrict bac to a single occurence
+  private updateBacSource(component: dxDataGrid) {
+    const usedBacs: Partial<BureauAchat>[] = component.getDataSource()?.items().map(({ bureauAchat }) => bureauAchat);
+    const bacFilter = usedBacs?.map(({ id }) => `id!="${id}"`).join(" and ");
+    const source = this.bureauxAchatService
+      .getLookupStore<BureauAchat>(["id", "raisonSocial"], `valide==true and ${bacFilter}`);
+    GridConfiguratorService.bindLookupColumnSource(component, "bureauAchat.id", source);
+  }
+
   private fetchDatasource(entrepotID: Entrepot["id"]) {
     return this.columns.pipe(
       map(columns => columns.map(({ dataField, calculateDisplayValue }) => [dataField, calculateDisplayValue]).flat(2)),
@@ -89,12 +95,14 @@ export class SetBassinComponent implements OnInit {
   }
 
   public onInserting(event) {
+    // complete row data
     event.data.entrepot = { id: this.route.snapshot.paramMap.get("id") } as { id: string } & Partial<Entrepot>;
     event.data.valide = true;
   }
 
-  public onSaved(event: { changes: any[]; }) {
+  public onSaved(event: { changes: any[]; component: dxDataGrid; }) {
     (this.etbDatasource.store() as CustomStore).push(event.changes);
+    this.updateBacSource(event.component);
   }
 
 }
