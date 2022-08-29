@@ -18,7 +18,15 @@
         : column?.dataField
     "
     [lookup]="column?.lookup"
-  ></dxi-column>
+  >
+    <dxi-validation-rule
+      *ngIf="
+        column.dataField === 'bureauAchat.id' ||
+        column.dataField === 'transporteur.id'
+      "
+      type="required"
+    ></dxi-validation-rule>
+  </dxi-column>
 
   <dxo-editing
     [allowUpdating]="true"
