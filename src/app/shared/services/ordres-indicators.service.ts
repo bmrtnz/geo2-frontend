@@ -272,7 +272,7 @@ const indicators: Indicator[] = [
   },
   {
     id: "CommandesEdi",
-    enabled: true,
+    enabled: false,
     withCount: false,
     parameter: "Commandes",
     subParameter: "EDI",
