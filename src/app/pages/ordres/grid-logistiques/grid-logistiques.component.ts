@@ -44,7 +44,6 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
   private hintDblClick: string;
   public addStepText: string;
   public infoPopupText: string;
-  public env = environment;
   @Input() public ordre: Ordre;
   @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
   @Output() public transporteurLigneId: string;

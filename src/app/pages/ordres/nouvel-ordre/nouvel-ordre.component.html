@@ -17,17 +17,13 @@
     '+ ' +
     ('create' | localize) +
     (getSelectedEntrepot()
-      ? ' ' +
-        ('depuis' | localize) +
-        '   \'' +
-        codeEnt  +
-        '\''
+      ? ' ' + ('depuis' | localize) + '   \'' + codeEnt + '\''
       : '')
   "
   [type]="'success'"
   class="button-create-order"
   [ngClass]="{ pulse: pulseBtnOn }"
-  [hidden]="!getSelectedEntrepot() || env.production"
+  [hidden]="!getSelectedEntrepot()"
   [resolver]="resolver"
   (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>

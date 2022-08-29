@@ -35,7 +35,6 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   private gridConfig: Promise<GridConfig>;
   public itemsWithSelectBox: any;
   public allowMutations = false;
-  public env = environment;
   public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
   public gridFilter: any[];
   public gridExpFiltered: boolean;
@@ -79,7 +78,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
+    this.allowMutations = !Ordre.isCloture(this.ordre);
   }
 
   async enableFilters(e?) {

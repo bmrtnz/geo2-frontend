@@ -11,7 +11,6 @@ import { SocietesService } from "app/shared/services/api/societes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { SingleSelection } from "basic";
-import { environment } from "environments/environment";
 import { defer, EMPTY, Observable, zip } from "rxjs";
 import {
   catchError,
@@ -75,7 +74,6 @@ export class NouvelOrdreComponent implements OnInit {
   public favorites = true;
   public resolver: Observable<Ordre>;
   public errorText: string;
-  public env = environment;
   public codeEnt: any;
 
   private societe: Societe;

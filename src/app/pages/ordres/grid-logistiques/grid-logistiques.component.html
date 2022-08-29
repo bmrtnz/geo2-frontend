@@ -33,8 +33,8 @@
   ></dxo-pager>
   <dxo-editing
     [selectTextOnEditStart]="true"
-    [allowUpdating]="!env.production"
-    [allowDeleting]="!env.production"
+    [allowUpdating]="true"
+    [allowDeleting]="true"
     [mode]="'cell'"
   ></dxo-editing>
   <dxo-state-storing
@@ -80,7 +80,6 @@
     type="buttons"
     [width]="80"
     [showInColumnChooser]="false"
-    *ngIf="!env.production"
   >
     <dxi-button
       cssClass="add-step-button"
@@ -101,21 +100,22 @@
       ]"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
-      [readOnly]="env.production"
     >
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
     </dx-select-box>
     <!-- <div class="SB-edit-title-element"></div> -->
   </div>
-  <div (mouseenter)="setSBInputTitle('customLogInstSB')" *dxTemplate="let cell of 'customSelectBoxTemplate'">
+  <div
+    (mouseenter)="setSBInputTitle('customLogInstSB')"
+    *dxTemplate="let cell of 'customSelectBoxTemplate'"
+  >
     <dx-select-box
       [class]="'customLogInstSB'"
       [items]="instructionsList"
       [value]="cell.data[cell.column.dataField]"
       [acceptCustomValue]="true"
       (onValueChanged)="onValueChanged($event, cell)"
-      [readOnly]="env.production"
     >
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>

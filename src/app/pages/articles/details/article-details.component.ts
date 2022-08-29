@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild, Input, OnChanges, ViewChildren, AfterViewInit } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, ViewChild, ViewChildren } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -23,6 +23,7 @@ import { EtiquettesColisService } from "app/shared/services/api/etiquettes-colis
 import { EtiquettesEvenementiellesService } from "app/shared/services/api/etiquettes-evenementielles.service";
 import { EtiquettesUcService } from "app/shared/services/api/etiquettes-uc.service";
 import { HistoryType } from "app/shared/services/api/historique.service";
+import { IdentificationsSymboliquesService } from "app/shared/services/api/identifications-symboliques.service";
 import { MarquesService } from "app/shared/services/api/marques.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
@@ -36,13 +37,11 @@ import { ValidationService } from "app/shared/services/api/validation.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { article as articlesGridConfig } from "assets/configurations/grids.json";
+import { DxAccordionComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { of } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
-import { IdentificationsSymboliquesService } from "app/shared/services/api/identifications-symboliques.service";
-import { environment } from "environments/environment";
-import { DxAccordionComponent } from "devextreme-angular";
+import { switchMap } from "rxjs/operators";
 
 @Component({
   selector: "app-articles",
@@ -143,7 +142,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
   validatePopup: PushHistoryPopupComponent;
   editing = false;
   public ucBW: boolean;
-  public env = environment;
 
   article: Article;
 

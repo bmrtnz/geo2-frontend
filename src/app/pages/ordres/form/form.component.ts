@@ -35,7 +35,6 @@ import { DxAccordionComponent, DxCheckBoxComponent, DxSelectBoxComponent } from 
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import { environment } from "environments/environment";
 import { of, Subject } from "rxjs";
 import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
@@ -222,7 +221,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public dotCQ: number;
   public orderNumber: string;
   public fullOrderNumber: string;
-  public env = environment;
   public allowMutations = false;
   public headerSaving;
   public instructionsList: string[];
@@ -377,7 +375,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   saveHeaderOnTheFly() {
     if (this.headerSaving) return;
-    if (!this.formGroup.pristine && this.formGroup.valid && !this.env.production) {
+    if (!this.formGroup.pristine && this.formGroup.valid) {
       this.headerSaving = true;
       const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
@@ -794,7 +792,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             notify(`Récupération des données de l'ordre impossible...`, "error", 7000);
             return;
           }
-          this.allowMutations = !this.env.production && !Ordre.isCloture(this.ordre);
+          this.allowMutations = !Ordre.isCloture(this.ordre);
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
           this.fetchFullOrderNumber();

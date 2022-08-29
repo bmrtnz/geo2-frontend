@@ -107,7 +107,6 @@
       [focusStateEnabled]="false"
       [visible]="showModifButton(cell)"
       [text]="'Modifier'"
-      [disabled]="env.production"
       (onClick)="modifDetailExp(cell)"
     >
     </dx-button>
@@ -117,7 +116,6 @@
       [focusStateEnabled]="false"
       [visible]="showAutoButton(cell)"
       [text]="'Auto'"
-      [disabled]="env.production"
       (onClick)="autoDetailExp(cell)"
     ></dx-button>
   </div>
@@ -125,8 +123,7 @@
   <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
     <div>
       {{
-        "ordreLignes-" + cell.column.dataField?.split(".").join("-")
-          | localize
+        "ordreLignes-" + cell.column.dataField?.split(".").join("-") | localize
       }}
     </div>
     <dx-button
