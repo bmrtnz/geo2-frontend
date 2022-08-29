@@ -86,7 +86,6 @@ import { GridHistoriqueComponent } from "./grid-historique/grid-historique.compo
 import { GridLignesDetailsComponent } from "./grid-lignes-details/grid-lignes-details.component";
 import { GridLignesHistoriqueComponent } from "./grid-lignes-historique/grid-lignes-historique.component";
 import { GridLignesTotauxDetailComponent } from "./grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
-import { GridLignesComponent } from "./grid-lignes/grid-lignes.component";
 import { GridLitigesLignesComponent } from "./grid-litiges-lignes/grid-litiges-lignes.component";
 import { GridLogistiquesComponent } from "./grid-logistiques/grid-logistiques.component";
 import { GridMargeComponent } from "./grid-marge/grid-marge.component";
@@ -140,7 +139,6 @@ import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visu
     OrdresAccueilComponent,
     OrdresSuiviComponent,
     GridSuiviComponent,
-    GridLignesComponent,
     GridEnvoisComponent,
     GridHistoriqueComponent,
     LitigesComponent,

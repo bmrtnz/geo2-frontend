@@ -53,7 +53,6 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
 })
 export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   readonly INDICATOR_NAME = "SupervisionAFacturer";
-  public readonly env = environment;
 
   public ordresDataSource: DataSource;
   public secteurs: DataSource;

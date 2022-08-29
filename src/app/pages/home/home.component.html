@@ -48,7 +48,7 @@
             type="default"
             icon="material-icons pageview"
             text="Traçabilité & Qualité"
-            [disabled]="prod"
+            [disabled]="!dev"
           >
           </dx-button>
           <dx-button
@@ -56,7 +56,7 @@
             type="default"
             icon="material-icons trending_up"
             text="Analyses & Statistiques"
-            [disabled]="prod"
+            [disabled]="!dev"
           >
           </dx-button>
         </div>
@@ -79,7 +79,7 @@
             type="default"
             icon="material-icons view_module"
             text="Stock"
-            [disabled]="prod"
+            [disabled]="!dev"
             routerLink="/pages/stock"
           >
           </dx-button>
@@ -88,7 +88,7 @@
             type="default"
             icon="material-icons local_shipping"
             text="Logistique"
-            [disabled]="prod"
+            [disabled]="!dev"
           >
           </dx-button>
           <dx-button
@@ -97,7 +97,7 @@
             icon="material-icons flash_on"
             text="Litiges"
             (onClick)="navigate('pages/ordres/indicateurs/litiges')"
-            [disabled]="prod"
+            [disabled]="!dev"
           >
           </dx-button>
         </div>

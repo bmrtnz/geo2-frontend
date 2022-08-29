@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   @ViewChild(DxDrawerComponent, { static: false }) drawer: DxDrawerComponent;
   public currentDate: Date;
   public navigation: NavHomeList[];
-  public prod = !isDevMode();
+  public dev = isDevMode();
 
   constructor(private router: Router, service: NavHomeService) {
     this.currentDate = new Date();

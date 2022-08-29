@@ -1,14 +1,16 @@
 <div
   class="flux-docs-buttons-container"
   [ngClass]="{ 'order-conf-button': orderConfirmationOnly }"
-  >
+>
   <div *ngFor="let action of actionsFlux.slice(0, visibleActionsNumber - 1)">
     <dx-button
       class="flux-doc-button"
       type="default"
       text="{{ action.text }}"
-      [visible]="action.visible && (action.id === 'ORDRE' || !orderConfirmationOnly)"
-      [disabled]="action.disabled || env.production"
+      [visible]="
+        action.visible && (action.id === 'ORDRE' || !orderConfirmationOnly)
+      "
+      [disabled]="action.disabled"
       (onClick)="sendAction(action.id)"
     ></dx-button>
   </div>

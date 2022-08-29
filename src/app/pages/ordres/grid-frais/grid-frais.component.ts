@@ -50,7 +50,6 @@ export class GridFraisComponent implements ToggledGrid {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public env = environment;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChildren(DxSelectBoxComponent) selectBoxes: QueryList<DxSelectBoxComponent>;
 

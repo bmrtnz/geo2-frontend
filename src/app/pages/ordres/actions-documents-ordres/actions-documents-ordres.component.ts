@@ -33,7 +33,6 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @Input() public orderConfirmationOnly: boolean;
   @Output() public flux: string;
 
-  public readonly env = environment;
   public actionsFlux: any[];
   public plusActionsFlux: any[];
   public plusActionsFluxEnabled: boolean;
