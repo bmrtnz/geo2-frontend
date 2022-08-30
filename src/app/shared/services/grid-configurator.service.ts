@@ -223,6 +223,10 @@ export class GridConfiguratorService {
    * @param config GridConfig object
    */
   save(config: GridConfig) {
+
+    // cancel on empty columns configs
+    if (!config?.columns) return;
+
     const context = this as unknown as DxoStateStoringComponent;
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
     self.gridsConfigsService
@@ -418,7 +422,7 @@ export class GridConfiguratorService {
         debounce(({ fullName }) =>
           interval(fullName === "columns" ? 10 : 1000),
         ),
-        concatMapTo(defer(() => this.fetchColumns(grid))),
+        concatMapTo(this.fetchColumns(grid)),
         GridConfiguratorService.getVisible(),
         startWith([] as GridColumn[]),
         pairwise(),
