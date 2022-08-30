@@ -1146,14 +1146,14 @@ export abstract class ApiService implements OnDestroy {
   /**
    * Build a mutation that delete an entity by his key
    */
-  protected buildDeleteGraph() {
+  protected buildDeleteGraph(keyType = "String") {
     return ApiService.buildGraph("mutation", [{
       name: `delete${this.model.name}`,
       params: [
         { name: "id", value: "id", isVariable: true },
       ],
     }], [
-      { name: "id", type: "String", isOptionnal: false },
+      { name: "id", type: keyType, isOptionnal: false },
     ]);
   }
 

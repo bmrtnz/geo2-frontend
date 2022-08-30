@@ -91,6 +91,10 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
               map(res => res.data.saveEntrepotTransporteurBassin),
             )
             .toPromise(),
+        remove: id => this.apollo.mutate({
+          mutation: gql(this.buildDeleteGraph("BigDecimal")),
+          variables: { id },
+        }).toPromise()
       },
       ),
     });
