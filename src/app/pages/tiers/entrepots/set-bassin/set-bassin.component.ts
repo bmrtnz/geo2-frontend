@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { BaseTarif, BureauAchat, Devise, Entrepot, Transporteur } from "app/shared/models";
 import { TransporteursService } from "app/shared/services";
@@ -8,6 +8,7 @@ import { DevisesService } from "app/shared/services/api/devises.service";
 import { EntrepotsTransporteursBassinsService } from "app/shared/services/api/entrepots-transporteurs-bassins.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
+import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
@@ -26,6 +27,7 @@ export class SetBassinComponent implements OnInit {
   public etbDatasource: DataSource;
   public columns: Observable<GridColumn[]>;
   public contentReadyEvent = new EventEmitter<any>();
+  @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
 
   constructor(
     private etbService: EntrepotsTransporteursBassinsService,
@@ -84,7 +86,6 @@ export class SetBassinComponent implements OnInit {
   }
 
   private fetchDatasource(entrepotID: Entrepot["id"]) {
-    console.log(entrepotID);
     return this.columns.pipe(
       map(columns => columns.map(({ dataField, calculateDisplayValue }) => [dataField, calculateDisplayValue]).flat(2)),
       map(fields => this.etbService.getDataSource_v2([
@@ -107,6 +108,18 @@ export class SetBassinComponent implements OnInit {
   public onSaved(event: { changes: any[]; component: dxDataGrid; }) {
     (this.etbDatasource.store() as CustomStore).push(event.changes);
     this.updateBacSource(event.component);
+  }
+
+  public onRowClick({ rowIndex }) {
+    this.dataGrid.instance.editRow(rowIndex);
+  }
+
+  public onOpened(elem) {
+    // Maximize dropdown list size
+    let width = 0;
+    if (elem.element.parentElement.classList.contains("largeDropDown")) width = 400;
+    if (elem.element.parentElement.classList.contains("mediumDropDown")) width = 250;
+    if (width) elem.component._popup.option("width", width);
   }
 
 }

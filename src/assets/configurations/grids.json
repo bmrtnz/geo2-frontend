@@ -976,6 +976,7 @@
           "transporteur.raisonSocial"
         ],
         "visible": true,
+        "cssClass": "no-padding largeDropDown",
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
@@ -1009,6 +1010,7 @@
           "baseTarifTransport.description"
         ],
         "visible": true,
+        "cssClass": "mediumDropDown",
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [

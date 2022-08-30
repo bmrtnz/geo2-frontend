@@ -5,6 +5,7 @@
   [columnAutoWidth]="true"
   (onRowInserting)="onInserting($event)"
   (onSaved)="onSaved($event)"
+  (onRowClick)="onRowClick($event)"
   (onContentReady)="contentReadyEvent.emit($event)"
 >
   <dxi-column
@@ -13,6 +14,8 @@
     [visible]="column?.visible"
     [dataType]="column?.dataType"
     [format]="column?.format"
+    [cssClass]="column?.cssClass"
+    [editorOptions]="{onOpened: onOpened}"
     [calculateDisplayValue]="
       column?.calculateDisplayValue
         ? (column.calculateDisplayValue | evalDisplay)
@@ -32,7 +35,6 @@
       "
       type="required"
     ></dxi-validation-rule>
-    <dxo-drop-down-options [width]="300"></dxo-drop-down-options>
   </dxi-column>
 
   <dxo-editing
