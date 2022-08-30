@@ -962,6 +962,7 @@
         "dataField": "bureauAchat.id",
         "calculateDisplayValue": "bureauAchat.id",
         "visible": true,
+        "cssClass": "smallDropDown",
         "fixed": true,
         "fixedPosition": "left",
         "lookup": {
@@ -973,7 +974,8 @@
         "dataField": "transporteur.id",
         "calculateDisplayValue": [
           "transporteur.id",
-          "transporteur.raisonSocial"
+          "transporteur.raisonSocial",
+          "transporteur.ville"
         ],
         "visible": true,
         "cssClass": "no-padding largeDropDown",
@@ -981,7 +983,23 @@
           "valueExpr": "id",
           "displayExpr": [
             "id",
-            "raisonSocial"
+            "raisonSocial",
+            "ville"
+          ]
+        }
+      },
+      {
+        "dataField": "baseTarifTransport.id",
+        "calculateDisplayValue": [
+          "baseTarifTransport.id"
+        ],
+        "visible": true,
+        "cssClass": "mediumDropDown",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
           ]
         }
       },
@@ -1001,22 +1019,6 @@
         "lookup": {
           "valueExpr": "id",
           "displayExpr": "id"
-        }
-      },
-      {
-        "dataField": "baseTarifTransport.id",
-        "calculateDisplayValue": [
-          "baseTarifTransport.id",
-          "baseTarifTransport.description"
-        ],
-        "visible": true,
-        "cssClass": "mediumDropDown",
-        "lookup": {
-          "valueExpr": "id",
-          "displayExpr": [
-            "id",
-            "description"
-          ]
         }
       },
       {

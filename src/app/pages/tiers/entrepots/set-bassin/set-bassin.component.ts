@@ -27,6 +27,7 @@ export class SetBassinComponent implements OnInit {
   public etbDatasource: DataSource;
   public columns: Observable<GridColumn[]>;
   public contentReadyEvent = new EventEmitter<any>();
+  public allowAdding: boolean;
   @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
 
   constructor(
@@ -61,7 +62,7 @@ export class SetBassinComponent implements OnInit {
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
       "transporteur.id",
-      this.transporteursService.getLookupStore<Transporteur>(["id", "raisonSocial"], "valide==true"),
+      this.transporteursService.getLookupStore<Transporteur>(["id", "raisonSocial", "ville"], "valide==true"),
     );
     GridConfiguratorService.bindLookupColumnSource(
       event.component,
@@ -117,9 +118,22 @@ export class SetBassinComponent implements OnInit {
   public onOpened(elem) {
     // Maximize dropdown list size
     let width = 0;
-    if (elem.element.parentElement.classList.contains("largeDropDown")) width = 400;
+    if (elem.element.parentElement.classList.contains("largeDropDown")) width = 500;
     if (elem.element.parentElement.classList.contains("mediumDropDown")) width = 250;
+    if (elem.element.parentElement.classList.contains("smallDropDown")) width = 125;
     if (width) elem.component._popup.option("width", width);
+  }
+
+  private arrayElsIncluded(arr, target) {
+    return target.every(v => arr.includes(v));
+  }
+
+  public onContentReady(e) {
+    const datasource = this.dataGrid.dataSource as DataSource;
+    if (!datasource) return;
+    const bass = [];
+    datasource?.items().map(el => bass.push(el.bureauAchat.id));
+    this.allowAdding = !this.arrayElsIncluded(bass, BASSINS);
   }
 
 }
