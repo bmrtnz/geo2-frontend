@@ -15,17 +15,18 @@
     [dataType]="column?.dataType"
     [format]="column?.format"
     [cssClass]="column?.cssClass"
-    [editorOptions]="{onOpened: onOpened}"
+    [editorOptions]="{ onOpened: onOpened }"
     [calculateDisplayValue]="
       column?.calculateDisplayValue
         ? (column.calculateDisplayValue | evalDisplay)
         : column?.dataField
     "
     [lookup]="column?.lookup"
+    [calculateSortValue]="column?.calculateSortValue"
     [caption]="
-    ('entrepotBassins-' +
-      column.dataField?.replace('.description', '').split('.').join('-')
-      | localize) || column.name
+      ('entrepotBassins-' +
+        column.dataField?.replace('.description', '').split('.').join('-')
+        | localize) || column.name
     "
   >
     <dxi-validation-rule

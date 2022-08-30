@@ -138,6 +138,7 @@ const extraConfigurations = [
   "format",
   "calculateCellValue",
   "lookup",
+  "calculateSortValue",
 ];
 
 @Injectable({

@@ -964,6 +964,7 @@
         "visible": true,
         "fixed": true,
         "fixedPosition": "left",
+        "calculateSortValue": "bureauAchat.id",
         "lookup": {
           "valueExpr": "id",
           "displayExpr": "id"
@@ -976,6 +977,7 @@
           "transporteur.raisonSocial"
         ],
         "visible": true,
+        "calculateSortValue": "transporteur.id",
         "cssClass": "no-padding largeDropDown",
         "lookup": {
           "valueExpr": "id",
@@ -997,6 +999,7 @@
       {
         "dataField": "deviseTarifTransport.id",
         "calculateDisplayValue": "deviseTarifTransport.id",
+        "calculateSortValue": "deviseTarifTransport.id",
         "visible": true,
         "lookup": {
           "valueExpr": "id",
@@ -1010,6 +1013,7 @@
           "baseTarifTransport.description"
         ],
         "visible": true,
+        "calculateSortValue": "baseTarifTransport.id",
         "cssClass": "mediumDropDown",
         "lookup": {
           "valueExpr": "id",
