@@ -3,7 +3,7 @@
   [dataSource]="etbDatasource"
   [remoteOperations]="true"
   [columnAutoWidth]="true"
-  (onContentReady)="onContentReady($event)"
+  (onContentReady)=" gridReady(); contentReadyEvent.emit($event)"
   (onRowInserting)="onInserting($event)"
   (onSaved)="onSaved($event)"
   (onRowClick)="onRowClick($event)"

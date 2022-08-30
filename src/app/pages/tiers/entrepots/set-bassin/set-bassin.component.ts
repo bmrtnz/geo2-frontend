@@ -82,7 +82,7 @@ export class SetBassinComponent implements OnInit {
     const bacFilter = usedBacs?.map(({ id }) => `id!="${id}"`).join(" and ");
     const bassListFilter = BASSINS.map((bassin) => `id=="${bassin}"`).join(" or ");
     const source = this.bureauxAchatService
-      .getLookupStore<BureauAchat>(["id", "raisonSocial"], `valide==true and ${bacFilter} and (${bassListFilter})`);
+      .getLookupStore<BureauAchat>(["id", "raisonSocial"], `valide==true ${(bacFilter ? "and " + bacFilter : "")} and (${bassListFilter})`);
     GridConfiguratorService.bindLookupColumnSource(component, "bureauAchat.id", source);
   }
 
@@ -128,12 +128,14 @@ export class SetBassinComponent implements OnInit {
     return target.every(v => arr.includes(v));
   }
 
-  public onContentReady(e) {
+  public gridReady() {
+    // If all bassins listed, disables adding functionality
     const datasource = this.dataGrid.dataSource as DataSource;
-    if (!datasource) return;
-    const bass = [];
-    datasource?.items().map(el => bass.push(el.bureauAchat.id));
-    this.allowAdding = !this.arrayElsIncluded(bass, BASSINS);
+    if (datasource) {
+      const bass = [];
+      datasource?.items().map(el => bass.push(el.bureauAchat.id));
+      this.allowAdding = !this.arrayElsIncluded(bass, BASSINS);
+    }
   }
 
 }
