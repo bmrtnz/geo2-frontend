@@ -255,7 +255,7 @@
                   text="Bon à facturer"
                   (onClick)="bonAFacturer()"
                 ></dx-button>
-                <div style="clear:both;"></div>
+                <div style="clear: both"></div>
                 <div
                   class="dx-form-group-content no-padding-bottom order-header"
                 >
@@ -822,7 +822,11 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-check-box
-                                [disabled]="!allowMutations || !authService.currentUser.adminClient || ordreBAFOuFacture"
+                                [disabled]="
+                                  !allowMutations ||
+                                  !authService.currentUser.adminClient ||
+                                  ordreBAFOuFacture
+                                "
                                 formControlName="venteACommission"
                               >
                               </dx-check-box>
@@ -898,7 +902,11 @@
                   class="upperButton subButton"
                   [disabled]="false"
                   type="success"
-                  [hint]="(!fullOrderNumber || !allowMutations) ? histoLigneOrdreReadOnlyText : histoLigneOrdreText"
+                  [hint]="
+                    !fullOrderNumber || !allowMutations
+                      ? histoLigneOrdreReadOnlyText
+                      : histoLigneOrdreText
+                  "
                   (onClick)="onArticleHistoClick()"
                   text="{{ 'btn-historique' | localize }}"
                 ></dx-button>
@@ -925,6 +933,7 @@
                     ></app-actions-documents-ordres>
                   </div>
                   <app-grid-commandes
+                    *ngIf="ordre?.id"
                     [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-commandes>
