@@ -1,1 +1,13 @@
+::ng-deep .grid-bassins {
+  max-height: 500px;
 
+  .dx-toolbar .dx-button-text {
+    width: 0 !important;
+  }
+
+  .dx-command-edit {
+    padding: 0 2px !important;
+    width: 60px !important;
+    min-width: 60px !important;
+  }
+}

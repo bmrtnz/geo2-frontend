@@ -14,6 +14,8 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { Observable } from "rxjs";
 import { concatMap, filter, map, takeWhile, tap } from "rxjs/operators";
 
+const BASSINS = ["UDC", "VDL", "SE", "SW", "IMP"];
+
 @Component({
   selector: "app-set-bassin",
   templateUrl: "./set-bassin.component.html",
@@ -37,7 +39,6 @@ export class SetBassinComponent implements OnInit {
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(Grid.Bassin);
-
     this.route.paramMap.pipe(
       concatMap(params => this.fetchDatasource(params.get("id"))),
     ).subscribe(datasource => this.etbDatasource = datasource);
@@ -76,12 +77,14 @@ export class SetBassinComponent implements OnInit {
   private updateBacSource(component: dxDataGrid) {
     const usedBacs: Partial<BureauAchat>[] = component.getDataSource()?.items().map(({ bureauAchat }) => bureauAchat);
     const bacFilter = usedBacs?.map(({ id }) => `id!="${id}"`).join(" and ");
+    const bassListFilter = BASSINS.map((bassin) => `id=="${bassin}"`).join(" or ");
     const source = this.bureauxAchatService
-      .getLookupStore<BureauAchat>(["id", "raisonSocial"], `valide==true and ${bacFilter}`);
+      .getLookupStore<BureauAchat>(["id", "raisonSocial"], `valide==true and ${bacFilter} and (${bassListFilter})`);
     GridConfiguratorService.bindLookupColumnSource(component, "bureauAchat.id", source);
   }
 
   private fetchDatasource(entrepotID: Entrepot["id"]) {
+    console.log(entrepotID);
     return this.columns.pipe(
       map(columns => columns.map(({ dataField, calculateDisplayValue }) => [dataField, calculateDisplayValue]).flat(2)),
       map(fields => this.etbService.getDataSource_v2([
