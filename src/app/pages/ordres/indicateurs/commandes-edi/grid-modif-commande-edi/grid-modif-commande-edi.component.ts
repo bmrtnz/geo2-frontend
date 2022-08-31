@@ -198,7 +198,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   }
 
   onCompleteOrderEdiClick() {
-    const ediOrdre = { id: "23844", statusGEO: statusGEO.Traité };
+    const ediOrdre = { id: this.ordreEdiId, statusGEO: statusGEO.Traité };
 
     //////////////////////////////////////////////////
     // A implémenter : Of_sauve_ordre
