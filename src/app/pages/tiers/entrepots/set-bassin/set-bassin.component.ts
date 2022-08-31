@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { BaseTarif, BureauAchat, Devise, Entrepot, Transporteur } from "app/shared/models";
-import { TransporteursService } from "app/shared/services";
+import { AuthService, TransporteursService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
@@ -29,6 +29,7 @@ export class SetBassinComponent implements OnInit {
   public contentReadyEvent = new EventEmitter<any>();
   public allowAdding: boolean;
   @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+  @Input() readOnly: boolean;
 
   constructor(
     private etbService: EntrepotsTransporteursBassinsService,
@@ -36,6 +37,7 @@ export class SetBassinComponent implements OnInit {
     private transporteursService: TransporteursService,
     private basesTarifService: BasesTarifService,
     private devisesService: DevisesService,
+    public authService: AuthService,
     private gridConfiguratorService: GridConfiguratorService,
     private route: ActivatedRoute,
   ) { }

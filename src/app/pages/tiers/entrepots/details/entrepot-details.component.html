@@ -383,14 +383,90 @@
                 </div>
               </div>
             </div>
-            <div class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+
+            <!-- Instructions internes -->
+            <div
+              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings enlarged"
+            >
+              <span class="dx-form-group-caption">{{
+                "tiers-entrepots-instructionSecretaireCommercial" | localize
+              }}</span>
+              <div class="dx-form-group-content">
+                <!-- Instructions secr comm -->
+                <div class="dx-field">
+                  <div class="dx-field-value">
+                    <dx-text-area
+                      formControlName="instructionSecretaireCommercial"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      <dx-validator
+                        name="{{
+                          'tiers-entrepots-instructionSecretaireCommercial'
+                            | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="140"
+                        ></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-area>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Instructions logistiques -->
+            <div
+              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings enlarged"
+            >
+              <span class="dx-form-group-caption">{{
+                "tiers-entrepots-instructionLogistique" | localize
+              }}</span>
+              <div class="dx-form-group-content">
+                <div class="dx-field">
+                  <div class="dx-field-value">
+                    <dx-text-area
+                      formControlName="instructionLogistique"
+                      [readOnly]="readOnlyMode"
+                      [inputAttr]="{
+                        style: 'text-transform: uppercase'
+                      }"
+                      (onValueChanged)="valueToUpperCase($event)"
+                      valueChangeEvent="keyup"
+                    >
+                      >
+                      <dx-validator
+                        name="{{
+                          'tiers-entrepots-instructionLogistique' | localize
+                        }}"
+                      >
+                        <dxi-validation-rule
+                          [trim]="false"
+                          type="stringLength"
+                          [max]="280"
+                        ></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-text-area>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transporteurs par bassins -->
+            <!-- <div *ngIf="!createMode" class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{
                 "tiers-entrepots-details-groupe-bassins" | localize
               }}</span>
               <div class="dx-form-group-content">
-                <app-set-bassin></app-set-bassin>
+                <app-set-bassin [readOnly]="readOnlyMode"></app-set-bassin>
               </div>
-            </div>
+            </div> -->
           </dxi-item>
           <dxi-item [ratio]="0.2"> </dxi-item>
           <dxi-item [ratio]="4">
@@ -999,80 +1075,14 @@
           </dxi-item>
         </dx-box>
         <dx-box direction="row">
-          <dxi-item [ratio]="4">
-            <div
-              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
-            >
+          <dxi-item [ratio]="1">
+            <!-- Transporteurs par bassins -->
+            <div *ngIf="!createMode" class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
               <span class="dx-form-group-caption">{{
-                "tiers-entrepots-instructionSecretaireCommercial" | localize
+                "tiers-entrepots-details-groupe-bassins" | localize
               }}</span>
               <div class="dx-form-group-content">
-                <!-- Instructions secr comm -->
-                <div class="dx-field">
-                  <div class="dx-field-value">
-                    <dx-text-area
-                      formControlName="instructionSecretaireCommercial"
-                      [readOnly]="readOnlyMode"
-                      [inputAttr]="{
-                        style: 'text-transform: uppercase'
-                      }"
-                      (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
-                    >
-                      <dx-validator
-                        name="{{
-                          'tiers-entrepots-instructionSecretaireCommercial'
-                            | localize
-                        }}"
-                      >
-                        <dxi-validation-rule
-                          [trim]="false"
-                          type="stringLength"
-                          [max]="140"
-                        ></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-area>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </dxi-item>
-          <dxi-item [ratio]="0.2"></dxi-item>
-          <dxi-item [ratio]="4">
-            <div
-              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
-            >
-              <span class="dx-form-group-caption">{{
-                "tiers-entrepots-instructionLogistique" | localize
-              }}</span>
-              <div class="dx-form-group-content">
-                <!-- Instructions logistique -->
-                <div class="dx-field">
-                  <div class="dx-field-value">
-                    <dx-text-area
-                      formControlName="instructionLogistique"
-                      [readOnly]="readOnlyMode"
-                      [inputAttr]="{
-                        style: 'text-transform: uppercase'
-                      }"
-                      (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
-                    >
-                      >
-                      <dx-validator
-                        name="{{
-                          'tiers-entrepots-instructionLogistique' | localize
-                        }}"
-                      >
-                        <dxi-validation-rule
-                          [trim]="false"
-                          type="stringLength"
-                          [max]="280"
-                        ></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-text-area>
-                  </div>
-                </div>
+                <app-set-bassin [readOnly]="readOnlyMode"></app-set-bassin>
               </div>
             </div>
           </dxi-item>

@@ -7,8 +7,12 @@
 
   .dx-command-edit {
     padding: 0 2px !important;
-    width: 60px !important;
-    min-width: 60px !important;
+    width: 30px !important;
+    min-width: 30px !important;
   }
 
+}
+
+::ng-deep .no-pointer-events .dx-data-row {
+  pointer-events: none !important;
 }

@@ -1,5 +1,6 @@
 <dx-data-grid
   class="grid-bassins"
+  [ngClass]="{ 'no-pointer-events': readOnly }"
   [dataSource]="etbDatasource"
   [remoteOperations]="true"
   [columnAutoWidth]="true"
@@ -38,10 +39,10 @@
     ></dxi-validation-rule>
   </dxi-column>
 
-  <dxo-editing
+  <dxo-editing *ngIf="!readOnly"
     [allowUpdating]="true"
-    [allowAdding]="allowAdding"
-    [allowDeleting]="true"
+    [allowAdding]="true"
+    [allowDeleting]="false"
   >
   </dxo-editing>
 </dx-data-grid>
