@@ -28,7 +28,7 @@ export class FournisseursService extends ApiService implements APIRead {
 
   getOne_v2(id: string, columns: Array<string> | Set<string>) {
     return this.apollo
-      .query<{ client: Fournisseur }>({
+      .query<{ fournisseur: Fournisseur }>({
         query: gql(this.buildGetOneGraph(columns)),
         variables: { id },
       })
