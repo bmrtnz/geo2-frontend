@@ -945,6 +945,7 @@
                     ></dx-button>
                   </div>
                   <app-grid-commandes
+                    *ngIf="ordre?.id"
                     [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
                   ></app-grid-commandes>
