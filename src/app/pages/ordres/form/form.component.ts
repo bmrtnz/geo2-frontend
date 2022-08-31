@@ -57,6 +57,7 @@ import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
 import { DatePipe } from "@angular/common";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
+import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -271,6 +272,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
   @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
   @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
+  @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
 
   constructor(
     private router: Router,
@@ -679,17 +681,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
   }
 
-  duplicate() {
-    if (this.formGroup.pristine && this.formGroup.valid) {
-      const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+  // duplicate() {
+  //   if (this.formGroup.pristine && this.formGroup.valid) {
+  //     const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
 
-      this.ordresService.clone({ ordre }).subscribe({
-        next: (e) => {
-          notify("Dupliqué", "success", 3000);
-        },
-        error: () => notify("Echec de la duplication", "error", 3000),
-      });
-    }
+  //     this.ordresService.clone({ ordre }).subscribe({
+  //       next: (e) => {
+  //         notify("Dupliqué", "success", 3000);
+  //       },
+  //       error: () => notify("Echec de la duplication", "error", 3000),
+  //     });
+  //   }
+  // }
+
+  onDuplicateOrderClick() {
+    this.duplicationPopup.visible = true;
   }
 
   addLinkedOrders() {
