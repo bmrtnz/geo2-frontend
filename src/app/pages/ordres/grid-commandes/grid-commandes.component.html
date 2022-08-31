@@ -19,7 +19,6 @@
   (onFocusedCellChanged)="onFocusedCellChanged($event)"
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
 >
-
   <dxo-export fileName="Lignes de commande"></dxo-export>
   <dxo-editing
     [selectTextOnEditStart]="true"
@@ -61,6 +60,11 @@
     [showDragIcons]="true"
     [dropFeedbackMode]="'push'"
   ></dxo-row-dragging>
+  <dxo-selection
+    mode="multiple"
+    [showCheckBoxesMode]="'onLongTap'"
+    [selectAllMode]="'page'"
+  ></dxo-selection>
 
   <!-- certifications -->
   <ng-container *ngIf="FEATURE.columnCertifications">

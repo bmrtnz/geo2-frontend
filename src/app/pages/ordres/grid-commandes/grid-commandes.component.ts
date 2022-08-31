@@ -284,14 +284,14 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     }
 
     if (change.type === "update")
-      return new Promise((rsv, rjt) => {
+      return new Promise(async (rsv, rjt) => {
 
         /* tslint:disable-next-line:prefer-const */
         let [name, value] = Object.entries(change.data)[0];
 
         // update "fournisseur" field when "proprietaire" value changed
         if (name === "proprietaireMarchandise") {
-          const fournisseur = this.updateFilterFournisseurDS(change.data.proprietaireMarchandise);
+          const fournisseur = await this.updateFilterFournisseurDS(change.data.proprietaireMarchandise.id);
           this.grid.instance.cellValue(
             this.grid.instance.getRowIndexByKey(change.key),
             "fournisseur",
@@ -300,7 +300,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           this.changes.push({
             key: change.key,
             type: "update",
-            data: { fournisseur: { id: fournisseur.id } } as Partial<OrdreLigne>,
+            data: { fournisseur: { id: fournisseur?.id } } as Partial<OrdreLigne>,
           });
         }
 
@@ -475,29 +475,35 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   // OLD codebase beyond this point (grid-lignes.component)
 
-  private updateFilterFournisseurDS(proprietaireMarchandise?: Partial<Fournisseur>) {
+  private async updateFilterFournisseurDS(proprietaireID?: Fournisseur["id"]) {
 
     let fournisseur: Partial<Fournisseur>;
     const filters = [];
 
+    const proprietaire = await this.fournisseursService
+      .getOne_v2(proprietaireID, ["id", "code", "listeExpediteurs"])
+      .pipe(
+        map(res => res.data.fournisseur),
+      ).toPromise();
+
     if (
       this.currentCompanyService.getCompany().id !== "BUK"
-      || proprietaireMarchandise?.code.substring(0, 2) !== "BW"
+      || proprietaire?.code.substring(0, 2) !== "BW"
     ) {
-      const listExp = proprietaireMarchandise?.listeExpediteurs;
+      const listExp = proprietaire?.listeExpediteurs;
       if (listExp) {
         listExp.split(",").map(exp => {
           filters.push(["code", "=", exp], "or");
           // Automatically selected when included in the list
-          if (exp === proprietaireMarchandise.code) {
-            fournisseur = proprietaireMarchandise;
+          if (exp === proprietaire.code) {
+            fournisseur = proprietaire;
           }
         });
         filters.pop();
       } else {
-        fournisseur = proprietaireMarchandise;
-        if (proprietaireMarchandise.id !== null)
-          filters.push(["id", "=", proprietaireMarchandise.id]);
+        fournisseur = proprietaire;
+        if (proprietaire.id !== null)
+          filters.push(["id", "=", proprietaire.id]);
       }
     }
     this.filterFournisseurDS(filters);
@@ -593,17 +599,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   onFocusedCellChanged(e) {
 
-    switch (e.column.dataField) {
-      case "fournisseur.id": {
-        const proprietaireMarchandise = this.grid.instance.getVisibleRows()[e.rowIndex].data.proprietaireMarchandise;
-        if (proprietaireMarchandise) {
-          this.updateFilterFournisseurDS(proprietaireMarchandise);
-        } else {
-          this.filterFournisseurDS();
-        }
-        break;
-      }
-    }
+    if (e.column.dataField !== "fournisseur.id") return;
+
+    const proprietaireMarchandise = e.row.data.proprietaireMarchandise;
+    if (proprietaireMarchandise) this.updateFilterFournisseurDS(proprietaireMarchandise.id);
 
   }
 
