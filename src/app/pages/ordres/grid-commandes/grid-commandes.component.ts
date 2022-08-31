@@ -292,7 +292,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
         // update "fournisseur" field when "proprietaire" value changed
         if (name === "proprietaireMarchandise") {
-          const fournisseur = await this.updateFilterFournisseurDS(change.data.proprietaireMarchandise);
+          const fournisseur = await this.updateFilterFournisseurDS(change.data.proprietaireMarchandise.id);
           this.grid.instance.cellValue(
             this.grid.instance.getRowIndexByKey(change.key),
             "fournisseur",
@@ -476,13 +476,13 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   // OLD codebase beyond this point (grid-lignes.component)
 
-  private async updateFilterFournisseurDS(proprietaireMarchandise?: Partial<Fournisseur>) {
+  private async updateFilterFournisseurDS(proprietaireID?: Fournisseur["id"]) {
 
     let fournisseur: Partial<Fournisseur>;
     const filters = [];
 
     const proprietaire = await this.fournisseursService
-      .getOne_v2(proprietaireMarchandise.id, ["id", "code", "listeExpediteurs"])
+      .getOne_v2(proprietaireID, ["id", "code", "listeExpediteurs"])
       .pipe(
         map(res => res.data.fournisseur),
       ).toPromise();
@@ -596,6 +596,15 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   openOriginePopup(ligne) {
     this.ordreLigne = ligne;
     this.articleOriginePopup.visible = true;
+  }
+
+  onFocusedCellChanged(e) {
+
+    if (e.column.dataField !== "fournisseur.id") return;
+
+    const proprietaireMarchandise = e.row.data.proprietaireMarchandise;
+    if (proprietaireMarchandise) this.updateFilterFournisseurDS(proprietaireMarchandise.id);
+
   }
 
   onCellPrepared(e) {

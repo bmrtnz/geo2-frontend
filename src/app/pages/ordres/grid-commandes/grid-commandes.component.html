@@ -16,6 +16,7 @@
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
   (onEditingStart)="onEditingStart($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
+  (onFocusedCellChanged)="onFocusedCellChanged($event)"
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
 >
   <dxo-export fileName="Lignes de commande"></dxo-export>
@@ -25,7 +26,7 @@
     [allowUpdating]="allowMutations"
     [allowDeleting]="allowMutations"
     [(changes)]="changes"
-    [refreshMode]="'repaint'"
+    [refreshMode]="'reshape'"
     [startEditAction]="'click'"
   ></dxo-editing>
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
