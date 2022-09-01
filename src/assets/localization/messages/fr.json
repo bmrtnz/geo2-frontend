@@ -176,6 +176,7 @@
     "ordre-edi-modification": "Modification Ordre EDI",
     "ordre-edi-choix-ordre": "Sélection des ordres à ouvrir",
     "ordre-edi-cloture": "Ordre EDI clôturé",
+    "ordre-cloture-ordre-edi": "Clôture ordre EDI",
     "text-popup-regularisation-subtitle": "Sélectionner un motif de l'ordre de régularisation",
     "text-popup-regularisation-solution": "La solution concerne",
     "text-popup-regularisation-conserver": "Conserver détail (qté, prix de vente, etc)",

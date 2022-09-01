@@ -25,6 +25,7 @@ export class OrdresEdiService extends ApiService {
   public allCommandeEdi(
     ediOrdreId: string,
     secteurId: string,
+    nomUtilisateur: string,
     clientId: string,
     assistantId: string,
     commercialId: string,
@@ -44,6 +45,7 @@ export class OrdresEdiService extends ApiService {
               params: [
                 { name: "ediOrdreId", value: "ediOrdreId", isVariable: true },
                 { name: "secteurId", value: "secteurId", isVariable: true },
+                { name: "nomUtilisateur", value: "nomUtilisateur", isVariable: true },
                 { name: "clientId", value: "clientId", isVariable: true },
                 { name: "assistantId", value: "assistantId", isVariable: true },
                 { name: "commercialId", value: "commercialId", isVariable: true },
@@ -56,6 +58,7 @@ export class OrdresEdiService extends ApiService {
           [
             { name: "ediOrdreId", type: "String", isOptionnal: false },
             { name: "secteurId", type: "String", isOptionnal: false },
+            { name: "nomUtilisateur", type: "String", isOptionnal: true },
             { name: "clientId", type: "String", isOptionnal: true },
             { name: "assistantId", type: "String", isOptionnal: true },
             { name: "commercialId", type: "String", isOptionnal: true },
@@ -64,7 +67,7 @@ export class OrdresEdiService extends ApiService {
             { name: "dateMax", type: "LocalDateTime", isOptionnal: true },
           ],
         )),
-        variables: { ediOrdreId, secteurId, clientId, assistantId, commercialId, status, dateMin, dateMax },
+        variables: { ediOrdreId, secteurId, nomUtilisateur, clientId, assistantId, commercialId, status, dateMin, dateMax },
         fetchPolicy: "no-cache",
       });
   }

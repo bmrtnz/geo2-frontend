@@ -10,7 +10,9 @@ import GridModifCommandeEdiComponent from "../grid-modif-commande-edi/grid-modif
 export class ModifCommandeEdiPopupComponent implements OnChanges {
 
   @Input() public commandeEdiId: string;
+  @Input() public commandeId: string;
   @Output() public ordreEdiId: string;
+  @Output() public ordreId: string;
   @Output() refreshGrid = new EventEmitter();
   @Output() gridTitle = "";
 
@@ -23,6 +25,7 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
 
   ngOnChanges() {
     this.ordreEdiId = this.commandeEdiId;
+    this.ordreId = this.commandeId;
   }
 
   onShowing(e) {

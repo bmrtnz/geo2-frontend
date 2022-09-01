@@ -5,6 +5,7 @@ import { AuthService, LocalizationService } from "app/shared/services";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { GridsService } from "../../../grids.service";
+import { alert } from "devextreme/ui/dialog";
 import {
   Grid, GridConfig, GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
@@ -15,6 +16,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../../root/root.component";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 
 const ALL = "%";
 const DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
@@ -35,6 +37,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   toRefresh: boolean;
 
   @Input() ordreEdiId: string;
+  @Input() ordreId: string;
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() clotureOrdreEdi = new EventEmitter();
 
@@ -43,6 +46,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private ordresEdiService: OrdresEdiService,
+    private ordresService: OrdresService,
     public tabContext: TabContext,
     private dateMgtService: DateManagementService,
     public gridsService: GridsService,
@@ -117,6 +121,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
     this.ordresEdiService.allCommandeEdi(
       this.ordreEdiId,
       this.authService.currentUser.secteurCommercial.id,
+      ALL,
       ALL,
       ALL,
       ALL,
@@ -198,13 +203,17 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
   }
 
   onCompleteOrderEdiClick() {
-    const ediOrdre = { id: this.ordreEdiId, statusGEO: statusGEO.Traité };
 
-    //////////////////////////////////////////////////
-    // A implémenter : Of_sauve_ordre
-    //////////////////////////////////////////////////
+    // Sauvegarde of_sauve_ordre
+    this.ordresService.ofSauveOrdre(this.ordreId)
+      .subscribe({
+        error: (error: Error) => {
+          alert(this.messageFormat(error.message), this.localization.localize("ordre-cloture-ordre-edi"));
+        }
+      });
 
     // Sauvegarde Statut ordre EDI
+    const ediOrdre = { id: this.ordreEdiId, statusGEO: statusGEO.Traité };
     this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
       next: () => {
         this.clotureOrdreEdi.emit();
@@ -215,6 +224,13 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
         console.log(err);
       }
     });
+  }
+
+  private messageFormat(mess) {
+    mess = mess
+      .replace("Exception while fetching data (/ofSauveOrdre) : ", "");
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
 }

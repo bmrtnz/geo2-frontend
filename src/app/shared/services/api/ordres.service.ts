@@ -341,4 +341,13 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     ]);
   }
 
+  /**
+   * of_sauve_ordre
+   */
+  public ofSauveOrdre(ordRef: string) {
+    return this.functionsService.queryFunction("ofSauveOrdre", [
+      { name: "ordRef", type: "String", value: ordRef }
+    ]);
+  }
+
 }
