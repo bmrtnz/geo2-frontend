@@ -5308,7 +5308,19 @@
       {
         "visibleIndex": 8,
         "dataField": "deviseTaux",
-        "allowEditing": false,
+        "dataType": "number",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 5
+        },
+        "editorOptions": {
+          "step": 0,
+          "format": {
+            "type": "fixedPoint",
+            "precision": 5
+          }
+        },
+        "allowEditing": true,
         "visible": true
       },
       {

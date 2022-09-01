@@ -107,20 +107,8 @@ export class GridFraisComponent implements ToggledGrid {
       "and",
       ["declarantDouanier", "=", true]
     ]);
-    this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-  }
-
-  async enableFilters() {
     if (this?.ordre?.id) {
-      const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return (this.addKeyToField(column.dataField));
-      })));
-      this.dataSource = this.ordresFraisService.getDataSource_v2(
-        await fields.toPromise(),
-      );
-      this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
-      this.datagrid.dataSource = this.dataSource;
-
+      this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
       const filtersEnt = [
         ["valide", "=", true],
         "and",
@@ -144,9 +132,20 @@ export class GridFraisComponent implements ToggledGrid {
           [["client.secteur.id", "<>", "GB"], "and", ["client.secteur.id", "=", "F"]]
         ]
       ];
-
       this.entrepotSource.filter(filtersEnt);
+    }
+  }
 
+  async enableFilters() {
+    if (this?.ordre?.id) {
+      const fields = this.columns.pipe(map(columns => columns.map(column => {
+        return (this.addKeyToField(column.dataField));
+      })));
+      this.dataSource = this.ordresFraisService.getDataSource_v2(
+        await fields.toPromise(),
+      );
+      this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
+      this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
   }
 
