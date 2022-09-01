@@ -14,7 +14,8 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, of, throwError } from "rxjs";
-import { concatMapTo, map, take } from "rxjs/operators";
+import { concatMapTo, map } from "rxjs/operators";
+import { FluxArService } from "../flux-ar.service";
 
 @Component({
   selector: "app-grid-annule-remplace",
@@ -32,6 +33,12 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     "dateSoumission", // date_lignes
     "dateEnvoi", // date_envois
     "commentairesAvancement", // raison anule et remplace
+    // extra fields for other grids display
+    "flux.id",
+    "nomContact",
+    "moyenCommunication.id",
+    "numeroAcces1",
+    "imprimante.id",
   ];
 
   firstReason: any;
@@ -51,6 +58,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
+    private ar: FluxArService,
   ) {
     this.raisonsList = [];
     this.raisonsAnnuleRemplaceService.getDataSource_v2(["description"]).load().then(res => {
@@ -95,30 +103,41 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   reload() {
-    this.functionsService.ofAREnvois(this.ordre.id).valueChanges
+    this.functionsService.ofAREnvois(this.ordre.id)
       .pipe(
         concatMapTo(this.envoisService.getList(
           `ordre.id==${this.ordre.id} and traite==R`,
           this.AR_ENVOIS_FIELDS,
         )),
-        take(1),
         map(res => res.data.allEnvoisList),
       )
       .subscribe({
-        next: data => this.dataGrid.dataSource = new DataSource(JSON.parse(JSON.stringify(data)))
-          .on("changed", () => {
-            this.handleRaisonAR();
-            this.dataGrid.instance.selectAll();
-          }),
+        next: data => {
+          const uniqueTiers = [...new Set(data.map(e => e.codeTiers))]
+            .map(tier => data.find(e => e.codeTiers === tier));
+
+          this.dataGrid.dataSource = new DataSource(JSON.parse(JSON.stringify(uniqueTiers)))
+            .on("changed", () => {
+              this.handleRaisonAR();
+              this.dataGrid.instance.selectAll();
+            });
+        },
         error: message => notify({ message }, "error", 7000),
         complete: () => this.dataGrid.instance.selectAll(),
       });
+  }
+
+  onRowUpdated(event) {
+    this.ar.setReason(event.data.codeTiers, event.data.commentairesAvancement);
   }
 
   public done() {
     const selection: Array<Partial<Envois>> = this.dataGrid.instance.getSelectedRowsData();
     if (!selection.every(envoi => envoi.commentairesAvancement))
       return throwError(Error("Le motif d'annulation est obligatoire pour les envois sélectionnés"));
+    this.dataGrid.instance.getVisibleRows()
+      .filter(row => !row.isSelected)
+      .forEach(c => this.ar.pushIgnoredTier(c.data.codeTiers));
     return of(selection);
   }
 

@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
-import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
@@ -84,9 +83,8 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
       });
   }
 
-  public async openWithMask(envois: Set<Partial<Envois>>) {
+  public async open() {
     await this.popup.instance.show();
-    this.gridChoixEnvoisComponent.setMask([...envois]);
   }
 
 }

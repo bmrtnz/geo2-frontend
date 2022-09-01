@@ -16,8 +16,9 @@ import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import {from, Observable, of, zip} from "rxjs";
-import { concatMap, concatMapTo, map, take } from "rxjs/operators";
+import { from, Observable, zip } from "rxjs";
+import { concatMapTo, finalize, map } from "rxjs/operators";
+import { FluxArService } from "../flux-ar.service";
 
 @Component({
   selector: "app-grid-choix-envois",
@@ -39,6 +40,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
+    private ar: FluxArService,
   ) { }
 
   @Input() public ordreID: string;
@@ -79,7 +81,6 @@ export class GridChoixEnvoisComponent implements OnInit {
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
-  private dataMask: Partial<Envois>[] = [];
 
   /**
    * It takes an array of Envois and an array of Partial<Envois> and returns an array of Envois with
@@ -87,18 +88,24 @@ export class GridChoixEnvoisComponent implements OnInit {
    * @param {Envois[]} data - Envois[]
    * @param {Partial<Envois>[]} mask - Partial<Envois>[]
    * @returns - The data is being filtered by the mask.
-   *   - The data is being filtered by the dateEnvoi.
    *   - The data is being mapped from the mask.
    */
   private static applyMask(data: Envois[], mask: Partial<Envois>[]) {
     const byMatchingTypeTiers = (tt: TypeTiers) => (e: Partial<Envois>) => e.typeTiers.id === tt.id;
+    // if (mask.length)
+    //   data = data.filter(({ typeTiers }) => mask.find(byMatchingTypeTiers(typeTiers)));
+
     return data
-      .filter(({ typeTiers }) => mask.find(byMatchingTypeTiers(typeTiers)))
-      .filter(({ dateEnvoi }) => !dateEnvoi)
-      .map(envoi => ({
-        ...envoi,
-        ...mask.find(byMatchingTypeTiers(envoi.typeTiers)) ?? {},
-      }));
+      // .filter(({ dateEnvoi }) => !dateEnvoi)
+      .map(envoi => {
+        // const matching = mask.find(byMatchingTypeTiers(envoi.typeTiers));
+        return {
+          ...envoi,
+          // commentairesAvancement: matching?.commentairesAvancement,
+          // imprimante: matching?.imprimante,
+          // dateEnvoi: matching?.dateEnvoi,
+        };
+      });
   }
 
   ngOnInit() {
@@ -170,33 +177,40 @@ export class GridChoixEnvoisComponent implements OnInit {
       true,
       annuleOrdre ? annuleOrdre : false,
       this.authService.currentUser.nomUtilisateur,
-    ).valueChanges
+    )
       .pipe(
         concatMapTo(this.envoisService.getList(
           `ordre.id==${this.ordreID} and traite==A`,
           this.CHOIX_ENVOIS_FIELDS,
         )),
-        take(1),
         map(res => JSON.parse(JSON.stringify(res.data.allEnvoisList)) as Envois[]), // unseal data
       )
       .subscribe({
         next: data => {
 
           // handle annule&remplace
-          if (this.dataMask.length)
-            data = GridChoixEnvoisComponent.applyMask(data, this.dataMask);
+          console.log(this.ar?.hasData, this.ar.get());
+          if (this.ar?.hasData) {
+            const { ignoredTiers, reasons } = this.ar.get();
+            console.log(ignoredTiers, reasons);
+            data = data
+              .filter(e => !ignoredTiers.includes(e.codeTiers))
+              .map(e => {
+                e.commentairesAvancement = reasons?.[e.codeTiers];
+                return e;
+              });
+          }
 
           this.gridData = new DataSource(data);
         },
         error: message => notify({ message }, "error", 7000),
-        // complete: () => this.dataGrid.instance.selectAll(),
       });
   }
 
   public done() {
     const allEnvois = this.dataGrid.instance.getSelectedRowsData()
       .map((envoi: Partial<Envois>) => new Envois({ ...envoi, traite: "N" }, { deepFetch: true }));
-    const action = this.dataMask.length ? "duplicateMergeAllEnvois" : "saveAll";
+    const action = this.ar.hasData ? "duplicateMergeAllEnvois" : "saveAll";
 
     const allNonEnvois = this.dataGrid.instance.getDataSource().items()
       .filter(e => !allEnvois.some(envoi => envoi.id === e.id))
@@ -205,11 +219,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     return zip(
       this.envoisService[action](allEnvois, new Set(["id", "traite"])),
       this.envoisService.deleteTempEnvois(allNonEnvois)
-    );
-  }
-
-  public setMask(data: Partial<Envois>[]) {
-    this.dataMask = data;
+    ).pipe(finalize(() => this.ar.clear()));
   }
 
 }
