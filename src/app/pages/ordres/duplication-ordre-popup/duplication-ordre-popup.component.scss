@@ -29,8 +29,18 @@
 
       .dx-field-value {
         width: 33% !important;
+
+        &.small-width {
+          width: 25% !important;
+        }
+
+        &.large-width {
+          width: 60% !important;
+        }
       }
+
     }
+
   }
 
   .items-title {

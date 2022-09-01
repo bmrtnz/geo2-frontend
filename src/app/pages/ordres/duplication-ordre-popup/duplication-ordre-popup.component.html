@@ -1,17 +1,45 @@
 <dx-popup
   [showTitle]="true"
   [dragEnabled]="true"
-  [width]="600"
+  [width]="700"
   height="auto"
   [(visible)]="visible"
   title="{{ 'ordre-duplication-creation' | localize }}"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
-  (onHiding)="onHiding()"
 >
 
    <form [formGroup]="formGroup">
     <div class="entrepot-dates-container">
+      <!-- Entrepôt -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "ordres-entrepotLivre" | localize }}
+        </div>
+        <div class="dx-field-value large-width">
+          <dx-select-box
+            [readOnly]="!activateEntrepot"
+            formControlName="entrepot"
+            [dataSource]="entrepotDS"
+            [displayExpr]="displayCodeBefore"
+            [searchEnabled]="false"
+          >
+            <dx-validator name="{{ 'ordres-entrepotLivre' | localize }}">
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+            <dxo-drop-down-options [width]="450"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+        <dx-button
+          type="default"
+          icon="material-icons search"
+          [focusStateEnabled]="false"
+          text="modifier"
+          (onClick)="changeEntrepot()"
+        >
+        </dx-button>
+      </div>
+
       <!-- Date départ -->
       <div class="dx-field">
         <div class="dx-field-label">{{ "ordre-duplication-dateDepartPrevue" | localize }}</div>
@@ -31,7 +59,7 @@
       <!-- Date livraison -->
       <div class="dx-field">
         <div class="dx-field-label">{{ "ordre-duplication-dateLivraisonPrevue" | localize }}</div>
-        <div class="dx-field-value">
+        <div class="dx-field-value small-width">
           <dx-date-box
             formControlName="dateLivraisonPrevue"
             [displayFormat]="'dd-MM-yy'"
