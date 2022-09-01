@@ -24,6 +24,14 @@
   .entrepot-dates-container {
     margin: 0 15px 20px 15px;
 
+    .modify-button {
+      margin-left: 20px;
+
+      .dx-button-content {
+        padding-left: 12px;
+      }
+    }
+
     .dx-field {
       margin-bottom: 0;
 
@@ -35,7 +43,7 @@
         }
 
         &.large-width {
-          width: 60% !important;
+          width: 45% !important;
         }
       }
 

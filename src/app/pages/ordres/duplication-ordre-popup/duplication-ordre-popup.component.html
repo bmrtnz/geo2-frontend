@@ -1,7 +1,7 @@
 <dx-popup
   [showTitle]="true"
   [dragEnabled]="true"
-  [width]="700"
+  [width]="750"
   height="auto"
   [(visible)]="visible"
   title="{{ 'ordre-duplication-creation' | localize }}"
@@ -31,8 +31,10 @@
           </dx-select-box>
         </div>
         <dx-button
+          class="modify-button"
           type="default"
           icon="material-icons search"
+          [visible]="!!showModify"
           [focusStateEnabled]="false"
           text="modifier"
           (onClick)="changeEntrepot()"

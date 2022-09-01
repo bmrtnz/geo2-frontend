@@ -1,17 +1,18 @@
-import { Component, Input, OnChanges, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import Ordre from "app/shared/models/ordre.model";
-import { EntrepotsService } from "app/shared/services";
+import { EntrepotsService, LocalizationService } from "app/shared/services";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { DxPopupComponent } from "devextreme-angular";
+import { DxPopupComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-duplication-ordre-popup",
   templateUrl: "./duplication-ordre-popup.component.html",
   styleUrls: ["./duplication-ordre-popup.component.scss"]
 })
-export class DuplicationOrdrePopupComponent implements OnChanges {
+export class DuplicationOrdrePopupComponent {
 
   @Input() ordre: Ordre;
 
@@ -19,6 +20,7 @@ export class DuplicationOrdrePopupComponent implements OnChanges {
   public itemsToKeep: any[];
   public activateEntrepot: boolean;
   public entrepotDS: DataSource;
+  public showModify: boolean;
   public formGroup = new FormGroup({
     dateDepartPrevue: new FormControl(),
     dateLivraisonPrevue: new FormControl(),
@@ -26,10 +28,12 @@ export class DuplicationOrdrePopupComponent implements OnChanges {
   });
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+  @ViewChild(DxSelectBoxComponent, { static: false }) entrepotSB: DxSelectBoxComponent;
 
   constructor(
     public dateManagementService: DateManagementService,
     private entrepotsService: EntrepotsService,
+    private localization: LocalizationService,
   ) {
     this.itemsToKeep = [
       { name: "codeChargement", checked: true },
@@ -46,21 +50,20 @@ export class DuplicationOrdrePopupComponent implements OnChanges {
     this.itemsToKeep.map(item => this.formGroup.addControl(item.name, new FormControl()));
   }
 
-  ngOnChanges() {
-
-    this.entrepotDS = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+  onShowing(e) {
+    e.component.content().parentNode.classList.add("duplication-ordre-popup");
+    this.setDefaultValues();
+    this.showModify = false;
     if (this.ordre) {
+      this.entrepotDS = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
       this.entrepotDS.filter([
         ["valide", "=", true],
         "and",
         ["client.id", "=", this.ordre.client?.id]
       ]);
+      // Only show modify button when several entrepôts
+      this.entrepotDS.load().then(res => this.showModify = res.length > 1);
     }
-  }
-
-  onShowing(e) {
-    e.component.content().parentNode.classList.add("duplication-ordre-popup");
-    this.setDefaultValues();
   }
 
   hidePopup() {
@@ -73,7 +76,11 @@ export class DuplicationOrdrePopupComponent implements OnChanges {
     });
     this.formGroup.get("dateDepartPrevue").patchValue(this.ordre.dateDepartPrevue);
     this.formGroup.get("dateLivraisonPrevue").patchValue(this.ordre.dateLivraisonPrevue);
-    this.formGroup.get("entrepot").patchValue({ id: this.ordre.entrepot.id });
+    this.formGroup.get("entrepot").patchValue({
+      id: this.ordre.entrepot.id,
+      code: this.ordre.entrepot.code,
+      raisonSocial: this.ordre.entrepot.raisonSocial
+    });
     this.activateEntrepot = false;
   }
 
@@ -86,6 +93,16 @@ export class DuplicationOrdrePopupComponent implements OnChanges {
   }
 
   applyClick() {
+
+    const values = this.formGroup.value;
+    /////////////////////////////////////////
+    // Appel duplique_ordre_on_duplique.pbl
+    // avec infos de values
+    /////////////////////////////////////////
+
+    const numero = "702222 fake";
+    notify(this.localization.localize("ordre-cree").replace("&O", numero), "success", 7000);
+
     this.hidePopup();
   }
 
