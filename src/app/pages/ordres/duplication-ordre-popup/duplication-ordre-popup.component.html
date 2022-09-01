@@ -35,6 +35,7 @@
           type="default"
           icon="material-icons search"
           [visible]="!!showModify"
+          [disabled]="activateEntrepot"
           [focusStateEnabled]="false"
           text="modifier"
           (onClick)="changeEntrepot()"

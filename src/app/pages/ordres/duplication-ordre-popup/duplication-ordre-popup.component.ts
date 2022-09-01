@@ -90,6 +90,7 @@ export class DuplicationOrdrePopupComponent {
 
   changeEntrepot() {
     this.activateEntrepot = true;
+    this.entrepotSB.instance.open();
   }
 
   applyClick() {
