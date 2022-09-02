@@ -3,7 +3,6 @@ import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/co
 import { FormControl, FormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import { Role } from "app/shared/models/personne.model";
-import { statusGEO } from "app/shared/models/edi-ordre.model";
 import { alert, confirm } from "devextreme/ui/dialog";
 import {
   AuthService, ClientsService, LocalizationService
@@ -148,25 +147,17 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       map((columns) => columns.map((column) => column.dataField)),
     );
 
-    const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
-    this.formGroup.get("dateMin").setValue(d); // A VIRER !!
-    const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
-    this.formGroup.get("dateMax").setValue(f); // A VIRER !!
+    // const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
+    // this.formGroup.get("dateMin").setValue(d); // A VIRER !!
+    // const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
+    // this.formGroup.get("dateMax").setValue(f); // A VIRER !!
 
-    // Declôture ordre edi
-    // const ediOrdre = { id: 23844, statusGEO: statusGEO.NonTraité };
-    // this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
-    //   error: (err) => {
-    //     notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
-    //     console.log(err);
-    //   }
-    // });
   }
 
   ngAfterViewInit() {
     const dxGridElement = this.datagrid.instance.$element()[0];
     this.gridTitleInput = dxGridElement.querySelector(".dx-toolbar .grid-title input");
-    this.etatRB.value = this.displayedEtat[0]; // A VIRER !!
+    // this.etatRB.value = this.displayedEtat[0]; // A VIRER !!
   }
 
   displayIDBefore(data) {
