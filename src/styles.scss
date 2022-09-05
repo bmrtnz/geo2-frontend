@@ -295,6 +295,11 @@ body app-root.production {
   }
 }
 
+// Controls dialog message boxes width
+.dx-dialog .dx-popup-normal {
+  max-width: 1000px;
+}
+
 // Filter panel adjustments
 .dx-datagrid-filter-panel {
   padding: 0 18px;

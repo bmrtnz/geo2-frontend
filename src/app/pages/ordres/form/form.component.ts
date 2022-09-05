@@ -649,12 +649,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private messageFormat(mess) {
-    mess = mess
-      .replace("Exception while fetching data (/fSuppressionOrdre) : ", "")
-      .replace("Exception while fetching data (/fTestAnnuleOrdre) : ", "")
-      .replace("Exception while fetching data (/fAnnulationOrdre) : ", "")
-      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "")
-      .replace("Exception while fetching data (/fCreeOrdreRegularisation) : ", "");
+    const functionNames =
+      ["fSuppressionOrdre",
+        "fTestAnnuleOrdre",
+        "fAnnulationOrdre",
+        "fCreeOrdreComplementaire",
+        "fCreeOrdreComplementaire"
+      ];
+    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
