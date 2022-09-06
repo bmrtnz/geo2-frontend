@@ -76,6 +76,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
+  canSelectAll: boolean;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -135,8 +136,10 @@ export class GridChoixEnvoisComponent implements OnInit {
     this.contentReadyEvent.emit(event);
 
     // Workaround for select all rows after loading data (without timeout do always select all)
+    if (!this.canSelectAll) return;
     setTimeout(() => {
       event.component.selectAll();
+      this.canSelectAll = false;
     }, 500);
   }
 
@@ -187,12 +190,12 @@ export class GridChoixEnvoisComponent implements OnInit {
       )
       .subscribe({
         next: data => {
-
+          this.canSelectAll = true;
           // handle annule&remplace
-          console.log(this.ar?.hasData, this.ar.get());
+          // console.log(this.ar?.hasData, this.ar.get());
           if (this.ar?.hasData) {
             const { ignoredTiers, reasons } = this.ar.get();
-            console.log(ignoredTiers, reasons);
+            // console.log(ignoredTiers, reasons);
             data = data
               .filter(e => !ignoredTiers.includes(e.codeTiers))
               .map(e => {

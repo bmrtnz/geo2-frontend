@@ -59,7 +59,7 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
           this.popup.instance.hide();
           await this.docsPopup.open();
         },
-        error: message => notify({ message }, "error", 7000),
+        error: (error: Error) => notify(error.message.replace("Error :", ""), "error", 7000),
       });
   }
 
