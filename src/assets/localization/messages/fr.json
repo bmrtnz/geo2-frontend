@@ -951,7 +951,7 @@
     "choixEnvois-moyenCommunication": "Moyen comm.",
     "choixEnvois-numeroAcces1": "E-mail / N° fax",
     "choixEnvois-imprimante": "Copie sur imprimante",
-    "choixEnvois-contact": "Contact",
+    "choixEnvois-nomContact": "Contact",
     "choixEnvois-commentairesAvancement": "Commentaire / Modif annule et remplace (70 car.)",
     "choixEnvois-dateEnvoi": "Date d'envoi",
     "choixEnvois-dernierEnvoi": "Dernier envoi",

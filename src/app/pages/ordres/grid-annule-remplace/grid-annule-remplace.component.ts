@@ -129,11 +129,9 @@ export class GridAnnuleRemplaceComponent implements OnInit {
           this.dataGrid.dataSource = new DataSource(JSON.parse(JSON.stringify(uniqueTiers)))
             .on("changed", () => {
               this.handleRaisonAR();
-              // this.dataGrid.instance.selectAll();
             });
         },
-        error: message => notify({ message }, "error", 7000),
-        // complete: () => this.dataGrid.instance.selectAll(),
+        error: message => notify({ message }, "error", 7000)
       });
   }
 
