@@ -69,7 +69,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() commandeEdiId: string;
   @Output() lignesOrdreIds: string[];
-  @Output() ordresIds: string[];
+  @Output() ordresNumeros: string[];
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -147,25 +147,16 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       map((columns) => columns.map((column) => column.dataField)),
     );
 
-    const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
-    this.formGroup.get("dateMin").setValue(d); // A VIRER !!
-    const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
-    this.formGroup.get("dateMax").setValue(f); // A VIRER !!
+    // const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
+    // this.formGroup.get("dateMin").setValue(d); // A VIRER !!
+    // const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
+    // this.formGroup.get("dateMax").setValue(f); // A VIRER !!
 
-    // Declôture ordre edi
-    // const ediOrdre = { id: 23844, statusGEO: statusGEO.NonTraité };
-    // this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
-    //   error: (err) => {
-    //     notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
-    //     console.log(err);
-    //   }
-    // });
   }
 
   ngAfterViewInit() {
     const dxGridElement = this.datagrid.instance.$element()[0];
     this.gridTitleInput = dxGridElement.querySelector(".dx-toolbar .grid-title input");
-    this.etatRB.value = this.displayedEtat[0]; // A VIRER !!
   }
 
   displayIDBefore(data) {
@@ -355,22 +346,21 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res) => {
           const result = res.data.fCreeOrdresEdi.data;
-          const numeros = result?.tab_ordre_cree;
-          const refs = result?.ls_nordre_tot;
-          if (!numeros?.length || !refs) {
+          this.lignesOrdreIds = [];
+          this.ordresNumeros = result?.ls_nordre_tot?.split(",");
+          if (!this.ordresNumeros?.length) {
             notify(this.localization.localize("ordre-erreur-creation"), "error");
             console.log(result);
             return;
           }
-          // const refs = "1976517,1038117,"; // A VIRER !!!
-          // const numeros = ["700362", "242975"]; // A VIRER !!!
-          if (numeros.length === 1) {
-            notify(this.localization.localize("ordre-cree").replace("&O", numeros[0]), "success", 7000);
-            this.tabContext.openOrdre(numeros[0], this.currentCompanyService.getCompany().campagne.id, false);
+          // console.log(result);
+          this.ordresNumeros.pop();
+          if (this.ordresNumeros.length === 1) {
+            notify(this.localization.localize("ordre-cree").replace("&O", this.ordresNumeros[0]), "success", 7000);
+            setTimeout(() =>
+              this.tabContext.openOrdre(this.ordresNumeros[0], this.currentCompanyService.getCompany().campagne.id, false)
+            );
           } else {
-            this.lignesOrdreIds = [];
-            this.ordresIds = refs.split(",");
-            this.ordresIds.pop();
             this.visuCdeEdiPopup.visible = true;
           }
         },
@@ -402,7 +392,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
   OnClickViewEdiButton(data) {
     data = data.items ?? data.collapsedItems;
-    this.ordresIds = [];
+    this.ordresNumeros = [];
     this.lignesOrdreIds = [];
     data.map(ligne => this.lignesOrdreIds.push(ligne.refEdiLigne));
 
