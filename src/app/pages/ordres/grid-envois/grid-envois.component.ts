@@ -94,8 +94,6 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
   onRowDblClick(event) {
     const envoi: Envois = event.data;
 
-    // console.log(envoi)
-
     if (!envoi.document || (envoi.document && !envoi.document.isPresent)) {
       notify("Désolé, document non accessible", "error");
       return;
