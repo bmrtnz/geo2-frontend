@@ -36,7 +36,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   public actionsFlux: any[];
   public plusActionsFlux: any[];
   public plusActionsFluxEnabled: boolean;
-  public visibleActionsNumber = 6; // Visible buttons number, others in a popup
+  public visibleActionsNumber = 5; // Visible buttons number, others in a popup
   public currentCMR: ViewDocument;
   public CMRVisible = false;
 
@@ -60,7 +60,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       //  Fake flu_code FICPOA = FICPAL + OLD
       { id: "FICPAO", text: "Editer fiches palettes", visible: true, disabled: false },
       //  Fake flu_code FICPON = FICPAL + NEW
-      { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false },
+      { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: true },
       //  Génère un PDF, Manque le PBL, on revient vers nous plus tard
       { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true },
       //  Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_cmr})

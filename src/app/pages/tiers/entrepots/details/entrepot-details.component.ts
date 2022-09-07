@@ -235,6 +235,8 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     this.transitaires = this.transitairesService.getDataSource();
     this.transitaires.filter(["valide", "=", "true"]);
 
+    if (this.entrepotId) return;
+
     this.route.params
       .pipe(tap(_ => this.formGroup.reset()))
       .subscribe(params => {

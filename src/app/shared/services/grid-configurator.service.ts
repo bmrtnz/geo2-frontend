@@ -422,7 +422,7 @@ export class GridConfiguratorService {
       columnsChangeEmitter.emit(event);
     columnsChangeEmitter
       .pipe(
-        filter(({ name }) => name === "columns" && !!onColumnsChange),
+        filter(({ name, value }) => name === "columns" && !!onColumnsChange && !!value.length),
         tap(
           ({
             fullName,
