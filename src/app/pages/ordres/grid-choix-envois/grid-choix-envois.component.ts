@@ -192,10 +192,8 @@ export class GridChoixEnvoisComponent implements OnInit {
         next: data => {
           this.canSelectAll = true;
           // handle annule&remplace
-          // console.log(this.ar?.hasData, this.ar.get());
           if (this.ar?.hasData) {
             const { ignoredTiers, reasons } = this.ar.get();
-            // console.log(ignoredTiers, reasons);
             data = data
               .filter(e => !ignoredTiers.includes(e.codeTiers))
               .map(e => {
