@@ -25,6 +25,7 @@
     dateSerializationFormat="yyyy-MM-dd"
     (onRowUpdated)="onRowUpdated($event)"
     (onRowClick)="onRowClick($event)"
+    (onContentReady)="onContentReady($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Veuillez indiquer le motif des annule et remplace...',
