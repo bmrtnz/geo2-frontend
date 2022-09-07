@@ -37,6 +37,10 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
         "and",
         ["client.id", "=", this.commandeEdi.client?.id]
       ]);
+      // Autocomplete
+      this.entrepotDS.load().then(ent => {
+        if (ent?.length === 1) this.entrepotSB.value = { id: ent[0].id };
+      });
     }
   }
 
