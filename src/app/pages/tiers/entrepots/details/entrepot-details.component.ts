@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, ViewChild, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewChildren } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -125,6 +125,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   ]);
   refreshGrid = new EventEmitter();
   @Input() entrepotId: string;
+  @Output() idEntrepot: string;
 
   helpBtnOptions = { icon: "help", elementAttr: { id: "help-1" }, onClick: () => this.toggleVisible() };
   contentReadyEvent = new EventEmitter<any>();
@@ -193,6 +194,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
 
     // Zoom entrepot mode
     if (this.entrepotId) {
+      this.idEntrepot = this.entrepotId; // Used for bassins grid
       this.formGroup.reset();
       this.entrepotsService.getOne_v2(this.entrepotId, this.inheritedFields).subscribe((res) => {
         this.afterLoadInitForm(res);

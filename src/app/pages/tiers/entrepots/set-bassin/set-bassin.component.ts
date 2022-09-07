@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { BaseTarif, BureauAchat, Devise, Entrepot, Transporteur } from "app/shared/models";
 import { AuthService, TransporteursService } from "app/shared/services";
@@ -22,7 +22,7 @@ const BASSINS = ["UDC", "VDL", "SE", "SW", "IMP"];
   templateUrl: "./set-bassin.component.html",
   styleUrls: ["./set-bassin.component.scss"]
 })
-export class SetBassinComponent implements OnInit {
+export class SetBassinComponent implements OnInit, OnChanges {
 
   public etbDatasource: DataSource;
   public columns: Observable<GridColumn[]>;
@@ -30,6 +30,7 @@ export class SetBassinComponent implements OnInit {
   public allowAdding: boolean;
   @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
   @Input() readOnly: boolean;
+  @Input() entrepotId: string;
 
   constructor(
     private etbService: EntrepotsTransporteursBassinsService,
@@ -43,10 +44,24 @@ export class SetBassinComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    const urlId = this.route.snapshot.paramMap.get("id");
+    if (urlId) this.initializeGrid(urlId);
+
+  }
+
+  ngOnChanges() {
+
+    // Zoom entrepot mode
+    if (this.entrepotId) this.initializeGrid(this.entrepotId);
+
+  }
+
+  initializeGrid(id) {
+
     this.columns = this.gridConfiguratorService.fetchColumns(Grid.Bassin);
-    this.route.paramMap.pipe(
-      concatMap(params => this.fetchDatasource(params.get("id"))),
-    ).subscribe(datasource => this.etbDatasource = datasource);
+
+    this.fetchDatasource(id).subscribe(datasource => this.etbDatasource = datasource);
 
     // wait until grid columns a ready
     this.contentReadyEvent
@@ -120,9 +135,9 @@ export class SetBassinComponent implements OnInit {
   public onOpened(elem) {
     // Maximize dropdown list size
     let width = 0;
-    if (elem.element.parentElement.classList.contains("largeDropDown")) width = 500;
-    if (elem.element.parentElement.classList.contains("mediumDropDown")) width = 250;
     if (elem.element.parentElement.classList.contains("smallDropDown")) width = 125;
+    if (elem.element.parentElement.classList.contains("mediumDropDown")) width = 250;
+    if (elem.element.parentElement.classList.contains("largeDropDown")) width = 500;
     if (width) elem.component._popup.option("width", width);
   }
 
