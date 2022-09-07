@@ -23,7 +23,9 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="false"
     dateSerializationFormat="yyyy-MM-dd"
+    (onRowUpdated)="onRowUpdated($event)"
     (onRowClick)="onRowClick($event)"
+    (onContentReady)="onContentReady($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Veuillez indiquer le motif des annule et remplace...',
@@ -70,6 +72,7 @@
         column.name
       "
       [width]="column.width"
+      [format]="column.format"
       [dataType]="column?.dataType"
       [allowSearch]="
         column?.allowSearch || ['string'].includes(column?.dataType)

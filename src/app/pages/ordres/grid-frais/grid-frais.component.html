@@ -69,6 +69,7 @@
     [allowEditing]="column.allowEditing"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [format]="column.format"
+    [editorOptions]="column.editorOptions"
     [editCellTemplate]="column.editCellTemplate"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
@@ -111,5 +112,3 @@
     </dx-select-box>
   </div>
 </dx-data-grid>
-
-<!-- [dataSource]="this[cell.column.dataField + 'Source']" -->

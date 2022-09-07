@@ -10,6 +10,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import notify from "devextreme/ui/notify";
 import { LocalizationService } from "app/shared/services";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
 @Component({
   selector: "app-visualiser-ordres-popup",
@@ -19,7 +20,7 @@ import { LocalizationService } from "app/shared/services";
 export class VisualiserOrdresPopupComponent {
 
   @Input() public lignesOrdreIds: string[];
-  @Input() public ordresIds: string[];
+  @Input() public ordresNumeros: string[];
 
   public dataSource: DataSource;
   public visible: boolean;
@@ -34,6 +35,7 @@ export class VisualiserOrdresPopupComponent {
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
+    private currentCompanyService: CurrentCompanyService,
     private localization: LocalizationService,
     public tabContext: TabContext,
     public ordreLignesService: OrdreLignesService
@@ -59,12 +61,14 @@ export class VisualiserOrdresPopupComponent {
       });
       filter.pop();
       this.dataSource.filter(filter);
-    } else if (this.ordresIds?.length) {
-      this.ordresIds.map(id => {
-        filter.push(["ordre.id", "=", id], "or");
+    } else if (this.ordresNumeros?.length) {
+      this.ordresNumeros.map(id => {
+        filter.push(["ordre.numero", "=", id], "or");
       });
       filter.pop();
-      this.dataSource.filter(filter);
+      this.dataSource.filter([
+        ["ordre.campagne.id", "=", this.currentCompanyService.getCompany().campagne.id], "and", [filter]
+      ]);
     } else {
       this.dataSource = null;
     }
@@ -124,6 +128,7 @@ export class VisualiserOrdresPopupComponent {
     [...this.chosenOrders].map(ordre => {
       setTimeout(() => this.tabContext.openOrdre(ordre.split("-")[1], ordre.split("-")[0], false));
     });
+    this.visible = false;
   }
 
   cancelClick() {

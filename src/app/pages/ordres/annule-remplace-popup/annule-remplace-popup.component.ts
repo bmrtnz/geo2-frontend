@@ -56,12 +56,10 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
     this.gridAnnuleRemplaceComponent.done()
       .subscribe({
         next: async arData => {
-          const mask = arData
-            .map(({ typeTiers, commentairesAvancement }) => ({ typeTiers, commentairesAvancement }));
           this.popup.instance.hide();
-          await this.docsPopup.openWithMask(new Set(mask));
+          await this.docsPopup.open();
         },
-        error: message => notify({ message }, "error", 7000),
+        error: (error: Error) => notify(error.message.replace("Error :", ""), "error", 7000),
       });
   }
 

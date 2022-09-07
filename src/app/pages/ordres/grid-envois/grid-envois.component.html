@@ -52,6 +52,7 @@
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [format]="column.format"
     [caption]="
       ('ordreEnvois-' + column.dataField?.split('.').join('-') | localize) ||
       column.name

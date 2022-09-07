@@ -3767,13 +3767,15 @@
         "visibleIndex": 10,
         "dataField": "dateDemande",
         "sortOrder": "asc",
-        "dataType": "string",
+        "dataType": "datetime",
+        "format": "dd-MM HH:mm",
         "visible": true
       },
       {
         "visibleIndex": 11,
         "dataField": "dateAccuseReception",
-        "dataType": "string",
+        "dataType": "date",
+        "format": "dd-MM",
         "visible": true
       },
       {
@@ -3867,7 +3869,8 @@
       {
         "visibleIndex": 18,
         "dataField": "dateEnvoi",
-        "dataType": "string",
+        "dataType": "date",
+        "format": "dd-MM",
         "allowEditing": false,
         "width": "100",
         "visible": true
@@ -3875,7 +3878,8 @@
       {
         "visibleIndex": 19,
         "dataField": "dateSoumission",
-        "dataType": "string",
+        "dataType": "date",
+        "format": "dd-MM",
         "allowEditing": false,
         "width": "100",
         "visible": true
@@ -3883,7 +3887,8 @@
       {
         "visibleIndex": 20,
         "dataField": "dateDemande",
-        "dataType": "string",
+        "dataType": "datetime",
+        "format": "dd-MM HH:mm",
         "allowEditing": false,
         "width": "100",
         "visible": true
@@ -3901,6 +3906,8 @@
       {
         "visibleIndex": 0,
         "dataField": "dateDemande",
+        "dataType": "datetime",
+        "format": "dd-MM HH:mm",
         "allowEditing": false,
         "width": "170",
         "visible": true
@@ -3908,6 +3915,8 @@
       {
         "visibleIndex": 2,
         "dataField": "dateSoumission",
+        "dataType": "date",
+        "format": "dd-MM",
         "allowEditing": false,
         "width": "170",
         "visible": true
@@ -3915,6 +3924,8 @@
       {
         "visibleIndex": 4,
         "dataField": "dateEnvoi",
+        "dataType": "date",
+        "format": "dd-MM",
         "allowEditing": false,
         "width": "170",
         "visible": true
@@ -5308,7 +5319,19 @@
       {
         "visibleIndex": 8,
         "dataField": "deviseTaux",
-        "allowEditing": false,
+        "dataType": "number",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 5
+        },
+        "editorOptions": {
+          "step": 0,
+          "format": {
+            "type": "fixedPoint",
+            "precision": 5
+          }
+        },
+        "allowEditing": true,
         "visible": true
       },
       {

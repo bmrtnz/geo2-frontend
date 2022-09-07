@@ -243,7 +243,7 @@ export class FunctionsService {
       annOrdre: boolean,
       user: string,
     ) => this.apollo
-      .watchQuery<{ geoPrepareEnvois: FunctionResponse<{ contacts: any[] }> }>({
+      .query<{ geoPrepareEnvois: FunctionResponse<{ contacts: any[] }> }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -283,7 +283,7 @@ export class FunctionsService {
    */
   public ofAREnvois =
     (ordRef: string) => this.apollo
-      .watchQuery<{ ofAREnvois: FunctionResponse }>({
+      .query<{ ofAREnvois: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [

@@ -337,7 +337,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
             // reject on error
             error: err => {
-              notify(err.message, "error", 5000);
+              notify(err.message.replace("Exception while fetching data (/updateField) : ", ""), "error", 7000);
               rjt(err);
             },
 
