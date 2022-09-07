@@ -1,11 +1,15 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import { alert } from "devextreme/ui/dialog";
 import Ordre from "app/shared/models/ordre.model";
-import { EntrepotsService, LocalizationService } from "app/shared/services";
+import { AuthService, EntrepotsService, LocalizationService } from "app/shared/services";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { DxPopupComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { TabContext } from "../root/root.component";
 
 @Component({
   selector: "app-duplication-ordre-popup",
@@ -14,24 +18,12 @@ import notify from "devextreme/ui/notify";
 })
 export class DuplicationOrdrePopupComponent {
 
-  @Input() ordre: Ordre;
-
-  public visible: boolean;
-  public itemsToKeep: any[];
-  public activateEntrepot: boolean;
-  public entrepotDS: DataSource;
-  public showModify: boolean;
-  public formGroup = new FormGroup({
-    dateDepartPrevue: new FormControl(),
-    dateLivraisonPrevue: new FormControl(),
-    entrepot: new FormControl(),
-  });
-
-  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxSelectBoxComponent, { static: false }) entrepotSB: DxSelectBoxComponent;
-
   constructor(
     public dateManagementService: DateManagementService,
+    public ordresService: OrdresService,
+    public currentCompanyService: CurrentCompanyService,
+    public authService: AuthService,
+    private tabContext: TabContext,
     private entrepotsService: EntrepotsService,
     private localization: LocalizationService,
   ) {
@@ -49,6 +41,22 @@ export class DuplicationOrdrePopupComponent {
     ];
     this.itemsToKeep.map(item => this.formGroup.addControl(item.name, new FormControl()));
   }
+
+  @Input() ordre: Ordre;
+
+  public visible: boolean;
+  public itemsToKeep: any[];
+  public activateEntrepot: boolean;
+  public entrepotDS: DataSource;
+  public showModify: boolean;
+  public formGroup = new FormGroup({
+    dateDepartPrevue: new FormControl(),
+    dateLivraisonPrevue: new FormControl(),
+    entrepot: new FormControl(),
+  });
+
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+  @ViewChild(DxSelectBoxComponent, { static: false }) entrepotSB: DxSelectBoxComponent;
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("duplication-ordre-popup");
@@ -96,15 +104,38 @@ export class DuplicationOrdrePopupComponent {
   applyClick() {
 
     const values = this.formGroup.value;
-    /////////////////////////////////////////
-    // Appel duplique_ordre_on_duplique.pbl
-    // avec infos de values
-    /////////////////////////////////////////
 
-    const numero = "702222 fake";
-    notify(this.localization.localize("ordre-cree").replace("&O", numero), "success", 7000);
+    this.ordresService.wDupliqueOrdreOnDuplique(
+      values.codeChargement,
+      values.propExp,
+      values.prixUniteAchat,
+      values.prixUniteVente,
+      values.DLUO,
+      values.ETD,
+      values.ETA,
+      values.portDepart,
+      values.portArrivee,
+      values.incoterm,
+      this.ordre.id,
+      this.currentCompanyService.getCompany().id,
+      this.authService.currentUser.nomUtilisateur
+    ).subscribe({
+      next: (res) => {
+        console.log(res);
+        // notify(this.localization.localize("ordre-cree").replace("&O", res.numero), "success", 7000);
+        // setTimeout(() =>
+        //   this.tabContext.openOrdre(res.numero, this.currentCompanyService.getCompany().campagne.id, false)
+        // );
+        // this.initializeForm("no-cache");
+        this.hidePopup();
+      },
+      error: (error: Error) => {
+        console.log(error);
+        alert(error.message.replace("Exception while fetching data (/wDupliqueOrdreOnDuplique) : ", ""),
+          this.localization.localize("ordre-duplication-creation"));
+      }
+    });
 
-    this.hidePopup();
   }
 
 }

@@ -683,19 +683,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
   }
 
-  // duplicate() {
-  //   if (this.formGroup.pristine && this.formGroup.valid) {
-  //     const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
-
-  //     this.ordresService.clone({ ordre }).subscribe({
-  //       next: (e) => {
-  //         notify("Dupliqué", "success", 3000);
-  //       },
-  //       error: () => notify("Echec de la duplication", "error", 3000),
-  //     });
-  //   }
-  // }
-
   onDuplicateOrderClick() {
     this.duplicationPopup.visible = true;
   }
