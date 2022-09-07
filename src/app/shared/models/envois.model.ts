@@ -4,6 +4,7 @@ import Imprimante from "./imprimante.model";
 import { Field, Model, ModelName } from "./model";
 import { MoyenCommunication } from "./moyen-communication.model";
 import { Ordre } from "./ordre.model";
+import Pays from "./pays.model";
 import { Personne } from "./personne.model";
 import { TypeTiers } from "./type-tiers.model";
 
@@ -34,6 +35,7 @@ export class Envois extends Model {
   @Field() public versionOrdre: string;
   @Field() public traite: string;
   @Field({ model: import("./document.model") }) public document: Document;
+  @Field({ model: import("./pays.model") }) public langue: Pays;
 }
 
 export default Envois;
