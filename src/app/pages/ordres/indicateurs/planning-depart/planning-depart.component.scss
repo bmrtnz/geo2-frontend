@@ -1,11 +1,30 @@
 .upperButton {
   float: right;
 }
+
+.planning-dep-filters {
+  width: 820px;
+
+  .difference-label {
+    width: 170px;
+    text-overflow: initial;
+    overflow: hidden;
+    white-space: inherit;
+  }
+
+  .difference-checkbox {
+    position: relative;
+    top: 9px;
+  }
+
+}
+
 ::ng-deep {
   .highlight-ok {
     background: green !important;
     color: white !important;
   }
+
   .highlight-err {
     background: red !important;
     color: white !important;

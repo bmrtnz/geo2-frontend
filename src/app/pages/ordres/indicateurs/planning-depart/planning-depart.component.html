@@ -5,8 +5,8 @@
   [disabled]="true"
 ></dx-button>
 <div>
-  <dx-box>
-    <dxi-item [ratio]="1">
+  <dx-box class="planning-dep-filters">
+    <dxi-item [ratio]="0.6">
       <div class="dx-field">
         <div class="dx-field-label">
           {{ "tiers-clients-secteur" | localize }}
@@ -17,55 +17,53 @@
             [dataSource]="secteurs"
             displayExpr="description"
             searchExpr="description"
-            (valueChange)="updateFilters()"
-          ></dx-select-box>
+            (onValueChanged)="updateFilters($event)"
+          >
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+          </dx-select-box>
         </div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="0.2"></dxi-item>
+    <dxi-item [ratio]="0.1"></dxi-item>
     <dxi-item
-      [ratio]="1.4"
+      [ratio]="0.45"
       style="justify-content: center"
     >
       <div class="dx-field">
-        <div
-          class="dx-field-label"
-          style="width: 3400px"
-        >
+        <div class="dx-field-label difference-label">
           {{ "ordre-planning-depart-diff-expe" | localize }}
         </div>
         <dx-check-box
           #diffCheckBox
-          [value]="false"
+          class="difference-checkbox"
+          [value]="true"
           [width]="40"
           (valueChange)="updateFilters()"
         ></dx-check-box>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="0.1"></dxi-item>
     <dxi-item
-      [ratio]="1"
+      [ratio]="0.6"
       style="justify-content: center"
     >
       <div class="dx-field">
         <div
           class="dx-field-label"
-          style="width: 50px"
+          style="width: 30px"
         >
           {{ "sur" | localize }}
         </div>
         <dx-number-box
           #daysOfService
-          [value]="1"
+          [value]="9"
+          [min]="0"
           [width]="50"
-          (valueChange)="changeDays()"
-          (onContentReady)="onDaysOfServiceInputReady()"
+          (valueChange)="updateFilters()"
           [inputAttr]="{ style: 'text-align: center' }"
         ></dx-number-box>
         <div class="dx-field-label">{{ "jours" | localize }}</div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="1"></dxi-item>
   </dx-box>
 
   <br />

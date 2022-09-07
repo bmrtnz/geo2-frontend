@@ -50,7 +50,6 @@ export class PlanningDepartComponent implements AfterViewInit {
   detailedFields: Observable<
     ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
   >;
-  rowSelected: boolean;
 
   @ViewChild("gridPLANNINGDEPART", { static: false })
   gridPLANNINGDEPARTComponent: DxDataGridComponent;
@@ -60,7 +59,6 @@ export class PlanningDepartComponent implements AfterViewInit {
   @ViewChild("daysOfService", { static: false }) daysNB: DxNumberBoxComponent;
 
   public dataSource: DataSource;
-  initialFilterLengh: number;
   public title: string;
   private dxGridElement: HTMLElement;
   readonly DAYSNB_DEFAULT = 1;
@@ -107,7 +105,23 @@ export class PlanningDepartComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dxGridElement =
       this.gridPLANNINGDEPARTComponent.instance.$element()[0];
+
+    // Show today title
+    this.title = this.localizePipe.transform(
+      "grid-situation-depart-title-today",
+    );
+
+    // Auto sector select from current user settings
+    if (this.authService.currentUser.secteurCommercial) {
+      this.secteurSB.value = {
+        id: this.authService.currentUser.secteurCommercial.id,
+        description: this.authService.currentUser.secteurCommercial.description
+      };
+    }
+
     this.dataSource = this.indicator.dataSource;
+    this.dataSource.load().then(res => console.log(res));
+    console.log(this.indicator);
     this.theTitle = this.dxGridElement.querySelector(
       ".dx-toolbar .dx-texteditor-input",
     ) as HTMLInputElement;
@@ -118,30 +132,17 @@ export class PlanningDepartComponent implements AfterViewInit {
     if (!this.authService.isAdmin)
       this.secteurSB.value =
         this.authService.currentUser.secteurCommercial;
+
+    this.updateFilters();
   }
 
-  enableFilters() {
-    const filters = this.indicator.cloneFilter();
-    this.initialFilterLengh = filters.length;
+  updateFilters(e?) {
 
-    filters.push("and", [
-      "logistiques.dateDepartPrevueFournisseur",
-      ">=",
-      this.getDaysNB(),
-    ]);
+    // Allow only user change
+    if (e) {
+      if (!e.event) return;
+    }
 
-    this.indicator?.dataSource?.filter(filters);
-
-    this.title = this.localizePipe.transform(
-      "grid-situation-depart-title-today",
-    );
-  }
-
-  changeDays() {
-    if (this.diffCB.value) this.updateFilters();
-  }
-
-  updateFilters() {
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value)
       filters.push("and", [
@@ -185,16 +186,8 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.theTitle.value = this.title;
   }
 
-  onRowClick(event) {
-    this.rowSelected = true;
-  }
-
   onRowDblClick({ data }: { data: Partial<Ordre> }) {
     this.tabContext.openOrdre(data.numero, data.campagne.id);
-  }
-
-  onDaysOfServiceInputReady() {
-    this.enableFilters();
   }
 
   onCellPrepared(event) {
