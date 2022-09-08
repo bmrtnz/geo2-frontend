@@ -45,6 +45,7 @@ export class DuplicationOrdrePopupComponent {
   @Input() ordre: Ordre;
 
   public visible: boolean;
+  public processRunning: boolean;
   public itemsToKeep: any[];
   public activateEntrepot: boolean;
   public entrepotDS: DataSource;
@@ -75,6 +76,7 @@ export class DuplicationOrdrePopupComponent {
   }
 
   hidePopup() {
+    this.processRunning = false;
     this.popup.visible = false;
   }
 
@@ -103,6 +105,7 @@ export class DuplicationOrdrePopupComponent {
 
   applyClick() {
 
+    this.processRunning = true;
     const values = this.formGroup.value;
 
     this.ordresService.wDupliqueOrdreOnDuplique(
@@ -130,6 +133,7 @@ export class DuplicationOrdrePopupComponent {
         this.hidePopup();
       },
       error: (error: Error) => {
+        this.processRunning = false;
         console.log(error);
         alert(error.message.replace("Exception while fetching data (/wDupliqueOrdreOnDuplique) : ", ""),
           this.localization.localize("ordre-duplication-creation"));

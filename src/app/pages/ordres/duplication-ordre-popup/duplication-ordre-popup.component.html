@@ -99,11 +99,13 @@
     <div class="popup-buttons-container">
       <dx-button
         type="default"
+        [disabled]="processRunning"
         text="{{ 'btn-annuler' | localize }}"
         (onClick)="hidePopup()"
       ></dx-button>
       <dx-button
         type="normal"
+        [disabled]="processRunning"
         text="{{ 'btn-duplication-ordre' | localize }}"
         (onClick)="applyClick()"
       ></dx-button>
