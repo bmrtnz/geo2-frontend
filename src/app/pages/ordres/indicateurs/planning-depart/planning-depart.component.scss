@@ -1,7 +1,3 @@
-.upperButton {
-  float: right;
-}
-
 .planning-dep-filters {
   width: 820px;
 
@@ -19,7 +15,16 @@
 
 }
 
-::ng-deep {
+::ng-deep .grid-planning-departs {
+
+  .dx-toolbar .dx-texteditor-container {
+    width: 750px;
+
+    .dx-placeholder {
+      color: rgba(0, 0, 0, .87);
+    }
+  }
+
   .highlight-ok {
     background: green !important;
     color: white !important;
@@ -29,4 +34,13 @@
     background: red !important;
     color: white !important;
   }
+}
+
+.refresh {
+  margin-right: 15px;
+  float: right;
+}
+
+.upperButton {
+  float: right;
 }
