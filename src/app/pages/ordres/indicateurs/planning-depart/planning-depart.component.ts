@@ -51,20 +51,22 @@ export class PlanningDepartComponent implements AfterViewInit {
     ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
   >;
 
-  @ViewChild("gridPLANNINGDEPART", { static: false })
-  gridPLANNINGDEPARTComponent: DxDataGridComponent;
-  @ViewChild("secteurValue", { static: false })
-  secteurSB: DxSelectBoxComponent;
+  @ViewChild("gridPLANNINGDEPART", { static: false }) gridPLANNINGDEPARTComponent: DxDataGridComponent;
+  @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("diffCheckBox", { static: false }) diffCB: DxCheckBoxComponent;
-  @ViewChild("daysOfService", { static: false }) daysNB: DxNumberBoxComponent;
+  @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild("dateMin", { static: false }) dateMin: DxSelectBoxComponent;
+  @ViewChild("dateMax", { static: false }) dateMax: DxSelectBoxComponent;
 
   public dataSource: DataSource;
   public title: string;
   private dxGridElement: HTMLElement;
-  readonly DAYSNB_DEFAULT = 1;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public theTitle: any;
+
+  public periodes: string[];
+  public toRefresh: boolean;
 
   constructor(
     public transporteursService: TransporteursService,
@@ -100,6 +102,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.columns = from(this.gridConfig).pipe(
       map((config) => config.columns),
     );
+    this.periodes = this.dateManagementService.periods();
   }
 
   ngAfterViewInit() {
@@ -111,6 +114,9 @@ export class PlanningDepartComponent implements AfterViewInit {
       "grid-situation-depart-title-today",
     );
 
+    this.dateMin.value = new Date();
+    this.dateMax.value = new Date();
+
     // Auto sector select from current user settings
     if (this.authService.currentUser.secteurCommercial) {
       this.secteurSB.value = {
@@ -120,18 +126,10 @@ export class PlanningDepartComponent implements AfterViewInit {
     }
 
     this.dataSource = this.indicator.dataSource;
-    this.dataSource.load().then(res => console.log(res));
-    console.log(this.indicator);
+    this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
     this.theTitle = this.dxGridElement.querySelector(
-      ".dx-toolbar .dx-texteditor-input",
+      ".dx-toolbar .dx-placeholder",
     ) as HTMLInputElement;
-    const inputContainer = this.dxGridElement.querySelector(
-      ".dx-toolbar .dx-texteditor-container",
-    ) as HTMLElement;
-    inputContainer.style.width = "750px";
-    if (!this.authService.isAdmin)
-      this.secteurSB.value =
-        this.authService.currentUser.secteurCommercial;
 
     this.updateFilters();
   }
@@ -143,6 +141,9 @@ export class PlanningDepartComponent implements AfterViewInit {
       if (!e.event) return;
     }
 
+    this.toRefresh = false;
+    this.gridPLANNINGDEPARTComponent.dataSource = null;
+
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value)
       filters.push("and", [
@@ -153,7 +154,12 @@ export class PlanningDepartComponent implements AfterViewInit {
     filters.push("and", [
       "logistiques.dateDepartPrevueFournisseur",
       ">=",
-      this.getDaysNB(),
+      this.dateMin.value,
+    ]);
+    filters.push("and", [
+      "dateLivraisonPrevue",
+      "<=",
+      this.dateMax.value,
     ]);
     if (this.diffCB.value)
       filters.push("and", [
@@ -161,29 +167,27 @@ export class PlanningDepartComponent implements AfterViewInit {
         "or",
         ["versionDetail", "<", "001"],
       ]);
-    this.ordresService.persistantVariables.onlyColisDiff =
-      this.diffCB.value;
+    this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
 
     this.dataSource.filter(filters);
     this.dataSource.reload();
+    this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
 
-    const fromDate = this.datePipe.transform(
-      new Date()
-        .setDate(
-          new Date().getDate() - this.daysNB.value ??
-          this.DAYSNB_DEFAULT,
-        )
-        .valueOf(),
-    );
-    /* tslint:disable-next-line max-line-length */
-    this.title = `${this.localizePipe.transform(
-      "grid-situation-depart-title",
-    )}
-     ${this.localizePipe.transform("du")}
-      ${this.dateManagementService.formatDate(fromDate, "dd-MM-yyyy")}
-      ${this.localizePipe.transform("au")}
-      ${this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy")}`;
-    this.theTitle.value = this.title;
+    const title = this.localizePipe.transform("grid-situation-depart-title");
+    const duValue = this.localizePipe.transform("du");
+    const fromValue = `<strong> ${this.dateManagementService.formatDate(this.dateMin.value, "dd-MM-yyyy")} </strong>`;
+    const auValue = this.localizePipe.transform("au");
+    const toValue = `<strong> ${this.dateManagementService.formatDate(this.dateMax.value, "dd-MM-yyyy")} </strong>`;
+
+    this.theTitle.innerHTML = `${title} ${duValue} ${fromValue} ${auValue} ${toValue}`;
+  }
+
+  onFieldValueChange(e?) {
+    if (e) {
+      this.updateFilters();
+    } else {
+      this.toRefresh = true;
+    }
   }
 
   onRowDblClick({ data }: { data: Partial<Ordre> }) {
@@ -208,13 +212,39 @@ export class PlanningDepartComponent implements AfterViewInit {
       );
   }
 
-  getDaysNB() {
-    const d = new Date();
-    d.setDate(
-      new Date().getDate() - this.daysNB.value ?? this.DAYSNB_DEFAULT,
-    );
-    return d.toISOString();
+  manualDate(e) {
+    // We check that this change is coming from the user, not following a period change
+    if (!e.event) return;
+
+    this.onFieldValueChange();
+
+    // Checking that date period is consistent otherwise, we set the other date to the new date
+    const deb = new Date(this.dateMin.value);
+    const fin = new Date(this.dateMax.value);
+    const deltaDate = fin < deb;
+
+    if (deltaDate) {
+      if (e.element.classList.contains("dateStart")) {
+        this.dateMax.value = deb;
+      } else {
+        this.dateMin.value = fin;
+      }
+    }
+    this.periodeSB.value = null;
   }
+
+  setDates(e) {
+    // We check that this change is coming from the user, not following a prog change
+    if (!e.event) return;
+
+    this.onFieldValueChange();
+
+    const datePeriod = this.dateManagementService.getDates(e);
+
+    this.dateMin.value = datePeriod.dateDebut;
+    this.dateMax.value = datePeriod.dateFin;
+  }
+
 }
 
 export default PlanningDepartComponent;
