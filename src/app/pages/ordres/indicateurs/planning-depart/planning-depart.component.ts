@@ -33,6 +33,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-planning-depart",
@@ -112,7 +113,8 @@ export class PlanningDepartComponent implements AfterViewInit {
       "grid-situation-depart-title-today",
     );
 
-    this.dateMin.value = new Date(2022, 7, 25);
+    // this.dateMin.value = new Date(2022, 7, 25);
+    this.dateMin.value = new Date();
     this.dateMax.value = new Date();
 
     // Auto sector select from current user settings
@@ -196,7 +198,8 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   onRowDblClick({ data }: { data: Partial<Ordre> }) {
-    this.tabContext.openOrdre(data.numero, data.campagne.id);
+    notify(this.localizePipe.transform("ouverture-ordre").replace("&NO", data.numero), "info", 1500);
+    setTimeout(() => this.tabContext.openOrdre(data.numero, data.campagne.id, false));
   }
 
   onCellPrepared(event) {
