@@ -124,12 +124,14 @@ export class DuplicationOrdrePopupComponent {
       this.authService.currentUser.nomUtilisateur
     ).subscribe({
       next: (res) => {
-        console.log(res);
-        // notify(this.localization.localize("ordre-cree").replace("&O", res.numero), "success", 7000);
-        // setTimeout(() =>
-        //   this.tabContext.openOrdre(res.numero, this.currentCompanyService.getCompany().campagne.id, false)
-        // );
-        // this.initializeForm("no-cache");
+        const numero = res.data?.wDupliqueOrdreOnDuplique?.data?.nordre;
+        if (numero) {
+          notify(this.localization.localize("ordre-cree").replace("&O", numero), "success", 7000);
+          setTimeout(() => this.tabContext.openOrdre(numero, this.currentCompanyService.getCompany().campagne.id, false));
+        } else {
+          notify(this.localization.localize("ordre-duplication-creation"), "error");
+          console.log(res);
+        }
         this.hidePopup();
       },
       error: (error: Error) => {
