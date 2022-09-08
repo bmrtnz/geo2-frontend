@@ -3984,12 +3984,12 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "codeClient",
+        "dataField": "client.raisonSocial",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "codeAlphaEntrepot",
+        "dataField": "entrepot.raisonSocial",
         "visible": true
       },
       {

@@ -113,9 +113,9 @@ export class PlanningDepartComponent implements AfterViewInit {
       "grid-situation-depart-title-today",
     );
 
-    // this.dateMin.value = new Date(2022, 7, 25);
-    this.dateMin.value = new Date();
-    this.dateMax.value = new Date();
+    // this.dateMin.value = this.dateManagementService.startOfDay(new Date(2022, 7, 25));
+    this.dateMin.value = this.dateManagementService.startOfDay();
+    this.dateMax.value = this.dateManagementService.endOfDay();
 
     // Auto sector select from current user settings
     if (this.authService.currentUser.secteurCommercial) {
@@ -157,7 +157,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       this.dateMin.value,
     ]);
     filters.push("and", [
-      "dateLivraisonPrevue",
+      "logistiques.dateDepartPrevueFournisseur",
       "<=",
       this.dateMax.value,
     ]);
