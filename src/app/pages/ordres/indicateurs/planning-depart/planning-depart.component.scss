@@ -25,13 +25,18 @@
     }
   }
 
+  .dx-master-detail-cell {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
   .highlight-ok {
-    background: green !important;
+    background-color: #8FC459 !important;
     color: white !important;
   }
 
   .highlight-err {
-    background: red !important;
+    background: #ff325a !important;
     color: white !important;
   }
 }

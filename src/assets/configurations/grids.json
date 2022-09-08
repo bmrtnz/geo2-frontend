@@ -4010,6 +4010,8 @@
       {
         "visibleIndex": 6,
         "dataField": "dateLivraisonPrevue",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       }
     ]
@@ -4018,7 +4020,7 @@
     "columns": [
       {
         "visibleIndex": 1,
-        "dataField": "ordre.transporteur.raisonSocial",
+        "dataField": "ordre.transporteur.id",
         "visible": true
       },
       {

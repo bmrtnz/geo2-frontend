@@ -25,7 +25,6 @@ import { GridColumn } from "basic";
 import {
   DxCheckBoxComponent,
   DxDataGridComponent,
-  DxNumberBoxComponent,
   DxSelectBoxComponent,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -79,7 +78,6 @@ export class PlanningDepartComponent implements AfterViewInit {
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
-    private datePipe: DatePipe,
     private localizePipe: LocalizePipe,
     private tabContext: TabContext,
   ) {
@@ -97,7 +95,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       this.INDICATOR_NAME,
     );
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.LitigeLigne,
+      Grid.PlanningDepart,
     );
     this.columns = from(this.gridConfig).pipe(
       map((config) => config.columns),
@@ -114,7 +112,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       "grid-situation-depart-title-today",
     );
 
-    this.dateMin.value = new Date();
+    this.dateMin.value = new Date(2022, 7, 25);
     this.dateMax.value = new Date();
 
     // Auto sector select from current user settings
@@ -173,13 +171,20 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.dataSource.reload();
     this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
 
+    // Customizing period display
     const title = this.localizePipe.transform("grid-situation-depart-title");
     const duValue = this.localizePipe.transform("du");
-    const fromValue = `<strong> ${this.dateManagementService.formatDate(this.dateMin.value, "dd-MM-yyyy")} </strong>`;
+    const fromDate = this.dateManagementService.formatDate(this.dateMin.value, "dd-MM-yyyy");
+    const fromValue = `<strong>${fromDate}</strong>`;
     const auValue = this.localizePipe.transform("au");
-    const toValue = `<strong> ${this.dateManagementService.formatDate(this.dateMax.value, "dd-MM-yyyy")} </strong>`;
-
-    this.theTitle.innerHTML = `${title} ${duValue} ${fromValue} ${auValue} ${toValue}`;
+    const toDate = this.dateManagementService.formatDate(this.dateMax.value, "dd-MM-yyyy");
+    const toValue = `<strong>${toDate}</strong>`;
+    const nowDate = this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy");
+    let finalTitle = `${title} ${duValue} ${fromValue} ${auValue} ${toValue}`;
+    if ((fromDate === toDate) && (fromDate === nowDate)) {
+      finalTitle = `${title} <strong>${this.localizePipe.transform("grid-situation-depart-title-today")}</strong>`;
+    }
+    this.theTitle.innerHTML = finalTitle;
   }
 
   onFieldValueChange(e?) {
