@@ -1,12 +1,19 @@
-<br />
+<br>
 <dx-button
   class="upperButton"
   text="{{ 'btn-blAutoSend' | localize }}"
   [disabled]="true"
 ></dx-button>
+<dx-button
+  class="refresh"
+  [class]="toRefresh ? '' : 'inactive-button'"
+  type="default"
+  text="{{ 'btn-refresh' | localize }}"
+  (onClick)="updateFilters()"
+></dx-button>
 <div>
-  <dx-box>
-    <dxi-item [ratio]="1">
+  <dx-box class="planning-dep-filters">
+    <dxi-item [ratio]="0.6">
       <div class="dx-field">
         <div class="dx-field-label">
           {{ "tiers-clients-secteur" | localize }}
@@ -17,63 +24,103 @@
             [dataSource]="secteurs"
             displayExpr="description"
             searchExpr="description"
-            (valueChange)="updateFilters()"
-          ></dx-select-box>
+            (onValueChanged)="updateFilters($event)"
+          >
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+          </dx-select-box>
         </div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="0.2"></dxi-item>
-    <dxi-item
-      [ratio]="1.4"
-      style="justify-content: center"
-    >
+    <dxi-item [ratio]="0.1"></dxi-item>
+    <dxi-item [ratio]="0.4">
       <div class="dx-field">
-        <div
-          class="dx-field-label"
-          style="width: 3400px"
-        >
+        <div class="dx-field-label difference-label">
           {{ "ordre-planning-depart-diff-expe" | localize }}
         </div>
         <dx-check-box
           #diffCheckBox
-          [value]="false"
+          class="difference-checkbox"
+          [value]="true"
           [width]="40"
-          (valueChange)="updateFilters()"
+          (onValueChanged)="onFieldValueChange()"
         ></dx-check-box>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="0.1"></dxi-item>
-    <dxi-item
-      [ratio]="1"
-      style="justify-content: center"
-    >
+    <dxi-item [ratio]="0.4"></dxi-item>
+  </dx-box>
+  <dx-box class="planning-dep-filters">
+    <dxi-item [ratio]="0.6">
+      <!-- Période -->
       <div class="dx-field">
-        <div
-          class="dx-field-label"
-          style="width: 50px"
-        >
-          {{ "sur" | localize }}
+        <div class="dx-field-label noEllipsis">
+          {{ "ordres-periode" | localize }}
         </div>
-        <dx-number-box
-          #daysOfService
-          [value]="1"
-          [width]="50"
-          (valueChange)="changeDays()"
-          (onContentReady)="onDaysOfServiceInputReady()"
-          [inputAttr]="{ style: 'text-align: center' }"
-        ></dx-number-box>
-        <div class="dx-field-label">{{ "jours" | localize }}</div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #periodeSB
+            [items]="periodes"
+            [value]="periodes[1]"
+            (onValueChanged)="setDates($event)"
+          >
+            <dxo-drop-down-options
+              [width]="300"
+              [elementAttr]="{ class: 'period-list' }"
+            >
+            </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="1"></dxi-item>
+    <dxi-item [ratio]="0.1"></dxi-item>
+    <dxi-item [ratio]="0.4">
+      <!-- Date de début -->
+      <div class="dx-field date-field">
+        <div class="dx-field-label">
+          {{ "ordres-Du" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-date-box
+            #dateMin
+            class="dateStart"
+            type="date"
+            [displayFormat]="'dd-MM-yy'"
+            (onValueChanged)="manualDate($event)"
+          >
+            <dx-validator>
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-date-box>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="0.4">
+      <!-- Date de fin -->
+      <div class="dx-field field date-field">
+        <div class="dx-field-label">
+          {{ "ordres-au" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-date-box
+            #dateMax
+            class="dateEnd"
+            type="date"
+            [displayFormat]="'dd-MM-yy'"
+            (onValueChanged)="manualDate($event)"
+          >
+            <dx-validator>
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-date-box>
+        </div>
+      </div>
+    </dxi-item>
   </dx-box>
 
   <br />
 
   <dx-data-grid
-    class="dx-card wide-card"
+    class="dx-card wide-card grid-planning-departs"
     #gridPLANNINGDEPART
-    [dataSource]="dataSource"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"

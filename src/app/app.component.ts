@@ -3,6 +3,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import dxNumberBox from "devextreme/ui/number_box";
 import dxSelectBox from "devextreme/ui/select_box";
 import dxTextBox from "devextreme/ui/text_box";
+import dxDateBox from "devextreme/ui/date_box";
 import dxTabPanel from "devextreme/ui/tab_panel";
 import { environment } from "../environments/environment";
 import { LocalizationService, ScreenService } from "./shared/services";
@@ -81,6 +82,11 @@ export class AppComponent {
       }
     });
     dxTextBox.defaultOptions({
+      options: {
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn
+      }
+    });
+    dxDateBox.defaultOptions({
       options: {
         onFocusIn: this.formUtilsService.selectTextOnFocusIn
       }

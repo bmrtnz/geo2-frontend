@@ -130,8 +130,8 @@
             <dx-date-box
               formControlName="dateMin"
               class="dateStart"
-              type="datetime"
-              [displayFormat]="'dd-MM-yy  HH:mm'"
+              type="date"
+              [displayFormat]="'dd-MM-yy'"
               (onValueChanged)="manualDate($event)"
             >
               <dx-validator>
@@ -151,8 +151,8 @@
             <dx-date-box
               formControlName="dateMax"
               class="dateEnd"
-              type="datetime"
-              [displayFormat]="'dd-MM-yy  HH:mm'"
+              type="date"
+              [displayFormat]="'dd-MM-yy'"
               (onValueChanged)="manualDate($event)"
             >
               <dx-validator>

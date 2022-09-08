@@ -457,16 +457,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Transporteurs par bassins -->
-            <!-- <div *ngIf="!createMode" class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
-              <span class="dx-form-group-caption">{{
-                "tiers-entrepots-details-groupe-bassins" | localize
-              }}</span>
-              <div class="dx-form-group-content">
-                <app-set-bassin [readOnly]="readOnlyMode"></app-set-bassin>
-              </div>
-            </div> -->
           </dxi-item>
           <dxi-item [ratio]="0.2"> </dxi-item>
           <dxi-item [ratio]="4">
@@ -1082,7 +1072,10 @@
                 "tiers-entrepots-details-groupe-bassins" | localize
               }}</span>
               <div class="dx-form-group-content">
-                <app-set-bassin [readOnly]="readOnlyMode"></app-set-bassin>
+                <app-set-bassin
+                  [readOnly]="readOnlyMode"
+                  [entrepotId]="idEntrepot"
+                ></app-set-bassin>
               </div>
             </div>
           </dxi-item>
