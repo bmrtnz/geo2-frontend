@@ -212,6 +212,7 @@
     "auth-login-btn": "Connexion",
     "auth-societe": "Société",
     "valeurIncorrecte": "Valeur incorrecte",
+    "date-depassee": "Date dépassée",
     "tiers-clients-title": "Clients",
     "tiers-client": "Client",
     "tiers-clients-id": "ID",

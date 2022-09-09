@@ -354,11 +354,15 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
    * Duplication d'un ordre
    */
   public wDupliqueOrdreOnDuplique(
+    depDate: string, livDate: string, cenRef: string,
     withCodeChargement: boolean, withFourni: boolean, withAchPu: boolean, withVtePu: boolean, withLibDlv: boolean,
     withEtdDate: boolean, withEtaDate: boolean, withEtdLocation: boolean, withEtaLocation: boolean, withIncCode: boolean,
     ordRef: string, socCode: string, user: string
   ) {
     return this.functionsService.queryFunction("wDupliqueOrdreOnDuplique", [
+      { name: "depDate", type: "LocalDateTime", value: depDate },
+      { name: "livDate", type: "LocalDate", value: livDate },
+      { name: "cenRef", type: "String", value: cenRef },
       { name: "withCodeChargement", type: "Boolean", value: withCodeChargement },
       { name: "withFourni", type: "Boolean", value: withFourni },
       { name: "withAchPu", type: "Boolean", value: withAchPu },

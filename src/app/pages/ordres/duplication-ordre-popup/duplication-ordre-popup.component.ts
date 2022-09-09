@@ -103,12 +103,33 @@ export class DuplicationOrdrePopupComponent {
     this.entrepotSB.instance.open();
   }
 
+  manualDate(e) {
+    // We check that this change is coming from the user
+    if (!e.event) return;
+
+    // Checking that date period is consistent otherwise, we set the other date to the new date
+    const deb = new Date(this.formGroup.get("dateDepartPrevue").value);
+    const fin = new Date(this.formGroup.get("dateLivraisonPrevue").value);
+    const diffJours = fin.getDate() - deb.getDate();
+
+    if (diffJours < 0) {
+      if (e.element.classList.contains("dateStart")) {
+        this.formGroup.get("dateLivraisonPrevue").patchValue(this.formGroup.get("dateDepartPrevue").value);
+      } else {
+        this.formGroup.get("dateDepartPrevue").patchValue(this.formGroup.get("dateLivraisonPrevue").value);
+      }
+    }
+  }
+
   applyClick() {
 
     this.processRunning = true;
     const values = this.formGroup.value;
 
     this.ordresService.wDupliqueOrdreOnDuplique(
+      this.formGroup.get("dateDepartPrevue").value,
+      this.formGroup.get("dateLivraisonPrevue").value.split("T")[0], // To localdate
+      this.entrepotSB.value.id,
       values.codeChargement,
       values.propExp,
       values.prixUniteAchat,
@@ -127,12 +148,12 @@ export class DuplicationOrdrePopupComponent {
         const numero = res.data?.wDupliqueOrdreOnDuplique?.data?.nordre;
         if (numero) {
           notify(this.localization.localize("ordre-cree").replace("&O", numero), "success", 7000);
-          setTimeout(() => this.tabContext.openOrdre(numero, this.currentCompanyService.getCompany().campagne.id, false));
+          this.hidePopup();
+          setTimeout(() => this.tabContext.openOrdre(numero, this.currentCompanyService.getCompany().campagne.id, false), 100);
         } else {
           notify(this.localization.localize("ordre-duplication-creation"), "error");
           console.log(res);
         }
-        this.hidePopup();
       },
       error: (error: Error) => {
         this.processRunning = false;

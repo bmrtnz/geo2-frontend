@@ -48,10 +48,12 @@
         <div class="dx-field-label">{{ "ordre-duplication-dateDepartPrevue" | localize }}</div>
         <div class="dx-field-value">
           <dx-date-box
+            class="dateStart"
             formControlName="dateDepartPrevue"
             [displayFormat]="'dd-MM-yy HH:mm'"
             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
             type="datetime"
+            (onValueChanged)="manualDate($event)"
           >
             <dx-validator name="{{ 'ordre-duplication-dateDepartPrevue' | localize }}">
               <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -64,10 +66,12 @@
         <div class="dx-field-label">{{ "ordre-duplication-dateLivraisonPrevue" | localize }}</div>
         <div class="dx-field-value small-width">
           <dx-date-box
+            class="dateEnd"
             formControlName="dateLivraisonPrevue"
             [displayFormat]="'dd-MM-yy'"
             dateSerializationFormat="yyyy-MM-dd"
             type="date"
+            (onValueChanged)="manualDate($event)"
           >
             <dx-validator name="{{ 'ordre-duplication-dateLivraisonPrevue' | localize }}">
               <dxi-validation-rule type="required"></dxi-validation-rule>
