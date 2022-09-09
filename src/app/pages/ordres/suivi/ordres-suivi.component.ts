@@ -55,7 +55,6 @@ export class OrdresSuiviComponent implements AfterViewInit {
   constructor(
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
-    public campagnesService: CampagnesService,
     public tabContext: TabContext,
     private route: ActivatedRoute,
   ) {
@@ -67,10 +66,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
       "client.code",
       "id",
     ];
-    this.campagnesService
-      .getDataSource_v2(["id", "description"])
-      .load()
-      .then((camp) => (this.campagneEnCours = camp.slice(-1)[0]));
+    this.campagneEnCours = this.currentCompanyService.getCompany().campagne;
   }
 
   ngAfterViewInit() {
