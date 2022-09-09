@@ -22,7 +22,7 @@ export class GridDetailPlanningDepartsComponent implements OnInit {
 
   public title: string;
   private dataFilter /* tslint:disable-next-line max-line-length */ =
-    /^nombreColisCommandes|nombreColisExpedies|ordre\.(?:transporteur\.id|assistante\.nomUtilisateur|commercial\.nomUtilisateur)|logistique\.(?:fournisseur\.code|dateDepartPrevueFournisseur|dateDepartReelleFournisseur|fournisseurReferenceDOC|okStation|totalPalettesExpediees|nombrePalettesAuSol|nombrePalettes100x120|nombrePalettes80x120|nombrePalettes60x80)$/;
+    /^nombreColisCommandes|nombreColisExpedies|ordre\.(?:transporteur\.id|assistante\.nomUtilisateur|commercial\.nomUtilisateur)|logistique\.(?:fournisseur\.code|dateDepartPrevueFournisseur|expedieStation|dateDepartReelleFournisseur|fournisseurReferenceDOC|okStation|totalPalettesExpediees|nombrePalettesAuSol|nombrePalettes100x120|nombrePalettes80x120|nombrePalettes60x80)$/;
 
   constructor(
     private localizePipe: LocalizePipe,

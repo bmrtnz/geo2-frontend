@@ -60,11 +60,9 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   public dataSource: DataSource;
   public title: string;
-  private dxGridElement: HTMLElement;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public theTitle: any;
-
   public periodes: string[];
   public toRefresh: boolean;
 
@@ -96,7 +94,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       this.INDICATOR_NAME,
     );
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.PlanningDepart,
+      Grid.PlanningDepart
     );
     this.columns = from(this.gridConfig).pipe(
       map((config) => config.columns),
@@ -105,13 +103,9 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dxGridElement =
-      this.gridPLANNINGDEPARTComponent.instance.$element()[0];
 
     // Show today title
-    this.title = this.localizePipe.transform(
-      "grid-situation-depart-title-today",
-    );
+    this.title = this.localizePipe.transform("grid-situation-depart-title-today");
 
     // this.dateMin.value = this.dateManagementService.startOfDay(new Date(2022, 7, 25));
     this.dateMin.value = this.dateManagementService.startOfDay();
@@ -124,10 +118,10 @@ export class PlanningDepartComponent implements AfterViewInit {
         description: this.authService.currentUser.secteurCommercial.description
       };
     }
-
     this.dataSource = this.indicator.dataSource;
     this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
-    this.theTitle = this.dxGridElement.querySelector(
+
+    this.theTitle = this.gridPLANNINGDEPARTComponent.instance.$element()[0].querySelector(
       ".dx-toolbar .dx-placeholder",
     ) as HTMLInputElement;
 
@@ -173,20 +167,25 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.dataSource.reload();
     this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
 
-    // Customizing period display
+    // Customizing period/date display
     const title = this.localizePipe.transform("grid-situation-depart-title");
     const duValue = this.localizePipe.transform("du");
     const fromDate = this.dateManagementService.formatDate(this.dateMin.value, "dd-MM-yyyy");
-    const fromValue = `<strong>${fromDate}</strong>`;
+    const fromValue = `<strong>${fromDate.replace(/^0+/, "")}</strong>`;
     const auValue = this.localizePipe.transform("au");
     const toDate = this.dateManagementService.formatDate(this.dateMax.value, "dd-MM-yyyy");
-    const toValue = `<strong>${toDate}</strong>`;
+    const toValue = `<strong>${toDate.replace(/^0+/, "")}</strong>`;
     const nowDate = this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy");
-    let finalTitle = `${title} ${duValue} ${fromValue} ${auValue} ${toValue}`;
-    if ((fromDate === toDate) && (fromDate === nowDate)) {
-      finalTitle = `${title} <strong>${this.localizePipe.transform("grid-situation-depart-title-today")}</strong>`;
+    let finalTitle = `${title} ${duValue}&nbsp;&nbsp;${fromValue}&nbsp;&nbsp;${auValue}&nbsp;&nbsp;${toValue}`;
+    if (fromDate === toDate) {
+      if (fromDate === nowDate) {
+        finalTitle = `${title}&nbsp;<strong>${this.localizePipe.transform("grid-situation-depart-title-today")}</strong>`;
+      } else {
+        finalTitle = finalTitle.split(auValue)[0];
+      }
     }
-    this.theTitle.innerHTML = finalTitle;
+    this.theTitle.innerHTML =
+      `${finalTitle} - ${this.localizePipe.transform("tiers-clients-secteur")}&nbsp;<strong>${this.secteurSB.value.description}</strong>`;
   }
 
   onFieldValueChange(e?) {

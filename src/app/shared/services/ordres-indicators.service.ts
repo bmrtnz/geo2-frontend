@@ -580,7 +580,7 @@ export class OrdresIndicatorsService {
         currDateTime24.setHours(23, 59, 59, 999);
         instance.detailedFields =
           this.ordresService.model.getDetailedFields(
-            2,
+            1,
             instance.regExpSelection,
             { forceFilter: true },
           );

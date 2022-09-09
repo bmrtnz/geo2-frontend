@@ -17,10 +17,8 @@
   (onCellPrepared)="onCellPrepared($event)"
 >
   <!-- Grid configuration -->
-  <dxo-header-filter
-    [visible]="true"
-    [allowSearch]="true"
-  ></dxo-header-filter>
+  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-paging></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -49,10 +47,11 @@
     *ngFor="let field of detailedFields | async"
     [dataField]="field.path"
     [caption]="
-      ('ordreLignes-' + field.path.replaceAll('.', '-') | localize) ||
+      ('ordres-planningDepartDetail-' + field.path.replaceAll('.', '-') | localize) ||
       field.name
     "
     [visible]="false"
+    [width]="field.width"
     [dataType]="field.dataType"
     [allowSearch]="
       field.allowSearch !== undefined
