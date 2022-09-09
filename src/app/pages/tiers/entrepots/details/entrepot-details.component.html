@@ -601,6 +601,7 @@
                     [dataSource]="regimesTva"
                     [displayExpr]="displayIDBefore"
                     [searchExpr]="['id']"
+                    (onValueChanged)="onRegimeTvaChange()"
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-regimeTva' | localize }}"
