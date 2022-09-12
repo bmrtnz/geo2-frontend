@@ -451,7 +451,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   private async updateRestrictions() {
     const isCloture = await this.ordresService.isCloture({ id: this.ordreID });
-    this.allowMutations = !environment.production && !isCloture;
+    this.allowMutations = !isCloture;
   }
 
   /**
