@@ -379,6 +379,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.headerSaving = true;
       const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
+      ordre.etaLocation = ordre.portTypeA?.name;
+      ordre.etdLocation = ordre.portTypeD?.name;
 
       this.ordresService.save({ ordre }).subscribe({
         next: (res) => {
