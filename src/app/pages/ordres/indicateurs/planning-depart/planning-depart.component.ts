@@ -156,11 +156,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       this.dateMax.value,
     ]);
     if (this.diffCB.value)
-      filters.push("and", [
-        ["versionDetail", "isnull", "null"],
-        "or",
-        ["versionDetail", "<", "001"],
-      ]);
+      filters.push("and", ["versionDetail", "isnull", "null"]);
     this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
 
     this.dataSource.filter(filters);
