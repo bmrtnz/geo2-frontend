@@ -96,7 +96,7 @@
     <dxi-item [ratio]="0.4">
       <!-- Date de fin -->
       <div class="dx-field field date-field">
-        <div class="dx-field-label">
+        <div class="dx-field-label text-align-center no-padding">
           {{ "ordres-au" | localize }}
         </div>
         <div class="dx-field-value">
@@ -173,8 +173,9 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
+      [format]="column.format"
       [caption]="
-        ('ordres-' + column.dataField?.split('.').join('-') | localize) ||
+        ('ordres-planningDepart-' + column.dataField?.split('.').join('-') | localize) ||
         column.name
       "
       [dataType]="column?.dataType"

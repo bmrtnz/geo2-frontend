@@ -33,7 +33,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|numeroFacture|marge|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
+  queryFilter = /.*(?:id|numero|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 

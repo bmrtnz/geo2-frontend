@@ -350,6 +350,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   onPaysChange(e) {
     if (!this.editing || !this.client) return;
     this.idTvaRequired = ((e.value?.id !== this.client.pays?.id) && e.value?.id !== null);
+    if (this.formGroup.get("regimeTva").value?.id === "E") this.idTvaRequired = false;
   }
 
   onTvaCeeChange(e) {
@@ -360,6 +361,11 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
       this.formGroup.get("tvaCee").reset();
       if (e.element) notify("Id TVA - " + e.value + " - incorrect", "warning", 5000);
     }
+  }
+
+  onRegimeTvaChange() {
+    if (!this.editing) return;
+    this.onPaysChange({ value: this.formGroup.get("pays").value });
   }
 
   valueToUpperCase(e) {

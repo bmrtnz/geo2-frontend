@@ -45,7 +45,6 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public allowMutations = false;
   public env = environment;
   public currentLogId: string;
   public currentRowIndex: number;
@@ -87,7 +86,6 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
 
   ngOnChanges(changes: SimpleChanges) {
     this.enableFilters();
-    this.allowMutations = !this.env.production; // We can update some fields even if the order is closed
   }
 
   ngAfterViewInit() {

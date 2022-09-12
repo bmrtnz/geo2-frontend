@@ -1,10 +1,16 @@
-::ng-deep {
+::ng-deep .grid-planning-departs-detail {
+
+  .dx-toolbar .dx-icon {
+    color: rgba(0, 0, 0, .87) !important;
+  }
+
   .highlight-ok {
-    background: green !important;
+    background-color: #8FC459 !important;
     color: white !important;
   }
+
   .highlight-err {
-    background: red !important;
+    background-color: #ff325a !important;
     color: white !important;
   }
 }

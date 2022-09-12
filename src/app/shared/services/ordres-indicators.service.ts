@@ -576,9 +576,11 @@ export class OrdresIndicatorsService {
 
       // Planning departs
       if (instance.id === "PlanningDepart") {
+        const currDateTime24 = new Date();
+        currDateTime24.setHours(23, 59, 59, 999);
         instance.detailedFields =
           this.ordresService.model.getDetailedFields(
-            2,
+            1,
             instance.regExpSelection,
             { forceFilter: true },
           );
@@ -598,7 +600,7 @@ export class OrdresIndicatorsService {
           [
             "logistiques.dateDepartPrevueFournisseur",
             "<=",
-            new Date().toISOString(),
+            currDateTime24.toISOString(),
           ],
         ];
       }
