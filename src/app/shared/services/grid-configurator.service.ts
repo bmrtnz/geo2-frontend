@@ -132,6 +132,8 @@ const extraConfigurations = [
   "cssClass",
   "editorOptions",
   "allowEditing",
+  "allowHeaderFiltering",
+  "allowSearch",
   "allowSorting",
   "dataType",
   "width",
@@ -139,6 +141,7 @@ const extraConfigurations = [
   "calculateCellValue",
   "lookup",
   "calculateSortValue",
+  "filterOperations",
 ];
 
 @Injectable({
