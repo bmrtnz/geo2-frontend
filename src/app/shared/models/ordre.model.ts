@@ -28,6 +28,15 @@ export enum FactureAvoir {
   AVOIR = "A",
 }
 
+export const StatutKeys = [
+  "ANNULE",
+  "A_FACTURER",
+  "CONFIRME",
+  "EN_PREPARATION",
+  "EXPEDIE",
+  "FACTURE",
+  "NON_CONFIRME",
+];
 export enum Statut {
   ANNULE = "Annulé" as any,
   A_FACTURER = "À facturer" as any,
@@ -67,8 +76,7 @@ export class Ordre extends Model {
   @Field() public venteACommission?: boolean;
   @Field() public bonAFacturer?: boolean;
   @Field() public facture?: boolean;
-  @Field({ allowHeaderFiltering: false, allowSearch: false })
-  public statut?: Statut;
+  @Field() public statut?: Statut;
   @Field() public factureEDI?: boolean;
   @Field() public livre?: boolean;
   @Field() public instructionsLogistiques?: string;

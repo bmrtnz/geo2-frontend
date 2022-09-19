@@ -2,10 +2,11 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { MRUOrdre } from "app/shared/models/mru-ordre.model";
+import { StatutKeys } from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { AuthService } from "..";
-import { APIRead, ApiService, RelayPage } from "../api.service";
+import { APIRead, ApiService, DistinctInfo, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
 
 @Injectable({
@@ -150,46 +151,66 @@ export class MruOrdresService extends ApiService implements APIRead {
     });
   }
 
-  // getDataSourceGrouped() {
-  //   return new DataSource({
-  //     store: this.createCustomStore({
-  //       key: ['utilisateur', 'ordre'],
-  //       load: (options: LoadOptions) => new Promise(async (resolve) => {
-  //
-  //         if (options.group)
-  //           return this.loadDistinctQuery(options, res => {
-  //             if (res.data && res.data.distinct)
-  //               resolve(this.asListCount(res.data.distinct));
-  //           });
-  //
-  //         type Response = { allGroupedMRUOrdre: RelayPage<MRUOrdre> };
-  //         const query = `
-  //           query AllGroupedMRUOrdre($search: String, $pageable: PaginationInput!) {
-  //             allGroupedMRUOrdre(search:$search, pageable:$pageable) {
-  //               edges {
-  //                 node {
-  //                   ${await this.model.getGQLFields(2, undefined, null, {noList: true}).toPromise()}
-  //                 }
-  //               }
-  //               pageInfo {
-  //                 startCursor
-  //                 endCursor
-  //                 hasPreviousPage
-  //                 hasNextPage
-  //               }
-  //               totalCount
-  //             }
-  //           }
-  //         `;
-  //         const variables = this.mapLoadOptionsToVariables(options);
-  //
-  //         this.listenQuery<Response>(query, { variables }, res => {
-  //           if (res.data && res.data.allGroupedMRUOrdre)
-  //             resolve(this.asInstancedListCount(res.data.allGroupedMRUOrdre));
-  //         });
-  //       }),
-  //       byKey: this.byKey(2),
-  //     }),
-  //   });
-  // }
+  getHeadListDataSource(columns: Array<string>) {
+    return new DataSource({
+      store: this.createCustomStore({
+        key: ["utilisateur", "ordreRef"],
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group) {
+
+              // Intercepting; GQL; fields, because; they; canno"t be filtered by backend
+              if (options.group.find(({ selector }) => selector === "ordre.statut"))
+                return resolve({
+                  data: StatutKeys.map(key => ({ key })) as DistinctInfo[],
+                  totalCount: 0,
+                });
+
+              return this.loadDistinctQuery(options, (res) => {
+                console.log(this.asListCount(res.data.distinct));
+                if (res.data && res.data.distinct)
+                  resolve(
+                    this.asListCount(res.data.distinct),
+                  );
+              });
+            }
+
+            type Response = { allMRUOrdreHeadList: RelayPage<MRUOrdre> };
+            const query = this.buildHeadList(columns);
+            const variables = {
+              societe: this.currentCompanyService.getCompany().id,
+              count: options.take ?? 50
+            };
+
+            this.listenQuery<Response>(
+              query,
+              { variables, fetchPolicy: "network-only" },
+              (res) => {
+                if (res.data && res.data.allMRUOrdreHeadList)
+                  resolve(res.data.allMRUOrdreHeadList);
+              },
+            );
+          }),
+        byKey: this.byKey(columns),
+      }),
+    });
+  }
+
+  protected buildHeadList(columns: Array<string> | Set<string>) {
+    return ApiService.buildGraph(
+      "query",
+      [
+        {
+          name: `all${this.model.name}HeadList`,
+          body: [...columns],
+          params: [
+            { name: "societe", value: "societe", isVariable: true },
+            { name: "count", value: "count", isVariable: true },
+          ],
+        },
+      ], [
+      { name: "societe", type: "String", isOptionnal: false },
+      { name: "count", type: "Long", isOptionnal: true },
+    ]);
+  }
 }

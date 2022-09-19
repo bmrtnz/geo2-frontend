@@ -1664,6 +1664,8 @@
       },
       {
         "dataField": "ordre.statut",
+        "allowHeaderFiltering": true,
+        "allowSearch": false,
         "visible": true
       },
       {
@@ -1699,6 +1701,10 @@
       {
         "dataField": "ordre.campagne.id",
         "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "ordreRef",
         "visible": false
       }
     ]

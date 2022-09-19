@@ -1,9 +1,4 @@
-import {
-  Component,
-
-
-  ViewChild
-} from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Statut } from "app/shared/models/ordre.model";
 import { AuthService } from "app/shared/services";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
@@ -44,30 +39,12 @@ export class GridHistoriqueComponent {
     public tabContext: TabContext,
   ) {
     this.detailedFields = historique.columns as GridColumn[];
-    this.dataSource = mruOrdresService.getDataSource_v2(
+    this.dataSource = mruOrdresService.getHeadListDataSource(
       this.detailedFields.map((property) => property.dataField),
     );
   }
 
   reload() {
-    const filters = [
-      [
-        "utilisateur.nomUtilisateur",
-        "=",
-        this.authService.currentUser.nomUtilisateur,
-      ],
-      "and",
-      ["societe.id", "=", this.currentCompanyService.getCompany().id],
-      "and",
-      [
-        "dateModification",
-        ">=",
-        new Date(this.dateManagementService.findDate(-60)),
-      ],
-      "and",
-      ["ordre.id", "<>", "null"]
-    ];
-    this.dataSource.filter(filters);
     this.histoGrid.dataSource = this.dataSource;
   }
 

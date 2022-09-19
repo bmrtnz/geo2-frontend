@@ -132,6 +132,8 @@ const extraConfigurations = [
   "cssClass",
   "editorOptions",
   "allowEditing",
+  "allowHeaderFiltering",
+  "allowSearch",
   "allowSorting",
   "dataType",
   "width",
@@ -139,6 +141,7 @@ const extraConfigurations = [
   "calculateCellValue",
   "lookup",
   "calculateSortValue",
+  "filterOperations",
 ];
 
 @Injectable({
@@ -422,7 +425,7 @@ export class GridConfiguratorService {
       columnsChangeEmitter.emit(event);
     columnsChangeEmitter
       .pipe(
-        filter(({ name, value }) => name === "columns" && !!onColumnsChange && !!value.length),
+        filter(({ name, value }) => name === "columns" && !!onColumnsChange && !!value?.length),
         tap(
           ({
             fullName,
