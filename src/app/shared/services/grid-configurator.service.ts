@@ -10,7 +10,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import { dxToolbarItem, dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
-import { defer, from, interval, Observable } from "rxjs";
+import { from, interval, Observable } from "rxjs";
 import {
   concatMap,
   concatMapTo,
@@ -355,11 +355,11 @@ export class GridConfiguratorService {
       .fetchUserGrid(this.authService.currentUser, grid, this.currentCompanyService.getCompany())
       .toPromise();
     const defaultConfig = this.fetchDefaultConfig(grid);
-    if (res.error || !res.data.gridConfig)
+    if (res?.error || !res.data.gridConfigBySociete)
       return await defaultConfig;
 
     // clone config (original is sealed)
-    const userConfig: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfig.config));
+    const userConfig: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfigBySociete.config));
 
     // merge extra configurations ( not handled by DX state storing )
     return this.mergeExtraConfiguration(userConfig, await defaultConfig);

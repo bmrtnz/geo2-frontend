@@ -76,21 +76,21 @@ export class GridsConfigsService
 
   fetchUserGrid(user: Utilisateur, grid: Grid, societe: Societe) {
     return this.apollo
-      .query<{ gridConfig: GridConfig }>({
+      .watchQuery<{ gridConfigBySociete: GridConfig }>({
         query: gql(this.getOneBySocieteGraph([
           "grid",
           "config",
           "utilisateur.nomUtilisateur",
           "societe.id",
         ])),
-        fetchPolicy: "cache-first",
+        fetchPolicy: "cache-and-network",
         variables: {
           utilisateur: user.nomUtilisateur,
           grid,
           societe: societe.id,
         },
-      })
-      .pipe(takeWhile((res) => !res.loading));
+      }).valueChanges
+      .pipe(takeWhile((res) => res.loading, true));
   }
 
   getDataSource() {
