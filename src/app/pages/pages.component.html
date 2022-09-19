@@ -2,6 +2,6 @@
   <router-outlet></router-outlet>
   <app-footer>
     {{ "copyright" | localize: copyrightYear }}
-    - {{ "version" | localize }} {{ version }}
+    - {{ versionService.getLabel() }}
   </app-footer>
 </app-side-nav-outer-toolbar>

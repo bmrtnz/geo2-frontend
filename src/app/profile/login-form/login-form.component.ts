@@ -5,13 +5,13 @@ import { AuthService } from "app/shared/services";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { UtilisateursService } from "app/shared/services/api/utilisateurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { VersionService } from "app/shared/services/version.service";
 import { DxButtonComponent } from "devextreme-angular/ui/button";
 import { DxSelectBoxComponent } from "devextreme-angular/ui/select-box";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { throwError } from "rxjs";
 import { catchError, concatMap } from "rxjs/operators";
-import { version } from "../../../../package.json";
 
 @Component({
   selector: "app-login-form",
@@ -25,7 +25,6 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
   @ViewChild("submitButton", { static: false })
   submitButton: DxButtonComponent;
   @ViewChild("societeSB", { static: false }) societeSB: DxSelectBoxComponent;
-  public readonly version = version;
 
   autoSubmit = false;
 
@@ -37,6 +36,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private utilisateursService: UtilisateursService,
+    public versionService: VersionService,
   ) { }
 
   ngOnInit() {
