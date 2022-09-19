@@ -12,7 +12,7 @@
           alt="bluewhale-logo"
         />
         <div class="title">{{ "title" | localize }}</div>
-        <div class="version">{{ "version" | localize }} {{ version }}</div>
+        <div class="version">{{ versionService.getLabel() }}</div>
         <div class="subtitle">{{ "auth-subtitle" | localize }}</div>
       </div>
 
