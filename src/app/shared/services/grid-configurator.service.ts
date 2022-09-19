@@ -355,11 +355,11 @@ export class GridConfiguratorService {
       .fetchUserGrid(this.authService.currentUser, grid, this.currentCompanyService.getCompany())
       .toPromise();
     const defaultConfig = this.fetchDefaultConfig(grid);
-    if (res?.error || !res.data.gridConfigBySociete)
+    if (res?.error || !res.data.gridConfig)
       return await defaultConfig;
 
     // clone config (original is sealed)
-    const userConfig: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfigBySociete.config));
+    const userConfig: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfig.config));
 
     // merge extra configurations ( not handled by DX state storing )
     return this.mergeExtraConfiguration(userConfig, await defaultConfig);

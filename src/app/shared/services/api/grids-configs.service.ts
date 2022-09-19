@@ -52,32 +52,10 @@ export class GridsConfigsService
     );
   }
 
-  private getOneBySocieteGraph(body: Array<string>) {
-    return ApiService.buildGraph(
-      "query",
-      [
-        {
-          name: `gridConfigBySociete`,
-          body,
-          params: [
-            { name: "grid", value: "grid", isVariable: true },
-            { name: "utilisateur", value: "utilisateur", isVariable: true },
-            { name: "societe", value: "societe", isVariable: true },
-          ],
-        },
-      ],
-      [
-        { name: "grid", type: "String", isOptionnal: false },
-        { name: "utilisateur", type: "String", isOptionnal: false },
-        { name: "societe", type: "String", isOptionnal: false },
-      ],
-    );
-  }
-
   fetchUserGrid(user: Utilisateur, grid: Grid, societe: Societe) {
     return this.apollo
-      .watchQuery<{ gridConfigBySociete: GridConfig }>({
-        query: gql(this.getOneBySocieteGraph([
+      .watchQuery<{ gridConfig: GridConfig }>({
+        query: gql(this.getOneGraph([
           "grid",
           "config",
           "utilisateur.nomUtilisateur",
@@ -85,9 +63,11 @@ export class GridsConfigsService
         ])),
         fetchPolicy: "cache-and-network",
         variables: {
-          utilisateur: user.nomUtilisateur,
-          grid,
-          societe: societe.id,
+          id: {
+            utilisateur: user.nomUtilisateur,
+            grid,
+            societe: societe.id,
+          }
         },
       }).valueChanges
       .pipe(takeWhile((res) => res.loading, true));
@@ -96,7 +76,7 @@ export class GridsConfigsService
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
-        key: ["utilisateur", "grid"],
+        key: ["utilisateur", "grid", "societe"],
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group)
