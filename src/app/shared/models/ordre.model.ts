@@ -4,6 +4,7 @@ import { Campagne } from "./campagne.model";
 import { Client } from "./client.model";
 import Courtier from "./courtier.model";
 import { Devise } from "./devise.model";
+import Document from "./document.model";
 import Entrepot from "./entrepot.model";
 import Incoterm from "./incoterm.model";
 import { Field, Model, ModelName } from "./model";
@@ -21,7 +22,6 @@ import Transporteur from "./transporteur.model";
 import TypeCamion from "./type-camion.model";
 import TypeOrdre from "./type-ordre.model";
 import TypeVente from "./type-vente.model";
-import Document from "./document.model";
 
 export enum FactureAvoir {
   FACTURE = "F",
@@ -156,6 +156,8 @@ export class Ordre extends Model {
   public transitaire?: Transitaire;
   @Field({ model: import("./document.model") }) public documentFacture: Document;
   @Field({ model: import("./document.model") }) public documentCMR: Document;
+  @Field() public societeCode: string;
+  @Field() public secteurCode: string;
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");
