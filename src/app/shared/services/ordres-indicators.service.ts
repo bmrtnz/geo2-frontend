@@ -155,8 +155,8 @@ const indicators: Indicator[] = [
     component: import(
       "../../pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component"
     ),
-    /* tslint:disable-next-line max-line-length */
-    select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateCreation|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial|campagne\.id)$/,
+    // tslint:disable-next-line: max-line-length
+    explicitSelection: ["id", "numero", "referenceClient", "dateDepartPrevue", "dateLivraisonPrevue", "codeClient", "codeAlphaEntrepot", "dateCreation", "type.id", "client.raisonSocial", "secteurCommercial.id", "entrepot.raisonSocial", "campagne.id"],
   },
   {
     id: "PlanningTransporteurs",
@@ -309,7 +309,7 @@ export class OrdresIndicatorsService {
       instance.filter = [
         ["valide", "=", true],
         "and",
-        ["societe.id", "=", this.currentCompanyService.getCompany().id],
+        ["societeCode", "=", this.currentCompanyService.getCompany().id],
       ];
 
       // Commandes EDI
@@ -489,17 +489,7 @@ export class OrdresIndicatorsService {
 
       // Ordres non confirmés
       if (instance.id === "OrdresNonConfirmes") {
-        instance.detailedFields =
-          this.ordresService.model.getDetailedFields(
-            3,
-            instance.regExpSelection,
-            { forceFilter: true },
-          );
-        instance.dataSource = this.ordresService.getDataSource(
-          null,
-          2,
-          instance.regExpSelection,
-        );
+        instance.dataSource = this.ordresService.getDataSource_v2(instance.explicitSelection);
         instance.filter = [
           ...instance.filter,
           "and",
@@ -512,6 +502,11 @@ export class OrdresIndicatorsService {
             ">=",
             this.datePipe.transform(Date.now(), "yyyy-MM-dd"),
           ],
+          "and",
+          // Bien plus rapide que le filtre demandé sur l'indicateur 'avoir'
+          // Donc on laisse sur le filtre 'historique'
+          ["id", "<", "800000"],
+          // ["factureAvoir", "=", FactureAvoir.AVOIR],
         ];
         instance.fetchCount = this.ordresService.count.bind(this.ordresService, [
           ...instance.filter,
@@ -520,10 +515,9 @@ export class OrdresIndicatorsService {
             ? [
               "and",
               [
-                "secteurCommercial.id",
+                "secteurCode",
                 "=",
-                this.authService.currentUser.secteurCommercial
-                  ?.id,
+                this.authService.currentUser.secteurCommercial?.id,
               ],
             ]
             : []),

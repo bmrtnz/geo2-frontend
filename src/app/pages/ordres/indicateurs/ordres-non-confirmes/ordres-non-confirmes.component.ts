@@ -5,7 +5,7 @@ import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
   LocalizationService,
-  TransporteursService,
+  TransporteursService
 } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -14,17 +14,17 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import {
   Indicator,
-  OrdresIndicatorsService,
+  OrdresIndicatorsService
 } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
 import {
   DxCheckBoxComponent,
   DxDataGridComponent,
-  DxSelectBoxComponent,
+  DxSelectBoxComponent
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
@@ -108,7 +108,7 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value?.id && this.withSector.value)
       filters.push("and", [
-        "secteurCommercial.id",
+        "secteurCode",
         "=",
         this.secteurSB.value.id,
       ]);
