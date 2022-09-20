@@ -118,6 +118,7 @@ export class MruOrdresService extends ApiService implements APIRead {
         nomUtilisateur: this.authService.currentUser.nomUtilisateur,
       },
       cenCode: ordre.entrepot.code,
+      ordreRef: ordre.id,
       ordre: { id: ordre.id },
       entrepot: { id: ordre.entrepot.code },
       societe: { id: this.currentCompanyService.getCompany().id },
@@ -127,6 +128,7 @@ export class MruOrdresService extends ApiService implements APIRead {
     this.save_v2(
       [
         "utilisateur.nomUtilisateur",
+        "ordreRef",
         "ordre.id",
         "ordre.numero",
         "ordre.codeClient",
