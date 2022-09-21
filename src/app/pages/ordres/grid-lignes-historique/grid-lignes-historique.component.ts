@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import Ordre from "app/shared/models/ordre.model";
+import Ordre, { Statut } from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService, ClientsService, EntrepotsService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -147,7 +147,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       return column.dataField;
     })));
     const gridFields = await fields.toPromise();
-    const dataSource = this.ordreLignesService.getListDataSource(gridFields);
+    const dataSource = this.ordreLignesService.getListDataSource([...gridFields, "ordre.statut"]);
 
     const values: Inputs = {
       ...this.formGroup.value,
@@ -188,7 +188,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         e.cellElement.textContent += " - " +
           (data.entrepot?.code ?? "") + " - " +
           (data.referenceClient ? data.referenceClient + " " : "") +
-          (data.transporteur?.id ? "(Transporteur : " + data.transporteur.id + ")" : "");
+          (data.transporteur?.id ? "(Transporteur : " + data.transporteur.id + ")" : "") +
+          ` - ${Statut[data.statut]}`;
       }
     }
     if (e.rowType === "data") {
