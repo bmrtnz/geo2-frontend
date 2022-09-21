@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import {
   AfterViewInit,
   Component, ElementRef, EventEmitter, OnDestroy, OnInit,
@@ -9,7 +10,6 @@ import { FileManagerComponent } from "app/shared/components/file-manager/file-ma
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
-import { confirm, alert } from "devextreme/ui/dialog";
 import {
   AuthService,
   ClientsService,
@@ -34,11 +34,13 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxAccordionComponent, DxCheckBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
+import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { of, Subject } from "rxjs";
 import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
+import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
 import {
   ConfirmationResultPopupComponent
 } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
@@ -50,13 +52,11 @@ import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
+import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
-import { DatePipe } from "@angular/common";
-import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
 
 /**
@@ -511,11 +511,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    const dateNow = this.datePipe.transform(new Date().setDate(new Date().getDate()).valueOf(), "yyyy-MM-dd");
-    if (dateNow > this.ordre.dateDepartPrevue) {
-      alert(this.localization.localize("text-popup-ordre-compl-dateDepassee"), this.localization.localize("ordre-complementaire-creation"));
-      return;
-    }
+    if (Date.now() > new Date(Date.parse(this.ordre.dateDepartPrevue)).setHours(15, 0))
+      return alert(
+        this.localization.localize("text-popup-ordre-compl-dateDepassee"),
+        this.localization.localize("ordre-complementaire-creation"),
+      );
 
     confirm(
       this.localization.localize("text-popup-ordre-compl").replace("&C", this.ordre.client.code),
