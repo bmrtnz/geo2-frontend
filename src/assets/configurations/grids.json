@@ -1,17 +1,10 @@
 {
   "common": {
-    "allowedPageSizes": [
-      10,
-      25,
-      50,
-      100
-    ],
     "filterPanel": {
       "filterEnabled": true
     },
     "filterValue": null,
     "pageIndex": 0,
-    "pageSize": 10,
     "searchText": ""
   },
   "client": {

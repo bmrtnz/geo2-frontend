@@ -99,7 +99,14 @@ export class AppComponent {
         commonColumnSettings: {
           trueText: this.localization.localize("trueText"),
           falseText: this.localization.localize("falseText")
-        }
+        },
+        pager: {
+          showPageSizeSelector: true,
+          showInfo: true,
+          showNavigationButtons: true,
+          allowedPageSizes: [10, 20, 50, 100],
+          pageSize: 20,
+        },
         // TODO for better keyboard navigation
         /*keyboardNavigation: {
           enterKeyAction: "moveFocus",
