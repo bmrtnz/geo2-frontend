@@ -39,7 +39,7 @@
           (onClick)="insertArticles()"
         ></dx-button>
 
-        <div style="clear:both"></div>
+        <div style="clear: both"></div>
 
         <app-grid-lignes-historique
           [clientId]="clientId"
@@ -48,10 +48,10 @@
           (selectChange)="selectFromGrid($event)"
           [gridSelectionEnabled]="gridSelectionEnabled"
           [popupShown]="popupShown"
+          (hidePopup)="clearAndHidePopup()"
         ></app-grid-lignes-historique>
         <br />
       </div>
     </dx-scroll-view>
   </div>
-
 </dx-popup>

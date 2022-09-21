@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
+import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService, ClientsService, EntrepotsService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -11,12 +12,13 @@ import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/g
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
-import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { TabContext } from "../root/root.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
 enum InputField {
@@ -46,6 +48,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @Output() public articleLigneId: string;
   @Output() public ordreLigne: OrdreLigne;
   @Output() selectChange = new EventEmitter<any>();
+  @Output() hidePopup = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
@@ -92,6 +95,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
+    private tabContext: TabContext,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreLigneHistorique);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
@@ -376,6 +380,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       ((data.code ? data.code : data.id) + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
         (data.raisonSocial ? data.raisonSocial : data.description)))
       : null;
+  }
+
+  // open selected ordre on group row double-click
+  public onRowDblClick({ data, rowType }: {
+    rowType: "group",
+    data: { key: Ordre["id"] },
+  }) {
+    if (rowType !== "group") return;
+    this.hidePopup.emit();
+    this.tabContext.openOrdre(data.key);
   }
 
 }

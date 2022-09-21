@@ -2,123 +2,118 @@
   class="periode-container"
   [formGroup]="formGroup"
 >
-<dx-box>
-  <dxi-item [ratio]="2">
-    <!-- Valides/non valides -->
-    <div class="dx-field">
-      <div class="dx-field-label">
-        {{ "clients-entrepots-valides" | localize }}
+  <dx-box>
+    <dxi-item [ratio]="2">
+      <!-- Valides/non valides -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "clients-entrepots-valides" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-check-box
+            formControlName="valide"
+            class="float-left"
+            (onValueChanged)="onValideChanged($event)"
+          >
+          </dx-check-box>
+        </div>
       </div>
-      <div class="dx-field-value">
-        <dx-check-box
-          formControlName="valide"
-          class="float-left"
-          (onValueChanged)="onValideChanged($event)"
-        >
-       </dx-check-box>
+    </dxi-item>
+  </dx-box>
+  <dx-box>
+    <dxi-item [ratio]="2">
+      <!-- Secteur -->
+      <div class="dx-field secteur-histo-ligne-field">
+        <div class="dx-field-label">
+          {{ "tiers-clients-secteur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            formControlName="secteur"
+            [dataSource]="secteurs"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['id']"
+            (onValueChanged)="onSecteurChanged($event)"
+          >
+            <dx-validator name="{{ 'tiers-clients-secteur' | localize }}">
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
       </div>
-    </div>
-  </dxi-item>
-</dx-box>
-<dx-box>
-  <dxi-item [ratio]="2">
-    <!-- Secteur -->
-    <div class="dx-field secteur-histo-ligne-field">
-      <div class="dx-field-label">
-        {{ "tiers-clients-secteur" | localize }}
-      </div>
-      <div class="dx-field-value">
-        <dx-select-box
-          formControlName="secteur"
-          [dataSource]="secteurs"
-          [displayExpr]="displayCodeBefore"
-          [searchExpr]="['id']"
-          (onValueChanged)="onSecteurChanged($event)"
-        >
-        <dx-validator
-          name="{{ 'tiers-clients-secteur' | localize }}"
-        >
-          <dxi-validation-rule
-            type="required"
-          ></dxi-validation-rule>
-        </dx-validator>
-        <dxo-drop-down-options [width]="350">
-        </dxo-drop-down-options>
-        </dx-select-box>
-      </div>
-    </div>
-  </dxi-item>
-  <dxi-item [ratio]="0.5"></dxi-item>
-  <dxi-item [ratio]="3.5">
-    <!-- Client -->
-    <div class="dx-field">
-      <div class="dx-field-label">
-        {{ "tiers-client" | localize }}
-      </div>
-      <div class="dx-field-value">
-        <dx-select-box
-          formControlName="client"
-          [dataSource]="clients"
-          [displayExpr]="displayCodeBefore"
-          [searchExpr]="['code']"
-          (onValueChanged)="onClientChanged($event)"
-          itemTemplate="items">
-          <div *dxTemplate="let data of 'items'">
-              <div [title]="!data.valide ? 'non valide' : ''" [ngClass]="{ 'not-valid' : !data.valide }">
+    </dxi-item>
+    <dxi-item [ratio]="0.5"></dxi-item>
+    <dxi-item [ratio]="3.5">
+      <!-- Client -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-client" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            formControlName="client"
+            [dataSource]="clients"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['code']"
+            (onValueChanged)="onClientChanged($event)"
+            itemTemplate="items"
+          >
+            <div *dxTemplate="let data of 'items'">
+              <div
+                [title]="!data.valide ? 'non valide' : ''"
+                [ngClass]="{ 'not-valid': !data.valide }"
+              >
                 {{ displayCodeBefore(data) }}
               </div>
-          </div>
-          >
-          <dx-validator
-            name="{{ 'tiers-client' | localize }}"
-          >
-          <dxi-validation-rule
-            type="required"
-          ></dxi-validation-rule>
-          </dx-validator>
-          <dxo-drop-down-options [width]="350">
-          </dxo-drop-down-options>
-        </dx-select-box>
+            </div>
+            >
+            <dx-validator name="{{ 'tiers-client' | localize }}">
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
       </div>
-    </div>
-  </dxi-item>
-  <dxi-item [ratio]="0.5"></dxi-item>
-  <dxi-item [ratio]="3.5">
-    <!-- Entrepot -->
-    <div class="dx-field">
-      <div class="dx-field-label">
-        {{ "tiers-entrepot" | localize }}
-      </div>
-      <div class="dx-field-value">
-        <dx-select-box
-          formControlName="entrepot"
-          [dataSource]="entrepots"
-          [searchExpr]="['code']"
-          [displayExpr]="displayCodeBefore"
-          (onValueChanged)="onEntrepotChanged($event)"
-          (onFocusIn)="onEntrepotFocus($event)"
-          [showClearButton]="true"
-          itemTemplate="items">
-          <div *dxTemplate="let data of 'items'">
-              <div [title]="!data.valide ? 'non valide' : ''" [ngClass]="{ 'not-valid' : !data.valide }">
+    </dxi-item>
+    <dxi-item [ratio]="0.5"></dxi-item>
+    <dxi-item [ratio]="3.5">
+      <!-- Entrepot -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-entrepot" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            formControlName="entrepot"
+            [dataSource]="entrepots"
+            [searchExpr]="['code']"
+            [displayExpr]="displayCodeBefore"
+            (onValueChanged)="onEntrepotChanged($event)"
+            (onFocusIn)="onEntrepotFocus($event)"
+            [showClearButton]="true"
+            itemTemplate="items"
+          >
+            <div *dxTemplate="let data of 'items'">
+              <div
+                [title]="!data.valide ? 'non valide' : ''"
+                [ngClass]="{ 'not-valid': !data.valide }"
+              >
                 {{ displayCodeBefore(data) }}
               </div>
-          </div>
-        >
-          <dx-validator
-            name="{{ 'tiers-entrepot' | localize }}"
-          >
-            <!-- <dxi-validation-rule
+            </div>
+            >
+            <dx-validator name="{{ 'tiers-entrepot' | localize }}">
+              <!-- <dxi-validation-rule
               type="required"
             ></dxi-validation-rule> -->
-          </dx-validator>
-          <dxo-drop-down-options [width]="350">
-          </dxo-drop-down-options>
-        </dx-select-box>
+            </dx-validator>
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
       </div>
-    </div>
-  </dxi-item>
-</dx-box>
+    </dxi-item>
+  </dx-box>
   <dx-box>
     <dxi-item [ratio]="5">
       <!-- Période -->
@@ -209,6 +204,7 @@
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
+    (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
@@ -229,7 +225,8 @@
       [showInfo]="true"
       [showNavigationButtons]="true"
     ></dxo-pager>
-    <dxo-selection *ngIf="gridSelectionEnabled"
+    <dxo-selection
+      *ngIf="gridSelectionEnabled"
       mode="multiple"
       [allowSelectAll]="false"
       [showCheckBoxesMode]="'always'"
