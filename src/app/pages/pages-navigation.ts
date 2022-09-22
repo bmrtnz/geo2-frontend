@@ -1,10 +1,5 @@
 export const navigation = [
     {
-        text: "Accueil",
-        path: "pages/home",
-        icon: "home",
-    },
-    {
         text: "Ordres de commande",
         icon: "material-icons euro_symbol",
         path: "pages/ordres",
