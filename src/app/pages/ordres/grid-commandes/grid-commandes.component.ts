@@ -26,6 +26,7 @@ import dxDataGrid, { dxDataGridColumn } from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
+import { exit } from "process";
 import { iif, Observable, of } from "rxjs";
 import { concatMap, concatMapTo, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
@@ -491,15 +492,24 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       this.currentCompanyService.getCompany().id !== "BUK"
       || proprietaire?.code.substring(0, 2) !== "BW"
     ) {
-      const listExp = proprietaire?.listeExpediteurs;
-      if (listExp) {
-        listExp.split(",").map(exp => {
+      const listExp = proprietaire?.listeExpediteurs?.split(",");
+      if (listExp?.length) {
+        for (const exp of listExp) {
           filters.push(["code", "=", exp], "or");
           // Automatically selected when included in the list
           if (exp === proprietaire.code) {
             fournisseur = proprietaire;
+            break;
           }
-        });
+        }
+
+        // Select first on the list if no selection
+        const { id } = await this.fournisseursService
+          .getFournisseurByCode(listExp[0], ["id"])
+          .pipe(map(res => res.data.fournisseurByCode))
+          .toPromise();
+        fournisseur = fournisseur ?? { id };
+
         filters.pop();
       } else {
         fournisseur = proprietaire;
