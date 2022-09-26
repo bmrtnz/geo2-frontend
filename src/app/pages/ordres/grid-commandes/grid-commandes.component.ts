@@ -27,8 +27,8 @@ import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { exit } from "process";
-import { iif, Observable, of } from "rxjs";
-import { concatMap, concatMapTo, filter, first, map, tap } from "rxjs/operators";
+import { from, iif, Observable, of } from "rxjs";
+import { concatMap, concatMapTo, filter, first, map, mapTo, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
@@ -192,7 +192,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           icon: "sorted",
           hint: "Renuméroter les lignes",
           onClick: () => {
-            this.reindexing();
+            this.reindexRows();
             this.grid.instance.saveEditData();
           },
         },
@@ -256,7 +256,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   // Reload grid data after external update
   public async update() {
     await (this.grid.dataSource as DataSource).reload();
-    this.reindexing();
+    this.reindexRows();
     this.grid.instance.saveEditData();
   }
 
@@ -458,21 +458,25 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   /**
    * Recalculate rows numero and push changes
    */
-  private reindexing() {
+  private reindexRows(startIndex?: number, endIndex?: number) {
+    const inclusive = (index: number) => index + 1;
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
     notify(this.localizeService.localize("renumerotation-lignes-ordre"), "info", 3000);
-    (datasource.items() as Partial<OrdreLigne>[])
-      .sort((a, b) => parseInt(a.numero, 10) - parseInt(b.numero, 10))
-      .forEach((item, index) => {
-        const numero = (index + 1).toString().padStart(2, "0");
-        if (item.numero !== numero)
-          this.changes.push({
-            key: item.id,
-            type: "update",
-            data: { numero },
-          });
-      });
+    const items = datasource.items();
+    const lignes = items
+      .slice(startIndex, endIndex ? inclusive(endIndex) : items.length)
+      .map(({ id }) => id);
+    this.ordreLignesService
+      .reindex(lignes, ["id", "numero"])
+      .pipe(
+        concatMap(res => from(res.data.reindex)),
+      )
+      .subscribe(({ id, numero }) => datasource.store().push([{
+        key: id,
+        type: "update",
+        data: { numero },
+      }]));
   }
 
   // OLD codebase beyond this point (grid-lignes.component)
@@ -662,7 +666,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     fromIndex: number,
     toIndex: number,
   }) {
-    // set moved row
+    // move selected row
     e.component.cellValue(e.fromIndex, "numero", OrdreLigne.formatNumero(e.toIndex + 1));
 
     // set offseted rows
