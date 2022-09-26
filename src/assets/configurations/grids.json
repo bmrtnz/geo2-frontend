@@ -2576,6 +2576,10 @@
       {
         "dataField": "gtinColisKit",
         "visible": true
+      },
+      {
+        "dataField": "id",
+        "visible": false
       }
     ]
   },

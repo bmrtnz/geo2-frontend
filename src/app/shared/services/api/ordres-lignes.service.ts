@@ -478,4 +478,28 @@ export class OrdreLignesService extends ApiService implements APIRead {
       });
   }
 
+  public reindex(lignes: string[], body: string[]) {
+    return this.apollo
+      .mutate<{ reindex: Partial<OrdreLigne>[] }>
+      ({
+        mutation: gql(ApiService.buildGraph(
+          "mutation",
+          [
+            {
+              name: "reindex",
+              body,
+              params: [
+                { name: "lignes", value: "lignes", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "lignes", type: "[String]", isOptionnal: false },
+          ],
+        )),
+        variables: { lignes },
+        fetchPolicy: "network-only",
+      });
+  }
+
 }
