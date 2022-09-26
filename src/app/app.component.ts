@@ -88,7 +88,8 @@ export class AppComponent {
     });
     dxDateBox.defaultOptions({
       options: {
-        onFocusIn: this.formUtilsService.selectTextOnFocusIn
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+        pickerType: "native",
       }
     });
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });
