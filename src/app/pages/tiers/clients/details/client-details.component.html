@@ -826,6 +826,7 @@
                       [dataSource]="regimesTva"
                       [displayExpr]="displayIDBefore"
                       [searchExpr]="['id']"
+                      (onValueChanged)="mandatoryUEVAT($event)"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-regimeTva' | localize }}"
@@ -1127,7 +1128,7 @@
                         ></dxi-validation-rule>
                         <dxi-validation-rule
                           type="async"
-                          *ngIf="!tvaCeeFree"
+                          *ngIf="mandatoryTvaCee"
                           type="required"
                         ></dxi-validation-rule>
                       </dx-validator>

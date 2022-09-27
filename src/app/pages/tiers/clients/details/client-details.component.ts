@@ -289,6 +289,7 @@ export class ClientDetailsComponent
   createMode = false;
   cofaceBlocked = false;
   tvaCeeFree = false;
+  mandatoryTvaCee = false;
   CCexists = false;
   ifcoChecked = false;
   couvTemp = false;
@@ -501,7 +502,9 @@ export class ClientDetailsComponent
   afterLoadInitForm(res) {
 
     this.client = res.data.client;
-    this.freeUEVAT(this.client.secteur, this.client.pays);
+    // Règle changée Tina 16/09/2022
+    // this.freeUEVAT(this.client.secteur, this.client.pays);
+    this.mandatoryUEVAT({ value: this.client.regimeTva });
     this.formGroup.get("tvaCee").markAsUntouched(); // Changing 'required' property marks as touched
     const certifications = this.mapCertificationsForDisplay(
       this.client.certifications,
@@ -804,7 +807,8 @@ export class ClientDetailsComponent
         this.formGroup.get("fraisMarketingModeCalcul").markAsDirty();
       }
     }
-    this.freeUEVAT(e.value, this.formGroup.get("pays").value);
+    // Règle changée Tina 16/09/2022
+    // this.freeUEVAT(e.value, this.formGroup.get("pays").value);
   }
 
   onUsageInterneChange(e) {
@@ -822,15 +826,22 @@ export class ClientDetailsComponent
   }
 
   onPaysChange(e) {
-    this.freeUEVAT(this.formGroup.get("secteur").value, e.value);
+    // Règle changée Tina 16/09/2022
+    // this.freeUEVAT(this.formGroup.get("secteur").value, e.value);
   }
 
   freeUEVAT(sector, pays) {
-    if (!sector || !pays) return;
-    // ID TVA CEE : doit être obligatoire pour tous les secteurs sauf MAR / AFA / GB et DIV
-    // (+ obligatoire si pays = Irlande) - Léa 10/09/2021
-    const sectors = ["MAR", "AFA", "GB", "DIV"];
-    this.tvaCeeFree = sectors.includes(sector.id) && pays.id !== "IE";
+    // Règle changée Tina 16/09/2022
+    // if (!sector || !pays) return;
+    // // ID TVA CEE : doit être obligatoire pour tous les secteurs sauf MAR / AFA / GB et DIV
+    // // (+ obligatoire si pays = Irlande) - Léa 10/09/2021
+    // const sectors = ["MAR", "AFA", "GB", "DIV"];
+    // this.tvaCeeFree = sectors.includes(sector.id) && pays.id !== "IE";
+  }
+
+  mandatoryUEVAT(e) {
+    const regime = e?.value?.id;
+    this.mandatoryTvaCee = (regime && !["E", "G"].includes(regime)) ? true : false;
   }
 
   onCourtierChange(e) {
