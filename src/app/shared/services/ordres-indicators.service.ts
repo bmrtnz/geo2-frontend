@@ -371,17 +371,7 @@ export class OrdresIndicatorsService {
             this.currentCompanyService.getCompany().id,
           ],
           "and",
-          [
-            ["clients.enCoursNonEchu", "<>", 0],
-            "or",
-            ["clients.enCours1a30", "<>", 0],
-            "or",
-            ["clients.enCours31a60", "<>", 0],
-            "or",
-            ["clients.enCours61a90", "<>", 0],
-            "or",
-            ["clients.enCours90Plus", "<>", 0],
-          ],
+          ["clients.depassement", ">", 0],
         ];
         instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection);
         instance.fetchCount = this.paysService.count.bind(this.paysService, [
