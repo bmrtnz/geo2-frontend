@@ -369,7 +369,6 @@
                       [dataSource]="pays"
                       [displayExpr]="displayIDBefore"
                       [searchExpr]="['id']"
-                      (onValueChanged)="onPaysChange($event)"
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-pays' | localize }}"
@@ -575,10 +574,6 @@
                           [max]="20"
                         ></dxi-validation-rule>
                         <dxi-validation-rule
-                          *ngIf="idTvaRequired"
-                          type="required"
-                        ></dxi-validation-rule>
-                        <dxi-validation-rule
                           *ngIf="editing"
                           type="pattern"
                           pattern="^[A-Z0-9]+$"
@@ -601,7 +596,6 @@
                     [dataSource]="regimesTva"
                     [displayExpr]="displayIDBefore"
                     [searchExpr]="['id']"
-                    (onValueChanged)="onRegimeTvaChange()"
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-regimeTva' | localize }}"
