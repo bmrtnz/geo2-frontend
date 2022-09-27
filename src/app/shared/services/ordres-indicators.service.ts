@@ -372,6 +372,8 @@ export class OrdresIndicatorsService {
           ],
           "and",
           ["clients.depassement", ">", 0],
+          "and",
+          ["clients.valide", "=", true],
         ];
         instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection);
         instance.fetchCount = this.paysService.count.bind(this.paysService, [
