@@ -126,7 +126,7 @@ const indicators: Indicator[] = [
       "../../pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component"
     ),
     /* tslint:disable-next-line max-line-length */
-    explicitSelection: ["id", "description", "clientsSommeAgrement", "clientsSommeEnCoursTemporaire", "clientsSommeEnCoursBlueWhale", "clientsSommeAutorise", "clientsSommeDepassement", "clientsSommeEnCoursActuel", "clientsSommeEnCoursNonEchu", "clientsSommeEnCours1a30", "clientsSommeEnCours31a60", "clientsSommeEnCours61a90", "clientsSommeEnCours90Plus", "clientsSommeAlerteCoface"]
+    explicitSelection: ["id", "pays.description", "clientsSommeAgrement", "clientsSommeEnCoursTemporaire", "clientsSommeEnCoursBlueWhale", "clientsSommeAutorise", "clientsSommeDepassement", "clientsSommeEnCoursActuel", "clientsSommeEnCoursNonEchu", "clientsSommeEnCours1a30", "clientsSommeEnCours31a60", "clientsSommeEnCours61a90", "clientsSommeEnCours90Plus", "clientsSommeAlerteCoface"]
   },
   {
     id: "OrdresNonClotures",
@@ -371,19 +371,11 @@ export class OrdresIndicatorsService {
             this.currentCompanyService.getCompany().id,
           ],
           "and",
-          [
-            ["clients.enCoursNonEchu", "<>", 0],
-            "or",
-            ["clients.enCours1a30", "<>", 0],
-            "or",
-            ["clients.enCours31a60", "<>", 0],
-            "or",
-            ["clients.enCours61a90", "<>", 0],
-            "or",
-            ["clients.enCours90Plus", "<>", 0],
-          ],
+          ["clients.depassement", ">", 0],
+          "and",
+          ["clients.valide", "=", true],
         ];
-        instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection);
+        instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection, instance.filter);
         instance.fetchCount = this.paysService.count.bind(this.paysService, [
           ...instance.filter,
           ...(this.authService.currentUser.secteurCommercial &&

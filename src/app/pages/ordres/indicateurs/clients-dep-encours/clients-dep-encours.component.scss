@@ -1,3 +1,10 @@
+@import "~themes/generated/variables.base";
+
 .secteur-encours {
   width: 400px;
+}
+
+::ng-deep td.highlight-err {
+  background: $datagrid-row-error-bg;
+  color: $datagrid-row-error-color;
 }
