@@ -4935,7 +4935,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "description",
+        "dataField": "pays.description",
         "visible": true,
         "sortIndex": 1,
         "sortOrder": "asc",

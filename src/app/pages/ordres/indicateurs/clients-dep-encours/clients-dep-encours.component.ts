@@ -1,25 +1,27 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { LocalizePipe } from "app/shared/pipes";
 import {
   AuthService,
   LocalizationService,
-  TransporteursService,
+  TransporteursService
 } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { PaysDepassementService } from "app/shared/services/api/pays-depassement.service";
+import { PaysService } from "app/shared/services/api/pays.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import {
   Indicator,
-  OrdresIndicatorsService,
+  OrdresIndicatorsService
 } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
-import { DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -30,7 +32,7 @@ import { map } from "rxjs/operators";
   templateUrl: "./clients-dep-encours.component.html",
   styleUrls: ["./clients-dep-encours.component.scss"],
 })
-export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
+export class ClientsDepEncoursComponent implements AfterViewInit {
   readonly INDICATOR_NAME = "ClientsDepEncours";
 
   secteurs: DataSource;
@@ -41,6 +43,7 @@ export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
 
   @ViewChild("secteurValue", { static: false })
   secteurSB: DxSelectBoxComponent;
+  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
   public dataSource: DataSource;
   public title: string;
@@ -56,6 +59,8 @@ export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     private localizePipe: LocalizePipe,
+    private paysService: PaysService,
+    private paysDepassementService: PaysDepassementService,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -81,22 +86,25 @@ export class ClientsDepEncoursComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngOnInit() {
-    this.dataSource = this.indicator.dataSource;
-  }
-
   ngAfterViewInit() {
     if (!this.authService.isAdmin)
       this.secteurSB.value =
         this.authService.currentUser.secteurCommercial;
+    this.enableFilters();
   }
 
   enableFilters() {
-    const filters = this.indicator.cloneFilter();
-    if (this.secteurSB.value?.id)
-      filters.push("and", ["secteur.id", "=", this.secteurSB.value.id]);
-    this.dataSource.filter(filters);
-    this.dataSource.reload();
+    this.grid.dataSource = null;
+    // const filters = this.indicator.cloneFilter();
+    // if (this.secteurSB.value?.id)
+    //   filters.push("and", ["secteur.id", "=", this.secteurSB.value.id]);
+    const dataSource = this.paysDepassementService
+      .getDataSource(this.indicator.explicitSelection, {
+        secteurCode: this.secteurSB.value?.id,
+        societeCode: this.currentCompanyService.getCompany().id,
+      });
+    // dataSource.filter(filters);
+    this.grid.dataSource = dataSource;
   }
 
   capitalize(str) {
