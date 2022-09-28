@@ -429,9 +429,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
     if (!this.selectedLignes?.length) {
-      this.gridCommandes.grid.instance.columnOption("command:select", "visible", true);
-      this.gridCommandes.grid.instance.selectAll();   // Way to avoid "null"
-      this.gridCommandes.grid.instance.deselectAll(); // in select checkboxes
       notify(this.localization.localize("text-selection-lignes"), "warning", 5000);
       return;
     }
@@ -461,7 +458,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (resCree) => {
           const refOrdreRegul = resCree.data.fCreeOrdreRegularisation.data.ls_ord_ref_regul;
-          const currOrder = this.ordre;
           if (refOrdreRegul) {
             // Find numero / Initialize form
             this.ordresService
@@ -493,7 +489,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   clearSelectionForRegul() {
     this.selectedLignes = [];
-    this.gridCommandes.grid.instance.columnOption("command:select", "visible", false);
     this.gridCommandes.grid.instance.deselectAll();
   }
 
