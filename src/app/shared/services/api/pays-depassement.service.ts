@@ -50,4 +50,31 @@ export class PaysDepassementService extends ApiService {
       })
     });
   }
+
+  count(variables: {
+    secteurCode: Secteur["id"],
+    societeCode: Societe["id"],
+  }) {
+    return this.apollo
+      .query<{ countPaysDepassement: number }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `count${this.model.name}`,
+              params: [
+                { name: "secteurCode", value: "secteurCode", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true }
+              ],
+            },
+          ],
+          [
+            { name: "secteurCode", type: "String", isOptionnal: true },
+            { name: "societeCode", type: "String", isOptionnal: true },
+          ],
+        )),
+        variables,
+        fetchPolicy: "network-only",
+      });
+  }
 }
