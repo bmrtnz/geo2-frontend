@@ -1345,7 +1345,9 @@
       },
       {
         "dataField": "dateFabrication",
-        "visible": false
+        "visible": true,
+        "dataType": "date",
+        "format": "dd-MM-yyyy"
       },
       {
         "dataField": "statut",
