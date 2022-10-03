@@ -88,7 +88,7 @@ export class AppComponent {
     });
     dxDateBox.defaultOptions({
       options: {
-        pickerType: "native",
+        useMaskBehavior: true,
       }
     });
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });
