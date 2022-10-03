@@ -248,6 +248,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
+  public allowVenteACommissionMutation: boolean;
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
@@ -790,6 +791,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             return;
           }
           this.allowMutations = !Ordre.isCloture(this.ordre);
+          this.initVACMutation();
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
           this.fetchFullOrderNumber();
@@ -822,6 +824,15 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: (message: string) => notify({ message }, "error", 7000),
       });
+  }
+
+  private initVACMutation() {
+    this.allowVenteACommissionMutation =
+      this.allowMutations && (
+        (this.ordre.client.venteACommission && this.ordre.type.id !== "REP") ||
+        (this.authService.currentUser.profileClient === "ADMIN") ||
+        (!!this.authService.currentUser.geoClient)
+      );
   }
 
   private initializeAnchors(event?: TabChangeData) {

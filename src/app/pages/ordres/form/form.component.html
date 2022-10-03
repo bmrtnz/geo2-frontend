@@ -821,11 +821,7 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-check-box
-                                [disabled]="
-                                  !allowMutations ||
-                                  !authService.currentUser.adminClient ||
-                                  ordreBAFOuFacture
-                                "
+                                [disabled]="!allowVenteACommissionMutation"
                                 formControlName="venteACommission"
                               >
                               </dx-check-box>
@@ -938,7 +934,7 @@
                     <dx-button
                       class="order-regul-button"
                       type="default"
-                      [disabled]="false"
+                      [disabled]="true"
                       [focusStateEnabled]="false"
                       text="{{ 'btn-regulorder' | localize }}"
                       hint="{{ 'hint-regulorder' | localize }}"
