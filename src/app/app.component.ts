@@ -88,7 +88,6 @@ export class AppComponent {
     });
     dxDateBox.defaultOptions({
       options: {
-        onFocusIn: this.formUtilsService.selectTextOnFocusIn,
         pickerType: "native",
       }
     });
