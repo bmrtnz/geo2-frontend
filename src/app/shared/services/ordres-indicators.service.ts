@@ -14,8 +14,8 @@ import {
   Operation,
   OrdresService
 } from "./api/ordres.service";
+import { PaysDepassementService } from "./api/pays-depassement.service";
 import {
-  CountResponse as CountResponsePays,
 
   PaysService
 } from "./api/pays.service";
@@ -297,6 +297,7 @@ export class OrdresIndicatorsService {
     public currentCompanyService: CurrentCompanyService,
     private ordresService: OrdresService,
     private paysService: PaysService,
+    private paysDepassementService: PaysDepassementService,
   ) {
     this.updateIndicators();
   }
@@ -376,23 +377,10 @@ export class OrdresIndicatorsService {
           ["clients.valide", "=", true],
         ];
         instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection, instance.filter);
-        instance.fetchCount = this.paysService.count.bind(this.paysService, [
-          ...instance.filter,
-          ...(this.authService.currentUser.secteurCommercial &&
-            !this.authService.isAdmin
-            ? [
-              "and",
-              [
-                "clients.secteur.id",
-                "=",
-                this.authService.currentUser.secteurCommercial
-                  ?.id,
-              ],
-            ]
-            : []),
-        ]) as (
-            dxFilter?: any[],
-          ) => Observable<ApolloQueryResult<CountResponsePays>>;
+        instance.fetchCount = this.paysDepassementService.count.bind(this.paysDepassementService, {
+          secteurCode: this.authService.currentUser.secteurCommercial.id,
+          societeCode: this.currentCompanyService.getCompany().id,
+        });
       }
 
       // Ordres non cloturés
