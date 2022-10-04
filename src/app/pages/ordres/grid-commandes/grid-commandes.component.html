@@ -12,7 +12,7 @@
   (onFocusedCellChanging)="focusedCellChanging($event)"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
-  (onContentReady)="onContentReady($event)"
+  (onContentReady)="contentReadyEvent.emit($event)"
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
   (onEditingStart)="onEditingStart($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
@@ -195,16 +195,20 @@
     [dataField]="column.dataField"
     [allowEditing]="column.allowEditing"
     [allowSorting]="column.allowSorting"
-    [cellTemplate]="column.cellTemplate"
     [format]="column?.format"
     [editorOptions]="column?.editorOptions"
-    [editCellTemplate]="column.editCellTemplate"
     [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="
-      column.cellTemplate === 'entityCellTemplate' ? displayCodeBefore : false
+      column?.calculateDisplayValue
+        ? (column.calculateDisplayValue | evalDisplay)
+        : column?.dataField
     "
+    [lookup]="column?.lookup"
     [showInColumnChooser]="column.showInColumnChooser"
-    [calculateSortValue]="column.dataField === 'numero' && calultateSortValue"
+    [calculateSortValue]="
+      column?.calculateSortValue ||
+      (column.dataField === 'numero' && calultateSortValue)
+    "
     [cssClass]="column?.cssClass"
     [caption]="
       ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
@@ -249,11 +253,6 @@
     [width]="30"
     [showInColumnChooser]="false"
   ></dxi-column>
-
-  <app-entity-cell-template
-    [columnsSettings]="columnsSettings"
-    [allowMutations]="allowMutations"
-  ></app-entity-cell-template>
 </dx-data-grid>
 
 <!-- marge previsionelle -->

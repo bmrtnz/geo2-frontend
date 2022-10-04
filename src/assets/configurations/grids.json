@@ -980,6 +980,11 @@
             "id",
             "raisonSocial",
             "ville"
+          ],
+          "searchExpr": [
+            "id",
+            "raisonSocial",
+            "ville"
           ]
         }
       },
@@ -992,6 +997,10 @@
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
             "id",
             "description"
           ]
@@ -2415,16 +2424,44 @@
       },
       {
         "dataField": "proprietaireMarchandise.id",
+        "calculateDisplayValue": [
+          "proprietaireMarchandise.code",
+          "proprietaireMarchandise.raisonSocial"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
+        "calculateSortValue": "proprietaireMarchandise.code",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code",
+            "raisonSocial"
+          ]
+        },
         "width": 170
       },
       {
         "dataField": "fournisseur.id",
+        "calculateDisplayValue": [
+          "fournisseur.code",
+          "fournisseur.raisonSocial"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
+        "calculateSortValue": "transporteur.code",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code",
+            "raisonSocial"
+          ]
+        },
         "width": 170
       },
       {
@@ -2446,9 +2483,23 @@
       },
       {
         "dataField": "venteUnite.id",
+        "calculateDisplayValue": [
+          "venteUnite.id",
+          "venteUnite.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "venteUnite.id",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "gratuit",
@@ -2458,9 +2509,23 @@
       },
       {
         "dataField": "codePromo.id",
+        "calculateDisplayValue": [
+          "codePromo.id",
+          "codePromo.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
+        "calculateSortValue": "codePromo.id",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "cssClass": "small-header-right",
         "allowEditing": true,
         "width": 60
@@ -2484,9 +2549,23 @@
       },
       {
         "dataField": "achatUnite.id",
+        "calculateDisplayValue": [
+          "achatUnite.id",
+          "achatUnite.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "achatUnite.id",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "achatDevise",
@@ -2496,15 +2575,43 @@
       },
       {
         "dataField": "typePalette.id",
+        "calculateDisplayValue": [
+          "typePalette.id",
+          "typePalette.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "typePalette.id",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "paletteInter.id",
+        "calculateDisplayValue": [
+          "paletteInter.id",
+          "paletteInter.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "paletteInter.id",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "libelleDLV",
@@ -2531,9 +2638,23 @@
       },
       {
         "dataField": "fraisUnite.id",
+        "calculateDisplayValue": [
+          "fraisUnite.id",
+          "fraisUnite.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "fraisUnite.id",
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "fraisCommentaires",

@@ -578,13 +578,13 @@ export abstract class ApiService implements OnDestroy {
       if (typeof node === "object") { // comparison
 
         // Map negation
-        if (node[0] === "!") {
+        if (node?.[0] === "!") {
           node = node[1];
           negate = !negate;
         }
 
         // Deep filter
-        if (typeof node[0] === "object") {
+        if (typeof node?.[0] === "object") {
           currentFilter[index] = `(${next(node, negate).join(" ")})`;
         } else {
           /* tslint:disable-next-line:prefer-const */
@@ -943,10 +943,7 @@ export abstract class ApiService implements OnDestroy {
         load: options => this.apollo
           .query<{ [key: string]: RelayPage<T> }>({
             query: gql(this.buildGetPageGraph(columns)),
-            variables: {
-              ...this.mapLoadOptionsToVariables(options),
-              search,
-            },
+            variables: this.mergeVariables(this.mapLoadOptionsToVariables(options), { search }),
             fetchPolicy: "cache-first",
           })
           .pipe(
