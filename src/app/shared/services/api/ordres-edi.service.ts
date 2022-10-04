@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { Client } from "app/shared/models";
+import ClientEdi from "app/shared/models/client-edi.model";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import EdiOrdre from "app/shared/models/edi-ordre.model";
 import { ApiService } from "../api.service";
@@ -78,11 +79,11 @@ export class OrdresEdiService extends ApiService {
   ) {
     const columns = Client.getFieldsName();
     columns.clear();
-    columns.add("id");
-    columns.add("code");
-    columns.add("raisonSocial");
+    columns.add("client.id");
+    columns.add("client.code");
+    columns.add("client.raisonSocial");
     return this.apollo
-      .query<{ allClientEdi: Client[] }>({
+      .query<{ allClientEdi: ClientEdi[] }>({
         query: gql(ApiService.buildGraph(
           "query",
           [

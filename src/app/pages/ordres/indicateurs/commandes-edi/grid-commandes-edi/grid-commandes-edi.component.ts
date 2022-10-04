@@ -272,7 +272,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         const filters: any = [["secteur.id", "=", this.authService.currentUser.secteurCommercial.id]];
         const filter = [];
         clientList.map(clt => {
-          filter.push(["id", "=", clt.id], "or");
+          filter.push(["id", "=", clt.client.id], "or");
         });
         filter.pop();
         filters.push("and", filter);
