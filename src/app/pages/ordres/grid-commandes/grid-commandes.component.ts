@@ -738,6 +738,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         .getLookupStore<Fournisseur>(
           ["id", "code", "raisonSocial", "listeExpediteurs"],
           fFilter,
+          { sort: [{ selector: "code" }] },
         ),
     );
     GridConfiguratorService.bindLookupColumnSource(
@@ -747,6 +748,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         .getLookupStore<Fournisseur>(
           ["id", "code", "raisonSocial", "listeExpediteurs"],
           fFilter,
+          { sort: [{ selector: "code" }] },
         ),
     );
 

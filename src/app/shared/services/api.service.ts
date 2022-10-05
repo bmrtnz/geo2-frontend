@@ -935,7 +935,11 @@ export abstract class ApiService implements OnDestroy {
       );
   }
 
-  getLookupStore<T>(columns: Array<string>, search?: string) {
+  getLookupStore<T>(
+    columns: Array<string>,
+    search?: string,
+    params: Partial<LookupStore> = {},
+  ) {
     return {
       paginate: true,
       sort: [{ selector: "id" }],
@@ -958,7 +962,8 @@ export abstract class ApiService implements OnDestroy {
           })
           .pipe(map(res => res.data[this.model.name.lcFirst()]))
           .toPromise(),
-      })
+      }),
+      ...params,
     } as LookupStore;
   }
 
