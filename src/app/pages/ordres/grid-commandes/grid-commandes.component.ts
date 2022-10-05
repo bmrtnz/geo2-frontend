@@ -726,32 +726,23 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   /** lookup columns datasource binding */
   private bindSources(grid: dxDataGrid) {
+
+    // With Fournisseur model
     const fFilter = this.fournisseursService.mapDXFilterToRSQL([
       ["valide", "=", true],
       "and",
       ["natureStation", "<>", "F"],
     ]);
-    GridConfiguratorService.bindLookupColumnSource(
-      grid,
-      "proprietaireMarchandise.id",
-      this.fournisseursService
-        .getLookupStore<Fournisseur>(
-          ["id", "code", "raisonSocial", "listeExpediteurs"],
-          fFilter,
-          { sort: [{ selector: "code" }] },
-        ),
-    );
-    GridConfiguratorService.bindLookupColumnSource(
-      grid,
-      "fournisseur.id",
-      this.fournisseursService
-        .getLookupStore<Fournisseur>(
-          ["id", "code", "raisonSocial", "listeExpediteurs"],
-          fFilter,
-          { sort: [{ selector: "code" }] },
-        ),
-    );
+    const fLookupStore = this.fournisseursService
+      .getLookupStore<Fournisseur>(
+        ["id", "code", "raisonSocial", "listeExpediteurs"],
+        fFilter,
+        { sort: [{ selector: "code" }] },
+      );
+    for (const field of ["proprietaireMarchandise.id", "fournisseur.id"])
+      GridConfiguratorService.bindLookupColumnSource(grid, field, fLookupStore);
 
+    // With BaseTarif model
     const btFilter = this.basesTarifService.mapDXFilterToRSQL([
       ["valide", "=", true],
       "and",
@@ -768,6 +759,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       this.codesPromoService.getLookupStore<CodePromo>(["id", "description"]),
     );
 
+    // With TypePalette model
     const tpLookupStore = this.typesPaletteService
       .getLookupStore<TypePalette>(["id", "description"], "valide==true");
     for (const field of ["typePalette.id", "paletteInter.id"])
