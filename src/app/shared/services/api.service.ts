@@ -3,6 +3,7 @@ import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariable
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
 import { LookupStore } from "basic";
+import ArrayStore from "devextreme/data/array_store";
 import CustomStore, { CustomStoreOptions } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -935,6 +936,7 @@ export abstract class ApiService implements OnDestroy {
       );
   }
 
+  /** Build DX LookupStore using paginated/backend queries */
   getLookupStore<T>(
     columns: Array<string>,
     search?: string,
@@ -963,6 +965,29 @@ export abstract class ApiService implements OnDestroy {
           .pipe(map(res => res.data[this.model.name.lcFirst()]))
           .toPromise(),
       }),
+      ...params,
+    } as LookupStore;
+  }
+
+  /** Build DX LookupStore using preloaded data */
+  async getPreloadedLookupStore<T>(
+    columns: Array<string>,
+    search?: string,
+    params: Partial<LookupStore> = {},
+  ) {
+    const data = await this.apollo
+      .query<{ [key: string]: Array<T> }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+        fetchPolicy: "cache-first",
+      })
+      .pipe(
+        map(res => res.data[`all${this.model.name}List`]),
+      ).toPromise();
+    return {
+      paginate: true,
+      sort: [{ selector: "id" }],
+      store: new ArrayStore({ data }),
       ...params,
     } as LookupStore;
   }
