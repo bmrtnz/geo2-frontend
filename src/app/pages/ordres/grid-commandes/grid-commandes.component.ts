@@ -21,11 +21,9 @@ import { Change, GridColumn, OnSavingEvent } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
-import dxDataGrid, { dxDataGridColumn } from "devextreme/ui/data_grid";
+import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { environment } from "environments/environment";
-import { exit } from "process";
 import { iif, Observable, of } from "rxjs";
 import { concatMap, concatMapTo, filter, first, last, map, takeWhile, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
@@ -725,7 +723,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   /** lookup columns datasource binding */
-  private bindSources(grid: dxDataGrid) {
+  private async bindSources(grid: dxDataGrid) {
 
     // With Fournisseur model
     const fFilter = this.fournisseursService.mapDXFilterToRSQL([
@@ -733,8 +731,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       "and",
       ["natureStation", "<>", "F"],
     ]);
-    const fLookupStore = this.fournisseursService
-      .getLookupStore<Fournisseur>(
+    const fLookupStore = await this.fournisseursService
+      .getPreloadedLookupStore<Fournisseur>(
         ["id", "code", "raisonSocial", "listeExpediteurs"],
         fFilter,
         { sort: [{ selector: "code" }] },
