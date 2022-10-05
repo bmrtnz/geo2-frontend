@@ -2430,6 +2430,9 @@
         ],
         "visible": true,
         "calculateSortValue": "proprietaireMarchandise.code",
+        "editorOptions": {
+          "searchTimeout": "10"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
@@ -2451,6 +2454,9 @@
         ],
         "visible": true,
         "calculateSortValue": "transporteur.code",
+        "editorOptions": {
+          "searchTimeout": "10"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
