@@ -141,6 +141,7 @@ const extraConfigurations = [
   "format",
   "calculateCellValue",
   "lookup",
+  "searchTimeout",
   "calculateSortValue",
   "filterOperations",
 ];
