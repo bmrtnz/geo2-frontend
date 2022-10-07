@@ -82,12 +82,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public changes: Change<Partial<OrdreLigne>>[] = [];
   public contentReadyEvent = new EventEmitter<any>();
 
-  /**
-   * Register potential proprietaire cells value, before request return with confirmation
-   * Used for others field preselections
-   */
-  private proprietairePredictions: { [key: string]: any } = {};
-
   @Input() ordreID: string;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
@@ -184,6 +178,16 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   displaySummaryFormat(data) {
     if (!data?.value) return;
     return data.value + " ligne" + (data.value > 1 ? "s" : "");
+  }
+
+  onFocusedCellChanged(e) {
+    if (e.column.dataField !== "fournisseur.id") return;
+    const { id } = e.row.data.proprietaireMarchandise;
+    this.buildFournisseurFilter(id).then(fournisseur => {
+      const cell = e.row.cells[e.columnIndex];
+      if (cell.value !== fournisseur.id)
+        cell.component.cellValue(e.rowIndex, "fournisseur.id", fournisseur.id);
+    });
   }
 
   onFocusedCellChanging(e) {
@@ -575,8 +579,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
     // push prediction for "proprietaireMarchandise"
     if (context.dataField === "proprietaireMarchandise.id") {
-
-      self.proprietairePredictions[currentRowData.id] = newData.proprietaireMarchandise;
 
       // code & raisonSocial needed for normal mode display evaluation
       const [code, raisonSocial] = displayValue.split(" - ");
