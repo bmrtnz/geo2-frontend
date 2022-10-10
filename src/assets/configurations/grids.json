@@ -2440,8 +2440,7 @@
             "raisonSocial"
           ],
           "searchExpr": [
-            "code",
-            "raisonSocial"
+            "code"
           ]
         },
         "width": 170
@@ -2464,8 +2463,7 @@
             "raisonSocial"
           ],
           "searchExpr": [
-            "code",
-            "raisonSocial"
+            "code"
           ]
         },
         "width": 170
