@@ -27,6 +27,9 @@ export class StockReservation extends StockQuantite {
 
   @Field()
   quantiteDisponible: number;
+
+  @Field({ dataType: "date" })
+  dateFabrication: string;
 }
 
 export default StockReservation;

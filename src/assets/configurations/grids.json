@@ -1476,6 +1476,12 @@
         "width": 180,
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "dateFabrication",
+        "visible": true,
+        "dataType": "date",
+        "format": "dd-MM-yyyy"
       }
     ]
   },
