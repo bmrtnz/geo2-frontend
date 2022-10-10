@@ -488,11 +488,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         }
 
         // Select first on the list if no selection
-        const { id } = await this.fournisseursService
-          .getFournisseurByCode(listExp[0], ["id"])
+        const firstFournisseur = await this.fournisseursService
+          .getFournisseurByCode(listExp[0], ["id", "code", "raisonSocial"])
           .pipe(map(res => res.data.fournisseurByCode))
           .toPromise();
-        fournisseur = fournisseur ?? { id };
+        fournisseur = fournisseur ?? firstFournisseur;
 
         filters.pop();
       } else {
@@ -599,13 +599,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         code,
         raisonSocial,
       };
-
-      // push changes
-      self.changes.push({
-        key: currentRowData.id,
-        type: "update",
-        data: newData,
-      });
     }
 
   }
