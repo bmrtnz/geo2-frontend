@@ -187,6 +187,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
       case "expedieStation": {
         if (this.changeCloture || this.ordreBAFOuFacture) return;
         if (e.data.expedieStation === true) {
+          if (!this.authService.isAdmin) return; // Seuls les admins peuvent déclôturer
           this.choixRaisonPopup.visible = true;
         } else {
           // Save cloture
