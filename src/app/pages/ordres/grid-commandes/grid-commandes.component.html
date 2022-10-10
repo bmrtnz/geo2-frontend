@@ -143,6 +143,7 @@
         [focusStateEnabled]="false"
         hint="{{ 'destockage' | localize }}"
         [visible]="allowMutations"
+        [disabled]="!cell.data.nombreColisCommandes"
         [text]="'D'"
         (onClick)="openDestockagePopup(cell.data)"
       >
