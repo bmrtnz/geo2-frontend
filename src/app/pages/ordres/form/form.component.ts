@@ -469,6 +469,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.initializeForm("no-cache");
                   notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "success", 7000);
                   this.clearSelectionForRegul();
+                  this.tabContext.openOrdre(numOrdreRegul);
                 },
                 error: (error: Error) => {
                   console.log(error);
