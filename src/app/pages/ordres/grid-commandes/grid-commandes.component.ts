@@ -182,9 +182,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   onFocusedCellChanged(e) {
     if (e.column.dataField !== "fournisseur.id") return;
+
+    const cell = e.row.cells[e.columnIndex];
     const { id } = e.row.data.proprietaireMarchandise;
+
     this.buildFournisseurFilter(id).then(fournisseur => {
-      const cell = e.row.cells[e.columnIndex];
       if (cell.value !== fournisseur.id)
         cell.component.cellValue(e.rowIndex, "fournisseur.id", fournisseur.id);
     });
@@ -195,8 +197,14 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     // It seems that not everything's really ready when event is triggered
     // Conclusion => without a timeOut, major risk of unsaved data!
     setTimeout(() => {
+      // from proprietaire to fournisseur -> cancel save
+      if (
+        e.columns[e.prevColumnIndex]?.dataField === "proprietaireMarchandise.id"
+        && e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
+      ) return;
+
       if (e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
-        this.grid.instance.saveEditData();
+        return this.grid.instance.saveEditData();
     }, 10);
   }
 
