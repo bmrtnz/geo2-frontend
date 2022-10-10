@@ -4,19 +4,18 @@
   [width]="600"
   [height]="500"
   [(visible)]="visible"
-  title="{{ 'ordre-complementaire-creation' | localize }}"
+  title="{{ 'ordre-regularisation-creation' | localize }}"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
   (onHiding)="onHiding()"
 >
-
   <!-- Subtitle -->
   <div class="blue-text">
-    {{ 'text-popup-regularisation-subtitle' | localize }}
+    {{ "text-popup-regularisation-subtitle" | localize }}
   </div>
-  <br>
+  <br />
 
-   <!-- Motif list -->
+  <!-- Motif list -->
   <dx-list
     class="list-motif"
     [dataSource]="dataSource"
@@ -28,11 +27,11 @@
     [selectedItemKeys]="[]"
     (onSelectionChanged)="onSelectionChanged($event)"
   ></dx-list>
-  <br>
+  <br />
 
   <!-- Solution -->
   <div class="blue-text">
-    {{ 'text-popup-regularisation-solution' | localize }}
+    {{ "text-popup-regularisation-solution" | localize }}
   </div>
   <div class="dx-field radio-group-popup">
     <div class="dx-field-value">
@@ -56,7 +55,7 @@
     </div>
   </div>
 
-  <br>
+  <br />
   <div class="popup-buttons-container">
     <dx-button
       type="default"
