@@ -2406,6 +2406,7 @@
       },
       {
         "dataField": "nombreColisPalette",
+        "dataType": "number",
         "width": 45,
         "editorOptions": {
           "step": 0
