@@ -434,7 +434,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
     return new DataSource({
       store: new ArrayStore({
         key: this.keyField,
-        data,
+        data: JSON.parse(JSON.stringify(data)),
       }),
     });
   }
