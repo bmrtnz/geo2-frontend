@@ -60,7 +60,7 @@ export class PromptPopupComponent {
   setValidationRules() {
     this.commentValidationRules = [
       { type: "required" },
-      { type: "stringLength", max: this.commentMaxLength ?? 128 }
+      { type: "stringLength", max: this.commentMaxLength ?? 512 }
     ];
   }
 
