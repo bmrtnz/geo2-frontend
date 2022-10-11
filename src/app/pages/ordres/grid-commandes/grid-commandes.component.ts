@@ -497,10 +497,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         for (const exp of listExp) {
           filters.push(["code", "=", exp], "or");
           // Automatically selected when included in the list
-          if (exp === proprietaire.code) {
-            fournisseur = proprietaire;
-            break;
-          }
+          if (exp === proprietaire.code) fournisseur = proprietaire;
         }
 
         // Select first on the list if no selection
