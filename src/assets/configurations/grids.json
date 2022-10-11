@@ -2897,17 +2897,19 @@
         "visibleIndex": 0,
         "dataField": "ordre.numero",
         "dataType": "string",
+        "sortOrder": "desc",
         "width": 80,
         "visible": true,
-        "groupIndex": 0
+        "groupIndex": 1
       },
       {
         "visibleIndex": 2,
         "dataField": "ordre.dateDepartPrevue",
         "dataType": "date",
-        "sortOrder": "desc",
         "format": "dd-MM-yyyy",
+        "sortOrder": "desc",
         "width": 110,
+        "groupIndex": 0,
         "visible": true
       },
       {
