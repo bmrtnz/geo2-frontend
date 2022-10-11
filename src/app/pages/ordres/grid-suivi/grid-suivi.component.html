@@ -7,6 +7,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [noDataText]="'aucun-ordre' | localize"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowDblClick)="
     tabContext.openOrdre($event.data.numero, $event.data.campagne.id)
@@ -59,6 +60,7 @@
     "
     [visible]="false"
     [dataType]="field.dataType"
+    [showInColumnChooser]="field.showInColumnChooser"
     [allowSearch]="
       field.allowSearch !== undefined
         ? field.allowSearch

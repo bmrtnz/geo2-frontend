@@ -184,8 +184,10 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       // Ajout code entrep. + réf client + (code transp.)
       if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
         let data = e.data.items ?? e.data.collapsedItems;
+        if (!data[0]) return;
         data = data[0].ordre;
-        e.cellElement.textContent += " - " +
+        e.cellElement.textContent =
+          data.numero + " - " +
           (data.entrepot?.code ?? "") + " - " +
           (data.referenceClient ? data.referenceClient + " " : "") +
           (data.transporteur?.id ? "(Transporteur : " + data.transporteur.id + ")" : "") +

@@ -132,6 +132,8 @@ export class Ordre extends Model {
   @Field() public listeOrdresRegularisations?: string;
   @Field() public cqLignesCount?: number;
   @Field() public commentairesOrdreCount?: number;
+  @Field() public totalNombrePalettesCommandees?: number;
+  @Field() public totalNombrePalettesExpediees?: number;
   @Field() public hasLitige?: boolean;
   @Field() public exclusionFraisPU?: boolean;
   @Field() public codeAlphaEntrepot?: string;
