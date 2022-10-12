@@ -5,6 +5,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Contrôle Qualité',
@@ -52,7 +53,10 @@
       field.name
     "
     [visible]="false"
+    [showInColumnChooser]="field.showInColumnChooser"
     [dataType]="field.dataType"
+    [trueText]="'OK'"
+    [falseText]="this.localization.localize('falseTextUC')"
     [allowSearch]="
       field.allowSearch !== undefined
         ? field.allowSearch

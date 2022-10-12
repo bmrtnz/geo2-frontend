@@ -4846,37 +4846,67 @@
       {
         "visibleIndex": 0,
         "dataField": "id",
-        "visible": true
-      },
-      {
-        "visibleIndex": 1,
-        "dataField": "isExp",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 2,
-        "dataField": "nombrePalettes",
-        "visible": true
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "nombreColis",
+        "dataField": "lotConforme",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "poidsNetTheoriqueParColis",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "fournisseur.code",
+        "dataField": "isExp",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "description",
+        "dataField": "nombrePalettes",
         "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "nombreColis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ordreLigne.poidsNetExpedie",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "description",
+        "showInColumnChooser": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "articleDescriptionAbrege",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "utilisateurEnCharge",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "dateDerniereSaisieOffline",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "utilisateurDerniereSaisieOffline",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
