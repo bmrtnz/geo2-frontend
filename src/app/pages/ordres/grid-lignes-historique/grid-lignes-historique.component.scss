@@ -8,6 +8,14 @@
     color: #39970e !important;
     cursor: pointer;
   }
+
+  .dx-datagrid-group-panel {
+    pointer-events: none;
+
+    .dx-column-indicators {
+      pointer-events: auto;
+    }
+  }
 }
 
 ::ng-deep .secteur-histo-ligne-field {
@@ -30,7 +38,7 @@
   }
 }
 
-::ng-deep .periode-container {
+::ng-deep .filter-container {
   margin-bottom: 15px;
   overflow: hidden;
 
@@ -41,6 +49,44 @@
 
     .dx-texteditor-container input {
       padding-right: 0 !important;
+    }
+  }
+
+  .valideCheckboxField {
+    .dx-field-label {
+      width: 224px !important;
+    }
+
+    .dx-field-value {
+      width: 33px !important;
+    }
+  }
+
+  .departLivraison-switch {
+    height: 36px !important;
+
+    .dx-field-value {
+      margin-top: 9px;
+      width: 33px !important;
+
+      dx-switch {
+        margin: 0;
+      }
+    }
+
+    .dx-field-label {
+      width: 56% !important;
+
+      &.dx-field-label-left {
+        margin-right: 10px;
+        width: 23% !important;
+        text-align: right !important;
+      }
+
+      &.dx-field-label-right {
+        margin-left: 10px;
+        text-align: left !important;
+      }
     }
   }
 

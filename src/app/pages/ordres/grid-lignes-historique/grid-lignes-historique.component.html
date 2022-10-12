@@ -1,11 +1,11 @@
 <form
-  class="periode-container"
+  class="filter-container"
   [formGroup]="formGroup"
 >
   <dx-box>
-    <dxi-item [ratio]="2">
+    <dxi-item [ratio]="1">
       <!-- Valides/non valides -->
-      <div class="dx-field">
+      <div class="dx-field valideCheckboxField">
         <div class="dx-field-label">
           {{ "clients-entrepots-valides" | localize }}
         </div>
@@ -19,6 +19,25 @@
         </div>
       </div>
     </dxi-item>
+    <dxi-item [ratio]="2">
+      <!-- Switch départ / livraison -->
+      <div class="dx-field departLivraison-switch">
+        <div class="dx-field-label dx-field-label-left">
+          {{ "ordreLignes-dateDepartPrevue" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-switch
+            #switchDepartLivraison
+            [switchedOnText]=""
+            [switchedOffText]=""
+            (onValueChanged)="switchDateType()"
+          ></dx-switch>
+        </div>
+        <div class="dx-field-label dx-field-label-right">
+          {{ "ordreLignes-dateLivraisonPrevue" | localize }}
+        </div>
+      </div>
+  </dxi-item>
   </dx-box>
   <dx-box>
     <dxi-item [ratio]="2">
@@ -102,12 +121,6 @@
                 {{ displayCodeBefore(data) }}
               </div>
             </div>
-            >
-            <dx-validator name="{{ 'tiers-entrepot' | localize }}">
-              <!-- <dxi-validation-rule
-              type="required"
-            ></dxi-validation-rule> -->
-            </dx-validator>
             <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
           </dx-select-box>
         </div>

@@ -919,6 +919,8 @@
     "ordreLignes-article-matierePremiere-origine-id": " ",
     "ordreLignes-article-matierePremiere-origine-description": "Origine",
     "ordreLignes-ordre-client-id": " ",
+    "ordreLignes-dateDepartPrevue": "Date de départ",
+    "ordreLignes-dateLivraisonPrevue": "Date de livraison",
     "ordreLignesHisto-ordre-numero": "Ordre",
     "ordreLignesHisto-article-id": "Réf. article",
     "ordreLignesHisto-ordre-dateDepartPrevue": "Départ",
