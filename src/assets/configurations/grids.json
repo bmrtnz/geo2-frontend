@@ -4881,30 +4881,56 @@
       {
         "visibleIndex": 14,
         "dataField": "description",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": true
       },
       {
-        "visibleIndex": 16,
         "dataField": "articleDescriptionAbrege",
         "showInColumnChooser": false,
         "visible": false
       },
       {
-        "visibleIndex": 18,
         "dataField": "utilisateurEnCharge",
         "showInColumnChooser": false,
         "visible": false
       },
       {
-        "visibleIndex": 20,
         "dataField": "dateDerniereSaisieOffline",
         "showInColumnChooser": false,
         "visible": false
       },
       {
-        "visibleIndex": 22,
         "dataField": "utilisateurDerniereSaisieOffline",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nonConformeTri",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nonConformeAutreClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "accepteApresAccordClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "corniereConforme",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nomResponsableDerogationInterne",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "commentairesControleur",
         "showInColumnChooser": false,
         "visible": false
       }
