@@ -20,6 +20,8 @@ import {
   DxValidatorModule,
   DxTagBoxModule,
   DxDateBoxModule,
+  DxPopupModule,
+  DxScrollViewModule,
 } from "devextreme-angular";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PushHistoryPopupModule } from "../../../shared/components/push-history-popup/push-history-popup.component";
@@ -31,6 +33,10 @@ import { EditingGuard } from "app/shared/guards/editing-guard";
 import { FileManagerModule } from "app/shared/components/file-manager/file-manager-popup.component";
 import { ModificationListModule } from "app/shared/components/modification-list/modification-list.component";
 import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
+import { OrderHistoryPopupComponent } from "./order-history/order-history-popup.component";
+import { GridOrderHistoryComponent } from "./order-history/grid-order-history/grid-order-history.component";
+import { ArticlesModule } from "app/pages/articles/articles.module";
+import { ZoomArticlePopupComponent } from "app/pages/ordres/zoom-article-popup/zoom-article-popup.component";
 
 @NgModule({
   imports: [
@@ -43,11 +49,13 @@ import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.com
     DxDataGridModule,
     DxButtonModule,
     DxAccordionModule,
+    DxPopupModule,
     DxTagBoxModule,
     DxListModule,
     DxSelectBoxModule,
     DxTextBoxModule,
     DxBoxModule,
+    DxScrollViewModule,
     DxCheckBoxModule,
     DxTextAreaModule,
     DxPopoverModule,
@@ -61,9 +69,16 @@ import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.com
     EditingAlertModule,
     ModificationListModule,
     FileManagerModule,
+    ArticlesModule,
   ],
-  declarations: [ClientsListComponent, ClientDetailsComponent],
+  declarations: [
+    ClientsListComponent,
+    ClientDetailsComponent,
+    OrderHistoryPopupComponent,
+    GridOrderHistoryComponent,
+    ZoomArticlePopupComponent
+  ],
   providers: [NestedGuard, EditingGuard],
-  exports: [ClientDetailsComponent]
+  exports: [ClientDetailsComponent, OrderHistoryPopupComponent, GridOrderHistoryComponent]
 })
 export class ClientsModule { }
