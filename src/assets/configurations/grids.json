@@ -2490,6 +2490,7 @@
           "proprietaireMarchandise.raisonSocial"
         ],
         "visible": true,
+        "calculateCellValue": "proprietaireMarchandise.id",
         "calculateSortValue": "proprietaireMarchandise.code",
         "editorOptions": {
           "searchTimeout": "100"
