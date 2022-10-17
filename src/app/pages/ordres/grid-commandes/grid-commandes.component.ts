@@ -25,8 +25,8 @@ import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { iif, Observable, of } from "rxjs";
-import { concatMap, concatMapTo, filter, first, last, map, takeWhile, tap } from "rxjs/operators";
+import { EMPTY, iif, Observable, of, zip } from "rxjs";
+import { concatMap, concatMapTo, filter, first, last, map, takeWhile } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
@@ -156,7 +156,13 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         takeWhile(event => event.component.columnCount() <= 5, true),
         last(),
       )
-      .subscribe(async event => this.bindSources(event.component));
+      .subscribe(async event => {
+        this.bindSources(event.component);
+        // const lookup: DxLookupComponent = event.component.instance()
+        //   .getVisibleColumns()
+        //   .find(column => column.dataField === "proprietaireMarchandise.id")
+        //   .lookup;
+      });
 
     if (this.FEATURE.columnCertifications) this.initFeatures();
   }
@@ -180,32 +186,37 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     return data.value + " ligne" + (data.value > 1 ? "s" : "");
   }
 
-  onFocusedCellChanged(e) {
-    if (e.column.dataField !== "fournisseur.id") return;
-
-    const cell = e.row.cells[e.columnIndex];
-    const { id } = e.row.data.proprietaireMarchandise;
-
-    this.buildFournisseurFilter(id).then(fournisseur => {
-      if (cell.value !== fournisseur.id)
-        cell.component.cellValue(e.rowIndex, "fournisseur.id", fournisseur.id);
-    });
-  }
-
   onFocusedCellChanging(e) {
-    // Keep the setTimeout function in place!!!
-    // It seems that not everything's really ready when event is triggered
-    // Conclusion => without a timeOut, major risk of unsaved data!
-    setTimeout(() => {
-      // from proprietaire to fournisseur -> cancel save
-      if (
-        e.columns[e.prevColumnIndex]?.dataField === "proprietaireMarchandise.id"
-        && e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
-      ) return;
+    const row = e.rows[e.newRowIndex];
 
-      if (e.prevColumnIndex !== e.newColumnIndex && this.grid.instance.hasEditData())
-        return this.grid.instance.saveEditData();
-    }, 10);
+    // from proprietaire to fournisseur
+    if (
+      e.columns[e.prevColumnIndex]?.dataField === "proprietaireMarchandise.id"
+      && e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
+    ) {
+      this.buildFournisseurFilter(row.data.proprietaireMarchandise.id)
+        .then(({ filters }) => this.bindFournisseurSource(filters));
+    } else
+      if (e.prevColumnIndex !== e.newColumnIndex) {
+        // Keep the setTimeout function in place!!!
+        // It seems that not everything's really ready when event is triggered
+        // Conclusion => without a timeOut, major risk of unsaved data!
+        return setTimeout(() => {
+          this.changes = this.splitPropChanges(this.changes);
+
+          // si le changement sur le fournisseur n'existe pas, on le pousse
+          // c'est le cas quand l'utilisateur conserve le fournisseur par defaut
+          if (this.changes.find(change => change.key === row.key && !change.data?.fournisseur))
+            this.buildFournisseurFilter(row.data.proprietaireMarchandise.id)
+              .then(({ fournisseur }) => this.changes.push({
+                key: row.key,
+                type: "update",
+                data: { fournisseur } as Partial<OrdreLigne>,
+              }));
+
+          this.grid.instance.saveEditData();
+        }, 10);
+      }
   }
 
   onSaving(event: OnSavingEvent) {
@@ -263,23 +274,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
         /* tslint:disable-next-line:prefer-const */
         let [name, value] = Object.entries(change.data)[0];
-
-        // update "fournisseur" field when "proprietaire" value changed
-        if (name === "proprietaireMarchandise") {
-          this.buildFournisseurFilter(change.data.proprietaireMarchandise.id)
-            .then(fournisseur => {
-              this.grid.instance.cellValue(
-                change.key,
-                "fournisseur",
-                fournisseur,
-              );
-              this.changes.push({
-                key: change.key,
-                type: "update",
-                data: { fournisseur } as Partial<OrdreLigne>,
-              });
-            });
-        }
 
         // map object value
         if (typeof value === "object")
@@ -497,8 +491,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           filters.push(["id", "=", proprietaire.id]);
       }
     }
-    await this.bindFournisseurSource(filters);
-    return fournisseur;
+    return { filters, fournisseur };
 
   }
 
@@ -579,22 +572,49 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     this.articleOriginePopup.visible = true;
   }
 
-  setCellValue(newData, value, currentRowData, displayValue) {
+  setCellValue(newData, value, currentData) {
     const context: any = this;
 
-    // default behavior
-    context.defaultSetCellValue(newData, value);
-
-    // push prediction for "proprietaireMarchandise"
     if (context.dataField === "proprietaireMarchandise.id") {
 
-      // code & raisonSocial needed for normal mode display evaluation
-      const [code, raisonSocial] = displayValue.split(" - ");
-      newData.proprietaireMarchandise = {
-        ...newData.proprietaireMarchandise,
-        code,
-        raisonSocial,
-      };
+      return zip(
+        self.fournisseursService
+          .getOne_v2(value, ["id", "code", "raisonSocial"])
+          .pipe(map(res => res.data.fournisseur)),
+        self.buildFournisseurFilter(value),
+      )
+        .pipe(
+          concatMap(([proprietaire, { fournisseur }]) => {
+            newData.proprietaireMarchandise = proprietaire;
+
+            // newData.fournisseur = fournisseur;
+            self.grid.instance.cellValue(context.visibleIndex, "fournisseur.id", fournisseur.id);
+
+            // On force la bonne valeur pour l'affichage au focus
+            const ds = self.grid.dataSource as DataSource;
+            const store = ds.store() as CustomStore;
+            store.push([{
+              key: currentData.id,
+              type: "update",
+              data: { fournisseur } as Partial<OrdreLigne>,
+            }]);
+
+            return EMPTY;
+          }),
+        )
+        .toPromise();
+
+    } else if (context.dataField === "fournisseur.id") {
+      return self.fournisseursService
+        .getOne_v2(value, ["id", "code", "raisonSocial"])
+        .pipe(concatMap(res => {
+          newData.fournisseur = res.data.fournisseur;
+          return EMPTY;
+        }))
+        .toPromise();
+    } else {
+      // default behavior
+      context.defaultSetCellValue(newData, value);
     }
 
   }
@@ -804,6 +824,22 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           this.fournisseursService.mapDXFilterToRSQL(filters),
           { sort: [{ selector: "code" }] },
         ));
+  }
+
+  splitPropChanges<T>(changes: Change<T>[]) {
+    // on decoupe les changements sur le cas proprietaire/fournisseur
+    const index = changes.findIndex(change => {
+      const properties = Object.keys(change.data);
+      return properties.includes("fournisseur") && properties.includes("proprietaireMarchandise");
+    });
+    if (index > -1) {
+      const proprietaire = JSON.parse(JSON.stringify(changes[index]));
+      delete proprietaire.data.fournisseur;
+      const fournisseur = JSON.parse(JSON.stringify(changes[index]));
+      delete fournisseur.data.proprietaireMarchandise;
+      changes.splice(index, 1, proprietaire, fournisseur);
+    }
+    return changes;
   }
 
 }

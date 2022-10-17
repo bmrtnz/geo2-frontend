@@ -188,6 +188,7 @@ interface GridColumn {
   lookup?: { valueExpr: string, displayExpr: string, dataSource: any };
 
   calculateSortValue?: string;
+  calculateCellValue?: string;
 
 }
 
