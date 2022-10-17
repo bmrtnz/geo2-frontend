@@ -3033,6 +3033,7 @@
         "dataField": "ordre.numero",
         "dataType": "string",
         "sortOrder": "desc",
+        "sortIndex": 1,
         "width": 80,
         "visible": true,
         "groupIndex": 1
@@ -3043,6 +3044,7 @@
         "dataType": "date",
         "format": "dd-MM-yyyy",
         "sortOrder": "desc",
+        "sortIndex": 0,
         "width": 110,
         "groupIndex": 0,
         "visible": true
@@ -3052,6 +3054,7 @@
         "dataField": "ordre.dateLivraisonPrevue",
         "dataType": "date",
         "format": "dd-MM-yyyy",
+        "sortOrder": "desc",
         "width": 110,
         "visible": true
       },

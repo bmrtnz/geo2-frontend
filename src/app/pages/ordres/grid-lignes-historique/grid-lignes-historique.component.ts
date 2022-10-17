@@ -2,17 +2,16 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewC
 import { FormControl, FormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import Ordre, { Statut } from "app/shared/models/ordre.model";
-import { ArticlesService, AuthService, ClientsService, EntrepotsService } from "app/shared/services";
+import { AuthService, ClientsService, EntrepotsService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -53,6 +52,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild("switchDepartLivraison", { static: false }) switchLivraison: DxSwitchComponent;
 
   public secteurs: DataSource;
   public clients: DataSource;
@@ -90,8 +90,6 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     private dateManagementService: DateManagementService,
-    private gridRowStyleService: GridRowStyleService,
-    private articlesService: ArticlesService,
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
@@ -141,6 +139,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   async enableFilters() {
 
+    let dateType = "dateDepartPrevue";
     this.toRefresh = false;
 
     const fields = this.columns.pipe(map(cols => cols.map(column => {
@@ -153,14 +152,17 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       ...this.formGroup.value,
     };
 
+    // Change date criteria
+    if (this.switchLivraison?.value) dateType = "dateLivraisonPrevue";
+
     const filter = [
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
       "and",
       ["ordre.client.id", "=", values.client.id],
       "and",
-      ["ordre.dateDepartPrevue", ">=", values.dateMin],
+      [`ordre.${dateType}`, ">=", values.dateMin],
       "and",
-      ["ordre.dateDepartPrevue", "<=", values.dateMax]
+      [`ordre.${dateType}`, "<=", values.dateMax]
     ];
     if (values.entrepot?.id) {
       filter.push(
@@ -171,6 +173,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
 
+  }
+
+  switchDateType() {
+    // Change grouping + sorting depending on #switchDepartLivraison
+    const liv = this.switchLivraison.value;
+    this.datagrid.instance.columnOption("ordre.dateDepartPrevue", "groupIndex", liv ? null : 0);
+    this.datagrid.instance.columnOption("ordre.dateDepartPrevue", "sortIndex", liv ? null : 0);
+    this.datagrid.instance.columnOption("ordre.dateLivraisonPrevue", "groupIndex", liv ? 0 : null);
+    this.datagrid.instance.columnOption("ordre.dateLivraisonPrevue", "sortIndex", liv ? 0 : null);
+    this.enableFilters();
   }
 
   onRowPrepared(e) {
