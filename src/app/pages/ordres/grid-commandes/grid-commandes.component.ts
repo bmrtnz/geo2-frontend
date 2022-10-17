@@ -187,13 +187,12 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   onFocusedCellChanging(e) {
-    const row = e.rows[e.newRowIndex];
-
     // from proprietaire to fournisseur
     if (
       e.columns[e.prevColumnIndex]?.dataField === "proprietaireMarchandise.id"
       && e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
     ) {
+      const row = e.rows[e.newRowIndex];
       this.buildFournisseurFilter(row.data.proprietaireMarchandise.id)
         .then(({ filters }) => this.bindFournisseurSource(filters));
     } else
@@ -205,14 +204,14 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
           this.changes = this.splitPropChanges(this.changes);
 
           // si le changement sur le fournisseur n'existe pas, on le pousse
-          // c'est le cas quand l'utilisateur conserve le fournisseur par defaut
-          if (this.changes.find(change => change.key === row.key && !change.data?.fournisseur))
-            this.buildFournisseurFilter(row.data.proprietaireMarchandise.id)
-              .then(({ fournisseur }) => this.changes.push({
+          // c'est le cas quand l'utilisateur conserve le fournisseur affiché par defaut
+          for (const row of this.grid.instance.getVisibleRows())
+            if (this.changes.find(change => change.key === row.key && !change.data?.fournisseur))
+              this.changes.push({
                 key: row.key,
                 type: "update",
-                data: { fournisseur } as Partial<OrdreLigne>,
-              }));
+                data: { fournisseur: row.data.fournisseur } as Partial<OrdreLigne>,
+              });
 
           this.grid.instance.saveEditData();
         }, 10);
