@@ -599,6 +599,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               data: { fournisseur } as Partial<OrdreLigne>,
             }]);
 
+            self.grid.instance.focus(self.grid.instance.getCellElement(
+              self.grid.instance.getRowIndexByKey(currentData.id),
+              "proprietaireMarchandise.id",
+            ));
+
             return EMPTY;
           }),
         )
