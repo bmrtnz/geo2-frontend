@@ -228,10 +228,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     this.grid.instance.beginCustomLoading("");
     const datasource = await this.refreshData(await this.columns.toPromise()).toPromise();
     this.grid.dataSource = datasource;
-    this.reindexRows();
     await this.grid.instance.saveEditData();
     this.grid.instance.endCustomLoading();
     this.loadPanel.enabled = false;
+    setTimeout(() => this.reindexRows(), 1000);
   }
 
   public calultateSortValue(event) {
