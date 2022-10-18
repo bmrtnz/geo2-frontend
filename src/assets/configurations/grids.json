@@ -4856,21 +4856,26 @@
       {
         "visibleIndex": 4,
         "dataField": "isExp",
+        "width": 55,
+        "cssClass": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "nombrePalettes",
+        "cssClass": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "nombreColis",
+        "cssClass": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 10,
         "dataField": "ordreLigne.poidsNetExpedie",
+        "cssClass": "no-padding",
         "visible": true
       },
       {
@@ -4885,9 +4890,11 @@
         "visible": true
       },
       {
+        "visibleIndex": 16,
         "dataField": "articleDescriptionAbrege",
         "showInColumnChooser": false,
-        "visible": false
+        "cellTemplate": "CQPhotoButtonsTemplate",
+        "visible": true
       },
       {
         "dataField": "utilisateurEnCharge",

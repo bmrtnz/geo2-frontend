@@ -1,0 +1,40 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .small-CQ-button {
+  position: relative;
+  height: 18px;
+  min-width: 0;
+  padding: 0 4px !important;
+
+  .dx-button-content {
+    padding: 0;
+    font-size: 11px;
+    text-overflow: initial;
+
+    .dx-button-text {
+      position: relative;
+      margin-top: -2px !important;
+      padding: 0;
+      line-height: 0 !important;
+    }
+  }
+
+  &.CQ {
+    margin-right: 5px;
+    background-color: $BW-purple-medium  !important;
+
+    &:hover {
+      background-color: $BW-purple-dark  !important;
+    }
+  }
+
+  &.photos {
+    background-color: $BW-orange-medium  !important;
+
+    &:hover {
+      background-color: $BW-orange-dark  !important;
+    }
+  }
+}

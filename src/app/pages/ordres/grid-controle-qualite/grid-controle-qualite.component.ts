@@ -79,4 +79,17 @@ export class GridControleQualiteComponent implements ToggledGrid {
   onToggling(toggled: boolean) {
     toggled ? this.enableFilters() : (this.dataSource = null);
   }
+
+  showPhotosButton(cell) {
+    return true;
+  }
+
+  openPhotos(cell) {
+    console.log("open photos");
+  }
+
+  openCQReport(cell) {
+    console.log("open CQ");
+  }
+
 }

@@ -1215,6 +1215,7 @@
     "ControleQualite-ordreLigne-poidsNetExpedie": "Poids",
     "ControleQualite-fournisseur-code": "Fournisseur",
     "ControleQualite-description": "Description abrégée - Données du contrôle",
+    "ControleQualite-articleDescriptionAbrege": "Visualiser",
     "rechOrdres-numero": "Numéro d'ordre",
     "rechOrdres-id": "Réf. ordre",
     "rechOrdres-client-code": "Code client",
