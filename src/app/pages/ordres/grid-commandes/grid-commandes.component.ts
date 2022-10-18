@@ -431,6 +431,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     if (!datasource) return;
     notify(this.localizeService.localize("renumerotation-lignes-ordre"), "info", 3000);
     const items = datasource.items();
+    console.log(items);
     const lignes = items
       .slice(startIndex, endIndex ? inclusive(endIndex) : items.length)
       .map(({ id }) => id);
