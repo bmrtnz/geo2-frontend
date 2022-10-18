@@ -77,7 +77,7 @@
       class="small-CQ-button CQ"
       type="default"
       [focusStateEnabled]="false"
-      [text]="'CQ'"
+      [text]="this.localization.localize('CQ')"
       (onClick)="openCQReport(cell)"
     >
     </dx-button>
@@ -86,8 +86,27 @@
       type="default"
       [focusStateEnabled]="false"
       [visible]="showPhotosButton(cell)"
-      [text]="'Photos'"
+      [text]="this.localization.localize('photos')"
       (onClick)="openPhotos(cell)"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let cell of 'FicheCQPDFButtonsTemplate'">
+    <dx-button
+      class="small-CQ-button createPDF"
+      type="default"
+      [focusStateEnabled]="false"
+      [text]="this.localization.localize('créer')"
+      (onClick)="createPDF(cell)"
+    >
+    </dx-button>
+    <dx-button
+      class="small-CQ-button openPDF"
+      type="default"
+      icon="material-icons search"
+      [focusStateEnabled]="false"
+      [visible]="showPhotosButton(cell)"
+      (onClick)="openPDF(cell)"
     ></dx-button>
   </div>
 

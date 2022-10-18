@@ -4892,14 +4892,20 @@
       {
         "visibleIndex": 16,
         "dataField": "articleDescriptionAbrege",
+        "cssClass": "no-padding",
         "showInColumnChooser": false,
+        "allowSearch": false,
         "cellTemplate": "CQPhotoButtonsTemplate",
         "visible": true
       },
       {
+        "visibleIndex": 18,
         "dataField": "utilisateurEnCharge",
+        "cssClass": "no-padding",
+        "allowSearch": false,
         "showInColumnChooser": false,
-        "visible": false
+        "cellTemplate": "FicheCQPDFButtonsTemplate",
+        "visible": true
       },
       {
         "dataField": "dateDerniereSaisieOffline",
@@ -4938,6 +4944,11 @@
       },
       {
         "dataField": "commentairesControleur",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "cq",
         "showInColumnChooser": false,
         "visible": false
       }

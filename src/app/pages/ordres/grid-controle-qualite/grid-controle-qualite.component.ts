@@ -62,8 +62,8 @@ export class GridControleQualiteComponent implements ToggledGrid {
       }
       if (e.column.dataField === "isExp") {
         let valCell = e.data[e.column.dataField];
-        if (valCell !== -2) {
-          if (valCell === 0) {
+        if (valCell !== "N/A" && valCell !== null) {
+          if (valCell === "0") {
             valCell = "OK";
           } else {
             valCell = "NON";
@@ -90,6 +90,14 @@ export class GridControleQualiteComponent implements ToggledGrid {
 
   openCQReport(cell) {
     console.log("open CQ");
+  }
+
+  createPDF(cell) {
+    console.log("create PDF");
+  }
+
+  openPDF(cell) {
+    console.log("open PDF");
   }
 
 }

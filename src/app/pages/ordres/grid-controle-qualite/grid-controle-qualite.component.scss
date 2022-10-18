@@ -37,4 +37,26 @@
       background-color: $BW-orange-dark  !important;
     }
   }
+
+  &.createPDF {
+    margin-right: 7px;
+  }
+
+  &.openPDF {
+    width: 22px !important;
+    height: 22px;
+    min-width: 22px !important;
+    background-color: transparent !important;
+
+    .dx-button-content {
+      padding: 0 !important;
+
+      .dx-icon {
+        position: relative;
+        left: -5px;
+        font-size: 20px;
+      }
+    }
+  }
+
 }

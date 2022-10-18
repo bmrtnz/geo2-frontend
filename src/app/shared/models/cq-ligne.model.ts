@@ -16,7 +16,7 @@ export enum CahierDesCharges {
 @ModelName("CQLigne")
 export class CQLigne extends Model {
   @Field({ asKey: true }) public id?: string;
-  @Field() public isExp?: number;
+  @Field() public isExp?: string;
   @Field() public codePaletteEffectif?: string;
   @Field() public nombreColis?: number;
   @Field() public poidsNetTheoriqueParColis?: number;
@@ -45,7 +45,7 @@ export class CQLigne extends Model {
   @Field() public codeBarreClient?: boolean;
   @Field() public nonConformeTri?: boolean;
   @Field() public nonConformeAutreClient?: boolean;
-  @Field() public nonConformeDerogationInterne?: boolean;
+  @Field() public nonConformeDerogationInterne?: string;
   @Field() public nomResponsableDerogationInterne?: string;
   @Field() public causeNonConformite?: string;
   @Field() public nombrePalettesTri?: number;
@@ -55,6 +55,7 @@ export class CQLigne extends Model {
   @Field() public evalue?: boolean;
   @Field({ dataType: "datetime" }) public dateFinControle?: string;
   @Field({ dataType: "datetime" }) public dateDerniereSaisieOffline?: string;
+  @Field({ dataType: "datetime" }) public dateModification?: string;
   @Field() public utilisateurDerniereSaisieOffline?: string;
   @Field() public machineDerniereSaisieOffline?: string;
   @Field() public utilisateurEnCharge?: string;
@@ -62,6 +63,8 @@ export class CQLigne extends Model {
   @Field() public articleReference?: string;
   @Field() public nombreColisControles?: number;
   @Field() public description?: string;
+  @Field() public cq?: string;
+  @Field() public userModification?: string;
 }
 
 export default CQLigne;
