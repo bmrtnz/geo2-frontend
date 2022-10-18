@@ -582,7 +582,8 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
             newData.proprietaireMarchandise = proprietaire;
 
             // newData.fournisseur = fournisseur;
-            self.grid.instance.cellValue(context.visibleIndex, "fournisseur.id", fournisseur.id);
+            const rowIndex = self.grid.instance.getRowIndexByKey(currentData.id);
+            self.grid.instance.cellValue(rowIndex, "fournisseur.id", fournisseur.id);
 
             // On force la bonne valeur pour l'affichage au focus
             const ds = self.grid.dataSource as DataSource;
