@@ -594,6 +594,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               data: { fournisseur } as Partial<OrdreLigne>,
             }]);
 
+            self.grid.instance.focus(self.grid.instance.getCellElement(
+              self.grid.instance.getRowIndexByKey(currentData.id),
+              "proprietaireMarchandise.id",
+            ));
+
             return EMPTY;
           }),
         )
@@ -823,10 +828,12 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   splitPropChanges<T>(changes: Change<T>[]) {
     // on decoupe les changements sur le cas proprietaire/fournisseur
-    const index = changes.findIndex(change => {
-      const properties = Object.keys(change.data);
-      return properties.includes("fournisseur") && properties.includes("proprietaireMarchandise");
-    });
+    const index = changes
+      .filter(change => change.type === "update")
+      .findIndex(change => {
+        const properties = Object.keys(change.data);
+        return properties.includes("fournisseur") && properties.includes("proprietaireMarchandise");
+      });
     if (index > -1) {
       const proprietaire = JSON.parse(JSON.stringify(changes[index]));
       delete proprietaire.data.fournisseur;
