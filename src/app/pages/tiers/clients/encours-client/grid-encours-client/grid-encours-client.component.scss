@@ -1,0 +1,129 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+
+::ng-deep .grid-encours-client {
+  .bio-article {
+    color: #39970e !important;
+    cursor: pointer;
+  }
+
+  .dx-datagrid-group-panel {
+    pointer-events: none;
+
+    .dx-column-indicators {
+      pointer-events: auto;
+    }
+  }
+}
+
+::ng-deep .secteur-histo-ligne-field {
+
+  .dx-field-label,
+  .dx-field-value {
+    width: 50% !important;
+  }
+}
+
+
+::ng-deep .grid-zoom-button {
+  width: 22px !important;
+  height: 22px;
+  min-width: 22px !important;
+  background-color: transparent !important;
+
+  .dx-button-content {
+    padding: 0;
+  }
+}
+
+::ng-deep .filter-container {
+  margin-bottom: 15px;
+  overflow: hidden;
+
+  dx-box {
+    width: 600px;
+    padding: 0 20px;
+    float: left;
+
+    .dx-texteditor-container input {
+      padding-right: 0 !important;
+    }
+  }
+
+  .valideCheckboxField {
+    .dx-field-label {
+      width: 224px !important;
+    }
+
+    .dx-field-value {
+      width: 33px !important;
+    }
+  }
+
+  .departLivraison-switch {
+    height: 36px !important;
+
+    .dx-field-value {
+      margin-top: 9px;
+      width: 33px !important;
+
+      dx-switch {
+        margin: 0;
+      }
+    }
+
+    .dx-field-label {
+      width: 56% !important;
+
+      &.dx-field-label-left {
+        margin-right: 10px;
+        width: 23% !important;
+        text-align: right !important;
+      }
+
+      &.dx-field-label-right {
+        margin-left: 10px;
+        text-align: left !important;
+      }
+    }
+  }
+
+  .refresh {
+    float: left;
+    margin-left: 30px;
+  }
+}
+
+::ng-deep .bold-text {
+  font-weight: bold !important;
+}
+
+::ng-deep .encours-info-container {
+  width: 850px !important;
+
+  .dx-field-value {
+    width: 45% !important;
+  }
+
+  .dx-field-label.encours-total {
+    width: 45% !important;
+  }
+
+  .encoursRetard .dx-texteditor-input {
+    color: #ff325a !important;
+    font-weight: bold;
+  }
+}
+
+::ng-deep .dx-row-focused {
+
+  .bio-article {
+    color: #a9f77e !important;
+  }
+}
+
+::ng-deep .not-valid {
+  opacity: 0.5;
+}

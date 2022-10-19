@@ -41,7 +41,6 @@
         ></dx-button>
         <dx-button
           class="upperButton"
-          [disabled]="true"
           [visible]="!createMode"
           type="success"
           hint="{{ 'hint-client-encours' | localize }}"
@@ -2064,8 +2063,12 @@
 <app-order-history-popup
   [client]="client"
   [readOnlyMode]="true"
-  >
+>
 </app-order-history-popup>
+<app-encours-client-popup
+  [client]="client"
+>
+</app-encours-client-popup>
 <app-file-manager-popup
   key="clients"
   [subTitle]="client?.code"

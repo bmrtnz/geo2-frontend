@@ -37,6 +37,8 @@ import { OrderHistoryPopupComponent } from "./order-history/order-history-popup.
 import { GridOrderHistoryComponent } from "./order-history/grid-order-history/grid-order-history.component";
 import { ArticlesModule } from "app/pages/articles/articles.module";
 import { ZoomArticlePopupComponent } from "app/pages/ordres/zoom-article-popup/zoom-article-popup.component";
+import { EncoursClientPopupComponent } from "./encours-client/encours-client-popup.component";
+import { GridEncoursClientComponent } from "./encours-client/grid-encours-client/grid-encours-client.component";
 
 @NgModule({
   imports: [
@@ -76,7 +78,9 @@ import { ZoomArticlePopupComponent } from "app/pages/ordres/zoom-article-popup/z
     ClientDetailsComponent,
     OrderHistoryPopupComponent,
     GridOrderHistoryComponent,
-    ZoomArticlePopupComponent
+    ZoomArticlePopupComponent,
+    EncoursClientPopupComponent,
+    GridEncoursClientComponent
   ],
   providers: [NestedGuard, EditingGuard],
   exports: [ClientDetailsComponent, OrderHistoryPopupComponent, GridOrderHistoryComponent]

@@ -56,6 +56,7 @@ import { AuthService, ClientsService } from "../../../../shared/services";
 import { client as clientsGridConfig } from "assets/configurations/grids.json";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { OrderHistoryPopupComponent } from "../order-history/order-history-popup.component";
+import { EncoursClientPopupComponent } from "../encours-client/encours-client-popup.component";
 
 const PREORDRE = "PREORDRE";
 
@@ -257,7 +258,7 @@ export class ClientDetailsComponent
   @ViewChild(InfoPopupComponent, { static: true })
   infoComponent: InfoPopupComponent;
   @ViewChild(OrderHistoryPopupComponent, { static: false }) orderHistoPopup: OrderHistoryPopupComponent;
-
+  @ViewChild(EncoursClientPopupComponent, { static: false }) encoursPopup: EncoursClientPopupComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
   editing = false;
@@ -554,6 +555,7 @@ export class ClientDetailsComponent
   }
 
   onEncoursClick() {
+    this.encoursPopup.visible = true;
   }
 
   displayIDBefore(data) {
