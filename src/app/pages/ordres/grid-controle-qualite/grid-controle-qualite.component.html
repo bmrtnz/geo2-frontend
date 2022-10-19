@@ -1,3 +1,11 @@
+<dx-button
+  class="cq-copy-photos"
+  type="default"
+  [focusStateEnabled]="false"
+  text="{{ 'btn-photos-copy' | localize }}"
+  (onClick)="copyPhotosClick()"
+></dx-button>
+
 <dx-data-grid
   class="dx-card wide-card"
   [remoteOperations]="true"
@@ -58,8 +66,6 @@
     [showInColumnChooser]="field.showInColumnChooser"
     [cellTemplate]="field.cellTemplate"
     [dataType]="field.dataType"
-    [trueText]="'OK'"
-    [falseText]="this.localization.localize('falseTextUC')"
     [allowSearch]="
       field.allowSearch !== undefined
         ? field.allowSearch

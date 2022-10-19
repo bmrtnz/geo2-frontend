@@ -2,6 +2,22 @@
 @import "~themes/generated/variables.base";
 @import "~scss/variables.scss";
 
+::ng-deep .cq-copy-photos {
+  position: absolute;
+  z-index: 1;
+  margin-top: 9px;
+  right: 197px;
+  height: 34px;
+  font-size: 12px;
+
+  .dx-button-content {
+    .dx-button-text {
+      margin-top: -1px !important;
+      padding: 0 10px !important;
+    }
+  }
+}
+
 ::ng-deep .small-CQ-button {
   position: relative;
   height: 18px;

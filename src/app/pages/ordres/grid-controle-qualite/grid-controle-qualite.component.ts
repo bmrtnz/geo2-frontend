@@ -2,13 +2,13 @@ import { Component, Input, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { CQLignesService } from "app/shared/services/api/cq-lignes.service";
-import { DateManagementService } from "app/shared/services/date-management.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import * as gridConfig from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
+import { alert, confirm } from "devextreme/ui/dialog";
 import { ToggledGrid } from "../form/form.component";
 
 @Component({
@@ -45,35 +45,6 @@ export class GridControleQualiteComponent implements ToggledGrid {
   }
 
   onCellPrepared(e) {
-    // Adjusting displayed values
-    if (e.rowType === "data") {
-      if (e.column.dataField === "lotConforme") {
-        let valCell = e.data[e.column.dataField];
-        if (valCell !== null) {
-          if (valCell === true) {
-            valCell = "OK";
-          } else {
-            valCell = "NON";
-          }
-        } else {
-          valCell = "N/A";
-        }
-        e.cellElement.innerText = valCell;
-      }
-      if (e.column.dataField === "isExp") {
-        let valCell = e.data[e.column.dataField];
-        if (valCell !== "N/A" && valCell !== null) {
-          if (valCell === "0") {
-            valCell = "OK";
-          } else {
-            valCell = "NON";
-          }
-        } else {
-          valCell = "N/A";
-        }
-        e.cellElement.innerText = valCell;
-      }
-    }
   }
 
   onToggling(toggled: boolean) {
@@ -98,6 +69,18 @@ export class GridControleQualiteComponent implements ToggledGrid {
 
   openPDF(cell) {
     console.log("open PDF");
+  }
+
+  copyPhotosClick() {
+    // Procédure copie photos
+    const nbPhotos = 0;
+    const directory = "fake";
+    alert(
+      this.localization.localize("copy-photo-finished")
+        .replace("&P", nbPhotos.toString())
+        .replace("&R", directory),
+      this.localization.localize("controle-qualité")
+    );
   }
 
 }

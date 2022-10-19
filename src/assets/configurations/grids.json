@@ -4850,7 +4850,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "lotConforme",
+        "dataField": "cq",
         "visible": true
       },
       {
@@ -4886,6 +4886,7 @@
       {
         "visibleIndex": 14,
         "dataField": "description",
+        "cssClass": "no-padding",
         "showInColumnChooser": true,
         "visible": true
       },
@@ -4948,7 +4949,7 @@
         "visible": false
       },
       {
-        "dataField": "cq",
+        "dataField": "lotConforme",
         "showInColumnChooser": false,
         "visible": false
       }
