@@ -194,21 +194,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         // Keep the setTimeout function in place!!!
         // It seems that not everything's really ready when event is triggered
         // Conclusion => without a timeOut, major risk of unsaved data!
-        return setTimeout(() => {
-          this.changes = this.splitPropChanges(this.changes);
-
-          // si le changement sur le fournisseur n'existe pas, on le pousse
-          // c'est le cas quand l'utilisateur conserve le fournisseur affiché par defaut
-          for (const row of this.grid.instance.getVisibleRows())
-            if (this.changes.find(change => change.key === row.key && !change.data?.fournisseur))
-              this.changes.push({
-                key: row.key,
-                type: "update",
-                data: { fournisseur: row.data.fournisseur } as Partial<OrdreLigne>,
-              });
-
-          this.grid.instance.saveEditData();
-        }, 10);
+        return setTimeout(() => this.grid.instance.saveEditData(), 10);
       }
   }
 
@@ -216,6 +202,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
     if (event.component.hasEditData()) {
 
+      this.changes = this.splitPropChanges();
       event.cancel = true;
       return this.handleMutations();
 
@@ -826,22 +813,31 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         ));
   }
 
-  splitPropChanges<T>(changes: Change<T>[]) {
-    // on decoupe les changements sur le cas proprietaire/fournisseur
-    const index = changes
-      .filter(change => change.type === "update")
-      .findIndex(change => {
-        const properties = Object.keys(change.data);
-        return properties.includes("fournisseur") && properties.includes("proprietaireMarchandise");
-      });
-    if (index > -1) {
-      const proprietaire = JSON.parse(JSON.stringify(changes[index]));
-      delete proprietaire.data.fournisseur;
-      const fournisseur = JSON.parse(JSON.stringify(changes[index]));
-      delete fournisseur.data.proprietaireMarchandise;
-      changes.splice(index, 1, proprietaire, fournisseur);
-    }
-    return changes;
+  splitPropChanges() {
+    const fournisseurChanges = [];
+    const mappedChanges = this.changes.map(change => {
+
+      // on ne s'occupe que des cas de mise a jour
+      if (change.type !== "update") return change;
+
+      // on decoupe les changements sur le cas proprietaire/fournisseur
+      const properties = Object.keys(change.data);
+      if (properties.includes("fournisseur") && properties.includes("proprietaireMarchandise")) {
+
+        // on pousse le changement sur le fournisseur
+        const fournisseur = JSON.parse(JSON.stringify(change));
+        delete fournisseur.data.proprietaireMarchandise;
+        fournisseurChanges.push(fournisseur);
+
+        // on retire la propriété fournisseur sur le changement en cours
+        delete change.data.fournisseur;
+
+      }
+      return change;
+    });
+
+    // on fusionne les changements
+    return [...mappedChanges, ...fournisseurChanges];
   }
 
 }
