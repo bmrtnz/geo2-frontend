@@ -16,8 +16,7 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ZoomArticlePopupComponent } from "app/pages/ordres/zoom-article-popup/zoom-article-popup.component";
-// import { TabContext } from "../root/root.component";
+import { ZoomClientArticlePopupComponent } from "../zoom-client-article-popup/zoom-client-article-popup.component";
 
 enum InputField {
   valide = "valide",
@@ -47,7 +46,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @Output() hidePopup = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
-  @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
+  @ViewChild(ZoomClientArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomClientArticlePopupComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("switchDepartLivraison", { static: false }) switchLivraison: DxSwitchComponent;
 
