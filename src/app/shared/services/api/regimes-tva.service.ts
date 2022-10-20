@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import Ordre from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { map } from "rxjs/operators";
 import { RegimeTva } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import { FunctionsService } from "./functions.service";
+import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
 
 @Injectable({
   providedIn: "root",
@@ -77,9 +76,28 @@ export class RegimesTvaService extends ApiService implements APIRead {
     });
   }
 
-  public ofInitRegimeTva(ordreRef: Ordre["id"], tvrCode: string) {
-    return this.functionsService
-      .queryFunction("ofInitRegimeTva", [ordreRef, tvrCode])
-      .pipe(map(res => res.data));
+  public ofInitRegimeTva(ordRef: Ordre["id"], tvrCode: string) {
+    return this.apollo
+      .query<{ ofInitRegimeTva: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofInitRegimeTva",
+              body: functionBody,
+              params: [
+                { name: "ordRef", value: "ordRef", isVariable: true },
+                { name: "tvrCode", value: "tvrCode", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordRef", type: "String", isOptionnal: false },
+            { name: "tvrCode", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordRef, tvrCode },
+        fetchPolicy: "network-only",
+      });
   }
 }
