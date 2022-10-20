@@ -1,4 +1,3 @@
-import { DatePipe } from "@angular/common";
 import {
   AfterViewInit,
   Component, ElementRef, EventEmitter, OnDestroy, OnInit,
@@ -19,15 +18,14 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
-import { FunctionsService } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
-import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { PortsService } from "app/shared/services/api/ports.service";
+import { RegimesTvaService } from "app/shared/services/api/regimes-tva.service";
 import { TypesCamionService } from "app/shared/services/api/types-camion.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
@@ -36,8 +34,8 @@ import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { of, Subject } from "rxjs";
-import { concatMap, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { combineLatest, Observable, of, Subject } from "rxjs";
+import { concatMap, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
@@ -93,6 +91,40 @@ let self;
   styleUrls: ["./form.component.scss"]
 })
 export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private formUtils: FormUtilsService,
+    private ordresService: OrdresService,
+    private ordresBafService: OrdresBafService,
+    private currentCompanyService: CurrentCompanyService,
+    private clientsService: ClientsService,
+    private typesCamionService: TypesCamionService,
+    private devisesService: DevisesService,
+    private incotermsService: IncotermsService,
+    private entrepotsService: EntrepotsService,
+    private personnesService: PersonnesService,
+    private instructionsService: InstructionsService,
+    private portsService: PortsService,
+    public formUtilsService: FormUtilsService,
+    private basesTarifService: BasesTarifService,
+    private transporteursService: TransporteursService,
+    private mruOrdresService: MruOrdresService,
+    private tabContext: TabContext,
+    public authService: AuthService,
+    private localization: LocalizationService,
+    public regimesTvaService: RegimesTvaService,
+  ) {
+    this.handleTabChange()
+      .subscribe(event => {
+        this.initializeAnchors(event);
+        if (event.status === "in")
+          this.refetchStatut();
+      });
+    self = this;
+  }
 
   @Output() public ordre: Ordre;
   @Output() openArticleManuPopup = new EventEmitter<any>();
@@ -250,6 +282,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public factureVisible = false;
   public currentFacture: ViewDocument;
   public allowVenteACommissionMutation: boolean;
+  public refreshRegimeTva = new EventEmitter();
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
@@ -275,41 +308,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private functionsService: FunctionsService,
-    private formBuilder: FormBuilder,
-    private formUtils: FormUtilsService,
-    private ordresService: OrdresService,
-    private ordresBafService: OrdresBafService,
-    private currentCompanyService: CurrentCompanyService,
-    private clientsService: ClientsService,
-    private typesCamionService: TypesCamionService,
-    private devisesService: DevisesService,
-    private incotermsService: IncotermsService,
-    private entrepotsService: EntrepotsService,
-    private personnesService: PersonnesService,
-    private instructionsService: InstructionsService,
-    private portsService: PortsService,
-    public formUtilsService: FormUtilsService,
-    private basesTarifService: BasesTarifService,
-    private transporteursService: TransporteursService,
-    private litigesService: LitigesService,
-    private mruOrdresService: MruOrdresService,
-    private tabContext: TabContext,
-    private datePipe: DatePipe,
-    public authService: AuthService,
-    private localization: LocalizationService
-  ) {
-    this.handleTabChange()
-      .subscribe(event => {
-        this.initializeAnchors(event);
-        if (event.status === "in")
-          this.refetchStatut();
-      });
-    self = this;
-  }
+  public mentionRegimeTva: Observable<string>;
 
   ngOnInit() {
     this.initializeForm();
@@ -357,6 +356,28 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         .filter(inst => inst.valide)
         .map(inst => this.instructionsList.push(inst.description));
     });
+
+
+    this.mentionRegimeTva =
+      this.mentionRegimeTva = combineLatest([
+        this.formGroup.valueChanges,
+        this.route.paramMap,
+        this.tabContext.onTabChange,
+        this.refreshRegimeTva.asObservable().pipe(startWith(1)),
+      ])
+        .pipe(
+          concatMap(async ([control, params]) => {
+            const [numero, campagne] = this.tabContext.parseTabID(params.get("tabid"));
+            const current = this.ordresService
+              .getOneByNumeroAndSocieteAndCampagne(numero, this.currentCompanyService.getCompany().id, campagne, ["id", "regimeTva.id"])
+              .toPromise();
+            return [control, (await current).data.ordreByNumeroAndSocieteAndCampagne];
+          }),
+          filter(([control, ordre]) => control.id === ordre.id),
+          debounceTime(1000),
+          concatMap(([, ordre]) => this.regimesTvaService.ofInitRegimeTva(ordre.id, ordre.regimeTva.id)),
+          map(res => res.data.ofInitRegimeTva.msg),
+        );
 
   }
 

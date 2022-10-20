@@ -110,6 +110,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @Output() public articleLigneId: string;
   @Output() public fournisseurLigneId: string;
   @Output() public fournisseurCode: string;
+  @Output() priceChange = new EventEmitter();
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
@@ -254,6 +255,9 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
         /* tslint:disable-next-line:prefer-const */
         let [name, value] = Object.entries(change.data)[0];
+
+        if (["ventePrixUnitaire", "achatPrixUnitaire"].includes(name))
+          this.priceChange.emit();
 
         // map object value
         if (typeof value === "object")

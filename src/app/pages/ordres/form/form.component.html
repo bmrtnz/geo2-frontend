@@ -610,6 +610,13 @@
                           </dx-text-box>
                         </div>
                       </div>
+                      <dxi-item [ratio]="9">
+                        <!-- Mention regime TVA -->
+                        <div class="dx-field red-font info-supp">
+                          {{ mentionRegimeTva | async }}
+                          <!-- YO -->
+                        </div>
+                      </dxi-item>
                     </dxi-item>
 
                     <dxi-item [ratio]="0.4"></dxi-item>
@@ -944,6 +951,7 @@
                     *ngIf="ordre?.id"
                     [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
+                    (priceChange)="refreshRegimeTva.emit()"
                   ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
