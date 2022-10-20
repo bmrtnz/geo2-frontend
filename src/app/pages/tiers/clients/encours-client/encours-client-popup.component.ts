@@ -11,9 +11,7 @@ export class EncoursClientPopupComponent implements OnChanges {
 
   @Input() public client: Client;
   @Input() public readOnlyMode: boolean;
-  @Output() public clientId: string;
-  @Output() public entrepotId: string;
-  @Output() public secteurId: string;
+  @Output() public clientInfo: any;
   @Output() public popupShown: boolean;
 
   visible: boolean;
@@ -32,10 +30,8 @@ export class EncoursClientPopupComponent implements OnChanges {
 
   setTitle() {
     if (this.client) {
-      this.clientId = this.client.id;
-      this.secteurId = this.client.secteur.id;
+      this.clientInfo = this.client;
       this.titleStart = "En-cours client ";
-      this.titleMid = this.client.raisonSocial;
     }
   }
 

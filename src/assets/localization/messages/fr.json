@@ -93,6 +93,7 @@
     "destockage": "Déstocker",
     "aucun-destockage": "Aucun déstockage actif",
     "aucun-ordre": "Aucun ordre trouvé",
+    "aucun-encours": "Aucun encours",
     "indicateur-stock": "Indicateur stock",
     "title-start-article-reservation-ordre-popup": "Déstockage sur ordre ",
     "title-end-article-reservation-ordre-popup": "- article &A - &C colis",
@@ -162,6 +163,7 @@
     "title-historique-modif-detail-popup": "Historique des changements du détail d'expédition",
     "encours-total": "En-cours total",
     "autorise": "Autorisé",
+    "depassement": "Dépass.",
     "retard": "Retard",
     "suppression-ordre": "Suppression ordre",
     "annulation-ordre": "Annulation ordre",
@@ -1309,6 +1311,16 @@
     "choixEntrepot-codeEntrepot": "Code entrep.",
     "choixEntrepot-entrepot-client-raisonSocial": "Raison sociale client",
     "choixEntrepot-entrepot-client-code": "Code client",
-    "choixEntrepot-entrepot-client-secteur-id": "Secteur"
+    "choixEntrepot-entrepot-client-secteur-id": "Secteur",
+    "encoursClient-dateFac": "Date Fact.",
+    "encoursClient-cfcIntitule": "Description",
+    "encoursClient-cfcMontantEuros": "Débit EUR",
+    "encoursClient-cfcMontantDevise": "Crédit EUR",
+    "encoursClient-cfcDateEcheance": "Echéance",
+    "encoursClient-echeanceNiveau": " ",
+    "encoursClient-devise-id": "DEV",
+    "encoursClient-ecPiece": "Facture",
+    "encoursClient-cfcRefPiece": "Réf. Client",
+    "encoursClient-numImmat": "N° Immatriculation"
   }
 }

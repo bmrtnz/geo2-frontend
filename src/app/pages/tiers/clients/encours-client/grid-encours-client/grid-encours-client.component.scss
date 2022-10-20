@@ -16,6 +16,11 @@
       pointer-events: auto;
     }
   }
+
+  .dx-toolbar-after {
+    background-color: #FFF;
+    z-index: 2;
+  }
 }
 
 ::ng-deep .secteur-histo-ligne-field {
@@ -96,12 +101,16 @@
   }
 }
 
-::ng-deep .bold-text {
+::ng-deep .encours-total-text {
   font-weight: bold !important;
+  color: rgba(0, 0, 0, .7) !important;
 }
 
 ::ng-deep .encours-info-container {
-  width: 850px !important;
+  position: absolute;
+  width: 950px !important;
+  margin-top: 56px;
+  z-index: 1;
 
   .dx-field-value {
     width: 45% !important;
@@ -111,19 +120,27 @@
     width: 45% !important;
   }
 
-  .encoursRetard .dx-texteditor-input {
-    color: #ff325a !important;
-    font-weight: bold;
+  .encoursRetard,
+  .encoursDepassement {
+
+    .dx-texteditor-input {
+      color: #ff325a !important;
+      font-weight: bold;
+    }
   }
+}
+
+::ng-deep .expired-date {
+  background-color: #FFCBCE !important;
 }
 
 ::ng-deep .dx-row-focused {
 
-  .bio-article {
-    color: #a9f77e !important;
+  .expired-date {
+    background-color: #ff325a !important;
   }
 }
 
-::ng-deep .not-valid {
-  opacity: 0.5;
+::ng-deep .noopacity {
+  opacity: 0 !important;
 }
