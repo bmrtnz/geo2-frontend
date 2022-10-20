@@ -25,8 +25,6 @@ import DataSource from "devextreme/data/data_source";
 import dxDataGrid, { dxDataGridColumn } from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { environment } from "environments/environment";
-import { exit } from "process";
 import { iif, Observable, of } from "rxjs";
 import { concatMap, concatMapTo, filter, first, map, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
@@ -161,6 +159,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @Output() public articleLigneId: string;
   @Output() public fournisseurLigneId: string;
   @Output() public fournisseurCode: string;
+  @Output() priceChange = new EventEmitter();
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
@@ -290,6 +289,9 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
         /* tslint:disable-next-line:prefer-const */
         let [name, value] = Object.entries(change.data)[0];
+
+        if (["ventePrixUnitaire", "achatPrixUnitaire"].includes(name))
+          this.priceChange.emit();
 
         // update "fournisseur" field when "proprietaire" value changed
         if (name === "proprietaireMarchandise") {

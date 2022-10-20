@@ -35,7 +35,7 @@ import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { combineLatest, Observable, of, Subject } from "rxjs";
-import { concatMap, debounceTime, filter, first, map, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { concatMap, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
@@ -280,6 +280,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
+  public refreshRegimeTva = new EventEmitter();
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
@@ -359,6 +360,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.formGroup.valueChanges,
         this.route.paramMap,
         this.tabContext.onTabChange,
+        this.refreshRegimeTva.asObservable().pipe(startWith(1)),
       ])
         .pipe(
           concatMap(async ([control, params]) => {

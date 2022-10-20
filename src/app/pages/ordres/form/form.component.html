@@ -956,6 +956,7 @@
                     *ngIf="ordre?.id"
                     [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
+                    (priceChange)="refreshRegimeTva.emit()"
                   ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
