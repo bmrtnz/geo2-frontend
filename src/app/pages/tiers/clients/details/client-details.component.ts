@@ -55,6 +55,7 @@ import {
 import { AuthService, ClientsService } from "../../../../shared/services";
 import { client as clientsGridConfig } from "assets/configurations/grids.json";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import { OrderHistoryPopupComponent } from "../order-history/order-history-popup.component";
 
 const PREORDRE = "PREORDRE";
 
@@ -255,6 +256,7 @@ export class ClientDetailsComponent
   modifListe: ModificationListComponent;
   @ViewChild(InfoPopupComponent, { static: true })
   infoComponent: InfoPopupComponent;
+  @ViewChild(OrderHistoryPopupComponent, { static: false }) orderHistoPopup: OrderHistoryPopupComponent;
 
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
@@ -545,6 +547,13 @@ export class ClientDetailsComponent
 
   onIfcoChange(params) {
     this.ifcoChecked = params.value;
+  }
+
+  onOrderHistoClick() {
+    this.orderHistoPopup.visible = true;
+  }
+
+  onEncoursClick() {
   }
 
   displayIDBefore(data) {
