@@ -246,6 +246,7 @@
                       [dataSource]="typesClient"
                       [displayExpr]="displayIDBefore"
                       [searchExpr]="['id']"
+                      (onValueChanged)="onTypeClientChange($event)"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-typeClient' | localize }}"

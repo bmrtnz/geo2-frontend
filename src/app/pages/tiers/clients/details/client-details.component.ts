@@ -504,7 +504,7 @@ export class ClientDetailsComponent
     this.client = res.data.client;
     // Règle changée Tina 16/09/2022
     // this.freeUEVAT(this.client.secteur, this.client.pays);
-    this.mandatoryUEVAT({ value: this.client.regimeTva });
+    this.mandatoryUEVAT({ regimeTva: this.client.regimeTva, typeClient: this.client.typeClient });
     this.formGroup.get("tvaCee").markAsUntouched(); // Changing 'required' property marks as touched
     const certifications = this.mapCertificationsForDisplay(
       this.client.certifications,
@@ -825,6 +825,10 @@ export class ClientDetailsComponent
     }
   }
 
+  onTypeClientChange(e) {
+    this.mandatoryUEVAT({ regimeTva: this.formGroup.get("regimeTva").value, typeClient: e.value });
+  }
+
   onPaysChange(e) {
     // Règle changée Tina 16/09/2022
     // this.freeUEVAT(this.formGroup.get("secteur").value, e.value);
@@ -840,8 +844,12 @@ export class ClientDetailsComponent
   }
 
   mandatoryUEVAT(e) {
-    const regime = e?.value?.id;
-    this.mandatoryTvaCee = (regime && !["E", "G"].includes(regime)) ? true : false;
+    if (e.value) e = { regimeTva: e.value };
+    const regime = e?.regimeTva?.id;
+    const typeClient = e?.typeClient?.id;
+    // regTVA = E ou G, ou typeClient = ASSOC alors pas d'id tva obligatoire
+    this.mandatoryTvaCee =
+      (regime && !["E", "G"].includes(regime) && typeClient !== "ASSOC") ? true : false;
   }
 
   onCourtierChange(e) {
