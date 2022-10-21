@@ -1,0 +1,36 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .grid-cq-photos {
+
+  .pathText {
+    width: 15% !important;
+  }
+
+  .small-CQ-button {
+    position: relative;
+    height: 18px;
+    min-width: 0;
+    padding: 0 4px !important;
+
+    .dx-button-content {
+      padding: 0;
+      font-size: 11px;
+      text-overflow: initial;
+
+      .dx-button-text {
+        position: relative;
+        margin-top: -2px !important;
+        padding: 0;
+        line-height: 0 !important;
+      }
+    }
+
+    &.copy-photos {
+      margin-right: 5px;
+    }
+
+  }
+
+}

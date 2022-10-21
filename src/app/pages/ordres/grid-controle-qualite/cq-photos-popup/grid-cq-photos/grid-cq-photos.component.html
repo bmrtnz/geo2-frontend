@@ -1,0 +1,144 @@
+
+<dx-box>
+  <dxi-item [ratio]="4">
+    <div class="dx-field">
+      <div class="dx-field-label pathText">
+        {{ "ControleQualite-photos-chemin" | localize }}
+      </div>
+      <div class="dx-field-value">
+        <dx-text-box
+          #path
+          [readOnly]="true"
+        >
+        </dx-text-box>
+      </div>
+    </div>
+  </dxi-item>
+  <dxi-item [ratio]="0.3"></dxi-item>
+  <dxi-item [ratio]="1.5">
+    <div>
+      <dx-button
+        class="copy-all"
+        type="success"
+        text="{{ 'btn-copy-all' | localize }}"
+        (onClick)="copyAllPhotos()"
+      ></dx-button>
+    </div>
+  </dxi-item>
+</dx-box>
+
+<br>
+
+<dx-data-grid
+  class="dx-card wide-card"
+  [remoteOperations]="{
+    filtering: true,
+    grouping: true,
+    groupPaging: false,
+    paging: false,
+    sorting: true,
+    summary: false
+  }"
+  [dataSource]="items"
+  [keyExpr]="'id'"
+  [showBorders]="false"
+  [elementAttr]="{ class: 'grid-cq-photos' }"
+  [focusedRowEnabled]="true"
+  [focusedRowIndex]="0"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [focusedRowIndex]="-1"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onCellClick)="onCellClick($event)"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      'Liste des photos disponibles',
+      $event,
+      gridConfiguratorService.Grid.PhotosControleQualite,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+  <dxo-export fileName="Photos contrôle qualité"></dxo-export>
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.PhotosControleQualite"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [allowUpdating]="true"
+    [mode]="'cell'"
+  >
+  </dxo-editing>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
+  >
+  </dxo-column-chooser>
+
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    [width]="column.width"
+    [cellTemplate]="column.cellTemplate"
+    [cssClass]="column?.cssClass"
+    [caption]="
+      ('ControleQualite-photos-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
+    "
+    [dataType]="column?.dataType"
+    [allowEditing]="column?.allowEditing ? column.allowEditing : false"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  ></dxi-column>
+
+  <div *dxTemplate="let cell of 'photoButtonsTemplate'">
+    <dx-button
+      class="small-CQ-button copy-photos"
+      type="success"
+      [focusStateEnabled]="false"
+      [text]="this.localization.localize('copier')"
+      (onClick)="copyPhoto(cell)"
+    >
+    </dx-button>
+    <dx-button
+      class="small-CQ-button comment-photos"
+      type="default"
+      [focusStateEnabled]="false"
+      [text]="this.localization.localize('commentaire')"
+      (onClick)="commentPhoto()"
+    ></dx-button>
+  </div>
+
+</dx-data-grid>
+
+<app-prompt-popup
+  [title]="this.localization.localize('text-popup-comment-photo')"
+  (whenValidate)="saveComment($event)"
+></app-prompt-popup>

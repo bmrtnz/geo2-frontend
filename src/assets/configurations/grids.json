@@ -4952,6 +4952,46 @@
         "dataField": "lotConforme",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordreLigne.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.ordre.numero",
+        "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
+  },
+  "photos-controle-qualite": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "nomFichier",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "fake1",
+        "showIncolumnChooser": false,
+        "cellTemplate": "photoButtonsTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "ficheCQ",
+        "dataType": "boolean",
+        "allowEditing": true,
+        "width": 70,
+        "cssClass": "no-padding",
+        "visible": true
       }
     ]
   },

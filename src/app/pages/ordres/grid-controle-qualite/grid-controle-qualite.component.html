@@ -1,4 +1,6 @@
 <dx-button
+  #copyPhotosButton
+  [visible]="gridRowsTotal > 0"
   class="cq-copy-photos"
   type="default"
   [focusStateEnabled]="false"
@@ -13,6 +15,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onContentReady)="onContentReady($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -43,7 +46,7 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -117,3 +120,8 @@
   </div>
 
 </dx-data-grid>
+
+<app-cq-photos-popup
+  [ordreLigne]="ordreLigne"
+>
+</app-cq-photos-popup>

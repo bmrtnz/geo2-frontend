@@ -1,0 +1,36 @@
+<dx-popup
+  [showTitle]="true"
+  [width]="700"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+  [resizeEnabled]="true"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ titleStart }}&nbsp;</div>
+    <div class="title-mid">{{ titleMid }}&nbsp;</div>
+    <div class="title-end">&nbsp;&nbsp;{{ titleEnd }}</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    >
+    </dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="cq-photos-content-container">
+        <app-grid-cq-photos
+          [ordreLigneId]="ordreLigneId"
+        ></app-grid-cq-photos>
+        <br>
+        <div class="photo-container">
+
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>
