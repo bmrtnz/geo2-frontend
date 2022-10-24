@@ -1,5 +1,3 @@
-<!-- ******************************************** -->
-
 <form
   class="filter-container"
   [formGroup]="formGroup"
@@ -39,7 +37,7 @@
           {{ "ordreLignes-dateLivraisonPrevue" | localize }}
         </div>
       </div>
-  </dxi-item>
+    </dxi-item>
   </dx-box>
   <dx-box>
     <dxi-item [ratio]="2">
@@ -218,8 +216,6 @@
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
-    (onSelectionChanged)="onSelectionChanged($event)"
-    (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
@@ -299,6 +295,6 @@
   </dx-data-grid>
 </div>
 
-<app-zoom-article-popup
+<app-zoom-client-article-popup
   [articleLigneId]="articleLigneId"
-></app-zoom-article-popup>
+></app-zoom-client-article-popup>

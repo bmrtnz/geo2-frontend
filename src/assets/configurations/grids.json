@@ -5754,5 +5754,73 @@
         "visible": false
       }
     ]
+  },
+  "encours-client": {
+    "pageSize": 10,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "dateFac",
+        "sortOrder": "asc",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "cfcIntitule",
+        "class": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "cfcMontantEuros",
+        "class": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "cfcMontantDevise",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "cfcDateEcheance",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "echeanceNiveau",
+        "class": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "devise.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "ecPiece",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "cfcRefPiece",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "numImmat",
+        "visible": true
+      }
+    ]
   }
 }

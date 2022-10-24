@@ -1,0 +1,16 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [title]="title"
+  (onShowing)="onShowing($event)"
+  [resizeEnabled]="true"
+>
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <app-articles [articleLigneId]="articleLigneId"></app-articles>
+      <br />
+    </dx-scroll-view>
+  </div>
+</dx-popup>
