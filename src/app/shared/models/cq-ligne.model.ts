@@ -1,4 +1,5 @@
 import CQExpedition from "./cq-expedition.model";
+import Document from "./document.model";
 import Fournisseur from "./fournisseur.model";
 import { Field, Model, ModelName } from "./model";
 import OrdreLigne from "./ordre-ligne.model";
@@ -65,6 +66,7 @@ export class CQLigne extends Model {
   @Field() public description?: string;
   @Field() public cq?: string;
   @Field() public userModification?: string;
+  @Field({ model: import("./document.model") }) public cqTechnique?: Document;
 }
 
 export default CQLigne;
