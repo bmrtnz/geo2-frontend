@@ -2432,7 +2432,7 @@
         "calculateCellValue": "proprietaireMarchandise.id",
         "calculateSortValue": "proprietaireMarchandise.code",
         "editorOptions": {
-          "searchTimeout": "100"
+          "searchTimeout": "0"
         },
         "lookup": {
           "valueExpr": "id",
@@ -2455,7 +2455,7 @@
         "visible": true,
         "calculateSortValue": "transporteur.code",
         "editorOptions": {
-          "searchTimeout": "100"
+          "searchTimeout": "0"
         },
         "lookup": {
           "valueExpr": "id",
@@ -2494,6 +2494,9 @@
         ],
         "visible": true,
         "calculateSortValue": "venteUnite.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
@@ -2520,6 +2523,9 @@
         ],
         "visible": true,
         "calculateSortValue": "codePromo.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
@@ -2560,6 +2566,9 @@
         ],
         "visible": true,
         "calculateSortValue": "achatUnite.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
@@ -2586,6 +2595,9 @@
         ],
         "visible": true,
         "calculateSortValue": "typePalette.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
@@ -2606,6 +2618,9 @@
         ],
         "visible": true,
         "calculateSortValue": "paletteInter.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
@@ -2649,6 +2664,9 @@
         ],
         "visible": true,
         "calculateSortValue": "fraisUnite.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
