@@ -31,6 +31,22 @@
           [visible]="!readOnlyMode"
           (onClick)="onCancel()"
         ></dx-button>
+        <dx-button
+          class="upperButton"
+          type="success"
+          [visible]="!createMode"
+          hint="{{ 'hint-client-historique' | localize }}"
+          (onClick)="onOrderHistoClick()"
+          text="{{ 'btn-historique' | localize }}"
+        ></dx-button>
+        <dx-button
+          class="upperButton"
+          [visible]="!createMode"
+          type="success"
+          hint="{{ 'hint-client-encours' | localize }}"
+          (onClick)="onEncoursClick()"
+          text="{{ 'btn-encours' | localize }}"
+        ></dx-button>
       </div>
     </h2>
   </div>
@@ -2045,6 +2061,15 @@
   </div>
 </form>
 <app-editing-alert></app-editing-alert>
+<app-order-history-popup
+  [client]="client"
+  [readOnlyMode]="true"
+>
+</app-order-history-popup>
+<app-encours-client-popup
+  [client]="client"
+>
+</app-encours-client-popup>
 <app-file-manager-popup
   key="clients"
   [subTitle]="client?.code"

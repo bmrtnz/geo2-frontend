@@ -3,6 +3,7 @@ import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariable
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
 import { LookupStore } from "basic";
+import ArrayStore from "devextreme/data/array_store";
 import CustomStore, { CustomStoreOptions } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -578,13 +579,13 @@ export abstract class ApiService implements OnDestroy {
       if (typeof node === "object") { // comparison
 
         // Map negation
-        if (node[0] === "!") {
+        if (node?.[0] === "!") {
           node = node[1];
           negate = !negate;
         }
 
         // Deep filter
-        if (typeof node[0] === "object") {
+        if (typeof node?.[0] === "object") {
           currentFilter[index] = `(${next(node, negate).join(" ")})`;
         } else {
           /* tslint:disable-next-line:prefer-const */
@@ -935,7 +936,12 @@ export abstract class ApiService implements OnDestroy {
       );
   }
 
-  getLookupStore<T>(columns: Array<string>, search?: string) {
+  /** Build DX LookupStore using paginated/backend queries */
+  getLookupStore<T>(
+    columns: Array<string>,
+    search?: string,
+    params: Partial<LookupStore> = {},
+  ) {
     return {
       paginate: true,
       sort: [{ selector: "id" }],
@@ -943,10 +949,7 @@ export abstract class ApiService implements OnDestroy {
         load: options => this.apollo
           .query<{ [key: string]: RelayPage<T> }>({
             query: gql(this.buildGetPageGraph(columns)),
-            variables: {
-              ...this.mapLoadOptionsToVariables(options),
-              search,
-            },
+            variables: this.mergeVariables(this.mapLoadOptionsToVariables(options), { search }),
             fetchPolicy: "cache-first",
           })
           .pipe(
@@ -961,7 +964,31 @@ export abstract class ApiService implements OnDestroy {
           })
           .pipe(map(res => res.data[this.model.name.lcFirst()]))
           .toPromise(),
+      }),
+      ...params,
+    } as LookupStore;
+  }
+
+  /** Build DX LookupStore using preloaded data */
+  async getPreloadedLookupStore<T>(
+    columns: Array<string>,
+    search?: string,
+    params: Partial<LookupStore> = {},
+  ) {
+    const data = await this.apollo
+      .query<{ [key: string]: Array<T> }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+        fetchPolicy: "cache-first",
       })
+      .pipe(
+        map(res => res.data[`all${this.model.name}List`]),
+      ).toPromise();
+    return {
+      paginate: true,
+      sort: [{ selector: "id" }],
+      store: new ArrayStore({ data }),
+      ...params,
     } as LookupStore;
   }
 

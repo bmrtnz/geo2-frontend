@@ -341,4 +341,41 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     ]);
   }
 
+  /**
+   * of_sauve_ordre
+   */
+  public ofSauveOrdre(ordRef: string) {
+    return this.functionsService.queryFunction("ofSauveOrdre", [
+      { name: "ordRef", type: "String", value: ordRef }
+    ]);
+  }
+
+  /**
+   * Duplication d'un ordre
+   */
+  public wDupliqueOrdreOnDuplique(
+    depDate: string, livDate: string, cenRef: string,
+    withCodeChargement: boolean, withFourni: boolean, withAchPu: boolean, withVtePu: boolean, withLibDlv: boolean,
+    withEtdDate: boolean, withEtaDate: boolean, withEtdLocation: boolean, withEtaLocation: boolean, withIncCode: boolean,
+    ordRef: string, socCode: string, user: string
+  ) {
+    return this.functionsService.queryFunction("wDupliqueOrdreOnDuplique", [
+      { name: "depDate", type: "LocalDateTime", value: depDate },
+      { name: "livDate", type: "LocalDate", value: livDate },
+      { name: "cenRef", type: "String", value: cenRef },
+      { name: "withCodeChargement", type: "Boolean", value: withCodeChargement },
+      { name: "withFourni", type: "Boolean", value: withFourni },
+      { name: "withAchPu", type: "Boolean", value: withAchPu },
+      { name: "withVtePu", type: "Boolean", value: withVtePu },
+      { name: "withLibDlv", type: "Boolean", value: withLibDlv },
+      { name: "withEtdDate", type: "Boolean", value: withEtdDate },
+      { name: "withEtaDate", type: "Boolean", value: withEtaDate },
+      { name: "withEtdLocation", type: "Boolean", value: withEtdLocation },
+      { name: "withEtaLocation", type: "Boolean", value: withEtaLocation },
+      { name: "withIncCode", type: "Boolean", value: withIncCode },
+      { name: "ordRef", type: "String", value: ordRef },
+      { name: "socCode", type: "String", value: socCode },
+      { name: "user", type: "String", value: user }
+    ]);
+  }
 }

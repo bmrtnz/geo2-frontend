@@ -11,14 +11,12 @@ import {
   DxListModule
 } from "devextreme-angular";
 import { SideNavOuterToolbarModule, SingleCardModule } from "../layouts";
-import { HomeComponent } from "./home/home.component";
 import { PagesRoutingModule } from "./pages-routing.module";
 import { PagesComponent } from "./pages.component";
 
 @NgModule({
   declarations: [
     PagesComponent,
-    HomeComponent,
   ],
   imports: [
     PagesRoutingModule,

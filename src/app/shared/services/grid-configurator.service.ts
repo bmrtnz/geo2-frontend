@@ -10,7 +10,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import { dxToolbarItem, dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
-import { defer, from, interval, Observable } from "rxjs";
+import { from, interval, Observable } from "rxjs";
 import {
   concatMap,
   concatMapTo,
@@ -28,6 +28,7 @@ import {
 import { Model } from "../models/model";
 import { GridsConfigsService } from "./api/grids-configs.service";
 import { AuthService } from "./auth.service";
+import { CurrentCompanyService } from "./current-company.service";
 import { LocalizationService } from "./localization.service";
 
 let self: GridConfiguratorService;
@@ -120,7 +121,8 @@ export enum Grid {
   RecapClientsComptesPalox = "recap-clients-comptes-palox",
   CommandesEdi = "commandes-edi",
   ModifCommandeEdi = "modif-commande-edi",
-  LignesEdi = "lignes-edi"
+  LignesEdi = "lignes-edi",
+  EncoursClient = "encours-client"
 }
 
 const extraConfigurations = [
@@ -140,6 +142,7 @@ const extraConfigurations = [
   "format",
   "calculateCellValue",
   "lookup",
+  "searchTimeout",
   "calculateSortValue",
   "filterOperations",
 ];
@@ -155,6 +158,7 @@ export class GridConfiguratorService {
     private httpClient: HttpClient,
     private apollo: Apollo,
     private localizationService: LocalizationService,
+    private currentCompanyService: CurrentCompanyService,
   ) {
     self = this;
   }
@@ -238,6 +242,9 @@ export class GridConfiguratorService {
       utilisateur: {
         nomUtilisateur: this.authService.currentUser.nomUtilisateur,
       },
+      societe: {
+        id: this.currentCompanyService.getCompany().id,
+      },
       grid,
     };
   }
@@ -255,7 +262,7 @@ export class GridConfiguratorService {
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
     config.selectedRowKeys = []; // Really not consistent to store this info
     self.gridsConfigsService
-      .save_v2(["grid", "utilisateur.nomUtilisateur", "config"], {
+      .save_v2(["grid", "utilisateur.nomUtilisateur", "config", "societe.id"], {
         gridConfig: {
           ...gridConfig,
           config: {
@@ -301,6 +308,7 @@ export class GridConfiguratorService {
       id: GridsConfigsService.getCacheID({
         grid,
         utilisateur: this.authService.currentUser,
+        societe: this.currentCompanyService.getCompany(),
       }),
     });
   }
@@ -346,10 +354,10 @@ export class GridConfiguratorService {
       );
 
     const res = await this.gridsConfigsService
-      .fetchUserGrid(this.authService.currentUser, grid)
+      .fetchUserGrid(this.authService.currentUser, grid, this.currentCompanyService.getCompany())
       .toPromise();
     const defaultConfig = this.fetchDefaultConfig(grid);
-    if (res.error || !res.data.gridConfig)
+    if (res?.error || !res.data.gridConfig)
       return await defaultConfig;
 
     // clone config (original is sealed)

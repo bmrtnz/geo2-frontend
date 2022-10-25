@@ -9,15 +9,15 @@
   [focusedRowEnabled]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
-  (onFocusedCellChanging)="focusedCellChanging($event)"
+  (onFocusedCellChanging)="onFocusedCellChanging($event)"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
-  (onContentReady)="onContentReady($event)"
+  (onContentReady)="contentReadyEvent.emit($event); onContentReady($event)"
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
   (onEditingStart)="onEditingStart($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
-  (onFocusedCellChanged)="onFocusedCellChanged($event)"
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
+  (onKeyDown)="onKeyDown($event)"
 >
   <dxo-paging [enabled]="false"></dxo-paging>
   <dxo-export fileName="Lignes de commande"></dxo-export>
@@ -36,7 +36,10 @@
     [enterKeyDirection]="'column'"
     [editOnKeyPress]="true"
   ></dxo-keyboard-navigation>
-  <dxo-summary *ngIf="!!gridRowsTotal">
+  <dxo-summary
+    *ngIf="!!gridRowsTotal"
+    [recalculateWhileEditing]="true"
+  >
     <dxi-total-item
       column="article.articleDescription.descriptionReferenceLongue"
       summaryType="count"
@@ -140,6 +143,7 @@
         [focusStateEnabled]="false"
         hint="{{ 'destockage' | localize }}"
         [visible]="allowMutations"
+        [disabled]="!cell.data.nombreColisCommandes"
         [text]="'D'"
         (onClick)="openDestockagePopup(cell.data)"
       >
@@ -195,21 +199,26 @@
     [dataField]="column.dataField"
     [allowEditing]="column.allowEditing"
     [allowSorting]="column.allowSorting"
-    [cellTemplate]="column.cellTemplate"
     [format]="column?.format"
     [editorOptions]="column?.editorOptions"
-    [editCellTemplate]="column.editCellTemplate"
     [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="
-      column.cellTemplate === 'entityCellTemplate' ? displayCodeBefore : false
+      column?.calculateDisplayValue
+        ? (column.calculateDisplayValue | evalDisplay)
+        : column?.dataField
     "
+    [lookup]="column?.lookup"
     [showInColumnChooser]="column.showInColumnChooser"
-    [calculateSortValue]="column.dataField === 'numero' && calultateSortValue"
+    [calculateSortValue]="
+      column?.calculateSortValue ||
+      (column.dataField === 'numero' && calultateSortValue)
+    "
     [cssClass]="column?.cssClass"
     [caption]="
       ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
       column.name
     "
+    [setCellValue]="setCellValue"
   >
     <!-- Restrictions valeurs saisies -->
     <dxi-validation-rule
@@ -249,11 +258,6 @@
     [width]="30"
     [showInColumnChooser]="false"
   ></dxi-column>
-
-  <app-entity-cell-template
-    [columnsSettings]="columnsSettings"
-    [allowMutations]="allowMutations"
-  ></app-entity-cell-template>
 </dx-data-grid>
 
 <!-- marge previsionelle -->

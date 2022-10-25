@@ -2,9 +2,10 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { functionBody, FunctionResponse, FunctionsService } from "app/shared/services/api/functions.service";
+import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { takeWhile } from "rxjs/operators";
+import { map, takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
 import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
@@ -400,7 +401,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   getListDataSource(columns: Array<string>) {
     return new DataSource({
-      reshapeOnPush: true,
+      reshapeOnPush: false,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
@@ -416,6 +417,24 @@ export class OrdreLignesService extends ApiService implements APIRead {
         insert: this.insert,
         update: this.update,
         remove: this.remove,
+      }),
+    });
+  }
+
+  async getPreloadedDataSource(columns: Array<string>, search?: string) {
+    const data = await this.apollo
+      .query<{ [key: string]: Array<OrdreLigne> }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+        fetchPolicy: "network-only",
+      })
+      .pipe(
+        map(res => res.data[`all${this.model.name}List`]),
+      ).toPromise();
+    return new DataSource({
+      store: new ArrayStore({
+        key: this.keyField,
+        data: JSON.parse(JSON.stringify(data)),
       }),
     });
   }
@@ -474,6 +493,30 @@ export class OrdreLignesService extends ApiService implements APIRead {
           ],
         )),
         variables: { orlRef },
+        fetchPolicy: "network-only",
+      });
+  }
+
+  public reindex(lignes: string[], body: string[]) {
+    return this.apollo
+      .mutate<{ reindex: Partial<OrdreLigne>[] }>
+      ({
+        mutation: gql(ApiService.buildGraph(
+          "mutation",
+          [
+            {
+              name: "reindex",
+              body,
+              params: [
+                { name: "lignes", value: "lignes", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "lignes", type: "[String]", isOptionnal: false },
+          ],
+        )),
+        variables: { lignes },
         fetchPolicy: "network-only",
       });
   }

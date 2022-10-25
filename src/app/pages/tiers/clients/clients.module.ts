@@ -20,6 +20,8 @@ import {
   DxValidatorModule,
   DxTagBoxModule,
   DxDateBoxModule,
+  DxPopupModule,
+  DxScrollViewModule,
 } from "devextreme-angular";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PushHistoryPopupModule } from "../../../shared/components/push-history-popup/push-history-popup.component";
@@ -31,6 +33,12 @@ import { EditingGuard } from "app/shared/guards/editing-guard";
 import { FileManagerModule } from "app/shared/components/file-manager/file-manager-popup.component";
 import { ModificationListModule } from "app/shared/components/modification-list/modification-list.component";
 import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
+import { OrderHistoryPopupComponent } from "./order-history/order-history-popup.component";
+import { GridOrderHistoryComponent } from "./order-history/grid-order-history/grid-order-history.component";
+import { ArticlesModule } from "app/pages/articles/articles.module";
+import { EncoursClientPopupComponent } from "./encours-client/encours-client-popup.component";
+import { GridEncoursClientComponent } from "./encours-client/grid-encours-client/grid-encours-client.component";
+import { ZoomClientArticlePopupComponent } from "./order-history/zoom-client-article-popup/zoom-client-article-popup.component";
 
 @NgModule({
   imports: [
@@ -43,11 +51,13 @@ import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.com
     DxDataGridModule,
     DxButtonModule,
     DxAccordionModule,
+    DxPopupModule,
     DxTagBoxModule,
     DxListModule,
     DxSelectBoxModule,
     DxTextBoxModule,
     DxBoxModule,
+    DxScrollViewModule,
     DxCheckBoxModule,
     DxTextAreaModule,
     DxPopoverModule,
@@ -61,9 +71,18 @@ import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.com
     EditingAlertModule,
     ModificationListModule,
     FileManagerModule,
+    ArticlesModule,
   ],
-  declarations: [ClientsListComponent, ClientDetailsComponent],
+  declarations: [
+    ClientsListComponent,
+    ClientDetailsComponent,
+    OrderHistoryPopupComponent,
+    GridOrderHistoryComponent,
+    EncoursClientPopupComponent,
+    GridEncoursClientComponent,
+    ZoomClientArticlePopupComponent
+  ],
   providers: [NestedGuard, EditingGuard],
-  exports: [ClientDetailsComponent]
+  exports: [ClientDetailsComponent, OrderHistoryPopupComponent, GridOrderHistoryComponent, ZoomClientArticlePopupComponent]
 })
 export class ClientsModule { }

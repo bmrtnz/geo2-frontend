@@ -1,0 +1,119 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [width]="750"
+  height="auto"
+  [(visible)]="visible"
+  title="{{ 'ordre-duplication-creation' | localize }}"
+  [focusStateEnabled]="false"
+  (onShowing)="onShowing($event)"
+>
+
+   <form [formGroup]="formGroup">
+    <div class="entrepot-dates-container">
+      <!-- Entrepôt -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "ordres-entrepotLivre" | localize }}
+        </div>
+        <div class="dx-field-value large-width">
+          <dx-select-box
+            [readOnly]="!activateEntrepot"
+            formControlName="entrepot"
+            [dataSource]="entrepotDS"
+            [displayExpr]="displayCodeBefore"
+            [searchEnabled]="false"
+          >
+            <dx-validator name="{{ 'ordres-entrepotLivre' | localize }}">
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+            <dxo-drop-down-options [width]="450"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+        <dx-button
+          class="modify-button"
+          type="default"
+          icon="material-icons search"
+          [visible]="!!showModify"
+          [disabled]="activateEntrepot"
+          [focusStateEnabled]="false"
+          text="modifier"
+          (onClick)="changeEntrepot()"
+        >
+        </dx-button>
+      </div>
+
+      <!-- Date départ -->
+      <div class="dx-field">
+        <div class="dx-field-label">{{ "ordre-duplication-dateDepartPrevue" | localize }}</div>
+        <div class="dx-field-value">
+          <dx-date-box
+            class="dateStart"
+            formControlName="dateDepartPrevue"
+            [displayFormat]="'dd-MM-yy HH:mm'"
+            dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+            type="datetime"
+            (onValueChanged)="manualDate($event)"
+          >
+            <dx-validator name="{{ 'ordre-duplication-dateDepartPrevue' | localize }}">
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-date-box>
+        </div>
+      </div>
+      <!-- Date livraison -->
+      <div class="dx-field">
+        <div class="dx-field-label">{{ "ordre-duplication-dateLivraisonPrevue" | localize }}</div>
+        <div class="dx-field-value small-width">
+          <dx-date-box
+            class="dateEnd"
+            formControlName="dateLivraisonPrevue"
+            [displayFormat]="'dd-MM-yy'"
+            dateSerializationFormat="yyyy-MM-dd"
+            type="date"
+            (onValueChanged)="manualDate($event)"
+          >
+            <dx-validator name="{{ 'ordre-duplication-dateLivraisonPrevue' | localize }}">
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-date-box>
+        </div>
+      </div>
+    </div>
+     <!-- Conserver élements -->
+    <div class="items-title">
+      {{ 'text-popup-duplication-conserver' | localize }}
+    </div>
+    <div class="to-keep-list">
+      <div *ngFor="let item of itemsToKeep" class="to-keep-item">
+        <div class="dx-field field-large midLarge">
+          <div class="dx-field-value">
+            <dx-check-box
+              [formControlName]="item.name"
+            ></dx-check-box>
+          </div>
+          <div class="dx-field-label">
+            {{ 'ordre-duplication-' + item.name  | localize }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br><br>
+    <div class="popup-buttons-container">
+      <dx-button
+        type="default"
+        [disabled]="processRunning"
+        text="{{ 'btn-annuler' | localize }}"
+        (onClick)="hidePopup()"
+      ></dx-button>
+      <dx-button
+        type="normal"
+        [disabled]="processRunning"
+        text="{{ 'btn-duplication-ordre' | localize }}"
+        (onClick)="applyClick()"
+      ></dx-button>
+    </div>
+  </form>
+
+</dx-popup>

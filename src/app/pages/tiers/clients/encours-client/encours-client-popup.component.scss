@@ -1,0 +1,61 @@
+// Var
+@import "~themes/generated/variables.base";
+
+
+::ng-deep .encours-client-popup {
+  max-width: 1320px;
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+
+    .title-start,
+    .title-mid {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+    .title-mid {
+      position: relative;
+      top: -1px;
+      font-size: 22px;
+      color: $base-accent;
+    }
+
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
+  .dx-popup-content {
+    .ajout-art-histo-content-container {
+      background: #FFF !important;
+      padding: 0 15px 0 2px;
+
+      .valid-field {
+        display: none;
+      }
+    }
+
+  }
+
+  .articles-valid-button,
+  .cancel-button {
+    transition: transform 0.5s;
+    transform: scale(1);
+    margin-top: 2px;
+    float: right;
+  }
+
+  .articles-valid-button {
+    margin-right: 15px;
+  }
+
+  .pulse {
+    animation: pulse 0.5s;
+  }
+
+}

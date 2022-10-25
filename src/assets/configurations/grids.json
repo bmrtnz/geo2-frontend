@@ -980,6 +980,11 @@
             "id",
             "raisonSocial",
             "ville"
+          ],
+          "searchExpr": [
+            "id",
+            "raisonSocial",
+            "ville"
           ]
         }
       },
@@ -992,6 +997,10 @@
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
             "id",
             "description"
           ]
@@ -1476,6 +1485,12 @@
         "width": 180,
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "dateFabrication",
+        "visible": true,
+        "dataType": "date",
+        "format": "dd-MM-yyyy"
       }
     ]
   },
@@ -2470,16 +2485,49 @@
       },
       {
         "dataField": "proprietaireMarchandise.id",
+        "calculateDisplayValue": [
+          "proprietaireMarchandise.code",
+          "proprietaireMarchandise.raisonSocial"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
+        "calculateCellValue": "proprietaireMarchandise.id",
+        "calculateSortValue": "proprietaireMarchandise.code",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code"
+          ]
+        },
         "width": 170
       },
       {
         "dataField": "fournisseur.id",
+        "calculateDisplayValue": [
+          "fournisseur.code",
+          "fournisseur.raisonSocial"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
+        "calculateSortValue": "transporteur.code",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code"
+          ]
+        },
         "width": 170
       },
       {
@@ -2501,9 +2549,26 @@
       },
       {
         "dataField": "venteUnite.id",
+        "calculateDisplayValue": [
+          "venteUnite.id",
+          "venteUnite.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "venteUnite.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "gratuit",
@@ -2513,9 +2578,26 @@
       },
       {
         "dataField": "codePromo.id",
+        "calculateDisplayValue": [
+          "codePromo.id",
+          "codePromo.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate",
+        "calculateSortValue": "codePromo.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "cssClass": "small-header-right",
         "allowEditing": true,
         "width": 60
@@ -2539,9 +2621,26 @@
       },
       {
         "dataField": "achatUnite.id",
+        "calculateDisplayValue": [
+          "achatUnite.id",
+          "achatUnite.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "achatUnite.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "achatDevise",
@@ -2551,15 +2650,49 @@
       },
       {
         "dataField": "typePalette.id",
+        "calculateDisplayValue": [
+          "typePalette.id",
+          "typePalette.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "typePalette.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "paletteInter.id",
+        "calculateDisplayValue": [
+          "paletteInter.id",
+          "paletteInter.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "paletteInter.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "libelleDLV",
@@ -2586,9 +2719,26 @@
       },
       {
         "dataField": "fraisUnite.id",
+        "calculateDisplayValue": [
+          "fraisUnite.id",
+          "fraisUnite.description"
+        ],
         "visible": true,
-        "cellTemplate": "entityCellTemplate",
-        "editCellTemplate": "entityEditCellTemplate"
+        "calculateSortValue": "fraisUnite.id",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        }
       },
       {
         "dataField": "fraisCommentaires",
@@ -2633,6 +2783,10 @@
       {
         "dataField": "gtinColisKit",
         "visible": true
+      },
+      {
+        "dataField": "id",
+        "visible": false
       }
     ]
   },
@@ -4997,7 +5151,7 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "description",
+        "dataField": "pays.description",
         "visible": true,
         "sortIndex": 1,
         "sortOrder": "asc",
@@ -5616,6 +5770,74 @@
       {
         "dataField": "ordre.campagne.id",
         "visible": false
+      }
+    ]
+  },
+  "encours-client": {
+    "pageSize": 10,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "dateFac",
+        "sortOrder": "asc",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "cfcIntitule",
+        "class": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "cfcMontantEuros",
+        "class": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "cfcMontantDevise",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "cfcDateEcheance",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "echeanceNiveau",
+        "class": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "devise.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "ecPiece",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "cfcRefPiece",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "numImmat",
+        "visible": true
       }
     ]
   }

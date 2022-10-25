@@ -3,7 +3,6 @@ import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/co
 import { FormControl, FormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import { Role } from "app/shared/models/personne.model";
-import { statusGEO } from "app/shared/models/edi-ordre.model";
 import { alert, confirm } from "devextreme/ui/dialog";
 import {
   AuthService, ClientsService, LocalizationService
@@ -68,6 +67,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() commandeEdiId: string;
+  @Output() commandeId: string;
   @Output() lignesOrdreIds: string[];
   @Output() ordresNumeros: string[];
 
@@ -157,6 +157,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const dxGridElement = this.datagrid.instance.$element()[0];
     this.gridTitleInput = dxGridElement.querySelector(".dx-toolbar .grid-title input");
+    // this.etatRB.value = this.displayedEtat[0]; // A VIRER !!
   }
 
   displayIDBefore(data) {
@@ -228,6 +229,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.ordresEdiService.allCommandeEdi(
       ALL,
       this.authService.currentUser.secteurCommercial.id,
+      this.authService.currentUser.nomUtilisateur,
       values.clientCode?.code || ALL,
       values.codeAssistante?.id || ALL,
       values.codeCommercial?.id || ALL,
@@ -272,7 +274,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         const filters: any = [["secteur.id", "=", this.authService.currentUser.secteurCommercial.id]];
         const filter = [];
         clientList.map(clt => {
-          filter.push(["id", "=", clt.id], "or");
+          filter.push(["id", "=", clt.client.id], "or");
         });
         filter.pop();
         filters.push("and", filter);
@@ -387,6 +389,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   OnClickModifyEdiButton(data) {
     this.commandeEdi = data.items ?? data.collapsedItems;
     this.commandeEdiId = this.commandeEdi[0].refEdiOrdre;
+    this.commandeId = this.commandeEdi[0].ordre.id;
     this.modifCdeEdiPopup.visible = true;
   }
 
@@ -466,9 +469,13 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
                       notify(this.localization.localize("ordre-complementaire-cree").replace("&O", numOrdreCompl), "success", 7000);
 
-                      //////////////////////////////////////////////////
-                      // A implémenter : Of_sauve_ordre
-                      //////////////////////////////////////////////////
+                      // Sauvegarde of_sauve_ordre
+                      this.ordresService.ofSauveOrdre(thatOrdre.id)
+                        .subscribe({
+                          error: (error: Error) => {
+                            alert(this.messageFormat(error.message), this.localization.localize("ordre-cloture-ordre-edi"));
+                          }
+                        });
 
                       // Sauvegarde Statut ordre EDI
                       const ediOrdre = { id: data[0].refEdiOrdre, statusGeo: "T" };
@@ -506,6 +513,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   private messageFormat(mess) {
     mess = mess
       .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "")
+      .replace("Exception while fetching data (/ofSauveOrdre) : ", "")
       .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;

@@ -4,7 +4,7 @@
   [dataSource]="etbDatasource"
   [remoteOperations]="true"
   [columnAutoWidth]="true"
-  (onContentReady)=" gridReady(); contentReadyEvent.emit($event)"
+  (onContentReady)="gridReady(); contentReadyEvent.emit($event)"
   (onRowInserting)="onInserting($event)"
   (onSaved)="onSaved($event)"
   (onRowClick)="onRowClick($event)"
@@ -39,7 +39,8 @@
     ></dxi-validation-rule>
   </dxi-column>
 
-  <dxo-editing *ngIf="!readOnly"
+  <dxo-editing
+    *ngIf="!readOnly"
     [allowUpdating]="true"
     [allowAdding]="allowAdding"
     [allowDeleting]="false"
