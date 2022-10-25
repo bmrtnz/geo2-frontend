@@ -133,6 +133,7 @@ import {
 import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
 import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
+import { HistoriqueOrdresComponent } from "./indicateurs/historique-ordres/historique-ordres.component";
 
 @NgModule({
   declarations: [
@@ -213,6 +214,7 @@ import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visu
     ModifCommandeEdiPopupComponent,
     GridModifCommandeEdiComponent,
     VisualiserOrdresPopupComponent,
+    HistoriqueOrdresComponent
   ],
   imports: [
     OrdresRoutingModule,

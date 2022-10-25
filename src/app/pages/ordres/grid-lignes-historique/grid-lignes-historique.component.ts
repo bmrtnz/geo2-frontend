@@ -116,6 +116,12 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit() {
     this.setDefaultPeriod("Mois à cheval");
+    if (this.secteurId) {
+      this.formGroup.get("valide").patchValue(true);
+      this.formGroup.patchValue({
+        secteur: { id: this.secteurId }
+      });
+    }
   }
 
   ngOnChanges() {

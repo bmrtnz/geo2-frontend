@@ -283,6 +283,19 @@ const indicators: Indicator[] = [
       "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
     ),
   },
+  {
+    id: "histoOrdres",
+    enabled: true,
+    withCount: false,
+    parameter: "Historique",
+    subParameter: "des ordres",
+    tileBkg: "#BF9126",
+    indicatorIcon: "material-icons history",
+    warningIcon: "",
+    component: import(
+      "../../pages/ordres/indicateurs/historique-ordres/historique-ordres.component"
+    ),
+  }
 ].map((indicator) => ({ ...indicator, loading: false }));
 
 
