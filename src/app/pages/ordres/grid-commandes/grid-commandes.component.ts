@@ -586,11 +586,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               data: { fournisseur } as Partial<OrdreLigne>,
             }]);
 
-            self.grid.instance.focus(self.grid.instance.getCellElement(
-              self.grid.instance.getRowIndexByKey(currentData.id),
-              "proprietaireMarchandise.id",
-            ));
-
             return EMPTY;
           }),
         )
@@ -843,6 +838,21 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
     // on fusionne les changements
     return [...mappedChanges, ...fournisseurChanges];
+  }
+
+  onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
+    if (event.originalEvent.code !== "Enter") return;
+    const shiftModifier = event.originalEvent.shiftKey;
+    this.grid.instance.closeEditCell();
+
+    // Only act on lookup
+    if (!this.grid.instance.columnOption(this.grid.focusedColumnIndex - 1)?.lookup) return;
+
+    // switch focus
+    this.grid.instance.focus(this.grid.instance.getCellElement(
+      this.grid.focusedRowIndex + (shiftModifier ? -1 : 1),
+      this.grid.focusedColumnIndex
+    ));
   }
 
 }
