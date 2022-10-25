@@ -133,6 +133,8 @@ import {
 import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
 import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
+import { CqPhotosPopupComponent } from "./grid-controle-qualite/cq-photos-popup/cq-photos-popup.component";
+import { GridCqPhotosComponent } from "./grid-controle-qualite/cq-photos-popup/grid-cq-photos/grid-cq-photos.component";
 
 @NgModule({
   declarations: [
@@ -213,6 +215,8 @@ import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visu
     ModifCommandeEdiPopupComponent,
     GridModifCommandeEdiComponent,
     VisualiserOrdresPopupComponent,
+    CqPhotosPopupComponent,
+    GridCqPhotosComponent,
   ],
   imports: [
     OrdresRoutingModule,
