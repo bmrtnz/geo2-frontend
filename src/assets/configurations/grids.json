@@ -1545,13 +1545,13 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "codeClient",
+        "dataField": "codeAlphaEntrepot",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "codeAlphaEntrepot",
+        "dataField": "codeClient",
         "dataType": "string",
         "visible": true
       },
@@ -1583,60 +1583,75 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "codeChargement",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 18,
         "dataField": "totalNombrePalettesCommandees",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 18,
         "dataField": "sommeColisCommandes",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 22,
-        "dataField": "statut",
-        "allowHeaderFiltering": true,
-        "allowSearch": false,
-        "visible": true
+        "visibleIndex": 20,
+        "dataField": "codeChargement",
+        "dataType": "string",
+        "visible": false
       },
       {
-        "visibleIndex": 24,
+        "visibleIndex": 22,
         "dataField": "secteurCommercial.id",
         "dataType": "string",
         "visible": false
       },
       {
-        "visibleIndex": 26,
+        "visibleIndex": 24,
         "dataField": "entrepot.raisonSocial",
         "dataType": "string",
         "visible": false
       },
       {
-        "visibleIndex": 28,
+        "visibleIndex": 26,
         "dataField": "dateModification",
         "sortOrder": "desc",
         "visible": false
       },
       {
+        "visibleIndex": 28,
         "dataField": "totalNombrePalettesExpediees",
         "showInColumnChooser": false,
         "visible": false
       },
       {
+        "visibleIndex": 30,
         "dataField": "sommeColisExpedies",
         "showInColumnChooser": false,
         "visible": false
       },
       {
+        "visibleIndex": 32,
+        "dataField": "commercial.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
+      },
+      {
+        "visibleIndex": 34,
+        "dataField": "assistante.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
+      },
+      {
+        "visibleIndex": 36,
         "dataField": "id",
         "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 50,
+        "dataField": "statut",
+        "allowHeaderFiltering": true,
+        "allowSearch": false,
         "visible": true
       }
     ]
@@ -1657,13 +1672,13 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "ordre.codeClient",
+        "dataField": "ordre.codeAlphaEntrepot",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "ordre.codeAlphaEntrepot",
+        "dataField": "ordre.codeClient",
         "dataType": "string",
         "visible": true
       },
@@ -1694,12 +1709,6 @@
         "visible": true
       },
       {
-        "visibleIndex": 16,
-        "dataField": "ordre.codeChargement",
-        "dataType": "string",
-        "visible": true
-      },
-      {
         "visibleIndex": 18,
         "dataField": "ordre.totalNombrePalettesCommandees",
         "dataType": "string",
@@ -1713,10 +1722,9 @@
       },
       {
         "visibleIndex": 22,
-        "dataField": "ordre.statut",
-        "allowHeaderFiltering": true,
-        "allowSearch": false,
-        "visible": true
+        "dataField": "ordre.codeChargement",
+        "dataType": "string",
+        "visible": false
       },
       {
         "visibleIndex": 24,
@@ -1737,24 +1745,47 @@
         "visible": false
       },
       {
+        "visibleIndex": 30,
         "dataField": "ordre.totalNombrePalettesExpediees",
         "showInColumnChooser": false,
         "visible": false
       },
       {
+        "visibleIndex": 32,
         "dataField": "ordre.sommeColisExpedies",
         "showInColumnChooser": false,
         "visible": false
       },
       {
-        "dataField": "ordre.id",
-        "dataType": "string",
-        "visible": true
+        "visibleIndex": 34,
+        "dataField": "ordre.commercial.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
       },
       {
+        "visibleIndex": 36,
+        "dataField": "ordre.assistante.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
+      },
+      {
+        "visibleIndex": 38,
+        "dataField": "ordre.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 40,
         "dataField": "ordreRef",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "visibleIndex": 50,
+        "dataField": "ordre.statut",
+        "allowHeaderFiltering": true,
+        "allowSearch": false,
+        "visible": true
       }
     ]
   },
