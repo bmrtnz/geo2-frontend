@@ -156,7 +156,7 @@ const indicators: Indicator[] = [
       "../../pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component"
     ),
     /* tslint:disable-next-line max-line-length */
-    select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|dateCreation|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial|campagne\.id)$/,
+    select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|totalNombrePalettesCommandees|secteurCommercial\.id|codeChargement|entrepot\.raisonSocial|campagne\.id)$/,
   },
   {
     id: "PlanningTransporteurs",
