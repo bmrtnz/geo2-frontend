@@ -47,6 +47,18 @@ export class DocumentsNumService extends ApiService {
       );
   }
 
+  getList(body: Set<string>, search?) {
+    return this.apollo
+      .query<{ allDocumentNumList: DocumentNum[] }>({
+        query: gql(this.buildGetListGraph(body)),
+        variables: { search },
+        fetchPolicy: "cache-first",
+      })
+      .pipe(
+        map(res => res.data.allDocumentNumList),
+      );
+  }
+
   count(search?) {
     return this.apollo
       .query<{ countDocumentNum: number }>({
