@@ -58,6 +58,21 @@ export class DocumentsNumService extends ApiService {
       );
   }
 
+  delete(id: {
+    ordreNumero: DocumentNum["ordreNumero"],
+    typeDocument: DocumentNum["typeDocument"],
+    anneeCreation: DocumentNum["anneeCreation"],
+  }) {
+    return this.apollo
+      .mutate<{ deleteDocumentNum: boolean }>({
+        mutation: gql(this.buildDeleteGraph(this.gqlKeyType)),
+        variables: { id },
+      })
+      .pipe(
+        map(res => res.data.deleteDocumentNum),
+      );
+  }
+
   getDataSource(body: Set<string>) {
     return new DataSource({
       store: this.createCustomStore({
