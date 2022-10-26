@@ -1182,4 +1182,22 @@ export abstract class ApiService implements OnDestroy {
     ]);
   }
 
+  /**
+   * It builds a graphql query that fetches a single entity of the model
+   * @param body - The body of the query.
+   * @returns The GraphQL query.
+   */
+  protected buildCountGraph() {
+    return ApiService.buildGraph(
+      "query",
+      [
+        {
+          name: `count${this.model.name}`,
+          params: [{ name: "search", value: "search", isVariable: true }],
+        },
+      ],
+      [{ name: "search", type: "String", isOptionnal: true }],
+    );
+  }
+
 }
