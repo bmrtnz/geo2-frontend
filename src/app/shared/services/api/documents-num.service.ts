@@ -100,6 +100,17 @@ export class DocumentsNumService extends ApiService {
       );
   }
 
+  save(documentNum: Partial<DocumentNum>, body: Set<string>) {
+    return this.apollo
+      .mutate<{ saveDocumentNum: DocumentNum }>({
+        mutation: gql(this.buildSaveGraph([...body])),
+        variables: { documentNum },
+      })
+      .pipe(
+        map(res => res.data.saveDocumentNum),
+      );
+  }
+
   getDataSource(body: Set<string>) {
     return new DataSource({
       store: this.createCustomStore({

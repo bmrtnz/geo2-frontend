@@ -26,7 +26,7 @@ export class DocumentNum extends Model {
   numeroOrdre: string;
 
   @Field({ model: import("./ordre-ligne.model") })
-  ordreLigne: OrdreLigne;
+  ordreLigne: Partial<OrdreLigne>;
 
   @Field()
   nomFic: string;
