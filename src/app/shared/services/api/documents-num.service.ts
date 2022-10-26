@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import { OrdreLigne } from "app/shared/models";
 import DocumentNum from "app/shared/models/document-num.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -70,6 +71,32 @@ export class DocumentsNumService extends ApiService {
       })
       .pipe(
         map(res => res.data.deleteDocumentNum),
+      );
+  }
+
+  deleteByIdAndOrdreLigneAndTypeDocument(
+    id: string,
+    ordreLigne: Partial<OrdreLigne>,
+    typeDocument: string,
+  ) {
+    return this.apollo
+      .mutate<{ deleteByIdAndOrdreLigneAndTypeDocument: boolean }>({
+        mutation: gql(ApiService.buildGraph("mutation", [{
+          name: "deleteByIdAndOrdreLigneAndTypeDocument",
+          params: [
+            { name: "id", value: "id", isVariable: true },
+            { name: "ordreLigne", value: "ordreLigne", isVariable: true },
+            { name: "typeDocument", value: "typeDocument", isVariable: true },
+          ],
+        }], [
+          { name: "id", type: "String", isOptionnal: false },
+          { name: "ordreLigne", type: "GeoOrdreLigneInput", isOptionnal: false },
+          { name: "typeDocument", type: "String", isOptionnal: false },
+        ])),
+        variables: { id, ordreLigne, typeDocument },
+      })
+      .pipe(
+        map(res => res.data.deleteByIdAndOrdreLigneAndTypeDocument),
       );
   }
 
