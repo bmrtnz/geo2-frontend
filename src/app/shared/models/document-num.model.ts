@@ -29,10 +29,10 @@ export class DocumentNum extends Model {
   ordreLigne: Partial<OrdreLigne>;
 
   @Field()
-  nomFic: string;
+  nomFichier: string;
 
   @Field()
-  nomFicComplet: string;
+  nomFichierComplet: string;
 
   @Field()
   commentaire: string;
