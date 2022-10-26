@@ -39,4 +39,16 @@ export class GridsService {
   public get(id: OrdreGridId) {
     return this.grids[id] as DxDataGridComponent;
   }
+
+  /**
+   * Expand/collapse all grid groups (specific button on the grid)
+   */
+  public expandCollapseGroups(that) {
+    if (!that.datagrid) return;
+    that.datagrid.instance.option(
+      "grouping",
+      { autoExpandAll: !that.datagrid.instance.option("grouping").autoExpandAll }
+    );
+  }
+
 }

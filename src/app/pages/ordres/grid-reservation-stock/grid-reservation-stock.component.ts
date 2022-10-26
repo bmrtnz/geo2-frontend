@@ -60,7 +60,7 @@ export class GridReservationStockComponent implements OnInit {
     private ordreLignesService: OrdreLignesService,
     private currentCompanyService: CurrentCompanyService,
     private fournisseursService: FournisseursService,
-    private grids: GridsService,
+    public gridsService: GridsService,
   ) {
   }
 

@@ -26,6 +26,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import Utils from "utils/Filter";
+import { GridsService } from "../../grids.service";
 import { TabContext } from "../../root/root.component";
 
 enum FormInput {
@@ -72,6 +73,7 @@ export class PlanningTransporteursComponent implements OnInit {
     public planningTransporteursService: PlanningTransporteursService,
     public transporteursService: TransporteursService,
     public authService: AuthService,
+    public gridsService: GridsService,
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
     private tabContext: TabContext,

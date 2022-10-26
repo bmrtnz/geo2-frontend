@@ -29,6 +29,7 @@ import notify from "devextreme/ui/notify";
 import { Societe } from "app/shared/models";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { GridsService } from "app/pages/ordres/grids.service";
 
 enum InputField {
   clientCode = "client",
@@ -60,6 +61,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public gridsService: GridsService;
   public allText: string;
   public gridTitle: string;
   public gridTitleCount: string;

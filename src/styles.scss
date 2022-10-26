@@ -435,3 +435,10 @@ body app-root.production {
 .dx-selection.dx-row:not(.dx-row-focused)>td {
   background-color: rgba(0, 117, 156, .3) !important;
 }
+
+.grid-grouping-button {
+  position: absolute !important;
+  z-index: 1 !important;
+  margin-top: 6px;
+  right: 146px;
+}

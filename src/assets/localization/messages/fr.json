@@ -75,6 +75,7 @@
     "btn-clotAdmin": "Clôture administratif",
     "btn-blAutoSend": "Envoi automatique des BL",
     "btn-refresh": "Rafraîchir",
+    "btn-grouping": "Dérouler/réduire champs groupés",
     "btn-delete-destockage": "Supprimer le déstockage",
     "btn-delete-destockages": "Supprimer les déstockages",
     "btn-launch": "lancer",
