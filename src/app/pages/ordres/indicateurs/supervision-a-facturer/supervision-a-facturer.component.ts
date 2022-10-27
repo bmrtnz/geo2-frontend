@@ -81,10 +81,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     entrepotCode: new FormControl(),
     codeCommercial: new FormControl(),
     codeAssistante: new FormControl(),
-    // dateMin: new FormControl(this.dateManagementService.startOfDay()),
-    // dateMax: new FormControl(this.dateManagementService.endOfDay()),
-    dateMin: new FormControl(this.dateManagementService.startOfDay(new Date("2022-05-27"))), // A VIRER !!!!!!!!!
-    dateMax: new FormControl(this.dateManagementService.endOfDay(new Date("2022-05-27"))) // A VIRER !!!!!!!!!
+    dateMin: new FormControl(this.dateManagementService.startOfDay()),
+    dateMax: new FormControl(this.dateManagementService.endOfDay()),
   } as Inputs<FormControl>);
 
   constructor(
@@ -171,8 +169,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     // Only way found to validate and show Warning icon
     this.formGroup.get("secteurCode").setValue("");
     this.formGroup.get("secteurCode").reset();
-
-    this.formGroup.get("clientCode").patchValue({ id: "002710", code: "POMONAPAU" }); // A VIRER !!!!!!!!!!!!!!
 
     if (this.authService.currentUser.secteurCommercial) {
       this.formGroup
