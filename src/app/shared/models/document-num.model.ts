@@ -1,3 +1,4 @@
+import Document from "./document.model";
 import { Field, Model, ModelName } from "./model";
 import OrdreLigne from "./ordre-ligne.model";
 
@@ -42,6 +43,9 @@ export class DocumentNum extends Model {
 
   @Field()
   statut: number;
+
+  @Field({ model: import("./document.model") })
+  cqPhoto: Document;
 }
 
 export default DocumentNum;
