@@ -65,8 +65,10 @@ export class PlanningTransporteursComponent implements OnInit {
   public transporteursDataSource: DataSource;
   public formGroup = new FormGroup({
     transporteurCode: new FormControl(),
-    dateMin: new FormControl(this.dateManagementService.startOfDay()),
-    dateMax: new FormControl(this.dateManagementService.endOfDay()),
+    // dateMin: new FormControl(this.dateManagementService.startOfDay()),
+    // dateMax: new FormControl(this.dateManagementService.endOfDay()),
+    dateMin: new FormControl(this.dateManagementService.startOfDay(new Date("2022-05-01"))), // A VIRER !!!!!!!!!
+    dateMax: new FormControl(this.dateManagementService.endOfDay(new Date("2022-05-30"))) // A VIRER !!!!!!!!!
   } as Inputs<FormControl>);
 
   constructor(
@@ -110,6 +112,9 @@ export class PlanningTransporteursComponent implements OnInit {
     this.formGroup.get("transporteurCode").setValue("");
     this.formGroup.get("transporteurCode").reset();
     this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
+
+    this.formGroup.get("transporteurCode").setValue("2FL"); // A VIRER
+
   }
 
   enableFilters() {
@@ -126,7 +131,8 @@ export class PlanningTransporteursComponent implements OnInit {
       this.planningTransporteursService.setPersisantVariables({
         dateMin: values.dateMin,
         dateMax: values.dateMax,
-        societeCode: this.currentCompanyService.getCompany().id,
+        societeCode: "%", // All companies
+        // societeCode: this.currentCompanyService.getCompany().id,
         transporteurCode: values.transporteurCode,
         // valideClient: values.valideClient,
         // valideEntrepot: values.valideEntrepot,
@@ -138,8 +144,13 @@ export class PlanningTransporteursComponent implements OnInit {
     }
   }
 
-  onRowDblClick({ data }: { data: Partial<Ordre> }) {
-    this.tabContext.openOrdre(data.numero, data.campagne.id);
+  onRowDblClick(e) {
+    let data = e.data.items ?? e.data.collapsedItems?.items;
+    if (!data || !data[0]) return;
+    data = data[0];
+    // Open order (if from the current company)
+    if (data.ordre?.societe.id === this.currentCompanyService.getCompany().id)
+      this.tabContext.openOrdre(data.numero, data.ordre.campagne.id);
   }
 
   validOrAll(e) {
@@ -166,7 +177,7 @@ export class PlanningTransporteursComponent implements OnInit {
     if (e.rowType === "data") {
 
       // Best expression for order status display
-      if (e.rowType === "data" && e.column.dataField === "ordre.statut") {
+      if (e.column.dataField === "ordre.statut") {
         if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
       }
 
@@ -234,6 +245,12 @@ export class PlanningTransporteursComponent implements OnInit {
   onRowPrepared(e) {
     if (e.rowType === "data") {
       e.rowElement.classList.add("highlight-order-row");
+    }
+    // Highlight canceled orders
+    if (["data", "group"].includes(e.rowType)) {
+      if (e.data?.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+      }
     }
   }
 

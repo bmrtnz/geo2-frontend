@@ -5,24 +5,30 @@
 .dx-fieldset {
   display: flex;
 }
+
 .dx-field {
   margin-right: 20px;
 }
+
 .bold {
   font-weight: bold;
 }
 
 ::ng-deep .orderTileFilterArea {
   width: 1024px;
+
   .dx-datebox .dx-texteditor-input {
     padding-right: 0 !important;
   }
+
   .orderTileleftFilters .dx-field {
     margin-bottom: 0;
   }
+
   .orderRightRightFilters {
     margin-top: 4px;
   }
+
   .validOnlyButtons {
     display: block;
     min-width: 0 !important;
@@ -30,10 +36,12 @@
     height: 30px;
     border-radius: 50%;
     float: left;
+
     .dx-button-content {
       padding: 0;
     }
   }
+
   .dx-invalid-message-content {
     padding: 0;
   }
@@ -44,9 +52,17 @@
   .numero-planning-transporteurs {
     background: $BW-khaki-dark;
     color: white;
+    cursor: pointer;
   }
+
   .entrepot-planning-transporteurs {
     background: $BW-orange-medium;
     color: white;
   }
+}
+
+// Highlight canceled orders
+::ng-deep .canceled-orders td {
+  color: #ff325a !important;
+  text-shadow: 1px 1px 15px #FFF;
 }

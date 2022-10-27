@@ -850,6 +850,8 @@
     "ordresTransporteur-flagEntrepot": "Flag entrepôt",
     "ordresTransporteur-ordre-statut": "Statut",
     "ordresTransporteur-ordre-id": "Réf. ordre",
+    "ordresTransporteur-ordre-societe-id": "Société",
+    "ordresTransporteur-ordre-flagAnnule": "Annulé ?",
     "ordreLignesPalox-logistique-dateDepartPrevueFournisseur": "Chargement",
     "ordreLignesPalox-logistique-fournisseur-code": "Fournisseur",
     "ordreLignesPalox-logistique-fournisseur-id": "Id Fournisseur",

@@ -78,6 +78,7 @@ export class Ordre extends Model {
   @Field() public facture?: boolean;
   @Field() public statut?: Statut;
   @Field() public factureEDI?: boolean;
+  @Field() public flagAnnule?: boolean;
   @Field() public livre?: boolean;
   @Field() public instructionsLogistiques?: string;
   @Field() public codeClient?: string;
