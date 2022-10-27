@@ -4,16 +4,18 @@ import { OrdreLigne } from "app/shared/models";
 import DocumentNum from "app/shared/models/document-num.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import FileSystemItem from "devextreme/file_management/file_system_item";
 import { from, iif } from "rxjs";
-import { map, mergeMap, toArray } from "rxjs/operators";
+import { filter, map, mergeMap, tap, toArray } from "rxjs/operators";
 import { ApiService, DistinctInfo, RelayPage } from "../api.service";
+import { FileManagerService } from "../file-manager.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class DocumentsNumService extends ApiService {
 
-  constructor(apollo: Apollo) {
+  constructor(apollo: Apollo, private fm: FileManagerService) {
     super(apollo, DocumentNum);
     this.gqlKeyType = "GeoDocumentNumKeyInput";
   }
@@ -47,7 +49,7 @@ export class DocumentsNumService extends ApiService {
       );
   }
 
-  getList(body: Set<string>, search?) {
+  getList(body: Set<string>, search?: string) {
     return this.apollo
       .query<{ allDocumentNumList: DocumentNum[] }>({
         query: gql(this.buildGetListGraph(body)),
@@ -59,7 +61,7 @@ export class DocumentsNumService extends ApiService {
       );
   }
 
-  count(search?) {
+  count(search?: string) {
     return this.apollo
       .query<{ countDocumentNum: number }>({
         query: gql(this.buildCountGraph()),
@@ -150,5 +152,21 @@ export class DocumentsNumService extends ApiService {
         byKey: key => this.getOne(key, body).toPromise(),
       }),
     });
+  }
+
+  downloadPhotos(search?: string) {
+    const baseArgs = { key: "GEO_CQ_PHOTOS" };
+    return this
+      .getList(new Set(["nomFichier", "anneeCreation", "moisCreation"]), search)
+      .pipe(
+        mergeMap(docs => from(docs)),
+        filter(doc => !!doc.nomFichier),
+        map(doc => new FileSystemItem(
+          `${doc.anneeCreation}/${doc.moisCreation}/${doc.nomFichier}`,
+          false,
+        )),
+        toArray(),
+      )
+      .subscribe(res => this.fm.downloadItems.call({ baseArgs }, res));
   }
 }
