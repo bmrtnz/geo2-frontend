@@ -40,6 +40,7 @@ export class PromptPopupComponent {
   validText: string;
   cancelText: string;
   commentMaxLength: number;
+  commentMinLength: number;
   commentTitle: string;
   commentItemsList: string[];
 
@@ -47,6 +48,7 @@ export class PromptPopupComponent {
     if (texts?.validText) this.validText = texts.validText;
     if (texts?.cancelText) this.cancelText = texts.cancelText;
     if (texts?.commentMaxLength) this.commentMaxLength = texts.commentMaxLength;
+    if (texts?.commentMinLength) this.commentMinLength = texts.commentMinLength;
     if (texts?.commentTitle) this.commentTitle = texts.commentTitle;
     if (texts?.commentItemsList) this.commentItemsList = texts.commentItemsList;
     await this.popupComponent.instance.show();
@@ -60,6 +62,7 @@ export class PromptPopupComponent {
   setValidationRules() {
     this.commentValidationRules = [
       { type: "required" },
+      { type: "stringLength", min: this.commentMinLength ?? 1 },
       { type: "stringLength", max: this.commentMaxLength ?? 512 }
     ];
   }

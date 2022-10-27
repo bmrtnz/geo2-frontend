@@ -15,6 +15,10 @@ h6 {
   z-index: 1;
 }
 
+::ng-deep .ordresBAF-grid {
+  max-height: 800px;
+}
+
 ::ng-deep .blocked-color {
   background-color: #ff325a !important;
 }
@@ -39,4 +43,13 @@ h6 {
 
 ::ng-deep .period-list .dx-list-item {
   padding: 6px 15px;
+}
+
+::ng-deep .hide-select-checkbox .dx-command-select {
+  visibility: hidden;
+}
+
+::ng-deep .refClient-BAF {
+  cursor: pointer !important;
+  background-color: #E2F5F1 !important;
 }

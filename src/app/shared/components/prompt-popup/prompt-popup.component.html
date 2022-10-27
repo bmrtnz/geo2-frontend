@@ -1,7 +1,7 @@
 <dx-popup
   width="600"
   height="auto"
-  [dragEnabled]="false"
+  [dragEnabled]="true"
   [title]="title"
   (onHiding)="onPopupHiding()"
   (onHidden)="onHidden()"
@@ -36,6 +36,7 @@
           name="{{ 'valide-commentaire' | localize }}"
         ></dx-validator>
       </dx-select-box>
+      <br>
 
       <dx-text-box
         ngModel

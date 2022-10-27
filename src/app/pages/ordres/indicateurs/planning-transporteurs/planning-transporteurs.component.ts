@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, NgForm } from "@angular/forms";
 import Ordre from "app/shared/models/ordre.model";
+import { Statut } from "app/shared/models/ordre.model";
 import {
   AuthService,
   LocalizationService,
@@ -163,6 +164,12 @@ export class PlanningTransporteursComponent implements OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
+
+      // Best expression for order status display
+      if (e.rowType === "data" && e.column.dataField === "ordre.statut") {
+        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+      }
+
       // Ajout CP, ville et pays au lieu de livraison
       if (e.column.dataField === "entrepotRaisonSocial") {
         if (e.data.entrepotCodePostal) {

@@ -196,7 +196,7 @@
 ></dx-button>
 
 <dx-data-grid
-  [height]="450"
+  class="ordresBAF-grid"
   [showBorders]="false"
   [focusedRowEnabled]="false"
   [focusedRowIndex]="0"
@@ -204,8 +204,10 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
+  (onRowPrepared)="onRowPrepared($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onCellClick)="onCellClick($event)"
+  (onSelectionChanged)="onSelectionChanged($event)"
   (onContentReady)="onGridContentReady($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -254,6 +256,7 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
+    [cssClass]="column.cssClass"
     [caption]="
       ('ordresBAF-' + column.dataField?.split('.').join('-') | localize) ||
       column.name
@@ -266,3 +269,8 @@
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
 </dx-data-grid>
+
+<app-prompt-popup
+  [title]="promptPopupTitle"
+  (whenValidate)="onValidatePromptPopup($event)"
+></app-prompt-popup>
