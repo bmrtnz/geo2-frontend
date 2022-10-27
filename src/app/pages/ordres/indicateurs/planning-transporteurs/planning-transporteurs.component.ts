@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, NgForm } from "@angular/forms";
-import Ordre from "app/shared/models/ordre.model";
 import { Statut } from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -65,10 +64,8 @@ export class PlanningTransporteursComponent implements OnInit {
   public transporteursDataSource: DataSource;
   public formGroup = new FormGroup({
     transporteurCode: new FormControl(),
-    // dateMin: new FormControl(this.dateManagementService.startOfDay()),
-    // dateMax: new FormControl(this.dateManagementService.endOfDay()),
-    dateMin: new FormControl(this.dateManagementService.startOfDay(new Date("2022-05-01"))), // A VIRER !!!!!!!!!
-    dateMax: new FormControl(this.dateManagementService.endOfDay(new Date("2022-05-30"))) // A VIRER !!!!!!!!!
+    dateMin: new FormControl(this.dateManagementService.startOfDay()),
+    dateMax: new FormControl(this.dateManagementService.endOfDay()),
   } as Inputs<FormControl>);
 
   constructor(
@@ -112,9 +109,6 @@ export class PlanningTransporteursComponent implements OnInit {
     this.formGroup.get("transporteurCode").setValue("");
     this.formGroup.get("transporteurCode").reset();
     this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
-
-    this.formGroup.get("transporteurCode").setValue("2FL"); // A VIRER
-
   }
 
   enableFilters() {
