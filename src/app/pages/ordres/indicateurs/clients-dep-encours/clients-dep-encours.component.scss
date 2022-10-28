@@ -1,10 +1,49 @@
 @import "~themes/generated/variables.base";
 
-.secteur-encours {
-  width: 400px;
+.encours-filter-area {
+  width: 830px;
 }
 
-::ng-deep td.highlight-err {
-  background: $datagrid-row-error-bg;
-  color: $datagrid-row-error-color;
+::ng-deep {
+  td.highlight-err {
+    background-color: #FFCBCE;
+  }
+
+  .dx-datagrid .dx-row.dx-header-row {
+
+    .green-encours,
+    .yellow-encours,
+    .orange-encours {
+      color: rgba(0, 0, 0, 0.87) !important;
+    }
+
+    .green-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #C6E0B4 !important;
+    }
+
+    .yellow-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #FFE699 !important;
+    }
+
+    .orange-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #F4B084 !important;
+    }
+
+    .red-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #FF0000 !important;
+    }
+
+    .dark-red-encours {
+      text-align: center;
+      background: #C00000 !important;
+    }
+  }
 }

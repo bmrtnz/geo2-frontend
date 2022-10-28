@@ -134,6 +134,7 @@ import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modi
 import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
 import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
 import { DuplicationOrdrePopupComponent } from "./duplication-ordre-popup/duplication-ordre-popup.component";
+import { EncoursClientPopupComponent } from "../tiers/clients/encours-client/encours-client-popup.component";
 
 @NgModule({
   declarations: [
@@ -214,7 +215,7 @@ import { DuplicationOrdrePopupComponent } from "./duplication-ordre-popup/duplic
     ModifCommandeEdiPopupComponent,
     GridModifCommandeEdiComponent,
     VisualiserOrdresPopupComponent,
-    DuplicationOrdrePopupComponent,
+    DuplicationOrdrePopupComponent
   ],
   imports: [
     OrdresRoutingModule,
