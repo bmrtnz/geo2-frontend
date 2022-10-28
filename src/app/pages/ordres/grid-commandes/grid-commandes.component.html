@@ -1,8 +1,7 @@
 <dx-data-grid
   class="grid-commandes"
-  [remoteOperations]="{
-    filtering: true
-  }"
+  [remoteOperations]="false"
+  [cacheEnabled]="true"
   [columnAutoWidth]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="false"
@@ -209,10 +208,7 @@
     "
     [lookup]="column?.lookup"
     [showInColumnChooser]="column.showInColumnChooser"
-    [calculateSortValue]="
-      column?.calculateSortValue ||
-      (column.dataField === 'numero' && calultateSortValue)
-    "
+    [calculateSortValue]="column?.calculateSortValue"
     [cssClass]="column?.cssClass"
     [caption]="
       ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||

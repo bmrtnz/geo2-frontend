@@ -222,11 +222,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     setTimeout(() => this.reindexRows(), 1000);
   }
 
-  public calultateSortValue(event) {
-    if (!event.numero) return Infinity;
-    return parseFloat(event.numero);
-  }
-
   private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
     this.refreshData(current).subscribe(datasource => {
       this.grid.dataSource = datasource;
@@ -234,6 +229,12 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   private handleMutations() {
+
+    setTimeout(() => {
+      this.grid.instance.columnOption("numero", "sortOrder", "desc");
+      this.grid.instance.columnOption("numero", "sortOrder", "asc");
+    }, 100);
+
     if (!this.changes.length) return;
 
     const source = this.grid.dataSource as DataSource;
@@ -246,6 +247,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         .then(() => {
           store.push([change]);
           this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+          setTimeout(() => this.reindexRows(), 200);
           return this.handleMutations();
         });
     }
@@ -650,8 +652,15 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     fromIndex: number,
     toIndex: number,
   }) {
+
     // move selected row
-    e.component.cellValue(e.fromIndex, "numero", OrdreLigne.formatNumero(e.toIndex + 1));
+    self.changes.push({
+      key: self.grid.instance.getKeyByRowIndex(e.fromIndex),
+      type: "update",
+      data: {
+        numero: OrdreLigne.formatNumero(e.toIndex + 1),
+      }
+    });
 
     // set offseted rows
     const offset = Math.sign(e.fromIndex - e.toIndex);
@@ -663,7 +672,13 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       ]);
     range
       .forEach(([index, value]) => {
-        e.component.cellValue(index, "numero", OrdreLigne.formatNumero(value));
+        self.changes.push({
+          key: self.grid.instance.getKeyByRowIndex(index),
+          type: "update",
+          data: {
+            numero: OrdreLigne.formatNumero(value),
+          }
+        });
       });
 
     e.component.saveEditData();
