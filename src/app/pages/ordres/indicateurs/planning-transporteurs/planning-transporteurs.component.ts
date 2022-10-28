@@ -244,6 +244,7 @@ export class PlanningTransporteursComponent implements OnInit {
     if (["data", "group"].includes(e.rowType)) {
       if (e.data?.flagAnnule === true) {
         e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
       }
     }
   }

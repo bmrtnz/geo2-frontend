@@ -634,6 +634,12 @@ export class OrdresIndicatorsService {
           ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
       }
 
+      // Planning fournisseurs
+      if (instance.id === "PlanningFournisseurs") {
+        // Need to see all companies (Léa 21-10-2022)
+        instance.filter = [["valide", "=", true]];
+      }
+
       // Commandes en transit
       if (instance.id === "CommandesTransit") {
         instance.filter = [...instance.filter];
