@@ -947,12 +947,14 @@
                       (onClick)="onRegulOrderClick()"
                     ></dx-button>
                   </div>
-                  <app-grid-commandes
-                    *ngIf="ordre?.id"
-                    [ordreID]="ordre?.id"
-                    (swapRowArticle)="onArticleManClick($event)"
-                    (priceChange)="refreshRegimeTva.emit()"
-                  ></app-grid-commandes>
+                  <div (pointerleave)="gridCommandePointerLeave()">
+                    <app-grid-commandes
+                      *ngIf="ordre?.id"
+                      [ordreID]="ordre?.id"
+                      (swapRowArticle)="onArticleManClick($event)"
+                      (priceChange)="refreshRegimeTva.emit()"
+                    ></app-grid-commandes>
+                  </div>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique

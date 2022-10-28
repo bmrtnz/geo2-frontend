@@ -45,6 +45,7 @@ import {
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
+import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
@@ -55,7 +56,6 @@ import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../r
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -1061,6 +1061,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.initializeForm("no-cache");
     });
 
+  }
+
+  gridCommandePointerLeave() {
+    this.gridCommandes.grid.instance.saveEditData();
   }
 
 }
