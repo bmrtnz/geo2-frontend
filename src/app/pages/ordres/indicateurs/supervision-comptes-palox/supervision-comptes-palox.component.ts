@@ -256,6 +256,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         e.cellElement.classList.add("bold-text");
       }
     }
+
+    // Highlight groups
+    console.log(e.rowType, e.column.dataField);
+    if (e.rowType === "group" && ["codeClient", "codeFournisseur"].includes(e.column.dataField)) {
+      e.cellElement.classList.add("group-palox-header");
+    }
   }
 
 }

@@ -237,9 +237,6 @@ export class PlanningTransporteursComponent implements OnInit {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === "data") {
-      e.rowElement.classList.add("highlight-order-row");
-    }
     // Highlight canceled orders
     if (["data", "group"].includes(e.rowType)) {
       if (e.data?.flagAnnule === true) {

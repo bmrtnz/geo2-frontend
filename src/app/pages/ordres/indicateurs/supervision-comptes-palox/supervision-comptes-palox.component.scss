@@ -1,4 +1,6 @@
+// Var
 @import "src/themes/generated/variables.base.scss";
+@import "~scss/variables.scss";
 
 .dx-fieldset {
   display: flex;
@@ -50,5 +52,13 @@
         text-align: left !important;
       }
     }
+  }
+}
+
+// Highlight client groups
+::ng-deep .dx-row:not(.dx-row-focused) {
+  .group-palox-header {
+    background: $BW-orange-medium;
+    color: white;
   }
 }
