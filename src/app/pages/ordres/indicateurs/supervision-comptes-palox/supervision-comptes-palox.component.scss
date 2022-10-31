@@ -56,9 +56,59 @@
 }
 
 // Highlight client groups
-::ng-deep .dx-row:not(.dx-row-focused) {
-  .group-palox-header {
-    background: $BW-orange-medium;
-    color: white;
+::ng-deep {
+
+  .dx-row:not(.dx-row-focused) {
+    .group-palox-header {
+      background: $BW-orange-dark;
+      color: white;
+    }
+
+    .subgroup-palox-header {
+      background: $BW-orange-medium;
+      color: white;
+    }
+
+    .subgroup2-palox-header {
+      background: $BW-orange-ultralight;
+    }
   }
+
+  .small-action-button {
+    position: relative;
+    float: right;
+    margin: 0 5px;
+    height: 20px;
+    line-height: 14px;
+    padding: 0;
+    font-size: 11px;
+
+    .dx-button-content {
+      padding: 6px 9px;
+
+      .dx-button-text {
+        line-height: 11px;
+      }
+    }
+  }
+
+  .group-text-1 {
+    position: relative;
+    margin-top: 3px;
+    height: auto;
+    width: 400px;
+    white-space: initial;
+    line-height: 16px;
+    float: left;
+  }
+
+  .group-text-2 {
+    position: relative;
+    top: 1px;
+    padding: 10px;
+    margin-left: 20px;
+    color: rgba(0, 0, 0, 0.7);
+    float: left;
+  }
+
 }

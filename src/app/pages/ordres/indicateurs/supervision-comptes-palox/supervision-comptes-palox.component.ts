@@ -6,6 +6,7 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import { fixObservableSubclass } from "@apollo/client/utilities";
 import { Role } from "app/shared/models";
 import MouvementEntrepot from "app/shared/models/mouvement-entrepot.model";
 import MouvementFournisseur from "app/shared/models/mouvement-fournisseur.model";
@@ -159,6 +160,9 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       ),
     );
 
+    this.formGroup.get("entrepot").patchValue({ id: "004874" }); // A VIRER !!!!!!!!!!!!!!!!!!
+
+
     this.formGroup.valueChanges.subscribe((_) => this.toRefresh = true);
     if (
       !this.authService.isAdmin &&
@@ -258,10 +262,43 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     }
 
     // Highlight groups
-    console.log(e.rowType, e.column.dataField);
-    if (e.rowType === "group" && ["codeClient", "codeFournisseur"].includes(e.column.dataField)) {
-      e.cellElement.classList.add("group-palox-header");
+    if (e.rowType === "group") {
+      if ((this.switchEntity.value ? "codeFournisseur" : ["codeClient"]).includes(e.column.dataField))
+        e.cellElement.classList.add("group-palox-header");
+      if (e.column.dataField === "codeEmballage")
+        e.cellElement.classList.add("subgroup-palox-header");
+      if ((!this.switchEntity.value ? "codeFournisseur" : ["codeClient", "codeEntrepot"]).includes(e.column.dataField))
+        e.cellElement.classList.add("subgroup2-palox-header");
     }
+  }
+
+  adjust(data) {
+    console.log(data);
+  }
+
+  inventory(data) {
+    console.log(data);
+  }
+
+  getInventoryData(e) {
+    if (this.switchEntity.value) {
+      if (e.items?.length)
+        return e.items[0].codeFournisseur + " - " + e.items[0].raisonSocialeFournisseur;
+      if (e.collapsedItems?.length)
+        return e.collapsedItems[0].codeFournisseur + " - " + e.collapsedItems[0].raisonSocialeFournisseur;
+    } else {
+      if (e.items?.length)
+        return e.items[0].codeEntrepot + " - " + e.items[0].raisonSocialeEntrepot;
+      if (e.collapsedItems?.length)
+        return e.collapsedItems[0].codeEntrepot + " - " + e.collapsedItems[0].raisonSocialeEntrepot;
+    }
+    return "";
+  }
+  getSoldeData(e) {
+    if (e.items?.length)
+      return "Solde : " + e.items[0].sommeQuantiteInventaire;
+    if (e.collapsedItems?.length)
+      return "Solde : " + e.collapsedItems[0].sommeQuantiteInventaire;
   }
 
 }

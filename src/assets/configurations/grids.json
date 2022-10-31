@@ -4513,6 +4513,7 @@
       {
         "visibleIndex": 2,
         "dataField": "codeEmballage",
+        "groupIndex": 2,
         "sortIndex": 3,
         "sortOrder": "asc",
         "visible": true
@@ -4520,6 +4521,8 @@
       {
         "visibleIndex": 3,
         "dataField": "codeFournisseur",
+        "groupIndex": 3,
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "sortIndex": 4,
         "sortOrder": "asc",
         "visible": true
@@ -4612,6 +4615,7 @@
       {
         "visibleIndex": 2,
         "dataField": "codeEmballage",
+        "groupIndex": 2,
         "sortIndex": 3,
         "sortOrder": "asc",
         "visible": true
@@ -4619,6 +4623,8 @@
       {
         "visibleIndex": 3,
         "dataField": "codeEntrepot",
+        "groupIndex": 3,
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "sortIndex": 2,
         "sortOrder": "asc",
         "visible": true
