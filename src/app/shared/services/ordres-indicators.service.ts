@@ -157,6 +157,8 @@ const indicators: Indicator[] = [
     ),
     // tslint:disable-next-line: max-line-length
     explicitSelection: ["id", "numero", "referenceClient", "dateDepartPrevue", "dateLivraisonPrevue", "codeClient", "codeAlphaEntrepot", "dateCreation", "type.id", "client.raisonSocial", "secteurCommercial.id", "entrepot.raisonSocial", "campagne.id"],
+    /* tslint:disable-next-line max-line-length */
+    select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|totalNombrePalettesCommandees|secteurCommercial\.id|codeChargement|entrepot\.raisonSocial|campagne\.id)$/,
   },
   {
     id: "PlanningTransporteurs",
@@ -283,6 +285,19 @@ const indicators: Indicator[] = [
       "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
     ),
   },
+  {
+    id: "histoOrdres",
+    enabled: true,
+    withCount: false,
+    parameter: "Historique",
+    subParameter: "des ordres",
+    tileBkg: "#BF9126",
+    indicatorIcon: "material-icons history",
+    warningIcon: "",
+    component: import(
+      "../../pages/ordres/indicateurs/historique-ordres/historique-ordres.component"
+    ),
+  }
 ].map((indicator) => ({ ...indicator, loading: false }));
 
 
@@ -593,6 +608,12 @@ export class OrdresIndicatorsService {
         ) as (
             dxFilter?: any[],
           ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+      }
+
+      // Planning fournisseurs
+      if (instance.id === "PlanningFournisseurs") {
+        // Need to see all companies (Léa 21-10-2022)
+        instance.filter = [["valide", "=", true]];
       }
 
       // Commandes en transit

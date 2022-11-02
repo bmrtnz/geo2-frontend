@@ -196,6 +196,13 @@
 </form>
 
 <div class="grid-lignes-historique-container">
+  <dx-button
+    class="grid-grouping-button"
+    type="default"
+    icon="material-icons menu_open"
+    hint="{{ 'btn-grouping' | localize }}"
+    (onClick)="gridsService.expandCollapseGroups(this)"
+  ></dx-button>
   <dx-data-grid
     class="dx-card wide-card"
     [width]="'100%'"
@@ -227,6 +234,7 @@
       )
     "
   >
+
     <!-- Grid configuration -->
     <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
     <dxo-header-filter
@@ -253,7 +261,7 @@
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
     <!-- <dxo-filter-row [visible]="false"></dxo-filter-row> -->
-    <dxo-group-panel [visible]="true"> </dxo-group-panel>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"
@@ -294,6 +302,7 @@
       >
       </dx-button>
     </div>
+
   </dx-data-grid>
 </div>
 

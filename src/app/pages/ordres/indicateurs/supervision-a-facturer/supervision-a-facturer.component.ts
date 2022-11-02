@@ -1,14 +1,14 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import OrdreBaf from "app/shared/models/ordre-baf.model";
+import Ordre, { Statut } from "app/shared/models/ordre.model";
 import { Role } from "app/shared/models/personne.model";
 import {
-  AuthService, ClientsService, EntrepotsService,
-
-
-  LocalizationService
+  AuthService, ClientsService, EntrepotsService, LocalizationService
 } from "app/shared/services";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -20,6 +20,7 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -60,16 +61,19 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public entrepots: DataSource;
   public commerciaux: DataSource;
   public assistantes: DataSource;
-
+  public promptPopupTitle: string;
   public periodes: string[];
   public columnChooser = environment.columnChooser;
   private gridConfig: Promise<GridConfig>;
+  private currOrder: Partial<Ordre>;
+  private currCell: any;
   public columns: Observable<GridColumn[]>;
   toRefresh: boolean;
   gridHasData: boolean;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
 
   public formGroup = new FormGroup({
     secteurCode: new FormControl(),
@@ -84,6 +88,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private secteursService: SecteursService,
+    private localizeService: LocalizationService,
+    private ordresService: OrdresService,
     private personnesService: PersonnesService,
     private entrepotsService: EntrepotsService,
     private clientsService: ClientsService,
@@ -300,9 +306,84 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   onCellClick(e) {
-    if (e.column.dataField !== "numeroOrdre") return;
-    e.event.stopImmediatePropagation();
-    this.tabContext.openOrdre(e.data.numeroOrdre, e.data.campagneID);
+    if (e.rowType !== "data") return;
+    if (e.column.dataField === "numeroOrdre") {
+      e.event.stopImmediatePropagation();
+      this.tabContext.openOrdre(e.data.numeroOrdre, e.data.campagneID);
+    }
+    if (e.column.dataField === "clientReference") {
+
+      let minLength = 1;
+      let maxLength = 70;
+      let lengthMess = "";
+      // Find length requirements 8; = 8 only / 6-70 : from 6 to 70 car
+      // Entrepot first otherwise client
+      const ctrl = e.data.ordre.entrepot.controlReferenceClient ?? e.data.ordre.client.controlReferenceClient;
+      if (ctrl) {
+        if (ctrl.includes(";")) {
+          minLength = ctrl.split(";")[0];
+          maxLength = minLength;
+          lengthMess = `(${minLength} chiffres)`;
+        }
+        if (ctrl.includes("-")) {
+          minLength = ctrl.split("-")[0];
+          maxLength = ctrl.split("-")[1];
+          lengthMess = `(${minLength} à ${maxLength} caractères)`;
+        }
+      }
+      // Show text change popup
+      this.promptPopupTitle = this.localization.localize("referenceClient");
+      this.promptPopup.show(
+        {
+          commentTitle: this.localization.localize("ordreBAF-change-refClt") + " " + lengthMess + " :",
+          comment: e.value ?? "",
+          commentMinLength: minLength,
+          commentMaxLength: maxLength
+        }
+      );
+      // Store current order id/ cell elem
+      this.currOrder = { id: e.data.ordreRef };
+      this.currCell = e;
+    }
+  }
+
+  onValidatePromptPopup(ref: string) {
+    const ordre = { ...this.currOrder, referenceClient: ref };
+    // this.currCell.cellElement.innerHTML = ref; // Quick visual change
+
+    // Saving comment and refresh grid
+    this.datagrid.instance.beginCustomLoading("");
+    this.ordresService.save({ ordre }).subscribe({
+      next: () => {
+        const ds = this.datagrid.dataSource as DataSource;
+        const store = ds.store() as CustomStore;
+        store.push([{ key: ordre.id, type: "update", data: { clientReference: ref } }]);
+        notify(this.localizeService.localize("ordreBAF-save-refClient"), "success", 2000);
+        this.ordresBafService.fControlBaf(ordre.id, this.currentCompanyService.getCompany().id).subscribe({
+          next: (res: any) => {
+            console.log(res);
+            store.push([{
+              key: ordre.id, type: "update", data: {
+                indicateurBaf: res.data.fControlBaf.data.ind_baf,
+                description: res.data.fControlBaf.data.desc_ctl
+              }
+            }]);
+            this.datagrid.instance.repaintRows([this.currCell.row.rowIndex]);
+            this.datagrid.instance.endCustomLoading();
+          },
+          error: (err) => {
+            notify("Erreur update valeurs", "error", 3000);
+            console.log(err);
+            this.datagrid.instance.endCustomLoading();
+          }
+        });
+      },
+      error: (err) => {
+        notify("Erreur sauvegarde réf. client", "error", 3000);
+        console.log(err);
+        this.datagrid.instance.endCustomLoading();
+      }
+    });
   }
 
   launch(e) {
@@ -314,43 +395,78 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       });
   }
 
-  onCellPrepared(event) {
-    const field = event.column.dataField;
+  onCellPrepared(e) {
+    const field = e.column.dataField;
 
-    if (field === "numeroOrdre") {
-      event.cellElement.classList.add("text-underlined");
-      event.cellElement.setAttribute(
-        "title",
-        this.localization.localize("hint-click-ordre"),
-      );
+    if (e.rowType === "data") {
+      // Best expression for order status display
+      if (field === "ordre.statut") {
+        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+      }
+
+      // Adjust clientReference display/hint
+      if (e.column.dataField === "clientReference") {
+        e.cellElement.classList.add("refClient-BAF");
+        e.cellElement.setAttribute(
+          "title",
+          this.localization.localize("hint-click-change-refClt"),
+        );
+      }
+
+      // Adjust numero ordre cell info/style
+      if (field === "numeroOrdre") {
+        e.cellElement.classList.add("text-underlined");
+        e.cellElement.setAttribute(
+          "title",
+          this.localization.localize("hint-click-ordre"),
+        );
+      }
     }
 
     if (field?.includes("indicateur")) {
-      event.cellElement.style.textAlign = "center";
-      if (event.rowType === "filter") {
-        event.cellElement.style.opacity = 0;
-        event.cellElement.style.pointerEvents = "none";
+      e.cellElement.style.textAlign = "center";
+      if (e.rowType === "filter") {
+        e.cellElement.style.opacity = 0;
+        e.cellElement.style.pointeres = "none";
       }
 
-      if (event.rowType === "data") {
-        if (field !== "indicateurBaf" && event.value === "0") {
-          event.cellElement.innerText = "";
+      if (e.rowType === "data") {
+        if (field !== "indicateurBaf" && e.value === "0") {
+          e.cellElement.innerText = "";
           return;
         }
-        event.cellElement.classList.add("BAFstatus-cell");
-        event.cellElement.classList.add(this.colorizeCell(event.value));
-        event.cellElement.innerText =
+        e.cellElement.classList.add("BAFstatus-cell");
+        e.cellElement.classList.add(this.colorizeCell(e.value));
+        e.cellElement.innerText =
           Object.keys(status)[
-          (Object.values(status) as string[]).indexOf(event.value)
+          (Object.values(status) as string[]).indexOf(e.value)
           ];
-        if (event.data.description) {
-          event.cellElement.setAttribute(
+        if (e.data.description) {
+          e.cellElement.setAttribute(
             "title",
-            event.data.description,
+            e.data.description.replaceAll("%%%", "").replaceAll("~r~n", "\r\n")
           );
         }
       }
     }
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data") {
+      // Hiding checkboxes when status is BLOCKED
+      if (e.data.indicateurBaf === status.BLOQUÉ) {
+        e.rowElement.classList.add("hide-select-checkbox");
+      }
+    }
+  }
+
+  onSelectionChanged(e) {
+    // Disallowing selection of hidden checkboxes (Select All button) when status is BLOCKED
+    e.component.getVisibleRows().map(row => {
+      if (row.data.indicateurBaf === status.BLOQUÉ) {
+        e.component.deselectRows([row.key]);
+      }
+    });
   }
 
   colorizeCell(theValue) {

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, NgForm } from "@angular/forms";
-import Ordre from "app/shared/models/ordre.model";
+import { Statut } from "app/shared/models/ordre.model";
 import {
   AuthService,
   LocalizationService,
@@ -26,6 +26,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import Utils from "utils/Filter";
+import { GridsService } from "../../grids.service";
 import { TabContext } from "../../root/root.component";
 
 enum FormInput {
@@ -72,6 +73,7 @@ export class PlanningTransporteursComponent implements OnInit {
     public planningTransporteursService: PlanningTransporteursService,
     public transporteursService: TransporteursService,
     public authService: AuthService,
+    public gridsService: GridsService,
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
     private tabContext: TabContext,
@@ -123,7 +125,8 @@ export class PlanningTransporteursComponent implements OnInit {
       this.planningTransporteursService.setPersisantVariables({
         dateMin: values.dateMin,
         dateMax: values.dateMax,
-        societeCode: this.currentCompanyService.getCompany().id,
+        societeCode: "%", // All companies
+        // societeCode: this.currentCompanyService.getCompany().id,
         transporteurCode: values.transporteurCode,
         // valideClient: values.valideClient,
         // valideEntrepot: values.valideEntrepot,
@@ -135,8 +138,13 @@ export class PlanningTransporteursComponent implements OnInit {
     }
   }
 
-  onRowDblClick({ data }: { data: Partial<Ordre> }) {
-    this.tabContext.openOrdre(data.numero, data.campagne.id);
+  onRowDblClick(e) {
+    let data = e.data.items ?? e.data.collapsedItems?.items;
+    if (!data || !data[0]) return;
+    data = data[0];
+    // Open order (if from the current company)
+    if (data.ordre?.societe.id === this.currentCompanyService.getCompany().id)
+      this.tabContext.openOrdre(data.numero, data.ordre.campagne.id);
   }
 
   validOrAll(e) {
@@ -161,6 +169,12 @@ export class PlanningTransporteursComponent implements OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
+
+      // Best expression for order status display
+      if (e.column.dataField === "ordre.statut") {
+        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+      }
+
       // Ajout CP, ville et pays au lieu de livraison
       if (e.column.dataField === "entrepotRaisonSocial") {
         if (e.data.entrepotCodePostal) {
@@ -223,8 +237,12 @@ export class PlanningTransporteursComponent implements OnInit {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === "data") {
-      e.rowElement.classList.add("highlight-order-row");
+    // Highlight canceled orders
+    if (["data", "group"].includes(e.rowType)) {
+      if (e.data?.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
     }
   }
 

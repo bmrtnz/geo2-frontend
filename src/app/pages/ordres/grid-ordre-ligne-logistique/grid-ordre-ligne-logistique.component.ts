@@ -50,6 +50,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   public currentRowIndex: number;
   public countHisto: boolean;
   public changeCloture: boolean;
+  public askForCloture: boolean;
   public reasonId: string;
   public gridRowsTotal: number;
   @Input() public ordre: Ordre;
@@ -192,6 +193,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
         } else {
           // Save cloture
           this.changeCloture = true;
+          this.askForCloture = true;
           this.reasonId = "";
           this.saveGridField(this.currentRowIndex, "expedieStation", true);
         }
@@ -215,18 +217,21 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   onSaved() {
     if (!this.changeCloture) return;
     this.onCheckCloturer(this.reasonId);
-    this.changeCloture = false;
   }
 
   public handleCellChangeEventResponse<T>(): PartialObserver<T> {
     return {
       next: v => {
+        this.changeCloture = false;
         this.refresh();
         this.refreshGridLigneDetail.emit(true);
       },
-      error: (message: string) => {
-        notify({ message }, "error", 7000);
-        console.log(message);
+      error: (error: Error) => {
+        this.changeCloture = false;
+        if (this.askForCloture) this.saveGridField(this.currentRowIndex, "expedieStation", false); // Back to non-clôturé
+        this.askForCloture = false;
+        notify(error.message.replace("Exception while fetching data (/fDetailsExpOnCheckCloturer) : ", ""), "error", 7000);
+        console.log(error);
       }
     };
   }

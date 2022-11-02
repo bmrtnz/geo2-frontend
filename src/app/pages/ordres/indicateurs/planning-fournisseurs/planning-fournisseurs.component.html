@@ -184,6 +184,7 @@
     [allowColumnReordering]="true"
     (onContentReady)="showHidePrices()"
     (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
@@ -228,8 +229,10 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
+      [showInColumnChooser]="column.showInColumnChooser"
+      [cssClass]="column.cssClass"
       [caption]="
-        ('ordreLignesPalox-' + column.dataField?.split('.').join('-')
+        ('ordresFournisseur-' + column.dataField?.split('.').join('-')
           | localize) || column.name
       "
       [dataType]="column?.dataType"
@@ -239,7 +242,6 @@
       [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
-      [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
   </dx-data-grid>
 </div>

@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService, FournisseursService, ArticlesService } from "app/shared/services";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
-import { GridColumn, ONE_DAY } from "basic";
+import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent, DxCheckBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
@@ -177,6 +176,16 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onRowPrepared(e) {
+    // Highlight canceled orders
+    if (e.rowType === "data") {
+      if (e.data?.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
+    }
+  }
+
   showHidePrices() {
     const prices = this.prices.instance.option("value");
     this.priceColumns.map(field => this.datagrid.instance.columnOption(field, "visible", prices));
@@ -189,8 +198,9 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       : null;
   }
 
-  onRowDblClick({ data }: { data: Partial<Ordre> }) {
-    this.tabContext.openOrdre(data.numero, data.campagne.id);
+  onRowDblClick(e) {
+    if (e.data.ordre?.societe.id === this.currentCompanyService.getCompany().id)
+      this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id);
   }
 
   private buildFormFilter(values: Inputs): any[] {

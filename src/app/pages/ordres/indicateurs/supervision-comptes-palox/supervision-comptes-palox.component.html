@@ -188,12 +188,35 @@
         | localize) || column.name
     "
     [dataType]="column?.dataType"
+    [groupCellTemplate]="column.groupCellTemplate"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
+    <div class="group-text-1">
+      {{ getInventoryData(cell.data) }}
+    </div>
+    <dx-button
+      [visible]="getInventoryData(cell.data) !== ''"
+      class="small-action-button float-left"
+      type="normal"
+      (onClick)="adjust(cell.data)"
+      text="{{ 'ajuster' | localize }}"
+    ></dx-button>
+    <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
+    <dx-button
+      [visible]="getInventoryData(cell.data) !== ''"
+      class="small-action-button"
+      type="normal"
+      (onClick)="inventory(cell.data)"
+      text="{{ 'inventaire' | localize }}"
+    ></dx-button>
+  </div>
+
 </dx-data-grid>
 
 <dx-data-grid
@@ -321,6 +344,7 @@
     *ngFor="let column of this.columns[2] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [groupCellTemplate]="column.groupCellTemplate"
     [caption]="
       ('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -332,6 +356,28 @@
     "
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
+    <div class="group-text-1">
+      {{ getInventoryData(cell.data) }}
+    </div>
+    <dx-button
+      [visible]="getInventoryData(cell.data) !== ''"
+      class="small-action-button float-left"
+      type="normal"
+      (onClick)="adjust(cell.data)"
+      text="{{ 'ajuster' | localize }}"
+    ></dx-button>
+    <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
+    <dx-button
+    class="small-action-button"
+      [visible]="getInventoryData(cell.data) !== ''"
+      type="normal"
+      (onClick)="inventory(cell.data)"
+      text="{{ 'inventaire' | localize }}"
+    ></dx-button>
+  </div>
+
 </dx-data-grid>
 
 <dx-data-grid

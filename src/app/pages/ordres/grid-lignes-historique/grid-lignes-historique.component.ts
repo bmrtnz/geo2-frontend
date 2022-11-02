@@ -17,6 +17,7 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
@@ -88,6 +89,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public clientsService: ClientsService,
     public secteursService: SecteursService,
     public gridConfiguratorService: GridConfiguratorService,
+    public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
     private dateManagementService: DateManagementService,
     public authService: AuthService,
@@ -116,6 +118,12 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit() {
     this.setDefaultPeriod("Mois à cheval");
+    if (this.secteurId) {
+      this.formGroup.get("valide").patchValue(true);
+      this.formGroup.patchValue({
+        secteur: { id: this.secteurId }
+      });
+    }
   }
 
   ngOnChanges() {
