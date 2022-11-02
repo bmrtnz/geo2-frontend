@@ -110,6 +110,7 @@ import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-
 import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
 import { CommandesTransitComponent } from "./indicateurs/commandes-transit/commandes-transit.component";
+import HistoriqueOrdresComponent from "./indicateurs/historique-ordres/historique-ordres.component";
 import { LitigesComponent } from "./indicateurs/litiges/litiges.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
@@ -214,7 +215,8 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     ModifCommandeEdiPopupComponent,
     GridModifCommandeEdiComponent,
     VisualiserOrdresPopupComponent,
-    DuplicationOrdrePopupComponent
+    DuplicationOrdrePopupComponent,
+    HistoriqueOrdresComponent
   ],
   imports: [
     OrdresRoutingModule,
