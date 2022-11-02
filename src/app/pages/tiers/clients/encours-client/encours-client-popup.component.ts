@@ -9,7 +9,7 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 })
 export class EncoursClientPopupComponent implements OnChanges {
 
-  @Input() public client: Client;
+  @Input() public client: Partial<Client>;
   @Input() public readOnlyMode: boolean;
   @Output() public clientInfo: any;
   @Output() public popupShown: boolean;

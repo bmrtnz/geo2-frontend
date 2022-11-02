@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Output, ViewChild } from "@angular/core";
+import { Role } from "app/shared/models";
 import { LocalizePipe } from "app/shared/pipes";
 import {
   AuthService,
@@ -9,6 +10,7 @@ import { GridsConfigsService } from "app/shared/services/api/grids-configs.servi
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PaysDepassementService } from "app/shared/services/api/pays-depassement.service";
 import { PaysService } from "app/shared/services/api/pays.service";
+import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
@@ -35,17 +37,20 @@ import { map } from "rxjs/operators";
 export class ClientsDepEncoursComponent implements AfterViewInit {
   readonly INDICATOR_NAME = "ClientsDepEncours";
 
-  secteurs: DataSource;
+  @Output() public commercialId: string;
+
+  public secteurs: DataSource;
+  public pays: DataSource;
+  public commercial: DataSource;
   indicator: Indicator;
   columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
 
-  @ViewChild("secteurValue", { static: false })
-  secteurSB: DxSelectBoxComponent;
+  @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
+  @ViewChild("paysValue", { static: false }) paysSB: DxSelectBoxComponent;
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
-  public dataSource: DataSource;
   public title: string;
 
   constructor(
@@ -53,6 +58,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     public gridService: GridsConfigsService,
     public gridConfiguratorService: GridConfiguratorService,
     public secteursService: SecteursService,
+    public personnesService: PersonnesService,
     public currentCompanyService: CurrentCompanyService,
     public ordresService: OrdresService,
     public authService: AuthService,
@@ -72,6 +78,15 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         this.currentCompanyService.getCompany().id,
       ],
     ]);
+    this.commercial = this.personnesService.getDataSource_v2(["id", "nomUtilisateur"]);
+    this.commercial.filter([
+      ["valide", "=", true],
+      "and",
+      ["role", "=", Role.COMMERCIAL],
+      "and",
+      ["nomUtilisateur", "<>", "null"],
+    ]);
+    this.paysUpdateDS();
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
       this.INDICATOR_NAME,
     );
@@ -94,17 +109,46 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   enableFilters() {
+    let filter;
     this.grid.dataSource = null;
-    // const filters = this.indicator.cloneFilter();
-    // if (this.secteurSB.value?.id)
-    //   filters.push("and", ["secteur.id", "=", this.secteurSB.value.id]);
     const dataSource = this.paysDepassementService
       .getDataSource(this.indicator.explicitSelection, {
         secteurCode: this.secteurSB.value?.id,
         societeCode: this.currentCompanyService.getCompany().id,
       });
-    // dataSource.filter(filters);
+    if (this.paysSB.value) {
+      filter = [["id", "=", this.paysSB.value.id]];
+    }
+    if (filter) dataSource.filter(filter);
     this.grid.dataSource = dataSource;
+  }
+
+  onSecteurChanged(e) {
+    this.paysSB.value = null;
+    this.paysUpdateDS(e.value?.id);
+    if (!e.event) return;
+    this.pays.load().then(res => {
+      if (res?.length === 1) this.paysSB.value = { id: res[0].id };
+      this.enableFilters();
+    });
+  }
+
+  onPaysChanged(e) {
+    if (!e.event) return;
+    this.enableFilters();
+  }
+
+  onCommChanged(e) {
+    this.commercialId = e.value?.id;
+  }
+
+  paysUpdateDS(secteurId?) {
+    this.pays = this.paysService.getDataSource_v2(["id", "description"]);
+    const filter: any[] = [["valide", "=", true]];
+    if (secteurId) {
+      filter.push("and", ["secteur.id", "=", secteurId]);
+    }
+    this.pays.filter(filter);
   }
 
   capitalize(str) {
@@ -112,6 +156,20 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   onCellPrepared(e) {
+
+    if (e.rowType === "header") {
+      let classPrefix;
+      switch (e.column.dataField) {
+        case "clientsSommeEnCoursNonEchu":
+        case "clientsSommeEnCours1a30": classPrefix = "green"; break;
+        case "clientsSommeEnCours31a60": classPrefix = "yellow"; break;
+        case "clientsSommeEnCours61a90": classPrefix = "orange"; break;
+        case "clientsSommeEnCours90Plus": classPrefix = "red"; break;
+        case "clientsSommeAlerteCoface": classPrefix = "dark-red"; break;
+      }
+      if (classPrefix) e.cellElement.classList.add(`${classPrefix}-encours`);
+    }
+
     if ([
       "clientsSommeDepassement",
       "clientsSommeEnCours61a90",

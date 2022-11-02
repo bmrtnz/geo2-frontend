@@ -1,9 +1,56 @@
 ::ng-deep {
-  .underline {
+  .underline-bold {
     text-decoration: underline;
+    font-weight: bold !important;
+  }
+
+  .red-row {
+    color: #ff325a !important;
   }
 
   .strike {
     text-decoration: line-through;
+  }
+
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+
+  .dx-datagrid .dx-row.dx-header-row {
+
+    .green-encours,
+    .yellow-encours,
+    .orange-encours {
+      color: rgba(0, 0, 0, 0.87) !important;
+    }
+
+    .green-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #C6E0B4 !important;
+    }
+
+    .yellow-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #FFE699 !important;
+    }
+
+    .orange-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #F4B084 !important;
+    }
+
+    .red-encours {
+      border-right: 1px solid #FFF;
+      text-align: center !important;
+      background: #FF0000 !important;
+    }
+
+    .dark-red-encours {
+      text-align: center !important;
+      background: #C00000 !important;
+    }
   }
 }

@@ -190,7 +190,6 @@ export class GridEncoursClientComponent implements OnChanges {
       encoursDepassement: this.depassement ? depassement : null,
       encoursRetard: this.retard ? retard : null
     });
-    console.log(this.sumCredit, this.sumDebit);
   }
 
   onContentReady() {

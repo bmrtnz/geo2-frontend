@@ -80,9 +80,16 @@ import { ZoomClientArticlePopupComponent } from "./order-history/zoom-client-art
     GridOrderHistoryComponent,
     EncoursClientPopupComponent,
     GridEncoursClientComponent,
-    ZoomClientArticlePopupComponent
+    ZoomClientArticlePopupComponent,
+    EncoursClientPopupComponent
   ],
   providers: [NestedGuard, EditingGuard],
-  exports: [ClientDetailsComponent, OrderHistoryPopupComponent, GridOrderHistoryComponent, ZoomClientArticlePopupComponent]
+  exports: [
+    ClientDetailsComponent,
+    OrderHistoryPopupComponent,
+    GridOrderHistoryComponent,
+    ZoomClientArticlePopupComponent,
+    EncoursClientPopupComponent
+  ]
 })
 export class ClientsModule { }
