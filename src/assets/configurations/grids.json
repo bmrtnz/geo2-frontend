@@ -5933,6 +5933,11 @@
         "visibleIndex": 18,
         "dataField": "numImmat",
         "visible": true
+      },
+      {
+        "visibleIndex": 19,
+        "dataField": "codeEntrepot",
+        "visible": true
       }
     ]
   }
