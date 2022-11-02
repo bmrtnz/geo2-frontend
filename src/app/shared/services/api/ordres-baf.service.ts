@@ -175,6 +175,33 @@ export class OrdresBafService
     );
   }
 
+  /**
+   * Retourne l'indicateur BAF pour un id d'ordre donné
+   */
+  public fControlBaf =
+    (ordreRef: string, societeCode: string) => this.apollo
+      .query<{ fControlBaf: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fControlBaf",
+              body: functionBody,
+              params: [
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreRef, societeCode },
+        fetchPolicy: "network-only",
+      })
+
   private messageFormat(mess) {
     mess = mess.replaceAll("%%%", "");
     mess = mess.replace("Exception while fetching data (/fBonAFacturerPrepare) : ", "");

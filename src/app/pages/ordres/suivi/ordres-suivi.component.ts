@@ -6,20 +6,17 @@ import {
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   DxAutocompleteComponent,
-  DxPopupComponent,
   DxSelectBoxComponent,
-  DxValidationGroupComponent,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { filter } from "rxjs/operators";
 import { GridHistoriqueComponent } from "../grid-historique/grid-historique.component";
 import { GridSuiviComponent } from "../grid-suivi/grid-suivi.component";
 import { RouteParam, TabContext } from "../root/root.component";
-import { CampagnesService } from "app/shared/services/api/campagnes.service";
 
 let self;
 
@@ -55,6 +52,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   constructor(
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
+    private authService: AuthService,
     public tabContext: TabContext,
     private route: ActivatedRoute,
   ) {
@@ -66,6 +64,8 @@ export class OrdresSuiviComponent implements AfterViewInit {
       "client.code",
       "id",
     ];
+    // Léa CDT221021 Le critère de recherche "Réf. Ordre" n'a pas d'intérêt pour les utilisateurs et peut être supprimé
+    if (!this.authService.isAdmin) this.searchItems.pop();
     this.campagneEnCours = this.currentCompanyService.getCompany().campagne;
   }
 

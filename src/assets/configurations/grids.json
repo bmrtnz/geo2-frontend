@@ -1560,13 +1560,13 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "codeClient",
+        "dataField": "codeAlphaEntrepot",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "codeAlphaEntrepot",
+        "dataField": "codeClient",
         "dataType": "string",
         "visible": true
       },
@@ -1598,60 +1598,75 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "codeChargement",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 18,
         "dataField": "totalNombrePalettesCommandees",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 18,
         "dataField": "sommeColisCommandes",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 22,
-        "dataField": "statut",
-        "allowHeaderFiltering": true,
-        "allowSearch": false,
-        "visible": true
+        "visibleIndex": 20,
+        "dataField": "codeChargement",
+        "dataType": "string",
+        "visible": false
       },
       {
-        "visibleIndex": 24,
+        "visibleIndex": 22,
         "dataField": "secteurCommercial.id",
         "dataType": "string",
         "visible": false
       },
       {
-        "visibleIndex": 26,
+        "visibleIndex": 24,
         "dataField": "entrepot.raisonSocial",
         "dataType": "string",
         "visible": false
       },
       {
-        "visibleIndex": 28,
+        "visibleIndex": 26,
         "dataField": "dateModification",
         "sortOrder": "desc",
         "visible": false
       },
       {
+        "visibleIndex": 28,
         "dataField": "totalNombrePalettesExpediees",
         "showInColumnChooser": false,
         "visible": false
       },
       {
+        "visibleIndex": 30,
         "dataField": "sommeColisExpedies",
         "showInColumnChooser": false,
         "visible": false
       },
       {
+        "visibleIndex": 32,
+        "dataField": "commercial.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
+      },
+      {
+        "visibleIndex": 34,
+        "dataField": "assistante.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
+      },
+      {
+        "visibleIndex": 36,
         "dataField": "id",
         "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 50,
+        "dataField": "statut",
+        "allowHeaderFiltering": true,
+        "allowSearch": false,
         "visible": true
       }
     ]
@@ -1672,13 +1687,13 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "ordre.codeClient",
+        "dataField": "ordre.codeAlphaEntrepot",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "ordre.codeAlphaEntrepot",
+        "dataField": "ordre.codeClient",
         "dataType": "string",
         "visible": true
       },
@@ -1699,18 +1714,13 @@
         "visibleIndex": 12,
         "dataField": "ordre.dateLivraisonPrevue",
         "dataType": "date",
+        "cssClass": "no-padding",
         "format": "dd-MM-yyyy",
         "visible": true
       },
       {
         "visibleIndex": 14,
         "dataField": "ordre.transporteur.id",
-        "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 16,
-        "dataField": "ordre.codeChargement",
         "dataType": "string",
         "visible": true
       },
@@ -1728,10 +1738,9 @@
       },
       {
         "visibleIndex": 22,
-        "dataField": "ordre.statut",
-        "allowHeaderFiltering": true,
-        "allowSearch": false,
-        "visible": true
+        "dataField": "ordre.codeChargement",
+        "dataType": "string",
+        "visible": false
       },
       {
         "visibleIndex": 24,
@@ -1752,24 +1761,47 @@
         "visible": false
       },
       {
+        "visibleIndex": 30,
         "dataField": "ordre.totalNombrePalettesExpediees",
         "showInColumnChooser": false,
         "visible": false
       },
       {
+        "visibleIndex": 32,
         "dataField": "ordre.sommeColisExpedies",
         "showInColumnChooser": false,
         "visible": false
       },
       {
-        "dataField": "ordre.id",
-        "dataType": "string",
-        "visible": true
+        "visibleIndex": 34,
+        "dataField": "ordre.commercial.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
       },
       {
+        "visibleIndex": 36,
+        "dataField": "ordre.assistante.nomUtilisateur",
+        "showInColumnChooser": true,
+        "visible": false
+      },
+      {
+        "visibleIndex": 38,
+        "dataField": "ordre.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 40,
         "dataField": "ordreRef",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "visibleIndex": 50,
+        "dataField": "ordre.statut",
+        "allowHeaderFiltering": true,
+        "allowSearch": false,
+        "visible": true
       }
     ]
   },
@@ -3567,65 +3599,71 @@
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "indicateurBaf",
         "sortOrder": "asc",
         "sortIndex": 1,
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 4,
         "dataField": "dateFr",
         "visible": true
       },
       {
-        "visibleIndex": 3,
-        "dataField": "client",
-        "visible": true
-      },
-      {
-        "visibleIndex": 4,
-        "dataField": "entrepot",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "clientReference",
-        "visible": true
-      },
-      {
         "visibleIndex": 6,
-        "dataField": "pourcentageMargeBrut",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "indicateurTransporteur",
+        "dataField": "client",
+        "cssClass": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "indicateurDate",
-        "visible": true
-      },
-      {
-        "visibleIndex": 9,
-        "dataField": "indicateurPrix",
+        "dataField": "entrepot",
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "indicateurStation",
-        "visible": true
-      },
-      {
-        "visibleIndex": 11,
-        "dataField": "indicateurQte",
+        "dataField": "clientReference",
         "visible": true
       },
       {
         "visibleIndex": 12,
+        "dataField": "pourcentageMargeBrut",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "indicateurTransporteur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "indicateurDate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "indicateurPrix",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "indicateurStation",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "indicateurQte",
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
         "dataField": "indicateurAutre",
+        "visible": true
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "ordre.statut",
         "visible": true
       },
       {
@@ -3638,6 +3676,18 @@
       },
       {
         "dataField": "campagneID",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ordre.client.controlReferenceClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ordre.entrepot.controlReferenceClient",
         "showInColumnChooser": false,
         "visible": false
       }
@@ -3708,57 +3758,57 @@
         "visible": false
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "numero",
         "visible": true
       },
       {
-        "visibleIndex": 2,
-        "dataField": "codeClient",
-        "visible": false
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "client.raisonSocial",
-        "visible": true
-      },
-      {
         "visibleIndex": 4,
-        "dataField": "codeAlphaEntrepot",
-        "visible": false
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "entrepot.raisonSocial",
+        "dataField": "codeClient",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "referenceClient",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "dateDepartPrevue",
+        "dataField": "codeAlphaEntrepot",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "dateLivraisonPrevue",
+        "dataField": "referenceClient",
         "visible": true
       },
       {
-        "dataField": "type",
-        "visible": false
+        "visibleIndex": 10,
+        "dataField": "dateDepartPrevue",
+        "dataType": "datetime",
+        "format": "dd-MM-yyyy HH:mm:ss",
+        "visible": true
       },
       {
-        "dataField": "dateCreation",
-        "sortOrder": "asc",
-        "selectedFilterOperation": ">=",
-        "visible": false
+        "visibleIndex": 12,
+        "dataField": "dateLivraisonPrevue",
+        "dataType": "datetime",
+        "format": "dd-MM-yyyy HH:mm:ss",
+        "visible": true
       },
       {
-        "dataField": "secteurCommercial.id",
+        "visibleIndex": 16,
+        "dataField": "transporteur.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "totalNombrePalettesCommandees",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "sommeColisCommandes",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "codeChargement",
         "visible": false
       }
     ]
@@ -4296,55 +4346,64 @@
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "numero",
         "groupIndex": 1,
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 4,
         "dataField": "fournisseur",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 6,
         "dataField": "sommeColisPaletteBis",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 8,
         "dataField": "sommeColisCommandes",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 10,
         "dataField": "espece",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 12,
         "dataField": "dateDepartPrevueFournisseur",
         "visible": true
       },
       {
-        "visibleIndex": 7,
+        "visibleIndex": 14,
         "dataField": "dateLivraisonPrevue",
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 16,
         "dataField": "referenceClient",
         "visible": true
       },
       {
-        "visibleIndex": 9,
+        "visibleIndex": 18,
         "dataField": "ordre.statut",
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 20,
         "dataField": "codeChargement",
         "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "ordre.societe.id",
+        "visible": true
+      },
+      {
+        "dataField": "ordre.flagAnnule",
+        "visible": false
       },
       {
         "dataField": "version"
@@ -4420,67 +4479,78 @@
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "ordre.numero",
         "sortIndex": 3,
         "sortOrder": "asc",
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 4,
+        "dataField": "ordre.societe.id",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
         "dataField": "logistique.fournisseur.code",
         "sortIndex": 4,
         "sortOrder": "asc",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 8,
         "dataField": "ordre.transporteur.id",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 10,
         "dataField": "nombrePalettesCommandees",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 12,
         "dataField": "nombreColisExpedies",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 14,
         "dataField": "article.description",
         "visible": true
       },
       {
-        "visibleIndex": 7,
+        "visibleIndex": 16,
         "dataField": "ordre.dateLivraisonPrevue",
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 18,
         "dataField": "ordre.client.code",
         "visible": true
       },
       {
-        "visibleIndex": 9,
+        "visibleIndex": 20,
         "dataField": "ordre.entrepot.code",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 22,
         "dataField": "ordre.referenceClient",
         "visible": true
       },
       {
-        "visibleIndex": 15,
+        "visibleIndex": 24,
         "dataField": "ventePrixUnitaire",
         "visible": false
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 26,
         "dataField": "achatPrixUnitaire",
+        "visible": false
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "ordre.flagAnnule",
         "visible": false
       },
       {
@@ -4597,6 +4667,7 @@
       {
         "visibleIndex": 2,
         "dataField": "codeEmballage",
+        "groupIndex": 2,
         "sortIndex": 3,
         "sortOrder": "asc",
         "visible": true
@@ -4604,6 +4675,8 @@
       {
         "visibleIndex": 3,
         "dataField": "codeFournisseur",
+        "groupIndex": 3,
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "sortIndex": 4,
         "sortOrder": "asc",
         "visible": true
@@ -4696,6 +4769,7 @@
       {
         "visibleIndex": 2,
         "dataField": "codeEmballage",
+        "groupIndex": 2,
         "sortIndex": 3,
         "sortOrder": "asc",
         "visible": true
@@ -4703,6 +4777,8 @@
       {
         "visibleIndex": 3,
         "dataField": "codeEntrepot",
+        "groupIndex": 3,
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "sortIndex": 2,
         "sortOrder": "asc",
         "visible": true

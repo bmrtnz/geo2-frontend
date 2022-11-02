@@ -3,21 +3,26 @@
 .dx-fieldset {
   display: flex;
 }
+
 .dx-field {
   margin-right: 20px;
 }
 
 ::ng-deep .orderTileFilterArea {
   width: 1024px;
+
   .dx-datebox .dx-texteditor-input {
     padding-right: 0 !important;
   }
+
   .orderTileleftFilters .dx-field {
     margin-bottom: 0;
   }
+
   .orderRightRightFilters {
     margin-top: 4px;
   }
+
   .validOnlyButtons {
     display: block;
     min-width: 0 !important;
@@ -25,6 +30,7 @@
     height: 30px;
     border-radius: 50%;
     float: left;
+
     .dx-button-content {
       padding: 0;
     }
@@ -33,15 +39,23 @@
 
 ::ng-deep .gridPF-container {
   position: relative;
+
   .showPrices-box {
     width: 300px;
     position: absolute;
     top: -3px;
     z-index: 1;
+
     .dx-field-value {
       width: 10% !important;
       margin-right: 9px;
       margin-left: 10px;
     }
   }
+}
+
+// Highlight canceled orders
+::ng-deep .canceled-orders td {
+  color: #ff325a !important;
+  text-shadow: 1px 1px 15px #FFF;
 }

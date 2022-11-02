@@ -41,7 +41,7 @@ export class GridStockComponent implements OnInit {
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
-  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
   @ViewChild("especeSB", { static: false }) especeSB: DxSelectBoxComponent;
   @ViewChild("varieteSB", { static: false }) varieteSB: DxSelectBoxComponent;
   @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
@@ -85,7 +85,7 @@ export class GridStockComponent implements OnInit {
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
     private stockArticlesAgeService: StockArticlesAgeService,
-    private grids: GridsService,
+    public gridsService: GridsService,
   ) {
     this.apiService = this.articlesService;
 
@@ -158,7 +158,7 @@ export class GridStockComponent implements OnInit {
   }
 
   refreshArticlesGrid() {
-    this.dataGrid.instance.beginCustomLoading("");
+    this.datagrid.instance.beginCustomLoading("");
     this.stocksService.allStockArticleList(
       this.especeSB.value?.key,
       this.varieteSB.value?.key,
@@ -167,9 +167,9 @@ export class GridStockComponent implements OnInit {
       this.emballageSB.value,
       this.bureauAchatSB.value?.id
     ).subscribe((res) => {
-      this.dataGrid.dataSource = res.data.allStockArticleList;
-      this.dataGrid.instance.refresh();
-      this.dataGrid.instance.endCustomLoading();
+      this.datagrid.dataSource = res.data.allStockArticleList;
+      this.datagrid.instance.refresh();
+      this.datagrid.instance.endCustomLoading();
       this.toRefresh = false;
     });
   }
@@ -181,9 +181,9 @@ export class GridStockComponent implements OnInit {
 
   ajoutReservation() {
     this.selectChange.emit();
-    this.dataGrid.dataSource = [];
+    this.datagrid.dataSource = [];
     this.toRefresh = true;
-    this.grids.reload("SyntheseExpeditions");
+    this.gridsService.reload("SyntheseExpeditions");
   }
 
   onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
@@ -192,7 +192,7 @@ export class GridStockComponent implements OnInit {
 
   onCellClick(e) {
     if (e.rowType === "group" && e.column.dataField === "commentaire") {
-      this.dataGrid.instance.expandRow(e.key);
+      this.datagrid.instance.expandRow(e.key);
     }
   }
 
@@ -258,7 +258,7 @@ export class GridStockComponent implements OnInit {
   }
 
   validateComment(comment) {
-    this.dataGrid.instance.beginCustomLoading("");
+    this.datagrid.instance.beginCustomLoading("");
     this.stockConsolideService.save({
       id: this.articleLigneId,
       commentaire: comment

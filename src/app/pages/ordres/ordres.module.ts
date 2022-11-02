@@ -61,10 +61,11 @@ import { ArticleCertificationPopupComponent } from "./article-certification-popu
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
 import {
   ArticleReservationOrdrePopupComponent,
-  ListPipe,
+  ListPipe
 } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
 import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
+import { DuplicationOrdrePopupComponent } from "./duplication-ordre-popup/duplication-ordre-popup.component";
 import { FormLitigesComponent } from "./form-litiges/form-litiges.component";
 import { FormLogistiqueComponent } from "./form-logistique/form-logistique.component";
 import { FormComponent } from "./form/form.component";
@@ -100,7 +101,16 @@ import { GridsService } from "./grids.service";
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
+import {
+  ChoixEntrepotCommandeEdiPopupComponent
+} from "./indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
+import { CommandesEdiComponent } from "./indicateurs/commandes-edi/commandes-edi.component";
+import { GridCommandesEdiComponent } from "./indicateurs/commandes-edi/grid-commandes-edi/grid-commandes-edi.component";
+import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
+import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
+import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
 import { CommandesTransitComponent } from "./indicateurs/commandes-transit/commandes-transit.component";
+import { HistoriqueOrdresComponent } from "./indicateurs/historique-ordres/historique-ordres.component";
 import { LitigesComponent } from "./indicateurs/litiges/litiges.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
@@ -114,6 +124,7 @@ import { SupervisionAFacturerComponent } from "./indicateurs/supervision-a-factu
 import { SupervisionComptesPaloxComponent } from "./indicateurs/supervision-comptes-palox/supervision-comptes-palox.component";
 import { SupervisionLivraisonComponent } from "./indicateurs/supervision-livraison/supervision-livraison.component";
 import { ModifDetailLignesPopupComponent } from "./modif-detail-lignes-popup/modif-detail-lignes-popup.component";
+import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { NouvelOrdreComponent } from "./nouvel-ordre/nouvel-ordre.component";
 import { OrdresRoutingModule } from "./ordres-routing.module";
 import { LoadingTabComponent, RootComponent, TabContext } from "./root/root.component";
@@ -124,16 +135,6 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
-import { CommandesEdiComponent } from "./indicateurs/commandes-edi/commandes-edi.component";
-import { GridCommandesEdiComponent } from "./indicateurs/commandes-edi/grid-commandes-edi/grid-commandes-edi.component";
-import {
-  ChoixEntrepotCommandeEdiPopupComponent
-} from "./indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
-import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
-import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
-import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
-import { DuplicationOrdrePopupComponent } from "./duplication-ordre-popup/duplication-ordre-popup.component";
 
 @NgModule({
   declarations: [
@@ -215,6 +216,7 @@ import { DuplicationOrdrePopupComponent } from "./duplication-ordre-popup/duplic
     GridModifCommandeEdiComponent,
     VisualiserOrdresPopupComponent,
     DuplicationOrdrePopupComponent,
+    HistoriqueOrdresComponent
   ],
   imports: [
     OrdresRoutingModule,

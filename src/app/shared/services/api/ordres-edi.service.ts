@@ -85,6 +85,8 @@ export class OrdresEdiService extends ApiService {
     columns.add("client.id");
     columns.add("client.code");
     columns.add("client.raisonSocial");
+    columns.add("id");
+    columns.add("code");
     return this.apollo
       .query<{ allClientEdi: ClientEdi[] }>({
         query: gql(ApiService.buildGraph(
