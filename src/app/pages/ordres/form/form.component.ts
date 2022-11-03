@@ -832,7 +832,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           window.sessionStorage.setItem("idOrdre", this.ordre.id);
           window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
           this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
-          this.mruEntrepotsService.saveMRUEntrepot(this.ordre); // Save last opened entrepot into MRU table
+          this.mruEntrepotsService.saveMRUEntrepot(this.ordre.entrepot); // Save last opened entrepot into MRU table
 
           this.formGroup.valueChanges.subscribe((_) => {
             this.saveHeaderOnTheFly();

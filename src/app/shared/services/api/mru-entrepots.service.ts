@@ -93,20 +93,19 @@ export class MruEntrepotsService extends ApiService implements APIRead {
     );
   }
 
-  saveMRUEntrepot(ordre) {
+  saveMRUEntrepot(entrepot) {
     const mruEntrepot = {
       utilisateur: {
         nomUtilisateur: this.authService.currentUser.nomUtilisateur,
       },
-      codeEntrepot: ordre.entrepot.code,
-      ordre: { id: ordre.id },
-      entrepot: { id: ordre.entrepot.id },
+      codeEntrepot: entrepot.code,
+      entrepot: { id: entrepot.id },
       societe: { id: this.currentCompanyService.getCompany().id }
     };
 
     this.save_v2(
       [
-        "ordre.entrepot.id",
+        "entrepot.id",
         "utilisateur.nomUtilisateur",
       ],
       {
