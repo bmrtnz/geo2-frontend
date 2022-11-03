@@ -161,6 +161,7 @@ export class Ordre extends Model {
   @Field({ model: import("./document.model") }) public documentCMR: Document;
   @Field() public societeCode: string;
   @Field() public secteurCode: string;
+  @Field() public numeroContainer: string;
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");

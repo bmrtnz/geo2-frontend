@@ -1802,6 +1802,11 @@
         "allowHeaderFiltering": true,
         "allowSearch": false,
         "visible": true
+      }, {
+        "visibleIndex": 52,
+        "dataField": "ordre.numeroContainer",
+        "dataType": "string",
+        "visible": false
       }
     ]
   },
@@ -3809,6 +3814,12 @@
       {
         "visibleIndex": 22,
         "dataField": "codeChargement",
+        "visible": false
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "numeroContainer",
+        "dataType": "string",
         "visible": false
       }
     ]
