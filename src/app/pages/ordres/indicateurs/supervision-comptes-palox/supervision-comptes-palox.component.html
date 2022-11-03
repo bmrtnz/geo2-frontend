@@ -275,6 +275,7 @@
     *ngFor="let column of this.columns[1] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [groupCellTemplate]="column.groupCellTemplate"
     [caption]="
       ('comptesPalox-entrepots-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -286,6 +287,13 @@
     "
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
+    <div class="group-text-1">
+      {{ getInventoryData(cell.data) }}
+    </div>
+    <div class="group-text-3">{{ getSoldeGeneralData(cell.data) }}</div>
+  </div>
 </dx-data-grid>
 
 <dx-data-grid
@@ -422,6 +430,7 @@
     *ngFor="let column of this.columns[3] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [groupCellTemplate]="column.groupCellTemplate"
     [caption]="
       ('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -433,4 +442,12 @@
     "
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
+    <div class="group-text-1">
+      {{ getInventoryData(cell.data) }}
+    </div>
+    <div class="group-text-3">{{ getSoldeGeneralData(cell.data) }}</div>
+  </div>
+
 </dx-data-grid>
