@@ -2,7 +2,7 @@
   class="flux-docs-buttons-container"
   [ngClass]="{ 'order-conf-button': orderConfirmationOnly }"
 >
-  <div *ngFor="let action of actionsFlux.slice(0, visibleActionsNumber - 1)">
+  <div *ngFor="let action of actionsFlux.slice(0, visibleActionsNumber)">
     <dx-button
       class="flux-doc-button"
       type="default"
