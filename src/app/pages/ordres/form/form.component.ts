@@ -1019,6 +1019,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private refetchStatut() {
+    // No refetch when statut is "FACTURE" or "ANNULE"
+    if (![Statut.FACTURE, Statut.ANNULE].includes(this.ordre?.statut)) {
+      return;
+    }
+
     this.route.paramMap
       .pipe(
         first(),
