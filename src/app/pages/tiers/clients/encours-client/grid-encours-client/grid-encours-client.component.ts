@@ -102,6 +102,7 @@ export class GridEncoursClientComponent implements OnChanges {
       "encDateValid",
       "encDepasse",
       "encReferences",
+      "entrepot.code",
       "numImmat",
       "paysCode",
       "raisonSociale",
