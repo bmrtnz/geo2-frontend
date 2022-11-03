@@ -20,6 +20,7 @@ import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
+import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -113,6 +114,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private mruOrdresService: MruOrdresService,
+    public mruEntrepotsService: MruEntrepotsService,
     private tabContext: TabContext,
     public authService: AuthService,
     private localization: LocalizationService,
@@ -830,6 +832,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           window.sessionStorage.setItem("idOrdre", this.ordre.id);
           window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
           this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
+          this.mruEntrepotsService.saveMRUEntrepot(this.ordre); // Save last opened entrepot into MRU table
 
           this.formGroup.valueChanges.subscribe((_) => {
             this.saveHeaderOnTheFly();
