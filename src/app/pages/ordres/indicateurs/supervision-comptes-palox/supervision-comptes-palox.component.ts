@@ -281,7 +281,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   }
 
   getInventoryData(e) {
-    if (this.switchEntity.value) {
+    if (!this.switchEntity.value) {
       if (e.items?.length)
         return e.items[0].codeFournisseur + " - " + e.items[0].raisonSocialeFournisseur;
       if (e.collapsedItems?.length)
