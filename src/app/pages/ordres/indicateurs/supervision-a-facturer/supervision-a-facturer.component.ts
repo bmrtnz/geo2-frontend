@@ -313,22 +313,30 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     }
     if (e.column.dataField === "clientReference") {
 
-      let minLength = 1;
-      let maxLength = 70;
+      let regexCtrlCheck;
       let lengthMess = "";
       // Find length requirements 8; = 8 only / 6-70 : from 6 to 70 car
       // Entrepot first otherwise client
       const ctrl = e.data.ordre.entrepot.controlReferenceClient ?? e.data.ordre.client.controlReferenceClient;
       if (ctrl) {
+        let regexCtrl;
+
         if (ctrl.includes(";")) {
-          minLength = ctrl.split(";")[0];
-          maxLength = minLength;
-          lengthMess = `(${minLength} chiffres)`;
+          const values = ctrl.split(";").filter(v => v);
+
+          lengthMess = `(${values.map(v => `${v}`).join(" ou ")} chiffres)`;
+          regexCtrl = values.map(v => `\\d{${v}}`).join("|");
+        } else if (ctrl.includes("-")) {
+          const ctrlValues = ctrl.split("-");
+          const minNumberLength = ctrlValues[0];
+          const maxNumberLength = ctrlValues[1];
+
+          lengthMess = `(${minNumberLength} à ${maxNumberLength} caractères)`;
+          regexCtrl = `\\d{${minNumberLength},${maxNumberLength}}`;
         }
-        if (ctrl.includes("-")) {
-          minLength = ctrl.split("-")[0];
-          maxLength = ctrl.split("-")[1];
-          lengthMess = `(${minLength} à ${maxLength} caractères)`;
+
+        if (regexCtrl) {
+          regexCtrlCheck = new RegExp(`^\\D*?(${regexCtrl})(?:\\D|$)`);
         }
       }
       // Show text change popup
@@ -337,8 +345,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         {
           commentTitle: this.localization.localize("ordreBAF-change-refClt") + " " + lengthMess + " :",
           comment: e.value ?? "",
-          commentMinLength: minLength,
-          commentMaxLength: maxLength
+          commentMaxLength: 70,
+          commentRegex: regexCtrlCheck
         }
       );
       // Store current order id/ cell elem

@@ -9,8 +9,10 @@ import {
   DxValidatorComponent, DxValidatorModule, DxSelectBoxComponent
 } from "devextreme-angular";
 import { FormsModule, NgForm } from "@angular/forms";
-import { RangeRule, RequiredRule } from "devextreme/ui/validation_rules";
+import {PatternRule, RangeRule, RequiredRule} from "devextreme/ui/validation_rules";
 import { SharedModule } from "../../shared.module";
+
+type RulesArrayType = (RangeRule | RequiredRule | PatternRule)[];
 
 @Component({
   selector: "app-prompt-popup",
@@ -36,11 +38,12 @@ export class PromptPopupComponent {
   @Output() whenHiding = new EventEmitter<any>();
   @Output() whenShown = new EventEmitter<any>();
 
-  commentValidationRules: (RangeRule | RequiredRule)[];
+  commentValidationRules: RulesArrayType;
   validText: string;
   cancelText: string;
   commentMaxLength: number;
   commentMinLength: number;
+  commentRegex: RegExp;
   commentTitle: string;
   commentItemsList: string[];
 
@@ -49,6 +52,7 @@ export class PromptPopupComponent {
     if (texts?.cancelText) this.cancelText = texts.cancelText;
     if (texts?.commentMaxLength) this.commentMaxLength = texts.commentMaxLength;
     if (texts?.commentMinLength) this.commentMinLength = texts.commentMinLength;
+    if (texts?.commentRegex) this.commentRegex = texts.commentRegex;
     if (texts?.commentTitle) this.commentTitle = texts.commentTitle;
     if (texts?.commentItemsList) this.commentItemsList = texts.commentItemsList;
     await this.popupComponent.instance.show();
@@ -60,11 +64,17 @@ export class PromptPopupComponent {
   }
 
   setValidationRules() {
-    this.commentValidationRules = [
+    const rules: RulesArrayType = [
       { type: "required" },
       { type: "stringLength", min: this.commentMinLength ?? 1 },
       { type: "stringLength", max: this.commentMaxLength ?? 512 }
     ];
+
+    if (this.commentRegex) {
+      rules.push({ type: "pattern", pattern: this.commentRegex });
+    }
+
+    this.commentValidationRules = rules;
   }
 
   onPopupHiding() {

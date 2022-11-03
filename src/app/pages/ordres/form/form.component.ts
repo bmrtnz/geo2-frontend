@@ -56,6 +56,7 @@ import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../r
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ONE_SECOND } from "../../../../basic";
 
 /**
  * Grid with loading toggled by parent
@@ -120,8 +121,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.handleTabChange()
       .subscribe(event => {
         this.initializeAnchors(event);
-        if (event.status === "in")
-          this.refetchStatut();
+
+        if (event.status === "in") {
+          this.statutInterval = window.setInterval(() => this.refetchStatut(), 5 * ONE_SECOND);
+        } else if (event.status === "out" && this.statutInterval) {
+          window.clearInterval(this.statutInterval);
+        }
       });
     self = this;
   }
@@ -204,6 +209,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private destroy = new Subject<boolean>();
   private anchorsInitialized = false;
+  private statutInterval: number;
 
   public fragments = Fragments;
   public status: string;
@@ -1020,8 +1026,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.currentCompanyService.getCompany().id,
             campagneID,
             ["id", "statut"],
+            "network-only"
           )),
-        takeWhile(res => res.loading),
+        takeWhile(res => res.loading, true),
         map(res => res.data.ordreByNumeroAndSocieteAndCampagne),
       )
       .subscribe({
