@@ -331,7 +331,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           const minNumberLength = ctrlValues[0];
           const maxNumberLength = ctrlValues[1];
 
-          lengthMess = `(${minNumberLength} à ${maxNumberLength} caractères)`;
+          lengthMess = `(${minNumberLength} à ${maxNumberLength} chiffres)`;
           regexCtrl = `\\d{${minNumberLength},${maxNumberLength}}`;
         }
 
