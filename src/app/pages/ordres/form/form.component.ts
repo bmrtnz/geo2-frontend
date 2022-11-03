@@ -1074,6 +1074,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   gridCommandePointerLeave() {
+    return; // Suite soucis divers - à voir
     this.gridCommandes.grid.instance.saveEditData();
   }
 
