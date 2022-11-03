@@ -5947,7 +5947,7 @@
       },
       {
         "visibleIndex": 19,
-        "dataField": "refEntrepot",
+        "dataField": "entrepot.code",
         "visible": true
       }
     ]
