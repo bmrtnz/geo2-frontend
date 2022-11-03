@@ -330,7 +330,7 @@ export class GridConfiguratorService {
         ...config,
         columns: config?.columns ? config.columns.map(column => ({
           ...column,
-          ...column?.showInColumnChooser
+          ...column?.showInColumnChooser !== undefined
             ? { showInColumnChooser: column?.showInColumnChooser }
             : { showInColumnChooser: true },
           ...column?.visible
