@@ -37,6 +37,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   titleMid: string;
   titleEnd: string;
   pulseBtnOn: boolean;
+  popupFullscreen = true;
 
   @ViewChild(GridLignesHistoriqueComponent, { static: false }) gridLignesHisto: GridLignesHistoriqueComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -115,6 +116,10 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   hidePopup() {
     this.popup.visible = false;
     this.popupShown = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 
   clearAndHidePopup() {
