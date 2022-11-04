@@ -844,7 +844,16 @@
                       [displayExpr]="displayIDBefore"
                       [searchExpr]="['id']"
                       (onValueChanged)="mandatoryUEVAT($event)"
-                    >
+                      itemTemplate="items"
+                      >
+                      <div *dxTemplate="let data of 'items'">
+                        <div
+                          [title]="hintRegimeTva(data)"
+                          [ngClass]="{ 'not-valid': !data.valide }"
+                        >
+                          {{ displayIDBefore(data) }}
+                        </div>
+                      </div>
                       <dx-validator
                         name="{{ 'tiers-clients-regimeTva' | localize }}"
                       >
