@@ -60,6 +60,17 @@ import { EncoursClientPopupComponent } from "../encours-client/encours-client-po
 
 const PREORDRE = "PREORDRE";
 
+enum descriptDetRegimeTva {
+  C = "Client d’un pays de l’UE hors France",
+  O = "Client en Corse",
+  E = "Client d’un pays hors France et hors UE",
+  N = "Client en France (hors Corse) avec entrepôt(s) en France",
+  F = "Client en France avec entrepôt(s) à l’étranger (document des impôts à fournir)",
+  T = "Client de l’UE avec entrepôt(s) dans un pays de l’UE différent du facturé",
+  L = "",
+  G = "TVA locale GB : client de la société BW UK",
+}
+
 @Component({
   selector: "app-client-details",
   templateUrl: "./client-details.component.html",
@@ -544,6 +555,10 @@ export class ClientDetailsComponent
       .then((res) =>
         res.length ? (this.CCexists = true) : (this.CCexists = false),
       );
+  }
+
+  hintRegimeTva(data) {
+    return descriptDetRegimeTva[data?.id] ?? "";
   }
 
   onIfcoChange(params) {
