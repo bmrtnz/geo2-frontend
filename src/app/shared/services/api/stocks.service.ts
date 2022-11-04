@@ -8,14 +8,14 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { map } from "rxjs/operators";
 import { Stock } from "../../models/stock.model";
-import { APIRead, ApiService, RelayPage } from "../api.service";
+import { APIDistinct, APIRead, ApiService, RelayPage } from "../api.service";
 import { functionBody, FunctionResponse } from "./functions.service";
 import { StockMouvementsService } from "./stock-mouvements.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class StocksService extends ApiService implements APIRead {
+export class StocksService extends ApiService implements APIRead, APIDistinct {
   fieldsFilter = /.*\.(?:id|raisonSocial|description)$/i;
 
   constructor(apollo: Apollo, private stockMouvementsService: StockMouvementsService) {
@@ -212,6 +212,10 @@ export class StocksService extends ApiService implements APIRead {
         variables: { ordreId, articleId, societeId, stockId, quantite, commentaire },
         fetchPolicy: "network-only",
       });
+  }
+
+  public getDistinctEntityDatasource(fieldName, descriptionField?, searchExpr?) {
+    return this.getDistinctDatasource("GeoStock", fieldName, descriptionField, searchExpr);
   }
 
 }

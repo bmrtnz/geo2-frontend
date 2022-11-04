@@ -37,10 +37,10 @@
             [showClearButton]="true"
             (valueChange)="onFieldValueChange($event, 'variete')"
             [searchExpr]="['node.key']"
-            [displayExpr]="'node.key'"
+            [displayExpr]="displayCodeBefore"
             valueExpr="node"
           >
-            <dxo-drop-down-options [width]="200"> </dxo-drop-down-options>
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
       </div>
@@ -52,7 +52,7 @@
         <div class="dx-field-value">
           <dx-select-box
             #modesCultureSB
-            [dataSource]="modesCulture"
+            [dataSource]="modesCulture | async"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
             (valueChange)="
@@ -61,9 +61,9 @@
                 'matierePremiere.modeCulture.description'
               )
             "
-            searchExpr="matierePremiere.modeCulture.description"
-            [displayExpr]="'description'"
-            [valueExpr]="'id'"
+            [searchExpr]="['node.key']"
+            [displayExpr]="displayCodeBefore"
+            valueExpr="node"
           >
             <dxo-drop-down-options [width]="250"> </dxo-drop-down-options>
           </dx-select-box>
@@ -76,13 +76,13 @@
         <div class="dx-field-value">
           <dx-select-box
             #emballageSB
-            [dataSource]="emballages"
+            [dataSource]="emballages | async"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
             (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
-            [searchExpr]="['id']"
+            [searchExpr]="['node.key', 'node.description']"
             [displayExpr]="displayCodeBefore"
-            valueExpr="id"
+            valueExpr="node"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-select-box>
@@ -96,15 +96,15 @@
         <div class="dx-field-value">
           <dx-select-box
             #origineSB
-            [dataSource]="origines"
+            [dataSource]="origines | async"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
             (valueChange)="
               onFieldValueChange($event, 'matierePremiere.origine.id')
             "
-            [searchExpr]="['id']"
+            [searchExpr]="['node.key']"
             [displayExpr]="displayCodeBefore"
-            valueExpr="id"
+            valueExpr="node"
           >
             <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
           </dx-select-box>
@@ -119,12 +119,13 @@
         <div class="dx-field-value">
           <dx-select-box
             #bureauAchatSB
-            [dataSource]="bureauxAchat"
+            [dataSource]="bureauxAchat | async"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
             (valueChange)="onFilterChange()"
             [displayExpr]="displayCodeBefore"
-            [searchExpr]="['id']"
+            [searchExpr]="['node.key']"
+            valueExpr="node"
           >
             <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
           </dx-select-box>

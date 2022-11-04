@@ -1,11 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Apollo, gql } from "apollo-angular";
-import ArrayStore from "devextreme/data/array_store";
+import { Apollo } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { map } from "rxjs/operators";
 import { StockArticleAge } from "../../models/stock-article-age.model";
-import { APIRead, ApiService, Pageable, RelayPage } from "../api.service";
+import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
   providedIn: "root",
@@ -172,27 +170,4 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
       }),
     });
   }
-
-  public getDistinctEntityDatasource(fieldName, searchExpr?) {
-    return this.apollo.query<{ distinct: RelayPage<{ count: number, key: string, description: string }> }>({
-      query: gql(this.buildDistinctGraph()),
-      variables: {
-        field: fieldName, // E.g. "espece.id"
-        type: "GeoStockArticleAge",
-        search: searchExpr,
-        pageable: {
-          pageNumber: 0,
-          pageSize: 500,
-        } as Pageable,
-      },
-    }).pipe(
-      map(res => new DataSource({
-        store: new ArrayStore({
-          data: res.data.distinct.edges,
-        }),
-        key: "key",
-      })),
-    );
-  }
-
 }
