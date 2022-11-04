@@ -1802,7 +1802,8 @@
         "allowHeaderFiltering": true,
         "allowSearch": false,
         "visible": true
-      }, {
+      },
+      {
         "visibleIndex": 52,
         "dataField": "ordre.numeroContainer",
         "dataType": "string",
@@ -2897,7 +2898,7 @@
         "dataField": "poidsNetExpedie",
         "dataType": "number",
         "cssClass": "multi-line-header move-right",
-        "width": 40,
+        "width": 50,
         "visible": true
       },
       {
@@ -2905,7 +2906,7 @@
         "dataField": "poidsBrutExpedie",
         "dataType": "number",
         "cssClass": "multi-line-header move-right",
-        "width": 40,
+        "width": 50,
         "visible": true
       },
       {

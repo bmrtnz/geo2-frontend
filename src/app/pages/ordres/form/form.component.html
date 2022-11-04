@@ -935,6 +935,7 @@
                     <app-actions-documents-ordres
                       [ordre]="ordre"
                       [gridEnvois]="gridEnvois"
+                      [gridCommandes]="gridCommandes"
                       [orderConfirmationOnly]="true"
                     ></app-actions-documents-ordres>
                     <!-- Ordre de régularisation -->
@@ -947,14 +948,12 @@
                       (onClick)="onRegulOrderClick()"
                     ></dx-button>
                   </div>
-                  <div (pointerleave)="gridCommandePointerLeave()">
-                    <app-grid-commandes
-                      *ngIf="ordre?.id"
-                      [ordreID]="ordre?.id"
-                      (swapRowArticle)="onArticleManClick($event)"
-                      (priceChange)="refreshRegimeTva.emit()"
-                    ></app-grid-commandes>
-                  </div>
+                  <app-grid-commandes
+                    *ngIf="ordre?.id"
+                    [ordreID]="ordre?.id"
+                    (swapRowArticle)="onArticleManClick($event)"
+                    (priceChange)="refreshRegimeTva.emit()"
+                  ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique

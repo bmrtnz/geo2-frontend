@@ -53,7 +53,10 @@ export class ReservationPopupComponent {
         this.formGroup.get("quantite").value,
         this.formGroup.get("commentaire").value,
       ).subscribe({
-        error: ({ message }: Error) => notify(message, "error", 5000),
+        error: (error: Error) => {
+          console.log(error);
+          notify(error.message.replace("Exception while fetching data (/reservationStock) : ", ""), "error", 7000);
+        },
         complete: () => {
           this.ajoutReservation.emit();
         }

@@ -98,7 +98,25 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       this.actionSheet.instance.show();
     }
   }
+
+  onClickSendAction(e, annulation?) {
+    if (this.gridCommandes) {
+      this.gridCommandes.grid.instance.saveEditData();
+      // Wait until grid has been totally saved
+      const saveInterval = setInterval(() => {
+        if (!this.gridCommandes.grid.instance.hasEditData()) {
+          clearInterval(saveInterval);
+          this.sendAction(e, annulation);
+        }
+      }, 100);
+    } else {
+      this.sendAction(e, annulation);
+    }
+  }
+
   sendAction(e, annulation?) {
+
+    console.log(this.gridCommandes?.grid.instance.hasEditData());
     // On récupère ici le code de l'action:
     this.flux = e;
 
