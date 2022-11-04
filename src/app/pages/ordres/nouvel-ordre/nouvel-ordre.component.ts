@@ -229,11 +229,20 @@ export class NouvelOrdreComponent implements OnInit {
             baseTarifTransit: entrepot.baseTarifTransit
               ? { id: entrepot.baseTarifTransit.id }
               : null,
-            transporteur: { id: entrepot.transporteur?.id ?? "-" },
+            ...(this.societe.id !== "BUK"
+              ? {
+                transporteur: { id: "-" },
+                bassinTransporteur: "",
+                prixUnitaireTarifTransport: 0,
+                transporteurDEVPrixUnitaire: 0,
+              }
+              : {
+                transporteur: { id: entrepot.transporteur?.id ?? "-" },
+                prixUnitaireTarifTransport: entrepot?.prixUnitaireTarifTransport,
+                transporteurDEVPrixUnitaire: entrepot?.prixUnitaireTarifTransport,
+              }),
             transporteurDEVTaux: 1,
             transporteurDEVCode: { id: this.currentCompanyService.getCompany().devise.id },
-            prixUnitaireTarifTransport:
-              entrepot.prixUnitaireTarifTransport,
             assistante,
             commercial,
             typeTransport: entrepot.typeCamion
@@ -243,14 +252,14 @@ export class NouvelOrdreComponent implements OnInit {
               this.authService.currentUser.getSUP()
               ? {
                 assistante: this.authService.currentUser
-                  ?.assistante // Toujours pas
+                  ?.assistante
                   ? {
                     id: this.authService.currentUser
                       ?.assistante?.id,
                   }
                   : assistante,
                 commercial: this.authService.currentUser
-                  ?.commercial // Pareil
+                  ?.commercial
                   ? {
                     id: this.authService.currentUser
                       ?.commercial?.id,

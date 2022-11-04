@@ -96,6 +96,8 @@ export class Ordre extends Model {
   @Field({ format: { type: "currency", precision: 2 }, currency: "EUR" })
   public prixUnitaireTarifTransport?: number;
   @Field({ format: { type: "currency", precision: 2 }, currency: "EUR" })
+  public transporteurDEVPrixUnitaire?: number;
+  @Field({ format: { type: "currency", precision: 2 }, currency: "EUR" })
   public prixUnitaireTarifCourtage?: number;
   @Field() public tauxRemiseFacture: number;
   @Field() public tauxRemiseHorsFacture: number;
