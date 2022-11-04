@@ -392,7 +392,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     // Show/hide left button panel
     this.leftAccessPanel.value =
-      window.sessionStorage.getItem("HideOrderleftPanelView") === "true" ? false : true;
+      window.localStorage.getItem("HideOrderleftPanelView") === "true" ? false : true;
   }
 
   ngOnDestroy() {
@@ -957,7 +957,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   leftPanelChange(e) {
-    window.sessionStorage.setItem("HideOrderleftPanelView", e.value === true ? "false" : "true");
+    window.localStorage.setItem("HideOrderleftPanelView", e.value === true ? "false" : "true");
   }
 
   getFraisClient() {
