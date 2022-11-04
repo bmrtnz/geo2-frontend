@@ -3,7 +3,9 @@
 
 
 ::ng-deep .ajout-articles-histo-popup {
-  max-width: 1320px;
+  &:not(.dx-popup-fullscreen) {
+    max-width: 1320px;
+  }
 
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
@@ -22,6 +24,11 @@
       top: -1px;
       font-size: 22px;
       color: $base-accent;
+    }
+
+    .minimize-article-popup {
+      top: 13px;
+      float: right;
     }
 
     .close-article-popup {

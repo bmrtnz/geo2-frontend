@@ -1,4 +1,5 @@
 <dx-popup
+  [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
   [dragEnabled]="true"
   [closeOnOutsideClick]="true"
@@ -15,8 +16,12 @@
       class="close-article-popup"
       icon="close"
       (onClick)="hidePopup()"
-    >
-    </dx-button>
+    ></dx-button>
+    <dx-button
+      class="minimize-article-popup"
+      icon="material-icons fullscreen_exit"
+      (onClick)="resizePopup()"
+    ></dx-button>
   </div>
 
   <div *dxTemplate="let data of 'content'">
