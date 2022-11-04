@@ -4594,7 +4594,9 @@
         "dataField": "sommeQuantiteInventaire"
       },
       {
-        "dataField": "dateInventaire"
+        "dataField": "dateInventaire",
+        "dataType": "date",
+        "format": "dd-MM-yyyy"
       },
       {
         "dataField": "id"
@@ -4696,7 +4698,9 @@
         "dataField": "sommeQuantiteInventaire"
       },
       {
-        "dataField": "dateInventaire"
+        "dataField": "dateInventaire",
+        "dataType": "date",
+        "format": "dd-MM-yyyy"
       },
       {
         "dataField": "id"

@@ -182,6 +182,7 @@
   <dxi-column
     *ngFor="let column of this.columns[0] | async"
     [dataField]="column.dataField"
+    [format]="column.format"
     [visible]="false"
     [caption]="
       ('comptesPalox-entrepots-' + column.dataField?.split('.').join('-')
@@ -199,6 +200,9 @@
   <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
     <div class="group-text-1">
       {{ getInventoryData(cell.data) }}
+    </div>
+    <div class="group-text-4">
+      {{ inventoryDate(cell.data) }}
     </div>
     <dx-button
       [visible]="getInventoryData(cell.data) !== ''"
@@ -353,6 +357,7 @@
     [dataField]="column.dataField"
     [visible]="false"
     [groupCellTemplate]="column.groupCellTemplate"
+    [format]="column.format"
     [caption]="
       ('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -368,6 +373,9 @@
   <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
     <div class="group-text-1">
       {{ getInventoryData(cell.data) }}
+    </div>
+    <div class="group-text-4">
+      Date inventaire :&nbsp;{{ inventoryDate(cell.data) }}
     </div>
     <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
   </div>
