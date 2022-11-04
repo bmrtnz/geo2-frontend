@@ -622,7 +622,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (res) => {
           this.initializeForm("no-cache");
-          this.actionDocs.sendAction("ORDRE", true);
+          this.actionDocs.onClickSendAction("ORDRE", true);
         },
         error: (error: Error) => {
           console.log(error);
@@ -1071,11 +1071,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.initializeForm("no-cache");
     });
 
-  }
-
-  gridCommandePointerLeave() {
-    return; // Suite soucis divers - à voir
-    this.gridCommandes.grid.instance.saveEditData();
   }
 
 }
