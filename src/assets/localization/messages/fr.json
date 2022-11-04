@@ -1389,6 +1389,7 @@
     "encoursClient-ecPiece": "Facture",
     "encoursClient-cfcRefPiece": "Réf. Client",
     "encoursClient-numImmat": "N° Immatriculation",
+    "encoursClient-numeroContainer": "N° Container",
     "encours-clients-raisonSocial": "Raison sociale client",
     "encours-clients-agrement": "Couv. COFACE",
     "encours-clients-enCoursBlueWhale": "Couv. BW",

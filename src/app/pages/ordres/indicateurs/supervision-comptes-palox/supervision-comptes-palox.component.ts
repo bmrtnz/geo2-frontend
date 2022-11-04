@@ -111,7 +111,11 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       "raisonSocial",
     ]);
     this.entrepot.filter([
-      ["client.societe.id", "=", this.currentCompanyService.getCompany().id]
+      [
+        ["client.societe.id", "=", this.currentCompanyService.getCompany().id],
+        "and",
+        ["client.secteur.id", "=", "PAL"]
+      ]
     ]);
     this.fournisseur = this.fournisseursService.getDataSource_v2([
       "id",
@@ -159,9 +163,6 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         ),
       ),
     );
-
-    this.formGroup.get("entrepot").patchValue({ id: "004874" }); // A VIRER !!!!!!!!!!!!!!!!!!
-
 
     this.formGroup.valueChanges.subscribe((_) => this.toRefresh = true);
     if (

@@ -5947,9 +5947,14 @@
         "visible": true
       },
       {
-        "visibleIndex": 19,
+        "visibleIndex": 20,
         "dataField": "entrepot.code",
         "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "numeroContainer",
+        "visible": false
       }
     ]
   }

@@ -29,6 +29,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   titleMid: string;
   titleEnd: string;
   pulseBtnOn: boolean;
+  popupFullscreen = true;
 
   @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
   @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
@@ -68,6 +69,10 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
 
   hidePopup() {
     this.popup.visible = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 
   clearAndHidePopup() {
