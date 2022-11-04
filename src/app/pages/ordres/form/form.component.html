@@ -953,6 +953,7 @@
                     [ordreID]="ordre?.id"
                     (swapRowArticle)="onArticleManClick($event)"
                     (priceChange)="refreshRegimeTva.emit()"
+                    (transporteurChange)="refreshTransporteur()"
                   ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique

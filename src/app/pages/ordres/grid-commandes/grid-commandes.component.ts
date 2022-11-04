@@ -111,6 +111,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @Output() public fournisseurLigneId: string;
   @Output() public fournisseurCode: string;
   @Output() priceChange = new EventEmitter();
+  @Output() transporteurChange = new EventEmitter();
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
@@ -219,6 +220,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     await this.grid.instance.saveEditData();
     this.grid.instance.endCustomLoading();
     this.loadPanel.enabled = false;
+    this.transporteurChange.emit();
     setTimeout(() => this.reindexRows(), 1000);
   }
 
@@ -260,6 +262,9 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
         if (["ventePrixUnitaire", "achatPrixUnitaire"].includes(name))
           this.priceChange.emit();
+
+        if (["fournisseur"].includes(name))
+          this.transporteurChange.emit();
 
         // map object value
         if (typeof value === "object")

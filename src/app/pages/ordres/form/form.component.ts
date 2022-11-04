@@ -1078,4 +1078,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
+  public refreshTransporteur() {
+    this.ordresService
+      .getOne_v2(this.refOrdre, ["transporteur.id"])
+      .subscribe(res => this.formGroup.get("transporteur").setValue(res.data.ordre.transporteur));
+  }
+
 }
