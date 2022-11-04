@@ -132,6 +132,10 @@ export interface APICount<CountResponse> {
   count(filter?: any[]): Observable<ApolloQueryResult<CountResponse>>;
 }
 
+export interface APIDistinct {
+  getDistinctEntityDatasource(fieldName, descriptionField?, searchExpr?): Observable<DataSource>;
+}
+
 @Injectable()
 export abstract class ApiService implements OnDestroy {
 
@@ -1187,26 +1191,55 @@ export abstract class ApiService implements OnDestroy {
   /**
    * Build a distinct query graph
    */
-  protected buildDistinctGraph() {
+  protected buildDistinctGraph(withDescription = false) {
+    const body = [
+      ...PAGINATION_FIELDS,
+      "edges.node.count",
+      "edges.node.key",
+    ];
+
+    if (withDescription) body.push("edges.node.description");
+
     return ApiService.buildGraph("query", [{
       name: `distinct`,
-      body: [
-        ...PAGINATION_FIELDS,
-        "edges.node.count",
-        "edges.node.key",
-      ],
+      body,
       params: [
         { name: "field", value: "field", isVariable: true },
+        { name: "descriptionField", value: "descriptionField", isVariable: true },
         { name: "type", value: "type", isVariable: true },
         { name: "pageable", value: "pageable", isVariable: true },
         { name: "search", value: "search", isVariable: true },
       ],
     }], [
       { name: "field", type: "String", isOptionnal: false },
+      { name: "descriptionField", type: "String", isOptionnal: !withDescription },
       { name: "type", type: "String", isOptionnal: false },
       { name: "pageable", type: "PaginationInput", isOptionnal: false },
       { name: "search", type: "String", isOptionnal: true },
     ]);
+  }
+
+  protected getDistinctDatasource(type, fieldName, descriptionField?, searchExpr?) {
+    return this.apollo.query<{ distinct: RelayPage<{ count: number, key: string, description: string }> }>({
+      query: gql(this.buildDistinctGraph(descriptionField !== undefined)),
+      variables: {
+        field: fieldName, // E.g. "espece.id"
+        descriptionField: descriptionField ? descriptionField : null,
+        type,
+        search: searchExpr,
+        pageable: {
+          pageNumber: 0,
+          pageSize: 500,
+        } as Pageable,
+      },
+    }).pipe(
+      map(res => new DataSource({
+        store: new ArrayStore({
+          data: res.data.distinct.edges,
+        }),
+        key: "key",
+      })),
+    );
   }
 
 }

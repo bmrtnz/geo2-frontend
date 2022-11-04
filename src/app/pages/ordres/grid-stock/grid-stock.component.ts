@@ -58,10 +58,10 @@ export class GridStockComponent implements OnInit {
   tagFilters: { [path: string]: string[] } = {};
   especes: Observable<DataSource>;
   varietes: Observable<DataSource>;
-  modesCulture: DataSource;
-  emballages: DataSource;
-  origines: DataSource;
-  bureauxAchat: DataSource;
+  modesCulture: Observable<DataSource>;
+  emballages: Observable<DataSource>;
+  origines: Observable<DataSource>;
+  bureauxAchat: Observable<DataSource>;
   trueFalse: any;
   initialSpecy: any;
   allGridFilters: any;
@@ -75,11 +75,6 @@ export class GridStockComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     public clientsService: ClientsService,
-    public especesService: EspecesService,
-    public varietesService: VarietesService,
-    public emballagesService: EmballagesService,
-    public originesService: OriginesService,
-    public bureauxAchatService: BureauxAchatService,
     private stocksService: StocksService,
     private modesCultureService: ModesCultureService,
     public authService: AuthService,
@@ -88,15 +83,7 @@ export class GridStockComponent implements OnInit {
     public gridsService: GridsService,
   ) {
     this.apiService = this.articlesService;
-
-    this.especes = this.stockArticlesAgeService.getDistinctEntityDatasource("espece.id");
-    this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
-    this.origines.filter(["valide", "=", true]);
-    this.varietes = this.stockArticlesAgeService.getDistinctEntityDatasource("variete.id");
-    this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
-    this.emballages.filter(["valide", "=", true]);
-    this.modesCulture = this.modesCultureService.getDataSource();
-    this.modesCulture.filter([["valide", "=", true], "and", ["valide", "<>", false]]);
+    this.especes = this.stocksService.getDistinctEntityDatasource("article.cahierDesCharge.espece.id");
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
@@ -107,10 +94,6 @@ export class GridStockComponent implements OnInit {
     this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
     this.toRefresh = !this.noEspeceSet;
     this.gridTitle = this.localizeService.localize("articles-catalogue-preFilter-stock-title");
-    this.bureauxAchat = this.bureauxAchatService.getDataSource_v2([
-      "id",
-      "raisonSocial",
-    ]);
   }
 
   onFilterChange() {
@@ -135,17 +118,26 @@ export class GridStockComponent implements OnInit {
       this.origineSB.value = null;
 
       if (event) {
-        filter.push(["espece.id", "=", event.key]);
-        this.varietes = this.stockArticlesAgeService.getDistinctEntityDatasource("variete.id", `(espece.id=='${event.key}')`);
-        this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
-        this.emballages.filter(filter);
-        this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
-        this.origines.filter(filter);
+        const especeFilter = `(article.cahierDesCharge.espece.id=='${event.key}')`;
+        const dataToLoad = [
+          { var: "varietes", id: "article.matierePremiere.variete.id", desc: "article.matierePremiere.variete.description" },
+          { var: "emballages", id: "article.emballage.emballage.id", desc: "article.emballage.emballage.description" },
+          { var: "origines", id: "article.matierePremiere.origine.id", desc: "article.matierePremiere.origine.description" },
+          { var: "bureauxAchat", id: "fournisseur.bureauAchat.id", desc: "fournisseur.bureauAchat.raisonSocial" },
+          { var: "modesCulture", id: "article.matierePremiere.modeCulture.id", desc: "article.matierePremiere.modeCulture.description" },
+        ];
+
+        dataToLoad.forEach(data => this[data.var] = this.stocksService.getDistinctEntityDatasource(data.id, data.desc, especeFilter));
       }
     }
   }
 
   displayCodeBefore(data) {
+    if (data?.__typename === "DistinctEdge") {
+      console.log(data);
+      return data ? `${data.node.key} - ${data.node.description}` : null;
+    }
+
     return data
       ? (data.code ? data.code : data.id) +
       " - " +
@@ -162,10 +154,10 @@ export class GridStockComponent implements OnInit {
     this.stocksService.allStockArticleList(
       this.especeSB.value?.key,
       this.varieteSB.value?.key,
-      this.origineSB.value,
-      this.modesCultureSB.value,
-      this.emballageSB.value,
-      this.bureauAchatSB.value?.id
+      this.origineSB.value?.key,
+      this.modesCultureSB.value?.key,
+      this.emballageSB.value?.key,
+      this.bureauAchatSB.value?.key
     ).subscribe((res) => {
       this.datagrid.dataSource = res.data.allStockArticleList;
       this.datagrid.instance.refresh();

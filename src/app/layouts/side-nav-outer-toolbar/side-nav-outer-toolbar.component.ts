@@ -55,6 +55,9 @@ export class SideNavOuterToolbarComponent implements OnInit {
   ngOnInit() {
     this.filterMenuItems();
     this.menuOpened = this.screen.sizes["screen-large"];
+    if (window.localStorage.getItem("HideMainDrawer") === "true") {
+      this.menuOpened = false;
+    }
 
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
@@ -140,6 +143,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
     //     pointerEvent.preventDefault();
     //   }
     // }
+  }
+
+  menuToggle() {
+    this.menuOpened = !this.menuOpened;
+    window.localStorage.setItem("HideMainDrawer", !this.menuOpened ? "true" : "false");
   }
 
   navigationClick() {

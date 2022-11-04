@@ -2,7 +2,7 @@
   class="flux-docs-buttons-container"
   [ngClass]="{ 'order-conf-button': orderConfirmationOnly }"
 >
-  <div *ngFor="let action of actionsFlux.slice(0, visibleActionsNumber - 1)">
+  <div *ngFor="let action of actionsFlux.slice(0, visibleActionsNumber)">
     <dx-button
       class="flux-doc-button"
       type="default"
@@ -11,7 +11,7 @@
         action.visible && (action.id === 'ORDRE' || !orderConfirmationOnly)
       "
       [disabled]="action.disabled"
-      (onClick)="sendAction(action.id)"
+      (onClick)="onClickSendAction(action.id)"
     ></dx-button>
   </div>
   <dx-button
@@ -32,7 +32,7 @@
     target=".flux-doc-button-plus"
     [showCancelButton]="true"
     [usePopover]="true"
-    (onItemClick)="sendAction($event.itemData.id)"
+    (onItemClick)="onClickSendAction($event.itemData.id)"
   ></dx-action-sheet>
   <app-documents-ordres-popup
     [ordre]="ordre"

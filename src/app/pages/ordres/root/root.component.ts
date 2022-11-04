@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injectable, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, HostListener, Injectable, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, convertToParamMap, NavigationStart, ParamMap, Router } from "@angular/router";
 import { LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
@@ -106,6 +106,11 @@ export class RootComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy.next(true);
     this.destroy.unsubscribe();
+  }
+
+  @HostListener("window:unload")
+  windowUnload() {
+    window.sessionStorage.removeItem("surveyRunning");
   }
 
   surveyBlockage() {

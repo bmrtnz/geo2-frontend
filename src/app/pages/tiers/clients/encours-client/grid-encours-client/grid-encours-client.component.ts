@@ -260,6 +260,7 @@ export class GridEncoursClientComponent implements OnChanges {
     ]);
     const filter: any = [["secteur.id", "=", e.value?.id]];
     filter.push("and", ["valide", "=", true]);
+    filter.push("and", ["societe", "=", this.authService.currentCompanyService.getCompany().id]);
     this.clients.filter(filter);
     // We check that this change is coming from the user
     if (!e.event) return;

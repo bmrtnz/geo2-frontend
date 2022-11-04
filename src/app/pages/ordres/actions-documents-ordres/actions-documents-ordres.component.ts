@@ -60,7 +60,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       //  Fake flu_code FICPOA = FICPAL + OLD
       { id: "FICPAO", text: "Editer fiches palettes", visible: true, disabled: false },
       //  Fake flu_code FICPON = FICPAL + NEW
-      { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: true },
+      { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false },
       //  Génère un PDF, Manque le PBL, on revient vers nous plus tard
       { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true },
       //  Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_cmr})
@@ -98,7 +98,25 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       this.actionSheet.instance.show();
     }
   }
+
+  onClickSendAction(e, annulation?) {
+    if (this.gridCommandes) {
+      this.gridCommandes.grid.instance.saveEditData();
+      // Wait until grid has been totally saved
+      const saveInterval = setInterval(() => {
+        if (!this.gridCommandes.grid.instance.hasEditData()) {
+          clearInterval(saveInterval);
+          this.sendAction(e, annulation);
+        }
+      }, 100);
+    } else {
+      this.sendAction(e, annulation);
+    }
+  }
+
   sendAction(e, annulation?) {
+
+    console.log(this.gridCommandes?.grid.instance.hasEditData());
     // On récupère ici le code de l'action:
     this.flux = e;
 

@@ -20,6 +20,7 @@ import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
+import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -56,6 +57,7 @@ import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../r
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ONE_SECOND } from "../../../../basic";
 
 /**
  * Grid with loading toggled by parent
@@ -112,6 +114,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private mruOrdresService: MruOrdresService,
+    public mruEntrepotsService: MruEntrepotsService,
     private tabContext: TabContext,
     public authService: AuthService,
     private localization: LocalizationService,
@@ -120,8 +123,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.handleTabChange()
       .subscribe(event => {
         this.initializeAnchors(event);
-        if (event.status === "in")
-          this.refetchStatut();
+
+        if (event.status === "in") {
+          this.statutInterval = window.setInterval(() => this.refetchStatut(), 5 * ONE_SECOND);
+        } else if (event.status === "out" && this.statutInterval) {
+          window.clearInterval(this.statutInterval);
+        }
       });
     self = this;
   }
@@ -204,6 +211,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private destroy = new Subject<boolean>();
   private anchorsInitialized = false;
+  private statutInterval: number;
 
   public fragments = Fragments;
   public status: string;
@@ -384,7 +392,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     // Show/hide left button panel
     this.leftAccessPanel.value =
-      window.sessionStorage.getItem("HideOrderleftPanelView") === "true" ? false : true;
+      window.localStorage.getItem("HideOrderleftPanelView") === "true" ? false : true;
   }
 
   ngOnDestroy() {
@@ -614,7 +622,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (res) => {
           this.initializeForm("no-cache");
-          this.actionDocs.sendAction("ORDRE", true);
+          this.actionDocs.onClickSendAction("ORDRE", true);
         },
         error: (error: Error) => {
           console.log(error);
@@ -824,6 +832,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           window.sessionStorage.setItem("idOrdre", this.ordre.id);
           window.sessionStorage.setItem("numeroOrdre" + this.ordre.numero, this.ordre.id);
           this.mruOrdresService.saveMRUOrdre(this.ordre); // Save last opened order into MRU table
+          this.mruEntrepotsService.saveMRUEntrepot(this.ordre.entrepot); // Save last opened entrepot into MRU table
 
           this.formGroup.valueChanges.subscribe((_) => {
             this.saveHeaderOnTheFly();
@@ -948,7 +957,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   leftPanelChange(e) {
-    window.sessionStorage.setItem("HideOrderleftPanelView", e.value === true ? "false" : "true");
+    window.localStorage.setItem("HideOrderleftPanelView", e.value === true ? "false" : "true");
   }
 
   getFraisClient() {
@@ -1010,6 +1019,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private refetchStatut() {
+    // No refetch when statut is "FACTURE" or "ANNULE"
+    if (![Statut.FACTURE, Statut.ANNULE].includes(this.ordre?.statut)) {
+      return;
+    }
+
     this.route.paramMap
       .pipe(
         first(),
@@ -1020,8 +1034,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.currentCompanyService.getCompany().id,
             campagneID,
             ["id", "statut"],
+            "network-only"
           )),
-        takeWhile(res => res.loading),
+        takeWhile(res => res.loading, true),
         map(res => res.data.ordreByNumeroAndSocieteAndCampagne),
       )
       .subscribe({
@@ -1061,10 +1076,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.initializeForm("no-cache");
     });
 
-  }
-
-  gridCommandePointerLeave() {
-    this.gridCommandes.grid.instance.saveEditData();
   }
 
 }
