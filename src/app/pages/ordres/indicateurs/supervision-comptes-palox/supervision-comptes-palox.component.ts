@@ -281,7 +281,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   }
 
   getInventoryData(e) {
-    if (this.switchEntity.value) {
+    if ((!this.switchEntity.value && !this.switchType.value) || (this.switchType.value && this.switchEntity.value)) {
       if (e.items?.length)
         return e.items[0].codeFournisseur + " - " + e.items[0].raisonSocialeFournisseur;
       if (e.collapsedItems?.length)
@@ -294,11 +294,34 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     }
     return "";
   }
+
+  inventoryDate(e) {
+    if ((!this.switchEntity.value && !this.switchType.value) || (this.switchType.value && this.switchEntity.value)) {
+      if (e.items?.length)
+        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy");
+      if (e.collapsedItems?.length)
+        return this.dateManagementService.formatDate(e.collapsedItems[0].dateInventaire, "dd-MM-yyyy");
+    } else {
+      if (e.items?.length)
+        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy");
+      if (e.collapsedItems?.length)
+        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy");
+    }
+    return "";
+  }
+
   getSoldeData(e) {
     if (e.items?.length)
       return "Solde : " + e.items[0].sommeQuantiteInventaire;
     if (e.collapsedItems?.length)
       return "Solde : " + e.collapsedItems[0].sommeQuantiteInventaire;
+  }
+
+  getSoldeGeneralData(e) {
+    if (e.items?.length)
+      return "Solde général : " + e.items[0].sommeQuantiteInventaire;
+    if (e.collapsedItems?.length)
+      return "Solde général : " + e.collapsedItems[0].sommeQuantiteInventaire;
   }
 
 }

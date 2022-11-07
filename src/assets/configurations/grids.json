@@ -4748,7 +4748,9 @@
         "dataField": "sommeQuantiteInventaire"
       },
       {
-        "dataField": "dateInventaire"
+        "dataField": "dateInventaire",
+        "dataType": "date",
+        "format": "dd-MM-yyyy"
       },
       {
         "dataField": "id"
@@ -4850,7 +4852,9 @@
         "dataField": "sommeQuantiteInventaire"
       },
       {
-        "dataField": "dateInventaire"
+        "dataField": "dateInventaire",
+        "dataType": "date",
+        "format": "dd-MM-yyyy"
       },
       {
         "dataField": "id"
@@ -4863,6 +4867,7 @@
       {
         "visibleIndex": 1,
         "dataField": "codeClient",
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "groupIndex": 1,
         "sortIndex": 1,
         "sortOrder": "asc",
@@ -4945,6 +4950,7 @@
         "visibleIndex": 1,
         "dataField": "codeFournisseur",
         "groupIndex": 1,
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "sortIndex": 1,
         "sortOrder": "asc",
         "visible": true
