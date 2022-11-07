@@ -1,0 +1,35 @@
+// Var
+@import "~themes/generated/variables.base";
+
+.popup-action {
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &>.dx-button {
+    margin-left: 10px;
+  }
+}
+
+.palox-info-boxes {
+  .dx-field-label {
+    width: 200px !important;
+    margin-right: 20px;
+  }
+
+  .dx-field-value {
+    width: 200px !important;
+  }
+}
+
+.palox-inputs {
+  .dx-field-label {
+    width: 300px !important;
+    margin-right: 20px;
+  }
+
+  .dx-field-value {
+    width: 24% !important;
+  }
+}
