@@ -49,6 +49,10 @@ export class GridsService {
       "grouping",
       { autoExpandAll: !that.datagrid.instance.option("grouping").autoExpandAll }
     );
+    that.datagrid.instance.option(
+      "masterDetail",
+      { autoExpandAll: !that.datagrid.instance.option("masterDetail").autoExpandAll }
+    );
   }
 
 }
