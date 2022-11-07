@@ -26,7 +26,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { EMPTY, from, iif, Observable, of, zip } from "rxjs";
-import { concatMap, concatMapTo, filter, first, last, map, takeWhile } from "rxjs/operators";
+import { concatMap, concatMapTo, debounceTime, filter, finalize, first, last, map, takeWhile } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
@@ -213,13 +213,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   // Reload grid data after external update
   public async update() {
-    this.loadPanel.enabled = true;
     this.grid.instance.beginCustomLoading("");
     const datasource = await this.refreshData(await this.columns.toPromise()).toPromise();
     this.grid.dataSource = datasource;
     await this.grid.instance.saveEditData();
     this.grid.instance.endCustomLoading();
-    this.loadPanel.enabled = false;
     this.transporteurChange.emit();
     setTimeout(() => this.reindexRows(), 1000);
   }
@@ -232,10 +230,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   private handleMutations() {
 
-    setTimeout(() => {
-      this.grid.instance.columnOption("numero", "sortOrder", "desc");
-      this.grid.instance.columnOption("numero", "sortOrder", "asc");
-    }, 100);
+    // setTimeout(() => {
+    //   this.grid.instance.columnOption("numero", "sortOrder", "desc");
+    //   this.grid.instance.columnOption("numero", "sortOrder", "asc");
+    // }, 100);
 
     if (!this.changes.length) return;
 
@@ -427,7 +425,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     const inclusive = (index: number) => index + 1;
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
-    notify(this.localizeService.localize("renumerotation-lignes-ordre"), "info", 3000);
+    this.grid.instance.beginCustomLoading("reindexing");
     const items = datasource.items();
     const lignes = items
       .slice(startIndex, endIndex ? inclusive(endIndex) : items.length)
@@ -436,6 +434,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       .reindex(lignes, ["id", "numero"])
       .pipe(
         concatMap(res => from(res.data.reindex)),
+        finalize(() => this.grid.instance.endCustomLoading()),
       )
       .subscribe(({ id, numero }) => datasource.store().push([{
         key: id,
@@ -658,35 +657,28 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     toIndex: number,
   }) {
 
-    // move selected row
-    self.changes.push({
-      key: self.grid.instance.getKeyByRowIndex(e.fromIndex),
-      type: "update",
-      data: {
-        numero: OrdreLigne.formatNumero(e.toIndex + 1),
-      }
-    });
-
-    // set offseted rows
-    const offset = Math.sign(e.fromIndex - e.toIndex);
-    const range = new Array(Math.abs(e.toIndex - e.fromIndex))
-      .fill(null)
-      .map((_, index) => [
-        index + Math.min(e.fromIndex, e.toIndex) + (offset > 0 ? 0 : 1),
-        index + Math.min(e.fromIndex, e.toIndex) + (offset > 0 ? 2 : 1),
-      ]);
-    range
-      .forEach(([index, value]) => {
-        self.changes.push({
-          key: self.grid.instance.getKeyByRowIndex(index),
-          type: "update",
-          data: {
-            numero: OrdreLigne.formatNumero(value),
-          }
-        });
-      });
-
-    e.component.saveEditData();
+    const source = self.grid.dataSource as DataSource;
+    const sorted = source.items().map(({ id }) => id);
+    sorted.splice(e.toIndex, 0, sorted.splice(e.fromIndex, 1)[0]);
+    self.grid.instance.beginCustomLoading("reindexing");
+    self.ordreLignesService
+      .reindex(sorted, ["id", "numero"])
+      .pipe(
+        concatMap(res => from(res.data.reindex)),
+        finalize(() => {
+          // estimated wait for source changed
+          setTimeout(() => {
+            self.grid.instance.columnOption("numero", "sortOrder", "desc");
+            self.grid.instance.columnOption("numero", "sortOrder", "asc");
+            self.grid.instance.endCustomLoading();
+          }, 2000);
+        }),
+      )
+      .subscribe(({ id, numero }) => source.store().push([{
+        key: id,
+        type: "update",
+        data: { numero },
+      }]));
   }
 
   handleNewArticles() {

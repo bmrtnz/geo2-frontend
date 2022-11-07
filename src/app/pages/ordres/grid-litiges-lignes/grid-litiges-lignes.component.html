@@ -1,3 +1,12 @@
+<dx-button
+  style="margin-right: 46px"
+  class="grid-grouping-button"
+  type="default"
+  icon="material-icons menu_open"
+  hint="{{ 'btn-grouping' | localize }}"
+  (onClick)="gridsService.expandCollapseGroups(this)"
+></dx-button>
+
 <dx-data-grid
   class="dx-card wide-card"
   [dataSource]="dataSource"

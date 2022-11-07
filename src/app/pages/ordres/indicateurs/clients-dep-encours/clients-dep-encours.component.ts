@@ -28,6 +28,7 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { GridsService } from "../../grids.service";
 
 @Component({
   selector: "app-clients-dep-encours",
@@ -49,7 +50,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
 
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("paysValue", { static: false }) paysSB: DxSelectBoxComponent;
-  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   public title: string;
 
@@ -59,6 +60,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     public gridConfiguratorService: GridConfiguratorService,
     public secteursService: SecteursService,
     public personnesService: PersonnesService,
+    public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
     public ordresService: OrdresService,
     public authService: AuthService,
@@ -110,7 +112,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
 
   enableFilters() {
     let filter;
-    this.grid.dataSource = null;
+    this.datagrid.dataSource = null;
     const dataSource = this.paysDepassementService
       .getDataSource(this.indicator.explicitSelection, {
         secteurCode: this.secteurSB.value?.id,
@@ -120,7 +122,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
       filter = [["id", "=", this.paysSB.value.id]];
     }
     if (filter) dataSource.filter(filter);
-    this.grid.dataSource = dataSource;
+    this.datagrid.dataSource = dataSource;
   }
 
   onSecteurChanged(e) {
