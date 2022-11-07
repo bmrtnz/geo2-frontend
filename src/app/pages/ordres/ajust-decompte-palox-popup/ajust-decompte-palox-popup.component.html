@@ -3,6 +3,7 @@
   height="auto"
   [dragEnabled]="true"
   [title]="title"
+  [visible]="visible"
   (onHiding)="onPopupHiding()"
   (onHidden)="onHidden()"
   (onShown)="onShown()"
@@ -71,6 +72,18 @@
               </dx-validator>
             </dx-date-box>
           </div>
+        </div>
+      </div>
+
+      <!-- Commentaire -->
+      <div class="dx-field" *ngIf="purpose === 'adjust'">
+        <div class="dx-field-label text-align-right">{{ 'text-palox-popup-commentaire' | localize }}</div>
+        <div class="dx-field-value">
+          <dx-text-box
+            ngModel
+            #commentBox
+            name="commentaire">
+          </dx-text-box>
         </div>
       </div>
 

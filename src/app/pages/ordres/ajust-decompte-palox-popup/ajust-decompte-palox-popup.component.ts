@@ -27,6 +27,7 @@ export class AjustDecomptePaloxPopupComponent implements OnChanges {
   @ViewChild("entrepotBox", { static: false }) entrepotBox: DxTextBoxComponent;
   @ViewChild("stationBox", { static: false }) stationBox: DxTextBoxComponent;
   @ViewChild("typePaloxBox", { static: false }) typePaloxBox: DxTextBoxComponent;
+  @ViewChild("commentBox", { static: false }) commentBox: DxTextBoxComponent;
 
   @Input() purpose = "";
   @Input() info: any;
@@ -35,9 +36,10 @@ export class AjustDecomptePaloxPopupComponent implements OnChanges {
   @Output() whenHiding = new EventEmitter<any>();
   @Output() whenShown = new EventEmitter<any>();
 
-  title: string;
-  paloxLabel: string;
-  dateLabel: string;
+  public title: string;
+  public paloxLabel: string;
+  public dateLabel: string;
+  public visible: boolean;
 
 
   ngOnChanges() {
@@ -50,16 +52,10 @@ export class AjustDecomptePaloxPopupComponent implements OnChanges {
       this.paloxLabel = this.localizeService.localize("text-palox-popup-nombre-palox");
       this.dateLabel = this.localizeService.localize("text-palox-popup-date-decompte");
     }
-    if (this.dateBox) {
-      this.dateBox.value = new Date();
-      this.entrepotBox.value = this.info.entrepotCode;
-      this.stationBox.value = this.info.stationCode;
-      this.typePaloxBox.value = this.info.paloxCode;
-    }
   }
 
   show() {
-    this.popupComponent.instance.show();
+    this.visible = true;
   }
 
   onPopupHiding() {
@@ -67,22 +63,29 @@ export class AjustDecomptePaloxPopupComponent implements OnChanges {
   }
 
   onHidden() {
+    this.visible = false;
     this.paloxBox.instance.reset();
     this.dateBox.instance.reset();
+    if (this.commentBox) this.commentBox.instance.reset();
   }
 
   onShown() {
     this.whenShown.emit();
     this.paloxBox?.instance.focus();
+    this.dateBox.value = new Date();
+    this.entrepotBox.value = this.info.entrepotCode;
+    this.stationBox.value = this.info.stationCode;
+    this.typePaloxBox.value = this.info.paloxCode;
   }
 
   onSubmit(form: NgForm) {
-    if (typeof form.value.date.getMonth !== "function" || form.value.palox === null) return;
+    if (typeof form.value.date.getMonth !== "function" || form.value.palox === null || form.value.palox === "") return;
     this.whenValidate.emit({
       nbPalox: form.value.palox,
-      date: form.value.date
+      date: form.value.date,
+      commentaire: form.value.commentaire
     });
-    this.popupComponent.instance.hide();
+    this.visible = false;
   }
 
 }

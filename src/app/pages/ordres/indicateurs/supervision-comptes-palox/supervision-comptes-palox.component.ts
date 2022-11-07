@@ -30,6 +30,7 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSwitchComponent } from "devextreme-angular";
+import { AjustDecomptePaloxPopupComponent } from "../../ajust-decompte-palox-popup/ajust-decompte-palox-popup.component";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -66,8 +67,9 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   paloxGrids: QueryList<DxDataGridComponent>;
 
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
-  @ViewChild("switchEntity", { static: false })
-  switchEntity: DxSwitchComponent;
+  @ViewChild("switchEntity", { static: false }) switchEntity: DxSwitchComponent;
+  @ViewChild(AjustDecomptePaloxPopupComponent, { static: false }) ajustDecPopup: AjustDecomptePaloxPopupComponent;
+
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>[];
@@ -86,6 +88,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   private datasources: DataSource[] = [];
   public toRefresh: boolean;
+  public paloxPopupPurpose: string;
+  public info: any;
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
@@ -273,12 +277,28 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     }
   }
 
-  adjust(data) {
-    console.log(data);
+  adjustPalox(data, purpose) {
+    this.paloxPopupPurpose = purpose;
+    data = data.items?.length ? data.items[0] : data.collapsedItems[0];
+    this.info = {
+      entrepotCode: data.codeEntrepot,
+      stationCode: data.codeFournisseur,
+      paloxCode: data.codeEmballage
+    };
+    this.ajustDecPopup.show();
   }
 
-  inventory(data) {
-    console.log(data);
+  onValidatePaloxPopup(e) {
+    console.log(e);
+    ////////////////////////////
+    // On récupère e.nbPalox,
+    // e.date et e.commentaire
+    ////////////////////////////
+    if (this.paloxPopupPurpose === "adjust") {
+      // Function
+    } else {
+      // Function
+    }
   }
 
   getInventoryData(e) {

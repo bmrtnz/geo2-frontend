@@ -204,7 +204,7 @@
       [visible]="getInventoryData(cell.data) !== ''"
       class="small-action-button float-left"
       type="normal"
-      (onClick)="adjust(cell.data)"
+      (onClick)="adjustPalox(cell.data, 'adjust')"
       text="{{ 'ajuster' | localize }}"
     ></dx-button>
     <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
@@ -212,7 +212,7 @@
       [visible]="getInventoryData(cell.data) !== ''"
       class="small-action-button"
       type="normal"
-      (onClick)="inventory(cell.data)"
+      (onClick)="adjustPalox(cell.data, 'inventory')"
       text="{{ 'inventaire' | localize }}"
     ></dx-button>
   </div>
@@ -365,7 +365,7 @@
       [visible]="getInventoryData(cell.data) !== ''"
       class="small-action-button float-left"
       type="normal"
-      (onClick)="adjust(cell.data)"
+      (onClick)="adjustPalox(cell.data, 'adjust')"
       text="{{ 'ajuster' | localize }}"
     ></dx-button>
     <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
@@ -373,7 +373,7 @@
     class="small-action-button"
       [visible]="getInventoryData(cell.data) !== ''"
       type="normal"
-      (onClick)="inventory(cell.data)"
+      (onClick)="adjustPalox(cell.data, 'inventory')"
       text="{{ 'inventaire' | localize }}"
     ></dx-button>
   </div>
@@ -448,3 +448,9 @@
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
 </dx-data-grid>
+
+<app-ajust-decompte-palox-popup
+  [purpose]="paloxPopupPurpose"
+  [info]="info"
+  (whenValidate)="onValidatePaloxPopup($event)"
+></app-ajust-decompte-palox-popup>
