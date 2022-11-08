@@ -128,7 +128,7 @@ export class DocumentsNumService extends ApiService {
   getDataSource(body: Set<string>) {
     return new DataSource({
       store: this.createCustomStore({
-        // key: ["ordreNumero", "typeDocument", "anneeCreation"],
+        key: ["ordreNumero", "typeDocument", "anneeCreation"],
         load: (options: LoadOptions) =>
           iif(() => options.group,
             this.apollo

@@ -33,14 +33,12 @@
   class="dx-card wide-card"
   [remoteOperations]="{
     filtering: true,
-    grouping: true,
+    grouping: false,
     groupPaging: false,
     paging: false,
-    sorting: true,
+    sorting: false,
     summary: false
   }"
-  [dataSource]="items"
-  [keyExpr]="'id'"
   [showBorders]="false"
   [elementAttr]="{ class: 'grid-cq-photos' }"
   [focusedRowEnabled]="true"

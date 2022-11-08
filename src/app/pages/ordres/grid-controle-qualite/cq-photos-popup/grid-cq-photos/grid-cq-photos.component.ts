@@ -8,12 +8,14 @@ import {
 } from "@angular/core";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { AuthService } from "app/shared/services";
+import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-logistique.service";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import { alert, confirm } from "devextreme/ui/dialog";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
@@ -35,6 +37,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./grid-cq-photos.component.scss"]
 })
 export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
+
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -51,6 +54,7 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
     public ordresLogistiquesService: OrdresLogistiquesService,
     public gridConfiguratorService: GridConfiguratorService,
     public dateManagementService: DateManagementService,
+    public documentsNumService: DocumentsNumService,
     public gridUtilsService: GridUtilsService,
     public localization: LocalizationService,
     public historiqueModificationsDetailService: HistoriqueModificationsDetailService,
@@ -76,20 +80,14 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
 
   async enableFilters() {
     if (this?.ordreLigneId) {
-      // const fields = this.columns.pipe(
-      //   map((columns) => columns.map((column) => column.dataField)),
-      // );
-      this.items = [
-        { id: "1", nomFichier: "cqpho_033517_20170414_913277_85519B_002.JPG", ficheCQ: false },
-        { id: "2", nomFichier: "cqpho_033517_20170414_913277_85519B_003.JPG", ficheCQ: false },
-      ];
-      // this.dataSource = this.ordresLogistiquesService.getDataSource_v2(
-      //   await fields.toPromise(),
-      // );
-      // this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
-      // this.datagrid.dataSource = this.dataSource;
-      // this.gridUtilsService.resetGridScrollBar(this.datagrid);
-    } else if (this.datagrid) this.datagrid.dataSource = null;
+      const fields = this.columns.pipe(map(cols => cols.map(column => {
+        return column.dataField;
+      })));
+      const gridFields = await fields.toPromise();
+      const dataSource = this.documentsNumService.getDataSource(new Set(gridFields));
+      dataSource.filter(["ordreLigne.id", "=", this.ordreLigneId]);
+      this.datagrid.dataSource = dataSource;
+    }
   }
 
   onCellPrepared(e) {

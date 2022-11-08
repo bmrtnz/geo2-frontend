@@ -11,6 +11,7 @@ import { environment } from "environments/environment";
 import { alert, confirm } from "devextreme/ui/dialog";
 import { ToggledGrid } from "../form/form.component";
 import { CqPhotosPopupComponent } from "./cq-photos-popup/cq-photos-popup.component";
+import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
 
 @Component({
   selector: "app-grid-controle-qualite",
@@ -32,6 +33,7 @@ export class GridControleQualiteComponent implements ToggledGrid {
   constructor(
     private cqLignesService: CQLignesService,
     public localization: LocalizationService,
+    public documentsNumService: DocumentsNumService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
   ) {
@@ -60,6 +62,9 @@ export class GridControleQualiteComponent implements ToggledGrid {
   }
 
   showPhotosButton(cell) {
+    console.log(cell.data.ordreLigne.id);
+    // const dataSource = this.documentsNumService.count(`ordreLigne.id==${this.ordreLigneId}`);
+
     return true;
   }
 

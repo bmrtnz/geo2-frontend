@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
+import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
@@ -24,6 +25,7 @@ export class CqPhotosPopupComponent implements OnChanges {
 
   constructor(
     private localization: LocalizationService,
+    public documentsNumService: DocumentsNumService,
   ) {
   }
 
@@ -41,7 +43,7 @@ export class CqPhotosPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("encours-client-popup");
+    e.component.content().parentNode.classList.add("photo-cq-popup");
   }
 
   onShown(e) {

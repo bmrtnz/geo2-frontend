@@ -2,7 +2,7 @@
 @import "~themes/generated/variables.base";
 
 
-::ng-deep .encours-client-popup {
+::ng-deep .photo-cq-popup {
   max-width: 1320px;
 
   .dx-template-wrapper.dx-popup-title {
@@ -28,6 +28,7 @@
     .title-end {
       font-size: 12px;
       line-height: 34px;
+      color: #AAA;
     }
 
     .close-popup {

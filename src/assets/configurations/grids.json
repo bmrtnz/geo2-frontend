@@ -4979,18 +4979,30 @@
       },
       {
         "visibleIndex": 4,
-        "dataField": "fake1",
+        "dataField": "numeroOrdre",
         "showIncolumnChooser": false,
         "cellTemplate": "photoButtonsTemplate",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "ficheCQ",
+        "dataField": "flagPDF",
         "dataType": "boolean",
         "allowEditing": true,
         "width": 70,
         "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "dataField": "ordreNumero",
+        "visible": true
+      },
+      {
+        "dataField": "anneeCreation",
+        "visible": true
+      },
+      {
+        "dataField": "typeDocument",
         "visible": true
       }
     ]
