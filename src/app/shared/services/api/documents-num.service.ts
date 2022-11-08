@@ -152,6 +152,11 @@ export class DocumentsNumService extends ApiService {
               ),
           ).toPromise(),
         byKey: key => this.getOne(key, body).toPromise(),
+        update: (key, values) => {
+          console.log(key, values);
+          const variables = { documentNum: { id: key, ...values } };
+          return this.watchSaveQuery({ variables }).toPromise();
+        },
       }),
     });
   }

@@ -44,7 +44,8 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   private gridConfig: Promise<GridConfig>;
   public env = environment;
   public items: any[];
-  public currentId: string;
+  public currentData: any;
+  public gridFields: any;
   @Input() public ordreLigneId: string;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("path", { static: false }) path: DxTextBoxComponent;
@@ -83,8 +84,8 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
       const fields = this.columns.pipe(map(cols => cols.map(column => {
         return column.dataField;
       })));
-      const gridFields = await fields.toPromise();
-      const dataSource = this.documentsNumService.getDataSource(new Set(gridFields));
+      this.gridFields = await fields.toPromise();
+      const dataSource = this.documentsNumService.getDataSource(new Set(this.gridFields));
       dataSource.filter(["ordreLigne.id", "=", this.ordreLigneId]);
       this.datagrid.dataSource = dataSource;
     }
@@ -99,7 +100,7 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
 
   onCellClick(e) {
     if (!e.data) return;
-    this.currentId = e.data.id;
+    this.currentData = e.data;
   }
 
   copyAllPhotos() {
@@ -115,9 +116,21 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   }
 
   saveComment(comment) {
-    // Implémenter la sauvegarde du commentaire
-    // Geo1 : GEO_DOCNUM"."COMMENTAIRE" saisie libre (255 caractères max)
-    // Avec this.currentId comme id de ligne
+    const documentNum = this.currentData;
+    documentNum.commentaire = comment;
+    documentNum.ordreLigne = { id: documentNum.ordreLigne.id };
+    this.documentsNumService
+      .save(documentNum, new Set(this.gridFields))
+      .subscribe({
+        next: () => {
+          notify("Commentaire mis à jour", "success", 7000);
+        },
+        error: (err) => {
+          notify("Erreur sauvegarde commentaire", "error", 7000);
+          console.log(err);
+        }
+      });
+
   }
 
 }

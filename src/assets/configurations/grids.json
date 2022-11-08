@@ -4989,12 +4989,18 @@
         "visible": true
       },
       {
+        "visibleIndex": 8,
+        "dataField": "commentaire",
+        "visible": false
+      },
+      {
         "dataField": "ordreNumero",
         "showIncolumnChooser": false,
         "visible": false
       },
       {
         "dataField": "anneeCreation",
+        "showIncolumnChooser": false,
         "visible": false
       },
       {
@@ -5004,10 +5010,32 @@
       },
       {
         "dataField": "id",
+        "showIncolumnChooser": false,
         "visible": false
       },
       {
-        "dataField": "commentaire",
+        "dataField": "moisCreation",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nomFichierComplet",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nomPartage",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.id",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "statut",
+        "showIncolumnChooser": false,
         "visible": false
       }
     ]
