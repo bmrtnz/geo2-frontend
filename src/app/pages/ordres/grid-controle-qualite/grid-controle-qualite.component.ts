@@ -54,18 +54,26 @@ export class GridControleQualiteComponent implements ToggledGrid {
   }
 
   onContentReady(e) {
+
     this.gridRowsTotal = this.dataGrid.instance.getVisibleRows()?.length;
+
+    // Counting photos per row and display corresponding text in the button
+    this.dataGrid.instance.getVisibleRows()
+      .forEach(c => {
+        const button = document.getElementById("photo-button-" + c.key) as HTMLElement;
+        this.documentsNumService.count(`ordreLigne.id==${c.data.ordreLigne.id}`).subscribe(numb => {
+          if (numb) {
+            const toDisplay = (numb > 1) ? "photos-with-number" : "photo";
+            button.querySelector(".dx-button-text").textContent =
+              this.localization.localize(toDisplay).replace("&", numb.toString());
+            button.classList.remove("visibility-hidden");
+          }
+        });
+      });
   }
 
   onToggling(toggled: boolean) {
     toggled ? this.enableFilters() : (this.dataSource = null);
-  }
-
-  showPhotosButton(cell) {
-    console.log(cell.data.ordreLigne.id);
-    // const dataSource = this.documentsNumService.count(`ordreLigne.id==${this.ordreLigneId}`);
-
-    return true;
   }
 
   openPhotos(cell) {

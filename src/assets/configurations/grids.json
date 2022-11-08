@@ -4886,7 +4886,6 @@
       {
         "visibleIndex": 14,
         "dataField": "description",
-        "cssClass": "no-padding",
         "showInColumnChooser": true,
         "visible": true
       },
@@ -4897,6 +4896,7 @@
         "showInColumnChooser": false,
         "allowSearch": false,
         "cellTemplate": "CQPhotoButtonsTemplate",
+        "width": 125,
         "visible": true
       },
       {
@@ -4968,11 +4968,6 @@
   "photos-controle-qualite": {
     "columns": [
       {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "visible": false
-      },
-      {
         "visibleIndex": 2,
         "dataField": "nomFichier",
         "visible": true
@@ -4995,15 +4990,25 @@
       },
       {
         "dataField": "ordreNumero",
-        "visible": true
+        "showIncolumnChooser": false,
+        "visible": false
       },
       {
         "dataField": "anneeCreation",
-        "visible": true
+        "visible": false
       },
       {
         "dataField": "typeDocument",
-        "visible": true
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "dataField": "commentaire",
+        "visible": false
       }
     ]
   },

@@ -39,6 +39,10 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
+  <dxo-editing
+    [allowUpdating]="true"
+  >
+  </dxo-editing>
   <dxo-state-storing
     [enabled]="true"
     type="custom"
@@ -91,10 +95,11 @@
     >
     </dx-button>
     <dx-button
-      class="small-CQ-button photos"
+      [id]="'photo-button-' + cell.key"
+      class="small-CQ-button photos visibility-hidden"
       type="default"
       [focusStateEnabled]="false"
-      [visible]="showPhotosButton(cell)"
+      [visible]="true"
       [text]="this.localization.localize('photos')"
       (onClick)="openPhotos(cell)"
     ></dx-button>
@@ -114,7 +119,7 @@
       type="default"
       icon="material-icons search"
       [focusStateEnabled]="false"
-      [visible]="showPhotosButton(cell)"
+      [visible]="true"
       (onClick)="openPDF(cell)"
     ></dx-button>
   </div>
