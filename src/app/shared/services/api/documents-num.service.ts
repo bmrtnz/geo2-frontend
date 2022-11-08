@@ -6,7 +6,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import FileSystemItem from "devextreme/file_management/file_system_item";
 import { from, iif } from "rxjs";
-import { filter, map, mergeMap, tap, toArray } from "rxjs/operators";
+import { filter, map, mergeMap, toArray } from "rxjs/operators";
 import { ApiService, DistinctInfo, RelayPage } from "../api.service";
 import { FileManagerService } from "../file-manager.service";
 
@@ -18,6 +18,10 @@ export class DocumentsNumService extends ApiService {
   constructor(apollo: Apollo, private fm: FileManagerService) {
     super(apollo, DocumentNum);
     this.gqlKeyType = "GeoDocumentNumKeyInput";
+  }
+
+  static getCacheID(data: Partial<DocumentNum>) {
+    return `GeoDocumentNum:${data.ordreNumero}-${data.typeDocument}-${data.anneeCreation}`;
   }
 
   getOne(
@@ -139,14 +143,12 @@ export class DocumentsNumService extends ApiService {
               }),
             this.apollo
               .query<{ allDocumentNum: RelayPage<DocumentNum> }>({
-                query: gql(this.buildGetPageGraph(body)),
+                query: gql(this.buildGetPageGraph(new Set(["ordreNumero", "typeDocument", "anneeCreation", ...body]))),
                 variables: this.mapLoadOptionsToVariables(options),
                 fetchPolicy: "cache-first",
               })
               .pipe(
-                mergeMap(res => from(res.data.allDocumentNum.edges)),
-                map(edge => edge.node),
-                toArray(),
+                map(res => this.asInstancedListCount(res.data.allDocumentNum)),
               ),
           ).toPromise(),
         byKey: key => this.getOne(key, body).toPromise(),
