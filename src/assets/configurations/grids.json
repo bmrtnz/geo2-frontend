@@ -5020,12 +5020,12 @@
       },
       {
         "dataField": "nomFichierComplet",
-        "showIncolumnChooser": false,
+        "showIncolumnChooser": true,
         "visible": false
       },
       {
         "dataField": "nomPartage",
-        "showIncolumnChooser": false,
+        "showIncolumnChooser": true,
         "visible": false
       },
       {
@@ -5035,7 +5035,19 @@
       },
       {
         "dataField": "statut",
-        "showIncolumnChooser": false,
+        "showIncolumnChooser": true,
+        "visible": false
+      },
+      {
+        "dataField": "cqPhoto.uri",
+        "visible": false
+      },
+      {
+        "dataField": "cqPhoto.type",
+        "visible": false
+      },
+      {
+        "dataField": "cqPhoto.isPresent",
         "visible": false
       }
     ]

@@ -4,6 +4,13 @@
 
 ::ng-deep .grid-cq-photos {
 
+  // Override focus blue color from grid
+  .small-CQ-button.download-photos.dx-button.dx-button-success.dx-button-mode-contained.dx-widget.dx-button-has-icon.dx-button-has-text {
+    .dx-icon {
+      color: #FFF !important;
+    }
+  }
+
   .pathText {
     width: 15% !important;
   }
@@ -27,7 +34,7 @@
       }
     }
 
-    &.copy-photos {
+    &.download-photos {
       margin-right: 5px;
     }
 

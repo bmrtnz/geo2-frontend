@@ -46,6 +46,8 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   public items: any[];
   public currentData: any;
   public gridFields: any;
+  public currentImgPath: string;
+
   @Input() public ordreLigneId: string;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("path", { static: false }) path: DxTextBoxComponent;
@@ -91,9 +93,6 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  onCellPrepared(e) {
-  }
-
   public refreshGrid() {
     this.datagrid.instance.refresh();
   }
@@ -103,12 +102,19 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
     this.currentData = e.data;
   }
 
-  copyAllPhotos() {
-    console.log("copyAllPhotos");
+  onFocusedRowChanged(e) {
+    if (!e.row?.data) return;
+    this.currentImgPath = e.row.data.nomFichierComplet;
   }
 
-  copyPhoto(cell) {
-    console.log("copyPhoto");
+  downloadAllPhotos() {
+    console.log("downloadAllPhotos");
+    // this.documentsNumService.downloadPhotos(`numeroOrdre==${monNumeroOrdre}`)
+  }
+
+  downloadPhoto(cell) {
+    console.log("downloadPhoto");
+    // console.log(this.documentsNumService.downloadPhotos(`ordreLigne.id=="807A7B"`));
   }
 
   commentPhoto() {

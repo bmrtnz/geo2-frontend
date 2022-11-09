@@ -93,7 +93,7 @@ export class GridControleQualiteComponent implements ToggledGrid {
     console.log("open PDF");
   }
 
-  copyPhotosClick() {
+  downloadPhotosClick() {
     // Procédure copie photos
     const nbPhotos = 0;
     const directory = "fake";
