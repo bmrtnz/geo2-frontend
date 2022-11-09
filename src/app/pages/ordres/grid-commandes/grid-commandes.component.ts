@@ -404,11 +404,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               "proprietaireMarchandise.listeExpediteurs",
             ]
           ], this.ordreLignesService.mapDXFilterToRSQL([
-            ["ordre.id", "=", this.ordreID],
-            "and",
-            ["valide", "=", true],
-            "and",
-            ["article.id", "isnotnull", "null"],
+            ["ordre.id", "=", this.ordreID]
           ]))),
         );
   }
