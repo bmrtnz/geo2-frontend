@@ -122,9 +122,13 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   }
 
   saveComment(comment) {
-    const documentNum = this.currentData;
-    documentNum.commentaire = comment;
-    documentNum.ordreLigne = { id: documentNum.ordreLigne.id };
+    const documentNum = {
+      ordreNumero: this.currentData.ordreNumero,
+      typeDocument: this.currentData.typeDocument,
+      anneeCreation: this.currentData.anneeCreation,
+      commentaire: comment
+    };
+
     this.documentsNumService
       .save(documentNum, new Set(this.gridFields))
       .subscribe({
