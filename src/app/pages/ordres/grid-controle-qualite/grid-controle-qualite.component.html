@@ -16,7 +16,6 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onContentReady)="onContentReady($event)"
-  (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Contrôle Qualité',
@@ -91,7 +90,12 @@
       type="default"
       [focusStateEnabled]="false"
       [text]="this.localization.localize('CQ')"
-      (onClick)="openCQReport(cell)"
+      (onClick)="
+      openCQTechReport(
+        'ControleQualite-photos-cqTechnique',
+        cell.data.cqTechnique
+      )
+    "
     >
     </dx-button>
     <dx-button
@@ -111,7 +115,7 @@
       type="default"
       [focusStateEnabled]="false"
       [text]="this.localization.localize('créer')"
-      (onClick)="createPDF(cell)"
+      (onClick)="onClickCreateCQClientReport(cell)"
     >
     </dx-button>
     <dx-button
@@ -120,13 +124,14 @@
       icon="material-icons search"
       [focusStateEnabled]="false"
       [visible]="true"
-      (onClick)="openPDF(cell)"
+      (onClick)="openCQClientReport(cell)"
     ></dx-button>
   </div>
 
 </dx-data-grid>
 
-<app-cq-photos-popup
-  [ordreLigne]="ordreLigne"
->
-</app-cq-photos-popup>
+<app-cq-photos-popup [ordreLigne]="ordreLigne"></app-cq-photos-popup>
+<app-view-document-popup
+  [(visible)]="this.reportVisible"
+  [document]="this.currentReport"
+></app-view-document-popup>

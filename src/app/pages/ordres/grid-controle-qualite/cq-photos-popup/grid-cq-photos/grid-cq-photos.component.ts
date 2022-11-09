@@ -3,17 +3,14 @@ import {
   Component,
   Input,
   OnChanges,
-  SimpleChanges,
   ViewChild
 } from "@angular/core";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { AuthService } from "app/shared/services";
 import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
-import { FunctionsService } from "app/shared/services/api/functions.service";
 import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-logistique.service";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { alert, confirm } from "devextreme/ui/dialog";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
@@ -47,6 +44,7 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   public currentData: any;
   public gridFields: any;
   public currentImgPath: string;
+  public currentImgComment: string;
 
   @Input() public ordreLigneId: string;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -75,6 +73,8 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges() {
+    this.currentImgComment = "";
+    this.currentImgPath = "";
     this.enableFilters();
   }
 
@@ -88,7 +88,11 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
       })));
       this.gridFields = await fields.toPromise();
       const dataSource = this.documentsNumService.getDataSource(new Set(this.gridFields));
-      dataSource.filter(["ordreLigne.id", "=", this.ordreLigneId]);
+      dataSource.filter([
+        ["ordreLigne.id", "=", this.ordreLigneId],
+        "and",
+        ["typeDocument", "=", "CQPHO"]
+      ]);
       this.datagrid.dataSource = dataSource;
     }
   }
@@ -104,17 +108,19 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
 
   onFocusedRowChanged(e) {
     if (!e.row?.data) return;
-    this.currentImgPath = e.row.data.nomFichierComplet;
+    this.currentImgPath = e.row.data.cqPhoto.uri;
+    if (!this.currentImgPath) this.currentImgPath = "assets/images/BW-couleur-blanc.png";
+    this.currentImgComment = e.row.data.commentaire;
   }
 
   downloadAllPhotos() {
     console.log("downloadAllPhotos");
-    // this.documentsNumService.downloadPhotos(`numeroOrdre==${monNumeroOrdre}`)
+    this.documentsNumService.downloadPhotos(`ordreLigne.id==${this.ordreLigneId}`);
   }
 
   downloadPhoto(cell) {
     console.log("downloadPhoto");
-    // console.log(this.documentsNumService.downloadPhotos(`ordreLigne.id=="807A7B"`));
+    this.documentsNumService.downloadPhotos(`ordreNumero==${cell.data.ordreNumero}`);
   }
 
   commentPhoto() {
@@ -133,7 +139,9 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
       .save(documentNum, new Set(this.gridFields))
       .subscribe({
         next: () => {
-          notify("Commentaire mis à jour", "success", 7000);
+          this.refreshGrid();
+          this.currentImgComment = comment;
+          notify("Commentaire mis à jour", "success", 2000);
         },
         error: (err) => {
           notify("Erreur sauvegarde commentaire", "error", 7000);

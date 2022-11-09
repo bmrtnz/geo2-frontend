@@ -4962,6 +4962,25 @@
         "dataField": "ordreLigne.ordre.numero",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "cqTechnique.isPresent",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "cqTechnique.uri",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "cqTechnique.type",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "referenceCQC",
+        "visible": false
       }
     ]
   },

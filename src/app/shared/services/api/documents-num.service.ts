@@ -82,6 +82,7 @@ export class DocumentsNumService extends ApiService {
     typeDocument: DocumentNum["typeDocument"],
     anneeCreation: DocumentNum["anneeCreation"],
   }) {
+    console.log(id);
     return this.apollo
       .mutate<{ deleteDocumentNum: boolean }>({
         mutation: gql(this.buildDeleteGraph(this.gqlKeyType)),

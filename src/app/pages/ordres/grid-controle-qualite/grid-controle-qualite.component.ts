@@ -9,6 +9,9 @@ import { DxButtonComponent, DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { alert, confirm } from "devextreme/ui/dialog";
+import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
+import Document from "../../../shared/models/document.model";
+import notify from "devextreme/ui/notify";
 import { ToggledGrid } from "../form/form.component";
 import { CqPhotosPopupComponent } from "./cq-photos-popup/cq-photos-popup.component";
 import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
@@ -29,6 +32,8 @@ export class GridControleQualiteComponent implements ToggledGrid {
   public columnChooser = environment.columnChooser;
   public detailedFields: GridColumn[];
   public gridRowsTotal: number;
+  public reportVisible: boolean;
+  public currentReport: ViewDocument;
 
   constructor(
     private cqLignesService: CQLignesService,
@@ -50,9 +55,6 @@ export class GridControleQualiteComponent implements ToggledGrid {
     }
   }
 
-  onCellPrepared(e) {
-  }
-
   onContentReady(e) {
 
     this.gridRowsTotal = this.dataGrid.instance.getVisibleRows()?.length;
@@ -61,7 +63,9 @@ export class GridControleQualiteComponent implements ToggledGrid {
     this.dataGrid.instance.getVisibleRows()
       .forEach(c => {
         const button = document.getElementById("photo-button-" + c.key) as HTMLElement;
-        this.documentsNumService.count(`ordreLigne.id==${c.data.ordreLigne.id}`).subscribe(numb => {
+        this.documentsNumService.count(
+          `ordreLigne.id==${c.data.ordreLigne.id} and typeDocument==CQPHO`
+        ).subscribe(numb => {
           if (numb) {
             const toDisplay = (numb > 1) ? "photos-with-number" : "photo";
             button.querySelector(".dx-button-text").textContent =
@@ -76,33 +80,95 @@ export class GridControleQualiteComponent implements ToggledGrid {
     toggled ? this.enableFilters() : (this.dataSource = null);
   }
 
+  downloadPhotosClick() {
+    console.log("downloadPhotosClick");
+    this.documentsNumService.downloadPhotos(`numeroOrdre==${this.ordre.numero}`);
+  }
+
   openPhotos(cell) {
     this.ordreLigne = cell.data.ordreLigne;
     this.photosPopup.visible = true;
   }
 
-  openCQReport(cell) {
-    console.log("open CQ");
+  openCQTechReport(titleKey: string, document: Document) {
+    if (!document || !document.isPresent) {
+      notify("Désolé, contrôle CQ technique non accessible", "error");
+      return;
+    }
+    this.currentReport = {
+      title: this.localization.localize(titleKey),
+      document,
+    };
+    this.reportVisible = true;
   }
 
-  createPDF(cell) {
-    console.log("create PDF");
+  onClickCreateCQClientReport(cell) {
+    // Checks if QC report already exists
+    this.documentsNumService.count(
+      `ordreLigne.id==${cell.data.ordreLigne.id} and typeDocument=='CQXSL' and id==${cell.data.referenceCQC}`
+    ).subscribe(report => {
+      if (report) {
+        confirm(
+          this.localization.localize("text-popup-CQ-creation-PDF-existe"),
+          this.localization.localize("text-popup-CQ-creation-PDF")
+        ).then(res => {
+          if (res) {
+            this.documentsNumService
+              .deleteByIdAndOrdreLigneAndTypeDocument(
+                cell.data.referenceCQC,
+                { id: cell.data.ordreLigne.id },
+                "CQXSL"
+              )
+              .subscribe({
+                next: () => {
+                  this.createCQClientReport(cell.data);
+                },
+                error: (err) => {
+                  notify("Erreur suppression ancien rapport CQ", "error", 7000);
+                  console.log(err);
+                }
+              });
+          }
+        });
+      } else {
+        this.createCQClientReport(cell.data);
+      }
+    });
   }
 
-  openPDF(cell) {
+  createCQClientReport(data) {
+    const d = new Date();
+
+    const documentNum = {
+      id: data.referenceCQC,
+      numeroOrdre: data.ordreLigne.ordre.numero,
+      ordreLigne: { id: data.ordreLigne.id },
+      typeDocument: "CQXSL",
+      anneeCreation: d.getFullYear().toString(),
+      moisCreation: ("0" + (d.getMonth() + 1)).slice(-2),
+      flagPDF: false,
+      statut: 1
+    };
+
+    this.documentsNumService
+      .save(documentNum, new Set(["ordreNumero", "typeDocument", "anneeCreation"]))
+      .subscribe({
+        next: () => {
+          notify(
+            this.localization.localize("text-popup-CQ-creation-PDF-deposee")
+            , "success",
+            3000);
+        },
+        error: (err) => {
+          notify("Erreur création rapport CQ", "error", 7000);
+          console.log(err);
+        }
+      });
+
+  }
+
+  openCQClientReport(cell) {
     console.log("open PDF");
-  }
-
-  downloadPhotosClick() {
-    // Procédure copie photos
-    const nbPhotos = 0;
-    const directory = "fake";
-    alert(
-      this.localization.localize("copy-photo-finished")
-        .replace("&P", nbPhotos.toString())
-        .replace("&R", directory),
-      this.localization.localize("controle-qualité")
-    );
   }
 
 }

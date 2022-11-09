@@ -11,10 +11,6 @@
     }
   }
 
-  .pathText {
-    width: 15% !important;
-  }
-
   .small-CQ-button {
     position: relative;
     height: 18px;
@@ -40,4 +36,18 @@
 
   }
 
+}
+
+::ng-deep .photo-container {
+  position: relative;
+  max-width: 100%;
+  background-color: #F5F5F5;
+
+  img {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 100%;
+    max-width: 100%;
+  }
 }
