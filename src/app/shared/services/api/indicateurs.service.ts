@@ -6,6 +6,8 @@ import { CurrentCompanyService } from "../current-company.service";
 
 export enum Indicateur {
   ClientsDepassementEncours = "ClientsDepassementEncours",
+  OrdresNonConfirmes = "OrdresNonConfirmes",
+  PlanningDepart = "PlanningDepart",
 }
 
 @Injectable({

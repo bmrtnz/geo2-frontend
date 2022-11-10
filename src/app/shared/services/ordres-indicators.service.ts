@@ -52,7 +52,6 @@ export class Indicator implements dxButtonOptions {
   loading: boolean;
   withCount?: boolean;
   fetchCount?: (dxFilter?: any[]) => Observable<ApolloQueryResult<any>>;
-  useCountV2?: boolean;
   dataSource?: DataSource;
   regExpSelection?: RegExp;
   explicitSelection?: Array<string>;
@@ -117,7 +116,6 @@ const indicators: Indicator[] = [
   },
   {
     id: Indicateur.ClientsDepassementEncours,
-    useCountV2: true,
     enabled: true,
     withCount: true,
     parameter: "Clients",
@@ -147,7 +145,7 @@ const indicators: Indicator[] = [
     select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial|campagne\.id)$/,
   },
   {
-    id: "OrdresNonConfirmes",
+    id: Indicateur.OrdresNonConfirmes,
     enabled: true,
     withCount: true,
     parameter: "Ordres",
@@ -251,7 +249,7 @@ const indicators: Indicator[] = [
     warningIcon: "",
   },
   {
-    id: "PlanningDepart",
+    id: Indicateur.PlanningDepart,
     enabled: true,
     withCount: true,
     parameter: "Planning",
@@ -487,7 +485,7 @@ export class OrdresIndicatorsService {
       }
 
       // Ordres non confirmés
-      if (instance.id === "OrdresNonConfirmes") {
+      if (instance.id === Indicateur.OrdresNonConfirmes) {
         instance.dataSource = this.ordresService.getDataSource_v2(instance.explicitSelection);
         instance.filter = [
           ...instance.filter,
@@ -568,7 +566,7 @@ export class OrdresIndicatorsService {
       }
 
       // Planning departs
-      if (instance.id === "PlanningDepart") {
+      if (instance.id === Indicateur.PlanningDepart) {
         const currDateTime24 = new Date();
         currDateTime24.setHours(23, 59, 59, 999);
         instance.detailedFields =
@@ -649,7 +647,7 @@ export class OrdresIndicatorsService {
 
   public getCounts() {
     const indicatorsID = this.getIndicators()
-      .filter(i => i.useCountV2)
+      .filter(i => i.withCount)
       .map(i => i.id as Indicateur);
     return this.indicateursService.countByIndicators(...indicatorsID);
   }
