@@ -168,7 +168,12 @@ export abstract class ApiService implements OnDestroy {
    */
   static buildGraph(
     type: "query" | "mutation",
-    operations: { name: string, body?: Array<string> | Set<string>, params: { name: string, value: any, isVariable: boolean }[] }[],
+    operations: {
+      name: string,
+      body?: Array<string> | Set<string>,
+      alias?: string,
+      params: { name: string, value: any, isVariable: boolean }[],
+    }[],
     variables: { name: string, type: string, isOptionnal: boolean }[] = [],
     alias = operations?.[0].name.ucFirst(),
   ) {
@@ -181,7 +186,7 @@ export abstract class ApiService implements OnDestroy {
     const mapPaths = pths => Model.getGQL(pths).toGraphQL();
 
     const mapOperations = ops => ops
-      .map(o => `${o.name}(${mapParams(o.params)}) ${o?.body ? `{${mapPaths(o?.body)}}` : ""}`);
+      .map(o => `${o.alias ? `${o.alias}: ` : ""} ${o.name}(${mapParams(o.params)}) ${o?.body ? `{${mapPaths(o?.body)}}` : ""}`);
 
     return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
   }
