@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import { map } from "rxjs/operators";
 import { ApiService } from "../api.service";
+import { CurrentCompanyService } from "../current-company.service";
 
 export enum Indicateur {
   ClientsDepassementEncours = "ClientsDepassementEncours",
@@ -14,6 +15,7 @@ export class IndicateursService {
 
   constructor(
     private apollo: Apollo,
+    private currentCompanyService: CurrentCompanyService,
   ) { }
 
   /**
@@ -24,6 +26,7 @@ export class IndicateursService {
       query: gql(this.buildCountsGraph(...indicateurs)),
       fetchPolicy: "network-only",
       variables: {
+        societeCode: this.currentCompanyService.getCompany().id,
         ...indicateurs.reduce((acm, crt) => ({ ...acm, [crt]: crt }), {}),
       },
     }).pipe(map(res => res.data));
@@ -36,10 +39,14 @@ export class IndicateursService {
         alias,
         params: [
           { name: "indicateur", value: alias, isVariable: true },
+          { name: "societeCode", value: "societeCode", isVariable: true },
         ],
       })
-    ), indicateurs.map(name =>
+    ), indicateurs.map((name: string) =>
       ({ name, type: "Indicateur", isOptionnal: false })
-    ), "CountByIndicators");
+    ).concat([
+      { name: "societeCode", type: "String", isOptionnal: false },
+    ]),
+      "CountByIndicators");
   }
 }
