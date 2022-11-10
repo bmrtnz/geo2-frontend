@@ -10,6 +10,8 @@ export enum Indicateur {
   PlanningDepart = "PlanningDepart",
 }
 
+export type IndicateurCountResponse = { [key in keyof typeof Indicateur]: number };
+
 @Injectable({
   providedIn: "root"
 })
@@ -24,7 +26,7 @@ export class IndicateursService {
    * Request entities count from specified indicators
    */
   public countByIndicators(...indicateurs: Indicateur[]) {
-    return this.apollo.query<{ [key in keyof typeof Indicateur]: number }>({
+    return this.apollo.query<IndicateurCountResponse>({
       query: gql(this.buildCountsGraph(...indicateurs)),
       fetchPolicy: "network-only",
       variables: {
