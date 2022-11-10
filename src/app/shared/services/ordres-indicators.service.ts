@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
 import { Role } from "../models";
 import { Model, ModelFieldOptions } from "../models/model";
 import Ordre from "../models/ordre.model";
+import { Indicateur, IndicateursService } from "./api/indicateurs.service";
 import {
   CountResponse as CountResponseOrdre,
   Operation,
@@ -51,6 +52,7 @@ export class Indicator implements dxButtonOptions {
   loading: boolean;
   withCount?: boolean;
   fetchCount?: (dxFilter?: any[]) => Observable<ApolloQueryResult<any>>;
+  useCountV2?: boolean;
   dataSource?: DataSource;
   regExpSelection?: RegExp;
   explicitSelection?: Array<string>;
@@ -114,7 +116,8 @@ const indicators: Indicator[] = [
     ),
   },
   {
-    id: "ClientsDepEncours",
+    id: Indicateur.ClientsDepassementEncours,
+    useCountV2: true,
     enabled: true,
     withCount: true,
     parameter: "Clients",
@@ -313,6 +316,7 @@ export class OrdresIndicatorsService {
     private ordresService: OrdresService,
     private paysService: PaysService,
     private paysDepassementService: PaysDepassementService,
+    private indicateursService: IndicateursService,
   ) {
     this.updateIndicators();
   }
@@ -371,7 +375,7 @@ export class OrdresIndicatorsService {
       }
 
       // Ordres clients depassement en cours
-      if (instance.id === "ClientsDepEncours") {
+      if (instance.id === Indicateur.ClientsDepassementEncours) {
         instance.detailedFields =
           this.paysService.model.getDetailedFields(
             1,
@@ -641,5 +645,12 @@ export class OrdresIndicatorsService {
   getFormatedDate(date, dateFormat?) {
     dateFormat = dateFormat || "yyyy-MM-dd";
     return this.datePipe.transform(date, dateFormat);
+  }
+
+  public getCounts() {
+    const indicatorsID = this.getIndicators()
+      .filter(i => i.useCountV2)
+      .map(i => i.id as Indicateur);
+    return this.indicateursService.countByIndicators(...indicatorsID);
   }
 }
