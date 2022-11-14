@@ -3,9 +3,9 @@ import { gql, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { takeWhile } from "rxjs/operators";
 import { Client } from "../../models";
 import { APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
-import { takeWhile } from "rxjs/operators";
 import { FunctionsService } from "./functions.service";
 
 @Injectable({
@@ -100,7 +100,8 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
    */
   public allClientEnCours(
     clientRef: string,
-    columns: string[]
+    columns: string[],
+    deviseCodeRef?: string,
   ) {
     return this.apollo
       .query<{ allClientEnCours }>({
@@ -111,15 +112,17 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
               name: `allClientEnCours`,
               body: columns,
               params: [
-                { name: "clientRef", value: "clientRef", isVariable: true }
+                { name: "clientRef", value: "clientRef", isVariable: true },
+                { name: "deviseCodeRef", value: "deviseCodeRef", isVariable: true },
               ],
             },
           ],
           [
-            { name: "clientRef", type: "String", isOptionnal: false }
+            { name: "clientRef", type: "String", isOptionnal: false },
+            { name: "deviseCodeRef", type: "String", isOptionnal: true },
           ],
         )),
-        variables: { clientRef },
+        variables: { clientRef, deviseCodeRef },
         fetchPolicy: "no-cache",
       });
   }
