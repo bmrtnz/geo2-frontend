@@ -7,6 +7,7 @@ import {
   TransporteursService
 } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
+import { Indicateur } from "app/shared/services/api/indicateurs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PaysDepassementService } from "app/shared/services/api/pays-depassement.service";
 import { PaysService } from "app/shared/services/api/pays.service";
@@ -36,7 +37,7 @@ import { GridsService } from "../../grids.service";
   styleUrls: ["./clients-dep-encours.component.scss"],
 })
 export class ClientsDepEncoursComponent implements AfterViewInit {
-  readonly INDICATOR_NAME = "ClientsDepEncours";
+  readonly INDICATOR_NAME = Indicateur.ClientsDepassementEncours;
 
   @Output() public commercialId: string;
 

@@ -8,6 +8,7 @@ import {
   TransporteursService
 } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
+import { Indicateur } from "app/shared/services/api/indicateurs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -38,7 +39,7 @@ import { TabContext } from "../../root/root.component";
   styleUrls: ["./ordres-non-confirmes.component.scss"],
 })
 export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
-  readonly INDICATOR_NAME = "OrdresNonConfirmes";
+  readonly INDICATOR_NAME = Indicateur.OrdresNonConfirmes;
   options: {};
   secteurs: DataSource;
   indicator: Indicator;

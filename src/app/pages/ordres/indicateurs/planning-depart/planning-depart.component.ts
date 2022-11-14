@@ -34,6 +34,7 @@ import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import notify from "devextreme/ui/notify";
+import { Indicateur } from "app/shared/services/api/indicateurs.service";
 
 @Component({
   selector: "app-planning-depart",
@@ -41,7 +42,7 @@ import notify from "devextreme/ui/notify";
   styleUrls: ["./planning-depart.component.scss"],
 })
 export class PlanningDepartComponent implements AfterViewInit {
-  readonly INDICATOR_NAME = "PlanningDepart";
+  readonly INDICATOR_NAME = Indicateur.PlanningDepart;
   options: {};
   secteurs: DataSource;
   indicator: Indicator;
