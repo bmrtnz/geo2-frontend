@@ -1,17 +1,14 @@
 import { DatePipe } from "@angular/common";
 import { Injectable } from "@angular/core";
-import { ApolloQueryResult } from "@apollo/client/core";
 import grids from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
 import DataSource from "devextreme/data/data_source";
 import { dxButtonOptions } from "devextreme/ui/button";
 import { Observable } from "rxjs";
-import { Role } from "../models";
 import { Model, ModelFieldOptions } from "../models/model";
 import Ordre from "../models/ordre.model";
-import { Indicateur, IndicateursService } from "./api/indicateurs.service";
+import { Indicateur, IndicateurCountResponse, IndicateursService } from "./api/indicateurs.service";
 import {
-  CountResponse as CountResponseOrdre,
   Operation,
   OrdresService
 } from "./api/ordres.service";
@@ -51,7 +48,7 @@ export class Indicator implements dxButtonOptions {
   warningIcon: string;
   loading: boolean;
   withCount?: boolean;
-  fetchCount?: (dxFilter?: any[]) => Observable<ApolloQueryResult<any>>;
+  fetchCount?: Observable<IndicateurCountResponse>;
   dataSource?: DataSource;
   regExpSelection?: RegExp;
   explicitSelection?: Array<string>;
@@ -128,21 +125,6 @@ const indicators: Indicator[] = [
     ),
     /* tslint:disable-next-line max-line-length */
     explicitSelection: ["id", "pays.description", "clientsSommeAgrement", "clientsSommeEnCoursTemporaire", "clientsSommeEnCoursBlueWhale", "clientsSommeAutorise", "clientsSommeDepassement", "clientsSommeEnCoursActuel", "clientsSommeEnCoursNonEchu", "clientsSommeEnCours1a30", "clientsSommeEnCours31a60", "clientsSommeEnCours61a90", "clientsSommeEnCours90Plus", "clientsSommeAlerteCoface"]
-  },
-  {
-    id: "OrdresNonClotures",
-    enabled: false,
-    withCount: true,
-    parameter: "Ordres",
-    subParameter: "non clôturés",
-    tileBkg: "#F26C5A",
-    indicatorIcon: "material-icons lock_open",
-    warningIcon: "",
-    component: import(
-      "../../pages/ordres/indicateurs/ordres-non-clotures/ordres-non-clotures.component"
-    ),
-    /* tslint:disable-next-line max-line-length */
-    select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|type|client\.raisonSocial|secteurCommercial\.id|entrepot\.raisonSocial|campagne\.id)$/,
   },
   {
     id: Indicateur.OrdresNonConfirmes,
@@ -394,94 +376,7 @@ export class OrdresIndicatorsService {
           ["clients.valide", "=", true],
         ];
         instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection, instance.filter);
-        instance.fetchCount = this.paysDepassementService.count.bind(this.paysDepassementService, {
-          secteurCode: this.authService.currentUser.secteurCommercial.id,
-          societeCode: this.currentCompanyService.getCompany().id,
-        });
-      }
-
-      // Ordres non cloturés
-      if (instance.id === "OrdresNonClotures") {
-        const currDateTime0 = new Date();
-        currDateTime0.setHours(0, 0, 0, 0);
-        instance.detailedFields =
-          this.ordresService.model.getDetailedFields(
-            3,
-            instance.regExpSelection,
-            { forceFilter: true },
-          );
-        instance.dataSource = this.ordresService.getDataSource(
-          null,
-          2,
-          instance.regExpSelection,
-        );
-        instance.filter = [
-          ...instance.filter,
-          "and",
-          ["logistiques.typeLieuDepart", "=", "F"],
-          "and",
-          ["logistiques.expedieStation", "=", false],
-          "and",
-          ["codeClient", "notcontains", "PREORD%"],
-          "and",
-          [
-            "dateDepartPrevue",
-            ">=",
-            this.datePipe.transform(
-              currDateTime0
-                .setDate(currDateTime0.getDate() - 180)
-                .valueOf(),
-              "yyyy-MM-ddTHH:mm:ss",
-            ),
-          ],
-          "and",
-          ["bonAFacturer", "=", false],
-        ];
-        instance.fetchCount = this.ordresService.count.bind(this.ordresService, [
-          ...instance.filter,
-          ...(this.authService.currentUser.secteurCommercial &&
-            !this.authService.isAdmin
-            ? [
-              "and",
-              [
-                "secteurCommercial.id",
-                "=",
-                this.authService.currentUser.secteurCommercial
-                  ?.id,
-              ],
-            ]
-            : []),
-          ...(this.authService.isAdmin
-            ? []
-            : [
-              ...(this.authService.currentUser.personne?.role.toString() ===
-                Role[Role.COMMERCIAL]
-                ? [
-                  "and",
-                  [
-                    "commercial.id",
-                    "=",
-                    this.authService.currentUser
-                      .commercial.id,
-                  ],
-                ]
-                : []),
-              ...(this.authService.currentUser.personne?.role.toString() ===
-                Role[Role.ASSISTANT]
-                ? [
-                  "and",
-                  [
-                    "assistante.id",
-                    "=",
-                    this.authService.currentUser
-                      .assistante.id,
-                  ],
-                ]
-                : []),
-            ]),
-        ]) as (
-            dxFilter?: any[],
-          ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.ClientsDepassementEncours);
       }
 
       // Ordres non confirmés
@@ -505,50 +400,7 @@ export class OrdresIndicatorsService {
           ["id", "<", "800000"],
           // ["factureAvoir", "=", FactureAvoir.AVOIR],
         ];
-        instance.fetchCount = this.ordresService.count.bind(this.ordresService, [
-          ...instance.filter,
-          ...(this.authService.currentUser.secteurCommercial &&
-            !this.authService.isAdmin
-            ? [
-              "and",
-              [
-                "secteurCode",
-                "=",
-                this.authService.currentUser.secteurCommercial?.id,
-              ],
-            ]
-            : []),
-          ...(this.authService.isAdmin
-            ? []
-            : [
-              ...(this.authService.currentUser.personne?.role.toString() ===
-                Role[Role.COMMERCIAL]
-                ? [
-                  "and",
-                  [
-                    "commercial.id",
-                    "=",
-                    this.authService.currentUser
-                      .commercial.id,
-                  ],
-                ]
-                : []),
-              ...(this.authService.currentUser.personne?.role.toString() ===
-                Role[Role.ASSISTANT]
-                ? [
-                  "and",
-                  [
-                    "assistante.id",
-                    "=",
-                    this.authService.currentUser
-                      .assistante.id,
-                  ],
-                ]
-                : []),
-            ]),
-        ]) as (
-            dxFilter?: any[],
-          ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.OrdresNonConfirmes);
       }
 
       // Litiges
@@ -580,11 +432,7 @@ export class OrdresIndicatorsService {
           1,
           instance.regExpSelection,
         );
-        instance.fetchCount = this.ordresService.count.bind(
-          this.ordresService,
-        ) as (
-            dxFilter?: any[],
-          ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
+        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.PlanningDepart);
         instance.filter = [
           ...instance.filter,
           "and",
@@ -605,11 +453,6 @@ export class OrdresIndicatorsService {
         instance.dataSource = this.ordresService.getDataSource_v2(
           instance.detailedFields.map((field) => field.dataField),
         );
-        instance.fetchCount = this.ordresService.count.bind(
-          this.ordresService,
-        ) as (
-            dxFilter?: any[],
-          ) => Observable<ApolloQueryResult<CountResponseOrdre>>;
       }
 
       // Planning fournisseurs

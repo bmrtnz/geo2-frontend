@@ -11,7 +11,6 @@ import {
   Indicator,
   OrdresIndicatorsService
 } from "app/shared/services/ordres-indicators.service";
-import { ONE_DAY } from "basic";
 import { DxTagBoxComponent } from "devextreme-angular";
 import { from, Observable, Subscription } from "rxjs";
 import {
@@ -72,52 +71,9 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
           if (!indicator.withCount)
             return [indicator.id, ""] as [string, string];
 
-          const flt = indicator.cloneFilter();
-
-          // Mapping
-          if (indicator.id === "PlanningDepart")
-            flt.push("and", [
-              "logistiques.dateDepartPrevueFournisseur",
-              ">=",
-              new Date(Date.now() - ONE_DAY).toISOString(),
-            ]);
-
-          if (indicator.id === "PlanningTransporteurs")
-            flt.push(
-              "and",
-              [
-                "logistiques.dateDepartPrevueFournisseur",
-                ">=",
-                new Date(Date.now() - ONE_DAY).toISOString(),
-              ],
-              "and",
-              [
-                "logistiques.dateDepartPrevueFournisseur",
-                "<=",
-                new Date().toISOString(),
-              ],
-            );
-
-          if (indicator.id === "PlanningFournisseurs")
-            flt.push(
-              "and",
-              [
-                "logistiques.dateDepartPrevueFournisseur",
-                ">=",
-                new Date(Date.now() - ONE_DAY).toISOString(),
-              ],
-              "and",
-              [
-                "logistiques.dateDepartPrevueFournisseur",
-                "<=",
-                new Date().toISOString(),
-              ],
-            );
-
-          const countResponse = await indicator
-            .fetchCount(flt)
+          const countResponse = await indicator.fetchCount
             .pipe(
-              map((res) => Object.values(res.data)[0].toString()),
+              map((res) => res[indicator.id].toString()),
             )
             .toPromise();
           return [indicator.id, countResponse] as [string, string];

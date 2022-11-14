@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
-import { map } from "rxjs/operators";
+import { map, takeWhile } from "rxjs/operators";
 import { ApiService } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
 
@@ -33,7 +33,11 @@ export class IndicateursService {
         societeCode: this.currentCompanyService.getCompany().id,
         ...indicateurs.reduce((acm, crt) => ({ ...acm, [crt]: crt }), {}),
       },
-    }).pipe(map(res => res.data));
+    })
+      .pipe(
+        takeWhile(res => res.loading, true),
+        map(res => res.data),
+      );
   }
 
   private buildCountsGraph(...indicateurs: Indicateur[]) {
