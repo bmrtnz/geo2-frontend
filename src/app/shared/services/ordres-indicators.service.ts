@@ -250,7 +250,7 @@ const indicators: Indicator[] = [
     enabled: true,
     withCount: true,
     parameter: "Planning",
-    subParameter: "départ",
+    subParameter: "départs",
     tileBkg: "#71BF45",
     indicatorIcon: "material-icons calendar_today",
     warningIcon: "",

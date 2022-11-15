@@ -81,7 +81,6 @@ export class GridControleQualiteComponent implements ToggledGrid {
   }
 
   downloadPhotosClick() {
-    console.log("downloadPhotosClick");
     this.documentsNumService.downloadPhotos(`numeroOrdre==${this.ordre.numero}`);
   }
 
@@ -169,6 +168,44 @@ export class GridControleQualiteComponent implements ToggledGrid {
 
   openCQClientReport(cell) {
     console.log("open PDF");
+    this.documentsNumService
+      .getList(
+        new Set(["nomFichierComplet", "statut"]),
+        `ordreLigne.id==${cell.data.ordreLigne.id} and typeDocument=='CQXSL' and id==${cell.data.referenceCQC}`
+      )
+      .subscribe({
+        next: (res) => {
+          if (!res?.length) {
+            notify("Aucun rapport CQ disponible", "warning", 3000);
+          } else {
+            let localText = "";
+            switch (res[0].statut) {
+              case 1: {
+                localText = "text-popup-CQ-creation-PDF-attente";
+                break;
+              }
+              case 2: {
+                localText = "text-popup-CQ-creation-PDF-generation";
+                break;
+              }
+              case 3: {
+                break;
+              }
+              case 4: {
+                localText = "text-popup-CQ-creation-PDF-erreur";
+                break;
+              }
+            }
+            // Show warning text
+            if (localText) notify(this.localization.localize(localText), "warning", 3000);
+          }
+        },
+        error: (err) => {
+          notify("Erreur ouverture rapport CQ Client", "error", 7000);
+          console.log(err);
+        }
+      });
   }
 
 }
+

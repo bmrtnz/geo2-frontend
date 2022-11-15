@@ -114,12 +114,10 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   }
 
   downloadAllPhotos() {
-    console.log("downloadAllPhotos");
     this.documentsNumService.downloadPhotos(`ordreLigne.id==${this.ordreLigneId}`);
   }
 
   downloadPhoto(cell) {
-    console.log("downloadPhoto");
     this.documentsNumService.downloadPhotos(`ordreNumero==${cell.data.ordreNumero}`);
   }
 
