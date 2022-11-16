@@ -15,6 +15,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onRowPrepared)="onRowPrepared($event)"
   (onContentReady)="onContentReady($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(

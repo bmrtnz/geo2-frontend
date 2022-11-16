@@ -22,6 +22,10 @@
   visibility: hidden;
 }
 
+::ng-deep .yellow-datagrid-row {
+  background-color: #FFD662;
+}
+
 ::ng-deep .small-CQ-button {
   position: relative;
   height: 18px;

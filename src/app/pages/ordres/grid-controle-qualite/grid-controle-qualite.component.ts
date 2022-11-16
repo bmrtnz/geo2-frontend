@@ -76,6 +76,12 @@ export class GridControleQualiteComponent implements ToggledGrid {
       });
   }
 
+  onRowPrepared(e) {
+    if (e.rowType === "data") {
+      if (e.data.cq === "NON") e.rowElement.classList.add("yellow-datagrid-row");
+    }
+  }
+
   onToggling(toggled: boolean) {
     toggled ? this.enableFilters() : (this.dataSource = null);
   }
