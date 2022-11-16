@@ -1599,12 +1599,14 @@
       {
         "visibleIndex": 16,
         "dataField": "totalNombrePalettesCommandees",
+        "cssClass": "text-align-center",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "sommeColisCommandes",
+        "cssClass": "text-align-center",
         "dataType": "string",
         "visible": true
       },
@@ -1727,12 +1729,14 @@
       {
         "visibleIndex": 18,
         "dataField": "ordre.totalNombrePalettesCommandees",
+        "cssClass": "text-align-center",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "ordre.sommeColisCommandes",
+        "cssClass": "text-align-center",
         "dataType": "string",
         "visible": true
       },

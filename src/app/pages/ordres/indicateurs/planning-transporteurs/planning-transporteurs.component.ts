@@ -30,6 +30,7 @@ import { GridsService } from "../../grids.service";
 import { TabContext } from "../../root/root.component";
 
 enum FormInput {
+  valide = "valide",
   transporteurCode = "transporteur",
   dateMin = "dateDepartPrevueFournisseur",
   dateMax = "dateDepartPrevueFournisseur",
@@ -63,6 +64,7 @@ export class PlanningTransporteursComponent implements OnInit {
   public ordresDataSource: DataSource;
   public transporteursDataSource: DataSource;
   public formGroup = new FormGroup({
+    valide: new FormControl(),
     transporteurCode: new FormControl(),
     dateMin: new FormControl(this.dateManagementService.startOfDay()),
     dateMax: new FormControl(this.dateManagementService.endOfDay()),
@@ -86,7 +88,8 @@ export class PlanningTransporteursComponent implements OnInit {
       map((config) => config.columns),
     );
     this.transporteursDataSource =
-      this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+      this.transporteursService.getDataSource_v2(["id", "raisonSocial", "valide"]);
+    this.transporteursDataSource.filter(["valide", "=", true]);
     this.periodes = this.dateManagementService.periods();
     this.validRequiredEntity = {
       client: true,
@@ -108,6 +111,7 @@ export class PlanningTransporteursComponent implements OnInit {
     // Only way found to validate and show Warning icon
     this.formGroup.get("transporteurCode").setValue("");
     this.formGroup.get("transporteurCode").reset();
+    this.formGroup.get("valide").patchValue(true);
     this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
   }
 
@@ -239,11 +243,27 @@ export class PlanningTransporteursComponent implements OnInit {
   onRowPrepared(e) {
     // Highlight canceled orders
     if (["data", "group"].includes(e.rowType)) {
-      if (e.data?.flagAnnule === true) {
+      let data = e.data.items ?? e.data.collapsedItems;
+      if (e.rowType === "data") {
+        data = e.data;
+      } else {
+        data = data[0];
+      }
+      if (data?.ordre?.flagAnnule === true) {
         e.rowElement.classList.add("canceled-orders");
         e.rowElement.title = this.localizeService.localize("ordre-annule");
       }
     }
+  }
+
+  onValideChanged(e) {
+    if (!e.event) return; // Only user event
+    this.formGroup.patchValue({
+      transporteurCode: null
+    });
+    this.transporteursDataSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial", "valide"]);
+    if (this.formGroup.get("valide").value)
+      this.transporteursDataSource.filter(["valide", "=", true]);
   }
 
   manualDate(e) {

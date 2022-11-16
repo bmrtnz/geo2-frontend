@@ -4,6 +4,22 @@
 >
   <div class="orderTileFilterArea">
     <dx-box>
+      <dxi-item [ratio]="1">
+        <!-- Valides/non valides -->
+        <div class="dx-field valideCheckboxField">
+          <div class="dx-field-label">
+            {{ "valide-uniq" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-check-box
+              formControlName="valide"
+              class="float-left"
+              (onValueChanged)="onValideChanged($event)"
+            >
+            </dx-check-box>
+          </div>
+        </div>
+      </dxi-item>
       <dxi-item [ratio]="3">
         <div class="orderTileleftFilters">
           <!-- Transporteurs -->
@@ -18,7 +34,16 @@
                 valueExpr="id"
                 [displayExpr]="displayIDBefore"
                 [searchExpr]="['id']"
-              >
+                itemTemplate="items"
+                >
+                <div *dxTemplate="let data of 'items'">
+                  <div
+                    [title]="!data.valide ? 'non valide' : ''"
+                    [ngClass]="{ 'not-valid': !data.valide }"
+                  >
+                    {{ displayCodeBefore(data) }}
+                  </div>
+                </div>
                 <dx-validator>
                   <dxi-validation-rule
                     type="required"

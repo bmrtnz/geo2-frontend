@@ -537,7 +537,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    if (Date.now() > new Date(Date.parse(this.ordre.dateDepartPrevue)).setHours(15, 0))
+    if (Date.now() > new Date(Date.parse(this.ordre.dateDepartPrevue)).setHours(23, 59, 59))
       return alert(
         this.localization.localize("text-popup-ordre-compl-dateDepassee"),
         this.localization.localize("ordre-complementaire-creation"),

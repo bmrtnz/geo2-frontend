@@ -179,7 +179,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   onRowPrepared(e) {
     // Highlight canceled orders
     if (e.rowType === "data") {
-      if (e.data?.flagAnnule === true) {
+      if (e.data?.ordre.flagAnnule === true) {
         e.rowElement.classList.add("canceled-orders");
         e.rowElement.title = this.localizeService.localize("ordre-annule");
       }
