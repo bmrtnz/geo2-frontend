@@ -122,6 +122,11 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       "code",
       "raisonSocial",
     ]);
+    this.fournisseur.filter([
+      ["consignePaloxUdc", "=", true],
+      "or",
+      ["consignePaloxSa", "=", true]
+    ]);
     this.commercial = this.personnesService.getDataSource_v2([
       "id",
       "nomUtilisateur",

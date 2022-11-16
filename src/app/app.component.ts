@@ -77,6 +77,7 @@ export class AppComponent {
         onFocusIn: this.formUtilsService.selectTextOnFocusIn
       }
     });
+    // The below lookup part seems not to work...
     dxLookup.defaultOptions({
       options: {
         searchMode: "startswith",
