@@ -138,7 +138,7 @@ export class PlanningTransporteursComponent implements OnInit {
       } as Inputs);
 
       this.datagrid.dataSource = this.ordresDataSource;
-      this.ordresDataSource.filter(["sommeColisPaletteBis", "<>", 0]);
+      // this.ordresDataSource.filter(["sommeColisPaletteBis", "<>", 0]);
     }
   }
 
