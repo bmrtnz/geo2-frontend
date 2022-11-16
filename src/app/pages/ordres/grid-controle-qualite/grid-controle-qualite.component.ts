@@ -50,7 +50,11 @@ export class GridControleQualiteComponent implements ToggledGrid {
       this.dataSource = this.cqLignesService.getDataSource_v2(
         this.detailedFields.map((property) => property.dataField),
       );
-      this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
+      this.dataSource.filter([
+        ["ordre.id", "=", this.ordre.id],
+        "and",
+        ["evalue", "<>", false],
+      ]);
       this.dataGrid.dataSource = this.dataSource;
     }
   }
