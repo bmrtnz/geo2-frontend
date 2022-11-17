@@ -33,7 +33,6 @@ export class AjustDecomptePaloxPopupComponent implements OnChanges {
   @Input() info: any;
 
   @Output() whenValidate = new EventEmitter<any>();
-  @Output() whenHiding = new EventEmitter<any>();
   @Output() whenShown = new EventEmitter<any>();
 
   public title: string;
@@ -58,28 +57,30 @@ export class AjustDecomptePaloxPopupComponent implements OnChanges {
     this.visible = true;
   }
 
-  onPopupHiding() {
-    this.whenHiding.emit();
-  }
-
   onHidden() {
     this.visible = false;
     this.paloxBox.instance.reset();
     this.dateBox.instance.reset();
+    this.entrepotBox.instance.reset();
+    this.stationBox.instance.reset();
+    this.typePaloxBox.instance.reset();
     if (this.commentBox) this.commentBox.instance.reset();
   }
 
-  onShown() {
-    this.whenShown.emit();
+  onShowing(e) {
+    e.component.content().parentNode.classList.add("ajust-decompte-palox-popup");
+    const date = new Date();
+    const currendDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
     this.paloxBox?.instance.focus();
-    this.dateBox.value = new Date();
+    this.dateBox.value = currendDate;
     this.entrepotBox.value = this.info.entrepotCode;
     this.stationBox.value = this.info.stationCode;
     this.typePaloxBox.value = this.info.paloxCode;
   }
 
   onSubmit(form: NgForm) {
-    if (typeof form.value.date.getMonth !== "function" || form.value.palox === null || form.value.palox === "") return;
+    if (form.value.date === null || form.value.date === ""
+      || form.value.palox === null || form.value.palox === "") return;
     this.whenValidate.emit({
       nbPalox: form.value.palox,
       date: form.value.date,

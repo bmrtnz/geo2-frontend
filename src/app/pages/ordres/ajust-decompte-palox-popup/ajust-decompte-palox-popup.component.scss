@@ -1,6 +1,19 @@
 // Var
 @import "~themes/generated/variables.base";
 
+
+::ng-deep .ajust-decompte-palox-popup {
+
+  .dx-invalid-message {
+    visibility: hidden !important;
+  }
+
+  .dx-state-disabled {
+    opacity: 1 !important;
+  }
+
+}
+
 .popup-action {
   position: relative;
   display: inline-block;
@@ -15,7 +28,12 @@
 .palox-info-boxes {
   .dx-field-label {
     width: 200px !important;
+    white-space: initial;
     margin-right: 20px;
+
+    &.large-padding-left {
+      padding-left: 50px;
+    }
   }
 
   .dx-field-value {
@@ -24,12 +42,11 @@
 }
 
 .palox-inputs {
-  .dx-field-label {
-    width: 300px !important;
-    margin-right: 20px;
-  }
-
   .dx-field-value {
-    width: 24% !important;
+    width: 130px !important;
   }
+}
+
+.comment-palox {
+  width: 25% !important;
 }

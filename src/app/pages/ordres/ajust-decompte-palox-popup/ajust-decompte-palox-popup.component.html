@@ -4,9 +4,8 @@
   [dragEnabled]="true"
   [title]="title"
   [visible]="visible"
-  (onHiding)="onPopupHiding()"
   (onHidden)="onHidden()"
-  (onShown)="onShown()"
+  (onShown)="onShowing($event)"
   [closeOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
@@ -17,29 +16,29 @@
         <div class="dx-field">
           <div class="dx-field-label text-align-right">{{ 'text-palox-popup-entrepot' | localize }}</div>
           <div class="dx-field-value">
-            <dx-text-box #entrepotBox [readOnly]="true"></dx-text-box>
+            <dx-text-box #entrepotBox [disabled]="true"></dx-text-box>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label text-align-right">{{ 'text-palox-popup-station' | localize }}</div>
           <div class="dx-field-value">
-            <dx-text-box #stationBox [readOnly]="true"></dx-text-box>
+            <dx-text-box #stationBox [disabled]="true"></dx-text-box>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label text-align-right">{{ 'text-palox-popup-type-palox' | localize }}</div>
           <div class="dx-field-value">
-            <dx-text-box #typePaloxBox [readOnly]="true"></dx-text-box>
+            <dx-text-box #typePaloxBox [disabled]="true"></dx-text-box>
           </div>
         </div>
       </div>
 
       <br>
 
-      <div class="palox-inputs">
+      <div class="palox-info-boxes palox-inputs">
         <!-- Palox -->
         <div class="dx-field">
-          <div class="dx-field-label text-align-right">{{ paloxLabel }}</div>
+          <div class="dx-field-label text-align-right large-padding-left">{{ paloxLabel }}</div>
           <div class="dx-field-value">
             <dx-number-box
               ngModel
@@ -64,6 +63,7 @@
               #dateBox
               name="date"
               [displayFormat]="'dd-MM-yy'"
+              dateSerializationFormat="yyyy-MM-dd"
               valueChangeEvent="keyup"
               type="date"
               >
@@ -77,7 +77,7 @@
 
       <!-- Commentaire -->
       <div class="dx-field" *ngIf="purpose === 'adjust'">
-        <div class="dx-field-label text-align-right">{{ 'text-palox-popup-commentaire' | localize }}</div>
+        <div class="dx-field-label text-align-right comment-palox">{{ 'text-palox-popup-commentaire' | localize }}</div>
         <div class="dx-field-value">
           <dx-text-box
             ngModel

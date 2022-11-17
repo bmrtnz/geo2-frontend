@@ -7,6 +7,7 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { fixObservableSubclass } from "@apollo/client/utilities";
+import { alert } from "devextreme/ui/dialog";
 import { Role } from "app/shared/models";
 import MouvementEntrepot from "app/shared/models/mouvement-entrepot.model";
 import MouvementFournisseur from "app/shared/models/mouvement-fournisseur.model";
@@ -36,6 +37,8 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+import notify from "devextreme/ui/notify";
+import { FunctionResult } from "app/shared/services/api/functions.service";
 
 enum GridModel {
   MouvementsClients,
@@ -94,6 +97,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public ordresService: OrdresService,
+    public localization: LocalizationService,
     public supervisionPaloxsService: SupervisionPaloxsService,
     public entrepotsService: EntrepotsService,
     public fournisseursService: FournisseursService,
@@ -102,7 +106,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
     private tabContext: TabContext,
-    private currentCompanyService: CurrentCompanyService,
+    public currentCompanyService: CurrentCompanyService,
   ) {
     this.validRequiredEntity = {
       client: true,
@@ -283,22 +287,70 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     this.info = {
       entrepotCode: data.codeEntrepot,
       stationCode: data.codeFournisseur,
-      paloxCode: data.codeEmballage
+      codeClient: data.codeClient,
+      paloxCode: data.codeEmballage,
+      raisonSocialeFournisseur: data.raisonSocialeFournisseur,
+      codeEspece: data.codeEspece
     };
     this.ajustDecPopup.show();
   }
 
   onValidatePaloxPopup(e) {
-    console.log(e);
-    ////////////////////////////
-    // On récupère e.nbPalox,
-    // e.date et e.commentaire
-    ////////////////////////////
+
     if (this.paloxPopupPurpose === "adjust") {
-      // Function
+      // Adjustment
+      this.supervisionPaloxsService
+        .fAjustPalox(
+          this.info.codeClient,
+          this.info.codeEspece,
+          e.date,
+          this.info.entrepotCode,
+          this.info.paloxCode,
+          e.commentaire,
+          this.currentCompanyService.getCompany().id,
+          this.info.stationCode,
+          e.nbPalox
+        )
+        .subscribe({
+          next: (result) => {
+            const data = result.data.fAjustPalox;
+            if (data.res === 1)
+              return alert(data.msg, this.localization.localize("text-popup-ajust-palox"));
+            notify(this.localization.localize("text-popup-ajust-palox-ok"), "success", 3000);
+          },
+          error: (error: Error) => alert(this.messageFormat(error.message), this.localization.localize("text-popup-ajust-palox"))
+        });
     } else {
-      // Function
+      // Inventory
+      this.supervisionPaloxsService
+        .fDecomptePalox(
+          this.info.codeEspece,
+          e.date,
+          this.info.entrepotCode,
+          this.info.paloxCode,
+          this.currentCompanyService.getCompany().id,
+          this.info.stationCode,
+          e.nbPalox
+        )
+        .subscribe({
+          next: () => {
+            notify(this.localization.localize("text-popup-inventaire-palox-ok"), "success", 3000);
+          },
+          error: (error: Error) => {
+            alert(this.messageFormat(error.message), this.localization.localize("text-popup-inventaire-palox"));
+          }
+        });
     }
+  }
+
+  private messageFormat(mess) {
+    const functionNames = [
+      "fDecomptePalox",
+      "fAjustPalox"
+    ];
+    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
   getInventoryData(e) {
