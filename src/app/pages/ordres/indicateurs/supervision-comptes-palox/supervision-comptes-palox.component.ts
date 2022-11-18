@@ -285,6 +285,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     this.paloxPopupPurpose = purpose;
     data = data.items?.length ? data.items[0] : data.collapsedItems[0];
     this.info = {
+      entrepotId: this.formGroup.get("entrepot").value.id,
       entrepotCode: data.codeEntrepot,
       stationCode: data.codeFournisseur,
       codeClient: data.codeClient,
@@ -314,7 +315,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         .subscribe({
           next: (result) => {
             const data = result.data.fAjustPalox;
-            if (data.res === 1)
+            if (data.res === 2)
               return alert(data.msg, this.localization.localize("text-popup-ajust-palox"));
             notify(this.localization.localize("text-popup-ajust-palox-ok"), "success", 3000);
           },
@@ -326,7 +327,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         .fDecomptePalox(
           this.info.codeEspece,
           e.date,
-          this.info.entrepotCode,
+          this.info.entrepotId,
           this.info.paloxCode,
           this.currentCompanyService.getCompany().id,
           this.info.stationCode,
