@@ -12,6 +12,7 @@
         <div class="dx-field-value">
           <dx-select-box
             formControlName="secteur"
+            [readOnly]="true"
             [dataSource]="secteurs"
             [displayExpr]="displayCodeBefore"
             [searchExpr]="['id']"
@@ -35,6 +36,7 @@
         <div class="dx-field-value">
           <dx-select-box
             formControlName="client"
+            [readOnly]="true"
             [dataSource]="clients"
             [displayExpr]="displayCodeBefore"
             [searchExpr]="['code']"
@@ -61,6 +63,7 @@
   </dx-box>
   <dx-button
     class="refresh"
+    [visible]="false"
     [class]="(toRefresh && readyToRefresh) ? '' : 'inactive-button'"
     type="default"
     text="{{ 'btn-refresh' | localize }}"
@@ -200,6 +203,7 @@
         | localize) || column.name
     "
     [cellTemplate]="column.cellTemplate"
+    [headerCellTemplate]="column.headerCellTemplate"
     [fixed]="column.fixed"
     [dataType]="column?.dataType"
     [cssClass]="column?.cssClass"
@@ -209,6 +213,13 @@
     [showInColumnChooser]="column?.showInColumnChooser"
   >
   </dxi-column>
+
+  <div *dxTemplate="let cell of 'creditDebitDevTemplate'">
+    <div>
+      {{ "encoursClient-" + cell.column.dataField | localize }} {{ deviseTodisplay() }}
+    </div>
+  </div>
+
   <dxo-summary>
     <dxi-total-item column="cfcMontantEuros"></dxi-total-item>
     <dxi-total-item column="cfcMontantDevise"></dxi-total-item>

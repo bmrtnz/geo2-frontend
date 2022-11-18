@@ -57,6 +57,8 @@ export class GridEncoursClientComponent implements OnChanges {
     encoursDepassement: new FormControl(),
     encoursRetard: new FormControl()
   } as Inputs<FormControl>);
+  public deviseSociete: string;
+  public deviseEncours: string;
 
   constructor(
     public clientsService: ClientsService,
@@ -67,6 +69,7 @@ export class GridEncoursClientComponent implements OnChanges {
     public functionsService: FunctionsService,
     public localizeService: LocalizationService
   ) {
+    this.deviseSociete = this.currentCompanyService.getCompany().devise.id;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.EncoursClient);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     this.secteurs = secteursService.getDataSource();
@@ -141,49 +144,56 @@ export class GridEncoursClientComponent implements OnChanges {
     this.formGroup.patchValue({
       encoursTotal: null,
       encoursAutorise:
-        values.client.agrement ?? 0
-        + values.client.enCoursTemporaire ?? 0
-        + values.client.enCoursBlueWhale ?? 0,
+        (values.client.agrement ?? 0)
+        + (values.client.enCoursTemporaire ?? 0)
+        + (values.client.enCoursBlueWhale ?? 0),
       encoursRetard: null,
       encoursDepassement: null
     });
     this.depassement = false;
     this.retard = false;
 
+
     this.today = new Date();
     setTimeout(() => this.datagrid.instance.beginCustomLoading(""));
     this.clientsService.allClientEnCours(
       values.client.id,
-      this.requiredFields
+      this.requiredFields,
+      this.deviseSociete
     ).subscribe((res) => {
-      this.readyToRefresh = true;
       const results = res.data.allClientEnCours;
       this.datagrid.dataSource = results;
       this.datagrid.instance.refresh();
       this.calculateMiscEncours(results);
-      this.datagrid.instance.endCustomLoading();
+      setTimeout(() => this.datagrid.instance.endCustomLoading());
+      this.readyToRefresh = true;
+      if (results.length) this.deviseEncours = res.data.allClientEnCours[0].devise.id;
     });
 
   }
 
   calculateMiscEncours(data) {
     let encTotal = 0;
+    let encTotalEuros = 0;
     let retard = 0;
     this.sumDebit = 0;
     this.sumCredit = 0;
     data.map(enc => {
+      const montant = enc.cfcMontantDevise ?? enc.cfcMontantEuros;
       if (enc.cfcSens === "D") {
-        encTotal += enc.cfcMontantEuros;
-        this.sumDebit += enc.cfcMontantEuros;
-        if (this.today > new Date(enc.cfcDateEcheance)) retard += enc.cfcMontantEuros;
+        encTotal += montant;
+        encTotalEuros += enc.cfcMontantEuros;
+        this.sumDebit += montant;
+        if (this.today > new Date(enc.cfcDateEcheance)) retard += montant;
       }
       if (enc.cfcSens === "C") {
-        encTotal -= enc.cfcMontantEuros;
-        this.sumCredit += enc.cfcMontantEuros;
-        if (this.today > new Date(enc.cfcDateEcheance)) retard -= enc.cfcMontantEuros;
+        encTotal -= montant;
+        encTotalEuros -= enc.cfcMontantEuros;
+        this.sumCredit += montant;
+        if (this.today > new Date(enc.cfcDateEcheance)) retard -= montant;
       }
     });
-    const depassement = encTotal - this.formGroup.get("encoursAutorise").value;
+    const depassement = encTotalEuros - this.formGroup.get("encoursAutorise").value;
     this.depassement = depassement > 0;
     this.retard = retard > 0;
     this.formGroup.patchValue({
@@ -193,32 +203,41 @@ export class GridEncoursClientComponent implements OnChanges {
     });
   }
 
+  deviseTodisplay() {
+    return this.deviseEncours === "FRF" ? this?.deviseSociete : this.deviseEncours;
+  }
+
   onContentReady() {
     if (!this.readyToRefresh) this.datagrid.instance.beginCustomLoading("");
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Credit and Debit display management
-      const montant = e.data.cfcMontantEuros.toString().replace(".", ",");
+      // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
+      let montant = e.data.cfcMontantDevise ?? e.data.cfcMontantEuros;
+      montant = this.numberWithSpaces(montant);
       if (e.data.cfcSens === "C") {
         if (e.column.dataField === "cfcMontantEuros") {
           e.cellElement.innerText = "";
         }
         if (e.column.dataField === "cfcMontantDevise") {
-          e.cellElement.innerText = montant;
+          e.cellElement.textContent = montant;
         }
       } else {
         if (e.column.dataField === "cfcMontantDevise") {
           e.cellElement.innerText = "";
         }
         if (e.column.dataField === "cfcMontantEuros") {
-          e.cellElement.innerText = montant;
+          e.cellElement.textContent = montant;
         }
       }
       // Expired date
       if (e.column.dataField === "cfcDateEcheance") {
         if (this.today > e.value) e.cellElement.classList.add("expired-date");
+      }
+      // DEV
+      if (e.column.dataField === "devise.id") {
+        if (e.value === "FRF") e.cellElement.innerText = "";
       }
     }
     // Setting total debit & credit info
@@ -232,19 +251,23 @@ export class GridEncoursClientComponent implements OnChanges {
       }
       if (e.column.dataField === "cfcMontantEuros") {
         if (this.sumDebit) {
-          e.cellElement.innerText = this.sumDebit.toFixed(2).replace(".", ",");
+          e.cellElement.textContent = this.numberWithSpaces(this.sumDebit);
         } else {
           e.cellElement.innerText = "";
         }
       }
       if (e.column.dataField === "cfcMontantDevise") {
         if (this.sumCredit) {
-          e.cellElement.innerText = this.sumCredit.toFixed(2).replace(".", ",");
+          e.cellElement.textContent = this.numberWithSpaces(this.sumCredit);
         } else {
           e.cellElement.innerText = "";
         }
       }
     }
+  }
+
+  numberWithSpaces(numb) {
+    return numb.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(".", ",");
   }
 
   onSecteurChanged(e) {
@@ -260,7 +283,7 @@ export class GridEncoursClientComponent implements OnChanges {
     ]);
     const filter: any = [["secteur.id", "=", e.value?.id]];
     filter.push("and", ["valide", "=", true]);
-    filter.push("and", ["societe", "=", this.authService.currentCompanyService.getCompany().id]);
+    filter.push("and", ["societe.id", "=", this.authService.currentCompanyService.getCompany().id]);
     this.clients.filter(filter);
     // We check that this change is coming from the user
     if (!e.event) return;
