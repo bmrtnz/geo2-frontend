@@ -870,7 +870,7 @@
     "ordresTransporteur-transporteur": "Transporteur",
     "ordresTransporteur-dateDepartPrevueFournisseur": "Départ",
     "ordresTransporteur-dateDepartPrevueGroupage": "Départ Groupage",
-    "ordresTransporteur-groupage": "Groupage",
+    "ordresTransporteur-groupage": "(Groupage)",
     "ordresTransporteur-fournisseurCodePostal": "CP Fournisseur",
     "ordresTransporteur-fournisseurPays": "Pays Fournisseur",
     "ordresTransporteur-espece": "Produit / Palette",

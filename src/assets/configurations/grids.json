@@ -4364,6 +4364,11 @@
         "visible": true
       },
       {
+        "visibleIndex": 3,
+        "dataField": "groupage",
+        "visible": true
+      },
+      {
         "visibleIndex": 4,
         "dataField": "fournisseur",
         "visible": true
@@ -4456,10 +4461,9 @@
       },
       {
         "dataField": "dateDepartPrevueGroupage",
-        "visible": false
-      },
-      {
-        "dataField": "groupage",
+        "cssClass": "no-padding",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": false
       },
       {
