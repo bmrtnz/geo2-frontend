@@ -4366,6 +4366,7 @@
       {
         "visibleIndex": 3,
         "dataField": "groupage",
+        "cssClass": "no-padding",
         "visible": true
       },
       {
@@ -4462,8 +4463,6 @@
       {
         "dataField": "dateDepartPrevueGroupage",
         "cssClass": "no-padding",
-        "dataType": "date",
-        "format": "dd-MM-yyyy",
         "visible": false
       },
       {
