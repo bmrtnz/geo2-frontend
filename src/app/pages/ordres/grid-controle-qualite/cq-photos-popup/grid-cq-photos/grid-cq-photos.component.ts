@@ -108,7 +108,7 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
 
   onFocusedRowChanged(e) {
     if (!e.row?.data) return;
-    this.currentImgPath = e.row.data.cqPhoto.uri;
+    this.currentImgPath = e.row.data.cqDoc.uri;
     if (!this.currentImgPath) this.currentImgPath = "assets/images/BW-couleur-blanc.png";
     this.currentImgComment = e.row.data.commentaire;
   }

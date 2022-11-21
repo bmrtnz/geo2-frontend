@@ -45,7 +45,7 @@ export class DocumentNum extends Model {
   statut: number;
 
   @Field({ model: import("./document.model") })
-  cqPhoto: Document;
+  cqDoc: Document;
 }
 
 export default DocumentNum;

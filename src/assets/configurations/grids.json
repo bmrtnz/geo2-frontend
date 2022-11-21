@@ -5058,15 +5058,15 @@
         "visible": false
       },
       {
-        "dataField": "cqPhoto.uri",
+        "dataField": "cqDoc.uri",
         "visible": false
       },
       {
-        "dataField": "cqPhoto.type",
+        "dataField": "cqDoc.type",
         "visible": false
       },
       {
-        "dataField": "cqPhoto.isPresent",
+        "dataField": "cqDoc.isPresent",
         "visible": false
       }
     ]
