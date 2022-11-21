@@ -2,6 +2,7 @@ import { Component, HostBinding } from "@angular/core";
 import dxDataGrid from "devextreme/ui/data_grid";
 import dxNumberBox from "devextreme/ui/number_box";
 import dxSelectBox from "devextreme/ui/select_box";
+import dxLookup from "devextreme/ui/lookup";
 import dxTextBox from "devextreme/ui/text_box";
 import dxDateBox from "devextreme/ui/date_box";
 import dxTabPanel from "devextreme/ui/tab_panel";
@@ -74,6 +75,13 @@ export class AppComponent {
         searchMode: "startswith",
         searchEnabled: true,
         onFocusIn: this.formUtilsService.selectTextOnFocusIn
+      }
+    });
+    // The below lookup part seems not to work...
+    dxLookup.defaultOptions({
+      options: {
+        searchMode: "startswith",
+        searchEnabled: true
       }
     });
     dxNumberBox.defaultOptions({

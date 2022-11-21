@@ -15,7 +15,22 @@
 }
 
 ::ng-deep .orderTileFilterArea {
-  width: 1024px;
+  width: 1100px;
+
+  .valideCheckboxField {
+
+    .dx-field-label {
+      position: relative;
+      top: -1px;
+      width: 90px !important;
+      white-space: inherit;
+      text-overflow: initial;
+    }
+
+    .dx-field-value {
+      width: 33px !important;
+    }
+  }
 
   .dx-datebox .dx-texteditor-input {
     padding-right: 0 !important;
@@ -59,6 +74,16 @@
     background: $BW-orange-medium;
     color: white;
   }
+}
+
+// Highlight canceled orders
+::ng-deep .canceled-orders td {
+  color: #ff325a !important;
+  text-shadow: 1px 1px 15px #FFF;
+}
+
+::ng-deep .not-valid {
+  opacity: 0.5;
 }
 
 // Highlight canceled orders
