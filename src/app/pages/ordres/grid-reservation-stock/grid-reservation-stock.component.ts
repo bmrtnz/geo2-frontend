@@ -34,7 +34,7 @@ export class GridReservationStockComponent implements OnInit {
   @Output() reservationChange = new EventEmitter<Reservation>();
 
   contentReadyEvent = new EventEmitter<any>();
-  @ViewChild(DxDataGridComponent, { static: true }) dataGridResa: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
   @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
 
   public columns: Observable<GridColumn[]>;
@@ -87,7 +87,7 @@ export class GridReservationStockComponent implements OnInit {
       }
     }
     // Higlight important columns
-    if (e.column.dataField.indexOf("quantiteCalculee") === 0 ||
+    if (e.column.dataField?.indexOf("quantiteCalculee") === 0 ||
       e.column.dataField === "quantiteDisponible") {
       e.cellElement.classList.add("bold-text");
     }
@@ -98,7 +98,7 @@ export class GridReservationStockComponent implements OnInit {
         data = data[0];
         if (data.proprietaireCode === this.ordreLigneInfo.proprietaireMarchandise?.code &&
           data.fournisseurCode === this.ordreLigneInfo.fournisseur?.code) {
-          this.dataGridResa.instance.option("focusedRowIndex", e.rowIndex);
+          this.datagrid.instance.option("focusedRowIndex", e.rowIndex);
         }
       }
     }
@@ -216,13 +216,13 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   reloadSource(articleID: string) {
-    this.dataGridResa.instance.option("focusedRowIndex", -1);
+    this.datagrid.instance.option("focusedRowIndex", -1);
     this.reservationsSource = this.stocksService
       .getStockReservationDatasource(articleID);
   }
 
   clearDataSource() {
-    this.dataGridResa.dataSource = null;
+    this.datagrid.dataSource = null;
   }
 
   public calcFouProp(rowData: Partial<StockReservation>) {

@@ -43,16 +43,17 @@ export class GridsService {
   /**
    * Expand/collapse all grid groups (specific button on the grid)
    */
-  public expandCollapseGroups(that) {
+  public expandCollapseGroups(that, masterDetail = true) {
     if (!that.datagrid) return;
     that.datagrid.instance.option(
       "grouping",
       { autoExpandAll: !that.datagrid.instance.option("grouping").autoExpandAll }
     );
-    that.datagrid.instance.option(
-      "masterDetail",
-      { autoExpandAll: !that.datagrid.instance.option("masterDetail").autoExpandAll }
-    );
+    if (masterDetail)
+      that.datagrid.instance.option(
+        "masterDetail",
+        { autoExpandAll: !that.datagrid.instance.option("masterDetail").autoExpandAll }
+      );
   }
 
 }
