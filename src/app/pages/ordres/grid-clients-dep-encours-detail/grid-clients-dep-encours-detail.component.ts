@@ -82,6 +82,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
       "and",
       ["depassement", "<>", 0],
+      "and",
+      ["enCoursAll", "<>", 0],
       ...(this.masterRow.data.secteur
         ? ["and", ["secteur.id", "=", this.masterRow.data.secteur?.id]]
         : []),
