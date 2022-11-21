@@ -31,6 +31,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   separator = " ● ";
   quantiteAReserver: number;
   resaStatus: LigneReservation[];
+  public okVisible = true;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
@@ -90,7 +91,11 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   applyClick() {
     // On ferme en renvoyant le fournisseur courant et le nbre de réservation
-    this.updateNombreResa().subscribe(() => this.popup.visible = false);
+    this.okVisible = false;
+    this.updateNombreResa().subscribe(() => {
+      this.popup.visible = false;
+      this.okVisible = true;
+    });
   }
 
   pushText(info) {

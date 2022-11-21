@@ -63,6 +63,7 @@
           [readOnly]="true"
           [dataSource]="societe"
           [searchEnabled]="false"
+          [searchTimeout]="0"
           displayExpr="raisonSocial"
           (onFocusIn)="findAssociatedCompanies()"
           (onSelectionChanged)="societeOnChange($event)"
