@@ -2,11 +2,32 @@
 
 .encours-filter-area {
   width: 830px;
+
+  .encours-switch {
+    .dx-field-value {
+      width: 36px !important;
+      margin-right: 10px;
+
+      .dx-switch {
+        margin: 7px 0 5px 0;
+      }
+    }
+
+    .dx-field-label {
+      width: 56% !important;
+
+      &.dx-field-label-left {
+        width: 32% !important;
+      }
+
+    }
+  }
+
 }
 
 ::ng-deep {
   td.highlight-err {
-    background-color: #FFCBCE;
+    background-color: #FFCBCE !important;
   }
 
   .dx-datagrid .dx-row.dx-header-row {
