@@ -374,14 +374,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.refreshRegimeTva.asObservable().pipe(startWith(1)),
       ])
         .pipe(
-          concatMap(async ([control, params]) => {
+          concatMap(async ([control, params, x]) => {
             const [numero, campagne] = this.tabContext.parseTabID(params.get("tabid"));
+            if (!campagne) return;
             const current = this.ordresService
               .getOneByNumeroAndSocieteAndCampagne(numero, this.currentCompanyService.getCompany().id, campagne, ["id", "regimeTva.id"])
               .toPromise();
             return [control, (await current).data.ordreByNumeroAndSocieteAndCampagne];
           }),
-          filter(([control, ordre]) => control.id === ordre.id),
+          filter(r => !!r),
+          filter(([control, ordre]) => control?.id === ordre.id),
           debounceTime(1000),
           concatMap(([, ordre]) => this.regimesTvaService.ofInitRegimeTva(ordre.id, ordre.regimeTva.id)),
           map(res => res.data.ofInitRegimeTva.msg),
@@ -793,7 +795,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initializeForm(fetchPol?) {
-
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
       .pipe(
