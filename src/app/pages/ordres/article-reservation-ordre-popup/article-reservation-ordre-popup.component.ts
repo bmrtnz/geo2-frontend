@@ -177,13 +177,15 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
       .pipe(
         map(res => {
           const qteDispo = res.data.fGetInfoResa.data.ll_tot_qte_ini - res.data.fGetInfoResa.data.ll_tot_qte_res;
-          let newNbResa = res.data.fGetInfoResa.data.ll_tot_nb_resa;
-          if (qteDispo < 0) newNbResa *= -1;
-          return newNbResa;
+          const newNbResa = res.data.fGetInfoResa.data.ll_tot_nb_resa;
+          if (newNbResa === 0) return 0; // pas de stock réservé
+          if (qteDispo < 0) return -1; // dépassement de stock
+          if (newNbResa) return 1; // stock réservé ok
+          return null;
         }),
-        concatMap(nbResa => this.ordreLignesService.updateField(
+        concatMap(indicateurResa => this.ordreLignesService.updateField(
           "nombreReservationsSurStock",
-          nbResa,
+          indicateurResa,
           this.ordreLigneInfo.id,
           this.currentCompanyService.getCompany().id,
           ["id", "nombreReservationsSurStock"],
