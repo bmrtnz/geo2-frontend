@@ -97,6 +97,8 @@
     "aucun-destockage": "Aucun déstockage actif",
     "aucun-ordre": "Aucun ordre trouvé",
     "aucun-encours": "Aucun en-cours",
+    "tous-encours": "Tous en-cours",
+    "depassement-encours": "Dépassements",
     "indicateur-stock": "Indicateur stock",
     "title-start-article-reservation-ordre-popup": "Déstockage sur ordre ",
     "title-end-article-reservation-ordre-popup": "- article &A - &C colis",

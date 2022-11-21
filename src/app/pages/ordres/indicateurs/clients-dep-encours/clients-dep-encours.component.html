@@ -1,5 +1,26 @@
 <br />
 <div class="encours-filter-area">
+
+  <dx-box>
+    <dxi-item [ratio]="2">
+      <div class="dx-field encours-switch">
+        <div class="dx-field-label dx-field-label-left">
+          {{ "tous-encours" | localize }}
+        </div>
+        <div class="dx-field-value">
+            <dx-switch
+              #switchType
+              [value]="true"
+              (onValueChanged)="enableFilters()"
+            ></dx-switch>
+        </div>
+        <div class="dx-field-label dx-field-label-right">
+          {{ "depassement-encours" | localize }}
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="3"></dxi-item>
+  </dx-box>
   <dx-box>
     <dxi-item [ratio]="3">
       <div class="dx-field secteur-encours">

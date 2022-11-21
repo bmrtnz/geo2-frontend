@@ -24,7 +24,7 @@ import {
   OrdresIndicatorsService
 } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -51,6 +51,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
 
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("paysValue", { static: false }) paysSB: DxSelectBoxComponent;
+  @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   public title: string;
@@ -112,17 +113,24 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   enableFilters() {
-    let filter;
+    const filter = [];
+    const filterItem = [];
     this.datagrid.dataSource = null;
     const dataSource = this.paysDepassementService
       .getDataSource(this.indicator.explicitSelection, {
         secteurCode: this.secteurSB.value?.id,
         societeCode: this.currentCompanyService.getCompany().id,
       });
-    if (this.paysSB.value) {
-      filter = [["id", "=", this.paysSB.value.id]];
-    }
-    if (filter) dataSource.filter(filter);
+    if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
+    if (this.switchType.value) filterItem.push(["clientsSommeDepassement", ">", 0]);
+    filterItem.forEach(element => {
+      filter.push(element);
+      filter.push("and");
+    });
+    filter.pop(); // Remove last 'and'
+    console.log(filter);
+
+    if (filter.length) dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
   }
 

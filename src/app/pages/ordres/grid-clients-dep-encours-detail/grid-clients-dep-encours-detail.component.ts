@@ -82,6 +82,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
       "and",
       ["depassement", "<>", 0],
+      "and",
+      ["enCoursAll", "<>", 0],
       ...(this.masterRow.data.secteur
         ? ["and", ["secteur.id", "=", this.masterRow.data.secteur?.id]]
         : []),
@@ -107,6 +109,17 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     }
 
     if (event.rowType === "data") {
+
+      // Highlight some >0 cells
+      if ([
+        "depassement",
+        "enCours61a90",
+        "enCours90Plus",
+        "alerteCoface",
+      ].includes(event.column.dataField))
+        if (event.value > 0)
+          event.cellElement.classList.add("highlight-err");
+
       // Formating figures: 1000000 becomes 1 000 000 €
       if (
         event.column.dataType === "number" &&
