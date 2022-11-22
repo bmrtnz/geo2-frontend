@@ -2700,6 +2700,7 @@
           "searchTimeout": "0"
         },
         "lookup": {
+          "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
             "id",
@@ -2722,6 +2723,7 @@
           "searchTimeout": "0"
         },
         "lookup": {
+          "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
             "id",
