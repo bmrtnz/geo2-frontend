@@ -700,6 +700,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         this.gridUtilsService.secureTypedValueWithEditGrid(elem);
       };
     }
+    // Optimizing lookup dropdown list width
+    if (e.editorName === "dxSelectBox") {
+      e.editorOptions.onOpened = (elem) => elem.component._popup.option("width", 300);
+    }
   }
 
   onEditorPrepared(e) {

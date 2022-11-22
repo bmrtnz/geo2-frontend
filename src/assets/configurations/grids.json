@@ -2607,8 +2607,7 @@
             "description"
           ],
           "searchExpr": [
-            "id",
-            "description"
+            "id"
           ]
         }
       },
@@ -2679,8 +2678,7 @@
             "description"
           ],
           "searchExpr": [
-            "id",
-            "description"
+            "id"
           ]
         }
       },
@@ -2708,8 +2706,7 @@
             "description"
           ],
           "searchExpr": [
-            "id",
-            "description"
+            "id"
           ]
         }
       },
@@ -2731,8 +2728,7 @@
             "description"
           ],
           "searchExpr": [
-            "id",
-            "description"
+            "id"
           ]
         }
       },
@@ -2777,8 +2773,7 @@
             "description"
           ],
           "searchExpr": [
-            "id",
-            "description"
+            "id"
           ]
         }
       },
