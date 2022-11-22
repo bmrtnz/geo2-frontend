@@ -36,7 +36,7 @@ export class GridReservationStockEnCoursComponent implements OnInit {
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
-  @ViewChild(DxDataGridComponent, { static: true }) dataGridResaEnCours: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
   @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
 
   public columns: Observable<GridColumn[]>;
@@ -73,8 +73,8 @@ export class GridReservationStockEnCoursComponent implements OnInit {
   }
 
   onContentReady(e) {
-    this.gridRowsTotal = this.dataGridResaEnCours.instance.getVisibleRows()?.length;
-    const items = (this.dataGridResaEnCours.dataSource as DataSource)?.items();
+    this.gridRowsTotal = this.datagrid.instance.getVisibleRows()?.length;
+    const items = (this.datagrid.dataSource as DataSource)?.items();
     this.reservationChange.emit(items ?? []);
   }
 
@@ -97,7 +97,7 @@ export class GridReservationStockEnCoursComponent implements OnInit {
   }
 
   clearDataSource() {
-    this.dataGridResaEnCours.dataSource = null;
+    this.datagrid.dataSource = null;
   }
 
 }
