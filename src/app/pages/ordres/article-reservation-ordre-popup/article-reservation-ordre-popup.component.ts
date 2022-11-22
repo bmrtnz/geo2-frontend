@@ -32,6 +32,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   quantiteAReserver: number;
   resaStatus: LigneReservation[];
   public okDisabled = false;
+  public popupFullscreen = false;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
@@ -78,6 +79,10 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
     // this.gridResa.reloadSource(this.ordreLigne.article.id);
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 
   clearAll() {

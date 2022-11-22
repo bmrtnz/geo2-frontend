@@ -237,7 +237,7 @@
                 <dx-check-box
                   #leftAccessPanel
                   class="float-right leftPanelCheckBox"
-                  hint="{{ 'afficher-boutons-navigation-rapide' | localize }}"
+                  hint="{{ (leftAccessPanel.value ? 'masquer' : 'afficher') + '-boutons-navigation-rapide' | localize }}"
                   (onValueChanged)="leftPanelChange($event)"
                 >
                 </dx-check-box>
