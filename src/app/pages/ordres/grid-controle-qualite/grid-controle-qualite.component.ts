@@ -99,9 +99,9 @@ export class GridControleQualiteComponent implements ToggledGrid {
     this.photosPopup.visible = true;
   }
 
-  openCQTechReport(titleKey: string, document: Document) {
+  openReport(titleKey: string, document: Document) {
     if (!document || !document.isPresent) {
-      notify("Désolé, contrôle CQ technique non accessible", "error");
+      notify(`Désolé, ${this.localization.localize(titleKey)} non accessible`, "error", 7000);
       return;
     }
     this.currentReport = {
@@ -177,10 +177,9 @@ export class GridControleQualiteComponent implements ToggledGrid {
   }
 
   openCQClientReport(cell) {
-    console.log("open PDF");
     this.documentsNumService
       .getList(
-        new Set(["nomFichierComplet", "statut"]),
+        new Set(["statut", "cqDoc.isPresent", "cqDoc.uri", "cqDoc.type"]),
         `ordreLigne.id==${cell.data.ordreLigne.id} and typeDocument=='CQXSL' and id==${cell.data.referenceCQC}`
       )
       .subscribe({
@@ -189,6 +188,8 @@ export class GridControleQualiteComponent implements ToggledGrid {
             notify("Aucun rapport CQ disponible", "warning", 3000);
           } else {
             let localText = "";
+            let toastType = "warning";
+
             switch (res[0].statut) {
               case 1: {
                 localText = "text-popup-CQ-creation-PDF-attente";
@@ -199,15 +200,25 @@ export class GridControleQualiteComponent implements ToggledGrid {
                 break;
               }
               case 3: {
+                // Opening PDF
+                localText = "text-popup-CQ-ouverture-PDF";
+                toastType = "info";
+                const document = {
+                  isPresent: res[0].cqDoc.isPresent,
+                  uri: res[0].cqDoc.uri,
+                  type: res[0].cqDoc.type
+                };
+                this.openReport("ControleQualite-cqClient", document);
                 break;
               }
               case 4: {
                 localText = "text-popup-CQ-creation-PDF-erreur";
+                toastType = "error";
                 break;
               }
             }
-            // Show warning text
-            if (localText) notify(this.localization.localize(localText), "warning", 3000);
+            // Show info/warning text
+            if (localText) notify(this.localization.localize(localText), toastType, 3000);
           }
         },
         error: (err) => {
