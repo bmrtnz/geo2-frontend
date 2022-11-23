@@ -4489,6 +4489,7 @@
         "dataField": "logistique.dateDepartPrevueFournisseur",
         "sortIndex": 1,
         "sortOrder": "asc",
+        "dataType": "string",
         "visible": true
       },
       {
@@ -4496,12 +4497,14 @@
         "dataField": "ordre.numero",
         "sortIndex": 3,
         "sortOrder": "asc",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "ordre.societe.id",
         "cssClass": "no-padding",
+        "dataType": "string",
         "visible": true
       },
       {
@@ -4509,11 +4512,13 @@
         "dataField": "logistique.fournisseur.code",
         "sortIndex": 4,
         "sortOrder": "asc",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "ordre.transporteur.id",
+        "dataType": "string",
         "visible": true
       },
       {
@@ -4529,26 +4534,31 @@
       {
         "visibleIndex": 14,
         "dataField": "article.description",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 16,
         "dataField": "ordre.dateLivraisonPrevue",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "ordre.client.code",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "ordre.entrepot.code",
+        "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 22,
         "dataField": "ordre.referenceClient",
+        "dataType": "string",
         "visible": true
       },
       {
@@ -4564,16 +4574,19 @@
       {
         "visibleIndex": 28,
         "dataField": "ordre.flagAnnule",
+        "dataType": "boolean",
         "visible": false
       },
       {
         "dataField": "ordre.pays.id",
         "sortIndex": 1,
+        "dataType": "string",
         "sortOrder": "asc"
       },
       {
         "dataField": "numero",
         "sortIndex": 4,
+        "dataType": "string",
         "sortOrder": "asc"
       },
       {
@@ -4582,6 +4595,7 @@
       },
       {
         "dataField": "logistique.fournisseur.id",
+        "dataType": "string",
         "visible": false
       },
       {
