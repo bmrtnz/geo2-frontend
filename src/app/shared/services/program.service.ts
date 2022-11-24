@@ -1,4 +1,3 @@
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 
@@ -7,23 +6,27 @@ export enum Program {
   ORCHARD = "orchard",
 }
 
+export const SUPPORTED_MIMES = [
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-excel",
+];
+
 @Injectable({
   providedIn: "root"
 })
 export class ProgramService {
 
-  constructor(
-    private httpClient: HttpClient,
-  ) { }
+  /** Name of the body parameter in the backend */
+  public static bodyName = "chunk";
 
-  private static buildUrl(program: Program): string {
-    return `${environment.apiEndpoint}/program/${program}`;
+  /** Build ther URL that match the program */
+  public static buildUrl(program: Program): string {
+    return `${environment.apiEndpoint}/program/${program.toString()}`;
   }
 
-  public fetch(program: Program, body) {
-    return this.httpClient.post(ProgramService.buildUrl(program), body, {
-      withCredentials: true,
-    });
+  /** Build the `accept` header */
+  public static buildAccept(): string {
+    return SUPPORTED_MIMES.join();
   }
 
 }
