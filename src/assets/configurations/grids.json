@@ -5016,16 +5016,6 @@
         "sortOrder": "asc"
       },
       {
-        "dataField": "dateDepartOrdre",
-        "sortIndex": 5,
-        "sortOrder": "asc"
-      },
-      {
-        "dataField": "numeroOrdre",
-        "sortIndex": 5,
-        "sortOrder": "asc"
-      },
-      {
         "dataField": "raisonSocialeEntrepot"
       },
       {

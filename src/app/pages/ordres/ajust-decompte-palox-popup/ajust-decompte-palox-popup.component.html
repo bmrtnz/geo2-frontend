@@ -1,0 +1,107 @@
+<dx-popup
+  width="500"
+  height="auto"
+  [dragEnabled]="true"
+  [title]="title"
+  [visible]="visible"
+  (onHidden)="onHidden()"
+  (onShown)="onShowing($event)"
+  [closeOnOutsideClick]="true"
+>
+  <div *dxTemplate="let d of 'content'">
+    <form #form="ngForm" class="inputs">
+
+      <!-- Entrepôt, station & type palox -->
+      <div class="palox-info-boxes">
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">{{ 'text-palox-popup-entrepot' | localize }}</div>
+          <div class="dx-field-value">
+            <dx-text-box #entrepotBox [disabled]="true"></dx-text-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">{{ 'text-palox-popup-station' | localize }}</div>
+          <div class="dx-field-value">
+            <dx-text-box #stationBox [disabled]="true"></dx-text-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">{{ 'text-palox-popup-type-palox' | localize }}</div>
+          <div class="dx-field-value">
+            <dx-text-box #typePaloxBox [disabled]="true"></dx-text-box>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="palox-info-boxes palox-inputs">
+        <!-- Palox -->
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right large-padding-left">{{ paloxLabel }}</div>
+          <div class="dx-field-value">
+            <dx-number-box
+              ngModel
+              #paloxBox
+              name="palox"
+              valueChangeEvent="keyup"
+              [showClearButton]="true"
+              >
+              <dx-validator>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dx-validator>
+            </dx-number-box>
+          </div>
+        </div>
+
+        <!-- Date -->
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">{{ dateLabel }}</div>
+          <div class="dx-field-value">
+            <dx-date-box
+              ngModel
+              #dateBox
+              name="date"
+              [displayFormat]="'dd-MM-yy'"
+              dateSerializationFormat="yyyy-MM-dd"
+              valueChangeEvent="keyup"
+              type="date"
+              >
+              <dx-validator>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dx-validator>
+            </dx-date-box>
+          </div>
+        </div>
+      </div>
+
+      <!-- Commentaire -->
+      <div class="dx-field" *ngIf="purpose === 'adjust'">
+        <div class="dx-field-label text-align-right comment-palox">{{ 'text-palox-popup-commentaire' | localize }}</div>
+        <div class="dx-field-value">
+          <dx-text-box
+            ngModel
+            #commentBox
+            name="commentaire">
+          </dx-text-box>
+        </div>
+      </div>
+
+      <br>
+      <br>
+      <div class="popup-action">
+        <dx-button
+          text="{{ 'btn-annuler' | localize }}"
+          type="normal"
+          (onClick)="popupComponent.instance.hide()"
+        ></dx-button>
+        <dx-button
+          text="{{ 'btn-valider' | localize }}"
+          type="default"
+          (onClick)="onSubmit(form)"
+        ></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>
+

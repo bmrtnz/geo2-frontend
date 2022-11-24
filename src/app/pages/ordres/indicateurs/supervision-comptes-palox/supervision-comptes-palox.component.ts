@@ -7,6 +7,7 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { fixObservableSubclass } from "@apollo/client/utilities";
+import { alert } from "devextreme/ui/dialog";
 import { Role } from "app/shared/models";
 import MouvementEntrepot from "app/shared/models/mouvement-entrepot.model";
 import MouvementFournisseur from "app/shared/models/mouvement-fournisseur.model";
@@ -30,11 +31,14 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSwitchComponent } from "devextreme-angular";
+import { AjustDecomptePaloxPopupComponent } from "../../ajust-decompte-palox-popup/ajust-decompte-palox-popup.component";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+import notify from "devextreme/ui/notify";
+import { FunctionResult } from "app/shared/services/api/functions.service";
 
 enum GridModel {
   MouvementsClients,
@@ -66,8 +70,9 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   paloxGrids: QueryList<DxDataGridComponent>;
 
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
-  @ViewChild("switchEntity", { static: false })
-  switchEntity: DxSwitchComponent;
+  @ViewChild("switchEntity", { static: false }) switchEntity: DxSwitchComponent;
+  @ViewChild(AjustDecomptePaloxPopupComponent, { static: false }) ajustDecPopup: AjustDecomptePaloxPopupComponent;
+
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>[];
@@ -86,10 +91,13 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   private datasources: DataSource[] = [];
   public toRefresh: boolean;
+  public paloxPopupPurpose: string;
+  public info: any;
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public ordresService: OrdresService,
+    public localization: LocalizationService,
     public supervisionPaloxsService: SupervisionPaloxsService,
     public entrepotsService: EntrepotsService,
     public fournisseursService: FournisseursService,
@@ -98,7 +106,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
     private tabContext: TabContext,
-    private currentCompanyService: CurrentCompanyService,
+    public currentCompanyService: CurrentCompanyService,
   ) {
     this.validRequiredEntity = {
       client: true,
@@ -278,12 +286,77 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     }
   }
 
-  adjust(data) {
-    console.log(data);
+  adjustPalox(data, purpose) {
+    this.paloxPopupPurpose = purpose;
+    data = data.items?.length ? data.items[0] : data.collapsedItems[0];
+    this.info = {
+      entrepotId: this.formGroup.get("entrepot").value.id,
+      entrepotCode: data.codeEntrepot,
+      stationCode: data.codeFournisseur,
+      codeClient: data.codeClient,
+      paloxCode: data.codeEmballage,
+      raisonSocialeFournisseur: data.raisonSocialeFournisseur,
+      codeEspece: data.codeEspece
+    };
+    this.ajustDecPopup.show();
   }
 
-  inventory(data) {
-    console.log(data);
+  onValidatePaloxPopup(e) {
+
+    if (this.paloxPopupPurpose === "adjust") {
+      // Adjustment
+      this.supervisionPaloxsService
+        .fAjustPalox(
+          this.info.codeClient,
+          this.info.codeEspece,
+          e.date,
+          this.info.entrepotCode,
+          this.info.paloxCode,
+          e.commentaire,
+          this.currentCompanyService.getCompany().id,
+          this.info.stationCode,
+          e.nbPalox
+        )
+        .subscribe({
+          next: (result) => {
+            const data = result.data.fAjustPalox;
+            if (data.res === 2)
+              return alert(data.msg, this.localization.localize("text-popup-ajust-palox"));
+            notify(this.localization.localize("text-popup-ajust-palox-ok"), "success", 3000);
+          },
+          error: (error: Error) => alert(this.messageFormat(error.message), this.localization.localize("text-popup-ajust-palox"))
+        });
+    } else {
+      // Inventory
+      this.supervisionPaloxsService
+        .fDecomptePalox(
+          this.info.codeEspece,
+          e.date,
+          this.info.entrepotId,
+          this.info.paloxCode,
+          this.currentCompanyService.getCompany().id,
+          this.info.stationCode,
+          e.nbPalox
+        )
+        .subscribe({
+          next: () => {
+            notify(this.localization.localize("text-popup-inventaire-palox-ok"), "success", 3000);
+          },
+          error: (error: Error) => {
+            alert(this.messageFormat(error.message), this.localization.localize("text-popup-inventaire-palox"));
+          }
+        });
+    }
+  }
+
+  private messageFormat(mess) {
+    const functionNames = [
+      "fDecomptePalox",
+      "fAjustPalox"
+    ];
+    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
   getInventoryData(e) {

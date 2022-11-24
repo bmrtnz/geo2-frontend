@@ -56,6 +56,7 @@ import { AjoutArticlesHistoPopupComponent } from "./ajout-articles-histo-popup/a
 import { AjoutArticlesManuPopupComponent } from "./ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
+import { AjustDecomptePaloxPopupComponent } from "./ajust-decompte-palox-popup/ajust-decompte-palox-popup.component";
 import { AnnuleRemplacePopupComponent } from "./annule-remplace-popup/annule-remplace-popup.component";
 import { ArticleCertificationPopupComponent } from "./article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
@@ -216,7 +217,8 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GridModifCommandeEdiComponent,
     VisualiserOrdresPopupComponent,
     DuplicationOrdrePopupComponent,
-    HistoriqueOrdresComponent
+    HistoriqueOrdresComponent,
+    AjustDecomptePaloxPopupComponent
   ],
   imports: [
     OrdresRoutingModule,
