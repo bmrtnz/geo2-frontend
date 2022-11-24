@@ -290,7 +290,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     this.paloxPopupPurpose = purpose;
     data = data.items?.length ? data.items[0] : data.collapsedItems[0];
     this.info = {
-      entrepotId: this.formGroup.get("entrepot").value.id,
+      entrepotId: this.formGroup.get("entrepot").value?.id,
       entrepotCode: data.codeEntrepot,
       stationCode: data.codeFournisseur,
       codeClient: data.codeClient,
