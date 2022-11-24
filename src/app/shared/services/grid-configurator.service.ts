@@ -533,6 +533,7 @@ export class GridConfiguratorService {
       {
         location: "after",
         widget: "dxButton",
+        cssClass: `grid-refresh${(title ? "-" + title.toLowerCase().split(" ").join("-") : "")}`,
         options: {
           icon: "material-icons settings_backup_restore",
           hint: "Réinitialiser les colonnes affichées",

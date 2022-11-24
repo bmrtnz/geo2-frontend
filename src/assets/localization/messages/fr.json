@@ -219,6 +219,7 @@
     "text-transporteurs-popup-documents": "N’oubliez pas de joindre la lettre d’engagement pour validation du tiers par l’administrateur",
     "text-groupage-popup": "Veuillez sélectionner un lieu de groupage",
     "text-selection-lignes": "Veuillez sélectionner au moins un article",
+    "grid-title-lignes-cde": "Lignes de commande",
     "datagridTitle-SyntheseExpeditions": "Synthèse expéditions",
     "auth-logout": "Déconnexion",
     "auth-subtitle": "Connectez-vous à votre compte",
