@@ -281,11 +281,16 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     }
   }
 
-  adjustPalox(data, purpose) {
+  async adjustPalox(data, purpose) {
+    let idEntrepot = "";
     this.paloxPopupPurpose = purpose;
     data = data.items?.length ? data.items[0] : data.collapsedItems[0];
+    const entDS = this.entrepotsService.getDataSource_v2(["id"]);
+    entDS.filter(["code", "=", data.codeEntrepot]);
+    await entDS.load().then(res => idEntrepot = res[0]?.id);
+    if (idEntrepot === "" || !idEntrepot) return notify("Erreur ID entrepôt", "error", 3000);
     this.info = {
-      entrepotId: this.formGroup.get("entrepot").value?.id,
+      entrepotId: idEntrepot,
       entrepotCode: data.codeEntrepot,
       stationCode: data.codeFournisseur,
       codeClient: data.codeClient,
