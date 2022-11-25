@@ -1,0 +1,18 @@
+<div class="program-chooser-panel">
+  <dx-context-menu
+    *ngIf="menuMode === 'context'"
+    [items]="programs"
+    target=".program-button"
+    showEvent="dxclick"
+    (onItemClick)="selectProgram($event)"
+    width="170px"
+    cssClass="program-chooser-menu"
+  >
+  </dx-context-menu>
+  <dx-list
+    *ngIf="menuMode === 'list'"
+    class="dx-toolbar-menu-action program-list"
+    [items]="programs"
+  >
+  </dx-list>
+</div>

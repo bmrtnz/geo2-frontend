@@ -7,6 +7,8 @@ import {
 } from "@angular/core";
 import { AuthService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { ProgramChooserComponent } from "app/shared/components/program-chooser/program-chooser.component";
+import { CommandesEdiComponent } from "../indicateurs/commandes-edi/commandes-edi.component";
 import {
   Indicator,
   OrdresIndicatorsService
@@ -36,7 +38,11 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<string[]>();
+
+  public programs: any[];
+
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
+  @ViewChild(CommandesEdiComponent, { static: false }) cdesEDI: CommandesEdiComponent;
 
   constructor(
     public ordresIndicatorsService: OrdresIndicatorsService,
@@ -46,6 +52,16 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+
+    this.programs = [
+      {
+        text: "TESCO"
+      },
+      {
+        text: "ORCHARD"
+      }
+    ];
+
     this.configureIndicator();
 
     const selectIndicators = this.indicatorsChange.pipe(
@@ -100,6 +116,10 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   openTagBox() {
     this.tagBox.instance.open();
+  }
+
+  openCommandesEdi() {
+    // this.cdesEDI.
   }
 
   tileNumber(e) {

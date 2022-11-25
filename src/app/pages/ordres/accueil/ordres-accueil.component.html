@@ -6,13 +6,6 @@
       {{ "ordres-configuration" | localize }}
     </div>
     <div class="dx-field-value">
-      <dx-button
-        style="float: right"
-        icon="material-icons settings"
-        (onClick)="openTagBox()"
-        text=""
-      >
-      </dx-button>
       <dx-tag-box
         [items]="allIndicators"
         [value]="loadedIndicators"
@@ -27,7 +20,36 @@
         <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
       </dx-tag-box>
     </div>
+    <dx-button class="tile-config-button"
+      icon="material-icons settings"
+      (onClick)="openTagBox()"
+      text=""
+    >
+    </dx-button>
   </div>
+
+  <dx-button
+    class="dx-button order-home-up-button program-button"
+    type="default"
+  >
+    <div *dxTemplate="let data of 'content'">
+      <div class="dx-button-content">
+        <div class="button-programs">Programmes</div>
+      </div>
+      <app-program-chooser
+        [programs]="programs"
+        menuMode="context"
+      ></app-program-chooser>
+    </div>
+  </dx-button>
+  <dx-button
+    class="order-home-up-button"
+    type="default"
+    text="Commandes EDI"
+    [disabled]="!authService.currentUser.accessCommandeEdi"
+    (onClick)="openCommandesEdi()"
+  >
+  </dx-button>
 </h2>
 
 <div class="content-block accueilOrdres-page">
@@ -86,3 +108,5 @@
     </dxi-item>
   </dx-tile-view>
 </div>
+
+<!-- <app-commandes-edi></app-commandes-edi> -->

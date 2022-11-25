@@ -9,28 +9,34 @@
     top: 50%;
     transform: translateY(-50%);
     padding: 0 20px;
+
     .number-container {
       line-height: 0;
       font-size: 0;
     }
+
     .indicator,
     .parameter,
     .subParameter {
       color: #fff;
     }
+
     .dx-loadindicator-segment0 .dx-loadindicator-segment-inner {
       border-top-color: #fff;
       border-right-color: #fff;
     }
+
     .dx-loadindicator-segment1 .dx-loadindicator-segment-inner {
       border-top-color: #fff;
       border-right-color: #fff;
       border-left-color: #fff;
     }
+
     .dx-loadindicator-segment2 .dx-loadindicator-segment-inner {
       border-top-color: #fff;
       border-left-color: #fff;
     }
+
     .indicator {
       display: inline-block;
       position: relative;
@@ -40,21 +46,26 @@
       left: 50%;
       transform: translateX(-50%);
     }
+
     .indicator-button {
       left: 50%;
       transform: translateX(-50%);
       margin: 0 auto;
       background-color: transparent;
     }
+
     .tile-button {
+
       &:hover,
       &:focus {
         background-color: #ff325a !important;
       }
+
       &.warning-button {
         position: absolute;
         top: 19px;
         right: 67px;
+
         .warning {
           font-size: 22px !important;
           line-height: 22px !important;
@@ -68,6 +79,7 @@
       padding-top: 5px;
       text-align: center;
     }
+
     .subParameter {
       font-size: 1.7em;
       line-height: 1.2em;
@@ -75,34 +87,66 @@
     }
   }
 }
+
 ::ng-deep .dx-tile {
   cursor: pointer;
   transition: 0.15s;
 }
+
 ::ng-deep .dx-tile:hover {
   transform: scale(102%, 102%);
 }
+
 ::ng-deep .configuration {
-  width: 400px;
+  width: 165px;
   float: right;
-  top: 7px;
+  margin: 0 35px 5px 0;
+
   .dx-tag {
     display: none;
   }
+
   .dx-field-label {
-    font-size: 1.3em;
-    color: #444;
-    left: 130px;
-    margin-top: -3px;
     position: absolute;
+    left: 0;
+    margin-top: -3px;
+    width: 70% !important;
+    font-size: 1.3em;
+    padding-right: 0;
+    padding-left: 9px;
+    text-overflow: initial;
+    color: #444;
   }
+
   .dx-dropdowneditor-input-wrapper {
     display: none;
   }
+
   .dx-editor-underlined::after {
     display: none;
   }
+
+  .tile-config-button {
+    left: 4px;
+  }
+
 }
+
 ::ng-deep .dx-list-select-all {
   display: none;
+}
+
+::ng-deep .program-button,
+.order-home-up-button {
+  margin: 0 5px;
+  float: right;
+
+  .button-programs {
+    display: inline;
+    vertical-align: middle;
+    line-height: 13px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: .04em;
+  }
 }

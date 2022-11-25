@@ -255,19 +255,19 @@ const indicators: Indicator[] = [
     indicatorIcon: "material-icons local_shipping",
     warningIcon: "",
   },
-  {
-    id: "CommandesEdi",
-    enabled: false,
-    withCount: false,
-    parameter: "Commandes",
-    subParameter: "EDI",
-    tileBkg: "#225AA8",
-    indicatorIcon: "material-icons view_list",
-    warningIcon: "",
-    component: import(
-      "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
-    ),
-  },
+  // {
+  //   id: "CommandesEdi",
+  //   enabled: false,
+  //   withCount: false,
+  //   parameter: "Commandes",
+  //   subParameter: "EDI",
+  //   tileBkg: "#225AA8",
+  //   indicatorIcon: "material-icons view_list",
+  //   warningIcon: "",
+  //   component: import(
+  //     "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
+  //   ),
+  // },
   {
     id: "histoOrdres",
     enabled: true,
@@ -313,9 +313,9 @@ export class OrdresIndicatorsService {
       ];
 
       // Commandes EDI
-      if (instance.id === "CommandesEdi") {
-        instance.enabled = this.authService.currentUser.accessCommandeEdi;
-      }
+      // if (instance.id === "CommandesEdi") {
+      //   instance.enabled = this.authService.currentUser.accessCommandeEdi;
+      // }
 
       // Supervision livraison
       if (instance.id === "SupervisionLivraison") {
