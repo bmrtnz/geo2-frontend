@@ -1,4 +1,4 @@
-import { Component, Input, NgModule, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, NgModule, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 import { DxListModule } from "devextreme-angular/ui/list";
@@ -14,15 +14,14 @@ export class ProgramChooserComponent {
 
   @Input() programs: any;
   @Input() menuMode: string;
+  @Output() programChosen = new EventEmitter();
 
   constructor(
   ) { }
 
   selectProgram(e) {
     if (e.itemData) e = e.itemData;
-
-    const program = e.text;
-    console.log(program);
+    this.programChosen.emit(e);
   }
 }
 

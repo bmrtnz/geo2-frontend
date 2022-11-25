@@ -1,0 +1,45 @@
+// Var
+@import "~themes/generated/variables.base";
+
+
+::ng-deep .import-programme-popup {
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+  }
+
+  .close-import-programme-popup,
+  .minimize-popup {
+    top: 13px;
+    float: right;
+  }
+
+  .dx-popup-content {
+    overflow-y: auto;
+
+    .popup-buttons-container {
+      display: inline-block;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .dx-button {
+        margin: 5px;
+      }
+    }
+  }
+
+  .display-none {
+    display: none;
+  }
+
+}

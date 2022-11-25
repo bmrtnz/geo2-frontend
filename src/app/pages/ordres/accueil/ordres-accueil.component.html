@@ -31,6 +31,7 @@
   <dx-button
     class="dx-button order-home-up-button program-button"
     type="default"
+    hint="{{ 'hint-open-program' | localize }}"
   >
     <div *dxTemplate="let data of 'content'">
       <div class="dx-button-content">
@@ -38,6 +39,7 @@
       </div>
       <app-program-chooser
         [programs]="programs"
+        (programChosen)="openProgramPopup($event)"
         menuMode="context"
       ></app-program-chooser>
     </div>
@@ -110,3 +112,6 @@
 </div>
 
 <!-- <app-commandes-edi></app-commandes-edi> -->
+<app-import-programmes-popup
+  [program]="programChosen"
+></app-import-programmes-popup>

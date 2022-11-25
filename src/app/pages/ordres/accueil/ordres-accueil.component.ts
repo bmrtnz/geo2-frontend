@@ -3,6 +3,7 @@ import {
   EventEmitter,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild
 } from "@angular/core";
 import { AuthService } from "app/shared/services";
@@ -24,6 +25,7 @@ import {
   tap
 } from "rxjs/operators";
 import { TabContext } from "../root/root.component";
+import { ImportProgrammesPopupComponent } from "../import-programmes-popup/import-programmes-popup.component";
 
 @Component({
   selector: "app-ordres-accueil",
@@ -31,6 +33,9 @@ import { TabContext } from "../root/root.component";
   styleUrls: ["./ordres-accueil.component.scss"],
 })
 export class OrdresAccueilComponent implements OnInit, OnDestroy {
+
+  @Output() public programChosen: any;
+
   indicators: (Indicator & any)[];
   allIndicators: Indicator[];
   loadedIndicators: string[];
@@ -43,6 +48,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
   @ViewChild(CommandesEdiComponent, { static: false }) cdesEDI: CommandesEdiComponent;
+  @ViewChild(ImportProgrammesPopupComponent, { static: false }) importProgPopup: ImportProgrammesPopupComponent;
 
   constructor(
     public ordresIndicatorsService: OrdresIndicatorsService,
@@ -55,9 +61,11 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
     this.programs = [
       {
+        id: "tesco",
         text: "TESCO"
       },
       {
+        id: "orchard",
         text: "ORCHARD"
       }
     ];
@@ -120,6 +128,11 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   openCommandesEdi() {
     // this.cdesEDI.
+  }
+
+  openProgramPopup(e) {
+    this.programChosen = e;
+    this.importProgPopup.visible = true;
   }
 
   tileNumber(e) {

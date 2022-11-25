@@ -5957,5 +5957,54 @@
         "visible": false
       }
     ]
+  },
+  "import-programme": {
+    "pageSize": 10,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "loadReference",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "depot",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "dateDepartPrevue",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateLivraisonPrevue",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "erreur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "message",
+        "visible": true
+      }
+    ]
   }
 }

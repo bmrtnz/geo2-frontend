@@ -1,0 +1,57 @@
+<dx-popup
+  [width]="800"
+  height="auto"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="visible"
+  [fullScreen]="this.popupFullscreen"
+  [resizeEnabled]="true"
+  (onShowing)="onShowing($event)"
+  >
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-import-programme-popup"
+      icon="close"
+      (onClick)="quitPopup()"
+    >
+    </dx-button>
+    <dx-button
+      class="minimize-popup"
+      icon="material-icons fullscreen_exit"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <app-grid-import-programmes [programID]="programID"></app-grid-import-programmes>
+
+  <br />
+  <div class="popup-buttons-container">
+    <dx-button
+    class="download-button"
+      type="default"
+      text="Télécharger"
+      (onClick)="download()"
+  ></dx-button>
+    <dx-button
+        type="normal"
+        text="{{ 'btn-fermer' | localize }}"
+        (onClick)="quitPopup()"
+    ></dx-button>
+  </div>
+
+  <form action="http://example.com">
+    <input
+      #excelUpload
+      type="file"
+      name="import"
+      class="display-none"
+      accept=".xls, .xlsx"
+      onchange="form.submit()"
+    />
+  </form>
+
+</dx-popup>
+
+
