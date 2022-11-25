@@ -7,6 +7,7 @@
   [(visible)]="visible"
   [fullScreen]="this.popupFullscreen"
   [resizeEnabled]="true"
+  (onShown)="onShown($event)"
   (onShowing)="onShowing($event)"
   >
   <div *dxTemplate="let data of 'title'">

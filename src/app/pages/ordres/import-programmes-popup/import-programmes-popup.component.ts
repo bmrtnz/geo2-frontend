@@ -42,9 +42,9 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   setTitle() {
     if (this.program) {
-      this.programID = this.program?.id;
+      this.programID = this.program.id;
       this.title =
-        this.localizeService.localize("title-import-programme-popup").replace("&P", this.program?.text);
+        this.localizeService.localize("title-import-programme-popup").replace("&P", this.program.text);
       this.progressMessage = "Fin duplication vers la SA";
     }
   }
