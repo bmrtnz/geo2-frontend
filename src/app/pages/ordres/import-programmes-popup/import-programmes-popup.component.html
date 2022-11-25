@@ -20,37 +20,46 @@
     <dx-button
       class="minimize-popup"
       icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       (onClick)="resizePopup()"
     ></dx-button>
   </div>
 
-  <app-grid-import-programmes [programID]="programID"></app-grid-import-programmes>
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="import-programme-content-container">
+        <app-grid-import-programmes [programID]="programID"></app-grid-import-programmes>
+        <div class="import-progress">{{ progressMessage }}</div>
 
-  <br />
-  <div class="popup-buttons-container">
-    <dx-button
-    class="download-button"
-      type="default"
-      text="Télécharger"
-      (onClick)="download()"
-  ></dx-button>
-    <dx-button
-        type="normal"
-        text="{{ 'btn-fermer' | localize }}"
-        (onClick)="quitPopup()"
-    ></dx-button>
+        <br />
+        <div class="popup-buttons-container">
+          <dx-button
+          class="download-button"
+            type="default"
+            text="Télécharger"
+            (onClick)="download()"
+        ></dx-button>
+          <dx-button
+              type="normal"
+              text="{{ 'btn-fermer' | localize }}"
+              (onClick)="quitPopup()"
+          ></dx-button>
+        </div>
+
+        <form action="http://example.com">
+          <input
+            #excelUpload
+            type="file"
+            name="import"
+            class="display-none"
+            accept=".xls, .xlsx"
+            onchange="form.submit()"
+          />
+        </form>
+      </div>
+    </dx-scroll-view>
   </div>
-
-  <form action="http://example.com">
-    <input
-      #excelUpload
-      type="file"
-      name="import"
-      class="display-none"
-      accept=".xls, .xlsx"
-      onchange="form.submit()"
-    />
-  </form>
 
 </dx-popup>
 

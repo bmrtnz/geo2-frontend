@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
-import { DxPopupComponent } from "devextreme-angular";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
 import { confirm } from "devextreme/ui/dialog";
 
@@ -12,17 +12,19 @@ import { confirm } from "devextreme/ui/dialog";
 })
 export class ImportProgrammesPopupComponent implements OnChanges {
 
-  @Input() program;
+  @Input() program: any;
   @Output() programID: string;
   @Output() title: string;
 
   public visible: boolean;
   public gridHasData: boolean;
   public popupFullscreen = true;
+  public progressMessage: string;
 
   @ViewChild(GridImportProgrammesComponent, { static: false }) gridComponent: GridImportProgrammesComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("excelUpload") excelUpload: ElementRef;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
     private localizeService: LocalizationService
@@ -30,6 +32,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    this.progressMessage = "";
     this.setTitle();
   }
 
@@ -42,11 +45,16 @@ export class ImportProgrammesPopupComponent implements OnChanges {
       this.programID = this.program?.id;
       this.title =
         this.localizeService.localize("title-import-programme-popup").replace("&P", this.program?.text);
+      this.progressMessage = "Fin duplication vers la SA";
     }
   }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("import-programme-popup");
+  }
+
+  onShown(e) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.excelUpload.nativeElement.click();
   }
 
@@ -57,10 +65,8 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   quitPopup() {
     confirm(
       this.localizeService.localize("text-popup-quit"),
-      this.localizeService.localize("title-import-programme-popup").replace(" &P", ""))
-      .then(res => {
-        if (res) this.popup.visible = false;
-      });
+      this.localizeService.localize("title-import-programme-popup").replace(" &P", "")
+    ).then(res => this.popup.visible = !res);
   }
 
 }

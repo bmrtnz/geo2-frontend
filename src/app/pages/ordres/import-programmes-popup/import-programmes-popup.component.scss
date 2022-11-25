@@ -23,23 +23,34 @@
     float: right;
   }
 
-  .dx-popup-content {
-    overflow-y: auto;
-
-    .popup-buttons-container {
-      display: inline-block;
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-
-      .dx-button {
-        margin: 5px;
-      }
-    }
-  }
-
   .display-none {
     display: none;
   }
+}
 
+::ng-deep .import-programme-content-container {
+  padding: 0 15px 0 2px;
+
+  .import-progress {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFE1E6;
+    margin: 8px 0px 15px 0px;
+    padding: 8px 24px 10px 24px;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 1em;
+  }
+
+  .popup-buttons-container {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .dx-button {
+      margin: 5px;
+    }
+  }
 }

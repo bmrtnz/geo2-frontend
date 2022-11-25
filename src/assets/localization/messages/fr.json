@@ -109,6 +109,8 @@
     "clone": "Clone",
     "ajuster": "Ajuster",
     "inventaire": "Inventaire",
+    "reduire": "Réduire",
+    "agrandir": "Agrandir",
     "choose-cancel-reason": "Choisir un motif d'annulation",
     "choose-delete-reason": "Veuillez préciser la raison de la suppression de l'ordre :",
     "preSaisie": "(Pré-saisie)",
