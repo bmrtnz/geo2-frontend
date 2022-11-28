@@ -39,7 +39,7 @@ export class SupervisionPaloxsService extends ApiService {
             const variables = this.persistantVariables;
             this.listenQuery<Response>(
               query,
-              { variables },
+              { variables, fetchPolicy: "no-cache" },
               (res) => {
                 if (res.data && res.data[operation]) {
                   resolve({
@@ -58,7 +58,7 @@ export class SupervisionPaloxsService extends ApiService {
             type Response = { [operation: string]: M };
             this.listenQuery<Response>(
               query,
-              { variables },
+              { variables, fetchPolicy: "no-cache" },
               (res) => {
                 if (res.data && res.data[operation])
                   resolve(res.data[operation]);

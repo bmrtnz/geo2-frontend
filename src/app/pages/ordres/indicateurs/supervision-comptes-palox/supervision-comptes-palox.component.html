@@ -201,9 +201,7 @@
     <div class="group-text-1">
       {{ getInventoryData(cell.data) }}
     </div>
-    <div class="group-text-4">
-      {{ inventoryDate(cell.data) }}
-    </div>
+    <div class="group-text-4">{{ inventoryDate(cell.data) }}</div>
     <dx-button
       [visible]="getInventoryData(cell.data) !== ''"
       class="small-action-button float-left"
@@ -374,24 +372,8 @@
     <div class="group-text-1">
       {{ getInventoryData(cell.data) }}
     </div>
-    <dx-button
-      [visible]="getInventoryData(cell.data) !== ''"
-      class="small-action-button float-left"
-      type="normal"
-      (onClick)="adjustPalox(cell.data, 'adjust')"
-      text="{{ 'ajuster' | localize }}"
-    ></dx-button>
+    <div class="group-text-4">{{ inventoryDate(cell.data) }}</div>
     <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
-    <dx-button
-    class="small-action-button"
-      [visible]="getInventoryData(cell.data) !== ''"
-      type="normal"
-      (onClick)="adjustPalox(cell.data, 'inventory')"
-      text="{{ 'inventaire' | localize }}"
-    ></dx-button>
-    <div class="group-text-4">
-      Date inventaire :&nbsp;{{ inventoryDate(cell.data) }}
-    </div>
   </div>
 
 </dx-data-grid>
