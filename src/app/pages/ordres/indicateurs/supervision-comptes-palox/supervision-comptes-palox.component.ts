@@ -267,7 +267,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             );
       }
       if (e.column.dataField === "sommeQuantiteInventaire") {
-        e.cellElement.innerText = e.data.entree - e.data.sortie;
+        e.cellElement.innerText = e.data.entree - e.data.sortie - e.data.quantiteInventaire;
         e.cellElement.classList.add("bold-text");
       }
     }
