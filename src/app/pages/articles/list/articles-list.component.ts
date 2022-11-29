@@ -28,6 +28,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
+  @Input() public preFilterTitle: string;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();

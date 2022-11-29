@@ -11,7 +11,8 @@
 
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
-    <div class="title-end">{{ titleEnd }}</div>
+    <div class="title-mid">{{ titleMid }}</div>
+    <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
     <dx-button
       class="close-article-popup"
       icon="close"
@@ -28,27 +29,19 @@
     <dx-scroll-view>
 
       <div class="ajout-art-manu-content-container">
-        <!-- code article -->
-        <div class="dx-field quickCode-area">
-          <div class="dx-field-label">{{ "articles-saisieCode" | localize }}</div>
-          <div class="dx-field-value">
-            <dx-tag-box
-              [acceptCustomValue]="true"
-              [placeholder]="'Code...'"
-              [readOnly]="codeChangeProcess"
-              (onValueChanged)="onValueChanged($event)"
-              [ngClass]="{ 'max-tags': chosenArticles?.length && remplacementArticle }"
-              [disabled]="!!getGridSelectedArticles()?.length && remplacementArticle"
-            >
-              <dxo-drop-down-options [width]="0"> </dxo-drop-down-options>
-            </dx-tag-box>
-          </div>
-        </div>
         <dx-button
           class="cancel-button"
           type="normal"
           text="{{ 'btn-annuler' | localize }}"
           (onClick)="clearAndHidePopup()"
+        ></dx-button>
+        <dx-button
+          class="delete-ref-client-button"
+          type="danger"
+          stylingMode="outlined"
+          [disabled]="!nbARticles"
+          text="Enlever les articles"
+          (onClick)="deleteFromRefClient()"
         ></dx-button>
         <dx-button
           #addButton
@@ -58,13 +51,12 @@
           [disabled]="articlesKO"
           [visible]="nbARticles > 0"
           [text]="validBtnText"
-          (onClick)="insertReplaceArticles()"
+          (onClick)="insertArticles()"
         ></dx-button>
-        <br />
         <div style="clear: both"></div>
         <app-articles-list
           [ordre]="ordre"
-          [preFilterTitle]="'articles-catalogue-preFilter-title' | localize"
+          [preFilterTitle]="'articles-refsclient-preFilter-title' | localize"
           (selectChange)="selectFromGrid($event)"
         ></app-articles-list>
         <br />

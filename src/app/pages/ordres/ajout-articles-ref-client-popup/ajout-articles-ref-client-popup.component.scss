@@ -1,0 +1,72 @@
+// Var
+@import "~themes/generated/variables.base";
+
+::ng-deep .app-ajout-articles-ref-client-popup {
+
+  .max-tags {
+    input {
+      display: none !important;
+    }
+  }
+
+  .pulse {
+    animation: pulse 0.5s;
+  }
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+
+    .title-start,
+    .title-mid {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+    .title-mid {
+      position: relative;
+      top: -1px;
+      font-size: 22px;
+      color: $base-accent;
+    }
+
+    .minimize-article-popup {
+      top: 13px;
+      float: right;
+    }
+
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
+  .dx-popup-content {
+
+    .ajout-art-manu-content-container {
+      background: #FFF !important;
+      padding: 0 15px 0 2px;
+
+      .articles-title {
+        display: none;
+      }
+
+      .articles-valid-button,
+      .cancel-button,
+      .delete-ref-client-button {
+        transition: transform 0.5s;
+        transform: scale(1);
+        float: right;
+        margin-top: 2px;
+        margin-right: 15px;
+      }
+
+      // .articles-valid-button {
+      //   margin-right: 15px;
+      // }
+    }
+
+  }
+}

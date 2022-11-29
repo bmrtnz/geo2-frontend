@@ -58,6 +58,7 @@ import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ONE_SECOND } from "../../../../basic";
+import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -286,6 +287,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public promptPopupTitle: string;
   public promptPopupPurpose: string;
   public selectedLignes: string[];
+  public selectedGridCdesRows: boolean;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -299,6 +301,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("leftAccessPanel", { static: false }) leftAccessPanel: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
   @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
+  @ViewChild(AjoutArticlesRefClientPopupComponent, { static: false }) ajoutArtRefClt: AjoutArticlesRefClientPopupComponent;
   @ViewChild(AjoutArticlesManuPopupComponent, { static: false }) ajoutArtManu: AjoutArticlesManuPopupComponent;
   @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
   @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
@@ -450,6 +453,26 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
+  warnNoSelectedRows() {
+    this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
+    if (!this.selectedLignes?.length) {
+      notify(this.localization.localize("text-selection-lignes"), "warning", 5000);
+      return false;
+    }
+    return this.gridCommandes.grid.instance.getSelectedRowsData();
+  }
+
+  onAddRefsClient() {
+    const artIds = [];
+    const rowsData = this.warnNoSelectedRows();
+    if (!rowsData) return;
+    rowsData.map((data) => artIds.push(data.article.id));
+    console.log(artIds);
+    ///////////////////////////////
+    // Ajout aux réfs client
+    ///////////////////////////////
+  }
+
   onRegulOrderClick() {
 
     // As LIST_NORDRE_REGUL is a VARCHAR(50)
@@ -459,11 +482,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
-    if (!this.selectedLignes?.length) {
-      notify(this.localization.localize("text-selection-lignes"), "warning", 5000);
-      return;
-    }
+    if (!this.warnNoSelectedRows()) return;
 
     this.motifRegulPopup.visible = true;
 
@@ -707,6 +726,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onArticleStockClick() {
     this.ajoutArtStock.visible = true;
+  }
+
+  onRefClientClick() {
+    this.ajoutArtRefClt.visible = true;
+  }
+
+  gridCdesSelectedRowsChange(e) {
+    if (e) this.selectedGridCdesRows = e.length > 0;
   }
 
   detailExp() {

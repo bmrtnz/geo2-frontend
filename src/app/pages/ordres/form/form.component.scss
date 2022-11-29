@@ -6,11 +6,13 @@
 
 
   .shiftNoMutations .order-conf-button,
-  .shiftNoMutations .order-regul-button {
+  .shiftNoMutations .order-regul-button,
+  .shiftNoMutations .add-ref-client-button {
     margin-right: -85px;
   }
 
-  .order-regul-button {
+  .order-regul-button,
+  .add-ref-client-button {
     position: absolute;
     z-index: 1;
     margin-top: 9px;
@@ -21,6 +23,10 @@
     .dx-button-content {
       padding: 3px 13px !important;
     }
+  }
+
+  .add-ref-client-button {
+    right: 559px;
   }
 
   .header-btn-baf {

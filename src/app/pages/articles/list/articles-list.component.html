@@ -4,9 +4,7 @@
   <div class="search-criteria-container">
     <div class="title-container">
       <h6 *ngIf="!ordre">{{ "articles-preFilter-title" | localize }}</h6>
-      <h6 *ngIf="ordre">
-        {{ "articles-catalogue-preFilter-title" | localize }}
-      </h6>
+      <h6 *ngIf="preFilterTitle">{{ preFilterTitle }}</h6>
       <dx-button
         *ngIf="!ordre"
         class="refresh"

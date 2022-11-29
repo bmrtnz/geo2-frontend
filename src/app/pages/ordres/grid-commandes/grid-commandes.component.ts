@@ -112,6 +112,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @Output() public fournisseurCode: string;
   @Output() priceChange = new EventEmitter();
   @Output() transporteurChange = new EventEmitter();
+  @Output() selectedRowsChange = new EventEmitter();
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
@@ -167,6 +168,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
     this.grid.instance.deselectAll();
     this.gridRowsTotal = this.grid.instance.getVisibleRows()?.length;
+  }
+
+  onSelectionChanged(e) {
+    this.selectedRowsChange.emit(this.grid?.instance.getSelectedRowKeys());
+    this.grid?.instance.getSelectedRowKeys();
   }
 
   ngOnChanges() {
