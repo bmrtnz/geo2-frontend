@@ -29,9 +29,20 @@
 
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
+
+      <form method="" action="">
+        <dx-file-uploader
+          selectButtonText="{{ 'choisir-fichier' | localize }}"
+          [allowedFileExtensions]="['.xls', '.xlsx']"
+          accept=".xls, .xlsx"
+          uploadMode="instantly"
+        >
+        </dx-file-uploader>
+      </form>
+
       <div class="import-programme-content-container">
         <app-grid-import-programmes [programID]="programID"></app-grid-import-programmes>
-        <div class="import-progress">{{ progressMessage }}</div>
+        <!-- <div class="import-progress">{{ progressMessage }}</div> -->
 
         <br />
         <div class="popup-buttons-container">
@@ -48,16 +59,6 @@
           ></dx-button>
         </div>
 
-        <form action="http://example.com">
-          <input
-            #excelUpload
-            type="file"
-            name="import"
-            class="display-none"
-            accept=".xls, .xlsx"
-            onchange="form.submit()"
-          />
-        </form>
       </div>
     </dx-scroll-view>
   </div>

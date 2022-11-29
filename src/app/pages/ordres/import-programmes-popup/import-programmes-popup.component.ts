@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
-import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import { DxPopupComponent, DxScrollViewComponent, DxFileUploaderComponent } from "devextreme-angular";
 import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
 import { confirm } from "devextreme/ui/dialog";
 
@@ -18,12 +18,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   public visible: boolean;
   public gridHasData: boolean;
-  public popupFullscreen = true;
+  public popupFullscreen = false;
   public progressMessage: string;
 
   @ViewChild(GridImportProgrammesComponent, { static: false }) gridComponent: GridImportProgrammesComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild("excelUpload") excelUpload: ElementRef;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
@@ -55,7 +54,6 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
-    this.excelUpload.nativeElement.click();
   }
 
   resizePopup() {

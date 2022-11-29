@@ -38,6 +38,7 @@ import {
   DxTextAreaModule,
   DxTextBoxModule,
   DxTileViewModule,
+  DxFileUploaderModule,
   DxTooltipModule,
   DxValidationGroupModule,
   DxValidatorModule
@@ -238,6 +239,7 @@ import { GridImportProgrammesComponent } from "./import-programmes-popup/grid-im
     DxDataGridModule,
     DxButtonModule,
     DxPopupModule,
+    DxFileUploaderModule,
     DxAccordionModule,
     DxAutocompleteModule,
     DxTileViewModule,

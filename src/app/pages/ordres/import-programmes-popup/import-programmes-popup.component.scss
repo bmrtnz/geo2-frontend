@@ -17,6 +17,10 @@
 
   }
 
+  .dx-popup-content {
+    padding-top: 15px;
+  }
+
   .close-import-programme-popup,
   .minimize-popup {
     top: 13px;
@@ -25,6 +29,26 @@
 
   .display-none {
     display: none;
+  }
+}
+
+::ng-deep .dx-fileuploader-wrapper {
+  padding: 0 0 7px 0;
+
+  .dx-fileuploader-file-container {
+    position: relative;
+    top: -10px;
+    width: auto !important;
+    float: left !important;
+    margin: 0 0 0 20px !important;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    float: left !important;
+
+    .dx-fileuploader-input-container {
+      display: none !important;
+    }
   }
 }
 
