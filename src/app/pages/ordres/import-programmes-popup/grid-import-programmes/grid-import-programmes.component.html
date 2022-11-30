@@ -2,39 +2,33 @@
   class="dx-card wide-card"
   [showBorders]="false"
   [focusedRowEnabled]="true"
+  [keyExpr]="'id'"
   [focusedRowIndex]="0"
   (onCellPrepared)="onCellPrepared($event)"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  (onRowDblClick)="
-    tabContext.openOrdre(
-      $event.data.ordre.numero,
-      $event.data.ordre.campagne.id
-    )
-  "
+  [wordWrapEnabled]="false"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       this.localizeService.localize('title-import-programme-grid'),
       $event,
-      gridConfiguratorService.Grid.ImportProgramme,
-      enableFilters.bind(this)
+      gridConfiguratorService.Grid.ImportProgramme
     )
   "
 >
   <!-- Grid configuration -->
-  <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+  <dxo-export fileName="Import programme"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
   ></dxo-header-filter>
-  <dxo-paging></dxo-paging>
+  <dxo-paging [enabled]="true"></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
     [showNavigationButtons]="true"
   ></dxo-pager>
-  <dxo-export [fileName]="title"></dxo-export>
   <dxo-state-storing
     [enabled]="true"
     type="custom"
@@ -63,15 +57,11 @@
     "
     [fixed]="column.fixed"
     [cssClass]="column?.cssClass"
-    [headerCellTemplate]="column?.headerCellTemplate"
-    [editCellTemplate]="column?.editCellTemplate"
     allowSearch="false"
     [dataType]="column?.dataType"
-    [allowEditing]="column.allowEditing"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
     [showInColumnChooser]="column.showInColumnChooser"
-    [showEditorAlways]="true"
   ></dxi-column>
 </dx-data-grid>

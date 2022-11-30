@@ -19,6 +19,10 @@
 
   .dx-popup-content {
     padding-top: 15px;
+
+    .dx-datagrid {
+      max-height: 400px;
+    }
   }
 
   .close-import-programme-popup,
@@ -55,7 +59,7 @@
 ::ng-deep .import-programme-content-container {
   padding: 0 15px 0 2px;
 
-  .import-progress {
+  .import-loading {
     display: inline-block;
     position: relative;
     left: 50%;

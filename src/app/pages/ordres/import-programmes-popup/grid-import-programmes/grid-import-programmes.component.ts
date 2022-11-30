@@ -32,7 +32,6 @@ export class GridImportProgrammesComponent {
 
   constructor(
     public mruOrdresService: MruOrdresService,
-    private dateManagementService: DateManagementService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -42,19 +41,15 @@ export class GridImportProgrammesComponent {
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
   }
 
-  async enableFilters() {
-    if (true) {
-      const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return column.dataField;
-      })));
-    }
-  }
-
   reload() {
     this.datagrid.dataSource = this.dataSource;
   }
 
   onCellPrepared(e) {
-
+    if (e.rowType === "data") {
+      if (e.column.dataField === "erreurs") {
+        e.cellElement.classList.add("red-bold-font");
+      }
+    }
   }
 }

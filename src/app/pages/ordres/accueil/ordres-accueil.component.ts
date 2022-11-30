@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { AuthService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { ProgramChooserComponent } from "app/shared/components/program-chooser/program-chooser.component";
+import { Program } from "app/shared/services/program.service";
 import { CommandesEdiComponent } from "../indicateurs/commandes-edi/commandes-edi.component";
 import {
   Indicator,
@@ -59,16 +59,16 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.programs = [
-      {
-        id: "tesco",
-        text: "TESCO"
-      },
-      {
-        id: "orchard",
-        text: "ORCHARD"
-      }
-    ];
+    this.programs = [];
+    Object.keys(Program).map(prog => {
+      this.programs.push(
+        {
+          id: Program[prog],
+          name: prog,
+          text: prog
+        }
+      );
+    });
 
     this.configureIndicator();
 

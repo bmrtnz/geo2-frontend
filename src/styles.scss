@@ -436,6 +436,18 @@ body app-root.production {
   pointer-events: none !important;
 }
 
+// Inactive item
+.inactive-item {
+  pointer-events: none !important;
+}
+
+// Inactive choose file button (file uploader)
+.inactive-choose-file {
+  .dx-fileuploader-input-wrapper {
+    pointer-events: none !important;
+  }
+}
+
 // Better selection rows readibility
 .dx-selection.dx-row:not(.dx-row-focused)>td {
   background-color: rgba(0, 117, 156, .3) !important;
