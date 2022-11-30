@@ -155,6 +155,7 @@
     [allowColumnReordering]="true"
     [keyExpr]="'id'"
     (onRowPrepared)="onRowPrepared($event)"
+    (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onSelectionChanged)="onSelectionChanged($event)"

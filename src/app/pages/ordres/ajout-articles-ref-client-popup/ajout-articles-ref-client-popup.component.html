@@ -40,7 +40,7 @@
           type="danger"
           stylingMode="outlined"
           [disabled]="!nbARticles"
-          text="Enlever les articles"
+          text="{{ 'dereferencer-articles' | localize }}"
           (onClick)="deleteFromRefClient()"
         ></dx-button>
         <dx-button

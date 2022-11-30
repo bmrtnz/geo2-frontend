@@ -112,6 +112,13 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     this.gridRowStyleService.applyGridRowStyle(e);
   }
 
+  onCellPrepared(e) {
+    // Best expression for emballage display
+    if (e.rowType === "data" && e.column.dataField === "emballage.emballage.description") {
+      e.cellElement.textContent = e.data.emballage.emballage.id + " - " + e.value;
+    }
+  }
+
   /**
    * Apply filters from tag boxs
    * @param event List of field values

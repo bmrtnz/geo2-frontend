@@ -1120,7 +1120,7 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "matierePremiere.variete.description",
+        "dataField": "matierePremiere.variete.id",
         "dataType": "string",
         "visible": true
       },
@@ -1181,10 +1181,10 @@
         "visible": true
       },
       {
-        "dataField": "matierePremiere.variete.id",
+        "visibleIndex": 12,
+        "dataField": "articleDescription.descriptionCourte",
         "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": false
+        "visible": false
       },
       {
         "dataField": "matierePremiere.type.id",
