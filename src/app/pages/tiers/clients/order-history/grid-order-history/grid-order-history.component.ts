@@ -268,7 +268,11 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       entrepot: null
     });
     this.clients = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
-    const filter: any = [["secteur.id", "=", this.formGroup.get("secteur").value?.id]];
+    const filter: any = [
+      ["secteur.id", "=", this.formGroup.get("secteur").value?.id],
+      "and",
+      ["societe.id", "=", this.currentCompanyService.getCompany().id]
+    ];
     if (this.formGroup.get("valide").value) filter.push("and", ["valide", "=", true]);
     this.clients.filter(filter);
     this.onFieldValueChange();
@@ -277,7 +281,11 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   onSecteurChanged(e) {
     this.onFieldValueChange();
     this.clients = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
-    const filter: any = [["secteur.id", "=", e.value?.id]];
+    const filter: any = [
+      ["secteur.id", "=", e.value?.id],
+      "and",
+      ["societe.id", "=", this.currentCompanyService.getCompany().id]
+    ];
     if (this.formGroup.get("valide").value) filter.push("and", ["valide", "=", true]);
     this.clients.filter(filter);
     // We check that this change is coming from the user
