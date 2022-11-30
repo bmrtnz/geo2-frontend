@@ -837,6 +837,7 @@
     "ordres-ordresNonConfirmes": "Ordres du jour non confirmés",
     "ordres-ordresNonClotures": "Ordres non clôturés",
     "ordres-commandesTransit": "Commandes en transit",
+    "ordres-commandes-edi": "Commandes EDI",
     "ordres-planningDepart": "Planning départ",
     "ordres-clientsDepEncours": "Clients en dépassement en-cours",
     "ordres-differenceQuantites": "Différence sur expédition et/ou sans détail client",
