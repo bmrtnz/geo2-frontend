@@ -136,6 +136,7 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { PlanningDepartsMaritimesComponent } from "./indicateurs/planning-departs-maritimes/planning-departs-maritimes.component";
 
 @NgModule({
   declarations: [
@@ -218,7 +219,8 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     VisualiserOrdresPopupComponent,
     DuplicationOrdrePopupComponent,
     HistoriqueOrdresComponent,
-    AjustDecomptePaloxPopupComponent
+    AjustDecomptePaloxPopupComponent,
+    PlanningDepartsMaritimesComponent
   ],
   imports: [
     OrdresRoutingModule,

@@ -5957,5 +5957,68 @@
         "visible": false
       }
     ]
+  },
+  "planning-departs-maritimes": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "dateDepart",
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "heureDepart",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "client.raisonSocial",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "entrepot.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ville",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "pays.id",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "transporteur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "nbrePalettes",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "refLogistique",
+        "visible": true
+      }
+    ]
   }
 }

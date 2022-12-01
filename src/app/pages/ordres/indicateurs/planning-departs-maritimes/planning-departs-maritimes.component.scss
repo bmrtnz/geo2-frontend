@@ -1,0 +1,32 @@
+// Var
+@import "src/themes/generated/variables.base.scss";
+@import "~scss/variables.scss";
+
+.dx-fieldset {
+  display: flex;
+}
+
+.dx-field {
+  margin-right: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+::ng-deep .orderTileFilterArea {
+  width: 700px;
+
+  .dx-datebox .dx-texteditor-input {
+    padding-right: 0 !important;
+  }
+
+  .orderTileleftFilters .dx-field {
+    margin-bottom: 0;
+  }
+
+  .orderRightRightFilters {
+    margin-top: 4px;
+  }
+
+}
