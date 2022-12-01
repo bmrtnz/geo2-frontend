@@ -5977,6 +5977,7 @@
         "visibleIndex": 4,
         "dataField": "depot",
         "dataType": "string",
+        "cssClass": "no-padding",
         "visible": true
       },
       {
@@ -5991,6 +5992,7 @@
         "dataField": "dateLivraison",
         "dataType": "date",
         "format": "dd-MM-yyyy",
+        "cssClass": "no-padding",
         "visible": true
       },
       {
@@ -6003,6 +6005,7 @@
         "visibleIndex": 12,
         "dataField": "erreurs",
         "dataType": "string",
+        "cssClass": "no-padding",
         "visible": true
       },
       {

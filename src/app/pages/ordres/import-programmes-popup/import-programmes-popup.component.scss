@@ -4,6 +4,14 @@
 
 ::ng-deep .import-programme-popup {
 
+  // Fake choose file button
+  .custom-choose-file-button {
+    position: absolute;
+    top: 9px;
+    left: 3px;
+    z-index: 1;
+  }
+
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
 
@@ -49,6 +57,10 @@
 
   .dx-fileuploader-input-wrapper {
     float: left !important;
+
+    .dx-fileuploader-button {
+      visibility: hidden;
+    }
 
     .dx-fileuploader-input-container {
       display: none !important;
