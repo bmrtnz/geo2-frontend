@@ -93,9 +93,9 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     this.gridComponent.datagrid.dataSource = DSitems;
 
     // Downloading modified Excel file
-    // this.programService.downloadAndSave();
+    this.programService.downloadAndSave();
     notify(
-      this.localizeService.localize("telechargement-fichier").replace("&F", e.file.name),
+      this.localizeService.localize("telechargement-fichier-retour"),
       "success",
       7000
     );
@@ -147,11 +147,6 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   resizePopup() {
     this.popupFullscreen = !this.popupFullscreen;
-  }
-
-  start(e) {
-    console.log(e);
-    e.event.stopImmediatePropagation();
   }
 
   quitPopup() {
