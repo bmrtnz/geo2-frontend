@@ -29,6 +29,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
+  @Input() public additionnalFilter: any;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -161,6 +162,10 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       console.warn("Failed to parse filter, resetted to empty");
       this.allGridFilters = null;
     }
+
+    // Used for eg. when need for referencement articles client
+    if (this.additionnalFilter)
+      this.additionnalFilter.map(addFilt => this.allGridFilters.push(addFilt));
 
     // Filtering variete, emballage & origine selectBox list depending on specy
     const filter = [];

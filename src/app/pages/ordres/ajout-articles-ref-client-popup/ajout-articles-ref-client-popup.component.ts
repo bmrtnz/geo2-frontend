@@ -22,6 +22,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
   @Output() public lignesChanged = new EventEmitter();
+  @Output() public additionnalFilter: any;
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -39,6 +40,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   remplacementArticle: boolean;
   popupFullscreen = true;
 
+
   @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
@@ -54,6 +56,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
 
   ngOnChanges() {
     this.setTitle();
+    // this.additionnalFilter = ["and", ["matierePremiere.espece.id", "=", "POMME"]];
   }
 
   setTitle() {
@@ -113,7 +116,8 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     // datagrid state loading is not executed automatically in this component...
     const gridConfig = await this.gridConfiguratorService.fetchConfig(Grid.Article);
     this.catalogue?.dataGrid.instance.state(gridConfig);
-    this.catalogue?.dataGrid.instance.repaint();
+    // this.catalogue?.dataGrid.instance.repaint();
+    this.catalogue?.refreshArticlesGrid(); // Show grid values
   }
 
   clearAll() {

@@ -64,6 +64,7 @@
         <div style="clear: both"></div>
         <app-articles-list
           [ordre]="ordre"
+          [additionnalFilter]=""
           [preFilterTitle]="'articles-catalogue-preFilter-title' | localize"
           (selectChange)="selectFromGrid($event)"
         ></app-articles-list>
