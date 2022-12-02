@@ -1,0 +1,33 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+
+::ng-deep .grid-ordre-lignes-groupage-chargements-container {
+
+  .grid-ordre-lignes-groupage-chargements {
+    .bold-grey-light {
+      background-color: #EEE;
+    }
+
+    .text-underlined-pointer input {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+  }
+
+  .bottom-buttons-container {
+    display: inline-block;
+    position: relative;
+
+    .flux-docs-buttons-container {
+      float: left;
+    }
+
+    .dx-button {
+      margin: 5px;
+      float: left;
+    }
+  }
+}

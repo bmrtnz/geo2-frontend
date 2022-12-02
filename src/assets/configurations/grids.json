@@ -5957,5 +5957,111 @@
         "visible": false
       }
     ]
+  },
+  "lignes-groupage-chargements": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordre.codeChargement",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ordre.numero",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "ordre.id",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "ordre.entrepot.code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "ordre.dateDepartPrevue",
+        "dataType": "date",
+        "width": 125,
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "ordre.dateLivraisonPrevue",
+        "dataType": "date",
+        "width": 125,
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "logistique.dateDepartPrevueFournisseur",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "width": 125,
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "logistique.fournisseur.code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "article.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "article.articleDescription.descriptionCourte",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "article.emballage.emballage.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "nombrePalettesCommandees",
+        "dataType": "number",
+        "cssClass": "multi-line-header move-right",
+        "width": 30,
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "nombreColisCommandes",
+        "dataType": "number",
+        "cssClass": "multi-line-header move-right",
+        "width": 30,
+        "visible": true
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
   }
 }

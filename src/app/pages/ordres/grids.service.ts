@@ -5,7 +5,8 @@ type OrdreGridId =
   | "Commande"
   | "SyntheseExpeditions"
   | "DetailExpeditions"
-  | "CommandesEdi";
+  | "CommandesEdi"
+  | "GroupageChargement";
 
 /**
  * Helper service to perform actions on datagrids

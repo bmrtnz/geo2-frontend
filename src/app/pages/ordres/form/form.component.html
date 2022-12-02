@@ -643,6 +643,7 @@
                           <dx-button
                             class="form-text-button"
                             type="default"
+                            [visible]="allowMutations"
                             text="{{ 'grouper-chargements' | localize }}"
                             [focusStateEnabled]="false"
                             hint="{{ 'hint-group-order-lines' | localize }}"
@@ -1307,3 +1308,8 @@
   (whenQuitRegulPopup)="validateRegulOrder($event)"
 ></app-motif-regularisation-ordre-popup>
 <app-duplication-ordre-popup [ordre]="ordre"></app-duplication-ordre-popup>
+<app-groupage-chargements-popup
+  [ordre]="ordre"
+  [gridCommandes]="gridCommandes"
+  [gridEnvois]="gridEnvois"
+></app-groupage-chargements-popup>

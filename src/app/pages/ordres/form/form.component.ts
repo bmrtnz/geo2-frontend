@@ -716,7 +716,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openGroupageChargementsPopup() {
-    // this.groupagePopup.visible = true;
+    this.groupagePopup.visible = true;
   }
 
   onDuplicateOrderClick() {

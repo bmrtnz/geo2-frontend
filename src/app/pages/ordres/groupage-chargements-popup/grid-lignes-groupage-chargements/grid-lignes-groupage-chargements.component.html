@@ -1,0 +1,125 @@
+<div class="grid-ordre-lignes-groupage-chargements-container">
+  <dx-data-grid
+    class="dx-card wide-card"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [elementAttr]="{ class: 'grid-ordre-lignes-groupage-chargements' }"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [focusedRowIndex]="-1"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onEditingStart)="onEditingStart($event)"
+    (onSaved)="cellValueChange($event)"
+    (onCellClick)="onCellClick($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        'Passage à quai',
+        $event,
+        gridConfiguratorService.Grid.LignesGroupageChargements,
+        enableFilters.bind(this)
+      )
+    "
+  >
+    <!-- Grid configuration -->
+    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+    <dxo-export fileName="Groupage chargements"></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-editing
+      [selectTextOnEditStart]="true"
+      [allowUpdating]="allowMutations"
+      [mode]="'cell'"
+    >
+    </dxo-editing>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.LignesGroupageChargements"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+    >
+    </dxo-column-chooser>
+
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [visible]="false"
+      [width]="column.width"
+      [caption]="
+        ('lignesGroupageCharg-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [fixed]="column.fixed"
+      [cssClass]="column?.cssClass"
+      [headerCellTemplate]="column?.headerCellTemplate"
+      [editCellTemplate]="column?.editCellTemplate"
+      allowSearch="false"
+      [dataType]="column?.dataType"
+      [allowEditing]="column.allowEditing ? column.allowEditing : false"
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+      [showEditorAlways]="true"
+    ></dxi-column>
+
+  </dx-data-grid>
+
+  <br>
+
+  <div class="bottom-buttons-container float-left">
+    <!-- Valider données -->
+    <dx-button
+      type="success"
+      stylingMode="outlined"
+      text="{{ 'btn-valider' | localize }}"
+      (onClick)="validGrouping()"
+    ></dx-button>
+    <!-- Confirmation de l'ordre -->
+    <app-actions-documents-ordres
+      [ordre]="ordre"
+      [gridEnvois]="gridEnvois"
+      [gridCommandes]="gridCommandes"
+      [orderConfirmationOnly]="true"
+    ></app-actions-documents-ordres>
+  </div>
+  <div class="bottom-buttons-container float-right">
+    <!-- Transférer -->
+    <dx-button
+      type="success"
+      icon="arrowright"
+      text="{{ 'btn-transfer' | localize }}"
+      (onClick)="transferGrouping()"
+    ></dx-button>
+    <!-- Dupliquer -->
+    <dx-button
+      type="success"
+      icon="material-icons content_copy"
+      text="{{ 'btn-cloneorder' | localize }}"
+      (onClick)="duplicateGrouping()"
+    ></dx-button>
+  </div>
+</div>
+

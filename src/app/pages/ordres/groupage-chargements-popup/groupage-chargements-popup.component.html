@@ -1,1 +1,44 @@
-<p>groupage-chargements-popup works!</p>
+<dx-popup
+  height="auto"
+  [fullScreen]="this.popupFullscreen"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+  [shading]="false"
+  [resizeEnabled]="true"
+>
+
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-popup">{{ title }}</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+    <dx-button
+      class="minimize-popup"
+      icon="material-icons fullscreen_exit"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+
+      <div class="groupage-chargements-popup">
+        <div class="groupage-chargements-popup-content-container">
+          <app-grid-lignes-groupage-chargements
+            [ordre]="ordre"
+            [gridEnv]="gridEnv"
+            [gridCdes]="gridCdes"
+          ></app-grid-lignes-groupage-chargements>
+        </div>
+        <br />
+      </div>
+    </dx-scroll-view>
+  </div>
+
+</dx-popup>
