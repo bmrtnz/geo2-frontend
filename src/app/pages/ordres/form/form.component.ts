@@ -58,6 +58,7 @@ import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ONE_SECOND } from "../../../../basic";
+import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -315,6 +316,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
   @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
+  @ViewChild(GroupageChargementsPopupComponent) groupagePopup: GroupageChargementsPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
 
@@ -711,6 +713,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   detailExp() {
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
+  }
+
+  openGroupageChargementsPopup() {
+    // this.groupagePopup.visible = true;
   }
 
   onDuplicateOrderClick() {
