@@ -16,7 +16,7 @@
     <dx-button
       class="close-popup"
       icon="close"
-      (onClick)="hidePopup()"
+      (onClick)="closePopup()"
     ></dx-button>
     <dx-button
       class="minimize-popup"
@@ -34,6 +34,7 @@
             [ordre]="ordre"
             [gridEnv]="gridEnv"
             [gridCdes]="gridCdes"
+            (closePopup)="hidePopup()"
           ></app-grid-lignes-groupage-chargements>
         </div>
         <br />

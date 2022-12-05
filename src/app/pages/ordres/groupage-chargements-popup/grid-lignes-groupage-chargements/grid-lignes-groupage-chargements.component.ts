@@ -1,11 +1,8 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { ArticlesService, AuthService } from "app/shared/services";
+import { AuthService } from "app/shared/services";
 import { SummaryType } from "app/shared/services/api.service";
-import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
-import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
@@ -33,32 +30,28 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   @Input() public gridEnv: any;
   @Output() public gridCommandes: any;
   @Output() public gridEnvois: any;
+  @Output() closePopup = new EventEmitter();
 
   public dataSource: DataSource;
-  public typePaletteSource: DataSource;
-  public paletteInterSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public itemsWithSelectBox: any;
   public allowMutations = false;
   public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
   public gridFilter: any[];
   public gridExpFiltered: boolean;
-  public dataField: string;
-  public ligneOrdre: any;
+  public gridRowsTotal: number;
+  private dataField: string;
 
-  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
-    public formUtilsService: FormUtilsService,
     public localizeService: LocalizationService,
     public gridUtilsService: GridUtilsService,
-    private functionsService: FunctionsService,
     private gridsService: GridsService,
     public tabContext: TabContext,
   ) {
@@ -67,7 +60,6 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   ngAfterViewInit() {
-    this.enableFilters();
     this.gridsService.register("GroupageChargement", this.datagrid);
   }
 
@@ -98,24 +90,29 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     setTimeout(() => this.datagrid.instance.saveEditData());
   }
 
-  onValueChanged(event, cell) {
-    if (cell.setValue) {
-      cell.setValue(event.value);
-    }
+  onContentReady(e) {
+    this.gridRowsTotal = this.datagrid.instance.getVisibleRows()?.length;
   }
 
   onEditorPreparing(e) {
     if (e.parentType === "dataRow") {
+      e.editorOptions.onValueChanged = (elem) => {
+        // Copy paste on all rows
+        const rows = this.datagrid.instance.getVisibleRows();
+        rows.map((res) => this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value));
+      };
     }
   }
 
-  onEditingStart(e) {
-
+  onToolbarPreparing(e) {
+    // Hide grid save button
+    e.toolbarOptions.items[0].visible = false;
   }
 
   onCellClick(e) {
     if (e.rowType !== "data") return;
-    if (e.column.dataField === "ordre.numero") {
+    this.dataField = e.column.dataField;
+    if (this.dataField === "ordre.numero") {
       e.event.stopImmediatePropagation();
       this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id);
     }
@@ -132,10 +129,10 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
         "ordre.dateLivraisonPrevue",
         "logistique.dateDepartPrevueFournisseur",
         "poidsBrutExpedie",
-        "$$$camion",
-        "$$$ordre chargement"
+        "$$$camion",              // A modifier dès qu'on a l'info
+        "$$$ordre chargement"     // A modifier dès qu'on a l'info
       ].includes(e.column.dataField)) {
-        e.cellElement.classList.add("bold-grey-light"); // grey bkg
+        e.cellElement.classList.add("grey-light-column"); // grey bkg
       }
     }
 
@@ -149,12 +146,9 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     }
   }
 
-  cellValueChange(data) {
-
-  }
-
   validGrouping() {
 
+    this.closePopup.emit();
   }
 
   transferGrouping() {

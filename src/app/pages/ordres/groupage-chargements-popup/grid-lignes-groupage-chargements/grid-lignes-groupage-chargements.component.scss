@@ -6,8 +6,10 @@
 ::ng-deep .grid-ordre-lignes-groupage-chargements-container {
 
   .grid-ordre-lignes-groupage-chargements {
-    .bold-grey-light {
-      background-color: #EEE;
+    max-height: 600px;
+
+    .grey-light-column:not(.dx-cell-modified) {
+      background-color: #F5F5F5;
     }
 
     .text-underlined-pointer input {
@@ -15,6 +17,20 @@
       cursor: pointer;
     }
 
+  }
+
+  tr.dx-row-focused {
+    td.dx-editor-cell:not(.dx-focused) {
+      .dx-texteditor-input {
+        color: #FFF !important;
+      }
+    }
+
+    td.dx-editor-cell.dx-cell-modified:not(.dx-focused) {
+      .dx-texteditor-input {
+        color: #DBECCA !important;
+      }
+    }
   }
 
   .bottom-buttons-container {

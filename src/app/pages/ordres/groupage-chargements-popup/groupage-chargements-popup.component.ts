@@ -11,6 +11,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
+import { GridLignesGroupageChargementsComponent } from "./grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
 
 @Component({
   selector: "app-groupage-chargements-popup",
@@ -41,6 +42,7 @@ export class GroupageChargementsPopupComponent implements OnChanges {
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(GridLignesGroupageChargementsComponent, { static: false }) gridComponent: GridLignesGroupageChargementsComponent;
 
   constructor(
     public OrdreLigneService: OrdreLignesService,
@@ -64,24 +66,26 @@ export class GroupageChargementsPopupComponent implements OnChanges {
     e.component.content().parentNode.classList.add("groupage-chargements-popup");
   }
 
-  async onShown(e) {
+  onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    if (this.ordre) this.gridComponent.enableFilters();
   }
 
-  clearAll() {
+  closePopup() {
+    if (this.gridComponent.datagrid.instance.hasEditData()) {
+      this.hidePopup();
+    } else {
+      this.hidePopup();
+    }
   }
 
   hidePopup() {
     this.popup.visible = false;
+    this.gridComponent.datagrid.dataSource = null;
   }
 
   resizePopup() {
     this.popupFullscreen = !this.popupFullscreen;
-  }
-
-  clearAndHidePopup() {
-    this.hidePopup();
-    this.clearAll();
   }
 
 }

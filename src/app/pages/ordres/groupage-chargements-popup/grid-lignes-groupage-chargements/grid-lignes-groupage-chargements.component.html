@@ -1,7 +1,14 @@
 <div class="grid-ordre-lignes-groupage-chargements-container">
   <dx-data-grid
     class="dx-card wide-card"
-    [remoteOperations]="true"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: false,
+      groupPaging: false,
+      paging: true,
+      sorting: true,
+      summary: false
+    }"
     [showBorders]="false"
     [elementAttr]="{ class: 'grid-ordre-lignes-groupage-chargements' }"
     [focusedRowEnabled]="true"
@@ -10,12 +17,13 @@
     [focusedRowIndex]="-1"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    (onContentReady)="onContentReady($event)"
     (onCellPrepared)="onCellPrepared($event)"
+    (onCellClick)="onCellClick($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
-    (onEditingStart)="onEditingStart($event)"
-    (onSaved)="cellValueChange($event)"
     (onCellClick)="onCellClick($event)"
     (onToolbarPreparing)="
+      onToolbarPreparing($event);
       gridConfiguratorService.onToolbarPreparing(
         'Passage à quai',
         $event,
@@ -41,7 +49,7 @@
     <dxo-editing
       [selectTextOnEditStart]="true"
       [allowUpdating]="allowMutations"
-      [mode]="'cell'"
+      [mode]="'batch'"
     >
     </dxo-editing>
     <dxo-state-storing
@@ -61,6 +69,19 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
+
+    <dxo-summary *ngIf="!!gridRowsTotal">
+      <dxi-total-item
+        column="nombrePalettesCommandees"
+        summaryType="sum"
+        displayFormat="{0}"
+      ></dxi-total-item>
+      <dxi-total-item
+        column="nombreColisCommandes"
+        summaryType="sum"
+        displayFormat="{0}"
+      ></dxi-total-item>
+    </dxo-summary>
 
     <dxi-column
       *ngFor="let column of this.columns | async"
@@ -84,7 +105,6 @@
       [showInColumnChooser]="column.showInColumnChooser"
       [showEditorAlways]="true"
     ></dxi-column>
-
   </dx-data-grid>
 
   <br>
