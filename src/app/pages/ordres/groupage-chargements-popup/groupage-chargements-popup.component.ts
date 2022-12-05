@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
-import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
+import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
@@ -9,6 +8,7 @@ import { Grid, GridConfiguratorService } from "app/shared/services/grid-configur
 import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { confirm } from "devextreme/ui/dialog";
 import { from } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
 import { GridLignesGroupageChargementsComponent } from "./grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
@@ -73,7 +73,10 @@ export class GroupageChargementsPopupComponent implements OnChanges {
 
   closePopup() {
     if (this.gridComponent.datagrid.instance.hasEditData()) {
-      this.hidePopup();
+      confirm(
+        this.localizeService.localize("text-popup-quit-unsaved-elements"),
+        this.localizeService.localize("groupage-chargements")
+      ).then(res => { if (res) this.hidePopup(); });
     } else {
       this.hidePopup();
     }

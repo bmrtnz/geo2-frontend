@@ -221,6 +221,7 @@
     "text-popup-ajust-palox-ok": "Sauvegarde ajustement palox réalisée avec succès",
     "text-popup-inventaire-palox": "Inventaire palox",
     "text-popup-ajust-palox": "Ajustement palox",
+    "text-popup-quit-unsaved-elements": "Des données n'ont pas été sauvegardées, êtes-vous bien sûr de vouloir quitter ?",
     "text-clients-popup-documents": "N'oubliez pas de joindre les documents obligatoires !",
     "text-fournisseurs-popup-documents": "N'oubliez pas de joindre CGA signées (OBLIGATOIRE) et certifications si nécessaire",
     "text-transporteurs-popup-documents": "N’oubliez pas de joindre la lettre d’engagement pour validation du tiers par l’administrateur",

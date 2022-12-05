@@ -48,7 +48,7 @@
     ></dxo-pager>
     <dxo-editing
       [selectTextOnEditStart]="true"
-      [allowUpdating]="allowMutations"
+      [allowUpdating]="true"
       [mode]="'batch'"
     >
     </dxo-editing>
@@ -94,8 +94,6 @@
       "
       [fixed]="column.fixed"
       [cssClass]="column?.cssClass"
-      [headerCellTemplate]="column?.headerCellTemplate"
-      [editCellTemplate]="column?.editCellTemplate"
       allowSearch="false"
       [dataType]="column?.dataType"
       [allowEditing]="column.allowEditing ? column.allowEditing : false"
