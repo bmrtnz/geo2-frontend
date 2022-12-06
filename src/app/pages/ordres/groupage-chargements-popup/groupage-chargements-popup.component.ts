@@ -84,6 +84,7 @@ export class GroupageChargementsPopupComponent implements OnChanges {
 
   hidePopup() {
     this.popup.visible = false;
+    this.gridComponent.datagrid.instance.cancelEditData();
     this.gridComponent.datagrid.dataSource = null;
   }
 

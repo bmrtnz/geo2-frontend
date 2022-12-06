@@ -78,7 +78,11 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
       })));
 
       this.dataSource = this.ordreLignesService.getDataSource_v2(await fields.toPromise());
-      this.gridFilter = [["ordre.codeChargement", "=", this.ordre.codeChargement]]; // FAKE FOR FRONT TESTING
+      this.gridFilter = [
+        ["ordre.codeChargement", "isnotnull", null],
+        "and",
+        ["ordre.codeChargement", "=", this.ordre.codeChargement]
+      ]; // FAKE FOR FRONT TESTING
       this.dataSource.filter(this.gridFilter);
       this.datagrid.dataSource = this.dataSource;
       this.gridUtilsService.resetGridScrollBar(this.datagrid);
@@ -98,8 +102,8 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     if (e.parentType === "dataRow") {
       e.editorOptions.onValueChanged = (elem) => {
         // Copy paste on all rows
-        const rows = this.datagrid.instance.getVisibleRows();
-        rows.map((res) => this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value));
+        // const rows = this.datagrid.instance.getVisibleRows();
+        // rows.map((res) => this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value));
       };
     }
   }

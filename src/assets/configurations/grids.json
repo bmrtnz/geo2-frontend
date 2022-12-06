@@ -5976,6 +5976,8 @@
         "visibleIndex": 4,
         "dataField": "ordre.numero",
         "dataType": "string",
+        "sortOrder": "asc",
+        "sortIndex": 2,
         "cssClass": "no-padding",
         "visible": true
       },
@@ -5996,6 +5998,9 @@
         "visibleIndex": 14,
         "dataField": "ordre.dateDepartPrevue",
         "dataType": "date",
+        "sortOrder": "asc",
+        "sortIndex": 1,
+        "cssClass": "multi-line-header",
         "width": 125,
         "allowEditing": true,
         "visible": true
@@ -6033,6 +6038,8 @@
         "visibleIndex": 24,
         "dataField": "article.articleDescription.descriptionCourte",
         "dataType": "string",
+        "sortOrder": "asc",
+        "sortIndex": 3,
         "visible": true
       },
       {
