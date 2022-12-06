@@ -36,11 +36,12 @@
           (onClick)="clearAndHidePopup()"
         ></dx-button>
         <dx-button
+          #deleteButton
           class="delete-ref-client-button"
           type="danger"
           stylingMode="outlined"
-          [disabled]="!nbARticles"
-          text="{{ 'dereferencer-articles' | localize }}"
+          [visible]="nbARticles > 0"
+          text="{{ ('dereferencer-article' + (nbARticles > 1 ? 's' : '' )) | localize }}"
           (onClick)="deleteFromRefClient()"
         ></dx-button>
         <dx-button

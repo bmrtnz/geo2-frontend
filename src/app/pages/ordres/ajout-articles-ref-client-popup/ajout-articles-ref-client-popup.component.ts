@@ -9,6 +9,7 @@ import { Grid, GridConfiguratorService } from "app/shared/services/grid-configur
 import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { confirm } from "devextreme/ui/dialog";
 import { from } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
 
@@ -44,6 +45,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
+  @ViewChild("deleteButton", { static: false }) deleteButton: DxButtonComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
@@ -84,7 +86,11 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
       setTimeout(() => this.pulseBtnOn = true, 1);
     }
     this.nbArticlesOld = this.nbARticles;
-    if (this.nbARticles) this.addButton.instance.option("hint", this.chosenArticles.join(" - "));
+    if (this.nbARticles) {
+      const hintArticles = this.chosenArticles.join(" - ");
+      this.addButton.instance.option("hint", hintArticles);
+      this.deleteButton.instance.option("hint", hintArticles);
+    }
   }
 
   getGridSelectedArticles() {
@@ -95,12 +101,26 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     this.updateChosenArticles();
   }
 
-  deleteFromRefClient() {
-    console.log(this.chosenArticles);
-    //////////////////////////////////////
-    // Suppression liste art ref client
-    // Puis refresh grid
-    //////////////////////////////////////
+  async deleteFromRefClient() {
+
+    if (await confirm(
+      this.localizeService.localize("confirm-deferencement-client"),
+      this.localizeService.localize("references-client"))) {
+      //////////////////////////////////////
+      // Suppression liste art ref client
+      // Puis refresh grid
+      // (this.chosenArticles)
+      //////////////////////////////////////
+      const message = this.localizeService.localize("articles-supprimes-refs-client")
+        .split("&&").join(this.chosenArticles.length > 1 ? "s" : "")
+        .replace("&A", this.chosenArticles.join(" & "))
+        .replace("&C", this.ordre.client.code);
+      notify(message, "success", 7000);
+      // We refresh grid articles
+      this.catalogue.dataGrid.instance.clearSelection();
+      this.catalogue?.refreshArticlesGrid();
+    }
+
   }
 
   onShowing(e) {

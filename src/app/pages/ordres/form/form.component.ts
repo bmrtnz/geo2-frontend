@@ -467,10 +467,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const rowsData = this.warnNoSelectedRows();
     if (!rowsData) return;
     rowsData.map((data) => artIds.push(data.article.id));
-    console.log(artIds);
     ///////////////////////////////
     // Ajout aux réfs client
+    // (artIds)
     ///////////////////////////////
+    const message = this.localization.localize("articles-ajoutes-refs-client")
+      .split("&&").join(artIds.length > 1 ? "s" : "")
+      .replace("&A", artIds.join(" & "))
+      .replace("&C", this.ordre.client.code);
+    notify(message, "success", 7000);
+    this.gridCommandes.grid.instance.clearSelection();
   }
 
   onRegulOrderClick() {
