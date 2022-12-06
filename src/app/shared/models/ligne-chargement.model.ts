@@ -11,8 +11,8 @@ export class LigneChargement extends Model {
   @Field() numeroOrdre: string;
   @Field() codeFournisseur: string;
   @Field() codeEntrepot: string;
-  @Field({ dataType: "localdate" }) dateDepartPrevue: string;
-  @Field({ dataType: "localdate" }) dateLivraisonPrevue: string;
+  @Field({ dataType: "datetime" }) dateDepartPrevue: string;
+  @Field({ dataType: "datetime" }) dateLivraisonPrevue: string;
   @Field({ model: import("./article.model") }) public article?: Article;
   @Field() descriptionArticle: string;
   @Field() descriptionColis: string;
@@ -22,7 +22,7 @@ export class LigneChargement extends Model {
   @Field({ model: import("./ordre-ligne.model") }) public ligne?: OrdreLigne;
   @Field() numeroCamion: number;
   @Field() ordreChargement: number;
-  @Field({ dataType: "localdate" }) dateDepartPrevueFournisseur: string;
+  @Field({ dataType: "datetime" }) dateDepartPrevueFournisseur: string;
 }
 
 export default LigneChargement;
