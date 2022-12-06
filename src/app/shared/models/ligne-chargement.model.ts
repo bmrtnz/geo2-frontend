@@ -5,7 +5,7 @@ import Ordre from "./ordre.model";
 
 @ModelName("LigneChargement")
 export class LigneChargement extends Model {
-  @Field({ asKey: true }) id: number;
+  @Field({ asKey: true }) id: string;
   @Field({ asLabel: true }) codeChargement: string;
   @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
   @Field() numeroOrdre: string;

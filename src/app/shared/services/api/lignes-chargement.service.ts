@@ -54,4 +54,11 @@ export class LignesChargementService extends ApiService {
       ],
     );
   }
+
+  saveAll(allLigneChargement: Partial<LigneChargement>[], columns: Set<string>) {
+    return this.apollo.mutate({
+      mutation: gql(this.buildSaveAllGraph([...columns])),
+      variables: { allLigneChargement },
+    });
+  }
 }
