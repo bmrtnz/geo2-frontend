@@ -644,6 +644,7 @@
                             class="form-text-button"
                             type="default"
                             [visible]="allowMutations"
+                            [disabled]="!ordre?.codeChargement"
                             text="{{ 'grouper-chargements' | localize }}"
                             [focusStateEnabled]="false"
                             hint="{{ 'hint-group-order-lines' | localize }}"

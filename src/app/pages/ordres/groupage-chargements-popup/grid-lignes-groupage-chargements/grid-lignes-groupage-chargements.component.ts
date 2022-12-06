@@ -132,9 +132,8 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
         "ordre.dateDepartPrevue",
         "ordre.dateLivraisonPrevue",
         "logistique.dateDepartPrevueFournisseur",
-        "poidsBrutExpedie",
-        "$$$camion",              // A modifier dès qu'on a l'info
-        "$$$ordre chargement"     // A modifier dès qu'on a l'info
+        "ordre.numeroCamion",
+        "ordre.ordreChargement"
       ].includes(e.column.dataField)) {
         e.cellElement.classList.add("grey-light-column"); // grey bkg
       }

@@ -5989,6 +5989,24 @@
         "visible": true
       },
       {
+        "visibleIndex": 8,
+        "dataField": "ordre.numeroCamion",
+        "dataType": "number",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ordre.ordreChargement",
+        "dataType": "number",
+        "width": 60,
+        "cssClass": "multi-line-header",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
         "visibleIndex": 12,
         "dataField": "ordre.entrepot.code",
         "dataType": "string",

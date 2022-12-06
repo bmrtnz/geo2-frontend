@@ -1306,6 +1306,8 @@
     "lignesGroupageCharg-ordre-codeChargement": "Code Charg.",
     "lignesGroupageCharg-ordre-numero": "N° ordre",
     "lignesGroupageCharg-ordre-id": "Réf. ordre",
+    "lignesGroupageCharg-ordre-numeroCamion": "N° camion",
+    "lignesGroupageCharg-ordre-ordreChargement": "Ordre Charg.",
     "lignesGroupageCharg-ordre-entrepot-code": "Entrepôt",
     "lignesGroupageCharg-ordre-dateDepartPrevue": "Départ camion",
     "lignesGroupageCharg-ordre-dateLivraisonPrevue": "Livraison",
