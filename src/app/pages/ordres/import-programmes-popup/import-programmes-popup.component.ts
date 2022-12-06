@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
-import { DxPopupComponent, DxScrollViewComponent, DxFileUploaderComponent } from "devextreme-angular";
-import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
-import { confirm } from "devextreme/ui/dialog";
 import { Program, ProgramService } from "app/shared/services/program.service";
+import { DxFileUploaderComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
+import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
 
 
 @Component({
@@ -24,7 +24,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   public loadingMessage: string;
   public bodyName = ProgramService.bodyName;
   public buildAccept = ProgramService.buildAccept();
-  public programService = ProgramService;
+  public customUploadData;
   public loading: boolean;
   public entrepotBWUK: boolean;
 
@@ -34,7 +34,8 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   @ViewChild(DxFileUploaderComponent, { static: false }) uploader: DxFileUploaderComponent;
 
   constructor(
-    private localizeService: LocalizationService
+    private localizeService: LocalizationService,
+    private programService: ProgramService,
   ) {
   }
 
@@ -44,7 +45,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   }
 
   uploadUrl() {
-    return this.programService.buildImportUrl(Program[this.program.name]);
+    return ProgramService.buildImportUrl(Program[this.program.name]);
   }
 
   onClickUpload() {
@@ -60,6 +61,9 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     } else {
       chooseFileButton.click();
     }
+
+    this.customUploadData = this.programService.buildCustomData(this.entrepotBWUK);
+
   }
 
   onBeforeSend(e) {
@@ -67,8 +71,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     this.gridComponent.datagrid.dataSource = null;
 
     // Use this.entrepotBWUK when TESCO
-    e.request.withCredentials = true;
-    e.request.responseType = "json";
+    ProgramService.setupUploadRequest(e.request);
   }
 
   onProgress(e) {
@@ -93,7 +96,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     this.gridComponent.datagrid.dataSource = DSitems;
 
     // Downloading modified Excel file
-    this.programService.downloadAndSave();
+    ProgramService.downloadAndSave();
     notify(
       this.localizeService.localize("telechargement-fichier-retour"),
       "success",

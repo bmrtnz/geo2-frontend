@@ -10,7 +10,7 @@
   (onShown)="onShown($event)"
   (onShowing)="onShowing($event)"
   (onHidden)="onHidden($event)"
-  >
+>
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}&nbsp;</div>
     <dx-button
@@ -42,6 +42,7 @@
         [accept]="buildAccept"
         [uploadUrl]="uploadUrl()"
         [name]="bodyName"
+        [uploadCustomData]="customUploadData"
         [focusStateEnabled]="false"
         (onBeforeSend)="onBeforeSend($event)"
         (onUploaded)="onUploaded($event)"
@@ -53,7 +54,9 @@
       </dx-file-uploader>
 
       <div class="import-programme-content-container">
-        <app-grid-import-programmes [programID]="programID"></app-grid-import-programmes>
+        <app-grid-import-programmes
+          [programID]="programID"
+        ></app-grid-import-programmes>
         <!-- <div class="import-loading">{{ loadingMessage }}</div> -->
 
         <br />
@@ -65,17 +68,13 @@
             (onClick)="download()"
         ></dx-button> -->
           <dx-button
-              type="normal"
-              text="{{ 'btn-fermer' | localize }}"
-              [disabled]="loading"
-              (onClick)="quitPopup()"
+            type="normal"
+            text="{{ 'btn-fermer' | localize }}"
+            [disabled]="loading"
+            (onClick)="quitPopup()"
           ></dx-button>
         </div>
-
       </div>
     </dx-scroll-view>
   </div>
-
 </dx-popup>
-
-
