@@ -1,0 +1,57 @@
+import { Injectable } from "@angular/core";
+import { Apollo, gql } from "apollo-angular";
+import LigneChargement from "app/shared/models/ligne-chargement.model";
+import DataSource from "devextreme/data/data_source";
+import { map } from "rxjs/operators";
+import { ApiService } from "../api.service";
+
+export type QueryArgs = { codeChargement: string, campagne: string };
+
+@Injectable({
+  providedIn: "root"
+})
+export class LignesChargementService extends ApiService {
+
+  constructor(
+    apollo: Apollo,
+  ) {
+    super(apollo, LigneChargement);
+  }
+
+  getDatasource(variables: QueryArgs, columns: Set<string>) {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: options => this
+          .getList(variables, columns)
+          .pipe(map(res => res.data.allLignesChargement))
+          .toPromise(),
+      }),
+    });
+  }
+
+  getList(variables: QueryArgs, columns: Set<string>) {
+    return this.apollo
+      .query<{ allLignesChargement: Partial<LigneChargement[]> }>({
+        query: gql(this.buildGraph(columns)),
+        variables,
+        fetchPolicy: "network-only",
+      });
+  }
+
+  private buildGraph(body: Set<string>) {
+    return ApiService.buildGraph("query",
+      [{
+        name: "allLignesChargement",
+        body,
+        params: [
+          { name: "codeChargement", value: "codeChargement", isVariable: true },
+          { name: "campagne", value: "campagne", isVariable: true },
+        ],
+      }],
+      [
+        { name: "codeChargement", type: "String", isOptionnal: false },
+        { name: "campagne", type: "String", isOptionnal: false },
+      ],
+    );
+  }
+}
