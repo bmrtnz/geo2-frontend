@@ -270,12 +270,14 @@
   *ngIf="FEATURE.columnCertifications"
   [ordreLigne]="ordreLigne"
   (changeLigne)="onDataChanged($event)"
+  (update)="update()"
 ></app-article-certification-popup>
 
 <app-article-origine-popup
   *ngIf="FEATURE.columnOrigine"
   [ordreLigne]="ordreLigne"
   (changeLigne)="onDataChanged($event)"
+  (update)="update()"
 ></app-article-origine-popup>
 
 <app-zoom-article-popup

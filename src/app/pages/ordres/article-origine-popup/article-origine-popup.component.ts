@@ -19,6 +19,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
 
   @Input() public ordreLigne: OrdreLigne;
   @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
+  @Output() public update = new EventEmitter();
 
   dataSource: DataSource;
   departementDataSource: DataSource;
@@ -110,7 +111,7 @@ export class ArticleOriginePopupComponent implements OnInit, OnChanges {
       .subscribe({
         next: res => {
           notify(this.localizeService.localize("articles-save-origin"), "success", 2000);
-          this.gridsService.reload("Commande");
+          this.update.emit(); // Deep grid refresh
         },
         error: (err) => {
           console.log(err);
