@@ -26,7 +26,6 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   public buildAccept = ProgramService.buildAccept();
   public customUploadData;
   public loading: boolean;
-  public entrepotBWUK: boolean;
 
   @ViewChild(GridImportProgrammesComponent, { static: false }) gridComponent: GridImportProgrammesComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -55,22 +54,17 @@ export class ImportProgrammesPopupComponent implements OnChanges {
         this.localizeService.localize("entrepot-import-programme"),
         this.title
       ).then(ent => {
-        this.entrepotBWUK = ent;
+        this.customUploadData = this.programService.buildCustomData(ent);
         chooseFileButton.click();
       });
     } else {
       chooseFileButton.click();
     }
-
-    this.customUploadData = this.programService.buildCustomData(this.entrepotBWUK);
-
   }
 
   onBeforeSend(e) {
     this.loading = true;
     this.gridComponent.datagrid.dataSource = null;
-
-    // Use this.entrepotBWUK when TESCO
     ProgramService.setupUploadRequest(e.request);
   }
 
