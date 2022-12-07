@@ -30,6 +30,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
   @Input() public additionnalFilter: any;
+  @Input() public fetchPolicy: string;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -86,7 +87,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Article);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
-    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
+    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise(), this.fetchPolicy);
     this.toRefresh = true;
   }
 

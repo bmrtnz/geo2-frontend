@@ -50,4 +50,9 @@ export class GridUtilsService {
     this.focusSB = true;
   }
 
+  // Converts a string array to "item1 & item2" or "item1, item2, item3 & item4"
+  public friendlyFormatList(items: Array<string>) {
+    return items.join(", ").replace(/,(?![\s\S]*,)/, " &");
+  }
+
 }

@@ -58,6 +58,7 @@
         <app-articles-list
           [ordre]="ordre"
           [additionnalFilter]="additionnalFilter"
+          [fetchPolicy]="'no-cache'"
           [preFilterTitle]="'articles-refsclient-preFilter-title' | localize"
           (selectChange)="selectFromGrid($event)"
         ></app-articles-list>

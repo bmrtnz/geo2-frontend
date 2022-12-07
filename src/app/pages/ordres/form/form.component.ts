@@ -59,6 +59,9 @@ import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { ONE_SECOND } from "../../../../basic";
 import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
+import { ReferencesClientService } from "app/shared/services/api/references-client.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
+import { cpuUsage } from "process";
 
 /**
  * Grid with loading toggled by parent
@@ -114,11 +117,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public formUtilsService: FormUtilsService,
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
+    private referencesClientService: ReferencesClientService,
     private mruOrdresService: MruOrdresService,
     public mruEntrepotsService: MruEntrepotsService,
     private tabContext: TabContext,
     public authService: AuthService,
     private localization: LocalizationService,
+    private gridUtilsService: GridUtilsService,
     public regimesTvaService: RegimesTvaService,
   ) {
     this.handleTabChange()
@@ -463,20 +468,46 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onAddRefsClient() {
-    const artIds = [];
+    let artIds = [];
     const rowsData = this.warnNoSelectedRows();
     if (!rowsData) return;
     rowsData.map((data) => artIds.push(data.article.id));
-    ///////////////////////////////
-    // Ajout aux réfs client
-    // (artIds)
-    ///////////////////////////////
-    const message = this.localization.localize("articles-ajoutes-refs-client")
-      .split("&&").join(artIds.length > 1 ? "s" : "")
-      .replace("&A", artIds.join(" & "))
-      .replace("&C", this.ordre.client.code);
-    notify(message, "success", 7000);
-    this.gridCommandes.grid.instance.clearSelection();
+    artIds = [...new Set(artIds)]; // Removing duplicates
+    const allReferenceClient = [];
+    artIds.map(artId => {
+      allReferenceClient.push({
+        article: { id: artId },
+        client: { id: this.ordre.client.id }
+      });
+    });
+    this.referencesClientService.saveAll(allReferenceClient, new Set(["article.id"])).subscribe({
+      next: (res) => {
+        const addedArt = res.data.saveAllReferenceClient;
+        if (addedArt.length) {
+          const addedArtids = [];
+          addedArt.map(artId => addedArtids.push(artId.article?.id));
+          let message = this.localization.localize("articles-ajoutes-refs-client")
+            .split("&&").join(addedArtids.length > 1 ? "s" : "")
+            .replace("&A", this.gridUtilsService.friendlyFormatList(addedArtids))
+            .replace("&C", this.ordre.client.code);
+          // Find existing articles and adjust final toast message
+          const diffArtIds = artIds.filter(x => !addedArtids.includes(x));
+          if (diffArtIds.length) {
+            message += ". " + this.localization.localize("articles-refs-client-delta")
+              .split("&&").join(diffArtIds.length > 1 ? "s" : "")
+              .replace("&A", this.gridUtilsService.friendlyFormatList(diffArtIds));
+          }
+          // Show ok message
+          notify(message, "success", 5000 + (2000 * diffArtIds.length));
+        } else {
+          const message = this.localization.localize("articles-refs-client-present" + (artIds.length > 1 ? "s" : ""));
+          notify(message, "warning", 5000);
+        }
+        this.gridCommandes.grid.instance.clearSelection();
+      },
+      error: () => notify("Erreur lors de la sauvegarde dans les références client", "error", 5000)
+    });
+
   }
 
   onRegulOrderClick() {
