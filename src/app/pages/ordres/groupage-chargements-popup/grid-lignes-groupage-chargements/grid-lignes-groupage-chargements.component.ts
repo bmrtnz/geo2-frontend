@@ -17,6 +17,7 @@ import { map } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 import { ModifDetailLignesPopupComponent } from "../../modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 import { LignesChargementService } from "app/shared/services/api/lignes-chargement.service";
+import LigneChargement from "app/shared/models/ligne-chargement.model";
 
 
 @Component({
@@ -43,6 +44,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   public gridExpFiltered: boolean;
   public gridRowsTotal: number;
   private dataField: string;
+  private ligneOrdre: Partial<LigneChargement>;
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
@@ -101,26 +103,69 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   onEditorPreparing(e) {
+
     if (e.parentType === "dataRow") {
+
       e.editorOptions.onValueChanged = (elem) => {
-        // Copy paste on all rows
         const rows = this.datagrid.instance.getVisibleRows();
-        rows.map((res) => this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value));
+
+        ///////////////////////////////
+        // update other cells value
+        ///////////////////////////////
+
+        switch (this.dataField) {
+          case "dateDepartPrevue":
+          case "dateLivraisonPrevue": {
+            // Copy paste on all rows
+            rows.map((res) => this.updateRowsAndDs(res, elem));
+            break;
+          }
+          case "dateDepartPrevueFournisseur": {
+            // Copy paste on same fournisseur rows
+            rows.filter(
+              l => l.data.codeFournisseur === this.ligneOrdre.codeFournisseur
+            ).map((res) => this.updateRowsAndDs(res, elem));
+            break;
+          }
+          case "ordreChargement":
+          case "numeroCamion": {
+            // Copy paste on same order rows
+            rows.filter(
+              l => l.data.ordre.id === this.ligneOrdre.ordre.id
+            ).map((res) => this.updateRowsAndDs(res, elem));
+            break;
+          }
+        }
       };
     }
   }
 
+  updateRowsAndDs(res, elem) {
+    this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value);
+    (this.datagrid.dataSource as DataSource).items()
+      .filter(r => r.ligne.id === res.data.ligne.id)[0][this.dataField] = elem.value;
+  }
+
+
   onToolbarPreparing(e) {
-    // Hide grid save button
+    // Hide save/undo buttons
     e.toolbarOptions.items[0].visible = false;
+    e.toolbarOptions.items[1].visible = false;
   }
 
   onCellClick(e) {
     if (e.rowType !== "data") return;
     this.dataField = e.column.dataField;
-    if (this.dataField === "ordre.numero") {
+    this.ligneOrdre = e.row?.data;
+    if (this.dataField === "numeroOrdre") {
       e.event.stopImmediatePropagation();
       this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id);
+    }
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data") {
+      e.rowElement.classList.add("cursor-pointer");
     }
   }
 
@@ -152,8 +197,34 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   validGrouping() {
+    const modified = "modified"; // Curiously, unknown default property
+    const modifiedRows = this.datagrid.instance.getVisibleRows().filter(r => r[modified]);
 
-    this.closePopup.emit();
+    if (modifiedRows.length) { // Loop through edited rows
+      const allLigneChargement = [];
+      modifiedRows.map(row => {
+        const d = row.data;
+        allLigneChargement.push({
+          id: d.id,
+          // ligne: { id: d.ligne.id },
+          numeroCamion: d.numeroCamion,
+          ordreChargement: d.ordreChargement,
+          dateDepartPrevue: d.dateDepartPrevue,
+          dateLivraisonPrevue: d.dateLivraisonPrevue,
+          dateDepartPrevueFournisseur: d.dateDepartPrevueFournisseur
+        });
+      });
+      this.lignesChargementService.saveAll(allLigneChargement, new Set(["id"])).subscribe({
+        next: (res) => {
+          notify("OK", "success", 5000);
+          this.closePopup.emit();
+        },
+        error: () => notify("Erreur lors de la sauvegarde", "error", 5000)
+      });
+    } else {
+      this.closePopup.emit();
+    }
+
   }
 
   transferGrouping() {

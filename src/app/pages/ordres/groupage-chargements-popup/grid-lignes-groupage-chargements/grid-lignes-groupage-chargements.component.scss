@@ -5,6 +5,10 @@
 
 ::ng-deep .grid-ordre-lignes-groupage-chargements-container {
 
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+
   .grid-ordre-lignes-groupage-chargements {
     height: 400px;
 

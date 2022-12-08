@@ -5967,6 +5967,11 @@
         "visible": false
       },
       {
+        "visibleIndex": 1,
+        "dataField": "ligne.id",
+        "visible": true
+      },
+      {
         "visibleIndex": 2,
         "dataField": "codeChargement",
         "dataType": "string",
@@ -6084,7 +6089,6 @@
       },
       {
         "dataField": "ordre.campagne.id",
-        "showInColumnChooser": false,
         "visible": false
       }
     ]

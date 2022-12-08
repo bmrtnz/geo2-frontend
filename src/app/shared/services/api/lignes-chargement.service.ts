@@ -37,7 +37,7 @@ export class LignesChargementService extends ApiService {
       .query<{ allLignesChargement: Partial<LigneChargement[]> }>({
         query: gql(this.buildListGraph(columns)),
         variables,
-        fetchPolicy: "network-only",
+        fetchPolicy: "no-cache",
       });
   }
 

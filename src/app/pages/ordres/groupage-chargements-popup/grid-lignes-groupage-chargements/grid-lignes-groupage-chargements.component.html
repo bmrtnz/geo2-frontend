@@ -19,13 +19,14 @@
     [allowColumnReordering]="true"
     (onContentReady)="onContentReady($event)"
     (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
     (onCellClick)="onCellClick($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
     (onCellClick)="onCellClick($event)"
     (onToolbarPreparing)="
       onToolbarPreparing($event);
       gridConfiguratorService.onToolbarPreparing(
-        'Passage à quai',
+        'Passage à quai - Créer un ordre à partir de la sélection',
         $event,
         gridConfiguratorService.Grid.LignesGroupageChargements,
         enableFilters.bind(this)
@@ -40,12 +41,11 @@
       [allowSearch]="true"
     ></dxo-header-filter>
     <dxo-paging [enabled]="false"></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-pager>
+    <dxo-selection
+      mode="multiple"
+      [showCheckBoxesMode]="'always'"
+      [selectAllMode]="'all'"
+    ></dxo-selection>
     <dxo-editing
       [selectTextOnEditStart]="true"
       [allowUpdating]="true"
