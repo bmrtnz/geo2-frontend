@@ -13,7 +13,7 @@ export class BrowserService {
    * Exemple : "Transporteurs"
    */
   openWiki(element) {
-    const baseUrl = "http://svr_wiki:8080/xwiki/bin/view/GEO TIERS/";
+    const baseUrl = "http://svr_wiki:8080/xwiki/bin/view/GEO 2/GEO TIERS/";
 
     window.open(encodeURI(`${baseUrl}${element}`), "_blank");
   }

@@ -120,6 +120,8 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     const gridConfig = await this.gridConfiguratorService.fetchConfig(Grid.Article);
     this.catalogue?.dataGrid.instance.state(gridConfig);
     this.catalogue?.dataGrid.instance.repaint();
+
+    this.saisieCode.instance.focus();
   }
 
   alreadySelected() {

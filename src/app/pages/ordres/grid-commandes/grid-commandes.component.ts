@@ -118,12 +118,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @ViewChild(ZoomFournisseurPopupComponent, { static: false }) zoomFournisseurPopup: ZoomFournisseurPopupComponent;
   @ViewChild(ArticleReservationOrdrePopupComponent, { static: false }) reservationStockPopup: ArticleReservationOrdrePopupComponent;
 
-  onR;
 
   public gridConfigHandler = event =>
     this.gridConfigurator.init(this.gridID, {
       ...event,
-      title: "Lignes de commande",
+      title: this.localizeService.localize("grid-title-lignes-cde"),
       onColumnsChange: this.onColumnsConfigurationChange.bind(this),
       toolbarItems: [{
         location: "after",
@@ -699,6 +698,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       e.editorOptions.onInput = (elem) => {
         this.gridUtilsService.secureTypedValueWithEditGrid(elem);
       };
+    }
+    // Optimizing lookup dropdown list width
+    if (e.editorName === "dxSelectBox") {
+      e.editorOptions.onOpened = (elem) => elem.component._popup.option("width", 300);
     }
   }
 

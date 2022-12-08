@@ -201,6 +201,7 @@
       [visible]="true"
       [allowSearch]="true"
     ></dxo-header-filter>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
@@ -215,7 +216,6 @@
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-column-chooser
       [enabled]="true"
       mode="select"

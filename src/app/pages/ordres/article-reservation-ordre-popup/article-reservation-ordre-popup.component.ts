@@ -6,8 +6,9 @@ import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
-import { concatMap, finalize, map } from "rxjs/operators";
+import { DxDataGridComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import { concatMap, debounceTime, delay, finalize, map } from "rxjs/operators";
+import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 import { GridReservationStockComponent, Reservation } from "../grid-reservation-stock/grid-reservation-stock.component";
 import { GridsService } from "../grids.service";
@@ -20,6 +21,7 @@ import { GridsService } from "../grids.service";
 export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   @Input() public ordreLigne: OrdreLigne;
+  @Input() public gridCommandeComponent: GridCommandesComponent;
   @Output() public ordreLigneInfo: OrdreLigne;
 
   visible: boolean;
@@ -32,6 +34,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   quantiteAReserver: number;
   resaStatus: LigneReservation[];
   public okDisabled = false;
+  public popupFullscreen = false;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
@@ -78,6 +81,10 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
     // this.gridResa.reloadSource(this.ordreLigne.article.id);
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 
   clearAll() {
@@ -188,10 +195,13 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
           this.currentCompanyService.getCompany().id,
           ["id", "nombreReservationsSurStock"],
         )),
-        finalize(() => this.grids.reload("Commande", "SyntheseExpeditions", "DetailExpeditions"))
+        finalize(() => {
+          this.gridCommandeComponent.update(); // Needs to make a deeper refresh for this grid
+          this.grids.reload("SyntheseExpeditions", "DetailExpeditions");
+        }
+        )
       );
   }
-
 
 }
 

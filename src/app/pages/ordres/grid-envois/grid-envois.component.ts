@@ -88,7 +88,7 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
   }
 
   reload() {
-    this.dataSource.reload();
+    this.dataSource?.reload();
   }
 
   onRowDblClick(event) {

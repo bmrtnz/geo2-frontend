@@ -14,7 +14,7 @@ import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { concat, defer, from, Observable, of, zip } from "rxjs";
-import { concatMap, concatMapTo, filter, finalize, map, tap, withLatestFrom } from "rxjs/operators";
+import { concatMap, concatMapTo, filter, last, map, withLatestFrom } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 import { GridsService } from "../grids.service";
 
@@ -106,7 +106,9 @@ export class GridReservationStockComponent implements OnInit {
 
   private pushReservation(event) {
     const [fournisseur, proprietaire] = event.key[0].split("/");
-    const desc = `Ordre ${this.ordreLigneInfo.ordre.numero} / ${this.ordreLigneInfo.ordre.entrepot.code} `;
+    const desc =
+      `Ordre ${this.ordreLigneInfo.ordre.numero} / ${this.ordreLigneInfo.ordre.entrepot.code}
+       (${this.authService.currentUser.nomUtilisateur})`;
     this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
       .pipe(
         concatMap(ol => this.stockMouvementsService
@@ -203,10 +205,11 @@ export class GridReservationStockComponent implements OnInit {
               ["id", `${name}.id`],
             )),
           )),
+          last(),
         )
         .subscribe({
           error: ({ message }: Error) => notify(message, "error"),
-          next: () => this.pushReservation(e),
+          next: () => { console.log("push"); this.pushReservation(e); }
         });
     }
 
