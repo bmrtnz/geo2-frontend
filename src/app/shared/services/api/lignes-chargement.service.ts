@@ -21,7 +21,7 @@ export class LignesChargementService extends ApiService {
     super(apollo, LigneChargement);
   }
 
-  getDatasource(variables: QueryArgs, columns: Set<string>) {
+  getDataSource(variables: QueryArgs, columns: Set<string>) {
     return new DataSource({
       store: this.createCustomStore({
         load: options => this

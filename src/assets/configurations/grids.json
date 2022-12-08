@@ -5968,13 +5968,13 @@
       },
       {
         "visibleIndex": 2,
-        "dataField": "ordre.codeChargement",
+        "dataField": "codeChargement",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "ordre.numero",
+        "dataField": "numeroOrdre",
         "dataType": "string",
         "sortOrder": "asc",
         "sortIndex": 2,
@@ -5990,7 +5990,7 @@
       },
       {
         "visibleIndex": 8,
-        "dataField": "ordre.numeroCamion",
+        "dataField": "numeroCamion",
         "dataType": "number",
         "width": 50,
         "cssClass": "multi-line-header",
@@ -5999,7 +5999,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "ordre.ordreChargement",
+        "dataField": "ordreChargement",
         "dataType": "number",
         "width": 60,
         "cssClass": "multi-line-header",
@@ -6014,7 +6014,7 @@
       },
       {
         "visibleIndex": 14,
-        "dataField": "ordre.dateDepartPrevue",
+        "dataField": "dateDepartPrevue",
         "dataType": "date",
         "sortOrder": "asc",
         "sortIndex": 1,
@@ -6025,7 +6025,7 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "ordre.dateLivraisonPrevue",
+        "dataField": "dateLivraisonPrevue",
         "dataType": "date",
         "width": 125,
         "allowEditing": true,
@@ -6033,7 +6033,7 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "logistique.dateDepartPrevueFournisseur",
+        "dataField": "dateDepartPrevueFournisseur",
         "dataType": "date",
         "format": "dd-MM-yyyy",
         "width": 125,
@@ -6042,7 +6042,7 @@
       },
       {
         "visibleIndex": 20,
-        "dataField": "logistique.fournisseur.code",
+        "dataField": "codeFournisseur",
         "dataType": "string",
         "visible": true
       },
@@ -6054,7 +6054,7 @@
       },
       {
         "visibleIndex": 24,
-        "dataField": "article.articleDescription.descriptionCourte",
+        "dataField": "descriptionArticle",
         "dataType": "string",
         "sortOrder": "asc",
         "sortIndex": 3,
@@ -6062,7 +6062,7 @@
       },
       {
         "visibleIndex": 26,
-        "dataField": "article.emballage.emballage.description",
+        "dataField": "descriptionColis",
         "dataType": "string",
         "visible": true
       },
@@ -6071,7 +6071,7 @@
         "dataField": "nombrePalettesCommandees",
         "dataType": "number",
         "cssClass": "multi-line-header move-right",
-        "width": 30,
+        "width": 60,
         "visible": true
       },
       {
@@ -6079,7 +6079,7 @@
         "dataField": "nombreColisCommandes",
         "dataType": "number",
         "cssClass": "multi-line-header move-right",
-        "width": 30,
+        "width": 60,
         "visible": true
       },
       {
