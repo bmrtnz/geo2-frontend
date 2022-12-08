@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import PlanningDepartMaritime from "app/shared/models/planning-depart-maritime.model";
 import DataSource from "devextreme/data/data_source";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { ApiService } from "../api.service";
 
 export type QueryArgs = { societeCode: string, dateMin: string, dateMax: string };
@@ -18,13 +18,17 @@ export class PlanningDepartMaritimeService extends ApiService {
     super(apollo, PlanningDepartMaritime);
   }
 
-  getDatasource(variables: QueryArgs, columns: Set<string>) {
+  getDataSource(variables: QueryArgs, columns: Set<string>) {
     return new DataSource({
       store: this.createCustomStore({
         load: options => this
           .getList(variables, columns)
-          .pipe(map(res => res.data.allPlanningDepartMaritime))
-          .toPromise(),
+          .pipe(
+            map(res => res.data.allPlanningDepartMaritime),
+            // Time formating
+            tap(res => res.map(r => r.dateDepartPrevueFournisseurRaw = r.dateDepartPrevueFournisseur?.split("T")[1]))
+          )
+          .toPromise()
       }),
     });
   }

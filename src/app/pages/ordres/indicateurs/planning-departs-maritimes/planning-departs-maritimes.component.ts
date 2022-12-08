@@ -1,20 +1,13 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, NgForm } from "@angular/forms";
-import { Statut } from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
-import { PlanningTransporteursService } from "app/shared/services/api/planning-transporteurs.service";
+import { PlanningDepartMaritimeService } from "app/shared/services/api/planning-depart-maritime.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import {
-  Grid,
-  GridConfig,
-  GridConfiguratorService,
-} from "app/shared/services/grid-configurator.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridColumn } from "basic";
-import {
-  DxButtonComponent,
-  DxDataGridComponent,
-  DxSelectBoxComponent,
-} from "devextreme-angular";
+import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -33,10 +26,11 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
   styleUrls: ["./planning-departs-maritimes.component.scss"]
 })
 
-export class PlanningDepartsMaritimesComponent implements OnInit {
+export class PlanningDepartsMaritimesComponent implements OnInit, AfterViewInit {
 
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
+  public titleElement: HTMLInputElement;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -52,121 +46,80 @@ export class PlanningDepartsMaritimesComponent implements OnInit {
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
-    public planningTransporteursService: PlanningTransporteursService,
+    public planningDepartMaritimeService: PlanningDepartMaritimeService,
     public localizeService: LocalizationService,
+    public gridUtilsService: GridUtilsService,
+    public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchConfig(
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.PlanningDepartsMaritimes,
     );
     this.columns = from(this.gridConfig).pipe(
       map((config) => config.columns),
     );
+
     this.periodes = this.dateManagementService.periods();
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
+    this.enableFilters();
+  }
+
+  ngAfterViewInit() {
+    this.titleElement = this.datagrid.instance.$element()[0].querySelector(
+      ".dx-toolbar .dx-placeholder",
+    ) as HTMLInputElement;
+    // Customizing grid title with period/date
+    this.titleElement.innerHTML = this.gridUtilsService
+      .customGridPlanningTitle("grid-situation-depart-maritime-title");
+  }
+
+  async enableFilters() {
+
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField)),
     );
 
+    const values: Inputs = {
+      ...this.formGroup.value
+    };
+
+    // Customizing grid title with period/date
+    if (this.titleElement)
+      this.titleElement.innerHTML = this.gridUtilsService
+        .customGridPlanningTitle("grid-situation-depart-maritime-title", values.dateMin, values.dateMax);
+
     this.ordresDataSource =
-      this.planningTransporteursService.getDataSource_v2(
-        await fields.toPromise(),
+      this.planningDepartMaritimeService.getDataSource(
+        {
+          societeCode: this.currentCompanyService.getCompany().id,
+          dateMin: values.dateMin,
+          dateMax: values.dateMax
+        },
+        new Set(await fields.toPromise()),
       );
+    this.datagrid.dataSource = this.ordresDataSource;
 
-    this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
-  }
-
-  enableFilters() {
-    // const values: Inputs = {
-    //   ...this.formGroup.value
-    // };
-
-    // this.planningTransporteursService.setPersisantVariables({
-    //   dateMin: values.dateMin,
-    //   dateMax: values.dateMax,
-    //   societeCode: "%", // All companies
-    // } as Inputs);
-
-    // this.datagrid.dataSource = this.ordresDataSource;
-  }
-
-  onRowDblClick(e) {
-    // if (data.ordre?.societe.id === this.currentCompanyService.getCompany().id)
-    //   this.tabContext.openOrdre(data.numero, data.ordre.campagne.id);
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
 
-      // Best expression for order status display
-      if (e.column.dataField === "ordre.statut") {
-        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
-      }
+      // Higlight important column
+      if (e.column.dataField === "dateDepartPrevueFournisseur")
+        e.cellElement.classList.add("grey-normal-depart");
 
-      // Ajout CP, ville et pays au lieu de livraison
-      if (e.column.dataField === "entrepotRaisonSocial") {
-        if (e.data.entrepotCodePostal) {
-          e.cellElement.innerText +=
-            " - " +
-            e.data.entrepotCodePostal +
-            " " +
-            e.data.entrepotVille +
-            " (" +
-            e.data.entrepotPays +
-            ")";
-        }
-      }
-      // Ajout version ordre
-      if (e.column.dataField === "numero") {
-        e.cellElement.innerText += (e.data.version ? " - " + e.data.version : "");
-        e.cellElement.classList += " bold";
-      }
-      // Ajout type colis
-      if (e.column.dataField === "sommeColisCommandes") {
-        e.cellElement.innerText += " / " + e.data.colis;
-      }
-      // Ajout type palette
-      if (e.column.dataField === "espece") {
-        e.cellElement.innerText += " / " + e.data.palette;
-      }
-      // Best expression for date
-      if (
-        e.column.dataField === "dateLivraisonPrevue" ||
-        e.column.dataField === "dateDepartPrevueFournisseur"
-      ) {
-        if (e.value)
-          e.cellElement.innerText =
-            this.dateManagementService.formatDate(
-              e.value,
-              "dd-MM-yyyy",
-            );
-      }
+      // Higlight important column
+      if (e.column.dataField === "dateDepartPrevueFournisseurRaw")
+        e.cellElement.classList.add("grey-light-depart");
+
+      // No palette
+      if (e.column.dataField === "nombrePalettesCommandees" && !e.value)
+        e.cellElement.classList.add("bold-text");
+
     }
-
-    // Ajout CP, ville et pays au lieu de livraison nom groupe
-    if (e.rowType === "group") {
-      if (e.data.items && e.column.dataField === "entrepotRaisonSocial") {
-        if (e.data.items[0]?.entrepotCodePostal) {
-          e.cellElement.innerText +=
-            " - " +
-            e.data.items[0].entrepotCodePostal +
-            " " +
-            e.data.items[0].entrepotVille +
-            " (" +
-            e.data.items[0].entrepotPays +
-            ")";
-        }
-        e.cellElement.classList.add("entrepot-planning-transporteurs");
-      }
-      if (e.data.items && e.column.dataField === "numero") {
-        e.cellElement.classList.add("numero-planning-transporteurs");
-      }
-    }
-  }
-
-  onRowPrepared(e) {
   }
 
   manualDate(e) {

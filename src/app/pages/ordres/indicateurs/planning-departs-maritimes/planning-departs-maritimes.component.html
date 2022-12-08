@@ -66,6 +66,7 @@
 </form>
 
 <dx-data-grid
+  class="grid-planning-departs-maritimes"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="true"
@@ -74,11 +75,9 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onCellPrepared)="onCellPrepared($event)"
-  (onRowPrepared)="onRowPrepared($event)"
-  (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
-      'Planning départs maritimes',
+      '',
       $event,
       gridConfiguratorService.Grid.PlanningDepartsMaritimes,
       enableFilters.bind(this)
@@ -102,6 +101,10 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -117,6 +120,7 @@
     [dataField]="column.dataField"
     [cssClass]="column.cssClass"
     [width]="column.width"
+    [format]="column.format"
     [caption]="
       ('ordres-planningDepartsMar-' + column.dataField?.split('.').join('-')
         | localize) || column.name
