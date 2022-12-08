@@ -16,6 +16,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 import { ModifDetailLignesPopupComponent } from "../../modif-detail-lignes-popup/modif-detail-lignes-popup.component";
+import { LignesChargementService } from "app/shared/services/api/lignes-chargement.service";
 
 
 @Component({
@@ -47,7 +48,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
 
   constructor(
-    public ordreLignesService: OrdreLignesService,
+    public lignesChargementService: LignesChargementService,
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
@@ -77,13 +78,14 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
         return column.dataField;
       })));
 
-      this.dataSource = this.ordreLignesService.getDataSource_v2(await fields.toPromise());
-      this.gridFilter = [
-        ["ordre.codeChargement", "isnotnull", null],
-        "and",
-        ["ordre.codeChargement", "=", this.ordre.codeChargement]
-      ]; // FAKE FOR FRONT TESTING
-      this.dataSource.filter(this.gridFilter);
+      this.dataSource = this.lignesChargementService.getDataSource(
+        {
+          campagne: this.ordre.campagne.id,
+          codeChargement: this.ordre.codeChargement
+        },
+        new Set(await fields.toPromise())
+      );
+
       this.datagrid.dataSource = this.dataSource;
       this.gridUtilsService.resetGridScrollBar(this.datagrid);
     } else if (this.datagrid)
@@ -102,8 +104,8 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     if (e.parentType === "dataRow") {
       e.editorOptions.onValueChanged = (elem) => {
         // Copy paste on all rows
-        // const rows = this.datagrid.instance.getVisibleRows();
-        // rows.map((res) => this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value));
+        const rows = this.datagrid.instance.getVisibleRows();
+        rows.map((res) => this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value));
       };
     }
   }
@@ -129,11 +131,11 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     if (e.rowType === "data") {
       // Higlight editable columns
       if ([
-        "ordre.dateDepartPrevue",
-        "ordre.dateLivraisonPrevue",
-        "logistique.dateDepartPrevueFournisseur",
-        "ordre.numeroCamion",
-        "ordre.ordreChargement"
+        "dateDepartPrevue",
+        "dateLivraisonPrevue",
+        "dateDepartPrevueFournisseur",
+        "numeroCamion",
+        "ordreChargement"
       ].includes(e.column.dataField)) {
         e.cellElement.classList.add("grey-light-column"); // grey bkg
       }

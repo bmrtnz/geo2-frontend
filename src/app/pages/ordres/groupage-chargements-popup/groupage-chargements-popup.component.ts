@@ -1,16 +1,10 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { ArticlesService, LocalizationService } from "app/shared/services";
-import { FunctionsService } from "app/shared/services/api/functions.service";
+import { LocalizationService } from "app/shared/services";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
 import { confirm } from "devextreme/ui/dialog";
-import { from } from "rxjs";
-import { concatMap, takeWhile } from "rxjs/operators";
 import { GridLignesGroupageChargementsComponent } from "./grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
 
 @Component({
@@ -46,9 +40,6 @@ export class GroupageChargementsPopupComponent implements OnChanges {
 
   constructor(
     public OrdreLigneService: OrdreLignesService,
-    private gridConfiguratorService: GridConfiguratorService,
-    private functionsService: FunctionsService,
-    private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
   ) { }
 
@@ -71,6 +62,11 @@ export class GroupageChargementsPopupComponent implements OnChanges {
     if (this.ordre) this.gridComponent.enableFilters();
   }
 
+  onHidden(e) {
+    this.gridComponent.datagrid.instance.cancelEditData();
+    this.gridComponent.datagrid.dataSource = null;
+  }
+
   closePopup() {
     if (this.gridComponent.datagrid.instance.hasEditData()) {
       confirm(
@@ -84,8 +80,6 @@ export class GroupageChargementsPopupComponent implements OnChanges {
 
   hidePopup() {
     this.popup.visible = false;
-    this.gridComponent.datagrid.instance.cancelEditData();
-    this.gridComponent.datagrid.dataSource = null;
   }
 
   resizePopup() {

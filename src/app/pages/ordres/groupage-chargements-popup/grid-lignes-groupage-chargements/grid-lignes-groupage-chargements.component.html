@@ -1,7 +1,14 @@
 <div class="grid-ordre-lignes-groupage-chargements-container">
   <dx-data-grid
     class="dx-card wide-card"
-    [remoteOperations]="true"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: false,
+      groupPaging: false,
+      paging: false,
+      sorting: true,
+      summary: false
+    }"
     [showBorders]="false"
     [elementAttr]="{ class: 'grid-ordre-lignes-groupage-chargements' }"
     [focusedRowEnabled]="true"
@@ -32,7 +39,7 @@
       [visible]="true"
       [allowSearch]="true"
     ></dxo-header-filter>
-    <dxo-paging></dxo-paging>
+    <dxo-paging [enabled]="false"></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
@@ -63,7 +70,7 @@
     >
     </dxo-column-chooser>
 
-    <dxo-summary *ngIf="!!gridRowsTotal">
+    <dxo-summary>
       <dxi-total-item
         column="nombrePalettesCommandees"
         summaryType="sum"
