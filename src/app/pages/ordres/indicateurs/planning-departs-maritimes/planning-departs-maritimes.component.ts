@@ -101,7 +101,6 @@ export class PlanningDepartsMaritimesComponent implements OnInit, AfterViewInit 
         new Set(await fields.toPromise()),
       );
     this.datagrid.dataSource = this.ordresDataSource;
-
   }
 
   onCellPrepared(e) {

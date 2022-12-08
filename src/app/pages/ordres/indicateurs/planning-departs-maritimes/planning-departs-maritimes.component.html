@@ -70,10 +70,10 @@
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="true"
-  [focusedRowIndex]="0"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [focusedRowIndex]="-1"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -100,7 +100,7 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"

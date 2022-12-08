@@ -418,6 +418,15 @@ body app-root.production {
   padding: 0 !important;
 }
 
+.no-padding-right {
+  padding-right: 0 !important;
+}
+
+.small-side-padding {
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+
 .text-align-center {
   text-align: center !important;
 }

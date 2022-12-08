@@ -5970,7 +5970,8 @@
         "visibleIndex": 1,
         "dataField": "dateDepartPrevueFournisseur",
         "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "cssClass": "small-side-padding text-align-center",
+        "width": 90,
         "sortOrder": "asc",
         "visible": true
       },
