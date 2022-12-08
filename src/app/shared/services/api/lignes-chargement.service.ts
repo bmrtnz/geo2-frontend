@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import { OrdreLigne } from "app/shared/models";
 import LigneChargement from "app/shared/models/ligne-chargement.model";
 import DataSource from "devextreme/data/data_source";
 import { map } from "rxjs/operators";
@@ -72,7 +73,7 @@ export class LignesChargementService extends ApiService {
     originalOrdreId: string,
     body: Set<string>,
   ) {
-    return this.apollo.query<{}>({
+    return this.apollo.query<{ [operation: string]: Partial<OrdreLigne> }>({
       query: gql(this.buildDuplicateTransferGraph(operation, body)),
       variables: {
         ordreLignesID,
