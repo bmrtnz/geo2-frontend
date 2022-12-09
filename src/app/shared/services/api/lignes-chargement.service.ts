@@ -73,7 +73,7 @@ export class LignesChargementService extends ApiService {
     originalOrdreId: string,
     body: Set<string>,
   ) {
-    return this.apollo.query<{ [operation: string]: Partial<OrdreLigne> }>({
+    return this.apollo.query<{ [operation: string]: Partial<OrdreLigne>[] }>({
       query: gql(this.buildDuplicateTransferGraph(operation, body)),
       variables: {
         ordreLignesID,
