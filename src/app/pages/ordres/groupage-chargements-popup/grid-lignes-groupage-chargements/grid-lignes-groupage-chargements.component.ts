@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewC
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService } from "app/shared/services";
 import { SummaryType } from "app/shared/services/api.service";
-import { alert, confirm } from "devextreme/ui/dialog";
+import { alert } from "devextreme/ui/dialog";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
@@ -123,7 +123,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
           "ordreChargement"
         ].includes(this.dataField)) return;
 
-        console.log(elem);
+        // console.log(this.dataField, elem, elem.value);
 
         ///////////////////////////////
         // Update other cells value
@@ -152,6 +152,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
             break;
           }
         }
+        this.dataField = "";
         this.saveData();
       };
     }
@@ -171,12 +172,10 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   onCellClick(e) {
+    this.dataField = "";
     if (e.rowType !== "data") return;
     this.dataField = e.column.dataField;
     this.ligneOrdre = e.row?.data;
-  }
-
-  onCellDblClick(e) {
     if (this.dataField === "numeroOrdre") {
       e.event.stopImmediatePropagation();
       this.tabContext.openOrdre(e.data.numeroOrdre, e.data.ordre.campagne.id);
@@ -207,7 +206,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     }
 
     // Adjust numero ordre cell info/style
-    if (field === "ordre.numero") {
+    if (field === "numeroOrdre") {
       e.cellElement.classList.add("text-underlined-pointer");
       e.cellElement.setAttribute(
         "title",
@@ -275,37 +274,36 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     this.saveData(true);
   }
 
-  transferOrDuplicate(action: Operation) {
+  transferOrDuplicate(operation: Operation) {
 
     this.lignesChargementService.transferOrDuplicate(
-      action,
+      operation,
       this.datagrid.selectedRowKeys,
       this.ordre.codeChargement,
       this.ordre.id,
       new Set(["id", "ordre.numero"])
     ).subscribe({
       next: (res) => {
-        console.log(res);
-        const data = res.data[action];
+        const data = res.data[operation];
         const numOrdre = data[0].ordre.numero;
         const campOrdre = this.currentCompanyService.getCompany().campagne.id;
         let message = this.localizeService.localize("ordre-cree").replace("&O", numOrdre);
-        message += " - " + this.localizeService.localize(`ordre-${action}-lignes`);
+        message += " - " + this.localizeService.localize(`ordre-${operation}-lignes`);
         message = message
           .replace("&L", data.length.toString())
           .split("&&").join(data.length > 1 ? "s" : "");
         notify(message, "success", 7000);
-        this.tabContext.openOrdre(numOrdre, campOrdre, false);
-        setTimeout(() => this.tabContext.openOrdre(this.ordre.numero, this.ordre.campagne.id, false), 500);
-        if (action === "transfer") {
+        if (operation === "transfer") {
           this.datagrid.instance.refresh();
           this.updateGridCde.emit();
+          this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
         }
+        this.tabContext.openOrdre(numOrdre, campOrdre, false);
+        setTimeout(() => this.tabContext.openOrdre(this.ordre.numero, this.ordre.campagne.id, false), 500);
       },
       error: (error: Error) => {
         console.log(error);
-        console.log(`ordre-${action}-creation`);
-        alert(this.messageFormat(error.message), this.localizeService.localize(`ordre-${action}-creation`));
+        alert(this.messageFormat(error.message), this.localizeService.localize(`ordre-${operation}-creation`));
       }
     });
 
