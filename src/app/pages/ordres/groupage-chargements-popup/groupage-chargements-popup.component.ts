@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -19,6 +19,7 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   @Input() public gridEnvois: any;
   @Output() public gridCdes: any;
   @Output() public gridEnv: any;
+  @Output() lignesChanged = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -84,6 +85,10 @@ export class GroupageChargementsPopupComponent implements OnChanges {
 
   resizePopup() {
     this.popupFullscreen = !this.popupFullscreen;
+  }
+
+  updateGridCde() {
+    this.lignesChanged.emit();
   }
 
 }

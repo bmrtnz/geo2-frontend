@@ -35,6 +35,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   @Output() public gridCommandes: any;
   @Output() public gridEnvois: any;
   @Output() closePopup = new EventEmitter();
+  @Output() updateGridCde = new EventEmitter();
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -114,6 +115,16 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
       e.editorOptions.onValueChanged = (elem) => {
         const rows = this.datagrid.instance.getVisibleRows();
 
+        if (![
+          "dateDepartPrevue",
+          "dateLivraisonPrevue",
+          "dateDepartPrevueFournisseur",
+          "numeroCamion",
+          "ordreChargement"
+        ].includes(this.dataField)) return;
+
+        console.log(elem);
+
         ///////////////////////////////
         // Update other cells value
         ///////////////////////////////
@@ -163,9 +174,12 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     if (e.rowType !== "data") return;
     this.dataField = e.column.dataField;
     this.ligneOrdre = e.row?.data;
+  }
+
+  onCellDblClick(e) {
     if (this.dataField === "numeroOrdre") {
       e.event.stopImmediatePropagation();
-      this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id);
+      this.tabContext.openOrdre(e.data.numeroOrdre, e.data.ordre.campagne.id);
     }
   }
 
@@ -276,14 +290,17 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
         const numOrdre = data[0].ordre.numero;
         const campOrdre = this.currentCompanyService.getCompany().campagne.id;
         let message = this.localizeService.localize("ordre-cree").replace("&O", numOrdre);
-        message += "\r\n" + this.localizeService.localize(`ordre-${action}-lignes`);
-        // message
-        //   .replace("&L", data.length.toString())
-        //   .replace("&&", data.length > 1 ? "s" : "");
+        message += " - " + this.localizeService.localize(`ordre-${action}-lignes`);
+        message = message
+          .replace("&L", data.length.toString())
+          .split("&&").join(data.length > 1 ? "s" : "");
         notify(message, "success", 7000);
         this.tabContext.openOrdre(numOrdre, campOrdre, false);
         setTimeout(() => this.tabContext.openOrdre(this.ordre.numero, this.ordre.campagne.id, false), 500);
-        if (action === "transfer") this.datagrid.instance.refresh();
+        if (action === "transfer") {
+          this.datagrid.instance.refresh();
+          this.updateGridCde.emit();
+        }
       },
       error: (error: Error) => {
         console.log(error);

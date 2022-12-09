@@ -407,6 +407,7 @@ export class TabContext {
    * @param toastInfo Shows toast by default, false it not desired
    */
   public openOrdre(numero: string, campagne?: string, toastInfo?: boolean) {
+    if (!numero) return;
     toastInfo = (toastInfo === undefined) ? true : toastInfo;
     if (toastInfo) notify(this.localization.localize("ouverture-ordre").replace("&NO", numero), "info", 1500);
     const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
