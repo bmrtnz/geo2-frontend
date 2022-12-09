@@ -5964,12 +5964,13 @@
         "visibleIndex": 0,
         "dataField": "id",
         "dataType": "string",
+        "showinColumnChooser": false,
         "visible": false
       },
       {
         "visibleIndex": 1,
         "dataField": "ligne.id",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 2,

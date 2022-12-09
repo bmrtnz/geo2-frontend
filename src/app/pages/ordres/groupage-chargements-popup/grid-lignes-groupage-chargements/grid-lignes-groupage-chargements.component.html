@@ -23,6 +23,7 @@
     (onCellClick)="onCellClick($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
     (onCellClick)="onCellClick($event)"
+    (onSelectionChanged)="onSelectionChanged($event)"
     (onToolbarPreparing)="
       onToolbarPreparing($event);
       gridConfiguratorService.onToolbarPreparing(
@@ -43,8 +44,8 @@
     <dxo-paging [enabled]="false"></dxo-paging>
     <dxo-selection
       mode="multiple"
+      [allowSelectAll]="false"
       [showCheckBoxesMode]="'always'"
-      [selectAllMode]="'all'"
     ></dxo-selection>
     <dxo-editing
       [selectTextOnEditStart]="true"
@@ -117,13 +118,17 @@
     ></dx-button>
     <!-- Confirmation de l'ordre -->
     <app-actions-documents-ordres
+      [ngClass]="{ 'inactive-box': unsavedData }"
       [ordre]="ordre"
       [gridEnvois]="gridEnvois"
       [gridCommandes]="gridCommandes"
       [orderConfirmationOnly]="true"
     ></app-actions-documents-ordres>
   </div>
-  <div class="bottom-buttons-container float-right">
+  <div
+    class="bottom-buttons-container float-right"
+    [ngClass]="{ 'inactive-box': unsavedData || !datagrid?.selectedRowKeys?.length }"
+    >
     <!-- Transférer -->
     <dx-button
       type="success"

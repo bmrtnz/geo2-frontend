@@ -45,6 +45,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   public gridRowsTotal: number;
   private dataField: string;
   private ligneOrdre: Partial<LigneChargement>;
+  public unsavedData: boolean;
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
@@ -100,6 +101,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
 
   onContentReady(e) {
     this.gridRowsTotal = this.datagrid.instance.getVisibleRows()?.length;
+    this.unsavedData = this.datagrid.instance.hasEditData();
   }
 
   onEditorPreparing(e) {
@@ -193,6 +195,16 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
         "title",
         this.localizeService.localize("hint-click-ordre"),
       );
+    }
+  }
+
+  onSelectionChanged(e) {
+    // Only one order can be selected at once
+    if (e.selectedRowsData?.length > 1) {
+      if (e.selectedRowsData[e.selectedRowsData.length - 1].ordre.id !== e.selectedRowsData[0].ordre.id) {
+        e.selectedRowKeys.pop();
+        e.component.deselectRows(e.selectedRowKeys);
+      }
     }
   }
 
