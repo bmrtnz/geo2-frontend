@@ -195,7 +195,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       codeCommercial: values.commercial?.id,
       codeEntrepot: this.switchEntity.value ? null : values.entrepot?.id,
       codeFournisseur: this.switchEntity.value ? values.fournisseur?.code : null,
-      dateMaxMouvements: values.dateMaxMouvements,
+      dateMaxMouvements: this.dateManagementService.endOfDay(values.dateMaxMouvements),
     });
     const index = this.getActiveGridIndex();
     this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
@@ -215,7 +215,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       [
         ["entree", "<>", 0],
         "and",
-        ["sortie", "<>", 0]
+        ["sortie", "<>", 0],
       ]
     ]);
 
@@ -270,7 +270,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             );
       }
       if (e.column.dataField === "sommeQuantiteInventaire") {
-        e.cellElement.innerText = e.data.entree - e.data.sortie;
+        e.cellElement.innerText = e.data.entree - e.data.sortie - e.data.quantiteInventaire;
         e.cellElement.classList.add("bold-text");
       }
     }
@@ -327,6 +327,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
             const data = result.data.fAjustPalox;
             if (data.res === 2)
               return alert(data.msg, this.localization.localize("text-popup-ajust-palox"));
+            this.enableFilters();
             notify(this.localization.localize("text-popup-ajust-palox-ok"), "success", 3000);
           },
           error: (error: Error) => alert(this.messageFormat(error.message), this.localization.localize("text-popup-ajust-palox"))
@@ -346,6 +347,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         .subscribe({
           next: () => {
             notify(this.localization.localize("text-popup-inventaire-palox-ok"), "success", 3000);
+            this.enableFilters();
           },
           error: (error: Error) => {
             alert(this.messageFormat(error.message), this.localization.localize("text-popup-inventaire-palox"));
@@ -382,14 +384,18 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   inventoryDate(e) {
     if ((!this.switchEntity.value && !this.switchType.value) || (this.switchType.value && this.switchEntity.value)) {
       if (e.items?.length)
-        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy");
+        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy") +
+          " (" + e.items[0].quantiteInventaire + ")";
       if (e.collapsedItems?.length)
-        return this.dateManagementService.formatDate(e.collapsedItems[0].dateInventaire, "dd-MM-yyyy");
+        return this.dateManagementService.formatDate(e.collapsedItems[0].dateInventaire, "dd-MM-yyyy") +
+          " (" + e.collapsedItems[0].quantiteInventaire + ")";
     } else {
       if (e.items?.length)
-        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy");
+        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy") +
+          " (" + e.items[0].quantiteInventaire + ")";
       if (e.collapsedItems?.length)
-        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy");
+        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy") +
+          " (" + e.items[0].quantiteInventaire + ")";
     }
     return "";
   }

@@ -7,6 +7,7 @@ import {
 } from "devextreme-angular";
 import { NgForm } from "@angular/forms";
 import { LocalizationService } from "app/shared/services";
+import { DateManagementService } from "app/shared/services/date-management.service";
 
 @Component({
   selector: "app-ajust-decompte-palox-popup",
@@ -16,7 +17,8 @@ import { LocalizationService } from "app/shared/services";
 export class AjustDecomptePaloxPopupComponent implements OnChanges {
 
   constructor(
-    private localizeService: LocalizationService
+    private localizeService: LocalizationService,
+    private dateManagementService: DateManagementService
   ) { }
 
   @ViewChild(DxPopupComponent, { static: false })
@@ -68,9 +70,10 @@ export class AjustDecomptePaloxPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    console.log(this.dateManagementService.formatDate(new Date()));
     e.component.content().parentNode.classList.add("ajust-decompte-palox-popup");
     const date = new Date();
-    const currendDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    const currendDate = this.dateManagementService.formatDate(new Date());
     this.paloxBox?.instance.focus();
     this.dateBox.value = currendDate;
     this.entrepotBox.value = this.info.entrepotCode;
