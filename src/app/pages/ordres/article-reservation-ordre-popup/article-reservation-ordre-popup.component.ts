@@ -1,14 +1,13 @@
 // tslint:disable-next-line: max-line-length
-import { ChangeDetectorRef, Component, Input, OnChanges, Output, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
 import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { DxDataGridComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
-import { concatMap, debounceTime, delay, finalize, map } from "rxjs/operators";
-import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import { concatMap, finalize, map } from "rxjs/operators";
 import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 import { GridReservationStockComponent, Reservation } from "../grid-reservation-stock/grid-reservation-stock.component";
 import { GridsService } from "../grids.service";
@@ -21,8 +20,8 @@ import { GridsService } from "../grids.service";
 export class ArticleReservationOrdrePopupComponent implements OnChanges {
 
   @Input() public ordreLigne: OrdreLigne;
-  @Input() public gridCommandeComponent: GridCommandesComponent;
   @Output() public ordreLigneInfo: OrdreLigne;
+  @Output() public whenApplied = new EventEmitter();
 
   visible: boolean;
   titleStart: string;
@@ -196,7 +195,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
           ["id", "nombreReservationsSurStock"],
         )),
         finalize(() => {
-          this.gridCommandeComponent.update(); // Needs to make a deeper refresh for this grid
+          this.whenApplied.emit();
           this.grids.reload("SyntheseExpeditions", "DetailExpeditions");
         }
         )
