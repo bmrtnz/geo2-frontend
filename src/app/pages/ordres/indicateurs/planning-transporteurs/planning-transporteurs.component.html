@@ -212,6 +212,7 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
+    [cssClass]="column.cssClass"
     [caption]="
       ('ordresTransporteur-' + column.dataField?.split('.').join('-')
         | localize) || column.name

@@ -179,6 +179,17 @@ export class PlanningTransporteursComponent implements OnInit {
         if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
       }
 
+      // Groupage
+      if (e.column.dataField === "groupage" && e.value) {
+        e.cellElement.textContent =
+          this.localizeService.localize("ordresTransporteur-groupage-text")
+            .replace("&T", e.value)
+            .replace("&D", this.dateManagementService.formatDate(
+              e.data.dateDepartPrevueGroupage,
+              "dd-MM-yyyy",
+            ));
+        e.cellElement.classList.add("transporteur-grouping");
+      }
       // Ajout CP, ville et pays au lieu de livraison
       if (e.column.dataField === "entrepotRaisonSocial") {
         if (e.data.entrepotCodePostal) {
@@ -238,6 +249,8 @@ export class PlanningTransporteursComponent implements OnInit {
         e.cellElement.classList.add("numero-planning-transporteurs");
       }
     }
+
+
   }
 
   onRowPrepared(e) {
