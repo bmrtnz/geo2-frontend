@@ -7,6 +7,7 @@
   [(visible)]="visible"
   title="Quelle(s) certification(s) ?"
   [focusStateEnabled]="false"
+  [resizeEnabled]="true"
   (onShowing)="onShowing($event)"
   (onHidden)="onHidden()"
 >
@@ -20,10 +21,15 @@
     ></dx-list>
   </div>
 
+  <div class="mode-culture-info" [ngClass]="{ 'visibility-hidden': !modeCultureInfo }">
+    {{ "articles-matierePremiere-modeCulture" | localize }} : {{ modeCultureInfo }}
+  </div>
+
   <dx-button
     class="valid-button"
     type="default"
     text="Valider"
     (onClick)="saveCertification()"
   ></dx-button>
+
 </dx-popup>

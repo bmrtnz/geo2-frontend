@@ -23,6 +23,7 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
   @Input() public ordre: Ordre;
   @Input() public ordreLigne: OrdreLigne;
   @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
+  @Output() public update = new EventEmitter();
 
   certDataSource: DataSource;
   visible: boolean;
@@ -31,6 +32,7 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
   certification: string;
   newCertification: string;
   alreadyLoaded: boolean;
+  public modeCultureInfo: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxListComponent, { static: false }) certlist: DxListComponent;
@@ -66,13 +68,12 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
     e.component.content().parentNode.classList.add("article-certification-popup");
     this.certlist.selectedItemKeys = null;
     this.newCertification = this.certification;
-    // Retrieves article mode de culture cert
+
+    // Retrieves article mode de culture
     this.OrdreLigneService
       .getOne_v2(this.ordreLigne.id, [
         "article.matierePremiere.modeCulture.id",
-        "ordre.client.certifications.id",
-        // "ordre.client.certifications.certification.id",
-        // "ordre.client.certifications.certification.description",
+        "ordre.client.certifications.id"
       ])
       .pipe(
         concatMap(res => this.modesCultureService
@@ -81,25 +82,21 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
         )
       )
       .subscribe(([ol, modeCulture]) => {
-        if (modeCulture) {
-          if (!this.certifications.length) {
-            this.certifications.push({ text: this.formatCert(modeCulture), disabled: true });
-            this.selectLastCertAdded();
-          }
-        }
+        if (modeCulture) this.modeCultureInfo = this.formatCert(modeCulture);
         this.certDataSource = this.certificationsService.getDataSource("id");
         this.certDataSource.filter([
           ["valide", "=", true],
           "and",
           ["maskTiers", "startswith", "1"],
         ]);
-        // Retrieves all other certs
+        // Retrieves all certs
         this.certDataSource.load().then(certs => {
           if (this.alreadyLoaded) return;
           this.alreadyLoaded = true;
           if (certs) {
             certs.map(cert => {
-              this.certifications.push({ text: this.formatCert(cert) });
+              // BIO (12) must be locked
+              this.certifications.push({ text: this.formatCert(cert), disabled: cert.id === 12 });
               if (this.certification?.split(",").includes(cert.id.toString())) this.selectLastCertAdded();
             });
           }
@@ -145,9 +142,9 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
       ordreLigne,
     })
       .subscribe({
-        next: res => {
+        next: () => {
           notify(this.localizeService.localize("articles-save-certification"), "success", 2000);
-          this.gridsService.reload("Commande");
+          this.update.emit(); // Deep grid refresh
         },
         error: (err) => {
           console.log(err);
