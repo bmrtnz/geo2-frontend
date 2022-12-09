@@ -5105,37 +5105,228 @@
       {
         "visibleIndex": 0,
         "dataField": "id",
-        "visible": true
-      },
-      {
-        "visibleIndex": 1,
-        "dataField": "isExp",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 2,
-        "dataField": "nombrePalettes",
-        "visible": true
-      },
-      {
-        "visibleIndex": 3,
-        "dataField": "nombreColis",
+        "dataField": "cq",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "poidsNetTheoriqueParColis",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "fournisseur.code",
+        "dataField": "isExp",
+        "width": 55,
+        "cssClass": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "description",
+        "dataField": "nombrePalettes",
+        "cssClass": "no-padding",
         "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "nombreColis",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ordreLigne.poidsNetExpedie",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "fournisseur.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "description",
+        "showInColumnChooser": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "articleDescriptionAbrege",
+        "cssClass": "no-padding",
+        "showInColumnChooser": false,
+        "allowSearch": false,
+        "cellTemplate": "CQPhotoButtonsTemplate",
+        "width": 125,
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "utilisateurEnCharge",
+        "cssClass": "no-padding",
+        "allowSearch": false,
+        "showInColumnChooser": false,
+        "cellTemplate": "FicheCQPDFButtonsTemplate",
+        "visible": true
+      },
+      {
+        "dataField": "dateDerniereSaisieOffline",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "utilisateurDerniereSaisieOffline",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nonConformeTri",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nonConformeAutreClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "accepteApresAccordClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "corniereConforme",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nomResponsableDerogationInterne",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "commentairesControleur",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "lotConforme",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.ordre.numero",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "cqTechnique.isPresent",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "cqTechnique.uri",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "cqTechnique.type",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "referenceCQC",
+        "visible": false
+      }
+    ]
+  },
+  "photos-controle-qualite": {
+    "columns": [
+      {
+        "visibleIndex": 2,
+        "dataField": "nomFichier",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "numeroOrdre",
+        "showIncolumnChooser": false,
+        "cellTemplate": "photoButtonsTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "flagPDF",
+        "dataType": "boolean",
+        "allowEditing": true,
+        "width": 70,
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "commentaire",
+        "visible": false
+      },
+      {
+        "dataField": "ordreNumero",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "anneeCreation",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "typeDocument",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "id",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "moisCreation",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nomFichierComplet",
+        "showIncolumnChooser": true,
+        "visible": false
+      },
+      {
+        "dataField": "nomPartage",
+        "showIncolumnChooser": true,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.id",
+        "showIncolumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "statut",
+        "showIncolumnChooser": true,
+        "visible": false
+      },
+      {
+        "dataField": "cqDoc.uri",
+        "visible": false
+      },
+      {
+        "dataField": "cqDoc.type",
+        "visible": false
+      },
+      {
+        "dataField": "cqDoc.isPresent",
+        "visible": false
       }
     ]
   },

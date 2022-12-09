@@ -1046,7 +1046,7 @@ export abstract class ApiService implements OnDestroy {
    * @param {string[]} body - The body of the query.
    * @returns The GraphQL query that will be executed.
    */
-  protected buildGetPageGraph(body: string[]) {
+  protected buildGetPageGraph(body: string[] | Set<string>) {
     return ApiService.buildGraph(
       "query",
       [
@@ -1058,7 +1058,7 @@ export abstract class ApiService implements OnDestroy {
             "pageInfo.hasPreviousPage",
             "pageInfo.hasNextPage",
             "totalCount",
-            ...body.map(c => `edges.node.${c}`),
+            ...[...body].map(c => `edges.node.${c}`),
           ],
           params: [
             { name: "search", value: "search", isVariable: true },
@@ -1244,6 +1244,24 @@ export abstract class ApiService implements OnDestroy {
         }),
         key: "key",
       })),
+    );
+  }
+
+  /**
+   * It builds a graphql query that fetches a single entity of the model
+   * @param body - The body of the query.
+   * @returns The GraphQL query.
+   */
+  protected buildCountGraph() {
+    return ApiService.buildGraph(
+      "query",
+      [
+        {
+          name: `count${this.model.name}`,
+          params: [{ name: "search", value: "search", isVariable: true }],
+        },
+      ],
+      [{ name: "search", type: "String", isOptionnal: true }],
     );
   }
 

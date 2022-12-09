@@ -76,6 +76,8 @@ import { GridClientsDepEncoursDetailComponent } from "./grid-clients-dep-encours
 import { ButtonMargePreviComponent } from "./grid-commandes/button-marge-previ/button-marge-previ.component";
 import { GridCommandesComponent } from "./grid-commandes/grid-commandes.component";
 import { GridCommentaireOrdreComponent } from "./grid-commentaire-ordre/grid-commentaire-ordre.component";
+import { CqPhotosPopupComponent } from "./grid-controle-qualite/cq-photos-popup/cq-photos-popup.component";
+import { GridCqPhotosComponent } from "./grid-controle-qualite/cq-photos-popup/grid-cq-photos/grid-cq-photos.component";
 import { GridControleQualiteComponent } from "./grid-controle-qualite/grid-controle-qualite.component";
 import { GridDetailPalettesComponent } from "./grid-detail-palettes/grid-detail-palettes.component";
 import { GridDetailPlanningDepartsComponent } from "./grid-detail-planning-departs/grid-detail-planning-departs.component";
@@ -218,7 +220,9 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     VisualiserOrdresPopupComponent,
     DuplicationOrdrePopupComponent,
     HistoriqueOrdresComponent,
-    AjustDecomptePaloxPopupComponent
+    AjustDecomptePaloxPopupComponent,
+    CqPhotosPopupComponent,
+    GridCqPhotosComponent,
   ],
   imports: [
     OrdresRoutingModule,

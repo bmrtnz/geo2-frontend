@@ -1,0 +1,86 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .cq-copy-photos {
+  position: absolute;
+  z-index: 1;
+  margin-top: 9px;
+  right: 197px;
+  height: 34px;
+  font-size: 12px;
+
+  .dx-button-content {
+    .dx-button-text {
+      margin-top: -1px !important;
+      padding: 0 10px !important;
+    }
+  }
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+::ng-deep .yellow-datagrid-row {
+  background-color: #FFD662;
+}
+
+::ng-deep .small-CQ-button {
+  position: relative;
+  height: 18px;
+  min-width: 0;
+  padding: 0 4px !important;
+
+  .dx-button-content {
+    padding: 0;
+    font-size: 11px;
+    text-overflow: initial;
+
+    .dx-button-text {
+      position: relative;
+      margin-top: -2px !important;
+      padding: 0;
+      line-height: 0 !important;
+    }
+  }
+
+  &.CQ {
+    margin-right: 5px;
+    background-color: $BW-purple-medium  !important;
+
+    &:hover {
+      background-color: $BW-purple-dark  !important;
+    }
+  }
+
+  &.photos {
+    background-color: $BW-orange-medium  !important;
+
+    &:hover {
+      background-color: $BW-orange-dark  !important;
+    }
+  }
+
+  &.createPDF {
+    margin-right: 7px;
+  }
+
+  &.openPDF {
+    width: 22px !important;
+    height: 22px;
+    min-width: 22px !important;
+    background-color: transparent !important;
+
+    .dx-button-content {
+      padding: 0 !important;
+
+      .dx-icon {
+        position: relative;
+        left: -5px;
+        font-size: 20px;
+      }
+    }
+  }
+
+}

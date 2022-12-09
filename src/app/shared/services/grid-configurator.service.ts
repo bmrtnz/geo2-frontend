@@ -110,6 +110,7 @@ export enum Grid {
   ChoixEnvois = "choix-envois",
   AnnuleRemplace = "annule-remplace",
   ControleQualite = "controle-qualite",
+  PhotosControleQualite = "photos-controle-qualite",
   DepassementEncoursPays = "depassement-encours-pays",
   DepassementEncoursClient = "depassement-encours-client",
   PlanningTransporteurs = "planning-transporteurs",
