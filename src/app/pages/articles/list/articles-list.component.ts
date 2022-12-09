@@ -28,6 +28,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
+  @Input() public preFilterTitle: string;
+  @Input() public additionnalFilter: any;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -111,6 +113,13 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     this.gridRowStyleService.applyGridRowStyle(e);
   }
 
+  onCellPrepared(e) {
+    // Best expression for emballage display
+    if (e.rowType === "data" && e.column.dataField === "emballage.emballage.description") {
+      e.cellElement.textContent = e.data.emballage.emballage.id + " - " + e.value;
+    }
+  }
+
   /**
    * Apply filters from tag boxs
    * @param event List of field values
@@ -153,6 +162,10 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       console.warn("Failed to parse filter, resetted to empty");
       this.allGridFilters = null;
     }
+
+    // Used for eg. when need for referencement articles client
+    if (this.additionnalFilter)
+      this.additionnalFilter.map(addFilt => this.allGridFilters.push(addFilt));
 
     // Filtering variete, emballage & origine selectBox list depending on specy
     const filter = [];

@@ -6,6 +6,7 @@ import { ArticleNormalisation } from "./article-normalisation.model";
 import Document from "./document.model";
 import Historique from "./historique.model";
 import { Field, Model, ModelName } from "./model";
+import ReferenceClient from "./reference-client.model";
 
 @ModelName("Article")
 export class Article extends Model {
@@ -29,6 +30,8 @@ export class Article extends Model {
   public emballage: ArticleEmballage;
   @Field({ model: import("./historique.model") })
   public historique: Historique[];
+  @Field({ model: import("./reference-client.model") })
+  public referencesClient: ReferenceClient[];
   @Field({ model: import("./document.model") })
   public document: Document;
 }

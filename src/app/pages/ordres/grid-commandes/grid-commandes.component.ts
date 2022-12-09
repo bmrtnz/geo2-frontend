@@ -112,6 +112,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @Output() public fournisseurCode: string;
   @Output() priceChange = new EventEmitter();
   @Output() transporteurChange = new EventEmitter();
+  @Output() selectedRowsChange = new EventEmitter();
   @ViewChild(ArticleCertificationPopupComponent) articleCertificationPopup: ArticleCertificationPopupComponent;
   @ViewChild(ArticleOriginePopupComponent) articleOriginePopup: ArticleOriginePopupComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
@@ -168,6 +169,11 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     this.gridRowsTotal = this.grid.instance.getVisibleRows()?.length;
   }
 
+  onSelectionChanged(e) {
+    this.selectedRowsChange.emit(this.grid?.instance.getSelectedRowKeys());
+    this.grid?.instance.getSelectedRowKeys();
+  }
+
   ngOnChanges() {
     if (this.ordreID) this.updateRestrictions();
   }
@@ -191,7 +197,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       this.buildFournisseurFilter(row.data.proprietaireMarchandise.id)
         .then(({ filters }) => this.bindFournisseurSource(filters));
     } else
-      if (e.prevColumnIndex !== e.newColumnIndex) {
+      if ((e.prevColumnIndex !== e.newColumnIndex) && this.grid.instance.hasEditData()) {
         // Keep the setTimeout function in place!!!
         // It seems that not everything's really ready when event is triggered
         // Conclusion => without a timeOut, major risk of unsaved data!

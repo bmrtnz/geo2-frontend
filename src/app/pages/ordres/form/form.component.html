@@ -873,12 +873,13 @@
                 }}</span>
                 <dx-button
                   class="upperButton subButton"
-                  [disabled]="!fullOrderNumber || !allowMutations || true"
+                  [disabled]="!fullOrderNumber || !allowMutations"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
                     'hint-source-refClt' | localize
                   }}"
                   text="{{ 'btn-referenceClt' | localize }}"
+                  (onClick)="onRefClientClick()"
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
@@ -944,8 +945,18 @@
                       type="default"
                       [focusStateEnabled]="false"
                       text="{{ 'btn-regulorder' | localize }}"
-                      hint="{{ 'hint-regulorder' | localize }}"
+                      hint="{{ 'hint-regulorder' | localize }} "
                       (onClick)="onRegulOrderClick()"
+                    ></dx-button>
+                    <!-- Ajout article(s) dans les réfs client -->
+                    <dx-button
+                      class="add-ref-client-button"
+                      type="default"
+                      [focusStateEnabled]="false"
+                      [disabled]="!selectedGridCdesRows"
+                      text="{{ 'btn-addrefclt' | localize }}"
+                      [hint]="('hint-addrefclt' | localize) + ordre?.client?.code"
+                      (onClick)="onAddRefsClient()"
                     ></dx-button>
                   </div>
                   <app-grid-commandes
@@ -954,6 +965,7 @@
                     (swapRowArticle)="onArticleManClick($event)"
                     (priceChange)="refreshRegimeTva.emit()"
                     (transporteurChange)="refreshTransporteur()"
+                    (selectedRowsChange)="gridCdesSelectedRowsChange($event)"
                   ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
@@ -1236,6 +1248,12 @@
   </form>
 
   <app-editing-alert></app-editing-alert>
+  <app-ajout-articles-ref-client-popup
+    [ordre]="ordre"
+    [articleRowKey]="articleRowKey"
+    (lignesChanged)="onLignesChanged($event)"
+  >
+  </app-ajout-articles-ref-client-popup>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
     [articleRowKey]="articleRowKey"
