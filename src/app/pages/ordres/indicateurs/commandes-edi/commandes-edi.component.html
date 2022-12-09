@@ -1,4 +1,34 @@
 
-<br>
-<app-grid-commandes-edi></app-grid-commandes-edi>
+<dx-popup
+  [fullScreen]="this.popupFullscreen"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+  [resizeEnabled]="true"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ "ordres-commandes-edi" | localize }}&nbsp;</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+    <dx-button
+      class="minimize-popup"
+      icon="material-icons fullscreen_exit"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="commandes-edi-content-container">
+        <br>
+        <app-grid-commandes-edi></app-grid-commandes-edi>
+      </div>
+    </dx-scroll-view>
+  </div>
 
+</dx-popup>

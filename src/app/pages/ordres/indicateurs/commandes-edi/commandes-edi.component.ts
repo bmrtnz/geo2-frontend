@@ -1,16 +1,43 @@
-import { Component, OnInit, Output } from "@angular/core";
 
+import { Component, ViewChild } from "@angular/core";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 @Component({
   selector: "app-commandes-edi",
   templateUrl: "./commandes-edi.component.html",
   styleUrls: ["./commandes-edi.component.scss"]
 })
-export class CommandesEdiComponent implements OnInit {
+export class CommandesEdiComponent {
+
+  public visible: boolean;
+  public popupFullscreen = true;
+
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
   constructor(
   ) { }
 
-  ngOnInit() {
+  onShowing(e) {
+    e.component.content().parentNode.classList.add("commandes-edi-popup");
+  }
+
+  onShown(e) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+  }
+
+  onHidden() {
+  }
+
+  hidePopup() {
+    this.popup.visible = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
+  }
+
+  capitalize(data) {
+    return data?.description ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
   }
 
 }

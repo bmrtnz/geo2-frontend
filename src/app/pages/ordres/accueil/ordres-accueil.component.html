@@ -28,6 +28,14 @@
       </dx-tag-box>
     </div>
   </div>
+  <dx-button
+    class="order-home-up-button"
+    type="default"
+    text="Commandes EDI"
+    [disabled]="!authService.currentUser.accessCommandeEdi"
+    (onClick)="openCommandesEdi()"
+  >
+  </dx-button>
 </h2>
 
 <div class="content-block accueilOrdres-page">
@@ -86,3 +94,5 @@
     </dxi-item>
   </dx-tile-view>
 </div>
+
+<app-commandes-edi></app-commandes-edi>

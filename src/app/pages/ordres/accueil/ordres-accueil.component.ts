@@ -21,6 +21,7 @@ import {
   switchMap,
   tap
 } from "rxjs/operators";
+import CommandesEdiComponent from "../indicateurs/commandes-edi/commandes-edi.component";
 import { TabContext } from "../root/root.component";
 
 @Component({
@@ -37,6 +38,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<string[]>();
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
+  @ViewChild(CommandesEdiComponent, { static: false }) cdesEdiPopup: CommandesEdiComponent;
 
   constructor(
     public ordresIndicatorsService: OrdresIndicatorsService,
@@ -120,6 +122,10 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   onTileClick(event) {
     const indicator: Indicator = event.itemData.buttonOptions;
     this.tabContext.openIndicator(indicator.id);
+  }
+
+  openCommandesEdi() {
+    this.cdesEdiPopup.visible = true;
   }
 
   configureIndicator() {
