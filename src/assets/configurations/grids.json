@@ -5919,12 +5919,14 @@
       {
         "visibleIndex": 4,
         "dataField": "cfcMontantEuros",
+        "headerCellTemplate": "creditDebitDevTemplate",
         "class": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "cfcMontantDevise",
+        "headerCellTemplate": "creditDebitDevTemplate",
         "visible": true
       },
       {
