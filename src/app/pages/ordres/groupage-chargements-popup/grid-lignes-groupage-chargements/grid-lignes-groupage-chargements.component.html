@@ -134,14 +134,14 @@
       type="success"
       icon="arrowright"
       text="{{ 'btn-transfer' | localize }}"
-      (onClick)="transferGrouping()"
+      (onClick)="transferOrDuplicate('transfer')"
     ></dx-button>
     <!-- Dupliquer -->
     <dx-button
       type="success"
       icon="material-icons content_copy"
       text="{{ 'btn-cloneorder' | localize }}"
-      (onClick)="duplicateGrouping()"
+      (onClick)="transferOrDuplicate('duplicate')"
     ></dx-button>
   </div>
 </div>

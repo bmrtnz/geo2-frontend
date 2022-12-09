@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewC
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService } from "app/shared/services";
 import { SummaryType } from "app/shared/services/api.service";
-import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { alert, confirm } from "devextreme/ui/dialog";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
@@ -18,6 +18,8 @@ import { GridsService } from "../../grids.service";
 import { ModifDetailLignesPopupComponent } from "../../modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 import { LignesChargementService } from "app/shared/services/api/lignes-chargement.service";
 import LigneChargement from "app/shared/models/ligne-chargement.model";
+import { Operation } from "app/shared/services/api/lignes-chargement.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
 
 @Component({
@@ -58,6 +60,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     public gridUtilsService: GridUtilsService,
     private gridsService: GridsService,
     public tabContext: TabContext,
+    public currentCompanyService: CurrentCompanyService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.LignesGroupageChargements);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
@@ -112,7 +115,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
         const rows = this.datagrid.instance.getVisibleRows();
 
         ///////////////////////////////
-        // update other cells value
+        // Update other cells value
         ///////////////////////////////
 
         switch (this.dataField) {
@@ -138,6 +141,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
             break;
           }
         }
+        this.saveData();
       };
     }
   }
@@ -208,11 +212,14 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     }
   }
 
-  validGrouping() {
+  saveData(quitPopup?) {
+
     const modified = "modified"; // Curiously, unknown default property
     const modifiedRows = this.datagrid.instance.getVisibleRows().filter(r => r[modified]);
+    if (modifiedRows.length) {
 
-    if (modifiedRows.length) { // Loop through edited rows
+      // Loop through edited rows
+      this.datagrid.instance.beginCustomLoading("");
       const allLigneChargement = [];
       modifiedRows.map(row => {
         const d = row.data;
@@ -228,25 +235,74 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
       });
       this.lignesChargementService.saveAll(allLigneChargement, new Set(["id"])).subscribe({
         next: (res) => {
-          notify("OK", "success", 5000);
-          this.closePopup.emit();
+          if (quitPopup) {
+            // Message and close
+            notify("Sauvegardé", "success", 3000);
+            this.closePopup.emit();
+          } else {
+            this.datagrid.instance.cancelEditData();
+            this.datagrid.instance.endCustomLoading();
+          }
         },
-        error: () => notify("Erreur lors de la sauvegarde", "error", 5000)
+        error: (error: Error) => {
+          console.log(error);
+          notify(this.messageFormat(error.message), "error", 7000);
+          this.datagrid.instance.endCustomLoading();
+        },
+        complete: () => this.datagrid.instance.endCustomLoading()
       });
     } else {
-      this.closePopup.emit();
+      if (quitPopup) this.closePopup.emit();
     }
 
   }
 
-  transferGrouping() {
+  validGrouping() {
+    this.saveData(true);
+  }
+
+  transferOrDuplicate(action: Operation) {
+
+    this.lignesChargementService.transferOrDuplicate(
+      action,
+      this.datagrid.selectedRowKeys,
+      this.ordre.codeChargement,
+      this.ordre.id,
+      new Set(["id", "ordre.numero"])
+    ).subscribe({
+      next: (res) => {
+        console.log(res);
+        const data = res.data[action];
+        const numOrdre = data[0].ordre.numero;
+        const campOrdre = this.currentCompanyService.getCompany().campagne.id;
+        let message = this.localizeService.localize("ordre-cree").replace("&O", numOrdre);
+        message += "\r\n" + this.localizeService.localize(`ordre-${action}-lignes`);
+        // message
+        //   .replace("&L", data.length.toString())
+        //   .replace("&&", data.length > 1 ? "s" : "");
+        notify(message, "success", 7000);
+        this.tabContext.openOrdre(numOrdre, campOrdre, false);
+        setTimeout(() => this.tabContext.openOrdre(this.ordre.numero, this.ordre.campagne.id, false), 500);
+        if (action === "transfer") this.datagrid.instance.refresh();
+      },
+      error: (error: Error) => {
+        console.log(error);
+        console.log(`ordre-${action}-creation`);
+        alert(this.messageFormat(error.message), this.localizeService.localize(`ordre-${action}-creation`));
+      }
+    });
 
   }
 
-  duplicateGrouping() {
-
+  private messageFormat(mess) {
+    const functionNames =
+      ["duplicate",
+        "transfer"
+      ];
+    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
 }
-
 
