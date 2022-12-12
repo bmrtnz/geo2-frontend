@@ -499,7 +499,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               .subscribe({
                 next: (result) => {
                   const numOrdreRegul = result.data.ordre.numero;
-                  this.initializeForm("no-cache");
+                  this.refreshHeader();
                   notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "success", 7000);
                   this.clearSelectionForRegul();
                   this.tabContext.openOrdre(numOrdreRegul);
@@ -566,7 +566,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                   .getOne_v2(refOrdreCompl, ["id", "numero"])
                   .subscribe({
                     next: (result) => {
-                      this.initializeForm("no-cache");
+                      this.refreshHeader();
                       notify(this.localization.localize("ordre-complementaire-cree")
                         .replace("&O", result.data.ordre.numero), "success", 7000);
                     },
@@ -625,7 +625,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .fAnnulationOrdre(motif, this.ordre.id)
       .subscribe({
         next: (res) => {
-          this.initializeForm("no-cache");
+          this.refreshHeader();
           this.actionDocs.onClickSendAction("ORDRE", true);
         },
         error: (error: Error) => {
@@ -1080,7 +1080,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const societe: Societe = this.currentCompanyService.getCompany();
 
     this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe(res => {
-      this.initializeForm("no-cache");
+      this.refreshHeader();
     });
 
   }
@@ -1089,6 +1089,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordresService
       .getOne_v2(this.refOrdre, ["transporteur.id"])
       .subscribe(res => this.formGroup.get("transporteur").setValue(res.data.ordre.transporteur));
+  }
+
+  public refreshHeader(e?) {
+    this.initializeForm("no-cache");
   }
 
 }

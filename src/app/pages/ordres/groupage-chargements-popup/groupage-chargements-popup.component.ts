@@ -20,6 +20,7 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   @Output() public gridCdes: any;
   @Output() public gridEnv: any;
   @Output() lignesChanged = new EventEmitter();
+  @Output() ordreChanged = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -89,6 +90,10 @@ export class GroupageChargementsPopupComponent implements OnChanges {
 
   updateGridCde() {
     this.lignesChanged.emit();
+  }
+
+  updateOrder() {
+    this.ordreChanged.emit();
   }
 
 }

@@ -36,6 +36,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   @Output() public gridEnvois: any;
   @Output() closePopup = new EventEmitter();
   @Output() updateGridCde = new EventEmitter();
+  @Output() updateOrder = new EventEmitter();
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -123,8 +124,6 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
           "ordreChargement"
         ].includes(this.dataField)) return;
 
-        // console.log(this.dataField, elem, elem.value);
-
         ///////////////////////////////
         // Update other cells value
         ///////////////////////////////
@@ -159,9 +158,13 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   updateRowsAndDs(res, elem) {
+    // Saving value
     this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value);
+    // Updating datasource
     (this.datagrid.dataSource as DataSource).items()
       .filter(r => r.ligne.id === res.data.ligne.id)[0][this.dataField] = elem.value;
+    // Updating row data
+    // this.datagrid.instance.getVisibleRows()[res.rowIndex].data[this.dataField] = elem.value;
   }
 
 
@@ -236,14 +239,14 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
       const allLigneChargement = [];
       modifiedRows.map(row => {
         const d = row.data;
+        console.log(d.dateDepartPrevue, d.dateLivraisonPrevue, d.dateDepartPrevueFournisseur);
         allLigneChargement.push({
           id: d.id,
-          // ligne: { id: d.ligne.id },
           numeroCamion: d.numeroCamion,
           ordreChargement: d.ordreChargement,
-          dateDepartPrevue: d.dateDepartPrevue,
-          dateLivraisonPrevue: d.dateLivraisonPrevue,
-          dateDepartPrevueFournisseur: d.dateDepartPrevueFournisseur
+          dateDepartPrevue: d.dateDepartPrevue.split("T")[0] + "T00:00",
+          dateLivraisonPrevue: d.dateLivraisonPrevue.split("T")[0] + "T00:00",
+          dateDepartPrevueFournisseur: d.dateDepartPrevueFournisseur.split("T")[0] + "T00:00"
         });
       });
       this.lignesChargementService.saveAll(allLigneChargement, new Set(["id"])).subscribe({
@@ -251,10 +254,13 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
           if (quitPopup) {
             // Message and close
             notify("Sauvegardé", "success", 3000);
+            this.datagrid.instance.endCustomLoading();
             this.closePopup.emit();
           } else {
             this.datagrid.instance.cancelEditData();
+            this.datagrid.instance.refresh();
             this.datagrid.instance.endCustomLoading();
+            this.updateOrder.emit();
           }
         },
         error: (error: Error) => {
@@ -293,6 +299,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
           .replace("&L", data.length.toString())
           .split("&&").join(data.length > 1 ? "s" : "");
         notify(message, "success", 7000);
+        this.datagrid.instance.clearSelection();
         if (operation === "transfer") {
           this.datagrid.instance.refresh();
           this.updateGridCde.emit();
