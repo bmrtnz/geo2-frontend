@@ -6,6 +6,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
@@ -50,6 +51,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     public OrdreLigneService: OrdreLignesService,
     private gridConfiguratorService: GridConfiguratorService,
     private functionsService: FunctionsService,
+    private gridUtilsService: GridUtilsService,
     private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
   ) { }
@@ -83,8 +85,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
       setTimeout(() => this.pulseBtnOn = true, 1);
     }
     this.nbArticlesOld = this.nbARticles;
-    // this.catalogue.dataGrid.instance.repaint();
-    if (this.nbARticles) this.addButton.instance.option("hint", this.chosenArticles.join(" - "));
+    if (this.nbARticles) this.addButton.instance.option(this.gridUtilsService.friendlyFormatList(this.chosenArticles));
   }
 
   getGridSelectedArticles() {

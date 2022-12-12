@@ -12,6 +12,9 @@ import notify from "devextreme/ui/notify";
 import { confirm } from "devextreme/ui/dialog";
 import { from } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
+import { ReferencesClientService } from "app/shared/services/api/references-client.service";
+import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 @Component({
   selector: "app-ajout-articles-ref-client-popup",
@@ -21,9 +24,8 @@ import { concatMap, takeWhile } from "rxjs/operators";
 export class AjoutArticlesRefClientPopupComponent implements OnChanges {
 
   @Input() public ordre: Ordre;
-  @Input() public articleRowKey: string;
-  @Output() public lignesChanged = new EventEmitter();
   @Output() public additionnalFilter: any;
+  @Output() public lignesChanged = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -50,15 +52,17 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
 
   constructor(
     public OrdreLigneService: OrdreLignesService,
+    public referencesClientService: ReferencesClientService,
     private gridConfiguratorService: GridConfiguratorService,
     private functionsService: FunctionsService,
+    private gridUtilsService: GridUtilsService,
     private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
   ) { }
 
   ngOnChanges() {
     this.setTitle();
-    // this.additionnalFilter = ["and", ["matierePremiere.espece.id", "=", "POMME"]];
+    if (this.ordre) this.additionnalFilter = ["and", ["referencesClient.client.id", "=", this.ordre.client.id]];
   }
 
   setTitle() {
@@ -87,7 +91,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     }
     this.nbArticlesOld = this.nbARticles;
     if (this.nbARticles) {
-      const hintArticles = this.chosenArticles.join(" - ");
+      const hintArticles = this.gridUtilsService.friendlyFormatList(this.chosenArticles);
       this.addButton.instance.option("hint", hintArticles);
       this.deleteButton.instance.option("hint", hintArticles);
     }
@@ -104,21 +108,22 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   async deleteFromRefClient() {
 
     if (await confirm(
-      this.localizeService.localize("confirm-deferencement-client"),
+      this.localizeService.localize("confirm-deferencement-client").replace("&DA", this.deleteButton.text),
       this.localizeService.localize("references-client"))) {
-      //////////////////////////////////////
-      // Suppression liste art ref client
-      // Puis refresh grid
-      // (this.chosenArticles)
-      //////////////////////////////////////
-      const message = this.localizeService.localize("articles-supprimes-refs-client")
-        .split("&&").join(this.chosenArticles.length > 1 ? "s" : "")
-        .replace("&A", this.chosenArticles.join(" & "))
-        .replace("&C", this.ordre.client.code);
-      notify(message, "success", 7000);
-      // We refresh grid articles
-      this.catalogue.dataGrid.instance.clearSelection();
-      this.catalogue?.refreshArticlesGrid();
+      let artIds = this.chosenArticles;
+      artIds = [...new Set(artIds)]; // Removing duplicates
+      this.referencesClientService.removeRefs(this.ordre.client.id, artIds).subscribe({
+        next: () => {
+          const message = this.localizeService.localize("articles-supprimes-refs-client")
+            .split("&&").join(artIds.length > 1 ? "s" : "")
+            .replace("&A", this.gridUtilsService.friendlyFormatList(artIds))
+            .replace("&C", this.ordre.client.code);
+          this.catalogue.dataGrid.instance.clearSelection();
+          this.catalogue.refreshArticlesGrid();
+          notify(message, "success", 7000);
+        },
+        error: () => notify("Erreur lors de la suppression référence(s) client", "error", 5000)
+      });
     }
 
   }
