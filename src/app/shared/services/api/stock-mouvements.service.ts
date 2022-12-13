@@ -101,4 +101,34 @@ export class StockMouvementsService extends ApiService {
         },
         fetchPolicy: "network-only",
       })
+
+  public fResaAutoOrdre =
+    (
+      ordRef: string,
+      username: string,
+    ) => this.apollo
+      .query<{ fResaAutoOrdre: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fResaAutoOrdre",
+              body: functionBody,
+              params: [
+                { name: "ordRef", value: "ordRef", isVariable: true },
+                { name: "username", value: "username", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordRef", type: "String", isOptionnal: false },
+            { name: "username", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: {
+          ordRef,
+          username,
+        },
+        fetchPolicy: "network-only",
+      })
 }
