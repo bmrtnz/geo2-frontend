@@ -956,7 +956,7 @@
                       [focusStateEnabled]="false"
                       text="{{ 'btn-stockauto' | localize }}"
                       hint="{{ 'hint-stockauto' | localize }} "
-                      (onClick)="onRegulOrderClick()"
+                      (onClick)="onDestockAutoClick()"
                     ></dx-button>
                     <!-- Ajout article(s) dans les réfs client -->
                     <dx-button
@@ -1263,6 +1263,9 @@
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-ref-client-popup>
+  <app-destockage-auto-popup
+    [ordreId]="ordre?.id"
+  ></app-destockage-auto-popup>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
     [articleRowKey]="articleRowKey"

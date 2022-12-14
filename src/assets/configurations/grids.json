@@ -6085,6 +6085,32 @@
       }
     ]
   },
+  "ordre-destockage-auto": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "statut",
+        "dataType": "boolean",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "orl_lig",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "resa_desc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "info_stock",
+        "visible": true
+      }
+    ]
+  },
   "encours-client": {
     "pageSize": 10,
     "columns": [

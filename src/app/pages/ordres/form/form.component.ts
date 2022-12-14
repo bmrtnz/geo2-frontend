@@ -61,7 +61,7 @@ import { ONE_SECOND } from "../../../../basic";
 import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
 import { ReferencesClientService } from "app/shared/services/api/references-client.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
-import { cpuUsage } from "process";
+import { DestockageAutoPopupComponent } from "../destockage-auto-popup/destockage-auto-popup.component";
 
 /**
  * Grid with loading toggled by parent
@@ -323,6 +323,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
   @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
+  @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
 
@@ -767,6 +768,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRefClientClick() {
     this.ajoutArtRefClt.visible = true;
+  }
+
+  onDestockAutoClick() {
+    this.destockageAutoPopup.visible = true;
   }
 
   gridCdesSelectedRowsChange(e) {
