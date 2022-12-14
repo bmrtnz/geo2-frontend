@@ -1149,4 +1149,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(res => this.formGroup.get("transporteur").setValue(res.data.ordre.transporteur));
   }
 
+  vowelTest(text) {
+    return (/^[AEIOUYaeiouy]$/i).test(text);
+  }
+
 }

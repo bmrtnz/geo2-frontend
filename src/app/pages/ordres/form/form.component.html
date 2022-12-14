@@ -929,6 +929,7 @@
                 <div style="clear: both"></div>
                 <div class="dx-form-group-content">
                   <div
+                    class="top-grid-cde-buttons"
                     [ngClass]="{ shiftNoMutations: !allowMutations }"
                     [hidden]="!gridCommandes?.gridRowsTotal"
                   >
@@ -948,6 +949,15 @@
                       hint="{{ 'hint-regulorder' | localize }} "
                       (onClick)="onRegulOrderClick()"
                     ></dx-button>
+                    <!-- Destockage auto -->
+                    <dx-button
+                      class="stock-auto-button"
+                      type="success"
+                      [focusStateEnabled]="false"
+                      text="{{ 'btn-stockauto' | localize }}"
+                      hint="{{ 'hint-stockauto' | localize }} "
+                      (onClick)="onRegulOrderClick()"
+                    ></dx-button>
                     <!-- Ajout article(s) dans les réfs client -->
                     <dx-button
                       class="add-ref-client-button"
@@ -955,7 +965,7 @@
                       [focusStateEnabled]="false"
                       [disabled]="!selectedGridCdesRows"
                       text="{{ 'btn-addrefclt' | localize }}"
-                      [hint]="('hint-addrefclt' | localize) + ordre?.client?.code"
+                      [hint]="((vowelTest(ordre?.client?.code) ? 'hint-addrefclt2' : 'hint-addrefclt') | localize) + ordre?.client?.code"
                       (onClick)="onAddRefsClient()"
                     ></dx-button>
                   </div>
