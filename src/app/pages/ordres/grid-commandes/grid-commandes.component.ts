@@ -26,7 +26,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { EMPTY, from, iif, Observable, of, zip } from "rxjs";
-import { concatMap, concatMapTo, debounceTime, filter, finalize, first, last, map, takeWhile } from "rxjs/operators";
+import { concatMap, concatMapTo, debounceTime, filter, finalize, first, last, map, takeWhile, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";

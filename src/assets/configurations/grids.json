@@ -6097,19 +6097,24 @@
       },
       {
         "visibleIndex": 2,
+        "dataField": "orl_ref",
+        "visible": false
+      },
+      {
+        "visibleIndex": 4,
         "dataField": "orl_lig",
         "width": 35,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 6,
         "dataField": "resa_desc",
         "cssClass": "small-left-padding",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 8,
         "dataField": "info_stock",
         "visible": true
       }

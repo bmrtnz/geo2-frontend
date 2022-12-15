@@ -13,6 +13,7 @@ import { StockMouvementsService } from "app/shared/services/api/stock-mouvements
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { OrdreLigne } from "app/shared/models";
 import { StocksService } from "app/shared/services/api/stocks.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 
 
 @Component({
@@ -49,6 +50,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   constructor(
     private stockMouvementsService: StockMouvementsService,
+    private ordreLignesService: OrdreLignesService,
     private authService: AuthService,
     private stocksService: StocksService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -64,13 +66,16 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   onRowClick(e) {
     // Retrieve ligne data
-    this.ordreLigne = this.lignes.filter(l => l.numero === e.data.orl_lig)[0];
+    this.ordreLigne = this.lignes.filter(l => l.id === e.data.orl_ref)[0];
     this.gridCommandes.openDestockagePopup(this.ordreLigne);
   }
 
   onCellPrepared(e) {
-    if (e.rowType === "data" && e.column.dataField === "resa_desc") {
-      if (e.value.includes("<br>")) e.cellElement.classList.add("lineHeight16");
+    if (e.rowType === "data") {
+      if (e.column.dataField === "resa_desc") {
+        if (e.value.includes("<br>")) e.cellElement.classList.add("lineHeight16");
+      }
+      if (e.column.dataField === "info_stock") e.cellElement.classList.add("red-font");
     }
   }
 
@@ -104,8 +109,8 @@ export class DestockageAutoPopupComponent implements OnChanges {
           item.warning = item.warning === "O" ? true : false;
           item.resa_desc = item.resa_desc.split("~n").join("<br>").split("ERREUR").join("<br>ERREUR");
         });
-        this.applyErrorsFilter();
         console.log(this.DsItems);
+        this.applyErrorsFilter();
         setTimeout(() => this.datagrid.instance.endCustomLoading());
       },
       error: (error: Error) => {
@@ -127,13 +132,11 @@ export class DestockageAutoPopupComponent implements OnChanges {
     // On modifie le commentaire sur la ligne de la grid selon l'état du déstockage
     this.stocksService.allLigneReservationList(this.ordreLigne.id).subscribe(res => {
       const info = res?.data?.allLigneReservationList;
-      let newDesc = "Attention : déstockage supprimé sur ";
-      newDesc += `${this.ordreLigne.fournisseur.code}/${this.ordreLigne.proprietaireMarchandise.code}`;
-      newDesc += "<br>Nouveau déstockage à prévoir";
+      let newDesc = `${this.ordreLigne.fournisseur.code}/${this.ordreLigne.proprietaireMarchandise.code} ${info.length}`;
       if (info.length) {
         newDesc = `OK ${info[0].ligneFournisseurCode}/${info[0].proprietaireCode} ${info.length}`;
       }
-      this.DsItems.filter(ds => ds.orl_lig === this.ordreLigne.numero)[0].resa_desc = newDesc;
+      this.DsItems.filter(ds => ds.orl_ref === this.ordreLigne.id)[0].resa_desc = newDesc;
     });
   }
 
@@ -149,7 +152,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   onHidden() {
     this.switchErrors.value = true;
-    this.DsItems = [];
+    this.datagrid.dataSource = null;
   }
 
   resizePopup() {
