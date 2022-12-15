@@ -20,6 +20,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { AjoutEtapeLogistiquePopupComponent } from "../ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 import { ToggledGrid } from "../form/form.component";
+import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 import { ZoomLieupassageaquaiPopupComponent } from "../zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
@@ -41,11 +42,11 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  private hintDblClick: string;
   public addStepText: string;
   public infoPopupText: string;
   @Input() public ordre: Ordre;
   @Input() public gridLignesLogistique: GridOrdreLigneLogistiqueComponent;
+  @Input() public gridCommandes: GridCommandesComponent;
   @Output() public transporteurLigneId: string;
   @Output() public transporteurTitle: string;
   @Output() public lieupassageaquaiLigneId: string;
@@ -84,7 +85,6 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     ];
     this.lieuxGroupage = [];
     this.instructionsList = [];
-    this.hintDblClick = this.localizeService.localize("hint-dblClick-file");
     this.addStepText = this.localizeService.localize("hint-addStep");
     this.transporteurGroupageSource = this.transporteurGroupageService.getDataSource_v2(["id", "raisonSocial"]);
     this.transporteurGroupageSource.filter(["valide", "=", true]);
@@ -214,9 +214,18 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
           e.cellElement.classList.add("cursor-pointer");
         }
       }
-      if (e.column.dataField === "instructions") {
-        // if (e.value) e.cellElement.title = e.value;
+
+      // Disallow deleting grid commandes fournisseurs
+      if (e.column.command === "edit") {
+        const deleteLink = e.cellElement.querySelector(".dx-link-delete");
+        deleteLink?.classList.add("visibility-hidden");
+        if (this.gridCommandes.grid.dataSource) {
+          if (!this.gridCommandes.embalExp.includes(e.row.data.codeFournisseur)) {
+            deleteLink?.classList.remove("visibility-hidden");
+          }
+        }
       }
+
     }
   }
 
