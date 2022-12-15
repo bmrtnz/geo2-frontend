@@ -1,5 +1,5 @@
 <dx-popup
-  [width]="1000"
+  [width]="950"
   height="auto"
   [showTitle]="true"
   [dragEnabled]="true"
@@ -60,6 +60,7 @@
           [focusedRowEnabled]="true"
           [keyExpr]="'id'"
           [focusedRowIndex]="0"
+          (onCellPrepared)="onCellPrepared($event)"
           (onRowPrepared)="onRowPrepared($event)"
           (onRowClick)="onRowClick($event)"
           [columnAutoWidth]="true"
@@ -106,6 +107,7 @@
           <dxi-column
             *ngFor="let column of this.columns | async"
             [dataField]="column.dataField"
+            [encodeHtml]="false"
             [visible]="false"
             [width]="column.width"
             [caption]="

@@ -6091,6 +6091,7 @@
         "visibleIndex": 0,
         "dataField": "statut",
         "dataType": "boolean",
+        "width": 35,
         "cssClass": "no-padding",
         "visible": true
       },
@@ -6098,12 +6099,13 @@
         "visibleIndex": 2,
         "dataField": "orl_lig",
         "width": 35,
-        "cssClass": "no-padding",
+        "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "resa_desc",
+        "cssClass": "small-left-padding",
         "visible": true
       },
       {

@@ -20,6 +20,7 @@ import { StocksService } from "app/shared/services/api/stocks.service";
   templateUrl: "./destockage-auto-popup.component.html",
   styleUrls: ["./destockage-auto-popup.component.scss"]
 })
+
 export class DestockageAutoPopupComponent implements OnChanges {
 
   @Input() ordreId: string;
@@ -67,12 +68,17 @@ export class DestockageAutoPopupComponent implements OnChanges {
     this.gridCommandes.openDestockagePopup(this.ordreLigne);
   }
 
+  onCellPrepared(e) {
+    if (e.rowType === "data" && e.column.dataField === "resa_desc") {
+      if (e.value.includes("<br>")) e.cellElement.classList.add("lineHeight16");
+    }
+  }
+
   onRowPrepared(e) {
     if (e.rowType === "data") {
       e.rowElement.classList.add("cursor-pointer");
       e.rowElement.title = this.localizeService.localize("hint-click-modif-destock");
     }
-
   }
 
   endLoading() {
@@ -96,8 +102,10 @@ export class DestockageAutoPopupComponent implements OnChanges {
           item.id = index;
           item.statut = item.statut === "O" ? true : false;
           item.warning = item.warning === "O" ? true : false;
+          item.resa_desc = item.resa_desc.split("~n").join("<br>").split("ERREUR").join("<br>ERREUR");
         });
         this.applyErrorsFilter();
+        console.log(this.DsItems);
         setTimeout(() => this.datagrid.instance.endCustomLoading());
       },
       error: (error: Error) => {
@@ -121,7 +129,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
       const info = res?.data?.allLigneReservationList;
       let newDesc = "Attention : déstockage supprimé sur ";
       newDesc += `${this.ordreLigne.fournisseur.code}/${this.ordreLigne.proprietaireMarchandise.code}`;
-      newDesc += "Nouveau déstockage à prévoir";
+      newDesc += "<br>Nouveau déstockage à prévoir";
       if (info.length) {
         newDesc = `OK ${info[0].ligneFournisseurCode}/${info[0].proprietaireCode} ${info.length}`;
       }

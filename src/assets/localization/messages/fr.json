@@ -203,7 +203,7 @@
     "hint-not-valid-article": "article non-valide",
     "hint-voir-encours": "Double-cliquez pour voir les en-cours client",
     "title-historique-modif-detail-popup": "Historique des changements du détail d'expédition",
-    "title-destockage-auto-grid": "Cliquez sur la ligne souhaitée pour modifier les déstockages",
+    "title-destockage-auto-grid": "<span class='material-symbols-outlined'>info</span>Cliquez sur la ligne souhaitée pour modifier les déstockages",
     "title-destockage-auto-popup": "Résultat du déstockage automatique",
     "title-destock-auto": "Déstockage automatique",
     "encours-total": "En-cours total",
