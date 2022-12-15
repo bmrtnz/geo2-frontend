@@ -75,11 +75,22 @@
       .grid-destockage-auto {
         max-height: 400px;
 
+        .cursor-pointer {
+          cursor: pointer !important;
+        }
+
         .dx-toolbar .dx-texteditor-container {
           left: 282px;
           width: 550px;
         }
       }
+    }
+
+    .popup-action {
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
   }

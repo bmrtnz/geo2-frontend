@@ -7,9 +7,9 @@
   [(visible)]="visible"
   [fullScreen]="this.popupFullscreen"
   [resizeEnabled]="true"
-  (onShown)="onShown($event)"
   (onShowing)="onShowing($event)"
-  (onHidden)="onHidden($event)"
+  (onShown)="onShown()"
+  (onHidden)="onHidden()"
   >
   <div *dxTemplate="let data of 'title'">
     <div class="title-popup">{{ title }}&nbsp;</div>
@@ -42,7 +42,7 @@
               [value]="true"
               [switchedOnText]=""
               [switchedOffText]=""
-              (onValueChanged)="enableFilters()"
+              (onValueChanged)="applyErrorsFilter($event)"
             ></dx-switch>
           </div>
           <div
@@ -60,7 +60,8 @@
           [focusedRowEnabled]="true"
           [keyExpr]="'id'"
           [focusedRowIndex]="0"
-          (onCellClick)="onCellClick($event)"
+          (onRowPrepared)="onRowPrepared($event)"
+          (onRowClick)="onRowClick($event)"
           [columnAutoWidth]="true"
           [columnHidingEnabled]="false"
           [allowColumnReordering]="true"
@@ -121,6 +122,14 @@
             [showInColumnChooser]="column.showInColumnChooser"
           ></dxi-column>
         </dx-data-grid>
+        <br>
+        <div class="popup-action">
+          <dx-button
+            text="{{ 'btn-fermer' | localize }}"
+            type="default"
+            (onClick)="quitPopup()"
+          ></dx-button>
+        </div>
       </div>
     </dx-scroll-view>
   </div>

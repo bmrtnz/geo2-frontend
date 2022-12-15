@@ -265,7 +265,7 @@
 <app-article-reservation-ordre-popup
   *ngIf="FEATURE.destockage"
   [ordreLigne]="ordreLigne"
-  (whenApplied)="this.update()"
+  (whenApplied)="this.update(); destockEnded()"
 ></app-article-reservation-ordre-popup>
 
 <app-article-certification-popup

@@ -106,9 +106,10 @@ export class GridReservationStockComponent implements OnInit {
 
   private pushReservation(event) {
     const [fournisseur, proprietaire] = event.key[0].split("/");
-    const desc =
-      `Ordre ${this.ordreLigneInfo.ordre.numero} / ${this.ordreLigneInfo.ordre.entrepot.code}
-       (${this.authService.currentUser.nomUtilisateur})`;
+    let desc =
+      // tslint:disable-next-line: max-line-length
+      `Ordre ${this.ordreLigneInfo.ordre.numero}/${this.ordreLigneInfo.ordre.entrepot.code} (${this.authService.currentUser.nomUtilisateur})`;
+    desc = desc.substring(0, 35); // Database limitation
     this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
       .pipe(
         concatMap(ol => this.stockMouvementsService

@@ -191,6 +191,7 @@
     "hint-client-encours": "Voir les en-cours client",
     "hint-deplacer-ligne-haut": "Déplacer la ligne sélectionnée vers le haut",
     "hint-deplacer-ligne-bas": "Déplacer la ligne sélectionnée vers le bas",
+    "hint-click-modif-destock": "Cliquez pour modifier le déstockage",
     "hint-dblClick-file": "Double-cliquez pour voir la fiche",
     "hint-click-file": "Cliquez pour voir la fiche",
     "hint-click-ordre": "Cliquez pour afficher l'ordre",

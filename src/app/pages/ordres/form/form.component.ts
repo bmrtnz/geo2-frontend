@@ -774,6 +774,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destockageAutoPopup.visible = true;
   }
 
+  updateDestockAuto() {
+    if (this.destockageAutoPopup.visible) this.destockageAutoPopup.updateGrid();
+  }
+
   gridCdesSelectedRowsChange(e) {
     if (e) this.selectedGridCdesRows = e.length > 0;
   }

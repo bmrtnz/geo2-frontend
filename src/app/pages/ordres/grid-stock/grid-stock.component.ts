@@ -134,7 +134,6 @@ export class GridStockComponent implements OnInit {
 
   displayCodeBefore(data) {
     if (data?.__typename === "DistinctEdge") {
-      console.log(data);
       return data ? `${data.node.key} - ${data.node.description}` : null;
     }
 

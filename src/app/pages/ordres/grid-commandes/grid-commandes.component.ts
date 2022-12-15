@@ -86,6 +86,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
   @Output() allowMutations = false;
+  @Output() updateDestockAuto = new EventEmitter<any>();
 
   // legacy features properties
   public certifsMD: any;
@@ -203,6 +204,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         // Conclusion => without a timeOut, major risk of unsaved data!
         return setTimeout(() => this.grid.instance.saveEditData(), 10);
       }
+  }
+
+  destockEnded() {
+    this.updateDestockAuto.emit();
   }
 
   onSaving(event: OnSavingEvent) {

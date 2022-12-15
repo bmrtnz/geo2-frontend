@@ -976,6 +976,7 @@
                     (priceChange)="refreshRegimeTva.emit()"
                     (transporteurChange)="refreshTransporteur()"
                     (selectedRowsChange)="gridCdesSelectedRowsChange($event)"
+                    (updateDestockAuto)="updateDestockAuto()"
                   ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
@@ -1265,6 +1266,8 @@
   </app-ajout-articles-ref-client-popup>
   <app-destockage-auto-popup
     [ordreId]="ordre?.id"
+    [gridCommandes]="gridCommandes"
+    (updateGridCde)="gridCommandes.update()"
   ></app-destockage-auto-popup>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"

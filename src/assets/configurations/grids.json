@@ -6097,6 +6097,8 @@
       {
         "visibleIndex": 2,
         "dataField": "orl_lig",
+        "width": 35,
+        "cssClass": "no-padding",
         "visible": true
       },
       {
