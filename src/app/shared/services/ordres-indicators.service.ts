@@ -267,6 +267,19 @@ const indicators: Indicator[] = [
     component: import(
       "../../pages/ordres/indicateurs/historique-ordres/historique-ordres.component"
     ),
+  },
+  {
+    id: "PlanningDepartsMaritimes",
+    enabled: true,
+    withCount: false,
+    parameter: "Planning",
+    subParameter: "départs maritimes",
+    tileBkg: "#225AA8",
+    indicatorIcon: "material-icons directions_boat",
+    warningIcon: "",
+    component: import(
+      "../../pages/ordres/indicateurs/planning-departs-maritimes/planning-departs-maritimes.component"
+    ),
   }
 ].map((indicator) => ({ ...indicator, loading: false }));
 
@@ -298,6 +311,11 @@ export class OrdresIndicatorsService {
         "and",
         ["societeCode", "=", this.currentCompanyService.getCompany().id],
       ];
+
+      // Commandes EDI
+      // if (instance.id === "CommandesEdi") {
+      //   instance.enabled = this.authService.currentUser.accessCommandeEdi;
+      // }
 
       // Supervision livraison
       if (instance.id === "SupervisionLivraison") {

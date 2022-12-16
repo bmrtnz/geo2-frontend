@@ -54,6 +54,7 @@ import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/acti
 import { ConfirmationResultPopupComponent } from "./actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "./ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "./ajout-articles-manu-popup/ajout-articles-manu-popup.component";
+import { AjoutArticlesRefClientPopupComponent } from "./ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
 import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 import { AjustDecomptePaloxPopupComponent } from "./ajust-decompte-palox-popup/ajust-decompte-palox-popup.component";
@@ -65,6 +66,7 @@ import {
   ListPipe
 } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
+import { DestockageAutoPopupComponent } from "./destockage-auto-popup/destockage-auto-popup.component";
 import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
 import { DuplicationOrdrePopupComponent } from "./duplication-ordre-popup/duplication-ordre-popup.component";
 import { FormLitigesComponent } from "./form-litiges/form-litiges.component";
@@ -101,6 +103,10 @@ import { GridStockComponent } from "./grid-stock/grid-stock.component";
 import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
 import { GridSuiviComponent } from "./grid-suivi/grid-suivi.component";
 import { GridsService } from "./grids.service";
+import {
+  GridLignesGroupageChargementsComponent
+} from "./groupage-chargements-popup/grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
+import { GroupageChargementsPopupComponent } from "./groupage-chargements-popup/groupage-chargements-popup.component";
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
@@ -118,6 +124,7 @@ import { LitigesComponent } from "./indicateurs/litiges/litiges.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
 import { PlanningDepartComponent } from "./indicateurs/planning-depart/planning-depart.component";
+import { PlanningDepartsMaritimesComponent } from "./indicateurs/planning-departs-maritimes/planning-departs-maritimes.component";
 import { PlanningFournisseursComponent } from "./indicateurs/planning-fournisseurs/planning-fournisseurs.component";
 import {
   PlanningTransporteursApprocheComponent
@@ -138,12 +145,6 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { AjoutArticlesRefClientPopupComponent } from "./ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
-import { GroupageChargementsPopupComponent } from "./groupage-chargements-popup/groupage-chargements-popup.component";
-import {
-  GridLignesGroupageChargementsComponent
-} from "./groupage-chargements-popup/grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
-import { DestockageAutoPopupComponent } from "./destockage-auto-popup/destockage-auto-popup.component";
 
 @NgModule({
   declarations: [
@@ -233,6 +234,7 @@ import { DestockageAutoPopupComponent } from "./destockage-auto-popup/destockage
     GroupageChargementsPopupComponent,
     GridLignesGroupageChargementsComponent,
     DestockageAutoPopupComponent,
+    PlanningDepartsMaritimesComponent
   ],
   imports: [
     OrdresRoutingModule,

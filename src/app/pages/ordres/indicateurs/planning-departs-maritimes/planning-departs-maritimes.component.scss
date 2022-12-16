@@ -1,0 +1,52 @@
+// Var
+@import "src/themes/generated/variables.base.scss";
+@import "~scss/variables.scss";
+
+.dx-fieldset {
+  display: flex;
+}
+
+.dx-field {
+  margin-right: 20px;
+}
+
+::ng-deep .orderTileFilterArea {
+  width: 700px;
+
+  .dx-datebox .dx-texteditor-input {
+    padding-right: 0 !important;
+  }
+
+  .orderTileleftFilters .dx-field {
+    margin-bottom: 0;
+  }
+
+  .orderRightRightFilters {
+    margin-top: 4px;
+  }
+
+}
+
+::ng-deep .grid-planning-departs-maritimes {
+
+  .dx-toolbar .dx-texteditor-container {
+    width: 750px;
+
+    .dx-placeholder {
+      display: block !important;
+      color: rgba(0, 0, 0, .87);
+    }
+  }
+
+  .bold-text {
+    font-weight: bold;
+  }
+
+  .grey-light-depart {
+    background-color: #E5E5E5;
+  }
+
+  .grey-normal-depart {
+    background-color: #D5D5D5;
+  }
+}

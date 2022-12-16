@@ -107,6 +107,7 @@ export enum Grid {
   LignesCommandes = "lignes-commandes",
   PlanningDepart = "planning-depart",
   PlanningDepartDetail = "planning-depart-detail",
+  PlanningDepartsMaritimes = "planning-departs-maritimes",
   Envois = "envois",
   ChoixEnvois = "choix-envois",
   AnnuleRemplace = "annule-remplace",

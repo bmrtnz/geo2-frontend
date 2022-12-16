@@ -6200,6 +6200,99 @@
       }
     ]
   },
+  "planning-departs-maritimes": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "dateDepartPrevueFournisseur",
+        "dataType": "date",
+        "cssClass": "small-side-padding text-align-center",
+        "width": 90,
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "dateDepartPrevueFournisseurRaw",
+        "dataType": "string",
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "codeFournisseur",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "codeEntrepot",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ville",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "pays.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "transporteur.id",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "numeroOrdre",
+        "dataType": "string",
+        "width": 60,
+        "cssClass": "multi-line-header bold-text",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "nombrePalettesCommandees",
+        "dataType": "number",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "referenceLogistique",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "referenceLogistiqueComplete",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
   "lignes-groupage-chargements": {
     "columns": [
       {

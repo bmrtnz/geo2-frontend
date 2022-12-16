@@ -1,4 +1,6 @@
 import { Injectable } from "@angular/core";
+import { DateManagementService } from "./date-management.service";
+import { LocalizationService } from "./localization.service";
 
 @Injectable({
   providedIn: "root",
@@ -8,7 +10,10 @@ export class GridUtilsService {
   public currentValueTyped: string;
   public focusSB: boolean;
 
-  constructor() { }
+  constructor(
+    private localizeService: LocalizationService,
+    private dateManagementService: DateManagementService
+  ) { }
 
   // Reset (go to left) datagrid horizontal scroll bar
   public resetGridScrollBar(grid) {
@@ -53,6 +58,27 @@ export class GridUtilsService {
   // Converts a string array to "item1 & item2" or "item1, item2, item3 & item4"
   public friendlyFormatList(items: Array<string>) {
     return items.join(", ").replace(/,(?![\s\S]*,)/, " &");
+  }
+
+  // Customizing grid title with period/date
+  public customGridPlanningTitle(titlePrefix: string, dateMin: Date = new Date(), dateMax: Date = new Date()) {
+    const title = this.localizeService.localize(titlePrefix);
+    const duValue = this.localizeService.localize("du");
+    const fromDate = this.dateManagementService.formatDate(dateMin, "dd-MM-yyyy");
+    const fromValue = `<strong>${fromDate.replace(/^0+/, "")}</strong>`;
+    const auValue = this.localizeService.localize("au");
+    const toDate = this.dateManagementService.formatDate(dateMax, "dd-MM-yyyy");
+    const toValue = `<strong>${toDate.replace(/^0+/, "")}</strong>`;
+    const nowDate = this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy");
+    let finalTitle = `${title} ${duValue}&nbsp;&nbsp;${fromValue}&nbsp;&nbsp;${auValue}&nbsp;&nbsp;${toValue}`;
+    if (fromDate === toDate) {
+      if (fromDate === nowDate) {
+        finalTitle = `${title}&nbsp;<strong>${this.localizeService.localize("from-today")}</strong>`;
+      } else {
+        finalTitle = finalTitle.split(auValue)[0];
+      }
+    }
+    return finalTitle;
   }
 
 }
