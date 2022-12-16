@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, NgForm } from "@angular/forms";
 import { LocalizationService } from "app/shared/services";
-import { PlanningDepartMaritimeService } from "app/shared/services/api/planning-depart-maritime.service";
+import { PlanningMaritimeService, PlanningSide } from "app/shared/services/api/planning-maritime.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -46,7 +46,7 @@ export class PlanningDepartsMaritimesComponent implements OnInit, AfterViewInit 
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
-    public planningDepartMaritimeService: PlanningDepartMaritimeService,
+    public planningDepartMaritimeService: PlanningMaritimeService,
     public localizeService: LocalizationService,
     public gridUtilsService: GridUtilsService,
     public currentCompanyService: CurrentCompanyService,
@@ -99,6 +99,7 @@ export class PlanningDepartsMaritimesComponent implements OnInit, AfterViewInit 
           dateMax: values.dateMax
         },
         new Set(await fields.toPromise()),
+        PlanningSide.Depart,
       );
     this.datagrid.dataSource = this.ordresDataSource;
   }

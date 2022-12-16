@@ -1,11 +1,12 @@
 import { Field, Model, ModelName } from "./model";
 import Pays from "./pays.model";
 
-@ModelName("PlanningDepartMaritime")
-export class PlanningDepartMaritime extends Model {
+@ModelName("PlanningMaritime")
+export class PlanningMaritime extends Model {
   @Field({ asKey: true }) id: number;
   @Field() dateDepartPrevueFournisseurRaw: string;
   @Field({ dataType: "localdate" }) dateDepartPrevueFournisseur: string;
+  @Field({ dataType: "datetime" }) dateLivraisonPrevue: string;
   @Field() nombrePalettesCommandees: number;
   @Field() codeFournisseur: string;
   @Field() codeClient: string;
@@ -18,4 +19,4 @@ export class PlanningDepartMaritime extends Model {
   @Field() referenceLogistiqueComplete: string;
 }
 
-export default PlanningDepartMaritime;
+export default PlanningMaritime;
