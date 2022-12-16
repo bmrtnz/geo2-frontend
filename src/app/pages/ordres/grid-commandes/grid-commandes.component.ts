@@ -104,6 +104,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   public hintDblClick: string;
   public proprietairesDataSource: DataSource;
   public fournisseursDataSource: DataSource;
+  public embalExp: string[];
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -167,6 +168,15 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
     this.grid.instance.deselectAll();
     this.gridRowsTotal = this.grid.instance.getVisibleRows()?.length;
+    // Register all distinct fournisseurs (embal/exp)
+    this.embalExp = [];
+    if (this.grid.dataSource) {
+      (this.grid.dataSource as DataSource).items()
+        .filter(ds => ds.fournisseur)
+        .map(ds => this.embalExp.push(ds.fournisseur?.code));
+      this.embalExp = [...new Set(this.embalExp)];
+    }
+
   }
 
   onSelectionChanged(e) {
