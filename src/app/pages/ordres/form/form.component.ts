@@ -50,6 +50,7 @@ import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
+import { DestockageAutoPopupComponent } from "../destockage-auto-popup/destockage-auto-popup.component";
 import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
@@ -324,6 +325,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
   @ViewChild(GroupageChargementsPopupComponent) groupagePopup: GroupageChargementsPopupComponent;
+  @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
 
@@ -770,6 +772,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ajoutArtRefClt.visible = true;
   }
 
+  onDestockAutoClick() {
+    this.destockageAutoPopup.visible = true;
+  }
+
+  updateDestockAuto() {
+    if (this.destockageAutoPopup.visible) this.destockageAutoPopup.updateGrid();
+  }
+
   gridCdesSelectedRowsChange(e) {
     if (e) this.selectedGridCdesRows = e.length > 0;
   }
@@ -1156,6 +1166,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public refreshHeader(e?) {
     this.initializeForm("no-cache");
+  }
+
+  vowelTest(text) {
+    return (/^[AEIOUYaeiouy]$/i).test(text);
   }
 
 }

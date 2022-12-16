@@ -1,0 +1,139 @@
+<dx-popup
+  [width]="950"
+  height="auto"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [fullScreen]="this.popupFullscreen"
+  [resizeEnabled]="true"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
+  (onHidden)="onHidden()"
+  >
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-popup">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="quitPopup()"
+    >
+    </dx-button>
+    <dx-button
+      class="minimize-popup"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="destockage-auto-content-container">
+
+        <div class="dx-field erreurs-switch">
+          <div class="dx-field-label dx-field-label-left">
+            {{ "all" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-switch
+              #switchErrors
+              [value]="true"
+              [switchedOnText]=""
+              [switchedOffText]=""
+              (onValueChanged)="applyErrorsFilter($event)"
+            ></dx-switch>
+          </div>
+          <div
+            class="dx-field-label dx-field-label-right"
+            [ngClass]="{ 'red-font': switchErrors?.value }"
+          >
+            {{ "errors-only" | localize }}
+          </div>
+        </div>
+
+
+        <dx-data-grid
+          class="dx-card wide-card grid-destockage-auto"
+          [showBorders]="false"
+          [focusedRowEnabled]="true"
+          [keyExpr]="'id'"
+          [focusedRowIndex]="0"
+          (onCellPrepared)="onCellPrepared($event)"
+          (onRowPrepared)="onRowPrepared($event)"
+          (onRowClick)="onRowClick($event)"
+          [columnAutoWidth]="true"
+          [columnHidingEnabled]="false"
+          [allowColumnReordering]="true"
+          [rowAlternationEnabled]="true"
+          [wordWrapEnabled]="false"
+          (onToolbarPreparing)="
+            gridConfiguratorService.onToolbarPreparing(
+              this.localizeService.localize('title-destockage-auto-grid'),
+              $event,
+              gridConfiguratorService.Grid.OrdreDestockageAuto
+            )
+          "
+        >
+          <!-- Grid configuration -->
+          <dxo-export fileName="Destockage auto"></dxo-export>
+          <dxo-header-filter
+            [visible]="true"
+            [allowSearch]="true"
+          ></dxo-header-filter>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager
+            [showPageSizeSelector]="true"
+            [showInfo]="true"
+            [showNavigationButtons]="true"
+          ></dxo-pager>
+          <dxo-state-storing
+            [enabled]="true"
+            type="custom"
+            [storageKey]="gridConfiguratorService.Grid.OrdreDestockageAuto"
+            [customLoad]="gridConfiguratorService.load"
+            [customSave]="gridConfiguratorService.save"
+          ></dxo-state-storing>
+          <dxo-column-chooser
+            [enabled]="true"
+            mode="select"
+            title="{{ 'columnChooser' | localize }}"
+            [allowSearch]="true"
+            [width]="columnChooser.width"
+            [height]="columnChooser.height"
+          >
+          </dxo-column-chooser>
+          <dxi-column
+            *ngFor="let column of this.columns | async"
+            [dataField]="column.dataField"
+            [encodeHtml]="false"
+            [visible]="false"
+            [width]="column.width"
+            [caption]="
+              ('ordres-destockAuto-' + column.dataField?.split('.').join('-') | localize) ||
+              column.name
+            "
+            [fixed]="column.fixed"
+            [cssClass]="column?.cssClass"
+            allowSearch="false"
+            [dataType]="column?.dataType"
+            [allowHeaderFiltering]="
+              column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+            "
+            [showInColumnChooser]="column.showInColumnChooser"
+          ></dxi-column>
+        </dx-data-grid>
+        <br>
+        <div class="popup-action">
+          <dx-button
+            text="{{ 'btn-fermer' | localize }}"
+            type="default"
+            (onClick)="quitPopup()"
+          ></dx-button>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+
+</dx-popup>

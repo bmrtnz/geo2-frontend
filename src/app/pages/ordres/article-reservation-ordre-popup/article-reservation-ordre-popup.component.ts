@@ -7,6 +7,7 @@ import { CalibresFournisseurService } from "app/shared/services/api/calibres-fou
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
 import { concatMap, finalize, map } from "rxjs/operators";
 import { GridReservationStockEnCoursComponent } from "../grid-reservation-stock-en-cours/grid-reservation-stock-en-cours.component";
 import { GridReservationStockComponent, Reservation } from "../grid-reservation-stock/grid-reservation-stock.component";
@@ -99,7 +100,17 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   applyClick() {
     // On ferme en renvoyant le fournisseur courant et le nbre de réservation
     this.okDisabled = true;
-    this.updateNombreResa().subscribe(() => this.popup.visible = false);
+    this.updateNombreResa().subscribe({
+      next: () => {
+        this.okDisabled = true;
+        this.popup.visible = false;
+      },
+      error: (error: Error) => {
+        this.okDisabled = true;
+        console.log(error);
+        notify(error.message, "error", 7000);
+      }
+    });
   }
 
   pushText(info) {

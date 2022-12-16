@@ -26,7 +26,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { EMPTY, from, iif, Observable, of, zip } from "rxjs";
-import { concatMap, concatMapTo, debounceTime, filter, finalize, first, last, map, takeWhile } from "rxjs/operators";
+import { concatMap, concatMapTo, debounceTime, filter, finalize, first, last, map, takeWhile, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
@@ -86,6 +86,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
   @Output() allowMutations = false;
+  @Output() updateDestockAuto = new EventEmitter<any>();
 
   // legacy features properties
   public certifsMD: any;
@@ -213,6 +214,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         // Conclusion => without a timeOut, major risk of unsaved data!
         return setTimeout(() => this.grid.instance.saveEditData(), 10);
       }
+  }
+
+  destockEnded() {
+    this.updateDestockAuto.emit();
   }
 
   onSaving(event: OnSavingEvent) {

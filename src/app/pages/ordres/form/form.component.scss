@@ -5,18 +5,43 @@
 ::ng-deep .form-ordres-page {
 
 
-  .shiftNoMutations .order-conf-button,
-  .shiftNoMutations .order-regul-button,
-  .shiftNoMutations .add-ref-client-button {
-    margin-right: -85px;
+  .top-grid-cde-buttons {
+    position: absolute;
+    right: 289px;
+    margin-top: 9px;
+    z-index: 1;
+    background: #EEE;
+
+    .dx-button,
+    app-actions-documents-ordres .flux-docs-buttons-container {
+      position: relative;
+      float: right;
+    }
+
+    .dx-button:not(.flux-doc-button) {
+      margin: 0 4px;
+    }
+
+    .flux-docs-buttons-container {
+      margin-top: 0 !important;
+      right: 0;
+
+      .flux-doc-button {
+        margin: 0 0 0 13px;
+      }
+    }
+  }
+
+  .shiftNoMutations {
+    margin-right: -83px;
   }
 
   .order-regul-button,
-  .add-ref-client-button {
-    position: absolute;
+  .add-ref-client-button,
+  .stock-auto-button {
+    position: relative;
     z-index: 1;
     margin-top: 9px;
-    right: 438px;
     height: 34px;
     font-size: 12px;
 
@@ -25,9 +50,13 @@
     }
   }
 
-  .add-ref-client-button {
-    right: 559px;
-  }
+  // .add-ref-client-button {
+  //   right: 704px;
+  // }
+
+  // .stock-auto-button {
+  //   right: 558px;
+  // }
 
   .header-btn-baf {
     margin: -9px 5px 0 0;

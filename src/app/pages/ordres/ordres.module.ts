@@ -143,6 +143,7 @@ import { GroupageChargementsPopupComponent } from "./groupage-chargements-popup/
 import {
   GridLignesGroupageChargementsComponent
 } from "./groupage-chargements-popup/grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
+import { DestockageAutoPopupComponent } from "./destockage-auto-popup/destockage-auto-popup.component";
 
 @NgModule({
   declarations: [
@@ -230,7 +231,8 @@ import {
     GridCqPhotosComponent,
     AjoutArticlesRefClientPopupComponent,
     GroupageChargementsPopupComponent,
-    GridLignesGroupageChargementsComponent
+    GridLignesGroupageChargementsComponent,
+    DestockageAutoPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,
