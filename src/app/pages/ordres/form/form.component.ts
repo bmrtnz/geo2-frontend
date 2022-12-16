@@ -26,10 +26,12 @@ import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { PortsService } from "app/shared/services/api/ports.service";
+import { ReferencesClientService } from "app/shared/services/api/references-client.service";
 import { RegimesTvaService } from "app/shared/services/api/regimes-tva.service";
 import { TypesCamionService } from "app/shared/services/api/types-camion.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { DxAccordionComponent, DxCheckBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
@@ -37,6 +39,7 @@ import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { combineLatest, Observable, of, Subject } from "rxjs";
 import { concatMap, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
@@ -45,6 +48,7 @@ import {
 } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
+import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
@@ -52,16 +56,12 @@ import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
+import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { ONE_SECOND } from "../../../../basic";
-import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
-import { ReferencesClientService } from "app/shared/services/api/references-client.service";
-import { GridUtilsService } from "app/shared/services/grid-utils.service";
-import { cpuUsage } from "process";
 
 /**
  * Grid with loading toggled by parent
@@ -323,6 +323,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ActionsDocumentsOrdresComponent) actionDocs: ActionsDocumentsOrdresComponent;
   @ViewChild(MotifRegularisationOrdrePopupComponent) motifRegulPopup: MotifRegularisationOrdrePopupComponent;
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
+  @ViewChild(GroupageChargementsPopupComponent) groupagePopup: GroupageChargementsPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
 
@@ -553,7 +554,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               .subscribe({
                 next: (result) => {
                   const numOrdreRegul = result.data.ordre.numero;
-                  this.initializeForm("no-cache");
+                  this.refreshHeader();
                   notify(this.localization.localize("ordre-regularisation-cree").replace("&O", numOrdreRegul), "success", 7000);
                   this.clearSelectionForRegul();
                   this.tabContext.openOrdre(numOrdreRegul);
@@ -620,7 +621,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                   .getOne_v2(refOrdreCompl, ["id", "numero"])
                   .subscribe({
                     next: (result) => {
-                      this.initializeForm("no-cache");
+                      this.refreshHeader();
                       notify(this.localization.localize("ordre-complementaire-cree")
                         .replace("&O", result.data.ordre.numero), "success", 7000);
                     },
@@ -679,7 +680,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .fAnnulationOrdre(motif, this.ordre.id)
       .subscribe({
         next: (res) => {
-          this.initializeForm("no-cache");
+          this.refreshHeader();
           this.actionDocs.onClickSendAction("ORDRE", true);
         },
         error: (error: Error) => {
@@ -775,6 +776,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   detailExp() {
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
+  }
+
+  openGroupageChargementsPopup() {
+    this.groupagePopup.visible = true;
   }
 
   onDuplicateOrderClick() {
@@ -1138,7 +1143,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const societe: Societe = this.currentCompanyService.getCompany();
 
     this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe(res => {
-      this.initializeForm("no-cache");
+      this.refreshHeader();
     });
 
   }
@@ -1147,6 +1152,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordresService
       .getOne_v2(this.refOrdre, ["transporteur.id"])
       .subscribe(res => this.formGroup.get("transporteur").setValue(res.data.ordre.transporteur));
+  }
+
+  public refreshHeader(e?) {
+    this.initializeForm("no-cache");
   }
 
 }

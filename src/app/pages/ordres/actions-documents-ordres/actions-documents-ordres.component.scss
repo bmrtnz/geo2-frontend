@@ -1,32 +1,35 @@
-::ng-deep .flux-docs-buttons-container {
-  margin: 0 0 5px -10px;
-  overflow: hidden;
+::ng-deep .form-ordres-page {
 
-  &.order-conf-button {
-    position: absolute;
-    z-index: 1;
-    margin-top: 4px;
-    right: 290px;
-  }
+  .flux-docs-buttons-container {
+    margin: 0 0 5px -10px;
+    overflow: hidden;
 
-  .dx-button {
-    height: 34px;
-    font-size: 12px;
-    margin: 5px 0 5px 10px;
-    float: left;
-
-    &.flux-doc-button-plus {
-      border-radius: 100%;
-      min-width: 33px;
-      float: none;
-
-      .dx-button-content {
-        padding: 0;
-      }
+    &.order-conf-button {
+      position: absolute;
+      z-index: 1;
+      margin-top: 4px;
+      right: 290px;
     }
 
-    .dx-button-content {
-      padding: 6px 13px;
+    .dx-button {
+      height: 34px;
+      font-size: 12px;
+      margin: 5px 0 5px 10px;
+      float: left;
+
+      &.flux-doc-button-plus {
+        border-radius: 100%;
+        min-width: 33px;
+        float: none;
+
+        .dx-button-content {
+          padding: 0;
+        }
+      }
+
+      .dx-button-content {
+        padding: 6px 13px;
+      }
     }
   }
 }

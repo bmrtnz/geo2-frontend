@@ -1,0 +1,147 @@
+<div class="grid-ordre-lignes-groupage-chargements-container">
+  <dx-data-grid
+    class="dx-card wide-card"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: false,
+      groupPaging: false,
+      paging: false,
+      sorting: true,
+      summary: false
+    }"
+    [showBorders]="false"
+    [elementAttr]="{ class: 'grid-ordre-lignes-groupage-chargements' }"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [focusedRowIndex]="-1"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    (onContentReady)="onContentReady($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onCellClick)="onCellClick($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
+    (onSelectionChanged)="onSelectionChanged($event)"
+    (onToolbarPreparing)="
+      onToolbarPreparing($event);
+      gridConfiguratorService.onToolbarPreparing(
+        'Passage à quai - Créer un ordre à partir de la sélection',
+        $event,
+        gridConfiguratorService.Grid.LignesGroupageChargements,
+        enableFilters.bind(this)
+      )
+    "
+  >
+    <!-- Grid configuration -->
+    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+    <dxo-export fileName="Groupage chargements"></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-paging [enabled]="false"></dxo-paging>
+    <dxo-selection
+      mode="multiple"
+      [allowSelectAll]="false"
+      [showCheckBoxesMode]="'always'"
+    ></dxo-selection>
+    <dxo-editing
+      [selectTextOnEditStart]="true"
+      [allowUpdating]="true"
+      [mode]="'batch'"
+    >
+    </dxo-editing>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.LignesGroupageChargements"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+    >
+    </dxo-column-chooser>
+
+    <dxo-summary>
+      <dxi-total-item
+        column="nombrePalettesCommandees"
+        summaryType="sum"
+        displayFormat="{0}"
+      ></dxi-total-item>
+      <dxi-total-item
+        column="nombreColisCommandes"
+        summaryType="sum"
+        displayFormat="{0}"
+      ></dxi-total-item>
+    </dxo-summary>
+
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [visible]="false"
+      [width]="column.width"
+      [caption]="
+        ('lignesGroupageCharg-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [fixed]="column.fixed"
+      [cssClass]="column?.cssClass"
+      allowSearch="false"
+      [dataType]="column?.dataType"
+      [allowEditing]="column.allowEditing ? column.allowEditing : false"
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+      [showEditorAlways]="true"
+    ></dxi-column>
+  </dx-data-grid>
+
+  <br>
+
+  <div class="bottom-buttons-container float-left">
+    <!-- Valider données -->
+    <dx-button
+      type="success"
+      stylingMode="outlined"
+      text="{{ 'btn-valider' | localize }}"
+      (onClick)="validGrouping()"
+    ></dx-button>
+    <!-- Confirmation de l'ordre -->
+    <app-actions-documents-ordres
+      [ngClass]="{ 'inactive-box': unsavedData }"
+      [ordre]="ordre"
+      [gridEnvois]="gridEnvois"
+      [gridCommandes]="gridCommandes"
+      [orderConfirmationOnly]="true"
+    ></app-actions-documents-ordres>
+  </div>
+  <div
+    class="bottom-buttons-container float-right"
+    [ngClass]="{ 'inactive-box': unsavedData || !datagrid?.selectedRowKeys?.length }"
+    >
+    <!-- Transférer -->
+    <dx-button
+      type="success"
+      icon="arrowright"
+      text="{{ 'btn-transfer' | localize }}"
+      (onClick)="transferOrDuplicate('transfer')"
+    ></dx-button>
+    <!-- Dupliquer -->
+    <dx-button
+      type="success"
+      icon="material-icons content_copy"
+      text="{{ 'btn-cloneorder' | localize }}"
+      (onClick)="transferOrDuplicate('duplicate')"
+    ></dx-button>
+  </div>
+</div>
+

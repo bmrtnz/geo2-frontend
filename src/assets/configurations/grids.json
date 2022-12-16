@@ -6164,5 +6164,141 @@
         "visible": false
       }
     ]
+  },
+  "lignes-groupage-chargements": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "showinColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ligne.id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "codeChargement",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "numeroOrdre",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "sortIndex": 2,
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "ordre.id",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "numeroCamion",
+        "dataType": "number",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ordreChargement",
+        "dataType": "number",
+        "width": 60,
+        "cssClass": "multi-line-header",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "ordre.entrepot.code",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "dateDepartPrevue",
+        "dataType": "date",
+        "sortOrder": "asc",
+        "sortIndex": 1,
+        "cssClass": "multi-line-header",
+        "width": 125,
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "dateLivraisonPrevue",
+        "dataType": "date",
+        "width": 125,
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "dateDepartPrevueFournisseur",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "width": 125,
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "codeFournisseur",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "article.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "descriptionArticle",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "sortIndex": 3,
+        "visible": true
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "descriptionColis",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "nombrePalettesCommandees",
+        "dataType": "number",
+        "cssClass": "multi-line-header move-right",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "nombreColisCommandes",
+        "dataType": "number",
+        "cssClass": "multi-line-header move-right",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "visible": false
+      }
+    ]
   }
 }

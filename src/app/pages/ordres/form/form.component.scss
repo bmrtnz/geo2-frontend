@@ -351,6 +351,26 @@ dx-button[type="normal"] {
   }
 }
 
+::ng-deep .form-text-button {
+  position: relative;
+  top: 3px;
+  height: 20px;
+  min-width: 0 !important;
+  border-radius: 4px !important;
+  font-size: 11px;
+
+  .dx-button-content {
+    padding: 0 7px !important;
+
+    .dx-button-text {
+      margin-top: 0 !important;
+      // white-space: nowrap !important;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
+    }
+  }
+}
+
 ::ng-deep #head {
   padding: 20px 20px 10px 20px;
 }

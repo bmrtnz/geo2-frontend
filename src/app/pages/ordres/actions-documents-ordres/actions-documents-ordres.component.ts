@@ -116,7 +116,6 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
   sendAction(e, annulation?) {
 
-    console.log(this.gridCommandes?.grid.instance.hasEditData());
     // On récupère ici le code de l'action:
     this.flux = e;
 

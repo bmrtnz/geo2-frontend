@@ -139,6 +139,10 @@ import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fou
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { AjoutArticlesRefClientPopupComponent } from "./ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
+import { GroupageChargementsPopupComponent } from "./groupage-chargements-popup/groupage-chargements-popup.component";
+import {
+  GridLignesGroupageChargementsComponent
+} from "./groupage-chargements-popup/grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
 
 @NgModule({
   declarations: [
@@ -224,7 +228,9 @@ import { AjoutArticlesRefClientPopupComponent } from "./ajout-articles-ref-clien
     AjustDecomptePaloxPopupComponent,
     CqPhotosPopupComponent,
     GridCqPhotosComponent,
-    AjoutArticlesRefClientPopupComponent
+    AjoutArticlesRefClientPopupComponent,
+    GroupageChargementsPopupComponent,
+    GridLignesGroupageChargementsComponent
   ],
   imports: [
     OrdresRoutingModule,

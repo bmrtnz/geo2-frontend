@@ -622,19 +622,37 @@
                     <dxi-item [ratio]="0.4"></dxi-item>
 
                     <dxi-item [ratio]="4">
-                      <!-- Code Chargement -->
-                      <div class="dx-field">
-                        <div class="dx-field-label">
-                          {{ "ordres-codeChargement" | localize }}
-                        </div>
-                        <div class="dx-field-value">
-                          <dx-text-box
-                            formControlName="codeChargement"
-                            [readOnly]="ordreFacture"
+                      <dx-box>
+                        <dxi-item [ratio]="6">
+                          <!-- Code Chargement -->
+                          <div class="dx-field">
+                            <div class="dx-field-label">
+                              {{ "ordres-codeChargement" | localize }}
+                            </div>
+                            <div class="dx-field-value">
+                              <dx-text-box
+                                formControlName="codeChargement"
+                                [readOnly]="ordreFacture"
+                              >
+                              </dx-text-box>
+                            </div>
+                          </div>
+                        </dxi-item>
+                        <dxi-item [ratio]="0.1"></dxi-item>
+                        <dxi-item [ratio]="2" style="max-width: 156px;">
+                          <dx-button
+                            class="form-text-button"
+                            type="default"
+                            [visible]="allowMutations"
+                            [disabled]="!ordre?.codeChargement"
+                            text="{{ 'grouper-chargements' | localize }}"
+                            [focusStateEnabled]="false"
+                            hint="{{ 'hint-group-order-lines' | localize }}"
+                            (onClick)="openGroupageChargementsPopup()"
                           >
-                          </dx-text-box>
-                        </div>
-                      </div>
+                          </dx-button>
+                        </dxi-item>
+                      </dx-box>
 
                       <dx-box>
                         <dxi-item [ratio]="3">
@@ -1308,3 +1326,10 @@
   (whenQuitRegulPopup)="validateRegulOrder($event)"
 ></app-motif-regularisation-ordre-popup>
 <app-duplication-ordre-popup [ordre]="ordre"></app-duplication-ordre-popup>
+<app-groupage-chargements-popup
+  [ordre]="ordre"
+  [gridCommandes]="gridCommandes"
+  [gridEnvois]="gridEnvois"
+  (lignesChanged)="onLignesChanged($event)"
+  (ordreChanged)="refreshHeader($event)"
+></app-groupage-chargements-popup>
