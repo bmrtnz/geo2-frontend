@@ -1,0 +1,80 @@
+<dx-popup
+  [width]="1000"
+  height="auto"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="visible"
+  [fullScreen]="this.popupFullscreen"
+  [resizeEnabled]="true"
+  (onShown)="onShown($event)"
+  (onShowing)="onShowing($event)"
+  (onHidden)="onHidden($event)"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-import-programme-popup"
+      icon="close"
+      (onClick)="quitPopup()"
+    >
+    </dx-button>
+    <dx-button
+      class="minimize-popup"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <dx-button
+        [ngClass]="{ 'inactive-item': loading }"
+        class="custom-choose-file-button"
+        type="normal"
+        text="{{ 'choisir-fichier' | localize }}"
+        (onClick)="onClickUpload()"
+      ></dx-button>
+      <dx-file-uploader
+        selectButtonText="{{ 'choisir-fichier' | localize }}"
+        [accept]="buildAccept"
+        [uploadUrl]="uploadUrl()"
+        [name]="bodyName"
+        [uploadCustomData]="customUploadData"
+        [focusStateEnabled]="false"
+        (onBeforeSend)="onBeforeSend($event)"
+        (onUploaded)="onUploaded($event)"
+        (onUploadError)="onUploadError($event)"
+        (onUploadAborted)="onUploadAborted($event)"
+        (onProgress)="onProgress($event)"
+        uploadedMessage="{{ 'termine' | localize }}"
+      >
+      </dx-file-uploader>
+
+      <div class="import-programme-content-container">
+        <app-grid-import-programmes
+          [programID]="programID"
+        ></app-grid-import-programmes>
+        <!-- <div class="import-loading">{{ loadingMessage }}</div> -->
+
+        <br />
+        <div class="popup-buttons-container">
+          <!-- <dx-button
+          class="download-button"
+            type="default"
+            text="Télécharger"
+            (onClick)="download()"
+        ></dx-button> -->
+          <dx-button
+            type="normal"
+            text="{{ 'btn-fermer' | localize }}"
+            [disabled]="loading"
+            (onClick)="quitPopup()"
+          ></dx-button>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

@@ -6,13 +6,6 @@
       {{ "ordres-configuration" | localize }}
     </div>
     <div class="dx-field-value">
-      <dx-button
-        style="float: right"
-        icon="material-icons settings"
-        (onClick)="openTagBox()"
-        text=""
-      >
-      </dx-button>
       <dx-tag-box
         [items]="allIndicators"
         [value]="loadedIndicators"
@@ -27,12 +20,37 @@
         <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
       </dx-tag-box>
     </div>
+    <dx-button
+      class="tile-config-button"
+      icon="material-icons settings"
+      (onClick)="openTagBox()"
+      text=""
+    >
+    </dx-button>
   </div>
+
+  <dx-button
+    class="dx-button order-home-up-button program-button"
+    type="default"
+    hint="{{ 'hint-open-program' | localize }}"
+  >
+    <div *dxTemplate="let data of 'content'">
+      <div class="dx-button-content">
+        <div class="button-programs">Programmes</div>
+      </div>
+      <app-program-chooser
+        [programs]="programs"
+        (programChosen)="openProgramPopup($event)"
+        menuMode="context"
+      ></app-program-chooser>
+    </div>
+  </dx-button>
   <dx-button
     class="order-home-up-button"
     type="default"
     text="Commandes EDI"
     [disabled]="!authService.currentUser.accessCommandeEdi"
+    [disabled]="true"
     (onClick)="openCommandesEdi()"
   >
   </dx-button>
@@ -96,3 +114,7 @@
 </div>
 
 <app-commandes-edi></app-commandes-edi>
+<!-- <app-commandes-edi></app-commandes-edi> -->
+<app-import-programmes-popup
+  [program]="programChosen"
+></app-import-programmes-popup>

@@ -1,0 +1,67 @@
+<dx-data-grid
+  class="dx-card wide-card"
+  [showBorders]="false"
+  [focusedRowEnabled]="true"
+  [keyExpr]="'id'"
+  [focusedRowIndex]="0"
+  (onCellPrepared)="onCellPrepared($event)"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [wordWrapEnabled]="false"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      this.localizeService.localize('title-import-programme-grid'),
+      $event,
+      gridConfiguratorService.Grid.ImportProgramme
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-export fileName="Import programme"></dxo-export>
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+  ></dxo-pager>
+  <dxo-state-storing
+    [enabled]="true"
+    type="custom"
+    [storageKey]="gridConfiguratorService.Grid.ImportProgramme"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
+  >
+  </dxo-column-chooser>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    [width]="column.width"
+    [caption]="
+      ('ordres-program-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [fixed]="column.fixed"
+    [cssClass]="column?.cssClass"
+    allowSearch="false"
+    [dataType]="column?.dataType"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  ></dxi-column>
+</dx-data-grid>

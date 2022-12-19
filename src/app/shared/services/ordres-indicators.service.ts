@@ -255,6 +255,19 @@ const indicators: Indicator[] = [
     indicatorIcon: "material-icons local_shipping",
     warningIcon: "",
   },
+  // {
+  //   id: "CommandesEdi",
+  //   enabled: false,
+  //   withCount: false,
+  //   parameter: "Commandes",
+  //   subParameter: "EDI",
+  //   tileBkg: "#225AA8",
+  //   indicatorIcon: "material-icons view_list",
+  //   warningIcon: "",
+  //   component: import(
+  //     "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
+  //   ),
+  // },
   {
     id: "histoOrdres",
     enabled: true,

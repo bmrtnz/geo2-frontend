@@ -6200,6 +6200,64 @@
       }
     ]
   },
+  "import-programme": {
+    "pageSize": 10,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "loadRef",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "depot",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateDepart",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "dateLivraison",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "ordreNum",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "erreurs",
+        "dataType": "string",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "messages",
+        "dataType": "string",
+        "visible": true
+      }
+    ]
+  },
   "planning-departs-maritimes": {
     "columns": [
       {

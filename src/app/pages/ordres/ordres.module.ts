@@ -6,6 +6,7 @@ import { EditingAlertModule } from "app/shared/components/editing-alert/editing-
 import { EntityCellTemplateModule } from "app/shared/components/entity-cell-template/entity-cell-template.component";
 import { FileManagerModule } from "app/shared/components/file-manager/file-manager-popup.component";
 import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
+import { ProgramChooserModule } from "app/shared/components/program-chooser/program-chooser.component";
 import { ViewDocumentPopupModule } from "app/shared/components/view-document-popup/view-document-popup.component";
 import { OrdresTabsPersistGuard } from "app/shared/guards/ordres-tabs-persist.guard";
 import { LocalizePipe } from "app/shared/pipes";
@@ -20,7 +21,7 @@ import {
   DxCheckBoxModule,
   DxDataGridModule,
   DxDateBoxModule,
-  DxFormModule,
+  DxFileUploaderModule, DxFormModule,
   DxListModule,
   DxLoadIndicatorModule,
   DxLoadPanelModule,
@@ -37,6 +38,7 @@ import {
   DxTextAreaModule,
   DxTextBoxModule,
   DxTileViewModule,
+
   DxTooltipModule,
   DxValidationGroupModule,
   DxValidatorModule
@@ -108,6 +110,8 @@ import {
 } from "./groupage-chargements-popup/grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
 import { GroupageChargementsPopupComponent } from "./groupage-chargements-popup/groupage-chargements-popup.component";
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
+import { GridImportProgrammesComponent } from "./import-programmes-popup/grid-import-programmes/grid-import-programmes.component";
+import { ImportProgrammesPopupComponent } from "./import-programmes-popup/import-programmes-popup.component";
 import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
 import {
@@ -234,7 +238,9 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GroupageChargementsPopupComponent,
     GridLignesGroupageChargementsComponent,
     DestockageAutoPopupComponent,
-    PlanningDepartsMaritimesComponent
+    PlanningDepartsMaritimesComponent,
+    ImportProgrammesPopupComponent,
+    GridImportProgrammesComponent
   ],
   imports: [
     OrdresRoutingModule,
@@ -249,6 +255,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     DxDataGridModule,
     DxButtonModule,
     DxPopupModule,
+    DxFileUploaderModule,
     DxAccordionModule,
     DxAutocompleteModule,
     DxTileViewModule,
@@ -282,7 +289,8 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     EntityCellTemplateModule,
     PromptPopupModule,
     ClientsModule,
-    EntrepotsModule
+    EntrepotsModule,
+    ProgramChooserModule
   ],
   providers: [
     OrdresIndicatorsService,

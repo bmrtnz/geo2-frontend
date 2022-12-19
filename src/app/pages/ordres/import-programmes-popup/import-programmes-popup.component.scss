@@ -1,0 +1,96 @@
+// Var
+@import "~themes/generated/variables.base";
+
+
+::ng-deep .import-programme-popup {
+
+  // Fake choose file button
+  .custom-choose-file-button {
+    position: absolute;
+    top: 9px;
+    left: 3px;
+    z-index: 1;
+  }
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+  }
+
+  .dx-popup-content {
+    padding-top: 15px;
+
+    .dx-datagrid {
+      max-height: 400px;
+    }
+  }
+
+  .close-import-programme-popup,
+  .minimize-popup {
+    top: 13px;
+    float: right;
+  }
+
+  .display-none {
+    display: none;
+  }
+}
+
+::ng-deep .dx-fileuploader-wrapper {
+  padding: 0 0 7px 0;
+
+  .dx-fileuploader-file-container {
+    position: relative;
+    top: -10px;
+    width: auto !important;
+    float: left !important;
+    margin: 0 0 0 20px !important;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    float: left !important;
+
+    .dx-fileuploader-button {
+      visibility: hidden;
+    }
+
+    .dx-fileuploader-input-container {
+      display: none !important;
+    }
+  }
+}
+
+::ng-deep .import-programme-content-container {
+  padding: 0 15px 0 2px;
+
+  .import-loading {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFE1E6;
+    margin: 8px 0px 15px 0px;
+    padding: 8px 24px 10px 24px;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 1em;
+  }
+
+  .popup-buttons-container {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .dx-button {
+      margin: 5px;
+    }
+  }
+}

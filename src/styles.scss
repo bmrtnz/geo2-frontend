@@ -453,6 +453,17 @@ body app-root.production {
 .inactive-box {
   .dx-button {
     opacity: 0.2 !important;
+  }
+}
+
+// Inactive item
+.inactive-item {
+  pointer-events: none !important;
+}
+
+// Inactive choose file button (file uploader)
+.inactive-choose-file {
+  .dx-fileuploader-input-wrapper {
     pointer-events: none !important;
   }
 }
