@@ -12,7 +12,7 @@ export class PacklistEntete extends Model {
     @Field() mail: string;
     @Field({ model: import("./type-tiers.model") }) typeTier: Partial<TypeTiers>;
     @Field() traite: boolean;
-    @Field({ model: import("./packlist-ordre.model") }) ordres: PacklistOrdre[];
+    @Field({ model: import("./packlist-ordre.model") }) ordres: Partial<PacklistOrdre>[];
 }
 
 export default PacklistEntete;
