@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: ":tabid",
     component: RootComponent,
-    canDeactivate: [OrdresTabsPersistGuard],
+    canActivate: [OrdresTabsPersistGuard],
   },
   {
     path: "",

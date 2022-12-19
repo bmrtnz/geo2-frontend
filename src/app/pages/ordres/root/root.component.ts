@@ -195,9 +195,10 @@ export class RootComponent implements OnInit, OnDestroy {
       ? history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID
       : selectedID;
 
-    this.router.navigate(["pages/ordres", navID], {
-      queryParams: { indicateur, ordre },
-    });
+    this.router.navigate(["pages/ordres", TAB_LOAD_ID])
+      .then(_ => this.router.navigate(["pages/ordres", navID], {
+        queryParams: { indicateur, ordre },
+      }));
   }
 
   private handleRouting() {
