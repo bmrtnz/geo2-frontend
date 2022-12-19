@@ -1,5 +1,6 @@
 import { Field, Model, ModelName } from "./model";
 import PacklistOrdre from "./packlist-ordre.model";
+import TypeTiers from "./type-tiers.model";
 
 @ModelName("PacklistEntete")
 export class PacklistEntete extends Model {
@@ -9,7 +10,7 @@ export class PacklistEntete extends Model {
     @Field({ dataType: "datetime" }) impression: string;
     @Field() numeroPo: string;
     @Field() mail: string;
-    @Field() cliEnt: boolean;
+    @Field({ model: import("./type-tiers.model") }) typeTier: Partial<TypeTiers>;
     @Field() traite: boolean;
     @Field({ model: import("./packlist-ordre.model") }) ordres: PacklistOrdre[];
 }
