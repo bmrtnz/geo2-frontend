@@ -124,7 +124,6 @@ import { LitigesComponent } from "./indicateurs/litiges/litiges.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
 import { PlanningDepartComponent } from "./indicateurs/planning-depart/planning-depart.component";
-import { PlanningDepartsMaritimesComponent } from "./indicateurs/planning-departs-maritimes/planning-departs-maritimes.component";
 import { PlanningFournisseursComponent } from "./indicateurs/planning-fournisseurs/planning-fournisseurs.component";
 import {
   PlanningTransporteursApprocheComponent
@@ -145,6 +144,7 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { PlanningMaritimeComponent } from "./indicateurs/planning-maritime/planning-maritime.component";
 
 @NgModule({
   declarations: [
@@ -234,7 +234,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GroupageChargementsPopupComponent,
     GridLignesGroupageChargementsComponent,
     DestockageAutoPopupComponent,
-    PlanningDepartsMaritimesComponent
+    PlanningMaritimeComponent
   ],
   imports: [
     OrdresRoutingModule,

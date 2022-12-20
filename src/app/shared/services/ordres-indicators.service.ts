@@ -269,16 +269,16 @@ const indicators: Indicator[] = [
     ),
   },
   {
-    id: "PlanningDepartsMaritimes",
+    id: "PlanningMaritime",
     enabled: true,
     withCount: false,
     parameter: "Planning",
-    subParameter: "départs maritimes",
+    subParameter: "maritime",
     tileBkg: "#225AA8",
     indicatorIcon: "material-icons directions_boat",
     warningIcon: "",
     component: import(
-      "../../pages/ordres/indicateurs/planning-departs-maritimes/planning-departs-maritimes.component"
+      "../../pages/ordres/indicateurs/planning-maritime/planning-maritime.component"
     ),
   }
 ].map((indicator) => ({ ...indicator, loading: false }));

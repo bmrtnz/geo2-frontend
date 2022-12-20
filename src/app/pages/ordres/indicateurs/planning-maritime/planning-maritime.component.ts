@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, NgForm } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { LocalizationService } from "app/shared/services";
 import { PlanningMaritimeService, PlanningSide } from "app/shared/services/api/planning-maritime.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -13,28 +13,26 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-enum FormInput {
-  dateMin = "dateDepartPrevueFournisseur",
-  dateMax = "dateDepartPrevueFournisseur"
-}
+enum FormInput { dateMin, dateMax }
 
 type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
 
 @Component({
-  selector: "app-planning-departs-maritimes",
-  templateUrl: "./planning-departs-maritimes.component.html",
-  styleUrls: ["./planning-departs-maritimes.component.scss"]
+  selector: "app-planning-maritime",
+  templateUrl: "./planning-maritime.component.html",
+  styleUrls: ["./planning-maritime.component.scss"]
 })
 
-export class PlanningDepartsMaritimesComponent implements OnInit, AfterViewInit {
+export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
 
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
   public titleElement: HTMLInputElement;
+  public side = PlanningSide.Depart;
+  public dateColumns: string[];
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
-  @ViewChild("filterForm") filterForm: NgForm;
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -46,74 +44,97 @@ export class PlanningDepartsMaritimesComponent implements OnInit, AfterViewInit 
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
-    public planningDepartMaritimeService: PlanningMaritimeService,
+    public planningMaritimeService: PlanningMaritimeService,
     public localizeService: LocalizationService,
     public gridUtilsService: GridUtilsService,
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.PlanningDepartsMaritimes,
+      Grid.PlanningMaritime,
     );
     this.columns = from(this.gridConfig).pipe(
       map((config) => config.columns),
     );
-
+    this.dateColumns = ["dateDepartPrevueFournisseur", "dateLivraisonPrevue"];
     this.periodes = this.dateManagementService.periods();
   }
 
   ngOnInit() {
     this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
-    this.enableFilters();
   }
 
   ngAfterViewInit() {
     this.titleElement = this.datagrid.instance.$element()[0].querySelector(
       ".dx-toolbar .dx-placeholder",
     ) as HTMLInputElement;
-    // Customizing grid title with period/date
-    this.titleElement.innerHTML = this.gridUtilsService
-      .customGridPlanningTitle("grid-situation-depart-maritime-title");
+    this.enableFilters();
   }
 
   async enableFilters() {
+
+    if (this.datagrid) {
+      this.datagrid.dataSource = null;
+    } else {
+      return;
+    }
 
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField)),
     );
 
-    const values: Inputs = {
-      ...this.formGroup.value
-    };
-
-    // Customizing grid title with period/date
-    if (this.titleElement)
-      this.titleElement.innerHTML = this.gridUtilsService
-        .customGridPlanningTitle("grid-situation-depart-maritime-title", values.dateMin, values.dateMax);
+    const values: Inputs = { ...this.formGroup.value };
 
     this.ordresDataSource =
-      this.planningDepartMaritimeService.getDataSource(
+      this.planningMaritimeService.getDataSource(
         {
           societeCode: this.currentCompanyService.getCompany().id,
           dateMin: values.dateMin,
           dateMax: values.dateMax
         },
         new Set(await fields.toPromise()),
-        PlanningSide.Depart,
+        this.side,
       );
     this.datagrid.dataSource = this.ordresDataSource;
+    this.datagrid.dataSource.load().then(() => this.updateTitleAndColumns());
+  }
+
+  updateTitleAndColumns() {
+    const values: Inputs = { ...this.formGroup.value };
+    if (this.titleElement)
+      this.titleElement.innerHTML = this.gridUtilsService
+        .customGridPlanningTitle(`grid-situation-${this.side.toLowerCase()}-maritime-title`, values.dateMin, values.dateMax);
+    if (this.datagrid) {
+      const dep = this.side === PlanningSide.Depart;
+      this.datagrid.instance.columnOption(this.dateColumns[0], "visible", dep);
+      this.datagrid.instance.columnOption(this.dateColumns[0], "sortIndex", dep ? 0 : null);
+      this.datagrid.instance.columnOption(this.dateColumns[1], "visible", !dep);
+      this.datagrid.instance.columnOption("dateDepartPrevueFournisseurRaw", "visible", dep);
+      this.datagrid.instance.columnOption(this.dateColumns[1], "sortIndex", !dep ? 0 : null);
+    }
+  }
+
+  onSideChange(e) {
+    this.side = e.value ? PlanningSide.Arrive : PlanningSide.Depart;
+    this.enableFilters();
+  }
+
+  onContentReady(e) {
+    // To override a SaveGridConfig side effect
+    if (this.side === PlanningSide.Depart && !this.datagrid.instance.columnOption(this.dateColumns[0], "visible"))
+      this.updateTitleAndColumns();
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
 
       // Higlight important column
-      if (e.column.dataField === "dateDepartPrevueFournisseur")
-        e.cellElement.classList.add("grey-normal-depart");
+      if (this.dateColumns.includes(e.column.dataField))
+        e.cellElement.classList.add("grey-normal-maritime");
 
       // Higlight important column
       if (e.column.dataField === "dateDepartPrevueFournisseurRaw")
-        e.cellElement.classList.add("grey-light-depart");
+        e.cellElement.classList.add("grey-light-maritime");
 
       // No palette
       if (e.column.dataField === "nombrePalettesCommandees" && !e.value)
@@ -162,4 +183,4 @@ export class PlanningDepartsMaritimesComponent implements OnInit, AfterViewInit 
 
 }
 
-export default PlanningDepartsMaritimesComponent;
+export default PlanningMaritimeComponent;

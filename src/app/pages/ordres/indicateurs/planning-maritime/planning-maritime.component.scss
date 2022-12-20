@@ -11,7 +11,7 @@
 }
 
 ::ng-deep .orderTileFilterArea {
-  width: 700px;
+  width: 830px;
 
   .dx-datebox .dx-texteditor-input {
     padding-right: 0 !important;
@@ -25,9 +25,38 @@
     margin-top: 4px;
   }
 
+  .side-switch {
+    .dx-field-value {
+      margin-top: 9px;
+      width: 33px !important;
+
+      dx-switch {
+        margin: 0;
+      }
+    }
+
+    .dx-field-label {
+      margin-top: 9px;
+      width: 40% !important;
+
+      &.dx-field-label-left {
+        margin-right: 1px;
+        text-align: right !important;
+      }
+
+      &.dx-field-label-right {
+        margin-left: 10px;
+        padding-right: 10px;
+        text-align: left !important;
+      }
+    }
+
+  }
+
+
 }
 
-::ng-deep .grid-planning-departs-maritimes {
+::ng-deep .grid-planning-maritime {
 
   .dx-toolbar .dx-texteditor-container {
     width: 750px;
@@ -42,11 +71,11 @@
     font-weight: bold;
   }
 
-  .grey-light-depart {
+  .grey-light-maritime {
     background-color: #E5E5E5;
   }
 
-  .grey-normal-depart {
+  .grey-normal-maritime {
     background-color: #D5D5D5;
   }
 }

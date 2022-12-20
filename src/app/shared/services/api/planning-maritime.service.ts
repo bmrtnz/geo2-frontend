@@ -23,23 +23,45 @@ export class PlanningMaritimeService extends ApiService {
   }
 
   getDataSource(variables: QueryArgs, columns: Set<string>, side: PlanningSide) {
-    return new DataSource({
-      store: this.createCustomStore({
-        load: options => this
-          .getList(variables, columns, side)
-          .pipe(
-            map(res => res.data.allPlanningDepartMaritime),
-            // Time formating
-            tap(res => res.map(r => r.dateDepartPrevueFournisseurRaw = r.dateDepartPrevueFournisseur?.split("T")[1]))
-          )
-          .toPromise()
-      }),
-    });
+    if (side === PlanningSide.Depart) {
+      return new DataSource({
+        store: this.createCustomStore({
+          load: options => this
+            .getListDepart(variables, columns, side)
+            .pipe(
+              map(res => res.data.allPlanningDepartMaritime),
+              // Time formating
+              tap(res => res.map(r => r.dateDepartPrevueFournisseurRaw = r.dateDepartPrevueFournisseur?.split("T")[1]))
+            )
+            .toPromise()
+        })
+      });
+    } else {
+      return new DataSource({
+        store: this.createCustomStore({
+          load: options => this
+            .getListArrive(variables, columns, side)
+            .pipe(
+              map(res => res.data.allPlanningArriveMaritime),
+            )
+            .toPromise()
+        })
+      });
+    }
   }
 
-  getList(variables: QueryArgs, columns: Set<string>, side: PlanningSide) {
+  getListDepart(variables: QueryArgs, columns: Set<string>, side: PlanningSide) {
     return this.apollo
       .query<{ allPlanningDepartMaritime: Partial<PlanningMaritime[]> }>({
+        query: gql(this.buildGraph(columns, side)),
+        variables,
+        fetchPolicy: "network-only",
+      });
+  }
+
+  getListArrive(variables: QueryArgs, columns: Set<string>, side: PlanningSide) {
+    return this.apollo
+      .query<{ allPlanningArriveMaritime: Partial<PlanningMaritime[]> }>({
         query: gql(this.buildGraph(columns, side)),
         variables,
         fetchPolicy: "network-only",
