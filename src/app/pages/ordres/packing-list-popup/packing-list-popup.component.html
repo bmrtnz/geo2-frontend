@@ -7,7 +7,6 @@
   [title]="title"
   [visible]="visible"
   (onHidden)="onHidden()"
-  (onHiding)="onHiding()"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
   [closeOnOutsideClick]="false"
@@ -49,6 +48,7 @@
                 [displayFormat]="'dd-MM-yy'"
                 dateSerializationFormat="yyyy-MM-dd"
                 type="date"
+                valueChangeEvent="keyup"
                 >
                 <dx-validator>
                   <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -65,6 +65,7 @@
                 [displayFormat]="'dd-MM-yy'"
                 dateSerializationFormat="yyyy-MM-dd"
                 type="date"
+                valueChangeEvent="keyup"
                 >
                 <dx-validator>
                   <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -81,6 +82,7 @@
                 [displayFormat]="'dd-MM-yy'"
                 dateSerializationFormat="yyyy-MM-dd"
                 type="date"
+                valueChangeEvent="keyup"
                 >
                 <dx-validator>
                   <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -95,7 +97,14 @@
           <div class="dx-field">
             <div class="dx-field-label text-align-right">{{ 'packing-list-PO' | localize }}</div>
             <div class="dx-field-value">
-              <dx-text-box #PO></dx-text-box>
+              <dx-text-box
+                #PO
+                valueChangeEvent="keyup"
+                >
+                <dx-validator>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-text-box>
             </div>
           </div>
 
@@ -140,7 +149,7 @@
             (onClick)="hidePopup()"
           ></dx-button>
           <dx-button
-            [ngClass]="{ 'inactive-button': !validOk }"
+            [ngClass]="{ 'inactive-button': !selectOk || !validateFields() }"
             text="{{ 'btn-valider' | localize }}"
             type="default"
             (onClick)="onSubmit()"

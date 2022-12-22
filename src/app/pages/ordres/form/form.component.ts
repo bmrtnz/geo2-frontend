@@ -328,7 +328,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
   @ViewChild(GroupageChargementsPopupComponent) groupagePopup: GroupageChargementsPopupComponent;
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
-  @ViewChild(PackingListPopupComponent) packingListPopup: PackingListPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
 
@@ -462,10 +461,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     grids.forEach((grid) =>
       grid.onToggling(itemElement.dataset.toggled === "true")
     );
-  }
-
-  openPackingList() {
-    this.packingListPopup.visible = true;
   }
 
   warnNoSelectedRows() {

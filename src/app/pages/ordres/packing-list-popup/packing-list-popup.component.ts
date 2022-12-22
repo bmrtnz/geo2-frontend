@@ -2,13 +2,11 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@a
 import {
   DxPopupComponent,
   DxDateBoxComponent,
-  DxNumberBoxComponent,
   DxTextBoxComponent,
   DxSwitchComponent
 } from "devextreme-angular";
-import { NgForm } from "@angular/forms";
+import { alert, confirm } from "devextreme/ui/dialog";
 import { AuthService, LocalizationService } from "app/shared/services";
-import { DateManagementService } from "app/shared/services/date-management.service";
 import Ordre from "app/shared/models/ordre.model";
 import { GridPackingListComponent } from "./grid-packing-list/grid-packing-list.component";
 import { PacklistsService } from "app/shared/services/api/packlists.service";
@@ -48,9 +46,10 @@ export class PackingListPopupComponent implements OnChanges {
   public visible: boolean;
   public popupFullscreen = false;
   public labelEntrepot: string;
-  public validOk: boolean;
-  public ordresIds: string[];
+  public selectOk: boolean;
+  public ordres: any[];
   public shown: boolean;
+  public infoPopupText: string;
 
   ngOnChanges() {
     if (this.ordre) {
@@ -69,13 +68,16 @@ export class PackingListPopupComponent implements OnChanges {
     this.dateArrInput.value = this.ordre.etaDate ?? new Date();
     this.dateImpInput.value = new Date();
     this.switchCltEnt.value = true;
+    this.POInput.value = " ";
+    this.POInput.value = null;
     this.gridComponent.enableFilters();
-    console.log(this.authService.currentUser);
-    console.log("mail", this.authService.currentUser.email);
     this.shown = true;
-  }
 
-  onHiding() {
+    // ETD/ETA Missing alert
+    if (!this.ordre.etaDate || !this.ordre.etdDate) notify(
+      this.localizeService.localize("text-popup-etdeta-current-order-missing"),
+      "warning",
+      5000);
   }
 
   onHidden() {
@@ -95,20 +97,52 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   selectedOrderIds(e) {
-    this.ordresIds = e;
-    this.validOk = e?.length;
+    this.ordres = e;
+    this.selectOk = !!e?.length;
   }
 
   resizePopup() {
     this.popupFullscreen = !this.popupFullscreen;
   }
 
-  onSubmit() {
-    if (!this.dateDepInput.value || !this.dateArrInput.value) return;
+  validateFields() {
+    if (this.dateDepInput.value && this.dateArrInput.value && this.POInput.value !== "" && this.POInput.value !== null)
+      return true;
+  }
 
-    const myOrdres = [];
-    this.ordresIds.map(ord => myOrdres.push({ ordre: { id: ord } }));
+  async onSubmit() {
+    if (!this.validateFields()) return;
 
+    // Save all orders into myOrders
+    // Checks client.raisonSocial difference and etd/eta not null
+    const myOrders = [];
+    let etaEtdDatesMissing = false;
+    let raisonSocialCltDiff = false;
+    const raisonSocialClt = this.ordre.client.raisonSocial;
+    this.ordres.map(ord => {
+      myOrders.push({ ordre: { id: ord.id } });
+      if (!ord.etaDate || !ord.etdDate) etaEtdDatesMissing = true;
+      if (ord.client.raisonSocial !== raisonSocialClt) raisonSocialCltDiff = true;
+    });
+
+    // ETD/ETA Missing alert
+    if (etaEtdDatesMissing) await alert(
+      this.localizeService.localize("text-popup-etdeta-selected-orders-missing"),
+      this.localizeService.localize("packing-list-popup-title")
+    );
+
+    // One or several orders have a different client raison sociale
+    if (raisonSocialCltDiff) {
+      if (await confirm(
+        this.localizeService.localize("text-popup-raisonSocial-client-diff"),
+        this.localizeService.localize("packing-list-popup-title"))) {
+        this.saveData(myOrders);
+      } else return;
+    }
+    this.saveData(myOrders);
+  }
+
+  saveData(myOrders) {
     this.packlistsService.save({
       depart: new Date(this.dateDepInput.value).toISOString(),
       livraison: new Date(this.dateArrInput.value).toISOString(),
@@ -116,20 +150,18 @@ export class PackingListPopupComponent implements OnChanges {
       numeroPo: this.POInput.value,
       typeTier: { id: this.switchCltEnt.value ? "E" : "C" },
       mail: this.authService.currentUser.email ?? "",
-      ordres: myOrdres
+      ordres: myOrders
     }, new Set(["id"])).subscribe({
-      next: (res) => {
+      next: () => {
         // Message and close
-        notify("Sauvegardé", "success", 3000);
+        notify(this.localizeService.localize("text-popup-CQ-creation-PDF-deposee"), "success", 5000);
         this.hidePopup();
       },
       error: (error: Error) => {
         console.log(error);
         notify(this.messageFormat(error.message), "error", 7000);
-      },
-      complete: () => console.log("complete")
+      }
     });
-
   }
 
   private messageFormat(mess) {

@@ -39,7 +39,7 @@ export class GridPackingListComponent {
   }
 
   onSelectionChanged(e) {
-    this.selectedOrders.emit(e.selectedRowKeys);
+    this.selectedOrders.emit(e.selectedRowsData);
   }
 
   onCellPrepared(e) {

@@ -86,11 +86,11 @@
         height: 36px;
 
         .dx-switch-handle:before {
-          background-color: $BW-turquoise-light !important;
+          background-color: $base-accent !important;
         }
 
         .dx-switch-container:before {
-          background-color: $BW-turquoise-dark !important;
+          background-color: rgba(0, 117, 156, .5) !important;
         }
 
         .dx-field-value {

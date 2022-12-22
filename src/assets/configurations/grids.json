@@ -6466,6 +6466,26 @@
         "format": "dd-MM-yyyy",
         "sortOrder": "desc",
         "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "client.raisonSocial",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "etaDate",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": false
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "etdDate",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": false
       }
     ]
   }
