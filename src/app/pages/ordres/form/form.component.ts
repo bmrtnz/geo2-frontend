@@ -59,6 +59,7 @@ import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/gr
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
+import { PackingListPopupComponent } from "../packing-list-popup/packing-list-popup.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
@@ -166,6 +167,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "client.certifications.certification.id",
     "entrepot.id",
     "entrepot.code",
+    "entrepot.raisonSocial",
     "referenceClient",
     "dateDepartPrevue",
     "dateLivraisonPrevue",
@@ -326,6 +328,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
   @ViewChild(GroupageChargementsPopupComponent) groupagePopup: GroupageChargementsPopupComponent;
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
+  @ViewChild(PackingListPopupComponent) packingListPopup: PackingListPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
 
@@ -459,6 +462,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     grids.forEach((grid) =>
       grid.onToggling(itemElement.dataset.toggled === "true")
     );
+  }
+
+  openPackingList() {
+    this.packingListPopup.visible = true;
   }
 
   warnNoSelectedRows() {

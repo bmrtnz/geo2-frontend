@@ -126,7 +126,8 @@ export enum Grid {
   ModifCommandeEdi = "modif-commande-edi",
   LignesEdi = "lignes-edi",
   EncoursClient = "encours-client",
-  LignesGroupageChargements = "lignes-groupage-chargements"
+  LignesGroupageChargements = "lignes-groupage-chargements",
+  PackingList = "packing-list"
 }
 
 const extraConfigurations = [

@@ -1,0 +1,130 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+
+::ng-deep .packing-list-popup {
+
+  min-width: 800px;
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
+  .dx-invalid-message {
+    visibility: hidden !important;
+  }
+
+  .dx-state-disabled {
+    opacity: 1 !important;
+  }
+
+  .packing-list-content-container {
+
+    background: #FFF !important;
+    padding: 0 15px 0 2px;
+
+    .grid-packing-list {
+      margin-top: 9px;
+    }
+
+    .popup-action {
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+
+      &>.dx-button {
+        margin: 0 5px;
+      }
+    }
+
+    .entrepot-field {
+      width: 730px;
+      margin-bottom: 2px;
+    }
+
+    .entrepot-textvalue {
+      width: 96% !important;
+
+      .dx-state-disabled {
+        opacity: 1 !important;
+      }
+    }
+
+    .inputs-container {
+      width: 360px;
+      float: left;
+
+      .dx-field {
+        margin-bottom: 2px;
+      }
+
+      .switch-label {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        padding-right: 7px;
+        color: $base-accent;
+      }
+
+      .departLivraison-switch {
+
+        height: 36px;
+
+        .dx-switch-handle:before {
+          background-color: $BW-turquoise-light !important;
+        }
+
+        .dx-switch-container:before {
+          background-color: $BW-turquoise-dark !important;
+        }
+
+        .dx-field-value {
+          width: 33px !important;
+
+          dx-switch {
+            margin: 11px 0;
+          }
+        }
+
+        .dx-field-label-left {
+          margin-top: 4px;
+          width: 21% !important;
+          color: rgba(0, 0, 0, 0.87)
+        }
+
+        .dx-field-label-right {
+          margin-top: 4px;
+          padding-left: 10px;
+          width: 35% !important;
+          color: rgba(0, 0, 0, 0.87)
+        }
+      }
+
+      &.date-inputs {
+        .dx-field-label {
+          width: 48% !important;
+        }
+
+        .dx-field-value {
+          width: 35% !important;
+        }
+      }
+    }
+
+  }
+}

@@ -920,6 +920,11 @@
                   text="{{ 'btn-manuel' | localize }}"
                 ></dx-button>
                 <dx-button
+                  type="danger"
+                  (onClick)="openPackingList()"
+                  text="PACKING LIST"
+                ></dx-button>
+                <dx-button
                   class="upperButton subButton"
                   [disabled]="false"
                   type="success"
@@ -1350,3 +1355,7 @@
   (lignesChanged)="onLignesChanged($event)"
   (ordreChanged)="refreshHeader($event)"
 ></app-groupage-chargements-popup>
+<app-packing-list-popup
+  [ordre]="ordre"
+>
+</app-packing-list-popup>
