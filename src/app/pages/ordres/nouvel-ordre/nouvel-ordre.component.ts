@@ -6,6 +6,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { AuthService, EntrepotsService } from "app/shared/services";
 import { DevisesRefsService } from "app/shared/services/api/devises-refs.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
+import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -107,7 +108,10 @@ export class NouvelOrdreComponent implements OnInit {
     private societesService: SocietesService,
     private devisesRefsService: DevisesRefsService,
     private authService: AuthService,
-  ) { }
+    private s: MruEntrepotsService,
+  ) {
+    s.deleteAll().subscribe();
+  }
 
   ngOnInit() {
     const { id } = this.currentCompanyService.getCompany();

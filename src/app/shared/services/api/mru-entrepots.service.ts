@@ -183,4 +183,24 @@ export class MruEntrepotsService extends ApiService implements APIRead {
       }),
     });
   }
+
+  deleteOne(entrepotId: string) {
+    return this.apollo.mutate({
+      mutation: gql(ApiService.buildGraph("mutation", [{
+        name: "deleteOneMRUEntrepot",
+        params: [{ name: "entrepotId", value: "entrepotId", isVariable: true }],
+      }], [
+        { name: "entrepotId", type: "String", isOptionnal: false },
+      ])),
+      variables: { entrepotId },
+    });
+  }
+
+  deleteAll() {
+    return this.apollo.mutate({
+      mutation: gql(ApiService.buildGraph("mutation", [{
+        name: "deleteAllMRUEntrepot",
+      }])),
+    });
+  }
 }
