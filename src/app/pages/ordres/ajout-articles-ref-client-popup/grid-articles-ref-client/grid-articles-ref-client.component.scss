@@ -1,0 +1,94 @@
+::ng-deep .articles-ref-client-page .dx-datagrid-search-panel {
+  display: none;
+}
+
+::ng-deep .articles-ref-client-page {
+
+  .search-criteria-container {
+    margin-top: -30px;
+
+    .search-criteria-subcontainer {
+
+      // Hiding unuseful input
+      .dx-tag+.dx-texteditor-input {
+        display: none;
+      }
+
+      // overflow: hidden;
+      .dx-field {
+        float: left;
+        margin-right: 15px;
+        width: 200px;
+
+        .dx-field-label {
+          text-overflow: visible;
+          white-space: normal;
+          font-size: 12px;
+          line-height: 12px;
+          padding: 10px 0;
+          text-align: left;
+          margin-right: 10px;
+          overflow: visible;
+          align-self: baseline;
+
+          &.noPadding {
+            padding: 0 !important;
+          }
+        }
+
+        .dx-texteditor {
+          font-size: 12px;
+
+          .dx-texteditor-input {
+            font-size: 13px;
+          }
+        }
+
+        .dx-field-value {
+          width: 70%;
+
+          &.small-field {
+            width: 30%;
+          }
+        }
+
+        .dx-field-label {
+          width: 30%;
+        }
+
+        &.valid-field {
+          width: 100px;
+        }
+
+      }
+
+      .dx-field-value {
+        width: 70%;
+
+        &.small-field {
+          width: 55% !important;
+        }
+      }
+
+      .refresh {
+        top: 0;
+        margin-left: 10px;
+        float: right;
+      }
+    }
+  }
+}
+
+h6 {
+  margin: 0;
+  float: left;
+}
+
+.refresh {
+  top: -8px;
+  float: right;
+}
+
+.title-container {
+  height: 36px;
+}

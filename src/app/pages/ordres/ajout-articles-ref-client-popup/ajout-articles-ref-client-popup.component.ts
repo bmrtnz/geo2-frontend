@@ -15,6 +15,7 @@ import { concatMap, takeWhile } from "rxjs/operators";
 import { ReferencesClientService } from "app/shared/services/api/references-client.service";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
+import { GridArticlesRefClientComponent } from "./grid-articles-ref-client/grid-articles-ref-client.component";
 
 @Component({
   selector: "app-ajout-articles-ref-client-popup",
@@ -44,7 +45,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   popupFullscreen = true;
 
 
-  @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
+  @ViewChild(GridArticlesRefClientComponent, { static: false }) catalogueRefsClt: GridArticlesRefClientComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
   @ViewChild("deleteButton", { static: false }) deleteButton: DxButtonComponent;
@@ -98,7 +99,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   }
 
   getGridSelectedArticles() {
-    return this.catalogue?.dataGrid.instance.getSelectedRowKeys();
+    return this.catalogueRefsClt?.dataGrid.instance.getSelectedRowKeys();
   }
 
   selectFromGrid(e) {
@@ -118,8 +119,8 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
             .split("&&").join(artIds.length > 1 ? "s" : "")
             .replace("&A", this.gridUtilsService.friendlyFormatList(artIds))
             .replace("&C", this.ordre.client.code);
-          this.catalogue.dataGrid.instance.clearSelection();
-          this.catalogue.refreshArticlesGrid();
+          this.catalogueRefsClt.dataGrid.instance.clearSelection();
+          this.catalogueRefsClt.refreshArticlesGrid();
           notify(message, "success", 7000);
         },
         error: () => notify("Erreur lors de la suppression référence(s) client", "error", 5000)
@@ -135,27 +136,27 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   async onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
 
-    this.catalogue.dataGrid.selection = { mode: "multiple", allowSelectAll: false, showCheckBoxesMode: "always" };
-    this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
+    this.catalogueRefsClt.dataGrid.selection = { mode: "multiple", allowSelectAll: false, showCheckBoxesMode: "always" };
+    this.catalogueRefsClt.valideSB.value = this.catalogueRefsClt.trueFalse[1];
 
     // datagrid state loading is not executed automatically in this component...
     const gridConfig = await this.gridConfiguratorService.fetchConfig(Grid.Article);
-    this.catalogue?.dataGrid.instance.state(gridConfig);
+    this.catalogueRefsClt?.dataGrid.instance.state(gridConfig);
     // this.catalogue?.dataGrid.instance.repaint();
-    this.catalogue?.refreshArticlesGrid(); // Show grid values
+    this.catalogueRefsClt?.refreshArticlesGrid(); // Show grid values
   }
 
   clearAll() {
-    if (!this.catalogue) return;
+    if (!this.catalogueRefsClt) return;
     this.codeChangeProcess = true;
-    this.catalogue.dataGrid.dataSource = [];
+    this.catalogueRefsClt.dataGrid.dataSource = [];
     this.updateChosenArticles();
-    this.catalogue.dataGrid.instance.clearSelection();
-    this.catalogue.especeSB.instance.reset();
-    this.catalogue.varieteSB.instance.reset();
-    this.catalogue.modesCultureSB.instance.reset();
-    this.catalogue.emballageSB.instance.reset();
-    this.catalogue.origineSB.instance.reset();
+    this.catalogueRefsClt.dataGrid.instance.clearSelection();
+    this.catalogueRefsClt.especesSB.instance.reset();
+    this.catalogueRefsClt.varietesSB.instance.reset();
+    this.catalogueRefsClt.modesCultureSB.instance.reset();
+    this.catalogueRefsClt.emballagesSB.instance.reset();
+    this.catalogueRefsClt.originesSB.instance.reset();
     this.codeChangeProcess = false;
   }
 
