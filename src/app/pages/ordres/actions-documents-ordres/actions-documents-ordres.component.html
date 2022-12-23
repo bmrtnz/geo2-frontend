@@ -21,7 +21,7 @@
     [focusStateEnabled]="false"
     [visible]="!orderConfirmationOnly"
     [disabled]="!plusActionsFluxEnabled"
-    text="..."
+    text="+"
     (onClick)="showFluxDoxOtherBtns($event)"
   ></dx-button>
   <dx-action-sheet
@@ -29,7 +29,7 @@
     width="auto"
     [items]="plusActionsFlux"
     [showTitle]="false"
-    target=".flux-doc-button-plus"
+    [target]="actionSheetTarget"
     [showCancelButton]="true"
     [usePopover]="true"
     (onItemClick)="onClickSendAction($event.itemData.id)"

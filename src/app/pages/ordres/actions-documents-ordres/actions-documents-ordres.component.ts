@@ -41,6 +41,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   public visibleActionsNumber = 5; // Visible buttons number, others in a popup
   public currentCMR: ViewDocument;
   public CMRVisible = false;
+  public actionSheetTarget: any;
 
   @ViewChild("actionSheet", { static: false }) actionSheet: DxActionSheetComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -73,7 +74,6 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: false },
       { id: "PROFOR", text: "Pro forma", visible: true, disabled: false },
       { id: "COMINV", text: "Custom template", visible: true, disabled: false },
-      //  Manque le PBL, on revient vers nous plus tard
       { id: "PACKLIST", text: "Packing list", visible: true, disabled: false },
       //  Manque le PBL, on revient vers nous plus tard
       { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true },
@@ -94,12 +94,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   }
 
   showFluxDoxOtherBtns(e) {
-    if (this.actionSheet.visible) {
-      this.actionSheet.instance.hide();
-    } else {
-      this.actionSheet.visible = true;
-      this.actionSheet.instance.show();
-    }
+    this.actionSheetTarget = e.element;
+    this.actionSheet.visible = !this.actionSheet.visible;
   }
 
   onClickSendAction(e, annulation?) {
