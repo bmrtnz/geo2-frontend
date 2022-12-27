@@ -214,6 +214,35 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
       });
   }
 
+  takeOptionStock(quantite: number, stockId: string, propCode: string, palCode: string) {
+    return this.apollo
+      .query<{ takeOptionStock: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "takeOptionStock",
+              body: functionBody,
+              params: [
+                { name: "propCode", value: "propCode", isVariable: true },
+                { name: "stockId", value: "stockId", isVariable: true },
+                { name: "quantite", value: "quantite", isVariable: true },
+                { name: "palCode", value: "palCode", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "propCode", type: "String", isOptionnal: false },
+            { name: "stockId", type: "String", isOptionnal: false },
+            { name: "quantite", type: "Int", isOptionnal: false },
+            { name: "palCode", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { propCode, stockId, quantite, palCode },
+        fetchPolicy: "network-only",
+      });
+  }
+
   public getDistinctEntityDatasource(fieldName, descriptionField?, searchExpr?) {
     return this.getDistinctDatasource("GeoStock", fieldName, descriptionField, searchExpr);
   }
