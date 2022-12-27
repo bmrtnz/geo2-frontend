@@ -4257,96 +4257,96 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "numero",
+        "dataField": "ordre.numero",
         "visible": true
       },
       {
         "visibleIndex": 1,
-        "dataField": "codeClient",
+        "dataField": "ordre.codeClient",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "codeAlphaEntrepot",
+        "dataField": "ordre.codeAlphaEntrepot",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "versionDetail",
+        "dataField": "ordre.versionDetail",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "sommeColisCommandes",
+        "dataField": "ordre.sommeColisCommandes",
         "visible": true
       },
       {
         "visibleIndex": 5,
-        "dataField": "sommeColisExpedies",
+        "dataField": "ordre.sommeColisExpedies",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "dateLivraisonPrevue",
+        "dataField": "ordre.dateLivraisonPrevue",
         "dataType": "date",
         "format": "dd-MM-yyyy",
         "visible": true
-      }
-    ]
-  },
-  "planning-depart-detail": {
-    "columns": [
+      },
       {
-        "visibleIndex": 0,
+        "visibleIndex": 7,
         "dataField": "ordre.transporteur.id",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 8,
         "dataField": "logistique.fournisseur.code",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 9,
         "class": "no-padding multi-line-header",
         "width": 20,
         "dataField": "logistique.expedieStation",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 10,
         "dataField": "logistique.dateDepartReelleFournisseur",
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 11,
         "dataField": "nombreColisCommandes",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 12,
         "dataField": "nombreColisExpedies",
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 14,
         "dataField": "logistique.fournisseurReferenceDOC",
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 16,
         "dataField": "logistique.okStation",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 18,
         "dataField": "ordre.assistante.nomUtilisateur",
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 19,
         "dataField": "ordre.commercial.nomUtilisateur",
         "visible": true
+      },
+      {
+        "dataField": "id",
+        "visible": false
       }
     ]
   },

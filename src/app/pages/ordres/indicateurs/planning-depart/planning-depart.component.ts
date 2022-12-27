@@ -1,4 +1,3 @@
-import { DatePipe } from "@angular/common";
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
 import Ordre from "app/shared/models/ordre.model";
@@ -6,35 +5,35 @@ import { LocalizePipe } from "app/shared/pipes";
 import {
   AuthService,
   LocalizationService,
-  TransporteursService,
+  TransporteursService
 } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
+import { Indicateur } from "app/shared/services/api/indicateurs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import {
   Indicator,
-  OrdresIndicatorsService,
+  OrdresIndicatorsService
 } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
 import {
   DxCheckBoxComponent,
   DxDataGridComponent,
-  DxSelectBoxComponent,
+  DxSelectBoxComponent
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
-import { DateManagementService } from "app/shared/services/date-management.service";
-import notify from "devextreme/ui/notify";
-import { Indicateur } from "app/shared/services/api/indicateurs.service";
 
 @Component({
   selector: "app-planning-depart",
@@ -142,22 +141,22 @@ export class PlanningDepartComponent implements AfterViewInit {
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value)
       filters.push("and", [
-        "secteurCommercial.id",
+        "ordre.secteurCommercial.id",
         "=",
         this.secteurSB.value.id,
       ]);
     filters.push("and", [
-      "logistiques.dateDepartPrevueFournisseur",
+      "logistique.dateDepartPrevueFournisseur",
       ">=",
       this.dateMin.value,
     ]);
     filters.push("and", [
-      "logistiques.dateDepartPrevueFournisseur",
+      "logistique.dateDepartPrevueFournisseur",
       "<=",
       this.dateMax.value,
     ]);
     if (this.diffCB.value)
-      filters.push("and", ["versionDetail", "isnull", "null"]);
+      filters.push("and", ["ordre.versionDetail", "isnull", "null"]);
     this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
 
     this.dataSource.filter(filters);
@@ -201,16 +200,16 @@ export class PlanningDepartComponent implements AfterViewInit {
   onCellPrepared(event) {
     if (event.rowType !== "data") return;
     const equal =
-      event.data.sommeColisCommandes === event.data.sommeColisExpedies;
-    if (event.column.dataField === "versionDetail")
+      event.data.ordre.sommeColisCommandes === event.data.ordre.sommeColisExpedies;
+    if (event.column.dataField === "ordre.versionDetail")
       event.cellElement.classList.add(
         event.value ? "highlight-ok" : "highlight-err",
       );
-    if (event.column.dataField === "sommeColisCommandes")
+    if (event.column.dataField === "ordre.sommeColisCommandes")
       event.cellElement.classList.add(
         equal ? "highlight-ok" : "highlight-err",
       );
-    if (event.column.dataField === "sommeColisExpedies")
+    if (event.column.dataField === "ordre.sommeColisExpedies")
       event.cellElement.classList.add(
         equal ? "highlight-ok" : "highlight-err",
       );

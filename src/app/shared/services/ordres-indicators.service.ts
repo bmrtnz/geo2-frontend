@@ -9,7 +9,6 @@ import { Model, ModelFieldOptions } from "../models/model";
 import Ordre from "../models/ordre.model";
 import { Indicateur, IndicateurCountResponse, IndicateursService } from "./api/indicateurs.service";
 import {
-  Operation,
   OrdresService
 } from "./api/ordres.service";
 import { PaysDepassementService } from "./api/pays-depassement.service";
@@ -242,8 +241,27 @@ const indicators: Indicator[] = [
     component: import(
       "../../pages/ordres/indicateurs/planning-depart/planning-depart.component"
     ),
-    /* tslint:disable-next-line max-line-length */
-    select: /^(?:dateLivraisonPrevue|sommeColisCommandes|sommeColisExpedies|numero|codeClient|codeAlphaEntrepot|versionDetail|campagne\.id)$/,
+    explicitSelection: [
+      "ordre.id",
+      "ordre.dateLivraisonPrevue",
+      "ordre.sommeColisCommandes",
+      "ordre.sommeColisExpedies",
+      "ordre.numero",
+      "ordre.codeClient",
+      "ordre.codeAlphaEntrepot",
+      "ordre.versionDetail",
+      "ordre.campagne.id",
+      "id",
+      "logistique.fournisseur.code",
+      "logistique.expedieStation",
+      "logistique.dateDepartReelleFournisseur",
+      "nombreColisCommandes",
+      "nombreColisExpedies",
+      "logistique.fournisseurReferenceDOC",
+      "logistique.okStation",
+      "ordre.assistante.nomUtilisateur",
+      "ordre.commercial.nomUtilisateur",
+    ],
   },
   {
     id: "CommandesTransit",
@@ -434,23 +452,13 @@ export class OrdresIndicatorsService {
       if (instance.id === Indicateur.PlanningDepart) {
         const currDateTime24 = new Date();
         currDateTime24.setHours(23, 59, 59, 999);
-        instance.detailedFields =
-          this.ordresService.model.getDetailedFields(
-            1,
-            instance.regExpSelection,
-            { forceFilter: true },
-          );
-        instance.dataSource = this.ordresService.getDataSource(
-          Operation.SuiviDeparts,
-          1,
-          instance.regExpSelection,
-        );
+        instance.dataSource = this.ordresService.getSuiviDepartsDatasource(instance.explicitSelection);
         instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.PlanningDepart);
         instance.filter = [
-          ...instance.filter,
+          ["valide", "=", true],
           "and",
           [
-            "logistiques.dateDepartPrevueFournisseur",
+            "logistique.dateDepartPrevueFournisseur",
             "<=",
             currDateTime24.toISOString(),
           ],
