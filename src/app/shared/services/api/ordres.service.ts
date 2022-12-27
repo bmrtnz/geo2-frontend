@@ -431,11 +431,25 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     dateMin: string,
     dateMax: string
   ) {
-    return this.functionsService.queryFunction("checkBLAuto", [
-      { name: "soc_code", type: "String", value: socCode },
-      { name: "sco_code", type: "String", value: scoCode },
-      { name: "date_min", type: "LocalDate", value: dateMin },
-      { name: "date_max", type: "LocalDate", value: dateMax },
-    ]);
+    return this.apollo
+      .query<{ checkBLAuto: FunctionResponse<{ array_ord_ref: Array<string> }> }>({
+        query: gql(ApiService.buildGraph("query", [{
+          name: "checkBLAuto",
+          body: functionBody,
+          params: [
+            { name: "socCode", value: "socCode", isVariable: true },
+            { name: "scoCode", value: "scoCode", isVariable: true },
+            { name: "dateMin", value: "dateMin", isVariable: true },
+            { name: "dateMax", value: "dateMax", isVariable: true },
+          ],
+        }], [
+          { name: "socCode", type: "String", isOptionnal: false },
+          { name: "scoCode", type: "String", isOptionnal: false },
+          { name: "dateMin", type: "LocalDate", isOptionnal: false },
+          { name: "dateMax", type: "LocalDate", isOptionnal: false },
+        ])),
+        variables: { socCode, scoCode, dateMin, dateMax },
+      })
+      .pipe(map(res => res.data.checkBLAuto));
   }
 }
