@@ -424,4 +424,18 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "user", type: "String", value: user }
     ]);
   }
+
+  public checkBLAuto(
+    socCode: string,
+    scoCode: string,
+    dateMin: string,
+    dateMax: string
+  ) {
+    return this.functionsService.queryFunction("checkBLAuto", [
+      { name: "soc_code", type: "String", value: socCode },
+      { name: "sco_code", type: "String", value: scoCode },
+      { name: "date_min", type: "LocalDate", value: dateMin },
+      { name: "date_max", type: "LocalDate", value: dateMax },
+    ]);
+  }
 }
