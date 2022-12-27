@@ -2,7 +2,7 @@
 <dx-button
   class="upperButton"
   text="{{ 'btn-blAutoSend' | localize }}"
-  [disabled]="true"
+  (onClick)="onBLAutoClick()"
 ></dx-button>
 <dx-button
   class="refresh"

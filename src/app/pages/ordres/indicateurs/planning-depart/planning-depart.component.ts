@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
 import Ordre from "app/shared/models/ordre.model";
@@ -79,6 +80,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     private ordresIndicatorsService: OrdresIndicatorsService,
     private localizePipe: LocalizePipe,
     private tabContext: TabContext,
+    private datePipe: DatePipe,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -248,6 +250,14 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.dateMax.value = datePeriod.dateFin;
   }
 
+  public onBLAutoClick() {
+    this.ordresService.checkBLAuto(
+      this.currentCompanyService.getCompany().id,
+      this.secteurSB.value.id,
+      this.datePipe.transform(new Date(Date.parse(this.dateMin.value)), "yyyy-MM-dd"),
+      this.datePipe.transform(new Date(Date.parse(this.dateMax.value)), "yyyy-MM-dd"),
+    ).subscribe();
+  }
 }
 
 export default PlanningDepartComponent;
