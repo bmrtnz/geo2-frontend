@@ -17,6 +17,7 @@ export class Stock extends BaseStock {
   @Field() dateInfo: string;
   @Field() quantiteInitiale: number;
   @Field() quantiteReservee: number;
+  @Field() quantiteTotale: number;
 }
 
 export default Stock;
