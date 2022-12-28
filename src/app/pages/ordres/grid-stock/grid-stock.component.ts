@@ -118,7 +118,7 @@ export class GridStockComponent implements OnInit {
       this.origineSB.value = null;
 
       if (event) {
-        const especeFilter = `(article.cahierDesCharge.espece.id=='${event.key}')`;
+        const especeFilter = `(article.cahierDesCharge.espece.id=='${event.key}' and quantiteTotale > 0 and valide == true)`;
         const dataToLoad = [
           { var: "varietes", id: "article.matierePremiere.variete.id", desc: "article.matierePremiere.variete.description" },
           { var: "emballages", id: "article.emballage.emballage.id", desc: "article.emballage.emballage.description" },
@@ -126,7 +126,6 @@ export class GridStockComponent implements OnInit {
           { var: "bureauxAchat", id: "fournisseur.bureauAchat.id", desc: "fournisseur.bureauAchat.raisonSocial" },
           { var: "modesCulture", id: "article.matierePremiere.modeCulture.id", desc: "article.matierePremiere.modeCulture.description" },
         ];
-
         dataToLoad.forEach(data => this[data.var] = this.stocksService.getDistinctEntityDatasource(data.id, data.desc, especeFilter));
       }
     }
