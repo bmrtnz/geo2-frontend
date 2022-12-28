@@ -5,13 +5,8 @@ import StockArticle from "app/shared/models/stock-article.model";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
-import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
-import { EmballagesService } from "app/shared/services/api/emballages.service";
-import { EspecesService } from "app/shared/services/api/especes.service";
-import { OriginesService } from "app/shared/services/api/origines.service";
 import { StockArticlesAgeService } from "app/shared/services/api/stock-articles-age.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
-import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
@@ -43,11 +38,11 @@ export class GridStockComponent implements OnInit {
   apiService: ApiService;
   @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
   @ViewChild("especeSB", { static: false }) especeSB: DxSelectBoxComponent;
-  @ViewChild("varieteSB", { static: false }) varieteSB: DxSelectBoxComponent;
+  @ViewChild("varieteSB", { static: false }) varietesSB: DxSelectBoxComponent;
   @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
-  @ViewChild("emballageSB", { static: false }) emballageSB: DxSelectBoxComponent;
-  @ViewChild("origineSB", { static: false }) origineSB: DxSelectBoxComponent;
-  @ViewChild("bureauAchatSB", { static: false }) bureauAchatSB: DxSelectBoxComponent;
+  @ViewChild("emballageSB", { static: false }) emballagesSB: DxSelectBoxComponent;
+  @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatSB", { static: false }) bureauxAchatSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ReservationPopupComponent) reservationPopup: ReservationPopupComponent;
   @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
@@ -110,15 +105,21 @@ export class GridStockComponent implements OnInit {
     this.onFilterChange();
 
     // Filtering variete, emballage & origine selectBox list depending on specy
-    const filter = [];
+    if (["espece", "variete", "origine", "emballage", "modeCulture"].includes(dataField)) {
 
-    if (dataField === "espece") {
-      this.varieteSB.value = null;
-      this.emballageSB.value = null;
-      this.origineSB.value = null;
+      if (["espece"].includes(dataField)) {
+        this.varietesSB.value = null;
+        this.emballagesSB.value = null;
+        this.originesSB.value = null;
+        this.modesCultureSB.value = null;
+      }
 
       if (event) {
-        const especeFilter = `(article.cahierDesCharge.espece.id=='${event.key}' and quantiteTotale > 0 and valide == true)`;
+        let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value.key}' and quantiteTotale > 0 and valide == true)`;
+        if (this.varietesSB.value) sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value.key}'`;
+        if (this.emballagesSB.value) sbFilters += ` and article.emballage.emballage.id == '${this.emballagesSB.value.key}'`;
+        if (this.originesSB.value) sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value.key}'`;
+        if (this.modesCultureSB.value) sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value.key}'`;
         const dataToLoad = [
           { var: "varietes", id: "article.matierePremiere.variete.id", desc: "article.matierePremiere.variete.description" },
           { var: "emballages", id: "article.emballage.emballage.id", desc: "article.emballage.emballage.description" },
@@ -126,7 +127,9 @@ export class GridStockComponent implements OnInit {
           { var: "bureauxAchat", id: "fournisseur.bureauAchat.id", desc: "fournisseur.bureauAchat.raisonSocial" },
           { var: "modesCulture", id: "article.matierePremiere.modeCulture.id", desc: "article.matierePremiere.modeCulture.description" },
         ];
-        dataToLoad.forEach(data => this[data.var] = this.stocksService.getDistinctEntityDatasource(data.id, data.desc, especeFilter));
+        dataToLoad
+          .filter(data => !this[`${data.var}SB`].value)
+          .forEach(data => this[data.var] = this.stocksService.getDistinctEntityDatasource(data.id, data.desc, sbFilters));
       }
     }
   }
@@ -151,11 +154,11 @@ export class GridStockComponent implements OnInit {
     this.datagrid.instance.beginCustomLoading("");
     this.stocksService.allStockArticleList(
       this.especeSB.value?.key,
-      this.varieteSB.value?.key,
-      this.origineSB.value?.key,
+      this.varietesSB.value?.key,
+      this.originesSB.value?.key,
       this.modesCultureSB.value?.key,
-      this.emballageSB.value?.key,
-      this.bureauAchatSB.value?.key
+      this.emballagesSB.value?.key,
+      this.bureauxAchatSB.value?.key
     ).subscribe((res) => {
       this.datagrid.dataSource = res.data.allStockArticleList;
       this.datagrid.instance.refresh();
