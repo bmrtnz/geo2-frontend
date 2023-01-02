@@ -378,4 +378,18 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "user", type: "String", value: user }
     ]);
   }
+
+  public fDuplicationBukSa(
+    ordreRef: string,
+    socCode: string,
+    nomUtilisateur: string,
+    codeEntrepot: string,
+  ) {
+    return this.functionsService.queryFunction("fDuplicationBukSa", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+      { name: "socCode", type: "String", value: socCode },
+      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
+      { name: "codeEntrepot", type: "String", value: codeEntrepot },
+    ]);
+  }
 }
