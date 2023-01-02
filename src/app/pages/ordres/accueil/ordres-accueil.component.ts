@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   OnDestroy,
@@ -7,13 +8,16 @@ import {
   ViewChild
 } from "@angular/core";
 import { AuthService } from "app/shared/services";
+import { IndicateursService } from "app/shared/services/api/indicateurs.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Indicator,
   OrdresIndicatorsService
 } from "app/shared/services/ordres-indicators.service";
 import { Program } from "app/shared/services/program.service";
-import { DxTagBoxComponent } from "devextreme-angular";
+import { DxSelectBoxComponent, DxTagBoxComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
 import { from, Observable, Subscription } from "rxjs";
 import {
   filter,
@@ -32,7 +36,7 @@ import { TabContext } from "../root/root.component";
   templateUrl: "./ordres-accueil.component.html",
   styleUrls: ["./ordres-accueil.component.scss"],
 })
-export class OrdresAccueilComponent implements OnInit, OnDestroy {
+export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() public programChosen: any;
 
@@ -43,6 +47,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<string[]>();
+  secteursSource: DataSource;
 
   public programs: any[];
 
@@ -50,12 +55,15 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   @ViewChild(CommandesEdiComponent, { static: false }) cdesEdiPopup: CommandesEdiComponent;
   @ViewChild(CommandesEdiComponent, { static: false }) cdesEDI: CommandesEdiComponent;
   @ViewChild(ImportProgrammesPopupComponent, { static: false }) importProgPopup: ImportProgrammesPopupComponent;
+  @ViewChild(DxSelectBoxComponent) secteurInput: DxSelectBoxComponent;
 
   constructor(
     public ordresIndicatorsService: OrdresIndicatorsService,
+    public indicateursService: IndicateursService,
     public authService: AuthService,
     public currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
+    private secteursService: SecteursService,
   ) { }
 
   ngOnInit() {
@@ -72,51 +80,25 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     });
 
     this.configureIndicator();
+    this.setupSecteursDatasource();
+  }
 
-    const selectIndicators = this.indicatorsChange.pipe(
-      startWith(this.loadedIndicators),
-    );
-    this.indicatorsSubscription = selectIndicators
-      .pipe(
-        tap((_) => (this.indicators = [])),
-        switchMap((ids) => from(ids)),
-        map((id) =>
-          this.ordresIndicatorsService.getIndicatorByName(id),
-        ),
-        map(
-          (indicator) =>
-            new Indicator({
-              ...indicator,
-              loading: !!indicator?.withCount,
-            }),
-        ),
-        tap((indicator) => this.indicators.push(indicator)),
-        filter((indicator) => indicator.loading),
-        mergeMap(async (indicator: Indicator) => {
-          if (!indicator.withCount)
-            return [indicator.id, ""] as [string, string];
-
-          const countResponse = await indicator.fetchCount
-            .pipe(
-              map((res) => res[indicator.id].toString()),
-            )
-            .toPromise();
-          return [indicator.id, countResponse] as [string, string];
-        }),
-      )
-      .subscribe(([id, value]) => {
-        const index = this.indicators.findIndex(
-          (indicator) => id === indicator.id,
-        );
-        if (index) {
-          this.indicators[index].number = value;
-          this.indicators[index].loading = false;
-        }
-      });
+  ngAfterViewInit() {
+    if (!this.authService.isAdmin) {
+      const secteur = this.authService.currentUser.secteurCommercial;
+      this.secteurInput.value = secteur;
+      this.indicateursService.secteur = secteur.id;
+    }
+    this.loadIndicators();
   }
 
   ngOnDestroy() {
     this.indicatorsSubscription.unsubscribe();
+  }
+
+  onValueChanged(event) {
+    this.indicateursService.secteur = event.value?.id;
+    this.loadIndicators();
   }
 
   displayExpr(data) {
@@ -173,5 +155,61 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
           .map(({ id }) => id),
       },
     );
+  }
+
+  private setupSecteursDatasource() {
+    this.secteursSource = this.secteursService.getDataSource();
+    this.secteursSource.filter([
+      ["valide", "=", true],
+      "and",
+      [
+        "societes",
+        "contains",
+        this.currentCompanyService.getCompany().id,
+      ],
+    ]);
+  }
+
+  private loadIndicators() {
+    const selectIndicators = this.indicatorsChange.pipe(
+      startWith(this.loadedIndicators),
+    );
+    this.indicatorsSubscription = selectIndicators
+      .pipe(
+        tap((_) => (this.indicators = [])),
+        switchMap((ids) => from(ids)),
+        map((id) =>
+          this.ordresIndicatorsService.getIndicatorByName(id),
+        ),
+        map(
+          (indicator) =>
+            new Indicator({
+              ...indicator,
+              loading: !!indicator?.withCount,
+            }),
+        ),
+        tap((indicator) => this.indicators.push(indicator)),
+        filter((indicator) => indicator.loading),
+        mergeMap(async (indicator: Indicator) => {
+          if (!indicator.withCount)
+            return [indicator.id, ""] as [string, string];
+
+          const countResponse = await indicator.fetchCount
+            .pipe(
+              map((res) => res[indicator.id].toString()),
+            )
+            .toPromise();
+          return [indicator.id, countResponse] as [string, string];
+        }),
+      )
+      .subscribe(([id, value]) => {
+        const index = this.indicators.findIndex(
+          (indicator) => id === indicator.id,
+        );
+        if (index) {
+          this.indicators[index].number = value;
+          this.indicators[index].loading = false;
+        }
+      });
   }
 }
