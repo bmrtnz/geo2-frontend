@@ -392,4 +392,10 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "codeEntrepot", type: "String", value: codeEntrepot },
     ]);
   }
+
+  public fDelRegroupement(ordreRef: string) {
+    return this.functionsService.queryFunction("fDelRegroupement", [
+      { name: "ordreRef", type: "String", value: ordreRef }
+    ]);
+  }
 }
