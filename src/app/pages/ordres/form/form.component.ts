@@ -1203,4 +1203,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  public onDelRegroupementClick() {
+    this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
+      error: ({ message }: Error) => notify(message, "error"),
+      next: res => notify(res.data.fDelRegroupement.msg, "success"),
+    });
+  }
+
 }
