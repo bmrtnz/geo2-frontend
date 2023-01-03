@@ -1199,7 +1199,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     )
       .subscribe({
         error: ({ message }: Error) => notify(message, "error"),
-        // complete: () => this.clearAndHidePopup(),
+        next: () => notify("Duplication effectuée avec succès", "success"),
       });
   }
 
