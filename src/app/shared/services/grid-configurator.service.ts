@@ -596,13 +596,13 @@ export class GridConfiguratorService {
     // Export page
     toolbarOptions.items.push(this.buildExportToolbarItem(component, {
       name: "exportPage",
-      hint: "Exporter la page",
+      hint: this.localizationService.localize("btn-export-view"),
     }));
 
     // Export all
     toolbarOptions.items.push(this.buildExportToolbarItem(component, {
       name: "exportAll",
-      hint: "Exporter tout",
+      hint: this.localizationService.localize("btn-export-all"),
       exportTake: 1_000_000_000,
     }));
   }
@@ -617,6 +617,7 @@ export class GridConfiguratorService {
     return {
       widget: "dxButton",
       locateInMenu: "always",
+      cssClass: "grid-excel-download-element",
       options: {
         icon: options?.icon ?? "xlsxfile",
         hint: options?.hint,
