@@ -71,6 +71,17 @@
     }
   }
 
+  .duplication-buk-container {
+    .dx-button {
+      margin: 0;
+
+      &.dx-button-has-icon:not(.dx-button-has-text) {
+        border-radius: 0;
+      }
+    }
+
+  }
+
   .margin-btn-baf {
     position: absolute;
     z-index: 1;

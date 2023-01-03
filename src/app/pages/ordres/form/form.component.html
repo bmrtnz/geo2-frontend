@@ -237,7 +237,10 @@
                 <dx-check-box
                   #leftAccessPanel
                   class="float-right leftPanelCheckBox"
-                  hint="{{ (leftAccessPanel.value ? 'masquer' : 'afficher') + '-boutons-navigation-rapide' | localize }}"
+                  hint="{{
+                    (leftAccessPanel.value ? 'masquer' : 'afficher') +
+                      '-boutons-navigation-rapide' | localize
+                  }}"
                   (onValueChanged)="leftPanelChange($event)"
                 >
                 </dx-check-box>
@@ -254,6 +257,22 @@
                   text="Bon à facturer"
                   (onClick)="bonAFacturer()"
                 ></dx-button>
+                <div
+                  class="duplication-buk-container header-btn-baf float-right"
+                  [hidden]="hideDuplicationBUK"
+                >
+                  <dx-button
+                    type="default"
+                    class="header-btn-baf"
+                    [text]="'Duplication vers SA'"
+                  ></dx-button>
+                  <dx-button
+                    type="default"
+                    [stylingMode]="'outlined'"
+                    class="header-btn-baf"
+                    [icon]="'trash'"
+                  ></dx-button>
+                </div>
                 <div style="clear: both"></div>
                 <div
                   class="dx-form-group-content no-padding-bottom order-header"
@@ -639,7 +658,10 @@
                           </div>
                         </dxi-item>
                         <dxi-item [ratio]="0.1"></dxi-item>
-                        <dxi-item [ratio]="2" style="max-width: 156px;">
+                        <dxi-item
+                          [ratio]="2"
+                          style="max-width: 156px"
+                        >
                           <dx-button
                             class="form-text-button"
                             type="default"
@@ -983,7 +1005,12 @@
                       [focusStateEnabled]="false"
                       [disabled]="!selectedGridCdesRows"
                       text="{{ 'btn-addrefclt' | localize }}"
-                      [hint]="((vowelTest(ordre?.client?.code) ? 'hint-addrefclt2' : 'hint-addrefclt') | localize) + ordre?.client?.code"
+                      [hint]="
+                        ((vowelTest(ordre?.client?.code)
+                          ? 'hint-addrefclt2'
+                          : 'hint-addrefclt'
+                        ) | localize) + ordre?.client?.code
+                      "
                       (onClick)="onAddRefsClient()"
                     ></dx-button>
                   </div>

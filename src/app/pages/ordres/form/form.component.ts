@@ -299,6 +299,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public currentFacture: ViewDocument;
   public allowVenteACommissionMutation: boolean;
   public refreshRegimeTva = new EventEmitter();
+  public hideDuplicationBUK = this.currentCompanyService.getCompany().id !== "BUK";
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
