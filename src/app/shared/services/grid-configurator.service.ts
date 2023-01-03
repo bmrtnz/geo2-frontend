@@ -593,26 +593,49 @@ export class GridConfiguratorService {
           name: "columnChooserButton",
         });
 
-    toolbarOptions.items.push({
+    // Export page
+    toolbarOptions.items.push(this.buildExportToolbarItem(component, {
+      name: "exportPage",
+      hint: "Exporter la page",
+    }));
+
+    // Export all
+    toolbarOptions.items.push(this.buildExportToolbarItem(component, {
+      name: "exportAll",
+      hint: "Exporter tout",
+      exportTake: 1_000_000_000,
+    }));
+  }
+
+  /** Build dxToolbarItem for Excel export */
+  private buildExportToolbarItem(grid: dxDataGrid, options: {
+    name: string,
+    hint: string,
+    icon?: string,
+    exportTake?: number,
+  }) {
+    return {
       widget: "dxButton",
+      locateInMenu: "always",
       options: {
-        icon: "xlsxfile",
-        hint: "Exporter la page",
+        icon: options?.icon ?? "xlsxfile",
+        hint: options?.hint,
         onClick: () => {
-          const loadOptions = component.getDataSource().loadOptions();
-          component.getDataSource().loadOptions = () => ({
+          const loadOptions = grid.getDataSource().loadOptions();
+          grid.getDataSource().loadOptions = () => ({
             ...loadOptions,
-            exportTake: component.pageSize(),
-            exportPage: component.pageIndex(),
+            exportTake: options?.exportTake ?? grid.pageSize(),
+            exportPage: grid.pageIndex(),
           });
           // @ts-ignore
-          component.exportToExcel();
+          grid.exportToExcel();
         },
       },
       showText: "inMenu",
       location: "after",
-      name: "exportPage",
-    } as dxToolbarItem);
+      name: options?.name,
+      text: options?.hint,
+    } as dxToolbarItem;
   }
 }
 
