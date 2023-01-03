@@ -379,17 +379,31 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     ]);
   }
 
+  public fnMajOrdreRegroupementV2(
+    socCode: string,
+    nomUtilisateur: string,
+    entrepotGeneric: boolean,
+    codeRegimeTva: string,
+  ) {
+    return this.functionsService.queryFunction("fnMajOrdreRegroupementV2", [
+      { name: "socCode", type: "String", value: socCode },
+      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
+      { name: "entrepotGeneric", type: "Boolean", value: entrepotGeneric },
+      { name: "codeRegimeTva", type: "String", value: codeRegimeTva },
+    ]);
+  }
+
   public fDuplicationBukSa(
     ordreRef: string,
     socCode: string,
     nomUtilisateur: string,
-    codeEntrepot: string,
+    codeRegimeTva: string,
   ) {
     return this.functionsService.queryFunction("fDuplicationBukSa", [
       { name: "ordreRef", type: "String", value: ordreRef },
       { name: "socCode", type: "String", value: socCode },
       { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
-      { name: "codeEntrepot", type: "String", value: codeEntrepot },
+      { name: "codeRegimeTva", type: "String", value: codeRegimeTva },
     ]);
   }
 

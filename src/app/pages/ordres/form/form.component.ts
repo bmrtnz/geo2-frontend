@@ -18,6 +18,7 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
+import { FunctionResult } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
@@ -38,7 +39,8 @@ import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { combineLatest, Observable, of, Subject } from "rxjs";
-import { concatMap, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+// tslint:disable-next-line: max-line-length
+import { catchError, concatMap, concatMapTo, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
@@ -1171,6 +1173,34 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   vowelTest(text) {
     return (/^[AEIOUYaeiouy]$/i).test(text);
+  }
+
+  public onDuplicationBukSaClick() {
+    this.ordresService.fDuplicationBukSa(
+      this.refOrdre,
+      this.currentCompanyService.getCompany().id,
+      this.authService.currentUser.nomUtilisateur,
+      this.ordre.entrepot.regimeTva?.id ?? "",
+    ).pipe(
+      map(res => res.data.fDuplicationBukSa),
+      concatMap(response => {
+        if (response.res === FunctionResult.Warning)
+          return this.resultPopup.openAs("WARNING", response.msg);
+        return of(true);
+      }),
+      catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
+      filter(flag => flag),
+      concatMapTo(this.ordresService.fnMajOrdreRegroupementV2(
+        this.currentCompanyService.getCompany().id,
+        this.authService.currentUser.nomUtilisateur,
+        false,
+        this.ordre.entrepot.regimeTva?.id ?? "",
+      )),
+    )
+      .subscribe({
+        error: ({ message }: Error) => notify(message, "error"),
+        // complete: () => this.clearAndHidePopup(),
+      });
   }
 
 }

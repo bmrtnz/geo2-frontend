@@ -265,6 +265,7 @@
                     type="default"
                     class="header-btn-baf"
                     [text]="'Duplication vers SA'"
+                    (onClick)="onDuplicationBukSaClick()"
                   ></dx-button>
                   <dx-button
                     type="default"
@@ -1377,3 +1378,4 @@
   (lignesChanged)="onLignesChanged($event)"
   (ordreChanged)="refreshHeader($event)"
 ></app-groupage-chargements-popup>
+<app-confirmation-result-popup></app-confirmation-result-popup>
