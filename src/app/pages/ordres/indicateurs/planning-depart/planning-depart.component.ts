@@ -1,32 +1,17 @@
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
 import { LocalizePipe } from "app/shared/pipes";
-import {
-  AuthService,
-  LocalizationService,
-  TransporteursService
-} from "app/shared/services";
+import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { Indicateur } from "app/shared/services/api/indicateurs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import {
-  Grid,
-  GridConfig,
-  GridConfiguratorService
-} from "app/shared/services/grid-configurator.service";
-import {
-  Indicator,
-  OrdresIndicatorsService
-} from "app/shared/services/ordres-indicators.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { Indicator, OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
-import {
-  DxCheckBoxComponent,
-  DxDataGridComponent,
-  DxSelectBoxComponent
-} from "devextreme-angular";
+import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -52,7 +37,7 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   @ViewChild("gridPLANNINGDEPART", { static: false }) gridPLANNINGDEPARTComponent: DxDataGridComponent;
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
-  @ViewChild("diffCheckBox", { static: false }) diffCB: DxCheckBoxComponent;
+  @ViewChild("diffCheckBox", { static: false }) diffSumColisOrNotDetail: DxCheckBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("dateMin", { static: false }) dateMin: DxSelectBoxComponent;
   @ViewChild("dateMax", { static: false }) dateMax: DxSelectBoxComponent;
@@ -103,10 +88,6 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   ngAfterViewInit() {
 
-    // Show today title
-    this.title = this.localizePipe.transform("grid-situation-depart-title-today");
-
-    // this.dateMin.value = this.dateManagementService.startOfDay(new Date(2022, 7, 25));
     this.dateMin.value = this.dateManagementService.startOfDay();
     this.dateMax.value = this.dateManagementService.endOfDay();
 
@@ -151,29 +132,43 @@ export class PlanningDepartComponent implements AfterViewInit {
       "<=",
       this.dateMax.value,
     ]);
-    if (this.diffCB.value)
-      filters.push("and", ["ordre.versionDetail", "isnull", "null"]);
-    this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
-
+    this.ordresService.persistantVariables.onlyColisDiff = false;
     this.dataSource.filter(filters);
 
     this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
     this.gridPLANNINGDEPARTComponent.dataSource.reload().then(res => {
-      let oldOrderId;
 
-      // Sort on numero
+      // Sort by numero ordre
       res.sort((a, b) => a.ordre.numero - b.ordre.numero);
-      // Clear repeated fields i.e. group structure
+
+      // Clear repeated fields, a kind of group structure wanted by BW
+      // with new id assignement
+      // Handles checkbox filter
+      let oldOrderId;
+      let id = 1;
       res.map(data => {
+        if (this.diffSumColisOrNotDetail.value
+          && ((data.ordre.sommeColisCommandes === data.ordre.sommeColisExpedies)
+            && data.ordre.versionDetail)
+        ) {
+          data.id = 0; // Sums are equal and there's a version number
+        } else {
+          data.id = id;
+          id++;
+        }
         if (oldOrderId === data.ordre.id) {
-          data.ordre = {};
-          data.versionDetail = null;
-          data.sommeColisCommandes = null;
-          data.sommeColisExpedies = null;
+          data.ordre = {
+            dateLivraisonPrevue: data.ordre.dateLivraisonPrevue,
+            transporteur: { id: data.ordre.transporteur.id },
+            assistante: { id: data.ordre.assistante.id },
+            commercial: { id: data.ordre.commercial.id }
+          };
         } else {
           oldOrderId = data.ordre.id;
         }
       });
+
+      res = res.filter(r => r.id); // Removing unwanted items (see above)
       this.gridPLANNINGDEPARTComponent.dataSource = res;
     });
 
@@ -199,12 +194,8 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   }
 
-  onFieldValueChange(e?) {
-    if (e) {
-      this.updateFilters();
-    } else {
-      this.toRefresh = true;
-    }
+  onFieldValueChange() {
+    this.toRefresh = true;
   }
 
   onRowDblClick(e) {
@@ -213,24 +204,32 @@ export class PlanningDepartComponent implements AfterViewInit {
     setTimeout(() => this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id, false));
   }
 
+  onRowPrepared(e) {
+    if (e.rowType === "data" && e.data.ordre.numero) {
+      e.rowElement.classList.add("cursor-pointer");
+      e.rowElement.setAttribute(
+        "title",
+        this.localizePipe.transform("hint-dblClick-ordre"),
+      );
+    }
+  }
+
   onCellPrepared(event) {
     if (event.rowType !== "data") return;
-    const equalSum = event.data.ordre.sommeColisCommandes === event.data.ordre.sommeColisExpedies;
     const equal = event.data.nombreColisCommandes === event.data.nombreColisExpedies;
 
     if (event.data.ordre.id) {
       if (event.column.dataField === "ordre.versionDetail") this.colorizeRedGreen(event, event.value);
-      // if (["ordre.sommeColisCommandes", "ordre.sommeColisExpedies"].includes(event.column.dataField))
-      //   this.colorizeRedGreen(event, equalSum);
     }
 
     if (event.column.dataField === "logistique.dateDepartReelleFournisseur") this.colorizeRedGreen(event, event.value);
-    if (["nombreColisCommandes", "nombreColisExpedies"].includes(event.column.dataField))
-      this.colorizeRedGreen(event, equal);
-  }
-
-  onRowPrepared(e) {
-    if (e.rowType === "data" && e.data.ordre.numero) e.rowElement.classList.add("cursor-pointer");
+    if (["nombreColisCommandes", "nombreColisExpedies"].includes(event.column.dataField)) {
+      if (event.data.logistique.dateDepartReelleFournisseur) {
+        this.colorizeRedGreen(event, equal);
+      } else {
+        if (equal) event.cellElement.classList.add("highlight-ok");
+      }
+    }
   }
 
   colorizeRedGreen(e, condition) {

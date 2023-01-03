@@ -4254,6 +4254,7 @@
     ]
   },
   "planning-depart": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4274,7 +4275,7 @@
       },
       {
         "visibleIndex": 4,
-        "width": 60,
+        "width": 50,
         "dataField": "ordre.versionDetail",
         "cssClass": "no-padding multi-line-header",
         "visible": true
@@ -4304,6 +4305,7 @@
         "width": 25,
         "cssClass": "no-padding",
         "dataField": "logistique.expedieStation",
+        "showInColumnChooser": false,
         "visible": true
       },
       {
@@ -4346,6 +4348,7 @@
       {
         "visibleIndex": 24,
         "dataField": "logistique.okStation",
+        "cssClass": "no-padding-left",
         "visible": true
       },
       {
@@ -4380,6 +4383,7 @@
       },
       {
         "dataField": "id",
+        "showInColumnChooser": false,
         "visible": false
       }
     ]
