@@ -237,7 +237,10 @@
                 <dx-check-box
                   #leftAccessPanel
                   class="float-right leftPanelCheckBox"
-                  hint="{{ (leftAccessPanel.value ? 'masquer' : 'afficher') + '-boutons-navigation-rapide' | localize }}"
+                  hint="{{
+                    (leftAccessPanel.value ? 'masquer' : 'afficher') +
+                      '-boutons-navigation-rapide' | localize
+                  }}"
                   (onValueChanged)="leftPanelChange($event)"
                 >
                 </dx-check-box>
@@ -639,7 +642,10 @@
                           </div>
                         </dxi-item>
                         <dxi-item [ratio]="0.1"></dxi-item>
-                        <dxi-item [ratio]="2" style="max-width: 156px;">
+                        <dxi-item
+                          [ratio]="2"
+                          style="max-width: 156px"
+                        >
                           <dx-button
                             class="form-text-button"
                             type="default"
@@ -866,6 +872,14 @@
                           <div class="dx-field blue-font info-supp">
                             {{ instructionsComm }}
                           </div>
+                          <!-- Depassement client -->
+                          <div
+                            *ngIf="ordre?.client?.depassement > 0"
+                            class="dx-field red-font info-supp"
+                          >
+                            Dépassement client :
+                            {{ ordre?.client?.depassement }}
+                          </div>
                         </dxi-item>
                       </dx-box>
 
@@ -983,7 +997,12 @@
                       [focusStateEnabled]="false"
                       [disabled]="!selectedGridCdesRows"
                       text="{{ 'btn-addrefclt' | localize }}"
-                      [hint]="((vowelTest(ordre?.client?.code) ? 'hint-addrefclt2' : 'hint-addrefclt') | localize) + ordre?.client?.code"
+                      [hint]="
+                        ((vowelTest(ordre?.client?.code)
+                          ? 'hint-addrefclt2'
+                          : 'hint-addrefclt'
+                        ) | localize) + ordre?.client?.code
+                      "
                       (onClick)="onAddRefsClient()"
                     ></dx-button>
                   </div>
