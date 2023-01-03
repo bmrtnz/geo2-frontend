@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
-import Ordre from "app/shared/models/ordre.model";
 import { LocalizePipe } from "app/shared/pipes";
 import {
   AuthService,
@@ -62,7 +61,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   public title: string;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public theTitle: any;
+  public titleElement: HTMLInputElement;
   public periodes: string[];
   public toRefresh: boolean;
 
@@ -118,13 +117,9 @@ export class PlanningDepartComponent implements AfterViewInit {
         description: this.authService.currentUser.secteurCommercial.description
       };
     }
-    this.dataSource = this.indicator.dataSource;
-    this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
-
-    this.theTitle = this.gridPLANNINGDEPARTComponent.instance.$element()[0].querySelector(
-      ".dx-toolbar .dx-placeholder",
+    this.titleElement = this.gridPLANNINGDEPARTComponent.instance.$element()[0].querySelector(
+      ".dx-toolbar-before .dx-placeholder",
     ) as HTMLInputElement;
-
     this.updateFilters();
   }
 
@@ -136,7 +131,8 @@ export class PlanningDepartComponent implements AfterViewInit {
     }
 
     this.toRefresh = false;
-    this.gridPLANNINGDEPARTComponent.dataSource = null;
+    this.dataSource = null;
+    this.dataSource = this.indicator.dataSource;
 
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value)
@@ -160,8 +156,26 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
 
     this.dataSource.filter(filters);
-    this.dataSource.reload();
+
     this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
+    this.gridPLANNINGDEPARTComponent.dataSource.reload().then(res => {
+      let oldOrderId;
+
+      // Sort on numero
+      res.sort((a, b) => a.ordre.numero - b.ordre.numero);
+      // Clear repeated fields i.e. group structure
+      res.map(data => {
+        if (oldOrderId === data.ordre.id) {
+          data.ordre = {};
+          data.versionDetail = null;
+          data.sommeColisCommandes = null;
+          data.sommeColisExpedies = null;
+        } else {
+          oldOrderId = data.ordre.id;
+        }
+      });
+      this.gridPLANNINGDEPARTComponent.dataSource = res;
+    });
 
     // Customizing period/date display
     const title = this.localizePipe.transform("grid-situation-depart-title");
@@ -180,8 +194,9 @@ export class PlanningDepartComponent implements AfterViewInit {
         finalTitle = finalTitle.split(auValue)[0];
       }
     }
-    this.theTitle.innerHTML =
+    this.titleElement.innerHTML =
       `${finalTitle} - ${this.localizePipe.transform("tiers-clients-secteur")}&nbsp;<strong>${this.secteurSB.value.description}</strong>`;
+
   }
 
   onFieldValueChange(e?) {
@@ -192,27 +207,34 @@ export class PlanningDepartComponent implements AfterViewInit {
     }
   }
 
-  onRowDblClick({ data }: { data: Partial<Ordre> }) {
-    notify(this.localizePipe.transform("ouverture-ordre").replace("&NO", data.numero), "info", 1500);
-    setTimeout(() => this.tabContext.openOrdre(data.numero, data.campagne.id, false));
+  onRowDblClick(e) {
+    if (!e.data?.ordre?.numero) return;
+    notify(this.localizePipe.transform("ouverture-ordre").replace("&NO", e.data.ordre.numero), "info", 1500);
+    setTimeout(() => this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id, false));
   }
 
   onCellPrepared(event) {
     if (event.rowType !== "data") return;
-    const equal =
-      event.data.ordre.sommeColisCommandes === event.data.ordre.sommeColisExpedies;
-    if (event.column.dataField === "ordre.versionDetail")
-      event.cellElement.classList.add(
-        event.value ? "highlight-ok" : "highlight-err",
-      );
-    if (event.column.dataField === "ordre.sommeColisCommandes")
-      event.cellElement.classList.add(
-        equal ? "highlight-ok" : "highlight-err",
-      );
-    if (event.column.dataField === "ordre.sommeColisExpedies")
-      event.cellElement.classList.add(
-        equal ? "highlight-ok" : "highlight-err",
-      );
+    const equalSum = event.data.ordre.sommeColisCommandes === event.data.ordre.sommeColisExpedies;
+    const equal = event.data.nombreColisCommandes === event.data.nombreColisExpedies;
+
+    if (event.data.ordre.id) {
+      if (event.column.dataField === "ordre.versionDetail") this.colorizeRedGreen(event, event.value);
+      // if (["ordre.sommeColisCommandes", "ordre.sommeColisExpedies"].includes(event.column.dataField))
+      //   this.colorizeRedGreen(event, equalSum);
+    }
+
+    if (event.column.dataField === "logistique.dateDepartReelleFournisseur") this.colorizeRedGreen(event, event.value);
+    if (["nombreColisCommandes", "nombreColisExpedies"].includes(event.column.dataField))
+      this.colorizeRedGreen(event, equal);
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data" && e.data.ordre.numero) e.rowElement.classList.add("cursor-pointer");
+  }
+
+  colorizeRedGreen(e, condition) {
+    e.cellElement.classList.add(condition ? "highlight-ok" : "highlight-err");
   }
 
   manualDate(e) {

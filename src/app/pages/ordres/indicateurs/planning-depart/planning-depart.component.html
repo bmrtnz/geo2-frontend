@@ -42,7 +42,7 @@
           class="difference-checkbox"
           [value]="true"
           [width]="40"
-          (onValueChanged)="onFieldValueChange()"
+          (onValueChanged)="updateFilters()"
         ></dx-check-box>
       </div>
     </dxi-item>
@@ -127,7 +127,10 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    [keyExpr]="'id'"
     (onRowDblClick)="onRowDblClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         title,
@@ -136,7 +139,6 @@
         updateFilters.bind(this)
       )
     "
-    (onCellPrepared)="onCellPrepared($event)"
   >
     <!-- Grid configuration -->
     <dxo-export fileName="Planning départ"></dxo-export>
@@ -173,7 +175,9 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
+      [width]="column.width"
       [format]="column.format"
+      [cssClass]="column.cssClass"
       [caption]="
         ('ordres-planningDepart-' + column.dataField?.split('.').join('-')
           | localize) || column.name

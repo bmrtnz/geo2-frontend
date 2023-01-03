@@ -259,8 +259,12 @@ const indicators: Indicator[] = [
       "nombreColisExpedies",
       "logistique.fournisseurReferenceDOC",
       "logistique.okStation",
-      "ordre.assistante.nomUtilisateur",
-      "ordre.commercial.nomUtilisateur",
+      "ordre.assistante.id",
+      "ordre.commercial.id",
+      "ordre.referenceClient",
+      "ordre.transporteur.id",
+      "ordre.codeChargement",
+      "ordre.userModification"
     ],
   },
   {
