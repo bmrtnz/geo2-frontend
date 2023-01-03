@@ -380,16 +380,16 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   public fnMajOrdreRegroupementV2(
+    ordreRef: string,
     socCode: string,
-    nomUtilisateur: string,
     entrepotGeneric: boolean,
-    codeRegimeTva: string,
+    nomUtilisateur: string,
   ) {
     return this.functionsService.queryFunction("fnMajOrdreRegroupementV2", [
+      { name: "ordreRef", type: "String", value: ordreRef },
       { name: "socCode", type: "String", value: socCode },
-      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
       { name: "entrepotGeneric", type: "Boolean", value: entrepotGeneric },
-      { name: "codeRegimeTva", type: "String", value: codeRegimeTva },
+      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
     ]);
   }
 

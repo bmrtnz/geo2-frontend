@@ -1191,10 +1191,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
       filter(flag => flag),
       concatMapTo(this.ordresService.fnMajOrdreRegroupementV2(
+        this.refOrdre,
         this.currentCompanyService.getCompany().id,
-        this.authService.currentUser.nomUtilisateur,
         false,
-        this.ordre.entrepot.regimeTva?.id ?? "",
+        this.authService.currentUser.nomUtilisateur,
       )),
     )
       .subscribe({
