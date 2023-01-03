@@ -163,7 +163,7 @@
                       formControlName="bureauAchat"
                       [readOnly]="readOnlyMode"
                       [dataSource]="bureauxAchat"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                     >
                       <dx-validator
@@ -316,7 +316,7 @@
                       formControlName="langue"
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                     >
                       <dx-validator
@@ -371,7 +371,7 @@
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                       [dataSource]="incoterms"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                     >
                     </dx-select-box>
@@ -580,7 +580,7 @@
                       formControlName="pays"
                       [readOnly]="readOnlyMode"
                       [dataSource]="pays"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                     >
                       <dx-validator
@@ -953,7 +953,7 @@
                       formControlName="regimeTva"
                       [readOnly]="readOnlyMode"
                       [dataSource]="regimesTva"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                     >
                       <dx-validator
@@ -976,7 +976,7 @@
                       formControlName="devise"
                       [readOnly]="readOnlyMode"
                       [dataSource]="devises"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                     >
                       <dx-validator
@@ -1031,7 +1031,7 @@
                       formControlName="moyenPaiement"
                       [readOnly]="readOnlyMode"
                       [dataSource]="moyensPaiement"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1060,7 +1060,7 @@
                       formControlName="basePaiement"
                       [readOnly]="readOnlyMode"
                       [dataSource]="basesPaiement"
-                      [displayExpr]="displayIDBefore"
+                      [displayExpr]="displayCodeBefore"
                       [searchExpr]="['id']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
@@ -1310,8 +1310,8 @@
                       formControlName="fournisseurDeRattachement"
                       [readOnly]="readOnlyMode"
                       [dataSource]="fournisseursDeRattachement"
-                      displayExpr="raisonSocial"
-                      [searchExpr]="['id']"
+                      [displayExpr]="displayCodeBefore"
+                      [searchExpr]="['code', 'raisonSocial']"
                       [showClearButton]="true"
                       (onValueChanged)="onNonRequiredSBChange($event)"
                     >
