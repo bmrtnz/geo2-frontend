@@ -215,7 +215,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "type.id",
     "documentCMR.isPresent",
     "documentCMR.uri",
-    "documentCMR.type"
+    "documentCMR.type",
+    "descriptifRegroupement",
   ];
 
   private destroy = new Subject<boolean>();
@@ -331,6 +332,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
+  public descriptifRegoupement: string;
 
   ngOnInit() {
     this.initializeForm();
@@ -903,6 +905,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
           this.fetchFullOrderNumber();
+          this.descriptifRegoupement = ordre.descriptifRegroupement;
           this.refOrdre = this.ordre?.id ? ordre.id : "-";
           this.canDuplicate = !!this?.ordre?.id;
           this.formGroup.reset(ordre);
@@ -1199,7 +1202,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     )
       .subscribe({
         error: ({ message }: Error) => notify(message, "error"),
-        next: () => notify("Duplication effectuée avec succès", "success"),
+        next: () => notify("Duplication effectuée", "success"),
+        complete: () => this.refreshDescriptifRegoupement(),
       });
   }
 
@@ -1207,7 +1211,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
       error: ({ message }: Error) => notify(message, "error"),
       next: res => notify(res.data.fDelRegroupement.msg, "success"),
+      complete: () => this.refreshDescriptifRegoupement(),
     });
+  }
+
+  private refreshDescriptifRegoupement() {
+    this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"])
+      .subscribe(res => this.descriptifRegoupement = res.data.ordre.descriptifRegroupement);
   }
 
 }
