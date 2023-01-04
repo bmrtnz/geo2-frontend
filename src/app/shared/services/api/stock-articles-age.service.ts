@@ -1,9 +1,16 @@
-import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Injectable, Type } from "@angular/core";
+import { Apollo, gql } from "apollo-angular";
+import { Emballage, Origine, Variete } from "app/shared/models";
+import { Model } from "app/shared/models/model";
+import ArrayStore from "devextreme/data/array_store";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { map } from "rxjs/operators";
 import { StockArticleAge } from "../../models/stock-article-age.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
+
+type SubEntity = Variete | Origine | Emballage;
 
 @Injectable({
   providedIn: "root",
@@ -170,4 +177,39 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
       }),
     });
   }
+
+  /** Get distinct sub-entity list from Stock, by their class, filtered by espece */
+  public subDistinct<T extends SubEntity>(
+    entity: Type<T>,
+    especeID: string,
+    body?: Set<string>,
+  ) {
+    if (!body) body = new Set([
+      (entity as any).getKeyField(),
+      (entity as any).getLabelField()
+    ]);
+    const name = `subDistinctStock${entity.name}`;
+    return this.apollo.query<{ [name: string]: Array<T> }>({
+      query: gql(ApiService.buildGraph("query", [{
+        name,
+        body,
+        params: [{ name: "especeID", value: "especeID", isVariable: true }],
+      }], [{ name: "especeID", type: "String", isOptionnal: false }])),
+      variables: { especeID },
+    }).pipe(map(res => res.data[name]));
+  }
+
+  public getSubDistinctDataSource<T extends SubEntity>(
+    entity: Type<T>,
+    especeID: string,
+    body?: Set<string>,
+  ) {
+    return new DataSource({
+      store: new CustomStore({
+        key: (entity as any).getKeyField(),
+        load: options => this.subDistinct(entity, especeID, body).toPromise(),
+      }),
+    });
+  }
 }
+

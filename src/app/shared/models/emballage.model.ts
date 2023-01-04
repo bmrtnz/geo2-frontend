@@ -3,6 +3,7 @@ import { Espece } from "./espece.model";
 import GroupeEmballage from "./groupe-emballage.model";
 import PreEmballage from "./pre-emballage.model";
 import Marque from "./marque.model";
+import StockArticleAge from "./stock-article-age.model";
 
 @ModelName("Emballage")
 export class Emballage extends Model {
@@ -49,5 +50,6 @@ export class Emballage extends Model {
   @Field() public yh: number;
   @Field() public zb: number;
   @Field() public zh: number;
+  @Field({ model: import("./stock-article-age.model") }) public stocksAge: StockArticleAge[];
 }
 export default Emballage;
