@@ -69,6 +69,28 @@
           </dx-select-box>
         </div>
       </div>
+      <!-- Groupe emballage -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "articles-emballage-groupe" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #groupesSB
+            [dataSource]="groupes | async"
+            [disabled]="noEspeceSet"
+            [showClearButton]="true"
+            (valueChange)="
+              onFieldValueChange($event, 'emballage.emballage.groupe.id')
+            "
+            [searchExpr]="['node.key', 'node.description']"
+            [displayExpr]="displayCodeBefore"
+            valueExpr="node"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
       <div class="dx-field field-large">
         <div class="dx-field-label">
           {{ "articles-emballage-emballage" | localize }}
