@@ -61,13 +61,30 @@
             #modesCultureSB
             [dataSource]="modesCulture | async"
             (valueChange)="
-              onFieldValueChange(
-                $event,
-                'matierePremiere.modeCulture.id'
-              )
+              onFieldValueChange($event, 'matierePremiere.modeCulture.id')
             "
             [searchExpr]="['node.description']"
             [displayExpr]="'node.description'"
+            valueExpr="node"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-tag-box>
+        </div>
+      </div>
+      <!-- Groupe emballage -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "articles-emballage-groupe" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-tag-box
+            #groupeSB
+            [dataSource]="groupes | async"
+            (valueChange)="
+              onFieldValueChange($event, 'emballage.emballage.groupe.id')
+            "
+            [searchExpr]="['node.key', 'node.description']"
+            [displayExpr]="displayCodeBefore"
             valueExpr="node"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
