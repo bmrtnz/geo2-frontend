@@ -603,7 +603,7 @@ export class GridConfiguratorService {
     toolbarOptions.items.push(this.buildExportToolbarItem(component, {
       name: "exportAll",
       hint: this.localizationService.localize("btn-export-all"),
-      exportTake: 1_000_000_000,
+      exportTake: 1_000_000,
     }));
   }
 
