@@ -7,6 +7,7 @@ import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { EmballagesService } from "app/shared/services/api/emballages.service";
 import { EspecesService } from "app/shared/services/api/especes.service";
+import { GroupesEmballageService } from "app/shared/services/api/groupes-emballage.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
@@ -39,6 +40,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   @ViewChild("especeSB", { static: false }) especeSB: DxSelectBoxComponent;
   @ViewChild("varieteSB", { static: false }) varieteSB: DxSelectBoxComponent;
   @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
+  @ViewChild("groupeEmballageSB") groupeEmballageSB: DxSelectBoxComponent;
   @ViewChild("emballageSB", { static: false }) emballageSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) origineSB: DxSelectBoxComponent;
   @ViewChild("valideSB", { static: false }) valideSB: DxSelectBoxComponent;
@@ -49,6 +51,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   especes: DataSource;
   origines: DataSource;
   varietes: DataSource;
+  groupesEmballage: DataSource;
   emballages: DataSource;
   modesCulture: DataSource;
   trueFalse: any;
@@ -65,6 +68,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     public clientsService: ClientsService,
     public especesService: EspecesService,
     public varietesService: VarietesService,
+    public groupesEmballageService: GroupesEmballageService,
     public emballagesService: EmballagesService,
     public modesCultureService: ModesCultureService,
     public originesService: OriginesService,
@@ -76,6 +80,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     this.origines.filter(["valide", "=", true]);
     this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
     this.varietes.filter(["valide", "=", true]);
+    this.groupesEmballage = this.groupesEmballageService.getDistinctDataSource(["id", "description", "espece.id"]);
+    this.groupesEmballage.filter(["valide", "=", true]);
     this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
     this.emballages.filter(["valide", "=", true]);
     this.modesCulture = this.modesCultureService.getDataSource_v2(["id", "description"]);
@@ -183,6 +189,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
         this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
         if (event[0] !== "null") this.varietes.filter(filter);
+        this.groupesEmballage = this.groupesEmballageService.getDistinctDataSource(["id", "description", "espece.id"]);
+        if (event[0] !== "null") this.groupesEmballage.filter(filter);
         this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
         if (event[0] !== "null") this.emballages.filter(filter);
         this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
