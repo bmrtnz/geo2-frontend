@@ -155,7 +155,11 @@ export class ArticlesListComponent implements OnInit, NestedMain {
         .filter(([, values]) => values.length)
         .filter(([, [value]]) => value !== "null")
         .map(([path, values]) => values
-          .map(value => [path, value === "null" ? "isnotnull" : "=", value])
+          .map(value => {
+            // remap groupe-emballage path (reason: depth of 2)
+            path = path.replace("emballage.groupe.id", "emballage.emballage.groupe.id");
+            return [path, value === "null" ? "isnotnull" : "=", value];
+          })
           .map(value => JSON.stringify(value))
           .join(`¤${JSON.stringify("or")}¤`)
           .split("¤")
@@ -177,25 +181,21 @@ export class ArticlesListComponent implements OnInit, NestedMain {
     // Filtering variete, emballage & origine selectBox list depending on specy
     const filter = [];
 
-    if (dataField === "matierePremiere.espece.id") {
+    if (["matierePremiere.espece.id", "emballage.groupe.id"].includes(dataField)) {
       // Clear all dependent fields
 
-      if (event.length) {
-        event.forEach(element => {
-          filter.push(["espece.id", "=", element]);
-          filter.push("or");
-        });
-        filter.pop(); // Remove last 'or'
+      filter.push(["espece.id", "=", this.especeSB.value[0]]);
 
-        this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
-        if (event[0] !== "null") this.varietes.filter(filter);
-        this.groupesEmballage = this.groupesEmballageService.getDistinctDataSource(["id", "description", "espece.id"]);
-        if (event[0] !== "null") this.groupesEmballage.filter(filter);
-        this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
-        if (event[0] !== "null") this.emballages.filter(filter);
-        this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
-        if (event[0] !== "null") this.origines.filter(filter);
-      }
+      this.varietes = this.varietesService.getDistinctDataSource(["id", "description"]);
+      if (this.especeSB.value[0] !== "null") this.varietes.filter(filter);
+      this.groupesEmballage = this.groupesEmballageService.getDistinctDataSource(["id", "description", "espece.id"]);
+      if (this.especeSB.value[0] !== "null") this.groupesEmballage.filter(filter);
+      this.emballages = this.emballagesService.getDistinctDataSource(["id", "description", "espece.id"]);
+      if (this.especeSB.value[0] !== "null") this.emballages.filter(filter);
+      if (this.groupeEmballageSB.value)
+        this.emballages.filter([...filter, " and ", ["groupe.id", "=", this.groupeEmballageSB.value[0]]]);
+      this.origines = this.originesService.getDistinctDataSource(["id", "description", "espece.id"]);
+      if (this.especeSB.value[0] !== "null") this.origines.filter(filter);
     }
 
   }
