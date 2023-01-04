@@ -136,6 +136,10 @@ export class ArticlesService extends ApiService implements APIRead {
     `;
   }
 
+  public getDistinctEntityDatasource(fieldName, descriptionField?, searchExpr?, fetchPolicy?) {
+    return this.getDistinctDatasource("GeoArticle", fieldName, descriptionField, searchExpr, fetchPolicy);
+  }
+
   concatArtDescript(article) {
     let desc = "  " + article.id + " " + article.matierePremiere.variete.id;
     desc += " cat " + article.cahierDesCharge.categorie.id;

@@ -1224,7 +1224,7 @@ export abstract class ApiService implements OnDestroy {
     ]);
   }
 
-  protected getDistinctDatasource(type, fieldName, descriptionField?, searchExpr?) {
+  protected getDistinctDatasource(type, fieldName, descriptionField?, searchExpr?, fetchPol?) {
     return this.apollo.query<{ distinct: RelayPage<{ count: number, key: string, description: string }> }>({
       query: gql(this.buildDistinctGraph(descriptionField !== undefined)),
       variables: {
@@ -1237,6 +1237,7 @@ export abstract class ApiService implements OnDestroy {
           pageSize: 500,
         } as Pageable,
       },
+      fetchPolicy: fetchPol,
     }).pipe(
       map(res => new DataSource({
         store: new ArrayStore({

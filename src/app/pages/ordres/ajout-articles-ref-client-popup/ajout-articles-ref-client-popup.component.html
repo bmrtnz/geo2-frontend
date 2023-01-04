@@ -55,13 +55,13 @@
           (onClick)="insertArticles()"
         ></dx-button>
         <div style="clear: both"></div>
-        <app-articles-list
+        <app-grid-articles-ref-client
           [ordre]="ordre"
           [additionnalFilter]="additionnalFilter"
           [fetchPolicy]="'no-cache'"
           [preFilterTitle]="'articles-refsclient-preFilter-title' | localize"
           (selectChange)="selectFromGrid($event)"
-        ></app-articles-list>
+        ></app-grid-articles-ref-client>
         <br />
       </div>
     </dx-scroll-view>
