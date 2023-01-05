@@ -1556,6 +1556,7 @@
     ]
   },
   "ordre-option-reservation-stock": {
+    "pageSize": 10000,
     "columns": [
       {
         "dataField": "id",
@@ -1653,12 +1654,12 @@
       {
         "visibleIndex": 26,
         "dataField": "quantiteReservee1",
+        "cssClass": "text-align-left no-padding-right",
         "visible": true
       },
       {
         "visibleIndex": 28,
         "dataField": "option",
-        "width": 180,
         "dataType": "string",
         "visible": true
       },

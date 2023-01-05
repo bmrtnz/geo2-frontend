@@ -35,6 +35,7 @@
     class="dx-button-stock-reservation"
     text="{{ 'btn-reservation' | localize }}"
     type="success"
+    icon="check"
     [disabled]="!stockInfo"
     (onClick)="onClickReservation()"
   ></dx-button>
@@ -53,7 +54,7 @@
   ></dx-button>
 
   <dx-data-grid
-    class="dx-card wide-card grid-ordre-ligne-stock"
+    class="dx-card wide-card"
     [dataSource]="reservationsSource | async"
     [remoteOperations]="false"
     [showBorders]="false"

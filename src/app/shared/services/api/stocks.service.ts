@@ -218,7 +218,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
       });
   }
 
-  takeOptionStock(quantite: number, stockId: string, propCode: string, palCode: string) {
+  takeOptionStock(quantite: number, stockId: string, propCode: string, palCode: string, stockDescription: string) {
     return this.apollo
       .query<{ takeOptionStock: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
@@ -232,6 +232,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
                 { name: "stockId", value: "stockId", isVariable: true },
                 { name: "quantite", value: "quantite", isVariable: true },
                 { name: "palCode", value: "palCode", isVariable: true },
+                { name: "stockDescription", value: "stockDescription", isVariable: true },
               ]
             }
           ],
@@ -240,9 +241,10 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             { name: "stockId", type: "String", isOptionnal: false },
             { name: "quantite", type: "Int", isOptionnal: false },
             { name: "palCode", type: "String", isOptionnal: false },
+            { name: "stockDescription", type: "String", isOptionnal: false },
           ],
         )),
-        variables: { propCode, stockId, quantite, palCode },
+        variables: { propCode, stockId, quantite, palCode, stockDescription },
         fetchPolicy: "network-only",
       });
   }

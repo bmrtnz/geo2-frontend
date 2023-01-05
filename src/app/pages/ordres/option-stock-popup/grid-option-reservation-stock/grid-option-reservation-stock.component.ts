@@ -13,7 +13,6 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { PromptPopupComponent } from "../../../../shared/components/prompt-popup/prompt-popup.component";
 
 export type Reservation = [number, number, string];
 
@@ -30,7 +29,6 @@ export class GridOptionReservationStockComponent implements OnInit {
 
   contentReadyEvent = new EventEmitter<any>();
   @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
-  @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
   @ViewChild("comBox", { static: false }) comBox: DxTextBoxComponent;
   @ViewChild("qteBox", { static: false }) qteBox: DxNumberBoxComponent;
 
@@ -68,21 +66,10 @@ export class GridOptionReservationStockComponent implements OnInit {
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
   }
 
-  onFocusedRowChanged(e) {
-    if (e.row?.rowType !== "data") {
-      this.updateStockInfo();
-    } else {
-      this.updateStockInfo(e.row.data);
-    }
-  }
-
   initFields() {
+    this.stockInfo = "";
     if (this.comBox) this.comBox.value = this.authService.currentUser.nomUtilisateur;
-    if (this.stockInfo) this.stockInfo = "";
-    if (this.qteBox) {
-      this.qteBox.value = null;
-      this.qteBox.instance.focus();
-    }
+    if (this.qteBox) this.qteBox.value = null;
   }
 
   updateStockInfo(data?) {
@@ -99,6 +86,20 @@ export class GridOptionReservationStockComponent implements OnInit {
     this.stockInfo += `Expéditeur : ${data.fournisseurCode}${this.separator}`;
     this.stockInfo += `Marchandise de : ${this.propCode}${this.separator}`;
     this.stockInfo += `Dispo : ${this.dispo}`;
+  }
+
+  onFocusedRowChanged(e) {
+    if (e.row?.rowType === "data") {
+      if (e.row?.data?.stock?.statutStock === "O") {
+        // Case: already an option
+        notify(this.localizeService.localize("warning-option-on-option"), "warning", 1500);
+      } else {
+        this.updateStockInfo(e.row.data);
+        this.qteBox.instance.focus();
+        return;
+      }
+    }
+    this.updateStockInfo(); // Clear all
   }
 
   onCellPrepared(e) {
@@ -124,12 +125,14 @@ export class GridOptionReservationStockComponent implements OnInit {
       }
 
       // Prefix "OPTION " if this is an option
-      if (e.column.dataField === "option" && (e.data.statutStock === "O"))
+      if (e.column.dataField === "option" && e.data.stock.statutStock === "O") {
+        e.cellElement.classList.add("option-text");
         e.cellElement.textContent = `OPTION ${e.value}`;
+      }
 
       // Show situation
       if (e.column.dataField === "quantiteReservee1") {
-        e.cellElement.textContent = `Réservé : ${e.data.quantiteReservee}  Départ : ${e.data.quantiteInitiale}`;
+        e.cellElement.textContent = `Réservé : ${e.data.quantiteReservee}     Départ : ${e.data.quantiteInitiale}`;
       }
     }
 
@@ -140,7 +143,7 @@ export class GridOptionReservationStockComponent implements OnInit {
         data = data[0];
         if (data.proprietaireCode === this.ligneStock.proprietaireCode &&
           data.fournisseurCode === this.ligneStock.fournisseurCode) {
-          // Don't ask me why there's this timeout (otherwise focus event is not triggered as it should be)
+          // Don't ask me why a timeout needed (otherwise focus event is not triggered as it should be)
           if (e.row?.data?.items?.length !== 1) {
             setTimeout(() => this.datagrid.instance.option("focusedRowIndex", e.rowIndex));
           } else {
@@ -173,10 +176,11 @@ export class GridOptionReservationStockComponent implements OnInit {
         this.qteBox.value,
         this.stockId,
         this.propCode,
-        this.palCode
+        this.palCode,
+        this.comBox.value
       ).subscribe({
         next: (res) => {
-          notify("Réservation prise en compte", "success", 3000);
+          notify(this.localizeService.localize("reservation-ok"), "success", 3000);
           this.reservationChange.emit();
         },
         error: (error: Error) => {

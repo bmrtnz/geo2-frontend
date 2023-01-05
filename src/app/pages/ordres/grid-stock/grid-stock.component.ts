@@ -1,17 +1,10 @@
 
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import StockArticle from "app/shared/models/stock-article.model";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
-import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
-import { EmballagesService } from "app/shared/services/api/emballages.service";
-import { EspecesService } from "app/shared/services/api/especes.service";
-import { OriginesService } from "app/shared/services/api/origines.service";
-import { StockArticlesAgeService } from "app/shared/services/api/stock-articles-age.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
-import { VarietesService } from "app/shared/services/api/varietes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
@@ -21,7 +14,6 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
-import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
 import { StockConsolideService } from "../../../shared/services/api/stock-consolide.service";
 import { GridsService } from "../grids.service";
 import { OptionStockPopupComponent } from "../option-stock-popup/option-stock-popup.component";
@@ -82,10 +74,8 @@ export class GridStockComponent implements OnInit {
     public gridRowStyleService: GridRowStyleService,
     public clientsService: ClientsService,
     private stocksService: StocksService,
-    private modesCultureService: ModesCultureService,
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
-    private stockArticlesAgeService: StockArticlesAgeService,
     public gridsService: GridsService,
   ) {
     this.apiService = this.articlesService;
@@ -196,10 +186,6 @@ export class GridStockComponent implements OnInit {
     this.gridsService.reload("SyntheseExpeditions");
   }
 
-  // onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
-  //   if (data?.articleID) this.reservationPopup.present(data, this.ordre);
-  // }
-
   onCellClick(e) {
     if (e.rowType === "group" && e.column.dataField === "commentaire") {
       this.datagrid.instance.expandRow(e.key);
@@ -221,9 +207,8 @@ export class GridStockComponent implements OnInit {
       if (e.column.dataField === "articleDescription" && e.cellElement.textContent) {
         e.cellElement.title = this.localizeService.localize("hint-dblClick-file");
         e.cellElement.classList.add("cursor-pointer");
-        let data = e.data.items ?? e.data.collapsedItems;
-        data = data[0].bio;
-        if (data) e.cellElement.classList.add("bio-article");
+        const data = e.data.items ?? e.data.collapsedItems;
+        if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
     }
 
@@ -262,7 +247,7 @@ export class GridStockComponent implements OnInit {
     return data.toString();
   }
 
-  editComment(cell, event) {
+  editComment(cell) {
     this.articleLigneId = cell.data.articleID;
     this.promptPopupComponent.show({ comment: cell.value });
   }

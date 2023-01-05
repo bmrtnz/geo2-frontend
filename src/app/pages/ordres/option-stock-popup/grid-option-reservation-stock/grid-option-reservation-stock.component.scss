@@ -4,6 +4,10 @@
 
 ::ng-deep .grid-option-reservation-stock {
 
+  .dx-datagrid {
+    max-height: 400px;
+  }
+
   // Reducing grid's height when it's empty
   .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
     height: 70px;
@@ -36,6 +40,10 @@
       .dx-texteditor-container {
         width: 500px !important;
       }
+    }
+
+    .option-text {
+      color: $base-accent;
     }
 
   }
