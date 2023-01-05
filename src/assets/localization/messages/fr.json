@@ -121,6 +121,7 @@
     "title-end-article-reservation-ordre-popup": "- article &A - &C colis",
     "title-option-stock-popup": "Réservation de stock",
     "warning-option-on-option": "Impossible de prendre une option sur une option",
+    "warning-option-noQty": "Veuillez saisir la quantité à réserver",
     "search": "Recherche…",
     "saveError": "Sauvegardé",
     "saveKO": "Échec de la sauvegarde",

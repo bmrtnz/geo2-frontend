@@ -127,7 +127,7 @@ export class GridOptionReservationStockComponent implements OnInit {
       // Prefix "OPTION " if this is an option
       if (e.column.dataField === "option" && e.data.stock.statutStock === "O") {
         e.cellElement.classList.add("option-text");
-        e.cellElement.textContent = `OPTION ${e.value}`;
+        e.cellElement.textContent = `OPTION ${e.value ?? ""}`;
       }
 
       // Show situation
@@ -171,6 +171,13 @@ export class GridOptionReservationStockComponent implements OnInit {
   }
 
   reservation() {
+
+    if (!this.qteBox.value) {
+      notify(this.localizeService.localize("warning-option-noQty"), "warning", 1500);
+      this.qteBox.instance.focus();
+      return;
+    }
+
     this.stocksService
       .takeOptionStock(
         this.qteBox.value,
@@ -200,8 +207,7 @@ export class GridOptionReservationStockComponent implements OnInit {
   }
 
   reloadSource(articleID: string) {
-    this.reservationsSource = this.stocksService
-      .getStockReservationDatasource(articleID);
+    this.reservationsSource = this.stocksService.getStockReservationDatasource(articleID);
   }
 
   public calcFouProp(rowData: Partial<StockReservation>) {
