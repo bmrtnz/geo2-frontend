@@ -167,7 +167,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     "dateConditionGeneraleAchatSignee",
     "declarantBacsCHEP",
     "indicateurModificationDetail",
-    "fournisseurDeRattachement.id", "fournisseurDeRattachement.raisonSocial",
+    "fournisseurDeRattachement.id", "fournisseurDeRattachement.code", "fournisseurDeRattachement.raisonSocial",
     "groupeFournisseur.id", "groupeFournisseur.description",
     "conditionVente.id", "conditionVente.description"
 
@@ -289,7 +289,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     this.naturesStation = this.naturesStationService.getDataSource();
     this.conditionsVente = this.conditionsVenteService.getDataSource();
     this.conditionsVente.filter(["valide", "=", "true"]);
-    this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(["id", "raisonSocial"]);
+    this.fournisseursDeRattachement = this.fournisseursService.getDataSource_v2(["id", "code", "raisonSocial"]);
     this.fournisseursDeRattachement.filter(["valide", "=", "true"]);
     this.groupesFournisseur = this.groupesFournisseurService.getDataSource();
     this.certifications = this.certificationsService.getDataSource();
@@ -409,9 +409,9 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
     this.ifcoChecked = params.value;
   }
 
-  displayIDBefore(data) {
+  displayCodeBefore(data) {
     return data ?
-      (data.id + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
+      ((data.code ? data.code : data.id) + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
         (data.raisonSocial ? data.raisonSocial : data.description)))
       : null;
   }
