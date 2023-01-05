@@ -258,26 +258,16 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   public onBLAutoClick() {
     const socID = this.currentCompanyService.getCompany().id;
-    this.ordresService.checkBLAuto(
+    this.ordresService.fEnvoiBLAuto(
       socID,
       this.secteurSB.value.id,
       this.datePipe.transform(new Date(Date.parse(this.dateMin.value)), "yyyy-MM-dd"),
       this.datePipe.transform(new Date(Date.parse(this.dateMax.value)), "yyyy-MM-dd"),
-    ).pipe(
-      filter(res => !!res.data.array_ord_ref.length),
-      switchMap(res => from(res.data.array_ord_ref)),
-      mergeMap(ordreID => this.envoisService.fDocumentEnvoiDetailsExp(ordreID, socID)),
-    )
-      .subscribe({
-        next: res => {
-          const factory = this.cfr.resolveComponentFactory(DocumentsOrdresPopupComponent);
-          const popupRef = this.vcr.createComponent(factory);
-          popupRef.instance.flux = "DETAIL";
-          popupRef.instance.ordre = { id: res.data.fDocumentEnvoiDetailsExp.data.ordreRef };
-          popupRef.instance.visible = true;
-        },
-        error: (err: Error) => notify(`Erreur lors de l'envoi des détails: ${err.message}`, "error", 3000),
-      });
+      this.authService.currentUser.nomUtilisateur,
+    ).subscribe({
+      next: res => notify(res.msg, "success"),
+      error: (err: Error) => notify(`Erreur lors de l'envoi des détails: ${err.message}`, "error", 3000),
+    });
   }
 }
 
