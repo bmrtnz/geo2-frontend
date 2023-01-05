@@ -56,6 +56,24 @@
   </dx-button>
 </h2>
 
+<div class="inputs-container content-block">
+  <div class="dx-field">
+    <div class="dx-field-label">
+      {{ "tiers-clients-secteur" | localize }}
+    </div>
+    <div class="dx-field-value">
+      <dx-select-box
+        [dataSource]="secteursSource"
+        displayExpr="description"
+        [showClearButton]="true"
+        searchExpr="description"
+        [width]="200"
+        (onValueChanged)="onValueChanged($event)"
+      ></dx-select-box>
+    </div>
+  </div>
+</div>
+
 <div class="content-block accueilOrdres-page">
   <dx-tile-view
     class="dx-tile-content"

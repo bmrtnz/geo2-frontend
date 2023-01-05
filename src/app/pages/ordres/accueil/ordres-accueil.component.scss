@@ -152,3 +152,7 @@
     letter-spacing: .04em;
   }
 }
+
+::ng-deep .inputs-container {
+  width: calc(100% / 3);
+}

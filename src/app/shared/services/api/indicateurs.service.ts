@@ -17,6 +17,8 @@ export type IndicateurCountResponse = { [key in keyof typeof Indicateur]: number
 })
 export class IndicateursService {
 
+  public secteur: string;
+
   constructor(
     private apollo: Apollo,
     private currentCompanyService: CurrentCompanyService,
@@ -31,6 +33,7 @@ export class IndicateursService {
       fetchPolicy: "network-only",
       variables: {
         societeCode: this.currentCompanyService.getCompany().id,
+        secteurCode: this.secteur,
         ...indicateurs.reduce((acm, crt) => ({ ...acm, [crt]: crt }), {}),
       },
     })
@@ -48,12 +51,14 @@ export class IndicateursService {
         params: [
           { name: "indicateur", value: alias, isVariable: true },
           { name: "societeCode", value: "societeCode", isVariable: true },
+          { name: "secteurCode", value: "secteurCode", isVariable: true },
         ],
       })
     ), indicateurs.map((name: string) =>
       ({ name, type: "Indicateur", isOptionnal: false })
     ).concat([
       { name: "societeCode", type: "String", isOptionnal: false },
+      { name: "secteurCode", type: "String", isOptionnal: true },
     ]),
       "CountByIndicators");
   }
