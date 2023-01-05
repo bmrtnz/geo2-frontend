@@ -1,5 +1,6 @@
 import { Field, Model, ModelName } from "./model";
 import StockQuantite from "./stock-quantite.model";
+import Stock from "./stock.model";
 
 @ModelName("StockReservation")
 export class StockReservation extends StockQuantite {
@@ -30,6 +31,8 @@ export class StockReservation extends StockQuantite {
 
   @Field({ dataType: "date" })
   dateFabrication: string;
+
+  @Field({ model: import("./stock.model") }) public stock: Stock;
 }
 
 export default StockReservation;

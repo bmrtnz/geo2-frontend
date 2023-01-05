@@ -28,6 +28,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   titleStart: string;
   titleMid: string;
   titleEnd: string;
+  titlePlus: string;
   pulseBtnOn: boolean;
   popupFullscreen = true;
 
@@ -53,6 +54,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
         + "/" + this.ordre.entrepot.code;
     }
     this.titleEnd = this.localizeService.localize("via-stock");
+    this.titlePlus = this.localizeService.localize("resa-article");
   }
 
   onShowing(e) {

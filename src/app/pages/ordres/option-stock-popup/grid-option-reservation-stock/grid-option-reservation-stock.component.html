@@ -1,0 +1,147 @@
+
+<div class="stock-info">{{ stockInfo }}</div>
+<div class="stock-info-boxes">
+  <!-- Comm -->
+  <div class="dx-field dx-field-stock-comm">
+    <div class="dx-field-label">{{ 'tiers-clients-details-groupe-commentaires' | localize }}</div>
+    <div class="dx-field-value">
+      <dx-text-box #comBox [showClearButton]="true"
+        >
+      </dx-text-box>
+    </div>
+  </div>
+
+  <!-- Quantité -->
+  <div class="dx-field dx-field-stock-qte">
+    <div class="dx-field-label">{{ 'quantite' | localize }}</div>
+    <div class="dx-field-value">
+      <dx-number-box
+        #qteBox
+        format="###"
+        [format]="{
+          precision: 0
+        }"
+        valueChangeEvent="keyup"
+      >
+        <dx-validator>
+          <dxi-validation-rule *ngIf="!!stockInfo" type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-number-box>
+    </div>
+  </div>
+
+  <!-- Valid Button -->
+  <dx-button
+    class="dx-button-stock-reservation"
+    text="{{ 'btn-reservation' | localize }}"
+    type="success"
+    [disabled]="!stockInfo"
+    (onClick)="onClickReservation()"
+  ></dx-button>
+
+</div>
+<div style="clear:both"></div>
+
+<div class="grid-option-reservation-stock">
+  <dx-button
+    style="margin-right: 16px"
+    class="grid-grouping-button"
+    type="default"
+    icon="material-icons menu_open"
+    hint="{{ 'btn-grouping' | localize }}"
+    (onClick)="gridsService.expandCollapseGroups(this, false)"
+  ></dx-button>
+
+  <dx-data-grid
+    class="dx-card wide-card grid-ordre-ligne-stock"
+    [dataSource]="reservationsSource | async"
+    [remoteOperations]="false"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="-1"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
+    (onContentReady)="contentReadyEvent.emit($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.OrdreOptionReservationStock
+      )
+    "
+  >
+    <dxo-paging></dxo-paging>
+    <dxo-group-panel [visible]="true"> </dxo-group-panel>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-header-filter
+      [visible]="false"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-export fileName="Déstockage stock"></dxo-export>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    ></dxo-pager>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.OrdreOptionReservationStock"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+    >
+    </dxo-column-chooser>
+    <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
+
+    <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+      <dxi-group-item
+        *ngFor="let field of summaryFields"
+        [column]="field"
+        summaryType="sum"
+        [alignByColumn]="true"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+      <dxi-group-item
+        name="typePaletteCode"
+        [column]="'typePaletteCode'"
+        summaryType="custom"
+        [alignByColumn]="true"
+      >
+      </dxi-group-item>
+    </dxo-summary>
+
+    <dxi-column
+      [dataField]="'Fournisseur'"
+      [calculateCellValue]="calcFouProp"
+      [groupIndex]="0"
+    ></dxi-column>
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [visible]="false"
+      [caption]="
+        ('ordreReservationStock-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
+      "
+      [dataType]="column?.dataType"
+      [cssClass]="column?.cssClass"
+      [width]="column?.width"
+      [cellTemplate]="column.cellTemplate"
+      [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+  </dx-data-grid>
+</div>

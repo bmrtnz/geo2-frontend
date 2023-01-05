@@ -12,7 +12,6 @@
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-mid">{{ titleMid }}</div>
     <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
-
     <dx-button
       class="close-article-popup"
       icon="close"
@@ -25,6 +24,8 @@
       [focusStateEnabled]="false"
       (onClick)="resizePopup()"
     ></dx-button>
+    <div style="clear:both"></div>
+    <div class="title-plus">{{ titlePlus }}</div>
   </div>
 
   <div *dxTemplate="let data of 'content'">

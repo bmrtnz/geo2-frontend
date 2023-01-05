@@ -149,6 +149,10 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { OptionStockPopupComponent } from "./option-stock-popup/option-stock-popup.component";
+import {
+  GridOptionReservationStockComponent
+} from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
 
 @NgModule({
   declarations: [
@@ -240,7 +244,9 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     DestockageAutoPopupComponent,
     PlanningDepartsMaritimesComponent,
     ImportProgrammesPopupComponent,
-    GridImportProgrammesComponent
+    GridImportProgrammesComponent,
+    OptionStockPopupComponent,
+    GridOptionReservationStockComponent
   ],
   imports: [
     OrdresRoutingModule,

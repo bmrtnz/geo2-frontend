@@ -24,8 +24,10 @@ import { PromptPopupComponent } from "../../../shared/components/prompt-popup/pr
 import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
 import { StockConsolideService } from "../../../shared/services/api/stock-consolide.service";
 import { GridsService } from "../grids.service";
-import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import { OptionStockPopupComponent } from "../option-stock-popup/option-stock-popup.component";
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
+import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import { Article } from "app/shared/models";
 
 @Component({
   selector: "app-grid-stock",
@@ -34,9 +36,11 @@ import { ReservationPopupComponent } from "./reservation-popup/reservation-popup
 })
 export class GridStockComponent implements OnInit {
 
+  @Input() public ordre: Ordre;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
-  @Input() public ordre: Ordre;
+  @Output() public article: Partial<Article>;
+  @Output() public ligneStockArticle: any;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -49,8 +53,10 @@ export class GridStockComponent implements OnInit {
   @ViewChild("origineSB", { static: false }) origineSB: DxSelectBoxComponent;
   @ViewChild("bureauAchatSB", { static: false }) bureauAchatSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
-  @ViewChild(ReservationPopupComponent) reservationPopup: ReservationPopupComponent;
+  @ViewChild(ReservationPopupComponent) destockagePopup: ReservationPopupComponent;
+  @ViewChild(OptionStockPopupComponent) optionPopup: OptionStockPopupComponent;
   @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
+
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -170,6 +176,19 @@ export class GridStockComponent implements OnInit {
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
+  openReservationPopup(data) {
+    if (!data?.articleID) return;
+    this.ligneStockArticle = data;
+    this.articlesService.getOne(data.articleID).subscribe(res => {
+      this.article = res.data.article;
+      this.optionPopup.visible = true;
+    });
+  }
+
+  openDestockagePopup(data) {
+    if (data?.articleID) this.destockagePopup.present(data, this.ordre);
+  }
+
   ajoutReservation() {
     this.selectChange.emit();
     this.datagrid.dataSource = [];
@@ -177,9 +196,9 @@ export class GridStockComponent implements OnInit {
     this.gridsService.reload("SyntheseExpeditions");
   }
 
-  onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
-    if (data?.articleID) this.reservationPopup.present(data, this.ordre);
-  }
+  // onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
+  //   if (data?.articleID) this.reservationPopup.present(data, this.ordre);
+  // }
 
   onCellClick(e) {
     if (e.rowType === "group" && e.column.dataField === "commentaire") {
@@ -208,7 +227,7 @@ export class GridStockComponent implements OnInit {
       }
     }
 
-    if (["data", "group"].includes(e.rowType)) {
+    if (["data", "group"].includes(e.rowType) && e.column.dataField) {
       // Fond jaune pour les stocks J21
       if (e.column.dataField === "quantiteCalculee4") {
         e.cellElement.classList.add("highlight-stockJ21-cell");

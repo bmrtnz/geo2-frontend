@@ -114,6 +114,10 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
 
   /** Query fetching stock by article */
   allStockReservationList(article: string) {
+    const columns = StockReservation.getFieldsName();
+    columns.delete("stock");
+    columns.add("stock.id");
+    columns.add("stock.statutStock");
     return this.apollo
       .query<{ allStockReservationList: StockReservation[] }>({
         query: gql(ApiService.buildGraph(
@@ -121,7 +125,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
           [
             {
               name: `allStockReservationList`,
-              body: StockReservation.getFieldsName(),
+              body: columns,
               params: [
                 { name: "article", value: "article", isVariable: true },
               ],
