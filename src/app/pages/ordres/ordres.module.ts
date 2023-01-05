@@ -131,8 +131,8 @@ import { LitigesComponent } from "./indicateurs/litiges/litiges.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
 import { PlanningDepartComponent } from "./indicateurs/planning-depart/planning-depart.component";
-import { PlanningDepartsMaritimesComponent } from "./indicateurs/planning-departs-maritimes/planning-departs-maritimes.component";
 import { PlanningFournisseursComponent } from "./indicateurs/planning-fournisseurs/planning-fournisseurs.component";
+import { PlanningMaritimeComponent } from "./indicateurs/planning-maritime/planning-maritime.component";
 import {
   PlanningTransporteursApprocheComponent
 } from "./indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component";
@@ -243,12 +243,12 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GroupageChargementsPopupComponent,
     GridLignesGroupageChargementsComponent,
     DestockageAutoPopupComponent,
-    PlanningDepartsMaritimesComponent,
     ImportProgrammesPopupComponent,
     GridImportProgrammesComponent,
     GridArticlesRefClientComponent,
     PackingListPopupComponent,
     GridPackingListComponent,
+    PlanningMaritimeComponent,
   ],
   imports: [
     OrdresRoutingModule,

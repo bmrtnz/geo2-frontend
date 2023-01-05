@@ -6,6 +6,23 @@
     <dx-box>
       <dxi-item [ratio]="7">
         <dx-box>
+          <dxi-item [ratio]="1.5">
+            <div class="dx-field side-switch">
+              <div class="dx-field-label dx-field-label-left">
+                {{ "ordres-planningMaritime-departs" | localize }}
+              </div>
+              <div class="dx-field-value">
+                <dx-switch
+                  [switchedOnText]=""
+                  [switchedOffText]=""
+                  (onValueChanged)="onSideChange($event)"
+                ></dx-switch>
+              </div>
+              <div class="dx-field-label dx-field-label-right">
+                {{ "ordres-planningMaritime-arrivees" | localize }}
+              </div>
+            </div>
+          </dxi-item>
           <dxi-item [ratio]="2">
             <!-- Période -->
             <div class="dx-field">
@@ -24,7 +41,7 @@
               </div>
             </div>
           </dxi-item>
-          <dxi-item [ratio]="2">
+          <dxi-item [ratio]="1.5">
             <!-- Date de début -->
             <div class="dx-field field-small">
               <div class="dx-field-label">
@@ -41,7 +58,7 @@
               </div>
             </div>
           </dxi-item>
-          <dxi-item [ratio]="2">
+          <dxi-item [ratio]="1.5">
             <!-- Date de fin -->
             <div class="dx-field field-small">
               <div class="dx-field-label">
@@ -66,7 +83,7 @@
 </form>
 
 <dx-data-grid
-  class="grid-planning-departs-maritimes"
+  class="grid-planning-maritime"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="true"
@@ -74,18 +91,19 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [focusedRowIndex]="-1"
+  (onContentReady)="onContentReady($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       '',
       $event,
-      gridConfiguratorService.Grid.PlanningDepartsMaritimes,
+      gridConfiguratorService.Grid.PlanningMaritime,
       enableFilters.bind(this)
     )
   "
 >
   <!-- Grid configuration -->
-  <dxo-export fileName="Planning départs maritimes"></dxo-export>
+  <dxo-export fileName="Planning maritime"></dxo-export>
   <dxo-paging></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -94,7 +112,7 @@
     [showPageSizeSelector]="true"
   ></dxo-pager>
   <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.PlanningDepartsMaritimes"
+    [storageKey]="gridConfiguratorService.Grid.PlanningMaritime"
     [enabled]="true"
     type="custom"
     [customLoad]="gridConfiguratorService.load"
@@ -122,7 +140,7 @@
     [width]="column.width"
     [format]="column.format"
     [caption]="
-      ('ordres-planningDepartsMar-' + column.dataField?.split('.').join('-')
+      ('ordres-planningMaritime-' + column.dataField?.split('.').join('-')
         | localize) || column.name
     "
     [visible]="false"
