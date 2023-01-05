@@ -1,0 +1,98 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .grid-option-reservation-stock {
+
+  .dx-datagrid {
+    max-height: 400px;
+  }
+
+  // Reducing grid's height when it's empty
+  .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
+    height: 70px;
+  }
+
+  .bold-text {
+    font-weight: bold !important;
+  }
+
+  .dx-group-row {
+    cursor: pointer;
+  }
+
+  .dx-data-row {
+
+    .highlight-stockJ9-21-cell {
+      background: #ffdd00 !important;
+      color: rgba(0, 0, 0, .7) !important;
+    }
+
+    .highlight-negativeStock-cell {
+      color: #ff325a !important;
+    }
+
+    .highlight-positiveStock-cell {
+      color: #39970e !important;
+    }
+
+    .dx-datagrid-header-panel {
+      .dx-texteditor-container {
+        width: 500px !important;
+      }
+    }
+
+    .option-text {
+      color: $base-accent;
+    }
+
+  }
+
+}
+
+::ng-deep .stock-info {
+  height: 20px;
+  margin: 0 25px;
+}
+
+::ng-deep .stock-info-boxes {
+  overflow: hidden;
+  margin: 0 25px;
+
+  .dx-invalid-message-content {
+    display: none;
+  }
+
+  .dx-field,
+  .dx-button {
+    float: left;
+  }
+
+
+  .dx-field-stock-comm {
+    width: 50% !important;
+
+    .dx-field-label {
+      width: 23% !important;
+    }
+
+    .dx-field-value {
+      width: 77% !important;
+    }
+  }
+
+  .dx-field-stock-qte {
+    margin: 0 20px;
+    width: 14%;
+
+    .dx-field-label {
+      width: 55% !important;
+    }
+
+    .dx-field-value {
+      width: 45% !important;
+    }
+
+  }
+
+}

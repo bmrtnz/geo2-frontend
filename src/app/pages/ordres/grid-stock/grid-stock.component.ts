@@ -1,11 +1,10 @@
 
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Article } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
-import StockArticle from "app/shared/models/stock-article.model";
 import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
-import { StockArticlesAgeService } from "app/shared/services/api/stock-articles-age.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
@@ -16,9 +15,9 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
-import { ModesCultureService } from "../../../shared/services/api/modes-culture.service";
 import { StockConsolideService } from "../../../shared/services/api/stock-consolide.service";
 import { GridsService } from "../grids.service";
+import { OptionStockPopupComponent } from "../option-stock-popup/option-stock-popup.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 
@@ -29,9 +28,11 @@ import { ReservationPopupComponent } from "./reservation-popup/reservation-popup
 })
 export class GridStockComponent implements OnInit {
 
+  @Input() public ordre: Ordre;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
-  @Input() public ordre: Ordre;
+  @Output() public article: Partial<Article>;
+  @Output() public ligneStockArticle: any;
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -44,8 +45,10 @@ export class GridStockComponent implements OnInit {
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
   @ViewChild("bureauAchatSB", { static: false }) bureauxAchatSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
-  @ViewChild(ReservationPopupComponent) reservationPopup: ReservationPopupComponent;
+  @ViewChild(ReservationPopupComponent) destockagePopup: ReservationPopupComponent;
+  @ViewChild(OptionStockPopupComponent) optionPopup: OptionStockPopupComponent;
   @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
+
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -71,10 +74,8 @@ export class GridStockComponent implements OnInit {
     public gridRowStyleService: GridRowStyleService,
     public clientsService: ClientsService,
     private stocksService: StocksService,
-    private modesCultureService: ModesCultureService,
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
-    private stockArticlesAgeService: StockArticlesAgeService,
     public gridsService: GridsService,
   ) {
     this.apiService = this.articlesService;
@@ -172,15 +173,24 @@ export class GridStockComponent implements OnInit {
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
+  openReservationPopup(data) {
+    if (!data?.articleID) return;
+    this.ligneStockArticle = data;
+    this.articlesService.getOne(data.articleID).subscribe(res => {
+      this.article = res.data.article;
+      this.optionPopup.visible = true;
+    });
+  }
+
+  openDestockagePopup(data) {
+    if (data?.articleID) this.destockagePopup.present(data, this.ordre);
+  }
+
   ajoutReservation() {
     this.selectChange.emit();
     this.datagrid.dataSource = [];
     this.toRefresh = true;
     this.gridsService.reload("SyntheseExpeditions");
-  }
-
-  onRowDblClick({ data }: { data: { items: any } & Partial<StockArticle>, [key: string]: any }) {
-    if (data?.articleID) this.reservationPopup.present(data, this.ordre);
   }
 
   onCellClick(e) {
@@ -204,13 +214,12 @@ export class GridStockComponent implements OnInit {
       if (e.column.dataField === "articleDescription" && e.cellElement.textContent) {
         e.cellElement.title = this.localizeService.localize("hint-dblClick-file");
         e.cellElement.classList.add("cursor-pointer");
-        let data = e.data.items ?? e.data.collapsedItems;
-        data = data[0].bio;
-        if (data) e.cellElement.classList.add("bio-article");
+        const data = e.data.items ?? e.data.collapsedItems;
+        if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
     }
 
-    if (["data", "group"].includes(e.rowType)) {
+    if (["data", "group"].includes(e.rowType) && e.column.dataField) {
       // Fond jaune pour les stocks J21
       if (e.column.dataField === "quantiteCalculee4") {
         e.cellElement.classList.add("highlight-stockJ21-cell");
@@ -245,7 +254,7 @@ export class GridStockComponent implements OnInit {
     return data.toString();
   }
 
-  editComment(cell, event) {
+  editComment(cell) {
     this.articleLigneId = cell.data.articleID;
     this.promptPopupComponent.show({ comment: cell.value });
   }

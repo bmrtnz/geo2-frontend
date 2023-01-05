@@ -7,7 +7,8 @@
     overflow: hidden;
 
     .title-start,
-    .title-mid {
+    .title-mid,
+    .title-plus {
       font-size: 20px;
       font-weight: 500;
       float: left;
@@ -20,6 +21,10 @@
       top: -1px;
       font-size: 22px;
       color: $base-accent;
+    }
+
+    .title-plus {
+      margin-top: -21px;
     }
 
     .close-article-popup {

@@ -57,7 +57,6 @@ export class StockArticle extends StockQuantite {
 
   @Field()
   description: string;
-
   @Field({ dataType: "datetime" })
   dateFabrication: string;
 

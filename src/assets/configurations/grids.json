@@ -1353,6 +1353,7 @@
         "visible": false
       },
       {
+        "visibleIndex": 10,
         "dataField": "dateFabrication",
         "visible": true,
         "dataType": "date",
@@ -1371,30 +1372,36 @@
         "visible": false
       },
       {
+        "visibleIndex": 16,
         "dataField": "quantiteCalculee1",
         "width": 60,
         "visible": true
       },
       {
+        "visibleIndex": 18,
         "dataField": "quantiteCalculee2",
         "width": 60,
         "visible": true
       },
       {
+        "visibleIndex": 20,
         "dataField": "quantiteCalculee3",
         "width": 60,
         "visible": true
       },
       {
+        "visibleIndex": 22,
         "dataField": "quantiteCalculee4",
         "width": 60,
         "visible": true
       },
       {
+        "visibleIndex": 24,
         "dataField": "descriptionAbregee",
         "visible": true
       },
       {
+        "visibleIndex": 28,
         "dataField": "commentaire",
         "visible": true,
         "cellTemplate": "editButtonTemplate"
@@ -1491,6 +1498,10 @@
         "visible": true,
         "dataType": "date",
         "format": "dd-MM-yyyy"
+      },
+      {
+        "dataField": "stock.id",
+        "visible": false
       }
     ]
   },
@@ -1541,6 +1552,121 @@
         "dataType": "string",
         "width": 120,
         "visible": true
+      }
+    ]
+  },
+  "ordre-option-reservation-stock": {
+    "pageSize": 10000,
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "showInColumnChooser": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "fournisseurCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "proprietaireCode",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "stock.id",
+        "dataType": "string",
+        "cssClass": "no-padding multi-line-header",
+        "width": 70,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "typePaletteCode",
+        "cssClass": "multi-line-header",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "dateFabrication",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "width": 70,
+        "cssClass": "no-padding multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "quantiteDisponible",
+        "dataType": "number",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": false
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "quantiteInitiale",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "dataType": "number",
+        "visible": false
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "quantiteReservee",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "dataType": "number",
+        "visible": false
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "quantiteCalculee1",
+        "cssClass": "multi-line-header",
+        "width": 35,
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "quantiteCalculee2",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "quantiteCalculee3",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "quantiteCalculee4",
+        "cssClass": "multi-line-header",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "quantiteReservee1",
+        "cssClass": "text-align-left no-padding-right",
+        "visible": true
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "option",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "stock.statutStock",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
