@@ -1,4 +1,4 @@
-<br>
+<br />
 <dx-button
   class="upperButton"
   text="{{ 'btn-blAutoSend' | localize }}"
@@ -42,7 +42,7 @@
           class="difference-checkbox"
           [value]="true"
           [width]="40"
-          (onValueChanged)="onFieldValueChange()"
+          (onValueChanged)="updateFilters()"
         ></dx-check-box>
       </div>
     </dxi-item>
@@ -127,7 +127,10 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    [keyExpr]="'id'"
     (onRowDblClick)="onRowDblClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         title,
@@ -136,7 +139,6 @@
         updateFilters.bind(this)
       )
     "
-    (onCellPrepared)="onCellPrepared($event)"
   >
     <!-- Grid configuration -->
     <dxo-export fileName="Planning départ"></dxo-export>
@@ -144,13 +146,13 @@
       [visible]="true"
       [allowSearch]="true"
     ></dxo-header-filter>
-    <dxo-paging></dxo-paging>
+    <!-- <dxo-paging></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
-    ></dxo-pager>
+    ></dxo-pager> -->
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.PlanningDepart"
       [enabled]="true"
@@ -173,10 +175,12 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
+      [width]="column.width"
       [format]="column.format"
+      [cssClass]="column.cssClass"
       [caption]="
-        ('ordres-planningDepart-' + column.dataField?.split('.').join('-') | localize) ||
-        column.name
+        ('ordres-planningDepart-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
       "
       [dataType]="column?.dataType"
       [allowSearch]="
@@ -191,15 +195,5 @@
       "
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
-
-    <dxo-master-detail
-      [enabled]="true"
-      template="details"
-    ></dxo-master-detail>
-    <div *dxTemplate="let masterRow of 'details'">
-      <app-grid-detail-planning-departs
-        [masterRow]="masterRow"
-      ></app-grid-detail-planning-departs>
-    </div>
   </dx-data-grid>
 </div>

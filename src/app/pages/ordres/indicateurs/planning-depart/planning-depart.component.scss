@@ -25,11 +25,6 @@
     }
   }
 
-  .dx-master-detail-cell {
-    padding-top: 6px !important;
-    padding-bottom: 6px !important;
-  }
-
   .highlight-ok {
     background-color: #8FC459 !important;
     color: white !important;
@@ -39,6 +34,16 @@
     background: #ff325a !important;
     color: white !important;
   }
+
+  .highlight-ok,
+  .highlight-err {
+    border-left: 1px solid #FFF;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
 }
 
 .refresh {

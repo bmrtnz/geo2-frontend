@@ -1,40 +1,23 @@
-import { DatePipe } from "@angular/common";
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
-import Ordre from "app/shared/models/ordre.model";
 import { LocalizePipe } from "app/shared/pipes";
-import {
-  AuthService,
-  LocalizationService,
-  TransporteursService,
-} from "app/shared/services";
+import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
+import { Indicateur } from "app/shared/services/api/indicateurs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import {
-  Grid,
-  GridConfig,
-  GridConfiguratorService,
-} from "app/shared/services/grid-configurator.service";
-import {
-  Indicator,
-  OrdresIndicatorsService,
-} from "app/shared/services/ordres-indicators.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { Indicator, OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
-import {
-  DxCheckBoxComponent,
-  DxDataGridComponent,
-  DxSelectBoxComponent,
-} from "devextreme-angular";
+import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
-import { DateManagementService } from "app/shared/services/date-management.service";
-import notify from "devextreme/ui/notify";
-import { Indicateur } from "app/shared/services/api/indicateurs.service";
 
 @Component({
   selector: "app-planning-depart",
@@ -54,7 +37,7 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   @ViewChild("gridPLANNINGDEPART", { static: false }) gridPLANNINGDEPARTComponent: DxDataGridComponent;
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
-  @ViewChild("diffCheckBox", { static: false }) diffCB: DxCheckBoxComponent;
+  @ViewChild("diffCheckBox", { static: false }) diffSumColisOrNotDetail: DxCheckBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("dateMin", { static: false }) dateMin: DxSelectBoxComponent;
   @ViewChild("dateMax", { static: false }) dateMax: DxSelectBoxComponent;
@@ -63,7 +46,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   public title: string;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public theTitle: any;
+  public titleElement: HTMLInputElement;
   public periodes: string[];
   public toRefresh: boolean;
 
@@ -105,10 +88,6 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   ngAfterViewInit() {
 
-    // Show today title
-    this.title = this.localizePipe.transform("grid-situation-depart-title-today");
-
-    // this.dateMin.value = this.dateManagementService.startOfDay(new Date(2022, 7, 25));
     this.dateMin.value = this.dateManagementService.startOfDay();
     this.dateMax.value = this.dateManagementService.endOfDay();
 
@@ -119,13 +98,9 @@ export class PlanningDepartComponent implements AfterViewInit {
         description: this.authService.currentUser.secteurCommercial.description
       };
     }
-    this.dataSource = this.indicator.dataSource;
-    this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
-
-    this.theTitle = this.gridPLANNINGDEPARTComponent.instance.$element()[0].querySelector(
-      ".dx-toolbar .dx-placeholder",
+    this.titleElement = this.gridPLANNINGDEPARTComponent.instance.$element()[0].querySelector(
+      ".dx-toolbar-before .dx-placeholder",
     ) as HTMLInputElement;
-
     this.updateFilters();
   }
 
@@ -137,32 +112,65 @@ export class PlanningDepartComponent implements AfterViewInit {
     }
 
     this.toRefresh = false;
-    this.gridPLANNINGDEPARTComponent.dataSource = null;
+    this.dataSource = null;
+    this.dataSource = this.indicator.dataSource;
 
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value)
       filters.push("and", [
-        "secteurCommercial.id",
+        "ordre.secteurCommercial.id",
         "=",
         this.secteurSB.value.id,
       ]);
     filters.push("and", [
-      "logistiques.dateDepartPrevueFournisseur",
+      "logistique.dateDepartPrevueFournisseur",
       ">=",
       this.dateMin.value,
     ]);
     filters.push("and", [
-      "logistiques.dateDepartPrevueFournisseur",
+      "logistique.dateDepartPrevueFournisseur",
       "<=",
       this.dateMax.value,
     ]);
-    if (this.diffCB.value)
-      filters.push("and", ["versionDetail", "isnull", "null"]);
-    this.ordresService.persistantVariables.onlyColisDiff = this.diffCB.value;
-
+    this.ordresService.persistantVariables.onlyColisDiff = false;
     this.dataSource.filter(filters);
-    this.dataSource.reload();
+
     this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
+    this.gridPLANNINGDEPARTComponent.dataSource.reload().then(res => {
+
+      // Sort by numero ordre
+      res.sort((a, b) => a.ordre.numero - b.ordre.numero);
+
+      // Clear repeated fields, a kind of group structure wanted by BW
+      // with new id assignement
+      // Handles checkbox filter
+      let oldOrderId;
+      let id = 1;
+      res.map(data => {
+        if (this.diffSumColisOrNotDetail.value
+          && ((data.ordre.sommeColisCommandes === data.ordre.sommeColisExpedies)
+            && data.ordre.versionDetail)
+        ) {
+          data.id = 0; // Sums are equal and there's a version number
+        } else {
+          data.id = id;
+          id++;
+        }
+        if (oldOrderId === data.ordre.id) {
+          data.ordre = {
+            dateLivraisonPrevue: data.ordre.dateLivraisonPrevue,
+            transporteur: { id: data.ordre.transporteur.id },
+            assistante: { id: data.ordre.assistante.id },
+            commercial: { id: data.ordre.commercial.id }
+          };
+        } else {
+          oldOrderId = data.ordre.id;
+        }
+      });
+
+      res = res.filter(r => r.id); // Removing unwanted items (see above)
+      this.gridPLANNINGDEPARTComponent.dataSource = res;
+    });
 
     // Customizing period/date display
     const title = this.localizePipe.transform("grid-situation-depart-title");
@@ -181,39 +189,51 @@ export class PlanningDepartComponent implements AfterViewInit {
         finalTitle = finalTitle.split(auValue)[0];
       }
     }
-    this.theTitle.innerHTML =
+    this.titleElement.innerHTML =
       `${finalTitle} - ${this.localizePipe.transform("tiers-clients-secteur")}&nbsp;<strong>${this.secteurSB.value.description}</strong>`;
+
   }
 
-  onFieldValueChange(e?) {
-    if (e) {
-      this.updateFilters();
-    } else {
-      this.toRefresh = true;
+  onFieldValueChange() {
+    this.toRefresh = true;
+  }
+
+  onRowDblClick(e) {
+    if (!e.data?.ordre?.numero) return;
+    notify(this.localizePipe.transform("ouverture-ordre").replace("&NO", e.data.ordre.numero), "info", 1500);
+    setTimeout(() => this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id, false));
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data" && e.data.ordre.numero) {
+      e.rowElement.classList.add("cursor-pointer");
+      e.rowElement.setAttribute(
+        "title",
+        this.localizePipe.transform("hint-dblClick-ordre"),
+      );
     }
-  }
-
-  onRowDblClick({ data }: { data: Partial<Ordre> }) {
-    notify(this.localizePipe.transform("ouverture-ordre").replace("&NO", data.numero), "info", 1500);
-    setTimeout(() => this.tabContext.openOrdre(data.numero, data.campagne.id, false));
   }
 
   onCellPrepared(event) {
     if (event.rowType !== "data") return;
-    const equal =
-      event.data.sommeColisCommandes === event.data.sommeColisExpedies;
-    if (event.column.dataField === "versionDetail")
-      event.cellElement.classList.add(
-        event.value ? "highlight-ok" : "highlight-err",
-      );
-    if (event.column.dataField === "sommeColisCommandes")
-      event.cellElement.classList.add(
-        equal ? "highlight-ok" : "highlight-err",
-      );
-    if (event.column.dataField === "sommeColisExpedies")
-      event.cellElement.classList.add(
-        equal ? "highlight-ok" : "highlight-err",
-      );
+    const equal = event.data.nombreColisCommandes === event.data.nombreColisExpedies;
+
+    if (event.data.ordre.id) {
+      if (event.column.dataField === "ordre.versionDetail") this.colorizeRedGreen(event, event.value);
+    }
+
+    if (event.column.dataField === "logistique.dateDepartReelleFournisseur") this.colorizeRedGreen(event, event.value);
+    if (["nombreColisCommandes", "nombreColisExpedies"].includes(event.column.dataField)) {
+      if (event.data.logistique.dateDepartReelleFournisseur) {
+        this.colorizeRedGreen(event, equal);
+      } else {
+        if (equal) event.cellElement.classList.add("highlight-ok");
+      }
+    }
+  }
+
+  colorizeRedGreen(e, condition) {
+    e.cellElement.classList.add(condition ? "highlight-ok" : "highlight-err");
   }
 
   manualDate(e) {

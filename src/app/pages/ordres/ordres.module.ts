@@ -87,7 +87,6 @@ import { CqPhotosPopupComponent } from "./grid-controle-qualite/cq-photos-popup/
 import { GridCqPhotosComponent } from "./grid-controle-qualite/cq-photos-popup/grid-cq-photos/grid-cq-photos.component";
 import { GridControleQualiteComponent } from "./grid-controle-qualite/grid-controle-qualite.component";
 import { GridDetailPalettesComponent } from "./grid-detail-palettes/grid-detail-palettes.component";
-import { GridDetailPlanningDepartsComponent } from "./grid-detail-planning-departs/grid-detail-planning-departs.component";
 import { GridEntrepotsComponent } from "./grid-entrepots/grid-entrepots.component";
 import { GridEnvoisComponent } from "./grid-envois/grid-envois.component";
 import { GridFraisComponent } from "./grid-frais/grid-frais.component";
@@ -183,7 +182,6 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GridMargeComponent,
     GridFraisComponent,
     FormLogistiqueComponent,
-    GridDetailPlanningDepartsComponent,
     GridClientsDepEncoursDetailComponent,
     RootComponent,
     LoadingTabComponent,
