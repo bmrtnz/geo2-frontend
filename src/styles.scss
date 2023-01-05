@@ -485,3 +485,38 @@ body app-root.production {
   top: 13px;
   float: right;
 }
+
+// Excel download buttons - grids
+
+.dx-datagrid-header-panel .dx-toolbar-after .dx-toolbar-menu-container .dx-dropdownmenu-button {
+  margin-left: -3px;
+
+  &:not(:hover) {
+    background-color: transparent;
+  }
+}
+
+.grid-excel-download-element {
+  padding: 4px 10px;
+  width: 158px;
+
+  .dx-item-content {
+    div:not(.dx-button) {
+      position: absolute;
+      font-size: 14px;
+      padding: 4px 10px 4px 1px;
+    }
+
+    .dx-button {
+      top: -1px;
+      height: 30px;
+      float: left;
+      padding-left: 110px;
+      overflow: visible;
+
+      .dx-button-content {
+        padding: 0;
+      }
+    }
+  }
+}
