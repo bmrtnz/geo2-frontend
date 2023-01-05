@@ -1,0 +1,32 @@
+// Var
+@import "~themes/generated/variables.base";
+@import "~scss/variables.scss";
+
+::ng-deep .grid-packing-list {
+  max-height: 300px;
+
+  .dx-toolbar-after {
+    background-color: #FFF;
+  }
+
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+
+  .packing-ref-ordre {
+    width: 65% !important;
+  }
+
+  .highlight-order {
+    background-color: $BW-purple-light !important;
+
+    &.dx-row-focused td {
+      background-color: $BW-purple-dark !important;
+    }
+
+    td {
+      background-color: $BW-purple-light !important;
+    }
+  }
+
+}

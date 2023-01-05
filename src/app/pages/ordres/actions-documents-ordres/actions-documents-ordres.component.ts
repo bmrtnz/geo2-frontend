@@ -15,6 +15,7 @@ import { GridCommandesComponent } from "../grid-commandes/grid-commandes.compone
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 import { GridsService } from "../grids.service";
 import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/confirmation-result-popup.component";
+import { PackingListPopupComponent } from ".././packing-list-popup/packing-list-popup.component";
 import {
   ViewDocument,
   ViewDocumentPopupComponent
@@ -32,6 +33,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @Input() public gridCommandes: GridCommandesComponent;
   @Input() public orderConfirmationOnly: boolean;
   @Output() public flux: string;
+  @Output() public myOrdre: Ordre;
 
   public actionsFlux: any[];
   public plusActionsFlux: any[];
@@ -39,6 +41,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   public visibleActionsNumber = 5; // Visible buttons number, others in a popup
   public currentCMR: ViewDocument;
   public CMRVisible = false;
+  public actionSheetTarget: any;
 
   @ViewChild("actionSheet", { static: false }) actionSheet: DxActionSheetComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -46,6 +49,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @ViewChild(AnnuleRemplacePopupComponent, { static: false }) remplacePopup: AnnuleRemplacePopupComponent;
   @ViewChild(ConfirmationResultPopupComponent) resultPopup: ConfirmationResultPopupComponent;
   @ViewChild(ViewDocumentPopupComponent) documentPopup: ViewDocumentPopupComponent;
+  @ViewChild(PackingListPopupComponent) packingListPopup: PackingListPopupComponent;
 
   constructor(
     private envoisService: EnvoisService,
@@ -70,8 +74,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: false },
       { id: "PROFOR", text: "Pro forma", visible: true, disabled: false },
       { id: "COMINV", text: "Custom template", visible: true, disabled: false },
-      //  Manque le PBL, on revient vers nous plus tard
-      { id: "? (Packing list)", text: "Packing list", visible: true, disabled: true },
+      { id: "PACKLIST", text: "Packing list", visible: true, disabled: false },
       //  Manque le PBL, on revient vers nous plus tard
       { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true },
       //  Manque le PBL
@@ -91,12 +94,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   }
 
   showFluxDoxOtherBtns(e) {
-    if (this.actionSheet.visible) {
-      this.actionSheet.instance.hide();
-    } else {
-      this.actionSheet.visible = true;
-      this.actionSheet.instance.show();
-    }
+    this.actionSheetTarget = e.element;
+    this.actionSheet.visible = !this.actionSheet.visible;
   }
 
   onClickSendAction(e, annulation?) {
@@ -152,6 +151,11 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
           return of({ data: { res: 1 } }); // this.envoisService.fDocumentEnvoiProforma(this.ordre.id); // Because nothing to do
         case "COMINV":
           return this.envoisService.fDocumentEnvoiCominv(this.ordre.id);
+        case "PACKLIST": {
+          this.myOrdre = this.ordre;
+          this.packingListPopup.visible = true;
+          break;
+        }
         case "BUYCO":
           return this.envoisService.fDocumentEnvoiShipmentBuyco(this.ordre.id);
         case "DECBOL":

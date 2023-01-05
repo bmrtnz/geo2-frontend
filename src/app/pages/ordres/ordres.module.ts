@@ -57,6 +57,9 @@ import { ConfirmationResultPopupComponent } from "./actions-documents-ordres/con
 import { AjoutArticlesHistoPopupComponent } from "./ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "./ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesRefClientPopupComponent } from "./ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
+import {
+  GridArticlesRefClientComponent
+} from "./ajout-articles-ref-client-popup/grid-articles-ref-client/grid-articles-ref-client.component";
 import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 import { AjustDecomptePaloxPopupComponent } from "./ajust-decompte-palox-popup/ajust-decompte-palox-popup.component";
@@ -141,6 +144,8 @@ import { ModifDetailLignesPopupComponent } from "./modif-detail-lignes-popup/mod
 import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { NouvelOrdreComponent } from "./nouvel-ordre/nouvel-ordre.component";
 import { OrdresRoutingModule } from "./ordres-routing.module";
+import { GridPackingListComponent } from "./packing-list-popup/grid-packing-list/grid-packing-list.component";
+import { PackingListPopupComponent } from "./packing-list-popup/packing-list-popup.component";
 import { LoadingTabComponent, RootComponent, TabContext } from "./root/root.component";
 import OrdresSuiviComponent from "./suivi/ordres-suivi.component";
 import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-popup.component";
@@ -149,9 +154,6 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
-import {
-  GridArticlesRefClientComponent
-} from "./ajout-articles-ref-client-popup/grid-articles-ref-client/grid-articles-ref-client.component";
 
 @NgModule({
   declarations: [
@@ -244,7 +246,9 @@ import {
     PlanningDepartsMaritimesComponent,
     ImportProgrammesPopupComponent,
     GridImportProgrammesComponent,
-    GridArticlesRefClientComponent
+    GridArticlesRefClientComponent,
+    PackingListPopupComponent,
+    GridPackingListComponent,
   ],
   imports: [
     OrdresRoutingModule,

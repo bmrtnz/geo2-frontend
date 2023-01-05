@@ -17,12 +17,15 @@
       float: left;
 
       &.flux-doc-button-plus {
+        right: 2px;
         border-radius: 100%;
         min-width: 33px;
         float: none;
 
         .dx-button-content {
-          padding: 0;
+          font-size: 25px;
+          line-height: 11px;
+          padding: 0 0 5px 0;
         }
       }
 

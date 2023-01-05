@@ -128,6 +128,7 @@ export enum Grid {
   EncoursClient = "encours-client",
   LignesGroupageChargements = "lignes-groupage-chargements",
   ImportProgramme = "import-programme",
+  PackingList = "packing-list",
 }
 
 const extraConfigurations = [

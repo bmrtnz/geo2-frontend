@@ -6486,5 +6486,65 @@
         "visible": false
       }
     ]
+  },
+  "packing-list": {
+    "pageSize": 100,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "campagne.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "numero",
+        "width": 110,
+        "cssClass": "no-padding-right",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "referenceClient",
+        "cssClass": "packing-ref-ordre",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "dateDepartPrevue",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "sortOrder": "desc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "client.raisonSocial",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "etaDate",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": false
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "etdDate",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": false
+      }
+    ]
   }
 }

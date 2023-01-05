@@ -26,6 +26,7 @@ export class Utilisateur extends Model {
   @Field() public configTabsOrdres?: { [key: string]: string };
   @Field() public adminClient?: boolean;
   @Field() public profileClient?: string;
+  @Field() public email?: string;
   @Field() public commentaireStock?: boolean;
 
   public getSUP?() {

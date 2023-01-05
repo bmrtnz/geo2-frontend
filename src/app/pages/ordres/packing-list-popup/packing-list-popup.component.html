@@ -1,0 +1,162 @@
+<dx-popup
+  width="800"
+  height="auto"
+  [fullScreen]="this.popupFullscreen"
+  [dragEnabled]="true"
+  [resizeEnabled]="true"
+  [title]="title"
+  [visible]="visible"
+  (onHidden)="onHidden()"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+  [closeOnOutsideClick]="false"
+>
+
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let d of 'content'">
+    <dx-scroll-view>
+      <div class="packing-list-content-container">
+        <div class="dx-field entrepot-field">
+          <div class="dx-field-label text-align-right">{{ 'packing-list-ordres-entrepot' | localize }}</div>
+          <div class="dx-field-value entrepot-textvalue">
+            <dx-text-box #entrepot [disabled]="true"></dx-text-box>
+          </div>
+        </div>
+
+        <div class="inputs-container date-inputs">
+          <!-- Date de départ prévue -->
+          <div class="dx-field">
+            <div class="dx-field-label text-align-right">{{ 'packing-list-date-depart-prevue' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-date-box
+                #dateDep
+                [displayFormat]="'dd-MM-yy'"
+                dateSerializationFormat="yyyy-MM-dd"
+                type="date"
+                valueChangeEvent="keyup"
+                >
+                <dx-validator>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-date-box>
+            </div>
+          </div>
+          <!-- Date de livraison prévue -->
+          <div class="dx-field">
+            <div class="dx-field-label text-align-right">{{ 'packing-list-date-arrivee-prevue' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-date-box
+                #dateArr
+                [displayFormat]="'dd-MM-yy'"
+                dateSerializationFormat="yyyy-MM-dd"
+                type="date"
+                valueChangeEvent="keyup"
+                >
+                <dx-validator>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-date-box>
+            </div>
+          </div>
+          <!-- Date d'impressione -->
+          <div class="dx-field">
+            <div class="dx-field-label text-align-right">{{ 'packing-list-date-impression' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-date-box
+                #dateImp
+                [displayFormat]="'dd-MM-yy'"
+                dateSerializationFormat="yyyy-MM-dd"
+                type="date"
+                valueChangeEvent="keyup"
+                >
+                <dx-validator>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-date-box>
+            </div>
+          </div>
+        </div>
+
+        <div class="inputs-container">
+          <!-- PO -->
+          <div class="dx-field">
+            <div class="dx-field-label text-align-right">{{ 'packing-list-PO' | localize }}</div>
+            <div class="dx-field-value">
+              <dx-text-box
+                #PO
+                valueChangeEvent="keyup"
+                >
+                <dx-validator>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dx-validator>
+              </dx-text-box>
+            </div>
+          </div>
+
+          <!-- Switch Client / Entrepôt -->
+          <dx-box>
+            <dxi-item ratio="0.29">
+              <div class="switch-label text-align-right">{{ 'packing-list-facture' | localize }}</div>
+            </dxi-item>
+            <dxi-item ratio="0.7">
+              <div class="dx-field departLivraison-switch">
+                <div class="dx-field-label dx-field-label-left text-align-right">
+                  {{ "tiers-client" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-switch
+                    #switchCltEnt
+                    [switchedOnText]=""
+                    [switchedOffText]=""
+                  ></dx-switch>
+                </div>
+                <div class="dx-field-label dx-field-label-right text-align-left">
+                  {{ "tiers-entrepot" | localize }}
+                </div>
+              </div>
+            </dxi-item>
+          </dx-box>
+        </div>
+
+        <div style="clear:both"></div>
+
+        <app-grid-packing-list
+          [ordreId]="ordreId"
+          [entrepotId]="ordre?.entrepot.id"
+          (selectedOrders)="selectedOrderIds($event)"
+        ></app-grid-packing-list>
+        <br>
+        <br>
+        <div class="popup-action">
+          <dx-button
+            text="{{ 'btn-annuler' | localize }}"
+            type="normal"
+            (onClick)="hidePopup()"
+          ></dx-button>
+          <dx-button
+            [ngClass]="{ 'inactive-button': !selectOk || !validateFields() }"
+            text="{{ 'btn-valider' | localize }}"
+            type="default"
+            (onClick)="onSubmit()"
+          ></dx-button>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>
+

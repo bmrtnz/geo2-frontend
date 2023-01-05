@@ -30,6 +30,7 @@ export class AuthService {
     "assistante.id",
     "personne.id",
     "personne.role",
+    "email",
 
     // Sécurité / Droits
     "accessGeoTiers",
