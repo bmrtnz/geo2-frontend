@@ -1,0 +1,10 @@
+::ng-deep .delete-favorites-container {
+  position: absolute;
+  margin-top: 9px;
+  right: 140px;
+  z-index: 1;
+
+  .dx-button {
+    margin: 0 5px;
+  }
+}

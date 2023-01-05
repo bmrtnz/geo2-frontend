@@ -172,7 +172,7 @@ export abstract class ApiService implements OnDestroy {
       name: string,
       body?: Array<string> | Set<string>,
       alias?: string,
-      params: { name: string, value: any, isVariable: boolean }[],
+      params?: { name: string, value: any, isVariable: boolean }[],
     }[],
     variables: { name: string, type: string, isOptionnal: boolean }[] = [],
     alias = operations?.[0].name.ucFirst(),
@@ -186,9 +186,13 @@ export abstract class ApiService implements OnDestroy {
     const mapPaths = pths => Model.getGQL(pths).toGraphQL();
 
     const mapOperations = ops => ops
-      .map(o => `${o.alias ? `${o.alias}: ` : ""} ${o.name}(${mapParams(o.params)}) ${o?.body ? `{${mapPaths(o?.body)}}` : ""}`);
+      .map(o => `${o.alias ? `${o.alias}: ` : ""} ${o.name}
+      ${o?.params ? `(${mapParams(o.params)})` : ""}
+      ${o?.body ? `{
+        ${mapPaths(o?.body)}
+      }` : ""}`);
 
-    return `${type} ${alias}(${mapVariables(variables)}) { ${mapOperations(operations)} }`;
+    return `${type} ${alias}${variables?.length ? `(${mapVariables(variables)})` : ""} { ${mapOperations(operations)} }`;
   }
 
   static mapForSave(variables: { [key: string]: any }) {

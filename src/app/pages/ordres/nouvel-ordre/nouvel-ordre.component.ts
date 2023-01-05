@@ -107,7 +107,8 @@ export class NouvelOrdreComponent implements OnInit {
     private societesService: SocietesService,
     private devisesRefsService: DevisesRefsService,
     private authService: AuthService,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     const { id } = this.currentCompanyService.getCompany();

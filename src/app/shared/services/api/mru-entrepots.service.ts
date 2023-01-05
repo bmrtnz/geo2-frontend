@@ -168,7 +168,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
 
             this.listenQuery<Response>(
               query,
-              { variables },
+              { variables, fetchPolicy: "no-cache", },
               (res) => {
                 if (res.data && res.data.allMRUEntrepot)
                   resolve(
@@ -181,6 +181,26 @@ export class MruEntrepotsService extends ApiService implements APIRead {
           }),
         byKey: this.byKey(columns),
       }),
+    });
+  }
+
+  deleteOne(entrepotId: string) {
+    return this.apollo.mutate({
+      mutation: gql(ApiService.buildGraph("mutation", [{
+        name: "deleteOneMRUEntrepot",
+        params: [{ name: "entrepotId", value: "entrepotId", isVariable: true }],
+      }], [
+        { name: "entrepotId", type: "String", isOptionnal: false },
+      ])),
+      variables: { entrepotId },
+    });
+  }
+
+  deleteAll() {
+    return this.apollo.mutate({
+      mutation: gql(ApiService.buildGraph("mutation", [{
+        name: "deleteAllMRUEntrepot",
+      }])),
     });
   }
 }

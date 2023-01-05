@@ -10,11 +10,13 @@ import {
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, SingleSelection } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
+import { confirm } from "devextreme/ui/dialog";
 import { Observable, of } from "rxjs";
 import { TabContext } from "../root/root.component";
 import { map } from "rxjs/operators";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-grid-historique-entrepots",
@@ -27,8 +29,7 @@ export class GridHistoriqueEntrepotsComponent
 
   @Output() public pulseButton = new EventEmitter();
 
-  @ViewChild(DxDataGridComponent, { static: false })
-  private grid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: false }) public grid: DxDataGridComponent;
 
   public columns: Observable<GridColumn[]>;
   public gridConfigHandler = (event) =>
@@ -109,4 +110,42 @@ export class GridHistoriqueEntrepotsComponent
   onFocusedRowChanged(e) {
     this.pulseButton.emit();
   }
+
+  deleteItem() {
+    this.grid?.instance.getSelectedRowsData().map(data => {
+      this.mruEntrepotsService.deleteOne(data.entrepot.id).subscribe({
+        next: async res => {
+          notify(this.localizeService.localize("delete-done"), "success", 2000);
+          this.refreshGrid();
+        },
+        error: (err) => {
+          console.log(err);
+          notify(this.localizeService.localize("delete-error"), "error", 2000);
+        }
+      });
+    });
+  }
+
+  async deleteAllItems() {
+    if (await confirm(
+      this.localizeService.localize("text-popup-supprimer-favoris"),
+      this.localizeService.localize("text-popup-title-favoris"))) {
+      this.mruEntrepotsService.deleteAll().subscribe({
+        next: res => {
+          notify(this.localizeService.localize("delete-done"), "success", 2000);
+          this.refreshGrid();
+        },
+        error: (err) => {
+          console.log(err);
+          notify(this.localizeService.localize("delete-error"), "error", 2000);
+        }
+      });
+    }
+  }
+
+  refreshGrid() {
+    this.grid.instance.refresh();
+    this.grid.instance.clearSelection();
+  }
+
 }

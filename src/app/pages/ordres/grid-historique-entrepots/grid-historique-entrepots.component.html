@@ -1,3 +1,19 @@
+
+<div class="delete-favorites-container">
+  <dx-button
+    text="{{ 'btn-delete' | localize }}"
+    type="danger"
+    [disabled]="!grid?.instance.getSelectedRowKeys()?.length"
+    stylingMode="outlined"
+    (onClick)="deleteItem()"
+  ></dx-button>
+  <dx-button
+    text="{{ 'btn-deleteAllFavorites' | localize }}"
+    type="danger"
+    (onClick)="deleteAllItems()"
+  ></dx-button>
+</div>
+
 <dx-data-grid
   class="dx-card wide-card"
   [remoteOperations]="true"
@@ -16,6 +32,11 @@
     [allowSearch]="true"
   ></dxo-header-filter>
   <dxo-paging></dxo-paging>
+  <dxo-selection
+    mode="multiple"
+    [allowSelectAll]="false"
+    [showCheckBoxesMode]="'always'"
+  ></dxo-selection>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
