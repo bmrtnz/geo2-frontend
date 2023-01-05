@@ -38,9 +38,9 @@ import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { combineLatest, Observable, of, Subject } from "rxjs";
+import { combineLatest, defer, Observable, of, Subject } from "rxjs";
 // tslint:disable-next-line: max-line-length
-import { catchError, concatMap, concatMapTo, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { catchError, concatMap, concatMapTo, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile, tap } from "rxjs/operators";
 import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
@@ -1193,10 +1193,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
       filter(flag => flag),
-      concatMapTo(this.ordresService.fnMajOrdreRegroupementV2(
+      concatMapTo(defer(() => confirm(
+        this.localization.localize("entrepot-import-programme"),
+        "Duplication BUK vers SA",
+      ))),
+      concatMap(generic => this.ordresService.fnMajOrdreRegroupementV2(
         this.refOrdre,
         this.currentCompanyService.getCompany().id,
-        false,
+        generic,
         this.authService.currentUser.nomUtilisateur,
       )),
     )
