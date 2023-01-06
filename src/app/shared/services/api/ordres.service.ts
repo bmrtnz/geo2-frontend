@@ -47,11 +47,12 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getOne_v2(id: string, columns: Array<string> | Set<string>) {
+  getOne_v2(id: string, columns: Array<string> | Set<string>, fetchPol?) {
     return this.apollo
       .query<{ ordre: Ordre }>({
         query: gql(this.buildGetOneGraph(columns)),
         variables: { id },
+        fetchPolicy: fetchPol ? fetchPol : "cache-first"
       });
   }
 

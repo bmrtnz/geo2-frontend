@@ -404,7 +404,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           concatMap(([, ordre]) => this.regimesTvaService.ofInitRegimeTva(ordre.id, ordre.regimeTva.id)),
           map(res => res.data.ofInitRegimeTva.msg),
         );
-
   }
 
   ngAfterViewInit() {
@@ -748,7 +747,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "fTestAnnuleOrdre",
         "fAnnulationOrdre",
         "fCreeOrdreComplementaire",
-        "fCreeOrdreComplementaire"
+        "fCreeOrdreComplementaire",
+        "fnMajOrdreRegroupementV2"
       ];
     functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
@@ -1195,7 +1195,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       filter(flag => flag),
       concatMapTo(defer(() => confirm(
         this.localization.localize("entrepot-import-programme"),
-        "Duplication BUK vers SA",
+        this.localization.localize("ordre-duplicate-BUK-SA")
       ))),
       concatMap(generic => this.ordresService.fnMajOrdreRegroupementV2(
         this.refOrdre,
@@ -1205,8 +1205,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       )),
     )
       .subscribe({
-        error: ({ message }: Error) => notify(message, "error"),
-        next: () => notify("Duplication effectuée", "success"),
+        error: ({ message }: Error) => {
+          console.log(message);
+          notify(this.messageFormat(message), "error", 7000);
+        },
+        next: (res) => {
+          const msg = res.data.fnMajOrdreRegroupementV2.msg.split(",");
+          notify(this.localization.localize("ordre-duplicate-done").replace("&I", msg[1].replace(": ", "")), "success", 7000);
+        },
         complete: () => this.refreshDescriptifRegoupement(),
       });
   }
@@ -1220,7 +1226,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private refreshDescriptifRegoupement() {
-    this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"])
+    this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
       .subscribe(res => this.descriptifRegoupement = res.data.ordre.descriptifRegroupement);
   }
 

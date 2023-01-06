@@ -32,6 +32,16 @@
     }
   }
 
+  .desc-regroup {
+    display: inline-block;
+    margin-top: 5px;
+    background: #5D484D;
+    color: white;
+    padding: 0 8px 2px 8px;
+    height: 17px;
+    line-height: 16px;
+  }
+
   .shiftNoMutations {
     margin-right: -83px;
   }
@@ -72,6 +82,8 @@
   }
 
   .duplication-buk-container {
+    margin-top: -5px;
+
     .dx-button {
       margin: 0;
 
@@ -80,6 +92,30 @@
       }
     }
 
+  }
+
+  .duplicateBUKSA-btn {
+    height: 27px;
+
+    .dx-button-content {
+      padding: 0 10px !important;
+    }
+  }
+
+  .duplicateBUKSA-btn-trash {
+    margin-right: 4px !important;
+    height: 27px;
+    min-width: 30px;
+    width: 30px;
+    border-left: 1px dotted #FFF;
+
+    .dx-button-content {
+      padding: 0 !important;
+
+      .dx-icon {
+        font-size: 18px;
+      }
+    }
   }
 
   .margin-btn-baf {
@@ -221,6 +257,8 @@
 
 .order-id {
   font-size: 15px;
+  border-left: 1px solid #00759c;
+  padding-left: 2px;
   color: #00759c;
   float: right;
 }
