@@ -141,6 +141,8 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
   configureIndicator() {
     const loadIndicators = (config: { selection: string[] }) => {
       this.loadedIndicators = config.selection;
+      // We remove old (named) indicators that don't exist anymore but were saved
+      this.loadedIndicators = this.loadedIndicators.filter(ind => this.ordresIndicatorsService.getIndicatorByName(ind));
       this.indicators = this.loadedIndicators.map((id) =>
         this.ordresIndicatorsService.getIndicatorByName(id),
       );
