@@ -253,9 +253,9 @@
                   {{ refOrdre }}</span
                 >
                 <dx-button
-                  class="duplicateBUKSA-btn float-right"
+                  class="header-btn-baf float-right"
                   type="default"
-                  [visible]="showBAFButton"
+                  [visible]="showBAFButton && !!fullOrderNumber"
                   text="Bon à facturer"
                   (onClick)="bonAFacturer()"
                 ></dx-button>
