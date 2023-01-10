@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
+import Ordre from "app/shared/models/ordre.model";
 import { functionBody, FunctionResponse, FunctionsService } from "app/shared/services/api/functions.service";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
@@ -517,6 +518,30 @@ export class OrdreLignesService extends ApiService implements APIRead {
           ],
         )),
         variables: { lignes },
+        fetchPolicy: "network-only",
+      });
+  }
+
+  public wLitigePickOrdreOrdligV2(ordreID: Ordre["id"], body: string[]) {
+    return this.apollo
+      .query<{ wLitigePickOrdreOrdligV2: Partial<OrdreLigne>[] }>
+      ({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "wLitigePickOrdreOrdligV2",
+              body,
+              params: [
+                { name: "ordreID", value: "ordreID", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "lignes", type: "ordreID", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreID },
         fetchPolicy: "network-only",
       });
   }
