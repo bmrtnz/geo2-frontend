@@ -8,6 +8,9 @@ export class LitigeCause extends Model {
   @Field() public userModification?: string;
   @Field() public indicateurRegularisation?: boolean;
   @Field() public valide?: boolean;
+  @Field() public typeTier?: string;
+  @Field() public numeroTri?: number;
+  @Field({ dataType: "localdate" }) public dateFin?: string;
 }
 
 export default LitigeCause;
