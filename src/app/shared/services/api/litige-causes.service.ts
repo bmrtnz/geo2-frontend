@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import LitigeCause from "app/shared/models/litige-cause.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -61,6 +61,14 @@ export class LitigeCausesService extends ApiService implements APIRead {
         byKey: this.byKey(columns),
       }),
     });
+  }
+
+  public getList(columns: Array<string>, search?: string) {
+    return this.apollo
+      .query<{ allLitigeCauseList: Partial<LitigeCause>[] }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+      });
   }
 }
 
