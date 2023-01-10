@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -136,6 +136,13 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
                     return this.watchDeleteQuery({ variables }).toPromise();
                 },
             }),
+        });
+    }
+
+    count(search?: string) {
+        return this.apollo.query<{ countOrdreLogistique: number }>({
+            query: gql(this.buildCountGraph()),
+            variables: { search },
         });
     }
 }
