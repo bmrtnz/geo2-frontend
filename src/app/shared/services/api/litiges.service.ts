@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import Litige from "app/shared/models/litige.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
+import LitigeAPayer from "app/shared/models/litige-a-payer.model";
 
 @Injectable({
     providedIn: "root",
@@ -111,6 +112,19 @@ export class LitigesService extends ApiService implements APIRead {
                     }),
                 byKey: this.byKey(columns),
             }),
+        });
+    }
+
+    getLitigesAPayer(litigeID: string, body: Set<string>) {
+        return this.apollo.query<{ allLitigeAPayer: LitigeAPayer[] }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "allLitigeAPayer",
+                    body,
+                    params: [{ name: "litigeID", value: "litigeID", isVariable: true }],
+                }
+            ], [{ name: "litigeID", type: "String", isOptionnal: false }])),
+            variables: { litigeID },
         });
     }
 }
