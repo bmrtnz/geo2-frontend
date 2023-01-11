@@ -127,4 +127,11 @@ export class LitigesService extends ApiService implements APIRead {
             variables: { litigeID },
         });
     }
+
+    save(body: Set<string>, litige: Partial<Litige>) {
+        return this.apollo.mutate<{ saveLitige: Partial<Litige> }>({
+            mutation: gql(this.buildSaveGraph([...body])),
+            variables: { litige },
+        });
+    }
 }
