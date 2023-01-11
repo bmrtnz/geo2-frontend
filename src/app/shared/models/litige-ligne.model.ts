@@ -34,6 +34,8 @@ export class LitigeLigne extends Model {
     @Field() public responsablePrixUnitaire?: number;
     @Field() public responsableQuantite?: number;
     @Field() public responsableUniteFactureCode?: string;
+    @Field() public clientIndicateurForfait?: boolean;
+    @Field() public responsableIndicateurForfait?: boolean;
 }
 
 export default LitigeLigne;
