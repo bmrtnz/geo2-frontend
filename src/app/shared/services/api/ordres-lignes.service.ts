@@ -546,4 +546,19 @@ export class OrdreLignesService extends ApiService implements APIRead {
       });
   }
 
+  public fCreeOrdreReplacementLigne(
+    litigeLigneID: string,
+    ordreID: string,
+    ordreOriginID: string,
+    ordreLigneOriginID: string,
+    societeID: string
+  ) {
+    return this.functionsService.queryFunction("fCreeOrdreReplacementLigne", [
+      { name: "litigeLigneID", type: "String", value: litigeLigneID },
+      { name: "ordreID", type: "String", value: ordreID },
+      { name: "ordreOriginID", type: "String", value: ordreOriginID },
+      { name: "ordreLigneOriginID", type: "String", value: ordreLigneOriginID },
+      { name: "societeID", type: "String", value: societeID },
+    ]);
+  }
 }
