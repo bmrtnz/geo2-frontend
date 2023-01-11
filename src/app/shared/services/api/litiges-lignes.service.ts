@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { OperationVariables, WatchQueryOptions } from "@apollo/client/core";
+import { gql, OperationVariables, WatchQueryOptions } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
+import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import DataSource from "devextreme/data/data_source";
@@ -144,4 +145,24 @@ export class LitigesLignesService extends ApiService implements APIRead {
             returnPartialData: false,
         } as WatchQueryOptions).pipe(take(1));
     }
+
+    allLitigeLigneFait(litigeID: string, numeroLigne: string, body: Set<string>) {
+        return this.apollo.query<{ allLitigeLigneFait: LitigeLigneFait[] }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "allLitigeLigneFait",
+                    body,
+                    params: [
+                        { name: "litigeID", value: "litigeID", isVariable: true },
+                        { name: "numeroLigne", value: "numeroLigne", isVariable: true },
+                    ],
+                }
+            ], [
+                { name: "litigeID", type: "String", isOptionnal: false },
+                { name: "numeroLigne", type: "String", isOptionnal: false },
+            ])),
+            variables: { litigeID, numeroLigne },
+        });
+    }
+
 }
