@@ -26,10 +26,12 @@ import {
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
+import { TabContext } from "../../root/root.component";
 
 @Component({
   selector: "app-clients-dep-encours",
@@ -71,6 +73,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     private localizePipe: LocalizePipe,
     private paysService: PaysService,
     private paysDepassementService: PaysDepassementService,
+    public tabContext: TabContext,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -213,6 +216,11 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         }
       }
     }
+  }
+
+  openOrder(ordre) {
+    if (!ordre.numero) return notify("Aucun ordre associé à cet en-cours", "warning", 4000);
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 }
 

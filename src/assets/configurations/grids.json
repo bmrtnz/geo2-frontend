@@ -5793,6 +5793,10 @@
         "dataField": "commercial.id",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "devise.id",
+        "visible": false
       }
     ]
   },
@@ -6360,6 +6364,16 @@
       {
         "visibleIndex": 22,
         "dataField": "numeroContainer",
+        "visible": false
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "ordre.numero",
+        "visible": false
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "ordre.campagne.id",
         "visible": false
       }
     ]

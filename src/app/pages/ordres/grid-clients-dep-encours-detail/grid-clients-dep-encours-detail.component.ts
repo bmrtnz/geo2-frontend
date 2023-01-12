@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { EncoursClientPopupComponent } from "app/pages/tiers/clients/encours-client/encours-client-popup.component";
 import { Client } from "app/shared/models";
 import { LocalizePipe } from "app/shared/pipes";
@@ -26,6 +26,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   @Input() masterRow: dxDataGridRowObject;
   @Input() client: any;
   @Input() commercialId: any;
+  @Output() openEncoursOrder = new EventEmitter<any>();
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -64,7 +65,6 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   // }
 
   async ngOnChanges() {
-    console.log(this.commercialId);
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField)),
     );
@@ -168,11 +168,16 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     this.client = {
       id: e.data.id,
       secteur: { id: e.data.secteur.id },
+      devise: { id: e.data.devise.id },
       agrement: e.data.agrement,
       enCoursTemporaire: e.data.enCoursTemporaire,
       enCoursBlueWhale: e.data.enCoursBlueWhale
     };
     this.encoursPopup.visible = true;
+  }
+
+  openOrder(ordre) {
+    this.openEncoursOrder.emit(ordre);
   }
 
 }

@@ -80,6 +80,8 @@
             formControlName="encoursTotal"
             [readOnly]="true"
             [format]="{
+              type: 'currency',
+              currency: deviseClient,
               precision: 2
             }"
           >
@@ -97,7 +99,8 @@
             formControlName="encoursAutorise"
             [readOnly]="true"
             [format]="{
-              type: 'fixedPoint',
+              type: 'currency',
+              currency: deviseSociete,
               precision: 2
             }"
           >
@@ -115,6 +118,8 @@
             formControlName="encoursDepassement"
             [readOnly]="true"
             [format]="{
+              type: 'currency',
+              currency: deviseClient,
               precision: 2
             }"
           >
@@ -132,6 +137,8 @@
             formControlName="encoursRetard"
             [readOnly]="true"
             [format]="{
+              type: 'currency',
+              currency: deviseClient,
               precision: 2
             }"
           >
@@ -154,7 +161,9 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onCellDblClick)="onCellDblClick($event)"
   (onCellPrepared)="onCellPrepared($event)"
+  (onRowPrepared)="onRowPrepared($event)"
   (onContentReady)="onContentReady()"
   [noDataText]="'aucun-encours' | localize"
   (onToolbarPreparing)="
