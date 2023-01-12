@@ -129,6 +129,14 @@
   <br />
 </form>
 
+<dx-button
+  class="grid-grouping-button"
+  type="default"
+  icon="material-icons menu_open"
+  hint="{{ 'btn-grouping' | localize }}"
+  (onClick)="expandCollapseGroups()"
+></dx-button>
+
 <dx-data-grid
   #MouvClientsComptesPalox
   [remoteOperations]="{ paging: true }"
@@ -142,7 +150,7 @@
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
-      'Mouvements Palox par entrepôts',
+      'Mouvements Palox par client',
       $event,
       gridConfiguratorService.Grid.MouvClientsComptesPalox,
       enableFilters.bind(this)
