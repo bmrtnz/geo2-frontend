@@ -1593,7 +1593,8 @@
     "encoursClient-ordre-campagne-id": "Campagne",
     "encoursClient-societe-id": "Société",
     "encours-client-entrepots-code": "Entrepôt",
-    "encours-clients-raisonSocial": "Raison sociale client",
+    "encours-clients-raisonSocial": "Client",
+    "encours-clients-code": "Code",
     "encours-clients-agrement": "Couv. COFACE",
     "encours-clients-enCoursBlueWhale": "Couv. BW",
     "encours-clients-enCoursTemporaire": "Couv. temp. COFACE",
@@ -1610,6 +1611,8 @@
     "encours-clients-enCoursDouteux": "Encours douteux",
     "encours-clients-ville": "Ville",
     "encours-clients-enCoursDateLimite": "Date limite",
-    "encours-clients-entrepots-code": "Entrepôt"
+    "encours-clients-entrepots-code": "Entrepôt",
+    "encours-clients-secteur-id": "Secteur",
+    "encours-clients-commercial-id": "Comm."
   }
 }

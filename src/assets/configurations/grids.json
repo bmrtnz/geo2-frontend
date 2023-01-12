@@ -5696,6 +5696,12 @@
         "fixedPosition": "left"
       },
       {
+        "visibleIndex": 1,
+        "dataField": "code",
+        "visible": false,
+        "fixedPosition": "left"
+      },
+      {
         "visibleIndex": 2,
         "dataField": "agrement",
         "visible": true
@@ -5786,12 +5792,10 @@
       },
       {
         "dataField": "secteur.id",
-        "showInColumnChooser": false,
         "visible": false
       },
       {
         "dataField": "commercial.id",
-        "showInColumnChooser": false,
         "visible": false
       },
       {

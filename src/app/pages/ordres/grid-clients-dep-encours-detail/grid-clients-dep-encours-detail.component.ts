@@ -26,6 +26,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   @Input() masterRow: dxDataGridRowObject;
   @Input() client: any;
   @Input() commercialId: any;
+  @Input() secteurId: any;
   @Output() openEncoursOrder = new EventEmitter<any>();
 
   public dataSource: DataSource;
@@ -54,16 +55,6 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     );
   }
 
-  // async ngOnInit() {
-  //   const fields = this.columns.pipe(
-  //     map((columns) => columns.map((column) => column.dataField)),
-  //   );
-  //   this.dataSource = this.clientsService.getDataSource_v2(
-  //     await fields.toPromise(),
-  //   );
-  //   this.enableFilters();
-  // }
-
   async ngOnChanges() {
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField)),
@@ -71,7 +62,6 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     this.dataSource = this.clientsService.getDataSource_v2(
       await fields.toPromise(),
     );
-    this.enableFilters();
     if (this.dataSource) this.enableFilters();
   }
 
@@ -84,8 +74,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       ["depassement", "<>", 0],
       "and",
       ["enCoursAll", "<>", 0],
-      ...(this.masterRow.data.secteur
-        ? ["and", ["secteur.id", "=", this.masterRow.data.secteur?.id]]
+      ...(this.secteurId
+        ? ["and", ["secteur.id", "=", this.secteurId]]
         : []),
       ...(this.commercialId
         ? ["and", ["commercial.id", "=", this.commercialId]]
@@ -152,6 +142,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
           )}`;
         if (!event.data.valide)
           (event.cellElement as HTMLElement).classList.add("strike");
+        if (event.data.code)
+          event.cellElement.textContent = event.cellElement.textContent + " (" + event.data.code + ")";
       }
     }
   }
