@@ -6353,18 +6353,18 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "numImmat",
+        "dataField": "entrepot.code",
         "visible": true
       },
       {
         "visibleIndex": 20,
-        "dataField": "entrepot.code",
+        "dataField": "numImmat",
         "visible": true
       },
       {
         "visibleIndex": 22,
         "dataField": "numeroContainer",
-        "visible": false
+        "visible": true
       },
       {
         "visibleIndex": 24,
@@ -6374,6 +6374,11 @@
       {
         "visibleIndex": 26,
         "dataField": "ordre.campagne.id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "societe.id",
         "visible": false
       }
     ]

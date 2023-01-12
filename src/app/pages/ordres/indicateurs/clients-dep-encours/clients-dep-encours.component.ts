@@ -157,7 +157,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   paysUpdateDS(secteurId?) {
-    this.pays = this.paysService.getDataSource_v2(["id", "description"]);
+    this.pays = this.paysService.getDataSource_v2(["id", "description"], "description");
     const filter: any[] = [["valide", "=", true]];
     if (secteurId) {
       filter.push("and", ["secteur.id", "=", secteurId]);

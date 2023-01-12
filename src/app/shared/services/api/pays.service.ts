@@ -100,9 +100,9 @@ export class PaysService
       });
   }
 
-  getDataSource_v2(columns: Array<string>) {
+  getDataSource_v2(columns: Array<string>, sortSelector?) {
     return new DataSource({
-      sort: [{ selector: this.model.getKeyField() }],
+      sort: [{ selector: sortSelector ?? this.model.getKeyField() }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {

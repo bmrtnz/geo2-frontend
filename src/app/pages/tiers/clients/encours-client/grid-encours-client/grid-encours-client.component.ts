@@ -117,7 +117,9 @@ export class GridEncoursClientComponent implements OnChanges {
       "zip",
       "id",
       "ordre.numero",
-      "ordre.campagne.id"
+      "ordre.campagne.id",
+      "ordre.societe.id",
+      "numeroContainer"
     ];
   }
 
@@ -273,6 +275,7 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   onCellDblClick(e) {
+    if (e.data?.societe?.id !== this.currentCompanyService.getCompany().id) return;
     const ordre = {
       numero: e.data.ordre?.numero,
       campagne: { id: e.data.ordre?.campagne?.id }
