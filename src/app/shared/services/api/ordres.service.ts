@@ -441,4 +441,12 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
     ]);
   }
+
+  public fCreeOrdreReedFactLigne(ordreID: string, ordreOriginID: string, societeID: string) {
+    return this.functionsService.queryFunction("fCreeOrdreReedFact", [
+      { name: "ordreID", type: "String", value: ordreID },
+      { name: "ordreOriginID", type: "String", value: ordreOriginID },
+      { name: "societeID", type: "String", value: societeID },
+    ]);
+  }
 }
