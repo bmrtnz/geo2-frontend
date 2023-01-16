@@ -64,11 +64,11 @@
         </div>
         <div class="dx-field-value">
           <dx-select-box
-            #paysValue
+            #commercialValue
             [dataSource]="commercial"
-            displayExpr="nomUtilisateur"
+            [displayExpr]="displayIDBefore"
             [showClearButton]="true"
-            searchExpr="nomUtilisateur"
+            searchExpr="['id', 'nomUtilisateur']"
             (onValueChanged)="onCommChanged($event)"
           ></dx-select-box>
         </div>
@@ -166,6 +166,8 @@
       [masterRow]="masterRow"
       [commercialId]="commercialId"
       [showAllClients]="!switchType.value"
+      [secteurId]="secteurId"
+      (openEncoursOrder)="openOrder($event)"
     ></app-grid-clients-dep-encours-detail>
   </div>
 </dx-data-grid>

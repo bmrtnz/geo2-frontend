@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { gql } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
-import { Secteur, Societe } from "app/shared/models";
+import { Personne, Secteur, Societe } from "app/shared/models";
 import PaysDepassement from "app/shared/models/pays-depassement.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -20,6 +20,7 @@ export class PaysDepassementService extends ApiService {
   getDataSource(body: Array<string>, variables: {
     secteurCode: Secteur["id"],
     societeCode: Societe["id"],
+    commercialCode: Personne["id"]
   }) {
     return new DataSource({
       store: this.createCustomStore({
@@ -33,13 +34,15 @@ export class PaysDepassementService extends ApiService {
                   body,
                   params: [
                     { name: "secteurCode", value: "secteurCode", isVariable: true },
-                    { name: "societeCode", value: "societeCode", isVariable: true }
+                    { name: "societeCode", value: "societeCode", isVariable: true },
+                    { name: "commercialCode", value: "commercialCode", isVariable: true },
                   ],
                 },
               ],
               [
                 { name: "secteurCode", type: "String", isOptionnal: true },
                 { name: "societeCode", type: "String", isOptionnal: true },
+                { name: "commercialCode", type: "String", isOptionnal: true },
               ],
             )),
             variables,

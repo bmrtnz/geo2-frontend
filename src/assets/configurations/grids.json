@@ -5696,6 +5696,12 @@
         "fixedPosition": "left"
       },
       {
+        "visibleIndex": 1,
+        "dataField": "code",
+        "visible": false,
+        "fixedPosition": "left"
+      },
+      {
         "visibleIndex": 2,
         "dataField": "agrement",
         "visible": true
@@ -5786,12 +5792,14 @@
       },
       {
         "dataField": "secteur.id",
-        "showInColumnChooser": false,
         "visible": false
       },
       {
         "dataField": "commercial.id",
-        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "devise.id",
         "visible": false
       }
     ]
@@ -6349,17 +6357,32 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "numImmat",
-        "visible": true
-      },
-      {
-        "visibleIndex": 20,
         "dataField": "entrepot.code",
         "visible": true
       },
       {
+        "visibleIndex": 20,
+        "dataField": "ordre.logistiques.numeroImmatriculation",
+        "visible": true
+      },
+      {
         "visibleIndex": 22,
-        "dataField": "numeroContainer",
+        "dataField": "ordre.logistiques.numeroContainer",
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "ordre.numero",
+        "visible": false
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "ordre.campagne.id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "societe.id",
         "visible": false
       }
     ]

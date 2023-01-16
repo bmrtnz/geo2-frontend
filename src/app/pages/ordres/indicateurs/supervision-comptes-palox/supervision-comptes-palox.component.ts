@@ -414,6 +414,16 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       return "Solde général : " + e.collapsedItems[0].sommeQuantiteInventaire;
   }
 
+  public expandCollapseGroups() {
+    const index = this.getActiveGridIndex();
+    const datagrid = this.paloxGrids.toArray()[index];
+    if (!datagrid) return;
+    datagrid.instance.option(
+      "grouping",
+      { autoExpandAll: !datagrid.instance.option("grouping").autoExpandAll }
+    );
+  }
+
 }
 
 export default SupervisionComptesPaloxComponent;

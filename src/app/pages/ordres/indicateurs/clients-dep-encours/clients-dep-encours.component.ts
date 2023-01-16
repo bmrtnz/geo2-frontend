@@ -26,10 +26,12 @@ import {
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
+import { TabContext } from "../../root/root.component";
 
 @Component({
   selector: "app-clients-dep-encours",
@@ -40,6 +42,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   readonly INDICATOR_NAME = Indicateur.ClientsDepassementEncours;
 
   @Output() public commercialId: string;
+  @Output() public secteurId: string;
 
   public secteurs: DataSource;
   public pays: DataSource;
@@ -51,6 +54,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
 
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("paysValue", { static: false }) paysSB: DxSelectBoxComponent;
+  @ViewChild("commercialValue", { static: false }) commercialSB: DxSelectBoxComponent;
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
@@ -71,6 +75,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     private localizePipe: LocalizePipe,
     private paysService: PaysService,
     private paysDepassementService: PaysDepassementService,
+    public tabContext: TabContext,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -106,6 +111,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // this.secteurSB.value = { id: "FR" };
+    // this.paysSB.value = { id: "FR" };
     if (!this.authService.isAdmin)
       this.secteurSB.value =
         this.authService.currentUser.secteurCommercial;
@@ -113,6 +120,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   enableFilters() {
+    this.secteurId = this.secteurSB.value?.id;
+    this.commercialId = this.commercialSB.value?.id;
     const filter = [];
     const filterItem = [];
     this.datagrid.dataSource = null;
@@ -120,6 +129,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
       .getDataSource(this.indicator.explicitSelection, {
         secteurCode: this.secteurSB.value?.id,
         societeCode: this.currentCompanyService.getCompany().id,
+        commercialCode: this.commercialId ?? "%"
       });
     if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
     filterItem.forEach(element => {
@@ -149,11 +159,12 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   onCommChanged(e) {
+    this.enableFilters();
     this.commercialId = e.value?.id;
   }
 
   paysUpdateDS(secteurId?) {
-    this.pays = this.paysService.getDataSource_v2(["id", "description"]);
+    this.pays = this.paysService.getDataSource_v2(["id", "description"], "description");
     const filter: any[] = [["valide", "=", true]];
     if (secteurId) {
       filter.push("and", ["secteur.id", "=", secteurId]);
@@ -212,6 +223,17 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         }
       }
     }
+  }
+
+  displayIDBefore(data) {
+    return data ?
+      (data.id + " - " + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
+      : null;
+  }
+
+  openOrder(ordre) {
+    if (!ordre.numero) return notify("Aucun ordre associé à cet en-cours", "warning", 4000);
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 }
 
