@@ -6362,12 +6362,12 @@
       },
       {
         "visibleIndex": 20,
-        "dataField": "numImmat",
+        "dataField": "ordre.logistiques.numeroImmatriculation",
         "visible": true
       },
       {
         "visibleIndex": 22,
-        "dataField": "numeroContainer",
+        "dataField": "ordre.logistiques.numeroContainer",
         "visible": true
       },
       {

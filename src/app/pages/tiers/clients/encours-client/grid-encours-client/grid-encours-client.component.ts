@@ -109,7 +109,6 @@ export class GridEncoursClientComponent implements OnChanges {
       "encDepasse",
       "encReferences",
       "entrepot.code",
-      "numImmat",
       "paysCode",
       "raisonSociale",
       "societe.id",
@@ -119,7 +118,8 @@ export class GridEncoursClientComponent implements OnChanges {
       "ordre.numero",
       "ordre.campagne.id",
       "ordre.societe.id",
-      "numeroContainer"
+      "ordre.logistiques.numeroImmatriculation",
+      "ordre.logistiques.numeroContainer",
     ];
   }
 
@@ -170,6 +170,17 @@ export class GridEncoursClientComponent implements OnChanges {
       this.deviseSociete
     ).subscribe((res) => {
       const results = res.data.allClientEnCours;
+      // Concatenate immats and containers
+      results.map(r => {
+        const immat = [];
+        const container = [];
+        r.ordre?.logistiques.map(l => {
+          if (l.numeroContainer) container.push(l.numeroContainer);
+          if (l.numeroImmatriculation) immat.push(l.numeroImmatriculation);
+        });
+        if (container.length) r.ordre.logistiques.numeroContainer = container.join(" - ");
+        if (immat.length) r.ordre.logistiques.numeroImmatriculation = immat.join(" - ");
+      });
       this.datagrid.dataSource = results;
       this.datagrid.instance.refresh();
       this.calculateMiscEncours(results);
