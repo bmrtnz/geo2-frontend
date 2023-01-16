@@ -26,6 +26,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   @Input() masterRow: dxDataGridRowObject;
   @Input() client: any;
   @Input() commercialId: any;
+  @Input() showAllClients: boolean;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -80,10 +81,10 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       ["pays.id", "=", this.masterRow.data.id],
       "and",
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
-      "and",
-      ["depassement", "<>", 0],
-      "and",
-      ["enCoursAll", "<>", 0],
+      ... this.showAllClients ? [] : [
+        "and",
+        ["depassement", ">", 0],
+      ],
       ...(this.masterRow.data.secteur
         ? ["and", ["secteur.id", "=", this.masterRow.data.secteur?.id]]
         : []),

@@ -1,6 +1,5 @@
 <br />
 <div class="encours-filter-area">
-
   <dx-box>
     <dxi-item [ratio]="2">
       <div class="dx-field encours-switch">
@@ -8,11 +7,11 @@
           {{ "tous-encours" | localize }}
         </div>
         <div class="dx-field-value">
-            <dx-switch
-              #switchType
-              [value]="true"
-              (onValueChanged)="enableFilters()"
-            ></dx-switch>
+          <dx-switch
+            #switchType
+            [value]="true"
+            (onValueChanged)="enableFilters()"
+          ></dx-switch>
         </div>
         <div class="dx-field-label dx-field-label-right">
           {{ "depassement-encours" | localize }}
@@ -166,7 +165,7 @@
     <app-grid-clients-dep-encours-detail
       [masterRow]="masterRow"
       [commercialId]="commercialId"
+      [showAllClients]="!switchType.value"
     ></app-grid-clients-dep-encours-detail>
   </div>
 </dx-data-grid>
-

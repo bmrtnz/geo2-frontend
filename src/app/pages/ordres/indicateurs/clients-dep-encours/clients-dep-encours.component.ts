@@ -122,7 +122,6 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         societeCode: this.currentCompanyService.getCompany().id,
       });
     if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
-    if (this.switchType.value) filterItem.push(["clientsSommeDepassement", ">", 0]);
     filterItem.forEach(element => {
       filter.push(element);
       filter.push("and");
