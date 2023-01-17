@@ -137,7 +137,6 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
       filter.push("and");
     });
     filter.pop(); // Remove last 'and'
-    console.log(filter);
 
     if (filter.length) dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
