@@ -154,7 +154,6 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   idTvaRequired: boolean;
   preSaisie: string;
   client: Client;
-  paysClientIdentique: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -345,16 +344,6 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
       this.formGroup.get("gestionnaireChep").reset();
     }
     this.formGroup.get("gestionnaireChep").markAsDirty();
-  }
-
-  onTvaCeeChange(e) {
-    if (!this.editing || !this.client) return;
-    // Checking that if different country idtva is also different
-    const tvaClient = this.client.tvaCee;
-    if (this.formGroup.get("pays").value && !this.paysClientIdentique && e.value && e.value === tvaClient) {
-      this.formGroup.get("tvaCee").reset();
-      if (e.element) notify("Id TVA - " + e.value + " - incorrect", "warning", 5000);
-    }
   }
 
   valueToUpperCase(e) {
