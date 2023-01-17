@@ -23,6 +23,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onSelectionChanged)="onSelectionChanged($event)"
   (onFocusedRowChanged)="onFocusedRowChanged($event)"
   (onToolbarPreparing)="gridConfigHandler($event)"
 >

@@ -28,6 +28,7 @@ export class GridHistoriqueEntrepotsComponent
   readonly gridID = Grid.OrdreHistoriqueEntrepot;
 
   @Output() public pulseButton = new EventEmitter();
+  @Output() public hideCreateButton = new EventEmitter();
 
   @ViewChild(DxDataGridComponent, { static: false }) public grid: DxDataGridComponent;
 
@@ -109,6 +110,15 @@ export class GridHistoriqueEntrepotsComponent
 
   onFocusedRowChanged(e) {
     this.pulseButton.emit();
+  }
+
+  onSelectionChanged(e) {
+    // To hide create button when more than one entrepot selected
+    const selected = e.component.getSelectedRowKeys();
+    this.hideCreateButton.emit(selected?.length > 1);
+    if (selected.length === 1) {
+      e.component.option("focusedRowIndex", e.component.getRowIndexByKey(selected[0]));
+    }
   }
 
   deleteItem() {
