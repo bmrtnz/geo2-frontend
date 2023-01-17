@@ -154,5 +154,10 @@
 }
 
 ::ng-deep .inputs-container {
-  width: calc(100% / 3);
+  margin-top: 8px;
+  width: 300px;
+}
+
+h2.accueil-header {
+  margin-bottom: 0;
 }

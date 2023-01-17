@@ -144,7 +144,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   onSecteurChanged(e) {
-    this.paysSB.value = null;
+    if (e.value) this.paysSB.value = null;
     this.paysUpdateDS(e.value?.id);
     if (!e.event) return;
     this.pays.load().then(res => {

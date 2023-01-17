@@ -94,6 +94,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
+  [noDataText]="'aucun-depassement-encours' | localize"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
