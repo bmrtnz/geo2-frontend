@@ -196,7 +196,8 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
 
           const countResponse = await indicator.fetchCount
             .pipe(
-              map((res) => res[indicator.id].toString()),
+              map((res) => res[indicator.id]),
+              map(({ count, secteur }) => `${count} ${secteur ? `(${secteur})` : ""}`),
             )
             .toPromise();
           return [indicator.id, countResponse] as [string, string];
