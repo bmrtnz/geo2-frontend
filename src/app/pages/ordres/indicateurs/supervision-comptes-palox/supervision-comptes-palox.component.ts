@@ -400,6 +400,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     return "";
   }
 
+  getSoldeMouvement(e) {
+    return "Solde : " + e.aggregates[0];
+  }
+
   getSoldeData(e) {
     if (e.items?.length)
       return "Solde : " + e.items[0].sommeQuantiteInventaire;
@@ -422,6 +426,16 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       "grouping",
       { autoExpandAll: !datagrid.instance.option("grouping").autoExpandAll }
     );
+  }
+
+  public calculateCustomSummary(options) {
+    if (options.name === "solde_mouvement") {
+      if (options.summaryProcess === "start") {
+        options.totalValue = 0;
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue += options.value.sortie + options.value.quantiteInventaire - options.value.entree;
+      }
+    }
   }
 
 }

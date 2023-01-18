@@ -187,6 +187,13 @@
   >
   </dxo-column-chooser>
   <dxo-group-panel [visible]="true"> </dxo-group-panel>
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      [name]="'solde_mouvement'"
+      [summaryType]="'custom'"
+      [displayFormat]="'Solde : {0}'"
+    ></dxi-group-item>
+  </dxo-summary>
   <dxi-column
     *ngFor="let column of this.columns[0] | async"
     [dataField]="column.dataField"
@@ -217,7 +224,7 @@
       (onClick)="adjustPalox(cell.data, 'adjust')"
       text="{{ 'ajuster' | localize }}"
     ></dx-button>
-    <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
+    <div class="group-text-2">{{ getSoldeMouvement(cell.data) }}</div>
     <dx-button
       [visible]="getInventoryData(cell.data) !== ''"
       class="small-action-button"
@@ -226,7 +233,6 @@
       text="{{ 'inventaire' | localize }}"
     ></dx-button>
   </div>
-
 </dx-data-grid>
 
 <dx-data-grid
@@ -358,6 +364,13 @@
   >
   </dxo-column-chooser>
   <dxo-group-panel [visible]="true"> </dxo-group-panel>
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      [name]="'solde_mouvement'"
+      [summaryType]="'custom'"
+      [displayFormat]="'Solde : {0}'"
+    ></dxi-group-item>
+  </dxo-summary>
   <dxi-column
     *ngFor="let column of this.columns[2] | async"
     [dataField]="column.dataField"
@@ -380,9 +393,8 @@
     <div class="group-text-1">
       {{ getInventoryData(cell.data) }}
     </div>
-    <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
+    <div class="group-text-2">{{ getSoldeMouvement(cell.data) }}</div>
   </div>
-
 </dx-data-grid>
 
 <dx-data-grid
@@ -460,7 +472,6 @@
     </div>
     <div class="group-text-3">{{ getSoldeGeneralData(cell.data) }}</div>
   </div>
-
 </dx-data-grid>
 
 <app-ajust-decompte-palox-popup
