@@ -4892,11 +4892,13 @@
       {
         "visibleIndex": 6,
         "dataField": "entree",
+        "width": 80,
         "visible": true
       },
       {
         "visibleIndex": 7,
         "dataField": "sortie",
+        "width": 80,
         "visible": true
       },
       {

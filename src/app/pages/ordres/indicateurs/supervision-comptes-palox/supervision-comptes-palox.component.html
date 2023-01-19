@@ -137,6 +137,9 @@
   (onClick)="expandCollapseGroups()"
 ></dx-button>
 
+<!-- ------------------------ -->
+<!-- Mouvements palox clients -->
+<!-- ------------------------ -->
 <dx-data-grid
   #MouvClientsComptesPalox
   [remoteOperations]="{ paging: true }"
@@ -146,6 +149,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [rowAlternationEnabled]="true"
   (onRowDblClick)="onRowDblClick($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
@@ -190,6 +194,7 @@
   <dxi-column
     *ngFor="let column of this.columns[0] | async"
     [dataField]="column.dataField"
+    [width]="column.width"
     [format]="column.format"
     [visible]="false"
     [caption]="
@@ -229,6 +234,9 @@
 
 </dx-data-grid>
 
+<!-- --------------------------- -->
+<!-- Récapitulatif palox clients -->
+<!-- --------------------------- -->
 <dx-data-grid
   #RecapClientsComptesPalox
   [visible]="false"
@@ -285,6 +293,7 @@
     *ngFor="let column of this.columns[1] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
     [groupCellTemplate]="column.groupCellTemplate"
     [caption]="
       ('comptesPalox-entrepots-' + column.dataField?.split('.').join('-')
@@ -306,6 +315,9 @@
   </div>
 </dx-data-grid>
 
+<!-- ----------------------------- -->
+<!-- Mouvements palox fournisseurs -->
+<!-- ----------------------------- -->
 <dx-data-grid
   #MouvFournisseursComptesPalox
   [visible]="false"
@@ -362,6 +374,7 @@
     *ngFor="let column of this.columns[2] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
     [groupCellTemplate]="column.groupCellTemplate"
     [format]="column.format"
     [caption]="
@@ -385,6 +398,9 @@
 
 </dx-data-grid>
 
+<!-- -------------------------------- -->
+<!-- Récapitulatif palox Fournisseurs -->
+<!-- -------------------------------- -->
 <dx-data-grid
   #RecapFournisseursComptesPalox
   [visible]="false"
@@ -441,6 +457,7 @@
     *ngFor="let column of this.columns[3] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
     [groupCellTemplate]="column.groupCellTemplate"
     [caption]="
       ('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-')
