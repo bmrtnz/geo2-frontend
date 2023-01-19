@@ -433,7 +433,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       if (options.summaryProcess === "start") {
         options.totalValue = 0;
       } else if (options.summaryProcess === "calculate") {
-        options.totalValue += options.value.sortie + options.value.quantiteInventaire - options.value.entree;
+        if (!options.totalValue) options.totalValue = options.value.quantiteInventaire;
+        options.totalValue += options.value.sortie - options.value.entree;
       }
     }
   }
