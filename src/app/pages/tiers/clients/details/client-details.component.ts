@@ -537,23 +537,18 @@ export class ClientDetailsComponent
     this.client.id = this.client.id;
     const code = params.value;
     const clientsSource = this.clientsService.getDataSource_v2(["code"]);
-    clientsSource.searchExpr("code");
-    clientsSource.searchOperation("=");
-    clientsSource.searchValue(code);
+    clientsSource.filter(["code", "=", code]);
     return clientsSource.load().then((res) => !res.length);
   }
 
   checkCompteComptable(e) {
     const compteComptable = this.valueToUpperCase(e);
     if (!compteComptable) return;
-    const clientsSource = this.clientsService.getDataSource_v2([
-      "compteComptable",
-    ]);
+    const clientsSource = this.clientsService.getDataSource_v2(["id", "compteComptable"]);
     clientsSource.filter(["compteComptable", "=", compteComptable]);
     clientsSource
       .load()
-      .then((res) =>
-        res.length ? (this.CCexists = true) : (this.CCexists = false),
+      .then((res) => this.CCexists = res.length && !(res.filter(r => r.id === this.client.id)?.length)
       );
   }
 
