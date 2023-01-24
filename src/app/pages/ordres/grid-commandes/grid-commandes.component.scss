@@ -51,7 +51,7 @@
   }
 
   .dx-datagrid-headers.dx-datagrid-nowrap td:not(.dx-command-select) {
-    pointer-events: none;
+    // pointer-events: none;
 
     &.headerCellBtnTemplate {
       padding-left: 0 !important;
@@ -60,7 +60,7 @@
 
       .small-article-button {
         margin-top: 2px;
-        pointer-events: auto;
+        // pointer-events: auto;
       }
     }
   }
@@ -141,11 +141,11 @@
   }
 
   .dx-row-focused.dx-data-row>td {
-    border-bottom-color: $base-accent  !important;
+    border-bottom-color: $base-accent !important;
   }
 
   .dx-link-delete {
-    color: $base-accent  !important;
+    color: $base-accent !important;
     background-color: transparent !important;
   }
 
@@ -173,10 +173,10 @@
     }
 
     &.certification {
-      background-color: $BW-purple-medium  !important;
+      background-color: $BW-purple-medium !important;
 
       &:hover {
-        background-color: $BW-purple-dark  !important;
+        background-color: $BW-purple-dark !important;
       }
     }
   }
