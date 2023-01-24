@@ -165,14 +165,14 @@
                 <dx-button
                   class="upperButton"
                   type="danger"
-                  [disabled]="ordreBAFOuFacture"
+                  [disabled]="ordreBAFOuFacture || !fullOrderNumber"
                   text="{{ 'btn-deleteorder' | localize }}"
                   (onClick)="onDeleteOrderClick()"
                 ></dx-button>
                 <dx-button
                   class="upperButton"
                   type="danger"
-                  [disabled]="ordreFacture"
+                  [disabled]="ordreFacture || !fullOrderNumber"
                   hint="{{ 'hint-cancelorder' | localize }}"
                   text="{{ 'btn-cancelorder' | localize }}"
                   (onClick)="onCancelOrderClick()"
@@ -180,6 +180,7 @@
                 <dx-button
                   class="upperButton"
                   type="default"
+                  [disabled]="!fullOrderNumber"
                   text="{{ 'btn-cloneorder' | localize }}"
                   [disabled]="!canDuplicate"
                   (onClick)="onDuplicateOrderClick()"
@@ -187,6 +188,7 @@
                 <dx-button
                   class="upperButton"
                   type="default"
+                  [disabled]="!fullOrderNumber"
                   text="{{ 'btn-complorder' | localize }}"
                   (onClick)="onComplOrderClick()"
                 ></dx-button>
@@ -251,12 +253,32 @@
                   {{ refOrdre }}</span
                 >
                 <dx-button
-                  class="float-right header-btn-baf"
+                  class="header-btn-baf float-right"
                   type="default"
-                  [visible]="showBAFButton"
+                  [visible]="showBAFButton && !!fullOrderNumber"
                   text="Bon à facturer"
                   (onClick)="bonAFacturer()"
                 ></dx-button>
+                <div
+                  class="duplication-buk-container header-btn-baf float-right"
+                  [hidden]="hideDuplicationBUK"
+                >
+                  <dx-button
+                    type="default"
+                    class="duplicateBUKSA-btn"
+                    [disabled]="!fullOrderNumber"
+                    [text]="'Duplication vers SA'"
+                    (onClick)="onDuplicationBukSaClick()"
+                  ></dx-button>
+                  <dx-button
+                    type="default"
+                    class="duplicateBUKSA-btn-trash"
+                    [disabled]="!fullOrderNumber"
+                    [icon]="'trash'"
+                    hint="{{ 'hint-suppression-regroupement' | localize }}"
+                    (onClick)="onDelRegroupementClick()"
+                  ></dx-button>
+                </div>
                 <div style="clear: both"></div>
                 <div
                   class="dx-form-group-content no-padding-bottom order-header"
@@ -617,7 +639,12 @@
                         <!-- Mention regime TVA -->
                         <div class="dx-field red-font info-supp-tva">
                           {{ mentionRegimeTva | async }}
-                          <!-- YO -->
+                        </div>
+                      </dxi-item>
+                      <dxi-item [ratio]="9">
+                        <!-- Descriptif regroupement -->
+                        <div *ngIf="descriptifRegoupement" class="dx-field desc-regroup">
+                          {{ descriptifRegoupement }}
                         </div>
                       </dxi-item>
                     </dxi-item>
@@ -1369,3 +1396,4 @@
   (lignesChanged)="onLignesChanged($event)"
   (ordreChanged)="refreshHeader($event)"
 ></app-groupage-chargements-popup>
+<app-confirmation-result-popup></app-confirmation-result-popup>
