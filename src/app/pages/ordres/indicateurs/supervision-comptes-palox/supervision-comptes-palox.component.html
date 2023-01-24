@@ -129,6 +129,17 @@
   <br />
 </form>
 
+<dx-button
+  class="grid-grouping-button"
+  type="default"
+  icon="material-icons menu_open"
+  hint="{{ 'btn-grouping' | localize }}"
+  (onClick)="expandCollapseGroups()"
+></dx-button>
+
+<!-- ------------------------ -->
+<!-- Mouvements palox clients -->
+<!-- ------------------------ -->
 <dx-data-grid
   #MouvClientsComptesPalox
   [remoteOperations]="{ paging: true }"
@@ -138,11 +149,12 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [rowAlternationEnabled]="true"
   (onRowDblClick)="onRowDblClick($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
-      'Mouvements Palox par entrepôts',
+      'Mouvements Palox par client',
       $event,
       gridConfiguratorService.Grid.MouvClientsComptesPalox,
       enableFilters.bind(this)
@@ -179,9 +191,17 @@
   >
   </dxo-column-chooser>
   <dxo-group-panel [visible]="true"> </dxo-group-panel>
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      [name]="'solde_mouvement'"
+      [summaryType]="'custom'"
+      [displayFormat]="'Solde : {0}'"
+    ></dxi-group-item>
+  </dxo-summary>
   <dxi-column
     *ngFor="let column of this.columns[0] | async"
     [dataField]="column.dataField"
+    [width]="column.width"
     [format]="column.format"
     [visible]="false"
     [caption]="
@@ -209,7 +229,7 @@
       (onClick)="adjustPalox(cell.data, 'adjust')"
       text="{{ 'ajuster' | localize }}"
     ></dx-button>
-    <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
+    <div class="group-text-2">{{ getSoldeMouvement(cell.data) }}</div>
     <dx-button
       [visible]="getInventoryData(cell.data) !== ''"
       class="small-action-button"
@@ -218,9 +238,11 @@
       text="{{ 'inventaire' | localize }}"
     ></dx-button>
   </div>
-
 </dx-data-grid>
 
+<!-- --------------------------- -->
+<!-- Récapitulatif palox clients -->
+<!-- --------------------------- -->
 <dx-data-grid
   #RecapClientsComptesPalox
   [visible]="false"
@@ -277,6 +299,7 @@
     *ngFor="let column of this.columns[1] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
     [groupCellTemplate]="column.groupCellTemplate"
     [caption]="
       ('comptesPalox-entrepots-' + column.dataField?.split('.').join('-')
@@ -298,6 +321,9 @@
   </div>
 </dx-data-grid>
 
+<!-- ----------------------------- -->
+<!-- Mouvements palox fournisseurs -->
+<!-- ----------------------------- -->
 <dx-data-grid
   #MouvFournisseursComptesPalox
   [visible]="false"
@@ -350,10 +376,18 @@
   >
   </dxo-column-chooser>
   <dxo-group-panel [visible]="true"> </dxo-group-panel>
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      [name]="'solde_mouvement'"
+      [summaryType]="'custom'"
+      [displayFormat]="'Solde : {0}'"
+    ></dxi-group-item>
+  </dxo-summary>
   <dxi-column
     *ngFor="let column of this.columns[2] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
     [groupCellTemplate]="column.groupCellTemplate"
     [format]="column.format"
     [caption]="
@@ -372,11 +406,13 @@
     <div class="group-text-1">
       {{ getInventoryData(cell.data) }}
     </div>
-    <div class="group-text-2">{{ getSoldeData(cell.data) }}</div>
+    <div class="group-text-2">{{ getSoldeMouvement(cell.data) }}</div>
   </div>
-
 </dx-data-grid>
 
+<!-- -------------------------------- -->
+<!-- Récapitulatif palox Fournisseurs -->
+<!-- -------------------------------- -->
 <dx-data-grid
   #RecapFournisseursComptesPalox
   [visible]="false"
@@ -433,6 +469,7 @@
     *ngFor="let column of this.columns[3] | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column.width"
     [groupCellTemplate]="column.groupCellTemplate"
     [caption]="
       ('comptesPalox-fournisseurs-' + column.dataField?.split('.').join('-')
@@ -452,7 +489,6 @@
     </div>
     <div class="group-text-3">{{ getSoldeGeneralData(cell.data) }}</div>
   </div>
-
 </dx-data-grid>
 
 <app-ajust-decompte-palox-popup

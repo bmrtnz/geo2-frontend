@@ -48,11 +48,12 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getOne_v2(id: string, columns: Array<string> | Set<string>) {
+  getOne_v2(id: string, columns: Array<string> | Set<string>, fetchPol?) {
     return this.apollo
       .query<{ ordre: Ordre }>({
         query: gql(this.buildGetOneGraph(columns)),
         variables: { id },
+        fetchPolicy: fetchPol ? fetchPol : "cache-first"
       });
   }
 
@@ -422,6 +423,71 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "ordRef", type: "String", value: ordRef },
       { name: "socCode", type: "String", value: socCode },
       { name: "user", type: "String", value: user }
+    ]);
+  }
+
+  public fEnvoiBLAuto(
+    socCode: string,
+    scoCode: string,
+    dateMin: string,
+    dateMax: string,
+    nomUtilisateur: string,
+  ) {
+    return this.apollo
+      .query<{ fEnvoiBLAuto: FunctionResponse<{ array_ord_ref: Array<string> }> }>({
+        query: gql(ApiService.buildGraph("query", [{
+          name: "fEnvoiBLAuto",
+          body: functionBody,
+          params: [
+            { name: "socCode", value: "socCode", isVariable: true },
+            { name: "scoCode", value: "scoCode", isVariable: true },
+            { name: "dateMin", value: "dateMin", isVariable: true },
+            { name: "dateMax", value: "dateMax", isVariable: true },
+            { name: "nomUtilisateur", value: "nomUtilisateur", isVariable: true },
+          ],
+        }], [
+          { name: "socCode", type: "String", isOptionnal: false },
+          { name: "scoCode", type: "String", isOptionnal: false },
+          { name: "dateMin", type: "LocalDate", isOptionnal: false },
+          { name: "dateMax", type: "LocalDate", isOptionnal: false },
+          { name: "nomUtilisateur", type: "String", isOptionnal: false },
+        ])),
+        variables: { socCode, scoCode, dateMin, dateMax, nomUtilisateur },
+      })
+      .pipe(map(res => res.data.fEnvoiBLAuto));
+  }
+
+  public fnMajOrdreRegroupementV2(
+    ordreRef: string,
+    socCode: string,
+    entrepotGeneric: boolean,
+    nomUtilisateur: string,
+  ) {
+    return this.functionsService.queryFunction("fnMajOrdreRegroupementV2", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+      { name: "socCode", type: "String", value: socCode },
+      { name: "entrepotGeneric", type: "Boolean", value: entrepotGeneric },
+      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
+    ]);
+  }
+
+  public fDuplicationBukSa(
+    ordreRef: string,
+    socCode: string,
+    nomUtilisateur: string,
+    codeRegimeTva: string,
+  ) {
+    return this.functionsService.queryFunction("fDuplicationBukSa", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+      { name: "socCode", type: "String", value: socCode },
+      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
+      { name: "codeRegimeTva", type: "String", value: codeRegimeTva },
+    ]);
+  }
+
+  public fDelRegroupement(ordreRef: string) {
+    return this.functionsService.queryFunction("fDelRegroupement", [
+      { name: "ordreRef", type: "String", value: ordreRef }
     ]);
   }
 }

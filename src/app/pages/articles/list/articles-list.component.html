@@ -35,7 +35,7 @@
             [displayExpr]="formatListItem"
             valueExpr="id"
           >
-            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+            <dxo-drop-down-options [width]="150"> </dxo-drop-down-options>
           </dx-tag-box>
         </div>
       </div>
@@ -76,6 +76,24 @@
             "
             [displayExpr]="'description'"
             valueExpr="description"
+          >
+            <dxo-drop-down-options [width]="250"> </dxo-drop-down-options>
+          </dx-tag-box>
+        </div>
+      </div>
+      <!-- Groupe emballage -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label noPadding">
+          {{ "articles-emballage-groupe" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-tag-box
+            #groupeEmballageSB
+            [dataSource]="groupesEmballage"
+            (valueChange)="onFieldValueChange($event, 'emballage.groupe.id')"
+            [searchExpr]="['id']"
+            [displayExpr]="formatListItem"
+            valueExpr="id"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-tag-box>

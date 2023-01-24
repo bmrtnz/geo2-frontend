@@ -151,15 +151,14 @@ export class DuplicationOrdrePopupComponent {
           this.hidePopup();
           setTimeout(() => this.tabContext.openOrdre(numero, this.currentCompanyService.getCompany().campagne.id, false), 100);
         } else {
-          notify(this.localization.localize("ordre-duplication-creation"), "error");
-          console.log(res);
+          notify(this.localization.localize("ordre-duplicate-creation"), "error");
         }
       },
       error: (error: Error) => {
         this.processRunning = false;
         console.log(error);
         alert(error.message.replace("Exception while fetching data (/wDupliqueOrdreOnDuplique) : ", ""),
-          this.localization.localize("ordre-duplication-creation"));
+          this.localization.localize("ordre-duplicate-creation"));
       }
     });
 

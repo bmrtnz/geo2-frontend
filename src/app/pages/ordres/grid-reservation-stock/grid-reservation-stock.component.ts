@@ -210,7 +210,7 @@ export class GridReservationStockComponent implements OnInit {
         )
         .subscribe({
           error: ({ message }: Error) => notify(message, "error"),
-          next: () => { console.log("push"); this.pushReservation(e); }
+          next: () => this.pushReservation(e)
         });
     }
 

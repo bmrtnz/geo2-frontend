@@ -133,7 +133,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="onCodeChange($event)"
-                      valueChangeEvent="keyup change"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-code' | localize }}"
@@ -363,7 +363,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-raisonSocial' | localize }}"
@@ -394,7 +394,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-adresse1' | localize }}"
@@ -425,7 +425,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-adresse2' | localize }}"
@@ -453,7 +453,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-adresse3' | localize }}"
@@ -481,7 +481,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-codePostal' | localize }}"
@@ -512,7 +512,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-ville' | localize }}"
@@ -577,7 +577,7 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-                        valueChangeEvent="keyup"
+                        valueChangeEvent="input"
                       >
                         <dx-validator
                           name="{{
@@ -607,7 +607,7 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-                        valueChangeEvent="keyup"
+                        valueChangeEvent="input"
                       >
                         <dx-validator
                           name="{{
@@ -637,7 +637,7 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-                        valueChangeEvent="keyup"
+                        valueChangeEvent="input"
                       >
                         <dx-validator
                           name="{{
@@ -667,7 +667,7 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-                        valueChangeEvent="keyup"
+                        valueChangeEvent="input"
                       >
                         <dx-validator
                           name="{{
@@ -697,7 +697,7 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-                        valueChangeEvent="keyup"
+                        valueChangeEvent="input"
                       >
                         <dx-validator
                           name="{{
@@ -727,7 +727,7 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-                        valueChangeEvent="keyup"
+                        valueChangeEvent="input"
                       >
                         <dx-validator
                           name="{{
@@ -999,7 +999,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="checkCompteComptable($event)"
-                      valueChangeEvent="keyup change"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-compteComptable' | localize }}"
@@ -1011,7 +1011,7 @@
                         ></dxi-validation-rule>
                         <!-- Workaround. Apparemment bug de Devextreme qui apparait lorsqu'il y a 2 async validation rules sur la page, et crée une référence circulaire. -->
                         <dxi-validation-rule
-                          *ngIf="createMode === true && CCexists"
+                          *ngIf="CCexists"
                           type="stringLength"
                           [max]="0"
                           message="Ce code est déjà utilisé"
@@ -1110,7 +1110,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{
@@ -1142,7 +1142,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-tvaCee' | localize }}"
@@ -1174,7 +1174,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-siret' | localize }}"
@@ -1211,7 +1211,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{ 'tiers-clients-referenceCoface' | localize }}"
@@ -1383,7 +1383,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                     </dx-text-box>
                   </div>
@@ -1401,7 +1401,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                     </dx-text-box>
                   </div>
@@ -1813,7 +1813,7 @@
                     (onValueChanged)="
                       valueToUpperCase($event); onIfcoChange($event)
                     "
-                    valueChangeEvent="keyup"
+                    valueChangeEvent="input"
                   >
                     <dx-validator name="{{ 'tiers-clients-ifco' | localize }}">
                       <dxi-validation-rule
@@ -1861,7 +1861,7 @@
                       style: 'text-transform: uppercase'
                     }"
                     (onValueChanged)="valueToUpperCase($event)"
-                    valueChangeEvent="keyup"
+                    valueChangeEvent="input"
                   >
                     <dx-validator
                       name="{{ 'tiers-clients-lieuFonctionEan' | localize }}"
@@ -1937,7 +1937,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{
@@ -1967,7 +1967,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{
@@ -2007,7 +2007,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{
@@ -2045,7 +2045,7 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-                      valueChangeEvent="keyup"
+                      valueChangeEvent="input"
                     >
                       <dx-validator
                         name="{{

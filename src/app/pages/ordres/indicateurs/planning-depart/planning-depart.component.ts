@@ -1,7 +1,9 @@
-import { AfterViewInit, Component, ViewChild } from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from "@angular/core";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
 import { LocalizePipe } from "app/shared/pipes";
 import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
+import { EnvoisService } from "app/shared/services/api/envois.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { Indicateur } from "app/shared/services/api/indicateurs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -17,6 +19,7 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { DocumentsOrdresPopupComponent } from "../../documents-ordres-popup/documents-ordres-popup.component";
 import { TabContext } from "../../root/root.component";
 
 @Component({
@@ -41,6 +44,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("dateMin", { static: false }) dateMin: DxSelectBoxComponent;
   @ViewChild("dateMax", { static: false }) dateMax: DxSelectBoxComponent;
+  @ViewChild(DocumentsOrdresPopupComponent) docsPopup: DocumentsOrdresPopupComponent;
 
   public dataSource: DataSource;
   public title: string;
@@ -63,6 +67,10 @@ export class PlanningDepartComponent implements AfterViewInit {
     private ordresIndicatorsService: OrdresIndicatorsService,
     private localizePipe: LocalizePipe,
     private tabContext: TabContext,
+    private datePipe: DatePipe,
+    private envoisService: EnvoisService,
+    private vcr: ViewContainerRef,
+    private cfr: ComponentFactoryResolver,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -269,6 +277,19 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.dateMax.value = datePeriod.dateFin;
   }
 
+  public onBLAutoClick() {
+    const socID = this.currentCompanyService.getCompany().id;
+    this.ordresService.fEnvoiBLAuto(
+      socID,
+      this.secteurSB.value.id,
+      this.datePipe.transform(new Date(Date.parse(this.dateMin.value)), "yyyy-MM-dd"),
+      this.datePipe.transform(new Date(Date.parse(this.dateMax.value)), "yyyy-MM-dd"),
+      this.authService.currentUser.nomUtilisateur,
+    ).subscribe({
+      next: res => notify(res.msg, "success"),
+      error: (err: Error) => notify(`Erreur lors de l'envoi des détails: ${err.message}`, "error", 3000),
+    });
+  }
 }
 
 export default PlanningDepartComponent;

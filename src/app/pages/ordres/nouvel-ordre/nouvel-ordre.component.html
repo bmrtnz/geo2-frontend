@@ -14,16 +14,16 @@
 
 <app-button-loader
   [text]="
-    '+ ' +
     ('create' | localize) +
     (getSelectedEntrepot()
       ? ' ' + ('depuis' | localize) + '   \'' + codeEnt + '\''
       : '')
   "
   [type]="'success'"
+  [icon]="'material-icons add'"
   class="button-create-order"
   [ngClass]="{ pulse: pulseBtnOn }"
-  [hidden]="!getSelectedEntrepot()"
+  [hidden]="!getSelectedEntrepot() || hideButton"
   [resolver]="resolver"
   (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>
@@ -31,6 +31,7 @@
 <app-grid-historique-entrepots
   #grid
   (pulseButton)="pulseButton($event)"
+  (hideCreateButton)="hideCreateButton($event)"
   *ngIf="favorites"
 ></app-grid-historique-entrepots>
 <app-grid-entrepots

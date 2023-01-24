@@ -10,20 +10,24 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import { dxToolbarItem, dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
-import { from, interval, Observable } from "rxjs";
+import { ucs2 } from "punycode";
+import { from, interval, Observable, of } from "rxjs";
 import {
+  concatAll,
   concatMap,
   concatMapTo,
   debounce,
   filter,
   map,
+  mapTo,
   mergeMap,
   pairwise,
   reduce,
   share,
   shareReplay,
   startWith,
-  tap
+  tap,
+  toArray
 } from "rxjs/operators";
 import { Model } from "../models/model";
 import { GridsConfigsService } from "./api/grids-configs.service";
@@ -364,6 +368,7 @@ export class GridConfiguratorService {
     const res = await this.gridsConfigsService
       .fetchUserGrid(this.authService.currentUser, grid, this.currentCompanyService.getCompany())
       .toPromise();
+
     const defaultConfig = this.fetchDefaultConfig(grid);
     if (res?.error || !res.data.gridConfig)
       return await defaultConfig;
@@ -391,8 +396,8 @@ export class GridConfiguratorService {
             .map(param => ({ [param]: defaultColumn[param] }))
             .reduce((acm, crt) => ({ ...acm, ...crt })) : {},
         })),
-        reduce<GridColumn, GridColumn[]>((acc, value) => [...acc, value]),
-        map(columns => ({ ...inputConfig, columns }) as GridConfig),
+        toArray(),
+        map(columns => ({ ...inputConfig, columns: columns ?? defaultConfig.columns }) as GridConfig),
       )
       .toPromise();
   }

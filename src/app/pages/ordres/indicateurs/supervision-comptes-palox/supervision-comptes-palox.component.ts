@@ -400,6 +400,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     return "";
   }
 
+  getSoldeMouvement(e) {
+    return "Solde : " + e.aggregates[0];
+  }
+
   getSoldeData(e) {
     if (e.items?.length)
       return "Solde : " + e.items[0].sommeQuantiteInventaire;
@@ -412,6 +416,27 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       return "Solde général : " + e.items[0].sommeQuantiteInventaire;
     if (e.collapsedItems?.length)
       return "Solde général : " + e.collapsedItems[0].sommeQuantiteInventaire;
+  }
+
+  public expandCollapseGroups() {
+    const index = this.getActiveGridIndex();
+    const datagrid = this.paloxGrids.toArray()[index];
+    if (!datagrid) return;
+    datagrid.instance.option(
+      "grouping",
+      { autoExpandAll: !datagrid.instance.option("grouping").autoExpandAll }
+    );
+  }
+
+  public calculateCustomSummary(options) {
+    if (options.name === "solde_mouvement") {
+      if (options.summaryProcess === "start") {
+        options.totalValue = 0;
+      } else if (options.summaryProcess === "calculate") {
+        if (!options.totalValue) options.totalValue = options.value.quantiteInventaire;
+        options.totalValue += options.value.sortie - options.value.entree;
+      }
+    }
   }
 
 }

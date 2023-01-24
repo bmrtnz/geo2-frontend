@@ -1,10 +1,13 @@
 <dx-button
   [type]="type"
+  [icon]="icon"
   [stylingMode]="stylingMode"
   [disabled]="loading || disabled"
   (onClick)="onClick($event)"
+  class="button-load-indicator"
 >
   <div *dxTemplate="let data of 'content'">
+    <i class="dx-icon {{ icon }}"></i>
     <span class="dx-button-text">{{ text || "[" + type + "]" }}</span>
     <dx-load-indicator
       [visible]="loading"

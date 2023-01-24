@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Client from "app/shared/models/client.model";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
@@ -13,6 +13,7 @@ export class EncoursClientPopupComponent implements OnChanges {
   @Input() public readOnlyMode: boolean;
   @Output() public clientInfo: any;
   @Output() public popupShown: boolean;
+  @Output() openEncoursOrder = new EventEmitter<any>();
 
   visible: boolean;
   titleStart: string;
@@ -47,6 +48,10 @@ export class EncoursClientPopupComponent implements OnChanges {
   hidePopup() {
     this.popup.visible = false;
     this.popupShown = false;
+  }
+
+  openOrder(ordre) {
+    this.openEncoursOrder.emit(ordre);
   }
 
 }

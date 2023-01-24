@@ -75,6 +75,7 @@ export class NouvelOrdreComponent implements OnInit {
   public resolver: Observable<Ordre>;
   public errorText: string;
   public codeEnt: any;
+  public hideButton: boolean;
 
   private societe: Societe;
   private ofValideEntrepotForOrdreRef = defer(
@@ -163,6 +164,10 @@ export class NouvelOrdreComponent implements OnInit {
   pulseButton(e) {
     this.pulseBtnOn = false;
     setTimeout(() => this.pulseBtnOn = true, 1);
+  }
+
+  hideCreateButton(e) {
+    this.hideButton = e;
   }
 
   getSelectedEntrepot() {

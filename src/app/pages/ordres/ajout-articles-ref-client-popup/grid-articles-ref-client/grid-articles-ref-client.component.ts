@@ -16,7 +16,7 @@ import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-grid-articles-ref-client",
@@ -38,6 +38,7 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
   @ViewChild("especeSB", { static: false }) especesSB: DxSelectBoxComponent;
   @ViewChild("varieteSB", { static: false }) varietesSB: DxSelectBoxComponent;
   @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
+  @ViewChild("groupeSB") groupesSB: DxSelectBoxComponent;
   @ViewChild("emballageSB", { static: false }) emballagesSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
   @ViewChild("valideSB", { static: false }) valideSB: DxSelectBoxComponent;
@@ -48,6 +49,7 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
   especes: Observable<DataSource>;
   varietes: Observable<DataSource>;
   modesCulture: Observable<DataSource>;
+  groupes: Observable<DataSource>;
   emballages: Observable<DataSource>;
   origines: Observable<DataSource>;
   trueFalse: any;
@@ -62,6 +64,7 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     public clientsService: ClientsService,
     public especesService: EspecesService,
     public varietesService: VarietesService,
+    public groupesEmballageService: EmballagesService,
     public emballagesService: EmballagesService,
     public modesCultureService: ModesCultureService,
     public originesService: OriginesService,
@@ -82,12 +85,21 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     const dataToLoad = [
       { var: "especes", id: "matierePremiere.espece.id", desc: "matierePremiere.espece.description" },
       { var: "varietes", id: "matierePremiere.variete.id", desc: "matierePremiere.variete.description" },
+      { var: "groupes", id: "emballage.emballage.groupe.id", desc: "emballage.emballage.groupe.description" },
       { var: "emballages", id: "emballage.emballage.id", desc: "emballage.emballage.description" },
       { var: "origines", id: "matierePremiere.origine.id", desc: "matierePremiere.origine.description" },
       { var: "modesCulture", id: "matierePremiere.modeCulture.id", desc: "matierePremiere.modeCulture.description" },
     ];
     dataToLoad.forEach(data => {
-      this[data.var] = this.articlesService.getDistinctEntityDatasource(data.id, data.desc, refCltFilter, "no-cache");
+      let pimpedFilter;
+      // filtering emballages by their groupes
+      if (data.var === "emballages" && this.groupesSB.value.length) {
+        pimpedFilter = refCltFilter;
+        for (const { key } of this.groupesSB.value)
+          pimpedFilter = `${pimpedFilter} and emballage.emballage.groupe.id == ${key}`;
+      }
+
+      this[data.var] = this.articlesService.getDistinctEntityDatasource(data.id, data.desc, pimpedFilter ?? refCltFilter, "no-cache");
       this[data.var].subscribe(res => res.load().then(result => {
         const selectBox = data.var + "SB";
         if (result?.length === 1) this[selectBox].instance.option("value", [result[0].node]);
@@ -135,6 +147,10 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
         event = ["null"];
       }
     }
+
+    // toggle emballages filtering by their groupes
+    if (dataField === "emballage.emballage.groupe.id")
+      this.loadPreFilters();
 
     // Changing values for Oui/Non select-box
     if (event.toString() === "Oui") { event = ["true"]; }

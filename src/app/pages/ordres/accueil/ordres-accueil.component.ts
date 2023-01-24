@@ -96,9 +96,14 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
     this.indicatorsSubscription.unsubscribe();
   }
 
-  onValueChanged(event) {
-    this.indicateursService.secteur = event.value?.id;
+  onValueChanged(e) {
+    if (!e.event) return; // We check that this change is coming from the user
+    this.indicateursService.secteur = e.value?.id;
     this.loadIndicators();
+  }
+
+  setCalculatedSecteur(secteur) {
+    this.secteurInput.value = { id: secteur };
   }
 
   displayExpr(data) {
@@ -141,6 +146,8 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
   configureIndicator() {
     const loadIndicators = (config: { selection: string[] }) => {
       this.loadedIndicators = config.selection;
+      // We remove old (named) indicators that don't exist anymore but were saved
+      this.loadedIndicators = this.loadedIndicators.filter(ind => this.ordresIndicatorsService.getIndicatorByName(ind));
       this.indicators = this.loadedIndicators.map((id) =>
         this.ordresIndicatorsService.getIndicatorByName(id),
       );
@@ -196,7 +203,11 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
 
           const countResponse = await indicator.fetchCount
             .pipe(
-              map((res) => res[indicator.id].toString()),
+              map((res) => res[indicator.id]),
+              map(({ count, secteur }) => {
+                if (secteur) this.setCalculatedSecteur(secteur);
+                return count;
+              }),
             )
             .toPromise();
           return [indicator.id, countResponse] as [string, string];
@@ -206,7 +217,7 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
         const index = this.indicators.findIndex(
           (indicator) => id === indicator.id,
         );
-        if (index) {
+        if (index >= 0) {
           this.indicators[index].number = value;
           this.indicators[index].loading = false;
         }

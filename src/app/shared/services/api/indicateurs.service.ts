@@ -10,7 +10,8 @@ export enum Indicateur {
   PlanningDepart = "PlanningDepart",
 }
 
-export type IndicateurCountResponse = { [key in keyof typeof Indicateur]: number };
+export type IndicateurCount = { count: number, secteur?: string };
+export type IndicateurCountResponse = { [key in keyof typeof Indicateur]: IndicateurCount };
 
 @Injectable({
   providedIn: "root"
@@ -48,6 +49,7 @@ export class IndicateursService {
       ({
         name: "countByIndicator",
         alias,
+        body: ["count", "secteur"],
         params: [
           { name: "indicateur", value: alias, isVariable: true },
           { name: "societeCode", value: "societeCode", isVariable: true },

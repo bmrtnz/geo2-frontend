@@ -33,7 +33,7 @@ export class OrderHistoryPopupComponent implements OnChanges {
   }
 
   setTitle() {
-    if (this.client) {
+    if (this.client?.id) {
       this.clientId = this.client.id;
       this.secteurId = this.client.secteur.id;
       this.titleStart = "Historique client ";

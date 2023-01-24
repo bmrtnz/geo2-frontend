@@ -68,8 +68,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   private currOrder: Partial<Ordre>;
   private currCell: any;
   public columns: Observable<GridColumn[]>;
-  toRefresh: boolean;
-  gridHasData: boolean;
+  public toRefresh: boolean;
+  public gridItemsSelected: boolean;
+  public launchEnabled: boolean;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -151,7 +152,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       ["nomUtilisateur", "<>", "null"],
     ]);
     this.periodes = this.dateManagementService.periods();
-    this.gridHasData = false;
+    this.gridItemsSelected = false;
   }
 
   async ngOnInit() {
@@ -214,7 +215,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (!this.formGroup.get("secteurCode").value) {
       notify("Veuillez spécifier un secteur", "error");
     } else {
+      this.datagrid.instance.clearSelection();
       this.toRefresh = false;
+      this.launchEnabled = true;
       this.datagrid.dataSource = null;
 
       const values: Inputs = {
@@ -263,7 +266,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   onGridContentReady(e) {
-    this.gridHasData = this.datagrid.instance.getVisibleRows().length > 0;
   }
 
   manualDate(e) {
@@ -395,9 +397,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   launch(e) {
+    this.launchEnabled = false;
     const ordreRefs = this.datagrid.instance.getSelectedRowsData().map((row: Partial<OrdreBaf>) => row.ordreRef);
     this.ordresBafService
-      .fBonAFacturer(ordreRefs, this.currentCompanyService.getCompany().id)
+      .fBonAFacturer(ordreRefs, this.currentCompanyService.getCompany().id, true) // true for silent mode without warnings
       .subscribe({
         complete: () => this.enableFilters(),
       });
@@ -439,9 +442,17 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       }
 
       if (e.rowType === "data") {
-        if (field !== "indicateurBaf" && e.value === "0") {
-          e.cellElement.innerText = "";
-          return;
+
+        if (e.value === "0") {
+          if (field !== "indicateurBaf") {
+            e.cellElement.innerText = "";
+          } else {
+            // OK rows get selected
+            let selected = [];
+            e.component.getSelectedRowKeys().map(sel => selected.push(e.component.getRowIndexByKey(sel)));
+            selected?.length ? selected.push(e.rowIndex) : selected = [e.rowIndex];
+            e.component.selectRowsByIndexes(selected);
+          }
         }
         e.cellElement.classList.add("BAFstatus-cell");
         e.cellElement.classList.add(this.colorizeCell(e.value));
@@ -471,10 +482,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   onSelectionChanged(e) {
     // Disallowing selection of hidden checkboxes (Select All button) when status is BLOCKED
     e.component.getVisibleRows().map(row => {
-      if (row.data.indicateurBaf === status.BLOQUÉ) {
-        e.component.deselectRows([row.key]);
-      }
+      if (row.data.indicateurBaf === status.BLOQUÉ) e.component.deselectRows([row.key]);
     });
+    this.gridItemsSelected = this.datagrid.instance.getSelectedRowsData()?.length > 0;
   }
 
   colorizeCell(theValue) {

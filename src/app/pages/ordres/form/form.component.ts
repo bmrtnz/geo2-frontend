@@ -18,6 +18,7 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
+import { FunctionResult } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
@@ -37,8 +38,9 @@ import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { combineLatest, Observable, of, Subject } from "rxjs";
-import { concatMap, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
+import { combineLatest, defer, Observable, of, Subject } from "rxjs";
+// tslint:disable-next-line: max-line-length
+import { catchError, concatMap, concatMapTo, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile, tap } from "rxjs/operators";
 import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
@@ -216,7 +218,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "type.id",
     "documentCMR.isPresent",
     "documentCMR.uri",
-    "documentCMR.type"
+    "documentCMR.type",
+    "descriptifRegroupement",
   ];
 
   private destroy = new Subject<boolean>();
@@ -302,6 +305,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public currentFacture: ViewDocument;
   public allowVenteACommissionMutation: boolean;
   public refreshRegimeTva = new EventEmitter();
+  public hideDuplicationBUK = this.currentCompanyService.getCompany().id !== "BUK";
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
@@ -331,6 +335,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
+  public descriptifRegoupement: string;
 
   ngOnInit() {
     this.initializeForm();
@@ -402,7 +407,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           concatMap(([, ordre]) => this.regimesTvaService.ofInitRegimeTva(ordre.id, ordre.regimeTva.id)),
           map(res => res.data.ofInitRegimeTva.msg),
         );
-
   }
 
   ngAfterViewInit() {
@@ -746,7 +750,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "fTestAnnuleOrdre",
         "fAnnulationOrdre",
         "fCreeOrdreComplementaire",
-        "fCreeOrdreComplementaire"
+        "fCreeOrdreComplementaire",
+        "fnMajOrdreRegroupementV2"
       ];
     functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
@@ -903,6 +908,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
           this.fetchFullOrderNumber();
+          this.descriptifRegoupement = ordre.descriptifRegroupement;
           this.refOrdre = this.ordre?.id ? ordre.id : "-";
           this.canDuplicate = !!this?.ordre?.id;
           this.formGroup.reset(ordre);
@@ -1173,6 +1179,58 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   vowelTest(text) {
     return (/^[AEIOUYaeiouy]$/i).test(text);
+  }
+
+  public onDuplicationBukSaClick() {
+    this.ordresService.fDuplicationBukSa(
+      this.refOrdre,
+      this.currentCompanyService.getCompany().id,
+      this.authService.currentUser.nomUtilisateur,
+      this.ordre.entrepot.regimeTva?.id ?? "",
+    ).pipe(
+      map(res => res.data.fDuplicationBukSa),
+      concatMap(response => {
+        if (response.res === FunctionResult.Warning)
+          return this.resultPopup.openAs("WARNING", response.msg);
+        return of(true);
+      }),
+      catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
+      filter(flag => flag),
+      concatMapTo(defer(() => confirm(
+        this.localization.localize("entrepot-import-programme"),
+        this.localization.localize("ordre-duplicate-BUK-SA")
+      ))),
+      concatMap(generic => this.ordresService.fnMajOrdreRegroupementV2(
+        this.refOrdre,
+        this.currentCompanyService.getCompany().id,
+        generic,
+        this.authService.currentUser.nomUtilisateur,
+      )),
+    )
+      .subscribe({
+        error: ({ message }: Error) => {
+          console.log(message);
+          notify(this.messageFormat(message), "error", 7000);
+        },
+        next: (res) => {
+          const msg = res.data.fnMajOrdreRegroupementV2.msg.split(",");
+          notify(this.localization.localize("ordre-duplicate-done").replace("&I", msg[1].replace(": ", "")), "success", 7000);
+        },
+        complete: () => this.refreshDescriptifRegoupement(),
+      });
+  }
+
+  public onDelRegroupementClick() {
+    this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
+      error: ({ message }: Error) => notify(message, "error"),
+      next: res => notify(res.data.fDelRegroupement.msg, "success"),
+      complete: () => this.refreshDescriptifRegoupement(),
+    });
+  }
+
+  private refreshDescriptifRegoupement() {
+    this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
+      .subscribe(res => this.descriptifRegoupement = res.data.ordre.descriptifRegroupement);
   }
 
 }
