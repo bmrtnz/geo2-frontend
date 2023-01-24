@@ -13,7 +13,7 @@ import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 })
 export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
 
-  @Input() public ordre: Ordre;
+  @Input() public ordre: Partial<Ordre>;
   @Input() public flux: string;
   @Input() public gridEnvois: GridEnvoisComponent;
 

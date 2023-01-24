@@ -5,9 +5,9 @@ import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { take } from "rxjs/operators";
+import { map, take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import {functionBody, FunctionResponse, FunctionsService} from "./functions.service";
+import { FunctionsService } from "./functions.service";
 
 @Injectable({
     providedIn: "root",
@@ -216,66 +216,69 @@ export class EnvoisService extends ApiService implements APIRead {
         societeCode: string,
         username: string,
     ) {
-      return this.functionsService.queryFunction("fConfirmationCommande", [
-        { name: "ordreRef", type: "String", value: ordreRef },
-        { name: "societeCode", type: "String", value: societeCode },
-        { name: "username", type: "String", value: username },
-      ]);
+        return this.functionsService.queryFunction("fConfirmationCommande", [
+            { name: "ordreRef", type: "String", value: ordreRef },
+            { name: "societeCode", type: "String", value: societeCode },
+            { name: "username", type: "String", value: username },
+        ]);
     }
 
     public fDocumentEnvoiDetailsExp(ordreRef: string, societeCode: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiDetailsExp", [
-        { name: "ordreRef", type: "String", value: ordreRef },
-        { name: "societeCode", type: "String", value: societeCode }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiDetailsExp", [
+            { name: "ordreRef", type: "String", value: ordreRef },
+            { name: "societeCode", type: "String", value: societeCode }
+        ]).pipe(map(res => {
+            res.data.fDocumentEnvoiDetailsExp.data.ordreRef = ordreRef;
+            return res;
+        }));
     }
 
     public fDocumentEnvoiConfirmationPrixAchat(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiConfirmationPrixAchat", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiConfirmationPrixAchat", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public fDocumentEnvoiFichesPalette(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiFichesPalette", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiFichesPalette", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public fDocumentEnvoiGenereTraca(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiGenereTraca", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiGenereTraca", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public fDocumentEnvoiBonLivraison(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiBonLivraison", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiBonLivraison", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public fDocumentEnvoiProforma(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiProforma", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiProforma", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public fDocumentEnvoiCominv(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiCominv", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiCominv", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public fDocumentEnvoiShipmentBuyco(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiShipmentBuyco", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiShipmentBuyco", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public fDocumentEnvoiDeclarationBollore(ordreRef: string) {
-      return this.functionsService.queryFunction("fDocumentEnvoiDeclarationBollore", [
-        { name: "ordreRef", type: "String", value: ordreRef }
-      ]);
+        return this.functionsService.queryFunction("fDocumentEnvoiDeclarationBollore", [
+            { name: "ordreRef", type: "String", value: ordreRef }
+        ]);
     }
 
     public countBy(search: string) {

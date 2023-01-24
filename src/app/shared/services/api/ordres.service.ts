@@ -424,4 +424,35 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "user", type: "String", value: user }
     ]);
   }
+
+  public fEnvoiBLAuto(
+    socCode: string,
+    scoCode: string,
+    dateMin: string,
+    dateMax: string,
+    nomUtilisateur: string,
+  ) {
+    return this.apollo
+      .query<{ fEnvoiBLAuto: FunctionResponse<{ array_ord_ref: Array<string> }> }>({
+        query: gql(ApiService.buildGraph("query", [{
+          name: "fEnvoiBLAuto",
+          body: functionBody,
+          params: [
+            { name: "socCode", value: "socCode", isVariable: true },
+            { name: "scoCode", value: "scoCode", isVariable: true },
+            { name: "dateMin", value: "dateMin", isVariable: true },
+            { name: "dateMax", value: "dateMax", isVariable: true },
+            { name: "nomUtilisateur", value: "nomUtilisateur", isVariable: true },
+          ],
+        }], [
+          { name: "socCode", type: "String", isOptionnal: false },
+          { name: "scoCode", type: "String", isOptionnal: false },
+          { name: "dateMin", type: "LocalDate", isOptionnal: false },
+          { name: "dateMax", type: "LocalDate", isOptionnal: false },
+          { name: "nomUtilisateur", type: "String", isOptionnal: false },
+        ])),
+        variables: { socCode, scoCode, dateMin, dateMax, nomUtilisateur },
+      })
+      .pipe(map(res => res.data.fEnvoiBLAuto));
+  }
 }
