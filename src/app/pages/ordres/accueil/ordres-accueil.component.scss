@@ -100,7 +100,7 @@
 ::ng-deep .configuration {
   width: 165px;
   float: right;
-  top: 7px;
+  top: 0;
   margin: 0 35px 5px 6px !important;
   border-left: 1px solid #CCC;
 
@@ -154,5 +154,10 @@
 }
 
 ::ng-deep .inputs-container {
-  width: calc(100% / 3);
+  margin-top: 8px;
+  width: 300px;
+}
+
+h2.accueil-header {
+  margin-bottom: 0;
 }

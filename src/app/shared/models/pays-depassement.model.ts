@@ -1,3 +1,4 @@
+import { Personne } from ".";
 import { Field, Model, ModelName } from "./model";
 
 @ModelName("PaysDepassement")
@@ -100,6 +101,16 @@ export class PaysDepassement extends Model {
     currency: "EUR",
   })
   public clientsSommeAlerteCoface: number;
+
+  @Field({
+    allowSorting: false,
+    allowHeaderFiltering: false,
+    allowSearch: false,
+    format: { type: "currency", precision: 2 },
+    currency: "EUR",
+  })
+  @Field({ model: import("./personne.model") }) public commercial: Personne;
+
 }
 
 export default PaysDepassement;

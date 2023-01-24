@@ -190,7 +190,7 @@
 <dx-button
   class="launch"
   type="default"
-  [visible]="gridHasData"
+  [disabled]="!launchEnabled || !gridItemsSelected"
   text="{{ 'btn-launch' | localize }}"
   (onClick)="launch($event)"
 ></dx-button>

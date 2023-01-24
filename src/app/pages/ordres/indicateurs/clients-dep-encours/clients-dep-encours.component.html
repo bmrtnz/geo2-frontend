@@ -1,6 +1,5 @@
 <br />
 <div class="encours-filter-area">
-
   <dx-box>
     <dxi-item [ratio]="2">
       <div class="dx-field encours-switch">
@@ -8,11 +7,11 @@
           {{ "tous-encours" | localize }}
         </div>
         <div class="dx-field-value">
-            <dx-switch
-              #switchType
-              [value]="true"
-              (onValueChanged)="enableFilters()"
-            ></dx-switch>
+          <dx-switch
+            #switchType
+            [value]="true"
+            (onValueChanged)="enableFilters()"
+          ></dx-switch>
         </div>
         <div class="dx-field-label dx-field-label-right">
           {{ "depassement-encours" | localize }}
@@ -65,11 +64,11 @@
         </div>
         <div class="dx-field-value">
           <dx-select-box
-            #paysValue
+            #commercialValue
             [dataSource]="commercial"
-            displayExpr="nomUtilisateur"
+            [displayExpr]="displayIDBefore"
             [showClearButton]="true"
-            searchExpr="nomUtilisateur"
+            searchExpr="['id', 'nomUtilisateur']"
             (onValueChanged)="onCommChanged($event)"
           ></dx-select-box>
         </div>
@@ -95,6 +94,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
+  [noDataText]="'aucun-depassement-encours' | localize"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -166,7 +166,9 @@
     <app-grid-clients-dep-encours-detail
       [masterRow]="masterRow"
       [commercialId]="commercialId"
+      [showAllClients]="!switchType.value"
+      [secteurId]="secteurId"
+      (openEncoursOrder)="openOrder($event)"
     ></app-grid-clients-dep-encours-detail>
   </div>
 </dx-data-grid>
-

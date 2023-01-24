@@ -140,11 +140,6 @@ export class Client extends Model {
     format: { type: "currency", precision: 2 },
     currency: "EUR",
   })
-  public enCoursAll: number;
-  @Field({
-    format: { type: "currency", precision: 2 },
-    currency: "EUR",
-  })
   public alerteCoface: number;
   @Field({
     format: { type: "currency", precision: 2 },

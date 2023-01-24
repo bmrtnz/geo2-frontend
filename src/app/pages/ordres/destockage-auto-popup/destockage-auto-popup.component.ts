@@ -109,7 +109,6 @@ export class DestockageAutoPopupComponent implements OnChanges {
           item.warning = item.warning === "O" ? true : false;
           item.resa_desc = item.resa_desc.split("~n").join("<br>").split("ERREUR").join("<br>ERREUR");
         });
-        console.log(this.DsItems);
         this.applyErrorsFilter();
         setTimeout(() => this.datagrid.instance.endCustomLoading());
       },

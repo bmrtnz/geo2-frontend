@@ -23,6 +23,7 @@
         <app-grid-encours-client
           [client]="clientInfo"
           [popupShown]="popupShown"
+          (openOrder)="openOrder($event)"
         ></app-grid-encours-client>
         <br />
       </div>

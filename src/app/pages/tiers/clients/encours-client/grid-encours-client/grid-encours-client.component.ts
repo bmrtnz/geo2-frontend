@@ -10,6 +10,7 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -31,6 +32,7 @@ export class GridEncoursClientComponent implements OnChanges {
   @Input() popupShown: boolean;
   @Input() public client: Client;
   @Output() hidePopup = new EventEmitter<any>();
+  @Output() openOrder = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
 
@@ -59,6 +61,7 @@ export class GridEncoursClientComponent implements OnChanges {
   } as Inputs<FormControl>);
   public deviseSociete: string;
   public deviseEncours: string;
+  public deviseClient: string;
 
   constructor(
     public clientsService: ClientsService,
@@ -67,7 +70,7 @@ export class GridEncoursClientComponent implements OnChanges {
     public currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
     public functionsService: FunctionsService,
-    public localizeService: LocalizationService
+    public localizeService: LocalizationService,
   ) {
     this.deviseSociete = this.currentCompanyService.getCompany().devise.id;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.EncoursClient);
@@ -106,13 +109,17 @@ export class GridEncoursClientComponent implements OnChanges {
       "encDepasse",
       "encReferences",
       "entrepot.code",
-      "numImmat",
       "paysCode",
       "raisonSociale",
       "societe.id",
       "ville",
       "zip",
-      "id"
+      "id",
+      "ordre.numero",
+      "ordre.campagne.id",
+      "ordre.societe.id",
+      "ordre.logistiques.numeroImmatriculation",
+      "ordre.logistiques.numeroContainer",
     ];
   }
 
@@ -130,6 +137,7 @@ export class GridEncoursClientComponent implements OnChanges {
         encoursAutorise: null,
         encoursRetard: null
       });
+      this.deviseClient = this.client.devise.id;
       this.enableFilters();
     }
   }
@@ -162,6 +170,17 @@ export class GridEncoursClientComponent implements OnChanges {
       this.deviseSociete
     ).subscribe((res) => {
       const results = res.data.allClientEnCours;
+      // Concatenate immats and containers
+      results.map(r => {
+        const immat = [];
+        const container = [];
+        r.ordre?.logistiques.map(l => {
+          if (l.numeroContainer) container.push(l.numeroContainer);
+          if (l.numeroImmatriculation) immat.push(l.numeroImmatriculation);
+        });
+        if (container.length) r.ordre.logistiques.numeroContainer = container.join(" - ");
+        if (immat.length) r.ordre.logistiques.numeroImmatriculation = immat.join(" - ");
+      });
       this.datagrid.dataSource = results;
       this.datagrid.instance.refresh();
       this.calculateMiscEncours(results);
@@ -263,6 +282,21 @@ export class GridEncoursClientComponent implements OnChanges {
           e.cellElement.innerText = "";
         }
       }
+    }
+  }
+
+  onCellDblClick(e) {
+    if (e.data?.societe?.id !== this.currentCompanyService.getCompany().id) return;
+    const ordre = {
+      numero: e.data.ordre?.numero,
+      campagne: { id: e.data.ordre?.campagne?.id }
+    };
+    this.openOrder.emit(ordre);
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data" && e.data?.ordre?.numero) {
+      e.rowElement.classList.add("cursor-pointer");
     }
   }
 

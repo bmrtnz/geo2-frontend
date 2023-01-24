@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { EncoursClientPopupComponent } from "app/pages/tiers/clients/encours-client/encours-client-popup.component";
 import { Client } from "app/shared/models";
 import { LocalizePipe } from "app/shared/pipes";
@@ -26,6 +26,9 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   @Input() masterRow: dxDataGridRowObject;
   @Input() client: any;
   @Input() commercialId: any;
+  @Input() showAllClients: boolean;
+  @Input() secteurId: any;
+  @Output() openEncoursOrder = new EventEmitter<any>();
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -53,25 +56,13 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     );
   }
 
-  // async ngOnInit() {
-  //   const fields = this.columns.pipe(
-  //     map((columns) => columns.map((column) => column.dataField)),
-  //   );
-  //   this.dataSource = this.clientsService.getDataSource_v2(
-  //     await fields.toPromise(),
-  //   );
-  //   this.enableFilters();
-  // }
-
   async ngOnChanges() {
-    console.log(this.commercialId);
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField)),
     );
     this.dataSource = this.clientsService.getDataSource_v2(
       await fields.toPromise(),
     );
-    this.enableFilters();
     if (this.dataSource) this.enableFilters();
   }
 
@@ -80,12 +71,9 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       ["pays.id", "=", this.masterRow.data.id],
       "and",
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
-      "and",
-      ["depassement", "<>", 0],
-      "and",
-      ["enCoursAll", "<>", 0],
-      ...(this.masterRow.data.secteur
-        ? ["and", ["secteur.id", "=", this.masterRow.data.secteur?.id]]
+      ... this.showAllClients ? [] : ["and", ["depassement", ">", 0]],
+      ...(this.secteurId
+        ? ["and", ["secteur.id", "=", this.secteurId]]
         : []),
       ...(this.commercialId
         ? ["and", ["commercial.id", "=", this.commercialId]]
@@ -152,6 +140,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
           )}`;
         if (!event.data.valide)
           (event.cellElement as HTMLElement).classList.add("strike");
+        if (event.data.code)
+          event.cellElement.textContent = event.cellElement.textContent + " (" + event.data.code + ")";
       }
     }
   }
@@ -168,11 +158,16 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     this.client = {
       id: e.data.id,
       secteur: { id: e.data.secteur.id },
+      devise: { id: e.data.devise.id },
       agrement: e.data.agrement,
       enCoursTemporaire: e.data.enCoursTemporaire,
       enCoursBlueWhale: e.data.enCoursBlueWhale
     };
     this.encoursPopup.visible = true;
+  }
+
+  openOrder(ordre) {
+    this.openEncoursOrder.emit(ordre);
   }
 
 }

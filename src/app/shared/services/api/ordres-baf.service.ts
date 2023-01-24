@@ -161,13 +161,13 @@ export class OrdresBafService
       });
   }
 
-  public fBonAFacturer(ordreRefs: Array<Ordre["id"]>, societeCode: Societe["id"]) {
+  public fBonAFacturer(ordreRefs: Array<Ordre["id"]>, societeCode: Societe["id"], noWarning?) {
     return from(ordreRefs).pipe(
       concatMap(ordreRef => zip(of(ordreRef), this.fBonAFacturerPrepare(ordreRef, societeCode))),
       catchError((err: Error) => (alert(this.messageFormat(err.message), "Erreur Mise en bon à facturer"), EMPTY)),
       map(([ref, res]) => [ref, res.data.fBonAFacturerPrepare] as [string, FunctionResponse<Record<string, any>>]),
       concatMap(([ref, result]) => zip(
-        of(ref), result.res === FunctionResult.Warning ? confirm(this.messageFormat(result.msg), "Attention") : of(true)
+        of(ref), ((result.res === FunctionResult.Warning) && !noWarning) ? confirm(this.messageFormat(result.msg), "Attention") : of(true)
       )),
       filter(([, choice]) => choice),
       concatMap(([ref]) => zip(of(ref), this.fBonAFacturerMain(ref, societeCode))),

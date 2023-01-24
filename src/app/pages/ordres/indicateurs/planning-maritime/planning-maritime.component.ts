@@ -111,6 +111,11 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
       this.datagrid.instance.columnOption(this.dateColumns[1], "visible", !dep);
       this.datagrid.instance.columnOption("dateDepartPrevueFournisseurRaw", "visible", dep);
       this.datagrid.instance.columnOption(this.dateColumns[1], "sortIndex", !dep ? 0 : null);
+
+      // Time management (départs)
+      (this.datagrid.dataSource as DataSource).items().map(ds => {
+        if (this.side === PlanningSide.Depart) ds.dateDepartPrevueFournisseurRaw = ds.dateDepartPrevueFournisseur?.split("T")[1];
+      });
     }
   }
 

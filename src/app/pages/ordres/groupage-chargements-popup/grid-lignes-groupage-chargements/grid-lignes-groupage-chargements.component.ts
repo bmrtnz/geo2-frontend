@@ -239,7 +239,6 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
       const allLigneChargement = [];
       modifiedRows.map(row => {
         const d = row.data;
-        console.log(d.dateDepartPrevue, d.dateLivraisonPrevue, d.dateDepartPrevueFournisseur);
         allLigneChargement.push({
           id: d.id,
           numeroCamion: d.numeroCamion,

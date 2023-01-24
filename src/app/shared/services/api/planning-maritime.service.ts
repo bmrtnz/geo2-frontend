@@ -29,9 +29,7 @@ export class PlanningMaritimeService extends ApiService {
           load: options => this
             .getListDepart(variables, columns, side)
             .pipe(
-              map(res => res.data.allPlanningDepartMaritime),
-              // Time formating
-              tap(res => res.map(r => r.dateDepartPrevueFournisseurRaw = r.dateDepartPrevueFournisseur?.split("T")[1]))
+              map(res => res.data.allPlanningDepartMaritime)
             )
             .toPromise()
         })

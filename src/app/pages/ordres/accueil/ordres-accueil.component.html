@@ -1,4 +1,4 @@
-<h2 class="content-block">
+<h2 class="content-block accueil-header">
   {{ "ordres-accueil-ordre-title" | localize }}
 
   <div class="dx-field configuration">
@@ -109,7 +109,7 @@
               height="40"
               width="40"
             ></dx-load-indicator>
-            <span *ngIf="!indicator.loading && indicator.number !== '0'">{{
+            <span *ngIf="!indicator.loading && indicator.number">{{
               indicator.number
             }}</span>
           </div>
@@ -117,7 +117,7 @@
             *ngIf="
               !indicator.loading &&
               indicator.warningIcon &&
-              indicator.number !== '0'
+              indicator.number
             "
             type="danger"
             icon="{{ indicator.warningIcon }}"
