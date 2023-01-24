@@ -717,6 +717,7 @@
     "articles-matierePremiere-codePlu": "Code PLU",
     "articles-groupe-emballage-infoscompl": "Infos complémentaires",
     "articles-emballage-emballage": "Emballage",
+    "articles-emballage-groupe": "Groupe d'emballage",
     "articles-emballage-poidsNetColis": "Poids net colis",
     "articles-emballage-poidsNetTheo": "Poids net théorique",
     "articles-emballage-poidsNetClient": "Poids net client",
