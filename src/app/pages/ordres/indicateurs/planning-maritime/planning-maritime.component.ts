@@ -115,13 +115,8 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
       this.datagrid.instance.columnOption(this.dateColumns[0], "visible", dep);
       this.datagrid.instance.columnOption(this.dateColumns[0], "sortIndex", dep ? 0 : null);
       this.datagrid.instance.columnOption(this.dateColumns[1], "visible", !dep);
-      this.datagrid.instance.columnOption("dateDepartPrevueFournisseurRaw", "visible", dep);
+      this.datagrid.instance.columnOption("heureDepartPrevueFournisseur", "visible", dep);
       this.datagrid.instance.columnOption(this.dateColumns[1], "sortIndex", !dep ? 0 : null);
-
-      // Time management (départs)
-      (this.datagrid.dataSource as DataSource).items().map(ds => {
-        if (this.side === PlanningSide.Depart) ds.dateDepartPrevueFournisseurRaw = ds.dateDepartPrevueFournisseur?.split("T")[1];
-      });
     }
   }
 
@@ -144,7 +139,7 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
         e.cellElement.classList.add("grey-normal-maritime");
 
       // Higlight important column
-      if (e.column.dataField === "dateDepartPrevueFournisseurRaw")
+      if (e.column.dataField === "heureDepartPrevueFournisseur")
         e.cellElement.classList.add("grey-light-maritime");
 
       // No palette

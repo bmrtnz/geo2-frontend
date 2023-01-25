@@ -5,7 +5,7 @@ import Pays from "./pays.model";
 @ModelName("PlanningMaritime")
 export class PlanningMaritime extends Model {
   @Field({ asKey: true }) id: number;
-  @Field() dateDepartPrevueFournisseurRaw: string;
+  @Field() heureDepartPrevueFournisseur: string;
   @Field({ dataType: "localdate" }) dateDepartPrevueFournisseur: string;
   @Field({ dataType: "datetime" }) dateLivraisonPrevue: string;
   @Field() nombrePalettesCommandees: number;

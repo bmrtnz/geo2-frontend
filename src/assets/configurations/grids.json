@@ -6477,7 +6477,7 @@
       },
       {
         "visibleIndex": 6,
-        "dataField": "dateDepartPrevueFournisseurRaw",
+        "dataField": "heureDepartPrevueFournisseur",
         "dataType": "string",
         "width": 60,
         "cssClass": "no-padding text-align-center",

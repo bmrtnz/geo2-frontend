@@ -972,7 +972,7 @@
     "ordres-planningDepart-ordre-campagne-id": "Campagne",
     "ordresTransporteur-entrepotRaisonSocial": "Lieu de livraison",
     "ordres-planningMaritime-dateDepartPrevueFournisseur": "Date dép.",
-    "ordres-planningMaritime-dateDepartPrevueFournisseurRaw": "Heure",
+    "ordres-planningMaritime-heureDepartPrevueFournisseur": "Heure",
     "ordres-planningMaritime-dateLivraisonPrevue": "Date arr.",
     "ordres-planningMaritime-codeFournisseur": "Fournisseur",
     "ordres-planningMaritime-raisonSocial": "Client",
