@@ -111,8 +111,6 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.secteurSB.value = { id: "FR" };
-    // this.paysSB.value = { id: "FR" };
     if (!this.authService.isAdmin)
       this.secteurSB.value =
         this.authService.currentUser.secteurCommercial;

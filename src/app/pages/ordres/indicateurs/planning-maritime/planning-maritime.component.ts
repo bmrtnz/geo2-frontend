@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import { LocalizePipe } from "app/shared/pipes";
 import { LocalizationService } from "app/shared/services";
 import { PlanningMaritimeService, PlanningSide } from "app/shared/services/api/planning-maritime.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -12,6 +13,7 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { TabContext } from "../../root/root.component";
 
 enum FormInput { dateMin, dateMax }
 
@@ -30,6 +32,7 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
   public titleElement: HTMLInputElement;
   public side = PlanningSide.Depart;
   public dateColumns: string[];
+  public currCompanyId: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -48,7 +51,9 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     public localizeService: LocalizationService,
     public gridUtilsService: GridUtilsService,
     public currentCompanyService: CurrentCompanyService,
-    public dateManagementService: DateManagementService
+    public dateManagementService: DateManagementService,
+    private localizePipe: LocalizePipe,
+    public tabContext: TabContext,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.PlanningMaritime,
@@ -58,6 +63,7 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     );
     this.dateColumns = ["dateDepartPrevueFournisseur", "dateLivraisonPrevue"];
     this.periodes = this.dateManagementService.periods();
+    this.currCompanyId = this.currentCompanyService.getCompany().id;
   }
 
   ngOnInit() {
@@ -145,6 +151,22 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
       if (e.column.dataField === "nombrePalettesCommandees" && !e.value)
         e.cellElement.classList.add("bold-text");
 
+    }
+  }
+
+  onCellDblClick(e) {
+    if (e.data?.ordre.societe?.id !== this.currCompanyId) return;
+    if (e.data.numeroOrdre && e.data.ordre?.campagne?.id)
+      this.tabContext.openOrdre(e.data.numeroOrdre, e.data.ordre.campagne.id);
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data" && e.data.ordre?.societe?.id === this.currCompanyId) {
+      e.rowElement.classList.add("cursor-pointer");
+      e.rowElement.setAttribute(
+        "title",
+        this.localizePipe.transform("hint-dblClick-ordre"),
+      );
     }
   }
 

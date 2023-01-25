@@ -199,25 +199,25 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     });
     const index = this.getActiveGridIndex();
     this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
-    this.datasources[index].filter([
-      [
-        ["entree", "=", 0],
-        "and",
-        ["sortie", "<>", 0]
-      ],
-      "or",
-      [
-        ["entree", "<>", 0],
-        "and",
-        ["sortie", "=", 0]
-      ],
-      "or",
-      [
-        ["entree", "<>", 0],
-        "and",
-        ["sortie", "<>", 0],
-      ]
-    ]);
+    // this.datasources[index].filter([
+    //   [
+    //     ["entree", "=", 0],
+    //     "and",
+    //     ["sortie", "<>", 0]
+    //   ],
+    //   "or",
+    //   [
+    //     ["entree", "<>", 0],
+    //     "and",
+    //     ["sortie", "=", 0]
+    //   ],
+    //   "or",
+    //   [
+    //     ["entree", "<>", 0],
+    //     "and",
+    //     ["sortie", "<>", 0],
+    //   ]
+    // ]);
 
   }
 
