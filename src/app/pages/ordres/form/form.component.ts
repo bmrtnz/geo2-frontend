@@ -1182,6 +1182,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onDuplicationBukSaClick() {
+    if (this.gridCommandes) {
+      this.gridCommandes.grid.instance.saveEditData();
+      // Wait until grid has been totally saved
+      const saveInterval = setInterval(() => {
+        if (!this.gridCommandes.grid.instance.hasEditData()) {
+          clearInterval(saveInterval);
+          this.onDuplicationBukSa();
+        }
+      }, 100);
+    } else {
+      this.onDuplicationBukSa();
+    }
+  }
+
+  private onDuplicationBukSa() {
     this.ordresService.fDuplicationBukSa(
       this.refOrdre,
       this.currentCompanyService.getCompany().id,
