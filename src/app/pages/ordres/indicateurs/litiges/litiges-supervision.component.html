@@ -1,0 +1,163 @@
+<form
+  class="dx-fieldset"
+  [formGroup]="formGroup"
+>
+  <div class="title-container">
+    <h6>{{ "preFilter-title" | localize }}</h6>
+    <dx-button
+      class="refresh"
+      [class]="toRefresh ? '' : 'inactive-button'"
+      type="default"
+      text="{{ 'btn-refresh' | localize }}"
+      (onClick)="enableFilters()"
+    ></dx-button>
+  </div>
+  <div style="clear: both"></div>
+  <div class="litiges-superv-filter-area">
+    <dx-box>
+      <dxi-item [ratio]="2">
+        <!-- Secteurs -->
+        <div class="dx-field">
+          <div class="dx-field-label">
+            {{ "tiers-clients-secteur" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              id="litiges-codeSecteur"
+              formControlName="codeSecteur"
+              [dataSource]="secteurs"
+              [showClearButton]="true"
+              displayExpr="description"
+              searchExpr="description"
+              (onValueChanged)="onFieldValueChange($event)"
+            >
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="0.25"></dxi-item>
+      <dxi-item [ratio]="3">
+        <!-- Commercial -->
+        <div class="dx-field">
+          <div class="dx-field-label">
+            {{ "ordres-commercial" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              id="litiges-codeCommercial"
+              formControlName="codeCommercial"
+              [dataSource]="commerciaux"
+              [showClearButton]="true"
+              [displayExpr]="displayIDBefore"
+              [searchExpr]="['id', 'nomUtilisateur']"
+              (onValueChanged)="onFieldValueChange($event)"
+            >
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="0.25"></dxi-item>
+      <dxi-item [ratio]="3">
+        <!-- Assistante -->
+        <div class="dx-field">
+          <div class="dx-field-label">
+            {{ "ordres-assistante" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              id="litiges-codeAssistante"
+              formControlName="codeAssistante"
+              [dataSource]="assistantes"
+              [showClearButton]="true"
+              [displayExpr]="displayIDBefore"
+              [searchExpr]="['id', 'nomUtilisateur']"
+              (onValueChanged)="onFieldValueChange($event)"
+            >
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+    </dx-box>
+  </div>
+</form>
+
+<dx-button
+  class="grid-grouping-button"
+  type="default"
+  icon="material-icons menu_open"
+  hint="{{ 'btn-grouping' | localize }}"
+  (onClick)="gridsService.expandCollapseGroups(this)"
+></dx-button>
+
+<dx-data-grid
+  class="ordres-litiges-grid"
+  [showBorders]="false"
+  [focusedRowEnabled]="false"
+  [focusedRowIndex]="0"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [rowAlternationEnabled]="true"
+  (onRowPrepared)="onRowPrepared($event)"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onCellClick)="onCellClick($event)"
+  (onContentReady)="onContentReady()"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      '',
+      $event,
+      gridConfiguratorService.Grid.Litiges,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-group-panel [visible]="true"> </dxo-group-panel>
+  <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+  <dxo-export fileName="Litiges en cours"></dxo-export>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.Litiges"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
+  >
+  </dxo-column-chooser>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [cssClass]="column.cssClass"
+    [format]="column.format"
+    [width]="column.width"
+    [caption]="
+      ('ordres-supervision-litiges-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  ></dxi-column>
+</dx-data-grid>
