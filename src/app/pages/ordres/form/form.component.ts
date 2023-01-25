@@ -1211,10 +1211,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
       filter(flag => flag),
-      concatMapTo(defer(() => confirm(
-        this.localization.localize("entrepot-import-programme"),
-        this.localization.localize("ordre-duplicate-BUK-SA")
-      ))),
+      concatMapTo(defer(async () => {
+        const res = await this.ordresService
+          .getOne_v2(this.refOrdre, new Set(["client.entrepotReferenceRegroupement"]), "no-cache")
+          .toPromise();
+
+        return res.data.ordre?.client?.entrepotReferenceRegroupement
+          ? false : confirm(
+            this.localization.localize("entrepot-import-programme"),
+            this.localization.localize("ordre-duplicate-BUK-SA")
+          );
+      })),
       concatMap(generic => this.ordresService.fnMajOrdreRegroupementV2(
         this.refOrdre,
         this.currentCompanyService.getCompany().id,
