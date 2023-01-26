@@ -134,6 +134,11 @@ interface GridColumn {
   visibleIndex?: number;
 
   /**
+   * Specifies whether HTML tags are displayed as plain text or applied to the values of the column.
+   */
+  encodeHtml?: boolean;
+
+  /**
    * Specifies the column's width in pixels or as a percentage. Ignored if it is less than minWidth.
    */
   width?: number | string;

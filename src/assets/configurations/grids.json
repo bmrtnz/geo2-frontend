@@ -4114,34 +4114,35 @@
         "visible": false
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "nomPersonne",
         "dataType": "string",
         "groupIndex": 0,
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 4,
         "dataField": "prenomPersonne",
         "dataType": "string",
         "visible": false
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 6,
         "dataField": "litige.id",
         "dataType": "string",
         "groupIndex": 1,
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 8,
         "dataField": "delai",
         "cssClass": "red-font bold-text",
         "format": "#",
+        "width": 60,
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 10,
         "dataField": "dateCreationLitige",
         "dataType": "date",
         "cssClass": "multi-line-header",
@@ -4150,7 +4151,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 12,
         "dataField": "societe.id",
         "dataType": "string",
         "cssClass": "no-padding text-align-center",
@@ -4158,7 +4159,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 14,
         "dataField": "numeroOrdre",
         "dataType": "string",
         "cssClass": "no-padding",
@@ -4166,7 +4167,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 16,
         "dataField": "clientClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
@@ -4174,7 +4175,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 18,
         "dataField": "prixClient",
         "dataType": "number",
         "format": {
@@ -4186,7 +4187,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 20,
         "dataField": "fournisseurClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
@@ -4194,7 +4195,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 22,
         "dataField": "prixFourni",
         "dataType": "number",
         "format": {
@@ -4206,70 +4207,54 @@
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 24,
         "dataField": "codeChargement",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 26,
         "dataField": "container",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 22,
+        "visibleIndex": 28,
         "dataField": "immatriculation",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 24,
         "dataField": "descriptionCause",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
-        "visibleIndex": 25,
         "dataField": "dateDepartPrevueFournisseur",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
-        "visibleIndex": 25,
         "dataField": "descriptionVariete",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
-        "visibleIndex": 25,
         "dataField": "proprietaire.code",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
-        "visibleIndex": 25,
         "dataField": "commentaireLigneLitige",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
-        "visibleIndex": 25,
         "dataField": "numeroOrdreRemplacement",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
-        "visibleIndex": 25,
         "dataField": "descriptionConsequence",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
-        "visibleIndex": 25,
         "dataField": "fournisseur.code",
-        "dataType": "string",
-        "visible": true
+        "showInColumnChooser": false
       },
       {
         "dataField": "litige.ordreOrigine.campagne.id",

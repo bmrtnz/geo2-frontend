@@ -48,6 +48,16 @@
   cursor: pointer;
 }
 
+.text-underlined-button {
+  .dx-button-content {
+    cursor: pointer !important;
+  }
+
+  .dx-button-text {
+    text-decoration: underline;
+  }
+}
+
 /* Toasts */
 
 .dx-toast-content {

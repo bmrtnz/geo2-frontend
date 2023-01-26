@@ -97,8 +97,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  [rowAlternationEnabled]="true"
-  (onRowPrepared)="onRowPrepared($event)"
+  [rowAlternationEnabled]="false"
   (onCellPrepared)="onCellPrepared($event)"
   (onCellClick)="onCellClick($event)"
   (onContentReady)="onContentReady()"
@@ -160,4 +159,48 @@
     "
     [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
+  <dxo-master-detail
+    [enabled]="true"
+    template="detail"
+    [autoExpandAll]="true"
+  ></dxo-master-detail>
+  <div *dxTemplate="let ds of 'detail'">
+    <div class="master-detail">
+      <div class="cause-container">
+        <span class="litiges-causeconseq red-font text-align-right">{{ "ordres-supervision-litiges-descriptionCause" | localize }} :&nbsp;</span>
+        <span class="">{{ "ordres-supervision-litiges-dateDepartPrevueFournisseur" | localize }} :&nbsp;</span>
+        <span class="litiges-dateDepartPrevueFournisseur bold-text">{{ dateManagementService.formatDate(ds.data.dateDepartPrevueFournisseur, "dd-MM-yyyy") }}</span>
+        <span class="">&nbsp;-&nbsp;</span>
+        <span class="">{{ ds.data.descriptionVariete }}</span>
+        <span class="">&nbsp;-&nbsp;</span>
+        <span class="litiges-descriptionCause bold-text">{{ ds.data.descriptionCause }}</span>
+        <span class="litiges-montant">&nbsp;- {{ "ordres-supervision-litiges-prixClient" | localize }} :&nbsp;</span>
+        <span class="litiges-prix bold-text">{{ ds.data.prixClient }}</span>
+        <span class="litiges-montant">&nbsp;- {{ "ordres-supervision-litiges-prixFourni" | localize }} :&nbsp;</span>
+        <span class="litiges-prix bold-text">{{ ds.data.prixFourni }}</span>
+        <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-proprietaire-code" | localize }} :&nbsp;</span>
+        <span class="litiges-tiers bold-text">{{ ds.data.proprietaire.code }}</span>
+        <span class="">&nbsp;- ({{ ds.data.commentaireLigneLitige }})</span>
+      </div>
+      <div style="clear:both"></div>
+      <div class="conseq-container">
+        <span class="litiges-causeconseq green-font text-align-right float-left">{{ "ordres-supervision-litiges-descriptionConsequence" | localize }} :&nbsp;</span>
+        <span class="float-left">{{ "ordres-supervision-litiges-numeroOrdreRemplacement" | localize }} :&nbsp;</span>
+        <span>
+          <dx-button
+            [ngClass]="{ 'text-underlined-button': ds.data.societe.id === this.currCompanyId }"
+            text="{{ ds.data.numeroOrdreRemplacement }}"
+            [focusStateEnabled]="false"
+            [hint]="ds.data.societe.id === this.currCompanyId ? localization.localize('hint-click-ordre') : ''"
+            (onClick)="onOpenNewOrder(ds)">
+          </dx-button>
+        </span>
+        <span class="">&nbsp;-&nbsp;</span>
+        <span class="litiges-descriptionConsequence bold-text">{{ ds.data.descriptionConsequence }}</span>
+        <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-fournisseur-code" | localize }} :&nbsp;</span>
+        <span class="litiges-tiers bold-text">{{ ds.data.fournisseur.code }}</span>
+      </div>
+    </div>
+  </div>
+
 </dx-data-grid>

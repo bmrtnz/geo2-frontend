@@ -6,6 +6,7 @@ import { LitigesService } from "app/shared/services/api/litiges.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -50,6 +51,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   public codeFiltrage: string;
   public fields: string[];
   public firstRun = true;
+  public currCompanyId: string;
 
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -65,8 +67,9 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     public gridsService: GridsService,
     private secteursService: SecteursService,
     private personnesService: PersonnesService,
-    private localization: LocalizationService,
+    public localization: LocalizationService,
     private currentCompanyService: CurrentCompanyService,
+    public dateManagementService: DateManagementService,
     public litigesService: LitigesService,
     public authService: AuthService,
     private tabContext: TabContext,
@@ -110,6 +113,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       "and",
       ["nomUtilisateur", "<>", "null"],
     ]);
+    this.currCompanyId = this.currentCompanyService.getCompany().id;
   }
 
   async ngOnInit() {
@@ -126,9 +130,9 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       this.typeFiltrage = searchType.codeSecteur;
       this.codeFiltrage = currSect.id;
     }
-    this.formGroup.get("codeCommercial").patchValue({ id: "AC" }); // A VIRER
+    this.formGroup.get("codeCommercial").patchValue({ id: "NB" }); // A VIRER
     this.typeFiltrage = searchType.codeCommercial; // A VIRER
-    this.codeFiltrage = "AC"; // A VIRER
+    this.codeFiltrage = "NB"; // A VIRER
     this.formGroup.get("codeSecteur").reset(); // A VIRER
   }
 
@@ -186,23 +190,31 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
 
   onCellClick(e) {
     if (e.rowType !== "data") return;
-    const sameCompany = (e.data.societe.id === this.currentCompanyService.getCompany().id);
+    const sameCompany = (e.data.societe.id === this.currCompanyId);
     if (e.column.dataField === "numeroOrdre" && e.data.numeroOrdre && sameCompany)
       this.tabContext.openOrdre(e.data.numeroOrdre, e.data.litige.ordreOrigine.campagne.id);
   }
 
+  onOpenNewOrder(ds) {
+    const sameCompany = (ds.data.societe.id === this.currentCompanyService.getCompany().id);
+    console.log(ds.data.numeroOrdre, sameCompany);
+    if (ds.data.numeroOrdre && sameCompany)
+      this.tabContext.openOrdre(ds.data.numeroOrdreRemplacement, ds.data.litige.ordreOrigine.campagne.id);
+  }
+
   onCellPrepared(e) {
     const field = e.column.dataField;
-
     if (e.rowType === "data") {
 
       // Adjust numero ordre cell info/style
       if (field === "numeroOrdre") {
-        e.cellElement.classList.add("text-underlined");
-        e.cellElement.setAttribute(
-          "title",
-          this.localization.localize("hint-click-ordre"),
-        );
+        if (e.data.societe.id === this.currCompanyId) {
+          e.cellElement.classList.add("text-underlined");
+          e.cellElement.setAttribute(
+            "title",
+            this.localization.localize("hint-click-ordre"),
+          );
+        }
       }
 
     }
@@ -216,7 +228,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
           if (!data[0]) return;
           data = data[0].items ?? data[0].collapsedItems;
           if (!data[0]) return;
-          e.cellElement.textContent = `Commercial(e) : ${data[0].nomPersonne.toUpperCase()} ${data[0].prenomPersonne}`;
+          e.cellElement.textContent = `Commercial(e) : ${data[0].prenomPersonne} ${data[0].nomPersonne.toUpperCase()}`;
         }
       }
       if (e.column.dataField === "litige.id") {
@@ -224,14 +236,11 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
         if (e.cellElement.textContent) {
           const data = e.data.items ?? e.data.collapsedItems;
           if (!data[0]) return;
-          e.cellElement.textContent = `Litige réf. : ${data[0].litige.id}`;
+          e.cellElement.textContent = `Litige réf. ${data[0].litige.id}`;
         }
       }
     }
 
-  }
-
-  onRowPrepared(e) {
   }
 
 }

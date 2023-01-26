@@ -1321,7 +1321,7 @@
     "ordres-supervision-litiges-descriptionConsequence": "Conséquence",
     "ordres-supervision-litiges-descriptionCause": "Cause",
     "ordres-supervision-litiges-proprietaire-code": "Propriétaire",
-    "ordres-supervision-litiges-fournisseur-code": "Fournisseur",
+    "ordres-supervision-litiges-fournisseur-code": "Expéditeur",
     "ordres-supervision-litiges-numeroOrdre": "N° ordre",
     "ordres-supervision-litiges-descriptionVariete": "Variété",
     "ordres-supervision-litiges-codeClient": "Client",
