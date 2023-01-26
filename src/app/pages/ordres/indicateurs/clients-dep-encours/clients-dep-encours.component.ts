@@ -127,7 +127,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
       .getDataSource(this.indicator.explicitSelection, {
         secteurCode: this.secteurSB.value?.id,
         societeCode: this.currentCompanyService.getCompany().id,
-        commercialCode: this.commercialId ?? "%"
+        commercialCode: this.commercialId ?? "%",
+        depassementOnly: this.switchType.value
       });
     if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
     filterItem.forEach(element => {
