@@ -4259,6 +4259,10 @@
       {
         "dataField": "litige.ordreOrigine.campagne.id",
         "showInColumnChooser": false
+      },
+      {
+        "dataField": "personne.id",
+        "showInColumnChooser": false
       }
     ]
   },

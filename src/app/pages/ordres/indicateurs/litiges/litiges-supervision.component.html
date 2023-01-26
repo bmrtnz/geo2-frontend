@@ -142,6 +142,26 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
+
+  <!-- <dxo-summary>
+    <dxi-group-item
+      column="prixClient"
+      summaryType="sum"
+      [alignByColumn]="false"
+      [showInGroupFooter]="true"
+      displayFormat="{0}"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="prixFourni"
+      summaryType="sum"
+      [alignByColumn]="false"
+      [showInGroupFooter]="true"
+      displayFormat="{0}"
+    >
+    </dxi-group-item>
+  </dxo-summary> -->
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
@@ -175,9 +195,9 @@
         <span class="">&nbsp;-&nbsp;</span>
         <span class="litiges-descriptionCause bold-text">{{ ds.data.descriptionCause }}</span>
         <span class="litiges-montant">&nbsp;- {{ "ordres-supervision-litiges-prixClient" | localize }} :&nbsp;</span>
-        <span class="litiges-prix bold-text">{{ ds.data.prixClient }}</span>
+        <span class="litiges-prix bold-text">{{ ds.data.prixClient?.toFixed(2).replace(".", ",") }}</span>
         <span class="litiges-montant">&nbsp;- {{ "ordres-supervision-litiges-prixFourni" | localize }} :&nbsp;</span>
-        <span class="litiges-prix bold-text">{{ ds.data.prixFourni }}</span>
+        <span class="litiges-prix bold-text">{{ ds.data.prixFourni?.toFixed(2).replace(".", ",") }}</span>
         <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-proprietaire-code" | localize }} :&nbsp;</span>
         <span class="litiges-tiers bold-text">{{ ds.data.proprietaire.code }}</span>
         <span class="">&nbsp;- ({{ ds.data.commentaireLigneLitige }})</span>

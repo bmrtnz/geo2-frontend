@@ -228,7 +228,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
           if (!data[0]) return;
           data = data[0].items ?? data[0].collapsedItems;
           if (!data[0]) return;
-          e.cellElement.textContent = `Commercial(e) : ${data[0].prenomPersonne} ${data[0].nomPersonne.toUpperCase()}`;
+          e.cellElement.textContent =
+            `Commercial(e) : ${data[0].prenomPersonne} ${data[0].nomPersonne.toUpperCase()}`;
         }
       }
       if (e.column.dataField === "litige.id") {
