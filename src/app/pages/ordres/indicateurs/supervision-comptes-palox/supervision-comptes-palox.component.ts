@@ -313,7 +313,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       this.supervisionPaloxsService
         .fAjustPalox(
           this.info.codeClient,
-          this.info.codeEspece,
+          this.info?.codeEspece ?? "EMBALL",
           e.date,
           this.info.entrepotCode,
           this.info.paloxCode,
@@ -336,7 +336,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       // Inventory
       this.supervisionPaloxsService
         .fDecomptePalox(
-          this.info.codeEspece,
+          this.info?.codeEspece ?? "EMBALL",
           e.date,
           this.info.entrepotId,
           this.info.paloxCode,
