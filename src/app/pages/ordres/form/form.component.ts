@@ -335,7 +335,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
-  public descriptifRegoupement: string;
+  public descriptifRegroupement: string;
 
   ngOnInit() {
     this.initializeForm();
@@ -908,7 +908,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
           this.fetchFullOrderNumber();
-          this.descriptifRegoupement = ordre.descriptifRegroupement;
+          this.descriptifRegroupement = ordre.descriptifRegroupement;
           this.refOrdre = this.ordre?.id ? ordre.id : "-";
           this.canDuplicate = !!this?.ordre?.id;
           this.formGroup.reset(ordre);
@@ -1252,7 +1252,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private refreshDescriptifRegoupement() {
     this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
-      .subscribe(res => this.descriptifRegoupement = res.data.ordre.descriptifRegroupement);
+      .subscribe(res => this.descriptifRegroupement = res.data.ordre.descriptifRegroupement);
   }
 
 }
