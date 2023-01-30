@@ -470,6 +470,22 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
     ]);
   }
+  public fCreeOrdreReplacement(ordreOriginID: string, entrepotID: string, nomUtilisateur: string, societeID: string) {
+    return this.functionsService.queryFunction("fCreeOrdreReplacement", [
+      { name: "ordreOriginID", type: "String", value: ordreOriginID },
+      { name: "entrepotID", type: "String", value: entrepotID },
+      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
+      { name: "societeID", type: "String", value: societeID },
+    ]);
+  }
+
+  public fCreeOrdreReedFact(ordreOriginID: string, societeID: string, nomUtilisateur: string) {
+    return this.functionsService.queryFunction("fCreeOrdreReedFact", [
+      { name: "ordreOriginID", type: "String", value: ordreOriginID },
+      { name: "societeID", type: "String", value: societeID },
+      { name: "nomUtilisateur", type: String, value: nomUtilisateur },
+    ]);
+  }
 
   public fDuplicationBukSa(
     ordreRef: string,
@@ -488,6 +504,13 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   public fDelRegroupement(ordreRef: string) {
     return this.functionsService.queryFunction("fDelRegroupement", [
       { name: "ordreRef", type: "String", value: ordreRef }
+    ]);
+  }
+  public fCreeOrdreReedFactLigne(ordreID: string, ordreOriginID: string, societeID: string) {
+    return this.functionsService.queryFunction("fCreeOrdreReedFact", [
+      { name: "ordreID", type: "String", value: ordreID },
+      { name: "ordreOriginID", type: "String", value: ordreOriginID },
+      { name: "societeID", type: "String", value: societeID },
     ]);
   }
 }

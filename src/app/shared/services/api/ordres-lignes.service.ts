@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
+import Ordre from "app/shared/models/ordre.model";
 import { functionBody, FunctionResponse, FunctionsService } from "app/shared/services/api/functions.service";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
@@ -521,4 +522,43 @@ export class OrdreLignesService extends ApiService implements APIRead {
       });
   }
 
+  public wLitigePickOrdreOrdligV2(ordreID: Ordre["id"], body: string[]) {
+    return this.apollo
+      .query<{ wLitigePickOrdreOrdligV2: Partial<OrdreLigne>[] }>
+      ({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "wLitigePickOrdreOrdligV2",
+              body,
+              params: [
+                { name: "ordreID", value: "ordreID", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "lignes", type: "ordreID", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreID },
+        fetchPolicy: "network-only",
+      });
+  }
+
+  public fCreeOrdreReplacementLigne(
+    litigeLigneID: string,
+    ordreID: string,
+    ordreOriginID: string,
+    ordreLigneOriginID: string,
+    societeID: string
+  ) {
+    return this.functionsService.queryFunction("fCreeOrdreReplacementLigne", [
+      { name: "litigeLigneID", type: "String", value: litigeLigneID },
+      { name: "ordreID", type: "String", value: ordreID },
+      { name: "ordreOriginID", type: "String", value: ordreOriginID },
+      { name: "ordreLigneOriginID", type: "String", value: ordreLigneOriginID },
+      { name: "societeID", type: "String", value: societeID },
+    ]);
+  }
 }

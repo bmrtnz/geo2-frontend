@@ -5,6 +5,7 @@ import { LoadOptions } from "devextreme/data/load_options";
 import Litige from "app/shared/models/litige.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import LitigeSupervision from "app/shared/models/litige-supervision.model";
+import LitigeAPayer from "app/shared/models/litige-a-payer.model";
 
 @Injectable({
     providedIn: "root",
@@ -136,6 +137,26 @@ export class LitigesService extends ApiService implements APIRead {
                 ],
             )),
             variables: { code, type },
+        });
+    }
+
+    getLitigesAPayer(litigeID: string, body: Set<string>) {
+        return this.apollo.query<{ allLitigeAPayer: LitigeAPayer[] }>({
+            query: gql(ApiService.buildGraph("query", [
+                {
+                    name: "allLitigeAPayer",
+                    body,
+                    params: [{ name: "litigeID", value: "litigeID", isVariable: true }],
+                }
+            ], [{ name: "litigeID", type: "String", isOptionnal: false }])),
+            variables: { litigeID },
+        });
+    }
+
+    save(body: Set<string>, litige: Partial<Litige>) {
+        return this.apollo.mutate<{ saveLitige: Partial<Litige> }>({
+            mutation: gql(this.buildSaveGraph([...body])),
+            variables: { litige },
         });
     }
 }

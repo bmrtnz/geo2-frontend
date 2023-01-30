@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
-import LitigeCause from "app/shared/models/litige-cause.model";
+import LitigeConsequence from "app/shared/models/litige-cause.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { APIRead, ApiService, RelayPage } from "../api.service";
@@ -8,20 +8,20 @@ import { APIRead, ApiService, RelayPage } from "../api.service";
 @Injectable({
   providedIn: "root",
 })
-export class LitigeCausesService extends ApiService implements APIRead {
+export class LitigeConsequencesService extends ApiService implements APIRead {
   constructor(apollo: Apollo) {
-    super(apollo, LitigeCause);
+    super(apollo, LitigeConsequence);
   }
 
   private byKey(columns: Array<string>) {
     return (key) =>
       new Promise(async (resolve) => {
         const query = await this.buildGetOne_v2(columns);
-        type Response = { litigeCause: LitigeCause };
+        type Response = { litigeConsequence: LitigeConsequence };
         const variables = { id: key };
         this.listenQuery<Response>(query, { variables }, (res) => {
-          if (res.data && res.data.litigeCause)
-            resolve(new LitigeCause(res.data.litigeCause));
+          if (res.data && res.data.litigeConsequence)
+            resolve(new LitigeConsequence(res.data.litigeConsequence));
         });
       });
   }
@@ -40,7 +40,7 @@ export class LitigeCausesService extends ApiService implements APIRead {
                   );
               });
 
-            type Response = { allLitigeCause: RelayPage<LitigeCause> };
+            type Response = { allLitigeConsequence: RelayPage<LitigeConsequence> };
             const query = await this.buildGetAll_v2(columns);
             const variables =
               this.mapLoadOptionsToVariables(options);
@@ -48,10 +48,10 @@ export class LitigeCausesService extends ApiService implements APIRead {
               query,
               { variables },
               (res) => {
-                if (res.data && res.data.allLitigeCause) {
+                if (res.data && res.data.allLitigeConsequence) {
                   resolve(
                     this.asInstancedListCount(
-                      res.data.allLitigeCause,
+                      res.data.allLitigeConsequence,
                     ),
                   );
                 }
@@ -65,7 +65,7 @@ export class LitigeCausesService extends ApiService implements APIRead {
 
   public getList(columns: Array<string>, search?: string) {
     return this.apollo
-      .query<{ allLitigeCauseList: Partial<LitigeCause>[] }>({
+      .query<{ allLitigeConsequenceList: Partial<LitigeConsequence>[] }>({
         query: gql(this.buildGetListGraph(columns)),
         variables: { search },
       });
