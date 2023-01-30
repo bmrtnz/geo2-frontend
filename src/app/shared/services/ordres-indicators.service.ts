@@ -209,15 +209,15 @@ const indicators: Indicator[] = [
   },
   {
     id: "Litiges",
-    enabled: false,
-    withCount: true,
+    enabled: true,
+    withCount: false,
     parameter: "Litiges",
     subParameter: "en cours",
-    tileBkg: "#1B715C",
+    tileBkg: "#EE6265",
     indicatorIcon: "material-icons offline_bolt",
     warningIcon: "material-icons warning",
     component: import(
-      "../../pages/ordres/indicateurs/litiges/litiges.component"
+      "../../pages/ordres/indicateurs/litiges/litiges-supervision.component"
     ),
   },
   {
@@ -277,19 +277,6 @@ const indicators: Indicator[] = [
     indicatorIcon: "material-icons local_shipping",
     warningIcon: "",
   },
-  // {
-  //   id: "CommandesEdi",
-  //   enabled: false,
-  //   withCount: false,
-  //   parameter: "Commandes",
-  //   subParameter: "EDI",
-  //   tileBkg: "#225AA8",
-  //   indicatorIcon: "material-icons view_list",
-  //   warningIcon: "",
-  //   component: import(
-  //     "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
-  //   ),
-  // },
   {
     id: "histoOrdres",
     enabled: true,
@@ -346,11 +333,6 @@ export class OrdresIndicatorsService {
         "and",
         ["societeCode", "=", this.currentCompanyService.getCompany().id],
       ];
-
-      // Commandes EDI
-      // if (instance.id === "CommandesEdi") {
-      //   instance.enabled = this.authService.currentUser.accessCommandeEdi;
-      // }
 
       // Supervision livraison
       if (instance.id === "SupervisionLivraison") {
@@ -439,18 +421,18 @@ export class OrdresIndicatorsService {
       }
 
       // Litiges
-      if (instance.id === "Litiges") {
-        // Model LitigeLigne
-        instance.filter = [["valide", "=", true]];
-        if (this.authService.currentUser.limitationSecteur) {
-          instance.filter.push("and");
-          instance.filter.push([
-            "litige.ordreOrigine.secteurCommercial.id",
-            "=",
-            this.authService.currentUser.secteurCommercial.id,
-          ]);
-        }
-      }
+      // if (instance.id === "Litiges") {
+      //   // Model LitigeLigne
+      //   instance.filter = [["valide", "=", true]];
+      //   if (this.authService.currentUser.limitationSecteur) {
+      //     instance.filter.push("and");
+      //     instance.filter.push([
+      //       "litige.ordreOrigine.secteurCommercial.id",
+      //       "=",
+      //       this.authService.currentUser.secteurCommercial.id,
+      //     ]);
+      //   }
+      // }
 
       // Planning departs
       if (instance.id === Indicateur.PlanningDepart) {

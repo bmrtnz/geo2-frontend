@@ -126,7 +126,7 @@ import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modi
 import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
 import { CommandesTransitComponent } from "./indicateurs/commandes-transit/commandes-transit.component";
 import HistoriqueOrdresComponent from "./indicateurs/historique-ordres/historique-ordres.component";
-import { LitigesComponent } from "./indicateurs/litiges/litiges.component";
+import { LitigesSupervisionComponent } from "./indicateurs/litiges/litiges-supervision.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
 import { PlanningDepartComponent } from "./indicateurs/planning-depart/planning-depart.component";
@@ -165,7 +165,7 @@ import {
     GridSuiviComponent,
     GridEnvoisComponent,
     GridHistoriqueComponent,
-    LitigesComponent,
+    LitigesSupervisionComponent,
     GridLogistiquesComponent,
     BonAFacturerComponent,
     SupervisionLivraisonComponent,
