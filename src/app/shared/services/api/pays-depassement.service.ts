@@ -20,7 +20,8 @@ export class PaysDepassementService extends ApiService {
   getDataSource(body: Array<string>, variables: {
     secteurCode: Secteur["id"],
     societeCode: Societe["id"],
-    commercialCode: Personne["id"]
+    commercialCode: Personne["id"],
+    depassementOnly: boolean
   }) {
     return new DataSource({
       store: this.createCustomStore({
@@ -36,6 +37,7 @@ export class PaysDepassementService extends ApiService {
                     { name: "secteurCode", value: "secteurCode", isVariable: true },
                     { name: "societeCode", value: "societeCode", isVariable: true },
                     { name: "commercialCode", value: "commercialCode", isVariable: true },
+                    { name: "depassementOnly", value: "depassementOnly", isVariable: true },
                   ],
                 },
               ],
@@ -43,6 +45,7 @@ export class PaysDepassementService extends ApiService {
                 { name: "secteurCode", type: "String", isOptionnal: true },
                 { name: "societeCode", type: "String", isOptionnal: true },
                 { name: "commercialCode", type: "String", isOptionnal: true },
+                { name: "depassementOnly", type: "Boolean", isOptionnal: true },
               ],
             )),
             variables,

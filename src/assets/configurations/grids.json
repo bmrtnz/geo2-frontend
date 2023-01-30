@@ -4879,7 +4879,7 @@
         "visibleIndex": 4,
         "dataField": "dateDepartOrdre",
         "sortIndex": 5,
-        "sortOrder": "asc",
+        "sortOrder": "desc",
         "visible": true
       },
       {
@@ -4985,7 +4985,7 @@
         "visibleIndex": 4,
         "dataField": "dateDepartOrdre",
         "sortIndex": 5,
-        "sortOrder": "asc",
+        "sortOrder": "desc",
         "visible": true
       },
       {
@@ -6477,7 +6477,7 @@
       },
       {
         "visibleIndex": 6,
-        "dataField": "dateDepartPrevueFournisseurRaw",
+        "dataField": "heureDepartPrevueFournisseur",
         "dataType": "string",
         "width": 60,
         "cssClass": "no-padding text-align-center",
@@ -6549,6 +6549,16 @@
         "dataField": "referenceLogistiqueComplete",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "dataField": "ordre.societe.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },

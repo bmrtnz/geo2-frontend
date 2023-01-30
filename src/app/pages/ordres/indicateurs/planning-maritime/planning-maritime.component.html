@@ -93,6 +93,8 @@
   [focusedRowIndex]="-1"
   (onContentReady)="onContentReady($event)"
   (onCellPrepared)="onCellPrepared($event)"
+  (onCellDblClick)="onCellDblClick($event)"
+  (onRowPrepared)="onRowPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       '',

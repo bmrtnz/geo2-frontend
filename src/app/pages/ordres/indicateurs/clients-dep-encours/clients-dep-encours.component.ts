@@ -111,8 +111,6 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.secteurSB.value = { id: "FR" };
-    // this.paysSB.value = { id: "FR" };
     if (!this.authService.isAdmin)
       this.secteurSB.value =
         this.authService.currentUser.secteurCommercial;
@@ -129,7 +127,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
       .getDataSource(this.indicator.explicitSelection, {
         secteurCode: this.secteurSB.value?.id,
         societeCode: this.currentCompanyService.getCompany().id,
-        commercialCode: this.commercialId ?? "%"
+        commercialCode: this.commercialId ?? "%",
+        depassementOnly: this.switchType.value
       });
     if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
     filterItem.forEach(element => {
