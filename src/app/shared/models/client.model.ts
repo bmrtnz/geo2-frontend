@@ -180,6 +180,7 @@ export class Client extends Model {
   @Field() public consignePalox: boolean;
   @Field() public releveFactures: boolean;
   @Field() public identifiantFiscal: string;
+  @Field() public entrepotReferenceRegroupement: string;
 }
 
 export default Client;
