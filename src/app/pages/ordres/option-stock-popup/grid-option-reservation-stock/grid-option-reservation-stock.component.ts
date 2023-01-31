@@ -132,7 +132,8 @@ export class GridOptionReservationStockComponent implements OnInit {
 
       // Show situation
       if (e.column.dataField === "quantiteReservee1") {
-        e.cellElement.textContent = `Réservé : ${e.data.quantiteReservee}     Départ : ${e.data.quantiteInitiale}`;
+        const first = e.data.option ? "Réservé :" : "Initial :";
+        e.cellElement.textContent = `${first} ${e.data.quantiteInitiale} - Déstocké : ${e.data.quantiteReservee}`;
       }
     }
 
