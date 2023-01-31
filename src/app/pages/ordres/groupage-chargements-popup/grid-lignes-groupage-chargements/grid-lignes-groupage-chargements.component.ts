@@ -32,6 +32,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   @Input() public ordre: Ordre;
   @Input() public gridCdes: any;
   @Input() public gridEnv: any;
+  @Input() public readOnlyGrid;
   @Output() public gridCommandes: any;
   @Output() public gridEnvois: any;
   @Output() closePopup = new EventEmitter();
@@ -170,8 +171,10 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
 
   onToolbarPreparing(e) {
     // Hide save/undo buttons
-    e.toolbarOptions.items[0].visible = false;
-    e.toolbarOptions.items[1].visible = false;
+    if (!this.readOnlyGrid) {
+      e.toolbarOptions.items[0].visible = false;
+      e.toolbarOptions.items[1].visible = false;
+    }
   }
 
   onCellClick(e) {

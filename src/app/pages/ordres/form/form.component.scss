@@ -494,4 +494,14 @@ dx-button[type="normal"] {
     }
   }
 
+  .dep-en-cours {
+    display: block;
+    top: 2px;
+    padding: 0 10px 2px 10px;
+    background-color: #ff325a !important;
+    color: #FFF;
+    text-align: center;
+    font-size: 20px;
+  }
+
 }

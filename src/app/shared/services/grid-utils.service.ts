@@ -81,4 +81,9 @@ export class GridUtilsService {
     return finalTitle;
   }
 
+  // Format numbers with spaces between 1000
+  numberWithSpaces(numb) {
+    return numb.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(".", ",");
+  }
+
 }

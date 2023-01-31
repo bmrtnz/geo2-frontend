@@ -41,14 +41,14 @@
       [allowSearch]="true"
     ></dxo-header-filter>
     <dxo-paging [enabled]="false"></dxo-paging>
-    <dxo-selection
+    <dxo-selection *ngIf="!readOnlyGrid"
       mode="multiple"
       [allowSelectAll]="false"
       [showCheckBoxesMode]="'always'"
     ></dxo-selection>
     <dxo-editing
       [selectTextOnEditStart]="true"
-      [allowUpdating]="true"
+      [allowUpdating]="!readOnlyGrid"
       [mode]="'batch'"
     >
     </dxo-editing>
@@ -110,6 +110,7 @@
   <div class="bottom-buttons-container float-left">
     <!-- Valider données -->
     <dx-button
+      [disabled]="readOnlyGrid"
       type="success"
       stylingMode="outlined"
       text="{{ 'btn-valider' | localize }}"
@@ -117,7 +118,7 @@
     ></dx-button>
     <!-- Confirmation de l'ordre -->
     <app-actions-documents-ordres
-      [ngClass]="{ 'inactive-box': unsavedData }"
+      [ngClass]="{ 'inactive-box': unsavedData || readOnlyGrid }"
       [ordre]="ordre"
       [gridEnvois]="gridEnvois"
       [gridCommandes]="gridCommandes"
@@ -126,7 +127,7 @@
   </div>
   <div
     class="bottom-buttons-container float-right"
-    [ngClass]="{ 'inactive-box': unsavedData || !datagrid?.selectedRowKeys?.length }"
+    [ngClass]="{ 'inactive-box': unsavedData || !datagrid?.selectedRowKeys?.length || readOnlyGrid }"
     >
     <!-- Transférer -->
     <dx-button

@@ -216,8 +216,8 @@
       [dataField]="column.dataField"
       [visible]="false"
       [caption]="
-        ('articles-' +
-          column.dataField?.replace('.description', '').split('.').join('-')
+        ('articles-list-' +
+          column.dataField?.split('.').join('-')
           | localize) || column.name
       "
       [dataType]="column?.dataType"

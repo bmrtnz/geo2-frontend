@@ -115,7 +115,7 @@ const indicators: Indicator[] = [
     enabled: true,
     withCount: true,
     parameter: "Clients",
-    subParameter: "en dépassement encours",
+    subParameter: "en dépassement en-cours",
     tileBkg: "#4199B4",
     indicatorIcon: "material-icons people",
     warningIcon: "material-icons warning",

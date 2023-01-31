@@ -127,7 +127,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private tabContext: TabContext,
     public authService: AuthService,
     private localization: LocalizationService,
-    private gridUtilsService: GridUtilsService,
+    public gridUtilsService: GridUtilsService,
     public regimesTvaService: RegimesTvaService,
   ) {
     this.handleTabChange()
@@ -220,6 +220,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "documentCMR.uri",
     "documentCMR.type",
     "descriptifRegroupement",
+    "client.devise.id"
   ];
 
   private destroy = new Subject<boolean>();
@@ -1253,6 +1254,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   private refreshDescriptifRegoupement() {
     this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
       .subscribe(res => this.descriptifRegroupement = res.data.ordre.descriptifRegroupement);
+  }
+
+  public formatDepassement(dep) {
+    dep = dep.toFixed(2);
   }
 
 }
