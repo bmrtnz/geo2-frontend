@@ -1113,90 +1113,92 @@
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "matierePremiere.espece.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 4,
         "dataField": "matierePremiere.variete.id",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 6,
         "dataField": "emballage.emballage.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 8,
         "dataField": "cahierDesCharge.categorie.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 10,
         "dataField": "matierePremiere.calibreUnifie.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 12,
         "dataField": "normalisation.calibreMarquage.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 7,
+        "visibleIndex": 14,
         "dataField": "matierePremiere.modeCulture.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 16,
         "dataField": "normalisation.marque.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 9,
+        "visibleIndex": 18,
         "dataField": "matierePremiere.origine.description",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 10,
-        "dataField": "valide",
-        "dataType": "boolean",
-        "width": 50,
-        "visible": true
-      },
-      {
-        "visibleIndex": 11,
-        "dataField": "preSaisie",
-        "dataType": "boolean",
-        "width": 50,
-        "visible": true
-      },
-      {
-        "visibleIndex": 12,
+        "visibleIndex": 20,
         "dataField": "articleDescription.descriptionCourte",
         "dataType": "string",
         "visible": false
       },
       {
+        "visibleIndex": 22,
         "dataField": "matierePremiere.type.id",
         "dataType": "string",
         "visible": false,
         "showInColumnChooser": true
       },
       {
+        "visibleIndex": 24,
         "dataField": "emballage.emballage.id",
         "dataType": "string",
         "visible": false,
         "showInColumnChooser": false
+      },
+      {
+        "visibleIndex": 50,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 50,
+        "visible": true
+      },
+      {
+        "dataField": "preSaisie",
+        "dataType": "boolean",
+        "width": 50,
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
