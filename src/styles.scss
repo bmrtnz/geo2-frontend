@@ -485,9 +485,21 @@ body app-root.production {
 
 .grid-grouping-button {
   position: absolute !important;
+  height: 26px;
+  width: 26px;
+  min-width: 26px;
   z-index: 1 !important;
-  margin-top: 6px;
-  right: 146px;
+  margin-top: 11px;
+  right: 141px;
+  transform: rotate(180deg);
+
+  .dx-button-content {
+    padding: 0;
+
+    .dx-icon {
+      font-size: 18px;
+    }
+  }
 }
 
 // Up right maximize button on popups
