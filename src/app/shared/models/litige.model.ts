@@ -28,8 +28,8 @@ export class Litige extends Model {
   @Field() public fournisseurValideAdmin?: boolean;
   @Field() public fraisAnnexesCommentaires: number;
   @Field() public numeroVersion: number;
-  @Field() public ordreAvoirFournisseurReference?: string;
-  @Field() public ordreReplacementReference?: string;
+  @Field({ model: import("./ordre.model") }) public ordreAvoirFournisseur?: Ordre;
+  @Field({ model: import("./ordre.model") }) public ordreReplacement?: Ordre;
   @Field() public referenceClient?: string;
   @Field() public responsableTiers?: string;
   @Field() public responsableTiersCode?: string;
