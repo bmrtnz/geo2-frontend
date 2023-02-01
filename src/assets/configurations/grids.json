@@ -1409,10 +1409,6 @@
       {
         "dataField": "dateStatut",
         "visible": false
-      },
-      {
-        "dataField": "typePaletteID",
-        "visible": false
       }
     ]
   },
