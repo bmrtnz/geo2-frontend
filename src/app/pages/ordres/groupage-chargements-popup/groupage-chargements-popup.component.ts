@@ -17,6 +17,8 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public gridCommandes: any;
   @Input() public gridEnvois: any;
+  @Input() public allowMutations: boolean;
+  @Output() public readOnlyGrid: boolean;
   @Output() public gridCdes: any;
   @Output() public gridEnv: any;
   @Output() lignesChanged = new EventEmitter();
@@ -49,6 +51,7 @@ export class GroupageChargementsPopupComponent implements OnChanges {
     this.setTitle();
     this.gridCdes = this.gridCommandes;
     this.gridEnv = this.gridEnvois;
+    this.readOnlyGrid = !this.allowMutations;
   }
 
   setTitle() {

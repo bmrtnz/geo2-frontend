@@ -6,6 +6,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -71,6 +72,7 @@ export class GridEncoursClientComponent implements OnChanges {
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
+    public gridUtilsService: GridUtilsService,
   ) {
     this.deviseSociete = this.currentCompanyService.getCompany().devise.id;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.EncoursClient);
@@ -234,7 +236,7 @@ export class GridEncoursClientComponent implements OnChanges {
     if (e.rowType === "data") {
       // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
       let montant = e.data.cfcMontantDevise ?? e.data.cfcMontantEuros;
-      montant = this.numberWithSpaces(montant);
+      montant = this.gridUtilsService.numberWithSpaces(montant);
       if (e.data.cfcSens === "C") {
         if (e.column.dataField === "cfcMontantEuros") {
           e.cellElement.innerText = "";
@@ -270,14 +272,14 @@ export class GridEncoursClientComponent implements OnChanges {
       }
       if (e.column.dataField === "cfcMontantEuros") {
         if (this.sumDebit) {
-          e.cellElement.textContent = this.numberWithSpaces(this.sumDebit);
+          e.cellElement.textContent = this.gridUtilsService.numberWithSpaces(this.sumDebit);
         } else {
           e.cellElement.innerText = "";
         }
       }
       if (e.column.dataField === "cfcMontantDevise") {
         if (this.sumCredit) {
-          e.cellElement.textContent = this.numberWithSpaces(this.sumCredit);
+          e.cellElement.textContent = this.gridUtilsService.numberWithSpaces(this.sumCredit);
         } else {
           e.cellElement.innerText = "";
         }
@@ -298,10 +300,6 @@ export class GridEncoursClientComponent implements OnChanges {
     if (e.rowType === "data" && e.data?.ordre?.numero) {
       e.rowElement.classList.add("cursor-pointer");
     }
-  }
-
-  numberWithSpaces(numb) {
-    return numb.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(".", ",");
   }
 
   onSecteurChanged(e) {

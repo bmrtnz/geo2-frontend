@@ -53,7 +53,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       .query<{ ordre: Ordre }>({
         query: gql(this.buildGetOneGraph(columns)),
         variables: { id },
-        fetchPolicy: "no-cache"
+        fetchPolicy: fetchPol ?? "cache-first"
       });
   }
 

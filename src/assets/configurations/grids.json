@@ -1323,55 +1323,21 @@
         "visible": true
       },
       {
-        "dataField": "stockID",
-        "visible": false
-      },
-      {
-        "dataField": "origineID",
-        "visible": false
-      },
-      {
-        "dataField": "varieteID",
-        "visible": false
-      },
-      {
-        "dataField": "especeID",
-        "visible": false
-      },
-      {
-        "dataField": "categorieID",
-        "visible": false
-      },
-      {
-        "dataField": "colisID",
-        "visible": false
-      },
-      {
-        "dataField": "calibreMarquageID",
-        "visible": false
-      },
-      {
-        "dataField": "calibreFournisseurID",
-        "visible": false
-      },
-      {
-        "visibleIndex": 10,
+        "visibleIndex": 9,
         "dataField": "dateFabrication",
         "visible": true,
         "dataType": "date",
         "format": "dd-MM-yyyy"
       },
       {
-        "dataField": "statut",
-        "visible": false
-      },
-      {
-        "dataField": "dateStatut",
-        "visible": false
-      },
-      {
+        "visibleIndex": 10,
         "dataField": "typePaletteID",
-        "visible": false
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "stockID",
+        "visible": true
       },
       {
         "visibleIndex": 16,
@@ -1407,6 +1373,42 @@
         "dataField": "commentaire",
         "visible": true,
         "cellTemplate": "editButtonTemplate"
+      },
+      {
+        "dataField": "origineID",
+        "visible": false
+      },
+      {
+        "dataField": "varieteID",
+        "visible": false
+      },
+      {
+        "dataField": "especeID",
+        "visible": false
+      },
+      {
+        "dataField": "categorieID",
+        "visible": false
+      },
+      {
+        "dataField": "colisID",
+        "visible": false
+      },
+      {
+        "dataField": "calibreMarquageID",
+        "visible": false
+      },
+      {
+        "dataField": "calibreFournisseurID",
+        "visible": false
+      },
+      {
+        "dataField": "statut",
+        "visible": false
+      },
+      {
+        "dataField": "dateStatut",
+        "visible": false
       }
     ]
   },

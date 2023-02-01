@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
@@ -16,12 +16,12 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   @Input() public ordre: Partial<Ordre>;
   @Input() public flux: string;
   @Input() public gridEnvois: GridEnvoisComponent;
+  @Output() public annuleOrdre: boolean;
 
   visible: boolean;
   closeConfirm = false;
   titleStart: string;
   titleEnd: string;
-  annuleOrdre: boolean;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridChoixEnvoisComponent) gridChoixEnvoisComponent: GridChoixEnvoisComponent;
 

@@ -96,7 +96,8 @@ export class TransporteurDetailsComponent
     "historique.valide",
     "historique.userModification",
     "historique.dateModification",
-    "typeTiers"
+    "typeTiers",
+    "typeClient.id"
   ]);
   helpBtnOptions = {
     icon: "help",
@@ -190,7 +191,11 @@ export class TransporteurDetailsComponent
     this.basesPaiement = this.basesPaiementService.getDataSource();
     this.basesPaiement.filter(["valide", "=", "true"]);
     this.clientsRaisonSocial = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-    this.clientsRaisonSocial.filter(["valide", "=", "true"]);
+    this.clientsRaisonSocial.filter([
+      ["valide", "=", "true"],
+      "and",
+      ["typeClient.id", "=", "TRANSP"]
+    ]);
 
     if (this.route.snapshot.url[1]?.path !== "transporteurs") return;
 

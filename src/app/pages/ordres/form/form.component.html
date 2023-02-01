@@ -679,7 +679,6 @@
                           <dx-button
                             class="form-text-button"
                             type="default"
-                            [visible]="allowMutations"
                             [disabled]="!ordre?.codeChargement"
                             text="{{ 'grouper-chargements' | localize }}"
                             [focusStateEnabled]="false"
@@ -905,10 +904,10 @@
                           <!-- Depassement client -->
                           <div
                             *ngIf="ordre?.client?.depassement > 0"
-                            class="dx-field red-font info-supp"
+                            class="dx-field dep-en-cours"
                           >
                             Dépassement client :
-                            {{ ordre?.client?.depassement }}
+                            {{ gridUtilsService.numberWithSpaces(ordre?.client?.depassement) }} {{ ordre?.client?.devise?.id }}
                           </div>
                         </dxi-item>
                       </dx-box>
@@ -1395,6 +1394,7 @@
 <app-groupage-chargements-popup
   [ordre]="ordre"
   [gridCommandes]="gridCommandes"
+  [allowMutations]="allowMutations"
   [gridEnvois]="gridEnvois"
   (lignesChanged)="onLignesChanged($event)"
   (ordreChanged)="refreshHeader($event)"

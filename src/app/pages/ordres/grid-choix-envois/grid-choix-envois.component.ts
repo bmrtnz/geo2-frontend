@@ -45,6 +45,7 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   @Input() public ordreID: string;
   @Input() public fluxID: string;
+  @Input() public annuleOrdre: boolean;
   @Input() public fournisseurCode: string;
   @Input() public transporteurLigneId: string;
   @Input() public lieupassageaquaiLigneId: string;
@@ -190,7 +191,9 @@ export class GridChoixEnvoisComponent implements OnInit {
       )
       .subscribe({
         next: data => {
+
           this.canSelectAll = true;
+          // console.log(this.ar?.hasData, this.annuleOrdre);
           // handle annule&remplace
           if (this.ar?.hasData) {
             const { ignoredTiers, reasons } = this.ar.get();
@@ -200,6 +203,14 @@ export class GridChoixEnvoisComponent implements OnInit {
                 e.commentairesAvancement = reasons?.[e.codeTiers];
                 return e;
               });
+          } else {
+            // if (this.annuleOrdre) {
+            //   const rows = this.dataGrid.instance.getVisibleRows();
+            //   rows.map((res) => {
+            //     this.dataGrid.instance.cellValue(res.rowIndex, "commentairesAvancement", "COMMANDE ANNULEE");
+            //   }
+            //   );
+            // }
           }
 
           this.gridData = new DataSource(data);
