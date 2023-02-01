@@ -335,7 +335,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
-  public descriptifRegoupement: string;
+  public descriptifRegroupement: string;
 
   ngOnInit() {
     this.initializeForm();
@@ -908,7 +908,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
           this.fetchFullOrderNumber();
-          this.descriptifRegoupement = ordre.descriptifRegroupement;
+          this.descriptifRegroupement = ordre.descriptifRegroupement;
           this.refOrdre = this.ordre?.id ? ordre.id : "-";
           this.canDuplicate = !!this?.ordre?.id;
           this.formGroup.reset(ordre);
@@ -1216,7 +1216,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           const msg = res.data.fnMajOrdreRegroupementV2.msg.split(",");
           notify(this.localization.localize("ordre-duplicate-done").replace("&I", msg[1].replace(": ", "")), "success", 7000);
         },
-        complete: () => this.refreshDescriptifRegoupement(),
+        complete: () => this.refreshDescriptifRegroupement(),
       });
   }
 
@@ -1224,13 +1224,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
       error: ({ message }: Error) => notify(message, "error"),
       next: res => notify(res.data.fDelRegroupement.msg, "success"),
-      complete: () => this.refreshDescriptifRegoupement(),
+      complete: () => this.refreshDescriptifRegroupement(),
     });
   }
 
-  private refreshDescriptifRegoupement() {
+  private refreshDescriptifRegroupement() {
     this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
-      .subscribe(res => this.descriptifRegoupement = res.data.ordre.descriptifRegroupement);
+      .subscribe(res => this.descriptifRegroupement = res.data.ordre.descriptifRegroupement);
   }
 
 }
