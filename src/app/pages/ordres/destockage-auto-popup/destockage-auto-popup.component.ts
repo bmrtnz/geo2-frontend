@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { DxPopupComponent, DxScrollViewComponent, DxDataGridComponent, DxSwitchComponent } from "devextreme-angular";
-import { confirm, alert } from "devextreme/ui/dialog";
-import notify from "devextreme/ui/notify";
+import { alert } from "devextreme/ui/dialog";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { from, Observable } from "rxjs";
