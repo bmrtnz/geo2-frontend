@@ -90,7 +90,8 @@ enum Fragments {
 enum LinkedCriterias {
   Client = "Réf. Clt",
   Compl = "Compl.",
-  Regul = "Régul."
+  Regul = "Régul.",
+  Palox = "Palox"
 }
 
 let self;
@@ -220,7 +221,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "documentCMR.uri",
     "documentCMR.type",
     "descriptifRegroupement",
-    "client.devise.id"
+    "client.devise.id",
+    "listeOrdreRefPalox",
+    "ordreRefPaloxPere"
   ];
 
   private destroy = new Subject<boolean>();
@@ -836,10 +839,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
           });
         this.findComplRegulLinkedOrders(refClt);
+        this.findPaloxLinkedOrders();
         this.linkedOrdersSearch = false;
       });
     } else {
       this.findComplRegulLinkedOrders(refClt);
+      this.findPaloxLinkedOrders();
     }
   }
 
@@ -858,6 +863,29 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
     if (!refClt) this.linkedOrdersSearch = false;
+  }
+
+  findPaloxLinkedOrders() {
+    const hasPaloxChildren = this.ordre.listeOrdreRefPalox;
+    const hasPaloxFather = this.ordre.ordreRefPaloxPere;
+    if (hasPaloxChildren) {
+      hasPaloxChildren.split(";").map(res => {
+        if (res) {
+          this.ordresService
+            .getOne_v2(res, ["numero"])
+            .subscribe(num =>
+              this.linkedOrders.push({ ordre: { numero: num.data.ordre.numero }, criteria: LinkedCriterias.Palox, class: "Palox" }));
+        }
+      });
+    }
+    if (hasPaloxFather) {
+      this.ordresService
+        .getOne_v2(hasPaloxFather, ["numero"])
+        .subscribe(num =>
+          this.linkedOrders.push({ ordre: { numero: num.data.ordre.numero }, criteria: LinkedCriterias.Palox, class: "Palox" }));
+    }
+
+
   }
 
   openLinkedOrder(ordre: Partial<Ordre>) {

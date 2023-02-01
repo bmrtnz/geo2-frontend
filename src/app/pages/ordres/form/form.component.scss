@@ -396,6 +396,14 @@ dx-button[type="normal"] {
   }
 }
 
+.linkedOrder-Palox {
+  background: $BW-orange-medium;
+
+  &:hover {
+    background: $BW-orange-dark;
+  }
+}
+
 ::ng-deep .alignright input {
   text-align: right;
 }
