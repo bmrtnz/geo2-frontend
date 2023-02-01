@@ -35,6 +35,7 @@ export const StatutKeys = [
   "EN_PREPARATION",
   "EXPEDIE",
   "FACTURE",
+  "FACTURE_EDI",
   "NON_CONFIRME",
 ];
 export enum Statut {
@@ -44,6 +45,7 @@ export enum Statut {
   EN_PREPARATION = "En préparation" as any,
   EXPEDIE = "Expédié" as any,
   FACTURE = "Facturé" as any,
+  FACTURE_EDI = "Facturé en EDI" as any,
   NON_CONFIRME = "Non confirmé" as any,
 }
 
