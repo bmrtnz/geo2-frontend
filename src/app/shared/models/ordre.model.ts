@@ -135,6 +135,9 @@ export class Ordre extends Model {
   @Field() public fileCMR?: string;
   @Field() public listeOrdresComplementaires?: string;
   @Field() public listeOrdresRegularisations?: string;
+  @Field() public ordreRefPaloxPere?: string;
+  @Field() public listeOrdreRefPalox?: string;
+  @Field() public listeNumeroOrigine?: string;
   @Field() public cqLignesCount?: number;
   @Field() public numeroCamion?: number;
   @Field() public ordreChargement?: number;
