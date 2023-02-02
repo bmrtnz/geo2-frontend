@@ -208,6 +208,7 @@ export class GridReservationStockComponent implements OnInit {
         .pipe(
           filter(v => !!v),
           concatMapTo(alertOther()),
+          filter(v => !!v),
           concatMapTo(alertNegative()),
           concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(this.ordreLigneInfo.id)),
           withLatestFrom(zip(...[fournisseur, proprietaire]
@@ -235,7 +236,11 @@ export class GridReservationStockComponent implements OnInit {
     }
 
     // when no actives resas, accept selection and exit
-    if (!this.resaStatus.length) return alertNegative()
+    if (!this.resaStatus.length) return alertOther()
+      .pipe(
+        filter(v => !!v),
+        concatMapTo(alertNegative()),
+      )
       .subscribe(() => this.pushReservation(e));
   }
 
