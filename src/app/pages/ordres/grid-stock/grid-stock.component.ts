@@ -121,29 +121,27 @@ export class GridStockComponent implements OnInit {
       if (["emballage.emballage.groupe.id"].includes(dataField))
         this.emballagesSB.value = null;
 
-      if (event) {
-        let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value.key}' and quantiteTotale > 0 and valide == true)`;
-        if (this.varietesSB.value) sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value.key}'`;
-        if (this.groupesSB.value) sbFilters += ` and article.emballage.emballage.groupe.id == '${this.groupesSB.value.key}'`;
-        if (this.emballagesSB.value) sbFilters += ` and article.emballage.emballage.id == '${this.emballagesSB.value.key}'`;
-        if (this.originesSB.value) sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value.key}'`;
-        if (this.modesCultureSB.value) sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value.key}'`;
-        const dataToLoad = [
-          { var: "varietes", id: "article.matierePremiere.variete.id", desc: "article.matierePremiere.variete.description" },
-          { var: "groupes", id: "article.emballage.emballage.groupe.id", desc: "article.emballage.emballage.groupe.description" },
-          { var: "emballages", id: "article.emballage.emballage.id", desc: "article.emballage.emballage.description" },
-          { var: "origines", id: "article.matierePremiere.origine.id", desc: "article.matierePremiere.origine.description" },
-          { var: "bureauxAchat", id: "fournisseur.bureauAchat.id", desc: "fournisseur.bureauAchat.raisonSocial" },
-          { var: "modesCulture", id: "article.matierePremiere.modeCulture.id", desc: "article.matierePremiere.modeCulture.description" },
-        ];
-        dataToLoad
-          .filter(data => !this[`${data.var}SB`].value)
-          .forEach(data => {
-            if (data.var === "emballages" && this.groupesSB.value)
-              sbFilters += ` and article.emballage.emballage.groupe.id == ${this.groupesSB.value.key}`;
-            this[data.var] = this.stocksService.getDistinctEntityDatasource(data.id, data.desc, sbFilters);
-          });
-      }
+      let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value.key}' and quantiteTotale > 0 and valide == true)`;
+      if (this.varietesSB.value) sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value.key}'`;
+      if (this.groupesSB.value) sbFilters += ` and article.emballage.emballage.groupe.id == '${this.groupesSB.value.key}'`;
+      if (this.emballagesSB.value) sbFilters += ` and article.emballage.emballage.id == '${this.emballagesSB.value.key}'`;
+      if (this.originesSB.value) sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value.key}'`;
+      if (this.modesCultureSB.value) sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value.key}'`;
+      const dataToLoad = [
+        { var: "varietes", id: "article.matierePremiere.variete.id", desc: "article.matierePremiere.variete.description" },
+        { var: "groupes", id: "article.emballage.emballage.groupe.id", desc: "article.emballage.emballage.groupe.description" },
+        { var: "emballages", id: "article.emballage.emballage.id", desc: "article.emballage.emballage.description" },
+        { var: "origines", id: "article.matierePremiere.origine.id", desc: "article.matierePremiere.origine.description" },
+        { var: "bureauxAchat", id: "fournisseur.bureauAchat.id", desc: "fournisseur.bureauAchat.raisonSocial" },
+        { var: "modesCulture", id: "article.matierePremiere.modeCulture.id", desc: "article.matierePremiere.modeCulture.description" },
+      ];
+      dataToLoad
+        .filter(data => !this[`${data.var}SB`].value)
+        .forEach(data => {
+          if (data.var === "emballages")
+            sbFilters += ` and article.emballage.emballage.groupe.id == ${this.groupesSB.value?.key}`;
+          this[data.var] = this.stocksService.getDistinctEntityDatasource(data.id, data.desc, sbFilters);
+        });
     }
   }
 
