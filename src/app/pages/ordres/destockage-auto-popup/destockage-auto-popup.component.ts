@@ -101,7 +101,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
       this.authService.currentUser.nomUtilisateur
     ).subscribe({
       next: (res) => {
-        this.DsItems = res.data.fResaAutoOrdre.data.result;
+        this.DsItems = JSON.parse(JSON.stringify(res.data.fResaAutoOrdre.data.result));
         this.DsItems.map((item, index) => {
           item.id = index;
           item.statut = item.statut === "O" ? true : false;

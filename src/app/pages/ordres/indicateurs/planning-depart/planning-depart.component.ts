@@ -143,8 +143,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.ordresService.persistantVariables.onlyColisDiff = false;
     this.dataSource.filter(filters);
 
-    this.gridPLANNINGDEPARTComponent.dataSource = this.dataSource;
-    this.gridPLANNINGDEPARTComponent.dataSource.reload().then(res => {
+    this.dataSource.reload().then(res => {
 
       // Sort by numero ordre
       res.sort((a, b) => a.ordre.numero - b.ordre.numero);
@@ -286,7 +285,10 @@ export class PlanningDepartComponent implements AfterViewInit {
       this.datePipe.transform(new Date(Date.parse(this.dateMax.value)), "yyyy-MM-dd"),
       this.authService.currentUser.nomUtilisateur,
     ).subscribe({
-      next: res => notify(res.msg, "success"),
+      next: res => {
+        notify(res.msg, "success");
+        this.updateFilters();
+      },
       error: (err: Error) => notify(`Erreur lors de l'envoi des détails: ${err.message}`, "error", 3000),
     });
   }

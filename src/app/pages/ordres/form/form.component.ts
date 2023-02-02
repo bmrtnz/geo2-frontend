@@ -872,7 +872,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       hasPaloxChildren.split(";").map(res => {
         if (res) {
           this.ordresService
-            .getOne_v2(res, ["numero"])
+            .getOne_v2(res, ["numero"], "no-cache")
             .subscribe(num =>
               this.linkedOrders.push({ ordre: { numero: num.data.ordre.numero }, criteria: LinkedCriterias.Palox, class: "Palox" }));
         }
@@ -880,7 +880,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (hasPaloxFather) {
       this.ordresService
-        .getOne_v2(hasPaloxFather, ["numero"])
+        .getOne_v2(hasPaloxFather, ["numero"], "no-cache")
         .subscribe(num =>
           this.linkedOrders.push({ ordre: { numero: num.data.ordre.numero }, criteria: LinkedCriterias.Palox, class: "Palox" }));
     }
@@ -1145,7 +1145,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.paramMap
       .pipe(
         first(),
+        filter(params => !!params.get(RouteParam.TabID)),
         map(params => this.tabContext.parseTabID(params.get(RouteParam.TabID))),
+        filter(data => data.every(v => v !== null)),
         concatMap(([numero, campagneID]) => this.ordresService
           .getOneByNumeroAndSocieteAndCampagne(
             numero,

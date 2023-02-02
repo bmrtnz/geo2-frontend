@@ -5735,34 +5735,124 @@
         "sortOrder": "asc"
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "tracabiliteDetailPalette.SSCC",
         "visible": true,
         "sortIndex": 3,
         "sortOrder": "asc"
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 4,
         "dataField": "ordreLigne.numero",
         "visible": true,
         "sortIndex": 1,
+        "cssClass": "no-padding text-align-center",
         "sortOrder": "asc"
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 6,
         "dataField": "ordreLigne.article.id",
         "visible": true,
         "sortIndex": 2,
         "sortOrder": "asc"
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 8,
         "dataField": "ordreLigne.article.matierePremiere.variete.description",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 10,
         "dataField": "ordreLigne.article.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "ordreLigne.nombrePalettesExpediees",
+        "cssClass": "no-padding multi-line-header",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "ordreLigne.ordre.client.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "ordreLigne.ordre.entrepot.raisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "ordreLigne.logistique.dateDepartReelleFournisseur",
+        "dataType": "date",
+        "format": "dd-MM-yyyy HH:mm:ss",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "arboCode",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "nombreColis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "ordreLigne.article.matierePremiere.espece.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "ordreLigne.article.normalisation.calibreMarquage.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 27,
+        "dataField": "ordreLigne.article.emballage.emballage.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "tracabiliteDetailPalette.poidsNet",
+        "dataType": "number",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "tracabiliteDetailPalette.poidsBrut",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
+        "visible": true
+      },
+      {
+        "visibleIndex": 32,
+        "dataField": "tracabiliteDetailPalette.typePalette.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 34,
+        "dataField": "ordreLigne.ordre.numero",
+        "cssClass": "no-padding text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 36,
+        "dataField": "ordreLigne.ordre.referenceClient",
+        "visible": true
+      },
+      {
+        "visibleIndex": 38,
+        "dataField": "ordreLigne.libelleDLV",
         "visible": true
       },
       {
@@ -5860,6 +5950,7 @@
         "sortIndex": 1,
         "sortOrder": "asc",
         "fixed": true,
+        "dataType": "string",
         "fixedPosition": "left"
       },
       {

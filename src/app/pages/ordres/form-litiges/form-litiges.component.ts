@@ -30,7 +30,10 @@ export class FormLitigesComponent implements OnInit {
 
   formGroup = this.fb.group({
     id: [""],
-    ordreAvoirFournisseurReference: [""],
+    ordreAvoirFournisseur: this.fb.group({
+      id: [""],
+      numero: [""]
+    }),
     dateCreation: [""],
     avoirClient: [""],
     avoirClientTaux: [""],
@@ -83,7 +86,7 @@ export class FormLitigesComponent implements OnInit {
     ]);
     this.columns = [
       "id",
-      "ordreAvoirFournisseurReference",
+      "ordreAvoirFournisseur.numero",
       "dateCreation",
       "dateAvoirClient",
       "dateAvoirFournisseur",

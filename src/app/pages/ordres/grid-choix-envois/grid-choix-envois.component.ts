@@ -204,13 +204,12 @@ export class GridChoixEnvoisComponent implements OnInit {
                 return e;
               });
           } else {
-            // if (this.annuleOrdre) {
-            //   const rows = this.dataGrid.instance.getVisibleRows();
-            //   rows.map((res) => {
-            //     this.dataGrid.instance.cellValue(res.rowIndex, "commentairesAvancement", "COMMANDE ANNULEE");
-            //   }
-            //   );
-            // }
+            if (this.annuleOrdre) {
+              data = data.map(e => {
+                e.commentairesAvancement = "COMMANDE ANNULEE";
+                return e;
+              });
+            }
           }
 
           this.gridData = new DataSource(data);

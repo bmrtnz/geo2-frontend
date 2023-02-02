@@ -49,14 +49,18 @@
                 <div class="dx-field field-large">
                   <div class="dx-field-label">
                     {{
-                      "ordres-litiges-ordreAvoirFournisseurReference" | localize
+                      "ordres-litiges-ordreAvoirFournisseur" | localize
                     }}
                   </div>
-                  <div class="dx-field-value">
+
+                  <div
+                    class="dx-field-value"
+                    formGroupName="ordreAvoirFournisseur"
+                  >
                     <dx-text-box
-                      formControlName="ordreAvoirFournisseurReference"
+                      formControlName="numero"
                       [readOnly]="true"
-                    ></dx-text-box>
+                      ></dx-text-box>
                   </div>
                 </div>
               </div>
