@@ -105,7 +105,9 @@ export class GridReservationStockComponent implements OnInit {
   }
 
   private pushReservation(event) {
-    const [fournisseur, proprietaire] = event.key[0].split("/");
+    const fournisseur = event.data.fournisseurCode;
+    const proprietaire = event.data.proprietaireCode;
+    // const [fournisseur, proprietaire] = event.key[0].split("/");
     let desc =
       // tslint:disable-next-line: max-line-length
       `Ordre ${this.ordreLigneInfo.ordre.numero}/${this.ordreLigneInfo.ordre.entrepot.code} (${this.authService.currentUser.nomUtilisateur})`;
@@ -122,7 +124,8 @@ export class GridReservationStockComponent implements OnInit {
             ol.data.ordreLigne.ordre.id,
             this.ordreLigneInfo.id,
             desc,
-            event.data[event.row.isExpanded ? "items" : "collapsedItems"][0].typePaletteCode,
+            // event.data[event.row.isExpanded ? "items" : "collapsedItems"][0].typePaletteCode,
+            event.data.typePaletteCode,
           ))
       )
       .subscribe({
@@ -149,15 +152,26 @@ export class GridReservationStockComponent implements OnInit {
     );
   }
 
+  /** Spawn alert popup with confirmation in case of different user reservation */
+  private alertOtherReservation(otherReservation: boolean, other: string) {
+    return defer(() => of(otherReservation)).pipe(
+      concatMap(prediction => prediction
+        ? confirm(`Voulez-vous vraiment déstocker en utilisant une réservation prise par ${other} ?`, "Attention")
+        : of(true)),
+      filter(result => !!result),
+    );
+  }
+
   onCellClick(e) {
 
     // do nothing on expand cell click
     if (e.cellElement.classList.contains("dx-command-expand")) return;
 
     // do nothing on expanded rows
-    if (!e?.data || e.rowType !== "group") return;
+    if (!e?.data || e.rowType === "group") return;
 
-    const [fournisseur, proprietaire] = e.key[0].split("/");
+    const fournisseur = e.data.fournisseurCode;
+    const proprietaire = e.data.proprietaireCode;
 
     const currentFournisseur = this.resaStatus.length
       ? this.resaStatus[0].fournisseurCode
@@ -167,11 +181,18 @@ export class GridReservationStockComponent implements OnInit {
       ? this.resaStatus[0].proprietaireCode
       : (this.ordreLigneInfo.proprietaireMarchandise?.code ?? "-");
 
-    const selectedStocks: StockReservation[] = e.data[e.row.isExpanded ? "items" : "collapsedItems"];
+    const selectedStocks: StockReservation[] = this.datagrid.instance.getVisibleRows()
+      .filter(r => r.data.fournisseurCode === e.data.fournisseurCode && r.data.proprietaireCode === e.data.proprietaireCode)
+      .map(d => d.data);
+
     const alertNegative = this.alertNegativeReservation.bind(this,
       selectedStocks.map(s => s.quantiteDisponible).reduce((acm, crt) => acm + crt),
       `${selectedStocks[0].fournisseurCode} / ${selectedStocks[0].proprietaireCode}`,
     );
+
+    const otherReservation = !!(e.data.option && !e.data.option?.toUpperCase().includes(this.authService.currentUser.nomUtilisateur));
+    const alertOther = this.alertOtherReservation.bind(this, otherReservation, e.data.option);
+    console.log("Message nécessaire ?", otherReservation);
 
     // when selected source differ from the target (fournisseur)
     if (
@@ -188,6 +209,7 @@ export class GridReservationStockComponent implements OnInit {
       return from(confirm(popupMessage, "Choix fournisseur"))
         .pipe(
           filter(v => !!v),
+          concatMapTo(alertOther()),
           concatMapTo(alertNegative()),
           concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(this.ordreLigneInfo.id)),
           withLatestFrom(zip(...[fournisseur, proprietaire]
