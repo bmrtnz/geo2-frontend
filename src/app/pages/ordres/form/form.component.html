@@ -907,7 +907,12 @@
                             class="dx-field dep-en-cours"
                           >
                             Dépassement client :
-                            {{ gridUtilsService.numberWithSpaces(ordre?.client?.depassement) }} {{ ordre?.client?.devise?.id }}
+                            {{
+                              gridUtilsService.numberWithSpaces(
+                                ordre?.client?.depassement
+                              )
+                            }}
+                            {{ ordre?.client?.devise?.id }}
                           </div>
                         </dxi-item>
                       </dx-box>

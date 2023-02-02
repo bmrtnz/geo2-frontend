@@ -130,10 +130,10 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       this.typeFiltrage = searchType.codeSecteur;
       this.codeFiltrage = currSect.id;
     }
-    this.formGroup.get("codeCommercial").patchValue({ id: "NB" }); // A VIRER
-    this.typeFiltrage = searchType.codeCommercial; // A VIRER
-    this.codeFiltrage = "NB"; // A VIRER
-    this.formGroup.get("codeSecteur").reset(); // A VIRER
+    // this.formGroup.get("codeCommercial").patchValue({ id: "NB" }); // A VIRER
+    // this.typeFiltrage = searchType.codeCommercial; // A VIRER
+    // this.codeFiltrage = "NB"; // A VIRER
+    // this.formGroup.get("codeSecteur").reset(); // A VIRER
   }
 
   displayIDBefore(data) {
@@ -267,7 +267,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       if (e.summaryItems[0]?.column === "id") {
         // Showing cloture button in group header
         e.cellElement.innerHTML =
-          `<div class="cloture-button">${this.localization.localize("ordres-supervision-litiges-cloture")}</div>`;
+          `<div class="cloture-button inactive-button">${this.localization.localize("ordres-supervision-litiges-cloture")}</div>`;
       }
 
     }

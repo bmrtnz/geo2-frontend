@@ -1269,7 +1269,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           const msg = res.data.fnMajOrdreRegroupementV2.msg.split(",");
           notify(this.localization.localize("ordre-duplicate-done").replace("&I", msg[1].replace(": ", "")), "success", 7000);
         },
-        complete: () => this.refreshDescriptifRegoupement(),
+        complete: () => this.refreshDescriptifRegroupement(),
       });
   }
 
@@ -1277,11 +1277,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
       error: ({ message }: Error) => notify(message, "error"),
       next: res => notify(res.data.fDelRegroupement.msg, "success"),
-      complete: () => this.refreshDescriptifRegoupement(),
+      complete: () => this.refreshDescriptifRegroupement(),
     });
   }
 
-  private refreshDescriptifRegoupement() {
+  private refreshDescriptifRegroupement() {
     this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
       .subscribe(res => this.descriptifRegroupement = res.data.ordre.descriptifRegroupement);
   }

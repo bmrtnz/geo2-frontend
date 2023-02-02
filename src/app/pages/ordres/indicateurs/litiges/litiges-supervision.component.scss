@@ -31,6 +31,8 @@ h6 {
 
   // Highlight groups
 
+  max-width: none !important;
+
   .dx-row:not(.dx-row-focused) {
     .group-1-header {
       background: $base-accent;

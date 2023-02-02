@@ -226,24 +226,24 @@
   <div *dxTemplate="let ds of 'detail'">
     <div class="master-detail">
       <div class="cause-container">
-        <span class="litiges-causeconseq red-font text-align-right">{{ "ordres-supervision-litiges-descriptionCause" | localize }} :&nbsp;</span>
+        <span class="litiges-tiers bold-text">{{ ds.data.codeClient }}</span>
+        <span class="">&nbsp;-&nbsp;</span>
+        <span class="litiges-tiers bold-text">{{ ds.data.litige.ordreOrigine.entrepot.code }}</span>
+        <span class="">&nbsp;-&nbsp;</span>
         <span class="">{{ "ordres-supervision-litiges-dateDepartPrevueFournisseur" | localize }} :&nbsp;</span>
         <span class="litiges-dateDepartPrevueFournisseur bold-text">{{ dateManagementService.formatDate(ds.data.dateDepartPrevueFournisseur, "dd-MM-yyyy") }}</span>
         <span class="">&nbsp;-&nbsp;</span>
-        <span class="">{{ ds.data.descriptionVariete }}</span>
-        <span class="">&nbsp;-&nbsp;</span>
-        <span class="litiges-descriptionCause bold-text">{{ ds.data.descriptionCause }}</span>
-        <span class="litiges-montant">&nbsp;- {{ "ordres-supervision-litiges-prixClient" | localize }} :&nbsp;</span>
-        <span class="litiges-prix bold-text">{{ ds.data.prixClient?.toFixed(2).replace(".", ",") }}</span>
-        <span class="litiges-montant">&nbsp;- {{ "ordres-supervision-litiges-prixFourni" | localize }} :&nbsp;</span>
-        <span class="litiges-prix bold-text">{{ ds.data.prixFourni?.toFixed(2).replace(".", ",") }}</span>
-        <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-proprietaire-code" | localize }} :&nbsp;</span>
-        <span class="litiges-tiers bold-text">{{ ds.data.proprietaire.code }}</span>
-        <span class="">&nbsp;- ({{ ds.data.commentaireLigneLitige }})</span>
+        <span class="">{{ "articles-matierePremiere-variete" | localize }} :&nbsp;</span>
+        <span class="bold-text">{{ ds.data.descriptionVariete }}</span>
       </div>
       <div style="clear:both"></div>
       <div class="conseq-container">
+        <span class="litiges-causeconseq red-font text-align-right float-left">{{ "ordres-supervision-litiges-descriptionCause" | localize }} :&nbsp;</span>
+        <span class="litiges-descriptionCause bold-text float-left">{{ ds.data.descriptionCause }}</span>
+        <span class="float-left">&nbsp;-&nbsp;</span>
         <span class="litiges-causeconseq green-font text-align-right float-left">{{ "ordres-supervision-litiges-descriptionConsequence" | localize }} :&nbsp;</span>
+        <span class="litiges-descriptionConsequence bold-text float-left">{{ ds.data.descriptionConsequence }}</span>
+        <span class="float-left">&nbsp;-&nbsp;</span>
         <span class="float-left">{{ "ordres-supervision-litiges-numeroOrdreRemplacement" | localize }} :&nbsp;</span>
         <span>
           <dx-button
@@ -254,8 +254,8 @@
             (onClick)="onOpenNewOrder(ds)">
           </dx-button>
         </span>
-        <span class="">&nbsp;-&nbsp;</span>
-        <span class="litiges-descriptionConsequence bold-text">{{ ds.data.descriptionConsequence }}</span>
+        <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-proprietaire-code" | localize }} :&nbsp;</span>
+        <span class="litiges-tiers bold-text">{{ ds.data.proprietaire.code }}</span>
         <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-fournisseur-code" | localize }} :&nbsp;</span>
         <span class="litiges-tiers bold-text">{{ ds.data.fournisseur.code }}</span>
       </div>
