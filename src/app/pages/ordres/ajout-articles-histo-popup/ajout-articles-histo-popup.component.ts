@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
-import { concatMap, takeWhile } from "rxjs/operators";
+import { concatMap, takeWhile, tap } from "rxjs/operators";
+import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
 import { GridLignesHistoriqueComponent } from "../grid-lignes-historique/grid-lignes-historique.component";
 
 
@@ -43,6 +44,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
 
   constructor(
     private functionsService: FunctionsService,
@@ -142,7 +144,14 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
             this.gridLignesHisto.datagrid.instance.getSelectedRowKeys()[index]
           )
           .valueChanges
-          .pipe(takeWhile(res => res.loading))
+          .pipe(
+            concatMap(res => {
+              this.associatedPrompt.ordreLigneID = res.data.ofInitArticleHistory.data.new_orl_ref;
+              this.associatedPrompt.articleAssocieID = res.data.ofInitArticleHistory.data.art_ass;
+              return this.associatedPrompt.tryPrompt();
+            }),
+            takeWhile(res => res.loading),
+          )
         ),
       )
       .subscribe({

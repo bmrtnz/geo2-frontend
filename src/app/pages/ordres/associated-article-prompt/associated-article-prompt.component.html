@@ -1,0 +1,25 @@
+<dx-popup
+  [width]="400"
+  [height]="'auto'"
+  [showTitle]="false"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  [(visible)]="visible"
+>
+  <div *dxTemplate="let data of 'content'">
+    <p class="text-align-center">
+      Voulez-vous ajouter l'article associé {{ articleAssocieID }} ?
+    </p>
+    <br />
+    <dx-button
+      type="normal"
+      text="non"
+      (onClick)="cancelClick()"
+    ></dx-button>
+    <dx-button
+      type="default"
+      text="oui"
+      (onClick)="continueClick()"
+    ></dx-button>
+  </div>
+</dx-popup>

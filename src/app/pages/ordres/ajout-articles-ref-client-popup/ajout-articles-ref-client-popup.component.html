@@ -8,7 +8,6 @@
   (onShown)="onShown($event)"
   [resizeEnabled]="true"
 >
-
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-mid">{{ titleMid }}</div>
@@ -27,7 +26,6 @@
 
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-
       <div class="ajout-art-manu-content-container">
         <dx-button
           class="cancel-button"
@@ -41,7 +39,9 @@
           type="danger"
           stylingMode="outlined"
           [visible]="nbARticles > 0"
-          text="{{ ('dereferencer-article' + (nbARticles > 1 ? 's' : '' )) | localize }}"
+          text="{{
+            'dereferencer-article' + (nbARticles > 1 ? 's' : '') | localize
+          }}"
           (onClick)="deleteFromRefClient()"
         ></dx-button>
         <dx-button
@@ -66,5 +66,6 @@
       </div>
     </dx-scroll-view>
   </div>
-
 </dx-popup>
+
+<app-associated-article-prompt></app-associated-article-prompt>
