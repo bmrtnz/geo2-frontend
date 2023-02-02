@@ -8,6 +8,7 @@ import { FournisseursService, LocalizationService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
 import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { StockMouvementsService } from "app/shared/services/api/stock-mouvements.service";
@@ -45,7 +46,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   constructor(
     public injector: Injector,
     private gridConfigurator: GridConfiguratorService,
-    private ordresService: OrdresService,
+    public ordresService: OrdresService,
     private ordreLignesService: OrdreLignesService,
     private route: ActivatedRoute,
     private currentCompanyService: CurrentCompanyService,
@@ -54,6 +55,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     private gridUtilsService: GridUtilsService,
     private codesPromoService: CodesPromoService,
     private formUtilsService: FormUtilsService,
+    private functionsService: FunctionsService,
     private typesPaletteService: TypesPaletteService,
     public localizeService: LocalizationService,
     private gridsService: GridsService,
@@ -226,8 +228,18 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
       this.changes = this.splitPropChanges();
       event.cancel = true;
+      // Calculate margin at the end of the saving process
+      // & refresh margin grid
+      const saveInterval = setInterval(() => {
+        if (!this.grid.instance.hasEditData()) {
+          clearInterval(saveInterval);
+          this.functionsService.fCalculMarge(this.ordreID).subscribe({
+            error: ({ message }: Error) => console.log(message),
+            complete: () => this.gridsService.reload("OrdreMarge"),
+          });
+        }
+      }, 100);
       return this.handleMutations();
-
     }
   }
 

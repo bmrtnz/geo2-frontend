@@ -151,6 +151,15 @@ export class FunctionsService {
       })
 
   /**
+   * Calcul marge
+   */
+  public fCalculMarge(ordreRef: string) {
+    return this.queryFunction("fCalculMarge", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+    ]);
+  }
+
+  /**
    * Calcule la marge prévisionnelle
    */
 
@@ -733,6 +742,50 @@ export class FunctionsService {
           ],
         )),
         variables: { devalexpRef, logistiqueRef, societeCode, username },
+        fetchPolicy: "network-only",
+      })
+
+  public fReturnForfaitsTrp = (
+    cenRef: string,
+    incCode: string,
+    trpDevPu: number,
+    btaCode: string,
+    devCode: string,
+    typeOrd: string) => this.apollo
+      .query<{ fReturnForfaitsTrp: FunctionResponse<{ li_ret: number }> }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fReturnForfaitsTrp",
+              body: functionBody,
+              params: [
+                { name: "cenRef", value: "cenRef", isVariable: true },
+                { name: "incCode", value: "incCode", isVariable: true },
+                { name: "trpDevPu", value: "trpDevPu", isVariable: true },
+                { name: "btaCode", value: "btaCode", isVariable: true },
+                { name: "devCode", value: "devCode", isVariable: true },
+                { name: "typeOrd", value: "typeOrd", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "cenRef", type: "String", isOptionnal: false },
+            { name: "incCode", type: "String", isOptionnal: false },
+            { name: "trpDevPu", type: "Double", isOptionnal: false },
+            { name: "btaCode", type: "String", isOptionnal: false },
+            { name: "devCode", type: "String", isOptionnal: false },
+            { name: "typeOrd", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: {
+          cenRef,
+          incCode,
+          trpDevPu,
+          btaCode,
+          devCode,
+          typeOrd,
+        },
         fetchPolicy: "network-only",
       })
 

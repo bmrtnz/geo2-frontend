@@ -4,6 +4,7 @@ import { Apollo } from "apollo-angular";
 import { OrdreLigne } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
 import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";

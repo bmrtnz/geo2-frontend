@@ -14,6 +14,7 @@ import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
 import { concatMap, takeWhile, tap } from "rxjs/operators";
 import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
+import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
 @Component({
   selector: "app-ajout-articles-manu-popup",
@@ -26,6 +27,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
   @Output() public lignesChanged = new EventEmitter();
+  @Output() public articleLigneId: string;
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -48,6 +50,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
   @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
+  @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
 
   constructor(
     private articlesService: ArticlesService,
@@ -70,6 +73,11 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.titleEnd = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero
       + " - " + this.ordre.client.code
       + "/" + this.ordre.entrepot.code;
+  }
+
+  openZoomArticle(e) {
+    this.articleLigneId = e;
+    this.zoomArticlePopup.visible = true;
   }
 
   updateChosenArticles() {
