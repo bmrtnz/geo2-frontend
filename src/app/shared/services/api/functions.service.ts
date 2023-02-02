@@ -151,6 +151,15 @@ export class FunctionsService {
       })
 
   /**
+   * Calcul marge
+   */
+  public fCalculMarge(ordreRef: string) {
+    return this.queryFunction("fCalculMarge", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+    ]);
+  }
+
+  /**
    * Calcule la marge prévisionnelle
    */
 

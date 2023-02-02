@@ -74,6 +74,7 @@
           [fetchPolicy]=""
           [preFilterTitle]="'articles-catalogue-preFilter-title' | localize"
           (selectChange)="selectFromGrid($event)"
+          (articleIdZoom)="openZoomArticle($event)"
         ></app-articles-list>
         <br />
       </div>
@@ -82,3 +83,6 @@
 </dx-popup>
 
 <app-associated-article-prompt></app-associated-article-prompt>
+<app-zoom-article-popup
+  [articleLigneId]="articleLigneId"
+></app-zoom-article-popup>
