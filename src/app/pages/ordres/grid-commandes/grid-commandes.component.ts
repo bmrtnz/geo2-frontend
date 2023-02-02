@@ -250,11 +250,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   private handleMutations() {
 
-    // setTimeout(() => {
-    //   this.grid.instance.columnOption("numero", "sortOrder", "desc");
-    //   this.grid.instance.columnOption("numero", "sortOrder", "asc");
-    // }, 100);
-
     if (!this.changes.length) return;
 
     const source = this.grid.dataSource as DataSource;
@@ -458,8 +453,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         data: { numero },
       }]));
   }
-
-  // OLD codebase beyond this point (grid-lignes.component)
 
   private async buildFournisseurFilter(proprietaireID?: Fournisseur["id"]) {
 

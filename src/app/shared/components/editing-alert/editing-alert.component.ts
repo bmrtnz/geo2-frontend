@@ -15,7 +15,7 @@ export class EditingAlertComponent {
     visible = false;
     doNavigate = new EventEmitter<boolean>();
 
-    constructor() {}
+    constructor() { }
 
     cancelClick() {
         this.visible = false;
@@ -33,4 +33,4 @@ export class EditingAlertComponent {
     declarations: [EditingAlertComponent],
     exports: [EditingAlertComponent],
 })
-export class EditingAlertModule {}
+export class EditingAlertModule { }
