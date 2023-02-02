@@ -107,7 +107,6 @@ export class GridReservationStockComponent implements OnInit {
   private pushReservation(event) {
     const fournisseur = event.data.fournisseurCode;
     const proprietaire = event.data.proprietaireCode;
-    // const [fournisseur, proprietaire] = event.key[0].split("/");
     let desc =
       // tslint:disable-next-line: max-line-length
       `Ordre ${this.ordreLigneInfo.ordre.numero}/${this.ordreLigneInfo.ordre.entrepot.code} (${this.authService.currentUser.nomUtilisateur})`;
@@ -124,7 +123,6 @@ export class GridReservationStockComponent implements OnInit {
             ol.data.ordreLigne.ordre.id,
             this.ordreLigneInfo.id,
             desc,
-            // event.data[event.row.isExpanded ? "items" : "collapsedItems"][0].typePaletteCode,
             event.data.typePaletteCode,
           ))
       )
