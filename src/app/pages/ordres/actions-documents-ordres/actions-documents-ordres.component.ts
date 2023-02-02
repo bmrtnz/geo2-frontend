@@ -75,8 +75,8 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       { id: "PROFOR", text: "Pro forma", visible: true, disabled: false },
       { id: "COMINV", text: "Custom template", visible: true, disabled: false },
       { id: "PACKLIST", text: "Packing list", visible: true, disabled: false },
-      //  Manque le PBL, on revient vers nous plus tard
-      { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true },
+      //  Manque le PBL, on revient vers nous plus tard -> On ne fait pas
+      // { id: "? (Relevé de factures)", text: "Relevé de factures", visible: true, disabled: true },
       //  Manque le PBL
       { id: "CUSINV", text: "Facture douanière", visible: true, disabled: true }, // Manque le PBL
       { id: "BUYCO", text: "Create Shipment (BuyCo)", visible: true, disabled: false },
