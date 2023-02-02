@@ -4212,19 +4212,25 @@
         "visibleIndex": 24,
         "dataField": "codeChargement",
         "dataType": "string",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 26,
-        "dataField": "container",
+        "dataField": "commentaireLigneLitige",
         "dataType": "string",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 28,
+        "dataField": "container",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 30,
         "dataField": "immatriculation",
         "dataType": "string",
-        "visible": true
+        "visible": false
       },
       {
         "dataField": "descriptionCause",
@@ -4240,10 +4246,6 @@
       },
       {
         "dataField": "proprietaire.code",
-        "showInColumnChooser": false
-      },
-      {
-        "dataField": "commentaireLigneLitige",
         "showInColumnChooser": false
       },
       {
@@ -4264,6 +4266,14 @@
       },
       {
         "dataField": "personne.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "codeClient",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "litige.ordreOrigine.entrepot.code",
         "showInColumnChooser": false
       }
     ]
