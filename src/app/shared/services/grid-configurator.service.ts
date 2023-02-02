@@ -269,7 +269,12 @@ export class GridConfiguratorService {
   save(config: GridConfig) {
 
     // cancel on empty columns configs
-    if (!config?.columns) return;
+    if (!Array.isArray(config?.columns) || !config.columns.length) return;
+
+    // cas grid lignes-commandes
+    // il faut qu'au moins une colonne possede un attribut `datafield`
+    // sinon, ce ne sont que des colonnes virtuelles
+    if (!config.columns.some(c => c.dataField)) return;
 
     const context = this as unknown as DxoStateStoringComponent;
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
@@ -372,6 +377,10 @@ export class GridConfiguratorService {
 
     const defaultConfig = this.fetchDefaultConfig(grid);
     if (res?.error || !res.data.gridConfig)
+      return await defaultConfig;
+
+    // cas lignes-commandes
+    if (grid === Grid.LignesCommandes && !res.data.gridConfig.config.columns.length)
       return await defaultConfig;
 
     // clone config (original is sealed)
