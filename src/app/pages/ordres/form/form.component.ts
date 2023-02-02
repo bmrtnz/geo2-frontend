@@ -1145,7 +1145,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.paramMap
       .pipe(
         first(),
+        filter(params => !!params.get(RouteParam.TabID)),
         map(params => this.tabContext.parseTabID(params.get(RouteParam.TabID))),
+        filter(data => data.every(v => v !== null)),
         concatMap(([numero, campagneID]) => this.ordresService
           .getOneByNumeroAndSocieteAndCampagne(
             numero,
