@@ -4112,12 +4112,6 @@
   "litiges": {
     "columns": [
       {
-        "visibleIndex": 0,
-        "dataField": "id",
-        "dataType": "string",
-        "visible": false
-      },
-      {
         "visibleIndex": 2,
         "dataField": "nomPersonne",
         "dataType": "string",
@@ -4209,6 +4203,14 @@
         "cssClass": "no-padding bold-text",
         "width": 70,
         "visible": true
+      },
+      {
+        "visibleIndex": 23,
+        "dataField": "id",
+        "dataType": "string",
+        "width": 90,
+        "visible": true,
+        "showInColumnChooser": false
       },
       {
         "visibleIndex": 24,

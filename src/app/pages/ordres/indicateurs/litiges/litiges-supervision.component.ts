@@ -189,6 +189,14 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   }
 
   onCellClick(e) {
+    if (e.rowType === "group") {
+      if (e.summaryItems[0]?.column === "id") {
+        console.log(e.data.key);
+        ///////////////////////////
+        // Fonction clôture
+        ///////////////////////////
+      }
+    }
     if (e.rowType !== "data") return;
     const sameCompany = (e.data.societe.id === this.currCompanyId);
     if (e.column.dataField === "numeroOrdre" && e.data.numeroOrdre && sameCompany)
@@ -217,6 +225,11 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
         }
       }
 
+      // Hide checkboxes as they're reported in parent group
+      if (["clientClos", "fournisseurClos", "id"].includes(field)) {
+        e.cellElement.classList.add("visibility-hidden");
+      }
+
     }
 
     if (e.rowType === "group") {
@@ -240,6 +253,23 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
           e.cellElement.textContent = `Litige réf. ${data[0].litige.id}`;
         }
       }
+
+      if (["clientClos", "fournisseurClos"].includes(e.summaryItems[0]?.column)) {
+        // Showing cloture checkboxes in group header
+        // Not the cleanest way to do things! but no Dx native solution
+        e.cellElement.innerHTML =
+          `<div class='dx-datagrid-checkbox-size dx-checkbox ${e.summaryItems[0].value ? "dx-checkbox-checked" : ""}
+         dx-state-readonly dx-widget'>
+        <input type="hidden" value="${!!e.summaryItems[0].value}">
+        <div class='dx-checkbox-container'>
+        <span class='dx-checkbox-icon'></span></div></div>`;
+      }
+      if (e.summaryItems[0]?.column === "id") {
+        // Showing cloture button in group header
+        e.cellElement.innerHTML =
+          `<div class="cloture-button">${this.localization.localize("ordres-supervision-litiges-cloture")}</div>`;
+      }
+
     }
 
   }

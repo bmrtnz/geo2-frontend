@@ -143,24 +143,63 @@
   >
   </dxo-column-chooser>
 
-  <!-- <dxo-summary>
+  <dxo-summary>
     <dxi-group-item
       column="prixClient"
       summaryType="sum"
-      [alignByColumn]="false"
-      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+      [showInGroupFooter]="false"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 2
+      }"
       displayFormat="{0}"
     >
     </dxi-group-item>
     <dxi-group-item
       column="prixFourni"
       summaryType="sum"
-      [alignByColumn]="false"
-      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+      [showInGroupFooter]="false"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 2
+      }"
       displayFormat="{0}"
     >
     </dxi-group-item>
-  </dxo-summary> -->
+    <dxi-group-item
+      column="clientClos"
+      summaryType="avg"
+      [alignByColumn]="true"
+      [showInGroupFooter]="false"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 0
+      }"
+      displayFormat="{0}"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="fournisseurClos"
+      summaryType="avg"
+      [alignByColumn]="true"
+      [showInGroupFooter]="false"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 0
+      }"
+      displayFormat="{0}"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="id"
+      summaryType="sum"
+      [alignByColumn]="true"
+    >
+    </dxi-group-item>
+
+  </dxo-summary>
 
   <dxi-column
     *ngFor="let column of this.columns | async"

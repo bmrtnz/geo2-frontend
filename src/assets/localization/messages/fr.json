@@ -1321,6 +1321,8 @@
     "ordres-litiges-fraisAnnexes": "Frais annexes",
     "ordres-litiges-noLitiges": "Aucun litige trouvé pour cet ordre de commande",
     "ordres-litiges-resultat": "Résultat",
+    "ordres-supervision-litiges-cloture": "Clôture",
+    "ordres-supervision-litiges-id": " ",
     "ordres-supervision-litiges-codeChargement": "Code chargement",
     "ordres-supervision-litiges-immatriculation": "Immatriculation",
     "ordres-supervision-litiges-container": "Container",
