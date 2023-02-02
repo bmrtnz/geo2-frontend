@@ -20,6 +20,8 @@ import {
   ViewDocument,
   ViewDocumentPopupComponent
 } from "../../../shared/components/view-document-popup/view-document-popup.component";
+import { DepotEnvoisService } from "app/shared/services/api/depot-envois.service";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -56,6 +58,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
     private currentCompanyService: CurrentCompanyService,
     private gridsService: GridsService,
     private authService: AuthService,
+    private depotEnvoisService: DepotEnvoisService,
   ) {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
@@ -66,11 +69,11 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       //  Fake flu_code FICPON = FICPAL + NEW
       { id: "FICPAN", text: "Générer une traçabilité", visible: true, disabled: false },
       //  Génère un PDF, Manque le PBL, on revient vers nous plus tard
-      { id: "? (Traçabilité)", text: "Traçabilité", visible: true, disabled: true },
+      { id: "TRACA", text: "Traçabilité", visible: true, disabled: false },
       //  Lire un PDF sur le NAS (/maddog2/geo_retour_palox/{geo_ordre.file_cmr})
-      { id: "(CMR)", text: "Afficher CMR", visible: true, disabled: !this.ordre?.documentCMR?.isPresent },
+      { id: "CMR", text: "Afficher CMR", visible: true, disabled: !this.ordre?.documentCMR?.isPresent },
       //  Génère un PDF (Stéphane a dit qu'on ne faisait pas)
-      { id: "? (Résumé ordre)", text: "Résumé de l'ordre", visible: false, disabled: true },
+      { id: "IMPORD", text: "Résumé de l'ordre", visible: true, disabled: false },
       { id: "BONLIV", text: "Bon de livraison", visible: true, disabled: false },
       { id: "PROFOR", text: "Pro forma", visible: true, disabled: false },
       { id: "COMINV", text: "Custom template", visible: true, disabled: false },
@@ -160,6 +163,10 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
           return this.envoisService.fDocumentEnvoiShipmentBuyco(this.ordre.id);
         case "DECBOL":
           return this.envoisService.fDocumentEnvoiDeclarationBollore(this.ordre.id);
+        case "TRACA":
+          return this.pushDepotEnvoi("TRACA", this.ordre.id);
+        case "IMPORD":
+          return this.pushDepotEnvoi("IMPORD", this.ordre.id);
       }
     })
       .pipe(
@@ -181,5 +188,16 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
         this.docsPopup.annuleOrdre = annulation;
         this[popup].visible = true;
       });
+  }
+
+  private pushDepotEnvoi(fluxID: "TRACA" | "IMPORD", ordreID: Ordre["id"]) {
+    this.depotEnvoisService.save({
+      ordre: { id: ordreID },
+      fluxID,
+      dateDepot: new Date().toISOString(),
+    }, ["id"]).subscribe({
+      error: err => notify(`Erreur de demande de dépôt pour le flux ${fluxID}`, "error"),
+      next: res => notify(`Demande de dépôt pour le flux ${fluxID} déposée`, "success"),
+    });
   }
 }
