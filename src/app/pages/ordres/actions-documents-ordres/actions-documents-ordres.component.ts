@@ -196,6 +196,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       ordre: { id: ordreID },
       fluxID,
       dateDepot: new Date().toISOString(),
+      utilisateur: { nomUtilisateur: this.authService.currentUser.nomUtilisateur }
     }, ["id"]).subscribe({
       error: err => notify(`Erreur de demande de dépôt pour le flux ${fluxID}`, "error"),
       next: res => notify(`Demande de dépôt pour le flux ${fluxID} déposée`, "success"),
