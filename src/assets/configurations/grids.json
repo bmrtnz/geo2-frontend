@@ -1413,6 +1413,7 @@
     ]
   },
   "ordre-reservation-stock": {
+    "pageSize": 10,
     "columns": [
       {
         "dataField": "id",
@@ -1510,6 +1511,7 @@
     ]
   },
   "ordre-reservation-stock-en-cours": {
+    "pageSize": 10,
     "columns": [
       {
         "dataField": "id",
