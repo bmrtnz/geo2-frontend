@@ -1,23 +1,26 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ToggledGrid } from "../form/form.component";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-grid-marge",
   templateUrl: "./grid-marge.component.html",
   styleUrls: ["./grid-marge.component.scss"]
 })
-export class GridMargeComponent implements ToggledGrid {
+export class GridMargeComponent implements AfterViewInit, ToggledGrid {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   public dataGrid: DxDataGridComponent;
@@ -32,10 +35,16 @@ export class GridMargeComponent implements ToggledGrid {
   constructor(
     private ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
+    private gridsService: GridsService,
+    private functionsService: FunctionsService,
     public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreMarge);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("OrdreMarge", this.dataGrid);
   }
 
   async enableFilters() {
@@ -105,7 +114,14 @@ export class GridMargeComponent implements ToggledGrid {
 
   onToggling(toggled: boolean) {
 
-    toggled && this?.ordre?.id ? this.enableFilters() : this.dataSource = null;
+    if (toggled && this?.ordre?.id) {
+      this.functionsService.fCalculMarge(this.ordre.id).subscribe({
+        error: ({ message }: Error) => console.log(message),
+        complete: () => this.enableFilters(),
+      });
+    } else {
+      this.dataSource = null;
+    }
 
   }
 }
