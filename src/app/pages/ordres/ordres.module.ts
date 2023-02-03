@@ -157,6 +157,7 @@ import { OptionStockPopupComponent } from "./option-stock-popup/option-stock-pop
 import {
   GridOptionReservationStockComponent
 } from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
+import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
 
 @NgModule({
   declarations: [
@@ -252,7 +253,8 @@ import {
     GridPackingListComponent,
     PlanningMaritimeComponent,
     OptionStockPopupComponent,
-    GridOptionReservationStockComponent
+    GridOptionReservationStockComponent,
+    AssociatedArticlePromptComponent
   ],
   imports: [
     OrdresRoutingModule,

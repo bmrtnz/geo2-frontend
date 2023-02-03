@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -11,11 +11,12 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { confirm } from "devextreme/ui/dialog";
 import { from } from "rxjs";
-import { concatMap, takeWhile } from "rxjs/operators";
+import { concatMap, takeWhile, tap } from "rxjs/operators";
 import { ReferencesClientService } from "app/shared/services/api/references-client.service";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridArticlesRefClientComponent } from "./grid-articles-ref-client/grid-articles-ref-client.component";
+import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
 
 @Component({
   selector: "app-ajout-articles-ref-client-popup",
@@ -50,6 +51,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
   @ViewChild("deleteButton", { static: false }) deleteButton: DxButtonComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
 
   constructor(
     public OrdreLigneService: OrdreLignesService,
@@ -182,7 +184,14 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
         concatMap(articleID => this.functionsService
           .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
           .valueChanges
-          .pipe(takeWhile(res => res.loading))
+          .pipe(
+            concatMap(res => {
+              this.associatedPrompt.ordreLigneID = res.data.ofInitArticle.data.new_orl_ref;
+              this.associatedPrompt.articleAssocieID = res.data.ofInitArticle.data.art_ass;
+              return this.associatedPrompt.tryPrompt();
+            }),
+            takeWhile(res => res.loading),
+          )
         ),
       )
       .subscribe({

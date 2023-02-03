@@ -4,6 +4,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
@@ -11,7 +12,8 @@ import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxCom
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
-import { concatMap, takeWhile } from "rxjs/operators";
+import { concatMap, takeWhile, tap } from "rxjs/operators";
+import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
 
 @Component({
   selector: "app-ajout-articles-manu-popup",
@@ -45,6 +47,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
 
   constructor(
     private articlesService: ArticlesService,
@@ -202,7 +205,14 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
           concatMap(articleID => this.functionsService
             .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
             .valueChanges
-            .pipe(takeWhile(res => res.loading))
+            .pipe(
+              concatMap(res => {
+                this.associatedPrompt.ordreLigneID = res.data.ofInitArticle.data.new_orl_ref;
+                this.associatedPrompt.articleAssocieID = res.data.ofInitArticle.data.art_ass;
+                return this.associatedPrompt.tryPrompt();
+              }),
+              takeWhile(res => res.loading),
+            )
           ),
         )
         .subscribe({

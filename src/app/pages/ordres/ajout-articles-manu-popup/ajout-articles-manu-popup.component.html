@@ -8,7 +8,6 @@
   (onShown)="onShown($event)"
   [resizeEnabled]="true"
 >
-
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-end">{{ titleEnd }}</div>
@@ -28,19 +27,24 @@
 
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-
       <div class="ajout-art-manu-content-container">
         <!-- code article -->
         <div class="dx-field quickCode-area">
-          <div class="dx-field-label">{{ "articles-saisieCode" | localize }}</div>
+          <div class="dx-field-label">
+            {{ "articles-saisieCode" | localize }}
+          </div>
           <div class="dx-field-value">
             <dx-tag-box
               [acceptCustomValue]="true"
               [placeholder]="'Code...'"
               [readOnly]="codeChangeProcess"
               (onValueChanged)="onValueChanged($event)"
-              [ngClass]="{ 'max-tags': chosenArticles?.length && remplacementArticle }"
-              [disabled]="!!getGridSelectedArticles()?.length && remplacementArticle"
+              [ngClass]="{
+                'max-tags': chosenArticles?.length && remplacementArticle
+              }"
+              [disabled]="
+                !!getGridSelectedArticles()?.length && remplacementArticle
+              "
             >
               <dxo-drop-down-options [width]="0"> </dxo-drop-down-options>
             </dx-tag-box>
@@ -75,5 +79,6 @@
       </div>
     </dx-scroll-view>
   </div>
-
 </dx-popup>
+
+<app-associated-article-prompt></app-associated-article-prompt>
