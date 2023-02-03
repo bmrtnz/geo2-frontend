@@ -32,6 +32,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   @Input() public preFilterTitle: string;
   @Input() public additionnalFilter: any;
   @Input() public fetchPolicy: string;
+  @Output() articleIdZoom = new EventEmitter<any>();
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
@@ -44,6 +45,7 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   @ViewChild("emballageSB", { static: false }) emballageSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) origineSB: DxSelectBoxComponent;
   @ViewChild("valideSB", { static: false }) valideSB: DxSelectBoxComponent;
+
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -112,8 +114,12 @@ export class ArticlesListComponent implements OnInit, NestedMain {
   }
 
   onRowDblClick(e) {
-    // If ordre is there, we're accessing from an order : no article file opening is possible
-    if (!this.ordre) this.router.navigate([`/pages/articles/${e.data.id}`]);
+    // Open article file
+    if (this.ordre) {
+      this.articleIdZoom.emit(e.data.id);
+    } else {
+      this.router.navigate([`/pages/articles/${e.data.id}`]);
+    }
   }
 
   onRowPrepared(e) {
