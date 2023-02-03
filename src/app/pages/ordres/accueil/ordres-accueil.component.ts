@@ -84,11 +84,11 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
-    if (!this.authService.isAdmin) {
-      const secteur = this.authService.currentUser.secteurCommercial;
-      this.secteurInput.value = secteur;
-      this.indicateursService.secteur = secteur.id;
-    }
+    // if (!this.authService.isAdmin) {
+    //   const secteur = this.authService.currentUser.secteurCommercial;
+    //   this.secteurInput.value = secteur;
+    //   this.indicateursService.secteur = secteur.id;
+    // }
     this.loadIndicators();
   }
 
@@ -205,7 +205,7 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
             .pipe(
               map((res) => res[indicator.id]),
               map(({ count, secteur }) => {
-                if (secteur) this.setCalculatedSecteur(secteur);
+                // if (secteur) this.setCalculatedSecteur(secteur);
                 return count;
               }),
             )
