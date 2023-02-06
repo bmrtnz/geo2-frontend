@@ -544,22 +544,19 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       map(([context, res]) => ({
         cenRef: context?.cenRef ?? res.data.ordre?.entrepot?.id, // cenRef
         incCode: context?.incCode ?? res.data.ordre?.client?.incoterm?.id ?? res.data.ordre?.incoterm?.id, // incCode
-        trpDevPu: context?.trpDevPu ?? res.data.ordre?.transporteurDEVPrixUnitaire, // trpDevPu
-        btaCode: context?.btaCode ?? res.data.ordre?.baseTarifTransport?.id, // btaCode
-        devCode: context?.devCode ?? res.data.ordre?.transporteur?.devise?.id ?? res.data.ordre?.devise?.id, // devCode
         typeOrd: context?.typeOrd ?? res.data.ordre?.type?.id, // typeOrd
       })),
       // merge context with `fReturnForfaitsTrp` response
       concatMap(context => this.functionsService.fReturnForfaitsTrp(
         context.cenRef,
         context.incCode,
-        context.trpDevPu,
-        context.btaCode,
-        context.devCode,
         context.typeOrd,
       ).pipe(map(res => ({
         ...context,
         forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
+        trpDevPu: res.data.fReturnForfaitsTrp.data.arg_trp_dev_pu,
+        btaCode: res.data.fReturnForfaitsTrp.data.arg_bta_code,
+        devCode: res.data.fReturnForfaitsTrp.data.arg_dev_code,
       })))),
       // continue if we have `forfaitsTrp` value
       filter(context => context.forfaitsTrp > 0),
