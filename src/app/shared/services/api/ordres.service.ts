@@ -4,11 +4,12 @@ import { Apollo } from "apollo-angular";
 import { OrdreLigne } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import notify from "devextreme/ui/notify";
-import { from } from "rxjs";
-import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import { forkJoin, from, fromEvent, of, zip } from "rxjs";
+import { concatMap, filter, first, map, mergeMap, scan, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
+import { CurrentCompanyService } from "../current-company.service";
+import { DevisesRefsService } from "./devises-refs.service";
 import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
 
 export enum Operation {
@@ -29,7 +30,9 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
 
   constructor(
     apollo: Apollo,
-    public functionsService: FunctionsService
+    public functionsService: FunctionsService,
+    private devisesRefsService: DevisesRefsService,
+    private currentCompanyService: CurrentCompanyService,
   ) {
     super(apollo, Ordre);
   }
@@ -513,5 +516,66 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "ordreOriginID", type: "String", value: ordreOriginID },
       { name: "societeID", type: "String", value: societeID },
     ]);
+  }
+
+  public updateFortaitsTransporteur(ordreID: Ordre["id"], chunk?: {
+    cenRef: string,
+    incCode: string,
+    trpDevPu: number,
+    btaCode: string,
+    devCode: string,
+    typeOrd: string,
+  }) {
+
+    return forkJoin([
+      of(chunk),
+      this.getOne_v2(ordreID, new Set([
+        "entrepot.id",
+        "incoterm.id",
+        "client.incoterm.id",
+        "transporteurDEVPrixUnitaire",
+        "transporteur.devise.id",
+        "devise.id",
+        "baseTarifTransport.id",
+        "type.id",
+      ]))
+    ]).pipe(
+      // prepare context data, parameters data first, then fallback to persisted data
+      map(([context, res]) => ({
+        cenRef: context?.cenRef ?? res.data.ordre?.entrepot?.id, // cenRef
+        incCode: context?.incCode ?? res.data.ordre?.client?.incoterm?.id ?? res.data.ordre?.incoterm?.id, // incCode
+        trpDevPu: context?.trpDevPu ?? res.data.ordre?.transporteurDEVPrixUnitaire, // trpDevPu
+        btaCode: context?.btaCode ?? res.data.ordre?.baseTarifTransport?.id, // btaCode
+        devCode: context?.devCode ?? res.data.ordre?.transporteur?.devise?.id ?? res.data.ordre?.devise?.id, // devCode
+        typeOrd: context?.typeOrd ?? res.data.ordre?.type?.id, // typeOrd
+      })),
+      // merge context with `fReturnForfaitsTrp` response
+      concatMap(context => this.functionsService.fReturnForfaitsTrp(
+        context.cenRef,
+        context.incCode,
+        context.trpDevPu,
+        context.btaCode,
+        context.devCode,
+        context.typeOrd,
+      ).pipe(map(res => ({
+        ...context,
+        forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
+      })))),
+      // continue if we have `forfaitsTrp` value
+      filter(context => context.forfaitsTrp > 0),
+      // merge context with associated `deviseRef.taux`
+      concatMap(context => this.devisesRefsService.getList(
+        `devise.id==${context.devCode} and id==${this.currentCompanyService.getCompany().devise.id}`,
+        ["id"],
+      ).pipe(map(res => ({
+        ...context,
+        deviseRefTaux: res.data.allDeviseRefList?.[0].taux,
+      })))),
+      // calculate & add `transporteur PU` to context
+      map(context => ({
+        ...context,
+        trpPU: context.deviseRefTaux * context.trpDevPu,
+      }))
+    );
   }
 }

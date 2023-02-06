@@ -772,7 +772,7 @@ export class FunctionsService {
           [
             { name: "cenRef", type: "String", isOptionnal: false },
             { name: "incCode", type: "String", isOptionnal: false },
-            { name: "trpDevPu", type: "Double", isOptionnal: false },
+            { name: "trpDevPu", type: "Float", isOptionnal: false },
             { name: "btaCode", type: "String", isOptionnal: false },
             { name: "devCode", type: "String", isOptionnal: false },
             { name: "typeOrd", type: "String", isOptionnal: false },
