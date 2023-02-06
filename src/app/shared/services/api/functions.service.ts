@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import { BaseTarif, Devise } from "app/shared/models";
 import { ApiService } from "../api.service";
 
 export enum FunctionResult {
@@ -752,7 +753,14 @@ export class FunctionsService {
     btaCode: string,
     devCode: string,
     typeOrd: string) => this.apollo
-      .query<{ fReturnForfaitsTrp: FunctionResponse<{ li_ret: number }> }>({
+      .query<{
+        fReturnForfaitsTrp: FunctionResponse<{
+          li_ret: number,
+          arg_trp_dev_pu: number,
+          arg_bta_code: BaseTarif["id"],
+          arg_dev_code: Devise["id"],
+        }>
+      }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
