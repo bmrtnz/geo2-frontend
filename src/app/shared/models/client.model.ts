@@ -135,6 +135,11 @@ export class Client extends Model {
     format: { type: "currency", precision: 2 },
     currency: "EUR",
   })
+  public enCours61a90: number;
+  @Field({
+    format: { type: "currency", precision: 2 },
+    currency: "EUR",
+  })
   public enCours90Plus: number;
   @Field({
     format: { type: "currency", precision: 2 },
