@@ -1413,7 +1413,7 @@
     ]
   },
   "ordre-reservation-stock": {
-    "pageSize": 10,
+    "pageSize": 10000,
     "columns": [
       {
         "dataField": "id",
