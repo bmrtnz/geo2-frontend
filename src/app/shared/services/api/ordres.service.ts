@@ -5,7 +5,7 @@ import { OrdreLigne } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { forkJoin, from, fromEvent, of, zip } from "rxjs";
-import { concatMap, filter, first, map, mergeMap, scan, take, takeUntil } from "rxjs/operators";
+import { concatMap, filter, first, map, mergeMap, scan, take, takeUntil, tap } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
@@ -563,7 +563,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       // merge context with associated `deviseRef.taux`
       concatMap(context => this.devisesRefsService.getList(
         `devise.id==${context.devCode} and id==${this.currentCompanyService.getCompany().devise.id}`,
-        ["id"],
+        ["id", "taux"],
       ).pipe(map(res => ({
         ...context,
         deviseRefTaux: res.data.allDeviseRefList?.[0].taux,
