@@ -584,6 +584,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     this.articleOriginePopup.visible = true;
   }
 
+  onCellClick() {
+    self = this; // KEEP THIS to have a consistant value of 'self' when navigating through order tabs
+  }
+
   setCellValue(newData, value, currentData) {
     const context: any = this;
 
@@ -666,7 +670,6 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   onFocusedRowChanged(e) {
-    // this.gridRowsTotal = this.grid.instance.getVisibleRows().length;
     this.currentfocusedRow = e.row?.rowIndex;
     this.lastRowFocused = (this.currentfocusedRow === (this.gridRowsTotal - 1));
   }
